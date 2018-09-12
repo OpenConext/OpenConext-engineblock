@@ -180,6 +180,7 @@ $ymlContent = array(
         'feature_api_metadata_api'                                => (bool) $config->get('engineApi.features.metadataApi'),
         'feature_api_deprovision'                                 => (bool) $config->get('engineApi.features.deprovision'),
         'feature_run_all_manipulations_prior_to_consent'          => (bool) $config->get('engineblock.feature.run_all_manipulations_prior_to_consent'),
+        'feature_block_user_on_violation'                         => (bool) $config->get('engineblock.feature.block_user_on_violation'),
         'minimum_execution_time_on_invalid_received_response'     => (int) $config->get('minimumExecutionTimeOnInvalidReceivedResponse'),
         'wayf.cutoff_point_for_showing_unfiltered_idps'           => (int) $config->get('wayf.cutoffPointForShowingUnfilteredIdps'),
         'wayf.remember_choice'                                    => (bool) $config->get('wayf.rememberChoice', false),
@@ -222,7 +223,8 @@ $ymlContent = array(
             $config->get(
                 'attributeDefinitionFile', $projectRoot . 'application/configs/attributes-v2.2.0.json'
             )
-        )
+        ),
+        'monitor_database_health_check_query'                     => $config->get('openconext.monitor_bundle_health_query', '')
     )
 );
 

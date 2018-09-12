@@ -66,6 +66,13 @@ class IdentityProvider extends AbstractRole
     public $schacHomeOrganization = null;
 
     /**
+     * @var string[]
+     *
+     * @ORM\Column(name="sps_entity_ids_without_consent", type="array")
+     */
+    public $spsEntityIdsWithoutConsent = array();
+
+    /**
      * @var ConsentSettings
      *
      * @ORM\Column(name="consent_settings", type="json_array")
@@ -120,6 +127,7 @@ class IdentityProvider extends AbstractRole
      * @param null $schacHomeOrganization
      * @param array $shibMdScopes
      * @param array $singleSignOnServices
+     * @param array $spsEntityIdsWithoutConsent
      * @param ConsentSettings $consentSettings
      */
     public function __construct(
@@ -159,6 +167,7 @@ class IdentityProvider extends AbstractRole
         $schacHomeOrganization = null,
         $shibMdScopes = array(),
         $singleSignOnServices = array(),
+        $spsEntityIdsWithoutConsent = array(),
         ConsentSettings $consentSettings = null
     ) {
         parent::__construct(
@@ -197,6 +206,7 @@ class IdentityProvider extends AbstractRole
         $this->schacHomeOrganization = $schacHomeOrganization;
         $this->shibMdScopes = $shibMdScopes;
         $this->singleSignOnServices = $singleSignOnServices;
+        $this->spsEntityIdsWithoutConsent = $spsEntityIdsWithoutConsent;
         $this->consentSettings = $consentSettings;
     }
 

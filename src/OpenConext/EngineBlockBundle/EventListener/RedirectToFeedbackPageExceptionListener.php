@@ -27,6 +27,7 @@ use EngineBlock_Corto_Exception_PEPNoAccess;
 use EngineBlock_Corto_Exception_ReceivedErrorStatusCode;
 use EngineBlock_Corto_Exception_UnknownIssuer;
 use EngineBlock_Corto_Exception_UnknownPreselectedIdp;
+use EngineBlock_Corto_Exception_InvalidAttributeValue;
 use EngineBlock_Corto_Module_Bindings_SignatureVerificationException;
 use EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException;
 use EngineBlock_Corto_Module_Bindings_UnsupportedBindingException;
@@ -45,7 +46,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
- * @SuppressWarnings(PHPMD.Superglobals)
  *
  * All due to this being a catch all; will be refactored, see https://www.pivotaltracker.com/story/show/107565968
  */
@@ -113,7 +113,7 @@ class RedirectToFeedbackPageExceptionListener
             $redirectToRoute = 'authentication_feedback_missing_required_fields';
         } elseif ($exception instanceof EngineBlock_Attributes_Manipulator_CustomException) {
             // @todo this must be done differently, for now don't see how as state is managed by EB.
-            $_SESSION['feedback_custom'] = $exception->getFeedback();
+            $event->getRequest()->getSession()->set('feedback_custom', $exception->getFeedback());
 
             $message         = 'Custom Exception thrown from Attribute Manipulator';
             $redirectToRoute = 'authentication_feedback_custom';
@@ -149,6 +149,9 @@ class RedirectToFeedbackPageExceptionListener
             $redirectToRoute = 'authentication_feedback_unknown_preselected_idp';
 
             $redirectParams = ['idp-hash' => $exception->getRemoteIdpMd5Hash()];
+        } elseif ($exception instanceof EngineBlock_Corto_Exception_InvalidAttributeValue) {
+            $message         = $exception->getMessage();
+            $redirectToRoute = 'authentication_feedback_invalid_attribute_value';
         } elseif ($exception instanceof StuckInAuthenticationLoopException) {
             $message         = 'Stuck in authentication loop';
             $redirectToRoute = 'authentication_feedback_stuck_in_authentication_loop';

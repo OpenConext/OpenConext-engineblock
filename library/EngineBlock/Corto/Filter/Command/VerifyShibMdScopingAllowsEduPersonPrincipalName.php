@@ -17,11 +17,20 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincip
      */
     private $logger;
 
-    public function __construct(LoggerInterface $logger)
+    /**
+     * @var bool
+     */
+    private $blockUserOnViolation;
+
+    public function __construct(LoggerInterface $logger, $blockUserOnViolation)
     {
         $this->logger = $logger;
+        $this->blockUserOnViolation = (bool)$blockUserOnViolation;
     }
 
+    /**
+     * @throws EngineBlock_Corto_Exception_InvalidAttributeValue
+     */
     public function execute()
     {
         $this->logger->info('Verifying if eduPersonPrincipalName is allowed by configured IdP shibmd:scopes');
@@ -50,10 +59,16 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincip
         list(,$suffix) = explode('@', $eduPersonPrincipalName, 2);
 
         if (!$scopeList->inScope($suffix)) {
-            $this->logger->warning(sprintf(
+            $message = sprintf(
                 'eduPersonPrincipalName attribute value "%s" is not allowed by configured ShibMdScopes for IdP "%s"',
                 $suffix, $this->_identityProvider->entityId
-            ));
+            );
+
+            $this->logger->warning($message);
+
+            if ($this->blockUserOnViolation) {
+                throw new EngineBlock_Corto_Exception_InvalidAttributeValue($message, 'eduPersonPrincipalName', $suffix);
+            }
         }
     }
 

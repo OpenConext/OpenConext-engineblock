@@ -48,6 +48,8 @@ return $overrides + [
     'ipAddress'             => 'IP Address',
     'statusCode'            => 'Status Code',
     'statusMessage'         => 'Status Message',
+    'attributeName'         => 'Attribute Name',
+    'attributeValue'        => 'Attribute Value',
 
     // WAYF
     'search'                    => 'Search for an %organisationNoun%...',
@@ -213,6 +215,13 @@ Your log-in has failed and we don\'t know exactly why. Try again first, and if t
             <li>UID</li>
             <li>schacHomeOrganization</li>
         </ul>
+    </p>',
+    'error_invalid_attribute_value' => 'Attribute value not allowed',
+    'error_invalid_attribute_value_desc' => '<p>
+        Your %organisationNoun% used a value for attribute %attributeName% ("%attributeValue%") which is not allowed for this %organisationNoun%. Therefore you cannot log in.
+    </p>
+    <p>
+        Only your %organisationNoun% can resolve this. Please contact the service desk of your own %organisationNoun%.
     </p>',
     'error_received_error_status_code'     => 'Error - Identity Provider error',
     'error_received_error_status_code_desc'=> '<p>

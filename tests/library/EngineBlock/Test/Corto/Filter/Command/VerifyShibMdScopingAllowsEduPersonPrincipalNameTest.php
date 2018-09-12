@@ -46,7 +46,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPr
 
     public function testNoConfiguredScopesLeadsToNoVerification()
     {
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider(new IdentityProvider('OpenConext'));
 
@@ -71,7 +71,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPr
         // wipe the assertion attributes
         $this->response->getAssertion()->setAttributes(array());
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
@@ -99,7 +99,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPr
         // wipe the assertion attributes
         $this->response->getAssertion()->setAttributes(array(self::URN_OID => array('NoAtSign')));
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
@@ -121,7 +121,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPr
         $identityProvider               = new IdentityProvider('OpenConext');
         $identityProvider->shibMdScopes = array($scope);
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
@@ -143,7 +143,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPr
         $identityProvider               = new IdentityProvider('OpenConext');
         $identityProvider->shibMdScopes = array($scope);
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
@@ -165,7 +165,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPr
         $identityProvider               = new IdentityProvider('OpenConext');
         $identityProvider->shibMdScopes = array($scope);
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
@@ -187,7 +187,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPr
         $identityProvider               = new IdentityProvider('OpenConext');
         $identityProvider->shibMdScopes = array($scope);
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
@@ -209,7 +209,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPr
         $identityProvider               = new IdentityProvider('OpenConext');
         $identityProvider->shibMdScopes = array($scope);
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
@@ -220,6 +220,26 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPr
         );
 
         $this->assertTrue($invalidScopeIsLogged);
+    }
+
+    /**
+     * @expectedException EngineBlock_Corto_Exception_InvalidAttributeValue
+     * @expectedExceptionMessage eduPersonPrincipalName attribute value "openconext.org" is not allowed by configured ShibMdScopes for IdP "OpenConext"
+     */
+    public function testEduPersonPrincipalNameNotInRegexpScopeThrowsException()
+    {
+        $scope          = new ShibMdScope();
+        $scope->regexp  = true;
+        $scope->allowed = '.*\.noconext\.org';
+
+        $identityProvider               = new IdentityProvider('OpenConext');
+        $identityProvider->shibMdScopes = array($scope);
+
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger, true);
+        $verifier->setResponse($this->response);
+        $verifier->setIdentityProvider($identityProvider);
+
+        $verifier->execute();
     }
 
 }

@@ -13,6 +13,7 @@ use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository;
 use OpenConext\EngineBlock\Metadata\Service;
+use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy;
 use SAML2\Constants;
@@ -360,6 +361,18 @@ QUERY;
         $logo->width = 100;
 
         $this->getIdentityProvider($entityId)->logo = $logo;
+
+        return $this;
+    }
+
+
+    public function setIdpScope($entityId, $scope, $regexp = false)
+    {
+        $shibdScope = new ShibMdScope();
+        $shibdScope->allowed = $scope;
+        $shibdScope->regexp = $regexp;
+
+        $this->getIdentityProvider($entityId)->shibMdScopes = [$shibdScope];
 
         return $this;
     }

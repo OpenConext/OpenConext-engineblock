@@ -23,6 +23,7 @@ open_conext_engine_block:
         eb.encrypted_assertions: "%feature_eb_encrypted_assertions%"
         eb.encrypted_assertions_require_outer_signature: "%feature_eb_encrypted_assertions_require_outer_signature%"
         eb.run_all_manipulations_prior_to_consent: "%feature_run_all_manipulations_prior_to_consent%"
+        eb.block_user_on_violation: "%feature_block_user_on_violation%"
 
 swiftmailer:
     transport: sendmail

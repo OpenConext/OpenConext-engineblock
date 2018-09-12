@@ -2,6 +2,7 @@
 
 namespace OpenConext\EngineBlockBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;
 
@@ -25,13 +26,14 @@ class LogoutController
      * manages the sessions (for now). Therefore we destroy these the same way
      * as is being done in EB4
      *
+     * @param Request $request
      * @return Response
      */
-    public function logoutAction()
+    public function logoutAction(Request $request)
     {
         $response = new Response($this->twig->render('@theme/Logout/View/Index/index.html.twig'));
 
-        if (empty($_SESSION)) {
+        if (empty($request->getSession()->all())) {
             return $response;
         }
 

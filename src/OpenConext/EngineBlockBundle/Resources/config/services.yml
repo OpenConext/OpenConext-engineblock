@@ -1,4 +1,13 @@
 services:
+    openconext.monitor.database_health_check:
+        class: OpenConext\EngineBlockBundle\HealthCheck\DoctrineConnectionHealthCheck
+        arguments:
+            - "%monitor_database_health_check_query%"
+        calls:
+            - [ setEntityManager, ['@?doctrine.orm.entity_manager']]
+        tags:
+            - { name: openconext.monitor.health_check }
+
     engineblock.minimum_execution_time_on_invalid_received_response:
         class: OpenConext\EngineBlockBundle\Value\ExecutionTime
         factory: [ OpenConext\EngineBlockBundle\Value\ExecutionTime, "of" ]

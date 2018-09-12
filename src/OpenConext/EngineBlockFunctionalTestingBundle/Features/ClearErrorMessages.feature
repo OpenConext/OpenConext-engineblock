@@ -27,6 +27,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
 
     Scenario: I log in at my Identity Provider, but the IdP gives a message that I don't have access.
@@ -43,6 +44,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
 
     Scenario: I log in at my Identity Provider, but I don't have access.
@@ -57,6 +59,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
 
     Scenario: I log in at my Identity Provider, that does not send assertions, but they give a message that I don't have access.
@@ -73,6 +76,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
 
     Scenario: I log in at my Identity Provider, that does not send assertions, but I don't have access.
@@ -88,6 +92,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
 
   Scenario: I log in at my Identity Provider, but it has changed (private/public) keys without notifying OpenConext
@@ -102,6 +107,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
 
   Scenario: I want to log on, but this Service Provider may not access any Identity Providers
@@ -112,6 +118,7 @@ Feature:
      And I should see "User Agent:"
      And I should see "IP Address:"
      And I should see "Service Provider:"
+     And I should see "Service Provider Name:"
      And I should not see "Identity Provider:"
 
   Scenario: I want to log on but this Service Provider is not yet registered at OpenConext
@@ -135,6 +142,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
       And I should see "https://wrong.example.edu/metadata"
 
@@ -148,6 +156,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
 
   Scenario: An Identity Provider sends a response without a SHO
@@ -162,6 +171,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
 
   Scenario: An Identity Provider sends a response without a uid
@@ -176,6 +186,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
 
   Scenario: An SP sends a AuthnRequest transparently for an IdP that doesn't exist
@@ -187,6 +198,67 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
+
+  Scenario: I log in at my Identity Provider, that has the 'block_user_on_violation' feature activated, and has an invalid schacHomeOrganization attribute.
+    Given feature "eb.block_user_on_violation" is enabled
+    And the IdP "Dummy Idp" sends attribute "urn:mace:terena.org:attribute-def:schacHomeOrganization" with value "out-of-scope"
+    And the Idp with name "Dummy Idp" has shibd scope "invalid"
+  When I log in at "Dummy SP"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    And I give my consent
+  Then I should see "Attribute value not allowed"
+    And I should see "Your organisation used a value for attribute schacHomeOrganization (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
+    And I should see "Timestamp:"
+    And I should see "Unique Request Id:"
+    And I should see "User Agent:"
+    And I should see "IP Address:"
+    And I should see "Service Provider:"
+    And I should see "Service Provider Name:"
+    And I should see "Identity Provider:"
+
+  Scenario: I log in at my Identity Provider, that has the 'block_user_on_violation' feature activated, and has a valid schacHomeOrganization attribute.
+    Given feature "eb.block_user_on_violation" is enabled
+    And the IdP "Dummy Idp" sends attribute "urn:mace:terena.org:attribute-def:schacHomeOrganization" with value "test"
+    And the Idp with name "Dummy Idp" has shibd scope "test"
+  When I log in at "Dummy SP"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    And I give my consent
+  Then I should not see "Attribute value not allowed"
+    And I should not see "Your organisation used a value for attribute schacHomeOrganization"
+
+  Scenario: I log in at my Identity Provider, that has the 'block_user_on_violation' feature activated, and has an invalid eduPersonPrincipalName attribute.
+    Given feature "eb.block_user_on_violation" is enabled
+      And the IdP "Dummy Idp" sends attribute "urn:mace:terena.org:attribute-def:schacHomeOrganization" with value "test"
+      And the IdP "Dummy Idp" sends attribute "urn:mace:dir:attribute-def:eduPersonPrincipalName" with value "name@out-of-scope"
+      And the Idp with name "Dummy Idp" has shibd scope "test"
+    When I log in at "Dummy SP"
+      And I pass through EngineBlock
+      And I pass through the IdP
+      And I give my consent
+    Then I should see "Attribute value not allowed"
+      And I should see "Your organisation used a value for attribute eduPersonPrincipalName (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
+      And I should see "Timestamp:"
+      And I should see "Unique Request Id:"
+      And I should see "User Agent:"
+      And I should see "IP Address:"
+      And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
+      And I should see "Identity Provider:"
+
+  Scenario: I log in at my Identity Provider, that has the 'block_user_on_violation' feature activated, and has a valid eduPersonPrincipalName attribute.
+    Given feature "eb.block_user_on_violation" is enabled
+      And the IdP "Dummy Idp" sends attribute "urn:mace:terena.org:attribute-def:schacHomeOrganization" with value "test"
+      And the IdP "Dummy Idp" sends attribute "urn:mace:dir:attribute-def:eduPersonPrincipalName" with value "name@test"
+      And the Idp with name "Dummy Idp" has shibd scope "test"
+    When I log in at "Dummy SP"
+      And I pass through EngineBlock
+      And I pass through the IdP
+      And I give my consent
+    Then I should not see "Attribute value not allowed"
+      And I should not see "Your organisation used a value for attribute eduPersonPrincipalName"
 
   Scenario: The session has been lost after passing through EngineBlock
     When I log in at "Dummy SP"

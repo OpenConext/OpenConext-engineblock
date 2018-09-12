@@ -45,7 +45,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOr
 
     public function testNoConfiguredScopesLeadsToNoVerification()
     {
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider(new IdentityProvider('OpenConext'));
 
@@ -70,7 +70,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOr
         // wipe the assertion attributes
         $this->response->getAssertion()->setAttributes(array());
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
@@ -95,7 +95,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOr
         $identityProvider               = new IdentityProvider(self::SHO_VALUE);
         $identityProvider->shibMdScopes = array($scope);
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
@@ -117,7 +117,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOr
         $identityProvider               = new IdentityProvider(self::SHO_VALUE);
         $identityProvider->shibMdScopes = array($scope);
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
@@ -139,7 +139,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOr
         $identityProvider               = new IdentityProvider(self::SHO_VALUE);
         $identityProvider->shibMdScopes = array($scope);
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
@@ -161,7 +161,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOr
         $identityProvider               = new IdentityProvider(self::SHO_VALUE);
         $identityProvider->shibMdScopes = array($scope);
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
@@ -183,7 +183,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOr
         $identityProvider               = new IdentityProvider(self::SHO_VALUE);
         $identityProvider->shibMdScopes = array($scope);
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
@@ -194,5 +194,25 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOr
         );
 
         $this->assertTrue($invalidScopeIsLogged);
+    }
+
+    /**
+     * @expectedException EngineBlock_Corto_Exception_InvalidAttributeValue
+     * @expectedExceptionMessage schacHomeOrganization attribute value "OpenConext" is not allowed by configured ShibMdScopes for IdP "OpenConext"
+     */
+    public function testSchacHomeOrganizationNotInRegexpScopeThrowsException()
+    {
+        $scope          = new ShibMdScope();
+        $scope->regexp  = true;
+        $scope->allowed = '.*\.noconext\.org';
+
+        $identityProvider               = new IdentityProvider(self::SHO_VALUE);
+        $identityProvider->shibMdScopes = array($scope);
+
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger, true);
+        $verifier->setResponse($this->response);
+        $verifier->setIdentityProvider($identityProvider);
+
+        $verifier->execute();
     }
 }
