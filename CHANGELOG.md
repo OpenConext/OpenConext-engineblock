@@ -5,11 +5,15 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
-## Development
+## 5.8.3
+This is a release mainly focussed on the rolling updates. Be aware that 5.8 releases prior to 5.8.3 do have some
+breaking changes in migrations due to the rolling update implementation added in this release . In order to update you
+should skip releases <5.8.3. 
 
 ### Features
  * A custom database health check is added for the Monitor bundle. #589
  * A feature toggle to disallow users on attribute violations is added. #591
+ * Add Rolling update support #595
 
 ## 5.8.2
 This is mainly a release that consists of fixes of technical debt, longer standing quirks and other maintenance related 
