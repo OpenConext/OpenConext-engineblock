@@ -5,6 +5,8 @@
 ### Stored metadata incompatibility
 Metadata pushed to EngineBlock in earlier versions (EB<5.8) is not compatible with this version. A metadata push is
 required after upgrading to EB 5.8.
+In order to upgrade from 5.7 to 5.8 you need to go to 5.8.3 to prevent backwards compatibility
+breaking changes. From version 5.8.3 rolling updates are supported.  
 
 ### New user data deprovision API
 
