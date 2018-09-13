@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "3840cb9da8d9365f97bbe81765086a5e",
@@ -1504,16 +1504,16 @@
         },
         {
             "name": "openconext/monitor-bundle",
-            "version": "1.0.3",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/Monitor-bundle.git",
-                "reference": "1455a292376a03e28465195202c572aa243f0ddb"
+                "reference": "5f304d885cf6575b420dea592ed285c793d1b1d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/Monitor-bundle/zipball/1455a292376a03e28465195202c572aa243f0ddb",
-                "reference": "1455a292376a03e28465195202c572aa243f0ddb",
+                "url": "https://api.github.com/repos/OpenConext/Monitor-bundle/zipball/5f304d885cf6575b420dea592ed285c793d1b1d9",
+                "reference": "5f304d885cf6575b420dea592ed285c793d1b1d9",
                 "shasum": ""
             },
             "require": {
@@ -1553,7 +1553,7 @@
                 "stepup",
                 "surfnet"
             ],
-            "time": "2018-08-16T13:07:30+00:00"
+            "time": "2018-09-11T12:33:58+00:00"
         },
         {
             "name": "openconext/saml-value-object",
