@@ -209,21 +209,6 @@
             }
         }
     },
-    "urn:mace:surffederatie.nl:attribute-def:nlDigitalAuthorIdentifier": {
-        "Description": {
-            "en": "Digital Author Identifier (DAI)",
-            "nl": "Digital Author Identifier (DAI)"
-        },
-        "Name": {
-            "en": "DAI",
-            "nl": "DAI"
-        },
-        "Conditions": {
-            "warning": {
-                "max": "1"
-            }
-        }
-    },
     "urn:mace:surffederatie.nl:attribute-def:nlEduPersonHomeOrganization": {
         "Description": {
             "en": "display name of the organization",
