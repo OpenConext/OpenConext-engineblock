@@ -623,7 +623,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         } else if ($sspBinding instanceof HTTPRedirect) {
             if ($sspMessage instanceof Response) {
                 throw new EngineBlock_Corto_Module_Bindings_UnsupportedBindingException(
-                    'May not send a Reponse via HTTP Redirect'
+                    'May not send a response via HTTP redirect'
                 );
             }
 
