@@ -44,6 +44,11 @@ $forbiddenSignatureMethods = array_filter(
     )
 );
 
+$allowedAcsLocationSchemes = $config->get('allowedAcsLocationSchemes', array('http', 'https'));
+if (!is_array($allowedAcsLocationSchemes)) {
+    $allowedAcsLocationSchemes = $allowedAcsLocationSchemes->toArray();
+}
+
 /**
  * Convert PHP-ini configuration in EB-ini format to yaml format.
  *
@@ -124,6 +129,9 @@ $ymlContent = array(
 
         // List of signature methods explicitly forbidden by EngineBlock.
         'forbidden_signature_methods'                             => $forbiddenSignatureMethods,
+
+        // List of allowed ACS location URI schemes
+        'allowed_acs_location_schemes'                            => $allowedAcsLocationSchemes,
 
         // Ideally, PHP is configured using the regular PHP configuration in
         // /etc, but EngineBlock supports runtime modification of PHP

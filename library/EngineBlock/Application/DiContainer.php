@@ -333,6 +333,14 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
+     * @return array
+     */
+    public function getAllowedAcsLocationSchemes()
+    {
+        return (array) $this->container->getParameter('allowed_acs_location_schemes');
+    }
+
+    /**
      * @return bool
      */
     public function isUiOptionReturnToSpActive()
