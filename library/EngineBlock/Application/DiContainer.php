@@ -2,6 +2,7 @@
 
 use Doctrine\ORM\EntityManager;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
 class EngineBlock_Application_DiContainer extends Pimple
@@ -333,11 +334,11 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return array
+     * @return AllowedSchemeValidator
      */
-    public function getAllowedAcsLocationSchemes()
+    public function getAcsLocationSchemeValidator()
     {
-        return (array) $this->container->getParameter('allowed_acs_location_schemes');
+        return $this->container->get('engineblock.validator.allowed_scheme_validator');
     }
 
     /**

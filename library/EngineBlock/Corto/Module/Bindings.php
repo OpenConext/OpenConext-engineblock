@@ -3,10 +3,10 @@
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use OpenConext\EngineBlockBundle\Exception\ResponseProcessingFailedException;
 use SAML2\AuthnRequest;
 use SAML2\Binding;
-use SAML2\Assertion\Exception\InvalidSubjectConfirmationException;
 use SAML2\Certificate\KeyLoader;
 use SAML2\Configuration\Destination;
 use SAML2\Configuration\IdentityProvider as Saml2IdentityProvider;
@@ -85,6 +85,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     private $twig;
 
+    /**
+     * @var AllowedSchemeValidator
+     */
+    private $acsLocationSchemeValidator;
+
     public function __construct(EngineBlock_Corto_ProxyServer $server)
     {
         parent::__construct($server);
@@ -93,6 +98,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $this->_featureConfiguration = $diContainer->getFeatureConfiguration();
         $this->_logger = EngineBlock_ApplicationSingleton::getLog();
         $this->twig = $diContainer->getTwigEnvironment();
+        $this->acsLocationSchemeValidator = $diContainer->getAcsLocationSchemeValidator();
     }
 
     /**
@@ -675,18 +681,9 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
     private function assertValidAcsLocationScheme($acsLocation)
     {
-        $allowedAcsLocationSchemes = $this->_server->getConfig('allowedAcsLocationSchemes');
-        $parts = parse_url($acsLocation);
-
-        if (!isset($parts['scheme'])) {
+        if (!$this->acsLocationSchemeValidator->validate($acsLocation)) {
             throw new EngineBlock_Corto_Module_Bindings_UnsupportedAcsLocationSchemeException(
-                'The received ACS location does not have a scheme'
-            );
-        }
-
-        if ($acsLocation && !in_array($parts['scheme'], $allowedAcsLocationSchemes)) {
-            throw new EngineBlock_Corto_Module_Bindings_UnsupportedAcsLocationSchemeException(
-                'The received ACS location has an invalid uri scheme'
+                'The received ACS location does not have a valid scheme'
             );
         }
     }
