@@ -2,6 +2,7 @@ services:
     engineblock.controller.api.connections:
         class: OpenConext\EngineBlockBundle\Controller\Api\ConnectionsController
         arguments:
+            - "@engineblock.metadata.push_metadata_assembler"
             - "@security.authorization_checker"
             - "@engineblock.features"
             - '@engineblock.metadata.repository.doctrine'
