@@ -140,14 +140,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // Test if there is an invalid ACS location uri scheme in use
         $acsLocation = $sspRequest->getAssertionConsumerServiceURL();
-        if ($acsLocation && !in_array($acsLocation, $this->allowedAcsSchemes)) {
-            throw new EngineBlock_Corto_Module_Bindings_UnsupportedAcsLocationSchemeException(
-                sprintf(
-                    'Received AuthnRequest with an invalid ACS location uri scheme: "%s"',
-                    $sspRequest->getAssertionConsumerServiceURL()
-                )
-            );
-        }
+        $this->assertValidAcsLocationScheme($acsLocation);
 
         // check the IssueInstant against our own time to see if the SP's clock is getting out of sync
         $this->_checkIssueInstant( $sspRequest->getIssueInstant(), 'SP',  $sspRequest->getIssuer() );
@@ -678,6 +671,24 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // Determine if we should sign the message
         return $remoteEntity->requestsMustBeSigned || $this->_server->getConfig('WantsAuthnRequestsSigned');
+    }
+
+    private function assertValidAcsLocationScheme($acsLocation)
+    {
+        $allowedAcsLocationSchemes = $this->_server->getConfig('allowedAcsLocationSchemes');
+        $parts = parse_url($acsLocation);
+
+        if (!isset($parts['scheme'])) {
+            throw new EngineBlock_Corto_Module_Bindings_UnsupportedAcsLocationSchemeException(
+                'The received ACS location does not have a scheme'
+            );
+        }
+
+        if ($acsLocation && !in_array($parts['scheme'], $allowedAcsLocationSchemes)) {
+            throw new EngineBlock_Corto_Module_Bindings_UnsupportedAcsLocationSchemeException(
+                'The received ACS location has an invalid uri scheme'
+            );
+        }
     }
 
     /**
