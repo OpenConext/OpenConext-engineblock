@@ -96,7 +96,7 @@ class MockSpContext extends AbstractSubContext
             $ssoStartLocation = $mockSp->loginUrlRedirect();
         }
 
-        $this->getMainContext()->getMinkContext()->visit($ssoStartLocation);
+        $this->getMinkContext()->visit($ssoStartLocation);
     }
 
     /**
@@ -287,7 +287,7 @@ class MockSpContext extends AbstractSubContext
      */
     public function iPassThroughTheSp()
     {
-        $mink = $this->getMainContext()->getMinkContext();
+        $mink = $this->getMinkContext();
         $mink->pressButton('GO');
     }
 

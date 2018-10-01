@@ -159,6 +159,13 @@ with the following Apache rewrite rules on a *:80 VirtualHost:
     RewriteCond     %{SERVER_PORT} ^80$
     RewriteRule     ^(.*)$ https://%{SERVER_NAME}$1 [L,R=301]
 
+### Grab the front controller
+Copy the `app_dev.php.dist` file to the `web` directory.
+
+```bash
+Openconext-engineblock $ cp app_dev.php.dist web/app_dev.php
+```
+
 ### Test your EngineBlock instance
 
 Use these URLs to test your EngineBlock instance:

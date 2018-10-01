@@ -58,7 +58,7 @@ final class ExecutionTimeTracker
             return ExecutionTime::of(0);
         }
 
-        $timeRemaining = $executionTime->getExecutionTime() - $stopwatchEvent->getDuration();
+        $timeRemaining = $executionTime->getExecutionTime() - (int) $stopwatchEvent->getDuration();
 
         return ExecutionTime::of($timeRemaining);
     }
