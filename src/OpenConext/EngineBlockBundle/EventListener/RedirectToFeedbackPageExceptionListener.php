@@ -30,6 +30,7 @@ use EngineBlock_Corto_Exception_UnknownPreselectedIdp;
 use EngineBlock_Corto_Exception_InvalidAttributeValue;
 use EngineBlock_Corto_Module_Bindings_SignatureVerificationException;
 use EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException;
+use EngineBlock_Corto_Module_Bindings_UnsupportedAcsLocationSchemeException;
 use EngineBlock_Corto_Module_Bindings_UnsupportedBindingException;
 use EngineBlock_Corto_Module_Bindings_UnsupportedSignatureMethodException;
 use EngineBlock_Corto_Module_Bindings_VerificationException;
@@ -126,6 +127,9 @@ class RedirectToFeedbackPageExceptionListener
             $redirectParams  = [
                 'signature-method' => $exception->getSignatureMethod(),
             ];
+        } elseif ($exception instanceof EngineBlock_Corto_Module_Bindings_UnsupportedAcsLocationSchemeException) {
+            $message         = 'Unsupported URI scheme in ACS location';
+            $redirectToRoute = 'authentication_feedback_unsupported_acs_location_uri_scheme';
         } elseif ($exception instanceof EngineBlock_Corto_Exception_ReceivedErrorStatusCode) {
             $message         = 'Received Error Status Code';
             $redirectToRoute = 'authentication_feedback_received_error_status_code';

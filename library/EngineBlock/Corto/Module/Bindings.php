@@ -55,6 +55,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         null                                                        => '_sendHTTPRedirect'
     );
 
+    protected $allowedAcsSchemes = [
+        'http',
+        'https'
+    ];
+
     /**
      * @var array
      */
@@ -131,6 +136,17 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             if (in_array($signatureMethod, $forbiddenSignatureMethods)) {
                 throw new EngineBlock_Corto_Module_Bindings_UnsupportedSignatureMethodException($signatureMethod);
             }
+        }
+
+        // Test if there is an invalid ACS location uri scheme in use
+        $acsLocation = $sspRequest->getAssertionConsumerServiceURL();
+        if ($acsLocation && !in_array($acsLocation, $this->allowedAcsSchemes)) {
+            throw new EngineBlock_Corto_Module_Bindings_UnsupportedAcsLocationSchemeException(
+                sprintf(
+                    'Received AuthnRequest with an invalid ACS location uri scheme: "%s"',
+                    $sspRequest->getAssertionConsumerServiceURL()
+                )
+            );
         }
 
         // check the IssueInstant against our own time to see if the SP's clock is getting out of sync

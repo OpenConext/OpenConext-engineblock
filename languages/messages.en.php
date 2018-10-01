@@ -194,6 +194,8 @@ We somehow lost where you wanted to go. Did you wait too long? If so, try again 
     'error_unknown_service_provider'          => 'Error - Cannot provide metadata for EntityID \'%arg1%\'',
     'error_unknown_service_provider_desc'     => '<p>Your requested service couldn\'t be found.</p>',
 
+    'error_unsupported_acs_location_scheme' => 'Error - Unsupported URI scheme in ACS location',
+
     'error_unknown_issuer'          => 'Error - Unknown service',
     'error_unknown_issuer_desc'     => '<p>
         The service you are trying to log in to is unknown to %suiteName%. Possibly your %organisationNoun% has never enabled access to this service. Please contact the helpdesk of your %organisationNoun% and provide them with the following information:
