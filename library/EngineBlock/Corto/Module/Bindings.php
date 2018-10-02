@@ -55,11 +55,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         null                                                        => '_sendHTTPRedirect'
     );
 
-    protected $allowedAcsSchemes = [
-        'http',
-        'https'
-    ];
-
     /**
      * @var array
      */
