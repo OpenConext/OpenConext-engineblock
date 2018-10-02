@@ -44,6 +44,7 @@ $forbiddenSignatureMethods = array_filter(
     )
 );
 
+// As a default: ['http', 'https'] is used. See application.ini for more information
 $allowedAcsLocationSchemes = $config->get('allowedAcsLocationSchemes', array('http', 'https'));
 if (!is_array($allowedAcsLocationSchemes)) {
     $allowedAcsLocationSchemes = $allowedAcsLocationSchemes->toArray();
