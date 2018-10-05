@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3840cb9da8d9365f97bbe81765086a5e",
+    "content-hash": "883c2ef402aed3327f4046c921d835f9",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1508,12 +1508,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/Monitor-bundle.git",
-                "reference": "5f304d885cf6575b420dea592ed285c793d1b1d9"
+                "reference": "0c1fe3abfb68e5c315ccf651fa4a23b98d6ad2e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/Monitor-bundle/zipball/5f304d885cf6575b420dea592ed285c793d1b1d9",
-                "reference": "5f304d885cf6575b420dea592ed285c793d1b1d9",
+                "url": "https://api.github.com/repos/OpenConext/Monitor-bundle/zipball/0c1fe3abfb68e5c315ccf651fa4a23b98d6ad2e0",
+                "reference": "0c1fe3abfb68e5c315ccf651fa4a23b98d6ad2e0",
                 "shasum": ""
             },
             "require": {
@@ -1524,7 +1524,6 @@
             },
             "require-dev": {
                 "jakub-onderka/php-parallel-lint": "^0.9.2",
-                "liip/rmt": "^1.1",
                 "malukenho/docheader": "^0.1.6",
                 "matthiasnoback/symfony-config-test": "^2.1",
                 "mockery/mockery": "~0.9",
@@ -1553,7 +1552,7 @@
                 "stepup",
                 "surfnet"
             ],
-            "time": "2018-09-11T12:33:58+00:00"
+            "time": "2018-09-12T13:38:01+00:00"
         },
         {
             "name": "openconext/saml-value-object",
