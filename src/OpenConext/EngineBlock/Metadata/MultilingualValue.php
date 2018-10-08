@@ -20,17 +20,11 @@ class MultilingualValue
     {
         Assertion::string(
             $value,
-            sprintf(
-                'The \'value\' of a MultilingualValue should be a string. "%s" given',
-                var_export($value, true)
-            )
+            'The \'value\' of a MultilingualValue should be a string'
         );
         Assertion::string(
             $language,
-            sprintf(
-                'The \'language\' of a MultilingualValue should be a string. "%s" given',
-                var_export($language, true)
-            )
+            'The \'language\' of a MultilingualValue should be a string'
         );
 
         $this->value = $value;
