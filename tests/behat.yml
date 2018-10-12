@@ -75,7 +75,4 @@ default:
                     goutte:
                         guzzle_parameters:
                             verify: false
-        Behat\Symfony2Extension:
-            kernel:
-                env: test
-                debug: true
+        Behat\Symfony2Extension: ~
