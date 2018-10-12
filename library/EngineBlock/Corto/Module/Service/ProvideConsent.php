@@ -119,6 +119,8 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             $profileUrl = $configuredUrl;
         }
 
+        print_r([$this->getAttributeMotivations($serviceProviderMetadata, $attributes), $attributes]);
+
         $html = $this->twig->render(
             '@theme/Authentication/View/Proxy/consent.html.twig',
             [

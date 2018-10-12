@@ -50,7 +50,6 @@ abstract class AbstractDataStore
         if ($data === false) {
             throw new \RuntimeException('Unable to decode data from: ' . $this->filePath);
         }
-print_r(json_decode($fileContents));
 
         return $data;
     }
