@@ -57,7 +57,6 @@ before_script:
   - composer config secure-http false
   - composer install --prefer-dist -n -o
   - app/console cache:clear --env=test
-  - composer prepare-env
 
 script:
   - ant $COMMAND
