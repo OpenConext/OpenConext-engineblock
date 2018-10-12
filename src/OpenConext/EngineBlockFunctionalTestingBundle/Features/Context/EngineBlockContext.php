@@ -198,7 +198,7 @@ HTML;
         );
 
         $rows = $actualTable->getRows();
-
+print_r([$rows, $attributes->getRows()]);
         // Remove the first row (IDP name, is this correct?)
         unset($rows[1]);
 
