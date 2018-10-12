@@ -261,8 +261,10 @@ class MockIdpContext extends AbstractSubContext
         $mockIdp = $this->mockIdpRegistry->get($idpName);
 
         $mockIdp->setAttribute($attributeName, [$attributeValue]);
-
+print_r($this->mockIdpRegistry->get($idpName));
         $this->mockIdpRegistry->save();
+print_r($this->mockIdpRegistry->get($idpName));
+die();
     }
 
     /**
