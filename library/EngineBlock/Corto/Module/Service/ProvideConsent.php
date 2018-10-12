@@ -77,7 +77,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             $log->info('Raw HTTP request', array('http_request' => (string) $application->getHttpRequest()));
         }
         $serviceProviderMetadata = $spMetadataChain[0];
-print_r($response->getAssertion());
+
         $attributes = $response->getAssertion()->getAttributes();
         $consentRepository = $this->_consentFactory->create($this->_server, $response, $attributes);
 

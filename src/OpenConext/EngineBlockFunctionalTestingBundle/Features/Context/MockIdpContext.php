@@ -234,6 +234,7 @@ class MockIdpContext extends AbstractSubContext
     public function iPassThroughTheIdp()
     {
         $mink = $this->getMinkContext();
+        echo $mink->getSession()->getPage()->getContent();
         $mink->pressButton('GO');
     }
 
@@ -261,10 +262,8 @@ class MockIdpContext extends AbstractSubContext
         $mockIdp = $this->mockIdpRegistry->get($idpName);
 
         $mockIdp->setAttribute($attributeName, [$attributeValue]);
-print_r($this->mockIdpRegistry->get($idpName));
+
         $this->mockIdpRegistry->save();
-print_r($this->mockIdpRegistry->get($idpName));
-die();
     }
 
     /**

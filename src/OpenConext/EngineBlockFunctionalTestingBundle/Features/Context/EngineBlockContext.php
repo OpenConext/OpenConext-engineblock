@@ -199,9 +199,6 @@ HTML;
 
         $rows = $actualTable->getRows();
 
-print_r([$rows, $attributes->getRows()]);
-echo $mink->getSession()->getPage()->getContent();
-
         // Remove the first row (IDP name, is this correct?)
         unset($rows[1]);
 
