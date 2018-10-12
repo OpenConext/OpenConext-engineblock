@@ -17,11 +17,9 @@ sudo: true # sudo is required for behat
 env:
   matrix:
     - COMMAND="functional-tests"
-    - COMMAND="functional-tests"
     - COMMAND="functional-tests-wip"
     - COMMAND="code-quality-ci"
     - COMMAND="security-tests"
-
   global:
     - SYMFONY_ENV=test
     - ENGINEBLOCK_ENV=test
@@ -59,8 +57,6 @@ before_script:
   - composer config secure-http false
   - composer install --prefer-dist -n -o
   - app/console cache:clear --env=test
-  - ant enable-test-env
-  - ant prepare-env"
 
 script:
   - ant $COMMAND
