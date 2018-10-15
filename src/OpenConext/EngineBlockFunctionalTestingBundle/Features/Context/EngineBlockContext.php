@@ -206,7 +206,7 @@ HTML;
         array_pop($rows);
         array_pop($rows);
 
-        $actualTable::fromList($rows);
+        $actualTable = new TableNode($rows);
 
         $assert = new \Ingenerator\BehatTableAssert\AssertTable;
         $assert->isComparable($attributes, $actualTable, []);
