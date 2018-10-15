@@ -221,7 +221,7 @@
             depends="create-test-db">
         <exec executable="vendor/bin/behat" failonerror="true">
             <arg line="-c ./tests/behat.yml"/>
-            <arg line="--suite ${suite} -vv"/>
+            <arg line="--suite ${suite} --format=progress"/>
         </exec>
     </target>
 
