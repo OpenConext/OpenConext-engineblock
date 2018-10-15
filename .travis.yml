@@ -16,7 +16,7 @@ sudo: true # sudo is required for behat
 
 env:
   matrix:
-    - COMMAND="./vendor/bin/behat -c ./tests/behat.yml 'src/OpenConext/EngineBlockFunctionalTestingBundle/Features/AttributeAggregation.feature:39' --profile default"
+    - COMMAND="./vendor/bin/behat -c ./tests/behat.yml '~/build/OpenConext/OpenConext-engineblock/src/OpenConext/EngineBlockFunctionalTestingBundle/Features/AttributeAggregation.feature:39' --profile default"
   global:
     - SYMFONY_ENV=test
     - ENGINEBLOCK_ENV=test
