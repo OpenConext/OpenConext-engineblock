@@ -1,37 +1,78 @@
 default:
-    paths:
-        features: ../src/OpenConext/EngineBlockFunctionalTestingBundle/Features
-    formatter:
-        name: progress
-    filters:
-        tags: "~@WIP&&~@SKIP"
-    extensions:
-        Behat\Symfony2Extension\Extension:
-            mink_driver: true
-            kernel:
-                env: test
-                debug: true
-        Behat\MinkExtension\Extension:
-            goutte:
-                guzzle_parameters:
-                    ssl.certificate_authority: false
+    autoload:
+        - '%paths.base%/../src/OpenConext/EngineBlockFunctionalTestingBundle/Features/Context'
 
-wip:
-    paths:
-        features: ../src/OpenConext/EngineBlockFunctionalTestingBundle/Features
-    formatter:
-        name: pretty
-        parameters:
-            verbose: true
-    filters:
-        tags: "@WIP&&~@SKIP"
+    suites:
+        default:
+            paths:
+                - '%paths.base%/../src/OpenConext/EngineBlockFunctionalTestingBundle/Features'
+            formatter:
+                name: progress
+            filters:
+                tags: "~@WIP&&~@SKIP"
+            contexts:
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\EngineBlockContext:
+                    serviceRegistry: '@engineblock.functional_testing.fixture.service_registry'
+                    engineBlock: '@engineblock.functional_testing.service.engine_block'
+                    mockSpRegistry: '@engineblock.mock_entities.sp_registry'
+                    mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
+                    features: '@engineblock.functional_testing.fixture.features'
+                    pdpClient: '@engineblock.functional_testing.fixture.pdp_client'
+                    authenticationLoopGuard: '@engineblock.functional_testing.fixture.authentication_loop_guard'
+                    attributeAggregationClient: '@engineblock.functional_testing.fixture.attribute_aggregation_client'
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MockIdpContext:
+                    serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
+                    engineBlock: '@engineblock.functional_testing.service.engine_block'
+                    idpFactory: '@engineblock.mock_entities.idp_factory'
+                    mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
+                    mockSpRegistry: '@engineblock.mock_entities.sp_registry'
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MockSpContext:
+                    serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
+                    engineBlock: '@engineblock.functional_testing.service.engine_block'
+                    mockSpFactory: '@engineblock.mock_entities.sp_factory'
+                    mockSpRegistry: '@engineblock.mock_entities.sp_registry'
+                    mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext
+        wip:
+            paths:
+                - '%paths.base%/../src/OpenConext/EngineBlockFunctionalTestingBundle/Features'
+            formatter:
+                  name: pretty
+                  parameters:
+                      verbose: true
+            filters:
+                tags: "@WIP&&~@SKIP"
+            contexts:
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\EngineBlockContext:
+                    serviceRegistry: '@engineblock.functional_testing.fixture.service_registry'
+                    engineBlock: '@engineblock.functional_testing.service.engine_block'
+                    mockSpRegistry: '@engineblock.mock_entities.sp_registry'
+                    mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
+                    features: '@engineblock.functional_testing.fixture.features'
+                    pdpClient: '@engineblock.functional_testing.fixture.pdp_client'
+                    authenticationLoopGuard: '@engineblock.functional_testing.fixture.authentication_loop_guard'
+                    attributeAggregationClient: '@engineblock.functional_testing.fixture.attribute_aggregation_client'
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MockIdpContext:
+                    serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
+                    engineBlock: '@engineblock.functional_testing.service.engine_block'
+                    idpFactory: '@engineblock.mock_entities.idp_factory'
+                    mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
+                    mockSpRegistry: '@engineblock.mock_entities.sp_registry'
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MockSpContext:
+                    serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
+                    engineBlock: '@engineblock.functional_testing.service.engine_block'
+                    mockSpFactory: '@engineblock.mock_entities.sp_factory'
+                    mockSpRegistry: '@engineblock.mock_entities.sp_registry'
+                    mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext
+
     extensions:
-        Behat\Symfony2Extension\Extension:
-            mink_driver: true
-            kernel:
-                env: test
-                debug: true
-        Behat\MinkExtension\Extension:
-            goutte:
-                guzzle_parameters:
-                    ssl.certificate_authority: false
+        Behat\MinkExtension:
+            base_url: ~
+            goutte: ~
+            sessions:
+                default:
+                    goutte:
+                        guzzle_parameters:
+                            verify: false
+        Behat\Symfony2Extension: ~

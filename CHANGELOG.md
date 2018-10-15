@@ -10,6 +10,9 @@ This is a release mainly focussed on the rolling updates. Be aware that 5.8 rele
 breaking changes in migrations due to the rolling update implementation added in this release . In order to update you
 should skip releases <5.8.3. 
 
+### Chores and other improvements
+ * Symfony was upgrade from version 2.8 to 3.4. This required the upgrade of quite some other (mainly dev) dependencies. #590
+
 ### Features
  * A custom database health check is added for the Monitor bundle. #589
  * A feature toggle to disallow users on attribute violations is added. #591

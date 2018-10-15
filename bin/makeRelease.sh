@@ -65,6 +65,7 @@ rm -rf ${PROJECT_DIR}/.git &&
 rm -f ${PROJECT_DIR}/.gitignore &&
 rm -f ${PROJECT_DIR}/makeRelease.sh &&
 rm -f ${PROJECT_DIR}/bin/composer.phar &&
+rm -f ${PROJECT_DIR}/app_dev.php.dist &&
 rm -rf ${PROJECT_DIR}/features &&
 rm -rf ${PROJECT_DIR}/behat.yml &&
 rm -rf ${PROJECT_DIR}/build.xml &&
