@@ -16,10 +16,7 @@ sudo: true # sudo is required for behat
 
 env:
   matrix:
-    - COMMAND="functional-tests"
-    - COMMAND="functional-tests-wip"
-    - COMMAND="code-quality-ci"
-    - COMMAND="security-tests"
+    - COMMAND="./vendor/bin/behat -c ./tests/behat.yml 'src/OpenConext/EngineBlockFunctionalTestingBundle/Features/AttributeAggregation.feature:39' --profile default"
   global:
     - SYMFONY_ENV=test
     - ENGINEBLOCK_ENV=test
@@ -60,9 +57,10 @@ before_script:
 
 after_failure:
   - cat ~/build/OpenConext/OpenConext-engineblock/app/logs/test/test.log
+  - cat ~/build/OpenConext/OpenConext-engineblock/tmp/fixtures/db/idp.states.php.serialized
 
 script:
-  - ant $COMMAND
+  - $COMMAND
 
 branches:
   only:
