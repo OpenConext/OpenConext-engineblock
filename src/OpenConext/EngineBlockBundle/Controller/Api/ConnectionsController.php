@@ -2,7 +2,7 @@
 
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
-use OpenConext\EngineBlock\Metadata\Entity\Assembler\PushMetadataAssembler;
+use OpenConext\EngineBlock\Metadata\Entity\Assembler\MetadataAssemblerInterface;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
@@ -21,6 +21,11 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 class ConnectionsController
 {
     /**
+     * @var MetadataAssemblerInterface
+     */
+    private $pushMetadataAssembler;
+
+    /**
      * @var AuthorizationCheckerInterface
      */
     private $authorizationChecker;
@@ -36,15 +41,18 @@ class ConnectionsController
     private $repository;
 
     /**
-     * @param AuthorizationCheckerInterface    $authorizationChecker
-     * @param FeatureConfiguration             $featureConfiguration
-     * @param DoctrineMetadataRepository       $repository
+     * @param MetadataAssemblerInterface $assembler
+     * @param AuthorizationCheckerInterface $authorizationChecker
+     * @param FeatureConfiguration $featureConfiguration
+     * @param DoctrineMetadataRepository $repository
      */
     public function __construct(
+        MetadataAssemblerInterface $assembler,
         AuthorizationCheckerInterface $authorizationChecker,
         FeatureConfiguration $featureConfiguration,
         DoctrineMetadataRepository $repository
     ) {
+        $this->pushMetadataAssembler           = $assembler;
         $this->authorizationChecker            = $authorizationChecker;
         $this->featureConfiguration            = $featureConfiguration;
         $this->repository                      = $repository;
@@ -74,8 +82,7 @@ class ConnectionsController
             throw new BadApiRequestHttpException('Unrecognized structure for JSON');
         }
 
-        $assembler = new PushMetadataAssembler();
-        $roles     = $assembler->assemble($body->connections);
+        $roles     = $this->pushMetadataAssembler->assemble($body->connections);
         $result    = $this->repository->synchronize($roles);
 
         return new JsonResponse($result);

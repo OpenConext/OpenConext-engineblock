@@ -344,7 +344,7 @@ class EngineBlock_Corto_Adapter
             'debug' => $settings->isDebug(),
             'ConsentStoreValues' => $settings->isConsentStoreValuesActive(),
             'metadataValidUntilSeconds' => 86400, // This sets the time (in seconds) the entity metadata is valid.
-            'forbiddenSignatureMethods' => $settings->getForbiddenSignatureMethods(),
+            'forbiddenSignatureMethods' => $settings->getForbiddenSignatureMethods()
         ));
 
         $this->configureProxyCertificates($proxyServer);

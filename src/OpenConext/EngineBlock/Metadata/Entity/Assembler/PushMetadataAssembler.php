@@ -16,14 +16,25 @@ use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\Utils;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy;
+use OpenConext\EngineBlock\Validator\ValidatorInterface;
 use RuntimeException;
 use stdClass;
 
 /**
  * @SuppressWarnings(PMD)
  */
-class PushMetadataAssembler
+class PushMetadataAssembler implements MetadataAssemblerInterface
 {
+    /**
+     * @var ValidatorInterface
+     */
+    private $allowedAcsLocationsValidator;
+
+    public function __construct(ValidatorInterface $allowedAcsLocations)
+    {
+        $this->allowedAcsLocationsValidator = $allowedAcsLocations;
+    }
+
     public function assemble($connections)
     {
         $roles = array();
@@ -117,7 +128,7 @@ class PushMetadataAssembler
      * @param stdClass $connection
      * @return IdentityProvider|ServiceProvider
      */
-    public function assembleConnection(stdClass $connection)
+    private function assembleConnection(stdClass $connection)
     {
         if ($connection->type === 'saml20-sp') {
             return $this->assembleSp($connection);
@@ -481,6 +492,12 @@ class PushMetadataAssembler
             if (empty($assertionConsumerServiceMetadata->Location)) {
                 continue;
             }
+
+            // Only allow ACS locations with a verified URI scheme
+            if (!$this->allowedAcsLocationsValidator->validate($assertionConsumerServiceMetadata->Location)) {
+                throw new RuntimeException('The acs metadata contained an invalid location uri scheme');
+            }
+
             if (empty($assertionConsumerServiceMetadata->Binding)) {
                 continue;
             }

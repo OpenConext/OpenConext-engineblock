@@ -28,6 +28,11 @@ authentication_feedback_unsupported_signature_method:
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:unsupportedSignatureMethodAction }
 
+authentication_feedback_unsupported_acs_location_uri_scheme:
+    path:       '/unsupported-acs-location-scheme'
+    methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:unsupportedAcsLocationSchemeAction }
+
 authentication_feedback_unknown_service_provider:
     path:       '/unknown-service-provider'
     methods:    [GET]

@@ -10,6 +10,7 @@ use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProviderFactory;
 use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
+use SAML2\AuthnRequest;
 
 /**
  * Class MockSpContext
@@ -163,6 +164,22 @@ class MockSpContext extends AbstractSubContext
         /** @var MockServiceProvider $sp */
         $sp = $this->mockSpRegistry->get($spName);
         $this->doSpSignsItsRequests($sp);
+    }
+
+    /**
+     * @Given /^SP "([^"]*)" is set with acs location "([^"]*)"$/
+     */
+    public function spConfiguredWithAcsLocation($spName, $acsLocation)
+    {
+        /** @var MockServiceProvider $sp */
+        $sp = $this->mockSpRegistry->get($spName);
+
+        $request = new AuthnRequest();
+        $request->setIssuer($sp->entityId());
+        $request->setAssertionConsumerServiceURL($acsLocation);
+        $sp->setAuthnRequest($request);
+
+        $this->mockSpRegistry->save();
     }
 
     private function doSpSignsItsRequests(MockServiceProvider $sp)

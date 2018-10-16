@@ -2,6 +2,7 @@
 
 use Doctrine\ORM\EntityManager;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
 class EngineBlock_Application_DiContainer extends Pimple
@@ -330,6 +331,14 @@ class EngineBlock_Application_DiContainer extends Pimple
     public function getForbiddenSignatureMethods()
     {
         return (array) $this->container->getParameter('forbidden_signature_methods');
+    }
+
+    /**
+     * @return AllowedSchemeValidator
+     */
+    public function getAcsLocationSchemeValidator()
+    {
+        return $this->container->get('engineblock.validator.allowed_scheme_validator');
     }
 
     /**
