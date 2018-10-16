@@ -61,7 +61,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getSymfonyRequest()
     {
-        return $this->container->get('request_stack')->getCurrentRequest();
+        return $this->container->get('request');
     }
 
     /**
