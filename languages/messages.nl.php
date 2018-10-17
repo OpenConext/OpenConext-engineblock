@@ -193,6 +193,8 @@ We weten helaas niet waar je heen wilt. Heb je te lang gewacht? Probeer het dan 
         Er kon geen Service Provider worden gevonden met het opgegeven EntityID.
     </p>',
 
+    'error_unsupported_acs_location_scheme' => 'Error - URI scheme van de ACS locatie wordt niet ondersteund',
+
     'error_unknown_issuer'              => 'Error - Onbekende dienst',
     'error_unknown_issuer_desc'     => '<p>Je aangevraagde dienst kon niet worden gevonden.</p>',
     'error_generic'                     => 'Error - Foutmelding',

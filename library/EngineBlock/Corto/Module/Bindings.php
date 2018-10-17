@@ -3,10 +3,10 @@
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use OpenConext\EngineBlockBundle\Exception\ResponseProcessingFailedException;
 use SAML2\AuthnRequest;
 use SAML2\Binding;
-use SAML2\Assertion\Exception\InvalidSubjectConfirmationException;
 use SAML2\Certificate\KeyLoader;
 use SAML2\Configuration\Destination;
 use SAML2\Configuration\IdentityProvider as Saml2IdentityProvider;
@@ -80,6 +80,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     private $twig;
 
+    /**
+     * @var AllowedSchemeValidator
+     */
+    private $acsLocationSchemeValidator;
+
     public function __construct(EngineBlock_Corto_ProxyServer $server)
     {
         parent::__construct($server);
@@ -88,6 +93,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $this->_featureConfiguration = $diContainer->getFeatureConfiguration();
         $this->_logger = EngineBlock_ApplicationSingleton::getLog();
         $this->twig = $diContainer->getTwigEnvironment();
+        $this->acsLocationSchemeValidator = $diContainer->getAcsLocationSchemeValidator();
     }
 
     /**
@@ -132,6 +138,10 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 throw new EngineBlock_Corto_Module_Bindings_UnsupportedSignatureMethodException($signatureMethod);
             }
         }
+
+        // Test if there is an invalid ACS location uri scheme in use
+        $acsLocation = $sspRequest->getAssertionConsumerServiceURL();
+        $this->assertValidAcsLocationScheme($acsLocation);
 
         // check the IssueInstant against our own time to see if the SP's clock is getting out of sync
         $this->_checkIssueInstant( $sspRequest->getIssueInstant(), 'SP',  $sspRequest->getIssuer() );
@@ -623,7 +633,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         } else if ($sspBinding instanceof HTTPRedirect) {
             if ($sspMessage instanceof Response) {
                 throw new EngineBlock_Corto_Module_Bindings_UnsupportedBindingException(
-                    'May not send a Reponse via HTTP Redirect'
+                    'May not send a response via HTTP redirect'
                 );
             }
 
@@ -662,6 +672,15 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // Determine if we should sign the message
         return $remoteEntity->requestsMustBeSigned || $this->_server->getConfig('WantsAuthnRequestsSigned');
+    }
+
+    private function assertValidAcsLocationScheme($acsLocation)
+    {
+        if ($acsLocation && !$this->acsLocationSchemeValidator->validate($acsLocation)) {
+            throw new EngineBlock_Corto_Module_Bindings_UnsupportedAcsLocationSchemeException(
+                'The received ACS location does not have a valid scheme'
+            );
+        }
     }
 
     /**
