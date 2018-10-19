@@ -22,7 +22,6 @@ services:
         class: OpenConext\EngineBlock\Request\RequestId
         arguments:
             - "@engineblock.request.request_id_generator"
-        public: true
 
     engineblock.security.http_basic_entry_point:
         class: OpenConext\EngineBlockBundle\Security\Http\EntryPoint\JsonBasicAuthenticationEntryPoint
@@ -129,6 +128,18 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@engineblock.repository.service_provider"
             - "@engineblock.repository.identity_provider"
+
+    engineblock.metadata.push_metadata_assembler:
+        public: false
+        class: OpenConext\EngineBlock\Metadata\Entity\Assembler\PushMetadataAssembler
+        arguments:
+            - "@engineblock.validator.allowed_scheme_validator"
+
+    engineblock.validator.allowed_scheme_validator:
+        class: OpenConext\EngineBlock\Validator\AllowedSchemeValidator
+        arguments:
+            - "%allowed_acs_location_schemes%"
+
     engineblock.twig.extension.debug:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Debug
         tags:

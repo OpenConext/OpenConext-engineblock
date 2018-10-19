@@ -128,6 +128,21 @@ class FeedbackController
     }
 
     /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
+    public function unsupportedAcsLocationSchemeAction()
+    {
+        return new Response(
+            $this->twig
+                ->render(
+                    '@theme/Authentication/View/Feedback/unsupported-acs-location-scheme.html.twig'
+                ),
+            400
+        );
+    }
+
+    /**
      * @param Request $request
      * @return Response
      * @throws \EngineBlock_Exception
