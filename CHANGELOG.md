@@ -5,6 +5,9 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 5.8.5
+Bugfix for a possible break after giving consent. This release is preventing a crash when the original issuer is null #604   
+
 ## 5.8.4
 A security patch, fixing a possible XSS vulnerability. 
 Described in more detail in #598
