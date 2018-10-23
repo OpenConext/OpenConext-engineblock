@@ -15,16 +15,26 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends Engine
 
         $remainingProcessingEntities = &$_SESSION['Processing'][$receivedRequest->getId()]['RemainingEntities'];
 
-        // @todo check if this is the correct place to flush log
-        // Flush log if SP or IdP has additional logging enabled
-        $sp  = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
-        $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getOriginalIssuer());
-        if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(array($sp, $idp))) {
-            $application = EngineBlock_ApplicationSingleton::getInstance();
-            $application->flushLog('Activated additional logging for the SP or IdP');
+        $wantlogging = true;
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $log = $application->getLogInstance();
+        $originalIssuer = $response->getOriginalIssuer();
 
-            $log = $application->getLogInstance();
-            $log->info('Raw HTTP request', array('http_request' => (string) $application->getHttpRequest()));
+        if ($originalIssuer) {
+            $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
+            $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getOriginalIssuer());
+            $wantlogging = EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging([$sp, $idp]);
+        } else {
+            $log->warning(
+                'The original issuer could not be found in the response. Unable to verify if additional logging is '.
+                'required, assuming yes.'
+            );
+        }
+
+        if ($wantlogging) {
+            // Flush log if SP or IdP has additional logging enabled
+            $application->flushLog('Activated additional logging for the SP or IdP');
+            $log->info('Raw HTTP request', array('http_request' => (string)$application->getHttpRequest()));
         }
 
         if (!empty($remainingProcessingEntities)) { // Moar processing!
