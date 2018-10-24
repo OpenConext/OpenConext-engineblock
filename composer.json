@@ -51,6 +51,11 @@
         "ingenerator/behat-tableassert": "^1.1",
         "phpcompatibility/php-compatibility": "^8.2"
     },
+    "replace": {
+        "symfony/polyfill-php54": "1.99",
+        "symfony/polyfill-php55": "1.99",
+        "symfony/polyfill-php56": "1.99"
+    },
     "scripts": {
         "post-autoload-dump": [
             "bin/composer/dump-required-ini-params.sh"
