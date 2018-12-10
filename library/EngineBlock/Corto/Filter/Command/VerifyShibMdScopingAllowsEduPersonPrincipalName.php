@@ -1,7 +1,6 @@
 <?php
 
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
-use OpenConext\Value\RegularExpression;
 use OpenConext\Value\Saml\Metadata\ShibbolethMetadataScope;
 use OpenConext\Value\Saml\Metadata\ShibbolethMetadataScopeList;
 use Psr\Log\LoggerInterface;
@@ -104,13 +103,6 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincip
             function (ShibMdScope $scope) {
                 if (!$scope->regexp) {
                     return ShibbolethMetadataScope::literal($scope->allowed);
-                }
-
-                if (!RegularExpression::isValidRegularExpression($scope->allowed)) {
-                    $this->logger->warning(sprintf(
-                        'Ignoring scope "%s" as it is not a valid regular expression',
-                        $scope->allowed
-                    ));
                 }
 
                 return ShibbolethMetadataScope::regexp($scope->allowed);
