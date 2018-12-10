@@ -119,6 +119,40 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             $profileUrl = $configuredUrl;
         }
 
+        // If attribute manipulation was executed before consent, the SetNameId filter has already been applied, and
+        // applying the NameIdResolver is not required.
+        $featureConfiguration = $settings->getFeatureConfiguration();
+        $amPriorToConsent = $featureConfiguration->isEnabled('eb.run_all_manipulations_prior_to_consent');
+
+        // Show the correctly formatted nameId on the consent screen
+        $isPersistent = $serviceProvider->nameIdFormat === Constants::NAMEID_PERSISTENT;
+
+        // Create a local copy of the NameID that is set on the response. We do not yet want to update the actual NameID
+        // in the $response yet as this will cause side effects when saving the consent entry. The 'hashed user id'
+        // will not be consistent.
+        $nameId = clone $response->getNameId();
+
+        if ($isPersistent && !$amPriorToConsent) {
+            $collabPersonIdValue = $nameId->value;
+            // Load the persistent name id for this combination of SP/Identifier and update the local copy of the nameId
+            // to ensure the correct identifier is shown on the consent screen.
+            $resolver = new EngineBlock_Saml2_NameIdResolver();
+            $nameId = $resolver->resolve(
+                $request,
+                $response,
+                $serviceProvider,
+                $collabPersonIdValue
+            );
+        }
+
+        // The nameId format is not yet updated on the response (will be performed in the SetNameId filter after
+        // consent), but in order to display the correct nameId format, we set the SP requested name Id format on the
+        // name id copy that is used to render the correct identifier on the consent page. If AM was already performed,
+        // use the nameIdFormat from the nameId, and do not overwrite it with the SP's preferred format.
+        if (!$amPriorToConsent) {
+            $nameId->Format = $serviceProvider->nameIdFormat;
+        }
+
         $html = $this->twig->render(
             '@theme/Authentication/View/Proxy/consent.html.twig',
             [
@@ -132,9 +166,9 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'attributeMotivations' => $this->getAttributeMotivations($serviceProviderMetadata, $attributes),
                 'minimalConsent' => $identityProvider->getConsentSettings()->isMinimal($serviceProviderMetadata->entityId),
                 'consentCount' => $this->_consentService->countAllFor($response->getNameIdValue()),
-                'nameId' => $response->getNameId(),
+                'nameId' => $nameId,
                 'nameIdSupportUrl' => $settings->getOpenConextNameIdSupportUrl(),
-                'nameIdIsPersistent' => $this->isNameIdFormatPersistent($response->getNameId()),
+                'nameIdIsPersistent' => $isPersistent,
                 'profileUrl' => $profileUrl,
                 'supportUrl' => $settings->getOpenConextSupportUrl(),
                 'showConsentExplanation' => $identityProvider->getConsentSettings()->hasConsentExplanation($serviceProviderMetadata->entityId),
@@ -228,14 +262,5 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 return $contact;
             }
         }
-    }
-
-    /**
-     * @param NameID $nameId
-     * @return bool
-     */
-    private function isNameIdFormatPersistent(NameID $nameId)
-    {
-        return $nameId->Format === Constants::NAMEID_PERSISTENT;
     }
 }
