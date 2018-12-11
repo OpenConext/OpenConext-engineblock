@@ -37,12 +37,21 @@ class EngineBlock_Corto_Model_Consent_Factory
         EngineBlock_Saml2_ResponseAnnotationDecorator $response,
         array $attributes
     ) {
+        // If attribute manipulation was executed before consent, the NameId must be retrieved from the original response
+        // object, in order to ensure correct 'hashed_user_id' generation.
+        $featureConfiguration = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getFeatureConfiguration();
+
+        $amPriorToConsent = $featureConfiguration->isEnabled('eb.run_all_manipulations_prior_to_consent');
+
         return new EngineBlock_Corto_Model_Consent(
             $proxyServer->getConfig('ConsentDbTable', 'consent'),
             $proxyServer->getConfig('ConsentStoreValues', true),
             $response,
             $attributes,
-            $this->_databaseConnectionFactory
+            $this->_databaseConnectionFactory,
+            $amPriorToConsent
         );
     }
 }

@@ -30,18 +30,27 @@ class EngineBlock_Corto_Model_Consent
     private $_databaseConnectionFactory;
 
     /**
+     * A reflection of the eb.run_all_manipulations_prior_to_consent feature flag
+     *
+     * @var bool
+     */
+    private $_amPriorToConsentEnabled;
+
+    /**
      * @param string $tableName
      * @param bool $mustStoreValues
      * @param EngineBlock_Saml2_ResponseAnnotationDecorator $response
      * @param array $responseAttributes
      * @param EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
+     * @param bool $amPriorToConsentEnabled Is the run_all_manipulations_prior_to_consent feature enabled or not
      */
     public function __construct(
         $tableName,
         $mustStoreValues,
         EngineBlock_Saml2_ResponseAnnotationDecorator $response,
         array $responseAttributes,
-        EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
+        EngineBlock_Database_ConnectionFactory $databaseConnectionFactory,
+        $amPriorToConsentEnabled
     )
     {
         $this->_tableName = $tableName;
@@ -49,6 +58,7 @@ class EngineBlock_Corto_Model_Consent
         $this->_response = $response;
         $this->_responseAttributes = $responseAttributes;
         $this->_databaseConnectionFactory = $databaseConnectionFactory;
+        $this->_amPriorToConsentEnabled = $amPriorToConsentEnabled;
     }
 
     public function explicitConsentWasGivenFor(ServiceProvider $serviceProvider) {
@@ -96,6 +106,10 @@ class EngineBlock_Corto_Model_Consent
 
     protected function _getConsentUid()
     {
+        if ($this->_amPriorToConsentEnabled) {
+            $nameIdValue = $this->_response->getOriginalResponse()->getCollabPersonId();
+            return $nameIdValue;
+        }
         return $this->_response->getNameIdValue();
     }
 
