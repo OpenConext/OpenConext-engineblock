@@ -610,28 +610,35 @@ class EngineBlock_Corto_ProxyServer
         /** @var AuthnRequest $request */
 
         // Ignore requests for bindings we don't support for responses.
-        if ($request->getProtocolBinding() && ($request->getProtocolBinding() !== Constants::BINDING_HTTP_POST)) {
+        $protocolBinding = $request->getProtocolBinding();
+        // ProtocolBinding is not mandatory, seems safe to assume HTTP-POST since it's
+        // the only thing EB supports anyway.
+        if (empty($protocolBinding)) {
+            $protocolBinding = Constants::BINDING_HTTP_POST;
+        }
+
+        if ($protocolBinding !== Constants::BINDING_HTTP_POST) {
             $this->_server->getLogger()->notice(
-                "ProtocolBinding '{$request->getProtocolBinding()}' requested is not supported, ignoring..."
+                "ProtocolBinding '{$protocolBinding}' requested is not supported, ignoring..."
             );
             return false;
         }
 
         // Custom ACS Location & ProtocolBinding goes first
-        if ($request->getAssertionConsumerServiceURL() && $request->getProtocolBinding()) {
+        if ($request->getAssertionConsumerServiceURL()) {
             if ($requestWasSigned) {
                 $this->_server->getLogger()->info(
                     "Using AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' ".
-                    "and ProtocolBinding '{$request->getProtocolBinding()}' from signed request. "
+                    "and ProtocolBinding '{$protocolBinding}' from signed request. "
                 );
-                return new Service($request->getAssertionConsumerServiceURL(), $request->getProtocolBinding());
+                return new Service($request->getAssertionConsumerServiceURL(), $protocolBinding);
             }
             else {
                 $requestAcsIsRegisteredInMetadata = false;
                 foreach ($serviceProvider->assertionConsumerServices as $entityAcs) {
                     $requestAcsIsRegisteredInMetadata = (
                         $entityAcs->location === $request->getAssertionConsumerServiceURL() &&
-                        $entityAcs->binding === $request->getProtocolBinding()
+                        $entityAcs->binding === $protocolBinding
                     );
                     if ($requestAcsIsRegisteredInMetadata) {
                         break;
@@ -640,15 +647,15 @@ class EngineBlock_Corto_ProxyServer
                 if ($requestAcsIsRegisteredInMetadata) {
                     $this->_server->getLogger()->info(
                         "Using AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' ".
-                        "and ProtocolBinding '{$request->getProtocolBinding()}' from unsigned request, ".
+                        "and ProtocolBinding '{$protocolBinding}' from unsigned request, ".
                         "it's okay though, the ACSLocation and Binding were registered in the metadata"
                     );
-                    return new Service($request->getAssertionConsumerServiceURL(), $request->getProtocolBinding());
+                    return new Service($request->getAssertionConsumerServiceURL(), $protocolBinding);
                 }
                 else {
                     $this->_server->getLogger()->notice(
                         "AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' ".
-                        "and ProtocolBinding '{$request->getProtocolBinding()}' were mentioned in request, ".
+                        "and ProtocolBinding '{$protocolBinding}' were mentioned in request, ".
                         "but the AuthnRequest was not signed, and the ACSLocation and Binding were not found in ".
                         "the metadata for the SP, so I am disallowed from acting upon it.".
                         "Trying the default endpoint.."
@@ -656,18 +663,6 @@ class EngineBlock_Corto_ProxyServer
                 }
             }
             return false;
-        }
-        else {
-            if ($request->getAssertionConsumerServiceURL() || $request->getProtocolBinding()) {
-                // Note that an SP is not actually required to supply both a URL and a Binding.
-                // But what should we do if we don't have both? Pick out a random counterpart from the metadata?
-                // Seems a little hard to predict for the SP, so we go with the default endpoint.
-                $this->_server->getLogger()->notice(
-                    "AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' ".
-                    "or ProtocolBinding '{$request->getProtocolBinding()}' were mentioned in request, ".
-                    "but not both! Ignoring... "
-                );
-            }
         }
 
         if ($request->getAssertionConsumerServiceIndex()) {
