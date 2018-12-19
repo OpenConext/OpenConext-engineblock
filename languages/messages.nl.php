@@ -66,7 +66,7 @@ return $overrides + [
     // Help page
     'help_header'       => 'Help',
     'help_page_content' => <<<HTML
-<p>No help content available.</p>
+<p>Geen help-informatie beschikbaar.</p>
 HTML
     ,
 
