@@ -1,3 +1,4 @@
+@SKIP
 Feature:
   In order to prevent XSS attacks
   As a user
