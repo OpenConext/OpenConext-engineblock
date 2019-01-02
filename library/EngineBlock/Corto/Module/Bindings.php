@@ -678,9 +678,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     {
         if ($acsLocation && !$this->acsLocationSchemeValidator->validate($acsLocation)) {
             $this->_logger->warning(sprintf('The received ACS location "%s" does not have a valid scheme', $acsLocation));
-//            throw new EngineBlock_Corto_Module_Bindings_UnsupportedAcsLocationSchemeException(
-//                'The received ACS location does not have a valid scheme'
-//            );
         }
     }
 
