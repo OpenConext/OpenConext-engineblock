@@ -151,14 +151,14 @@ class EngineBlockContext extends AbstractSubContext
     public function iFollowTheEbDebugScreenToTheIdp()
     {
         // Support for HTTP-Post
-        $hasSubmitButton = $this->getMainContext()->getMinkContext()->getSession()->getPage()->findButton('Submit');
+        $hasSubmitButton = $this->getMinkContext()->getSession()->getPage()->findButton('Submit');
         if ($hasSubmitButton) {
-            $this->getMainContext()->getMinkContext()->pressButton('submitbutton');
+            $this->getMinkContext()->pressButton('submitbutton');
             return;
         }
 
         // Default to HTTP-Redirect
-        $this->getMainContext()->getMinkContext()->clickLink('GO');
+        $this->getMinkContext()->clickLink('GO');
     }
 
     /**
@@ -166,7 +166,7 @@ class EngineBlockContext extends AbstractSubContext
      */
     public function iPassThroughEngineblock()
     {
-        $mink = $this->getMainContext()->getMinkContext();
+        $mink = $this->getMinkContext();
 
         $mink->pressButton('Submit');
     }
@@ -176,7 +176,7 @@ class EngineBlockContext extends AbstractSubContext
      */
     public function iSeeTheAttributesFromSourceOnConsentPage($source, TableNode $attributes)
     {
-        $mink = $this->getMainContext()->getMinkContext();
+        $mink = $this->getMinkContext();
         $tableSelector = 'tbody[data-attr-source="' . strtolower($source) . '"]';
         $tableTemplate = <<<HTML
 <table>
@@ -206,7 +206,7 @@ HTML;
         array_pop($rows);
         array_pop($rows);
 
-        $actualTable->setRows($rows);
+        $actualTable = new TableNode($rows);
 
         $assert = new \Ingenerator\BehatTableAssert\AssertTable;
         $assert->isComparable($attributes, $actualTable, []);
@@ -217,7 +217,7 @@ HTML;
      */
     public function iGiveMyConsent()
     {
-        $mink = $this->getMainContext()->getMinkContext();
+        $mink = $this->getMinkContext();
         if (strstr($mink->getSession()->getPage()->getHtml(), 'accept_terms_button')) {
             $mink->pressButton('accept_terms_button');
         }
@@ -231,7 +231,7 @@ HTML;
         $mockSp = $this->mockSpRegistry->get($spName);
         $mockIdP = $this->mockIdpRegistry->get($idpName);
 
-        $mink = $this->getMainContext()->getMinkContext();
+        $mink = $this->getMinkContext();
         $mink->visit(
             $this->engineBlock->unsolicitedLocation($mockIdP->entityId(), $mockSp->entityId())
         );
@@ -245,7 +245,7 @@ HTML;
         $mockSp = $this->mockSpRegistry->get($spName);
         $mockIdP = $this->mockIdpRegistry->get($idpName);
 
-        $mink = $this->getMainContext()->getMinkContext();
+        $mink = $this->getMinkContext();
         $mink->visit(
             $this->engineBlock->unsolicitedLocation($mockIdP->entityId() . 'I made a booboo', $mockSp->entityId())
         );
@@ -267,7 +267,7 @@ HTML;
 
         $selector = 'input[type="submit"][data-entityid="' . $mockIdp->entityId() . '"]';
 
-        $mink = $this->getMainContext()->getMinkContext()->getSession()->getPage();
+        $mink = $this->getMinkContext()->getSession()->getPage();
         $button = $mink->find('css', $selector);
 
         if (!$button) {
@@ -283,7 +283,7 @@ HTML;
     public function iSeeACertainFormFieldOnTheProcessForm($formFieldName)
     {
         $selector = 'input[name="' . $formFieldName . '"]';
-        $mink = $this->getMainContext()->getMinkContext()->getSession()->getPage();
+        $mink = $this->getMinkContext()->getSession()->getPage();
         $formField = $mink->find('css', $selector);
 
         if (!$formField) {
@@ -297,7 +297,7 @@ HTML;
     public function iDoNotSeeACertainFormFieldOnTheProcessForm($formFieldName)
     {
         $selector = 'input[name="' . $formFieldName . '"]';
-        $mink = $this->getMainContext()->getMinkContext()->getSession()->getPage();
+        $mink = $this->getMinkContext()->getSession()->getPage();
         $formField = $mink->find('css', $selector);
 
         if (!is_null($formField)) {
@@ -312,7 +312,7 @@ HTML;
     {
         $selector = 'a.noaccess';
 
-        $mink = $this->getMainContext()->getMinkContext()->getSession()->getPage();
+        $mink = $this->getMinkContext()->getSession()->getPage();
         $button = $mink->find('css', $selector);
 
         if (!$button) {
@@ -339,7 +339,7 @@ HTML;
      */
     public function iLogoutAtEngineBlock()
     {
-        $this->getMainContext()->getMinkContext()->visit($this->engineBlock->logoutLocation());
+        $this->getMinkContext()->visit($this->engineBlock->logoutLocation());
     }
 
     /**
@@ -365,7 +365,7 @@ HTML;
      */
     public function iLoseMySession()
     {
-        $session = $this->getMainContext()->getMinkContext()->getSession();
+        $session = $this->getMinkContext()->getSession();
         $session->restart();
     }
 
@@ -475,7 +475,7 @@ HTML;
      */
     public function theAuthnRequestToSubmitShouldMatchXpath($xpath)
     {
-        $session = $this->getMainContext()->getMinkContext()->getSession();
+        $session = $this->getMinkContext()->getSession();
         $mink    = $session->getPage();
 
         $authnRequestElement = $mink->find('css', 'input[name="authnRequestXml"]');
@@ -505,7 +505,7 @@ HTML;
      */
     public function myBrowserIsConfiguredToAcceptLanguage($language)
     {
-        $this->getMainContext()->getMinkContext()->getSession()->setRequestHeader('Accept-Language', $language);
+        $this->getMinkContext()->getSession()->setRequestHeader('Accept-Language', $language);
     }
 
     /**
@@ -513,19 +513,19 @@ HTML;
      */
     public function aLangCookieShouldBeSetWithValue($locale)
     {
-        $cookie = $this->getMainContext()->getMinkContext()->getSession()->getCookie('lang');
+        $cookie = $this->getMinkContext()->getSession()->getCookie('lang');
 
         if ($cookie === null) {
             throw new ExpectationException(
                 'The "lang" cookie has not been set',
-                $this->getMainContext()->getMinkContext()->getSession()->getDriver()
+                $this->getMinkContext()->getSession()->getDriver()
             );
         }
 
         if ($cookie !== $locale) {
             throw new ExpectationException(
                 sprintf('The "lang" cookie should contain "%s", but contains "%s"', $locale, $cookie),
-                $this->getMainContext()->getMinkContext()->getSession()->getDriver()
+                $this->getMinkContext()->getSession()->getDriver()
             );
         }
     }
@@ -535,7 +535,7 @@ HTML;
      */
     public function iHaveALocaleCookieContaining($locale)
     {
-        $this->getMainContext()->getMinkContext()->getSession()->setCookie('lang', $locale);
+        $this->getMinkContext()->getSession()->setCookie('lang', $locale);
     }
 
     /**
@@ -543,7 +543,7 @@ HTML;
      */
     public function iGoToEngineblockURL($path)
     {
-        $this->getMainContext()->getMinkContext()->visit($this->engineBlockDomain . $path);
+        $this->getMinkContext()->visit($this->engineBlockDomain . $path);
     }
 
     /**

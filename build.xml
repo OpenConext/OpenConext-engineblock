@@ -182,7 +182,7 @@
         <antcall target="prepare-env"/>
         <echo message="${line.separator}${line.separator}Running Behat"/>
         <antcall target="run-behat">
-            <param name="profile" value="default"/>
+            <param name="suite" value="default"/>
         </antcall>
         <echo message="${line.separator}${line.separator}Reverting the dev env to run in normal mode"/>
         <antcall target="disable-test-env"/>
@@ -195,7 +195,7 @@
         <antcall target="prepare-env"/>
         <echo message="${line.separator}${line.separator}Running Behat"/>
         <antcall target="run-behat">
-            <param name="profile" value="wip"/>
+            <param name="suite" value="wip"/>
         </antcall>
         <echo message="${line.separator}${line.separator}Reverting the dev env to run in normal mode"/>
         <antcall target="disable-test-env"/>
@@ -205,14 +205,14 @@
     <target name="behat-travis"
             description="Run the functional testing suite">
         <antcall target="run-behat">
-            <param name="profile" value="default"/>
+            <param name="suite" value="default"/>
         </antcall>
     </target>
 
     <target name="behat-travis-wip"
             description="Run the functional testing suite for features marked as WIP">
         <antcall target="run-behat">
-            <param name="profile" value="wip"/>
+            <param name="suite" value="wip"/>
         </antcall>
     </target>
 
@@ -220,8 +220,8 @@
             description="Execute the behat test suite"
             depends="create-test-db">
         <exec executable="vendor/bin/behat" failonerror="true">
-            <arg line="-c ./tests/behat.yml '@OpenConextEngineBlockFunctionalTestingBundle'"/>
-            <arg line="--profile ${profile}"/>
+            <arg line="-c ./tests/behat.yml"/>
+            <arg line="--suite ${suite} -vv"/>
         </exec>
     </target>
 
@@ -253,6 +253,13 @@
         </exec>
         <exec executable="app/console" failonerror="true">
             <arg line="doctrine:schema:create --env=test" />
+        </exec>
+    </target>
+
+    <target name="composer-validate"
+            description="validate composer">
+        <exec executable="composer" failonerror="true">
+            <arg line="validate"/>
         </exec>
     </target>
 
