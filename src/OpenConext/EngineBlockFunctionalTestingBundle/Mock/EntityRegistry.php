@@ -2,20 +2,20 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\SerializedDataStore;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 class EntityRegistry extends ParameterBag
 {
     /**
-     * @var SerializedDataStore
+     * @var AbstractDataStore
      */
     private $dataStore;
 
     /**
-     * @param SerializedDataStore $dataStore
+     * @param AbstractDataStore $dataStore
      */
-    public function __construct(SerializedDataStore $dataStore)
+    public function __construct(AbstractDataStore $dataStore)
     {
         $this->dataStore = $dataStore;
 

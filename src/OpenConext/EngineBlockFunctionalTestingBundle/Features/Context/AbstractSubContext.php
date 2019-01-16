@@ -2,18 +2,27 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
-use Behat\Behat\Context\BehatContext;
+use Behat\Behat\Context\Context;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 
 /**
  * Class AbstractSubContext
  */
-abstract class AbstractSubContext extends BehatContext
+abstract class AbstractSubContext implements Context
 {
+    protected $minkContext;
+
     /**
-     * @return FeatureContext
+     * @BeforeScenario
      */
-    public function getMainContext()
+    public function prepareContext(BeforeScenarioScope $scope)
     {
-        return parent::getMainContext();
+        $environment = $scope->getEnvironment();
+        $this->minkContext = $environment->getContext(MinkContext::class);
+    }
+
+    public function getMinkContext()
+    {
+        return $this->minkContext;
     }
 }

@@ -16,41 +16,41 @@
         "beberlei/assert": "^2.6",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-migrations-bundle": "^1.1",
-        "doctrine/orm": "~2.3",
-        "guzzlehttp/guzzle": "^6.0",
+        "doctrine/orm": "~2.5",
+        "guzzlehttp/guzzle": "^6.3",
         "incenteev/composer-parameter-handler": "~2.0",
         "monolog/monolog": "~1.13",
         "openconext/monitor-bundle": "^1.0",
         "openconext/saml-value-object": "^1.3",
         "pimple/pimple": "~2.1",
         "ramsey/uuid": "^3.3.0",
-        "sensio/distribution-bundle": "~4.0",
-        "sensio/framework-extra-bundle": "^3.0.2",
+        "sensio/distribution-bundle": "^5.0",
+        "sensio/framework-extra-bundle": "^3.0",
         "sensio/generator-bundle": "^3.0",
         "simplesamlphp/saml2": "^3.2",
         "swiftmailer/swiftmailer": "^5.4",
         "sybio/image-workshop": "~2.0.7",
-        "symfony/monolog-bundle": "~2.4",
+        "symfony/monolog-bundle": "^3.1.0",
         "symfony/swiftmailer-bundle": "^2.6",
-        "symfony/symfony": "^2.8",
+        "symfony/symfony": "3.4.*",
         "twig/extensions": "^1.5",
         "twig/twig": "^1.35"
     },
     "require-dev": {
-        "phake/phake": "2.1",
-        "behat/behat": "~2.5",
-        "behat/mink": "~1.5",
-        "behat/mink-extension": "~1.3",
+        "behat/behat": "~3.0",
+        "behat/mink": "~1.7",
+        "behat/mink-extension": "~2.0",
         "behat/mink-goutte-driver": "~1.0",
-        "behat/symfony2-extension": "~1.1",
-        "phpmd/phpmd": "^2.3",
-        "squizlabs/php_codesniffer": "^2.5",
-        "mockery/mockery": "0.9.4",
-        "phpunit/phpunit": "^5.6",
-        "sebastian/version": "^2.0",
-        "liip/functional-test-bundle": "^1.7",
+        "behat/symfony2-extension": "~2.0",
         "ingenerator/behat-tableassert": "^1.1",
-        "phpcompatibility/php-compatibility": "^8.2"
+        "liip/functional-test-bundle": "^1.7",
+        "mockery/mockery": "0.9.4",
+        "phake/phake": "2.1",
+        "phpcompatibility/php-compatibility": "^8.2",
+        "phpmd/phpmd": "^2.6",
+        "phpunit/phpunit": "^5.7",
+        "squizlabs/php_codesniffer": "^2.8",
+        "symfony/phpunit-bridge": "^3.0"
     },
     "replace": {
         "symfony/polyfill-mbstring": "1.99",
@@ -92,15 +92,23 @@
             "Surfnet_": "library/"
         },
         "psr-4": {
-            "": "src/"
-        }
+            "OpenConext\\": "src/OpenConext"
+        },
+        "classmap": [
+            "app/AppKernel.php",
+            "app/AppCache.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
             "OpenConext\\": ["tests/unit/OpenConext/", "tests/integration/OpenConext/", "tests/functional/OpenConext/"]
-        }
+        },
+        "files": [
+            "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php"
+        ]
     },
     "config": {
+        "optimize-autoloader": true,
         "platform": {
             "php": "5.6"
         },
@@ -108,6 +116,8 @@
     },
     "extra": {
         "symfony-app-dir": "app",
+        "symfony-var-dir": "app",
+        "symfony-bin-dir": "app",
         "symfony-web-dir": "web",
         "incenteev-parameters": [
             {

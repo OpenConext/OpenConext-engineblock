@@ -3,4 +3,4 @@ _main:
 
 functional_tests:
     prefix:   functional-testing
-    resource: @OpenConextEngineBlockFunctionalTestingBundle/Resources/config/routing.yml
+    resource: "@OpenConextEngineBlockFunctionalTestingBundle/Resources/config/routing.yml"

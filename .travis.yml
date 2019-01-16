@@ -20,6 +20,7 @@ env:
     - COMMAND="functional-tests-wip"
     - COMMAND="code-quality-ci"
     - COMMAND="security-tests"
+    - COMMAND="composer-validate"
   global:
     - SYMFONY_ENV=test
     - ENGINEBLOCK_ENV=test
@@ -66,6 +67,7 @@ branches:
     - 5.x-dev
     - master
     - release/5.8
+    - feature/symfony-upgrade-3.4-retry
 
 addons:
   hosts:
