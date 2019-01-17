@@ -351,7 +351,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             '@theme/Authentication/View/Proxy/wayf.html.twig',
             [
                 'action' => $action,
-                'greenHeader' => $serviceProvider->getDisplayName(),
+                'greenHeader' => $serviceProvider->getDisplayName($currentLocale),
                 'helpLink' => '/authentication/idp/help-discover?lang=' . $currentLocale,
                 'backLink' => $container->isUiOptionReturnToSpActive(),
                 'cutoffPointForShowingUnfilteredIdps' => $container->getCutoffPointForShowingUnfilteredIdps(),
