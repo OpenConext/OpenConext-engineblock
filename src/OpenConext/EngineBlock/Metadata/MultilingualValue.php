@@ -18,8 +18,14 @@ class MultilingualValue
      */
     public function __construct($value, $language)
     {
-        Assertion::string($value);
-        Assertion::string($language);
+        Assertion::string(
+            $value,
+            'The \'value\' of a MultilingualValue should be a string'
+        );
+        Assertion::string(
+            $language,
+            'The \'language\' of a MultilingualValue should be a string'
+        );
 
         $this->value = $value;
         $this->language = $language;
