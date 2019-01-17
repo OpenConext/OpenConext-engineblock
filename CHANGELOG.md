@@ -12,6 +12,11 @@ More information about our release strategy can be found in the [Development Gui
 
 ### Improvements
  * Improve the error message from MultilingualValue #597
+ * Replace un needed polyfills #606 thanks @BackEndTea
+ * Add an editorconfig #607 thanks @BackEndTea
+
+### Bugfix
+ * Fix displayName on WAYF #603 thanks @tvdijen!
 
 ## 5.8.6
 **Bugfix**: Stop overwriting the NameId before giving consent #610
