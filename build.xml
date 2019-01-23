@@ -222,6 +222,7 @@
         <exec executable="vendor/bin/behat" failonerror="true">
             <arg line="-c ./tests/behat.yml"/>
             <arg line="--suite ${suite} -vv"/>
+            <arg line="--format progress"/>
         </exec>
     </target>
 
