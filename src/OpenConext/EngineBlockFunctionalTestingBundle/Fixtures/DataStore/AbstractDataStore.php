@@ -2,13 +2,21 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore;
 
+use Symfony\Component\Filesystem\Filesystem;
+
 abstract class AbstractDataStore
 {
     protected $filePath;
 
-    public function __construct($filePath)
+    /**
+     * @var Filesystem
+     */
+    private $fileSystem;
+
+    public function __construct(Filesystem $fileSystem, $filePath)
     {
         $this->filePath = $filePath;
+        $this->fileSystem = $fileSystem;
     }
 
     protected function verifyFilePath()
@@ -37,7 +45,6 @@ abstract class AbstractDataStore
     public function load($default = [])
     {
         $this->verifyFilePath();
-
         $fileContents = file_get_contents($this->filePath);
         if ($fileContents === false) {
             throw new \RuntimeException('Unable to load data from: ' . $this->filePath);
@@ -58,7 +65,7 @@ abstract class AbstractDataStore
     {
         $this->verifyFilePath();
 
-        file_put_contents($this->filePath, $this->encode($data));
+        $this->fileSystem->dumpFile($this->filePath, $this->encode($data));
     }
 
     abstract protected function encode($data);

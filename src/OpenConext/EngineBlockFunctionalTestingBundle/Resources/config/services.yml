@@ -50,21 +50,21 @@ services:
     #region Data Stores
     engineblock.functional_testing.data_store.service_registry:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\SerializedDataStore
-        arguments: ['%engineblock.functional_testing.service_registry_data_store.file%']
+        arguments: ['@filesystem','%engineblock.functional_testing.service_registry_data_store.file%']
 
     engineblock.functional_testing.data_store.features:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
-        arguments: ['%engineblock.functional_testing.features_data_store.file%']
+        arguments: ['@filesystem','%engineblock.functional_testing.features_data_store.file%']
 
     engineblock.function_testing.data_store.pdp_client:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
-        arguments: ['%engineblock.functional_testing.pdp_data_store.file%']
+        arguments: ['@filesystem','%engineblock.functional_testing.pdp_data_store.file%']
 
     engineblock.functional_testing.data_store.authentication_loop_guard:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
-        arguments: ['%engineblock.functional_testing.authentication_loop_guard_data_store.file%']
+        arguments: ['@filesystem','%engineblock.functional_testing.authentication_loop_guard_data_store.file%']
 
     engineblock.function_testing.data_store.attribute_aggregation_client:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
-        arguments: ['%engineblock.functional_testing.attribute_aggregation_data_store.file%']
+        arguments: ['@filesystem','%engineblock.functional_testing.attribute_aggregation_data_store.file%']
     #endregion Data Stores

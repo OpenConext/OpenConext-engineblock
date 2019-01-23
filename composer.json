@@ -49,6 +49,7 @@
         "phpmd/phpmd": "^2.6",
         "phpunit/phpunit": "^5.7",
         "squizlabs/php_codesniffer": "^2.8",
+        "symfony/filesystem": "^3.4",
         "symfony/phpunit-bridge": "^3.0"
     },
     "scripts": {
