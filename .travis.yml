@@ -4,23 +4,23 @@ dist: precise
 
 php:
   - 5.6
-  - 7.0
+#  - 7.0
 
 matrix:
   fast_finish: true
-  allow_failures:
-  - php: 7.0
-  - env: COMMAND="functional-tests-wip"
+#  allow_failures:
+#  - php: 7.0
+#  - env: COMMAND="functional-tests-wip"
 
 sudo: true # sudo is required for behat
 
 env:
   matrix:
     - COMMAND="functional-tests"
-    - COMMAND="functional-tests-wip"
-    - COMMAND="code-quality-ci"
-    - COMMAND="security-tests"
-    - COMMAND="composer-validate"
+#    - COMMAND="functional-tests-wip"
+#    - COMMAND="code-quality-ci"
+#    - COMMAND="security-tests"
+#    - COMMAND="composer-validate"
   global:
     - SYMFONY_ENV=test
     - ENGINEBLOCK_ENV=test
