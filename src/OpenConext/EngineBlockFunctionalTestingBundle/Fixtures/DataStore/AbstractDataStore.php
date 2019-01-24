@@ -17,14 +17,18 @@ abstract class AbstractDataStore
 
     public function __construct($filePath)
     {
-        $this->filePath = $filePath;
-        $directory = dirname($this->filePath);
+        $directory = dirname($filePath);
+        $this->filePath = basename($filePath);
         $adapter = new Local($directory, LOCK_NB);
         $this->fileSystem = new Filesystem($adapter);
     }
 
     public function load($default = [])
     {
+        if (!$this->fileSystem->has($this->filePath)) {
+            return $default;
+        }
+
         $fileContents = $this->fileSystem->read($this->filePath);
 
         if ($fileContents === false) {

@@ -69,6 +69,10 @@ branches:
     - release/5.8
     - feature/symfony-upgrade-3.4-retry
 
+after_failure:
+  - cat ~/build/OpenConext/OpenConext-engineblock/app/logs/test/test.log
+  - sudo cat /var/log/syslog
+
 addons:
   hosts:
     - engine.vm.openconext.org
