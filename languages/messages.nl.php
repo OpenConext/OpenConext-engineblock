@@ -53,8 +53,8 @@ return $overrides + [
     // WAYF
     'search'                    => 'Zoek een %organisationNoun%...',
     'our_suggestion'            => 'Onze suggestie:',
-    'edit'                      => 'bewerk',
-    'done'                      => 'gedaan',
+    'edit'                      => 'bewerken',
+    'done'                      => 'klaar',
     'idps_with_access'          => '%organisationNounPlural% met toegang',
     'idps_without_access'       => '%organisationNounPlural% zonder toegang',
     'log_in_to'                 => 'Selecteer een %organisationNoun% en login bij',
