@@ -43,7 +43,6 @@ abstract class AbstractDataStore
         if ($data === false) {
             throw new RuntimeException('Unable to decode data from: ' . $this->filePath);
         }
-
         return $data;
     }
 
