@@ -43,6 +43,7 @@
         "behat/mink-goutte-driver": "~1.0",
         "behat/symfony2-extension": "~2.0",
         "ingenerator/behat-tableassert": "^1.1",
+        "league/flysystem": "^1.0",
         "liip/functional-test-bundle": "^1.7",
         "mockery/mockery": "0.9.4",
         "phake/phake": "2.1",
