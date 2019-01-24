@@ -109,6 +109,9 @@ final class FunctionalTestingAttributeAggregationClient implements AttributeAggr
     public function returnsAttribute($name, array $values, $source)
     {
         $attributes = $this->dataStore->load();
+        if (is_null($attributes)) {
+            $attributes = [];
+        }
 
         $attributes[] = [
             'name'   => $name,
