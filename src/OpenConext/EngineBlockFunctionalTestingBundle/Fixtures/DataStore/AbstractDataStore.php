@@ -19,7 +19,7 @@ abstract class AbstractDataStore
     {
         $this->filePath = $filePath;
         $directory = dirname($this->filePath);
-        $adapter = new Local($directory);
+        $adapter = new Local($directory, LOCK_NB);
         $this->fileSystem = new Filesystem($adapter);
     }
 
