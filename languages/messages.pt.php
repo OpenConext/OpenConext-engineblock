@@ -74,7 +74,7 @@ HTML
     'cookies_removal_confirm'    => 'Os seus cookies foram removidos.',
     // Footer
     'service_by'            => 'Este serviço está ligado através da',
-    'serviceprovider_link'  => '<a href="https://www.fccn.pt/seguranca/rcts-aai/" target="_blank">%suiteName%</a>',
+    'serviceprovider_link'  => '<a href="https://openconext.org/" target="_blank">%suiteName%</a>',
     'terms_of_service_link' => '<a href="#" target="_blank">Termos do Serviço</a>',
     // Form
     'request_access_instructions' => '<h2>Infelizmente, você não tem acesso ao serviço que seleccionou.
