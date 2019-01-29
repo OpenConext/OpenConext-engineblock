@@ -1,26 +1,26 @@
 language: php
 
-dist: precise
+dist: xenial
 
 php:
   - 5.6
-#  - 7.0
+  - 7.2
 
 matrix:
   fast_finish: true
-#  allow_failures:
-#  - php: 7.0
-#  - env: COMMAND="functional-tests-wip"
+  allow_failures:
+  - php: 7.2
+  - env: COMMAND="functional-tests-wip"
 
 sudo: true # sudo is required for behat
 
 env:
   matrix:
     - COMMAND="functional-tests"
-#    - COMMAND="functional-tests-wip"
-#    - COMMAND="code-quality-ci"
-#    - COMMAND="security-tests"
-#    - COMMAND="composer-validate"
+    - COMMAND="functional-tests-wip"
+    - COMMAND="code-quality-ci"
+    - COMMAND="security-tests"
+    - COMMAND="composer-validate"
   global:
     - SYMFONY_ENV=test
     - ENGINEBLOCK_ENV=test
@@ -44,14 +44,17 @@ before_script:
   - mkdir -p /tmp/engineblock/cache/test
   - mkdir -p /tmp/engineblock/logs/test
   - sudo apt-get update
-  - sudo apt-get install apache2 libapache2-mod-fastcgi
+  - sudo apt-get install apache2 libapache2-mod-fastcgi ant
   - if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf; fi
   - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
   - sudo a2enmod rewrite actions fastcgi alias ssl
   - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
-  - sudo cp -f ci/travis/vhost-apache /etc/apache2/sites-available/default-ssl
-  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default-ssl
+  - sudo cp -f ci/travis/vhost-apache /etc/apache2/sites-available/default-ssl.conf
+  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default-ssl.conf
+  - sudo sed -i -e "s,www-data,travis,g" /etc/apache2/envvars
+  - sudo chown -R travis:travis /var/lib/apache2/fastcgi
+  - sudo a2dissite 000-default
   - sudo a2ensite default-ssl
   - sudo service apache2 restart
   - composer self-update
@@ -70,8 +73,13 @@ branches:
     - feature/symfony-upgrade-3.4-retry
 
 after_failure:
+  - sudo tail -500 /var/log/apache2/error.log
+  - sudo tail -500 /var/log/apache2/access.log
   - cat ~/build/OpenConext/OpenConext-engineblock/app/logs/test/test.log
   - sudo tail -500 /var/log/syslog
+
+services:
+  - mysql
 
 addons:
   hosts:
