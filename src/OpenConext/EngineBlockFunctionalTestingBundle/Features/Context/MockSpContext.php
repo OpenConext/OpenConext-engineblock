@@ -248,6 +248,9 @@ class MockSpContext extends AbstractSubContext
      */
     public function noRegisteredServiceProviders()
     {
+        // Travis / PHP 5.6 issue requires gc cycle in order to actually clear the fixture
+        // https://www.pivotaltracker.com/story/show/161282428
+        gc_collect_cycles();
         $this->mockSpRegistry->clear()->save();
     }
 
