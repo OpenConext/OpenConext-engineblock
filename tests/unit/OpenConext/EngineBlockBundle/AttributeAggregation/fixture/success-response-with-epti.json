@@ -1,0 +1,32 @@
+[
+   {
+      "name": "urn:mace:dir:attribute-def:eduPersonEntitlement",
+      "values": [
+         "urn:x-surfnet:surfnet.nl:sab:role:SURFwireless-beheerder",
+         "urn:x-surfnet:surfnet.nl:sab:role:Coordinerend-SURF-Contactpersoon"
+      ],
+      "source": "sab"
+   },
+   {
+      "name": "urn:mace:dir:attribute-def:isMemberOf",
+      "values": [
+         "urn:collab:group:surfnet.nl:crowd-surfnet",
+         "urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:surflabs"
+      ],
+      "source": "voot"
+   },
+   {
+      "name": "urn:mace:dir:attribute-def:eduPersonTargetedID",
+      "values": [
+         {
+            "Format": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+            "SPProvidedID": null,
+            "value": "Bladiebla",
+            "NameQualifier": "https:\/\/idp.123.tld\/idp\/shibboleth",
+            "SPNameQualifier": "https:\/\/engine.123.tld",
+            "element": {}
+         }
+      ],
+      "source": "idp"
+   }
+]
