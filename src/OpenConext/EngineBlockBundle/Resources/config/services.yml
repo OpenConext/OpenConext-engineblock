@@ -22,6 +22,7 @@ services:
         class: OpenConext\EngineBlock\Request\RequestId
         arguments:
             - "@engineblock.request.request_id_generator"
+        public: true
 
     engineblock.security.http_basic_entry_point:
         class: OpenConext\EngineBlockBundle\Security\Http\EntryPoint\JsonBasicAuthenticationEntryPoint

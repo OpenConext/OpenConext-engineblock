@@ -1,4 +1,11 @@
 services:
+
+    # Aliased the monolog logger for OpenConextEngineBlockBundle who boots the ApplicationSingleton without use of DI.
+    # Remove this once ApplicationSingleton is removed, or uses DI.
+    monolog.logger.public:
+      alias: 'monolog.logger'
+      public: true
+
     engineblock.logger.additional_info_formatter:
         class: OpenConext\EngineBlock\Logger\Formatter\AdditionalInfoFormatter
         arguments:
@@ -15,6 +22,7 @@ services:
         factory: [OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrErrorLevelActivationStrategyFactory, createActivationStrategy]
         arguments:
             - { action_level: "%logger.fingers_crossed.action_level%" }
+        public: true
 
     engineblock.logger.processor.request_id_processor:
         class: OpenConext\EngineBlock\Logger\Processor\RequestIdProcessor

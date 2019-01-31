@@ -12,40 +12,10 @@ services:
         arguments:
             - '%engineblock_url%'
 
-    #region Behat Contexts
+#    #region Behat Contexts
     engineblock.functional_testing.behat_context.mink:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext
-
-    engineblock.functional_testing.behat_context.engine_block:
-        class: OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\EngineBlockContext
-        arguments:
-            - '@engineblock.functional_testing.fixture.service_registry'
-            - '@engineblock.functional_testing.service.engine_block'
-            - '@engineblock.mock_entities.sp_registry'
-            - '@engineblock.mock_entities.idp_registry'
-            - '@engineblock.functional_testing.fixture.features'
-            - '@engineblock.functional_testing.fixture.pdp_client'
-            - '@engineblock.functional_testing.fixture.authentication_loop_guard'
-            - '@engineblock.functional_testing.fixture.attribute_aggregation_client'
-
-    engineblock.functional_testing.behat_context.mock_idp:
-        class: OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MockIdpContext
-        arguments:
-            - '@engineblock.functional_testing.fixture.service_registry'
-            - '@engineblock.functional_testing.service.engine_block'
-            - '@engineblock.mock_entities.idp_factory'
-            - '@engineblock.mock_entities.idp_registry'
-            - '@engineblock.mock_entities.sp_registry'
-
-    engineblock.functional_testing.behat_context.mock_sp:
-        class: OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MockSpContext
-        arguments:
-            - '@engineblock.functional_testing.fixture.service_registry'
-            - '@engineblock.functional_testing.service.engine_block'
-            - '@engineblock.mock_entities.sp_factory'
-            - '@engineblock.mock_entities.sp_registry'
-            - '@engineblock.mock_entities.idp_registry'
-    #endregion Behat Contexts
+#    #endregion Behat Contexts
 
     #region Fixtures
     engineblock.functional_testing.fixture.service_registry:

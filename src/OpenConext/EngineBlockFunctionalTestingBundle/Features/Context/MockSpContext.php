@@ -97,7 +97,7 @@ class MockSpContext extends AbstractSubContext
             $ssoStartLocation = $mockSp->loginUrlRedirect();
         }
 
-        $this->getMainContext()->getMinkContext()->visit($ssoStartLocation);
+        $this->getMinkContext()->visit($ssoStartLocation);
     }
 
     /**
@@ -248,6 +248,9 @@ class MockSpContext extends AbstractSubContext
      */
     public function noRegisteredServiceProviders()
     {
+        // Travis / PHP 5.6 issue requires gc cycle in order to actually clear the fixture
+        // https://www.pivotaltracker.com/story/show/161282428
+        gc_collect_cycles();
         $this->mockSpRegistry->clear()->save();
     }
 
@@ -304,7 +307,7 @@ class MockSpContext extends AbstractSubContext
      */
     public function iPassThroughTheSp()
     {
-        $mink = $this->getMainContext()->getMinkContext();
+        $mink = $this->getMinkContext();
         $mink->pressButton('GO');
     }
 

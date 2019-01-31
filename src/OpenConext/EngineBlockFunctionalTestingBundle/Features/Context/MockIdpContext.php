@@ -225,6 +225,9 @@ class MockIdpContext extends AbstractSubContext
      */
     public function noRegisteredIdentityProviders()
     {
+        // Travis / PHP 5.6 issue requires gc cycle in order to actually clear the fixture
+        // https://www.pivotaltracker.com/story/show/161282428
+        gc_collect_cycles();
         $this->mockIdpRegistry->clear()->save();
     }
 
@@ -233,7 +236,7 @@ class MockIdpContext extends AbstractSubContext
      */
     public function iPassThroughTheIdp()
     {
-        $mink = $this->getMainContext()->getMinkContext();
+        $mink = $this->getMinkContext();
         $mink->pressButton('GO');
     }
 
