@@ -32,6 +32,8 @@
                 {% endif %}
             </header>
 
+            {% if attributes|length > 0 %}
+
             <section class="privacy">
                 <h2>{{ 'consent_privacy_title'|trans({'%arg1%': spName}) }}</h2>
             </section>
@@ -147,6 +149,58 @@
                     {% endfor %}
                 </table>
             </section>
+
+            {% else %}
+            {# There are no attributes requested by the SP #}
+
+            <section class="privacy">
+                <h2>{{ 'consent_no_attributes_text'|trans }}</h2>
+            </section>
+
+            <section class="attributes">
+                <table class="comp-table attributes">
+
+                    {% for attributeSource, attributes in attributesBySource %}
+                        {% if attributeSource == 'engineblock' %}
+                        <tbody data-attr-source="{{ attributeSource }}">
+                        <tr class="source-info">
+                            <td colspan="2">
+
+                                    <img width="30" height="30" src="{{ defaultLogo }}"
+                                         alt=""/>
+                                    <h2>{{ 'suite_name'|trans }}</h2>
+                                    <a class="small" href="{{ nameIdSupportUrl }}" target="_blank">{{ 'consent_name_id_support_link'|trans }}</a>
+
+                            </td>
+                        </tr>
+                        {% endif %}
+
+                        {% for attributeIdentifier, attributeValues in attributes %}
+
+                            {% if attributeSource == 'engineblock' %}
+                                <tr>
+                                    <td class="attr-name" data-identifier="{{ attributeIdentifier }}">{{ 'consent_name_id_label'|trans }}</td>
+                                    <td class="attr-value" data-identifier="{{ attributeIdentifier }}">
+
+                                        {% spaceless %}
+                                            {% if nameIdIsPersistent %}
+                                                <a class="help tooltip" title="{{ 'consent_name_id_value_tooltip'|trans({'%arg1%': 'suite_name'|trans }) }}" href="#">
+                                            {% endif %}
+                                            <span>{{ attributeValues }}</span>
+                                            {% if nameIdIsPersistent %}
+                                                </a>
+                                            {% endif %}
+                                        {% endspaceless %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    {% endfor %}
+                </table>
+            </section>
+
+            {% endif %}
 
             {% if showConsentExplanation and consentSettings.consentExplanationIn(app.request.locale, spEntityId) %}
             <section class="idp-consent-explanation">

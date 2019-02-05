@@ -116,6 +116,7 @@ HTML
     'consent_attributes_correction_link'      => 'Are your details incorrect?',
     'consent_attributes_show_more'            => 'Show more information',
     'consent_attributes_show_less'            => 'Show less information',
+    'consent_no_attributes_text'              => 'This service requires no information from your institution.',
     'consent_buttons_title'                   => 'Do you agree with sharing this data?',
     'consent_buttons_ok'                      => 'Yes, proceed to %arg1%',
     'consent_buttons_ok_minimal'              => 'Proceed to %arg1%',

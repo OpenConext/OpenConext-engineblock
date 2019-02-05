@@ -113,6 +113,7 @@ HTML
     'consent_attributes_correction_link'      => 'Kloppen deze gegevens niet?',
     'consent_attributes_show_more'            => 'Toon alle gegevens',
     'consent_attributes_show_less'            => 'Toon minder gegevens',
+    'consent_no_attributes_text'              => 'Voor deze dienst zijn geen gegevens van jouw instelling nodig.',
     'consent_buttons_title'                   => 'Ga je akkoord met het doorsturen van deze gegevens?',
     'consent_buttons_ok'                      => 'Ja, ga door naar %arg1%',
     'consent_buttons_ok_minimal'              => 'Ga door naar %arg1%',
