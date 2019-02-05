@@ -45,20 +45,18 @@
                         <tr class="source-info">
                             <td colspan="2">
                                 {% if attributeSource == 'engineblock' %}
-                                    <img width="30" height="30" src="{{ defaultLogo }}"
+                                    <img class="logo-small" src="{{ defaultLogo }}"
                                          alt=""/>
                                     <h2>{{ 'suite_name'|trans }}</h2>
                                 {% elseif attributeSource != 'idp' %}
-                                    <img width="30" height="30" src="{{ attributeSourceLogoUrl(attributeSource)|escape('html_attr') }}"
+                                    <img class="logo-small" src="{{ attributeSourceLogoUrl(attributeSource)|escape('html_attr') }}"
                                          alt=""/>
                                     <h2>{{ attributeSourceDisplayName(attributeSource) }}</h2>
                                 {% else %}
                                     {% if idp.logo is not null %}
-                                        <img width="30" height="30"
-                                             src="{{ idp.logo.url }}"
-                                             alt=""/>
+                                        <img class="logo-small" src="{{ idp.logo.url }}" alt=""/>
                                     {% else %}
-                                        <img width="30" height="30" src="/images/placeholder.png" alt=""/>
+                                        <img class="logo-small" src="/images/placeholder.png" alt=""/>
                                     {% endif %}
                                     <h2>{{ idpName }}</h2>
                                 {% endif %}
@@ -152,7 +150,7 @@
             <section class="idp-consent-explanation">
                 {% if idp.logo is not null %}
                     <div class="idp-logo">
-                        <img class="idp-logo" width="30" height="30" src="{{ idp.logo.url }}" alt=""/>
+                        <img class="idp-logo logo-small" src="{{ idp.logo.url }}" alt=""/>
                     </div>
                 {% endif %}
                 <p class="title">{{ 'consent_explanation_title'|trans }}</p>
