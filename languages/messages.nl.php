@@ -110,7 +110,7 @@ HTML
     'consent_header_text'                     => 'De dienst heeft deze gegevens nodig om goed te kunnen functioneren. De gegevens worden vanuit jouw %organisationNoun% veilig verstuurd naar %arg1% via <a class="help" data-slidein="about"><span>%suiteName%</span></a>.',
     'consent_privacy_title'                   => 'De volgende gegevens worden doorgestuurd naar %arg1%:',
     'consent_privacy_link'                    => 'Lees het privacybeleid van deze dienst',
-    'consent_attributes_correction_link'      => 'Kloppen deze gegevens niet?',
+    'consent_attributes_correction_link'      => 'Kloppen de onderstaande gegevens niet?',
     'consent_attributes_show_more'            => 'Toon alle gegevens',
     'consent_attributes_show_less'            => 'Toon minder gegevens',
     'consent_buttons_title'                   => 'Ga je akkoord met het doorsturen van deze gegevens?',

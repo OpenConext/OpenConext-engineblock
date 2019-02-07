@@ -113,7 +113,7 @@ HTML
     'consent_header_text'                     => 'The service needs the following information to function properly. These data will be sent securely from your %organisationNoun% towards %arg1% via <a class="help" href="#" data-slidein="about"><span>%suiteName%</span></a>.',
     'consent_privacy_title'                   => 'The following information will be shared with %arg1%:',
     'consent_privacy_link'                    => 'Read the privacy policy of this service',
-    'consent_attributes_correction_link'      => 'Are your details incorrect?',
+    'consent_attributes_correction_link'      => 'Are the details below incorrect?',
     'consent_attributes_show_more'            => 'Show more information',
     'consent_attributes_show_less'            => 'Show less information',
     'consent_buttons_title'                   => 'Do you agree with sharing this data?',
