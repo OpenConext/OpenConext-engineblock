@@ -14,6 +14,7 @@ More information about our release strategy can be found in the [Development Gui
  * Improve the error message from MultilingualValue #597
  * Replace un needed polyfills #606 thanks @BackEndTea
  * Add an editorconfig #607 thanks @BackEndTea
+ * Harden against hypothetical XXE vulnerability #621
 
 ### Bugfix
  * Fix displayName on WAYF #603 thanks @tvdijen!
