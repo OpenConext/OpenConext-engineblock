@@ -147,8 +147,8 @@ TXT
 
     // Consent slidein: Reject
     'consent_slidein_reject_text'  => <<<'TXT'
-<h1>You declined to share your data</h1>
-<p>The service you're logging into requires your data to function. If you do not agree with sharing your data, you cannot use this service. By closing your browser or this tab you fully decline to share the necessary information. If you change your mind after this, please return to the service and you will be asked for permission once again.</p>
+<h1>You don't want to share your data with the service</h1>
+<p>The service you're logging into requires your data to function properly. If you prefer not to share your data, you cannot use this service. By closing your browser or just this tab you prevent your information from being shared with the service. If you change your mind later, please login to the service again and this screen will reappear.</p>
 TXT
     ,
 

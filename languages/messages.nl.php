@@ -145,8 +145,8 @@ TXT
 
     // Consent slidein: Reject
     'consent_slidein_reject_text'  => <<<'TXT'
-<h1>Je geeft geen toestemming om gegevens door te sturen</h1>
-<p>De dienst waar je probeert in te loggen heeft jouw gegevens nodig om te kunnen functioneren. Als je hier geen toestemming voor geeft dan kun je geen gebruik maken van deze dienst. Door je browser of dit tabblad af te sluiten geef je geen toestemming voor het doorsturen van gegevens. Als je je hierna bedenkt, log dan opnieuw in bij de dienst; je wordt dan opnieuw gevraagd om toestemming te geven.</p>
+<h1>Je wilt geen gegevens delen met de dienst</h1>
+<p>De dienst waar je probeert in te loggen heeft jouw gegevens nodig om te kunnen functioneren. Als je deze gegevens niet wilt delen dan kun je geen gebruik maken van deze dienst. Door je browser of dit tabblad af te sluiten voorkom je het doorsturen van je gegevens. Als je je hierna bedenkt, log dan opnieuw in bij de dienst; je krijgt dit scherm dan opnieuw te zien.</p>
 TXT
     ,
 
