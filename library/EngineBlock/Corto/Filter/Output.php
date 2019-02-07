@@ -50,9 +50,6 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             // Then don't continue with the rest of the modifications
             new EngineBlock_Corto_Filter_Command_RejectProcessingMode(),
 
-            // Add collabPersonId attribute
-            new EngineBlock_Corto_Filter_Command_AddCollabPersonIdAttribute(),
-
             // Run custom attribute manipulations
             new EngineBlock_Corto_Filter_Command_RunAttributeManipulations(
                 EngineBlock_Corto_Filter_Command_RunAttributeManipulations::TYPE_SP
