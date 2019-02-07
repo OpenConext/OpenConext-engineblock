@@ -201,11 +201,16 @@
 
               +max-width($small)
                 width: auto
+                padding-bottom: 0.3em
+                border-bottom: none
 
 
             &.attr-value
               ul
                 margin-bottom: 0
+              +max-width($small)
+                border-top: none
+                padding-top: 0
 
             &.attr-value
               a
@@ -263,6 +268,10 @@
 
             td.attr-name
               text-align: left
+
+            td.attr-name::after
+              content: ":"
+              margin-left: -3px
 
             &.source-info
               td
