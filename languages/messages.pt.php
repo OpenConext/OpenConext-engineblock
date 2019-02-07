@@ -103,6 +103,7 @@ HTML
     'consent_attributes_correction_link'      => 'Os seus detalhes estão incorrectos?',
     'consent_attributes_show_more'            => 'Mostrar mais informação',
     'consent_attributes_show_less'            => 'Mostrar menos informação',
+    'consent_no_attributes_text'              => 'Este serviço não requer informações da sua instituição',
     'consent_buttons_title'                   => 'Concorda com a partilha desta informação?',
     'consent_buttons_ok'                      => 'Sim, prossiga para %arg1%',
     'consent_buttons_ok_minimal'              => 'Prossiga para %arg1%',
