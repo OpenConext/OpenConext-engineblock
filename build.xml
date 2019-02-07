@@ -178,27 +178,23 @@
 
     <target name="behat-dev">
         <echo message="Preparing the dev env to run in functional testing mode" />
-        <antcall target="enable-test-env"/>
         <antcall target="prepare-env"/>
         <echo message="${line.separator}${line.separator}Running Behat"/>
         <antcall target="run-behat">
             <param name="suite" value="default"/>
         </antcall>
         <echo message="${line.separator}${line.separator}Reverting the dev env to run in normal mode"/>
-        <antcall target="disable-test-env"/>
         <antcall target="prepare-env"/>
     </target>
 
     <target name="behat-dev-wip">
         <echo message="Preparing the dev env to run in functional testing mode" />
-        <antcall target="enable-test-env"/>
         <antcall target="prepare-env"/>
         <echo message="${line.separator}${line.separator}Running Behat"/>
         <antcall target="run-behat">
             <param name="suite" value="wip"/>
         </antcall>
         <echo message="${line.separator}${line.separator}Reverting the dev env to run in normal mode"/>
-        <antcall target="disable-test-env"/>
         <antcall target="prepare-env"/>
     </target>
 
@@ -224,20 +220,6 @@
             <arg line="--suite ${suite} -vv"/>
             <arg line="--format progress"/>
         </exec>
-    </target>
-
-    <target name="enable-test-env"
-            description="Set the environment in app_dev.php test">
-        <replace file="${basedir}/web/app_dev.php"
-                 token="new AppKernel('dev', true)"
-                 value="new AppKernel('test', true)"/>
-    </target>
-
-    <target name="disable-test-env"
-            description="Set the environment in app_dev.php dev">
-        <replace file="${basedir}/web/app_dev.php"
-                 token="new AppKernel('test', true)"
-                 value="new AppKernel('dev', true)"/>
     </target>
 
     <target name="prepare-env"
