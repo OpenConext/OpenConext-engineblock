@@ -56,9 +56,6 @@ abstract class EngineBlock_Corto_Filter_Abstract
         else if ($response->getCollabPersonId()) {
             $collabPersonId = $response->getCollabPersonId();
         }
-        else if (isset($responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.40.40.1'][0])) {
-            $collabPersonId = $responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.40.40.1'][0];
-        }
         else if ($responseNameId->value) {
             $collabPersonId = $responseNameId->value;
         }

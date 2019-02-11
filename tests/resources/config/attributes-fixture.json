@@ -373,16 +373,6 @@
             "nl": "Naam Virtuele Organisatie"
         }
     },
-    "urn:oid:1.3.6.1.4.1.1076.20.40.40.1": {
-        "Description": {
-            "en": "Unique identifier of this user within SURFconext",
-            "nl": "Unieke identificatie van deze gebruiker binnen SURFconext"
-        },
-        "Name": {
-            "en": "Identifier",
-            "nl": "Identifier"
-        }
-    },
     "urn:oid:1.3.6.1.4.1.5923.1.1.1.10": "urn:mace:dir:attribute-def:eduPersonTargetedID",
     "urn:mace:dir:attribute-def:eduPersonTargetedID": {
         "Description": {
