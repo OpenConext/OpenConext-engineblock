@@ -1,6 +1,6 @@
 import {AbstractIdpPicker} from "./AbstractIdpPicker";
 
-export class ConnectedIdpPicker extends AbstractIdpPicker {
+export class IdpPicker extends AbstractIdpPicker {
     constructor(searchForm, targetElement, previousSelectionList, idpList, previousSelectionStorage, rememberChoiceFeature, rememberChoiceStorage) {
         super(searchForm, targetElement, idpList);
 
@@ -176,6 +176,28 @@ export class ConnectedIdpPicker extends AbstractIdpPicker {
         this.previousSelectionStorage.save(this.previousSelectionList.getPreviousSelections());
     }
 
+    /**
+     * Test if the current node is an unconnected/noaccess node
+     * @returns {boolean}
+     */
+    isUnconnectedIdP() {
+        return this.targetElement.querySelector('.result.focussed.noaccess') !==null;
+    }
+
+    /**
+     * Retrieve the title and entity id from the currently focussed unconnected/noaccess node
+     *
+     * The data is returned as an anonymous object with a title and entityId property
+     *
+     * @returns {object}
+     */
+    getUnconnectedIdPDetails() {
+        const title = this.targetElement.querySelector('.result.focussed.noaccess h3');
+        const entityId = this.targetElement.querySelector('.result.focussed.noaccess span.action');
+
+        return {title: title.textContent, entityId: entityId.getAttribute('data-entity-id')};
+    }
+
     selectIdpUnderFocus() {
         const $focused = this.targetElement.querySelector('.result.focussed');
 
@@ -196,7 +218,6 @@ export class ConnectedIdpPicker extends AbstractIdpPicker {
 
             this.previousSelectionStorage.save(this.previousSelectionList.getListUpdatedWith(idp));
         }
-
         if (this.rememberChoiceFeature) {
             const $checkbox = this.targetElement.querySelector('#rememberChoice');
             if ($checkbox.checked) {

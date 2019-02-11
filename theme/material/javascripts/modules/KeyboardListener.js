@@ -43,7 +43,12 @@ export class KeyboardListener {
         }
 
         if (keyCode === ENTER) {
-            this.idpPicker.selectIdpUnderFocus();
+            if (this.idpPicker.isUnconnectedIdP()) {
+                const data = this.idpPicker.getUnconnectedIdPDetails();
+                this.requestAccessModalHelper.openRequestAccessModal(data.title, data.entityId);
+            } else {
+                this.idpPicker.selectIdpUnderFocus();
+            }
         }
     }
 }
