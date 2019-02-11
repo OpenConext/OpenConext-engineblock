@@ -35,8 +35,7 @@ function initialize() {
     const $searchForm                 = document.querySelector('form.mod-search');
     const $requestAccessModal         = document.getElementById('request-access');
     const $requestAccessScroller      = document.getElementById('request-access-scroller');
-    const $rememberChoiceTarget       = document.querySelector('#rememberChoiceDiv');
- 
+
     const configuration      = JSON.parse(document.getElementById('wayf-configuration').innerHTML);
     const throttleAmountInMs = 250;
 
