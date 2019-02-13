@@ -5,8 +5,10 @@
 1. [EngineBlock Input and Output Command Chains][filter]
 1. [Attribute Aggregation](attribute_aggregation.md)
 1. [Release notes for releases < 5.0.0][release-notes]
+1. [Javscript testing][js-testing]
 
 [license]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/LICENSE
 [release]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/release_procedure.md
 [filter]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/filter_commands.md
 [release-notes]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/release_notes
+[js-testing]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/js_testing.md

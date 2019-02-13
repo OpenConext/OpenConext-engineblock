@@ -39,3 +39,8 @@ functional_testing_sp_metadata:
         spName: ".+"
     defaults:
         _controller: engineblock.functional_test.controller.service_provider:metadataAction
+
+functional_testing_wayf:
+    path: "/wayf"
+    defaults:
+        _controller: engineblock.functional_test.controller.wayf:wayfAction

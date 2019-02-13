@@ -10,3 +10,8 @@ services:
         arguments:
             - "@engineblock.mock_entities.sp_registry"
             - "@engineblock.functional_testing.service.engine_block"
+
+    engineblock.functional_test.controller.wayf:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\WayfController
+        arguments:
+            - "@twig"
