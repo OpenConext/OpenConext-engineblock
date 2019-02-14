@@ -1,5 +1,7 @@
 {
   "name": "engineblockthemes",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/OpenConext/OpenConext-engineblock.git",
   "version": "1.0.0",
   "description": "Themes for OpenConext Engineblock",
   "main": "index.js",
@@ -7,7 +9,6 @@
     "test": "jest"
   },
   "author": "",
-  "license": "Apache",
   "devDependencies": {
     "autoprefixer-core": "^5.2.0",
     "babel-plugin-transform-es3-member-expression-literals": "^6.8.0",
