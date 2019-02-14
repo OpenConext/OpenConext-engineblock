@@ -4,7 +4,23 @@ The EngineBlock components that interface with the user in a graphical user inte
 correctly. In order to prevent breakage of these components, Javascript (Jest) functional / acceptance tests have been 
 written to try and prevent regressions from happening.
 
-## WAYF
+## Running tests
+Jest is used to run unit tests. Puppeteer is used on top of Jest in order to run end to end (smoke) tests. These tests 
+can be run in several ways:
+
+**Unit tests**
+
+`ant js-unit-tests` should work after installing the NPM dependencies in the `theme` folder. This will only run the unit 
+tests from the `theme/material/javascripts/tests/unit` directory. If you are building a custom theme, be sure to update
+the `build.xml` file, and change the target to your theme.
+
+**Smoke tests**
+ 
+`ant js-smoke-tests`
+
+Running  `npm run jest` can also be used from the `theme` folder, this will run all jest tests that can be found in the project.
+
+# WAYF tests
 The WAYF strongly relies on JavasScript. It is used to build the various IdP lists (connected, unconnected and previously selected).
 But is also used to search through the available IdP's, keypress navigate and display the request access lists.
 
@@ -25,6 +41,6 @@ parameters can be used to manipulate the behaviour of the wayf that is rendered.
 | backLink | (bool) false | Type: boolean. Display the back link on the WAYF. | 
 | lang | (string) 'en' | Type: string. The language to use when rendering the WAYF. Note that it's possible that this is overridden by the cookie value. | 
 
-### Acceptance tests
+## Acceptance tests
 The WAYF acceptance tests utilize the `/functional-testing/wayf` endpoint in order to test the correct inner working of
 the WAYF.
