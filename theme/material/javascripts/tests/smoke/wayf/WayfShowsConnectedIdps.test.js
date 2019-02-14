@@ -6,6 +6,8 @@ describe(
         let page;
         beforeAll(async () => {
             page = await global.__BROWSER__.newPage();
+            const override = Object.assign(page.viewport(), {width: 1920, height: 1080});
+            page.setViewport(override);
             await page.goto('https://engine.vm.openconext.org/functional-testing/wayf');
         }, timeout);
 
@@ -31,6 +33,26 @@ describe(
             expect(text).toEqual(expect.not.stringContaining('Remember my choice'));
             expect(text).toEqual(expect.not.stringContaining('Return to service provider'));
 
+            await page.screenshot({path: './material/javascripts/tests/smoke/screenshots/unconnected.png'});
+        });
+
+        it('Should show ten connected IdPs', async () => {
+            await page.goto('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=10');
+            let idps = await page.evaluate(() => [...document.querySelectorAll('#connected-idp-picker h3')].map(elem => elem.innerText));
+            expect(idps).toHaveLength(10);
+            await page.screenshot({path: './material/javascripts/tests/smoke/screenshots/unconnected-10.png'});
+        });
+
+        it('Should show no connected IdPs when cutoff point is configured', async () => {
+            await page.goto('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=6&cutoffPointForShowingUnfilteredIdps=5');
+            let idps = await page.evaluate(() => [...document.querySelectorAll('#connected-idp-picker h3')].map(elem => elem.innerText));
+            expect(idps).toHaveLength(0);
+            await page.screenshot({path: './material/javascripts/tests/smoke/screenshots/unconnected-cutoff-1.png'});
+
+            await page.type('.mod-search-input', 'IdP');
+            idps = await page.evaluate(() => [...document.querySelectorAll('#connected-idp-picker h3')].map(elem => elem.innerText));
+            expect(idps).toHaveLength(6);
+            await page.screenshot({path: './material/javascripts/tests/smoke/screenshots/unconnected-cutoff-2.png'});
         });
     },
     timeout,

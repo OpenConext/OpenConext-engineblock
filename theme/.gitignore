@@ -35,3 +35,6 @@ node_modules
 
 ### Bower components
 bower_components
+
+### Test output
+material/javascripts/tests/smoke/screenshots
