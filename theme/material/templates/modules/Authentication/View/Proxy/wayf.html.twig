@@ -30,7 +30,7 @@
         cutoffPointForShowingUnfilteredIdps)|raw }}
     </script>
 
-    <div id="connected-idp-picker">
+    <div id="idp-picker">
         <div class="preselection mod-results hidden">
             <header>
                 <h2>{{ 'our_suggestion'|trans }}<a class="edit" href="#" data-toggle="view" data-toggle-text="{{ 'done'|trans }}">{{ 'edit'|trans }}</a></h2>
@@ -92,25 +92,26 @@
                     <p>{{ 'no_idp_results'|trans }}</p>
                 </div>
             </div>
-        </div>
+            {% if showRequestAccess %}
+                <div id="unconnected-idp-picker" class="idp-picker hidden">
+                    <div class="selection mod-results">
+                        <header>
+                            <h2>{{ 'idps_without_access'|trans|capitalize }}</h2>
+                        </header>
 
-        {% if showRequestAccess %}
-            <div id="unconnected-idp-picker" class="idp-picker hidden">
-                <div class="selection mod-results">
-                    <header>
-                        <h2>{{ 'idps_without_access'|trans|capitalize }}</h2>
-                    </header>
-
-                    <div class="idp-list">
-                    </div>
-
-                    <div class="loading hidden noresults">
-                        <div class="logo">
-                            <div class="letter">??</div>
+                        <div class="idp-list">
                         </div>
-                        <p>{{ 'no_idp_results_request_access'|trans|raw }}</p>
+
+                        <div class="loading hidden noresults">
+                            <div class="logo">
+                                <div class="letter">??</div>
+                            </div>
+                            <p>{{ 'no_idp_results_request_access'|trans|raw }}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
 {% endblock %}

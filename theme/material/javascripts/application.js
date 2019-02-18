@@ -1,7 +1,7 @@
 import {replaceMetadataCertificateLinkTexts} from "./modules/EngineBlockMainPage";
 import {initConsentPage} from "./modules/ConsentPage";
 import {IdpList} from "./modules/IdpList";
-import {ConnectedIdpPicker} from "./modules/ConnectedIdpPicker";
+import {IdpPicker} from "./modules/IdpPicker";
 import {UnconnectedIdpPicker} from "./modules/UnconnectedIdpPicker";
 import {PreviousSelectionList} from "./modules/PreviousSelectionList";
 import {KeyboardListener} from "./modules/KeyboardListener";
@@ -29,14 +29,13 @@ function initialize() {
     }
 
     const $searchBar                  = document.querySelector('.mod-search-input');
-    const $connectedIdpPickerTarget   = document.getElementById('connected-idp-picker');
+    const $connectedIdpPickerTarget   = document.getElementById('idp-picker');
     const $connectedIdpListTarget     = $connectedIdpPickerTarget.querySelector('.selection');
     const $previousSelectionTarget    = $connectedIdpPickerTarget.querySelector('.preselection');
     const $searchForm                 = document.querySelector('form.mod-search');
     const $requestAccessModal         = document.getElementById('request-access');
     const $requestAccessScroller      = document.getElementById('request-access-scroller');
-    const $rememberChoiceTarget       = document.querySelector('#rememberChoiceDiv');
- 
+
     const configuration      = JSON.parse(document.getElementById('wayf-configuration').innerHTML);
     const throttleAmountInMs = 250;
 
@@ -54,7 +53,7 @@ function initialize() {
     );
     const previousSelectionStorage = new PreviousSelectionStorage(configuration.previousSelectionCookieName);
     const rememberChoiceStorage = new RememberChoiceStorage(configuration.rememberChoiceCookieName);
-    const connectedIdpPicker       = new ConnectedIdpPicker(
+    const idpPicker = new IdpPicker(
         $searchForm,
         $connectedIdpPickerTarget,
         previousSelectionList,
@@ -69,13 +68,13 @@ function initialize() {
         $searchBar,
         configuration.requestAccessUrl
     );
-    const keyboardListener         = new KeyboardListener(connectedIdpPicker, $searchBar, requestAccessModalHelper);
-    const mouseListener         = new MouseListener(connectedIdpPicker, $searchBar, requestAccessModalHelper);
+    const keyboardListener         = new KeyboardListener(idpPicker, $searchBar, requestAccessModalHelper);
+    const mouseListener         = new MouseListener(idpPicker, $searchBar, requestAccessModalHelper);
 
     // Keyup, click and input are registered events for cross-browser compatibility with HTML5 'search' input
-    $searchBar.addEventListener('keyup', throttle(event => connectedIdpPicker.searchBy(event.target.value), throttleAmountInMs));
-    $searchBar.addEventListener('click', event => connectedIdpPicker.searchBy(event.target.value));
-    $searchBar.addEventListener('input', event => connectedIdpPicker.searchBy(event.target.value));
+    $searchBar.addEventListener('keyup', throttle(event => idpPicker.searchBy(event.target.value), throttleAmountInMs));
+    $searchBar.addEventListener('click', event => idpPicker.searchBy(event.target.value));
+    $searchBar.addEventListener('input', event => idpPicker.searchBy(event.target.value));
 
     // Only show the search form when javascript is enabled.
     showElement($searchForm);
@@ -85,7 +84,7 @@ function initialize() {
 
     $searchForm.addEventListener('submit', (event) => {
         event.preventDefault();
-        connectedIdpPicker.selectIdpUnderFocus();
+        idpPicker.selectIdpUnderFocus();
     });
 
     const $unconnectedIdpPickerTarget = document.getElementById('unconnected-idp-picker');
@@ -111,6 +110,8 @@ function initialize() {
         $searchBar.addEventListener('input', event => unconnectedIdpPicker.searchBy(event.target.value));
 
         $unconnectedIdpPickerTarget.addEventListener('click', requestAccessModalHelper.requestAccessClickHandler());
+        // Use the keyboardListener to open the modal on ENTER presses
+        $unconnectedIdpPickerTarget.addEventListener('keyup', event => keyboardListener.handle(event.keyCode));
     }
 
     if (window.innerWidth > 800) {
