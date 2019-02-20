@@ -1,4 +1,6 @@
-const timeout = 10000;
+import expectPuppeteer from 'expect-puppeteer'
+
+const timeout = 5000;
 
 describe(
     'WAYF is showing connected IdPs by default',
@@ -33,13 +35,12 @@ describe(
             expect(idps).toHaveLength(1);
             expect(idps[0]).toEqual('Connected IdP 4');
 
-            const text = await page.evaluate(() => document.body.textContent);
             // Ensure some elements are on the page
-            expect(text).toContain('Select an organisation to login to the service');
+            await expectPuppeteer(page).toMatch('Select an organisation to login to the service');
             // Ensure some elements are NOT on the page
-            expect(text).toEqual(expect.not.stringContaining('Identity providers without access'));
-            expect(text).toEqual(expect.not.stringContaining('Remember my choice'));
-            expect(text).toEqual(expect.not.stringContaining('Return to service provider'));
+            await expectPuppeteer(page).not.toMatch('Identity providers without access');
+            await expectPuppeteer(page).not.toMatch('Remember my choice');
+            await expectPuppeteer(page).not.toMatch('Return to service provider');
 
             await page.screenshot({path: './material/javascripts/tests/smoke/screenshots/connected.png'});
         });
@@ -53,6 +54,7 @@ describe(
 
         it('Should show no connected IdPs when cutoff point is configured', async () => {
             await page.goto('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=6&cutoffPointForShowingUnfilteredIdps=5');
+
             let idps = await page.evaluate(() => [...document.querySelectorAll('#connected-idp-picker h3')].map(elem => elem.innerText));
             expect(idps).toHaveLength(0);
             await page.screenshot({path: './material/javascripts/tests/smoke/screenshots/connected-cutoff-1.png'});
@@ -65,37 +67,31 @@ describe(
 
         it('Should show the return to service link when configured', async () => {
             await page.goto('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5&backLink=true');
-            const text = await page.evaluate(() => document.body.textContent);
             // Ensure some elements are on the page
-            expect(text).toContain('Select an organisation to login to the service');
-            expect(text).toContain('Return to service provider');
+            await expectPuppeteer(page).toMatch('Select an organisation to login to the service');
+            await expectPuppeteer(page).toMatch('Return to service provider');
             // Ensure some elements are NOT on the page
-            expect(text).toEqual(expect.not.stringContaining('Identity providers without access'));
-            expect(text).toEqual(expect.not.stringContaining('Remember my choice'));
+            await expectPuppeteer(page).not.toMatch('Identity providers without access');
+            await expectPuppeteer(page).not.toMatch('Remember my choice');
 
             // To be more precise, the links should be in the header and footer
-            let headerLinks = await page.evaluate(() => [...document.querySelectorAll('.mod-header .comp-links li a')].map(elem => elem.innerText));
-            expect(headerLinks).toHaveLength(2);
-            expect(headerLinks[0]).toEqual('Return to service provider');
+            const headerLink = await expect(page).toMatchElement('.mod-header .comp-links li:nth-child(1) a');
+            await expectPuppeteer(headerLink).toMatch('Return to service provider');
 
-            let footerLinks = await page.evaluate(() => [...document.querySelectorAll('.footer-menu .comp-links li a')].map(elem => elem.innerText));
-            expect(footerLinks).toHaveLength(3);
-            expect(footerLinks[1]).toEqual('Return to service provider');
+            const footerLink = await expect(page).toMatchElement('.footer-menu .comp-links li:nth-child(2) a');
+            await expectPuppeteer(footerLink).toMatch('Return to service provider');
 
             await page.screenshot({path: './material/javascripts/tests/smoke/screenshots/connected-back-link.png'});
         });
 
         it('Should show the remember my choice option', async () => {
             await page.goto('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true');
-            const text = await page.evaluate(() => document.body.textContent);
             // Ensure some elements are on the page
-            expect(text).toContain('Select an organisation to login to the service');
-            expect(text).toContain('Remember my choice');
+            await expectPuppeteer(page).toMatch('Select an organisation to login to the service');
+            await expectPuppeteer(page).toMatch('Remember my choice');
             // Ensure some elements are NOT on the page
-            expect(text).toEqual(expect.not.stringContaining('Identity providers without access'));
-            expect(text).toEqual(expect.not.stringContaining('Return to service provider'));
-
-
+            await expectPuppeteer(page).not.toMatch('Identity providers without access');
+            await expectPuppeteer(page).not.toMatch('Return to service provider');
 
             await page.screenshot({path: './material/javascripts/tests/smoke/screenshots/connected-remember-choice.png'});
         });
