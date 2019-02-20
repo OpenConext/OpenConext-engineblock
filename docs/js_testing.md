@@ -20,6 +20,13 @@ the `build.xml` file, and change the target to your theme.
 
 Running  `npm run jest` can also be used from the `theme` folder, this will run all jest tests that can be found in the project.
 
+Note that the `expect-puppeteer` package is used to perform more efficient interactions and assertions on the DOM. Expect-puppeteer states:
+
+> Writing integration test is very hard, especially when you are testing a Single Page Applications. Data are loaded asynchronously and it is difficult to know exactly when an element will be displayed in the page.
+  Puppeteer API is great, but it is low level and not designed for integration testing.
+  
+More info about this package can be found at their [GitHub](https://github.com/smooth-code/jest-puppeteer/tree/master/packages/expect-puppeteer)
+
 # WAYF tests
 The WAYF strongly relies on JavasScript. It is used to build the various IdP lists (connected, unconnected and previously selected).
 But is also used to search through the available IdP's, keypress navigate and display the request access lists.
