@@ -67,38 +67,4 @@ class AttributeAggregationClientTest extends TestCase
         $this->assertEquals('urn:x-surfnet:surfnet.nl:sab:role:Coordinerend-SURF-Contactpersoon', $response->attributes[0]->values[1]);
         $this->assertEquals('sab', $response->attributes[0]->source);
     }
-
-    /**
-     * @test
-     */
-    public function an_attributeaggregation_client_parses_the_aggregator_response_and_filters_non_string_values()
-    {
-        $request = Request::from(
-            'sp-entity-id',
-            'subject',
-            [],
-            [
-                AttributeRule::from('name', 'value', 'source'),
-                AttributeRule::from('name', 'value', 'source'),
-            ]
-        );
-
-        $responseFixture = file_get_contents(__DIR__ . '/fixture/success-response-with-epti.json');
-
-        $mockHandler = new MockHandler([
-            new GuzzleResponse(200, [], $responseFixture)
-        ]);
-
-        $guzzle = new Client(['handler' => $mockHandler]);
-
-        $client = new AttributeAggregationClient(new HttpClient($guzzle), 'https://attr.at/api');
-        $response = $client->aggregate($request);
-
-        $this->assertInstanceOf(Response::class, $response);
-        $this->assertCount(2, $response->attributes);
-        $this->assertEquals('urn:mace:dir:attribute-def:eduPersonEntitlement', $response->attributes[0]->name);
-        $this->assertEquals('urn:x-surfnet:surfnet.nl:sab:role:SURFwireless-beheerder', $response->attributes[0]->values[0]);
-        $this->assertEquals('urn:x-surfnet:surfnet.nl:sab:role:Coordinerend-SURF-Contactpersoon', $response->attributes[0]->values[1]);
-        $this->assertEquals('sab', $response->attributes[0]->source);
-    }
 }
