@@ -6,15 +6,19 @@ We will continue to post relevant release notes on the GitHub release page. More
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
 ## 5.9.0
+Most effort for this release was invested in upgrading Symfony to version 3.4.
 
 ### Features
  * Portuguese language support and other language related work #615 #612 thanks @domgon and @tvdijen!
-
-### Improvements
- * Improve the error message from MultilingualValue #597
+ * Allow selecting unconnected IdP's with keyboard #634
+ * Stop releasing the SURFconextId attribute #631
+ 
+### Improvements 
  * Replace un needed polyfills #606 thanks @BackEndTea
  * Add an editorconfig #607 thanks @BackEndTea
  * Harden against hypothetical XXE vulnerability #621
+ * Several WAYF improvements: #623 #624 #625 #626 #627 #628 #629 #630
+ * Symfony 3.4 upgrade (#617 #614)
 
 ### Bugfix
  * Fix displayName on WAYF #603 thanks @tvdijen!
