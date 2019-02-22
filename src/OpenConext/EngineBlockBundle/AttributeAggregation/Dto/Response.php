@@ -40,11 +40,7 @@ final class Response
         $attributes = [];
 
         foreach ($jsonData as $attributeData) {
-            $attribute = self::parseAggregatedAttribute($attributeData);
-            if (!$attribute) {
-                continue;
-            }
-            $attributes[] = $attribute;
+            $attributes[] = self::parseAggregatedAttribute($attributeData);
         }
 
         $response = new self;
@@ -54,8 +50,8 @@ final class Response
     }
 
     /**
-     * @param array $attributeData
-     * @return AggregatedAttribute|null
+     * @param array $jsonData
+     * @return AggregatedAttribute
      */
     private static function parseAggregatedAttribute(array $attributeData)
     {
@@ -71,17 +67,9 @@ final class Response
             throw new InvalidAttributeAggregationResponseException('Missing aggregated attribute source');
         }
 
-        // All values must be string. See: https://www.pivotaltracker.com/story/show/162197380
-        $values = (array) $attributeData['values'];
-        foreach ($values as $value) {
-            if (!is_string($value)) {
-                return null;
-            }
-        }
-
         return AggregatedAttribute::from(
             (string) $attributeData['name'],
-            $values,
+            (array) $attributeData['values'],
             (string) $attributeData['source']
         );
     }

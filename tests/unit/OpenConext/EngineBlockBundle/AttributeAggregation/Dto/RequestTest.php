@@ -37,7 +37,7 @@ class RequestTest extends TestCase
             'sp-entity-id',
             'subject',
             [
-                'attr' => [1, 2, 3],
+                'attr' => ['1', '2', '3'],
             ],
             [
                 AttributeRule::from('name', 'value', 'source'),
@@ -58,7 +58,57 @@ class RequestTest extends TestCase
                     ],
                     [
                         'name' => 'attr',
-                        'values' => [1, 2, 3],
+                        'values' => ['1', '2', '3'],
+                    ],
+                ],
+                'arpAttributes' => [
+                    'name' => [
+                        [
+                            'value' => 'value',
+                            'source' => 'source',
+                        ],
+                        [
+                            'value' => 'value',
+                            'source' => 'source',
+                        ],
+                    ],
+                ],
+            ],
+            JSON_PRETTY_PRINT
+        );
+
+        $actualJson = json_encode($request, JSON_PRETTY_PRINT);
+
+        $this->assertEquals($expectedJson, $actualJson);
+    }
+
+    /**
+     * @test
+     */
+    public function request_serializes_to_aa_api_format_filters_non_string_values()
+    {
+        $request = Request::from(
+            'sp-entity-id',
+            'subject',
+            [
+                'attr' => ['1', ['foo' => 'bar'], '3'],
+            ],
+            [
+                AttributeRule::from('name', 'value', 'source'),
+                AttributeRule::from('name', 'value', 'source'),
+            ]
+        );
+
+        $expectedJson = json_encode(
+            [
+                'userAttributes' => [
+                    [
+                        'name' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
+                        'values' => ['subject'],
+                    ],
+                    [
+                        'name' => 'SPentityID',
+                        'values' => ['sp-entity-id'],
                     ],
                 ],
                 'arpAttributes' => [

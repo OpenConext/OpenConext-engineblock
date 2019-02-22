@@ -58,6 +58,9 @@ final class Request implements JsonSerializable
         Assertion::string($subjectId, 'The SubjectId must be a string, received "%s" (%s)');
         Assertion::allIsInstanceOf($rules, AttributeRule::class, 'All attributes must be of type AttributeRule');
 
+        // Filter the non string valued attributes
+        $attributes = self::filterNonStringValuesFromAttributes($attributes);
+
         $request = new self;
         $request->spEntityId = $spEntityId;
         $request->subjectId = $subjectId;
@@ -65,6 +68,18 @@ final class Request implements JsonSerializable
         $request->rules = $rules;
 
         return $request;
+    }
+
+    private static function filterNonStringValuesFromAttributes($attributes)
+    {
+        return array_filter($attributes, function ($attributeValues) {
+            foreach ($attributeValues as $attributeValue) {
+                if (!is_string($attributeValue)) {
+                    return false;
+                }
+            }
+            return true;
+        });
     }
 
     public function jsonSerialize()
