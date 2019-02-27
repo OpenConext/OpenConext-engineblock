@@ -7,7 +7,7 @@
     <target name="functional-tests-wip" depends="behat-travis-wip" />
     <target name="code-quality-ci" depends="test-suites,code-quality"/>
     <target name="code-quality" depends="php-lint,phpmd,phpcs,phpcs-legacy"/>
-    <target name="security-tests" depends="security-checker-travis-fix" />
+    <target name="security-tests" depends="security-checker" />
     <target name="test-suites" depends="eb4-tests,unit-tests,integration-tests"/>
 
     <target name="install-git-hooks"
@@ -125,18 +125,6 @@
     <target name="security-checker" description="Check for vulnerable dependencies with SensioLabs Security Checker">
         <exec dir="${basedir}" executable="vendor/bin/security-checker" failonerror="true">
             <arg value="security:check" />
-            <arg value="--verbose" />
-        </exec>
-    </target>
-
-    <!-- This is a (temporary) fix for Travis, see: -->
-    <!-- https://github.com/travis-ci/travis-ci/issues/6339 -->
-    <!-- https://github.com/sensiolabs/security-checker/pull/77#issuecomment-290733113 -->
-    <target name="security-checker-travis-fix" description="Check for vulnerable dependencies with SensioLabs Security Checker">
-        <exec dir="${basedir}" executable="vendor/bin/security-checker" failonerror="true">
-            <arg value="security:check" />
-            <arg value="--verbose" />
-            <arg value="--end-point=http://security.sensiolabs.org/check_lock" />
         </exec>
     </target>
 
