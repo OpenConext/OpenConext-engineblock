@@ -70,6 +70,8 @@
 
       h2
         margin-bottom: 0
+        +max-width($small)
+          margin-bottom: 1em
 
     &.buttons
       text-align: center
@@ -77,6 +79,9 @@
       h2
         text-align: left
         margin-bottom: 1rem
+
+      +max-width($small)
+        padding: 1rem .75rem 0
 
     form#accept
       display: inline
@@ -97,6 +102,10 @@
     a#decline-terms
       color: $blue
       text-decoration: underline
+      margin-top: 1.5em
+
+      +max-width($small)
+        margin-bottom: 1.5em
 
     &.attributes
       overflow-x: auto
@@ -290,7 +299,9 @@
 
     &.idp-consent-explanation
       background-color: $light-pink
-      border: 2em solid white
+      border-width: 2em 2em 1em 2em
+      border-style: solid
+      border-color: white
       padding: 0.75em
       position: relative
       .idp-logo
