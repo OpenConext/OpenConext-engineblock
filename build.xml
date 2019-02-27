@@ -8,7 +8,7 @@
     <target name="code-quality-ci" depends="test-suites,code-quality"/>
     <target name="code-quality" depends="php-lint,phpmd,phpcs,phpcs-legacy"/>
     <target name="security-tests" depends="security-checker" />
-    <target name="test-suites" depends="eb4-tests,unit-tests,integration-tests"/>
+    <target name="test-suites" depends="eb4-tests,unit-tests,integration-tests,js-unit-tests,js-smoke-tests"/>
 
     <target name="install-git-hooks"
             description="installs the pre-commit and pre-push hooks for git">
@@ -151,6 +151,18 @@
         <exec executable="vendor/bin/phpunit" failonerror="true">
             <arg line="--configuration=${basedir}/tests/phpunit.xml"/>
             <arg line="--testsuite=integration"/>
+        </exec>
+    </target>
+
+    <target name="js-unit-tests">
+        <exec dir="${basedir}/theme" executable="node_modules/.bin/jest" failonerror="true">
+            <arg value="material/javascripts/tests/unit" />
+        </exec>
+    </target>
+
+    <target name="js-smoke-tests">
+        <exec dir="${basedir}/theme" executable="node_modules/.bin/jest" failonerror="true">
+            <arg value="material/javascripts/tests/smoke" />
         </exec>
     </target>
 

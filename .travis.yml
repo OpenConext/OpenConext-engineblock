@@ -61,6 +61,7 @@ before_script:
   - composer config secure-http false
   - composer install --prefer-dist -n -o
   - app/console cache:clear --env=test
+  - npm install --prefix=theme
 
 script:
   - ant $COMMAND
@@ -84,5 +85,4 @@ services:
 addons:
   hosts:
     - engine.vm.openconext.org
-
   mariadb: '10.1'
