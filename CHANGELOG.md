@@ -5,6 +5,16 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 5.9.2
+This release improves upon some of the previous consent changes
+
+ * Display the no_attributes text in the IdP table #637
+ * Apply XS viewport UI improvements #638
+ 
+But also adds Jest unit and smoke tests for the WAYF
+
+ * Provide JS smoke tests for the WAYF #635
+ 
 ## 5.9.1
 
 ### Bugfix
