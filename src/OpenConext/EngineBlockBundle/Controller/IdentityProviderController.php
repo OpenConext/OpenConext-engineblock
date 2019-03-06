@@ -22,6 +22,7 @@ use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
 use Exception;
 use OpenConext\EngineBlock\Service\RequestAccessMailer;
+use OpenConext\EngineBlock\Validator\RequestValidator;
 use OpenConext\EngineBlockBridge\ResponseFactory;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
@@ -62,28 +63,37 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
      */
     private $session;
 
+    /**
+     * @var RequestValidator
+     */
+    private $requestValidator;
+
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
         Twig_Environment $twig,
         LoggerInterface $loggerInterface,
         RequestAccessMailer $requestAccessMailer,
-        Session $session
+        Session $session,
+        RequestValidator $validator
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->twig = $twig;
         $this->logger = $loggerInterface;
         $this->requestAccessMailer = $requestAccessMailer;
         $this->session = $session;
+        $this->requestValidator = $validator;
     }
 
     /**
+     * @param Request $request
      * @param null|string $keyId
      * @param null|string $idpHash
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     * @throws Exception
      */
-    public function singleSignOnAction($keyId = null, $idpHash = null)
+    public function singleSignOnAction(Request $request, $keyId = null, $idpHash = null)
     {
+        $this->requestValidator->isValid($request);
+
         $cortoAdapter = new EngineBlock_Corto_Adapter();
 
         if ($keyId !== null) {
