@@ -73,18 +73,27 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
         Twig_Environment $twig,
         LoggerInterface $loggerInterface,
         RequestAccessMailer $requestAccessMailer,
-        Session $session,
-        RequestValidator $validator
+        RequestValidator $validator,
+        Session $session
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->twig = $twig;
         $this->logger = $loggerInterface;
         $this->requestAccessMailer = $requestAccessMailer;
-        $this->session = $session;
         $this->requestValidator = $validator;
+        $this->session = $session;
     }
 
     /**
+     * The SSO action
+     *
+     *  Currently supported request method / binding combinations for SSO are:
+     *
+     *  | SAML Binding     | Request method | Parameter name |
+     *  | ---------------- | -------------- | -------------- |
+     *  | HttpRedirect     | GET            | SAMLRequest    |
+     *  | HTTPPost         | POST           | SAMLRequest    |
+     *
      * @param Request $request
      * @param null|string $keyId
      * @param null|string $idpHash
