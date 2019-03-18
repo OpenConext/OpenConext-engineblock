@@ -41,6 +41,7 @@ return $overrides + [
     'userAgent'             => 'Agente do Utilizador',
     'ipAddress'             => 'Endereço IP',
     'statusCode'            => 'Código de Estado',
+    'artCode'               => 'ART code',
     'statusMessage'         => 'Mensagem de Estado',
     'attributeName'         => 'Nome do Atributo',
     'attributeValue'        => 'Valor do Atributo',

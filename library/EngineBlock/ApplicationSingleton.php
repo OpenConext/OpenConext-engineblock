@@ -3,6 +3,7 @@
 use OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\EntityNotFoundException;
 use OpenConext\EngineBlock\Request\RequestId;
+use OpenConext\EngineBlockBundle\Exception\Art;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -204,7 +205,7 @@ class EngineBlock_ApplicationSingleton
 
         // Store some valuable debug info in session so it can be displayed on feedback pages
         session_start();
-        $this->getSession()->set('feedbackInfo', $this->collectFeedbackInfo());
+        $this->getSession()->set('feedbackInfo', $this->collectFeedbackInfo($exception));
 
         // flush all messages in queue, something went wrong!
         $this->flushLog('An error was caught');
@@ -213,9 +214,10 @@ class EngineBlock_ApplicationSingleton
     }
 
     /**
+     * @param Exception $exception
      * @return array
      */
-    public function collectFeedbackInfo()
+    public function collectFeedbackInfo(Exception $exception)
     {
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $userAgent = $_SERVER['HTTP_USER_AGENT'];
@@ -235,6 +237,7 @@ class EngineBlock_ApplicationSingleton
         $feedbackInfo['requestId'] = $logRequestId;
         $feedbackInfo['userAgent'] = $userAgent;
         $feedbackInfo['ipAddress'] = $this->getClientIpAddress();
+        $feedbackInfo['artCode'] = Art::forException($exception);
 
         // @todo  reset this when login is succesful
         // Find the current identity provider

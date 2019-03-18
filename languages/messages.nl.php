@@ -46,6 +46,7 @@ return $overrides + [
     'userAgent'             => 'User Agent',
     'ipAddress'             => 'IP-adres',
     'statusCode'            => 'Statuscode',
+    'artCode'               => 'ART-code',
     'statusMessage'         => 'Statusbericht',
     'attributeName'         => 'Attribuutnaam',
     'attributeValue'        => 'Attribuutwaarde',
