@@ -9,7 +9,7 @@ use PHPUnit_Framework_TestCase as TestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Stopwatch\StopwatchEvent;
 
-class ExecutionTimeTrackerTest extends TestCase
+class ExecutionTimeTrackerEventListenerTest extends TestCase
 {
     /**
      * @test

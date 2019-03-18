@@ -97,3 +97,8 @@ authentication_feedback_stuck_in_authentication_loop:
     path:       '/stuck-in-authentication-loop'
     methods:    [GET]
     defaults:    { _controller: engineblock.controller.authentication.feedback:stuckInAuthenticationLoopAction }
+
+authentication_feedback_no_authentication_request_received:
+    path:       '/invalid-request-method-on-sso'
+    methods:    [GET]
+    defaults:    { _controller: engineblock.controller.authentication.feedback:noAuthenticationRequestReceivedAction }

@@ -137,7 +137,7 @@ class RequestTest extends TestCase
      */
     public function request_subject_must_be_set()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         Request::from('sp-entity-id', NULL, [], []);
     }
 
@@ -146,7 +146,7 @@ class RequestTest extends TestCase
      */
     public function request_sp_entity_id_must_be_set()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         Request::from(NULL,'subject-id', [], []);
     }
 
@@ -155,7 +155,7 @@ class RequestTest extends TestCase
      */
     public function request_attributes_must_be_of_type_dto()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         Request::from('sp-entity-id', 'subject', [], [['invalid']]);
     }
 }

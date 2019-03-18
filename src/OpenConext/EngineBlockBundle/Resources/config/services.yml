@@ -141,6 +141,9 @@ services:
         arguments:
             - "%allowed_acs_location_schemes%"
 
+    engineblock.validator.sso_request_validator:
+            class: OpenConext\EngineBlock\Validator\SsoRequestValidator
+
     engineblock.twig.extension.debug:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Debug
         tags:

@@ -235,7 +235,7 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
     'error_stuck_in_authentication_loop_desc' => '<p>
         Je bent succesvol ingelogd bij je Identity Provider maar de dienst waar je naartoe wilt stuurt je weer terug naar %suiteName%. Omdat je succesvol bent ingelogd, stuurt %suiteName% je weer naar de dienst, wat resulteert in een oneindig zwart gat. Dit komt waarschijnlijk door een foutje aan de kant van de dienst.
     </p>',
-
+    'error_no_authentication_request_received' => 'Geen authenticatie-aanvraag ontvangen.',
     /**
      * %1 AttributeName
      * %2 Options

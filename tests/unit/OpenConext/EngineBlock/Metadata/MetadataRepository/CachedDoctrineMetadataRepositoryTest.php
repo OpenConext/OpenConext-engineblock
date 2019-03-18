@@ -45,7 +45,7 @@ class CachedDoctrineMetadataRepositoryTest extends PHPUnit_Framework_TestCase
         $doctrineRepository = Mockery::mock('OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository');
         $doctrineRepository->shouldReceive('findIdentityProviderByEntityId');
 
-        $this->setExpectedException('OpenConext\\EngineBlock\\Metadata\\MetadataRepository\\EntityNotFoundException');
+        $this->expectException(EntityNotFoundException::class);
 
         $repository = new CachedDoctrineMetadataRepository($doctrineRepository);
         $repository->fetchIdentityProviderByEntityId('test');
@@ -56,7 +56,7 @@ class CachedDoctrineMetadataRepositoryTest extends PHPUnit_Framework_TestCase
         $doctrineRepository = Mockery::mock('OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository');
         $doctrineRepository->shouldReceive('findServiceProviderByEntityId');
 
-        $this->setExpectedException('OpenConext\\EngineBlock\\Metadata\\MetadataRepository\\EntityNotFoundException');
+        $this->expectException(EntityNotFoundException::class);
 
         $repository = new CachedDoctrineMetadataRepository($doctrineRepository);
         $repository->fetchServiceProviderByEntityId('test');

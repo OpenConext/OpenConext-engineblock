@@ -196,12 +196,12 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOr
         $this->assertTrue($invalidScopeIsLogged);
     }
 
-    /**
-     * @expectedException EngineBlock_Corto_Exception_InvalidAttributeValue
-     * @expectedExceptionMessage schacHomeOrganization attribute value "OpenConext" is not allowed by configured ShibMdScopes for IdP "OpenConext"
-     */
+
     public function testSchacHomeOrganizationNotInRegexpScopeThrowsException()
     {
+        $this->expectException(EngineBlock_Corto_Exception_InvalidAttributeValue::class);
+        $this->expectExceptionMessage('schacHomeOrganization attribute value "OpenConext" is not allowed by configured ShibMdScopes for IdP "OpenConext"');
+
         $scope          = new ShibMdScope();
         $scope->regexp  = true;
         $scope->allowed = '.*\.noconext\.org';

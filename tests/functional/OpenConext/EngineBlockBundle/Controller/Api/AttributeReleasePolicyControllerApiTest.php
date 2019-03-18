@@ -7,7 +7,7 @@ use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use Symfony\Component\HttpFoundation\Response;
 
-class AttributeReleasePolicyControllerTest extends WebTestCase
+class AttributeReleasePolicyControllerApiTest extends WebTestCase
 {
     public function __construct($name = null, array $data = [], $dataName = '')
     {

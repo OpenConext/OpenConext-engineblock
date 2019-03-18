@@ -1,4 +1,5 @@
 <?php
+
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use SAML2\Constants;
 use SAML2\Response;
@@ -23,11 +24,10 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestC
         $this->bindings = new EngineBlock_Corto_Module_Bindings($proxyServer);
     }
 
-    /**
-     * @expectedException EngineBlock_Corto_Module_Bindings_UnsupportedBindingException
-     */
     public function testResponseRedirectIsNotSupported()
     {
+        $this->expectException(EngineBlock_Corto_Module_Bindings_UnsupportedBindingException::class);
+
         $response = new EngineBlock_Saml2_ResponseAnnotationDecorator(new Response());
         $response->setDeliverByBinding(Constants::BINDING_HTTP_REDIRECT);
 
@@ -37,7 +37,7 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestC
 
     /**
      * Provides a list of paths to response xml files and certificate files
-     * 
+     *
      * @return array
      */
     public function responseProvider()

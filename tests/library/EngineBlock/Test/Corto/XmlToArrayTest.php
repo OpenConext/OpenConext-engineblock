@@ -121,12 +121,11 @@ SAML
         $this->assertEquals($expectedOutput, $xmlConverter->attributesToArray($attributes));
     }
 
-    /**
-     * @expectedException EngineBlock_Corto_XmlToArray_Exception
-     * @expectedExceptionMessage Missing attribute name
-     */
     public function testAttributeNameIsRequired()
     {
+        $this->expectException(EngineBlock_Corto_XmlToArray_Exception::class);
+        $this->expectExceptionMessage('Missing attribute name');
+
         $xmlConverter = new EngineBlock_Corto_XmlToArray();
         $attributes = array(array());
         $xmlConverter->attributesToArray($attributes);
@@ -147,12 +146,11 @@ SAML
         $this->assertEquals(array(), $output['example']);
     }
 
-    /**
-     * @expectedException EngineBlock_Corto_XmlToArray_Exception
-     * @expectedExceptionMessage AttributeValue collection is not an array
-     */
     public function testAttributeValueCollectionShouldBeAnArray()
     {
+        $this->expectException(EngineBlock_Corto_XmlToArray_Exception::class);
+        $this->expectExceptionMessage('AttributeValue collection is not an array');
+
         $xmlConverter = new EngineBlock_Corto_XmlToArray();
         $attributes = array(
             array(
@@ -163,12 +161,11 @@ SAML
         $xmlConverter->attributesToArray($attributes);
     }
 
-    /**
-     * @expectedException EngineBlock_Corto_XmlToArray_Exception
-     * @expectedExceptionMessage AttributeValue is not an array
-     */
     public function testAttributeValueShouldBeAnArray()
     {
+        $this->expectException(EngineBlock_Corto_XmlToArray_Exception::class);
+        $this->expectExceptionMessage('AttributeValue is not an array');
+
         $xmlConverter = new EngineBlock_Corto_XmlToArray();
         $attributes = array(
             array(
@@ -181,8 +178,6 @@ SAML
         $xmlConverter->attributesToArray($attributes);
     }
 
-    /**
-     */
     public function testAttributeValueIsSkippedWhenEmpty()
     {
         $xmlConverter = new EngineBlock_Corto_XmlToArray();

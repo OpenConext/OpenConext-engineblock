@@ -12,6 +12,7 @@ services:
             - "@twig"
             - "@engineblock.compat.logger"
             - "@engineblock.service.request_access_mailer"
+            - "@engineblock.validator.sso_request_validator"
             - "@session"
 
     engineblock.controller.authentication.index:

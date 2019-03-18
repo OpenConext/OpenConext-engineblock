@@ -222,11 +222,35 @@ class MockSpContext extends AbstractSubContext
     /**
      * @Given /^the SP uses the HTTP POST Binding$/
      */
-    public function theSpUsesTheHttpPostBinding()
+    public function theOnlySpUsesHttpPostBinding()
     {
         $sp = $this->mockSpRegistry->getOnly();
 
         $sp->useHttpPost();
+
+        $this->mockSpRegistry->save();
+    }
+
+    /**
+     * @Given /^the SP "([^"]*)" uses the HTTP POST Binding$/
+     */
+    public function theSpUsesHttpPostBinding($spName)
+    {
+        $sp = $this->mockSpRegistry->get($spName);
+
+        $sp->useHttpPost();
+
+        $this->mockSpRegistry->save();
+    }
+
+    /**
+     * @Given /^the SP "([^"]*)" sends a malformed AuthNRequest$/
+     */
+    public function theSpSendsMalformedAuthnRequest($spName)
+    {
+        $sp = $this->mockSpRegistry->get($spName);
+
+        $sp->sendMalformedAuthNRequest();
 
         $this->mockSpRegistry->save();
     }

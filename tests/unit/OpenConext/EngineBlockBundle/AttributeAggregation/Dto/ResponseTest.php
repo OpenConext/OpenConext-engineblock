@@ -56,7 +56,7 @@ class ResponseTest extends TestCase
      */
     public function response_data_must_be_an_array()
     {
-        $this->setExpectedException(InvalidAttributeAggregationResponseException::class);
+        $this->expectException(InvalidAttributeAggregationResponseException::class);
         Response::fromData(NULL);
     }
 
@@ -65,7 +65,7 @@ class ResponseTest extends TestCase
      */
     public function response_attribute_must_have_a_name()
     {
-        $this->setExpectedException(InvalidAttributeAggregationResponseException::class);
+        $this->expectException(InvalidAttributeAggregationResponseException::class);
         Response::fromData([
           [
             'values' => [],
@@ -79,7 +79,7 @@ class ResponseTest extends TestCase
      */
     public function response_attribute_must_have_values_property()
     {
-        $this->setExpectedException(InvalidAttributeAggregationResponseException::class);
+        $this->expectException(InvalidAttributeAggregationResponseException::class);
         Response::fromData([
           [
             'name' => 'name',
@@ -93,7 +93,7 @@ class ResponseTest extends TestCase
      */
     public function response_attribute_must_have_a_source()
     {
-        $this->setExpectedException(InvalidAttributeAggregationResponseException::class);
+        $this->expectException(InvalidAttributeAggregationResponseException::class);
         Response::fromData([
           [
             'name' => 'name',

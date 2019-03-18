@@ -138,6 +138,11 @@ class MockServiceProvider extends AbstractMockEntityRole
         $this->descriptor->Extensions['SAMLRequest']->setIDPList($scope);
     }
 
+    public function sendMalformedAuthNRequest()
+    {
+        $this->descriptor->Extensions['Malformed'] = true;
+    }
+
     /**
      * @return array
      */

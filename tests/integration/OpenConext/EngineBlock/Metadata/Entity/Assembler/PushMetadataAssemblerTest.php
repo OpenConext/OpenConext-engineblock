@@ -5,6 +5,7 @@ namespace OpenConext\EngineBlock\Tests;
 use OpenConext\EngineBlock\Metadata\Entity\Assembler\PushMetadataAssembler;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use PHPUnit_Framework_TestCase;
+use RuntimeException;
 
 class PushMetadataAssemblerTest extends PHPUnit_Framework_TestCase
 {
@@ -17,10 +18,11 @@ class PushMetadataAssemblerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider invalidAcsLocations
-     * @expectedException \RuntimeException
      */
     public function test_it_rejects_invalid_acs_location_schemes($acsLocation)
     {
+        $this->expectException(\RuntimeException::class);
+
         $connection = '{
             "2d96e27a-76cf-4ca2-ac70-ece5d4c49523": {
                 "allow_all_entities": true,

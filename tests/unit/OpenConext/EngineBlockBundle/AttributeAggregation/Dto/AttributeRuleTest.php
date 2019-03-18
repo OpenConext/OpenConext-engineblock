@@ -34,7 +34,7 @@ class AttributeRuleTest extends TestCase
      */
     public function rule_name_must_be_set()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         AttributeRule::from(null, 'value', 'source');
     }
 
@@ -43,7 +43,7 @@ class AttributeRuleTest extends TestCase
      */
     public function rule_value_must_be_set()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         AttributeRule::from('name', null, 'source');
     }
 
@@ -52,7 +52,7 @@ class AttributeRuleTest extends TestCase
      */
     public function rule_source_must_be_set()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         AttributeRule::from('name', 'value', null);
     }
 

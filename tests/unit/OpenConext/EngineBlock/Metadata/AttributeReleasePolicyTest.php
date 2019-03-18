@@ -90,7 +90,7 @@ class AttributeReleasePolicyTest extends PHPUnit_Framework_TestCase
 
     public function testInvalidArpWithSourceSpecification()
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new AttributeReleasePolicy(
             array(

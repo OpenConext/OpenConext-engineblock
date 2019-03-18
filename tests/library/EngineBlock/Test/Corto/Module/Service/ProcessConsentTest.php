@@ -1,7 +1,7 @@
 <?php
 
-use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Response;
@@ -34,12 +34,11 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
         $this->mockGlobals();
     }
 
-    /**
-     * @expectedException EngineBlock_Corto_Module_Services_SessionLostException
-     * @expectedExceptionMessage Session lost after consent
-     */
     public function testSessionLostExceptionIfNoSession()
     {
+        $this->expectException(EngineBlock_Corto_Module_Services_SessionLostException::class);
+        $this->expectExceptionMessage('Session lost after consent');
+
         $processConsentService = $this->factoryService();
 
         unset($_SESSION['consent']);
@@ -47,22 +46,21 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
         $processConsentService->serve(null);
     }
 
-    /**
-     * @expectedException EngineBlock_Corto_Module_Services_SessionLostException
-     * @expectedExceptionMessage Stored response for ResponseID 'test' not found
-     */
     public function testSessionLostExceptionIfPostIdNotInSession()
     {
+        $this->expectException(EngineBlock_Corto_Module_Services_SessionLostException::class);
+        $this->expectExceptionMessage('Stored response for ResponseID \'test\' not found');
+
         unset($_SESSION['consent']['test']);
 
         $processConsentService = $this->factoryService();
         $processConsentService->serve(null);
     }
 
-    /**
-     * @expectedException EngineBlock_Corto_Exception_NoConsentProvided
-     */
-    public function testRedirectToFeedbackPageIfConsentNotInPost() {
+    public function testRedirectToFeedbackPageIfConsentNotInPost()
+    {
+        $this->expectException(EngineBlock_Corto_Exception_NoConsentProvided::class);
+
         $processConsentService = $this->factoryService();
 
         unset($_POST['consent']);
