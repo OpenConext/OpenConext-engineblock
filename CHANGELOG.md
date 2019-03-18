@@ -5,6 +5,13 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## Next release
+
+The 5.10 release focuses on making EngineBlock more robust. The biggest aim is to improve error reporting. 
+
+### Features
+ * SSO and ACS mis-use is logged earlier in the process #641 #642
+
 ## 5.9.2
 This release improves upon some of the previous consent changes
 
