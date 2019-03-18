@@ -222,12 +222,11 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPr
         $this->assertTrue($invalidScopeIsLogged);
     }
 
-    /**
-     * @expectedException EngineBlock_Corto_Exception_InvalidAttributeValue
-     * @expectedExceptionMessage eduPersonPrincipalName attribute value "openconext.org" is not allowed by configured ShibMdScopes for IdP "OpenConext"
-     */
     public function testEduPersonPrincipalNameNotInRegexpScopeThrowsException()
     {
+        $this->expectException(EngineBlock_Corto_Exception_InvalidAttributeValue::class);
+        $this->expectExceptionMessage('eduPersonPrincipalName attribute value "openconext.org" is not allowed by configured ShibMdScopes for IdP "OpenConext"');
+
         $scope          = new ShibMdScope();
         $scope->regexp  = true;
         $scope->allowed = '.*\.noconext\.org';
