@@ -51,14 +51,21 @@ class ServiceProviderController extends Controller
             throw new BadRequestHttpException('No SP found for ' . $spName);
         }
 
+        /** @var MockServiceProvider $sp */
+        $sp = $this->mockSpRegistry->get($spName);
+
         $factory = new AuthnRequestFactory();
         $authnRequest = $factory->createForRequestFromTo(
-            $this->mockSpRegistry->get($spName),
+            $sp,
             $this->engineBlock
         );
 
         $redirect = new HTTPRedirect();
         $url = $redirect->getRedirectURL($authnRequest);
+
+        if (isset($sp->getEntityDescriptor()->Extensions['Malformed'])) {
+            $url = str_replace('SAMLRequest', 'AuthNRequest', $url);
+        }
 
         return new RedirectResponse($url);
     }
@@ -75,8 +82,9 @@ class ServiceProviderController extends Controller
         }
 
         $factory = new AuthnRequestFactory();
+        $sp = $this->mockSpRegistry->get($spName);
         $authnRequest = $factory->createForRequestFromTo(
-            $this->mockSpRegistry->get($spName),
+            $sp,
             $this->engineBlock
         );
 
@@ -85,7 +93,14 @@ class ServiceProviderController extends Controller
 
         /** @var Container $container */
         $container = Utils::getContainer();
-        return $container->getPostResponse();
+        $response = $container->getPostResponse();
+
+        if (isset($sp->getEntityDescriptor()->Extensions['Malformed'])) {
+            $body = $response->getContent();
+            $response->setContent(str_replace('SAMLRequest', 'AuthNRequest', $body));
+        }
+
+        return $response;
     }
 
     /**

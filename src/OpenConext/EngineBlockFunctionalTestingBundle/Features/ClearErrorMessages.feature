@@ -274,6 +274,18 @@ Feature:
      And I pass through the IdP
      And I should see "your session was lost"
 
+  Scenario: The SP uses the wrong request parameter while using HTTP Redirect binding
+   Given the SP "Dummy SP" sends a malformed AuthNRequest
+    When I log in at "Dummy SP"
+    Then I should see "No SAMLRequest parameter was found in the HTTP \"GET\" request parameters"
+
+  Scenario: The SP uses the wrong request parameter while using HTTP Post binding
+   Given the SP "Dummy SP" sends a malformed AuthNRequest
+     And the SP "Dummy SP" uses the HTTP POST Binding
+    When I log in at "Dummy SP"
+     And I pass through the SP
+    Then I should see "No SAMLRequest parameter was found in the HTTP \"POST\" request parameters"
+
 #
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a location
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a binding
