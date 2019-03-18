@@ -571,4 +571,25 @@ HTML;
             );
         }
     }
+
+    /**
+     * @Given /^I should see ART code "([^"]*)"$/
+     */
+    public function iShouldSeeARTCode($artCode)
+    {
+        $session = $this->getMinkContext()->getSession();
+        $mink = $session->getPage();
+        // Grab the ART code from the page with an xpath expression.
+        $result = $mink->find('xpath', '//td[text()="ART Code:"]/../td[2]');
+        if ($result) {
+            $artOnPage = $result->getText();
+            if ($artOnPage == $artCode) {
+                return;
+            }
+            throw new RuntimeException(
+                sprintf('Expected ART Code "%s" did not match the ART Code on the page "%s"', $artCode, $artOnPage)
+            );
+        }
+        throw new RuntimeException('Unable to find the ART Code on the page');
+    }
 }
