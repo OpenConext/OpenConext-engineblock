@@ -43,7 +43,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         }
         if (!isset($_SESSION['consent'][$_POST['ID']]['response'])) {
             throw new EngineBlock_Corto_Module_Services_SessionLostException(
-                "Stored response for ResponseID '{$_POST['ID']}' not found"
+                sprintf('Stored response for ResponseID "%s" not found', $_POST['ID'])
             );
         }
         /** @var Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */

@@ -86,8 +86,8 @@ class ExecutionTimeTrackerTest extends TestCase
 
         $this->assertTrue($executionTimeTracker->currentExecutionTimeExceeds($aGivenExecutionTime),
             sprintf(
-                'Current execution time should exceed the given execution time of (%d ms) which is smaller: '
-                . '%d ms remaining',
+                'Current execution time should exceed the given execution time of ("%d" ms) which is smaller: '
+                . '"%d" ms remaining',
                 $aGivenExecutionTime->getExecutionTime(),
                 $executionTimeTracker->timeRemainingUntil($aGivenExecutionTime)->getExecutionTime()
             )

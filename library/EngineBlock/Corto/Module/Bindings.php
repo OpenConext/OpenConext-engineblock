@@ -166,7 +166,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         if (!$serviceProvider instanceof ServiceProvider) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
-                "Requesting entity '$spEntityId' is not a Service Provider"
+                sprintf("Requesting entity '%s' is not a Service Provider", $spEntityId)
             );
         }
 
@@ -266,7 +266,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $sspResponse = $sspBinding->receive();
         if (!($sspResponse instanceof Response)) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
-                'Unsupported Message received: ' . get_class($sspResponse),
+                sprintf('Unsupported Message received: "%s"', get_class($sspResponse)),
                 EngineBlock_Exception::CODE_NOTICE
             );
         }
@@ -292,7 +292,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         // We only support HTTP-POST binding for Responses
         if (!$sspBinding instanceof HTTPPost) {
             throw new EngineBlock_Corto_Module_Bindings_UnsupportedBindingException(
-                'Unsupported Binding used: ' . get_class($sspBinding),
+                sprintf('Unsupported Binding used: "%s"', get_class($sspBinding)),
                 EngineBlock_Exception::CODE_NOTICE
             );
         }
@@ -367,7 +367,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 // the user.
                 if ($sspResponse->isSuccess()) {
                     throw new ResponseProcessingFailedException(
-                        sprintf('Response processing failed: %s', $exception->getMessage()), null, $exception
+                        sprintf('Response processing failed: "%s"', $exception->getMessage()), null, $exception
                     );
                 }
 
@@ -405,7 +405,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
             } catch (Exception $exception) {
                 throw new ResponseProcessingFailedException(
-                    sprintf('Response processing failed: %s', $exception->getMessage()), null, $exception
+                    sprintf('Response processing failed: "%s"', $exception->getMessage()), null, $exception
                 );
             }
 
@@ -484,7 +484,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         );
 
         throw new EngineBlock_Corto_Exception_UnknownIssuer(
-            "Issuer '{$messageIssuer}' is not a known remote entity? (please add SP to Remote Entities)",
+            sprintf('Issuer "%s" is not a known remote entity? (please add SP to Remote Entities)', $messageIssuer),
             $messageIssuer,
             $destination
         );
@@ -514,7 +514,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         );
 
         throw new EngineBlock_Corto_Exception_UnknownIssuer(
-            "Issuer '{$messageIssuer}' is not a known remote entity? (please add IdP to Remote Entities)",
+            sprintf('Issuer "%s" is not a known remote entity? (please add IdP to Remote Entities)', $messageIssuer),
             $messageIssuer,
             $destination
         );
@@ -666,7 +666,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         if (!$sspMessage instanceof AuthnRequest) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
-                'Unsupported Message type: ' . get_class($sspMessage)
+                sprintf('Unsupported Message type: "%s"', get_class($sspMessage))
             );
         }
 

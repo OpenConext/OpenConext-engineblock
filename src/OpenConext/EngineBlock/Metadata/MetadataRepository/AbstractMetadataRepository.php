@@ -62,7 +62,7 @@ abstract class AbstractMetadataRepository implements MetadataRepositoryInterface
         $serviceProvider = $this->findServiceProviderByEntityId($entityId);
 
         if (!$serviceProvider) {
-            throw new EntityNotFoundException("Service Provider '$entityId' not found in InMemoryMetadataRepository");
+            throw new EntityNotFoundException(sprintf('Service Provider "%s" not found in InMemoryMetadataRepository', $entityId));
         }
 
         return $serviceProvider;
@@ -78,7 +78,9 @@ abstract class AbstractMetadataRepository implements MetadataRepositoryInterface
         $identityProvider = $this->findIdentityProviderByEntityId($entityId);
 
         if (!$identityProvider) {
-            throw new EntityNotFoundException("Identity Provider '$entityId' not found in InMemoryMetadataRepository");
+            throw new EntityNotFoundException(
+                sprintf('Identity Provider "%s" not found in InMemoryMetadataRepository', $entityId)
+            );
         }
 
         return $identityProvider;

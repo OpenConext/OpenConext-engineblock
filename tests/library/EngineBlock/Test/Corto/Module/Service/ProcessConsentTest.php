@@ -49,7 +49,7 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
     public function testSessionLostExceptionIfPostIdNotInSession()
     {
         $this->expectException(EngineBlock_Corto_Module_Services_SessionLostException::class);
-        $this->expectExceptionMessage('Stored response for ResponseID \'test\' not found');
+        $this->expectExceptionMessage('Stored response for ResponseID "test" not found');
 
         unset($_SESSION['consent']['test']);
 

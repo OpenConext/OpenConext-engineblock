@@ -22,13 +22,13 @@ class X509CertificateFactory
         $pemString = file_get_contents($filePath);
 
         if (!$pemString) {
-            throw new RuntimeException("Unable to read file at path '$filePath'.");
+            throw new RuntimeException(sprintf('Unable to read file at path "%s".', $filePath));
         }
 
         try {
             $certificate = $this->fromString($pemString);
         } catch (Exception $e) {
-            throw new RuntimeException("File at '$filePath' does not contain a valid certificate.", 0, $e);
+            throw new RuntimeException(sprintf('File at "%s" does not contain a valid certificate.', $filePath), 0, $e);
         }
         return $certificate;
     }
@@ -46,7 +46,7 @@ class X509CertificateFactory
 
         if (!$opensslCertificate) {
             throw new RuntimeException(
-                "Unable to read X.509 certificate from content: '$x509CertificateContent'"
+                sprintf('Unable to read X.509 certificate from content: "%s"', $x509CertificateContent)
             );
         }
 

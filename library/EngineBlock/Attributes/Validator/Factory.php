@@ -43,7 +43,7 @@ class EngineBlock_Attributes_Validator_Factory
         $validator = $this->create($validatorName, $attributeName, $validatorOptions);
 
         if (!$validator) {
-            throw new EngineBlock_Exception("Unable to find validator for $validatorName.");
+            throw new EngineBlock_Exception(sprintf('Unable to find validator for "%s"', $validatorName));
         }
 
         return $validator;

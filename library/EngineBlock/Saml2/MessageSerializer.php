@@ -60,7 +60,7 @@ class EngineBlock_Saml2_MessageSerializer
         );
 
         if (!isset($mapping[$class])) {
-            throw new Exception('Unknown Message Type' . $class);
+            throw new Exception(sprintf('Unknown Message Type "%s"', $class));
         }
 
         return $mapping[$class];

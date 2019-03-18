@@ -261,7 +261,7 @@ HTML;
 
         if (!$mockIdp) {
             throw new RuntimeException(
-                "Unable to find idp with name '$idpName'"
+                sprintf('Unable to find idp with name "%s"', $idpName)
             );
         }
 
@@ -287,7 +287,7 @@ HTML;
         $formField = $mink->find('css', $selector);
 
         if (!$formField) {
-            throw new RuntimeException(sprintf('The %s form field should have been on the form.', $formFieldName));
+            throw new RuntimeException(sprintf('The "%s" form field should have been on the form.', $formFieldName));
         }
     }
 
@@ -301,7 +301,7 @@ HTML;
         $formField = $mink->find('css', $selector);
 
         if (!is_null($formField)) {
-            throw new RuntimeException(sprintf('The %s form field should not have been on the form.', $formFieldName));
+            throw new RuntimeException(sprintf('The "%s" form field should not have been on the form.', $formFieldName));
         }
     }
 
@@ -316,7 +316,7 @@ HTML;
         $button = $mink->find('css', $selector);
 
         if (!$button) {
-            throw new RuntimeException(sprintf('Unable to find Request access button %s', $selector));
+            throw new RuntimeException(sprintf('Unable to find Request access button "%s"', $selector));
         }
     }
 
@@ -517,14 +517,14 @@ HTML;
 
         if ($cookie === null) {
             throw new ExpectationException(
-                'The "lang" cookie has not been set',
+                'The lang cookie has not been set',
                 $this->getMinkContext()->getSession()->getDriver()
             );
         }
 
         if ($cookie !== $locale) {
             throw new ExpectationException(
-                sprintf('The "lang" cookie should contain "%s", but contains "%s"', $locale, $cookie),
+                sprintf('The lang cookie should contain "%s", but contains "%s"', $locale, $cookie),
                 $this->getMinkContext()->getSession()->getDriver()
             );
         }

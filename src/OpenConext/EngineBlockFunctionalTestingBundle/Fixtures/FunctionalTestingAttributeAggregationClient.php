@@ -48,13 +48,13 @@ final class FunctionalTestingAttributeAggregationClient implements AttributeAggr
         foreach ($attributes as $attribute) {
             if (empty($request->rules)) {
                 throw new InvalidArgumentException(
-                    "Expecting an ARP rule for {$attribute['name']}, but no rules found."
+                    sprintf('Expecting an ARP rule for "%s", but no rules found.', $attribute['name'])
                 );
             }
 
             if (!$this->hasRuleForAttribute($request->rules, $attribute['name'], $attribute['source'])) {
                 throw new InvalidArgumentException(
-                    "Expectation failed in AA client mock: expecting ARP rule for '{$attribute['name']}"
+                    sprintf('Expectation failed in AA client mock: expecting ARP rule for "%s"', $attribute['name'])
                 );
             }
         }

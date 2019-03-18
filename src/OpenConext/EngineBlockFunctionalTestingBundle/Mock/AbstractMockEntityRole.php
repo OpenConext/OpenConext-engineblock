@@ -167,6 +167,6 @@ abstract class AbstractMockEntityRole
             return $pathFromRoot;
         }
 
-        throw new RuntimeException('Unable to find file: ' . $filePath . " ($fullFilePath)");
+        throw new RuntimeException(sprintf('Unable to find file: "%s" ("%s")', $filePath, $fullFilePath));
     }
 }

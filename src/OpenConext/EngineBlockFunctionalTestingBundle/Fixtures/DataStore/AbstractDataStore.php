@@ -32,7 +32,7 @@ abstract class AbstractDataStore
         $fileContents = $this->fileSystem->read($this->filePath);
 
         if ($fileContents === false) {
-            throw new RuntimeException('Unable to load data from: ' . $this->filePath);
+            throw new RuntimeException(sprintf('Unable to load data from: "%s"', $this->filePath));
         }
 
         if (empty($fileContents)) {
@@ -41,7 +41,7 @@ abstract class AbstractDataStore
 
         $data = $this->decode($fileContents);
         if ($data === false) {
-            throw new RuntimeException('Unable to decode data from: ' . $this->filePath);
+            throw new RuntimeException(sprintf('Unable to decode data from: "%s"', $this->filePath));
         }
         return $data;
     }
