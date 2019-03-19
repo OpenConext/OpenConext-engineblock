@@ -26,7 +26,7 @@ Feature:
       And I should see "Unique Request Id:"
       And I should see "User Agent:"
       And I should see "IP Address:"
-      And I should see "ART Code:"
+      And I should see "Error Code:"
       And I should see "Service Provider:"
       And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
