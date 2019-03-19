@@ -71,6 +71,10 @@ class Feedback extends Twig_Extension
                 }
             }
         }
+
+        // Sort the feedback info on key
+        ksort($feedbackInfo);
+
         return $feedbackInfo;
     }
 }
