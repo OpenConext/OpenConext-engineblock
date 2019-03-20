@@ -153,6 +153,9 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
         $proxyServer = new EngineBlock_Corto_Adapter();
         $proxyServer->processConsent();
 
+        $authenticationState = $this->session->get('authentication_state');
+        $authenticationState->completeCurrentProcedure();
+
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
 

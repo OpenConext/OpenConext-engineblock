@@ -2,9 +2,9 @@
 
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\ConsentServiceInterface;
 use SAML2\Constants;
-use SAML2\XML\saml\NameID;
 use Twig\Environment;
 
 /**
@@ -28,6 +28,9 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
     /** @var ConsentServiceInterface */
     private  $_consentService;
 
+    /** @var AuthenticationStateHelperInterface */
+    private $_authenticationStateHelper;
+
     /**
      * @var Environment
      */
@@ -38,12 +41,14 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         EngineBlock_Corto_XmlToArray $xmlConverter,
         EngineBlock_Corto_Model_Consent_Factory $consentFactory,
         ConsentServiceInterface $consentService,
+        AuthenticationStateHelperInterface $authStateHelper,
         Environment $twig
     ) {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->_consentFactory = $consentFactory;
         $this->_consentService = $consentService;
+        $this->_authenticationStateHelper = $authStateHelper;
         $this->twig = $twig;
     }
 
@@ -81,6 +86,8 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $attributes = $response->getAssertion()->getAttributes();
         $consentRepository = $this->_consentFactory->create($this->_server, $response, $attributes);
 
+        $authenticationState = $this->_authenticationStateHelper->getAuthenticationState();
+
         if ($this->isConsentDisabled($spMetadataChain, $identityProvider)) {
             if (!$consentRepository->implicitConsentWasGivenFor($serviceProviderMetadata)) {
                 $consentRepository->giveImplicitConsentFor($serviceProviderMetadata);
@@ -89,6 +96,9 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             $response->setConsent(Constants::CONSENT_INAPPLICABLE);
             $response->setDestination($response->getReturn());
             $response->setDeliverByBinding('INTERNAL');
+
+            // Consent is disabled, we now mark authentication_state as completed
+            $authenticationState->completeCurrentProcedure();
 
             $this->_server->getBindingsModule()->send(
                 $response,
@@ -103,6 +113,9 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
 
             $response->setDestination($response->getReturn());
             $response->setDeliverByBinding('INTERNAL');
+
+            // Prior consent is found, we now mark authentication_state as completed
+            $authenticationState->completeCurrentProcedure();
 
             $this->_server->getBindingsModule()->send(
                 $response,
