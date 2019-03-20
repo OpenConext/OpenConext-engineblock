@@ -160,6 +160,8 @@ TXT
     // Error screens
     'error_404'                         => '404 - Page not found',
     'error_404_desc'                    => 'This page has not been found.',
+    'error_405'                         => 'HTTP Method not allowed',
+    'error_405_desc'                    => 'The HTTP method "%requestMethod%" is not allowed for location "%uri%". Supported methods are: %allowedMethods%.',
     'error_help_desc'               => '<p></p>',
     'error_no_consent'              => 'Unable to continue to service',
     'error_no_consent_desc'         => 'This application can only be used when you share the mentioned information.<br /><br />
