@@ -151,14 +151,8 @@ Feature:
     Given the IdP uses the HTTP Redirect Binding
      When I log in at "Dummy SP"
       And I pass through EngineBlock
-     Then I should see "Invalid ACS Binding Type"
-      And I should see "Timestamp:"
-      And I should see "Unique Request Id:"
-      And I should see "User Agent:"
-      And I should see "IP Address:"
-      And I should see "Service Provider:"
-      And I should see "Service Provider Name:"
-      And I should see "Identity Provider:"
+     Then I should see "HTTP Method not allowed"
+      And I should see "The HTTP method \"GET\" is not allowed for location \"https://engine.vm.openconext.org/authentication/sp/consume-assertion\". Supported methods are: POST."
 
   Scenario: An Identity Provider sends a response without a SHO
     Given the IdP does not send the attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization"
