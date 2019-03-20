@@ -23,7 +23,7 @@ use OpenConext\EngineBlockBundle\Exception\LogicException;
 use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
 use OpenConext\Value\Saml\Entity;
 
-final class AuthenticationState
+final class AuthenticationState implements AuthenticationStateInterface
 {
     /**
      * @var AuthenticationProcedure

@@ -16,18 +16,15 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Service;
+namespace OpenConext\EngineBlockBundle\Authentication;
 
-use OpenConext\EngineBlockBundle\Authentication\AuthenticationStateInterface;
+use OpenConext\Value\Saml\Entity;
 
-/**
- * Used to distribute the contents of the authentication_state session
- * from the symfony session bag into legacy EngineBlock services.
- */
-interface AuthenticationStateHelperInterface
+interface AuthenticationStateInterface
 {
-    /**
-     * @return AuthenticationStateInterface
-     */
-    public function getAuthenticationState();
+    public function startAuthenticationOnBehalfOf(Entity $serviceProvider);
+
+    public function authenticatedAt(Entity $identityProvider);
+
+    public function completeCurrentProcedure();
 }

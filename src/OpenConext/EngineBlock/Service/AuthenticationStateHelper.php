@@ -18,7 +18,7 @@
 
 namespace OpenConext\EngineBlock\Service;
 
-use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
+use OpenConext\EngineBlockBundle\Authentication\AuthenticationStateInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class AuthenticationStateHelper implements AuthenticationStateHelperInterface
@@ -34,7 +34,7 @@ class AuthenticationStateHelper implements AuthenticationStateHelperInterface
     }
 
     /**
-     * @return AuthenticationState
+     * @return AuthenticationStateInterface
      */
     public function getAuthenticationState()
     {
