@@ -7,7 +7,7 @@ if (file_exists($overridesFile)) {
 return $overrides + [
     // Values used in placeholders for other translations
     // %suiteName%: OpenConext (default), SURFconext, ACMEconext
-    'suite_name' => '{{ instance_name }}',
+    'suite_name' => 'OpenConext',
     // Example translation message:
     //     'Find an %organisationNoun%'
     //
