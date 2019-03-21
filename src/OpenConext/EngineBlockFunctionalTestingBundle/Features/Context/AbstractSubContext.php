@@ -10,7 +10,13 @@ use Behat\Behat\Hook\Scope\BeforeScenarioScope;
  */
 abstract class AbstractSubContext implements Context
 {
+    /**
+     * @var MinkContext
+     */
     protected $minkContext;
+
+    const SESSION_DEFAULT = 'default';
+    const SESSION_CHROME = 'chrome';
 
     /**
      * @BeforeScenario
