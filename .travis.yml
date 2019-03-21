@@ -58,6 +58,9 @@ before_script:
   - sudo a2dissite 000-default
   - sudo a2ensite default-ssl
   - sudo service apache2 restart
+  - ./ci/bin/1-install-chromedriver.sh
+  - ./ci/bin/2-install-selenium-standalone.sh
+  - java -jar /var/selenium/selenium-server-standalone-2.53.1.jar -Dwebdriver.chrome.driver=/usr/bin/chromedriver &
   - composer self-update
   - composer config secure-http false
   - composer install --prefer-dist -n -o
@@ -72,13 +75,14 @@ branches:
     - 5.x-dev
     - master
     - release/5.8
-    - feature/symfony-upgrade-3.4-retry
+    - feature/allow-repost-on-consent
 
 after_failure:
   - sudo tail -500 /var/log/apache2/error.log
   - sudo tail -500 /var/log/apache2/access.log
   - cat ~/build/OpenConext/OpenConext-engineblock/app/logs/test/test.log
   - sudo tail -500 /var/log/syslog
+  - sudo tail -500 /tmp/selenium-log
 
 services:
   - mysql
@@ -87,3 +91,4 @@ addons:
   hosts:
     - engine.vm.openconext.org
   mariadb: '10.1'
+  chrome: stable
