@@ -28,6 +28,11 @@ final class JsonHelper
                         'name'         => $identityProvider->organizationNl->name,
                         'display_name' => $identityProvider->organizationNl->displayName,
                         'url'          => $identityProvider->organizationNl->url,
+                    ],
+                    'pt' => [
+                        'name'         => $identityProvider->organizationPt->name,
+                        'display_name' => $identityProvider->organizationPt->displayName,
+                        'url'          => $identityProvider->organizationPt->url,
                     ]
                 ],
                 'single_logout_service'   => [
@@ -46,11 +51,13 @@ final class JsonHelper
                 ),
                 'description'             => [
                     'en' => $identityProvider->descriptionEn,
-                    'nl' => $identityProvider->descriptionNl
+                    'nl' => $identityProvider->descriptionNl,
+                    'pt' => $identityProvider->descriptionPt,
                 ],
                 'display_name'            => [
                     'en' => $identityProvider->displayNameEn,
                     'nl' => $identityProvider->displayNameNl,
+                    'pt' => $identityProvider->displayNamePt,
                 ],
                 'logo'                    => [
                     'height' => $identityProvider->logo->height,
@@ -60,6 +67,7 @@ final class JsonHelper
                 'name'                    => [
                     'en' => $identityProvider->nameEn,
                     'nl' => $identityProvider->nameNl,
+                    'pt' => $identityProvider->namePt,
                 ],
                 'shib_md_scopes'          => array_map(
                     function (ShibMdScope $shibMdScope) {

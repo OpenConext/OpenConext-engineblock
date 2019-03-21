@@ -23,6 +23,9 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_Organization_OrganizationNames
         if ($this->_entity->organizationEn) {
             $organizationNames['en'] = $this->_entity->organizationEn->name;
         }
+        if ($this->_entity->organizationPt) {
+            $organizationNames['pt'] = $this->_entity->organizationPt->name;
+        }
         if (empty($organizationNames)) {
             return $rootElement;
         }

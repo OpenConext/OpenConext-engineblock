@@ -89,7 +89,7 @@ services:
     engineblock.locale_provider:
         class: OpenConext\EngineBlockBundle\Localization\LocaleProvider
         arguments:
-            - ['en', 'nl']
+            - ['en', 'nl', 'pt']
             - '%kernel.default_locale%'
 
     engineblock.locale.cookie_factory:

@@ -194,6 +194,12 @@ class CortoDisassembler
             $this->mapMultilang($entity->organizationNl->displayName, $cortoEntity, 'Organization', 'DisplayName', 'nl');
             $this->mapMultilang($entity->organizationNl->url        , $cortoEntity, 'Organization', 'URL'        , 'nl');
         }
+
+        if ($entity->organizationPt) {
+            $this->mapMultilang($entity->organizationPt->name       , $cortoEntity, 'Organization', 'Name'       , 'pt');
+            $this->mapMultilang($entity->organizationPt->displayName, $cortoEntity, 'Organization', 'DisplayName', 'pt');
+            $this->mapMultilang($entity->organizationPt->url        , $cortoEntity, 'Organization', 'URL'        , 'pt');
+        }
         // @codingStandardsIgnoreEnd
         return $cortoEntity;
     }
@@ -210,7 +216,11 @@ class CortoDisassembler
         }
 
         if ($entity->keywordsEn) {
-            $this->mapMultilang($entity->keywordsNl, $cortoEntity, 'Keywords', 'nl');
+            $this->mapMultilang($entity->keywordsNl, $cortoEntity, 'Keywords', 'en');
+        }
+
+        if ($entity->keywordsPt) {
+            $this->mapMultilang($entity->keywordsPt, $cortoEntity, 'Keywords', 'pt');
         }
         return $cortoEntity;
     }
@@ -229,6 +239,10 @@ class CortoDisassembler
         if ($entity->nameEn) {
             $this->mapMultilang($entity->keywordsNl, $cortoEntity, 'Name', 'en');
         }
+
+        if ($entity->namePt) {
+            $this->mapMultilang($entity->keywordsPt, $cortoEntity, 'Name', 'pt');
+        }
         return $cortoEntity;
     }
 
@@ -246,6 +260,10 @@ class CortoDisassembler
         if ($entity->descriptionEn) {
             $this->mapMultilang($entity->keywordsNl, $cortoEntity, 'Description', 'nl');
         }
+
+        if ($entity->descriptionPt) {
+            $this->mapMultilang($entity->keywordsPt, $cortoEntity, 'Description', 'pt');
+        }
         return $cortoEntity;
     }
 
@@ -262,6 +280,10 @@ class CortoDisassembler
 
         if ($entity->displayNameEn) {
             $this->mapMultilang($entity->displayNameEn, $cortoEntity, 'DisplayName', 'en');
+        }
+        
+        if ($entity->displayNamePt) {
+            $this->mapMultilang($entity->displayNamePt, $cortoEntity, 'DisplayName', 'pt');
         }
         return $cortoEntity;
     }

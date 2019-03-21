@@ -136,23 +136,35 @@ class ServiceProvider extends AbstractRole
     public $supportUrlNl;
 
     /**
+     * @var null|string
+     *
+     * @ORM\Column(name="support_url_pt", type="string", nullable=true)
+     */
+    public $supportUrlPt;
+
+    /**
      * @param string $entityId
      * @param Organization $organizationEn
      * @param Organization $organizationNl
+     * @param Organization $organizationPt
      * @param Service $singleLogoutService
      * @param bool $additionalLogging
      * @param array $certificates
      * @param array $contactPersons
      * @param string $descriptionEn
      * @param string $descriptionNl
+     * @param string $descriptionPt
      * @param bool $disableScoping
      * @param string $displayNameEn
      * @param string $displayNameNl
+     * @param string $displayNamePt
      * @param string $keywordsEn
      * @param string $keywordsNl
+     * @param string $keywordsPt
      * @param Logo $logo
      * @param string $nameEn
      * @param string $nameNl
+     * @param string $namePt
      * @param null $nameIdFormat
      * @param array $supportedNameIdFormats
      * @param null $publishInEduGainDate
@@ -178,25 +190,31 @@ class ServiceProvider extends AbstractRole
      * @param AttributeReleasePolicy $attributeReleasePolicy
      * @param string|null $supportUrlEn
      * @param string|null $supportUrlNl
+     * @param string|null $supportUrlPt
      */
     public function __construct(
         $entityId,
         Organization $organizationEn = null,
         Organization $organizationNl = null,
+        Organization $organizationPt = null,
         Service $singleLogoutService = null,
         $additionalLogging = false,
         array $certificates = array(),
         array $contactPersons = array(),
         $descriptionEn = '',
         $descriptionNl = '',
+        $descriptionPt = '',
         $disableScoping = false,
         $displayNameEn = '',
         $displayNameNl = '',
+        $displayNamePt = '',
         $keywordsEn = '',
         $keywordsNl = '',
+        $keywordsPt = '',
         Logo $logo = null,
         $nameEn = '',
         $nameNl = '',
+        $namePt = '',
         $nameIdFormat = null,
         $supportedNameIdFormats = array(
             Constants::NAMEID_TRANSIENT,
@@ -224,26 +242,32 @@ class ServiceProvider extends AbstractRole
         $manipulation = '',
         AttributeReleasePolicy $attributeReleasePolicy = null,
         $supportUrlEn = null,
-        $supportUrlNl = null
+        $supportUrlNl = null,
+        $supportUrlPt = null
     ) {
         parent::__construct(
             $entityId,
             $organizationEn,
             $organizationNl,
+            $organizationPt,
             $singleLogoutService,
             $additionalLogging,
             $certificates,
             $contactPersons,
             $descriptionEn,
             $descriptionNl,
+            $descriptionPt,
             $disableScoping,
             $displayNameEn,
             $displayNameNl,
+            $displayNamePt,
             $keywordsEn,
             $keywordsNl,
+            $keywordsPt,
             $logo,
             $nameEn,
             $nameNl,
+            $namePt,
             $nameIdFormat,
             $supportedNameIdFormats,
             $publishInEduGainDate,
@@ -271,6 +295,7 @@ class ServiceProvider extends AbstractRole
         $this->requesteridRequired = $requesteridRequired;
         $this->supportUrlEn = $supportUrlEn;
         $this->supportUrlNl = $supportUrlNl;
+        $this->supportUrlPt = $supportUrlPt;
     }
 
     /**
@@ -306,12 +331,18 @@ class ServiceProvider extends AbstractRole
             if (empty($spName)) {
                 $spName = $this->nameNl;
             }
-        } else {
+        } elseif ($preferredLocale === 'en') {
             $spName = $this->displayNameEn;
             if (empty($spName)) {
                 $spName = $this->nameEn;
             }
+        } elseif ($preferredLocale === 'pt') {
+            $spName = $this->displayNamePt;
+            if (empty($spName)) {
+                $spName = $this->namePt;
+            }
         }
+
         if (empty($spName)) {
             $spName = $this->entityId;
         }

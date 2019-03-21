@@ -92,6 +92,13 @@ abstract class AbstractRole
     /**
      * @var string
      *
+     * @ORM\Column(name="name_pt", type="string")
+     */
+    public $namePt;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="description_nl", type="string")
      */
     public $descriptionNl;
@@ -106,6 +113,13 @@ abstract class AbstractRole
     /**
      * @var string
      *
+     * @ORM\Column(name="description_pt", type="string")
+     */
+    public $descriptionPt;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="display_name_nl", type="string")
      */
     public $displayNameNl;
@@ -116,6 +130,13 @@ abstract class AbstractRole
      * @ORM\Column(name="display_name_en", type="string")
      */
     public $displayNameEn;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="display_name_pt", type="string")
+     */
+    public $displayNamePt;
 
     /**
      * @var Logo
@@ -139,6 +160,13 @@ abstract class AbstractRole
     public $organizationEn;
 
     /**
+     * @var Organization
+     *
+     * @ORM\Column(name="organization_pt_name",type="object", nullable=true)
+     */
+    public $organizationPt;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="keywords_nl", type="string")
@@ -151,6 +179,13 @@ abstract class AbstractRole
      * @ORM\Column(name="keywords_en", type="string")
      */
     public $keywordsEn;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="keywords_pt", type="string")
+     */
+    public $keywordsPt;
 
     /**
      * @var bool
@@ -254,20 +289,25 @@ abstract class AbstractRole
      * @param $entityId
      * @param Organization $organizationEn
      * @param Organization $organizationNl
+     * @param Organization $organizationPt
      * @param Service $singleLogoutService
      * @param bool $additionalLogging
      * @param array $certificates
      * @param array $contactPersons
      * @param string $descriptionEn
      * @param string $descriptionNl
+     * @param string $descriptionPt
      * @param bool $disableScoping
      * @param string $displayNameEn
      * @param string $displayNameNl
+     * @param string $displayNamePt
      * @param string $keywordsEn
      * @param string $keywordsNl
+     * @param string $keywordsPt
      * @param Logo $logo
      * @param string $nameEn
      * @param string $nameNl
+     * @param string $namePt
      * @param null $nameIdFormat
      * @param array $supportedNameIdFormats
      * @param null $publishInEduGainDate
@@ -282,20 +322,25 @@ abstract class AbstractRole
         $entityId,
         Organization $organizationEn = null,
         Organization $organizationNl = null,
+        Organization $organizationPt = null,
         Service $singleLogoutService = null,
         $additionalLogging = false,
         array $certificates = array(),
         array $contactPersons = array(),
         $descriptionEn = '',
         $descriptionNl = '',
+        $descriptionPt = '',
         $disableScoping = false,
         $displayNameEn = '',
         $displayNameNl = '',
+        $displayNamePt = '',
         $keywordsEn = '',
         $keywordsNl = '',
+        $keywordsPt = '',
         Logo $logo = null,
         $nameEn = '',
         $nameNl = '',
+        $namePt = '',
         $nameIdFormat = null,
         $supportedNameIdFormats = array(
             Constants::NAMEID_TRANSIENT,
@@ -314,19 +359,24 @@ abstract class AbstractRole
         $this->contactPersons = $contactPersons;
         $this->descriptionEn = $descriptionEn;
         $this->descriptionNl = $descriptionNl;
+        $this->descriptionPt = $descriptionPt;
         $this->disableScoping = $disableScoping;
         $this->displayNameEn = $displayNameEn;
         $this->displayNameNl = $displayNameNl;
+        $this->displayNamePt = $displayNamePt;
         $this->entityId = $entityId;
         $this->keywordsEn = $keywordsEn;
         $this->keywordsNl = $keywordsNl;
+        $this->keywordsPt = $keywordsPt;
         $this->logo = $logo;
         $this->nameEn = $nameEn;
+        $this->nameNl = $nameNl;
+        $this->namePt = $namePt;
         $this->nameIdFormat = $nameIdFormat;
         $this->supportedNameIdFormats = $supportedNameIdFormats;
-        $this->nameNl = $nameNl;
         $this->organizationEn = $organizationEn;
         $this->organizationNl = $organizationNl;
+        $this->organizationPt = $organizationPt;
         $this->publishInEduGainDate = $publishInEduGainDate;
         $this->publishInEdugain = $publishInEdugain;
         $this->requestsMustBeSigned = $requestsMustBeSigned;

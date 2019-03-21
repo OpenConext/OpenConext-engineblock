@@ -251,15 +251,20 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->setPathFromObject(array($connection, 'name'), 'entityId');
         $properties += $this->setPathFromObject(array($connection, 'metadata:name:nl'), 'nameNl');
         $properties += $this->setPathFromObject(array($connection, 'metadata:name:en'), 'nameEn');
+        $properties += $this->setPathFromObject(array($connection, 'metadata:name:pt'), 'namePt');
         $properties += $this->setPathFromObject(array($connection, 'metadata:displayName:nl'), 'displayNameNl');
         $properties += $this->setPathFromObject(array($connection, 'metadata:displayName:en'), 'displayNameEn');
+        $properties += $this->setPathFromObject(array($connection, 'metadata:displayName:pt'), 'displayNamePt');
         $properties += $this->setPathFromObject(array($connection, 'metadata:description:nl'), 'descriptionNl');
         $properties += $this->setPathFromObject(array($connection, 'metadata:description:en'), 'descriptionEn');
+        $properties += $this->setPathFromObject(array($connection, 'metadata:description:pt'), 'descriptionPt');
         $properties += $this->assembleLogo($connection);
         $properties += $this->assembleOrganization($connection, 'nl');
         $properties += $this->assembleOrganization($connection, 'en');
+        $properties += $this->assembleOrganization($connection, 'pt');
         $properties += $this->setPathFromObject(array($connection, 'metadata:keywords:en'), 'keywordsEn');
         $properties += $this->setPathFromObject(array($connection, 'metadata:keywords:nl'), 'keywordsNl');
+        $properties += $this->setPathFromObject(array($connection, 'metadata:keywords:pt'), 'keywordsPt');
         $properties += $this->setPathFromObject(array($connection, 'metadata:coin:publish_in_edugain'), 'publishInEdugain');
         $properties += $this->assembleCertificates($connection);
         $properties += $this->setPathFromObject(array($connection, 'state'), 'workflowState');
@@ -275,6 +280,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->setPathFromObject(array($connection, 'manipulation_code'), 'manipulation');
         $properties += $this->setPathFromObject(array($connection, 'metadata:url:en'), 'supportUrlEn');
         $properties += $this->setPathFromObject(array($connection, 'metadata:url:nl'), 'supportUrlNl');
+        $properties += $this->setPathFromObject(array($connection, 'metadata:url:pt'), 'supportUrlPt');
 
         return $properties;
     }

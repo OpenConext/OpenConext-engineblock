@@ -418,6 +418,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             $wayfIdp = array(
                 'Name_nl'   => $this->getNameNl($identityProvider, $additionalInfo),
                 'Name_en'   => $this->getNameEn($identityProvider, $additionalInfo),
+                'Name_pt'   => $this->getNamePt($identityProvider, $additionalInfo),
                 'Logo'      => $identityProvider->logo ? $identityProvider->logo->url : '/images/placeholder.png',
                 'Keywords'  => $this->getKeywords($identityProvider),
                 'Access'    => $identityProvider->enabledInWayf || $isDebugRequest ? '1' : '0',
@@ -514,6 +515,26 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         return $identityProvider->entityId;
     }
+    
+    private function getNamePt(
+        IdentityProvider $identityProvider,
+        AdditionalInfo $additionalInfo
+    ) {
+        if ($identityProvider->displayNamePt) {
+            return $identityProvider->displayNamePt;
+        }
+
+        if ($identityProvider->namePt) {
+            return $identityProvider->namePt;
+        }
+
+        EngineBlock_ApplicationSingleton::getLog()->warning(
+            'No PT displayName and name found for idp: ' . $identityProvider->entityId,
+            array('additional_info' => $additionalInfo->toArray())
+        );
+
+        return $identityProvider->entityId;
+    }
 
     private function getKeywords(IdentityProvider $identityProvider)
     {
@@ -523,6 +544,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         if ($identityProvider->keywordsNl) {
             return explode(' ', $identityProvider->keywordsNl);
+        }
+        
+        if ($identityProvider->keywordsPt) {
+            return explode(' ', $identityProvider->keywordsPt);
         }
 
         return 'Undefined';

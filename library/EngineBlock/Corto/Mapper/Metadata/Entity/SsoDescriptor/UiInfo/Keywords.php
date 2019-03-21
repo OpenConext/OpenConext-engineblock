@@ -23,6 +23,9 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_Keywords
         if ($this->_entity->keywordsNl) {
             $keywords['nl'] = $this->_entity->keywordsNl;
         }
+        if ($this->_entity->keywordsPt) {
+            $keywords['pt'] = $this->_entity->keywordsPt;
+        }
         if (empty($keywords)) {
             return $rootElement;
         }

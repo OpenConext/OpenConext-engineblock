@@ -55,6 +55,7 @@ final class Consent
             'support_url' => [
                 'en' => $this->serviceProvider->supportUrlEn,
                 'nl' => $this->serviceProvider->supportUrlNl,
+                'pt' => $this->serviceProvider->supportUrlPt,
             ],
             'eula_url' => $this->serviceProvider->termsOfServiceUrl,
             'support_email' => $supportEmail,
@@ -86,6 +87,14 @@ final class Consent
             $fields['display_name']['nl'] = $this->serviceProvider->nameNl;
         } else {
             $fields['display_name']['nl'] = $this->serviceProvider->entityId;
+        }
+
+        if (!empty($this->serviceProvider->displayNamePt)) {
+            $fields['display_name']['pt'] = $this->serviceProvider->displayNamePt;
+        } elseif (!empty($this->serviceProvider->namePt)) {
+            $fields['display_name']['pt'] = $this->serviceProvider->namePt;
+        } else {
+            $fields['display_name']['pt'] = $this->serviceProvider->entityId;
         }
 
         return $fields;
