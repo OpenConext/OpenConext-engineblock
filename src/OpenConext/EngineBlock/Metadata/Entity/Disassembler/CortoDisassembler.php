@@ -216,7 +216,7 @@ class CortoDisassembler
         }
 
         if ($entity->keywordsEn) {
-            $this->mapMultilang($entity->keywordsNl, $cortoEntity, 'Keywords', 'en');
+            $this->mapMultilang($entity->keywordsEn, $cortoEntity, 'Keywords', 'en');
         }
 
         if ($entity->keywordsPt) {
@@ -237,7 +237,7 @@ class CortoDisassembler
         }
 
         if ($entity->nameEn) {
-            $this->mapMultilang($entity->keywordsNl, $cortoEntity, 'Name', 'en');
+            $this->mapMultilang($entity->keywordsEn, $cortoEntity, 'Name', 'en');
         }
 
         if ($entity->namePt) {
@@ -258,7 +258,7 @@ class CortoDisassembler
         }
 
         if ($entity->descriptionEn) {
-            $this->mapMultilang($entity->keywordsNl, $cortoEntity, 'Description', 'nl');
+            $this->mapMultilang($entity->keywordsEn, $cortoEntity, 'Description', 'nl');
         }
 
         if ($entity->descriptionPt) {
