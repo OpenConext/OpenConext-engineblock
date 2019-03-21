@@ -258,7 +258,7 @@ class CortoDisassembler
         }
 
         if ($entity->descriptionEn) {
-            $this->mapMultilang($entity->keywordsEn, $cortoEntity, 'Description', 'nl');
+            $this->mapMultilang($entity->keywordsEn, $cortoEntity, 'Description', 'en');
         }
 
         if ($entity->descriptionPt) {
