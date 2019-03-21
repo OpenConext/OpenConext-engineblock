@@ -6,12 +6,19 @@ use Behat\Mink\Exception\ExpectationException;
 use Behat\MinkExtension\Context\MinkContext as BaseMinkContext;
 use DOMDocument;
 use DOMXPath;
+use RuntimeException;
 
 /**
  * Mink-enabled context.
  */
 class MinkContext extends BaseMinkContext
 {
+    /**
+     * @var array a list of window names identified by the name the tester refers to them in the step definitions.
+     * @example ['My tab' => 'WindowNameGivenByBrowser', 'My other tab' => 'WindowNameGivenByBrowser']
+     */
+    private $windows = [];
+
     /**
      * @Then /^the response should contain \'([^\']*)\'$/
      */
@@ -56,5 +63,53 @@ class MinkContext extends BaseMinkContext
             );
             throw new ExpectationException($message, $this->getSession());
         }
+    }
+
+    /**
+     * @Given /^I open (\d+) browser tabs identified by "([^"]*)"$/
+     */
+    public function iOpenTwoBrowserTabsIdentifiedBy($numberOfTabs, $tabNames)
+    {
+        $this->getMink()->setDefaultSessionName(AbstractSubContext::SESSION_CHROME);
+        $tabs = explode(',', $tabNames);
+        if (count($tabs) != $numberOfTabs) {
+            throw new RuntimeException(
+                'Please identify all tabs you are opening in order to refer to them at a later stage'
+            );
+        }
+
+        foreach ($tabs as $tab) {
+            $this->getMink()
+                ->getSession()
+                ->evaluateScript("return window.open('https://engine.vm.openconext.org', '_blank');");
+
+            $windowsNames = $this->getSession()->getWindowNames();
+
+            if (!$windowsNames) {
+                throw new RuntimeException('The windows where not opened correctly.');
+            }
+            // Grab the window name (which is the last one added to the window list)
+            $windowName = array_pop($windowsNames);
+            // Keep track of the opened windows in order allow switching between them
+            $this->windows[trim($tab)] = $windowName;
+        }
+    }
+
+    /**
+     * @Given /^I switch to "([^"]*)"$/
+     */
+    public function iSwitchToWindow($windowName)
+    {
+        // (re) set the default session to the chrome session.
+        $this->getMink()->setDefaultSessionName(AbstractSubContext::SESSION_CHROME);
+        $this->switchToWindow($windowName);
+    }
+
+    public function switchToWindow($windowName)
+    {
+        if (!isset($this->windows[$windowName])) {
+            throw new RuntimeException(sprintf('Unknown window/tab name "%s"', $windowName));
+        }
+        $this->getSession()->switchToWindow($this->windows[$windowName]);
     }
 }
