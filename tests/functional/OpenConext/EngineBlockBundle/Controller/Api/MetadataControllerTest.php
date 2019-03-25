@@ -474,6 +474,7 @@ class MetadataControllerTest extends WebTestCase
             $ptDisplayName,
             '',
             '',
+            '',
             $logo,
             $enName,
             $nlName,
