@@ -68,7 +68,7 @@ final class HttpClient
         }
 
         if ($statusCode < 200 || $statusCode >= 300) {
-            throw new UnreadableResourceException(sprintf('Resource could not be read (status code %d)', $statusCode));
+            throw new UnreadableResourceException(sprintf('Resource could not be read (status code "%d")', $statusCode));
         }
 
         try {
@@ -109,7 +109,7 @@ final class HttpClient
         }
 
         if ($statusCode < 200 || $statusCode >= 300) {
-            throw new UnreadableResourceException(sprintf('Resource could not be read (status code %d)', $statusCode));
+            throw new UnreadableResourceException(sprintf('Resource could not be read (status code "%d")', $statusCode));
         }
 
         try {

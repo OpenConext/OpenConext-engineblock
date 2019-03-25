@@ -174,7 +174,10 @@ class EngineBlock_Saml2_NameIdResolver
         }
 
         throw new EngineBlock_Exception(
-            "Whoa, SP '{$spEntityMetadata->entityId}' has no NameIDFormat set, did send a (valid) NameIDPolicy and has no supported NameIDFormats set... I give up..." ,
+            sprintf(
+                'Whoa, SP "%s" has no NameIDFormat set, did send a (valid) NameIDPolicy and has no supported NameIDFormats set... I give up...',
+                $spEntityMetadata->entityId
+            ),
             EngineBlock_Exception::CODE_NOTICE
         );
     }
@@ -237,7 +240,7 @@ class EngineBlock_Saml2_NameIdResolver
         $result = $statement->fetchAll();
 
         if (count($result) > 1) {
-            throw new EngineBlock_Exception('Multiple SP UUIDs found? For: SP: ' . $spEntityId);
+            throw new EngineBlock_Exception(sprintf('Multiple SP UUIDs found? For SP: "%s"', $spEntityId));
         }
 
         return isset($result[0]['uuid']) ? $result[0]['uuid'] : false;
@@ -261,7 +264,11 @@ class EngineBlock_Saml2_NameIdResolver
         $result = $statement->fetchAll();
         if (count($result) > 1) {
             throw new EngineBlock_Exception(
-                'Multiple persistent IDs found? For: SPUUID: ' . $serviceProviderUuid . ' and user UUID: ' . $userUuid
+                sprintf(
+                    'Multiple persistent IDs found? For: SP UUID: "%s" and user UUID: "%s"',
+                    $serviceProviderUuid,
+                    $userUuid
+                )
             );
         }
         return isset($result[0]['persistent_id']) ? $result[0]['persistent_id'] : false;
@@ -300,7 +307,7 @@ class EngineBlock_Saml2_NameIdResolver
         $user = $userDirectory->findUserBy($collabPersonId);
 
         if (!$user) {
-            throw new EngineBlock_Exception('No users found for collabPersonId: ' . $collabPersonId);
+            throw new EngineBlock_Exception(sprintf('No users found for collabPersonId: "%s"', $collabPersonId));
         }
 
         return $user->getCollabPersonUuid()->getUuid();

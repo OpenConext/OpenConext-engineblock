@@ -9,11 +9,11 @@ class EngineBlock_X509_PrivateKey
     function __construct($filePath)
     {
         if (!file_exists($filePath)) {
-            throw new EngineBlock_Exception("Private key file '$filePath' does not exist.");
+            throw new EngineBlock_Exception(sprintf('Private key file "%s" does not exist.', $filePath));
         }
 
         if (!is_readable($filePath)) {
-            throw new EngineBlock_Exception("Private key file '$filePath' exists but is not readable.");
+            throw new EngineBlock_Exception(sprintf('Private key file "%s" exists but is not readable.', $filePath));
         }
 
         $this->_filePath = $filePath;

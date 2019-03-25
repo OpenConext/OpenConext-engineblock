@@ -85,7 +85,7 @@ class ErrorReporter
 
         $this->session->set('feedbackInfo', array_merge(
             $feedback,
-            $this->engineBlockApplicationSingleton->collectFeedbackInfo()
+            $this->engineBlockApplicationSingleton->collectFeedbackInfo($exception)
         ));
 
         // flush all messages in queue, something went wrong!

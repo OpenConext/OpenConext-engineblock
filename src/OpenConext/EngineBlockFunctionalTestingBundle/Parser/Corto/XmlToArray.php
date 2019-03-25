@@ -191,7 +191,10 @@ class XmlToArray
         $foldingOptionSet = xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         if (!$foldingOptionSet) {
             throw new \RuntimeException(
-                "Unable to set XML_OPTION_CASE_FOLDING on parser object? Error message: " . xml_error_string(xml_get_error_code($parser))
+                sprintf(
+                    'Unable to set XML_OPTION_CASE_FOLDING on parser object? Error message: "%s"',
+                    xml_error_string(xml_get_error_code($parser))
+                )
             );
         }
 
@@ -199,9 +202,13 @@ class XmlToArray
         $parserResultStatus = xml_parse_into_struct($parser, $xml, $values);
         if ($parserResultStatus !== 1) {
             throw new \RuntimeException(
-                'Error parsing incoming XML. ' . PHP_EOL .
-                'Error code: ' . xml_error_string(xml_get_error_code($parser)) . PHP_EOL .
-                'XML: ' . $xml
+                sprintf(
+                    'Error parsing incoming XML. '.PHP_EOL.
+                    'Error code: "%s"'.PHP_EOL.
+                    'XML: "%s"',
+                    xml_error_string(xml_get_error_code($parser)),
+                    $xml
+                )
             );
         }
 
@@ -343,7 +350,11 @@ class XmlToArray
 
         if ($level > self::MAX_RECURSION_LEVEL) {
             throw new \RuntimeException(
-                'Recursion threshold exceed on element: ' . $elementName . ' for hashvalue: ' . var_export($hash, true)
+                sprintf(
+                    'Recursion threshold exceed on element: "%s" for hashvalue: "%s"',
+                    $elementName,
+                    var_export($hash, true)
+                )
             );
         }
         if ($hash == self::PLACEHOLDER_VALUE) {
@@ -373,7 +384,11 @@ class XmlToArray
             }
             else {
                 throw new \RuntimeException(
-                    "Value for key '$key' unrecognized (key naming error?)! Value" . print_r($value, true)
+                    sprintf(
+                        'Value for key "%s" unrecognized (key naming error?)! Value: "%s"',
+                        $key,
+                        print_r($value, true)
+                    )
                 );
             }
         }

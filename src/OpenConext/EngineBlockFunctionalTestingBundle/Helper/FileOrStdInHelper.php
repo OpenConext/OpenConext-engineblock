@@ -71,7 +71,7 @@ class FileOrStdInHelper
         }
 
         if (!is_file($filename)) {
-            throw new InvalidArgumentException("File '$filename' doesn't exist.");
+            throw new InvalidArgumentException(sprintf('File "%s" doesn\'t exist.', $filename));
         }
 
         return fopen($filename, 'r');

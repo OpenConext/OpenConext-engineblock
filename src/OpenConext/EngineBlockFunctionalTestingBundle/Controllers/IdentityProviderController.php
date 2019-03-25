@@ -69,7 +69,7 @@ class IdentityProviderController extends Controller
         }
 
         if (!$message instanceof AuthnRequest) {
-            throw new \RuntimeException('Unknown message type: ' . get_class($message));
+            throw new \RuntimeException(sprintf('Unknown message type: "%s"', get_class($message)));
         }
         $authnRequest = $message;
 

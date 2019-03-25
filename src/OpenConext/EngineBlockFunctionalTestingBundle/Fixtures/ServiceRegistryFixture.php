@@ -61,7 +61,7 @@ class ServiceRegistryFixture
 
         if ($entity === null) {
             throw new \Exception(
-                "Entity '{$entityId} was not registered with registerSp()"
+                sprintf('Entity "%s" was not registered with registerSp()', $entityId)
             );
         }
 
@@ -81,7 +81,7 @@ class ServiceRegistryFixture
 
         if ($entity === null) {
             throw new \Exception(
-                "Entity '{$entityId} was not registered with registerIdp()"
+                sprintf('Entity "%s" was not registered with registerIdp()', $entityId)
             );
         }
 

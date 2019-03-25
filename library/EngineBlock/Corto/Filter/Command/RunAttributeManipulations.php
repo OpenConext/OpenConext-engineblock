@@ -16,7 +16,7 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
     function __construct($type)
     {
         if (!in_array($type, array(self::TYPE_SP, self::TYPE_IDP, self::TYPE_REQUESTER_SP))) {
-            throw new \EngineBlock_Exception("Invalid type for Attribute Manipulation: '$type'");
+            throw new EngineBlock_Exception(sprintf('Invalid type for Attribute Manipulation: "%s"', $type));
         }
         $this->_type = $type;
     }
@@ -64,7 +64,9 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
             $serviceProvider = $entity;
         }
         else {
-            throw new EngineBlock_Exception('Attribute Manipulator encountered an unexpected type: ' . $this->_type);
+            throw new EngineBlock_Exception(
+                sprintf('Attribute Manipulator encountered an unexpected type: "%s"', $this->_type)
+            );
         }
 
         // Try entity specific file based manipulation from Service Registry

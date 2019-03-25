@@ -259,7 +259,7 @@ class EngineBlock_Corto_ProxyServer
 
         if (!isset($this->_keyPairs[$keyId])) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
-                "Unknown key id '{$keyId}'"
+                sprintf('Unknown key id "%s"', $keyId)
             );
         }
         return $this->_keyPairs[$keyId];
@@ -269,7 +269,7 @@ class EngineBlock_Corto_ProxyServer
     {
         if (!isset($this->_serviceToControllerMapping[$serviceName])) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
-                "Unable to map service '$serviceName' to a controller!"
+                sprintf('Unable to map service "%s" to a controller!', $serviceName)
             );
         }
 
@@ -355,7 +355,7 @@ class EngineBlock_Corto_ProxyServer
             $this->getLogger()->notice(sprintf('Unable to map remote IdpMD5 "%s" to a remote entity.', $remoteIdPMd5));
 
             throw new EngineBlock_Corto_Exception_UnknownPreselectedIdp(
-                "Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!",
+                sprintf('Unable to map remote IdpMD5 "%s" to a remote entity!', $remoteIdPMd5),
                 $remoteIdPMd5
             );
         }
@@ -737,8 +737,11 @@ class EngineBlock_Corto_ProxyServer
         $spRequestId = $authnRequestRepository->findLinkedRequestId($requestId);
         if ($spRequestId === null) {
             throw new EngineBlock_Corto_Module_Services_SessionLostException(
-                "Trying to find a AuthnRequest (we made and sent) with id '$requestId' but it is not known in this session? ".
-                "This could be an unsolicited Response (which we do not support) but more likely the user lost their session",
+                sprintf(
+                    'Trying to find a AuthnRequest (we made and sent) with id "%s" but it is not known in this session? '.
+                    'This could be an unsolicited Response (which we do not support) but more likely the user lost their session',
+                    $requestId
+                ),
                 EngineBlock_Corto_ProxyServer_Exception::CODE_NOTICE
             );
         }
@@ -982,7 +985,7 @@ class EngineBlock_Corto_ProxyServer
             }
         }
 
-        throw new EngineBlock_Corto_ProxyServer_Exception("Unable to map URL '$url' to EngineBlock URL");
+        throw new EngineBlock_Corto_ProxyServer_Exception(sprintf('Unable to map URL "%s" to EngineBlock URL', $url));
     }
 
     /**
@@ -1024,7 +1027,7 @@ class EngineBlock_Corto_ProxyServer
         else if (!empty($certificates['privateFile'])) {
                 if (!file_exists($certificates['privateFile'])) {
                     throw new EngineBlock_Corto_ProxyServer_Exception(
-                        'Private key PEM not found at: '.$certificates['privateFile']
+                        sprintf('Private key PEM not found at: "%s"', $certificates['privateFile'])
                     );
                 }
                 $privateKeyPem = file_get_contents($certificates['privateFile']);
@@ -1039,8 +1042,11 @@ class EngineBlock_Corto_ProxyServer
         $privateKey = openssl_pkey_get_private($privateKeyPem);
         if ($privateKey === false) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
-                "Current entity ['certificates']['private'] value is NOT a valid PEM formatted SSL private key?!? ".
-                "Value: '$privateKeyPem'"
+                sprintf(
+                    "Current entity ['certificates']['private'] value is NOT a valid PEM formatted SSL private key? ".
+                    "Value: '%s'",
+                    $privateKeyPem
+                )
             );
         }
         return $privateKey;

@@ -83,7 +83,7 @@ class Container extends AbstractContainer
      */
     public function redirect($url, $data = [])
     {
-        throw new NotImplementedException('SSP/SAML2 Redirect not implemented! URL: ' . $url);
+        throw new NotImplementedException(sprintf('SSP/SAML2 Redirect not implemented! URL: "%s', $url));
     }
 
     /**

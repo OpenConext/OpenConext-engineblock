@@ -53,6 +53,7 @@ before_script:
   - sudo cp -f ci/travis/vhost-apache /etc/apache2/sites-available/default-ssl.conf
   - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default-ssl.conf
   - sudo sed -i -e "s,www-data,travis,g" /etc/apache2/envvars
+  - sed -i 's,128M,1024M,' ~/build/OpenConext/OpenConext-engineblock/application/configs/application.ini
   - sudo chown -R travis:travis /var/lib/apache2/fastcgi
   - sudo a2dissite 000-default
   - sudo a2ensite default-ssl

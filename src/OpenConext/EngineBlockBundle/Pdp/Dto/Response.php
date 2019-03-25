@@ -66,11 +66,11 @@ final class Response
     public static function fromData(array $jsonData)
     {
         if (!isset($jsonData['Response'])) {
-            throw new InvalidPdpResponseException('Key "Response" was not found in the PDP response');
+            throw new InvalidPdpResponseException('Key: Response was not found in the PDP response');
         }
 
         if (!is_array($jsonData['Response'])) {
-            throw new InvalidPdpResponseException('Key "Response" is not an array');
+            throw new InvalidPdpResponseException('Key: Response is not an array');
         }
 
 
@@ -81,15 +81,15 @@ final class Response
         $responseData = $jsonData['Response'][0];
 
         if (!isset($responseData['Status'])) {
-            throw new InvalidPdpResponseException('Key "Status" was not found in the PDP response');
+            throw new InvalidPdpResponseException('Key: Status was not found in the PDP response');
         }
 
         if (!isset($responseData['PolicyIdentifier'])) {
-            throw new InvalidPdpResponseException('Key "PolicyIdentifier" was not found in the PDP response');
+            throw new InvalidPdpResponseException('Key: PolicyIdentifier was not found in the PDP response');
         }
 
         if (!isset($responseData['Decision'])) {
-            throw new InvalidPdpResponseException('Key "Decision" was not found in the PDP response');
+            throw new InvalidPdpResponseException('Key: Decision was not found in the PDP response');
         }
 
         $response = new self;

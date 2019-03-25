@@ -139,8 +139,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         }
 
         throw new RuntimeException(
-            "Unrecognized type: '{$connection->type}'"
-            . var_export($connection, true)
+            sprintf('Unrecognized type: "%s" "%s"', $connection->type, var_export($connection, true))
         );
     }
 

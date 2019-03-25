@@ -34,9 +34,11 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
 
         if ($validationResult->hasErrors()) {
             throw new EngineBlock_Corto_Exception_MissingRequiredFields(
-                'Errors validating attributes' .
-                    ' errors: '     . print_r($validationResult->getErrors(), true) .
-                    ' attributes: ' . print_r($this->_responseAttributes, true)
+                sprintf(
+                    'Errors validating attributes errors: "%s" attributes: "%s"',
+                    print_r($validationResult->getErrors(), true),
+                    print_r($this->_responseAttributes, true)
+                )
             );
         }
     }

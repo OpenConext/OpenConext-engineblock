@@ -34,12 +34,12 @@ class AttributeReleasePolicy
     {
         foreach ($attributeRules as $key => $rules) {
             if (!is_string($key)) {
-                throw new \InvalidArgumentException('Invalid key: ' . var_export($key, true));
+                throw new \InvalidArgumentException(sprintf('Invalid key: "%s"', var_export($key, true)));
             }
 
             if (!is_array($rules)) {
                 throw new \InvalidArgumentException(
-                    "Invalid values for attribute '$key', not an array: " . var_export($rules, true)
+                    sprintf('Invalid values for attribute "%s", not an array: "%s"', $key, var_export($rules, true))
                 );
             }
 
@@ -61,7 +61,11 @@ class AttributeReleasePolicy
         if (is_array($rule)) {
             if (!isset($rule['value'])) {
                 throw new \InvalidArgumentException(
-                    "Invalid value for attribute '$key', rule must contain a 'value' key, got: " . var_export($rule, true)
+                    sprintf(
+                        'Invalid value for attribute "%s", rule must contain a value key, got: "%s"',
+                        $key,
+                        var_export($rule, true)
+                    )
                 );
             }
 
@@ -72,7 +76,7 @@ class AttributeReleasePolicy
 
         if (!is_string($value)) {
             throw new \InvalidArgumentException(
-                "Invalid value for attribute '$key', not a string: " . var_export($value, true)
+                sprintf('Invalid value for attribute "%s", not a string: "%s"', $key, var_export($value, true))
             );
         }
     }

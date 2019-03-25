@@ -53,7 +53,7 @@ final class JsonResponseParser
                 $errorMessage = 'Unknown error';
             }
 
-            throw new InvalidJsonException((sprintf('Unable to parse JSON data: %s', $errorMessage)));
+            throw new InvalidJsonException((sprintf('Unable to parse JSON data: "%s"', $errorMessage)));
         }
 
         return $data;
