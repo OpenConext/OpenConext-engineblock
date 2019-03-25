@@ -98,7 +98,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             $response->setDeliverByBinding('INTERNAL');
 
             // Consent is disabled, we now mark authentication_state as completed
-            $authenticationState->completeCurrentProcedure();
+            $authenticationState->completeCurrentProcedure($response->getInResponseTo());
 
             $this->_server->getBindingsModule()->send(
                 $response,
@@ -115,7 +115,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             $response->setDeliverByBinding('INTERNAL');
 
             // Prior consent is found, we now mark authentication_state as completed
-            $authenticationState->completeCurrentProcedure();
+            $authenticationState->completeCurrentProcedure($response->getInResponseTo());
 
             $this->_server->getBindingsModule()->send(
                 $response,

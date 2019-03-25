@@ -4,6 +4,9 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlock\Metadata\Service;
+use OpenConext\Value\Saml\Entity;
+use OpenConext\Value\Saml\EntityId;
+use OpenConext\Value\Saml\EntityType;
 use Psr\Log\LoggerInterface;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
@@ -372,6 +375,15 @@ class EngineBlock_Corto_ProxyServer
         $identityProvider = $this->getRepository()->fetchIdentityProviderByEntityId($idpEntityId);
 
         $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest($spRequest, $identityProvider, $this);
+
+        // Store the authentication state based on the request id and the sp entity id.
+        $spEntityId = $spRequest->getSspMessage()->getIssuer();
+        $serviceProvider = new Entity(new EntityId($spEntityId), EntityType::SP());
+
+        $authenticationState = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()
+            ->getAuthenticationStateHelper()
+            ->getAuthenticationState();
+        $authenticationState->startAuthenticationOnBehalfOf($ebRequest->getId(), $serviceProvider);
 
         // Store the original Request
         $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_logger);

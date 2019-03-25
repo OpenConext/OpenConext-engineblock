@@ -22,9 +22,23 @@ use OpenConext\Value\Saml\Entity;
 
 interface AuthenticationStateInterface
 {
-    public function startAuthenticationOnBehalfOf(Entity $serviceProvider);
+    /**
+     * @param string $requestId
+     * @param Entity $serviceProvider
+     * @return void
+     */
+    public function startAuthenticationOnBehalfOf($requestId, Entity $serviceProvider);
 
-    public function authenticatedAt(Entity $identityProvider);
+    /**
+     * @param string $requestId
+     * @param Entity $identityProvider
+     * @return void
+     */
+    public function authenticatedAt($requestId, Entity $identityProvider);
 
-    public function completeCurrentProcedure();
+    /**
+     * @param $requestId
+     * @return void
+     */
+    public function completeCurrentProcedure($requestId);
 }

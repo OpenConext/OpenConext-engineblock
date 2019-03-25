@@ -7,11 +7,11 @@ interface AuthenticationLoopGuardInterface
 {
     /**
      * @param Entity $serviceProvider
-     * @param AuthenticationProcedureList $pastAuthenticationProcedures
+     * @param AuthenticationProcedureMap $pastAuthenticationProcedures
      * @return
      */
     public function detectsAuthenticationLoop(
         Entity $serviceProvider,
-        AuthenticationProcedureList $pastAuthenticationProcedures
+        AuthenticationProcedureMap $pastAuthenticationProcedures
     );
 }
