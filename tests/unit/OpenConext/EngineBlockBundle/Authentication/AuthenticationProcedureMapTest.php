@@ -20,46 +20,47 @@ namespace OpenConext\EngineBlockBundle\Tests;
 
 use DateTimeImmutable;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedure;
-use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedureList;
+use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedureMap;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
 use PHPUnit_Framework_TestCase as TestCase;
 
-class AuthenticationProcedureListTest extends TestCase
+class AuthenticationProcedureMapTest extends TestCase
 {
     /**
      * @test
      * @group AuthenticationState
      */
-    public function a_new_list_is_returned_when_an_authentication_procedure_is_added_to_an_authentication_procedures_list()
+    public function a_new_map_is_returned_when_an_authentication_procedure_is_added_to_an_authentication_procedures_map()
     {
         $someServiceProvider  = new Entity(new EntityId('some.serviceprovider.example'), EntityType::SP());
         $otherServiceProvider = new Entity(new EntityId('other.serviceprovider.example'), EntityType::SP());
 
         $someAuthenticationProcedure = AuthenticationProcedure::onBehalfOf($someServiceProvider);
         $otherAuthenticationProcedure = AuthenticationProcedure::onBehalfOf($otherServiceProvider);
+        $requestId = 'UniqeRequestId';
 
-        $authenticationProcedureList = new AuthenticationProcedureList([$someAuthenticationProcedure]);
-        $newAuthenticationProcedureList = $authenticationProcedureList->add($otherAuthenticationProcedure);
+        $authenticationProcedureMap = new AuthenticationProcedureMap([$someAuthenticationProcedure]);
+        $newAuthenticationProcedureMap = $authenticationProcedureMap->add($requestId, $otherAuthenticationProcedure);
 
 
         $this->assertTrue(
-            $authenticationProcedureList->contains($someAuthenticationProcedure),
-            'The original authentication procedure list should have the original authentication procedure'
+            $authenticationProcedureMap->contains($someAuthenticationProcedure),
+            'The original authentication procedure map should have the original authentication procedure'
         );
         $this->assertTrue(
-            $authenticationProcedureList->contains($someAuthenticationProcedure),
-            'The new authentication procedure list should have the original authentication procedure'
+            $authenticationProcedureMap->contains($someAuthenticationProcedure),
+            'The new authentication procedure map should have the original authentication procedure'
         );
 
         $this->assertFalse(
-            $authenticationProcedureList->contains($otherAuthenticationProcedure),
-            'The original authentication procedure list should not mutate when adding another authentication procedure'
+            $authenticationProcedureMap->contains($otherAuthenticationProcedure),
+            'The original authentication procedure map should not mutate when adding another authentication procedure'
         );
         $this->assertTrue(
-            $newAuthenticationProcedureList->contains($otherAuthenticationProcedure),
-            'The new authentication procedure list should contain the added another authentication procedure'
+            $newAuthenticationProcedureMap->contains($otherAuthenticationProcedure),
+            'The new authentication procedure map should contain the added another authentication procedure'
         );
     }
 
@@ -67,7 +68,7 @@ class AuthenticationProcedureListTest extends TestCase
      * @test
      * @group AuthenticationState
      */
-    public function an_authentication_procedure_list_can_be_filtered_by_authentications_on_behalf_of_a_given_service_provider_returning_a_new_list()
+    public function an_authentication_procedure_map_can_be_filtered_by_authentications_on_behalf_of_a_given_service_provider_returning_a_new_map()
     {
         $someServiceProvider  = new Entity(new EntityId('some.serviceprovider.example'), EntityType::SP());
         $otherServiceProvider = new Entity(new EntityId('other.serviceprovider.example'), EntityType::SP());
@@ -75,20 +76,20 @@ class AuthenticationProcedureListTest extends TestCase
         $someAuthenticationProcedure  = AuthenticationProcedure::onBehalfOf($someServiceProvider);
         $otherAuthenticationProcedure = AuthenticationProcedure::onBehalfOf($otherServiceProvider);
 
-        $authenticationProcedureList = new AuthenticationProcedureList([
+        $authenticationProcedureMap = new AuthenticationProcedureMap([
             $someAuthenticationProcedure,
             $otherAuthenticationProcedure,
         ]);
 
-        $filteredList = $authenticationProcedureList->filterOnBehalfOf($someServiceProvider);
+        $filteredMap = $authenticationProcedureMap->filterOnBehalfOf($someServiceProvider);
 
         $this->assertTrue(
-            $filteredList->contains($someAuthenticationProcedure),
-            'The filtered authentication list should contain the matching authentication procedure'
+            $filteredMap->contains($someAuthenticationProcedure),
+            'The filtered authentication map should contain the matching authentication procedure'
         );
         $this->assertFalse(
-            $filteredList->contains($otherAuthenticationProcedure),
-            'The filtered authentication list should not contain the non-matching authentication procedure'
+            $filteredMap->contains($otherAuthenticationProcedure),
+            'The filtered authentication map should not contain the non-matching authentication procedure'
         );
     }
 
@@ -96,7 +97,7 @@ class AuthenticationProcedureListTest extends TestCase
      * @test
      * @group AuthenticationState
      */
-    public function an_authentication_procedure_list_can_be_filtered_by_completed_procedures_since_a_given_time_returning_a_new_list()
+    public function an_authentication_procedure_map_can_be_filtered_by_completed_procedures_since_a_given_time_returning_a_new_map()
     {
         $someServiceProvider  = new Entity(new EntityId('some.serviceprovider.example'), EntityType::SP());
         $otherServiceProvider = new Entity(new EntityId('other.serviceprovider.example'), EntityType::SP());
@@ -110,22 +111,22 @@ class AuthenticationProcedureListTest extends TestCase
         $otherAuthenticationProcedure->authenticatedAt($someIdentityProvider);
         $otherAuthenticationProcedure->completeOn(new DateTimeImmutable('2001-01-01'));
 
-        $authenticationProcedureList = new AuthenticationProcedureList([
+        $authenticationProcedureMap = new AuthenticationProcedureMap([
             $someAuthenticationProcedure,
             $otherAuthenticationProcedure,
         ]);
 
-        $filteredList = $authenticationProcedureList->filterProceduresCompletedAfter(
+        $filteredMap = $authenticationProcedureMap->filterProceduresCompletedAfter(
             new DateTimeImmutable('2000-01-01')
         );
 
         $this->assertFalse(
-            $filteredList->contains($someAuthenticationProcedure),
-            'The filtered list should not contain a completed procedure before the given time'
+            $filteredMap->contains($someAuthenticationProcedure),
+            'The filtered map should not contain a completed procedure before the given time'
         );
         $this->assertTrue(
-            $filteredList->contains($otherAuthenticationProcedure),
-            'The filtered list should contain a completed procedure after the given time'
+            $filteredMap->contains($otherAuthenticationProcedure),
+            'The filtered map should contain a completed procedure after the given time'
         );
     }
 }

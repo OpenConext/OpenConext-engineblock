@@ -2,6 +2,8 @@
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
+use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
+use OpenConext\EngineBlockBundle\Authentication\AuthenticationStateInterface;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Response;
@@ -23,6 +25,11 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
      */
     private $consentFactoryMock;
 
+    /**
+     * @var \OpenConext\EngineBlock\Service\AuthenticationStateHelperInterfacee
+     */
+    private $authnStateHelperMock;
+
     public function setup()
     {
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
@@ -30,7 +37,7 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
         $this->proxyServerMock    = $this->mockProxyServer();
         $this->xmlConverterMock   = $this->mockXmlConverter($diContainer->getXmlConverter());
         $this->consentFactoryMock = $diContainer->getConsentFactory();
-
+        $this->authnStateHelperMock = $this->mockAuthnStateHelper();
         $this->mockGlobals();
     }
 
@@ -194,6 +201,18 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
         return $consentMock;
     }
 
+    private function mockAuthnStateHelper()
+    {
+        $authStateMock = Phake::mock(AuthenticationStateInterface::class);
+
+        $helperMock = Phake::mock(AuthenticationStateHelperInterface::class);
+        Phake::when($helperMock)
+            ->getAuthenticationState()
+            ->thenReturn($authStateMock);
+
+        return $helperMock;
+    }
+
     /**
      * @return EngineBlock_Corto_Module_Service_ProcessConsent
      */
@@ -202,7 +221,8 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
         return new EngineBlock_Corto_Module_Service_ProcessConsent(
             $this->proxyServerMock,
             $this->xmlConverterMock,
-            $this->consentFactoryMock
+            $this->consentFactoryMock,
+            $this->authnStateHelperMock
         );
     }
 }

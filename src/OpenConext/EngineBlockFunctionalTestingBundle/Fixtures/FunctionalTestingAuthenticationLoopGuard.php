@@ -20,7 +20,7 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuardInterface;
-use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedureList;
+use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedureMap;
 use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use OpenConext\Value\Saml\Entity;
@@ -70,11 +70,11 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
 
     /**
      * @param Entity $serviceProvider
-     * @param AuthenticationProcedureList $pastAuthenticationProcedures
+     * @param AuthenticationProcedureMap $pastAuthenticationProcedures
      */
     public function detectsAuthenticationLoop(
         Entity $serviceProvider,
-        AuthenticationProcedureList $pastAuthenticationProcedures
+        AuthenticationProcedureMap $pastAuthenticationProcedures
     ) {
         if ($this->authenticationGuardFixture === false) {
             $authenticationLoopGuard = $this->authenticationLoopGuard;

@@ -239,7 +239,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
     {
         $authState = Phake::mock(AuthenticationStateInterface::class);
         Phake::when($authState)
-            ->completeCurrentProcedure();
+            ->completeCurrentProcedure('_00000000-0000-0000-0000-000000000000');
 
         $mock = Phake::mock(AuthenticationStateHelperInterface::class);
         Phake::when($mock)
