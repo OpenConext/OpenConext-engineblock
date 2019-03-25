@@ -47,7 +47,7 @@ class UserService implements UserDirectory
 
         if (!$user) {
             throw new RuntimeException(sprintf(
-                'Attempting to get user by %s failed, no such user exists.',
+                'Attempting to get user by "%s" failed, no such user exists.',
                 $collabPersonId
             ));
         }
