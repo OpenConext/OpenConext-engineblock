@@ -172,11 +172,11 @@ final class ConsentControllerTest extends WebTestCase
         $serviceProvider = new ServiceProvider($spEntityId);
         $serviceProvider->displayNameEn = 'My Test SP';
         $serviceProvider->displayNameNl = 'Mijn Test SP';
-        $serviceProvider->displayNamePT = 'O Meus Teste SP';
+        $serviceProvider->displayNamePt = 'O Meu teste SP';
         $serviceProvider->nameIdFormat = NameIdFormat::TRANSIENT_IDENTIFIER;
         $serviceProvider->supportUrlNl = 'https://my-test-sp.test/help-nl';
         $serviceProvider->supportUrlEn = 'https://my-test-sp.test/help-en';
-        $serviceProvider->supportUrlPt = 'https://my-test-sp.test/help-en';
+        $serviceProvider->supportUrlPt = 'https://my-test-sp.test/help-pt';
         $serviceProvider->contactPersons = [
             $technicalContact,
             $firstSupportContact,
