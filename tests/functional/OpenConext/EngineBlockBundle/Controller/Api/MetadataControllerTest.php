@@ -213,6 +213,11 @@ class MetadataControllerTest extends WebTestCase
         $nlOrganizationUrl = 'https://my-idp.test/nl';
         $nlOrganization = new Organization($nlOrganizationName, $nlOrganizationDisplayName, $nlOrganizationUrl);
 
+        $ptOrganizationName = 'A Minha Org (PT)';
+        $ptOrganizationDisplayName = 'A Minha Organização';
+        $ptOrganizationUrl = 'https://my-idp.test/pt';
+        $ptOrganization = new Organization($ptOrganizationName, $ptOrganizationDisplayName, $ptOrganizationUrl);
+
         $sloLocation = 'https://my-idp.test/slo';
         $sloBinding  = Constants::BINDING_HTTP_POST;
         $sloService = new Service($sloLocation, $sloBinding);
@@ -224,12 +229,15 @@ class MetadataControllerTest extends WebTestCase
 
         $enDescription = 'Description';
         $nlDescription = 'Omschrijving';
+        $ptDescription = 'Descrição';
 
         $enDisplayName = 'My IdP';
         $nlDisplayName = 'Mijn IdP';
+        $ptDisplayName = 'O Meu IdP';
 
         $enName = 'My IdP (EN)';
         $nlName = 'My IdP (NL)';
+        $ptName = 'O Meu Idp (PT)';
 
         $logoHeight = 100;
         $logoWidth = 100;
@@ -252,15 +260,19 @@ class MetadataControllerTest extends WebTestCase
             $idpEntityId,
             $enOrganization,
             $nlOrganization,
+            $ptOrganization,
             $sloService,
             $supportContact,
             $enDescription,
             $nlDescription,
+            $ptDescription,
             $enDisplayName,
             $nlDisplayName,
+            $ptDisplayName,
             $logo,
             $enName,
             $nlName,
+            $ptName,
             $shibMdScope,
             $ssoService
         );
@@ -295,6 +307,11 @@ class MetadataControllerTest extends WebTestCase
                     'display_name' => $nlOrganizationDisplayName,
                     'url' => $nlOrganizationUrl,
                 ],
+                'pt' => [
+                    'name' => $ptOrganizationName,
+                    'display_name' => $ptOrganizationDisplayName,
+                    'url' => $ptOrganizationUrl,
+                ],
             ],
             'single_logout_service' => [
                 'binding' => $sloBinding,
@@ -310,14 +327,17 @@ class MetadataControllerTest extends WebTestCase
             'description' => [
                 'en' => $enDescription,
                 'nl' => $nlDescription,
+                'pt' => $ptDescription,
             ],
             'display_name' => [
                 'en' => $enDisplayName,
                 'nl' => $nlDisplayName,
+                'pt' => $ptDisplayName,
             ],
             'name' => [
                 'en' => $enName,
                 'nl' => $nlName,
+                'pt' => $ptName,
             ],
             'logo' => [
                 'height' => $logoHeight,
@@ -399,15 +419,19 @@ class MetadataControllerTest extends WebTestCase
      * @param $idpEntityId
      * @param Organization $enOrganization
      * @param Organization $nlOrganization
+     * @param Organization $ptOrganization
      * @param Service $sloService
      * @param ContactPerson $supportContact
      * @param $enDescription
      * @param $nlDescription
+     * @param $ptDescription
      * @param $enDisplayName
      * @param $nlDisplayName
+     * @param $ptDisplayName
      * @param Logo $logo
      * @param $enName
      * @param $nlName
+     * @param $ptName
      * @param ShibMdScope $shibMdScope
      * @param Service $ssoService
      * @return IdentityProvider
@@ -416,15 +440,19 @@ class MetadataControllerTest extends WebTestCase
         $idpEntityId,
         Organization $enOrganization,
         Organization $nlOrganization,
+        Organization $ptOrganization,
         Service $sloService,
         ContactPerson $supportContact,
         $enDescription,
         $nlDescription,
+        $ptDescription,
         $enDisplayName,
         $nlDisplayName,
+        $ptDisplayName,
         Logo $logo,
         $enName,
         $nlName,
+        $ptName,
         ShibMdScope $shibMdScope,
         Service $ssoService
     ) {
@@ -432,20 +460,24 @@ class MetadataControllerTest extends WebTestCase
             $idpEntityId,
             $enOrganization,
             $nlOrganization,
+            $ptOrganization,
             $sloService,
             false,
             [],
             [$supportContact],
             $enDescription,
             $nlDescription,
+            $ptDescription,
             false,
             $enDisplayName,
             $nlDisplayName,
+            $ptDisplayName,
             '',
             '',
             $logo,
             $enName,
             $nlName,
+            $ptName,
             null,
             [Constants::NAMEID_TRANSIENT, Constants::NAMEID_PERSISTENT],
             null,
