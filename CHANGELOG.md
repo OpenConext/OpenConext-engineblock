@@ -11,6 +11,11 @@ The 5.10 release focuses on making EngineBlock more robust. The biggest aim is t
 
 ### Features
  * SSO and ACS mis-use is logged earlier in the process #641 #642
+ * Show a repeatable error code on the custom error pages (ART) #645
+ * Improved handling of HTTP 405 request errors #646 #647
+ * Allow re-posting of SAML Responses, allowing page refresh on Consent screen #648
+ * Allow for more than one in-flight authentication session per user session #649
+ * Added further support for Portuguese language #650 (thanks @domgon!)
 
 ## 5.9.2
 This release improves upon some of the previous consent changes
