@@ -1,5 +1,6 @@
 <?php
 
+use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use SAML2\Constants;
 use SAML2\Response;
 
@@ -22,6 +23,11 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
     private $_consentFactory;
 
     /**
+     * @var AuthenticationStateHelperInterface
+     */
+    private $_authenticationStateHelper;
+
+    /**
      * @param EngineBlock_Corto_ProxyServer $server
      * @param EngineBlock_Corto_XmlToArray $xmlConverter
      * @param EngineBlock_Corto_Model_Consent_Factory $consentFactory
@@ -29,11 +35,13 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
-        EngineBlock_Corto_Model_Consent_Factory $consentFactory
+        EngineBlock_Corto_Model_Consent_Factory $consentFactory,
+        AuthenticationStateHelperInterface $stateHelper
     ) {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->_consentFactory = $consentFactory;
+        $this->_authenticationStateHelper = $stateHelper;
     }
 
     public function serve($serviceName)
@@ -43,7 +51,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         }
         if (!isset($_SESSION['consent'][$_POST['ID']]['response'])) {
             throw new EngineBlock_Corto_Module_Services_SessionLostException(
-                "Stored response for ResponseID '{$_POST['ID']}' not found"
+                sprintf('Stored response for ResponseID "%s" not found', $_POST['ID'])
             );
         }
         /** @var Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
@@ -72,6 +80,10 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         $response->setConsent(Constants::CONSENT_OBTAINED);
         $response->setDestination($response->getReturn());
         $response->setDeliverByBinding('INTERNAL');
+
+        // Finally, mark the authentication procedure as being complete.
+        $authenticationState = $this->_authenticationStateHelper->getAuthenticationState();
+        $authenticationState->completeCurrentProcedure($response->getInResponseTo());
 
         $this->_server->getBindingsModule()->send(
             $response,

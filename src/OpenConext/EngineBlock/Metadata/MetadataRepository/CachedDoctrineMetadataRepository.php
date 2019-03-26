@@ -110,7 +110,7 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
         $serviceProvider = $this->findServiceProviderByEntityId($entityId);
 
         if (!$serviceProvider) {
-            throw new EntityNotFoundException("Service Provider '$entityId' not found in database");
+            throw new EntityNotFoundException(sprintf('Service Provider "%s" not found in database', $entityId));
         }
 
         return $serviceProvider;
@@ -125,7 +125,7 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
         $identityProvider = $this->findIdentityProviderByEntityId($entityId);
 
         if (!$identityProvider) {
-            throw new EntityNotFoundException("Identity Provider '$entityId' not found in database");
+            throw new EntityNotFoundException(sprintf('Identity Provider "%s" not found in database', $entityId));
         }
 
         return $identityProvider;

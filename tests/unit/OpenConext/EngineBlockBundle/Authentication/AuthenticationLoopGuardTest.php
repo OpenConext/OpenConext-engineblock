@@ -22,6 +22,7 @@ use DateTimeImmutable;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedure;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedureList;
+use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedureMap;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
@@ -53,7 +54,12 @@ class AuthenticationLoopGuardTest extends TestCase
         $currentProcedure->authenticatedAt($identityProvider);
         $currentProcedure->completeOn(new DateTimeImmutable());
 
-        $pastAuthenticationProcedures = new AuthenticationProcedureList([$firstProcedure, $currentProcedure]);
+        $pastAuthenticationProcedures = new AuthenticationProcedureMap(
+            [
+                '_00000000-0000-0000-0000-000000000000' => $firstProcedure,
+                '_00000000-0000-0000-0000-000000000001' => $currentProcedure,
+            ]
+        );
 
         $stuckInLoop = $authenticationLoopGuard->detectsAuthenticationLoop(
             $serviceProvider,
@@ -86,7 +92,9 @@ class AuthenticationLoopGuardTest extends TestCase
         $firstProcedure->authenticatedAt($identityProvider);
         $firstProcedure->completeOn(new DateTimeImmutable());
 
-        $pastAuthenticationProcedures = new AuthenticationProcedureList([$firstProcedure]);
+        $pastAuthenticationProcedures = new AuthenticationProcedureMap(
+            ['_00000000-0000-0000-0000-000000000000' => $firstProcedure]
+        );
 
         $inAuthenticationLoop = $authenticationLoopGuard->detectsAuthenticationLoop(
             $serviceProvider,

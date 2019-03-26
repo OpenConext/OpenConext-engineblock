@@ -65,12 +65,13 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
 
         if ($receivedRequest->isDebugRequest()) {
             $_SESSION['debugIdpResponse'] = $receivedResponse;
+            $requestId = $receivedResponse->getInResponseTo();
 
             // Authentication state needs to be registered here as the debug flow differs from the regular flow,
             // yet the procedures for both are completed when consuming the assertion in the ServiceProviderController
             $identityProvider = new Entity(new EntityId($idp->entityId), EntityType::IdP());
             $authenticationState = $this->_session->get('authentication_state');
-            $authenticationState->authenticatedAt($identityProvider);
+            $authenticationState->authenticatedAt($requestId, $identityProvider);
 
             $this->_server->redirect(
                 $this->_server->getUrl('debugSingleSignOnService'),
@@ -103,14 +104,15 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             $newResponse = $this->_server->createEnhancedResponse($receivedRequest, $receivedResponse);
 
             // Change the destiny of the received response
-            $newResponse->setInResponseTo($receivedResponse->getInResponseTo());
+            $inResponseTo = $receivedResponse->getInResponseTo();
+            $newResponse->setInResponseTo($inResponseTo);
             $newResponse->setDestination($firstProcessingEntity->responseProcessingService->location);
             $newResponse->setDeliverByBinding($firstProcessingEntity->responseProcessingService->binding);
             $newResponse->setReturn($this->_server->getUrl('processedAssertionConsumerService'));
 
             $identityProvider = new Entity(new EntityId($idp->entityId), EntityType::IdP());
             $authenticationState = $this->_session->get('authentication_state');
-            $authenticationState->authenticatedAt($identityProvider);
+            $authenticationState->authenticatedAt($inResponseTo, $identityProvider);
 
             $this->_server->getBindingsModule()->send($newResponse, $firstProcessingEntity);
         }

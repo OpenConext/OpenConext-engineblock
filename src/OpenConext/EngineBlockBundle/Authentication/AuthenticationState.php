@@ -18,18 +18,15 @@
 
 namespace OpenConext\EngineBlockBundle\Authentication;
 
+use Assert\AssertionFailedException;
 use DateTimeImmutable;
+use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlockBundle\Exception\LogicException;
 use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
 use OpenConext\Value\Saml\Entity;
 
 final class AuthenticationState implements AuthenticationStateInterface
 {
-    /**
-     * @var AuthenticationProcedure
-     */
-    private $currentAuthenticationProcedure;
-
     /**
      * @var AuthenticationProcedureList
      */
@@ -42,17 +39,20 @@ final class AuthenticationState implements AuthenticationStateInterface
 
     public function __construct(AuthenticationLoopGuardInterface $authenticationLoopGuard)
     {
-        $this->authenticationProcedures = new AuthenticationProcedureList;
+        $this->authenticationProcedures = new AuthenticationProcedureMap;
         $this->authenticationLoopGuard  = $authenticationLoopGuard;
     }
 
     /**
+     * @param $requestId
      * @param Entity $serviceProvider
      * @return void
+     * @throws AssertionFailedException
      */
-    public function startAuthenticationOnBehalfOf(Entity $serviceProvider)
+    public function startAuthenticationOnBehalfOf($requestId, Entity $serviceProvider)
     {
-        $this->currentAuthenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
+        Assertion::string($requestId, 'The requestId must be a string (XML ID) value');
+        $currentAuthenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
 
         $inAuthenticationLoop = $this->authenticationLoopGuard->detectsAuthenticationLoop(
             $serviceProvider,
@@ -71,46 +71,57 @@ final class AuthenticationState implements AuthenticationStateInterface
             );
         }
 
-        $this->authenticationProcedures = $this->authenticationProcedures->add($this->currentAuthenticationProcedure);
+        $this->authenticationProcedures = $this->authenticationProcedures->add(
+            $requestId,
+            $currentAuthenticationProcedure
+        );
     }
 
     /**
+     * @param string $requestId
      * @param Entity $identityProvider
      * @return void
+     * @throws AssertionFailedException
      */
-    public function authenticatedAt(Entity $identityProvider)
+    public function authenticatedAt($requestId, Entity $identityProvider)
     {
-        if ($this->currentAuthenticationProcedure === null) {
+        Assertion::string($requestId, 'The requestId must be a string (XML ID) value');
+
+        $currentRequest = $this->authenticationProcedures->find($requestId);
+
+        if ($currentRequest === null) {
             throw new LogicException(
                 'Current authentication procedure cannot be authenticated:'
                  . ' authentication procedure has not been started'
             );
         }
 
-        $this->currentAuthenticationProcedure->authenticatedAt($identityProvider);
+        $currentRequest->authenticatedAt($identityProvider);
     }
 
     /**
+     * @param string $requestId
      * @return void
+     * @throws AssertionFailedException
      */
-    public function completeCurrentProcedure()
+    public function completeCurrentProcedure($requestId)
     {
-        if ($this->currentAuthenticationProcedure === null) {
+        Assertion::string($requestId, 'The requestId must be a string (XML ID) value');
+        $currentRequest = $this->authenticationProcedures->find($requestId);
+        if ($currentRequest === null) {
             throw new LogicException(
                 'Current authentication procedure cannot be completed:'
                 . ' authentication procedure has not been started'
             );
         }
 
-        if ($this->currentAuthenticationProcedure->hasBeenAuthenticated()) {
+        if ($currentRequest->hasBeenAuthenticated()) {
             throw new LogicException(
                 'Current authentication procedure cannot be completed:'
                 . ' authentication procedure has not been authenticated'
             );
         }
 
-        $this->currentAuthenticationProcedure->completeOn(new DateTimeImmutable);
-
-        $this->currentAuthenticationProcedure = null;
+        $currentRequest->completeOn(new DateTimeImmutable);
     }
 }

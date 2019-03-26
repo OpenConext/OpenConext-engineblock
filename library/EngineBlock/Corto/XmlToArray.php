@@ -180,7 +180,10 @@ class EngineBlock_Corto_XmlToArray
         $foldingOptionSet = xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         if (!$foldingOptionSet) {
             throw new EngineBlock_Corto_XmlToArray_Exception(
-                "Unable to set XML_OPTION_CASE_FOLDING on parser object? Error message: " . xml_error_string(xml_get_error_code($parser)),
+                sprintf(
+                    'Unable to set XML_OPTION_CASE_FOLDING on parser object? Error message: "%s"',
+                    xml_error_string(xml_get_error_code($parser))
+                ),
                 EngineBlock_Corto_XmlToArray_Exception::CODE_ERROR
             );
         }
@@ -191,11 +194,17 @@ class EngineBlock_Corto_XmlToArray
             $errorCode = xml_get_error_code($parser);
             $errorMessage = xml_error_string($errorCode);
             throw new EngineBlock_Corto_XmlToArray_Exception(
-                'Error parsing incoming XML. ' . PHP_EOL .
-                'Error code: ' . $errorCode . PHP_EOL .
-                'Error message: ' . $errorMessage . PHP_EOL .
-                'Last libXML error: ' . var_export(libxml_get_last_error(), true) . PHP_EOL .
-                'XML: ' . $xml
+                sprintf(
+                    'Error parsing incoming XML. '.PHP_EOL.
+                    'Error code: "%s"'.PHP_EOL.
+                    'Error message: "%s"'.PHP_EOL.
+                    'Last libXML error: "%s"'.PHP_EOL.
+                    'XML: "%s"',
+                    $errorCode,
+                    $errorMessage,
+                    var_export(libxml_get_last_error(), true),
+                    $xml
+                )
             );
         }
 
@@ -338,7 +347,11 @@ class EngineBlock_Corto_XmlToArray
 
         if ($level > self::MAX_RECURSION_LEVEL) {
             throw new EngineBlock_Corto_XmlToArray_Exception(
-                'Recursion threshold exceed on element: ' . $elementName . ' for hashvalue: ' . var_export($hash, true)
+                sprintf(
+                    'Recursion threshold exceed on element: "%s" for hashvalue: "%s"',
+                    $elementName,
+                    var_export($hash, true)
+                )
             );
         }
         if ($hash == self::PLACEHOLDER_VALUE) {
@@ -368,7 +381,11 @@ class EngineBlock_Corto_XmlToArray
             }
             else {
                 throw new EngineBlock_Corto_XmlToArray_Exception(
-                    "Value for key '$key' unrecognized (key naming error?)! Value" . print_r($value, true)
+                    sprintf(
+                        'Value for key "%s" unrecognized (key naming error?)! Value "%s"',
+                        $key,
+                        print_r($value, true)
+                    )
                 );
             }
         }

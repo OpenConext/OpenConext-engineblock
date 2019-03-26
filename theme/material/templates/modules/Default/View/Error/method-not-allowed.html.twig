@@ -1,0 +1,17 @@
+{% extends '@themeLayouts/scripts/default.html.twig' %}
+
+{# Prepare the page title #}
+{% set pageTitle = 'error_405'|trans %}
+
+{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
+{% block pageHeading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
+
+{% block content %}
+<div class="box">
+  <div class="mod-content">
+    <h1>{{ pageTitle }}</h1>
+    {{ 'error_405_desc'|trans({'%requestMethod%': requestMethod, '%uri%': uri,'%allowedMethods%': allowedMethods}) }}
+  </div>
+</div>
+
+{% endblock %}

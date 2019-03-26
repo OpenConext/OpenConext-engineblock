@@ -10,7 +10,9 @@ require_once __DIR__.'/../app/AppKernel.php';
 
 $request = Request::createFromGlobals();
 
-$kernel = new AppKernel('dev', true);
+$env = (isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] === 'Symfony BrowserKit' ? 'test' : 'dev');
+
+$kernel = new AppKernel($env, true);
 $response = $kernel->handle($request);
 $response->send();
 $kernel->terminate($request, $response);

@@ -17,7 +17,11 @@ class EngineBlock_Attributes_Definition_Denormalizer
 
                 if (!isset($definitions[$attributeName])) {
                     throw new EngineBlock_Exception(
-                        "Unable to resolve definition for '$attributeName', path: " . join(' > ', $aliases)
+                        sprintf(
+                            'Unable to resolve definition for "%s", path: "%s"',
+                            $attributeName,
+                            join(' > ', $aliases)
+                        )
                     );
                 }
 

@@ -101,7 +101,9 @@ class EngineBlock_Attributes_Validator_Type extends EngineBlock_Attributes_Valid
                 break;
 
             default:
-                throw new EngineBlock_Exception("Unknown validate option '{$this->_options}' for attribute validation");
+                throw new EngineBlock_Exception(
+                    sprintf('Unknown validate option "%s" for attribute validation', $this->_options)
+                );
         }
         return true;
     }

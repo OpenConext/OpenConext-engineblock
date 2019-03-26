@@ -42,7 +42,12 @@ class DebugController implements AuthenticationLoopThrottlingController
         // Authentication state needs to be registered here as the debug flow differs from the regular flow,
         // yet the procedures for both are completed when consuming the assertion in the ServiceProviderController
         $authenticationState = $this->session->get('authentication_state');
-        $authenticationState->startAuthenticationOnBehalfOf(new Entity(new EntityId('debug_sp'), EntityType::SP()));
+
+        $requestId = '_00000000-0000-0000-0000-000000000000';
+        $authenticationState->startAuthenticationOnBehalfOf(
+            $requestId,
+            new Entity(new EntityId('debug_sp'), EntityType::SP())
+        );
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }

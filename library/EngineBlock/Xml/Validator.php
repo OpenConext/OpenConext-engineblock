@@ -30,7 +30,7 @@ class EngineBlock_Xml_Validator
         $schemaXml = @file_get_contents($this->_schemaLocation);
         if ($schemaXml === false) {
             throw new EngineBlock_Exception(
-                'Failed validating XML, schema url could not be opened: "' . $this->_schemaLocation . '"'
+                sprintf('Failed validating XML, schema url could not be opened: "%s"', $this->_schemaLocation)
             );
         }
 
@@ -44,7 +44,11 @@ class EngineBlock_Xml_Validator
             $parsedErrorMessage = preg_replace('/\{[^}]*\}/', '', $errorMessage);
             echo '<pre>' . htmlentities(EngineBlock_Corto_XmlToArray::formatXml($xml)) . '</pre>';
             throw new EngineBlock_Exception(
-                "Metadata XML doesn't validate against schema at '$schemaXml', gives error:: '$parsedErrorMessage'"
+                sprintf(
+                    'Metadata XML doesn\'t validate against schema at "%s", gives error: "%s"',
+                    $schemaXml,
+                    $parsedErrorMessage
+                )
             );
         }
     }

@@ -24,10 +24,13 @@ class CollabPersonUuidType extends Type
         }
 
         if (!$value instanceof CollabPersonUuid) {
-            throw new ConversionException(sprintf(
-                'Value %s must be null or an instance of CollabPersonUuid to be able to convert it to a database value',
-                is_object($value) ? get_class($value) : (string) $value
-            ));
+            throw new ConversionException(
+                sprintf(
+                    'Value "%s" must be null or an instance of CollabPersonUuid to be able to ' .
+                    'convert it to a database value',
+                    is_object($value) ? get_class($value) : (string)$value
+                )
+            );
         }
 
         return $value->getUuid();

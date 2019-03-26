@@ -17,14 +17,14 @@ class EngineBlock_X509_CertificateFactory
         $pemString = file_get_contents($filePath);
 
         if (!$pemString) {
-            throw new EngineBlock_Exception("Unable to read file at path '$filePath'.");
+            throw new EngineBlock_Exception(sprintf('Unable to read file at path "%s"', $filePath));
         }
 
         try {
             $certificate = $this->fromString($pemString);
         } catch (Exception $e) {
             throw new EngineBlock_Exception(
-                "File at '$filePath' does not contain a valid certificate.",
+                sprintf('File at "%s" does not contain a valid certificate.', $filePath),
                 EngineBlock_Exception::CODE_ERROR,
                 $e
             );
@@ -45,7 +45,7 @@ class EngineBlock_X509_CertificateFactory
 
         if (!$opensslCertificate) {
             throw new EngineBlock_Exception(
-                "Unable to read X.509 certificate from content: '$x509CertificateContent'"
+                sprintf('Unable to read X.509 certificate from content: "%s"', $x509CertificateContent)
             );
         }
 

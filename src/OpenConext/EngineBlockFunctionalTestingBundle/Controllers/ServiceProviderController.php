@@ -48,7 +48,7 @@ class ServiceProviderController extends Controller
     public function triggerLoginRedirectAction($spName)
     {
         if (!$this->mockSpRegistry->has($spName)) {
-            throw new BadRequestHttpException('No SP found for ' . $spName);
+            throw new BadRequestHttpException(sprintf('No SP found for "%s"', $spName));
         }
 
         /** @var MockServiceProvider $sp */
@@ -78,7 +78,7 @@ class ServiceProviderController extends Controller
     public function triggerLoginPostAction($spName)
     {
         if (!$this->mockSpRegistry->has($spName)) {
-            throw new BadRequestHttpException('No SP found for ' . $spName);
+            throw new BadRequestHttpException(sprintf('No SP found for "%s"', $spName));
         }
 
         $factory = new AuthnRequestFactory();
@@ -119,16 +119,12 @@ class ServiceProviderController extends Controller
                 $httpRedirectBinding = new HTTPRedirect();
                 $message = $httpRedirectBinding->receive();
             } catch (\Exception $e2) {
-                throw new \RuntimeException(
-                    'Unable to retrieve SAML message?',
-                    1,
-                    $e1
-                );
+                throw new \RuntimeException('Unable to retrieve SAML message?', 1, $e1);
             }
         }
 
         if (!$message instanceof SAMLResponse) {
-            throw new \RuntimeException('Unrecognized message type received: ' . get_class($message));
+            throw new \RuntimeException(sprintf('Unrecognized message type received: "%s"', get_class($message)));
         }
 
         $xml = base64_decode($request->get('SAMLResponse'));

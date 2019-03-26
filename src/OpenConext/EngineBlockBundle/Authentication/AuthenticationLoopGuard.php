@@ -53,12 +53,12 @@ final class AuthenticationLoopGuard implements AuthenticationLoopGuardInterface
 
     /**
      * @param Entity $serviceProvider
-     * @param AuthenticationProcedureList $pastAuthenticationProcedures
+     * @param AuthenticationProcedureMap $pastAuthenticationProcedures
      * @return bool
      */
     public function detectsAuthenticationLoop(
         Entity $serviceProvider,
-        AuthenticationProcedureList $pastAuthenticationProcedures
+        AuthenticationProcedureMap $pastAuthenticationProcedures
     ) {
         $now  = new DateTimeImmutable;
         $startDate = $now->modify(sprintf('-%d seconds', $this->timeFrameForAuthenticationLoopInSeconds));

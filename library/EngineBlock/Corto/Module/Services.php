@@ -56,7 +56,12 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
         }
 
         throw new EngineBlock_Corto_Module_Services_Exception(
-            "Unable to load service '$serviceName' (resolved to '$resolvedServiceName') tried className '$className'!"
+            sprintf(
+                'Unable to load service "%s" (resolved to "%s") tried className "%s"!',
+                $serviceName,
+                $resolvedServiceName,
+                $className
+            )
         );
     }
 
@@ -85,7 +90,8 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                 return new EngineBlock_Corto_Module_Service_ProcessConsent(
                     $server,
                     $diContainer->getXmlConverter(),
-                    $diContainer->getConsentFactory()
+                    $diContainer->getConsentFactory(),
+                    $diContainer->getAuthenticationStateHelper()
                 );
             case EngineBlock_Corto_Module_Service_AssertionConsumer::class :
                 return new EngineBlock_Corto_Module_Service_AssertionConsumer(

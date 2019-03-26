@@ -45,7 +45,7 @@ class AuthenticationStateTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('authentication procedure has not been started');
 
-        $authenticationState->authenticatedAt($identityProvider);
+        $authenticationState->authenticatedAt('_00000000-0000-0000-0000-000000000000', $identityProvider);
     }
 
     /**
@@ -61,7 +61,7 @@ class AuthenticationStateTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('authentication procedure has not been started');
 
-        $authenticationState->completeCurrentProcedure();
+        $authenticationState->completeCurrentProcedure('_00000000-0000-0000-0000-000000000000');
     }
 
     /**
@@ -74,12 +74,14 @@ class AuthenticationStateTest extends TestCase
 
         $serviceProvider = new Entity(new EntityId('https://my-service-provider.example'), EntityType::SP());
 
+        $requestId = '_00000000-0000-0000-0000-000000000000';
+
         $authenticationState = new AuthenticationState($authenticationLoopGuard);
-        $authenticationState->startAuthenticationOnBehalfOf($serviceProvider);
+        $authenticationState->startAuthenticationOnBehalfOf($requestId, $serviceProvider);
 
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('authentication procedure has not been authenticated');
 
-        $authenticationState->completeCurrentProcedure();
+        $authenticationState->completeCurrentProcedure($requestId);
     }
 }

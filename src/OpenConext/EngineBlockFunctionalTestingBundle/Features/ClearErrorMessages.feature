@@ -26,6 +26,7 @@ Feature:
       And I should see "Unique Request Id:"
       And I should see "User Agent:"
       And I should see "IP Address:"
+      And I should see "Error Code:"
       And I should see "Service Provider:"
       And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
@@ -150,14 +151,8 @@ Feature:
     Given the IdP uses the HTTP Redirect Binding
      When I log in at "Dummy SP"
       And I pass through EngineBlock
-     Then I should see "Invalid ACS Binding Type"
-      And I should see "Timestamp:"
-      And I should see "Unique Request Id:"
-      And I should see "User Agent:"
-      And I should see "IP Address:"
-      And I should see "Service Provider:"
-      And I should see "Service Provider Name:"
-      And I should see "Identity Provider:"
+     Then I should see "HTTP Method not allowed"
+      And I should see "The HTTP method \"GET\" is not allowed for location \"https://engine.vm.openconext.org/authentication/sp/consume-assertion\". Supported methods are: POST."
 
   Scenario: An Identity Provider sends a response without a SHO
     Given the IdP does not send the attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization"
@@ -217,6 +212,7 @@ Feature:
     And I should see "Service Provider:"
     And I should see "Service Provider Name:"
     And I should see "Identity Provider:"
+    And I should see ART code "39211"
 
   Scenario: I log in at my Identity Provider, that has the 'block_user_on_violation' feature activated, and has a valid schacHomeOrganization attribute.
     Given feature "eb.block_user_on_violation" is enabled
@@ -247,6 +243,7 @@ Feature:
       And I should see "Service Provider:"
       And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
+      And I should see ART code "25138"
 
   Scenario: I log in at my Identity Provider, that has the 'block_user_on_violation' feature activated, and has a valid eduPersonPrincipalName attribute.
     Given feature "eb.block_user_on_violation" is enabled
@@ -278,6 +275,7 @@ Feature:
    Given the SP "Dummy SP" sends a malformed AuthNRequest
     When I log in at "Dummy SP"
     Then I should see "No SAMLRequest parameter was found in the HTTP \"GET\" request parameters"
+     And I should see ART code "18993"
 
   Scenario: The SP uses the wrong request parameter while using HTTP Post binding
    Given the SP "Dummy SP" sends a malformed AuthNRequest
@@ -285,7 +283,7 @@ Feature:
     When I log in at "Dummy SP"
      And I pass through the SP
     Then I should see "No SAMLRequest parameter was found in the HTTP \"POST\" request parameters"
-
+     And I should see ART code "18993"
 #
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a location
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a binding

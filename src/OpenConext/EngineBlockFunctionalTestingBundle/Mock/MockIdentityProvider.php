@@ -79,7 +79,7 @@ class MockIdentityProvider extends AbstractMockEntityRole
             return $constValue;
         }
 
-        throw new \RuntimeException("'$shortStatusCode' is not a valid status code");
+        throw new \RuntimeException(sprintf('"%s" is not a valid status code', $shortStatusCode));
     }
 
     /**

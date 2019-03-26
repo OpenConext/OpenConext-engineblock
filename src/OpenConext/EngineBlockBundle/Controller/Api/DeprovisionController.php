@@ -170,7 +170,7 @@ final class DeprovisionController
         } catch (InvalidArgumentException $e) {
             throw new ApiNotFoundHttpException(
                 sprintf(
-                    'User ID is not valid: %s',
+                    'User ID is not valid: "%s"',
                     $e->getMessage()
                 )
             );

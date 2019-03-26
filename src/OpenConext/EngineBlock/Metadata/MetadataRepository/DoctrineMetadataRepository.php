@@ -137,7 +137,7 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
         }
 
         if (count($result) > 1) {
-            throw new RuntimeException('Multiple Identity Providers found for entityId: ' . $entityId);
+            throw new RuntimeException(sprintf('Multiple Identity Providers found for entityId: "%s"', $entityId));
         }
 
         $identityProvider = reset($result);
@@ -166,7 +166,7 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
         }
 
         if (count($result) > 1) {
-            throw new RuntimeException('Multiple Identity Providers found for entityId MD5 hash: ' . $hash);
+            throw new RuntimeException(sprintf('Multiple Identity Providers found for entityId MD5 hash: "%s"', $hash));
         }
 
         return reset($result)['entityId'];
@@ -192,7 +192,7 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
         }
 
         if (count($result) > 1) {
-            throw new RuntimeException('Multiple Service Providers found for entityId: ' . $entityId);
+            throw new RuntimeException(sprintf('Multiple Service Providers found for entityId: "%s"', $entityId));
         }
 
         $serviceProvider = reset($result);
@@ -291,7 +291,9 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
                     continue;
                 }
 
-                throw new RuntimeException('Unsupported role provided to synchonization: ' . var_export($role, true));
+                throw new RuntimeException(
+                    sprintf('Unsupported role provided to synchonization: "%s"', var_export($role, true))
+                );
             }
 
             if ($idpsToBeRemoved) {

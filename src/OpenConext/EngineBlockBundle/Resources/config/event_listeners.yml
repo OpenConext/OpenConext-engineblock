@@ -45,6 +45,14 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 25 }
 
+    engineblock.listener.method_not_allowed_http_exception:
+        class: OpenConext\EngineBlockBundle\EventListener\MethodNotAllowedHttpExceptionListener
+        arguments:
+            - "@twig"
+            - "@engineblock.compat.logger"
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 25 }
+
     engineblock.listener.fallback_exception:
         class: OpenConext\EngineBlockBundle\EventListener\FallbackExceptionListener
         arguments:

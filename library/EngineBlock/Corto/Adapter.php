@@ -508,7 +508,10 @@ class EngineBlock_Corto_Adapter
         $engineServiceProvider = $proxyServer->getRepository()->findServiceProviderByEntityId($spEntityId);
         if (!$engineServiceProvider) {
             throw new EngineBlock_Exception(
-                "Unable to find EngineBlock configured as Service Provider. No '$spEntityId' in repository!"
+                sprintf(
+                    "Unable to find EngineBlock configured as Service Provider. No '%s' in repository!",
+                    $spEntityId
+                )
             );
         }
 

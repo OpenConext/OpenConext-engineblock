@@ -9,8 +9,11 @@ class EngineBlock_Corto_Filter_Command_ValidateAllowedConnection extends EngineB
     {
         if (!$this->_serviceProvider->isAllowed($this->_identityProvider->entityId)) {
             throw new EngineBlock_Corto_Exception_InvalidConnection(
-                "Disallowed response by SP configuration. " .
-                "Response from IdP '{$this->_identityProvider->entityId}' to SP '{$this->_serviceProvider->entityId}'"
+                sprintf(
+                    'Disallowed response by SP configuration. Response from IdP "%s" to SP "%s"',
+                    $this->_identityProvider->entityId,
+                    $this->_serviceProvider->entityId
+                )
             );
         }
     }

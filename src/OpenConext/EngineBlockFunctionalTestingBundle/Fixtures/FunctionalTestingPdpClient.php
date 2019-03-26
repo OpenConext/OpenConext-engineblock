@@ -113,7 +113,7 @@ XML;
 
                 throw new RuntimeException(
                     sprintf(
-                        'Invalid Policy Decision fixture given: expected one of %s, got: %s',
+                        'Invalid Policy Decision fixture given: expected one of "%s", got: "%s"',
                         implode(
                             ', ',
                             [

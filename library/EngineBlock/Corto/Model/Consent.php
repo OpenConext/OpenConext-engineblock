@@ -155,7 +155,7 @@ class EngineBlock_Corto_Model_Consent
         /** @var $statement PDOStatement */
         if (!$statement->execute($parameters)) {
             throw new EngineBlock_Corto_Module_Services_Exception(
-                "Error storing consent: " . var_export($statement->errorInfo(), true),
+                sprintf('Error storing consent: "%s"', var_export($statement->errorInfo(), true)),
                 EngineBlock_Exception::CODE_CRITICAL
             );
         }
@@ -195,7 +195,7 @@ class EngineBlock_Corto_Model_Consent
             return true;
         } catch (PDOException $e) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
-                "Consent retrieval failed! Error: " . $e->getMessage(),
+                sprintf('Consent retrieval failed! Error: "%s"', $e->getMessage()),
                 EngineBlock_Exception::CODE_ALERT
             );
         }

@@ -82,14 +82,14 @@ class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
             }
 
             throw new EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception(
-                "No service '$serviceName' is configured in EngineBlock metadata"
+                sprintf('No service "%s" is configured in EngineBlock metadata', $serviceName)
             );
         }
 
         $services = $proxyEntity->$serviceName;
         if (!is_array($services)) {
             throw new EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception(
-                "Service '$this->serviceName' in EngineBlock metadata is not an array"
+                sprintf('Service "%s" in EngineBlock metadata is not an array', $this->serviceName)
             );
         }
 
@@ -97,7 +97,7 @@ class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
 
         if (count($supportedBindings) === 0 && $required == self::REQUIRED) {
             throw new EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception(
-                "No '$serviceName' service bindings configured in EngineBlock metadata"
+                sprintf('No "%s" service bindings configured in EngineBlock metadata', $serviceName)
             );
         }
 
@@ -115,14 +115,18 @@ class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
         foreach($services as $serviceInfo) {
             if (!isset($serviceInfo->binding)) {
                 throw new EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception(
-                    "Service '$this->serviceName' configured without a Binding in EngineBlock metadata"
+                    sprintf('Service "%s" configured without a Binding in EngineBlock metadata', $this->serviceName)
                 );
             }
 
             $binding = $serviceInfo->binding;
             if (!in_array($binding, $this->knownBindings)) {
                 throw new EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception(
-                    "Service '$this->serviceName' has an invalid binding '$binding' configured in EngineBlock metadata"
+                    sprintf(
+                        'Service "%s" has an invalid binding "%s" configured in EngineBlock metadata',
+                        $this->serviceName,
+                        $binding
+                    )
                 );
             }
 

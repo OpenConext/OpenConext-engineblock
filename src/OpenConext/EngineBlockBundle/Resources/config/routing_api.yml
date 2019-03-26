@@ -6,11 +6,13 @@ api_heartbeat:
     path:     /
     defaults:
         _controller: engineblock.controller.api.heartbeat:itWorksAction
+        _format: json
 
 api_connections:
     path:     /api/connections
     defaults:
         _controller: engineblock.controller.api.connections:pushConnectionsAction
+        _format: json
 
 api_consent_user:
     path:    /consent/{userId}
@@ -18,6 +20,7 @@ api_consent_user:
         userId: .+
     defaults:
         _controller: engineblock.controller.api.consent:userAction
+        _format: json
 
 api_deprovision_delete_user_data_dry_run:
     path:    /deprovision/{collabPersonId}/dry-run
@@ -25,6 +28,7 @@ api_deprovision_delete_user_data_dry_run:
         collabPersonId: .+
     defaults:
         _controller: engineblock.controller.api.deprovision:dryRunAction
+        _format: json
 
 api_deprovision_get_user_data:
     path:    /deprovision/{collabPersonId}
@@ -32,18 +36,22 @@ api_deprovision_get_user_data:
         collabPersonId: .+
     defaults:
         _controller: engineblock.controller.api.deprovision:userDataAction
+        _format: json
 
 api_metadata_idp:
     path:    /metadata/idp
     defaults:
         _controller: engineblock.controller.api.metadata:idpAction
+        _format: json
 
 api_apply_attribute_release_policy:
     path:   /arp
     defaults:
         _controller: engineblock.controller.api.attribute_release_policy:applyArpAction
+        _format: json
 
 api_read_attribute_release_policy:
     path:   /read-arp
     defaults:
         _controller: engineblock.controller.api.attribute_release_policy:readArpAction
+        _format: json
