@@ -7,8 +7,10 @@ use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterfa
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\DisableDisallowedEntitiesInWayfVisitor;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\EngineBlockMetadataVisitor;
 use OpenConext\EngineBlock\Metadata\Service;
+use OpenConext\EngineBlock\Service\ConsentProcessor\ConsentProcessorAdapterInterface;
+use OpenConext\EngineBlock\Service\ConsentProcessor\ConsentProcessorProxyServerInterface;
 
-class EngineBlock_Corto_Adapter
+class EngineBlock_Corto_Adapter implements ConsentProcessorAdapterInterface
 {
     const DEFAULT_HOSTED_ENTITY = 'main';
 
@@ -365,8 +367,16 @@ class EngineBlock_Corto_Adapter
         return EngineBlock_ApplicationSingleton::getLog();
     }
 
+    /**
+     * @return EngineBlock_Corto_ProxyServer|ConsentProcessorProxyServerInterface
+     */
     public function getProxyServer()
     {
+        // In order to always have an initialized proxy server, test if initialized, if not, do magic.
+        if (!isset($this->_proxyServer)) {
+            $this->_initProxy();
+        }
+
         return $this->_proxyServer;
     }
 

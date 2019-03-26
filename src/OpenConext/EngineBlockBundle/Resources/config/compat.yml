@@ -1,4 +1,7 @@
 services:
+    engineblock.compat.adapter:
+        class: EngineBlock_Corto_Adapter
+
     engineblock.compat.application:
         class: EngineBlock_ApplicationSingleton
         factory:  [EngineBlock_ApplicationSingleton, getInstance]
