@@ -1,8 +1,11 @@
 <?php
+
+use OpenConext\EngineBlock\Service\ConsentFactoryInterface;
+
 /**
  * @todo write a test
  */
-class EngineBlock_Corto_Model_Consent_Factory
+class EngineBlock_Corto_Model_Consent_Factory implements ConsentFactoryInterface
 {
     /** @var EngineBlock_Corto_Filter_Command_Factory */
     private $_filterCommandFactory;

@@ -3,6 +3,7 @@
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
+use OpenConext\EngineBlock\Service\ConsentFactoryInterface;
 use OpenConext\EngineBlock\Service\ConsentServiceInterface;
 use SAML2\Constants;
 use Twig\Environment;
@@ -22,7 +23,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
      */
     private $_xmlConverter;
 
-    /** @var EngineBlock_Corto_Model_Consent_Factory */
+    /** @var ConsentFactoryInterface */
     private  $_consentFactory;
 
     /** @var ConsentServiceInterface */
@@ -39,7 +40,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
-        EngineBlock_Corto_Model_Consent_Factory $consentFactory,
+        ConsentFactoryInterface $consentFactory,
         ConsentServiceInterface $consentService,
         AuthenticationStateHelperInterface $authStateHelper,
         Environment $twig

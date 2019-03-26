@@ -48,7 +48,7 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
         if (strtolower(substr($className, -1 * strlen('service'))) === "service") {
             $className = substr($className, 0, -1 * strlen('service'));
         }
-        if (class_exists($className, true)) {
+        if ($className === 'EngineBlock_Corto_Module_Service_ProcessConsent' || class_exists($className, true)) {
             /** @var $serviceName EngineBlock_Corto_Module_Service_Abstract */
             $service = $this->factoryService($className, $this->_server);
             $service->serve($serviceName);
@@ -86,19 +86,15 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer->getAuthenticationStateHelper(),
                     $diContainer->getTwigEnvironment()
                 );
-            case EngineBlock_Corto_Module_Service_ProcessConsent::class :
-                return new EngineBlock_Corto_Module_Service_ProcessConsent(
-                    $server,
-                    $diContainer->getXmlConverter(),
-                    $diContainer->getConsentFactory(),
-                    $diContainer->getAuthenticationStateHelper()
-                );
             case EngineBlock_Corto_Module_Service_AssertionConsumer::class :
                 return new EngineBlock_Corto_Module_Service_AssertionConsumer(
                     $server,
                     $diContainer->getXmlConverter(),
                     $diContainer->getSession()
                 );
+            case 'EngineBlock_Corto_Module_Service_ProcessConsent':
+                return $diContainer->getConsentProcessor();
+                break;
             default :
                 return new $className($server, $diContainer->getXmlConverter(), $diContainer->getTwigEnvironment());
         }
