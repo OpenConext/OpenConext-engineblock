@@ -21,7 +21,7 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
     private $xmlConverterMock;
 
     /**
-     * @var EngineBlock_Corto_Model_Consent_Factory
+     * @var ConsentFactoryInterface
      */
     private $consentFactoryMock;
 

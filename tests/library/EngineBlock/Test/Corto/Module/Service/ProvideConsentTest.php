@@ -16,7 +16,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
     /** @var EngineBlock_Corto_XmlToArray */
     private $xmlConverterMock;
 
-    /** @var EngineBlock_Corto_Model_Consent_Factory */
+    /** @var ConsentFactoryInterface */
     private $consentFactoryMock;
 
     /** @var EngineBlock_Corto_Model_Consent */
@@ -206,7 +206,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
     }
 
     /**
-     * @param EngineBlock_Corto_Model_Consent_Factory $this->consentFactoryMock
+     * @param ConsentFactoryInterface $this ->consentFactoryMock
      * @return EngineBlock_Corto_Model_Consent
      */
     private function mockConsent()
