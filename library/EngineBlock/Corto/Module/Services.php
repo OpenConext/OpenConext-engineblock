@@ -83,6 +83,7 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer->getXmlConverter(),
                     $diContainer->getConsentFactory(),
                     $diContainer->getConsentService(),
+                    $diContainer->getAuthenticationStateHelper(),
                     $diContainer->getTwigEnvironment()
                 );
             case EngineBlock_Corto_Module_Service_ProcessConsent::class :

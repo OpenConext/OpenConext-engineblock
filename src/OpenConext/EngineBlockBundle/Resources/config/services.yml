@@ -29,6 +29,11 @@ services:
         arguments:
             - "engine-api.%domain%"
 
+    engineblock.service.authentication_state_helper:
+        class: OpenConext\EngineBlock\Service\AuthenticationStateHelper
+        arguments:
+            - "@session"
+
     engineblock.service.consent:
         class: OpenConext\EngineBlock\Service\ConsentService
         arguments:

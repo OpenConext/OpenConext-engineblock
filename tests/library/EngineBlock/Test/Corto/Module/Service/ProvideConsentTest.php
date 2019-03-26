@@ -4,7 +4,9 @@ use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
+use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\ConsentServiceInterface;
+use OpenConext\EngineBlockBundle\Authentication\AuthenticationStateInterface;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Response;
@@ -29,6 +31,9 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
     /** @var Twig_Environment */
     private $twig;
 
+    /** @var AuthenticationStateHelperInterface|Mock */
+    private $authStateHelperMock;
+
     public function setup() {
         $diContainer              = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
 
@@ -37,6 +42,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $this->consentFactoryMock = $diContainer->getConsentFactory();
         $this->consentMock        = $this->mockConsent();
         $this->consentService     = $this->mockConsentService();
+        $this->authStateHelperMock = $this->mockAuthStateHelper();
         $this->twig               = $this->mockTwig();
     }
 
@@ -229,6 +235,19 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         return $mock;
     }
 
+    private function mockAuthStateHelper()
+    {
+        $authState = Phake::mock(AuthenticationStateInterface::class);
+        Phake::when($authState)
+            ->completeCurrentProcedure();
+
+        $mock = Phake::mock(AuthenticationStateHelperInterface::class);
+        Phake::when($mock)
+            ->getAuthenticationState()
+            ->thenReturn($authState);
+
+        return $mock;
+    }
 
     private function mockTwig()
     {
@@ -250,6 +269,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
             $this->xmlConverterMock,
             $this->consentFactoryMock,
             $this->consentService,
+            $this->authStateHelperMock,
             $this->twig
         );
     }

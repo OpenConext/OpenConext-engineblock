@@ -357,6 +357,11 @@ class EngineBlock_Application_DiContainer extends Pimple
         return (bool) $this->container->getParameter('consent_store_values');
     }
 
+    public function getAuthenticationStateHelper()
+    {
+        return $this->container->get('engineblock.service.authentication_state_helper');
+    }
+
     /**
      * @return array
      */
