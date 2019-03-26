@@ -289,14 +289,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         // Remember idp for debugging
         $_SESSION['currentIdentityProvider'] = $idpEntityId;
 
-        // We only support HTTP-POST binding for Responses
-        if (!$sspBinding instanceof HTTPPost) {
-            throw new EngineBlock_Corto_Module_Bindings_UnsupportedBindingException(
-                sprintf('Unsupported Binding used: "%s"', get_class($sspBinding)),
-                EngineBlock_Exception::CODE_NOTICE
-            );
-        }
-
         // Verify that we know this IdP and have metadata for it.
         $cortoIdpMetadata = $this->_verifyKnownIdP(
             $idpEntityId,
