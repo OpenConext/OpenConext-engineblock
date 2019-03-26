@@ -2,6 +2,7 @@
 
 use Doctrine\ORM\EntityManager;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Service\ConsentProcessor\ConsentProcessor;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
@@ -90,7 +91,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return EngineBlock_Corto_Model_Consent_Factory
+     * @return ConsentFactoryInterface
      */
     public function getConsentFactory()
     {
@@ -315,6 +316,14 @@ class EngineBlock_Application_DiContainer extends Pimple
     public function getTwigEnvironment()
     {
         return $this->container->get('twig');
+    }
+
+    /**
+     * @return ConsentProcessor
+     */
+    public function getConsentProcessor()
+    {
+        return $this->container->get('engineblock.service.consent_processor');
     }
 
     /**

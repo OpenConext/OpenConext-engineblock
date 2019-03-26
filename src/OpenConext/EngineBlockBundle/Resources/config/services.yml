@@ -41,6 +41,13 @@ services:
             - "@engineblock.service.metadata"
             - "@engineblock.compat.logger"
 
+    engineblock.service.consent_processor:
+        class: OpenConext\EngineBlock\Service\ConsentProcessor\ConsentProcessor
+        arguments:
+            - "@engineblock.compat.adapter"
+            - "@engineblock.compat.corto_model_consent_factory"
+            - "@engineblock.service.authentication_state_helper"
+
     engineblock.service.deprovision:
         class: OpenConext\EngineBlock\Service\DeprovisionService
         arguments:
