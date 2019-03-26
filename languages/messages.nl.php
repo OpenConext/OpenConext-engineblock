@@ -159,6 +159,8 @@ TXT
     // Error screens
     'error_404'                         => '404 - Pagina niet gevonden',
     'error_404_desc'                    => 'De pagina is niet gevonden.',
+    'error_405'                         => 'HTTP methode is niet toegestaan',
+    'error_405_desc'                    => 'De HTTP-methode "%requestMethod%" is niet toegestaan ​​voor locatie "%uri%". Ondersteunde methodes zijn: %allowedMethods%.',
     'error_help_desc'                   => '<p></p>',
     'error_no_consent'                  => 'Niet mogelijk om verder te gaan naar dienst',
     'error_no_consent_desc'             => 'Deze applicatie kan enkel worden gebruikt wanneer de vermelde informatie wordt gedeeld.<br /><br />

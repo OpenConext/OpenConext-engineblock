@@ -143,6 +143,8 @@ TXT
     // Error screens
     'error_404'                         => '404 - Página não encontrada',
     'error_404_desc'                    => 'Esta página não foi encontrada.',
+    'error_405'                         => 'Método HTTP não permitido',
+    'error_405_desc'                    => 'O método HTTP "%requestMethod%" não é permitido para o endereço "%uri%". Os métodos suportados são: %allowedMethods%.',
     'error_help_desc'               => '<p></p>',
     'error_no_consent'              => 'Não é possivel continua para o serviço',
     'error_no_consent_desc'         => 'Esta aplicação só pode ser utilizada quando a informação mencionada for partilhada.<br /><br />
