@@ -19,14 +19,14 @@
 namespace OpenConext\EngineBlock\Service\ConsentProcessor;
 
 use EngineBlock_Corto_Exception_NoConsentProvided;
+use EngineBlock_Corto_Module_Services_SessionLostException;
 use EngineBlock_SamlHelper;
+use OpenConext\EngineBlock\Message\RequestId;
+use OpenConext\EngineBlock\Metadata\ConsentMap;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\ConsentFactoryInterface;
 use SAML2\Constants;
-use SAML2\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ConsentProcessor
 {
@@ -45,33 +45,33 @@ class ConsentProcessor
      */
     private $authenticationStateHelper;
 
-    /**
-     * @param ConsentProcessorAdapterInterface $adapter
-     * @param ConsentFactoryInterface $consentFactory
-     * @param AuthenticationStateHelperInterface $stateHelper
-     */
     public function __construct(
         ConsentProcessorAdapterInterface $adapter,
         ConsentFactoryInterface $consentFactory,
-        AuthenticationStateHelperInterface $stateHelper
+        AuthenticationStateHelperInterface $stateHelper,
+        RequestStack $request
     ) {
         $this->proxyServer = $adapter->getProxyServer();
         $this->consentFactory = $consentFactory;
         $this->authenticationStateHelper = $stateHelper;
+        $this->request = $request->getCurrentRequest();
+        $this->session = $this->request->getSession();
     }
 
     public function serve()
     {
-        if (!isset($_SESSION['consent'])) {
+        $requestId = $this->getRequestId();
+
+        if ($this->session->has('consent')) {
             throw new EngineBlock_Corto_Module_Services_SessionLostException('Session lost after consent');
         }
-        if (!isset($_SESSION['consent'][$_POST['ID']]['response'])) {
+        if (!$this->sessionContainsConsentResponseFor($requestId)) {
             throw new EngineBlock_Corto_Module_Services_SessionLostException(
-                sprintf('Stored response for ResponseID "%s" not found', $_POST['ID'])
+                sprintf('Stored response for ResponseID "%s" not found', $requestId)
             );
         }
-        /** @var Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
-        $response = $_SESSION['consent'][$_POST['ID']]['response'];
+
+        $response = $this->getConsentResponseFor($requestId)->getResponse();
 
         $request = $this->proxyServer->getReceivedRequestFromResponse($response);
         $serviceProvider = $this->proxyServer->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
@@ -82,7 +82,7 @@ class ConsentProcessor
             $this->proxyServer->getRepository()
         );
 
-        if (!isset($_POST['consent']) || $_POST['consent'] !== 'yes') {
+        if (!$this->consentGiven()) {
             throw new EngineBlock_Corto_Exception_NoConsentProvided('No consent given...');
         }
 
@@ -102,5 +102,37 @@ class ConsentProcessor
         $authenticationState->completeCurrentProcedure($response->getInResponseTo());
 
         $this->proxyServer->getBindingsModule()->send($response, $serviceProvider);
+    }
+
+    /**
+     * If consent is present in post, test if it was filled with 'yes', in that case consent was given.
+     * @return bool
+     */
+    private function consentGiven()
+    {
+        return $this->request->request->has('consent') ? $this->request->request->get('consent') === 'yes' : false;
+    }
+
+    private function getRequestId()
+    {
+        return new RequestId($this->request->get('ID'));
+    }
+
+    private function sessionContainsConsentResponseFor(RequestId $requestId)
+    {
+        /** @var ConsentMap $consentMap */
+        $consentMap = $this->session->get('consent');
+        return $consentMap->has($requestId) && !is_null($this->getConsentResponseFor($requestId));
+    }
+
+    /**
+     * @param RequestId $requestId
+     * @return \OpenConext\EngineBlock\Metadata\ConsentInterface|null
+     */
+    private function getConsentResponseFor(RequestId $requestId)
+    {
+        /** @var ConsentMap $consentMap */
+        $consentMap = $this->session->get('consent');
+        return $consentMap->find($requestId);
     }
 }
