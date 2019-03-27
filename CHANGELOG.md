@@ -5,6 +5,11 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+# 5.9.3
+
+### Bugfix
+ * Honor explicit keyid in unsolicited single sign on #653
+
 ## 5.9.2
 This release improves upon some of the previous consent changes
 
