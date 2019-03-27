@@ -70,7 +70,7 @@ class ConsentProcessor
         
         $requestId = $this->getRequestId();
 
-        if ($this->session->has('consent')) {
+        if (!$this->session->has('consent')) {
             throw new EngineBlock_Corto_Module_Services_SessionLostException('Session lost after consent');
         }
         if (!$this->sessionContainsConsentResponseFor($requestId)) {

@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Metadata;
+namespace OpenConext\EngineBlock\Consent;
 
 use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\EngineBlock\Message\RequestId;

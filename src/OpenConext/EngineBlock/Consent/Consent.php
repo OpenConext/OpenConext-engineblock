@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Metadata;
+namespace OpenConext\EngineBlock\Consent;
 
 use EngineBlock_Saml2_ResponseAnnotationDecorator;
 

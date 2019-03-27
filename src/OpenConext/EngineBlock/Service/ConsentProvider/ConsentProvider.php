@@ -21,6 +21,9 @@ namespace OpenConext\EngineBlock\Service\ConsentProvider;
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Saml2_NameIdResolver;
 use EngineBlock_SamlHelper;
+use OpenConext\EngineBlock\Consent\Consent;
+use OpenConext\EngineBlock\Consent\ConsentMap;
+use OpenConext\EngineBlock\Message\RequestId;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
@@ -102,7 +105,8 @@ class ConsentProvider
         }
 
         $response = $this->proxyServer->getBindingsModule()->receiveResponse();
-        $_SESSION['consent'][$response->getId()]['response'] = $response;
+
+        $this->saveResponseToSession($response);
 
         $request = $this->proxyServer->getReceivedRequestFromResponse($response);
         $serviceProvider = $this->proxyServer->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
@@ -324,12 +328,25 @@ class ConsentProvider
      * @param IdentityProvider $idp
      * @return ContactPerson
      */
-    public function getSupportContact(IdentityProvider $idp)
+    private function getSupportContact(IdentityProvider $idp)
     {
         foreach ($idp->contactPersons as $contact) {
             if ($contact->contactType === 'support') {
                 return $contact;
             }
         }
+    }
+
+    private function saveResponseToSession(\EngineBlock_Saml2_ResponseAnnotationDecorator $response)
+    {
+        if (!$this->session->has('consent')) {
+            $this->session->set('consent', new ConsentMap());
+        }
+
+        $consent = new Consent($response);
+        $requestId = new RequestId($response->getSspMessage()->getId());
+
+        $this->session->get('consent')->add($requestId, $consent);
+        $this->session->save();
     }
 }
