@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlock\Service\ConsentProvider;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Saml2_NameIdResolver;
+use EngineBlock_Saml2_ResponseAnnotationDecorator;
 use EngineBlock_SamlHelper;
 use OpenConext\EngineBlock\Consent\Consent;
 use OpenConext\EngineBlock\Consent\ConsentMap;
@@ -30,6 +31,7 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\ConsentFactoryInterface;
 use OpenConext\EngineBlock\Service\ConsentServiceInterface;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Exception\RuntimeException;
 use SAML2\Constants;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,6 +41,8 @@ use Twig\Environment;
 
 /**
  * Ask the user for consent over all of the attributes being sent to the SP.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) - Should be addressed when properly refactoring this service. This
+ *                                                   service has WAY to many responsibilities.
  */
 class ConsentProvider
 {
@@ -77,12 +81,46 @@ class ConsentProvider
      */
     private $session;
 
+    /**
+     * @var string
+     */
+    private $featureConfiguration;
+
+    /**
+     * @var string
+     */
+    private $profileUrl;
+
+    /**
+     * @var string
+     */
+    private $nameIdSupportUrl;
+
+    /**
+     * @var string
+     */
+    private $supportUrl;
+
+    /**
+     * @param ConsentFactoryInterface $consentFactory
+     * @param ConsentServiceInterface $consentService
+     * @param AuthenticationStateHelperInterface $stateHelper
+     * @param RequestStack $request
+     * @param Environment $twig
+     * @param string $profileBaseUrl
+     * @param string $nameIdSupportUrl
+     * @param string $supportUrl
+     */
     public function __construct(
         ConsentFactoryInterface $consentFactory,
         ConsentServiceInterface $consentService,
         AuthenticationStateHelperInterface $stateHelper,
         RequestStack $request,
-        Environment $twig
+        Environment $twig,
+        FeatureConfiguration $featureConfiguration,
+        $profileBaseUrl,
+        $nameIdSupportUrl,
+        $supportUrl
     ) {
         $this->proxyServer = null;
         $this->consentFactory = $consentFactory;
@@ -91,6 +129,10 @@ class ConsentProvider
         $this->request = $request->getCurrentRequest();
         $this->session = $this->request->getSession();
         $this->twig = $twig;
+        $this->featureConfiguration = $featureConfiguration;
+        $this->profileUrl = $profileBaseUrl;
+        $this->nameIdSupportUrl = $nameIdSupportUrl;
+        $this->supportUrl = $supportUrl;
     }
 
     public function setProxyServer(ConsentProviderProxyServerInterface $proxyServer)
@@ -103,116 +145,57 @@ class ConsentProvider
         if (is_null($this->proxyServer)) {
             throw new RuntimeException('Before using the service, the current proxy server must be set');
         }
-
         $response = $this->proxyServer->getBindingsModule()->receiveResponse();
-
         $this->saveResponseToSession($response);
 
         $request = $this->proxyServer->getReceivedRequestFromResponse($response);
         $serviceProvider = $this->proxyServer->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
-        $spMetadataChain = EngineBlock_SamlHelper::getSpRequesterChain(
-            $serviceProvider,
-            $request,
-            $this->proxyServer->getRepository()
-        );
+
+        $spMetadataChain = $this->getMetadataChain($serviceProvider, $request);
 
         $identityProviderEntityId = $response->getOriginalIssuer();
         $identityProvider = $this->proxyServer->getRepository()->fetchIdentityProviderByEntityId(
             $identityProviderEntityId
         );
-
         // Flush log if SP or IdP has additional logging enabled
         $requireAdditionalLogging = EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(
             array_merge($spMetadataChain, array($identityProvider))
         );
         if ($requireAdditionalLogging) {
-            $application = EngineBlock_ApplicationSingleton::getInstance();
-            $application->flushLog(
-                'Activated additional logging for one or more SPs in the SP requester chain, or the IdP'
-            );
-
-            $log = $application->getLogInstance();
-            $log->info('Raw HTTP request', array('http_request' => (string)$application->getHttpRequest()));
+            $this->enableAdditionalLogging();
         }
-        $serviceProviderMetadata = $spMetadataChain[0];
+        $spMetadata = $spMetadataChain[0];
 
         $attributes = $response->getAssertion()->getAttributes();
         $consentRepository = $this->consentFactory->create($this->proxyServer, $response, $attributes);
-
-        $authenticationState = $this->authenticationStateHelper->getAuthenticationState();
-
+        $authnState = $this->authenticationStateHelper->getAuthenticationState();
         if ($this->isConsentDisabled($spMetadataChain, $identityProvider)) {
-            if (!$consentRepository->implicitConsentWasGivenFor($serviceProviderMetadata)) {
-                $consentRepository->giveImplicitConsentFor($serviceProviderMetadata);
-            }
-
-            $response->setConsent(Constants::CONSENT_INAPPLICABLE);
-            $response->setDestination($response->getReturn());
-            $response->setDeliverByBinding('INTERNAL');
-
-            // Consent is disabled, we now mark authentication_state as completed
-            $authenticationState->completeCurrentProcedure($response->getInResponseTo());
-
-            $this->proxyServer->getBindingsModule()->send(
-                $response,
-                $serviceProvider
-            );
-
+            $this->handleDisabledConsent($response, $authnState, $consentRepository, $spMetadata, $serviceProvider);
             return;
         }
-
-        $priorConsent = $consentRepository->explicitConsentWasGivenFor($serviceProviderMetadata);
+        $priorConsent = $consentRepository->explicitConsentWasGivenFor($spMetadata);
         if ($priorConsent) {
-            $response->setConsent(Constants::CONSENT_PRIOR);
-
-            $response->setDestination($response->getReturn());
-            $response->setDeliverByBinding('INTERNAL');
-
-            // Prior consent is found, we now mark authentication_state as completed
-            $authenticationState->completeCurrentProcedure($response->getInResponseTo());
-
-            $this->proxyServer->getBindingsModule()->send(
-                $response,
-                $serviceProvider
-            );
-
+            $this->handlePriorConsent($response, $authnState, $serviceProvider);
             return;
         }
-
-        $settings = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
         // Profile url is configurable in application.ini (profile.baseUrl)
         $profileUrl = '#';
-        $configuredUrl = $settings->getProfileBaseUrl();
+        $configuredUrl = $this->profileUrl;
         if (!empty($configuredUrl)) {
             $profileUrl = $configuredUrl;
         }
-
         // If attribute manipulation was executed before consent, the SetNameId filter has already been applied, and
         // applying the NameIdResolver is not required.
-        $featureConfiguration = $settings->getFeatureConfiguration();
-        $amPriorToConsent = $featureConfiguration->isEnabled('eb.run_all_manipulations_prior_to_consent');
-
+        $amPriorToConsent = $this->featureConfiguration->isEnabled('eb.run_all_manipulations_prior_to_consent');
         // Show the correctly formatted nameId on the consent screen
         $isPersistent = $serviceProvider->nameIdFormat === Constants::NAMEID_PERSISTENT;
-
         // Create a local copy of the NameID that is set on the response. We do not yet want to update the actual NameID
         // in the $response yet as this will cause side effects when saving the consent entry. The 'hashed user id'
         // will not be consistent.
         $nameId = clone $response->getNameId();
-
         if ($isPersistent && !$amPriorToConsent) {
-            $collabPersonIdValue = $nameId->value;
-            // Load the persistent name id for this combination of SP/Identifier and update the local copy of the nameId
-            // to ensure the correct identifier is shown on the consent screen.
-            $resolver = new EngineBlock_Saml2_NameIdResolver();
-            $nameId = $resolver->resolve(
-                $request,
-                $response,
-                $serviceProvider,
-                $collabPersonIdValue
-            );
+            $nameId = $this->resolveNameId($nameId, $request, $response, $serviceProvider);
         }
-
         // The nameId format is not yet updated on the response (will be performed in the SetNameId filter after
         // consent), but in order to display the correct nameId format, we set the SP requested name Id format on the
         // name id copy that is used to render the correct identifier on the consent page. If AM was already performed,
@@ -220,38 +203,46 @@ class ConsentProvider
         if (!$amPriorToConsent) {
             $nameId->Format = $serviceProvider->nameIdFormat;
         }
-
         $html = $this->twig->render(
             '@theme/Authentication/View/Proxy/consent.html.twig',
             [
                 'action' => $this->proxyServer->getUrl('processConsentService'),
                 'responseId' => $response->getId(),
-                'sp' => $serviceProviderMetadata,
+                'sp' => $spMetadata,
                 'idp' => $identityProvider,
                 'idpSupport' => $this->getSupportContact($identityProvider),
                 'attributes' => $attributes,
                 'attributeSources' => $this->getAttributeSources($request->getId()),
-                'attributeMotivations' => $this->getAttributeMotivations($serviceProviderMetadata, $attributes),
+                'attributeMotivations' => $this->getAttributeMotivations($spMetadata, $attributes),
                 'minimalConsent' => $identityProvider->getConsentSettings()->isMinimal(
-                    $serviceProviderMetadata->entityId
+                    $spMetadata->entityId
                 ),
                 'consentCount' => $this->consentService->countAllFor($response->getNameIdValue()),
                 'nameId' => $nameId,
-                'nameIdSupportUrl' => $settings->getOpenConextNameIdSupportUrl(),
+                'nameIdSupportUrl' => $this->nameIdSupportUrl,
                 'nameIdIsPersistent' => $isPersistent,
                 'profileUrl' => $profileUrl,
-                'supportUrl' => $settings->getOpenConextSupportUrl(),
+                'supportUrl' => $this->supportUrl,
                 'showConsentExplanation' => $identityProvider->getConsentSettings()->hasConsentExplanation(
-                    $serviceProviderMetadata->entityId
+                    $spMetadata->entityId
                 ),
                 'consentSettings' => $identityProvider->getConsentSettings(),
-                'spEntityId' => $serviceProviderMetadata->entityId,
+                'spEntityId' => $spMetadata->entityId,
                 'hideHeader' => true,
                 'hideFooter' => true,
             ]
         );
 
         $this->proxyServer->sendOutput($html);
+    }
+
+    private function getMetadataChain($serviceProvider, $request)
+    {
+        return EngineBlock_SamlHelper::getSpRequesterChain(
+            $serviceProvider,
+            $request,
+            $this->proxyServer->getRepository()
+        );
     }
 
     /**
@@ -279,6 +270,10 @@ class ConsentProvider
      *
      * The attribute aggregator corto filter stores the aggregated attribute
      * sources in the session.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals) - For now unable to get rid of this superglobal use. The Corto input/output
+     *                                         filtering set the attribute sources on the session superglobal. We cannot
+     *                                         access them through Symfony sessions.
      */
     private function getAttributeSources($requestId)
     {
@@ -337,7 +332,7 @@ class ConsentProvider
         }
     }
 
-    private function saveResponseToSession(\EngineBlock_Saml2_ResponseAnnotationDecorator $response)
+    private function saveResponseToSession(EngineBlock_Saml2_ResponseAnnotationDecorator $response)
     {
         if (!$this->session->has('consent')) {
             $this->session->set('consent', new ConsentMap());
@@ -348,5 +343,73 @@ class ConsentProvider
 
         $this->session->get('consent')->add($requestId, $consent);
         $this->session->save();
+    }
+
+    private function handlePriorConsent(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $response,
+        $authenticationState,
+        $serviceProvider
+    ) {
+        $response->setConsent(Constants::CONSENT_PRIOR);
+
+        $response->setDestination($response->getReturn());
+        $response->setDeliverByBinding('INTERNAL');
+
+        // Prior consent is found, we now mark authentication_state as completed
+        $authenticationState->completeCurrentProcedure($response->getInResponseTo());
+
+        $this->proxyServer->getBindingsModule()->send(
+            $response,
+            $serviceProvider
+        );
+    }
+
+    private function handleDisabledConsent(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $response,
+        $authenticationState,
+        $consentRepository,
+        $serviceProviderMetadata,
+        $serviceProvider
+    ) {
+        if (!$consentRepository->implicitConsentWasGivenFor($serviceProviderMetadata)) {
+            $consentRepository->giveImplicitConsentFor($serviceProviderMetadata);
+        }
+
+        $response->setConsent(Constants::CONSENT_INAPPLICABLE);
+        $response->setDestination($response->getReturn());
+        $response->setDeliverByBinding('INTERNAL');
+
+        // Consent is disabled, we now mark authentication_state as completed
+        $authenticationState->completeCurrentProcedure($response->getInResponseTo());
+
+        $this->proxyServer->getBindingsModule()->send(
+            $response,
+            $serviceProvider
+        );
+    }
+
+    private function resolveNameId($nameId, $request, $response, $serviceProvider)
+    {
+        $collabPersonIdValue = $nameId->value;
+        // Load the persistent name id for this combination of SP/Identifier and update the local copy of the nameId
+        // to ensure the correct identifier is shown on the consent screen.
+        $resolver = new EngineBlock_Saml2_NameIdResolver();
+        return $resolver->resolve(
+            $request,
+            $response,
+            $serviceProvider,
+            $collabPersonIdValue
+        );
+    }
+
+    private function enableAdditionalLogging()
+    {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $application->flushLog(
+            'Activated additional logging for one or more SPs in the SP requester chain, or the IdP'
+        );
+
+        $log = $application->getLogInstance();
+        $log->info('Raw HTTP request', array('http_request' => (string)$application->getHttpRequest()));
     }
 }

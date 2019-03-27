@@ -407,22 +407,6 @@ class EngineBlock_Application_DiContainer extends Pimple
     /**
      * @return string
      */
-    public function getOpenConextSupportUrl()
-    {
-        return (string) $this->container->getParameter('openconext_support_url');
-    }
-
-    /**
-     * @return string
-     */
-    public function getOpenConextNameIdSupportUrl()
-    {
-        return (string) $this->container->getParameter('openconext_support_name_id_url');
-    }
-
-    /**
-     * @return string
-     */
     public function getOpenConextTermsOfUseUrl()
     {
         return (string) $this->container->getParameter('openconext_terms_of_use_url');
@@ -450,14 +434,6 @@ class EngineBlock_Application_DiContainer extends Pimple
     public function getEmailIdpDebuggingConfiguration()
     {
         return (array) $this->container->getParameter('email_idp_debugging');
-    }
-
-    /**
-     * @return string
-     */
-    public function getProfileBaseUrl()
-    {
-        return (string) $this->container->getParameter('profile_base_url');
     }
 
     /**

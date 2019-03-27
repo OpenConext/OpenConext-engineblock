@@ -56,6 +56,10 @@ services:
             - "@engineblock.service.authentication_state_helper"
             - "@request_stack"
             - "@twig"
+            - "@engineblock.features"
+            - "%profile_base_url%"
+            - "%openconext_support_name_id_url%"
+            - "%openconext_support_url%"
 
     engineblock.service.deprovision:
         class: OpenConext\EngineBlock\Service\DeprovisionService
