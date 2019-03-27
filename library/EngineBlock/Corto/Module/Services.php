@@ -24,6 +24,11 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
         'debugSingleSignOnService'      => 'singleSignOn',
     );
 
+    private $movedServices = [
+        'ProcessConsent',
+        'ProvideConsent'
+    ];
+
     const BINDING_TYPE_HTTP_REDIRECT = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect';
     const BINDING_TYPE_HTTP_POST = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST';
     const DEFAULT_REQUEST_BINDING  = self::BINDING_TYPE_HTTP_REDIRECT;
@@ -48,7 +53,11 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
         if (strtolower(substr($className, -1 * strlen('service'))) === "service") {
             $className = substr($className, 0, -1 * strlen('service'));
         }
-        if ($className === 'EngineBlock_Corto_Module_Service_ProcessConsent' || class_exists($className, true)) {
+        // Moved legacy services are loaded from the DI container
+        if ($this->isMovedService($serviceName)){
+            $service = $this->loadMovedService($serviceName);
+            $service->serve();
+        } elseif (class_exists($className, true)) {
             /** @var $serviceName EngineBlock_Corto_Module_Service_Abstract */
             $service = $this->factoryService($className, $this->_server);
             $service->serve($serviceName);
@@ -76,27 +85,35 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
     {
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
 
-        switch($className) {
-            case EngineBlock_Corto_Module_Service_ProvideConsent::class :
-                return new EngineBlock_Corto_Module_Service_ProvideConsent(
-                    $server,
-                    $diContainer->getXmlConverter(),
-                    $diContainer->getConsentFactory(),
-                    $diContainer->getConsentService(),
-                    $diContainer->getAuthenticationStateHelper(),
-                    $diContainer->getTwigEnvironment()
-                );
+        switch ($className) {
             case EngineBlock_Corto_Module_Service_AssertionConsumer::class :
                 return new EngineBlock_Corto_Module_Service_AssertionConsumer(
                     $server,
                     $diContainer->getXmlConverter(),
                     $diContainer->getSession()
                 );
-            case 'EngineBlock_Corto_Module_Service_ProcessConsent':
-                return $diContainer->getConsentProcessor();
                 break;
             default :
                 return new $className($server, $diContainer->getXmlConverter(), $diContainer->getTwigEnvironment());
         }
+    }
+
+    private function loadMovedService($serviceName)
+    {
+        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+
+        switch ($serviceName) {
+            case 'ProvideConsent':
+                return $diContainer->getConsentProvider();
+                break;
+            case 'ProcessConsent':
+                return $diContainer->getConsentProcessor();
+                break;
+        }
+    }
+
+    private function isMovedService($serviceName)
+    {
+        return in_array($serviceName, $this->movedServices);
     }
 }
