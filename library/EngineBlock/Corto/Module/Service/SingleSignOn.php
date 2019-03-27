@@ -261,6 +261,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         $request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
+        if ($keyid = $this->_server->getKeyId()) {
+            $request->setKeyId($keyid);
+        }
+
         $request->setUnsolicited();
 
         return $request;
