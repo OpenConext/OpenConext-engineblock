@@ -5,6 +5,7 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Service\ConsentProcessor\ConsentProcessorProxyServerInterface;
+use OpenConext\EngineBlock\Service\ConsentProvider\ConsentProviderProxyServerInterface;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
@@ -17,7 +18,7 @@ use SAML2\Response;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\saml\SubjectConfirmationData;
 
-class EngineBlock_Corto_ProxyServer implements ConsentProcessorProxyServerInterface
+class EngineBlock_Corto_ProxyServer implements ConsentProcessorProxyServerInterface, ConsentProviderProxyServerInterface
 {
     const ID_PREFIX = 'CORTO';
 
