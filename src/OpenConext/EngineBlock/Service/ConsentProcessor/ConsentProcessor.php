@@ -46,20 +46,28 @@ class ConsentProcessor
     private $authenticationStateHelper;
 
     public function __construct(
-        ConsentProcessorAdapterInterface $adapter,
         ConsentFactoryInterface $consentFactory,
         AuthenticationStateHelperInterface $stateHelper,
         RequestStack $request
     ) {
-        $this->proxyServer = $adapter->getProxyServer();
         $this->consentFactory = $consentFactory;
         $this->authenticationStateHelper = $stateHelper;
         $this->request = $request->getCurrentRequest();
         $this->session = $this->request->getSession();
     }
 
+
+    public function setProxyServer(ConsentProcessorProxyServerInterface $proxyServer)
+    {
+        $this->proxyServer = $proxyServer;
+    }
+
     public function serve()
     {
+        if (is_null($this->proxyServer)) {
+            throw new RuntimeException('Before using the service, the current proxy server must be set');
+        }
+        
         $requestId = $this->getRequestId();
 
         if ($this->session->has('consent')) {

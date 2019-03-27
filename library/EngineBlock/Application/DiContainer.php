@@ -3,6 +3,9 @@
 use Doctrine\ORM\EntityManager;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlock\Service\ConsentProcessor\ConsentProcessor;
+use OpenConext\EngineBlock\Service\ConsentProcessor\ConsentProcessorProxyServerInterface;
+use OpenConext\EngineBlock\Service\ConsentProvider\ConsentProvider;
+use OpenConext\EngineBlock\Service\ConsentProvider\ConsentProviderProxyServerInterface;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
@@ -321,9 +324,23 @@ class EngineBlock_Application_DiContainer extends Pimple
     /**
      * @return ConsentProcessor
      */
-    public function getConsentProcessor()
+    public function getConsentProcessor(ConsentProcessorProxyServerInterface $proxyServer)
     {
-        return $this->container->get('engineblock.service.consent_processor');
+        $processor = $this->container->get('engineblock.service.consent_processor');
+        // This can be reverted once we serve the proxy server from DI
+        $processor->setProxyServer($proxyServer);
+        return $processor;
+    }
+
+    /**
+     * @return ConsentProvider
+     */
+    public function getConsentProvider(ConsentProviderProxyServerInterface $proxyServer)
+    {
+        $provider = $this->container->get('engineblock.service.consent_provider');
+        // This can be reverted once we serve the proxy server from DI
+        $provider->setProxyServer($proxyServer);
+        return $provider;
     }
 
     /**

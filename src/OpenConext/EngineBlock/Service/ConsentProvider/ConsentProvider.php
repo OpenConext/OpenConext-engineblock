@@ -18,11 +18,16 @@
 
 namespace OpenConext\EngineBlock\Service\ConsentProvider;
 
+use EngineBlock_ApplicationSingleton;
+use EngineBlock_Saml2_NameIdResolver;
+use EngineBlock_SamlHelper;
+use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\ConsentFactoryInterface;
 use OpenConext\EngineBlock\Service\ConsentServiceInterface;
+use OpenConext\EngineBlockBundle\Exception\RuntimeException;
 use SAML2\Constants;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -70,14 +75,13 @@ class ConsentProvider
     private $session;
 
     public function __construct(
-        ConsentProviderAdapterInterface $adapter,
         ConsentFactoryInterface $consentFactory,
         ConsentServiceInterface $consentService,
         AuthenticationStateHelperInterface $stateHelper,
         RequestStack $request,
         Environment $twig
     ) {
-        $this->proxyServer = $adapter->getProxyServer();
+        $this->proxyServer = null;
         $this->consentFactory = $consentFactory;
         $this->consentService = $consentService;
         $this->authenticationStateHelper = $stateHelper;
@@ -86,8 +90,17 @@ class ConsentProvider
         $this->twig = $twig;
     }
 
+    public function setProxyServer(ConsentProviderProxyServerInterface $proxyServer)
+    {
+        $this->proxyServer = $proxyServer;
+    }
+
     public function serve()
     {
+        if (is_null($this->proxyServer)) {
+            throw new RuntimeException('Before using the service, the current proxy server must be set');
+        }
+
         $response = $this->proxyServer->getBindingsModule()->receiveResponse();
         $_SESSION['consent'][$response->getId()]['response'] = $response;
 
@@ -308,7 +321,8 @@ class ConsentProvider
     }
 
     /**
-     * @return ContactPerson|null
+     * @param IdentityProvider $idp
+     * @return ContactPerson
      */
     public function getSupportContact(IdentityProvider $idp)
     {

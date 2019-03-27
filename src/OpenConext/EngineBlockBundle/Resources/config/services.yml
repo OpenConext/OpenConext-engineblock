@@ -44,10 +44,18 @@ services:
     engineblock.service.consent_processor:
         class: OpenConext\EngineBlock\Service\ConsentProcessor\ConsentProcessor
         arguments:
-            - "@engineblock.compat.adapter"
             - "@engineblock.compat.corto_model_consent_factory"
             - "@engineblock.service.authentication_state_helper"
             - "@request_stack"
+
+    engineblock.service.consent_provider:
+        class: OpenConext\EngineBlock\Service\ConsentProvider\ConsentProvider
+        arguments:
+            - "@engineblock.compat.corto_model_consent_factory"
+            - "@engineblock.service.consent"
+            - "@engineblock.service.authentication_state_helper"
+            - "@request_stack"
+            - "@twig"
 
     engineblock.service.deprovision:
         class: OpenConext\EngineBlock\Service\DeprovisionService

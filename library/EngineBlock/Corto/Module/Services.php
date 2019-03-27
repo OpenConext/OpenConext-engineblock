@@ -25,8 +25,8 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
     );
 
     private $movedServices = [
-        'ProcessConsent',
-        'ProvideConsent'
+        'processConsentService',
+        'provideConsentService'
     ];
 
     const BINDING_TYPE_HTTP_REDIRECT = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect';
@@ -55,8 +55,9 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
         }
         // Moved legacy services are loaded from the DI container
         if ($this->isMovedService($serviceName)){
-            $service = $this->loadMovedService($serviceName);
+            $service = $this->loadMovedService($serviceName, $this->_server);
             $service->serve();
+            return;
         } elseif (class_exists($className, true)) {
             /** @var $serviceName EngineBlock_Corto_Module_Service_Abstract */
             $service = $this->factoryService($className, $this->_server);
@@ -98,16 +99,16 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
         }
     }
 
-    private function loadMovedService($serviceName)
+    private function loadMovedService($serviceName, $server)
     {
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
 
         switch ($serviceName) {
-            case 'ProvideConsent':
-                return $diContainer->getConsentProvider();
+            case 'provideConsentService':
+                return $diContainer->getConsentProvider($server);
                 break;
-            case 'ProcessConsent':
-                return $diContainer->getConsentProcessor();
+            case 'processConsentService':
+                return $diContainer->getConsentProcessor($server);
                 break;
         }
     }
