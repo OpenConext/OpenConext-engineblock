@@ -123,7 +123,7 @@ class ConsentProcessor
 
     private function getRequestId()
     {
-        return new RequestId($this->request->get('ID'));
+        return new RequestId($this->request->request->get('ID'));
     }
 
     private function sessionContainsConsentResponseFor(RequestId $requestId)
