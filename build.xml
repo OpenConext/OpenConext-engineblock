@@ -3,8 +3,9 @@
     <target name="build" depends="test-suites,code-quality,functional-tests,security-tests" />
     <target name="pre-commit" depends="test-suites,api-functional-tests,code-quality" />
     <target name="pre-push" depends="test-suites,code-quality,behat-dev-wip,security-tests" />
-    <target name="functional-tests" depends="api-functional-tests, behat-travis" />
+    <target name="functional-tests" depends="api-functional-tests,behat-travis" />
     <target name="functional-tests-wip" depends="behat-travis-wip" />
+    <target name="functional-tests-selenium" depends="behat-travis-selenium"/>
     <target name="code-quality-ci" depends="test-suites,code-quality"/>
     <target name="code-quality" depends="php-lint,phpmd,phpcs,phpcs-legacy"/>
     <target name="security-tests" depends="security-checker" />
@@ -183,8 +184,19 @@
         <antcall target="run-behat">
             <param name="suite" value="default"/>
         </antcall>
-        <echo message="${line.separator}${line.separator}Reverting the dev env to run in normal mode"/>
+    </target>
+
+    <target name="behat-selenium-dev">
+        <echo message="Starting a new selenium instance" />
+        <antcall target="selenium-stop"/>
+        <antcall target="selenium-start"/>
+        <echo message="Preparing the dev env to run in functional testing mode" />
         <antcall target="prepare-env"/>
+        <echo message="${line.separator}${line.separator}Running Behat"/>
+        <antcall target="run-behat">
+            <param name="suite" value="selenium"/>
+        </antcall>
+        <antcall target="selenium-stop"/>
     </target>
 
     <target name="behat-dev-wip">
@@ -194,8 +206,6 @@
         <antcall target="run-behat">
             <param name="suite" value="wip"/>
         </antcall>
-        <echo message="${line.separator}${line.separator}Reverting the dev env to run in normal mode"/>
-        <antcall target="prepare-env"/>
     </target>
 
     <target name="behat-travis"
@@ -209,6 +219,13 @@
             description="Run the functional testing suite for features marked as WIP">
         <antcall target="run-behat">
             <param name="suite" value="wip"/>
+        </antcall>
+    </target>
+
+    <target name="behat-travis-selenium"
+            description="Run the functional testing suite for features marked as selenium with selenium">
+        <antcall target="run-behat">
+            <param name="suite" value="selenium"/>
         </antcall>
     </target>
 
@@ -243,6 +260,20 @@
             description="validate composer">
         <exec executable="composer" failonerror="true">
             <arg line="validate"/>
+        </exec>
+    </target>
+
+    <target name="selenium-start"
+            description="ensures that selenium is started">
+        <exec executable="sudo" failonerror="true">
+            <arg line="systemctl start selenium"/>
+        </exec>
+    </target>
+
+    <target name="selenium-stop"
+            description="ensures that selenium is stopped">
+        <exec executable="sudo" failonerror="false">
+            <arg line="systemctl stop selenium"/>
         </exec>
     </target>
 

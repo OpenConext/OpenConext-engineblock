@@ -18,6 +18,7 @@ env:
   matrix:
     - COMMAND="functional-tests"
     - COMMAND="functional-tests-wip"
+    - COMMAND="functional-tests-selenium"
     - COMMAND="code-quality-ci"
     - COMMAND="security-tests"
     - COMMAND="composer-validate"
@@ -58,9 +59,9 @@ before_script:
   - sudo a2dissite 000-default
   - sudo a2ensite default-ssl
   - sudo service apache2 restart
-  - ./ci/bin/1-install-chromedriver.sh
-  - ./ci/bin/2-install-selenium-standalone.sh
-  - java -jar /var/selenium/selenium-server-standalone-2.53.1.jar -Dwebdriver.chrome.driver=/usr/bin/chromedriver &
+  - sudo mkdir -p /opt/selenium && wget http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar && sudo mv selenium-server-standalone-2.53.1.jar /opt/selenium/
+  - wget https://chromedriver.storage.googleapis.com/2.46/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && rm chromedriver_linux64.zip && chmod +x chromedriver && sudo mv chromedriver /opt/selenium/chromedriver
+  - sudo /usr/bin/java -jar /opt/selenium/selenium-server-standalone-2.53.1.jar -Dwebdriver.chrome.driver=/opt/selenium/chromedriver -host 127.0.0.1 -port 4444 &
   - composer self-update
   - composer config secure-http false
   - composer install --prefer-dist -n -o
@@ -83,9 +84,6 @@ after_failure:
   - cat ~/build/OpenConext/OpenConext-engineblock/app/logs/test/test.log
   - sudo tail -500 /var/log/syslog
   - sudo tail -500 /tmp/selenium-log
-
-services:
-  - mysql
 
 addons:
   hosts:

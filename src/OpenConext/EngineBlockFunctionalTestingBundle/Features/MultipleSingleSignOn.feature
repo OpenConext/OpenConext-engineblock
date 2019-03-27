@@ -1,4 +1,4 @@
-@WIP
+@selenium
 Feature:
     In order to offer a stable and user friendly service
     As EngineBlock
