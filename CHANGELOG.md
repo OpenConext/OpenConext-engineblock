@@ -17,6 +17,11 @@ The 5.10 release focuses on making EngineBlock more robust. The biggest aim is t
  * Allow for more than one in-flight authentication session per user session #649
  * Added further support for Portuguese language #650 (thanks @domgon!)
 
+## 5.9.3
+
+### Bugfix
+ * Honor explicit keyid in unsolicited single sign on #653
+
 ## 5.9.2
 This release improves upon some of the previous consent changes
 
