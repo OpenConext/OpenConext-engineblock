@@ -86,6 +86,11 @@ class RedirectToFeedbackPageExceptionListener
         $this->errorReporter = $errorReporter;
     }
 
+    /**
+     * @param GetResponseForExceptionEvent $event
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength) - See comment in class doc block
+     */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getException();
@@ -165,6 +170,9 @@ class RedirectToFeedbackPageExceptionListener
             $message = $exception->getMessage();
             $event->getRequest()->getSession()->set('feedback_custom', $exception->getMessage());
             $redirectToRoute = 'authentication_feedback_no_authentication_request_received';
+        } elseif ($exception instanceof \EngineBlock_Corto_Module_Bindings_ClockIssueException) {
+            $message = $exception->getMessage();
+            $redirectToRoute = 'authentication_feedback_response_clock_issue';
         } else {
             return;
         }
