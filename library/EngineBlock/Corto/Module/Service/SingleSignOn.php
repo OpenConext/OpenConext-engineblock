@@ -25,6 +25,13 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $log->info(sprintf("Fetching service provider matching request issuer '%s'", $request->getIssuer()));
         $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
 
+        // When dealing with an SP that acts as a trusted proxy, we should perform SSO on the proxying SP and not the
+        // proxy itself.
+        if ($sp->isTrustedProxy) {
+            // Overwrite the trusted proxy SP instance with that of the SP that uses the trusted proxy.
+            $sp = $this->findOriginalServiceProvider($request, $log);
+        }
+
         // Exposing entityId to be used when tracking the start of an authentication procedure
         $application->authenticationStateSpEntityId = $sp->entityId;
 
