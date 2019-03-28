@@ -15,6 +15,7 @@ Feature:
       And a Service Provider named "Loa SP"
       And a Service Provider named "Far SP"
       And a Service Provider named "Test SP"
+      And a Service Provider named "Second SP"
       And SP "Far SP" is not connected to IdP "CombinedAuth"
       And SP "Far SP" is not connected to IdP "LoaOnlyAuth"
       And SP "Far SP" is not connected to IdP "StepUpOnlyAuth"
@@ -229,3 +230,22 @@ Feature:
     And SP "Step Up" signs its requests
     When I log in at "Step Up"
     Then I should see "Error - Unknown service"
+
+  Scenario: User logs in to two SPs via trusted proxy
+   Given SP "Step Up" is authenticating for SP "Loa SP"
+     And SP "Step Up" is a trusted proxy
+     And SP "Step Up" does not require consent
+    When I log in at "Step Up"
+     And I select "AlwaysAuth" on the WAYF
+     And I pass through EngineBlock
+     And I pass through the IdP
+     And I pass through EngineBlock
+         # Next, Step Up SP would redirect to the Loa SP, but verifying this is out of our test boundaries
+    Then the url should match "functional-testing/Step%20Up/acs"
+   Given SP "Step Up" is authenticating for SP "Second SP" resetting the RequesterID chain
+     And SP "Second SP" is not connected to IdP "AlwaysAuth"
+    When I log in at "Second SP"
+         # Bug report: https://www.pivotaltracker.com/story/show/164069793
+    Then I should not see "Error - No Identity Providers found"
+         # The WAYF should be visible
+     And I should see "Select an organisation to login to the service"
