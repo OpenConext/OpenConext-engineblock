@@ -284,22 +284,30 @@ Feature:
      And I pass through the SP
     Then I should see "No SAMLRequest parameter was found in the HTTP \"POST\" request parameters"
      And I should see ART code "18993"
-#
+
+  Scenario: The IdP sends a SAMLResponse that triggers a NotOnOrAfter violation when behind on time
+   Given The clock on the IdP "Dummy Idp" is behind
+    When I log in at "Dummy SP"
+     And I pass through EngineBlock
+     And I pass through the IdP
+     And I give my consent
+    Then I should see "Error - The Assertion is not yet valid or has expired"
+    And I should see ART code "44601"
+
+  Scenario: The IdP sends a SAMLResponse that triggers a NotOnOrAfter violation when ahead of time
+   Given The clock on the IdP "Dummy Idp" is ahead
+    When I log in at "Dummy SP"
+     And I pass through EngineBlock
+     And I pass through the IdP
+     And I give my consent
+    Then I should see "Error - The Assertion is not yet valid or has expired"
+     And I should see ART code "44601"
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a location
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a binding
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying an invalid index
 #
-#
 #  Scenario: I don't give consent to release my attributes to a Service Provider
-#
-#  Scenario: I visit the EngineBlock SSO location without a SAMLRequest
-#  Scenario: I visit the EngineBlock ACS location without a SAMLResponse
-#  Scenario: I visit the EngineBlock SSO location with a bad SAMLRequest
-#  Scenario: I visit the EngineBlock ACS location with a bad SAMLResponse
-#
-#  Scenario: I lose my 'main' session cookie.
 #
 #  Scenario: An attribute manipulation determines that a user may not continue
 #
-#  Scenario: An Identity Provider dates its assertions in the future.
 #  Scenario: I want to log in to a service but am not a member of the appropriate VO
