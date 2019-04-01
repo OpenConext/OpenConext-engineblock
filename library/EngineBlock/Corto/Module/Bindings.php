@@ -414,6 +414,19 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             ]);
         }
         catch (ResponseProcessingFailedException $e) {
+            // The clock on the IdP side must be checked
+            // @see \SAML2\Assertion\Validation\ConstraintValidator\NotBefore::validate
+            // @see \SAML2\Assertion\Validation\ConstraintValidator\NotOnOrAfter::validate
+            if (strpos($e->getMessage(), 'Received an assertion that is valid in the future') !== false ||
+                strpos($e->getMessage(), 'Received an assertion that has expired') !== false
+            ) {
+                throw new EngineBlock_Corto_Module_Bindings_ClockIssueException(
+                    $e->getMessage(),
+                    EngineBlock_Exception::CODE_ERROR,
+                    $e
+                );
+            }
+
             // Passthrough, should be handled at a different level protecting against oracle attacks
             throw $e;
         }

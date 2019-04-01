@@ -346,4 +346,26 @@ class MockIdpContext extends AbstractSubContext
         $this->serviceRegistryFixture->setConsentSettings($idp->entityId(), $sp->entityId(), ConsentSettings::CONSENT_DISABLED);
         $this->serviceRegistryFixture->save();
     }
+
+    /**
+     * @Given /^The clock on the IdP "([^"]*)" is behind$/
+     */
+    public function theClockOnTheIdPIsBehind($idpName)
+    {
+        $idp = $this->mockIdpRegistry->get($idpName);
+        $idp->turnBackTheTime();
+
+        $this->mockIdpRegistry->save();
+    }
+
+    /**
+     * @Given /^The clock on the IdP "([^"]*)" is ahead/
+     */
+    public function theClockOnTheIdPIsAhead($idpName)
+    {
+        $idp = $this->mockIdpRegistry->get($idpName);
+        $idp->fromTheFuture();
+
+        $this->mockIdpRegistry->save();
+    }
 }

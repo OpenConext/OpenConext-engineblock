@@ -102,3 +102,8 @@ authentication_feedback_no_authentication_request_received:
     path:       '/invalid-request-method-on-sso'
     methods:    [GET]
     defaults:    { _controller: engineblock.controller.authentication.feedback:noAuthenticationRequestReceivedAction }
+
+authentication_feedback_response_clock_issue:
+    path:       '/clock-issue'
+    methods:    [GET]
+    defaults:    { _controller: engineblock.controller.authentication.feedback:clockIssueAction }

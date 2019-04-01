@@ -393,6 +393,17 @@ class FeedbackController
     }
 
     /**
+     * @return Response
+     */
+    public function clockIssueAction()
+    {
+        return new Response(
+            $this->twig->render('@theme/Authentication/View/Feedback/clock-issue.html.twig'),
+            400
+        );
+    }
+
+    /**
      * @param SessionInterface $session
      * @param array $customFeedbackInfo
      */

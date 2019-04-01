@@ -240,6 +240,8 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_attribute_validator_availability'        => '\'%arg3%\' é um schacHomeOrganization reservado para outro Fornecedor de Identidade',
     'error_unknown_service'         => 'Erro - Serviço desconhecido',
     'error_unknown_service_desc'    => '<p>O serviço solicitado não foi encontrado.</p>',
+    'error_clock_issue_title' => 'Erro - A asserção ainda não é válida ou expirou',
+    'error_clock_issue_desc' => '<p>Por favor, verifique se a hora no IdP está correta.</p>',
     'attributes_validation_succeeded' => 'Autenticação com sucesso',
     'attributes_validation_failed'    => 'Alguns atributos falharam na validação',
     'attributes_data_mailed'          => 'Os dados dos atributos foram enviados',

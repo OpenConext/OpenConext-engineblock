@@ -31,6 +31,16 @@ class ResponseFactory
             $response->setAssertions([]);
         }
 
+        if ($mockIdp->shouldTurnBackTheTime()) {
+            // Set the timestamp to Unix Epoch
+            $response->getAssertions()[0]->setNotOnOrAfter(0);
+        }
+
+        if ($mockIdp->isFromTheFuture()) {
+            // Set the timestamp to current time + i year
+            $response->getAssertions()[0]->setNotBefore(strtotime(date('Y-m-d H:i:s', strtotime('+1 year'))));
+        }
+
         return $response;
     }
 

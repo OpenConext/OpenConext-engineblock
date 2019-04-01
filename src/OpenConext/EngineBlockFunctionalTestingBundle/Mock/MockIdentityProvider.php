@@ -14,6 +14,10 @@ class MockIdentityProvider extends AbstractMockEntityRole
 {
     private $sendAssertions = true;
 
+    private $turnBackTime = false;
+
+    private $fromTheFuture = false;
+
     private $logo = null;
 
     public function singleSignOnLocation()
@@ -267,6 +271,30 @@ class MockIdentityProvider extends AbstractMockEntityRole
     public function doNotSendAssertions()
     {
         $this->sendAssertions = false;
+
+        return $this;
+    }
+
+    public function shouldTurnBackTheTime()
+    {
+        return $this->turnBackTime;
+    }
+
+    public function turnBackTheTime()
+    {
+        $this->turnBackTime = true;
+
+        return $this;
+    }
+
+    public function isFromTheFuture()
+    {
+        return $this->fromTheFuture;
+    }
+
+    public function fromTheFuture()
+    {
+        $this->fromTheFuture = true;
 
         return $this;
     }

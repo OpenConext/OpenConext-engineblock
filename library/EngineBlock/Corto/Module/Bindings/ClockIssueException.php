@@ -1,0 +1,5 @@
+<?php
+
+class EngineBlock_Corto_Module_Bindings_ClockIssueException extends EngineBlock_Corto_Module_Bindings_Exception
+{
+}
