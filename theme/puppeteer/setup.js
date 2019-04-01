@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 const mkdirp = require('mkdirp');
 const path = require('path');
 const fs = require('fs');
@@ -12,8 +12,9 @@ module.exports = async function() {
         '--ignore-certificate-errors'
     ];
     const options = {
+        executablePath: '/usr/bin/google-chrome',
         args,
-        ignoreHTTPSErrors: true,
+        ignoreHTTPSErrors: true
     };
     const browser = await puppeteer.launch(options);
     // store the browser instance so we can teardown it later

@@ -10,7 +10,11 @@ require_once __DIR__.'/../app/AppKernel.php';
 
 $request = Request::createFromGlobals();
 
-$env = (isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] === 'Symfony BrowserKit' ? 'test' : 'dev');
+$env = (isset($_SERVER['HTTP_USER_AGENT']) &&
+    (
+        $_SERVER['HTTP_USER_AGENT'] === 'Symfony BrowserKit' || // Goutte
+        strpos( $_SERVER['HTTP_USER_AGENT'],'HeadlessChrome') !== false // Selenium
+    ) ? 'test' : 'dev');
 
 $kernel = new AppKernel($env, true);
 $response = $kernel->handle($request);

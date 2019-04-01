@@ -9,8 +9,8 @@ default:
             formatter:
                 name: progress
             filters:
-                tags: "~@WIP&&~@SKIP"
-            contexts:
+                tags: "~@WIP&&~@SKIP&&~@selenium"
+            contexts: &defaultContexts
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\EngineBlockContext:
                     serviceRegistry: '@engineblock.functional_testing.fixture.service_registry'
                     engineBlock: '@engineblock.functional_testing.service.engine_block'
@@ -33,6 +33,14 @@ default:
                     mockSpRegistry: '@engineblock.mock_entities.sp_registry'
                     mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext
+        selenium:
+            paths:
+                - '%paths.base%/../src/OpenConext/EngineBlockFunctionalTestingBundle/Features'
+            formatter:
+                name: progress
+            filters:
+                tags: "@selenium&&~@SKIP&&~@WIP"
+            contexts: *defaultContexts
         wip:
             paths:
                 - '%paths.base%/../src/OpenConext/EngineBlockFunctionalTestingBundle/Features'
@@ -41,30 +49,8 @@ default:
                   parameters:
                       verbose: true
             filters:
-                tags: "@WIP&&~@SKIP"
-            contexts:
-                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\EngineBlockContext:
-                    serviceRegistry: '@engineblock.functional_testing.fixture.service_registry'
-                    engineBlock: '@engineblock.functional_testing.service.engine_block'
-                    mockSpRegistry: '@engineblock.mock_entities.sp_registry'
-                    mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
-                    features: '@engineblock.functional_testing.fixture.features'
-                    pdpClient: '@engineblock.functional_testing.fixture.pdp_client'
-                    authenticationLoopGuard: '@engineblock.functional_testing.fixture.authentication_loop_guard'
-                    attributeAggregationClient: '@engineblock.functional_testing.fixture.attribute_aggregation_client'
-                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MockIdpContext:
-                    serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
-                    engineBlock: '@engineblock.functional_testing.service.engine_block'
-                    idpFactory: '@engineblock.mock_entities.idp_factory'
-                    mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
-                    mockSpRegistry: '@engineblock.mock_entities.sp_registry'
-                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MockSpContext:
-                    serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
-                    engineBlock: '@engineblock.functional_testing.service.engine_block'
-                    mockSpFactory: '@engineblock.mock_entities.sp_factory'
-                    mockSpRegistry: '@engineblock.mock_entities.sp_registry'
-                    mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
-                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext
+                tags: "@WIP&&~@SKIP&&~@selenium"
+            contexts: *defaultContexts
 
     extensions:
         Behat\MinkExtension:
@@ -86,5 +72,4 @@ default:
                                     - "--disable-gpu"
                                     - "--window-size=1920,1080"
                                     - "--no-sandbox"
-                                    - "--whitelisted-ips"
         Behat\Symfony2Extension: ~

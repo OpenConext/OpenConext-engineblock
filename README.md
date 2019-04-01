@@ -27,7 +27,9 @@ In short, themes require compilation which can be done by running the following 
 To setup the required tooling on the VM, the following steps might be useful:
 
     cd /opt/openconext/OpenConext-engineblock/theme
-    sudo yum install npm
+    sudo yum install gcc
+    sudo curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
+    sudo yum install nodejs
     sudo npm install -g grunt grunt-cli
     
     sudo yum install gem ruby-devel

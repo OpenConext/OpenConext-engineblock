@@ -1,4 +1,4 @@
-@WIP
+@selenium
 Feature:
     In order to offer a stable and user friendly service
     As EngineBlock
@@ -44,6 +44,7 @@ Feature:
         And I pass through the SP
         And I switch to "Browser tab 2"
         And An IdP initiated Single Sign on for SP "SSO-Two" is triggered by IdP "SSO-IdP"
+        And I pass through the IdP
         And I switch to "Browser tab 1"
         And I give my consent
        Then the url should match "functional-testing/SSO-SP/acs"
