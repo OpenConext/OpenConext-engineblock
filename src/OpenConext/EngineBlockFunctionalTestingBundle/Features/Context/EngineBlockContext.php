@@ -367,6 +367,8 @@ HTML;
     {
         $session = $this->getMinkContext()->getSession();
         $session->restart();
+        // set unknown session id to prevent session not found exception
+        $session->setCookie(session_name(), '000000');
     }
 
     /**

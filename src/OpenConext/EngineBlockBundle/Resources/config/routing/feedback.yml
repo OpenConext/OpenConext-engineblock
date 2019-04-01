@@ -8,6 +8,11 @@ authentication_feedback_session_lost:
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:sessionLostAction }
 
+authentication_feedback_session_not_started:
+    path:       '/session-not-started'
+    methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:sessionNotStartedAction }
+
 authentication_feedback_unknown_issuer:
     path:       '/unknown-issuer'
     methods:    [GET]

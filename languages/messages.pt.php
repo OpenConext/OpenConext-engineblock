@@ -157,10 +157,9 @@ Se pretende utilizar esta aplicação devem:<br />
 O serviço (&lsquo;Service Provider&rsquo;) a que pretende ligar-se não está acessível através da %suiteName%.<br /><br />
     </p>',
     'error_session_lost'            => 'Erro - a sua sessão foi perdida',
-    'error_session_lost_desc'       => '<p>
-Por algum motivo, foi perdido o destino para onde pretendia ir. Terá aguardado demasiado tempo? Se foi o caso, pedimos que volte a tentar. Será que o seu browser aceita cookies? Você estará a utilizar um URL ou marcador desatualizado?<br /><br />
-        <br /><br />
-    </p>',
+    'error_session_lost_desc'       => '<p>Por algum motivo, foi perdido o destino para onde pretendia ir. Terá aguardado demasiado tempo? Se foi o caso, pedimos que volte a tentar. Será que o seu browser aceita cookies? Você estará a utilizar um URL ou marcador desatualizado?<br /><br /><br /><br /></p>',
+    'error_session_not_started'            => 'Error - your session was not found',
+    'error_session_not_started_desc'       => '<p>We somehow lost where you wanted to go. Did you wait too long? If so, try again first. Does your browser accept cookies? Are you using an outdated URL or bookmark?<br /><br /><br /><br /></p>',
     'error_authorization_policy_violation'            => 'Erro - Sem acesso',
     'error_authorization_policy_violation_desc'       => '<p>
         Você autenticu-se com sucesso na sua %organisationNoun%, mas infelizmente você não pode utilizar este serviço (o &lsquo;Fornecedor de Serviço&rsquo;) porque não tem acesso. A sua %organisationNoun% limita o acesso a este serviço com uma <i>política de autorização</i>. Entre em contacto com o suporte da sua %organisationNoun% se acha que deve ser-lhe concedido acesso ao serviço.

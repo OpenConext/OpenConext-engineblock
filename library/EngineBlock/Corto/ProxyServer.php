@@ -45,6 +45,12 @@ class EngineBlock_Corto_ProxyServer
         'singleLogoutService'               => '/logout'
     );
 
+    protected $_servicesNotNeedingSession = array(
+        'singleSignOnService',
+        'unsolicitedSingleSignOnService',
+        'logout'
+    );
+
     protected $_headers = array();
     protected $_output;
 
@@ -327,11 +333,17 @@ class EngineBlock_Corto_ProxyServer
 
     public function serve($serviceName, $remoteIdpMd5 = "")
     {
+        $logger = $this->getLogger();
+
+        if (!isset($_COOKIE[session_name()]) && !in_array($serviceName, $this->_servicesNotNeedingSession)) {
+            $application = EngineBlock_ApplicationSingleton::getInstance();
+            $logger->info('Session not started', array('http_request' => (string) $application->getHttpRequest()));
+            throw new EngineBlock_Corto_Module_Services_SessionNotStartedException('Session not started');
+        }
+
         if (!empty($remoteIdpMd5)) {
             $this->setRemoteIdpMd5($remoteIdpMd5);
         }
-
-        $logger = $this->getLogger();
 
         if (empty($remoteIdpMd5)) {
             $logger->info("Calling service '$serviceName'");

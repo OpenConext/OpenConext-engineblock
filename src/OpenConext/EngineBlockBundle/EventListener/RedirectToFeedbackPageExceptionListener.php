@@ -36,6 +36,7 @@ use EngineBlock_Corto_Module_Bindings_UnsupportedSignatureMethodException;
 use EngineBlock_Corto_Module_Bindings_VerificationException;
 use EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException;
 use EngineBlock_Corto_Module_Services_SessionLostException;
+use EngineBlock_Corto_Module_Services_SessionNotStartedException;
 use EngineBlock_Exception_UnknownServiceProvider;
 use OpenConext\EngineBlock\Exception\InvalidBindingException;
 use OpenConext\EngineBlock\Exception\InvalidRequestMethodException;
@@ -100,8 +101,11 @@ class RedirectToFeedbackPageExceptionListener
             $message         = 'Unable to receive message';
             $redirectToRoute = 'authentication_feedback_unable_to_receive_message';
         } elseif ($exception instanceof EngineBlock_Corto_Module_Services_SessionLostException) {
-            $message         = 'Sessions lost';
+            $message         = 'Session lost';
             $redirectToRoute = 'authentication_feedback_session_lost';
+        } elseif ($exception instanceof EngineBlock_Corto_Module_Services_SessionNotStartedException) {
+            $message         = 'Session not started';
+            $redirectToRoute = 'authentication_feedback_session_not_started';
         } elseif ($exception instanceof EngineBlock_Corto_Exception_UnknownIssuer) {
             $message         = 'Unknown Issuer';
             $redirectToRoute = 'authentication_feedback_unknown_issuer';
@@ -122,7 +126,6 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof EngineBlock_Attributes_Manipulator_CustomException) {
             // @todo this must be done differently, for now don't see how as state is managed by EB.
             $event->getRequest()->getSession()->set('feedback_custom', $exception->getFeedback());
-
             $message         = 'Custom Exception thrown from Attribute Manipulator';
             $redirectToRoute = 'authentication_feedback_custom';
         } elseif ($exception instanceof EngineBlock_Corto_Module_Bindings_UnsupportedBindingException) {

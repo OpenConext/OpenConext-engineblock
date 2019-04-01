@@ -176,11 +176,9 @@ If you want to use this application you have to:<br />
 The service you\'re trying to reach (&lsquo;Service Provider&rsquo;) is not accessible through %suiteName%.<br /><br />
     </p>',
     'error_session_lost'            => 'Error - your session was lost',
-    'error_session_lost_desc'       => '<p>
-We somehow lost where you wanted to go. Did you wait too long? If so, try again first. Does your browser accept cookies? Are you using an outdated URL or bookmark?<br /><br />
-        <br /><br />
-    </p>',
-
+    'error_session_lost_desc'       => '<p>We somehow lost where you wanted to go. Did you wait too long? If so, try again first. Does your browser accept cookies? Are you using an outdated URL or bookmark?<br /><br /><br /><br /></p>',
+    'error_session_not_started'            => 'Error - your session was not found',
+    'error_session_not_started_desc'       => '<p>We somehow lost where you wanted to go. Did you wait too long? If so, try again first. Does your browser accept cookies? Are you using an outdated URL or bookmark?<br /><br /><br /><br /></p>',
     'error_authorization_policy_violation'            => 'Error - No access',
     'error_authorization_policy_violation_desc'       => '<p>
         You have successfully logged in at your %organisationNoun%, but unfortunately you cannot use this service (the &lsquo;Service Provider&rsquo;) because you have no access. Your %organisationNoun% limits access to this service with an <i>authorization policy</i>. Please contact the helpdesk of your %organisationNoun% if you think you should be allowed access to this service.

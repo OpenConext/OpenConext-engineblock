@@ -28,7 +28,7 @@ use OpenConext\Value\Saml\Entity;
 final class AuthenticationState implements AuthenticationStateInterface
 {
     /**
-     * @var AuthenticationProcedureList
+     * @var AuthenticationProcedureMap
      */
     private $authenticationProcedures;
 

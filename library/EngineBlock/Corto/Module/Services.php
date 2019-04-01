@@ -13,6 +13,10 @@ class EngineBlock_Corto_Module_Services_SessionLostException extends EngineBlock
 {
 }
 
+class EngineBlock_Corto_Module_Services_SessionNotStartedException extends EngineBlock_Corto_Module_Services_Exception
+{
+}
+
 class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstract
 {
     protected $_aliases = array(

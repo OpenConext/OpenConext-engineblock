@@ -70,6 +70,8 @@ class Feedback extends Twig_Extension
                     unset($feedbackInfo[$key]);
                 }
             }
+        } else {
+            $feedbackInfo = [];
         }
 
         // Sort the feedback info on key
