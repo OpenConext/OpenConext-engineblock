@@ -264,6 +264,8 @@ Your %organisationNoun% has denied you access to this service. You will have to 
 
     'error_unknown_service'         => 'Error - Unknown service',
     'error_unknown_service_desc'    => '<p>Your requested service couldn\'t be found.</p>',
+    'error_clock_issue_title' => 'Error - The Assertion is not yet valid or has expired',
+    'error_clock_issue_desc' => '<p>Please verify that the time on the IdP is correct.</p>',
 
     'attributes_validation_succeeded' => 'Authentication success',
     'attributes_validation_failed'    => 'Some attributes failed validation',

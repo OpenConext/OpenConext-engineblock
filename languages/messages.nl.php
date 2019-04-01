@@ -261,6 +261,8 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
 
     'error_unknown_service'         => 'Error - Deze dienst is niet geregistreerd bij %suiteName%.',
     'error_unknown_service_desc'    => '<p>Deze dienst is niet bekend.</p>',
+    'error_clock_issue_title' => 'Error - De Assertion is nog niet geldig of is verlopen',
+    'error_clock_issue_desc' => '<p>Controleer de tijd op de IdP.</p>',
 
     'attributes_validation_succeeded' => 'Authenticatie geslaagd',
     'attributes_validation_failed'    => 'Sommige attributen kunnen niet gevalideerd worden',
