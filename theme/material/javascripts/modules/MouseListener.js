@@ -1,7 +1,6 @@
 export class MouseListener {
-    constructor(idpPicker, searchBarElement, requestAccessModalHelper) {
+    constructor(idpPicker, requestAccessModalHelper) {
         this.idpPicker        = idpPicker;
-        this.searchBarElement = searchBarElement;
         this.requestAccessModalHelper = requestAccessModalHelper;
     }
 
@@ -10,11 +9,6 @@ export class MouseListener {
 
             // Don't interfere with the IDP selection list when
             // the request-access modal dialog is open.
-            return;
-        }
-
-        if (document.activeElement === this.searchBarElement) {
-            this.searchBarElement.blur();
             return;
         }
 
