@@ -19,7 +19,7 @@ module.exports = function(grunt) {
                         [
                             "babelify", {
                                 presets: [
-                                    ['es2015', {'loose': true}]
+                                    ["babel-preset-env", {'loose': true}]
                                 ],
                                 plugins: [
                                     'transform-es3-property-literals',
