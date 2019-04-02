@@ -36,7 +36,7 @@ class WayfController extends Controller
         return new Response($this->twig->render(
             '@theme/Authentication/View/Proxy/wayf.html.twig',
             [
-                'action' => 'https://continue-to-idp.example.com',
+                'action' => 'https://engine.vm.openconext.org/',
                 'greenHeader' => $currentLocale,
                 'helpLink' => '/authentication/idp/help-discover?lang='.$currentLocale,
                 'backLink' => $backLink,
