@@ -191,6 +191,7 @@ class ServiceProvider extends AbstractRole
      * @param string|null $supportUrlEn
      * @param string|null $supportUrlNl
      * @param string|null $supportUrlPt
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)  Private methods will be recoded
      */
     public function __construct(
         $entityId,
