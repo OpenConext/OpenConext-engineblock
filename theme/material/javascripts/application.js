@@ -69,7 +69,7 @@ function initialize() {
         configuration.requestAccessUrl
     );
     const keyboardListener         = new KeyboardListener(idpPicker, $searchBar, requestAccessModalHelper);
-    const mouseListener         = new MouseListener(idpPicker, $searchBar, requestAccessModalHelper);
+    const mouseListener         = new MouseListener(idpPicker, requestAccessModalHelper);
 
     // Keyup, click and input are registered events for cross-browser compatibility with HTML5 'search' input
     $searchBar.addEventListener('keyup', throttle(event => idpPicker.searchBy(event.target.value), throttleAmountInMs));
