@@ -168,10 +168,15 @@ export class IdpPicker extends AbstractIdpPicker {
         const idp = this.previousSelectionList.getFilteredIdpByIndex(index);
         this.previousSelectionList.removeIdpByIndex(index);
         this.idpList.addIdp(idp);
-
-        this.updateDeleteIdpFromPreviousSelectionClickListeners();
-        this.indexElements();
-        this.focusOnFirstIdp();
+        // When the last previous selection is removed, the previous chosen block is hidden, but we need an
+        // explicit call to updateFocus, in order to re-register the mouse listeners on the connected IdPs.
+        if (this.previousSelectionList.getLengthOfFilteredList() === 0) {
+            this.updateFocus();
+        } else {
+            this.updateDeleteIdpFromPreviousSelectionClickListeners();
+            this.indexElements();
+            this.focusOnFirstIdp();
+        }
 
         this.previousSelectionStorage.save(this.previousSelectionList.getPreviousSelections());
     }
