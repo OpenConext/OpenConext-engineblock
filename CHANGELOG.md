@@ -5,7 +5,15 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
-# 5.9.3
+## 5.9.4
+Three WAYF related usability fixes have been addressed in this release.
+
+### Bugfix
+ * Prevent blurring the search bar #656 
+ * Make sure the mouse responds after removing previous IdP selection #661
+ * Unconnected IdP mouse hover should also highlight the IdP #662
+
+## 5.9.3
 
 ### Bugfix
  * Honor explicit keyid in unsolicited single sign on #653
