@@ -105,6 +105,10 @@ function initialize() {
             unconnectedIdpList
         );
 
+        // Call indexElements to also include the disconnected IdPs in the IdP list index, ensuring mouse
+        // and keyboard behavior matches that of the connected IdP list.
+        idpPicker.indexElements();
+
         $searchBar.addEventListener('keyup', throttle(event => unconnectedIdpPicker.searchBy(event.target.value), throttleAmountInMs));
         $searchBar.addEventListener('click', event => unconnectedIdpPicker.searchBy(event.target.value));
         $searchBar.addEventListener('input', event => unconnectedIdpPicker.searchBy(event.target.value));

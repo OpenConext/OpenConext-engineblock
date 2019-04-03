@@ -1,4 +1,4 @@
-const timeout = 10000;
+const timeout = 30000;
 
 describe(
     'WAYF can be used with a mouse',
@@ -8,6 +8,22 @@ describe(
             page = await global.__BROWSER__.newPage();
             const override = Object.assign(page.viewport(), {width: 1920, height: 1080});
             page.setViewport(override);
+        }, timeout);
+
+        /**
+         * Reproduction of the behaviour, described in:
+         * https://www.pivotaltracker.com/story/show/165056451
+         */
+        it('Disconnected IdPs should be highlighted on mouse hover', async () => {
+            // Open a dummy wayf with 5 connected IdPs and 5 unconnected IdPs
+            await page.goto('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=10&displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
+            // Wait for the unconnected idp picker to load.
+            await page.waitFor("#unconnected-idp-picker");
+            //await page.mouse.move(900, 720);
+            await page.hover('#unconnected-idp-picker > div > div.idp-list > a.result.active.noaccess:nth-child(1)');
+            const disconnectedIdP1 = await page.$eval('#unconnected-idp-picker > div > div.idp-list > a.result.active.noaccess:nth-child(1)', e => e.className);
+            // The previously chosen IdP list must now be on the page
+            expect(disconnectedIdP1).toContain("focussed");
         }, timeout);
 
         /**
@@ -45,8 +61,7 @@ describe(
             await page.click('a.result.active.access:nth-child(1)', {'button': 'left'});
             await page.waitForNavigation();
             expect(await page.url()).toBe('https://engine.vm.openconext.org/');
-        });
-
+        }, timeout);
     },
     timeout,
 );
