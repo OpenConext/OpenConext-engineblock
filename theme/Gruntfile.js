@@ -8,6 +8,8 @@ module.exports = function(grunt) {
 
     require('load-grunt-tasks')(grunt);
 
+    const sass = require('node-sass');
+
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -68,16 +70,20 @@ module.exports = function(grunt) {
             src: '../web/stylesheets/*.css'
           }
         },
-        compass: {
+        sass: {
             material: {
                 options: {
-                    sassDir: 'material/stylesheets',
-                    cssDir: '../web/stylesheets',
-                    fontsDir: '../web/fonts',
-                    imagesDir: 'material/images',
-                    outputStyle: 'compressed',
-                    raw: 'preferred_syntax = :sass\n'
-                }
+                    implementation: sass,
+                    sourceMap: true,
+                    outputStyle: 'compressed'
+                },
+                files: [{
+                    expand: true,
+                    cwd: 'material/stylesheets',
+                    src: ['**/*.sass'],
+                    dest: '../web/stylesheets',
+                    ext: '.css'
+                }]
             }
         },
         copy: {
@@ -167,7 +173,7 @@ module.exports = function(grunt) {
                 tasks = [
                   'clean:' + themeConfig.current,
                   'copy:' + theme,
-                  'compass:' + theme
+                  'sass:' + theme
                 ];
 
             tasks.push('postcss:' + theme);
@@ -187,4 +193,7 @@ module.exports = function(grunt) {
 
         grunt.log.error('No such theme: ' + theme);
     });
+    grunt.loadNpmTasks('grunt-sass');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+
 };

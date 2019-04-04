@@ -22,16 +22,17 @@
     "grunt-add-comment": "^1.1.5",
     "grunt-browserify": "^5.3.0",
     "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-compass": "^1.0.3",
     "grunt-contrib-copy": "^0.8.0",
     "grunt-contrib-symlink": "^0.3.0",
     "grunt-contrib-uglify": "^3.3.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-postcss": "^0.4.0",
+    "grunt-sass": "^3.0.2",
     "grunt-string-replace": "^1.2.0",
     "html5shiv": "^3.7.3",
     "jest": "^24.1.0",
     "load-grunt-tasks": "^3.1.0",
+    "node-sass": "^4.11.0",
     "puppeteer-core": "^1.13.0"
   },
   "dependencies": {
