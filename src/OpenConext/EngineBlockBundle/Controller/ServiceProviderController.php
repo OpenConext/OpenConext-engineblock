@@ -20,7 +20,9 @@ namespace OpenConext\EngineBlockBundle\Controller;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
+use OpenConext\EngineBlock\Validator\RequestValidator;
 use OpenConext\EngineBlockBridge\ResponseFactory;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class ServiceProviderController implements AuthenticationLoopThrottlingController
@@ -34,20 +36,29 @@ class ServiceProviderController implements AuthenticationLoopThrottlingControlle
      * @var Session
      */
     private $session;
+    /**
+     * @var RequestValidator
+     */
+    private $requestValidator;
 
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        Session $session
+        Session $session,
+        RequestValidator $requestValidator
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->session                         = $session;
+        $this->requestValidator = $requestValidator;
     }
 
     /**
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function consumeAssertionAction()
+    public function consumeAssertionAction(Request $request)
     {
+        $this->requestValidator->isValid($request);
+
         $proxyServer = new EngineBlock_Corto_Adapter();
         $proxyServer->consumeAssertion();
 

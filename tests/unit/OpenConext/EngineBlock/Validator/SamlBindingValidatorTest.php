@@ -8,16 +8,16 @@ use OpenConext\EngineBlock\Exception\InvalidRequestMethodException;
 use PHPUnit_Framework_TestCase as TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class SsoRequestValidatorTest extends TestCase
+class SamlBindingValidatorTest extends TestCase
 {
     /**
-     * @var SsoRequestValidator
+     * @var SamlBindingValidator
      */
     private $validator;
 
     public function setUp()
     {
-        $this->validator = new SsoRequestValidator();
+        $this->validator = new SamlBindingValidator();
 
         // PHPunit does not reset the superglobals on each run.
         unset($_GET['SAMLRequest']);

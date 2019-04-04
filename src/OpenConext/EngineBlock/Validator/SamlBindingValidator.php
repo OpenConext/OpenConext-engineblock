@@ -31,12 +31,12 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * Valid requests method / binding combinations for SSO are:
  *
- *  | SAML Binding     | Request method | Parameter name |
- *  | ---------------- | -------------- | -------------- |
- *  | HttpRedirect     | GET            | SAMLRequest    |
- *  | HTTPPost         | POST           | SAMLRequest    |
+ *  | SAML Binding     | Request method | Parameter name              |
+ *  | ---------------- | -------------- | --------------------------- |
+ *  | HttpRedirect     | GET            | SAMLRequest,SAMLResponse    |
+ *  | HTTPPost         | POST           | SAMLRequest,SAMLResponse    |
  */
-class SsoRequestValidator implements RequestValidator
+class SamlBindingValidator implements RequestValidator
 {
     private $supportedRequestMethods = [Request::METHOD_GET, Request::METHOD_POST];
 
@@ -54,7 +54,7 @@ class SsoRequestValidator implements RequestValidator
             $binding = Binding::getCurrentBinding();
         } catch (Exception $e) {
             throw new InvalidBindingException(
-                sprintf('No SAMLRequest parameter was found in the HTTP "%s" request parameters', $requestMethod),
+                sprintf('No SAMLRequest or SAMLResponse parameter was found in the HTTP "%s" request parameters', $requestMethod),
                 0,
                 $e
             );
@@ -62,7 +62,7 @@ class SsoRequestValidator implements RequestValidator
         if (!($binding instanceof HTTPRedirect || $binding instanceof HTTPPost)) {
             // We only support HTTP Redirect binding
             throw new InvalidBindingException(
-                sprintf('The binding type "%s" is not supported on this SAML SSO endpoint', get_class($binding))
+                sprintf('The binding type "%s" is not supported on this endpoint', get_class($binding))
             );
         }
         return true;
