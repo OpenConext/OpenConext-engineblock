@@ -1,0 +1,2 @@
+require('./WayfShowsConnectedIdps');
+require('./WayfMouseBehaviour');

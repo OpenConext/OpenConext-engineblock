@@ -1,4 +1,4 @@
-const timeout = 30000;
+const timeout = 40000;
 
 describe(
     'WAYF can be used with a mouse',
@@ -24,7 +24,7 @@ describe(
             const disconnectedIdP1 = await page.$eval('#unconnected-idp-picker > div > div.idp-list > a.result.active.noaccess:nth-child(1)', e => e.className);
             // The previously chosen IdP list must now be on the page
             expect(disconnectedIdP1).toContain("focussed");
-        }, timeout);
+        });
 
         /**
          * Reproduction of the behaviour, described in:
@@ -61,7 +61,7 @@ describe(
             await page.click('a.result.active.access:nth-child(1)', {'button': 'left'});
             await page.waitForNavigation();
             expect(await page.url()).toBe('https://engine.vm.openconext.org/');
-        }, timeout);
+        });
     },
     timeout,
 );
