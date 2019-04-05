@@ -163,7 +163,8 @@
 
     <target name="js-smoke-tests">
         <exec dir="${basedir}/theme" executable="node_modules/.bin/jest" failonerror="true">
-            <arg value="material/javascripts/tests/smoke" />
+            <arg line="--runInBand" />
+            <arg line="material/javascripts/tests/smoke" />
         </exec>
     </target>
 
