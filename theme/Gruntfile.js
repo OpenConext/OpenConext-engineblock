@@ -9,6 +9,8 @@ module.exports = function(grunt) {
     require('load-grunt-tasks')(grunt);
 
     const sass = require('node-sass');
+    const autoprefixer = require('autoprefixer');
+    const cssnano = require('cssnano');
 
     // Project configuration.
     grunt.initConfig({
@@ -53,7 +55,7 @@ module.exports = function(grunt) {
           options: {
             map: true,
             processors: [
-              require('autoprefixer-core')({browsers: [
+              autoprefixer({browsers: [
                   'ie >= 8',
                   'chrome >= 20',
                   'firefox >= 20',
@@ -63,7 +65,7 @@ module.exports = function(grunt) {
                   'ios >= 4',
                   'last 3 versions'
               ]}),
-              require('csswring')
+              cssnano
             ]
           },
           material: {
