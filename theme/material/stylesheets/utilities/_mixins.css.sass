@@ -67,3 +67,9 @@
   &::-webkit-scrollbar-track
     background: $background-color
     border-radius: $br-track
+
+@mixin clearfix
+  &:after
+    content: ""
+    display: table
+    clear: both

@@ -8,6 +8,10 @@ module.exports = function(grunt) {
 
     require('load-grunt-tasks')(grunt);
 
+    const sass = require('node-sass');
+    const autoprefixer = require('autoprefixer');
+    const cssnano = require('cssnano');
+
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -51,7 +55,7 @@ module.exports = function(grunt) {
           options: {
             map: true,
             processors: [
-              require('autoprefixer-core')({browsers: [
+              autoprefixer({browsers: [
                   'ie >= 8',
                   'chrome >= 20',
                   'firefox >= 20',
@@ -61,23 +65,27 @@ module.exports = function(grunt) {
                   'ios >= 4',
                   'last 3 versions'
               ]}),
-              require('csswring')
+              cssnano
             ]
           },
           material: {
             src: '../web/stylesheets/*.css'
           }
         },
-        compass: {
+        sass: {
             material: {
                 options: {
-                    sassDir: 'material/stylesheets',
-                    cssDir: '../web/stylesheets',
-                    fontsDir: '../web/fonts',
-                    imagesDir: 'material/images',
-                    outputStyle: 'compressed',
-                    raw: 'preferred_syntax = :sass\n'
-                }
+                    implementation: sass,
+                    sourceMap: true,
+                    outputStyle: 'compressed'
+                },
+                files: [{
+                    expand: true,
+                    cwd: 'material/stylesheets',
+                    src: ['**/*.sass'],
+                    dest: '../web/stylesheets',
+                    ext: '.css'
+                }]
             }
         },
         copy: {
@@ -167,7 +175,7 @@ module.exports = function(grunt) {
                 tasks = [
                   'clean:' + themeConfig.current,
                   'copy:' + theme,
-                  'compass:' + theme
+                  'sass:' + theme
                 ];
 
             tasks.push('postcss:' + theme);
@@ -187,4 +195,7 @@ module.exports = function(grunt) {
 
         grunt.log.error('No such theme: ' + theme);
     });
+    grunt.loadNpmTasks('grunt-sass');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+
 };
