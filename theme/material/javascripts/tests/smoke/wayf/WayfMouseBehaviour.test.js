@@ -1,4 +1,4 @@
-const timeout = 40000;
+const timeout = 10000;
 
 describe(
     'WAYF can be used with a mouse',
@@ -9,6 +9,13 @@ describe(
             const override = Object.assign(page.viewport(), {width: 1920, height: 1080});
             page.setViewport(override);
         }, timeout);
+
+        const waitForClick = async (selector, clickOptions) => {
+            await Promise.all([
+                page.waitForNavigation(),
+                page.click(selector, clickOptions),
+            ])
+        };
 
         /**
          * Reproduction of the behaviour, described in:
@@ -34,14 +41,15 @@ describe(
             // Open a dummy wayf with 5 connected IdPs
             await page.goto('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5');
             // Click the first IdP, adding it to the list of previously chosen IdPs
-            await page.click('a.result.active.access:nth-child(1)', {'button': 'left'});
-            await page.waitForNavigation();
+            await waitForClick('a.result.active.access:nth-child(1)', {'button': 'left'});
             expect(await page.url()).toBe('https://engine.vm.openconext.org/');
+
             // Go back to the WAYF
             await page.goto('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5');
             // Click another IdP, adding a second entry to the preselection
-            await page.click('a.result.active.access:nth-child(2)', {'button': 'left'});
-            await page.waitForNavigation();
+            await waitForClick('a.result.active.access:nth-child(2)', {'button': 'left'});
+            expect(await page.url()).toBe('https://engine.vm.openconext.org/');
+
             // Go back to the WAYF
             await page.goto('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5');
             const previouslyChosenTitle = await page.$eval('div.preselection header h2', e => e.innerHTML);
@@ -58,8 +66,8 @@ describe(
             expect(editButton).toBe("done");
             await page.click('.edit', {'button': 'left'});
             // Finally click one of the Connected IdPs
-            await page.click('a.result.active.access:nth-child(1)', {'button': 'left'});
-            await page.waitForNavigation();
+            await waitForClick('a.result.active.access:nth-child(1)', {'button': 'left'});
+
             expect(await page.url()).toBe('https://engine.vm.openconext.org/');
         });
     },
