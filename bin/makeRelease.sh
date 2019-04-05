@@ -40,7 +40,7 @@ echo "Preparing environment" &&
 mkdir -p ${RELEASE_DIR} &&
 rm -rf ${PROJECT_DIR} &&
 
-echo "Cloning repository";
+echo "Cloning repository" &&
 cd ${RELEASE_DIR} &&
 git clone https://github.com/${GITHUB_USER}/${PROJECT_NAME}.git ${PROJECT_DIR_NAME} &&
 
@@ -48,8 +48,13 @@ echo "Checking out ${TAG}" &&
 cd ${PROJECT_DIR} &&
 git checkout ${TAG} &&
 
-echo "Running Composer Install";
+echo "Running Composer Install" &&
 php ./bin/composer.phar install -n --no-dev --prefer-dist -o &&
+
+echo "Build assets" &&
+cd ${PROJECT_DIR}/theme &&
+npm install &&
+grunt &&
 
 echo "Tagging the release in RELEASE file" &&
 COMMITHASH=`git rev-parse HEAD` &&
