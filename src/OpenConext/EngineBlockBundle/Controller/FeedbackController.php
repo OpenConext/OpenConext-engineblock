@@ -68,6 +68,15 @@ class FeedbackController
     }
 
     /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
+    public function sessionNotStartedAction()
+    {
+        return new Response($this->twig->render('@theme/Authentication/View/Feedback/session-not-started.html.twig'), 400);
+    }
+
+    /**
      * @param Request $request
      * @return Response
      * @throws \EngineBlock_Exception

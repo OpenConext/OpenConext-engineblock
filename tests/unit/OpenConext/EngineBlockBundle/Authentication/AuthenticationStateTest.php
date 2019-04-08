@@ -18,8 +18,6 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
-use Mockery;
-use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\EngineBlockBundle\Exception\LogicException;

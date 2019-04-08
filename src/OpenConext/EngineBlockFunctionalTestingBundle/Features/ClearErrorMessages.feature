@@ -262,14 +262,18 @@ Feature:
      And I pass through EngineBlock
      And I lose my session
      And I pass through the IdP
-     And I should see "your session was lost"
+     Then I should see "your session was lost"
 
   Scenario: The session has been lost after logging in at the SP
     When I log in at "Dummy SP"
      And I lose my session
      And I pass through EngineBlock
      And I pass through the IdP
-     And I should see "your session was lost"
+    Then I should see "your session was lost"
+
+  Scenario: A session is not started while expected
+    When I go to Engineblock URL "/authentication/sp/metadata"
+    Then I should see "your session was not found"
 
   Scenario: The SP uses the wrong request parameter while using HTTP Redirect binding
    Given the SP "Dummy SP" sends a malformed AuthNRequest

@@ -174,10 +174,9 @@ Als je deze applicatie wilt gebruiken moet je:<br />
         De dienst die je probeert te benaderen (de &lsquo;Service Provider&rsquo;) is niet toegankelijk via de %suiteName%-infrastructuur.
     </p>',
     'error_session_lost'                => 'Error - Sessie is verloren gegaan',
-    'error_session_lost_desc'           => '<p>
-We weten helaas niet waar je heen wilt. Heb je te lang gewacht? Probeer het dan eerst opnieuw. Accepteert je browser wel cookies? Maak je gebruik van een te oude link of bookmark?<br /><br />
-    </p>',
-
+    'error_session_lost_desc'           => '<p>We weten helaas niet waar je heen wilt. Heb je te lang gewacht? Probeer het dan eerst opnieuw. Accepteert je browser wel cookies? Maak je gebruik van een te oude link of bookmark?<br /><br /></p>',
+    'error_session_not_started'                => 'Error - Sessie is niet gevonden',
+    'error_session_not_started_desc'           => '<p>We weten helaas niet waar je heen wilt. Heb je te lang gewacht? Probeer het dan eerst opnieuw. Accepteert je browser wel cookies? Maak je gebruik van een te oude link of bookmark?<br /><br /></p>',
     'error_authorization_policy_violation'            => 'Error - Geen toegang',
     'error_authorization_policy_violation_desc'       => '<p>
         Je bent succesvol ingelogd bij jouw %organisationNoun%, maar je kunt geen gebruik maken van deze dienst omdat je geen toegang hebt. Voor deze dienst (de &lsquo;Service Provider&rsquo;) heeft jouw %organisationNoun% met <i>autorisatieregels</i> ingesteld dat alleen bepaalde gebruikers toegang krijgen. Neem contact op met de (IT-)servicedesk van je %organisationNoun% als je vindt dat je wel toegang moet hebben.
