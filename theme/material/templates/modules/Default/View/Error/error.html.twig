@@ -8,6 +8,10 @@
 {% set hideHeader = true %}
 {% set hideFooter = true %}
 
+{% block languageSwitcher %}
+    {{ languageSwitcher.form(locale(), postData()) }}
+{% endblock %}
+
 {% block content %}
 
     {{ flushLog('Showing feedback page with message: ' ~ pageTitle) }}
