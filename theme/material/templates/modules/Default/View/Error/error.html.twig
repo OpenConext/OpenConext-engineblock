@@ -16,46 +16,46 @@
 
     {{ flushLog('Showing feedback page with message: ' ~ pageTitle) }}
 
-    <div class="box">
-        <div class="mod-content">
-            <h1>{% block pageTitle %}{% endblock %}</h1>
-            {% block errorMessage %}{% endblock %}
+    <div class="error-container">
 
-            {% block feedbackInfo %}
-            <div class="l-overflow">
-                <table class="comp-table">
-                    <thead></thead>
-                    <tbody>
+        <h1>{% block pageTitle %}{% endblock %}</h1>
+        {% block errorMessage %}{% endblock %}
 
-                    {% if feedbackInfo is not empty %}
-                        {% for name, value in feedbackInfo %}
-                            <tr>
-                                <td class="strong">{{ name|trans }}:</td>
-                                <td class="smaller">{{ value }}</td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
+        {% block feedbackInfo %}
+        <div class="l-overflow">
+            <table class="comp-table">
+                <thead></thead>
+                <tbody>
 
-                    </tbody>
-                </table>
-            </div>
-            {% endblock %}
+                {% if feedbackInfo is not empty %}
+                    {% for name, value in feedbackInfo %}
+                        <tr>
+                            <td class="strong">{{ name|trans }}:</td>
+                            <td class="smaller">{{ value }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
 
-            <p>{{ 'error_help_desc'|trans|raw }}</p>
-
-            {% if exception is defined %}
-                <div class="l-overflow">
-                    <strong>{{ exception.message }}</strong>
-                    <pre>
-                    {{ var_dump(exception) }}
-
-                    {% if exception.xdebug_message is defined %}
-                        {{ exception.xdebug_message|raw }}
-                    {% endif %}
-                    </pre>
-                </div>
-            {% endif %}
-
+                </tbody>
+            </table>
         </div>
+        {% endblock %}
+
+        <p>{{ 'error_help_desc'|trans|raw }}</p>
+
+        {% if exception is defined %}
+            <div class="l-overflow">
+                <strong>{{ exception.message }}</strong>
+                <pre>
+                {{ var_dump(exception) }}
+
+                {% if exception.xdebug_message is defined %}
+                    {{ exception.xdebug_message|raw }}
+                {% endif %}
+                </pre>
+            </div>
+        {% endif %}
+
     </div>
+
 {% endblock %}
