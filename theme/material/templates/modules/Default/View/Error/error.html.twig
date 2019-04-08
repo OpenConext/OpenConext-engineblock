@@ -37,13 +37,6 @@
 
             <p>{{ 'error_help_desc'|trans|raw }}</p>
 
-            {% block backButton %}
-            {# @todo make the number of steps in history that the back button makes dynamic, it is not always 2 #}
-            <a href="#" id="GoBack" class="c-button" onclick="history.back(-2); return false;">
-                {{ 'go_back'|trans|raw }}
-            </a>
-            {% endblock %}
-
             {% if exception is defined %}
                 <div class="l-overflow">
                     <strong>{{ exception.message }}</strong>
