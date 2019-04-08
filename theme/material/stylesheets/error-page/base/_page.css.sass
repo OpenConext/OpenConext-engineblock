@@ -1,0 +1,9 @@
+html
+  height: 100%
+body
+  height: 100%
+  $list: $blue 0%, $light-blue 100%
+  @include gradient(to bottom, $list)
+
+*, *:before, *:after
+  box-sizing: border-box
