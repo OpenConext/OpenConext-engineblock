@@ -83,6 +83,7 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: 'material/stylesheets',
                     src: ['**/*.sass'],
+                    flatten: true,
                     dest: '../web/stylesheets',
                     ext: '.css'
                 }]
