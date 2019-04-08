@@ -1,5 +1,9 @@
 {% extends '@themeLayouts/scripts/default.html.twig' %}
 
+{% block stylesheets %}{% spaceless %}
+    <link href="/stylesheets/error-page.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
+{% endspaceless %}{% endblock %}
+
 {% set feedbackInfo = feedbackInfo() %}
 
 {% block content %}
