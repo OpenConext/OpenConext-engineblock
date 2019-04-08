@@ -18,8 +18,14 @@
 
     <div class="error-container">
 
-        <h1>{% block pageTitle %}{% endblock %}</h1>
-        {% block errorMessage %}{% endblock %}
+        <div class="error-title">
+            <h1 class="error-title__heading">{% block pageTitle %}{% endblock %}</h1>
+            <span class="error-title__error-message">{% block errorMessage %}{% endblock %}</span>
+        </div>
+
+        <div class="horizontal-rule">
+            <hr class="horizontal-rule__line">
+        </div>
 
         {% block feedbackInfo %}
         <div class="l-overflow">
