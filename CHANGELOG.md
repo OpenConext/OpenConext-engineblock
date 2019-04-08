@@ -17,6 +17,13 @@ The 5.10 release focuses on making EngineBlock more robust. The biggest aim is t
  * Allow for more than one in-flight authentication session per user session #649
  * Added further support for Portuguese language #650 (thanks @domgon!)
 
+## 5.9.4
+
+### Bugfix
+ * Prevent blurring the search bar #656 
+ * Make sure the mouse responds after removing previous IdP selection #661
+ * Unconnected IdP mouse hover should also highlight the IdP #662
+
 ## 5.9.3
 
 ### Bugfix
