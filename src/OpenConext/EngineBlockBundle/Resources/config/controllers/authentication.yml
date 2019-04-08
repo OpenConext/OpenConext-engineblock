@@ -4,6 +4,7 @@ services:
         arguments:
             - "@engineblock.compat.application"
             - "@session"
+            - "@engineblock.validator.acs_request_validator"
             - "@engineblock.validator.saml_binding_validator"
 
     engineblock.controller.authentication.identity_provider:
@@ -13,6 +14,7 @@ services:
             - "@twig"
             - "@engineblock.compat.logger"
             - "@engineblock.service.request_access_mailer"
+            - "@engineblock.validator.sso_request_validator"
             - "@engineblock.validator.saml_binding_validator"
             - "@engineblock.service.authentication_state_helper"
 

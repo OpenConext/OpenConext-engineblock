@@ -40,6 +40,7 @@ use EngineBlock_Corto_Module_Services_SessionNotStartedException;
 use EngineBlock_Exception_UnknownServiceProvider;
 use OpenConext\EngineBlock\Exception\InvalidBindingException;
 use OpenConext\EngineBlock\Exception\InvalidRequestMethodException;
+use OpenConext\EngineBlock\Exception\MissingParameterException;
 use OpenConext\EngineBlockBridge\ErrorReporter;
 use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
 use Psr\Log\LoggerInterface;
@@ -169,7 +170,10 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof StuckInAuthenticationLoopException) {
             $message         = 'Stuck in authentication loop';
             $redirectToRoute = 'authentication_feedback_stuck_in_authentication_loop';
-        } elseif ($exception instanceof InvalidRequestMethodException || $exception instanceof InvalidBindingException) {
+        } elseif ($exception instanceof InvalidRequestMethodException ||
+            $exception instanceof InvalidBindingException ||
+            $exception instanceof  MissingParameterException
+        ) {
             $message = $exception->getMessage();
             $event->getRequest()->getSession()->set('feedback_custom', $exception->getMessage());
             $redirectToRoute = 'authentication_feedback_no_authentication_request_received';

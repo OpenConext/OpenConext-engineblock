@@ -64,19 +64,26 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
      */
     private $requestValidator;
 
+    /**
+     * @var RequestValidator
+     */
+    private $bindingValidator;
+
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
         Twig_Environment $twig,
         LoggerInterface $loggerInterface,
         RequestAccessMailer $requestAccessMailer,
-        RequestValidator $validator,
+        RequestValidator $requestValidator,
+        RequestValidator $bindingValidator,
         AuthenticationStateHelperInterface $authenticationStateHelper
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->twig = $twig;
         $this->logger = $loggerInterface;
         $this->requestAccessMailer = $requestAccessMailer;
-        $this->requestValidator = $validator;
+        $this->requestValidator = $requestValidator;
+        $this->bindingValidator = $bindingValidator;
         $this->authenticationStateHelper = $authenticationStateHelper;
     }
 
@@ -98,6 +105,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
     public function singleSignOnAction(Request $request, $keyId = null, $idpHash = null)
     {
         $this->requestValidator->isValid($request);
+        $this->bindingValidator->isValid($request);
 
         $cortoAdapter = new EngineBlock_Corto_Adapter();
 
@@ -119,6 +127,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
     public function unsolicitedSingleSignOnAction(Request $request, $keyId = null, $idpHash = null)
     {
         $this->requestValidator->isValid($request);
+        $this->bindingValidator->isValid($request);
 
         $cortoAdapter = new EngineBlock_Corto_Adapter();
 

@@ -147,7 +147,13 @@ services:
             - "%allowed_acs_location_schemes%"
 
     engineblock.validator.saml_binding_validator:
-            class: OpenConext\EngineBlock\Validator\SamlBindingValidator
+        class: OpenConext\EngineBlock\Validator\SamlBindingValidator
+
+    engineblock.validator.acs_request_validator:
+        class: OpenConext\EngineBlock\Validator\AcsRequestValidator
+
+    engineblock.validator.sso_request_validator:
+        class: OpenConext\EngineBlock\Validator\SsoRequestValidator
 
     engineblock.twig.extension.debug:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Debug

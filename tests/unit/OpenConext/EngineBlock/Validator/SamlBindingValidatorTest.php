@@ -4,7 +4,6 @@ namespace OpenConext\EngineBlock\Validator;
 
 use Mockery as m;
 use OpenConext\EngineBlock\Exception\InvalidBindingException;
-use OpenConext\EngineBlock\Exception\InvalidRequestMethodException;
 use PHPUnit_Framework_TestCase as TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -20,10 +19,9 @@ class SamlBindingValidatorTest extends TestCase
         $this->validator = new SamlBindingValidator();
 
         // PHPunit does not reset the superglobals on each run.
-        unset($_GET['SAMLRequest']);
-        unset($_GET['AuhtNRequest']);
-        unset($_GET['SAMLart']);
-        unset($_POST['SAMLRequest']);
+        $_GET = [];
+        $_POST = [];
+        $_SERVER = [];
     }
 
     public function test_happy_flow_get()
@@ -54,8 +52,8 @@ class SamlBindingValidatorTest extends TestCase
 
     public function test_post_binding_is_not_supported()
     {
-        $this->expectException(InvalidRequestMethodException::class);
-        $this->expectExceptionMessage('The HTTP request method "PATCH" is not supported on this SAML SSO endpoint');
+        $this->expectException(InvalidBindingException::class);
+        $this->expectExceptionMessage('No SAMLRequest or SAMLResponse parameter was found in the HTTP');
 
         $request = m::mock(Request::class);
         $request
@@ -68,12 +66,12 @@ class SamlBindingValidatorTest extends TestCase
     public function test_used_invalid_binding()
     {
         $this->expectException(InvalidBindingException::class);
-        $this->expectExceptionMessage('No SAMLRequest parameter was found in the HTTP "GET" request parameters');
+        $this->expectExceptionMessage('No SAMLRequest or SAMLResponse parameter was found in the HTTP');
 
         // Under the hood, the Binding::getCurrentBinding method is used, which directly reads from the super globals
         $_SERVER['REQUEST_METHOD'] = 'GET';
         // Even though we are handling a AuthNRequest, the binding is based on a get parameter named SAMLRequest
-        $_GET['AuhtNRequest'] = 'loremipsum';
+        $_GET['AuhtnRequest'] = 'loremipsum';
 
         $request = m::mock(Request::class);
         $request
@@ -86,7 +84,7 @@ class SamlBindingValidatorTest extends TestCase
     public function test_used_unsupported_binding()
     {
         $this->expectException(InvalidBindingException::class);
-        $this->expectExceptionMessage('The binding type "SAML2\HTTPArtifact" is not supported on this SAML SSO endpoint');
+        $this->expectExceptionMessage('The binding type "SAML2\HTTPArtifact" is not supported on this endpoint');
 
         // Under the hood, the Binding::getCurrentBinding method is used, which directly reads from the super globals
         $_SERVER['REQUEST_METHOD'] = 'GET';
