@@ -1,5 +1,8 @@
 # UPGRADE NOTES
 
+## 5.8 -> 5.9
+The minified `web/javascripts/application.min.js` is removed from VCS therefore you need to build it yourself if you don't use the release tarballs. In the `README.md` you can find how to accomplish this. 
+
 ## 5.7 -> 5.8
 
 ### Stored metadata incompatibility
