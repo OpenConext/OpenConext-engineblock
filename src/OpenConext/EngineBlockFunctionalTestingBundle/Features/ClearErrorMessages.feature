@@ -289,6 +289,16 @@ Feature:
     Then I should see "The parameter \"SAMLRequest\" is missing on this SAML SSO endpoint"
      And I should see ART code "35954"
 
+  Scenario: The acs location is missing the SamlResponse parameter
+    When I post data "{}" to Engineblock URL "/authentication/sp/consume-assertion"
+    Then I should see "he parameter \"SAMLResponse\" is missing on this SAML ACS endpoint."
+    And I should see ART code "39524"
+
+  Scenario: The sso location is missing the SamlRequest parameter
+    When I post data "{}" to Engineblock URL "/authentication/idp/single-sign-on"
+    Then I should see "The parameter \"SAMLRequest\" is missing on this SAML SSO endpoint"
+    And I should see ART code "35954"
+
   Scenario: The IdP sends a SAMLResponse that triggers a NotOnOrAfter violation when behind on time
    Given The clock on the IdP "Dummy Idp" is behind
     When I log in at "Dummy SP"

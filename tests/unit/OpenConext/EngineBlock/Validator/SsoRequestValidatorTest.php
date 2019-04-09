@@ -3,6 +3,7 @@
 namespace OpenConext\EngineBlock\Validator;
 
 use OpenConext\EngineBlock\Exception\InvalidRequestMethodException;
+use OpenConext\EngineBlock\Exception\MissingParameterException;
 use PHPUnit_Framework_TestCase as TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -51,6 +52,30 @@ class SsoRequestValidatorTest extends TestCase
         $this->expectExceptionMessage('The HTTP request method "PATCH" is not supported on this SAML SSO endpoint');
 
         $_SERVER['REQUEST_METHOD'] = 'PATCH';
+
+        $request = new Request($_GET, $_POST, [], [], [], $_SERVER);
+
+        $this->validator->isValid($request);
+    }
+
+    public function test_missing_saml_argument_on_post()
+    {
+        $this->expectException(MissingParameterException::class);
+        $this->expectExceptionMessage('The parameter "SAMLRequest" is missing on this SAML SSO endpoint');
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+
+        $request = new Request($_GET, $_POST, [], [], [], $_SERVER);
+
+        $this->validator->isValid($request);
+    }
+
+    public function test_missing_saml_argument_on_get()
+    {
+        $this->expectException(MissingParameterException::class);
+        $this->expectExceptionMessage('The parameter "SAMLRequest" is missing on this SAML SSO endpoint');
+
+        $_SERVER['REQUEST_METHOD'] = 'GET';
 
         $request = new Request($_GET, $_POST, [], [], [], $_SERVER);
 

@@ -91,8 +91,10 @@ final class AuthenticationState implements AuthenticationStateInterface
 
         if ($currentRequest === null) {
             throw new LogicException(
-                'Current authentication procedure cannot be authenticated:'
-                 . ' authentication procedure has not been started'
+                sprintf(
+                    'The requested authentication procedure with requestId (%s) couldn\'t be found in the session storage.',
+                    $requestId
+                )
             );
         }
 
@@ -110,15 +112,19 @@ final class AuthenticationState implements AuthenticationStateInterface
         $currentRequest = $this->authenticationProcedures->find($requestId);
         if ($currentRequest === null) {
             throw new LogicException(
-                'Current authentication procedure cannot be completed:'
-                . ' authentication procedure has not been started'
+                sprintf(
+                    'The requested authentication procedure with requestId (%s) couldn\'t be found in the session storage.',
+                    $requestId
+                )
             );
         }
 
         if ($currentRequest->hasBeenAuthenticated()) {
             throw new LogicException(
-                'Current authentication procedure cannot be completed:'
-                . ' authentication procedure has not been authenticated'
+                sprintf(
+                    'The requested authentication procedure with requestId (%s) couldn\'t be completed in the session storage.',
+                    $requestId
+                )
             );
         }
 
