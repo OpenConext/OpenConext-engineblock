@@ -26,30 +26,7 @@
       <span class="error-title__error-message">{{ 'error_405_desc'|trans({'%requestMethod%': requestMethod, '%uri%': uri,'%allowedMethods%': allowedMethods}) }}</span>
     </div>
   </div>
-  <footer class="error-container__footer footer">
-    <div class="footer__button-row">
-      <ul class="footer-buttons">
-        <li class="footer-buttons__link">
-          <a href="{{ 'error_wiki-href'|trans }}" class="footer-button" title="{{ 'error_wiki-link-text'|trans }}">
-            <i class="footer-button__icon fa-wikipedia-w"></i>
-            <p class="footer-button__text">{{ 'error_wiki-link-text'|trans }}</p>
-          </a>
-        </li>
-        <li class="footer-buttons__link">
-          <a href="{{ 'error_help-desk-link-href'|trans }}" class="footer-button" title="{{ 'error_help-desk-link-text'|trans }}">
-            <i class="footer-button__icon fa-graduation-cap"></i>
-            <p class="footer-button__text">{{ 'error_help-desk-link-text'|trans }}</p>
-          </a>
-        </li>
-        <li class="footer-buttons__link">
-          <a href="mailto:{{ 'error_help-desk-email'|trans }}" class="footer-button">
-            <i class="footer-button__icon fa-paper-plane"></i>
-            <p class="footer-button__text">{{ 'error_help-desk-email-text'|trans }}</p>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </footer>
+  {% include "@theme/Default/View/Error/partial/footer.html.twig" %}
 </div>
 
 {% endblock %}
