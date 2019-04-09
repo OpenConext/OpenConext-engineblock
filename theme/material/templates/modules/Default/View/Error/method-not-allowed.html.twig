@@ -1,20 +1,7 @@
-{% extends '@themeLayouts/scripts/default.html.twig' %}
-
-{% block stylesheets %}{% spaceless %}
-  <link href="/stylesheets/error-page.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
-{% endspaceless %}{% endblock %}
+{% extends '@theme/Default/View/Error/error.html.twig' %}
 
 {# Prepare the page title #}
 {% set pageTitle = 'error_405'|trans %}
-{% set hideHeader = true %}
-{% set hideFooter = true %}
-
-{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
-{% block pageHeading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
-
-{% block languageSwitcher %}
-  {{ languageSwitcher.form(locale(), postData()) }}
-{% endblock %}
 
 {% block content %}
 
