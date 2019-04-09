@@ -13,7 +13,7 @@
       <span class="error-title__error-message">{{ 'error_405_desc'|trans({'%requestMethod%': requestMethod, '%uri%': uri,'%allowedMethods%': allowedMethods}) }}</span>
     </div>
   </div>
-  {% include "@theme/Default/View/Error/partial/footer.html.twig" %}
+    {% spaceless %}{% include "@theme/Default/View/Error/partial/footer.html.twig" %}{% endspaceless %}
 </div>
 
 {% endblock %}
