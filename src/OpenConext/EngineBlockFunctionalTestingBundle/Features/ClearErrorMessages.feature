@@ -272,7 +272,7 @@ Feature:
     Then I should see "your session was lost"
 
   Scenario: A session is not started while expected
-    When I go to Engineblock URL "/authentication/sp/metadata"
+    When I go to Engineblock URL "/authentication/sp/process-consent"
     Then I should see "your session was not found"
 
   Scenario: The SP uses the wrong request parameter while using HTTP Redirect binding

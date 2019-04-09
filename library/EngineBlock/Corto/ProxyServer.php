@@ -48,7 +48,9 @@ class EngineBlock_Corto_ProxyServer
     protected $_servicesNotNeedingSession = array(
         'singleSignOnService',
         'unsolicitedSingleSignOnService',
-        'logout'
+        'singleLogoutService',
+        'idpMetadataService',
+        'spMetadataService',
     );
 
     protected $_headers = array();
