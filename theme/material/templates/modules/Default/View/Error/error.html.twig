@@ -18,50 +18,77 @@
 
     <div class="error-container">
 
-        <div class="error-title">
-            <h1 class="error-title__heading">{% block pageTitle %}{% endblock %}</h1>
-            <span class="error-title__error-message">{% block errorMessage %}{% endblock %}</span>
-        </div>
-
-        {% if feedbackInfo is not empty %}
-
-        <div class="horizontal-rule">
-            <hr class="horizontal-rule__line">
-        </div>
-
-        <div class="error-details">
-            <span class="error-details__intro-text">In overeenstemming met wetgeving ten aanzien van gegevensbescherming vragen we je even de tijd te nemen de belangrijkste punten van ons Privacybeleid door te nemen</span>
-            <div class="error-details__feedback-list">
-                {% block feedbackInfo %}
-
-                        {% for name, value in feedbackInfo %}
-                        <div class="feedback-info">
-                            <span class="feedback-info__label">{{ name|trans }}:</span>
-                            <span class="feedback-info__value">{{ value }}</span>
-                        </div>
-                        {% endfor %}
-
-                {% endblock %}
+        <div class="error-container__content">
+            <div class="error-title">
+                <h1 class="error-title__heading">{% block pageTitle %}{% endblock %}</h1>
+                <span class="error-title__error-message">{% block errorMessage %}{% endblock %}</span>
             </div>
-        </div>
 
-        {% endif %}
+            {% if feedbackInfo is not empty %}
 
-        <p>{{ 'error_help_desc'|trans|raw }}</p>
-
-        {% if exception is defined %}
-            <div class="l-overflow">
-                <strong>{{ exception.message }}</strong>
-                <pre>
-                {{ var_dump(exception) }}
-
-                {% if exception.xdebug_message is defined %}
-                    {{ exception.xdebug_message|raw }}
-                {% endif %}
-                </pre>
+            <div class="horizontal-rule">
+                <hr class="horizontal-rule__line">
             </div>
-        {% endif %}
 
+            <div class="error-details">
+                <span class="error-details__intro-text">In overeenstemming met wetgeving ten aanzien van gegevensbescherming vragen we je even de tijd te nemen de belangrijkste punten van ons Privacybeleid door te nemen</span>
+                <div class="error-details__feedback-list">
+                    {% block feedbackInfo %}
+
+                            {% for name, value in feedbackInfo %}
+                            <div class="feedback-info">
+                                <span class="feedback-info__label">{{ name|trans }}:</span>
+                                <span class="feedback-info__value">{{ value }}</span>
+                            </div>
+                            {% endfor %}
+
+                    {% endblock %}
+                </div>
+            </div>
+
+            {% endif %}
+
+            <p>{{ 'error_help_desc'|trans|raw }}</p>
+
+            {% if exception is defined %}
+                <div class="l-overflow">
+                    <strong>{{ exception.message }}</strong>
+                    <pre>
+                    {{ var_dump(exception) }}
+
+                    {% if exception.xdebug_message is defined %}
+                        {{ exception.xdebug_message|raw }}
+                    {% endif %}
+                    </pre>
+                </div>
+            {% endif %}
+
+
+        </div>
+        <footer class="error-container__footer footer">
+            <div class="footer__button-row">
+                <ul class="footer-buttons">
+                    <li class="footer-buttons__link">
+                        <a class="footer-button">
+                            <i class="footer-button__icon fa-wikipedia-w"></i>
+                            <p class="footer-button__text">Surfconext Wiki</p>
+                        </a>
+                    </li>
+                    <li class="footer-buttons__link">
+                        <a class="footer-button">
+                            <i class="footer-button__icon fa-graduation-cap"></i>
+                            <p class="footer-button__text">Helpdesk</p>
+                        </a>
+                    </li>
+                    <li class="footer-buttons__link">
+                        <a class="footer-button">
+                            <i class="footer-button__icon fa-paper-plane"></i>
+                            <p class="footer-button__text">help@surfconext.nl</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </footer>
     </div>
 
 {% endblock %}
