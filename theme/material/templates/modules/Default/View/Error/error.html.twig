@@ -31,7 +31,9 @@
             </div>
 
             <div class="error-details">
-                <span class="error-details__intro-text">In overeenstemming met wetgeving ten aanzien van gegevensbescherming vragen we je even de tijd te nemen de belangrijkste punten van ons Privacybeleid door te nemen</span>
+                <span class="error-details__intro-text">
+                    {{ 'error_feedback_info_intro'|trans }}
+                </span>
                 <div class="error-details__feedback-list">
                     {% block feedbackInfo %}
 
@@ -69,21 +71,21 @@
             <div class="footer__button-row">
                 <ul class="footer-buttons">
                     <li class="footer-buttons__link">
-                        <a class="footer-button">
+                        <a href="{{ 'error_wiki-href'|trans }}" class="footer-button" title="{{ 'error_wiki-link-text'|trans }}">
                             <i class="footer-button__icon fa-wikipedia-w"></i>
-                            <p class="footer-button__text">Surfconext Wiki</p>
+                            <p class="footer-button__text">{{ 'error_wiki-link-text'|trans }}</p>
                         </a>
                     </li>
                     <li class="footer-buttons__link">
-                        <a class="footer-button">
+                        <a href="{{ 'error_help-desk-link-href'|trans }}" class="footer-button" title="{{ 'error_help-desk-link-text'|trans }}">
                             <i class="footer-button__icon fa-graduation-cap"></i>
-                            <p class="footer-button__text">Helpdesk</p>
+                            <p class="footer-button__text">{{ 'error_help-desk-link-text'|trans }}</p>
                         </a>
                     </li>
                     <li class="footer-buttons__link">
-                        <a class="footer-button">
+                        <a href="mailto:{{ 'error_help-desk-email'|trans }}" class="footer-button">
                             <i class="footer-button__icon fa-paper-plane"></i>
-                            <p class="footer-button__text">help@surfconext.nl</p>
+                            <p class="footer-button__text">{{ 'error_help-desk-email-text'|trans }}</p>
                         </a>
                     </li>
                 </ul>
