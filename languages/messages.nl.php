@@ -157,6 +157,14 @@ TXT
     'slidein_read_more' => 'Lees meer',
 
     // Error screens
+    'error_feedback_info_intro' => 'Blijft deze foutmelding terug komen? Maak dan gebruik van de hieronder vermelde hulp opties. Vermeld bij contact via helpdesk of mail de onderstaande code(s):',
+    'error_wiki-href' => 'https://nl.wikipedia.org/wiki/SURFnet',
+    'error_wiki-link-text' => '%suiteName% Wiki',
+    'error_help-desk-href' => 'https://www.surf.nl/over-surf/dienstverlening-support-werkmaatschappijen',
+    'error_help-desk-link-text' => 'Helpdesk',
+    'error_help-desk-email' => 'help@surfconext.nl',
+    'error_help-desk-email-text' => 'help@surfconext.nl',
+
     'error_404'                         => '404 - Pagina niet gevonden',
     'error_404_desc'                    => 'De pagina is niet gevonden.',
     'error_405'                         => 'HTTP methode is niet toegestaan',
