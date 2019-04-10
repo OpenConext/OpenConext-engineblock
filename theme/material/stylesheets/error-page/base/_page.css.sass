@@ -5,6 +5,8 @@ body
   $list: $blue 0%, $light-blue 100%
   background: $medium-blue
   @include gradient(to bottom, $list)
+  +max-width($small)
+    background: $light-grey
 
 *, *:before, *:after
   box-sizing: border-box
