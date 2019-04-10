@@ -77,7 +77,7 @@ branches:
     - 5.x-dev
     - master
     - release/5.8
-    - feature/allow-repost-on-consent
+    - feature/error-page-styling
 
 after_failure:
   - sudo tail -500 /var/log/apache2/error.log
