@@ -66,8 +66,7 @@ before_script:
   - composer install --prefer-dist -n -o
   - app/console cache:clear --env=test
   - npm install --prefix=theme
-  - npm install grunt-cli -g
-  - cd theme && grunt && cd ..
+  - cd theme && npm run build && cd ..
 
 script:
   - ant $COMMAND

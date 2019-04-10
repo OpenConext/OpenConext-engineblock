@@ -1,13 +1,24 @@
 {
-  "plugins": [
-    "transform-es2015-modules-commonjs"
-  ],
-  "presets":[
-    ["@babel/preset-env", {
-      "modules": false,
-      "targets": {
-        "node": "current"
-      }
-    }]
-  ]
+  "env": {
+    "development": {
+      "presets":[
+        ["@babel/preset-env", {
+          "targets": {
+            "browsers": [
+              "last 2 versions"
+            ]
+          }
+        }]
+      ]
+    },
+    "test": {
+      "presets":[
+        ["@babel/preset-env", {
+          "targets": {
+            "node": "current"
+          }
+        }]
+      ]
+    }
+  }
 }
