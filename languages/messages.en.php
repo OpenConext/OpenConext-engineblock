@@ -162,10 +162,13 @@ TXT
     'error_feedback_info_intro' => 'Does this error message recur? Then use the error feedback codes listed below when contacting the help desk or e-mail. Please state the codes below:',
     'error_wiki-href' => 'https://nl.wikipedia.org/wiki/SURFnet',
     'error_wiki-link-text' => '%suiteName% Wiki',
+    'error_wiki-link-text-short' => 'Wiki',
     'error_help-desk-href' => 'https://www.surf.nl/over-surf/dienstverlening-support-werkmaatschappijen',
     'error_help-desk-link-text' => 'Helpdesk',
+    'error_help-desk-link-text-short' => 'Helpdesk',
     'error_help-desk-email' => 'help@surfconext.nl',
     'error_help-desk-email-text' => 'help@surfconext.nl',
+    'error_help-desk-email-text-short' => 'Mail',
 
 
     'error_404'                         => '404 - Page not found',
