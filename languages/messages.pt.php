@@ -141,7 +141,7 @@ TXT
     'slidein_close' => 'Fechar',
     'slidein_read_more' => 'Leia mais',
     // Error screens
-    'error_feedback_info_intro' => 'Does this error message recur? Then use the error feedback codes listed below when contacting the help desk or e-mail. Please state the codes below:',
+    'error_feedback_info_intro' => '<span class="first-line">Does this error message recur?</span> Then use the error feedback codes listed below when contacting the help desk or e-mail. Please state the codes below:',
     'error_wiki-href' => 'https://nl.wikipedia.org/wiki/SURFnet',
     'error_wiki-link-text' => '%suiteName% Wiki',
     'error_wiki-link-text-short' => 'Wiki',
