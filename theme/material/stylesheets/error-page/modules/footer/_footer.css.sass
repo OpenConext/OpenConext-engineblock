@@ -30,6 +30,13 @@
     text-decoration: none
   &__text
     margin-top: 0.5em
+    +max-width($small)
+      display: none
+      font-weight: bold
+    &--small
+      display: none
+      +max-width($small)
+        display: block
   &__icon
     font-family: FontAwesome
     text-align: center
