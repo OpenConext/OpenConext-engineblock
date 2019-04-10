@@ -2,6 +2,11 @@
   &__intro-text
     font-size: $f-normal
     line-height: 1.6em
+    text-align: center
+    span.first-line
+      +max-width($small)
+        font-weight: bold
+        display: block
   &__feedback-list
     width: 100%
     &::after
