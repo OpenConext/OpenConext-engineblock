@@ -10,6 +10,6 @@
         ]
       }
     ],
-    "no-descending-specificity": false
+    "no-descending-specificity": null
   }
 }
