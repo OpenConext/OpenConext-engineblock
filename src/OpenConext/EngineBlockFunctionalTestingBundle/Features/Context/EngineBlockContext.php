@@ -593,7 +593,7 @@ HTML;
         $session = $this->getMinkContext()->getSession();
         $mink = $session->getPage();
         // Grab the ART code from the page with an xpath expression.
-        $result = $mink->find('xpath', '//td[text()="Error Code:"]/../td[2]');
+        $result = $mink->find('xpath', '//span[text()="Error Code:"]/../span[2]');
         if ($result) {
             $artOnPage = $result->getText();
             if ($artOnPage == $artCode) {
