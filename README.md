@@ -29,8 +29,7 @@ To setup the required tooling on the VM, the following steps might be useful:
     cd /opt/openconext/OpenConext-engineblock/theme
     sudo curl --silent --location https://rpm.nodesource.com/setup_11.x | sudo bash -
     sudo yum install nodejs
-    sudo npm install -g grunt grunt-cli
-    (npm install && grunt)
+    (npm install && npm run build)
 
 ## System Requirements
 
