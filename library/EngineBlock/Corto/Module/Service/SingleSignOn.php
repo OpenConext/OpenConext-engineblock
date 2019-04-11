@@ -11,6 +11,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 {
     public function serve($serviceName)
     {
+        throw new Error('Foooooo');
         $application = EngineBlock_ApplicationSingleton::getInstance();
 
         $log = $this->_server->getLogger();
