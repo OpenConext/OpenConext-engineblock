@@ -10,7 +10,7 @@ export class PreviousSelectionStorage {
             return {
                 'idp': idp.entityId,
                 'count': idp.count
-            }
+            };
         });
 
         Cookies.set(this.cookieName, simplifiedPreviousSelection, { expires: 365, path: '/' });

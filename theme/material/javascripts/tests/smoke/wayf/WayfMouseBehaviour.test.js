@@ -14,7 +14,7 @@ describe(
             await Promise.all([
                 page.waitForNavigation(),
                 page.click(selector, clickOptions),
-            ])
+            ]);
         };
 
         /**

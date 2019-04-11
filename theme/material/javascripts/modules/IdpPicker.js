@@ -107,7 +107,7 @@ export class IdpPicker extends AbstractIdpPicker {
 
             this.focusOnIdpByIndex(event.currentTarget.getAttribute('data-idp-list-index'));
             this.selectIdpUnderFocus();
-        }
+        };
     }
 
     updateEditPreviousSelectionClickListener() {
@@ -145,7 +145,7 @@ export class IdpPicker extends AbstractIdpPicker {
             } else {
                 this.updateResultSelectedClickListeners();
             }
-        }
+        };
     }
 
     updateDeleteIdpFromPreviousSelectionClickListeners() {
@@ -161,7 +161,7 @@ export class IdpPicker extends AbstractIdpPicker {
             event.preventDefault();
             const index = event.currentTarget.parentNode.getAttribute('data-idp-list-index');
             this.deleteIdpFromPreviousSelection(index);
-        }
+        };
     }
 
     deleteIdpFromPreviousSelection(index) {
