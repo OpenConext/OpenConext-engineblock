@@ -14,10 +14,10 @@
     "build": "npm run build:clean && npm run build:js && npm run build:css && npm run build:copy",
     "build:clean": "rimraf ../web/images/* ../web/javascripts/* ../web/stylesheets/*",
     "build:js": "mkdir -p ../web/javascripts && browserify material/javascripts/application.js --debug -t [ babelify ] | uglifyjs > ../web/javascripts/application.min.js",
-    "build:css": "mkdir -p ../web/stylesheets && node-sass material/stylesheets/ --error-bell --output-style compressed -o ../web/stylesheets/",
+    "build:css": "mkdir -p ../web/stylesheets && node-sass material/stylesheets/ --include-path=material/stylesheets/theme/${EB_THEME:=surfconext} --error-bell --output-style compressed -o ../web/stylesheets/",
     "build:copy": "mkdir -p ../web/images && copyfiles --verbose --up 2 material/images/* ../web/images/",
     "watch:js": "watchify -t -t [ babelify ] material/javascripts/application.js -o ../web/javascripts/application.min.js -v",
-    "watch:css": "node-sass material/stylesheets/ -w -o ../web/stylesheets/"
+    "watch:css": "node-sass material/stylesheets/ --include-path=material/stylesheets/theme/${EB_THEME:=surfconext} -w -o ../web/stylesheets/"
   },
   "author": "",
   "devDependencies": {
