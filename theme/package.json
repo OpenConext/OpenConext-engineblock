@@ -21,7 +21,7 @@
     "build:copy": "mkdir -p ../web/images && copyfiles --verbose --up 2 material/images/* ../web/images/",
     "watch:js": "watchify material/javascripts/application.js material/javascripts/theme/${EB_THEME:=surfconext}/application.js --poll=100 --debug -t [ babelify ] material/javascripts/application.js material/javascripts/theme/${EB_THEME:=surfconext}/application.js -o ../web/javascripts/application.min.js -v",
     "watch:css": "node-sass -r material/stylesheets/ --include-path=material/stylesheets/theme/${EB_THEME:=surfconext} -w -o ../web/stylesheets/",
-    "release": "npm run lint && npm run build && npm run test"
+    "release": "npm run test && npm run lint && npm run build"
   },
   "author": "",
   "devDependencies": {
