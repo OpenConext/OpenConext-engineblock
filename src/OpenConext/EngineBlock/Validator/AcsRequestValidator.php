@@ -50,7 +50,7 @@ class AcsRequestValidator implements RequestValidator
         if (($requestMethod ===  Request::METHOD_POST && !$request->request->has('SAMLResponse')) ||
             ($requestMethod ===  Request::METHOD_GET && !$request->query->has('SAMLResponse'))) {
             throw new MissingParameterException(
-                sprintf('The parameter "SAMLResponse" is missing on this SAML ACS endpoint')
+                sprintf('The parameter "SAMLResponse" is missing on the SAML ACS request')
             );
         }
 

@@ -50,7 +50,7 @@ class SsoRequestValidator implements RequestValidator
         if (($requestMethod ===  Request::METHOD_POST && !$request->request->has('SAMLRequest')) ||
             ($requestMethod ===  Request::METHOD_GET && !$request->query->has('SAMLRequest'))) {
             throw new MissingParameterException(
-                sprintf('The parameter "SAMLRequest" is missing on this SAML SSO endpoint')
+                sprintf('The parameter "SAMLRequest" is missing on the SAML SSO request')
             );
         }
 
