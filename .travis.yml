@@ -89,5 +89,5 @@ after_failure:
 addons:
   hosts:
     - engine.vm.openconext.org
-  mariadb: '10.1'
+  mariadb: '10.2'
   chrome: stable
