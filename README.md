@@ -21,7 +21,7 @@ See the [UPGRADING.md][upgrading] file
 Please see the [wiki][eb-wiki-theme-development] for information on how to get started with developing themes for OpenConext EngineBlock
 In short, themes require compilation which can be done by running the following commands:
 ```
-    (cd theme && npm install && grunt)
+    (cd theme && npm install && npm run:build)
 ```
 
 To setup the required tooling on the VM, the following steps might be useful:
@@ -42,7 +42,6 @@ To setup the required tooling on the VM, the following steps might be useful:
     - default-collation=utf8_unicode_ci
 * [Manage][manage]
 * NPM (optional for theme deployment)
-* Grunt-cli (optional for theme deployment)
 
 _**Note**:
 While care was given to make EngineBlock as compliant as possible with mainstream Linux distributions,
