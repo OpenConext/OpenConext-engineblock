@@ -49,7 +49,8 @@ class EngineBlock
     {
         return $this->baseUrl
                . sprintf(self::UNSOLICITED_SSO_START_PATH, md5($identityProviderEntityId))
-               . '?sp-entity-id=' . urlencode($serviceProviderEntityId);
+               . '?sp-entity-id=' . urlencode($serviceProviderEntityId)
+               . '&SAMLRequest=test';
     }
 
     public function spEntityId()

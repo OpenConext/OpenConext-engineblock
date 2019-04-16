@@ -23,16 +23,16 @@ use OpenConext\EngineBlock\Exception\MissingParameterException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * The SsoRequestValidator verifies valid saml binding
+ * The AcsRequestValidator verifies valid saml binding
  *
  * Valid requests method / binding combinations for SSO are:
  *
  *  | Request method | Parameter name  |
  *  | -------------- | --------------- |
- *  | GET            | SAMLRequest     |
- *  | POST           | SAMLRequest    |
+ *  | GET            | SAMLResponse    |
+ *  | POST           | SAMLResponse    |
  */
-class SsoRequestValidator implements RequestValidator
+class AcsRequestValidator implements RequestValidator
 {
     private $supportedRequestMethods = [Request::METHOD_GET, Request::METHOD_POST];
 
@@ -43,14 +43,14 @@ class SsoRequestValidator implements RequestValidator
         if (!in_array($requestMethod, $this->supportedRequestMethods)) {
             // Only Redirect binding is supported for Single Sign On
             throw new InvalidRequestMethodException(
-                sprintf('The HTTP request method "%s" is not supported on this SAML SSO endpoint', $requestMethod)
+                sprintf('The HTTP request method "%s" is not supported on this SAML ACS endpoint', $requestMethod)
             );
         }
 
-        if (($requestMethod ===  Request::METHOD_POST && !$request->request->has('SAMLRequest')) ||
-            ($requestMethod ===  Request::METHOD_GET && !$request->query->has('SAMLRequest'))) {
+        if (($requestMethod ===  Request::METHOD_POST && !$request->request->has('SAMLResponse')) ||
+            ($requestMethod ===  Request::METHOD_GET && !$request->query->has('SAMLResponse'))) {
             throw new MissingParameterException(
-                sprintf('The parameter "SAMLRequest" is missing on the SAML SSO request')
+                sprintf('The parameter "SAMLResponse" is missing on the SAML ACS request')
             );
         }
 

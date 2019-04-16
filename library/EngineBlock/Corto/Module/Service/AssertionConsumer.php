@@ -1,6 +1,7 @@
 <?php
 
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
+use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
@@ -70,7 +71,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             // Authentication state needs to be registered here as the debug flow differs from the regular flow,
             // yet the procedures for both are completed when consuming the assertion in the ServiceProviderController
             $identityProvider = new Entity(new EntityId($idp->entityId), EntityType::IdP());
-            $authenticationState = $this->_session->get('authentication_state');
+            $authenticationState = $this->getAuthenticationState();
             $authenticationState->authenticatedAt($requestId, $identityProvider);
 
             $this->_server->redirect(
@@ -111,7 +112,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             $newResponse->setReturn($this->_server->getUrl('processedAssertionConsumerService'));
 
             $identityProvider = new Entity(new EntityId($idp->entityId), EntityType::IdP());
-            $authenticationState = $this->_session->get('authentication_state');
+            $authenticationState = $this->getAuthenticationState();
             $authenticationState->authenticatedAt($inResponseTo, $identityProvider);
 
             $this->_server->getBindingsModule()->send($newResponse, $firstProcessingEntity);
@@ -164,5 +165,13 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         if (in_array($signatureMethod, $this->_server->getConfig('forbiddenSignatureMethods'))) {
             throw new EngineBlock_Corto_Module_Bindings_UnsupportedSignatureMethodException($signatureMethod);
         }
+    }
+
+    /**
+     * @return AuthenticationState
+     */
+    private function getAuthenticationState()
+    {
+        return $this->_session->get('authentication_state');
     }
 }

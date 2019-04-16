@@ -7,16 +7,16 @@ use OpenConext\EngineBlock\Exception\MissingParameterException;
 use PHPUnit_Framework_TestCase as TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class SsoRequestValidatorTest extends TestCase
+class AcsRequestValidatorTest extends TestCase
 {
     /**
-     * @var SsoRequestValidator
+     * @var AcsRequestValidator
      */
     private $validator;
 
     public function setUp()
     {
-        $this->validator = new SsoRequestValidator();
+        $this->validator = new AcsRequestValidator();
 
         // PHPunit does not reset the superglobals on each run.
         $_GET = [];
@@ -28,7 +28,7 @@ class SsoRequestValidatorTest extends TestCase
     {
         // Under the hood, the Binding::getCurrentBinding method is used, which directly reads from the super globals
         $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_GET['SAMLRequest'] = 'loremipsum';
+        $_GET['SAMLResponse'] = 'loremipsum';
 
         $request = new Request($_GET, $_POST, [], [], [], $_SERVER);
 
@@ -39,17 +39,17 @@ class SsoRequestValidatorTest extends TestCase
     {
         // Under the hood, the Binding::getCurrentBinding method is used, which directly reads from the super globals
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST['SAMLRequest'] = 'loremipsum';
+        $_POST['SAMLResponse'] = 'loremipsum';
 
         $request = new Request($_GET, $_POST, [], [], [], $_SERVER);
 
         $this->assertTrue($this->validator->isValid($request));
     }
 
-    public function test_post_binding_is_not_supported()
+    public function test_patch_method_is_not_supported()
     {
         $this->expectException(InvalidRequestMethodException::class);
-        $this->expectExceptionMessage('The HTTP request method "PATCH" is not supported on this SAML SSO endpoint');
+        $this->expectExceptionMessage('The HTTP request method "PATCH" is not supported on this SAML ACS endpoint');
 
         $_SERVER['REQUEST_METHOD'] = 'PATCH';
 
@@ -61,7 +61,7 @@ class SsoRequestValidatorTest extends TestCase
     public function test_missing_saml_argument_on_post()
     {
         $this->expectException(MissingParameterException::class);
-        $this->expectExceptionMessage('The parameter "SAMLRequest" is missing on this SAML SSO endpoint');
+        $this->expectExceptionMessage('The parameter "SAMLResponse" is missing on this SAML ACS endpoint');
 
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
@@ -73,7 +73,7 @@ class SsoRequestValidatorTest extends TestCase
     public function test_missing_saml_argument_on_get()
     {
         $this->expectException(MissingParameterException::class);
-        $this->expectExceptionMessage('The parameter "SAMLRequest" is missing on this SAML SSO endpoint');
+        $this->expectExceptionMessage('The parameter "SAMLResponse" is missing on this SAML ACS endpoint');
 
         $_SERVER['REQUEST_METHOD'] = 'GET';
 

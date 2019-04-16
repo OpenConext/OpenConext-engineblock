@@ -20,14 +20,10 @@ namespace OpenConext\EngineBlockBundle\Controller;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
-use Exception;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\RequestAccessMailer;
 use OpenConext\EngineBlock\Validator\RequestValidator;
 use OpenConext\EngineBlockBridge\ResponseFactory;
-use OpenConext\Value\Saml\Entity;
-use OpenConext\Value\Saml\EntityId;
-use OpenConext\Value\Saml\EntityType;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,19 +64,26 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
      */
     private $requestValidator;
 
+    /**
+     * @var RequestValidator
+     */
+    private $bindingValidator;
+
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
         Twig_Environment $twig,
         LoggerInterface $loggerInterface,
         RequestAccessMailer $requestAccessMailer,
-        RequestValidator $validator,
+        RequestValidator $requestValidator,
+        RequestValidator $bindingValidator,
         AuthenticationStateHelperInterface $authenticationStateHelper
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->twig = $twig;
         $this->logger = $loggerInterface;
         $this->requestAccessMailer = $requestAccessMailer;
-        $this->requestValidator = $validator;
+        $this->requestValidator = $requestValidator;
+        $this->bindingValidator = $bindingValidator;
         $this->authenticationStateHelper = $authenticationStateHelper;
     }
 
@@ -102,6 +105,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
     public function singleSignOnAction(Request $request, $keyId = null, $idpHash = null)
     {
         $this->requestValidator->isValid($request);
+        $this->bindingValidator->isValid($request);
 
         $cortoAdapter = new EngineBlock_Corto_Adapter();
 
@@ -115,13 +119,16 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
     }
 
     /**
+     * @param Request $request
      * @param null|string $keyId
      * @param null|string $idpHash
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     * @throws Exception
      */
-    public function unsolicitedSingleSignOnAction($keyId = null, $idpHash = null)
+    public function unsolicitedSingleSignOnAction(Request $request, $keyId = null, $idpHash = null)
     {
+        $this->requestValidator->isValid($request);
+        $this->bindingValidator->isValid($request);
+
         $cortoAdapter = new EngineBlock_Corto_Adapter();
 
         if ($keyId !== null) {

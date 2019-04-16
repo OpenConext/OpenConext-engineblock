@@ -278,16 +278,26 @@ Feature:
   Scenario: The SP uses the wrong request parameter while using HTTP Redirect binding
    Given the SP "Dummy SP" sends a malformed AuthNRequest
     When I log in at "Dummy SP"
-    Then I should see "No SAMLRequest parameter was found in the HTTP \"GET\" request parameters"
-     And I should see ART code "18993"
+    Then I should see "The parameter \"SAMLRequest\" is missing on the SAML SSO request"
+     And I should see ART code "41946"
 
   Scenario: The SP uses the wrong request parameter while using HTTP Post binding
    Given the SP "Dummy SP" sends a malformed AuthNRequest
      And the SP "Dummy SP" uses the HTTP POST Binding
     When I log in at "Dummy SP"
      And I pass through the SP
-    Then I should see "No SAMLRequest parameter was found in the HTTP \"POST\" request parameters"
-     And I should see ART code "18993"
+    Then I should see "The parameter \"SAMLRequest\" is missing on the SAML SSO request"
+     And I should see ART code "41946"
+
+  Scenario: The acs location is missing the SamlResponse parameter
+    When I post data "{}" to Engineblock URL "/authentication/sp/consume-assertion"
+    Then I should see "he parameter \"SAMLResponse\" is missing on the SAML ACS request"
+    And I should see ART code "16088"
+
+  Scenario: The sso location is missing the SamlRequest parameter
+    When I post data "{}" to Engineblock URL "/authentication/idp/single-sign-on"
+    Then I should see "The parameter \"SAMLRequest\" is missing on the SAML SSO request"
+    And I should see ART code "41946"
 
   Scenario: The IdP sends a SAMLResponse that triggers a NotOnOrAfter violation when behind on time
    Given The clock on the IdP "Dummy Idp" is behind

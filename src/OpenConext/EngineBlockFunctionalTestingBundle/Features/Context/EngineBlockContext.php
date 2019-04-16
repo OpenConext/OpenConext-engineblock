@@ -549,6 +549,17 @@ HTML;
     }
 
     /**
+     * @When /^I post data "([^"]*)" to Engineblock URL "([^"]*)"$/
+     */
+    public function iPostDataToEngineBlockUrl($data, $path)
+    {
+        $postdata = json_decode($data, true);
+        $url = $this->engineBlockDomain . $path;
+
+        $this->getMinkContext()->getSession()->getDriver()->getClient()->request('POST', $url, $postdata);
+    }
+
+    /**
      * @Given /^the attribute aggregator returns no attributes$/
      */
     public function aaReturnsNoAttributes()
