@@ -61,7 +61,7 @@ class SsoRequestValidatorTest extends TestCase
     public function test_missing_saml_argument_on_post()
     {
         $this->expectException(MissingParameterException::class);
-        $this->expectExceptionMessage('The parameter "SAMLRequest" is missing on this SAML SSO endpoint');
+        $this->expectExceptionMessage('The parameter "SAMLRequest" is missing on the SAML SSO request');
 
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
@@ -73,7 +73,7 @@ class SsoRequestValidatorTest extends TestCase
     public function test_missing_saml_argument_on_get()
     {
         $this->expectException(MissingParameterException::class);
-        $this->expectExceptionMessage('The parameter "SAMLRequest" is missing on this SAML SSO endpoint');
+        $this->expectExceptionMessage('The parameter "SAMLRequest" is missing on the SAML SSO request');
 
         $_SERVER['REQUEST_METHOD'] = 'GET';
 
