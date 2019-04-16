@@ -41,7 +41,7 @@ class AuthenticationStateTest extends TestCase
         $authenticationState = new AuthenticationState($authenticationLoopGuard);
 
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('authentication procedure could not be found for given requestId');
+        $this->expectExceptionMessage('The requested authentication procedure with requestId "_00000000-0000-0000-0000-000000000000" couldn\'t be found in the session storage.');
 
         $authenticationState->authenticatedAt('_00000000-0000-0000-0000-000000000000', $identityProvider);
     }
@@ -57,7 +57,7 @@ class AuthenticationStateTest extends TestCase
         $authenticationState = new AuthenticationState($authenticationLoopGuard);
 
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('authentication procedure could not be found for given requestId');
+        $this->expectExceptionMessage('The requested authentication procedure with requestId "_00000000-0000-0000-0000-000000000000" couldn\'t be found in the session storage in order to complete.');
 
         $authenticationState->completeCurrentProcedure('_00000000-0000-0000-0000-000000000000');
     }
@@ -78,7 +78,7 @@ class AuthenticationStateTest extends TestCase
         $authenticationState->startAuthenticationOnBehalfOf($requestId, $serviceProvider);
 
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('authentication procedure could not be found for given requestId');
+        $this->expectExceptionMessage('The requested authentication procedure with requestId "_00000000-0000-0000-0000-000000000000" has already been authenticated.');
 
         $authenticationState->completeCurrentProcedure($requestId);
     }

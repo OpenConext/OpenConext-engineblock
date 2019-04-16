@@ -61,7 +61,7 @@ class AcsRequestValidatorTest extends TestCase
     public function test_missing_saml_argument_on_post()
     {
         $this->expectException(MissingParameterException::class);
-        $this->expectExceptionMessage('The parameter "SAMLResponse" is missing on this SAML ACS endpoint');
+        $this->expectExceptionMessage('The parameter "SAMLResponse" is missing on the SAML ACS request');
 
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
@@ -73,7 +73,7 @@ class AcsRequestValidatorTest extends TestCase
     public function test_missing_saml_argument_on_get()
     {
         $this->expectException(MissingParameterException::class);
-        $this->expectExceptionMessage('The parameter "SAMLResponse" is missing on this SAML ACS endpoint');
+        $this->expectExceptionMessage('The parameter "SAMLResponse" is missing on the SAML ACS request');
 
         $_SERVER['REQUEST_METHOD'] = 'GET';
 

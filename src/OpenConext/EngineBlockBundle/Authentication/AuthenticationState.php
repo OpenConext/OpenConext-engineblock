@@ -92,7 +92,7 @@ final class AuthenticationState implements AuthenticationStateInterface
         if ($currentRequest === null) {
             throw new LogicException(
                 sprintf(
-                    'The requested authentication procedure with requestId (%s) couldn\'t be found in the session storage.',
+                    'The requested authentication procedure with requestId "%s" couldn\'t be found in the session storage.',
                     $requestId
                 )
             );
@@ -113,7 +113,7 @@ final class AuthenticationState implements AuthenticationStateInterface
         if ($currentRequest === null) {
             throw new LogicException(
                 sprintf(
-                    'The requested authentication procedure with requestId (%s) couldn\'t be found in the session storage in order to complete.',
+                    'The requested authentication procedure with requestId "%s" couldn\'t be found in the session storage in order to complete.',
                     $requestId
                 )
             );
@@ -122,7 +122,7 @@ final class AuthenticationState implements AuthenticationStateInterface
         if ($currentRequest->hasBeenAuthenticated()) {
             throw new LogicException(
                 sprintf(
-                    'The requested authentication procedure with requestId (%s) has already been authenticated.',
+                    'The requested authentication procedure with requestId "%s" has already been authenticated.',
                     $requestId
                 )
             );
