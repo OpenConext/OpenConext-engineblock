@@ -3,7 +3,7 @@
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
 use OpenConext\EngineBlock\Metadata\Entity\Assembler\MetadataAssemblerInterface;
-use OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataPushRepository;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
@@ -36,7 +36,7 @@ class ConnectionsController
     private $featureConfiguration;
 
     /**
-     * @var DoctrineMetadataRepository
+     * @var DoctrineMetadataPushRepository
      */
     private $repository;
 
@@ -44,13 +44,13 @@ class ConnectionsController
      * @param MetadataAssemblerInterface $assembler
      * @param AuthorizationCheckerInterface $authorizationChecker
      * @param FeatureConfiguration $featureConfiguration
-     * @param DoctrineMetadataRepository $repository
+     * @param DoctrineMetadataPushRepository $repository
      */
     public function __construct(
         MetadataAssemblerInterface $assembler,
         AuthorizationCheckerInterface $authorizationChecker,
         FeatureConfiguration $featureConfiguration,
-        DoctrineMetadataRepository $repository
+        DoctrineMetadataPushRepository $repository
     ) {
         $this->pushMetadataAssembler           = $assembler;
         $this->authorizationChecker            = $authorizationChecker;
@@ -74,7 +74,7 @@ class ConnectionsController
             );
         }
 
-        ini_set('memory_limit', '265M');
+        ini_set('memory_limit', '256M');
 
         $body = JsonRequestHelper::decodeContentOf($request);
 
@@ -83,6 +83,9 @@ class ConnectionsController
         }
 
         $roles     = $this->pushMetadataAssembler->assemble($body->connections);
+
+        unset($body);
+
         $result    = $this->repository->synchronize($roles);
 
         return new JsonResponse($result);
