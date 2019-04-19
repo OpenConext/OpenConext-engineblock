@@ -154,6 +154,9 @@ $ymlContent = array(
         'attribute_aggregation.username'                          => $config->get('attributeAggregation.username'),
         'attribute_aggregation.password'                          => escapeYamlValue($config->get('attributeAggregation.password')),
 
+        // Metdata push memory limit
+        'engineblock.metadata_push_memory_limit'                  => $config->get('engineblock.metadata_push_memory_limit'),
+
         // Logger settings.
         'logger.channel'                                          => $config->get('logger.conf.name'),
         'logger.fingers_crossed.passthru_level'                   => $config->get('logger.conf.handler.fingers_crossed.conf.passthru_level'),

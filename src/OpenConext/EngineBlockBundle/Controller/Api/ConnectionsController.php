@@ -41,21 +41,29 @@ class ConnectionsController
     private $repository;
 
     /**
+     * @var string
+     */
+    private $memoryLimit;
+
+    /**
      * @param MetadataAssemblerInterface $assembler
      * @param AuthorizationCheckerInterface $authorizationChecker
      * @param FeatureConfiguration $featureConfiguration
      * @param DoctrineMetadataPushRepository $repository
+     * @param string|null $memoryLimit
      */
     public function __construct(
         MetadataAssemblerInterface $assembler,
         AuthorizationCheckerInterface $authorizationChecker,
         FeatureConfiguration $featureConfiguration,
-        DoctrineMetadataPushRepository $repository
+        DoctrineMetadataPushRepository $repository,
+        $memoryLimit
     ) {
         $this->pushMetadataAssembler           = $assembler;
         $this->authorizationChecker            = $authorizationChecker;
         $this->featureConfiguration            = $featureConfiguration;
         $this->repository                      = $repository;
+        $this->memoryLimit                     = $memoryLimit;
     }
 
     public function pushConnectionsAction(Request $request)
@@ -74,7 +82,9 @@ class ConnectionsController
             );
         }
 
-        ini_set('memory_limit', '256M');
+        if ($this->memoryLimit) {
+            ini_set('memory_limit', $this->memoryLimit);
+        }
 
         $body = JsonRequestHelper::decodeContentOf($request);
 
