@@ -2,6 +2,7 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 use OpenConext\EngineBlockBundle\Configuration\Feature;

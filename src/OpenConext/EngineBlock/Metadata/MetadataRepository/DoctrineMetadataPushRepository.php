@@ -43,6 +43,9 @@ class DoctrineMetadataPushRepository
      */
     private $idpMetadata;
 
+
+    const ROLES_TABLE_NAME = 'sso_provider_roles_eb5';
+
     const FIELD_VALUE = 0;
     const FIELD_TYPE = 1;
 
@@ -76,8 +79,8 @@ class DoctrineMetadataPushRepository
         $result = new SynchronizationResult();
 
         $this->connection->transactional(function () use ($roles, $result) {
-            $idpsToBeRemoved = $this->findAllIdentityProviderEntityIds();
-            $spsToBeRemoved = $this->findAllServiceProviderEntityIds();
+            $idpsToBeRemoved = $this->findAllRoleEntityIds($this->idpMetadata);
+            $spsToBeRemoved = $this->findAllRoleEntityIds($this->spMetadata);
 
             foreach ($roles as $roleKey => $role) {
                 if ($role instanceof IdentityProvider) {
@@ -86,7 +89,7 @@ class DoctrineMetadataPushRepository
 
                     if ($index === false) {
                         // The IDP is new: create it.
-                        $this->insertIdentityProvider($role);
+                        $this->insertRole($role, $this->idpMetadata);
                         $result->createdIdentityProviders[] = $role->entityId;
                     } else {
                         // Remove from the list of entity ids so it won't get deleted later on.
@@ -94,7 +97,7 @@ class DoctrineMetadataPushRepository
 
                         // The IDP already exists: update it.
                         $role->id = $index;
-                        $this->updateIdentityProvider($role);
+                        $this->updateRole($role, $this->idpMetadata);
                         $result->updatedIdentityProviders[] = $role->entityId;
                     }
                     unset($roles[$roleKey]);
@@ -106,7 +109,7 @@ class DoctrineMetadataPushRepository
                     $index = array_search($role->entityId, $spsToBeRemoved);
                     if ($index === false) {
                         // The SP is new: create it.
-                        $this->insertServiceProvider($role);
+                        $this->insertRole($role, $this->spMetadata);
                         $result->createdServiceProviders[] = $role->entityId;
                     } else {
                         // Remove from the list of entity ids so it won't get deleted later on.
@@ -114,7 +117,7 @@ class DoctrineMetadataPushRepository
 
                         // The SP already exists: update it.
                         $role->id = $index;
-                        $this->updateServiceProvider($role);
+                        $this->updateRole($role, $this->spMetadata);
                         $result->updatedServiceProviders[] = $role->entityId;
                     }
                     unset($roles[$roleKey]);
@@ -127,14 +130,12 @@ class DoctrineMetadataPushRepository
             }
 
             if ($idpsToBeRemoved) {
-                $this->deleteRolesByEntityIds($idpsToBeRemoved);
-
+                $this->deleteRolesByIds(array_keys($idpsToBeRemoved), $this->idpMetadata);
                 $result->removedIdentityProviders = array_values($idpsToBeRemoved);
             }
 
             if ($spsToBeRemoved) {
-                $this->deleteRolesByEntityIds($spsToBeRemoved);
-
+                $this->deleteRolesByIds(array_keys($spsToBeRemoved), $this->spMetadata);
                 $result->removedServiceProviders = array_values($spsToBeRemoved);
             }
         });
@@ -142,86 +143,50 @@ class DoctrineMetadataPushRepository
         return $result;
     }
 
-    private function insertServiceProvider(ServiceProvider $role)
+    private function insertRole(AbstractRole $role, ClassMetadata $metadata)
     {
         $query = $this->connection->createQueryBuilder()
-            ->insert('sso_provider_roles_eb5');
+            ->insert(self::ROLES_TABLE_NAME);
 
-        $normalized = $this->addInsertQueryParameters($role, $query, $this->spMetadata);
+        $normalized = $this->addInsertQueryParameters($role, $query, $metadata);
 
         $stmt = $this->connection->prepare($query->getSQL());
         $this->bindParameters($normalized, $stmt);
         $stmt->execute();
     }
 
-    private function updateServiceProvider(ServiceProvider $role)
+    private function updateRole(AbstractRole $role, ClassMetadata $metadata)
     {
         $query = $this->connection->createQueryBuilder()
-            ->update('sso_provider_roles_eb5');
+            ->update(self::ROLES_TABLE_NAME);
 
-        $normalized = $this->addUpdateQueryParameters($role, $query, $this->spMetadata);
+        $normalized = $this->addUpdateQueryParameters($role, $query, $metadata);
 
         $stmt = $this->connection->prepare($query->getSQL());
         $this->bindParameters($normalized, $stmt);
         $stmt->execute();
     }
 
-    private function insertIdentityProvider(IdentityProvider $role)
+    private function deleteRolesByIds(array $roles, ClassMetadata $metadata)
     {
         $query = $this->connection->createQueryBuilder()
-            ->insert('sso_provider_roles_eb5');
-
-        $normalized = $this->addInsertQueryParameters($role, $query, $this->idpMetadata);
-
-        $stmt = $this->connection->prepare($query->getSQL());
-        $this->bindParameters($normalized, $stmt);
-        $stmt->execute();
-    }
-
-    private function updateIdentityProvider(IdentityProvider $role)
-    {
-        $query = $this->connection->createQueryBuilder()
-            ->update('sso_provider_roles_eb5');
-
-        $normalized = $this->addUpdateQueryParameters($role, $query, $this->idpMetadata);
-
-        $stmt = $this->connection->prepare($query->getSQL());
-        $this->bindParameters($normalized, $stmt);
-        $stmt->execute();
-    }
-
-    private function deleteRolesByEntityIds(array $roles)
-    {
-        $query = $this->connection->createQueryBuilder()
-            ->delete('sso_provider_roles_eb5')
-            ->where('entity_id IN (:ids)')
+            ->delete(self::ROLES_TABLE_NAME)
+            ->where('id IN (:ids)')
             ->setParameter('ids', $roles, Connection::PARAM_INT_ARRAY);
+
+        $this->addDiscriminatorQuery($query, $metadata);
 
         $result = $query->execute();
         return $result;
     }
 
-    private function findAllIdentityProviderEntityIds()
+    private function findAllRoleEntityIds(ClassMetadata $metadata)
     {
         $query = $this->connection->createQueryBuilder()
             ->select('id, entity_id')
-            ->from('sso_provider_roles_eb5')
-            ->where('type="idp"');
+            ->from(self::ROLES_TABLE_NAME);
 
-        $result = $query->execute();
-        $results = [];
-        foreach ($result->fetchAll() as $record) {
-            $results[$record['id']] = $record['entity_id'];
-        }
-        return $results;
-    }
-
-    private function findAllServiceProviderEntityIds()
-    {
-        $query = $this->connection->createQueryBuilder()
-            ->select('id, entity_id')
-            ->from('sso_provider_roles_eb5')
-            ->where('type="sp"');
+        $this->addDiscriminatorQuery($query, $metadata);
 
         $result = $query->execute();
         $results = [];
@@ -246,7 +211,10 @@ class DoctrineMetadataPushRepository
         foreach (array_keys($normalized) as $id) {
             $query->set($id, ":$id");
         }
-        $query->where('entity_id = :entity_id AND type = :type');
+        $query->where('entity_id = :entity_id');
+
+        $this->addDiscriminatorQuery($query, $metadata);
+
         return $normalized;
     }
 
@@ -255,6 +223,12 @@ class DoctrineMetadataPushRepository
         foreach ($normalized as $id => $value) {
             $statement->bindValue($id, $value[self::FIELD_VALUE], $value[self::FIELD_TYPE]);
         }
+    }
+
+    private function addDiscriminatorQuery(QueryBuilder $queryBuilder, ClassMetadata $metadata)
+    {
+        $queryBuilder->andWhere(sprintf('%s = :%s', $metadata->discriminatorColumn['fieldName'], $metadata->discriminatorColumn['name']))
+            ->setParameter($metadata->discriminatorColumn['name'], $metadata->discriminatorValue, $metadata->discriminatorColumn['type']);
     }
 
     private function normalizeData(AbstractRole $role, ClassMetadata $metadata)
