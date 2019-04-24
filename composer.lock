@@ -2890,16 +2890,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v3.4.21",
+            "version": "v3.4.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "c7a57e0bcc3c57ae697f072b3e862487b6fd0030"
+                "reference": "1b89e7baec9891c323bbf1ec81af77d901fc60c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/c7a57e0bcc3c57ae697f072b3e862487b6fd0030",
-                "reference": "c7a57e0bcc3c57ae697f072b3e862487b6fd0030",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/1b89e7baec9891c323bbf1ec81af77d901fc60c9",
+                "reference": "1b89e7baec9891c323bbf1ec81af77d901fc60c9",
                 "shasum": ""
             },
             "require": {
@@ -3041,7 +3041,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2019-01-06T15:54:26+00:00"
+            "time": "2019-04-17T15:57:27+00:00"
         },
         {
             "name": "twig/extensions",
@@ -3100,16 +3100,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.38.2",
+            "version": "v1.39.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "874adbd9222f928f6998732b25b01b41dff15b0c"
+                "reference": "23e7b6f0cfa1d7ba3de69f30d8e05cf957412fec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/874adbd9222f928f6998732b25b01b41dff15b0c",
-                "reference": "874adbd9222f928f6998732b25b01b41dff15b0c",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/23e7b6f0cfa1d7ba3de69f30d8e05cf957412fec",
+                "reference": "23e7b6f0cfa1d7ba3de69f30d8e05cf957412fec",
                 "shasum": ""
             },
             "require": {
@@ -3124,7 +3124,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.38-dev"
+                    "dev-master": "1.39-dev"
                 }
             },
             "autoload": {
@@ -3162,7 +3162,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2019-03-12T18:45:24+00:00"
+            "time": "2019-04-16T17:12:57+00:00"
         },
         {
             "name": "webmozart/assert",
