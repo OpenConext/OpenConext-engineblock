@@ -1,7 +1,9 @@
 # UPGRADE NOTES
 
-## 5.8 -> 5.9
-The minified `web/javascripts/application.min.js` is removed from VCS therefore you need to build it yourself if you don't use the release tarballs. In the `README.md` you can find how to accomplish this. 
+## 5.9 -> 5.10
+
+### Metadata push memory configurable
+The memory used in php for the metadata push is now configurable with the `engineblock.metadata_push_memory_limit` configuration option.
 
 ## 5.7 -> 5.8
 

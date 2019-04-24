@@ -5,7 +5,8 @@ services:
             - "@engineblock.metadata.push_metadata_assembler"
             - "@security.authorization_checker"
             - "@engineblock.features"
-            - '@engineblock.metadata.repository.doctrine'
+            - "@engineblock.metadata_push.repository.doctrine"
+            - "%engineblock.metadata_push_memory_limit%"
 
     engineblock.controller.api.consent:
         class: OpenConext\EngineBlockBundle\Controller\Api\ConsentController

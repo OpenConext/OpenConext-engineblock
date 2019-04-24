@@ -135,6 +135,12 @@ services:
             - "@engineblock.repository.service_provider"
             - "@engineblock.repository.identity_provider"
 
+    engineblock.metadata_push.repository.doctrine:
+        public: false
+        class: OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataPushRepository
+        arguments:
+            - "@doctrine.orm.entity_manager"
+
     engineblock.metadata.push_metadata_assembler:
         public: false
         class: OpenConext\EngineBlock\Metadata\Entity\Assembler\PushMetadataAssembler
