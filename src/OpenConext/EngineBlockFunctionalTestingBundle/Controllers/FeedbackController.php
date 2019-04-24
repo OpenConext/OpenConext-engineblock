@@ -55,6 +55,7 @@ class FeedbackController extends Controller
     {
         $key = $this->getTemplate($request);
         $feedbackInfo = $this->getFeedbackInfo($request);
+        $parameters = $this->getTemplateParameters($request);
 
         $session = $request->getSession();
 
@@ -65,9 +66,7 @@ class FeedbackController extends Controller
 
         $session->set('feedbackInfo', $feedbackInfo);
 
-        return new Response(
-            $this->twig->render($template), 400
-        );
+        return new Response($this->twig->render($template, $parameters), 200);
     }
 
     /**
@@ -90,15 +89,34 @@ class FeedbackController extends Controller
      */
     private function getFeedbackInfo(Request $request)
     {
-        $feedbackInfo = $request->get('feedback-info');
+        $default = '{
+            "timestamp":"2019-04-15T19:21:06+02:00",
+            "requestId":"5cb4bd3879b49",
+            "userAgent":"Mozilla\/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko\/20100101 Firefox\/66.0",
+            "ipAddress":"192.168.66.98",
+            "artCode":"31914"
+        }';
 
-        if (!$feedbackInfo) {
-            $feedbackInfo = '{"timestamp":"2019-04-15T19:21:06+02:00","requestId":"5cb4bd3879b49","userAgent":"Mozilla\/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko\/20100101 Firefox\/66.0","ipAddress":"192.168.66.98","artCode":"31914"}';
-        }
+        $feedbackInfo = $request->get('feedback-info', $default);
 
         $feedbackInfo = json_decode($feedbackInfo, true);
 
         return $feedbackInfo;
     }
 
+
+    /**
+     * @param Request $request
+     * @return mixed|string
+     */
+    private function getTemplateParameters(Request $request)
+    {
+        $default = '{}';
+
+        $parameters = $request->get('parameters', $default);
+
+        $parameters = json_decode($parameters, true);
+
+        return $parameters;
+    }
 }
