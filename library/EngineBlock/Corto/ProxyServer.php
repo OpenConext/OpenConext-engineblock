@@ -46,6 +46,7 @@ class EngineBlock_Corto_ProxyServer
     );
 
     protected $_servicesNotNeedingSession = array(
+        'debugSingleSignOnService',
         'idpMetadataService',
         'singleLogoutService',
         'singleSignOnService',
