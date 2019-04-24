@@ -174,9 +174,9 @@ Als je deze applicatie wilt gebruiken moet je:<br />
         De dienst die je probeert te benaderen (de &lsquo;Service Provider&rsquo;) is niet toegankelijk via de %suiteName%-infrastructuur.
     </p>',
     'error_session_lost'                => 'Error - Sessie is verloren gegaan',
-    'error_session_lost_desc'           => '<p>Voor deze actie heb je een actieve sessie nodig, maar deze kan niet gevonden worden.<br /><ul><li>Heb je te lang gewacht?</li><li>Sluit je browser en probeer opnieuw, of probeer een andere browser.</li></ul></p>',
+    'error_session_lost_desc'           => '<p>Voor deze actie heb je een actieve sessie nodig, maar deze kan niet gevonden worden. Heb je te lang gewacht? Sluit je browser en probeer opnieuw, of probeer een andere browser.</p>',
     'error_session_not_started'                => 'Error - Sessie is niet gevonden',
-    'error_session_not_started_desc'           => '<p>Voor deze actie heb je een actieve sessie nodig, alleen hebben we géén sessie-cookie ontvangen.<br /><ul><li>De browser moet cookies ondersteune.n</li><li>Gebruik geen bladwijzer of link<./li><li>Sluit je browser en probeer opnieuw, of probeer een andere browser.</li></ul></p>',
+    'error_session_not_started_desc'           => '<p>Voor deze actie heb je een actieve sessie nodig, alleen hebben we géén sessie-cookie ontvangen. De browser moet cookies ondersteunen. Gebruik geen bladwijzer of link. Sluit je browser en probeer opnieuw, of probeer een andere browser.</p>',
     'error_authorization_policy_violation'            => 'Error - Geen toegang',
     'error_authorization_policy_violation_desc'       => '<p>
         Je bent succesvol ingelogd bij jouw %organisationNoun%, maar je kunt geen gebruik maken van deze dienst omdat je geen toegang hebt. Voor deze dienst (de &lsquo;Service Provider&rsquo;) heeft jouw %organisationNoun% met <i>autorisatieregels</i> ingesteld dat alleen bepaalde gebruikers toegang krijgen. Neem contact op met de (IT-)servicedesk van je %organisationNoun% als je vindt dat je wel toegang moet hebben.
