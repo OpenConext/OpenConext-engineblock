@@ -38,3 +38,5 @@ bower_components
 
 ### Test output
 material/javascripts/tests/smoke/screenshots
+material/javascripts/tests/visual-regression/error-page/screenshots
+material/javascripts/tests/visual-regression/error-page/__image_snapshots__
