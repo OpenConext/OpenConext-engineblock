@@ -71,7 +71,7 @@ const errorPages = [
     },
     {
         name: 'unknown-issuer',
-        url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=unknown-issuer&feedback-info={"timestamp":"2019-04-18T19:21:06+02:00","requestId":"5cb4bd3879b49","userAgent":"Mozilla\/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko\/20100101 Firefox\/66.0","ipAddress":"192.168.66.98","artCode":"31914","EntityId":"https://serviceregistry.vm.openconext.org/simplesaml/module.php/saml/sp/metadata.php/default-sp","Destination":"https://serviceregistry.vm.openconext.org/simplesaml/module.php/saml/sp/metadata.php/destination"}'
+        url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=unknown-issuer&feedback-info={"requestId":"5cb4bd3879b49","ipAddress":"192.168.66.98","artCode":"31914","EntityId":"https://serviceregistry.vm.openconext.org/simplesaml/module.php/saml/sp/metadata.php/default-sp","Destination":"https://serviceregistry.vm.openconext.org/simplesaml/module.php/saml/sp/metadata.php/destination"}'
     },
     {
         name: 'unsupported-signature-method',

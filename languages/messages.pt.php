@@ -38,7 +38,6 @@ return $overrides + [
     'identityProvider'      => 'Fornecedor de Identidade',
     'serviceProvider'       => 'Fornecedor de Serviço',
     'serviceProviderName'   => 'Nome do Fornecedor do Serviço',
-    'userAgent'             => 'Agente do Utilizador',
     'ipAddress'             => 'Endereço IP',
     'statusCode'            => 'Código de Estado',
     'artCode'               => 'Código de Erro',

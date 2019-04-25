@@ -219,12 +219,6 @@ class EngineBlock_ApplicationSingleton
      */
     public function collectFeedbackInfo(Exception $exception)
     {
-        if (isset($_SERVER['HTTP_USER_AGENT'])) {
-            $userAgent = $_SERVER['HTTP_USER_AGENT'];
-        } else {
-            $userAgent = 'not supplied';
-        }
-
         $logRequestId = $this->getLogRequestId();
         if ($logRequestId === null) {
             $logRequestId = 'N/A - application not yet bootstrapped';
@@ -235,7 +229,6 @@ class EngineBlock_ApplicationSingleton
         $feedbackInfo = array();
         $feedbackInfo['timestamp'] = date('c');
         $feedbackInfo['requestId'] = $logRequestId;
-        $feedbackInfo['userAgent'] = $userAgent;
         $feedbackInfo['ipAddress'] = $this->getClientIpAddress();
         $feedbackInfo['artCode'] = Art::forException($exception);
 

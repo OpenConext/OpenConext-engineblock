@@ -43,7 +43,6 @@ return $overrides + [
     'identityProvider'      => 'Identity Provider',
     'serviceProvider'       => 'Service Provider',
     'serviceProviderName'   => 'Service Provider Naam',
-    'userAgent'             => 'User Agent',
     'ipAddress'             => 'IP-adres',
     'statusCode'            => 'Statuscode',
     'artCode'               => 'Foutcode',
