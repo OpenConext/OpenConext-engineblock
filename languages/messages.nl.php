@@ -38,14 +38,13 @@ return $overrides + [
     'note_no_script'        => 'Jouw browser ondersteunt geen JavaScript. Je moet op de onderstaande knop drukken om door te gaan.',
 
      // Feedback
-    'timestamp'             => 'Timestamp',
-    'requestId'             => 'Uniek Request ID',
+    'requestId'             => 'UR ID',
     'identityProvider'      => 'Identity Provider',
     'serviceProvider'       => 'Service Provider',
     'serviceProviderName'   => 'Service Provider Naam',
-    'ipAddress'             => 'IP-adres',
+    'ipAddress'             => 'IP',
     'statusCode'            => 'Statuscode',
-    'artCode'               => 'Foutcode',
+    'artCode'               => 'EC',
     'statusMessage'         => 'Statusbericht',
     'attributeName'         => 'Attribuutnaam',
     'attributeValue'        => 'Attribuutwaarde',

@@ -227,7 +227,6 @@ class EngineBlock_ApplicationSingleton
         }
 
         $feedbackInfo = array();
-        $feedbackInfo['timestamp'] = date('c');
         $feedbackInfo['requestId'] = $logRequestId;
         $feedbackInfo['ipAddress'] = $this->getClientIpAddress();
         $feedbackInfo['artCode'] = Art::forException($exception);

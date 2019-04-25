@@ -90,7 +90,6 @@ class FeedbackController extends Controller
     private function getFeedbackInfo(Request $request)
     {
         $default = '{
-            "timestamp":"2019-04-15T19:21:06+02:00",
             "requestId":"5cb4bd3879b49",
             "ipAddress":"192.168.66.98",
             "artCode":"31914"
