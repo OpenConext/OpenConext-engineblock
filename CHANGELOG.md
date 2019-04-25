@@ -5,7 +5,7 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
-## Next release
+## 5.10.0
 
 The 5.10 release focuses on making EngineBlock more robust. The biggest aim is to improve error reporting.
 
@@ -18,6 +18,10 @@ The 5.10 release focuses on making EngineBlock more robust. The biggest aim is t
  * Added further support for Portuguese language #650 (thanks @domgon!)
  * Cleanup rolling update 5.8 compatibility support #683 (this was added in 5.8.3)
  * Update release script #666 #681
+ * Differentiate session exception #657
+ * Add Saml binding validator to acs endpoint #665
+ * Make the memory limit for push configurable #680
+ * Make the metadata push action more efficient #679
 
 ## 5.9.4
 
