@@ -22,7 +22,7 @@ Running  `npm run jest` can also be used from the `theme` folder, this will run 
 
 Note that the `expect-puppeteer` package is used to perform more efficient interactions and assertions on the DOM. Expect-puppeteer states:
 
-> Writing integration test is very hard, especially when you are testing a Single Page Applications. Data are loaded asynchronously and it is difficult to know exactly when an element will be displayed in the page.
+> Writing integration test is very hard, especially when you are testing Single Page Applications. Data are loaded asynchronously and it is difficult to know exactly when an element will be displayed in the page.
   Puppeteer API is great, but it is low level and not designed for integration testing.
   
 More info about this package can be found at their [GitHub](https://github.com/smooth-code/jest-puppeteer/tree/master/packages/expect-puppeteer)
@@ -51,3 +51,21 @@ parameters can be used to manipulate the behaviour of the wayf that is rendered.
 ## Acceptance tests
 The WAYF acceptance tests utilize the `/functional-testing/wayf` endpoint in order to test the correct inner working of
 the WAYF.
+
+## Visual regression tests
+While building the new error page styling, visual regression testing was utilized to take control over visual regressions. The `jest-image-snapshot` <sup>1</sup> package is used to perform these tests.
+
+Running them is as simple as:
+
+`$ ant js-visual-regression-tests`
+
+And to update the snapshots (should be performed after every controlled change):
+
+`$ ant js-visual-regression-tests-update-snapshots`
+
+Snapshots are stored in `__image_snapshots__` directories in a subfolder of the `theme/material/javascripts/tests/visual-regression/` directory, here you will also find diffs if ever your snapshot diverges from the previous snapshot.
+Additional, more user friendly, screenshots are saved respective `screenshots` directories.
+
+:warning: These tests are considered risky tests and are not run on every Travis build. 
+
+[1] https://github.com/americanexpress/jest-image-snapshot
