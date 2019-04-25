@@ -1,4 +1,4 @@
-const timeout = 10000;
+const timeout = 15000;
 const {toMatchImageSnapshot} = require('jest-image-snapshot');
 
 // Extend Jest expect
@@ -101,28 +101,30 @@ const viewports = [
 ];
 
 describe(
-    'Error screens match the previous snapshots',
+    'Verify',
     () => {
         let page;
 
         beforeAll(async () => {
             page = await global.__BROWSER__.newPage();
-            jest.setTimeout(15000);
+            jest.setTimeout(20000);
         }, timeout);
 
         for (const errorPage of errorPages) {
-            it(`Verify ${errorPage.name} no visual regression occurred between test runs`, async () => {
-                await page.goto(errorPage.url);
-                for (const viewport of viewports) {
+            for (const viewport of viewports) {
+                it(`${errorPage.name}-${viewport.width}x${viewport.height}`, async () => {
+
+                    await page.goto(errorPage.url);
                     await page.setViewport(viewport);
                     await page.waitFor(".error-container");
-                    const screenshot = await page.screenshot({path: `./material/javascripts/tests/visual-regression/error-page/screenshots/error-page/${errorPage.name}-${viewport.width}x${viewport.height}.png`});
-                    expect(screenshot).toMatchImageSnapshot()
-                }
-            });
+                    const screenshot = await page.screenshot({
+                        fullPage: true,
+                        path: `./material/javascripts/tests/visual-regression/error-page/screenshots/error-page/${errorPage.name}-${viewport.width}x${viewport.height}.png`
+                    });
+                    expect(screenshot).toMatchImageSnapshot();
+                });
+            }
         }
-
-
     },
     timeout,
 );
