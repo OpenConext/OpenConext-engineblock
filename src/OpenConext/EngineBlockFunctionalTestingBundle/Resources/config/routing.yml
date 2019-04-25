@@ -44,3 +44,8 @@ functional_testing_wayf:
     path: "/wayf"
     defaults:
         _controller: engineblock.functional_test.controller.wayf:wayfAction
+
+functional_testing_feedback:
+    path: "/feedback"
+    defaults:
+        _controller: engineblock.functional_test.controller.feedback:feedbackAction
