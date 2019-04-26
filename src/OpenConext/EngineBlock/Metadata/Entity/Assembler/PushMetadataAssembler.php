@@ -207,6 +207,14 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
             'requesteridRequired'
         );
 
+        $properties += $this->setPathFromObject(
+            array(
+                $connection,
+                'metadata:coin:sign_response'
+            ),
+            'signResponse'
+        );
+
         return Utils::instantiate(
             'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider',
             $properties

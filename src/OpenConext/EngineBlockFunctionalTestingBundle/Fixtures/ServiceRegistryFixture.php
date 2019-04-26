@@ -234,6 +234,13 @@ QUERY;
         return $this;
     }
 
+    public function setSpSignRepsones($entityId, $state = true)
+    {
+        $this->getServiceProvider($entityId)->signResponse = (bool)$state;
+
+        return $this;
+    }
+
     public function setSpEntityTrustedProxy($entityId)
     {
         $this->getServiceProvider($entityId)->isTrustedProxy = true;
@@ -290,6 +297,11 @@ QUERY;
         $this->getServiceProvider($entityId)->attributeReleasePolicy = new AttributeReleasePolicy($rules);
 
         return $this;
+    }
+
+    public function requireASignedResponse($entityId)
+    {
+        $this->getServiceProvider($entityId)->signResponse = true;
     }
 
     public function displayUnconnectedIdpsForSp($entityId, $displayUnconnected = true)

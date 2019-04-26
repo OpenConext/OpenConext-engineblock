@@ -6,6 +6,7 @@ use Behat\Mink\Exception\ExpectationException;
 use Behat\MinkExtension\Context\MinkContext as BaseMinkContext;
 use DOMDocument;
 use DOMXPath;
+use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RuntimeException;
 
 /**
@@ -36,6 +37,7 @@ class MinkContext extends BaseMinkContext
         $document->loadXML($this->getSession()->getPage()->getContent());
 
         $xpathObj = new DOMXPath($document);
+        $xpathObj->registerNamespace('ds', XMLSecurityDSig::XMLDSIGNS);
         $nodeList = $xpathObj->query($xpath);
 
         if (!$nodeList || $nodeList->length === 0) {
@@ -53,6 +55,7 @@ class MinkContext extends BaseMinkContext
         $document->loadXML($this->getSession()->getPage()->getContent());
 
         $xpathObj = new DOMXPath($document);
+        $xpathObj->registerNamespace('ds', XMLSecurityDSig::XMLDSIGNS);
         $nodeList = $xpathObj->query($xpath);
 
         if ($nodeList && $nodeList->length > 0) {

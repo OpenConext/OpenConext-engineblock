@@ -583,8 +583,16 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                     $assertion->setCertificates($sspMessage->getCertificates());
                     $assertion->setSignatureKey($sspMessage->getSignatureKey());
                 }
-                // BWC dictates that we don't sign responses.
-                $messageElement = $sspMessage->toUnsignedXML();
+
+                // According to saml2int 0.2, the assertion element must be directly signed, which we do.
+                // This suffices for most SP's. However, some SP's require the outer Response element to be signed directly.
+                // If configured to do so for that SP, Engineblock will sign the outer response element in addition to the signed Assertion element.
+                // It might make sense in the future to always sign both, if it has been shown that this causes no problems.
+                if ($remoteEntity instanceof ServiceProvider && $remoteEntity->signResponse) {
+                    $messageElement = $sspMessage->toSignedXML();
+                } else {
+                    $messageElement = $sspMessage->toUnsignedXML();
+                }
             }
             else {
                 $messageElement = $sspMessage->toSignedXML();
