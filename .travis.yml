@@ -21,7 +21,7 @@ env:
     - COMMAND="functional-tests-selenium"
     - COMMAND="code-quality-ci"
     - COMMAND="security-tests"
-    - COMMAND="composer-validate"
+    - COMMAND="validate"
   global:
     - SYMFONY_ENV=test
     - ENGINEBLOCK_ENV=test

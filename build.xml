@@ -6,10 +6,11 @@
     <target name="functional-tests" depends="api-functional-tests,behat-travis" />
     <target name="functional-tests-wip" depends="behat-travis-wip" />
     <target name="functional-tests-selenium" depends="behat-travis-selenium"/>
-    <target name="code-quality-ci" depends="test-suites,code-quality"/>
+    <target name="code-quality-ci" depends="test-suites,code-quality,npm-lint"/>
     <target name="code-quality" depends="php-lint,phpmd,phpcs,phpcs-legacy"/>
-    <target name="security-tests" depends="security-checker" />
+    <target name="security-tests" depends="security-checker,npm-audit" />
     <target name="test-suites" depends="eb4-tests,unit-tests,integration-tests,js-unit-tests,js-smoke-tests"/>
+    <target name="validate" depends="composer-validate"/>
 
     <target name="install-git-hooks"
             description="installs the pre-commit and pre-push hooks for git">
@@ -126,6 +127,18 @@
     <target name="security-checker" description="Check for vulnerable dependencies with SensioLabs Security Checker">
         <exec dir="${basedir}" executable="vendor/bin/security-checker" failonerror="true">
             <arg value="security:check" />
+        </exec>
+    </target>
+
+    <target name="npm-lint" description="Performs the linting of css and js">
+        <exec dir="${basedir}/theme" executable="npm" failonerror="true">
+            <arg line="run lint"/>
+        </exec>
+    </target>
+
+    <target name="npm-audit" description="Run npm audit">
+        <exec dir="${basedir}/theme" executable="npm" failonerror="true">
+            <arg line="run audit"/>
         </exec>
     </target>
 
