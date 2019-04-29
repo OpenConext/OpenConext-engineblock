@@ -1,13 +1,10 @@
 .feedback-info
   background: $light-grey
   border-radius: 2px
-  float: left
-  margin: 0.5em
   overflow: hidden
   padding: 0.5em
   text-overflow: ellipsis
   white-space: nowrap
-  width: 30%
 
   +max-width($small)
     float: none
@@ -23,3 +20,18 @@
     color: $blue
     font-size: $f-small
     font-weight: bold
+
+  &--destination,
+  &--identityprovider,
+  &--idp-hash,
+  &--serviceprovider,
+  &--serviceprovidername
+    +min-width($small + 1)
+      grid-column-end: span 2
+      order: -1
+
+  &--entityid,
+  &--statusmessage
+    +min-width($small + 1)
+      grid-column-end: span 3
+      order: -1

@@ -9,7 +9,8 @@
         display: block
   &__feedback-list
     width: 100%
-    &::after
-      content: ""
-      display: block
-      clear: both
+    +min-width($small + 1)
+      display: grid
+      grid-auto-flow: row dense
+      grid-gap: 0.5em
+      grid-template-columns: repeat(3, 1fr)
