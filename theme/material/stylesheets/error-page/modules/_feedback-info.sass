@@ -1,10 +1,13 @@
 .feedback-info
   background: $light-grey
   border-radius: 2px
-  margin: 0.5em
-  padding: 0.5em
-  width: 30%
   float: left
+  margin: 0.5em
+  overflow: hidden
+  padding: 0.5em
+  text-overflow: ellipsis
+  white-space: nowrap
+  width: 30%
 
   +max-width($small)
     float: none
@@ -20,4 +23,3 @@
     color: $blue
     font-size: $f-small
     font-weight: bold
-    overflow: hidden
