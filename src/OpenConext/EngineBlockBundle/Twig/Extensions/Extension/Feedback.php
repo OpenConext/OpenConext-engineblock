@@ -19,7 +19,8 @@
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use EngineBlock_ApplicationSingleton;
-use Symfony\Component\HttpFoundation\RequestStack;
+use OpenConext\EngineBlockBundle\Value\FeedbackInformation;
+use OpenConext\EngineBlockBundle\Value\FeedbackInformationMap;
 use Twig\TwigFunction;
 use Twig_Extension;
 
@@ -49,6 +50,9 @@ class Feedback extends Twig_Extension
         $this->application->flushLog($message);
     }
 
+    /**
+     * @return FeedbackInformationMap
+     */
     public function getFeedbackInfo()
     {
         return $this->retrieveFeedbackInfo();
@@ -57,11 +61,13 @@ class Feedback extends Twig_Extension
     /**
      * Loads the feedbackInfo from the session and filters out empty valued entries.
      *
-     * @return array|mixed
+     * @return FeedbackInformationMap
      */
     private function retrieveFeedbackInfo()
     {
         $feedbackInfo = $this->application->getSession()->get('feedbackInfo');
+
+        $feedbackInfoMap = new FeedbackInformationMap();
 
         // Remove the empty valued feedback info entries.
         if (!empty($feedbackInfo)) {
@@ -69,14 +75,12 @@ class Feedback extends Twig_Extension
                 if (empty($value)) {
                     unset($feedbackInfo[$key]);
                 }
+                $feedbackInfoMap->add(new FeedbackInformation($key, $value));
             }
-        } else {
-            $feedbackInfo = [];
         }
 
-        // Sort the feedback info on key
-        ksort($feedbackInfo);
+        $feedbackInfoMap->sort();
 
-        return $feedbackInfo;
+        return $feedbackInfoMap;
     }
 }
