@@ -32,13 +32,11 @@ throw $e;
       And I give my consent
     Then I should see "Authorization Incorrect"
       And I should see "This user does not have access to desired service. Contact the system administrator."
-      And I should see "Timestamp:"
-      And I should see "Unique Request Id:"
-      And I should see "User Agent:"
-      And I should see "IP Address:"
-      And I should see "Service Provider:"
-      And I should see "Service Provider Name:"
-      And I should see "Identity Provider:"
+      And I should see "UR ID:"
+      And I should see "IP:"
+      And I should see "EC:"
+      And I should see "SP:"
+      And I should see "SP Name:"
 
 #
 #  Scenario: Sp and IdP attribute manipulation exception

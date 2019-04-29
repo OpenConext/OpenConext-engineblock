@@ -74,6 +74,7 @@ class Feedback extends Twig_Extension
             foreach ($feedbackInfo as $key => $value) {
                 if (empty($value)) {
                     unset($feedbackInfo[$key]);
+                    continue;
                 }
                 $feedbackInfoMap->add(new FeedbackInformation($key, $value));
             }

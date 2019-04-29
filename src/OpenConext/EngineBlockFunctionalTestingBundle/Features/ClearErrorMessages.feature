@@ -22,14 +22,12 @@ Feature:
      Then I should see "Identity Provider error"
       And I should see "InvalidNameIDPolicy"
       And I should see "NameIdPolicy is invalid"
-      And I should see "Timestamp:"
-      And I should see "Unique Request Id:"
-      And I should see "User Agent:"
-      And I should see "IP Address:"
-      And I should see "Error Code:"
-      And I should see "Service Provider:"
-      And I should see "Service Provider Name:"
-      And I should see "Identity Provider:"
+      And I should see "UR ID:"
+      And I should see "IP:"
+      And I should see "EC:"
+      And I should see "SP:"
+      And I should see "SP Name:"
+      And I should see "IdP:"
 
     Scenario: I log in at my Identity Provider, but the IdP gives a message that I don't have access.
     Given the IdP is configured to always return Responses with StatusCode Responder/RequestDenied
@@ -40,13 +38,12 @@ Feature:
      Then I should see "Identity Provider error"
       And I should see "RequestDenied"
       And I should see "Invalid IP range"
-      And I should see "Timestamp:"
-      And I should see "Unique Request Id:"
-      And I should see "User Agent:"
-      And I should see "IP Address:"
-      And I should see "Service Provider:"
-      And I should see "Service Provider Name:"
-      And I should see "Identity Provider:"
+      And I should see "UR ID:"
+      And I should see "IP:"
+      And I should see "EC:"
+      And I should see "SP:"
+      And I should see "SP Name:"
+      And I should see "IdP:"
 
     Scenario: I log in at my Identity Provider, but I don't have access.
     Given the IdP is configured to always return Responses with StatusCode Responder/RequestDenied
@@ -55,13 +52,12 @@ Feature:
       And I pass through the IdP
      Then I should see "Identity Provider error"
       And I should see "RequestDenied"
-      And I should see "Timestamp:"
-      And I should see "Unique Request Id:"
-      And I should see "User Agent:"
-      And I should see "IP Address:"
-      And I should see "Service Provider:"
-      And I should see "Service Provider Name:"
-      And I should see "Identity Provider:"
+      And I should see "UR ID:"
+      And I should see "IP:"
+      And I should see "EC:"
+      And I should see "SP:"
+      And I should see "SP Name:"
+      And I should see "IdP:"
 
     Scenario: I log in at my Identity Provider, that does not send assertions, but they give a message that I don't have access.
     Given the IdP is configured to always return Responses with StatusCode Responder/RequestDenied
@@ -72,13 +68,12 @@ Feature:
       And I pass through the IdP
      Then I should see "Identity Provider error"
       And I should see "RequestDenied"
-      And I should see "Timestamp:"
-      And I should see "Unique Request Id:"
-      And I should see "User Agent:"
-      And I should see "IP Address:"
-      And I should see "Service Provider:"
-      And I should see "Service Provider Name:"
-      And I should see "Identity Provider:"
+      And I should see "UR ID:"
+      And I should see "IP:"
+      And I should see "EC:"
+      And I should see "SP:"
+      And I should see "SP Name:"
+      And I should see "IdP:"
 
     Scenario: I log in at my Identity Provider, that does not send assertions, but I don't have access.
     Given the IdP is configured to always return Responses with StatusCode Responder/RequestDenied
@@ -88,13 +83,12 @@ Feature:
       And I pass through the IdP
      Then I should see "Identity Provider error"
       And I should see "RequestDenied"
-      And I should see "Timestamp:"
-      And I should see "Unique Request Id:"
-      And I should see "User Agent:"
-      And I should see "IP Address:"
-      And I should see "Service Provider:"
-      And I should see "Service Provider Name:"
-      And I should see "Identity Provider:"
+      And I should see "UR ID:"
+      And I should see "IP:"
+      And I should see "EC:"
+      And I should see "SP:"
+      And I should see "SP Name:"
+      And I should see "IdP:"
 
   Scenario: I log in at my Identity Provider, but it has changed (private/public) keys without notifying OpenConext
     Given the IdP uses the private key at "src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/keys/rolled-over.key"
@@ -103,48 +97,44 @@ Feature:
       And I pass through EngineBlock
       And I pass through the IdP
      Then I should see "Invalid Identity Provider response"
-      And I should see "Timestamp:"
-      And I should see "Unique Request Id:"
-      And I should see "User Agent:"
-      And I should see "IP Address:"
-      And I should see "Service Provider:"
-      And I should see "Service Provider Name:"
-      And I should see "Identity Provider:"
+      And I should see "UR ID:"
+      And I should see "IP:"
+      And I should see "EC:"
+      And I should see "SP:"
+      And I should see "SP Name:"
+      And I should see "IdP:"
 
   Scenario: I want to log on, but this Service Provider may not access any Identity Providers
     When I log in at "Unconnected SP"
     Then I should see "No Identity Providers found"
-     And I should see "Timestamp:"
-     And I should see "Unique Request Id:"
-     And I should see "User Agent:"
-     And I should see "IP Address:"
-     And I should see "Service Provider:"
-     And I should see "Service Provider Name:"
-     And I should not see "Identity Provider:"
+     And I should see "UR ID:"
+     And I should see "IP:"
+     And I should see "EC:"
+     And I should see "SP:"
+     And I should see "SP Name:"
+     And I should not see "IdP:"
 
   Scenario: I want to log on but this Service Provider is not yet registered at OpenConext
     When I log in at "Unregistered SP"
     Then I should see "Unknown service"
-     And I should see "Timestamp:"
-     And I should see "Unique Request Id:"
-     And I should see "User Agent:"
-     And I should see "IP Address:"
-     And I should see "EntityID:"
-     And I should not see "Identity Provider:"
+     And I should see "UR ID:"
+     And I should see "IP:"
+     And I should see "EC:"
+     And I should see "SP:"
+     And I should not see "IdP:"
 
   Scenario: An Identity Provider misrepresents its entityId and is thus not recognized by EB
     Given the IdP thinks its EntityID is "https://wrong.example.edu/metadata"
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Unknown service"
-      And I should see "Timestamp:"
-      And I should see "Unique Request Id:"
-      And I should see "User Agent:"
-      And I should see "IP Address:"
-      And I should see "Service Provider:"
-      And I should see "Service Provider Name:"
-      And I should see "Identity Provider:"
+     Then I should see "Error - Unknown service"
+      And I should see "UR ID:"
+      And I should see "IP:"
+      And I should see "EC:"
+      And I should see "SP:"
+      And I should see "SP Name:"
+      And I should see "IdP:"
       And I should see "https://wrong.example.edu/metadata"
 
   Scenario: An Identity Provider tries to send a response over HTTP-Redirect, violating the spec
@@ -161,13 +151,12 @@ Feature:
       And I pass through the IdP
      Then I should see "Missing required fields"
       And I should see "UID"
-      And I should see "Timestamp:"
-      And I should see "Unique Request Id:"
-      And I should see "User Agent:"
-      And I should see "IP Address:"
-      And I should see "Service Provider:"
-      And I should see "Service Provider Name:"
-      And I should see "Identity Provider:"
+      And I should see "UR ID:"
+      And I should see "IP:"
+      And I should see "EC:"
+      And I should see "SP:"
+      And I should see "SP Name:"
+      And I should see "IdP:"
 
   Scenario: An Identity Provider sends a response without a uid
     Given the IdP does not send the attribute named "urn:mace:dir:attribute-def:uid"
@@ -176,24 +165,22 @@ Feature:
       And I pass through the IdP
      Then I should see "Missing required fields"
       And I should see "schacHomeOrganization"
-      And I should see "Timestamp:"
-      And I should see "Unique Request Id:"
-      And I should see "User Agent:"
-      And I should see "IP Address:"
-      And I should see "Service Provider:"
-      And I should see "Service Provider Name:"
-      And I should see "Identity Provider:"
+      And I should see "UR ID:"
+      And I should see "IP:"
+      And I should see "EC:"
+      And I should see "SP:"
+      And I should see "SP Name:"
+      And I should see "IdP:"
 
   Scenario: An SP sends a AuthnRequest transparently for an IdP that doesn't exist
      When I log in at SP "Dummy SP" which attempts to preselect nonexistent IdP "DoesNotExist"
      Then the url should match "/authentication/feedback/unknown-preselected-idp"
       And I should see "No connection between organisation and service"
-      And I should see "Timestamp:"
-      And I should see "Unique Request Id:"
-      And I should see "User Agent:"
-      And I should see "IP Address:"
-      And I should see "Service Provider:"
-      And I should see "Service Provider Name:"
+      And I should see "UR ID:"
+      And I should see "IP:"
+      And I should see "EC:"
+      And I should see "SP:"
+      And I should see "SP Name:"
 
   Scenario: I log in at my Identity Provider, that has the 'block_user_on_violation' feature activated, and has an invalid schacHomeOrganization attribute.
     Given feature "eb.block_user_on_violation" is enabled
@@ -205,13 +192,11 @@ Feature:
     And I give my consent
   Then I should see "Attribute value not allowed"
     And I should see "Your organisation used a value for attribute schacHomeOrganization (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
-    And I should see "Timestamp:"
-    And I should see "Unique Request Id:"
-    And I should see "User Agent:"
-    And I should see "IP Address:"
-    And I should see "Service Provider:"
-    And I should see "Service Provider Name:"
-    And I should see "Identity Provider:"
+    And I should see "UR ID:"
+    And I should see "IP:"
+    And I should see "EC:"
+    And I should see "SP:"
+    And I should see "SP Name:"
     And I should see ART code "39211"
 
   Scenario: I log in at my Identity Provider, that has the 'block_user_on_violation' feature activated, and has a valid schacHomeOrganization attribute.
@@ -236,13 +221,11 @@ Feature:
       And I give my consent
     Then I should see "Attribute value not allowed"
       And I should see "Your organisation used a value for attribute eduPersonPrincipalName (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
-      And I should see "Timestamp:"
-      And I should see "Unique Request Id:"
-      And I should see "User Agent:"
-      And I should see "IP Address:"
-      And I should see "Service Provider:"
-      And I should see "Service Provider Name:"
-      And I should see "Identity Provider:"
+      And I should see "UR ID:"
+      And I should see "IP:"
+      And I should see "EC:"
+      And I should see "SP:"
+      And I should see "SP Name:"
       And I should see ART code "25138"
 
   Scenario: I log in at my Identity Provider, that has the 'block_user_on_violation' feature activated, and has a valid eduPersonPrincipalName attribute.
