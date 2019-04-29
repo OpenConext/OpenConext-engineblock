@@ -34,9 +34,9 @@ return $overrides + [
     'note_no_script'        => 'Visto que o seu browser não suporta JavaScript, deve pressionar no botão em baixo para prosseguir.',
     // Feedback
     'requestId'             => 'UR ID',
-    'identityProvider'      => 'Fornecedor de Identidade',
-    'serviceProvider'       => 'Fornecedor de Serviço',
-    'serviceProviderName'   => 'Nome do Fornecedor do Serviço',
+    'identityProvider'      => 'IdP',
+    'serviceProvider'       => 'SP',
+    'serviceProviderName'   => 'SP Name',
     'ipAddress'             => 'IP',
     'statusCode'            => 'Código de Estado',
     'artCode'               => 'EC',

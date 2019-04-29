@@ -39,9 +39,9 @@ return $overrides + [
 
      // Feedback
     'requestId'             => 'UR ID',
-    'identityProvider'      => 'Identity Provider',
-    'serviceProvider'       => 'Service Provider',
-    'serviceProviderName'   => 'Service Provider Naam',
+    'identityProvider'      => 'IdP',
+    'serviceProvider'       => 'SP',
+    'serviceProviderName'   => 'SP Name',
     'ipAddress'             => 'IP',
     'statusCode'            => 'Statuscode',
     'artCode'               => 'EC',
