@@ -1,16 +1,12 @@
 /* stylelint-disable font-family-no-missing-generic-family-keyword */
 .error-page-footer-buttons
-  width: 100%
-  display: block
-  padding-top: 2em
-  background-color: white
-  border-radius: 0 0 5px 5px
+  margin-bottom: 25em
 
   &__container
+    border-radius: 0 0 5px 5px
     background: $blue
     text-align: center
     width: 100%
-    border-radius: 0 0 5px 5px
     overflow: hidden
 
   &__row
@@ -23,7 +19,6 @@
   display: inline-block
   border-right: 1px solid white
   text-align: center
-  padding: 1.5em 2em
 
   &:first-child
     margin-left: -2px
@@ -35,6 +30,9 @@
   &__link
     color: white
     text-decoration: none
+    width: 100%
+    display: inline-block
+    padding: 1.5em 2em
 
     &:hover
       text-decoration: none
@@ -54,3 +52,12 @@
     text-align: center
     font-size: $f-large
     font-weight: bold
+
+    &.fa-wikipedia-w
+      background: white
+      border-radius: 19px
+      color: $blue
+      display: inline-block
+      font-size: 12px
+      height: 19px
+      width: 19px

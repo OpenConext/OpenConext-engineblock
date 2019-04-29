@@ -1,7 +1,7 @@
 <footer class="error-page-footer-buttons">
     <div class="error-page-footer-buttons__container">
         <div class="error-page-footer-buttons__row">
-            {% if showWikiButton is not empty and showWikiButton %}
+            {% if showWikiButton is defined and showWikiButton %}
             <div class="footer-button">
                 <a href="{{ 'error_wiki-href'|trans }}" target="_blank" class="footer-button__link" title="{{ 'error_wiki-link-text'|trans }}">
                     <i class="footer-button__icon fa-wikipedia-w"></i>
@@ -11,13 +11,13 @@
             </div>
             {%  endif %}
             <div class="footer-button">
-                <a href="{{ 'error_help-desk-link-href'|trans }}" target="_blank" class="footer-button__link" title="{{ 'error_help-desk-link-text'|trans }}">
+                <a href="{{ 'error_help-desk-href'|trans }}" target="_blank" class="footer-button__link" title="{{ 'error_help-desk-link-text'|trans }}">
                     <i class="footer-button__icon fa-graduation-cap"></i>
                     <p class="footer-button__text">{{ 'error_help-desk-link-text'|trans }}</p>
                     <p class="footer-button__text footer-button__text--small">{{ 'error_help-desk-link-text-short'|trans }}</p>
                 </a>
             </div>
-            {% if supportEmail is not empty %}
+            {% if supportEmail is defined %}
             <div class="footer-button">
                 <a href="mailto:{{ supportEmail }}" target="_blank" class="footer-button__link">
                     <i class="footer-button__icon fa-paper-plane"></i>
