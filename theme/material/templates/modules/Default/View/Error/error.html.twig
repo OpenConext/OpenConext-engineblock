@@ -49,7 +49,7 @@
                             {% for feedbackInfo in feedbackInfoMap %}
                             <div class="feedback-info feedback-info--{{ feedbackInfo.attrSafeKey }}">
                                 <span class="feedback-info__label">{{ feedbackInfo.key|trans }}:</span>
-                                <span class="feedback-info__value">{{ feedbackInfo }}</span>
+                                <span class="feedback-info__value" title="{{ feedbackInfo|escape('html_attr') }}">{{ feedbackInfo }}</span>
                             </div>
                             {% endfor %}
 
