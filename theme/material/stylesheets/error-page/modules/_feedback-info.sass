@@ -9,7 +9,7 @@
   +max-width($small)
     float: none
     margin: 0.5em auto
-    width: 75%
+    width: 95%
 
   &__label
     display: inline-block
@@ -21,7 +21,6 @@
     font-size: $f-small
     font-weight: bold
 
-  &--destination,
   &--identityprovider,
   &--idp-hash,
   &--serviceprovider,
@@ -30,6 +29,7 @@
       grid-column-end: span 2
       order: -1
 
+  &--destination,
   &--entityid,
   &--statusmessage
     +min-width($small + 1)
