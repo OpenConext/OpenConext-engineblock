@@ -1,5 +1,8 @@
 .background
-  position: absolute
+  position: fixed
+  $list: $blue, $light-blue
+  background: $medium-blue
+  @include gradient(to bottom, $list)
   bottom: 0
   width: 100%
   height: 100%
