@@ -108,6 +108,13 @@ class ServiceProvider extends AbstractRole
     public $requesteridRequired;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="sign_response", type="boolean")
+     */
+    public $signResponse;
+
+    /**
      * @var null|RequestedAttribute[]
      *
      * @ORM\Column(name="requested_attributes", type="array")
@@ -166,6 +173,7 @@ class ServiceProvider extends AbstractRole
      * @param bool $skipDenormalization
      * @param bool $policyEnforcementDecisionRequired
      * @param bool $requesteridRequired
+     * #param bool $signResponse
      * @param string $manipulation
      * @param AttributeReleasePolicy $attributeReleasePolicy
      * @param string|null $supportUrlEn
@@ -212,6 +220,7 @@ class ServiceProvider extends AbstractRole
         $skipDenormalization = false,
         $policyEnforcementDecisionRequired = false,
         $requesteridRequired = false,
+        $signResponse = false,
         $manipulation = '',
         AttributeReleasePolicy $attributeReleasePolicy = null,
         $supportUrlEn = null,
@@ -259,6 +268,7 @@ class ServiceProvider extends AbstractRole
         $this->skipDenormalization = $skipDenormalization;
         $this->policyEnforcementDecisionRequired = $policyEnforcementDecisionRequired;
         $this->requesteridRequired = $requesteridRequired;
+        $this->signResponse = $signResponse;
         $this->supportUrlEn = $supportUrlEn;
         $this->supportUrlNl = $supportUrlNl;
     }

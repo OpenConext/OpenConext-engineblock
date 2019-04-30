@@ -237,6 +237,7 @@
             <arg line="-c ./tests/behat.yml"/>
             <arg line="--suite ${suite} -vv"/>
             <arg line="--format progress"/>
+            <arg line="--strict"/>
         </exec>
     </target>
 

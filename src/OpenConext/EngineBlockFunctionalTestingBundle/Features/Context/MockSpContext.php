@@ -546,6 +546,32 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^SP "([^"]*)" requires a signed response$/
+     */
+    public function spRequiresASignedResponse($spName)
+    {
+        /** @var MockServiceProvider $mockSp */
+        $mockSp = $this->mockSpRegistry->get($spName);
+
+        $this->serviceRegistryFixture
+            ->setSpSignRepsones($mockSp->entityId())
+            ->save();
+    }
+
+    /**
+     * @Given /^SP "([^"]*)" does not require a signed response$/
+     */
+    public function spDoesNotRequireASignedResponse($spName)
+    {
+        /** @var MockServiceProvider $mockSp */
+        $mockSp = $this->mockSpRegistry->get($spName);
+
+        $this->serviceRegistryFixture
+            ->setSpSignRepsones($mockSp->entityId(), false)
+            ->save();
+    }
+
+    /**
      * @Given /^SP "([^"]*)" is configured to display unconnected IdPs in the WAYF$/
      * @param string $spName
      */

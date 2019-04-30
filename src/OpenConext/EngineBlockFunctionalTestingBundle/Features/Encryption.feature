@@ -83,3 +83,25 @@ Feature:
       And I give my consent
       And I pass through EngineBlock
      Then the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+
+  Scenario: EngineBlock supports not signed responses
+    Given the SP uses the HTTP POST Binding
+    And SP "Dummy SP" does not require a signed response
+    When I log in at "Dummy SP"
+    And I pass through the SP
+    And I pass through EngineBlock
+    And I pass through the IdP
+    And I give my consent
+    And I pass through EngineBlock
+    Then the response should not match xpath '//samlp:Response/ds:Signature/ds:SignedInfo/ds:SignatureMethod'
+
+  Scenario: EngineBlock supports signed responses
+    Given the SP uses the HTTP POST Binding
+    And SP "Dummy SP" requires a signed response
+    When I log in at "Dummy SP"
+    And I pass through the SP
+    And I pass through EngineBlock
+    And I pass through the IdP
+    And I give my consent
+    And I pass through EngineBlock
+    Then the response should match xpath '//samlp:Response/ds:Signature/ds:SignedInfo/ds:SignatureMethod'
