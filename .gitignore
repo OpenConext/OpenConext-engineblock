@@ -16,3 +16,7 @@ bin/ignore_me.php
 /app/config/config_local.yml
 .idea
 /languages/overrides.*.php
+/theme/node_modules
+/theme/.sass-cache
+/theme/**/screenshots
+/theme/**/__image_snapshots__
