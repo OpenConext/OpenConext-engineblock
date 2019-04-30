@@ -2,30 +2,26 @@
 
 namespace OpenConext\EngineBlockBundle\EventListener;
 
-use EngineBlock_ApplicationSingleton;
 use EngineBlock_Exception;
 use OpenConext\EngineBlockBridge\ErrorReporter;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Twig_Environment;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * The Dispatcher in the old code wrapped everything in a try/catch to allow for graceful recovery.
  * This listener mimics that behaviour. When phasing out corto, this listener should be replaced by
  * Symfony style custom error pages
  * @see https://www.pivotaltracker.com/story/show/107565968
+ *
+ * In a later iteration, a custom error page implementation has been implemented. This to allow
+ * reloading of the error page. Otherwise, it would be hard to match the 'Unique Request Id'
+ * displayed on the error page with the actual request id of the error.
+ * @see https://www.pivotaltracker.com/story/show/164076480
  */
 class FallbackExceptionListener
 {
-    /**
-     * @var EngineBlock_ApplicationSingleton
-     */
-    private $engineBlockApplicationSingleton;
-    /**
-     * @var Twig_Environment
-     */
-    private $twig;
     /**
      * @var LoggerInterface
      */
@@ -34,28 +30,36 @@ class FallbackExceptionListener
      * @var ErrorReporter
      */
     private $errorReporter;
+    /**
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
 
     /**
-     * @param EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton
-     * @param Twig_Environment $twig
      * @param LoggerInterface $logger
      * @param ErrorReporter $errorReporter
+     * @param UrlGeneratorInterface $urlGenerator
      */
     public function __construct(
-        EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        Twig_Environment $twig,
         LoggerInterface $logger,
-        ErrorReporter $errorReporter
+        ErrorReporter $errorReporter,
+        UrlGeneratorInterface $urlGenerator
     ) {
-        $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
-        $this->twig = $twig;
         $this->logger = $logger;
         $this->errorReporter = $errorReporter;
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getException();
+
+        $this->logger->debug(sprintf(
+            'Caught Exception "%s":"%s"',
+            get_class($exception),
+            $exception->getMessage()
+        ));
+
         if ($exception instanceof EngineBlock_Exception) {
             $this->errorReporter->reportError($exception, 'Caught Unhandled EngineBlock_Exception');
         } else {
@@ -65,24 +69,10 @@ class FallbackExceptionListener
             );
         }
 
-        $context = [
-            'wide' => true,
-        ];
-        if ($this->engineBlockApplicationSingleton->getDiContainer()->isDebug()) {
-            $context['exception'] = $exception;
-        }
+        $redirectToRoute = 'feedback_unknown_error';
 
-        $response = new Response(
-            $this->twig->render(
-                '@theme/Default/View/Error/display.html.twig',
-                $context
-            ),
-            500
-        );
-
-        $event->setResponse($response);
-
-        // as fallback, we need to handle everything.
-        $event->stopPropagation();
+        $event->setResponse(new RedirectResponse(
+            $this->urlGenerator->generate($redirectToRoute, [], UrlGeneratorInterface::ABSOLUTE_PATH)
+        ));
     }
 }
