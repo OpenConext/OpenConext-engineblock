@@ -1,17 +1,19 @@
-{% extends '@themeLayouts/scripts/default.html.twig' %}
+{% extends '@theme/Default/View/Error/error.html.twig' %}
 
 {# Prepare the page title #}
 {% set pageTitle = 'error_405'|trans %}
 
-{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
-{% block pageHeading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
-
 {% block content %}
-<div class="box">
-  <div class="mod-content">
-    <h1>{{ pageTitle }}</h1>
-    {{ 'error_405_desc'|trans({'%requestMethod%': requestMethod, '%uri%': uri,'%allowedMethods%': allowedMethods}) }}
+
+<div class="error-container">
+
+  <div class="error-container__content">
+    <div class="error-title">
+      <h1 class="error-title__heading">{{ pageTitle }}</h1>
+      <span class="error-title__error-message">{{ 'error_405_desc'|trans({'%requestMethod%': requestMethod, '%uri%': uri,'%allowedMethods%': allowedMethods}) }}</span>
+    </div>
   </div>
+    {% spaceless %}{% include "@theme/Default/View/Error/partial/footer.html.twig" %}{% endspaceless %}
 </div>
 
 {% endblock %}

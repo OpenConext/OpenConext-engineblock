@@ -15,7 +15,10 @@
     <meta content="yes" name="apple-mobile-web-app-capable">
     <meta content="translucent-black" name="apple-mobile-web-app-status-bar-style">
     <link href="/favicon.ico" rel="shortcut icon">
+    {% block stylesheets %}{% spaceless %}
     <link href="/stylesheets/application.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
+    {% endspaceless %}{% endblock %}
+
     <!-- Firefox CSS -->
     <style>
         @-moz-document url-prefix() {
@@ -64,6 +67,9 @@
 
 {% endif %}
 
+{% block background %}{% endblock %}
+
+{% block languageSwitcher %}{% endblock %}
 <div class="l-container {% if wide is defined and wide == true %}wide{% endif %}">
     {% block content %}{% endblock %}
 </div>

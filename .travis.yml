@@ -21,7 +21,7 @@ env:
     - COMMAND="functional-tests-selenium"
     - COMMAND="code-quality-ci"
     - COMMAND="security-tests"
-    - COMMAND="composer-validate"
+    - COMMAND="validate"
   global:
     - SYMFONY_ENV=test
     - ENGINEBLOCK_ENV=test
@@ -30,6 +30,7 @@ env:
 cache:
   directories:
     - ~/.composer/cache/files
+    - "$HOME/.npm"
 
 before_install:
   - mysql -e "create database IF NOT EXISTS eb_test;" -uroot
@@ -65,9 +66,8 @@ before_script:
   - composer config secure-http false
   - composer install --prefer-dist -n -o
   - app/console cache:clear --env=test
-  - npm install --prefix=theme
-  - npm install grunt-cli -g
-  - cd theme && grunt && cd ..
+  - npm ci --prefix=theme
+  - cd theme && npm run build && cd ..
 
 script:
   - ant $COMMAND
@@ -77,7 +77,7 @@ branches:
     - 5.x-dev
     - master
     - release/5.8
-    - feature/allow-repost-on-consent
+    - feature/error-page-styling
 
 after_failure:
   - sudo tail -500 /var/log/apache2/error.log

@@ -21,7 +21,7 @@ See the [UPGRADING.md][upgrading] file
 Please see the [wiki][eb-wiki-theme-development] for information on how to get started with developing themes for OpenConext EngineBlock
 In short, themes require compilation which can be done by running the following commands:
 ```
-    (cd theme && npm install && grunt)
+    (cd theme && npm ci && npm run:build)
 ```
 
 To setup the required tooling on the VM, the following steps might be useful:
@@ -29,8 +29,7 @@ To setup the required tooling on the VM, the following steps might be useful:
     cd /opt/openconext/OpenConext-engineblock/theme
     sudo curl --silent --location https://rpm.nodesource.com/setup_11.x | sudo bash -
     sudo yum install nodejs
-    sudo npm install -g grunt grunt-cli
-    (npm install && grunt)
+    (npm ci && npm run build)
 
 ## System Requirements
 
@@ -43,7 +42,6 @@ To setup the required tooling on the VM, the following steps might be useful:
     - default-collation=utf8_unicode_ci
 * [Manage][manage]
 * NPM (optional for theme deployment)
-* Grunt-cli (optional for theme deployment)
 
 _**Note**:
 While care was given to make EngineBlock as compliant as possible with mainstream Linux distributions,
@@ -203,6 +201,20 @@ If you are using this pattern, an update can be done with the following:
         app/console doctrine:migrations:migrate --env=prod
 
 5. Change the symlink.
+
+## Browsers support
+
+The list of browsers that should be supported: 
+
+| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari-ios/safari-ios_48x48.png" alt="iOS Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>iOS Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/samsung-internet/samsung-internet_48x48.png" alt="Samsung" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Samsung | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" alt="Opera" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Opera |
+| --------- | --------- | --------- | --------- | --------- | --------- | --------- |
+| IE10, IE11, Edge| last 2 versions| last 2 versions| last 2 versions| last 2 versions| last 2 versions| last 2 versions
+
+The list of browsers being tested:
+
+| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome Android | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari-ios/safari-ios_48x48.png" alt="iOS Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>iOS Safari |
+| --------- | --------- | --------- | --------- | --------- | --------- |
+| IE11, Edge last version| last version| last version| last version| last version| last version|
 
 ## Additional Documentation
 

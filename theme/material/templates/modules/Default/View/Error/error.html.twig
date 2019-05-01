@@ -1,44 +1,65 @@
 {% extends '@themeLayouts/scripts/default.html.twig' %}
 
+{% block stylesheets %}{% spaceless %}
+    <link href="/stylesheets/error-page.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
+{% endspaceless %}{% endblock %}
+
 {% set feedbackInfo = feedbackInfo() %}
+{% set hideHeader = true %}
+{% set hideFooter = true %}
+
+{% block languageSwitcher %}
+    {{ languageSwitcher.form(locale(), postData()) }}
+{% endblock %}
+
+{% block background %}
+<div class="background">
+    <div class="background__front"></div>
+    <div class="background__back"></div>
+</div>
+{% endblock %}
 
 {% block content %}
 
     {{ flushLog('Showing feedback page with message: ' ~ pageTitle) }}
 
-    <div class="box">
-        <div class="mod-content">
-            <h1>{% block pageTitle %}{% endblock %}</h1>
-            {% block errorMessage %}{% endblock %}
+    <div class="error-container">
 
-            {% block feedbackInfo %}
-            <div class="l-overflow">
-                <table class="comp-table">
-                    <thead></thead>
-                    <tbody>
-
-                    {% if feedbackInfo is not empty %}
-                        {% for name, value in feedbackInfo %}
-                            <tr>
-                                <td class="strong">{{ name|trans }}:</td>
-                                <td class="smaller">{{ value }}</td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-
-                    </tbody>
-                </table>
+        <div class="error-container__content">
+            <div class="error-title">
+                <h1 class="error-title__heading">{% block pageTitle %}{% endblock %}</h1>
+                <div class="error-title__error-message">{% block errorMessage %}{% endblock %}</div>
             </div>
-            {% endblock %}
+
+            {# Some error pages omit the feedback info entirily. To ensure we do not show the intro text, check if the block is empty #}
+            {% set _feedbackInfoBlock = block('feedbackInfo') %}
+            {% if feedbackInfo is not empty and _feedbackInfoBlock is not empty %}
+
+            <div class="horizontal-rule">
+                <hr class="horizontal-rule__line">
+            </div>
+
+            <div class="error-details">
+                <p class="error-details__intro-text">
+                    {{ 'error_feedback_info_intro'|trans|raw }}
+                </p>
+                <div class="error-details__feedback-list">
+                    {% block feedbackInfo %}
+
+                            {% for name, value in feedbackInfo %}
+                            <div class="feedback-info">
+                                <span class="feedback-info__label">{{ name|trans }}:</span>
+                                <span class="feedback-info__value">{{ value }}</span>
+                            </div>
+                            {% endfor %}
+
+                    {% endblock %}
+                </div>
+            </div>
+
+            {% endif %}
 
             <p>{{ 'error_help_desc'|trans|raw }}</p>
-
-            {% block backButton %}
-            {# @todo make the number of steps in history that the back button makes dynamic, it is not always 2 #}
-            <a href="#" id="GoBack" class="c-button" onclick="history.back(-2); return false;">
-                {{ 'go_back'|trans|raw }}
-            </a>
-            {% endblock %}
 
             {% if exception is defined %}
                 <div class="l-overflow">
@@ -53,6 +74,9 @@
                 </div>
             {% endif %}
 
+
         </div>
+        {% spaceless %}{% include "@theme/Default/View/Error/partial/footer.html.twig" %}{% endspaceless %}
     </div>
+
 {% endblock %}

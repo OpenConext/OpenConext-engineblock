@@ -36,7 +36,7 @@ export class IdpListElementFactory {
                 const actionElement = document.createElement('span');
                 actionElement.className = 'c-button white action';
 
-                actionElement.textContent = this.messages['requestAccess'];
+                actionElement.textContent = this.messages.requestAccess;
                 actionElement.setAttribute('data-entity-id', idpList[i].entityId);
                 idpElement.appendChild(actionElement);
             }

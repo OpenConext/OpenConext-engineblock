@@ -1,0 +1,23 @@
+.feedback-info
+  background: $light-grey
+  border-radius: 2px
+  margin: 0.5em
+  padding: 0.5em
+  width: 30%
+  float: left
+
+  +max-width($small)
+    float: none
+    margin: 0.5em auto
+    width: 75%
+
+  &__label
+    display: inline-block
+    font-size: $f-small
+    font-weight: bold
+
+  &__value
+    color: $blue
+    font-size: $f-small
+    font-weight: bold
+    overflow: hidden

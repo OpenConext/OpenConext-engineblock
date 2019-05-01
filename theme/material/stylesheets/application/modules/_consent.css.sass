@@ -1,0 +1,361 @@
+/* stylelint-disable font-family-no-missing-generic-family-keyword */
+.mod-content.consent
+  margin-top: 2rem
+
+  +max-width($small)
+    margin-top: 0
+
+  padding: 0
+
+  a
+    color: black
+
+    &.small
+      font-size: 80%
+
+    &.help
+      text-decoration: none
+
+    &.help span,
+    &[target="_blank"] span
+      text-decoration: underline
+
+    &.help::after,
+    &[target="_blank"]::after
+      display: inline-block
+      font-family: FontAwesome
+      height: 1.2em
+      margin-left: 5px
+      vertical-align: middle
+      width: 1.2em
+    &.help::after
+      content: $fa-var-question-circle-o
+    &[target="_blank"]::after
+      content: $fa-var-external-link
+
+  p
+    margin: 0
+
+  h1
+    line-height: 32px
+
+  h2
+    font-size: 16px
+    font-weight: bold
+    line-height: 22px
+
+  img.logo-small
+    max-height: 30px
+    max-width: 30px
+
+  header
+    align-items: normal
+    display: block
+    padding: 2rem 2rem 0
+
+    +max-width($small)
+      padding: 2rem .75rem 0
+
+    h1
+      margin-bottom: 1rem
+
+  section
+    padding: 1rem 2rem
+
+    +max-width($small)
+      padding: 2rem .75rem 0
+
+    &.privacy
+      a
+        color: $link-grey
+
+      h2
+        margin-bottom: 0
+        +max-width($small)
+          margin-bottom: 1em
+
+    &.buttons
+      text-align: center
+
+      h2
+        text-align: left
+        margin-bottom: 1rem
+
+      +max-width($small)
+        padding: 1rem .75rem 0
+
+    form#accept
+      display: inline
+
+      input.submit
+        border-radius: 5px
+        font-weight: bold
+        max-width: 100%
+        min-width: 50%
+        padding: 1rem
+
+        &:focus
+          outline: none
+
+        &::-moz-focus-inner
+          border: 0
+
+    a#decline-terms
+      color: $blue
+      text-decoration: underline
+      margin-top: 1.5em
+
+      +max-width($small)
+        margin-bottom: 1.5em
+
+    &.attributes
+      overflow-x: auto
+      padding: 0
+
+      table
+        background-color: $table-bg
+        border-width: 0
+        margin: 0
+        overflow: hidden
+        padding: 1rem 0
+
+        tbody
+          &:last-child tr.separator
+            display: none
+
+          tr
+            display: none
+
+            &:nth-child(-n+8),
+            &.toggle-attributes,
+            &.separator
+              display: table-row
+
+              +max-width($small)
+                display: block
+
+            &.toggle-attributes
+              // Hide the 'expand' row if there are no more rows (and
+              // take into account the separator row)
+              &:nth-child(-n+9)
+                display: none
+
+              a
+                color: $blue
+                text-decoration: none
+
+                &::after
+                  content: $fa-var-chevron-down
+                  color: $blue
+                  font-family: FontAwesome
+                  display: inline-block
+                  height: 0.7em
+                  width: 0.7em
+
+                span.show-more
+                  display: inline
+                  text-decoration: underline
+
+                span.show-less
+                  display: none
+                  text-decoration: underline
+            a.small[target="_blank"]::after
+              background: none
+              content: ''
+              margin: 0
+              width: 0
+          &.expanded
+            tr
+              display: table-row !important
+
+              +max-width($small)
+                display: block
+
+              &.toggle-attributes
+                a
+                  &::after
+                    content: $fa-var-chevron-up
+                    color: $blue
+                    font-family: FontAwesome
+                    text-decoration: none
+
+                  span.show-more
+                    display: none
+
+                  span.show-less
+                    display: inline
+
+
+        tr
+          border-color: transparent
+          border-style: solid
+          border-width: 0 2rem
+          margin: 0 2rem
+          padding: 0 1rem
+
+          td
+            border-color: $border-dark
+            border-style: solid
+            border-width: 1px 0 0 0
+            max-width: 200px
+            white-space: normal
+            word-wrap: break-word
+
+            +max-width($small)
+              max-width: none
+
+            &.attr-name
+              font-size: small
+              text-align: right
+              width: 35%
+
+              +max-width($small)
+                width: auto
+                padding-bottom: 0.3em
+                border-bottom: none
+
+
+            &.attr-value
+              ul
+                margin-bottom: 0
+              +max-width($small)
+                border-top: none
+                padding-top: 0
+              a
+                text-decoration: none
+
+                // We underline the inner-span instead of the anchor
+                // because we don't want :after (help icon) to be
+                // underlined as well
+                span
+                  text-decoration: underline
+
+                &.help::after
+                  filter: opacity(25%)
+
+            &.attr-value.full-width
+              padding-left: 0.25em
+              +max-width($small)
+                padding-left: 1em
+
+          &.source-info
+            td > *
+              display: inline
+              vertical-align: middle
+
+            td
+              border-width: 0
+              padding-left: 0
+
+              a
+                color: $link-grey
+
+              img, h2
+                margin-right: 5px
+
+          &.toggle-attributes
+            td
+              text-align: center
+
+              a
+                color: $blue
+
+          &.separator
+            background-color: white
+            border-color: white
+            height: 1rem
+
+            td
+              border-width: 0
+
+        +max-width($small)
+          padding: 0
+
+          thead, tbody, th, td, tr
+            display: block
+
+          tr
+            border-width: 0
+            margin: 0
+            padding: 0
+
+            td.attr-name
+              text-align: left
+
+            td.attr-name::after
+              content: ":"
+              margin-left: -3px
+
+            &.source-info
+              td
+                padding-left: 1rem
+
+                & > *
+                  display: inline-block
+
+                h2
+                  margin-top: 0.5em
+
+    &.idp-consent-explanation
+      background-color: $light-pink
+      border-width: 2em 2em 1em 2em
+      border-style: solid
+      border-color: white
+      padding: 0.75em
+      position: relative
+      .idp-logo
+        float: right
+        height: 34px
+        background-color: #ffffff
+        width: 34px
+        border-radius: 32px
+        border: 1px solid $red
+        position: relative
+        img
+          width: 34px
+          height: 34px
+          border: 0
+          border-radius: 50%
+
+      .title::before
+        content: $fa-var-warning
+        font-family: FontAwesome
+        color: $red
+        display: inline-block
+        height: 1.2em
+        left: 0.75em
+        margin-right: 0.75em
+        vertical-align: middle
+        width: 1.2em
+        position: absolute
+      .title
+        font-weight: bold
+        margin-left: 1.95em
+        margin-right: 3em
+      .text
+        margin-left: 1.95em
+        margin-right: 3em
+
+
+  footer
+    border-top: 1px solid $border-dark
+    clear: both
+    padding: 2rem
+    text-align: center
+
+    p
+      a
+        white-space: nowrap
+
+        +max-width($small)
+          white-space: normal
+
+          // Force the 'more information' link on a new line,
+          // for bigger displays, we want everything on the
+          // same line.
+          &::before
+            content: ' '
+            display: block
+
+  .c-button
+    white-space: normal

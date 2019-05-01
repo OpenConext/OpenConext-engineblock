@@ -1,20 +1,18 @@
-{% extends '@themeLayouts/scripts/default.html.twig' %}
+{% extends '@theme/Default/View/Error/error.html.twig' %}
 
 {# Prepare the page title #}
 {% set pageTitle = 'error_404'|trans %}
 
-{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
-{% block pageHeading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
-
 {% block content %}
-<div class="box">
-  <div class="mod-content">
-    <h1>{{ pageTitle }}</h1>
-    {{ 'error_404_desc'|trans }}
-    <br /><br />
-    <a href="#" id="GoBack"  class="c-button" onclick="history.back(-2); return false;">
-        {{ 'go_back'|trans|raw }}
-    </a>
+  <div class="error-container">
+
+    <div class="error-container__content">
+      <div class="error-title">
+        <h1 class="error-title__heading">{{ pageTitle }}</h1>
+        <span class="error-title__error-message">{{ 'error_404_desc'|trans }}</span>
+      </div>
+    </div>
+    {% spaceless %}{% include "@theme/Default/View/Error/partial/footer.html.twig" %}{% endspaceless %}
   </div>
-</div>
+
 {% endblock %}

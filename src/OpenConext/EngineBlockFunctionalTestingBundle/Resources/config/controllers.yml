@@ -15,3 +15,11 @@ services:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\WayfController
         arguments:
             - "@twig"
+
+
+    engineblock.functional_test.controller.feedback:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\FeedbackController
+        arguments:
+            - "@translator"
+            - "@twig"
+            - "@engineblock.compat.logger"

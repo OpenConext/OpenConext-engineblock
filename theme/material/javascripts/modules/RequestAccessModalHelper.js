@@ -72,7 +72,7 @@ export class RequestAccessModalHelper {
 
                 this.openRequestAccessModal(institutionName, idpEntityId);
             }
-        }
+        };
     }
 
     containerClickHandler(containerElement) {
@@ -80,7 +80,7 @@ export class RequestAccessModalHelper {
             if (event.target === containerElement) {
                 this.closeRequestAccessModal();
             }
-        }
+        };
     }
 
     submitRequestAccessClickHandler() {
@@ -105,14 +105,14 @@ export class RequestAccessModalHelper {
             sendPostRequest('/authentication/idp/performRequestAccess', formData, (responseText) => {
                 this.renderRequestAccessModal(responseText);
             });
-        }
+        };
     }
 
     closeModalClickHandler() {
         return (event) => {
             event.preventDefault();
             this.closeRequestAccessModal();
-        }
+        };
     }
 
     closeRequestAccessModal() {
@@ -133,7 +133,7 @@ export class RequestAccessModalHelper {
 }
 
 function sendGetRequest(url, callback) {
-    const request = new XMLHttpRequest;
+    const request = new XMLHttpRequest();
 
     request.onreadystatechange = () => {
         if (request.readyState === 4 && request.status == 200) {
@@ -146,7 +146,7 @@ function sendGetRequest(url, callback) {
 }
 
 function sendPostRequest(url, formData, callback) {
-    const request = new XMLHttpRequest;
+    const request = new XMLHttpRequest();
 
     request.onreadystatechange = () => {
         if (request.readyState === 4 && request.status === 200) {
@@ -156,7 +156,7 @@ function sendPostRequest(url, formData, callback) {
 
     var parts = [];
 
-    for (name in formData) {
+    for (var name in formData) {
         parts.push(encodeURIComponent(name) + '=' + encodeURIComponent(formData[name]));
     }
 

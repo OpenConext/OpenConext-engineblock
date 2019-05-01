@@ -1,6 +1,5 @@
 {% extends '@theme/Default/View/Error/error.html.twig' %}
 
-{% set wide = true %}
 {% set pageTitle = 'error_authorization_policy_violation'|trans %}
 {% block pageTitle %}{{ pageTitle }}{% endblock %}
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
@@ -26,4 +25,3 @@
 
 {# The PDP error page should not show the table with the feedback information and back button. #}
 {% block feedbackInfo %}{% endblock %}
-{% block backButton %}{% endblock %}
