@@ -118,5 +118,4 @@ class FeedbackController extends Controller
 
         return $parameters;
     }
-
 }
