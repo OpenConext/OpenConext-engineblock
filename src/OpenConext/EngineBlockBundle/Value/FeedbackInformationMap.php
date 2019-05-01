@@ -22,6 +22,9 @@ use OpenConext\EngineBlockBundle\Exception\RuntimeException;
 
 class FeedbackInformationMap
 {
+    /**
+     * @var array
+     */
     private $data = [];
 
     public function add(FeedbackInformation $feedbackInformation)

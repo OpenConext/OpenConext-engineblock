@@ -22,10 +22,20 @@ use OpenConext\EngineBlock\Assert\Assertion;
 
 class FeedbackInformation
 {
+    /**
+     * @var string
+     */
     private $key;
 
+    /**
+     * @var string
+     */
     private $value;
 
+    /**
+     * @param string $key
+     * @param string $value
+     */
     public function __construct($key, $value)
     {
         Assertion::nonEmptyString($key, "The feedbackInfo key can't be empty and must be a string value");
@@ -39,6 +49,10 @@ class FeedbackInformation
         return $this->key;
     }
 
+    /**
+     * Get a HTML attribute safe representation of the key
+     * @return string
+     */
     public function getAttrSafeKey()
     {
         $safeKey = $this->key;
