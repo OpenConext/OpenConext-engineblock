@@ -19,9 +19,9 @@ See the [UPGRADING.md][upgrading] file
 ## (Theme) Development
 
 Please see the [wiki][eb-wiki-theme-development] for information on how to get started with developing themes for OpenConext EngineBlock
-In short, themes require compilation which can be done by running the following commands:
+In short, themes require front-end resource compilation which can be done by running the following commands:
 ```
-    (cd theme && npm ci && npm run:build)
+    (cd theme && npm ci && npm run build)
 ```
 
 To setup the required tooling on the VM, the following steps might be useful:
