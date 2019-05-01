@@ -5,6 +5,11 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 5.10.1
+
+### Features
+ * Add the possibility to sign a SAML response #690
+
 ## 5.10.0
 
 The 5.10 release focuses on making EngineBlock more robust. The biggest aim is to improve error reporting.
