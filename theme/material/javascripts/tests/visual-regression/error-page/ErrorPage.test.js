@@ -112,7 +112,7 @@ describe(
 
         for (const errorPage of errorPages) {
             for (const viewport of viewports) {
-                it(`${errorPage.name}-${viewport.width}x${viewport.height}`, async () => {
+                it(`${errorPage.name}-${viewport.width}x${viewport.height}`, async (page, expect) => {
 
                     await page.goto(errorPage.url);
                     await page.setViewport(viewport);
