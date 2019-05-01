@@ -57,8 +57,6 @@ class FeedbackController extends Controller
         $feedbackInfo = $this->getFeedbackInfo($request);
         $parameters = $this->getTemplateParameters($request);
 
-        $this->validateFooterTemplateParameters($parameters);
-
         $session = $request->getSession();
 
         $template = sprintf(
@@ -106,7 +104,6 @@ class FeedbackController extends Controller
         return $feedbackInfo;
     }
 
-
     /**
      * @param Request $request
      * @return mixed|string
@@ -122,21 +119,4 @@ class FeedbackController extends Controller
         return $parameters;
     }
 
-
-    /**
-     * @param array $parameters
-     * @return null|string
-     */
-    private function validateFooterTemplateParameters(array &$parameters)
-    {
-        $key = 'supportEmail';
-        if (!array_key_exists($key, $parameters)) {
-            $parameters[$key] = null;
-        }
-
-        $key = 'showWikiButton';
-        if (!array_key_exists($key, $parameters)) {
-            $parameters[$key] = false;
-        }
-    }
 }
