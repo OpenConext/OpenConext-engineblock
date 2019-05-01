@@ -21,7 +21,7 @@ See the [UPGRADING.md][upgrading] file
 Please see the [wiki][eb-wiki-theme-development] for information on how to get started with developing themes for OpenConext EngineBlock
 In short, themes require compilation which can be done by running the following commands:
 ```
-    (cd theme && npm install && npm run:build)
+    (cd theme && npm ci && npm run:build)
 ```
 
 To setup the required tooling on the VM, the following steps might be useful:
@@ -29,7 +29,7 @@ To setup the required tooling on the VM, the following steps might be useful:
     cd /opt/openconext/OpenConext-engineblock/theme
     sudo curl --silent --location https://rpm.nodesource.com/setup_11.x | sudo bash -
     sudo yum install nodejs
-    (npm install && npm run build)
+    (npm ci && npm run build)
 
 ## System Requirements
 

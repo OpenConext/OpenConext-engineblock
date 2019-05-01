@@ -53,7 +53,7 @@ php ./bin/composer.phar install -n --no-dev --prefer-dist -o &&
 
 echo "Build assets" &&
 cd ${PROJECT_DIR}/theme &&
-npm install &&
+npm ci &&
 npm run release &&
 
 echo "Tagging the release in RELEASE file" &&
