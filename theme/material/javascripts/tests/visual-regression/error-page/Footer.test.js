@@ -40,7 +40,7 @@ describe(
 
         for (const footer of footerDifferences) {
             for (const viewport of viewports) {
-                it(`${footer.name}-${viewport.width}x${viewport.height}`, async () => {
+                it(`${footer.name}-${viewport.width}x${viewport.height}`, async (page, expect) => {
 
                     await page.goto(footer.url);
                     await page.setViewport(viewport);
