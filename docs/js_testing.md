@@ -27,7 +27,9 @@ Note that the `expect-puppeteer` package is used to perform more efficient inter
   
 More info about this package can be found at their [GitHub](https://github.com/smooth-code/jest-puppeteer/tree/master/packages/expect-puppeteer)
 
-# WAYF tests
+## Test endpoints
+
+### WAYF
 The WAYF strongly relies on JavasScript. It is used to build the various IdP lists (connected, unconnected and previously selected).
 But is also used to search through the available IdP's, keypress navigate and display the request access lists.
 
@@ -47,6 +49,20 @@ parameters can be used to manipulate the behaviour of the wayf that is rendered.
 | unconnectedIdps | (int) 0 | Type: integer. The number of unconnected IdPs to display on the WAYF. | 
 | backLink | (bool) false | Type: boolean. Display the back link on the WAYF. | 
 | lang | (string) 'en' | Type: string. The language to use when rendering the WAYF. Note that it's possible that this is overridden by the cookie value. | 
+
+### Feedback (error) pages
+Many different custom error pages can be raised in many different conditions. It is quite tedious to raise those errors from the code as it sometimes is hard to simulate the error situations. This called for a test endpoint that allows us to easily recreate error screens.
+
+The test endpoint is available in `test` and `dev` environments on the `/functional-testing/feedback` endpoint. The following
+parameters can be used to manipulate the behaviour of the wayf that is rendered.
+
+| **Query parameter** | **Default value** | **Explanation** |
+|---|----|----|
+|template|Format: `string`<br>Value:`session-lost`|Render the error feedback template, identified by one of the templates found in `theme/material/templates/modules/Authentication/View/Feedback`|
+|feedbackInfo|Format: `JSON`<br>Value:`{"requestId":"5cb4bd3879b49","ipAddress":"192.168.66.98","artCode":"31914"}`|Can be filled with any parameter that can be rendered in the feedback information section of the feedback page.|
+|parameters|Format: `JSON`<br>Value:`{}`|Some templates might require additional twig parameters, this parameter allows you to pass these additional parameters in JSON format.|
+
+For a list of realistic reproductions of the available error pages, see this JavasScript test: `theme/material/javascripts/tests/visual-regression/error-page/ErrorPage.test.js`
 
 ## Acceptance tests
 The WAYF acceptance tests utilize the `/functional-testing/wayf` endpoint in order to test the correct inner working of
