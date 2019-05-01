@@ -14,3 +14,8 @@
       grid-auto-flow: row dense
       grid-gap: 0.5em
       grid-template-columns: repeat(3, 1fr)
+      // For IE 10 and 11, we can not use grid-auto-flow, and getting good results otherwise is not feasible
+      @media all and (-ms-high-contrast: none)
+        display: block
+        .feedback-info
+          margin: 0.5em 0 0.5em 0
