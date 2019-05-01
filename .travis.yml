@@ -30,6 +30,7 @@ env:
 cache:
   directories:
     - ~/.composer/cache/files
+    - "$HOME/.npm"
 
 before_install:
   - mysql -e "create database IF NOT EXISTS eb_test;" -uroot
