@@ -1,6 +1,13 @@
 # UPGRADE NOTES
 
-## 5.9 -> 5.10
+## 5.9 -> 5.10.0
+
+### Add the possibility to sign a SAML response
+According to saml2int 0.2, the assertion element must be directly signed, which we do. This suffices for most SP's. However, some SP's require the outer Response element to be signed directly. If configured to do so for that SP, Engineblock will sign the outer response element in addition to the signed Assertion element.
+
+Therefore if the option `metadata:coin:sign_response` on the SP is set the response will be signed. Also a migration `Version20190425205743` is added to add the required column.
+
+To support rolling-updates this migration needs to be executed before updating the code and before the rolling update column cleanup migrations as described below.
 
 ### Metadata push memory configurable
 The memory used in php for the metadata push is now configurable with the `engineblock.metadata_push_memory_limit` configuration option.
