@@ -5,6 +5,20 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 5.11.0
+The error feedback pages have been overhauled in this release. In addition, the theming solution that was previously used has been revised. 
+
+Be sure to read up on how to work with the new theming solution in the [README.md]()
+
+The most notable changes are:
+ * Grunt is no longer used, npm run scripts are used instead. #672
+ * Theming has changed, allowing for more easy theme overrides for JS and Sass resources. [Wiki](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#theme-development)
+ * The error page styling has been updated, making it more user friendly by being focused on the important information instead of overflowing the user with irrelevant information. 
+ * The error pages have been made mobile friendly #673 
+ * Minified front-end assets are no longer kept in version control #667
+ * Visual regression tests have been added for the error pages #687
+ * The browser support policy has been made explicit #686
+ 
 ## 5.10.1
 
 ### Features
