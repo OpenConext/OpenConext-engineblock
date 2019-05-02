@@ -68,3 +68,7 @@ services:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
         arguments: ['%engineblock.functional_testing.attribute_aggregation_data_store.file%']
     #endregion Data Stores
+
+    # test stand ins
+    engineblock.validator.sso_request_validator:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Validator\SsoRequestValidator

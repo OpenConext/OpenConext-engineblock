@@ -91,6 +91,11 @@ class EngineBlockContext extends AbstractSubContext
     private $usingAttributeAggregationClient = false;
 
     /**
+     * @var string
+     */
+    private $currentRequestId = '';
+
+    /**
      * @param ServiceRegistryFixture $serviceRegistry
      * @param EngineBlock $engineBlock
      * @param EntityRegistry $mockSpRegistry
@@ -169,6 +174,16 @@ class EngineBlockContext extends AbstractSubContext
         $mink = $this->getMinkContext();
 
         $mink->pressButton('Submit');
+    }
+
+    /**
+     * @Given /^EngineBlock raises an unexpected error$/
+     */
+    public function engineBlockRaisesARuntimeException()
+    {
+        $mink = $this->getMinkContext();
+        // By setting the throwException cookie, the test stand in of the SsoRequestValidator will throw an exception
+        $mink->getSession()->setCookie('throwException', 'EngineBlock in functional testing mode threw a RuntimeException');
     }
 
     /**
@@ -604,5 +619,49 @@ HTML;
             );
         }
         throw new RuntimeException('Unable to find the Error Code on the page');
+    }
+
+    /**
+     * @Then /^I write down the request id as seen on the error page$/
+     */
+    public function iWriteDownTimestampAndRequestId()
+    {
+        $this->currentRequestId = $this->getRequestIdFromFeedbackInformation();
+    }
+
+    /**
+     * @Then /^I should see the same request id on the error page$/
+     */
+    public function iShouldSeeTheSameRequestId()
+    {
+        $actualRequestId = $this->getRequestIdFromFeedbackInformation();
+        if ($actualRequestId !== $this->currentRequestId) {
+            throw new RuntimeException(
+                sprintf(
+                    'The request id changed between requests: "%s" versus "%s"',
+                    $actualRequestId,
+                    $this->currentRequestId
+                )
+            );
+        }
+        return;
+    }
+
+    /**
+     * Reads the request id from the error feedback page and returns it as a string
+     */
+    private function getRequestIdFromFeedbackInformation()
+    {
+        $session = $this->getMinkContext()->getSession();
+        $mink = $session->getPage();
+        // Grab the request id from the page with an xpath expression.
+        $result = $mink->find('xpath', '//span[text()="UR ID:"]/../span[2]');
+        if ($result) {
+            $requestIdOnPage = $result->getText();
+            if ($requestIdOnPage && $requestIdOnPage !== '') {
+                return $requestIdOnPage;
+            }
+        }
+        throw new RuntimeException('Unable to find the request id on the page');
     }
 }
