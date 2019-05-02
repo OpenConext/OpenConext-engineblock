@@ -27,10 +27,10 @@ class SsoRequestValidator extends BaseSsoRequestValidator
     public function isValid(Request $request)
     {
         // This service is overloaded in order to allow us to throw a custom exception from behat
-        if (isset($_COOKIE['throwException'])) {
+        if ($request->cookies->has('throwException')) {
             // Remove the cookie to prevent side effects in the next requests
             setcookie("throwException", "", time()-3600);
-            throw new RuntimeException($_COOKIE['throwException']);
+            throw new RuntimeException($request->cookies->get('throwException'));
         }
         parent::isValid($request);
     }
