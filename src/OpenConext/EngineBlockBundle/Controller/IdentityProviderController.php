@@ -126,9 +126,6 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
      */
     public function unsolicitedSingleSignOnAction(Request $request, $keyId = null, $idpHash = null)
     {
-        $this->requestValidator->isValid($request);
-        $this->bindingValidator->isValid($request);
-
         $cortoAdapter = new EngineBlock_Corto_Adapter();
 
         if ($keyId !== null) {
