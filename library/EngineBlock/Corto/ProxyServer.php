@@ -49,7 +49,6 @@ class EngineBlock_Corto_ProxyServer
         'edugainMetadataService',
         'debugSingleSignOnService',
         'idpCertificateService',
-        'idpCertificateService',
         'idpMetadataService',
         'idpsMetadataService',
         'singleLogoutService',
