@@ -76,7 +76,7 @@ branches:
   only:
     - 5.x-dev
     - master
-    - release/5.8
+    - release/5.10
     - feature/allow-repost-on-consent
 
 after_failure:
