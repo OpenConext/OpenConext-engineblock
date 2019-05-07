@@ -4,6 +4,13 @@ All release notes between version 4.7.5 and 5.8.0 can be found on [GitHub](https
 We will continue to post relevant release notes on the GitHub release page. More detailed release notes should be placed in this document. 
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
+ 
+## 5.10.2
+
+Two regressions where fixed in this release:
+
+ * Whitelist debugSingleSignOnService for access without session #697
+ * Remove validation on unsolicitedSingleSignOnAction #698
 
 ## 5.10.1
 
