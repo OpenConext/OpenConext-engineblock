@@ -19,6 +19,13 @@ The most notable changes are:
  * Visual regression tests have been added for the error pages #687
  * The browser support policy has been made explicit #686
  
+## 5.10.2
+
+Two regressions where fixed in this release:
+
+ * Whitelist debugSingleSignOnService for access without session #697
+ * Remove validation on unsolicitedSingleSignOnAction #698  
+ 
 ## 5.10.1
 
 ### Features
