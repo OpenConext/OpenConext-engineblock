@@ -161,6 +161,9 @@ services:
     engineblock.validator.sso_request_validator:
         class: OpenConext\EngineBlock\Validator\SsoRequestValidator
 
+    engineblock.validator.unsolicited_sso_request_validator:
+        class: OpenConext\EngineBlock\Validator\UnsolicitedSsoRequestValidator
+
     engineblock.twig.extension.debug:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Debug
         tags:
