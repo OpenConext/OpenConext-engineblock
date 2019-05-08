@@ -55,15 +55,6 @@ authentication_idp_sso_idphash:
     requirements:
         idpHash: .+
 
-authentication_idp_sso_idphash_keyid:
-    path:     '/authentication/idp/single-sign-on/{idpHash}/key:{keyId}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
-    requirements:
-        keyId: .+
-        idpHash: .+,
-
 ### Unsollicited
 
 authentication_idp_unsolicited_sso:
@@ -100,12 +91,3 @@ authentication_idp_unsolicited_sso_idphash:
         keyId: ~
     requirements:
         idpHash: .+
-
-authentication_idp_unsolicited_sso_idphash_keyid:
-    path:     '/authentication/idp/unsolicited-single-sign-on/{idpHash}/key:{keyId}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:unsolicitedSingleSignOnAction
-    requirements:
-        keyId: .+
-        idpHash: .+,
