@@ -5,6 +5,13 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
  
+## 5.10.3
+The unsolicited SSO endpoint received some TLC. In addition to adding request input validation, we also added additional test coverage and cleaned up some unused routes.
+
+* Enrich unsolicited SSO test coverage #699
+* Unsolicited request validation #700
+* Remove unused SSO routes #701
+ 
 ## 5.10.2
 
 Two regressions where fixed in this release:
