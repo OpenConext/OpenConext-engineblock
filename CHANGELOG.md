@@ -18,6 +18,13 @@ The most notable changes are:
  * Minified front-end assets are no longer kept in version control #667
  * Visual regression tests have been added for the error pages #687
  * The browser support policy has been made explicit #686
+
+## 5.10.3
+The unsolicited SSO endpoint received some TLC. In addition to adding request input validation, we also added additional test coverage and cleaned up some unused routes.
+
+* Enrich unsolicited SSO test coverage #699
+* Unsolicited request validation #700
+* Remove unused SSO routes #701
  
 ## 5.10.2
 
