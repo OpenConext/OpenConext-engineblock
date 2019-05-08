@@ -67,6 +67,11 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
     /**
      * @var RequestValidator
      */
+    private $unsolicitedRequestValidator;
+
+    /**
+     * @var RequestValidator
+     */
     private $bindingValidator;
 
     public function __construct(
@@ -76,6 +81,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
         RequestAccessMailer $requestAccessMailer,
         RequestValidator $requestValidator,
         RequestValidator $bindingValidator,
+        RequestValidator $unsolicitedRequestValidator,
         AuthenticationStateHelperInterface $authenticationStateHelper
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
@@ -84,6 +90,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
         $this->requestAccessMailer = $requestAccessMailer;
         $this->requestValidator = $requestValidator;
         $this->bindingValidator = $bindingValidator;
+        $this->unsolicitedRequestValidator = $unsolicitedRequestValidator;
         $this->authenticationStateHelper = $authenticationStateHelper;
     }
 
@@ -126,6 +133,8 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
      */
     public function unsolicitedSingleSignOnAction(Request $request, $keyId = null, $idpHash = null)
     {
+        $this->unsolicitedRequestValidator->isValid($request);
+
         $cortoAdapter = new EngineBlock_Corto_Adapter();
 
         if ($keyId !== null) {
