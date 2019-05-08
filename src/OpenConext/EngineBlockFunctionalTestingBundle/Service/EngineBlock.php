@@ -45,12 +45,22 @@ class EngineBlock
         return $this->baseUrl . self::SINGLE_SIGN_ON_PATH;
     }
 
-    public function unsolicitedLocation($identityProviderEntityId, $serviceProviderEntityId)
+    public function unsolicitedLocation($identityProviderEntityId, $serviceProviderEntityId, $keyId = false)
+    {
+        $keyParameter = '';
+        if ($keyId) {
+            $keyParameter = sprintf('key:%s/', $keyId);
+        }
+        return $this->baseUrl
+               . sprintf(self::UNSOLICITED_SSO_START_PATH, $keyParameter . md5($identityProviderEntityId))
+               . '?sp-entity-id=' . urlencode($serviceProviderEntityId);
+    }
+
+    public function unsolicitedLocationInvalidParam($identityProviderEntityId, $serviceProviderEntityId)
     {
         return $this->baseUrl
                . sprintf(self::UNSOLICITED_SSO_START_PATH, md5($identityProviderEntityId))
-               . '?sp-entity-id=' . urlencode($serviceProviderEntityId)
-               . '&SAMLRequest=test';
+               . '?wrong-parameter=' . urlencode($serviceProviderEntityId);
     }
 
     public function spEntityId()

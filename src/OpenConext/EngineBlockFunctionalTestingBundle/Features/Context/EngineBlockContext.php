@@ -238,6 +238,34 @@ HTML;
     }
 
     /**
+     * @Given /^An IdP initiated Single Sign on for SP "([^"]*)" is triggered by IdP "([^"]*)" and specifies a valid signing key$/
+     */
+    public function anIdpInitiatedSingleSignOnForSpIsTriggeredByIdPWithSigningKey($spName, $idpName)
+    {
+        $mockSp = $this->mockSpRegistry->get($spName);
+        $mockIdP = $this->mockIdpRegistry->get($idpName);
+
+        $mink = $this->getMinkContext();
+        $mink->visit(
+            $this->engineBlock->unsolicitedLocation($mockIdP->entityId(), $mockSp->entityId(), 'default')
+        );
+    }
+
+    /**
+     * @Given /^An IdP initiated Single Sign on for SP "([^"]*)" is triggered by IdP "([^"]*)" and specifies an invalid signing key$/
+     */
+    public function anIdpInitiatedSingleSignOnForSpIsTriggeredByIdPWithInvalidSigningKey($spName, $idpName)
+    {
+        $mockSp = $this->mockSpRegistry->get($spName);
+        $mockIdP = $this->mockIdpRegistry->get($idpName);
+
+        $mink = $this->getMinkContext();
+        $mink->visit(
+            $this->engineBlock->unsolicitedLocation($mockIdP->entityId(), $mockSp->entityId(), 'does-not-exist')
+        );
+    }
+
+    /**
      * @Given /^An IdP initiated Single Sign on for SP "([^"]*)" is incorrectly triggered by IdP "([^"]*)"$/
      */
     public function anIdpInitiatedSingleSignOnForSpIsIncorrectlyTriggeredByIdP($spName, $idpName)
@@ -248,6 +276,20 @@ HTML;
         $mink = $this->getMinkContext();
         $mink->visit(
             $this->engineBlock->unsolicitedLocation($mockIdP->entityId() . 'I made a booboo', $mockSp->entityId())
+        );
+    }
+
+    /**
+     * @Given /^An IdP initiated Single Sign on for SP "([^"]*)" with invalid parameter, by IdP "([^"]*)"$/
+     */
+    public function anIdpInitiatedSingleSignOnForSpIsInvalidParameterByIdP($spName, $idpName)
+    {
+        $mockSp = $this->mockSpRegistry->get($spName);
+        $mockIdP = $this->mockIdpRegistry->get($idpName);
+
+        $mink = $this->getMinkContext();
+        $mink->visit(
+            $this->engineBlock->unsolicitedLocationInvalidParam($mockIdP->entityId(), $mockSp->entityId())
         );
     }
 
