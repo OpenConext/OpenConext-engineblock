@@ -16,6 +16,7 @@ services:
             - "@engineblock.service.request_access_mailer"
             - "@engineblock.validator.sso_request_validator"
             - "@engineblock.validator.saml_binding_validator"
+            - "@engineblock.validator.unsolicited_sso_request_validator"
             - "@engineblock.service.authentication_state_helper"
 
     engineblock.controller.authentication.index:
