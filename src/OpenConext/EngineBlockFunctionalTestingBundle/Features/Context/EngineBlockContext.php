@@ -385,6 +385,18 @@ HTML;
         // set unknown session id to prevent session not found exception
         $session->setCookie(session_name(), '000000');
     }
+    /**
+     * @Given /^I lose my session and reload$/
+     */
+    public function iLoseMySessionAndReload()
+    {
+        $session = $this->getMinkContext()->getSession();
+        $currentUrl = $session->getCurrentUrl();
+        $session->restart();
+        // set unknown session id to prevent session not found exception
+        $session->setCookie(session_name(), '000000');
+        $session->visit($currentUrl);
+    }
 
     /**
      * @Given /^pdp gives a deny response$/
@@ -645,6 +657,20 @@ HTML;
             );
         }
         return;
+    }
+    /**
+     * @Then /^I should not see the same request id on the error page$/
+     */
+    public function iShouldNotSeeTheSameRequestId()
+    {
+        try {
+            // Not being able to find the request id yields a runtime exception
+            $this->getRequestIdFromFeedbackInformation();
+        } catch (RuntimeException $e) {
+            return;
+        }
+
+        throw new RuntimeException('The request was found on the page, and we expected it not to be.');
     }
 
     /**
