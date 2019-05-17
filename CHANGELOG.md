@@ -5,6 +5,9 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 5.11.1
+This release have all backported issues from release 5.10.2 and 5.10.3  
+
 ## 5.11.0
 The error feedback pages have been overhauled in this release. In addition, the theming solution that was previously used has been revised. 
 
