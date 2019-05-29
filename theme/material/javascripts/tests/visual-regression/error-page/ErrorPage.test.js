@@ -93,6 +93,10 @@ const errorPages = [
         name: 'authorization-policy-violation',
         url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=authorization-policy-violation&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata","serviceProviderName":"OpenConext Drop Supplies SP","identityProvider":"https://current-idp.entity-id.org/metadata"}&parameters={"logo":{"height":"96","width":"96","url":"https://static.vm.openconext.org/media/conext_logo.png"},"policyDecisionMessage":"No localized deny messages present"}'
     },
+    {
+        name: 'uncaught-error',
+        url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=feedback_unknown_error&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata","serviceProviderName":"OpenConext Drop Supplies SP","identityProvider":"https://current-idp.entity-id.org/metadata"}'
+    }
 ];
 
 const viewports = [
