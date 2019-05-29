@@ -58,6 +58,14 @@ class FeedbackController
         );
     }
 
+    public function unknownErrorAction()
+    {
+        return new Response(
+            $this->twig->render('@theme/Default/View/Error/display.html.twig'),
+            500
+        );
+    }
+
     /**
      * @return Response
      * @throws \EngineBlock_Exception

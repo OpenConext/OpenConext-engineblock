@@ -56,10 +56,9 @@ services:
     engineblock.listener.fallback_exception:
         class: OpenConext\EngineBlockBundle\EventListener\FallbackExceptionListener
         arguments:
-            - "@engineblock.compat.application"
-            - "@twig"
             - "@engineblock.compat.logger"
             - "@engineblock.bridge.error_reporter"
+            - "@router"
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: -200 }
 

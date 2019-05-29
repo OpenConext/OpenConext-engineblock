@@ -28,7 +28,12 @@ certificate:
 
 feedback:
     resource: routing/feedback.yml
-    prefix:   '/authentication/feedback'
+    prefix: '/authentication/feedback'
+
+feedback_unknown_error:
+    path: /feedback/unknown-error
+    methods: [GET]
+    defaults: { _controller: engineblock.controller.authentication.feedback:unknownErrorAction }
 
 wayf:
     resource: routing/wayf.yml
