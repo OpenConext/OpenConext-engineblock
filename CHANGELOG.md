@@ -22,6 +22,13 @@ The most notable changes are:
  * Visual regression tests have been added for the error pages #687
  * The browser support policy has been made explicit #686
 
+## 5.10.4
+This release changed the way the rolling upgrades are handled between version 5.9 and 5.10. In code we stop using two
+database columns we no longer use. But the database migration that accompanies that change was also included in this 
+release. This change was removed in this release and will be executed in 5.11.
+
+See #704 for details. 
+
 ## 5.10.3
 The unsolicited SSO endpoint received some TLC. In addition to adding request input validation, we also added additional test coverage and cleaned up some unused routes.
 
