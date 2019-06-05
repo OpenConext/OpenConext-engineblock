@@ -17,6 +17,9 @@
     position: absolute
     height: 100%
     width: 100%
+    z-index: 1
+    +max-width($large)
+      left: -8%
 
   &__back
     background: url(/images/background-back.svg) left bottom repeat-x
@@ -25,3 +28,4 @@
     position: absolute
     height: 200px
     width: 100%
+    z-index: 0
