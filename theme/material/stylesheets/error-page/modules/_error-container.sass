@@ -1,12 +1,18 @@
 .error-container
-  margin: 0 auto
-  position: relative
-  top: 8em
+  left: 50%
+  margin: 0
+  position: absolute
+  top: 50%
+  transform: translate(-50%, -50%)
   width: 720px
   +max-width($small)
     top: 2.75em
     width: 100%
     margin-bottom: 3em
+    transform: none
+    position: relative
+    margin: 0 auto
+    left: unset
 
   &__content
     padding: 2em
