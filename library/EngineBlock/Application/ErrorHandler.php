@@ -41,7 +41,7 @@ class EngineBlock_Application_ErrorHandler
         return $this;
     }
 
-    public function exception(Exception $e)
+    public function exception(Throwable $e)
     {
         foreach ($this->_exitHandlers as $exitHandler) {
             $exitHandler($e);
