@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Exception;
 
 use Exception;
+use Throwable;
 
 /**
  * Art (Alberts-Renterghem-Tuck)
@@ -46,7 +47,7 @@ class Art
      * @param Exception $exception
      * @return string
      */
-    public static function forException(Exception $exception)
+    public static function forException(Throwable $exception)
     {
         return self::calculateArt(get_class($exception), $exception->getMessage());
     }
