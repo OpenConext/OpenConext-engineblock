@@ -216,7 +216,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         );
 
         return Utils::instantiate(
-            'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider',
+            ServiceProvider::class,
             $properties
         );
     }
@@ -237,7 +237,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->assembleShibMdScopes($connection);
 
         return Utils::instantiate(
-            'OpenConext\EngineBlock\Metadata\Entity\IdentityProvider',
+            IdentityProvider::class,
             $properties
         );
     }

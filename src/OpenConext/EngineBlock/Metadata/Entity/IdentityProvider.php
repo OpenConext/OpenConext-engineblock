@@ -3,7 +3,7 @@
 namespace OpenConext\EngineBlock\Metadata\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use OpenConext\EngineBlock\Authentication\Dto\Consent;
+use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
@@ -198,6 +198,16 @@ class IdentityProvider extends AbstractRole
         $this->shibMdScopes = $shibMdScopes;
         $this->singleSignOnServices = $singleSignOnServices;
         $this->consentSettings = $consentSettings;
+
+        $this->coins = Coins::createForIdentityProvider(
+            $guestQualifier,
+            $schacHomeOrganization,
+            $hidden,
+            $publishInEdugain,
+            $disableScoping,
+            $additionalLogging,
+            $signatureMethod
+        );
     }
 
     /**
