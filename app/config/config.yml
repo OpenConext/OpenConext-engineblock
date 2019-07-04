@@ -87,6 +87,7 @@ doctrine:
         types:
             engineblock_collab_person_id: OpenConext\EngineBlockBundle\Doctrine\Type\CollabPersonIdType
             engineblock_collab_person_uuid: OpenConext\EngineBlockBundle\Doctrine\Type\CollabPersonUuidType
+            engineblock_metadata_coins: OpenConext\EngineBlockBundle\Doctrine\Type\MetadataCoinType
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'

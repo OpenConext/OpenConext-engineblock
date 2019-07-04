@@ -4,6 +4,7 @@ namespace OpenConext\EngineBlock\Metadata\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
@@ -249,6 +250,13 @@ abstract class AbstractRole
      * @ORM\Column(name="manipulation", type="text")
      */
     public $manipulation;
+
+    /**
+     * @var Coins
+     *
+     * @ORM\Column(name="coins", type="engineblock_metadata_coins")
+     */
+    protected $coins = array();
 
     /**
      * @param $entityId
