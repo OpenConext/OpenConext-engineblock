@@ -86,12 +86,30 @@
             "en": "ORCID researcher ID",
             "nl": "ORCID onderzoekers-ID"
         },
-	"DisplayOrder" : 13,
+        "DisplayOrder" : 13,
         "DisplayConsent" : true,
         "Conditions": {
             "warning": {
                 "max": "1",
                 "regex": "#^http://orcid\\.org/\\d{4}(-\\d{4}){3}$#"
+            }
+        }
+    },
+    "urn:mace:surf.nl:attribute-def:eckid": {
+        "Description": {
+            "en": "Pseudonymous identifier for educational content access",
+            "nl": "Pseudoniem voor toegang tot educatieve content"
+        },
+        "Name": {
+            "en": "ECK ID",
+            "nl": "ECK ID"
+        },
+        "DisplayOrder" : 15,
+        "DisplayConsent" : true,
+        "Conditions": {
+            "warning": {
+                "max": "1",
+                "regex": "#^https://ketenid\\.nl#"
             }
         }
     },
