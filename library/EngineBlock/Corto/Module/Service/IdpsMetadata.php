@@ -42,7 +42,7 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
                 continue;
             }
 
-            if ($entity->hidden) {
+            if ($entity->coins()->hidden()) {
                 continue;
             }
 

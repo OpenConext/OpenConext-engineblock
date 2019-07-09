@@ -38,7 +38,7 @@ class EngineBlock_Saml2_AuthnRequestFactory
         $sspRequest->setIssuer($server->getUrl('spMetadataService'));
         $sspRequest->setNameIdPolicy($nameIdPolicy);
 
-        if (empty($idpMetadata->disableScoping)) {
+        if (empty($idpMetadata->getCoins()->disableScoping())) {
             // Copy over the Idps that are allowed to answer this request.
             $sspRequest->setIDPList($originalRequest->getIDPList());
 

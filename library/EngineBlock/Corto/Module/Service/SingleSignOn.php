@@ -420,7 +420,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 continue;
             }
 
-            if ($identityProvider->hidden) {
+            if ($identityProvider->getCoins()->hidden()) {
                 continue;
             }
 

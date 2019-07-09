@@ -94,7 +94,7 @@ class CortoDisassembler
         }
 
         $cortoEntity['SpsWithoutConsent'] = $entity->getConsentSettings()->getSpEntityIdsWithoutConsent();
-        $cortoEntity['isHidden'] = $entity->hidden;
+        $cortoEntity['isHidden'] = $entity->coins()->hidden();
 
         $cortoEntity['shibmd:scopes'] = array();
         foreach ($entity->shibMdScopes as $scope) {
@@ -121,11 +121,11 @@ class CortoDisassembler
         if ($entity->publishInEduGainDate) {
             $cortoEntity['PublishInEdugainDate'] = $entity->publishInEduGainDate->format(DateTime::W3C);
         }
-        if ($entity->disableScoping) {
+        if ($entity->getCoins()->disableScoping()) {
             $cortoEntity['DisableScoping'] = true;
         }
-        if ($entity->additionalLogging) {
-            $cortoEntity['AdditionalLogging'] = $entity->additionalLogging;
+        if ($entity->getCoins()->additionalLogging()) {
+            $cortoEntity['AdditionalLogging'] = $entity->getCoins()->additionalLogging();
         }
         $cortoEntity = $this->translateCommonCertificates($entity, $cortoEntity);
         if ($entity->logo) {
