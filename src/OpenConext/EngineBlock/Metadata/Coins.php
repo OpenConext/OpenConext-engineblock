@@ -2,6 +2,9 @@
 
 namespace OpenConext\EngineBlock\Metadata;
 
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
+
 /**
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
@@ -19,7 +22,6 @@ class Coins
         $policyEnforcementDecisionRequired,
         $requesteridRequired,
         $signResponse,
-        $publishInEdugain,
         $disableScoping,
         $additionalLogging,
         $signatureMethod
@@ -34,7 +36,6 @@ class Coins
             'policyEnforcementDecisionRequired' => $policyEnforcementDecisionRequired,
             'requesteridRequired' => $requesteridRequired,
             'signResponse' => $signResponse,
-            'publishInEdugain' => $publishInEdugain,
             'disableScoping' => $disableScoping,
             'additionalLogging' => $additionalLogging,
             'signatureMethod' => $signatureMethod,
@@ -45,7 +46,6 @@ class Coins
         $guestQualifier,
         $schacHomeOrganization,
         $hidden,
-        $publishInEdugain,
         $disableScoping,
         $additionalLogging,
         $signatureMethod
@@ -54,16 +54,20 @@ class Coins
             'guestQualifier' => $guestQualifier,
             'schacHomeOrganization' => $schacHomeOrganization,
             'hidden' => $hidden,
-            'publishInEdugain' => $publishInEdugain,
             'disableScoping' => $disableScoping,
             'additionalLogging' => $additionalLogging,
             'signatureMethod' => $signatureMethod,
         ]);
     }
 
-    public function __construct(array $values)
+    private function __construct(array $values)
     {
-        $this->values = $values;
+        $this->values = [];
+        foreach ($values as $key => $value) {
+            if (!is_null($value)) {
+                $this->values[$key] = $value;
+            }
+        }
     }
 
     /**
@@ -83,5 +87,91 @@ class Coins
         $data = json_decode($data, true);
 
         return new self($data);
+    }
+
+    // SP
+    public function isConsentRequired()
+    {
+        return $this->getValue('isConsentRequired', true);
+    }
+
+    public function isTransparentIssuer()
+    {
+        return $this->getValue('isTransparentIssuer', false);
+    }
+
+    public function isTrustedProxy()
+    {
+        return $this->getValue('isTrustedProxy', false);
+    }
+
+    public function displayUnconnectedIdpsWayf()
+    {
+        return $this->getValue('displayUnconnectedIdpsWayf', false);
+    }
+
+    public function termsOfServiceUrl()
+    {
+        return $this->getValue('termsOfServiceUrl');
+    }
+
+    public function skipDenormalization()
+    {
+        return $this->getValue('skipDenormalization', false);
+    }
+
+    public function policyEnforcementDecisionRequired()
+    {
+        return $this->getValue('policyEnforcementDecisionRequired', false);
+    }
+
+    public function requesteridRequired()
+    {
+        return $this->getValue('requesteridRequired', false);
+    }
+
+    public function signResponse()
+    {
+        return $this->getValue('signResponse', false);
+    }
+
+    // IDP
+    public function guestQualifier()
+    {
+        return $this->getValue('guestQualifier', IdentityProvider::GUEST_QUALIFIER_ALL);
+    }
+
+    public function schacHomeOrganization()
+    {
+        return $this->getValue('schacHomeOrganization');
+    }
+
+    public function hidden()
+    {
+        return $this->getValue('hidden', false);
+    }
+
+    // Abstract
+    public function disableScoping()
+    {
+        return $this->getValue('disableScoping', false);
+    }
+
+    public function additionalLogging()
+    {
+        return $this->getValue('additionalLogging', false);
+    }
+
+    public function signatureMethod()
+    {
+        return $this->getValue('signatureMethod', XMLSecurityKey::RSA_SHA1);
+    }
+
+    private function getValue($key, $default = null)
+    {
+        if (!array_key_exists($key, $this->values)) {
+            return $default;
+        }
+        return $this->values[$key];
     }
 }
