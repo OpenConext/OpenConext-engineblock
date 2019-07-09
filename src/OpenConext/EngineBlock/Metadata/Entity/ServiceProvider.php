@@ -3,8 +3,6 @@
 namespace OpenConext\EngineBlock\Metadata\Entity;
 
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
-use OpenConext\EngineBlock\Metadata\Coin;
-use OpenConext\EngineBlock\Metadata\CoinCollection;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
@@ -286,7 +284,6 @@ class ServiceProvider extends AbstractRole
             $policyEnforcementDecisionRequired,
             $requesteridRequired,
             $signResponse,
-            $publishInEdugain,
             $disableScoping,
             $additionalLogging,
             $signatureMethod

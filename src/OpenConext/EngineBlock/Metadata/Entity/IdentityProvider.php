@@ -203,7 +203,6 @@ class IdentityProvider extends AbstractRole
             $guestQualifier,
             $schacHomeOrganization,
             $hidden,
-            $publishInEdugain,
             $disableScoping,
             $additionalLogging,
             $signatureMethod

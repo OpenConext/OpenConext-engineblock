@@ -376,4 +376,12 @@ abstract class AbstractRole
 
         throw new \RuntimeException('Unknown workflow state');
     }
+
+    /**
+     * @return Coins
+     */
+    public function getCoins()
+    {
+        return $this->coins;
+    }
 }
