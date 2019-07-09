@@ -568,7 +568,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $sspMessage->setCertificates(array($keyPair->getCertificate()->toPem()));
             $sspMessage->setSignatureKey(
                 $keyPair->getPrivateKey()->toXmlSecurityKey(
-                    $remoteEntity->signatureMethod
+                    $remoteEntity->getCoins()->signatureMethod()
                 )
             );
         }

@@ -15,7 +15,7 @@ class EngineBlock_SamlHelper
     public static function doRemoteEntitiesRequireAdditionalLogging(array $entities)
     {
         return array_reduce($entities, function($carry, AbstractRole $entity) {
-            return $carry | $entity->additionalLogging;
+            return $carry | $entity->getCoins()->additionalLogging();
         }, false);
     }
 

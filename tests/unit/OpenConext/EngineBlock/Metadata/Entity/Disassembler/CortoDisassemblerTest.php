@@ -81,7 +81,7 @@ class CortoDisassemblerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($identityProvider->workflowState, $cortoIdentityProvider['WorkflowState']);
         $this->assertEquals($identityProvider->guestQualifier, $cortoIdentityProvider['GuestQualifier']);
         $this->assertEquals($identityProvider->getConsentSettings()->getSpEntityIdsWithoutConsent(), $cortoIdentityProvider['SpsWithoutConsent']);
-        $this->assertEquals($identityProvider->hidden, $cortoIdentityProvider['isHidden']);
+        $this->assertEquals($identityProvider->getCoins()->hidden(), $cortoIdentityProvider['isHidden']);
         $this->assertEmpty($cortoIdentityProvider['shibmd:scopes']);
         $this->assertEquals($contact->contactType, $cortoIdentityProvider['ContactPersons'][0]['ContactType']);
         $this->assertEquals($contact->emailAddress, $cortoIdentityProvider['ContactPersons'][0]['EmailAddress']);
