@@ -476,7 +476,7 @@ class EngineBlock_Corto_ProxyServer
         // Unless of course we are in 'stealth' / transparent mode, in which case,
         // pretend to be the Identity Provider.
         $serviceProvider = $this->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
-        $mustProxyTransparently = ($request->isTransparent() || $serviceProvider->isTransparentIssuer);
+        $mustProxyTransparently = ($request->isTransparent() || $serviceProvider->getCoins()->isTransparentIssuer());
         if (!$this->isInProcessingMode() && $mustProxyTransparently) {
             $newResponse->setIssuer($newResponse->getOriginalIssuer());
             $newAssertion->setIssuer($newResponse->getOriginalIssuer());

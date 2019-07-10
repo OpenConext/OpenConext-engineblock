@@ -52,9 +52,9 @@ class CortoDisassemblerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($serviceProvider->displayNameNl         , $cortoServiceProvider['DisplayName']['en']);
         $this->assertEquals('yes'                                   , $cortoServiceProvider['TransparentIssuer']);
         $this->assertEquals('yes'                                   , $cortoServiceProvider['DisplayUnconnectedIdpsWayf']);
-        $this->assertEquals(!$serviceProvider->isConsentRequired    , $cortoServiceProvider['NoConsentRequired']);
-        $this->assertEquals($serviceProvider->skipDenormalization   , $cortoServiceProvider['SkipDenormalization']);
-        $this->assertEquals($serviceProvider->policyEnforcementDecisionRequired   , $cortoServiceProvider['PolicyEnforcementDecisionRequired']);
+        $this->assertEquals(!$serviceProvider->getCoins()->isConsentRequired()    , $cortoServiceProvider['NoConsentRequired']);
+        $this->assertEquals($serviceProvider->getCoins()->skipDenormalization()   , $cortoServiceProvider['SkipDenormalization']);
+        $this->assertEquals($serviceProvider->getCoins()->policyEnforcementDecisionRequired()   , $cortoServiceProvider['PolicyEnforcementDecisionRequired']);
         $this->assertEquals($serviceProvider->isAttributeAggregationRequired()        , true);
         $this->assertEquals($serviceProvider->isAttributeAggregationRequired()        , $cortoServiceProvider['AttributeAggregationRequired']);
         $this->assertEquals($contact->contactType, $cortoServiceProvider['ContactPersons'][0]['ContactType']);
