@@ -1,5 +1,6 @@
 <?php
 
+use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
@@ -70,7 +71,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
 
     public function testConsentIsSkippedWhenGloballyDisabled()
     {
-        $this->proxyServerMock->getRepository()->fetchServiceProviderByEntityId('testSp')->isConsentRequired = false;
+        $this->setCoin($this->proxyServerMock->getRepository()->fetchServiceProviderByEntityId('testSp'), 'isConsentRequired', false);
 
         $provideConsentService = $this->factoryService();
 
@@ -272,5 +273,21 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
             $this->authStateHelperMock,
             $this->twig
         );
+    }
+
+    private function setCoin(ServiceProvider $sp, $key, $name)
+    {
+        $jsonData = $sp->getCoins()->toJson();
+        $data = json_decode($jsonData, true);
+        $data[$key] = $name;
+        $jsonData = json_encode($data);
+
+        $coins = Coins::fromJson($jsonData);
+
+        $object = new \ReflectionClass($sp);
+
+        $property = $object->getProperty('coins');
+        $property->setAccessible(true);
+        $property->setValue($sp, $coins);
     }
 }

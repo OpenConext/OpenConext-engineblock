@@ -6,6 +6,7 @@ use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Utils;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -16,14 +17,19 @@ class CortoDisassemblerTest extends PHPUnit_Framework_TestCase
 {
     public function testSpDisassemble()
     {
-        $serviceProvider = new ServiceProvider('https://sp.example.edu');
-        $serviceProvider->displayNameNl = 'DisplayName';
-        $serviceProvider->displayNameEn = 'DisplayName';
-        $serviceProvider->isTransparentIssuer = true;
-        $serviceProvider->displayUnconnectedIdpsWayf = true;
-        $serviceProvider->isConsentRequired = false;
-        $serviceProvider->skipDenormalization = true;
-        $serviceProvider->policyEnforcementDecisionRequired = true;
+        $serviceProvider = Utils::instantiate(
+            ServiceProvider::class,
+            [
+                'entityId' => 'https://sp.example.edu',
+                'displayNameNl' => 'DisplayName',
+                'displayNameEn' => 'DisplayName',
+                'isTransparentIssuer' => true,
+                'displayUnconnectedIdpsWayf' => true,
+                'isConsentRequired' => false,
+                'skipDenormalization' => true,
+                'policyEnforcementDecisionRequired' => true,
+            ]
+        );
 
         // set a non-idp arp rule to enable attribute aggregation
         $serviceProvider->attributeReleasePolicy = new AttributeReleasePolicy([

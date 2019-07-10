@@ -4,6 +4,7 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
 use Doctrine\ORM\EntityManager;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
+use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
@@ -133,7 +134,7 @@ class ServiceRegistryFixture
             0
         );
 
-        $sp->termsOfServiceUrl = 'http://welcome.vm.openconext.org';
+        $this->setCoin($sp, 'termsOfServiceUrl', 'http://welcome.vm.openconext.org');
         $sp->logo = new Logo('/images/placeholder.png');
 
         // The repository does not allow us to retrieve all SP's for good reason. In functional testing mode the total
@@ -222,7 +223,7 @@ QUERY;
 
     public function setSpEntityNoConsent($entityId)
     {
-        $this->getServiceProvider($entityId)->isConsentRequired = false;
+        $this->setCoin($this->getServiceProvider($entityId), 'isConsentRequired', false);
 
         return $this;
     }
@@ -236,14 +237,14 @@ QUERY;
 
     public function setSpSignRepsones($entityId, $state = true)
     {
-        $this->getServiceProvider($entityId)->signResponse = (bool)$state;
+        $this->setCoin($this->getServiceProvider($entityId), 'signResponse', (bool)$state);
 
         return $this;
     }
 
     public function setSpEntityTrustedProxy($entityId)
     {
-        $this->getServiceProvider($entityId)->isTrustedProxy = true;
+        $this->setCoin($this->getServiceProvider($entityId), 'isTrustedProxy', true);
 
         return $this;
     }
@@ -278,7 +279,7 @@ QUERY;
 
     public function spRequiresPolicyEnforcementDecisionForSp($entityId)
     {
-        $this->getServiceProvider($entityId)->policyEnforcementDecisionRequired = true;
+        $this->setCoin($this->getServiceProvider($entityId), 'policyEnforcementDecisionRequired', true);
 
         return $this;
     }
@@ -301,12 +302,12 @@ QUERY;
 
     public function requireASignedResponse($entityId)
     {
-        $this->getServiceProvider($entityId)->signResponse = true;
+        $this->setCoin($this->getServiceProvider($entityId), 'signResponse', true);
     }
 
     public function displayUnconnectedIdpsForSp($entityId, $displayUnconnected = true)
     {
-        $this->getServiceProvider($entityId)->displayUnconnectedIdpsWayf = (bool) $displayUnconnected;
+        $this->setCoin($this->getServiceProvider($entityId), 'displayUnconnectedIdpsWayf', (bool) $displayUnconnected);
 
         return $this;
     }
@@ -403,5 +404,21 @@ QUERY;
         );
 
         return $this;
+    }
+
+    private function setCoin(ServiceProvider $sp, $key, $name)
+    {
+        $jsonData = $sp->getCoins()->toJson();
+        $data = json_decode($jsonData, true);
+        $data[$key] = $name;
+        $jsonData = json_encode($data);
+
+        $coins = Coins::fromJson($jsonData);
+
+        $object = new \ReflectionClass($sp);
+
+        $property = $object->getProperty('coins');
+        $property->setAccessible(true);
+        $property->setValue($sp, $coins);
     }
 }
