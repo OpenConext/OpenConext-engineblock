@@ -7,6 +7,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class Coins
 {
