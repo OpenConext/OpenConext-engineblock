@@ -31,10 +31,10 @@ class CortoDisassembler
 
         $cortoEntity = $this->translateCommon($entity, $cortoEntity);
 
-        if ($entity->isTransparentIssuer) {
+        if ($entity->getCoins()->isTransparentIssuer()) {
             $cortoEntity['TransparentIssuer'] = 'yes';
         }
-        if ($entity->displayUnconnectedIdpsWayf) {
+        if ($entity->getCoins()->displayUnconnectedIdpsWayf()) {
             $cortoEntity['DisplayUnconnectedIdpsWayf'] = 'yes';
         }
         foreach ($entity->assertionConsumerServices as $service) {
@@ -47,19 +47,19 @@ class CortoDisassembler
                 'Location' => $service->location,
             );
         }
-        if (!$entity->isConsentRequired) {
+        if (!$entity->getCoins()->isConsentRequired()) {
             $cortoEntity['NoConsentRequired'] = true;
         }
-        if ($entity->skipDenormalization) {
+        if ($entity->getCoins()->skipDenormalization()) {
             $cortoEntity['SkipDenormalization'] = true;
         }
-        if ($entity->policyEnforcementDecisionRequired) {
+        if ($entity->getCoins()->policyEnforcementDecisionRequired()) {
             $cortoEntity['PolicyEnforcementDecisionRequired'] = true;
         }
         if ($entity->isAttributeAggregationRequired()) {
             $cortoEntity['AttributeAggregationRequired'] = true;
         }
-        if ($entity->requesteridRequired) {
+        if ($entity->getCoins()->requesteridRequired()) {
             $cortoEntity['requesteridRequired'] = true;
         }
 

@@ -208,7 +208,7 @@ final class ConsentControllerTest extends WebTestCase
                         'en' => $serviceProvider->supportUrlEn,
                         'nl' => $serviceProvider->supportUrlNl,
                     ],
-                    'eula_url' => $serviceProvider->termsOfServiceUrl,
+                    'eula_url' => $serviceProvider->getCoins()->termsOfServiceUrl(),
                     'support_email' => $firstSupportContact->emailAddress,
                     'name_id_format' => $serviceProvider->nameIdFormat,
                 ],

@@ -56,7 +56,7 @@ final class Consent
                 'en' => $this->serviceProvider->supportUrlEn,
                 'nl' => $this->serviceProvider->supportUrlNl,
             ],
-            'eula_url' => $this->serviceProvider->termsOfServiceUrl,
+            'eula_url' => $this->serviceProvider->getCoins()->termsOfServiceUrl(),
             'support_email' => $supportEmail,
             'name_id_format' => $this->serviceProvider->nameIdFormat,
         ];

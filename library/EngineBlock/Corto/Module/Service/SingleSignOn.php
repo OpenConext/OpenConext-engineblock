@@ -27,7 +27,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         // When dealing with an SP that acts as a trusted proxy, we should perform SSO on the proxying SP and not the
         // proxy itself.
-        if ($sp->isTrustedProxy) {
+        if ($sp->getCoins()->isTrustedProxy()) {
             // Overwrite the trusted proxy SP instance with that of the SP that uses the trusted proxy.
             $sp = $this->findOriginalServiceProvider($request, $log);
         }
@@ -367,7 +367,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 'backLink' => $container->isUiOptionReturnToSpActive(),
                 'cutoffPointForShowingUnfilteredIdps' => $container->getCutoffPointForShowingUnfilteredIdps(),
                 'rememberChoiceFeature' => $rememberChoiceFeature,
-                'showRequestAccess' => $serviceProvider->displayUnconnectedIdpsWayf,
+                'showRequestAccess' => $serviceProvider->getCoins()->displayUnconnectedIdpsWayf(),
                 'requestId' => $request->getId(),
                 'serviceProvider' => $serviceProvider,
                 'idpList' => $idpList,

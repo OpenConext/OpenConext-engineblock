@@ -75,7 +75,7 @@ class EngineBlock_SamlHelper
         MetadataRepositoryInterface $repository,
         \Psr\Log\LoggerInterface $logger = null
     ) {
-        if (!$serviceProvider->isTrustedProxy) {
+        if (!$serviceProvider->getCoins()->isTrustedProxy()) {
             return null;
         }
 
@@ -89,7 +89,7 @@ class EngineBlock_SamlHelper
         $lastRequesterEntityId = end($requesterIds);
 
         if (!$lastRequesterEntityId) {
-            if ($serviceProvider->requesteridRequired) {
+            if ($serviceProvider->getCoins()->requesteridRequired()) {
                 throw new EngineBlock_Exception_UnknownServiceProvider(
                     $serviceProvider,
                     'No RequesterID specified'
