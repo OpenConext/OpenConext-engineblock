@@ -87,14 +87,14 @@ class CortoDisassembler
             );
         }
 
-        $cortoEntity['GuestQualifier'] = $entity->guestQualifier;
+        $cortoEntity['GuestQualifier'] = $entity->getCoins()->guestQualifier();
 
-        if ($entity->schacHomeOrganization) {
-            $cortoEntity['SchacHomeOrganization'] = $entity->schacHomeOrganization;
+        if ($entity->getCoins()->schacHomeOrganization()) {
+            $cortoEntity['SchacHomeOrganization'] = $entity->getCoins()->schacHomeOrganization();
         }
 
         $cortoEntity['SpsWithoutConsent'] = $entity->getConsentSettings()->getSpEntityIdsWithoutConsent();
-        $cortoEntity['isHidden'] = $entity->coins()->hidden();
+        $cortoEntity['isHidden'] = $entity->getCoins()->hidden();
 
         $cortoEntity['shibmd:scopes'] = array();
         foreach ($entity->shibMdScopes as $scope) {
