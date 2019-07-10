@@ -228,30 +228,9 @@ abstract class AbstractRole
     /**
      * @var bool
      *
-     * @ORM\Column(name="disable_scoping", type="boolean")
-     */
-    public $disableScoping;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="additional_logging", type="boolean")
-     */
-    public $additionalLogging = false;
-
-    /**
-     * @var bool
-     *
      * @ORM\Column(name="requests_must_be_signed", type="boolean")
      */
     public $requestsMustBeSigned = false;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="signature_method", type="string")
-     */
-    public $signatureMethod;
 
     /**
      * @var string
@@ -279,12 +258,10 @@ abstract class AbstractRole
      * @param Organization $organizationEn
      * @param Organization $organizationNl
      * @param Service $singleLogoutService
-     * @param bool $additionalLogging
      * @param array $certificates
      * @param array $contactPersons
      * @param string $descriptionEn
      * @param string $descriptionNl
-     * @param bool $disableScoping
      * @param string $displayNameEn
      * @param string $displayNameNl
      * @param string $keywordsEn
@@ -297,7 +274,6 @@ abstract class AbstractRole
      * @param null $publishInEduGainDate
      * @param bool $publishInEdugain
      * @param bool $requestsMustBeSigned
-     * @param string $signatureMethod
      * @param Service $responseProcessingService
      * @param string $workflowState
      * @param string $manipulation
@@ -307,12 +283,10 @@ abstract class AbstractRole
         Organization $organizationEn = null,
         Organization $organizationNl = null,
         Service $singleLogoutService = null,
-        $additionalLogging = false,
         array $certificates = array(),
         array $contactPersons = array(),
         $descriptionEn = '',
         $descriptionNl = '',
-        $disableScoping = false,
         $displayNameEn = '',
         $displayNameNl = '',
         $keywordsEn = '',
@@ -328,17 +302,14 @@ abstract class AbstractRole
         $publishInEduGainDate = null,
         $publishInEdugain = false,
         $requestsMustBeSigned = false,
-        $signatureMethod = XMLSecurityKey::RSA_SHA1,
         Service $responseProcessingService = null,
         $workflowState = self::WORKFLOW_STATE_DEFAULT,
         $manipulation = ''
     ) {
-        $this->additionalLogging = $additionalLogging;
         $this->certificates = $certificates;
         $this->contactPersons = $contactPersons;
         $this->descriptionEn = $descriptionEn;
         $this->descriptionNl = $descriptionNl;
-        $this->disableScoping = $disableScoping;
         $this->displayNameEn = $displayNameEn;
         $this->displayNameNl = $displayNameNl;
         $this->entityId = $entityId;
@@ -354,7 +325,6 @@ abstract class AbstractRole
         $this->publishInEduGainDate = $publishInEduGainDate;
         $this->publishInEdugain = $publishInEdugain;
         $this->requestsMustBeSigned = $requestsMustBeSigned;
-        $this->signatureMethod = $signatureMethod;
         $this->responseProcessingService = $responseProcessingService;
         $this->singleLogoutService = $singleLogoutService;
         $this->workflowState = $workflowState;

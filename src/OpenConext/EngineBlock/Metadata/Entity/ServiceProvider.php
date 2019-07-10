@@ -56,48 +56,6 @@ class ServiceProvider extends AbstractRole
     public $assertionConsumerServices;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="is_transparent_issuer", type="boolean")
-     */
-    public $isTransparentIssuer;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="is_trusted_proxy", type="boolean")
-     */
-    public $isTrustedProxy;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="display_unconnected_idps_wayf", type="boolean")
-     */
-    public $displayUnconnectedIdpsWayf;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="is_consent_required", type="boolean")
-     */
-    public $isConsentRequired;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="terms_of_service_url", type="string")
-     */
-    public $termsOfServiceUrl;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="skip_denormalization", type="boolean")
-     */
-    public $skipDenormalization;
-
-    /**
      * @var string[]
      *
      * @ORM\Column(name="allowed_idp_entity_ids", type="array")
@@ -110,27 +68,6 @@ class ServiceProvider extends AbstractRole
      * @ORM\Column(name="allow_all", type="boolean")
      */
     public $allowAll;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="policy_enforcement_decision_required", type="boolean")
-     */
-    public $policyEnforcementDecisionRequired;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="requesterid_required", type="boolean")
-     */
-    public $requesteridRequired;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="sign_response", type="boolean")
-     */
-    public $signResponse;
 
     /**
      * @var null|RequestedAttribute[]
@@ -254,12 +191,10 @@ class ServiceProvider extends AbstractRole
             $organizationEn,
             $organizationNl,
             $singleLogoutService,
-            $additionalLogging,
             $certificates,
             $contactPersons,
             $descriptionEn,
             $descriptionNl,
-            $disableScoping,
             $displayNameEn,
             $displayNameNl,
             $keywordsEn,
@@ -272,7 +207,6 @@ class ServiceProvider extends AbstractRole
             $publishInEduGainDate,
             $publishInEdugain,
             $requestsMustBeSigned,
-            $signatureMethod,
             $responseProcessingService,
             $workflowState,
             $manipulation
@@ -282,16 +216,7 @@ class ServiceProvider extends AbstractRole
         $this->allowedIdpEntityIds = $allowedIdpEntityIds;
         $this->allowAll = $allowAll;
         $this->assertionConsumerServices = $assertionConsumerServices;
-        $this->displayUnconnectedIdpsWayf = $displayUnconnectedIdpsWayf;
-        $this->termsOfServiceUrl = $termsOfServiceUrl;
-        $this->isConsentRequired = $isConsentRequired;
-        $this->isTransparentIssuer = $isTransparentIssuer;
-        $this->isTrustedProxy = $isTrustedProxy;
         $this->requestedAttributes = $requestedAttributes;
-        $this->skipDenormalization = $skipDenormalization;
-        $this->policyEnforcementDecisionRequired = $policyEnforcementDecisionRequired;
-        $this->requesteridRequired = $requesteridRequired;
-        $this->signResponse = $signResponse;
         $this->supportUrlEn = $supportUrlEn;
         $this->supportUrlNl = $supportUrlNl;
 
