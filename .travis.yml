@@ -77,6 +77,8 @@ branches:
   only:
     - master
     - feature/sfo
+    - /^feature\/serialize-coins.*$/
+    - feature/error-page-styling
 
 after_failure:
   - sudo tail -500 /var/log/apache2/error.log
