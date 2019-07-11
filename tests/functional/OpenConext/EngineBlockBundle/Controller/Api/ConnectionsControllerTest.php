@@ -378,11 +378,11 @@ class ConnectionsControllerTest extends WebTestCase
                     'name' => 'SP1',
                     'type' => 'saml20-sp',
                 ],[
-                'uuid' => '00000000-0000-0000-0000-000000000002',
-                'entityId' => 'https://my-idp.test/3',
-                'name' => 'IDP3',
-                'type' => 'saml20-idp',
-            ],
+                    'uuid' => '00000000-0000-0000-0000-000000000002',
+                    'entityId' => 'https://my-idp.test/3',
+                    'name' => 'IDP3',
+                    'type' => 'saml20-idp',
+                ],
             ],
             [
                 [
@@ -397,11 +397,11 @@ class ConnectionsControllerTest extends WebTestCase
                     'name' => 'SP1 updated',
                     'type' => 'saml20-sp',
                 ],[
-                'uuid' => '00000000-0000-0000-0000-000000000002',
-                'entityId' => 'https://my-idp.test/3',
-                'name' => 'IDP3 updated',
-                'type' => 'saml20-idp',
-            ],
+                    'uuid' => '00000000-0000-0000-0000-000000000002',
+                    'entityId' => 'https://my-idp.test/3',
+                    'name' => 'IDP3 updated',
+                    'type' => 'saml20-idp',
+                ],
             ],
             [
                 [
