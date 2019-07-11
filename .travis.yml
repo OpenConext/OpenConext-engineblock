@@ -74,9 +74,8 @@ script:
 
 branches:
   only:
-    - 5.x-dev
     - master
-    - release/5.8
+    - /^feature\/serialize-coins.*$/
     - feature/error-page-styling
 
 after_failure:
