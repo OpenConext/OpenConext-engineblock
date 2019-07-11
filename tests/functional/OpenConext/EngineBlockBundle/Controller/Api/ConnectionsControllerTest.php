@@ -247,7 +247,7 @@ class ConnectionsControllerTest extends WebTestCase
 
             // validate coins
             foreach ($connection['expected-coins'] as $key => $value) {
-                $this->assertSame($value, $data->$key, "Coin value for '{$key}' expected to be '{$value}' but unexpected '{$data->$key}' encountered.");
+                $this->assertSame($value, $data->getCoins()->$key(), "Coin value for '{$key}' expected to be '{$value}' but unexpected '{$data->getCoins()->$key()}' encountered.");
             }
         }
     }
@@ -378,11 +378,11 @@ class ConnectionsControllerTest extends WebTestCase
                     'name' => 'SP1',
                     'type' => 'saml20-sp',
                 ],[
-                'uuid' => '00000000-0000-0000-0000-000000000002',
-                'entityId' => 'https://my-idp.test/3',
-                'name' => 'IDP3',
-                'type' => 'saml20-idp',
-            ],
+                    'uuid' => '00000000-0000-0000-0000-000000000002',
+                    'entityId' => 'https://my-idp.test/3',
+                    'name' => 'IDP3',
+                    'type' => 'saml20-idp',
+                ],
             ],
             [
                 [
@@ -397,11 +397,11 @@ class ConnectionsControllerTest extends WebTestCase
                     'name' => 'SP1 updated',
                     'type' => 'saml20-sp',
                 ],[
-                'uuid' => '00000000-0000-0000-0000-000000000002',
-                'entityId' => 'https://my-idp.test/3',
-                'name' => 'IDP3 updated',
-                'type' => 'saml20-idp',
-            ],
+                    'uuid' => '00000000-0000-0000-0000-000000000002',
+                    'entityId' => 'https://my-idp.test/3',
+                    'name' => 'IDP3 updated',
+                    'type' => 'saml20-idp',
+                ],
             ],
             [
                 [
@@ -450,7 +450,6 @@ class ConnectionsControllerTest extends WebTestCase
                     'requesteridRequired' => true,
                     'signResponse' => false,
                     // abstract
-                    'publishInEdugain' => true,
                     'disableScoping' => false,
                     'additionalLogging' => true,
                     'signatureMethod' => 'signature-method',
@@ -476,7 +475,6 @@ class ConnectionsControllerTest extends WebTestCase
                     'schacHomeOrganization' => 'schac-home-organization',
                     'hidden' => false,
                     // abstract
-                    'publishInEdugain' => true,
                     'disableScoping' => false,
                     'additionalLogging' => true,
                     'signatureMethod' => 'signature-method',

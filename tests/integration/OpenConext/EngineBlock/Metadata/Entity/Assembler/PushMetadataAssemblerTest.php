@@ -126,7 +126,7 @@ class PushMetadataAssemblerTest extends PHPUnit_Framework_TestCase
 
             $roles = $this->assembler->assemble($input);
 
-            $this->assertSame($assertion[1], $roles[0]->{$parameter}, "Invalid coin conversion for {$roleType}:{$coinName}($type) expected '{$assertion[1]}' but encountered '{$roles[0]->{$parameter}}'");
+            $this->assertSame($assertion[1], $roles[0]->getCoins()->{$parameter}(), "Invalid coin conversion for {$roleType}:{$coinName}($type) expected '{$assertion[1]}' but encountered '{$roles[0]->getCoins()->{$parameter}()}'");
         }
     }
 
