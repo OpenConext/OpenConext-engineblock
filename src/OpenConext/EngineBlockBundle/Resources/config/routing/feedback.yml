@@ -48,6 +48,11 @@ authentication_feedback_missing_required_fields:
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:missingRequiredFieldsAction }
 
+authentication_authn_context_class_ref_blacklisted:
+    path:       '/authn_context_class_ref_blacklisted'
+    methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:authnContextClassRefBlacklistedAction }
+
 authentication_feedback_invalid_attribute_value:
     path:       '/invalid-attribute-value'
     methods:    [GET]

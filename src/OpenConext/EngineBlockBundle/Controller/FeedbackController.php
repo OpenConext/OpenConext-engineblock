@@ -14,6 +14,7 @@ use Twig_Environment;
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Mimics the previous methodology, will be refactored
  *  see https://www.pivotaltracker.com/story/show/107565968
+ * @SuppressWarnings(PMD.TooManyMethods)
  */
 class FeedbackController
 {
@@ -191,6 +192,17 @@ class FeedbackController
         return new Response(
             $this->twig->render('@theme/Authentication/View/Feedback/missing-required-fields.html.twig'),
             400
+        );
+    }
+
+    /**
+     * @return Response
+     */
+    public function authnContextClassRefBlacklistedAction()
+    {
+        return new Response(
+            $this->twig->render('@theme/Authentication/View/Feedback/authn-context-class-ref-blacklisted.html.twig'),
+            403
         );
     }
 

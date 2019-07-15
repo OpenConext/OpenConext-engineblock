@@ -224,6 +224,8 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_stuck_in_authentication_loop_desc' => '<p>
         Autenticou-se com sucesso no seu Fornecedor de Identidade, mas o serviço ao qual está a tentar aceder reencaminhou-o de volta para %suiteName%. Como já está autenticado, o %suiteName% o reencaminha de volta para o serviço, o que resulta num ciclo infinito. Muito provavelmente, isto é provocado por um erro no Fornecedor de Serviço.
     </p>',
+    'error_authn_context_class_ref_blacklisted'                     => 'Erro - O valor para AuthnContextClassRef não é permitido',
+    'error_authn_context_class_ref_blacklisted_desc'                => '<p>Não pode autenticar-se porque a sua %organisationNoun% enviou um valor para AuthnContextClassRef que não é permitido.</p>',
     'error_no_authentication_request_received' => 'Nenhuma solicitação de autenticação recebida.',
     /**
      * %1 AttributeName
