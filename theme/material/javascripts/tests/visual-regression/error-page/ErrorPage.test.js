@@ -96,6 +96,10 @@ const errorPages = [
     {
         name: 'uncaught-error',
         url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=feedback_unknown_error&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata","serviceProviderName":"OpenConext Drop Supplies SP","identityProvider":"https://current-idp.entity-id.org/metadata"}'
+    },
+    {
+        name: 'authn-context-class-ref-blacklisted',
+        url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=authn-context-class-ref-blacklisted&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata","serviceProviderName":"OpenConext Drop Supplies SP","identityProvider":"https://current-idp.entity-id.org/metadata"}'
     }
 ];
 

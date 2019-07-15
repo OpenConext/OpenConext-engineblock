@@ -41,4 +41,9 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
     {
         return $this->getSymfonyContainer()->get('engineblock.functional_testing.fixture.attribute_aggregation_client');
     }
+
+    public function getAuthnContextClassRefBlacklistRegex()
+    {
+        return '/invalid-authn-context-class-ref/';
+    }
 }

@@ -9,6 +9,7 @@ use SAML2\XML\md\IDPSSODescriptor;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Allows for better control
+ * @SuppressWarnings(PMD.ExcessiveClassComplexity)
  */
 class MockIdentityProvider extends AbstractMockEntityRole
 {
@@ -234,6 +235,18 @@ class MockIdentityProvider extends AbstractMockEntityRole
 
         $assertions[0]->setAttributes($newAttributes);
     }
+
+    public function setAuthnContextClassRef($authnContextClassRefValue)
+    {
+        $role = $this->getSsoRole();
+
+        /** @var Response $response */
+        $response = $role->Extensions['SAMLResponse'];
+        $assertions = $response->getAssertions();
+
+        $assertions[0]->setAuthnContextClassRef($authnContextClassRefValue);
+    }
+
 
     public function useResponseSigning()
     {

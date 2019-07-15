@@ -441,4 +441,12 @@ class EngineBlock_Application_DiContainer extends Pimple
     {
         return (string) $this->container->getParameter('attribute_definition_file_path');
     }
+
+    /**
+     * @return string
+     */
+    public function getAuthnContextClassRefBlacklistRegex()
+    {
+        return (string) $this->container->getParameter('sfo.authn_context_class_ref_blacklist_regex');
+    }
 }

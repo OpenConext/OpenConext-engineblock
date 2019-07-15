@@ -236,7 +236,10 @@ $ymlContent = array(
                 'attributeDefinitionFile', $projectRoot . 'application/configs/attributes-v2.2.0.json'
             )
         ),
-        'monitor_database_health_check_query'                     => $config->get('openconext.monitor_bundle_health_query', '')
+        'monitor_database_health_check_query'                     => $config->get('openconext.monitor_bundle_health_query', ''),
+
+        // SFO
+        'sfo.authn_context_class_ref_blacklist_regex'             => escapeYamlValue($config->get('sfo.authn_context_class_ref_blacklist_regex'))
     )
 );
 

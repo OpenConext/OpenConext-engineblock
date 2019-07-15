@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlockBundle\EventListener;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Attributes_Manipulator_CustomException;
+use EngineBlock_Corto_Exception_AuthnContextClassRefBlacklisted;
 use EngineBlock_Corto_Exception_InvalidAcsLocation;
 use EngineBlock_Corto_Exception_MissingRequiredFields;
 use EngineBlock_Corto_Exception_NoConsentProvided;
@@ -124,6 +125,9 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof EngineBlock_Corto_Exception_MissingRequiredFields) {
             $message         = 'Missing Required Fields';
             $redirectToRoute = 'authentication_feedback_missing_required_fields';
+        } elseif ($exception instanceof EngineBlock_Corto_Exception_AuthnContextClassRefBlacklisted) {
+            $message         = $exception->getMessage();
+            $redirectToRoute = 'authentication_authn_context_class_ref_blacklisted';
         } elseif ($exception instanceof EngineBlock_Attributes_Manipulator_CustomException) {
             // @todo this must be done differently, for now don't see how as state is managed by EB.
             $event->getRequest()->getSession()->set('feedback_custom', $exception->getFeedback());
