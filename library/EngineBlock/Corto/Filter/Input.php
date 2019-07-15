@@ -21,8 +21,12 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
         $logger               = EngineBlock_ApplicationSingleton::getLog();
 
         $blockUsersOnViolation = $featureConfiguration->isEnabled('eb.block_user_on_violation');
+        $authnContextClassRefBlacklistPattern = $diContainer->getAuthnContextClassRefBlacklistRegex();
 
         $commands = array(
+            // Validate if the authnContextClassRef is not blacklisted
+            new EngineBlock_Corto_Filter_Command_ValidateAuthnContextClassRef($logger, $authnContextClassRefBlacklistPattern),
+
             // Convert all OID attributes to URN and remove the OID variant
             new EngineBlock_Corto_Filter_Command_NormalizeAttributes(),
 

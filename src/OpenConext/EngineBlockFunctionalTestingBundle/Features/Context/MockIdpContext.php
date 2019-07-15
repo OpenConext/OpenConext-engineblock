@@ -3,6 +3,7 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
@@ -289,6 +290,22 @@ class MockIdpContext extends AbstractSubContext
         $mockIdp->setAttribute($attributeName, $explosion, $attributeValueType);
         $this->mockIdpRegistry->save();
     }
+
+    /**
+     * @Given /^the IdP "([^"]*)" sends AuthnContextClassRef with value "([^"]*)"$/
+     * @param string $idpName
+     * @param string $authnContextClassRefValue
+     */
+    public function theIdPSendsAuthnContextClassRefValue($idpName, $authnContextClassRefValue)
+    {
+        /** @var MockIdentityProvider $mockIdp */
+        $mockIdp = $this->mockIdpRegistry->get($idpName);
+
+        $mockIdp->setAuthnContextClassRef($authnContextClassRefValue);
+
+        $this->mockIdpRegistry->save();
+    }
+
 
     /**
      * @Given /^the IdP "([^"]*)" requires minimal consent for SP "([^"]*)"$/

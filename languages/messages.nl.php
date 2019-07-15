@@ -226,9 +226,12 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
     </p>',
     'error_received_invalid_response'        => 'Fout - Ongeldig SAML-bericht van %organisationNoun%',
     'error_received_invalid_signed_response' => 'Fout - Ongeldige handtekening op antwoord %organisationNoun%',
-    'error_stuck_in_authentication_loop' => 'Error - Je zit vast in een zwart gat',
+    'error_stuck_in_authentication_loop' => 'Fout - Je zit vast in een zwart gat',
     'error_stuck_in_authentication_loop_desc' => 'Je bent succesvol ingelogd bij je %organisationNoun% maar de dienst waar je naartoe wilt stuurt je weer terug naar %suiteName%. Omdat je succesvol bent ingelogd, stuurt %suiteName% je weer naar de dienst, wat resulteert in een oneindig zwart gat. Dit komt waarschijnlijk door een foutje aan de kant van de dienst.',
     'error_no_authentication_request_received' => 'Fout - Geen authenticatie-aanvraag ontvangen.',
+    'error_authn_context_class_ref_blacklisted' => 'Fout - Waarde van AuthnContextClassRef is niet toegestaan',
+    'error_authn_context_class_ref_blacklisted_desc' => '<p>Je kunt niet inloggen omdat je %organisationNoun% een waarde stuurde voor AuthnContextClassRef die niet is toegestaan.</p>',
+
     /**
      * %1 AttributeName
      * %2 Options
