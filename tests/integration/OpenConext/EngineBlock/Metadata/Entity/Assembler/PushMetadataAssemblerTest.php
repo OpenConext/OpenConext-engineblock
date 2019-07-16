@@ -2,7 +2,11 @@
 
 namespace OpenConext\EngineBlock\Tests;
 
+use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\Assembler\PushMetadataAssembler;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use PHPUnit_Framework_TestCase;
 use RuntimeException;
@@ -134,6 +138,92 @@ class PushMetadataAssemblerTest extends PHPUnit_Framework_TestCase
 
             $this->assertSame($assertion[1], $roles[0]->getCoins()->{$parameter}(), "Invalid coin conversion for {$roleType}:{$coinName}($type) expected '{$assertion[1]}' but encountered '{$roles[0]->getCoins()->{$parameter}()}'");
         }
+    }
+
+    public function test_it_assembles_sfo_settings()
+    {
+        $connection = '{
+            "2d96e27a-76cf-4ca2-ac70-ece5d4c49523": {
+                "metadata": {
+                    "coin": {
+                        "stepup": {
+                            "allow_no_token": "1",
+                            "requireloa": "http://test.openconext.nl/assurance/loa2"
+                        }
+                    }
+                },
+                "name": "https:\/\/serviceregistry.vm.openconext.org\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-sp",
+                "state": "prodaccepted",
+                "type": "saml20-sp"
+            },
+            "2d96e27a-76cf-4ca2-ac70-ece5d4c49524": {
+                "stepup_connections": [
+                    {
+                      "name": "https://serviceregistry.test2.openconext.nl/simplesaml/module.php/saml/sp/metadata.php/default-sp",
+                      "level": "http://test.openconext.nl/assurance/loa2"
+                    },
+                    {
+                      "name": "http://mock-sp",
+                      "level": "http://test.openconext.nl/assurance/loa3"
+                    }
+                ],
+                "name": "https:\/\/serviceregistry.vm.openconext.org\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-idp",
+                "state": "prodaccepted",
+                "type": "saml20-idp"
+            }
+	    }';
+
+        $input = json_decode($connection);
+
+        $connections = $this->assembler->assemble($input);
+
+        /** @var ServiceProvider $sp */
+        $sp = $connections[0];
+        $this->assertInstanceOf(ServiceProvider::class, $sp);
+        $this->assertSame(true, $sp->getCoins()->stepupAllowNoToken());
+        $this->assertSame('http://test.openconext.nl/assurance/loa2', $sp->getCoins()->stepupRequireLoa());
+
+        /** @var IdentityProvider $idp */
+        $idp = $connections[1];
+        $this->assertInstanceOf(IdentityProvider::class, $idp);
+        $stepupConnections = $idp->getCoins()->stepupConnections();
+
+        $this->assertInstanceOf(StepupConnections::class, $stepupConnections);
+        $this->assertTrue($stepupConnections->hasConnections());
+        $this->assertSame('http://test.openconext.nl/assurance/loa2', $stepupConnections->getLoa('https://serviceregistry.test2.openconext.nl/simplesaml/module.php/saml/sp/metadata.php/default-sp'));
+        $this->assertSame('http://test.openconext.nl/assurance/loa3', $stepupConnections->getLoa('http://mock-sp'));
+        $this->assertNull($stepupConnections->getLoa('http://unknown-sp'));
+    }
+
+
+    public function test_it_does_not_assemble_invalid_sfo_settings()
+    {
+        $connection = '{
+            "2d96e27a-76cf-4ca2-ac70-ece5d4c49525": {
+                "stepup_connections": [
+                    {},
+                    {
+                      "name2": "http://mock-sp",
+                      "level3": "http://test.openconext.nl/assurance/loa3"
+                    }
+                ],
+                "name": "https:\/\/serviceregistry.vm.openconext.org\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-idp",
+                "state": "prodaccepted",
+                "type": "saml20-idp"
+            }
+	    }';
+
+        $input = json_decode($connection);
+
+        $connections = $this->assembler->assemble($input);
+
+        /** @var IdentityProvider $idp */
+        $idp = $connections[0];
+        $this->assertInstanceOf(IdentityProvider::class, $idp);
+        $stepupConnections = $idp->getCoins()->stepupConnections();
+
+        $this->assertInstanceOf(StepupConnections::class, $stepupConnections);
+        $this->assertFalse($stepupConnections->hasConnections());
     }
 
     public function invalidAcsLocations()

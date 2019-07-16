@@ -5,6 +5,7 @@ namespace OpenConext\EngineBlockBundle\Tests;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlockBundle\Configuration\Feature;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use Symfony\Bundle\FrameworkBundle\Client;
@@ -250,6 +251,97 @@ class ConnectionsControllerTest extends WebTestCase
                 $this->assertSame($value, $data->getCoins()->$key(), "Coin value for '{$key}' expected to be '{$value}' but unexpected '{$data->getCoins()->$key()}' encountered.");
             }
         }
+    }
+
+    /**
+     * @test
+     * @group Api
+     * @group Connections
+     * @group MetadataPush
+     *
+     */
+    public function pushing_manage_sfo_data_should_succeed()
+    {
+        $this->clearMetadataFixtures();
+
+        $client = $this->makeClient([
+            'username' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
+            'password' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
+        ]);
+
+        $this->enableMetadataPushApiFeatureFor($client);
+
+        $payload = '{"connections" : {
+            "2d96e27a-76cf-4ca2-ac70-ece5d4c49523": {
+                "metadata": {
+                    "coin": {
+                        "stepup": {
+                            "allow_no_token": "1",
+                            "requireloa": "http://test.openconext.nl/assurance/loa2"
+                        }
+                    }
+                },
+                "name": "default-sp",
+                "state": "prodaccepted",
+                "type": "saml20-sp"
+            },
+            "2d96e27a-76cf-4ca2-ac70-ece5d4c49524": {
+                "stepup_connections": [
+                    {
+                      "name": "https://serviceregistry.test2.openconext.nl/simplesaml/module.php/saml/sp/metadata.php/default-sp",
+                      "level": "http://test.openconext.nl/assurance/loa2"
+                    },
+                    {
+                      "name": "http://mock-sp",
+                      "level": "http://test.openconext.nl/assurance/loa3"
+                    }
+                ],
+                "name": "default-idp",
+                "state": "prodaccepted",
+                "type": "saml20-idp"
+            },
+            "2d96e27a-76cf-4ca2-ac70-ece5d4c49525": {
+                "name": "empty-idp",
+                "state": "prodaccepted",
+                "type": "saml20-idp"
+            }
+	    }}';
+
+        $client->request(
+            'POST',
+            'https://engine-api.vm.openconext.org/api/connections',
+            [],
+            [],
+            [],
+            $payload
+        );
+        $this->assertStatusCode(Response::HTTP_OK, $client);
+
+        // check content type
+        $isContentTypeJson = $client->getResponse()->headers->contains('Content-Type', 'application/json');
+        $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
+
+        // check response status
+        $body = $client->getResponse()->getContent();
+        $result = json_decode($body, true);
+        $this->assertTrue($result['success']);
+
+        // validate data
+        $metadata = $this->getStoredMetadata();
+
+        $sp = $metadata['default-sp'];
+        $this->assertSame(true, $sp->getCoins()->stepupAllowNoToken());
+        $this->assertSame('http://test.openconext.nl/assurance/loa2', $sp->getCoins()->stepupRequireLoa());
+
+        $idp = $metadata['default-idp'];
+        $this->assertInstanceOf(StepupConnections::class, $idp->getCoins()->stepupConnections());
+        $this->assertTrue($idp->getCoins()->stepupConnections()->hasConnections());
+        $this->assertSame('http://test.openconext.nl/assurance/loa2', $idp->getCoins()->stepupConnections()->getLoa('https://serviceregistry.test2.openconext.nl/simplesaml/module.php/saml/sp/metadata.php/default-sp'));
+        $this->assertSame('http://test.openconext.nl/assurance/loa3', $idp->getCoins()->stepupConnections()->getLoa('http://mock-sp'));
+
+        $emptyIdp = $metadata['empty-idp'];
+        $this->assertInstanceOf(StepupConnections::class, $emptyIdp->getCoins()->stepupConnections());
+        $this->assertFalse($emptyIdp->getCoins()->stepupConnections()->hasConnections());
     }
 
     public function invalidHttpMethodProvider()
