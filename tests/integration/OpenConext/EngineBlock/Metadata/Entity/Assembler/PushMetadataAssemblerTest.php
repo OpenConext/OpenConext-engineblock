@@ -83,6 +83,12 @@ class PushMetadataAssemblerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider validCoins
+     *
+     * @param string $coinName The name of the coin and used to set the coin in the meta push data
+     * @param string $roleType The type of the role and used to set the coin in the meta push data
+     * @param string $parameter The name of the parameter used in the coin
+     * @param string $type The type of coin data to run possible assertions against see the validCoinValues* helper
+     *                     methods below which are used to assert the data after it went through the assembler.
      */
     public function testCoins($coinName, $roleType, $parameter, $type) {
         $connection = '{
@@ -164,6 +170,10 @@ class PushMetadataAssemblerTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * The first option is the manage coin value, the second is the expected entity coin value after assembling
+     * @return array
+     */
     private function validCoinValuesBool() {
         return [
             [null, false],
@@ -175,6 +185,10 @@ class PushMetadataAssemblerTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * The first option is the manage coin value, the second is the expected entity coin value after assembling
+     * @return array
+     */
     private function validCoinValuesBoolNegative() {
         return [
             [null, true],
@@ -186,6 +200,10 @@ class PushMetadataAssemblerTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * The first option is the manage coin value, the second is the expected entity coin value after assembling
+     * @return array
+     */
     private function validCoinValuesString() {
         return [
             [null, null],
@@ -194,6 +212,10 @@ class PushMetadataAssemblerTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * The first option is the manage coin value, the second is the expected entity coin value after assembling
+     * @return array
+     */
     private function validCoinValuesStringSignatureMethod() {
         return [
             [null, "http://www.w3.org/2000/09/xmldsig#rsa-sha1"],
@@ -202,6 +224,10 @@ class PushMetadataAssemblerTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * The first option is the manage coin value, the second is the expected entity coin value after assembling
+     * @return array
+     */
     private function validCoinValuesStringGuestQualifier() {
         return [
             [null, "All"],
