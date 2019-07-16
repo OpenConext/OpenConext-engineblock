@@ -10,6 +10,7 @@ use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\Service;
+use OpenConext\EngineBlock\Metadata\StepupConnections;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 
@@ -121,6 +122,7 @@ class IdentityProvider extends AbstractRole
      * @param array $shibMdScopes
      * @param array $singleSignOnServices
      * @param ConsentSettings $consentSettings
+     * @param StepupConnections|null $stepupConnections
      */
     public function __construct(
         $entityId,
@@ -159,7 +161,8 @@ class IdentityProvider extends AbstractRole
         $schacHomeOrganization = null,
         $shibMdScopes = array(),
         $singleSignOnServices = array(),
-        ConsentSettings $consentSettings = null
+        ConsentSettings $consentSettings = null,
+        StepupConnections $stepupConnections = null
     ) {
         parent::__construct(
             $entityId,
@@ -203,6 +206,7 @@ class IdentityProvider extends AbstractRole
             $guestQualifier,
             $schacHomeOrganization,
             $hidden,
+            $stepupConnections,
             $disableScoping,
             $additionalLogging,
             $signatureMethod

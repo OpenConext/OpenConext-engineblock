@@ -13,6 +13,7 @@ use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
+use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlock\Metadata\Utils;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy;
@@ -214,6 +215,20 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
             ),
             'signResponse'
         );
+        $properties += $this->setPathFromObjectString(
+            array(
+                $connection,
+                'metadata:coin:stepup:requireloa'
+            ),
+            'stepupRequireLoa'
+        );
+        $properties += $this->setPathFromObjectBool(
+            array(
+                $connection,
+                'metadata:coin:stepup:allow_no_token'
+            ),
+            'stepupAllowNoToken'
+        );
 
         return Utils::instantiate(
             ServiceProvider::class,
@@ -235,6 +250,8 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->assembleConsentSettings($connection);
         $properties += $this->setPathFromObjectBool(array($connection, 'metadata:coin:hidden'), 'hidden');
         $properties += $this->assembleShibMdScopes($connection);
+
+        $properties += $this->assembleStepupConnections($connection);
 
         return Utils::instantiate(
             IdentityProvider::class,
@@ -488,6 +505,24 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         }
 
         return array('shibMdScopes' => $shibMdScopes);
+    }
+
+    private function assembleStepupConnections(stdClass $connection)
+    {
+        if (empty($connection->stepup_connections)) {
+            return array();
+        }
+
+        $connections = [];
+        foreach ($connection->stepup_connections as $sp) {
+            $connections[(string)$sp->name] = (string)$sp->level;
+        }
+
+        return array(
+            'stepupConnections' => new StepupConnections(
+                $connections
+            ),
+        );
     }
 
     private function assembleAssertionConsumerServices(stdClass $connection)
