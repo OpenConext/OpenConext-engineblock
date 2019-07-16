@@ -176,10 +176,13 @@ class ServiceProvider extends AbstractRole
      * @param bool $policyEnforcementDecisionRequired
      * @param bool $requesteridRequired
      * #param bool $signResponse
+     * @param bool $signResponse
      * @param string $manipulation
      * @param AttributeReleasePolicy $attributeReleasePolicy
      * @param string|null $supportUrlEn
      * @param string|null $supportUrlNl
+     * @param bool|null $stepupAllowNoToken
+     * @param bool|null $stepupRequireLoa
      */
     public function __construct(
         $entityId,
@@ -226,7 +229,9 @@ class ServiceProvider extends AbstractRole
         $manipulation = '',
         AttributeReleasePolicy $attributeReleasePolicy = null,
         $supportUrlEn = null,
-        $supportUrlNl = null
+        $supportUrlNl = null,
+        $stepupAllowNoToken = null,
+        $stepupRequireLoa = null
     ) {
         parent::__construct(
             $entityId,
@@ -284,6 +289,8 @@ class ServiceProvider extends AbstractRole
             $policyEnforcementDecisionRequired,
             $requesteridRequired,
             $signResponse,
+            $stepupAllowNoToken,
+            $stepupRequireLoa,
             $disableScoping,
             $additionalLogging,
             $signatureMethod
