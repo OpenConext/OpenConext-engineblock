@@ -35,6 +35,9 @@ final class EngineBlockConfiguration
         $subPath = array_shift($subPaths);
 
         if (!array_key_exists($subPath, $this->configuration)) {
+            if (is_array($default) && empty($default)) {
+                return new EngineBlockConfiguration([]);
+            }
             return $default;
         }
 

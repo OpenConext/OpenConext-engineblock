@@ -239,7 +239,12 @@ $ymlContent = array(
         'monitor_database_health_check_query'                     => $config->get('openconext.monitor_bundle_health_query', ''),
 
         // SFO
-        'sfo.authn_context_class_ref_blacklist_regex'             => escapeYamlValue($config->get('sfo.authn_context_class_ref_blacklist_regex'))
+        'sfo.authn_context_class_ref_blacklist_regex'             => escapeYamlValue($config->get('sfo.authn_context_class_ref_blacklist_regex')),
+        'sfo.gateway.loa.mapping'                                 => $config->get('sfo.gateway.loa.mapping', array())->toArray(),
+        'sfo.gateway.loa.loa1'                                    => escapeYamlValue($config->get('sfo.gateway.loa.loa1')),
+        'sfo.gateway.sso.entity_id'                               => escapeYamlValue($config->get('sfo.gateway.sso.entityId')),
+        'sfo.gateway.sso.sso_location'                            => escapeYamlValue($config->get('sfo.gateway.sso.ssoLocation')),
+        'sfo.gateway.sso.key_file'                                => escapeYamlValue($config->get('sfo.gateway.sso.keyFile'))
     )
 );
 
