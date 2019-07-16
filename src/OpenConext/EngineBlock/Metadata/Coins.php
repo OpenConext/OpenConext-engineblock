@@ -172,6 +172,9 @@ class Coins
         return $this->getValue('hidden', false);
     }
 
+    /**
+     * @return StepupConnections
+     */
     public function stepupConnections()
     {
         return $this->getValue('stepupConnections', new StepupConnections());
