@@ -31,10 +31,10 @@ class CortoDisassembler
 
         $cortoEntity = $this->translateCommon($entity, $cortoEntity);
 
-        if ($entity->isTransparentIssuer) {
+        if ($entity->getCoins()->isTransparentIssuer()) {
             $cortoEntity['TransparentIssuer'] = 'yes';
         }
-        if ($entity->displayUnconnectedIdpsWayf) {
+        if ($entity->getCoins()->displayUnconnectedIdpsWayf()) {
             $cortoEntity['DisplayUnconnectedIdpsWayf'] = 'yes';
         }
         foreach ($entity->assertionConsumerServices as $service) {
@@ -47,19 +47,19 @@ class CortoDisassembler
                 'Location' => $service->location,
             );
         }
-        if (!$entity->isConsentRequired) {
+        if (!$entity->getCoins()->isConsentRequired()) {
             $cortoEntity['NoConsentRequired'] = true;
         }
-        if ($entity->skipDenormalization) {
+        if ($entity->getCoins()->skipDenormalization()) {
             $cortoEntity['SkipDenormalization'] = true;
         }
-        if ($entity->policyEnforcementDecisionRequired) {
+        if ($entity->getCoins()->policyEnforcementDecisionRequired()) {
             $cortoEntity['PolicyEnforcementDecisionRequired'] = true;
         }
         if ($entity->isAttributeAggregationRequired()) {
             $cortoEntity['AttributeAggregationRequired'] = true;
         }
-        if ($entity->requesteridRequired) {
+        if ($entity->getCoins()->requesteridRequired()) {
             $cortoEntity['requesteridRequired'] = true;
         }
 
@@ -87,14 +87,14 @@ class CortoDisassembler
             );
         }
 
-        $cortoEntity['GuestQualifier'] = $entity->guestQualifier;
+        $cortoEntity['GuestQualifier'] = $entity->getCoins()->guestQualifier();
 
-        if ($entity->schacHomeOrganization) {
-            $cortoEntity['SchacHomeOrganization'] = $entity->schacHomeOrganization;
+        if ($entity->getCoins()->schacHomeOrganization()) {
+            $cortoEntity['SchacHomeOrganization'] = $entity->getCoins()->schacHomeOrganization();
         }
 
         $cortoEntity['SpsWithoutConsent'] = $entity->getConsentSettings()->getSpEntityIdsWithoutConsent();
-        $cortoEntity['isHidden'] = $entity->hidden;
+        $cortoEntity['isHidden'] = $entity->getCoins()->hidden();
 
         $cortoEntity['shibmd:scopes'] = array();
         foreach ($entity->shibMdScopes as $scope) {
@@ -121,11 +121,11 @@ class CortoDisassembler
         if ($entity->publishInEduGainDate) {
             $cortoEntity['PublishInEdugainDate'] = $entity->publishInEduGainDate->format(DateTime::W3C);
         }
-        if ($entity->disableScoping) {
+        if ($entity->getCoins()->disableScoping()) {
             $cortoEntity['DisableScoping'] = true;
         }
-        if ($entity->additionalLogging) {
-            $cortoEntity['AdditionalLogging'] = $entity->additionalLogging;
+        if ($entity->getCoins()->additionalLogging()) {
+            $cortoEntity['AdditionalLogging'] = $entity->getCoins()->additionalLogging();
         }
         $cortoEntity = $this->translateCommonCertificates($entity, $cortoEntity);
         if ($entity->logo) {

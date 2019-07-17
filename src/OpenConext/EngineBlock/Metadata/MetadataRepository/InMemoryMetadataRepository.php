@@ -204,11 +204,11 @@ class InMemoryMetadataRepository extends AbstractMetadataRepository
 
         $identityProviders = $this->findIdentityProviders();
         foreach ($identityProviders as $identityProvider) {
-            if (!$identityProvider->schacHomeOrganization) {
+            if (!$identityProvider->getCoins()->schacHomeOrganization()) {
                 continue;
             }
 
-            $schacHomeOrganizations[] = $identityProvider->schacHomeOrganization;
+            $schacHomeOrganizations[] = $identityProvider->getCoins()->schacHomeOrganization();
         }
         return $schacHomeOrganizations;
     }

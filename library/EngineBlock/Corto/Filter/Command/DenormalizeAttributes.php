@@ -13,7 +13,7 @@ class EngineBlock_Corto_Filter_Command_DenormalizeAttributes extends EngineBlock
 
     public function execute()
     {
-        if ($this->_serviceProvider->skipDenormalization) {
+        if ($this->_serviceProvider->getCoins()->skipDenormalization()) {
             return;
         }
 

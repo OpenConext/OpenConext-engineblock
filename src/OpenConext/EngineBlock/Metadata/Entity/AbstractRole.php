@@ -4,6 +4,7 @@ namespace OpenConext\EngineBlock\Metadata\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
@@ -251,6 +252,13 @@ abstract class AbstractRole
     public $manipulation;
 
     /**
+     * @var Coins
+     *
+     * @ORM\Column(name="coins", type="engineblock_metadata_coins")
+     */
+    protected $coins = array();
+
+    /**
      * @param $entityId
      * @param Organization $organizationEn
      * @param Organization $organizationNl
@@ -367,5 +375,13 @@ abstract class AbstractRole
         }
 
         throw new \RuntimeException('Unknown workflow state');
+    }
+
+    /**
+     * @return Coins
+     */
+    public function getCoins()
+    {
+        return $this->coins;
     }
 }

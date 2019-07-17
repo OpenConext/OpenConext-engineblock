@@ -33,18 +33,18 @@ class EngineBlock_Corto_Filter_Command_AddGuestStatus extends EngineBlock_Corto_
      */
     protected function _addIsMemberOfSurfNlAttribute()
     {
-        if ($this->_identityProvider->guestQualifier === IdentityProvider::GUEST_QUALIFIER_ALL) {
+        if ($this->_identityProvider->getCoins()->guestQualifier() === IdentityProvider::GUEST_QUALIFIER_ALL) {
             // All users from this IdP are guests, so no need to add the isMemberOf
             return;
         }
 
-        if ($this->_identityProvider->guestQualifier === IdentityProvider::GUEST_QUALIFIER_NONE) {
+        if ($this->_identityProvider->getCoins()->guestQualifier() === IdentityProvider::GUEST_QUALIFIER_NONE) {
             $this->_setIsMember();
             return;
         }
 
         $log = EngineBlock_ApplicationSingleton::getLog();
-        if ($this->_identityProvider->guestQualifier === IdentityProvider::GUEST_QUALIFIER_SOME) {
+        if ($this->_identityProvider->getCoins()->guestQualifier() === IdentityProvider::GUEST_QUALIFIER_SOME) {
             if (isset($this->_responseAttributes[static::URN_SURF_PERSON_AFFILIATION][0])) {
                 if ($this->_responseAttributes[static::URN_SURF_PERSON_AFFILIATION][0] === 'member') {
                     $this->_setIsMember();
