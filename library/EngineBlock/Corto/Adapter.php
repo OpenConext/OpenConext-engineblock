@@ -140,7 +140,7 @@ class EngineBlock_Corto_Adapter
         $serviceProvider = $repository->fetchServiceProviderByEntityId($request->getIssuer());
 
         if (!$serviceProvider->allowAll) {
-            if ($serviceProvider->displayUnconnectedIdpsWayf) {
+            if ($serviceProvider->getCoins()->displayUnconnectedIdpsWayf()) {
                 $repository->appendVisitor(
                     new DisableDisallowedEntitiesInWayfVisitor($serviceProvider->allowedIdpEntityIds)
                 );

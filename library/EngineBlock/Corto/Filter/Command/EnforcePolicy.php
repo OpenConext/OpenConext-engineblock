@@ -18,7 +18,7 @@ class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_F
             $serviceProvider = $this->_serviceProvider;
         }
 
-        if (!$serviceProvider->policyEnforcementDecisionRequired) {
+        if (!$serviceProvider->getCoins()->policyEnforcementDecisionRequired()) {
             return;
         }
 

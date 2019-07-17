@@ -6,6 +6,7 @@ use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Utils;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -16,14 +17,19 @@ class CortoDisassemblerTest extends PHPUnit_Framework_TestCase
 {
     public function testSpDisassemble()
     {
-        $serviceProvider = new ServiceProvider('https://sp.example.edu');
-        $serviceProvider->displayNameNl = 'DisplayName';
-        $serviceProvider->displayNameEn = 'DisplayName';
-        $serviceProvider->isTransparentIssuer = true;
-        $serviceProvider->displayUnconnectedIdpsWayf = true;
-        $serviceProvider->isConsentRequired = false;
-        $serviceProvider->skipDenormalization = true;
-        $serviceProvider->policyEnforcementDecisionRequired = true;
+        $serviceProvider = Utils::instantiate(
+            ServiceProvider::class,
+            [
+                'entityId' => 'https://sp.example.edu',
+                'displayNameNl' => 'DisplayName',
+                'displayNameEn' => 'DisplayName',
+                'isTransparentIssuer' => true,
+                'displayUnconnectedIdpsWayf' => true,
+                'isConsentRequired' => false,
+                'skipDenormalization' => true,
+                'policyEnforcementDecisionRequired' => true,
+            ]
+        );
 
         // set a non-idp arp rule to enable attribute aggregation
         $serviceProvider->attributeReleasePolicy = new AttributeReleasePolicy([
@@ -52,9 +58,9 @@ class CortoDisassemblerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($serviceProvider->displayNameNl         , $cortoServiceProvider['DisplayName']['en']);
         $this->assertEquals('yes'                                   , $cortoServiceProvider['TransparentIssuer']);
         $this->assertEquals('yes'                                   , $cortoServiceProvider['DisplayUnconnectedIdpsWayf']);
-        $this->assertEquals(!$serviceProvider->isConsentRequired    , $cortoServiceProvider['NoConsentRequired']);
-        $this->assertEquals($serviceProvider->skipDenormalization   , $cortoServiceProvider['SkipDenormalization']);
-        $this->assertEquals($serviceProvider->policyEnforcementDecisionRequired   , $cortoServiceProvider['PolicyEnforcementDecisionRequired']);
+        $this->assertEquals(!$serviceProvider->getCoins()->isConsentRequired()    , $cortoServiceProvider['NoConsentRequired']);
+        $this->assertEquals($serviceProvider->getCoins()->skipDenormalization()   , $cortoServiceProvider['SkipDenormalization']);
+        $this->assertEquals($serviceProvider->getCoins()->policyEnforcementDecisionRequired()   , $cortoServiceProvider['PolicyEnforcementDecisionRequired']);
         $this->assertEquals($serviceProvider->isAttributeAggregationRequired()        , true);
         $this->assertEquals($serviceProvider->isAttributeAggregationRequired()        , $cortoServiceProvider['AttributeAggregationRequired']);
         $this->assertEquals($contact->contactType, $cortoServiceProvider['ContactPersons'][0]['ContactType']);
@@ -79,9 +85,9 @@ class CortoDisassemblerTest extends PHPUnit_Framework_TestCase
         $this->assertEmpty($cortoIdentityProvider['certificates']);
         $this->assertEquals($identityProvider->supportedNameIdFormats, $cortoIdentityProvider['NameIDFormats']);
         $this->assertEquals($identityProvider->workflowState, $cortoIdentityProvider['WorkflowState']);
-        $this->assertEquals($identityProvider->guestQualifier, $cortoIdentityProvider['GuestQualifier']);
+        $this->assertEquals($identityProvider->getCoins()->guestQualifier(), $cortoIdentityProvider['GuestQualifier']);
         $this->assertEquals($identityProvider->getConsentSettings()->getSpEntityIdsWithoutConsent(), $cortoIdentityProvider['SpsWithoutConsent']);
-        $this->assertEquals($identityProvider->hidden, $cortoIdentityProvider['isHidden']);
+        $this->assertEquals($identityProvider->getCoins()->hidden(), $cortoIdentityProvider['isHidden']);
         $this->assertEmpty($cortoIdentityProvider['shibmd:scopes']);
         $this->assertEquals($contact->contactType, $cortoIdentityProvider['ContactPersons'][0]['ContactType']);
         $this->assertEquals($contact->emailAddress, $cortoIdentityProvider['ContactPersons'][0]['EmailAddress']);

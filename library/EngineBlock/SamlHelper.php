@@ -15,7 +15,7 @@ class EngineBlock_SamlHelper
     public static function doRemoteEntitiesRequireAdditionalLogging(array $entities)
     {
         return array_reduce($entities, function($carry, AbstractRole $entity) {
-            return $carry | $entity->additionalLogging;
+            return $carry | $entity->getCoins()->additionalLogging();
         }, false);
     }
 
@@ -75,7 +75,7 @@ class EngineBlock_SamlHelper
         MetadataRepositoryInterface $repository,
         \Psr\Log\LoggerInterface $logger = null
     ) {
-        if (!$serviceProvider->isTrustedProxy) {
+        if (!$serviceProvider->getCoins()->isTrustedProxy()) {
             return null;
         }
 
@@ -89,7 +89,7 @@ class EngineBlock_SamlHelper
         $lastRequesterEntityId = end($requesterIds);
 
         if (!$lastRequesterEntityId) {
-            if ($serviceProvider->requesteridRequired) {
+            if ($serviceProvider->getCoins()->requesteridRequired()) {
                 throw new EngineBlock_Exception_UnknownServiceProvider(
                     $serviceProvider,
                     'No RequesterID specified'
