@@ -23,6 +23,8 @@ class Coins
         $policyEnforcementDecisionRequired,
         $requesteridRequired,
         $signResponse,
+        $stepupAllowNoToken,
+        $stepupRequireLoa,
         $disableScoping,
         $additionalLogging,
         $signatureMethod
@@ -40,6 +42,8 @@ class Coins
             'disableScoping' => $disableScoping,
             'additionalLogging' => $additionalLogging,
             'signatureMethod' => $signatureMethod,
+            'stepupAllowNoToken' => $stepupAllowNoToken,
+            'stepupRequireLoa' => $stepupRequireLoa,
         ]);
     }
 
@@ -47,6 +51,7 @@ class Coins
         $guestQualifier,
         $schacHomeOrganization,
         $hidden,
+        $stepupConnections,
         $disableScoping,
         $additionalLogging,
         $signatureMethod
@@ -58,6 +63,7 @@ class Coins
             'disableScoping' => $disableScoping,
             'additionalLogging' => $additionalLogging,
             'signatureMethod' => $signatureMethod,
+            'stepupConnections' => $stepupConnections,
         ]);
     }
 
@@ -86,6 +92,10 @@ class Coins
     public static function fromJson($data)
     {
         $data = json_decode($data, true);
+
+        if (isset($data['stepupConnections'])) {
+            $data['stepupConnections'] = new StepupConnections($data['stepupConnections']);
+        }
 
         return new self($data);
     }
@@ -136,6 +146,16 @@ class Coins
         return $this->getValue('signResponse', false);
     }
 
+    public function stepupAllowNoToken()
+    {
+        return $this->getValue('stepupAllowNoToken', false);
+    }
+
+    public function stepupRequireLoa()
+    {
+        return $this->getValue('stepupRequireLoa', '');
+    }
+
     // IDP
     public function guestQualifier()
     {
@@ -150,6 +170,14 @@ class Coins
     public function hidden()
     {
         return $this->getValue('hidden', false);
+    }
+
+    /**
+     * @return StepupConnections
+     */
+    public function stepupConnections()
+    {
+        return $this->getValue('stepupConnections', new StepupConnections());
     }
 
     // Abstract
