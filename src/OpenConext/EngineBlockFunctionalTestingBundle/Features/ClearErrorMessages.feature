@@ -320,6 +320,15 @@ Feature:
       # The session is lost, so the feedback information (containing the request id) can no longer be rendered on page
     Then I should not see the same request id on the error page
 
+  Scenario: I log in at my Identity Provider, that has an invalid AuthnContextClassRef attribute.
+    Given the IdP "Dummy Idp" sends AuthnContextClassRef with value "invalid-authn-context-class-ref"
+    When I log in at "Dummy SP"
+      And I pass through EngineBlock
+      And I pass through the IdP
+      And I give my consent
+    Then I should see "Error - AuthnContextClassRef value is disallowed"
+
+
 
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a location
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a binding
