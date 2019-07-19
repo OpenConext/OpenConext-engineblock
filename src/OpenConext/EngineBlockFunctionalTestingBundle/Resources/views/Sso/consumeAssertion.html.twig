@@ -1,0 +1,32 @@
+{% extends '::base.html.twig' %}
+{% block head_style %}
+    {% stylesheets
+        '@SurfnetStepupGatewayGatewayBundle/Resources/public/css/hiddensubmit.css' %}
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+{% endblock head_style %}
+{% block head_script %}
+    {% javascripts
+    '@SurfnetStepupGatewayGatewayBundle/Resources/public/js/submitonload.js'%}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock head_script %}
+
+{% block page_title %}{{ 'gateway.gateway.consume_assertion.title'|trans }}{% endblock %}
+
+{% block body %}
+    <noscript>
+        <b>Note: </b> javascript is disabled, please click the button below to proceed
+    </noscript>
+    One moment please...
+    <form method="post" action="{{ acu }}">
+        <input type="hidden" name="SAMLResponse" value="{{ response }}" />
+    {% if relayState|length > 0 %}
+        <input type="hidden" name="RelayState" value="{{ relayState|escape }}" />
+    {% endif %}
+        <input type="submit" class="hidden" />
+    <noscript>
+        <input type="submit" value="Submit"/>
+    </noscript>
+    </form>
+{% endblock %}

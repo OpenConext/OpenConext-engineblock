@@ -25,3 +25,8 @@ services:
     engineblock.mock_entities.data_store.mock_sps:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\SerializedDataStore
         arguments: ['%sp_fixture_file%']
+
+    engineblock.mock_clients.mock_sfo_gateway:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockSfoGateway
+        arguments:
+            - "@engineblock.functional_testing.fixture.sfo_gateway_mock"
