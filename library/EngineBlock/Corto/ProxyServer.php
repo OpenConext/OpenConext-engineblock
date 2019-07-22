@@ -35,6 +35,7 @@ class EngineBlock_Corto_ProxyServer
         'continueToIdP'                     => '/authentication/idp/process-wayf',
 
         'assertionConsumerService'          => '/authentication/sp/consume-assertion',
+        'sfoAssertionConsumerService'       => '/authentication/sfo/consume-assertion',
         'continueToSP'                      => '/authentication/sp/process-consent',
         'provideConsentService'             => '/authentication/idp/provide-consent',
         'processConsentService'             => '/authentication/idp/process-consent',
@@ -42,6 +43,7 @@ class EngineBlock_Corto_ProxyServer
 
         'idpMetadataService'                => '/authentication/idp/metadata',
         'spMetadataService'                 => '/authentication/sp/metadata',
+        'sfoMetadataService'                => '/authentication/sfo/metadata',
         'singleLogoutService'               => '/logout'
     );
 
@@ -54,6 +56,7 @@ class EngineBlock_Corto_ProxyServer
         'singleLogoutService',
         'singleSignOnService',
         'spMetadataService',
+        'sfoMetadataService',
         'unsolicitedSingleSignOnService',
     );
 

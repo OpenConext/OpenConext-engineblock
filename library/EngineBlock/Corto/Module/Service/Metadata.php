@@ -2,11 +2,15 @@
 
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\EntityNotFoundException;
+use OpenConext\EngineBlockBundle\Sfo\SfoServiceProvider;
 
 class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module_Service_Abstract
 {
     public function serve($serviceName)
     {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $container = $application->getDiContainer();
+
         // Get the configuration for EngineBlock in it's IdP / SP role without the VO.
         $this->_server->setProcessingMode();
         $engineEntityId = $this->_server->getUrl($serviceName);
@@ -21,6 +25,9 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
                 break;
             case 'spMetadataService':
                 $engineEntity = $this->_server->getRepository()->fetchServiceProviderByEntityId($engineEntityId);
+                break;
+            case 'sfoMetadataService':
+                $engineEntity = SfoServiceProvider::fromSfoEndpoint($container->getSfoEndpoint());
                 break;
             default:
                 // If an unsupported serviceName is used, first try to resolve a SP, then try IdP. This is a fallback
