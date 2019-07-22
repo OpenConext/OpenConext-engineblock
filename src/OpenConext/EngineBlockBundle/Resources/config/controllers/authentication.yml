@@ -59,6 +59,14 @@ services:
         arguments:
             - "@engineblock.compat.application"
 
+    engineblock.controller.authentication.sfo:
+        class: OpenConext\EngineBlockBundle\Controller\SfoController
+        arguments:
+            - "@engineblock.compat.application"
+            - "@session"
+            - "@engineblock.validator.acs_request_validator"
+            - "@engineblock.validator.saml_binding_validator"
+
     engineblock.controller.authentication.logout:
         class: OpenConext\EngineBlockBundle\Controller\LogoutController
         arguments:

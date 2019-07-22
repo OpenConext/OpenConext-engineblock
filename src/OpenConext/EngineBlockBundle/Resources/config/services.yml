@@ -14,6 +14,13 @@ services:
         arguments:
             - "%minimum_execution_time_on_invalid_received_response%"
 
+    engineblock.configuration.sfo.endpoint:
+        class: OpenConext\EngineBlockBundle\Sfo\SfoEndpoint
+        arguments:
+            - "%sfo.gateway.sso.entity_id%"
+            - "%sfo.gateway.sso.sso_location%"
+            - "%sfo.gateway.sso.key_file%"
+
     engineblock.request.request_id_generator:
         public: false
         class: OpenConext\EngineBlock\Request\UniqidGenerator

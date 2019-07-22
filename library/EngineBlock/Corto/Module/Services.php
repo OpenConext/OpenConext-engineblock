@@ -24,6 +24,7 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
         'idpCertificateService'         => 'Certificate',
         'spMetadataService'             => 'Metadata',
         'idpMetadataService'            => 'Metadata',
+        'sfoMetadataService'            => 'Metadata',
         'unsolicitedSingleSignOnService'=> 'singleSignOn',
         'debugSingleSignOnService'      => 'singleSignOn',
     );

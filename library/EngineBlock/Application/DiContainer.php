@@ -302,6 +302,14 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
+     * @return \OpenConext\EngineBlockBundle\Sfo\SfoEndpoint
+     */
+    public function getSfoEndpoint()
+    {
+        return $this->container->get('engineblock.configuration.sfo.endpoint');
+    }
+
+    /**
      * @return array
      */
     public function getEncryptionKeysConfiguration()

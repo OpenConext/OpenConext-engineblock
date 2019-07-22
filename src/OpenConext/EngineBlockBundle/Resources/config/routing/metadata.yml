@@ -63,3 +63,19 @@ metadata_edugain_key:
         _controller: engineblock.controller.authentication.metadata:edugainMetadataAction
     requirements:
         keyId: .+
+
+### Sfo
+metdata_sfo:
+    path:       'authentication/sfo/metadata'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.sfo:metadataAction
+        keyId: ~
+
+metdata_sfo_key:
+    path:       '/authentication/sfo/metadata/key:{keyId}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.sfo:metadataAction
+    requirements:
+        keyId: .+
