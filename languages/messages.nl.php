@@ -177,42 +177,32 @@ Als je deze applicatie wilt gebruiken moet je:<br />
 <li>opnieuw inloggen</li>
 <li>jouw informatie delen</li></ul>',
     'error_no_idps'                     => 'Error - Geen %organisationNounPlural% gevonden',
-    'error_no_idps_desc'                => '<p>
-        De dienst die je probeert te benaderen (de &lsquo;Service Provider&rsquo;) is niet toegankelijk via de %suiteName%-infrastructuur.
-    </p>',
-    'error_session_lost'                => 'Error - Sessie is verloren gegaan',
-    'error_session_lost_desc'           => '<p>Voor deze actie heb je een actieve sessie nodig, maar deze kan niet gevonden worden. Heb je te lang gewacht? Sluit je browser en probeer opnieuw, of probeer een andere browser.</p>',
-    'error_session_not_started'                => 'Error - Sessie is niet gevonden',
-    'error_session_not_started_desc'           => '<p>Voor deze actie heb je een actieve sessie nodig, alleen hebben we géén sessie-cookie ontvangen. De browser moet cookies ondersteunen. Gebruik geen bladwijzer of link. Sluit je browser en probeer opnieuw, of probeer een andere browser.</p>',
-    'error_authorization_policy_violation'            => 'Error - Geen toegang',
-    'error_authorization_policy_violation_desc'       => '<p>
-        Je bent succesvol ingelogd bij jouw %organisationNoun%, maar je kunt geen gebruik maken van deze dienst omdat je geen toegang hebt. Voor deze dienst (de &lsquo;Service Provider&rsquo;) heeft jouw %organisationNoun% met <i>autorisatieregels</i> ingesteld dat alleen bepaalde gebruikers toegang krijgen. Neem contact op met de (IT-)servicedesk van je %organisationNoun% als je vindt dat je wel toegang moet hebben.
-    </p>',
+    'error_no_idps_desc'                => 'Inloggen op de dienst via %suiteName% is onmogelijk. De dienst is niet gekoppeld met een instelling.',
+    'error_session_lost'                => 'Fout - Sessie is verloren gegaan',
+    'error_session_lost_desc'           => 'Om verder te gaan naar de dienst heb je een actieve sessie nodig, maar deze is verlopen. Heb je misschien te lang gewacht met inloggen? Ga terug naar de dienst en probeer het nog een keer. Als dat niet werkt, sluit je browser af en probeer nogmaals opnieuw in te loggen.',
+    'error_session_not_started'                => 'Fout - Geen sessie gevonden',
+    'error_session_not_started_desc'           => 'Om verder te gaan naar de dienst heb je een actieve sessie nodig, maar we kunnen deze niet vinden. Je browser moet cookies ondersteunen. Ook kan de link die je hebt gebruikt om bij de dienst te komen, verkeerd zijn. Ga terug naar de dienst en probeer het opnieuw. Als dat niet werkt, probeer een andere browser.',
+    'error_authorization_policy_violation'            => 'Fout - Geen toegang',
+    'error_authorization_policy_violation_desc'       => 'Je kunt geen gebruik maken van deze dienst omdat je geen toegang hebt. Voor deze dienst (de &lsquo;Service Provider&rsquo;) heeft jouw %organisationNoun% met <i>autorisatieregels</i> ingesteld dat alleen bepaalde gebruikers toegang krijgen. Neem contact op met de (IT-)servicedesk van je %organisationNoun% als je vindt dat je wel toegang moet hebben.',
     'error_authorization_policy_violation_info'       => 'Bericht van je %organisationNoun%: ',
-    'error_no_message'                  => 'Error - Geen bericht ontvangen',
-    'error_no_message_desc'             => 'We verwachtten een bericht, maar we hebben er geen ontvangen. Er is iets fout gegaan. Probeer het alstublieft opnieuw.',
+    'error_no_message'                  => 'Fout - Geen bericht ontvangen',
+    'error_no_message_desc'             => 'We verwachtten een SAML bericht, maar we hebben er geen ontvangen. Er is iets fout gegaan. Probeer het alstublieft opnieuw.',
     'error_invalid_acs_location'        => 'De opgegeven "Assertion Consumer Service" is onjuist of bestaat niet.',
-    'error_invalid_acs_binding'        => 'Onjuist ACS Binding Type',
+    'error_invalid_acs_binding'        => 'Fout - Onjuist ACS binding type',
     'error_invalid_acs_binding_desc'        => 'Het opgegeven of geconfigureerde "Assertion Consumer Service" Binding Type is onjuist of bestaat niet.',
-    'error_unsupported_signature_method' => 'Ondertekeningsmethode wordt niet ondersteund',
+    'error_unsupported_signature_method' => 'Fout - Ondertekeningsmethode wordt niet ondersteund',
     'error_unsupported_signature_method_desc' => 'De ondertekeningsmethode %arg1% wordt niet ondersteund, upgrade naar RSA-SHA256 (http://www.w3.org/2001/04/xmldsig-more#rsa-sha256).',
-    'error_unknown_preselected_idp' => 'Error - %organisationNoun% is niet gekoppeld aan dienst',
-    'error_unknown_preselected_idp_desc' => '<p>
-        De %organisationNoun% waarmee je wilt inloggen heeft toegang tot deze dienst niet geactiveerd. Dat betekent dat jij geen gebruik kunt maken van deze dienst via %suiteName%. Neem contact op met de helpdesk van jouw %organisationNoun% als je toegang wilt krijgen tot deze dienst. Geef daarbij aan om welke dienst het gaat (de &lsquo;Service Provider&rsquo;) en waarom je toegang wilt.
-    </p>',
-    'error_unknown_service_provider'              => 'Error - Kan geen metadata ophalen voor EntityID \'%arg1%\'',
-    'error_unknown_service_provider_desc'     => '<p>
-        Er kon geen Service Provider worden gevonden met het opgegeven EntityID.
-    </p>',
+    'error_unknown_preselected_idp' => 'Fout - Deze dienst niet toegankelijk via %organisationNoun%',
+    'error_unknown_preselected_idp_desc' => 'De %organisationNoun% waarmee je wilt inloggen heeft toegang tot deze dienst niet geactiveerd. Dat betekent dat jij geen gebruik kunt maken van deze dienst via %suiteName%. Neem contact op met de helpdesk van jouw %organisationNoun% als je toegang wilt krijgen tot deze dienst. Geef daarbij aan om welke dienst het gaat (de &lsquo;Service Provider&rsquo;) en waarom je toegang wilt.',
+    'error_unknown_service_provider'              => 'Error - Unkown service',
+    'error_unknown_service_provider_desc'     => 'Er kon geen Service Provider worden gevonden met het EntityID \'%arg1%\'.',
 
-    'error_unsupported_acs_location_scheme' => 'Error - URI scheme van de ACS locatie wordt niet ondersteund',
+    'error_unsupported_acs_location_scheme' => 'Fout - URI scheme van de ACS locatie wordt niet ondersteund',
 
     'error_unknown_issuer'              => 'Error - Onbekende dienst',
-    'error_unknown_issuer_desc'     => '<p>Je aangevraagde dienst kon niet worden gevonden.</p>',
-    'error_generic'                     => 'Error - Foutmelding',
-    'error_generic_desc'                => '<p>
-Inloggen is niet gelukt en we kunnen je niet precies vertellen waarom. Probeer het eerst eens opnieuw, en neem anders contact op met het supportteam van uw %organisationNoun%.
-    </p>',
+    'error_unknown_issuer_desc'     => 'Je probeert in te loggen op een dienst die niet bekend is binnen %suiteName%. Als je toch gebruik wilt maken van deze dienst, neem dan contact op met de helpdesk van je %organisationNoun%.',
+    'error_generic'                     => 'Fout - Generieke foutmelding',
+    'error_generic_desc'                => 'Inloggen is niet gelukt en we weten niet precies waarom. Probeer het eerst eens opnieuw door terug te gaan naar de dienst en opnieuw in te loggen. Lukt dit niet, neem dan contact op met de helpdesk van je %organisationNoun%.',
     'error_missing_required_fields'     => 'Error - Verplichte velden ontbreken',
     'error_missing_required_fields_desc'=> '<p>
         Jouw %organisationNoun% geeft niet de benodigde informatie vrij. Daarom kun je deze applicatie niet gebruiken.
@@ -227,24 +217,17 @@ Inloggen is niet gelukt en we kunnen je niet precies vertellen waarom. Probeer h
             <li>schacHomeOrganization</li>
         </ul>
     </p>',
-    'error_invalid_attribute_value' => 'Attribuutwaarde niet toegestaan',
-    'error_invalid_attribute_value_desc' => '<p>
-        Je %organisationNoun% geeft een waarde door in het attribuut %attributeName% ("%attributeValue%") die niet is toegestaan voor deze %organisationNoun%. Inloggen is daarom niet mogelijk.
-     <p>
-     </p>
-        Alleen jouw %organisationNoun% kan dit oplossen. Neem dus contact op met de servicedesk van je eigen %organisationNoun%.
-    </p>',
+    'error_invalid_attribute_value' => 'Fout - Attribuutwaarde niet toegestaan',
+    'error_invalid_attribute_value_desc' => 'Je %organisationNoun% geeft een waarde door in het attribuut %attributeName% ("%attributeValue%") die niet is toegestaan voor deze %organisationNoun%. Inloggen is daarom niet mogelijk. Alleen jouw %organisationNoun% kan dit oplossen. Neem dus contact op met de helpdesk van je eigen %organisationNoun%.',
     'error_received_error_status_code'     => 'Error - Fout bij Identity Provider',
     'error_received_error_status_code_desc'=> '<p>
 Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus contact moeten opnemen met de (IT-)servicedesk van je eigen %organisationNoun% om te kijken of dit verholpen kan worden.
     </p>',
-    'error_received_invalid_response'        => 'Error - Ongeldig antwoord van Identity Provider',
-    'error_received_invalid_signed_response' => 'Error - Ongeldige handtekening op antwoord Identity Provider',
-    'error_stuck_in_authentication_loop' => 'Error - Je zat vast in een zwart gat',
-    'error_stuck_in_authentication_loop_desc' => '<p>
-        Je bent succesvol ingelogd bij je Identity Provider maar de dienst waar je naartoe wilt stuurt je weer terug naar %suiteName%. Omdat je succesvol bent ingelogd, stuurt %suiteName% je weer naar de dienst, wat resulteert in een oneindig zwart gat. Dit komt waarschijnlijk door een foutje aan de kant van de dienst.
-    </p>',
-    'error_no_authentication_request_received' => 'Geen authenticatie-aanvraag ontvangen.',
+    'error_received_invalid_response'        => 'Fout - Ongeldig SAML-bericht van %organisationNoun%',
+    'error_received_invalid_signed_response' => 'Fout - Ongeldige handtekening op antwoord %organisationNoun%',
+    'error_stuck_in_authentication_loop' => 'Error - Je zit vast in een zwart gat',
+    'error_stuck_in_authentication_loop_desc' => 'Je bent succesvol ingelogd bij je %organisationNoun% maar de dienst waar je naartoe wilt stuurt je weer terug naar %suiteName%. Omdat je succesvol bent ingelogd, stuurt %suiteName% je weer naar de dienst, wat resulteert in een oneindig zwart gat. Dit komt waarschijnlijk door een foutje aan de kant van de dienst.',
+    'error_no_authentication_request_received' => 'Fout - Geen authenticatie-aanvraag ontvangen.',
     /**
      * %1 AttributeName
      * %2 Options
@@ -267,8 +250,8 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
 
     'error_unknown_service'         => 'Error - Deze dienst is niet geregistreerd bij %suiteName%.',
     'error_unknown_service_desc'    => '<p>Deze dienst is niet bekend.</p>',
-    'error_clock_issue_title' => 'Error - De Assertion is nog niet geldig of is verlopen',
-    'error_clock_issue_desc' => '<p>Controleer de tijd op de IdP.</p>',
+    'error_clock_issue_title' => 'Fout - De Assertion is nog niet geldig of is verlopen',
+    'error_clock_issue_desc' => 'Dit komt waarschijnlijk doordat de tijd tussen de %organisationNoun% en %suiteName% te ver uiteen loopt. Controleer de tijd op de IdP.',
 
     'attributes_validation_succeeded' => 'Authenticatie geslaagd',
     'attributes_validation_failed'    => 'Sommige attributen kunnen niet gevalideerd worden',
