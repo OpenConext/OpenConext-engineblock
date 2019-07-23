@@ -197,7 +197,8 @@ Als je deze applicatie wilt gebruiken moet je:<br />
     'error_unknown_service_provider'              => 'Error - Unkown service',
     'error_unknown_service_provider_desc'     => 'Er kon geen Service Provider worden gevonden met het EntityID \'%arg1%\'.',
 
-    'error_unsupported_acs_location_scheme' => 'Fout - URI scheme van de ACS locatie wordt niet ondersteund',
+
+        'error_unsupported_acs_location_scheme' => 'Fout - URI scheme van de ACS locatie wordt niet ondersteund',
 
     'error_unknown_issuer'              => 'Error - Onbekende dienst',
     'error_unknown_issuer_desc'     => 'Je probeert in te loggen op een dienst die niet bekend is binnen %suiteName%. Als je toch gebruik wilt maken van deze dienst, neem dan contact op met de helpdesk van je %organisationNoun%.',
