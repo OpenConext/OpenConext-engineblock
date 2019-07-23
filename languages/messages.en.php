@@ -179,75 +179,54 @@ If you want to use this application you have to:<br />
 <ul><li>restart your browser</li>
 <li>login again</li>
 <li>share your information</li></ul>',
-    'error_no_idps'                 => 'Error - No Identity Providers found',
-    'error_no_idps_desc'            => '<p>
-The service you\'re trying to reach (&lsquo;Service Provider&rsquo;) is not accessible through %suiteName%.<br /><br />
-    </p>',
+    'error_no_idps'                 => 'Error - No %organisationNounPlural% found',
+    'error_no_idps_desc'            => 'Logging into this service is not possible via %suiteName%. The service is not connected to any institutions.',
     'error_session_lost'            => 'Error - your session was lost',
-    'error_session_lost_desc'       => '<p>This action requires an active session, however, we could not find the session. Did you wait too long? Close your browser and retry, or try a different browser.</p>',
-    'error_session_not_started'            => 'Error - your session was not found',
-    'error_session_not_started_desc'       => '<p>This action requires an active session, however, we could not find one. Were you inactive for a while? Please close your browser and try again, or use a different browser.</p>',
-    'error_authorization_policy_violation'            => 'Error - No access',
-    'error_authorization_policy_violation_desc'       => '<p>
-        You have successfully logged in at your %organisationNoun%, but unfortunately you cannot use this service (the &lsquo;Service Provider&rsquo;) because you have no access. Your %organisationNoun% limits access to this service with an <i>authorization policy</i>. Please contact the helpdesk of your %organisationNoun% if you think you should be allowed access to this service.
-    </p>',
+    'error_session_lost_desc'       => 'To continue to the service an active session is required. However, your session expired. Perhaps you waited too long with logging in? Please go back to the service and try again. If that doesn\'t work, close your browser first and then try again.',
+    'error_session_not_started'            => 'Error - No session found',
+    'error_session_not_started_desc'       => 'To continue to the service an active session is required. However, no session was found. Your browser must accept cookies. Alternatively, the link you used to get to the service might be wrong. Please go back to the service and try again. If that doesn\'t work, try a different browser.',
+    'error_authorization_policy_violation'            => 'Error - Access denied',
+    'error_authorization_policy_violation_desc'       => 'You cannot use this service because your %organisationNoun% limits access to this service (the &lsquo;Service Provider&rsquo;) with an <i>authorization policy</i>. Please contact the helpdesk of your %organisationNoun% if you think you should be allowed access to this service.',
     'error_authorization_policy_violation_info'       => 'Message from your %organisationNoun%: ',
     'error_no_message'              => 'Error - No message received',
-    'error_no_message_desc'         => 'We were expecting a message, but did not get one? Something went wrong. Please try again.',
+    'error_no_message_desc'         => 'We were expecting a SAML message, but did not get one. Something went wrong. Please try again.',
     'error_invalid_acs_location'    => 'The given "Assertion Consumer Service" is unknown or invalid.',
-    'error_invalid_acs_binding'     => 'Invalid ACS Binding Type',
+    'error_invalid_acs_binding'     => 'Error - Invalid ACS binding type',
     'error_invalid_acs_binding_desc'     => 'The provided or configured "Assertion Consumer Service" Binding Type is unknown or invalid.',
-    'error_unsupported_signature_method' => 'Signature method is not supported',
+    'error_unsupported_signature_method' => 'Error - Signature method is not supported',
     'error_unsupported_signature_method_desc' => 'The signature method %arg1% is not supported, please upgrade to RSA-SHA256 (http://www.w3.org/2001/04/xmldsig-more#rsa-sha256).',
-    'error_unknown_preselected_idp' => 'Error - No connection between %organisationNoun% and service',
-    'error_unknown_preselected_idp_desc' => '<p>
-        The %organisationNoun% that you want to use to login to this service did not activate access to this service. This means you are unable to use this service through %suiteName%. Please contact the helpdesk of your %organisationNoun% to request access to this service. State what service it is about (the &lsquo;Service Provider&rsquo;) and why you need access.
-    </p>',
-    'error_unknown_service_provider'          => 'Error - Cannot provide metadata for EntityID \'%arg1%\'',
-    'error_unknown_service_provider_desc'     => '<p>Your requested service couldn\'t be found.</p>',
+    'error_unknown_preselected_idp' => 'Error - This service is not accessible through %organisationNoun%',
+    'error_unknown_preselected_idp_desc' => 'The %organisationNoun% that you want to use to login to this service did not activate access to this service. This means you are unable to use this service through %suiteName%. Please contact the helpdesk of your %organisationNoun% to request access to this service. State what service it is about (the &lsquo;Service Provider&rsquo;) and why you need access.',
+    'error_unknown_service_provider'          => 'Error - Unkown service',
+    'error_unknown_service_provider_desc'     => 'No Service Provider could be found with the EntityID \'%arg1%\'.',
 
     'error_unsupported_acs_location_scheme' => 'Error - Unsupported URI scheme in ACS location',
 
     'error_unknown_issuer'          => 'Error - Unknown service',
-    'error_unknown_issuer_desc'     => '<p>
-        The service you are trying to log in to is unknown to %suiteName%. Possibly your %organisationNoun% has never enabled access to this service. Please contact the helpdesk of your %organisationNoun% and provide them with the following information:
-    </p>',
+    'error_unknown_issuer_desc'     => 'The service you are trying to log in to is unknown to %suiteName%. Possibly your %organisationNoun% has never enabled access to this service. If you would like to use this service, please contact the helpdesk of your %organisationNoun%.',
     'error_generic'                     => 'Error - An error occurred',
-    'error_generic_desc'                => '<p>
-Your log-in has failed and we don\'t know exactly why. Try again first, and if that doesn\'t work contact your %organisationNoun% for help.
-    </p>',
+    'error_generic_desc'                => 'Logging in has failed and we don\'t know exactly why. Please try again first by going back to the service and logging in again. If this doesn\'t work, please contact the help desk of your %organisationNoun%.',
     'error_missing_required_fields'     => 'Error - Missing required fields',
     'error_missing_required_fields_desc'=> '<p>
-        You can not use this application because your %organisationNoun% is not providing the needed information.
+    Your %organisationNoun% does not provide the mandatory information. Therefore, you can not use this service. Please contact your %organisationNoun% and tell them one or more of the the following required attribute(s) are missing within %suiteName%:
     </p>
     <p>
-        Please contact your %organisationNoun% with the information stated below.
-    </p>
-    <p>
-        Login failed because the identity provider of your %organisationNoun% did not provide %suiteName% with one or more of the following required attribute(s):
         <ul>
             <li>UID</li>
             <li>schacHomeOrganization</li>
         </ul>
     </p>',
-    'error_invalid_attribute_value' => 'Attribute value not allowed',
-    'error_invalid_attribute_value_desc' => '<p>
-        Your %organisationNoun% used a value for attribute %attributeName% ("%attributeValue%") which is not allowed for this %organisationNoun%. Therefore you cannot log in.
-    </p>
-    <p>
-        Only your %organisationNoun% can resolve this. Please contact the service desk of your own %organisationNoun%.
-    </p>',
+    'error_invalid_attribute_value' => 'Error - Attribute value not allowed',
+    'error_invalid_attribute_value_desc' => 'Your %organisationNoun% sends a value for attribute %attributeName% ("%attributeValue%") which is not allowed for this %organisationNoun%. Therefore you cannot log in. Only your %organisationNoun% can resolve this. Please contact the help desk of your own %organisationNoun% to fix this problem.',
     'error_received_error_status_code'     => 'Error - Identity Provider error',
     'error_received_error_status_code_desc'=> '<p>
 Your %organisationNoun% has denied you access to this service. You will have to contact your own (IT-)servicedesk to see if this can be fixed.
     </p>',
-    'error_received_invalid_response'       => 'Error - Invalid Identity Provider response',
-    'error_received_invalid_signed_response'=> 'Error - Invalid signature on Identity Provider response',
+    'error_received_invalid_response'       => 'Error - Invalid %organisationNoun% SAML response',
+    'error_received_invalid_signed_response'=> 'Error - Invalid signature on %organisationNoun% response',
     'error_stuck_in_authentication_loop' => 'Error - You got stuck in a black hole',
-    'error_stuck_in_authentication_loop_desc' => '<p>
-        You\'ve successfully authenticated at your Identity Provider but the service you are trying to access sends you back again to %suiteName%. Because you are already logged in, %suiteName% then forwards you back to the service, which results in an infinite black hole. Likely, this is caused by an error at the Service Provider.
-    </p>',
-    'error_no_authentication_request_received' => 'No authentication request received.',
+    'error_stuck_in_authentication_loop_desc' => 'You\'ve successfully authenticated at your %organisationNoun% but the service you are trying to access sends you back again to %suiteName%. Because you are already logged in, %suiteName% then sends you back to the service, which results in an infinite black hole. Likely, this is caused by an error at the Service Provider.',
+    'error_no_authentication_request_received' => 'Error - No authentication request received.',
     /**
      * %1 AttributeName
      * %2 Options
@@ -271,7 +250,7 @@ Your %organisationNoun% has denied you access to this service. You will have to 
     'error_unknown_service'         => 'Error - Unknown service',
     'error_unknown_service_desc'    => '<p>Your requested service couldn\'t be found.</p>',
     'error_clock_issue_title' => 'Error - The Assertion is not yet valid or has expired',
-    'error_clock_issue_desc' => '<p>Please verify that the time on the IdP is correct.</p>',
+    'error_clock_issue_desc' => 'This is likely because the difference in time between %organisationNoun% and %suiteName% it too large. Please verify that the time on the IdP is correct.',
 
     'attributes_validation_succeeded' => 'Authentication success',
     'attributes_validation_failed'    => 'Some attributes failed validation',
