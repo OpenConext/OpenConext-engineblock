@@ -112,7 +112,7 @@ HTML
     'consent_attributes_correction_link'      => 'Kloppen de onderstaande gegevens niet?',
     'consent_attributes_show_more'            => 'Toon alle gegevens',
     'consent_attributes_show_less'            => 'Toon minder gegevens',
-    'consent_no_attributes_text'              => 'Voor deze dienst zijn geen gegevens van jouw instelling nodig.',
+    'consent_no_attributes_text'              => 'Voor deze dienst zijn geen gegevens van jouw %organizaionNoun% nodig.',
     'consent_buttons_title'                   => 'Ga je akkoord met het doorsturen van deze gegevens?',
     'consent_buttons_ok'                      => 'Ja, ga door naar %arg1%',
     'consent_buttons_ok_minimal'              => 'Ga door naar %arg1%',
@@ -177,7 +177,7 @@ Als je deze applicatie wilt gebruiken moet je:<br />
 <li>opnieuw inloggen</li>
 <li>jouw informatie delen</li></ul>',
     'error_no_idps'                     => 'Error - Geen %organisationNounPlural% gevonden',
-    'error_no_idps_desc'                => 'Inloggen op de dienst via %suiteName% is onmogelijk. De dienst is niet gekoppeld met een instelling.',
+    'error_no_idps_desc'                => 'Inloggen op de dienst via %suiteName% is onmogelijk. De dienst is niet gekoppeld met een %organizationNoun%.',
     'error_session_lost'                => 'Fout - Sessie is verloren gegaan',
     'error_session_lost_desc'           => 'Om verder te gaan naar de dienst heb je een actieve sessie nodig, maar deze is verlopen. Heb je misschien te lang gewacht met inloggen? Ga terug naar de dienst en probeer het nog een keer. Als dat niet werkt, sluit je browser af en probeer nogmaals opnieuw in te loggen.',
     'error_session_not_started'                => 'Fout - Geen sessie gevonden',

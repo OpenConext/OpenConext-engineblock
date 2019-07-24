@@ -115,7 +115,7 @@ HTML
     'consent_attributes_correction_link'      => 'Are the details below incorrect?',
     'consent_attributes_show_more'            => 'Show more information',
     'consent_attributes_show_less'            => 'Show less information',
-    'consent_no_attributes_text'              => 'This service requires no information from your institution.',
+    'consent_no_attributes_text'              => 'This service requires no information from your %organizationNoun%.',
     'consent_buttons_title'                   => 'Do you agree with sharing this data?',
     'consent_buttons_ok'                      => 'Yes, proceed to %arg1%',
     'consent_buttons_ok_minimal'              => 'Proceed to %arg1%',
@@ -180,7 +180,7 @@ If you want to use this application you have to:<br />
 <li>login again</li>
 <li>share your information</li></ul>',
     'error_no_idps'                 => 'Error - No %organisationNounPlural% found',
-    'error_no_idps_desc'            => 'Logging into this service is not possible via %suiteName%. The service is not connected to any institutions.',
+    'error_no_idps_desc'            => 'Logging into this service is not possible via %suiteName%. The service is not connected to any %organisationNounPlural%.',
     'error_session_lost'            => 'Error - your session was lost',
     'error_session_lost_desc'       => 'To continue to the service an active session is required. However, your session expired. Perhaps you waited too long with logging in? Please go back to the service and try again. If that doesn\'t work, close your browser first and then try again.',
     'error_session_not_started'            => 'Error - No session found',
