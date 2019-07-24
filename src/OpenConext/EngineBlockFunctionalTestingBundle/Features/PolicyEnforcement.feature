@@ -16,7 +16,7 @@ Feature:
     When I log in at "Dummy SP"
     And I pass through EngineBlock
     And I pass through the IdP
-    And I should see "Error - No access"
+    And I should see "Error - Access denied"
     And I should see "Message from your organisation:"
     And I should see "Students of MyIdP do not have access to this resource"
     And the response should contain "idp-logo.jpg"
@@ -27,7 +27,7 @@ Feature:
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-      And I should see "Error - No access"
+      And I should see "Error - Access denied"
       And I should see "Message from your organisation:"
 
   Scenario: Access is denied because of an Indeterminate policy

@@ -96,7 +96,7 @@ Feature:
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Invalid Identity Provider response"
+     Then I should see "Invalid organisation SAML response"
       And I should see "UR ID:"
       And I should see "IP:"
       And I should see "EC:"
