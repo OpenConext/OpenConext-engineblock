@@ -31,7 +31,7 @@ Feature:
       And I pass through the SP
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Invalid Identity Provider response"
+     Then I should see "Invalid organisation SAML response"
 
   Scenario: EngineBlock rejects Shared Key Encrypted Responses
     Given the SP uses the HTTP POST Binding
@@ -41,7 +41,7 @@ Feature:
       And I pass through the SP
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Invalid Identity Provider response"
+     Then I should see "Invalid organisation SAML response"
 
   Scenario: EngineBlock rejects encrypted responses if the feature "eb.encrypted_assertions" is not enabled
     Given the SP uses the HTTP POST Binding
@@ -52,7 +52,7 @@ Feature:
       And I pass through EngineBlock
       And I pass through the IdP
      Then the url should match "authentication/feedback/received-invalid-response"
-      And I should see "Invalid Identity Provider response"
+      And I should see "Invalid organisation SAML response"
 
   Scenario: EngineBlock rejects encrypted responses without outer signature if the feature "eb.encrypted_assertions_require_outer_signatures" is enabled
     Given the SP uses the HTTP POST Binding
@@ -65,7 +65,7 @@ Feature:
       And I pass through EngineBlock
       And I pass through the IdP
      Then the url should match "authentication/feedback/received-invalid-response"
-      And I should see "Invalid Identity Provider response"
+      And I should see "Invalid organisation SAML response"
 
   # This scenario is currently not supported by EngineBlock,
   # see https://www.pivotaltracker.com/story/show/155703943
