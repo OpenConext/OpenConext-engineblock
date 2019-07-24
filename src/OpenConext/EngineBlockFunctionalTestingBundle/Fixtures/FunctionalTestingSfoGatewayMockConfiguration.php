@@ -9,15 +9,7 @@ use RuntimeException;
 
 final class FunctionalTestingSfoGatewayMockConfiguration
 {
-    /**
-     * @var MockIdentityProvider|null
-     */
-    private $mockIdentityProvider = null;
-
-    /**
-     * @var MockServiceProvider|null
-     */
-    private $mockServiceProvider = null;
+    private $data = [];
 
     /**
      * @var null|string
@@ -44,9 +36,8 @@ final class FunctionalTestingSfoGatewayMockConfiguration
         $this->dataStore            = $dataStore;
 
         $data = $dataStore->load();
-        $this->mockIdentityProvider = (isset($data['idp']) ? $data['idp'] : null);
-        $this->mockServiceProvider = (isset($data['sp']) ? $data['sp'] : null);
 
+        $this->data = (isset($data['data']) && is_array($data['data']) ? $data['data'] : []);
         $this->messageStatus = (isset($data['messageStatus']) ? $data['messageStatus'] : []);
         $this->messageSubStatus = (isset($data['messageSubStatus']) ? $data['messageSubStatus'] : []);
         $this->messageMessage = (isset($data['messageMessage']) ? $data['messageMessage'] : []);
@@ -55,9 +46,19 @@ final class FunctionalTestingSfoGatewayMockConfiguration
     /**
      * @return MockIdentityProvider|null
      */
-    public function getMockIdentityProvider()
+    public function getIdentityProviderEntityId()
     {
-        return $this->mockIdentityProvider;
+        return $this->data['idp-entity-id'];
+    }
+
+    public function getIdentityProviderPublicKeyCertData()
+    {
+        return $this->data['idp-public-key'];
+    }
+
+    public function getIdentityProviderGetPrivateKeyPem()
+    {
+        return $this->data['idp-private-key'];
     }
 
     /**
@@ -65,15 +66,25 @@ final class FunctionalTestingSfoGatewayMockConfiguration
      */
     public function setMockIdentityProvider($mockIdentityProvider)
     {
-        $this->mockIdentityProvider = $mockIdentityProvider;
+        $this->data['idp-entity-id'] = $mockIdentityProvider->entityId();
+        $this->data['idp-public-key'] = $mockIdentityProvider->publicKeyCertData();
+        $this->data['idp-private-key'] = $mockIdentityProvider->getPrivateKeyPem();
     }
 
     /**
-     * @return MockServiceProvider|null
+     * @return MockIdentityProvider|null
      */
-    public function getMockServiceProvider()
+    public function getServiceProviderEntityId()
     {
-        return $this->mockServiceProvider;
+        return $this->data['sp-entity-id'];
+    }
+
+    /**
+     * @return MockIdentityProvider|null
+     */
+    public function getServiceProviderPublicKeyCertData()
+    {
+        return $this->data['sp-public-key'];
     }
 
     /**
@@ -81,7 +92,8 @@ final class FunctionalTestingSfoGatewayMockConfiguration
      */
     public function setMockServiceProvider($mockServiceProvider)
     {
-        $this->mockServiceProvider = $mockServiceProvider;
+        $this->data['sp-entity-id'] = $mockServiceProvider->entityId();
+        $this->data['sp-public-key'] = $mockServiceProvider->publicKeyCertData();
     }
 
     /**
@@ -132,14 +144,13 @@ final class FunctionalTestingSfoGatewayMockConfiguration
      */
     public function hasFailure()
     {
-        return !is_null($this->messageStatus);
+        return !empty($this->messageStatus);
     }
 
     public function save()
     {
         $data = [
-            'idp' => $this->mockIdentityProvider,
-            'sp' => $this->mockServiceProvider,
+            'data' => $this->data,
             'messageStatus' => $this->messageStatus,
             'messageSubStatus' => $this->messageSubStatus,
             'messageMessage' => $this->messageMessage,

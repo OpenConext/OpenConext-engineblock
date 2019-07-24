@@ -9,7 +9,8 @@ class EngineBlock_Saml2_AuthnRequestFactory
     public static function createFromRequest(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $originalRequest,
         IdentityProvider $idpMetadata,
-        EngineBlock_Corto_ProxyServer $server
+        EngineBlock_Corto_ProxyServer $server,
+        $serviceName = 'spMetadataService'
     ) {
         $nameIdPolicy = array('AllowCreate' => true);
         /**
@@ -35,7 +36,7 @@ class EngineBlock_Saml2_AuthnRequestFactory
         $sspRequest->setIsPassive($originalRequest->getIsPassive());
         $sspRequest->setAssertionConsumerServiceURL($server->getUrl('assertionConsumerService'));
         $sspRequest->setProtocolBinding(Constants::BINDING_HTTP_POST);
-        $sspRequest->setIssuer($server->getUrl('spMetadataService'));
+        $sspRequest->setIssuer($server->getUrl($serviceName));
         $sspRequest->setNameIdPolicy($nameIdPolicy);
 
         if (empty($idpMetadata->getCoins()->disableScoping())) {

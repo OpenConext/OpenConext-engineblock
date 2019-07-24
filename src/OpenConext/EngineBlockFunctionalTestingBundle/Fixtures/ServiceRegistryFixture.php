@@ -15,6 +15,7 @@ use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
+use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy;
 use SAML2\Constants;
@@ -367,6 +368,28 @@ QUERY;
         return $this;
     }
 
+    public function setSpSfoRequireLoa($entityId, $requiredLoa)
+    {
+        $this->setCoin($this->getServiceProvider($entityId), 'stepupRequireLoa', $requiredLoa);
+
+        return $this;
+    }
+
+    public function setSpSfoAllowNoToken($entityId)
+    {
+        $this->setCoin($this->getServiceProvider($entityId), 'stepupAllowNoToken', true);
+
+        return $this;
+    }
+
+    public function setIdpSfoConnections($entityId, array $spLoaMapping)
+    {
+        $connections = new StepupConnections($spLoaMapping);
+        $this->setCoin($this->getIdentityProvider($entityId), 'stepupConnections', $connections);
+
+        return $this;
+    }
+
     public function setIdpLogo($entityId, $url)
     {
         $logo = new Logo($url);
@@ -374,6 +397,23 @@ QUERY;
         $logo->width = 100;
 
         $this->getIdentityProvider($entityId)->logo = $logo;
+
+        return $this;
+    }
+
+
+    public function setHidden($entityId)
+    {
+        $idp = $this->getIdentityProvider($entityId);
+
+        $this->setCoin($idp, 'hidden', true);
+
+        return $this;
+    }
+
+    public function setIdpEntityWantsSignature($entityId)
+    {
+        $this->getIdentityProvider($entityId)->requestsMustBeSigned = true;
 
         return $this;
     }
@@ -406,19 +446,19 @@ QUERY;
         return $this;
     }
 
-    private function setCoin(ServiceProvider $sp, $key, $name)
+    private function setCoin(AbstractRole $role, $key, $name)
     {
-        $jsonData = $sp->getCoins()->toJson();
+        $jsonData = $role->getCoins()->toJson();
         $data = json_decode($jsonData, true);
         $data[$key] = $name;
         $jsonData = json_encode($data);
 
         $coins = Coins::fromJson($jsonData);
 
-        $object = new \ReflectionClass($sp);
+        $object = new \ReflectionClass($role);
 
         $property = $object->getProperty('coins');
         $property->setAccessible(true);
-        $property->setValue($sp, $coins);
+        $property->setValue($role, $coins);
     }
 }

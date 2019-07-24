@@ -1,11 +1,15 @@
 <?php
 
-use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
+use OpenConext\EngineBlockBundle\Sfo\SfoGatewayCallOutHelper;
+use OpenConext\EngineBlockBundle\Sfo\SfoIdentityProvider;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Request;
 
 class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
@@ -24,30 +28,45 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
      */
     private $_session;
 
+    /**
+     * @var ProcessingStateHelperInterface
+     */
+    private $_processingStateHelper;
+    /**
+     * @var SfoGatewayCallOutHelper
+     */
+    private $_sfoGatewayCallOutHelper;
+
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
-        Session $session
+        Session $session,
+        ProcessingStateHelperInterface $processingStateHelper,
+        SfoGatewayCallOutHelper $sfoGatewayCallOutHelper
     ) {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->_session = $session;
+        $this->_processingStateHelper = $processingStateHelper;
+        $this->_sfoGatewayCallOutHelper = $sfoGatewayCallOutHelper;
     }
 
     /**
      * @param $serviceName
+     * @param Request $httpRequest
      */
-    public function serve($serviceName)
+    public function serve($serviceName, Request $httpRequest)
     {
-        $receivedResponse = $this->_server->getBindingsModule()->receiveResponse();
+        $serviceEntityId = $this->_server->getUrl('assertionConsumerService');
+        $receivedResponse = $this->_server->getBindingsModule()->receiveResponse($serviceEntityId, $serviceEntityId);
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
 
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $log = $application->getLogInstance();
 
-        $this->checkResponseSignatureMethods($receivedResponse);
+        $this->_server->checkResponseSignatureMethods($receivedResponse);
 
-        $sp  = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
+        $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
 
         // Verify the SP requester chain.
         EngineBlock_SamlHelper::getSpRequesterChain(
@@ -61,7 +80,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
 
         if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(array($sp, $idp))) {
             $application->flushLog('Activated additional logging for the SP or IdP');
-            $log->info('Raw HTTP request', array('http_request' => (string) $application->getHttpRequest()));
+            $log->info('Raw HTTP request', array('http_request' => (string)$application->getHttpRequest()));
         }
 
         if ($receivedRequest->isDebugRequest()) {
@@ -92,79 +111,33 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
 
         $this->_server->filterInputAssertionAttributes($receivedResponse, $receivedRequest);
 
-        $processingEntities = $this->_server->getConfig('Processing', array());
-        if (!empty($processingEntities)) {
-            /** @var AbstractRole $firstProcessingEntity */
-            $firstProcessingEntity = array_shift($processingEntities);
-            $_SESSION['Processing'][$receivedRequest->getId()]['RemainingEntities']   = $processingEntities;
-            $_SESSION['Processing'][$receivedRequest->getId()]['OriginalDestination'] = $receivedResponse->getDestination();
-            $_SESSION['Processing'][$receivedRequest->getId()]['OriginalIssuer']      = $receivedResponse->getOriginalIssuer();
-            $_SESSION['Processing'][$receivedRequest->getId()]['OriginalBinding']     = $receivedResponse->getOriginalBinding();
-
-            $this->_server->setProcessingMode();
-            $newResponse = $this->_server->createEnhancedResponse($receivedRequest, $receivedResponse);
-
-            // Change the destiny of the received response
-            $inResponseTo = $receivedResponse->getInResponseTo();
-            $newResponse->setInResponseTo($inResponseTo);
-            $newResponse->setDestination($firstProcessingEntity->responseProcessingService->location);
-            $newResponse->setDeliverByBinding($firstProcessingEntity->responseProcessingService->binding);
-            $newResponse->setReturn($this->_server->getUrl('processedAssertionConsumerService'));
-
-            $identityProvider = new Entity(new EntityId($idp->entityId), EntityType::IdP());
-            $authenticationState = $this->getAuthenticationState();
-            $authenticationState->authenticatedAt($inResponseTo, $identityProvider);
-
-            $this->_server->getBindingsModule()->send($newResponse, $firstProcessingEntity);
-        }
-        else {
-            $newResponse = $this->_server->createEnhancedResponse($receivedRequest, $receivedResponse);
-            $this->_server->sendResponseToRequestIssuer($receivedRequest, $newResponse);
-        }
-    }
-
-    /**
-     * Log and verify the signature methods used.
-     *
-     * The signatures are not validated here, but the used methods
-     * (algorithms) are logged and an error is thrown if they're explicitly
-     * prohibited from use.
-     *
-     * @param EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse
-     */
-    private function checkResponseSignatureMethods(EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse)
-    {
-        $issuer = $receivedResponse->getIssuer();
-        $log = EngineBlock_ApplicationSingleton::getInstance()
-            ->getLogInstance();
-
-        $log->notice(
-            sprintf(
-                'Received Assertion from Issuer "%s" with signature method algorithms Response: "%s" and Assertion: "%s"',
-                $issuer,
-                $receivedResponse->getSignatureMethod(),
-                $receivedResponse->getAssertion()->getSignatureMethod()
-            )
+        // Add the consent step
+        $currentProcessStep = $this->_processingStateHelper->addStep(
+            $receivedRequest->getId(),
+            ProcessingStateHelperInterface::STEP_CONSENT,
+            $this->getEngineSpRole($this->_server),
+            $receivedResponse
         );
 
-        if ($receivedResponse->getSignatureMethod() !== null) {
-            $this->assertSignatureMethodIsAllowed($receivedResponse->getSignatureMethod());
+        // Goto consent if no SFO needed
+        if (!$this->_sfoGatewayCallOutHelper->shouldUseSfo($idp, $sp)) {
+            $this->_server->sendConsentAuthenticationRequest($receivedResponse, $receivedRequest, $currentProcessStep->getRole(), $this->getAuthenticationState());
+            return;
         }
 
-        if ($receivedResponse->getAssertion()->getSignatureMethod() !== null) {
-            $this->assertSignatureMethodIsAllowed($receivedResponse->getAssertion()->getSignatureMethod());
-        }
-    }
+        // Update AuthnClassRef and NameId
+        $nameId = clone $receivedResponse->getNameId();
+        $authnClassRef = $this->_sfoGatewayCallOutHelper->getSfoLoa($idp, $sp);
 
-    /**
-     * @param string $signatureMethod
-     * @throws EngineBlock_Corto_Module_Bindings_Exception
-     */
-    private function assertSignatureMethodIsAllowed($signatureMethod)
-    {
-        if (in_array($signatureMethod, $this->_server->getConfig('forbiddenSignatureMethods'))) {
-            throw new EngineBlock_Corto_Module_Bindings_UnsupportedSignatureMethodException($signatureMethod);
-        }
+        // Add sfo step
+        $currentProcessStep = $this->_processingStateHelper->addStep(
+            $receivedRequest->getId(),
+            ProcessingStateHelperInterface::STEP_SFO,
+            $application->getDiContainer()->getSfoIdentityProvider($this->_server),
+            $receivedResponse
+        );
+
+        $this->_server->sendSfoAuthenticationRequest($receivedRequest, $currentProcessStep->getRole(), $authnClassRef, $nameId);
     }
 
     /**
@@ -173,5 +146,27 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
     private function getAuthenticationState()
     {
         return $this->_session->get('authentication_state');
+    }
+
+    /**
+     * @param EngineBlock_Corto_ProxyServer $proxyServer
+     * @return ServiceProvider
+     * @throws EngineBlock_Corto_ProxyServer_Exception
+     * @throws EngineBlock_Exception
+     */
+    protected function getEngineSpRole(EngineBlock_Corto_ProxyServer $proxyServer)
+    {
+        $spEntityId = $proxyServer->getUrl('spMetadataService');
+        $engineServiceProvider = $proxyServer->getRepository()->findServiceProviderByEntityId($spEntityId);
+        if (!$engineServiceProvider) {
+            throw new EngineBlock_Exception(
+                sprintf(
+                    "Unable to find EngineBlock configured as Service Provider. No '%s' in repository!",
+                    $spEntityId
+                )
+            );
+        }
+
+        return $engineServiceProvider;
     }
 }

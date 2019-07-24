@@ -21,6 +21,12 @@ services:
             - "%sfo.gateway.sso.sso_location%"
             - "%sfo.gateway.sso.key_file%"
 
+    engineblock.configuration.sfo.gateway_loa_mapping:
+        class: OpenConext\EngineBlockBundle\Sfo\SfoGatewayLoaMapping
+        arguments:
+            - "%sfo.gateway.loa.mapping%"
+            - "%sfo.gateway.loa.loa1%"
+
     engineblock.request.request_id_generator:
         public: false
         class: OpenConext\EngineBlock\Request\UniqidGenerator
@@ -40,6 +46,18 @@ services:
         class: OpenConext\EngineBlock\Service\AuthenticationStateHelper
         arguments:
             - "@session"
+
+    engineblock.service.processing_state_helper:
+        class: OpenConext\EngineBlock\Service\ProcessingStateHelper
+        arguments:
+            - "@session"
+
+    engineblock.service.sfo.gateway_callout_helper:
+        class: OpenConext\EngineBlockBundle\Sfo\SfoGatewayCallOutHelper
+        arguments:
+            - "@engineblock.configuration.sfo.gateway_loa_mapping"
+            - "@engineblock.configuration.sfo.endpoint"
+
 
     engineblock.service.consent:
         class: OpenConext\EngineBlock\Service\ConsentService
