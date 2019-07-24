@@ -1,5 +1,7 @@
 <?php
 
+use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
+use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
@@ -411,7 +413,75 @@ class EngineBlock_Corto_ProxyServer
         $authnRequestRepository->store($spRequest);
         $authnRequestRepository->link($ebRequest, $spRequest);
 
+
         $this->getBindingsModule()->send($ebRequest, $identityProvider);
+    }
+
+    public function sendSfoAuthenticationRequest(
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $spRequest,
+        IdentityProvider $identityProvider,
+        $authnContextClassRef,
+        $nameId
+    ) {
+        $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest($spRequest, $identityProvider, $this);
+
+        $sspMessage = $ebRequest->getSspMessage();
+        if (!$sspMessage instanceof AuthnRequest) {
+            throw new \RuntimeException(sprintf('Unknown message type: "%s"', get_class($sspMessage)));
+        }
+
+        // Add sfo specific data
+        $sspMessage->setRequestedAuthnContext([
+            'AuthnContextClassRef' => [
+                $authnContextClassRef
+            ],
+            'Comparison' => 'minimal',
+        ]);
+        $sspMessage->setNameId([
+            'Value' => $nameId,
+            'Format' => Constants::NAMEID_UNSPECIFIED,
+        ]);
+
+        // Add gateway data
+        $sspMessage->setDestination($identityProvider->singleSignOnServices[0]->location);
+        $sspMessage->setAssertionConsumerServiceURL($this->_server->getUrl('sfoAssertionConsumerService'));
+        $sspMessage->setProtocolBinding(Constants::BINDING_HTTP_POST);
+        $sspMessage->setIssuer($this->_server->getUrl('sfoMetadataService'));
+
+        // Add the SP to the requesterIds
+        $requesterIds = $sspMessage->getRequesterID();
+        $requesterIds[] = $sspMessage->getIssuer();
+        $sspMessage->setRequesterID($requesterIds);
+
+        // Link with the original Request
+        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_logger);
+        $authnRequestRepository->store($spRequest);
+        $authnRequestRepository->link($ebRequest, $spRequest);
+
+        $this->getBindingsModule()->send($ebRequest, $identityProvider);
+    }
+
+    function sendConsentAuthenticationRequest(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest,
+        AbstractRole $serviceProvider,
+        AuthenticationState $authenticationState
+    ) {
+        $this->setProcessingMode();
+        $newResponse = $this->_server->createEnhancedResponse($receivedRequest, $receivedResponse);
+
+        // Change the destiny of the received response
+        $inResponseTo = $receivedResponse->getInResponseTo();
+        $newResponse->setInResponseTo($inResponseTo);
+        $newResponse->setDestination($serviceProvider->responseProcessingService->location);
+        $newResponse->setDeliverByBinding($serviceProvider->responseProcessingService->binding);
+        $newResponse->setReturn($this->_server->getUrl('processedAssertionConsumerService'));
+
+        $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($receivedResponse->getIssuer());
+        $identityProvider = new Entity(new EntityId($idp->entityId), EntityType::IdP());
+        $authenticationState->authenticatedAt($inResponseTo, $identityProvider);
+
+        $this->_server->getBindingsModule()->send($newResponse, $serviceProvider);
     }
 
 //////// RESPONSE HANDLING ////////
@@ -986,6 +1056,50 @@ class EngineBlock_Corto_ProxyServer
         $element[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Signed'] = true;
 
         return $element;
+    }
+
+    /**
+     * Log and verify the signature methods used.
+     *
+     * The signatures are not validated here, but the used methods
+     * (algorithms) are logged and an error is thrown if they're explicitly
+     * prohibited from use.
+     *
+     * @param EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse
+     */
+    public function checkResponseSignatureMethods(EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse)
+    {
+        $issuer = $receivedResponse->getIssuer();
+        $log = EngineBlock_ApplicationSingleton::getInstance()
+            ->getLogInstance();
+
+        $log->notice(
+            sprintf(
+                'Received Assertion from Issuer "%s" with signature method algorithms Response: "%s" and Assertion: "%s"',
+                $issuer,
+                $receivedResponse->getSignatureMethod(),
+                $receivedResponse->getAssertion()->getSignatureMethod()
+            )
+        );
+
+        if ($receivedResponse->getSignatureMethod() !== null) {
+            $this->assertSignatureMethodIsAllowed($receivedResponse->getSignatureMethod());
+        }
+
+        if ($receivedResponse->getAssertion()->getSignatureMethod() !== null) {
+            $this->assertSignatureMethodIsAllowed($receivedResponse->getAssertion()->getSignatureMethod());
+        }
+    }
+
+    /**
+     * @param string $signatureMethod
+     * @throws EngineBlock_Corto_Module_Bindings_Exception
+     */
+    private function assertSignatureMethodIsAllowed($signatureMethod)
+    {
+        if (in_array($signatureMethod, $this->getConfig('forbiddenSignatureMethods'))) {
+            throw new EngineBlock_Corto_Module_Bindings_UnsupportedSignatureMethodException($signatureMethod);
+        }
     }
 
     /**

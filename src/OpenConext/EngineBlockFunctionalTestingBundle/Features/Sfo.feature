@@ -8,14 +8,29 @@ Feature:
       And no registered SPs
       And no registered Idps
       And an Identity Provider named "SSO-IdP"
-      And an Identity Provider named "SSO-Foobar"
       And a Service Provider named "SSO-SP"
-      And a Service Provider named "SSO-Foobar"
+      And an Identity Provider named "Dummy-IdP"
+      And a Service Provider named "Dummy-SP"
 
   Scenario: Sfo should be supported
-    When SFO is used
-     And SFO will successfully verify a user
-     And I log in at "SSO-SP"
-     And I select "SSO-IdP" on the WAYF
-     And I pass through EngineBlock
-    Then the AuthnRequest to submit should match xpath '/samlp:AuthnRequest/samlp:NameIDPolicy[@AllowCreate="true" or @AllowCreate="1"]'
+    Given SFO is used
+      And SFO will successfully verify a user
+      And the SP "SSO-SP" requires SFO loa "http://test.openconext.nl/assurance/loa2"
+    Then I log in at "SSO-SP"
+      And I select "SSO-IdP" on the WAYF
+      And I pass through EngineBlock
+      And I pass through the IdP
+      And I pass through EngineBlock
+      And I authenticate with SFO
+      And I give my consent
+      And I pass through EngineBlock
+    Then the url should match "/functional-testing/SSO-SP/acs"
+
+    Scenario: If sfo is not used we should still go trough consent
+      Then I log in at "Dummy-SP"
+        And I select "Dummy-IdP" on the WAYF
+        And I pass through EngineBlock
+        And I pass through the IdP
+        And I give my consent
+        And I pass through EngineBlock
+      Then the url should match "/functional-testing/Dummy-SP/acs"

@@ -3,6 +3,7 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 use DOMDocument;
 use DOMXPath;
@@ -22,6 +23,7 @@ use RuntimeException;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity) Both set up and tasks can be a lot...
  * @SuppressWarnings(PHPMD.TooManyMethods) Both set up and tasks can be a lot...
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to all integration specific features
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount) Both set up and tasks can be a lot...
  */
 class EngineBlockContext extends AbstractSubContext
 {
@@ -233,6 +235,7 @@ HTML;
     public function iGiveMyConsent()
     {
         $mink = $this->getMinkContext();
+
         if (strstr($mink->getSession()->getPage()->getHtml(), 'accept_terms_button')) {
             $mink->pressButton('accept_terms_button');
         }

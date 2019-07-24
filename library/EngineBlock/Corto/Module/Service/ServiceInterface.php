@@ -1,5 +1,12 @@
 <?php
+
+use Symfony\Component\HttpFoundation\Request;
+
 interface EngineBlock_Corto_Module_Service_ServiceInterface
 {
-    public function serve($serviceName);
+    /**
+     * @param $serviceName
+     * @param Request $httpRequest
+     */
+    public function serve($serviceName, Request $httpRequest);
 }

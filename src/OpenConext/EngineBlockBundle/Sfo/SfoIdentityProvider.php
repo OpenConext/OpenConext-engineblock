@@ -18,30 +18,38 @@
 namespace OpenConext\EngineBlockBundle\Sfo;
 
 use EngineBlock_X509_CertificateFactory;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\IndexedService;
+use OpenConext\EngineBlock\Metadata\Service;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 
-class SfoServiceProvider extends ServiceProvider
+class SfoIdentityProvider extends ServiceProvider
 {
 
     /**
      * @param SfoEndpoint $sfoEndpoint
-     * @return ServiceProvider
+     * @param string $acsUrl
+     * @return IdentityProvider
+     * @throws \EngineBlock_Exception
      */
-    public static function fromSfoEndpoint(SfoEndpoint $sfoEndpoint)
+    public static function fromSfoEndpoint(SfoEndpoint $sfoEndpoint, $acsUrl)
     {
-        $entity = new ServiceProvider($sfoEndpoint->getEntityId());
+        $entity = new IdentityProvider($sfoEndpoint->getEntityId());
 
-        $entity->assertionConsumerServices[] = new IndexedService(
-            $sfoEndpoint->getSsoLocation(),
-            Constants::BINDING_HTTP_POST,
-            0
+        $entity->responseProcessingService = new Service(
+            $acsUrl,
+            Constants::BINDING_HTTP_POST
         );
 
         $publicKeyFactory = new EngineBlock_X509_CertificateFactory();
 
         $entity->certificates[] = $publicKeyFactory->fromFile($sfoEndpoint->getKeyFile());
+        $entity->singleSignOnServices[] = new Service($sfoEndpoint->getSsoLocation(), Constants::BINDING_HTTP_POST);
+        $entity->requestsMustBeSigned = true;
+        // Is this wanted?
+        $entity->signatureMethod = XMLSecurityKey::RSA_SHA256;
 
         return $entity;
     }

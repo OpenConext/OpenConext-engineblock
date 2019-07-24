@@ -30,6 +30,7 @@ use SAML2\Message;
 use SAML2\Response;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\saml\SubjectConfirmationData;
+use Surfnet\SamlBundle\Http\Exception\SignatureValidationFailedException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
@@ -71,17 +72,18 @@ class MockSfoGateway
 
         // get parameters from authnRequest
         $nameId = $authnRequest->getNameId()->value;
-        $destination = $authnRequest->getDestination();
-        $authnContextClassRef = $authnRequest->getRequestedAuthnContext()['AuthnContextClassRef'];
-        $requesterId = current($authnRequest->getRequesterID());
+        $destination = $authnRequest->getAssertionConsumerServiceURL();
+        $authnContextClassRef = current($authnRequest->getRequestedAuthnContext()['AuthnContextClassRef']);
+        $requestId = $authnRequest->getId();
 
         // handle failure
+        // TODO: set response in same request!
         if ($this->gatewayConfiguration->hasFailure()) {
             $status = $this->gatewayConfiguration->getStatus();
             $subStatus = $this->gatewayConfiguration->getSubStatus();
             $message = $this->gatewayConfiguration->getMessage();
 
-            return $this->createFailureResponse($destination, $requesterId, $status, $subStatus, $message);
+            return $this->createFailureResponse($destination, $requestId, $status, $subStatus, $message);
         }
 
         // handle success
@@ -89,7 +91,7 @@ class MockSfoGateway
             $nameId,
             $destination,
             $authnContextClassRef,
-            $requesterId
+            $requestId
         );
     }
 
@@ -148,10 +150,10 @@ class MockSfoGateway
         }
 
         // 4. Validate issuer
-        if (!$this->getServiceProvider()->entityId() !== $authnRequest->getIssuer()) {
+        if (!$this->gatewayConfiguration->getServiceProviderEntityId() === $authnRequest->getIssuer()) {
             throw new BadRequestHttpException(sprintf(
                 'Actual issuer "%s" does not match the AuthnRequest Issuer "%s"',
-                $this->getServiceProvider()->entityId(),
+                $this->gatewayConfiguration->getServiceProviderEntityId(),
                 $authnRequest->getIssuer()
             ));
         }
@@ -159,7 +161,7 @@ class MockSfoGateway
         // 5. Validate key
         // Note: $authnRequest->validate throws an Exception when the signature does not match.
         $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, array('type' => 'public'));
-        $key->loadKey($this->getServiceProvider()->publicKeyCertData());
+        $key->loadKey($this->addPublicKeyEnvelope($this->gatewayConfiguration->getIdentityProviderPublicKeyCertData()));
         if (!$authnRequest->validate($key)) {
             throw new BadRequestHttpException(
                 'Validation of the signature in the AuthnRequest failed'
@@ -190,7 +192,7 @@ class MockSfoGateway
     {
         $response = new Response();
         $response->setDestination($destination);
-        $response->setIssuer($this->getIdentityProvider()->entityId());
+        $response->setIssuer($this->gatewayConfiguration->getIdentityProviderEntityId());
         $response->setIssueInstant($this->getTimestamp());
         $response->setInResponseTo($requestId);
 
@@ -235,7 +237,7 @@ class MockSfoGateway
     {
         $response = new Response();
         $response->setAssertions([$newAssertion]);
-        $response->setIssuer($this->getIdentityProvider()->entityId());
+        $response->setIssuer($this->gatewayConfiguration->getIdentityProviderEntityId());
         $response->setIssueInstant($this->getTimestamp());
         $response->setDestination($destination);
         $response->setInResponseTo($requestId);
@@ -255,7 +257,7 @@ class MockSfoGateway
         $newAssertion = new Assertion();
         $newAssertion->setNotBefore($this->currentTime->getTimestamp());
         $newAssertion->setNotOnOrAfter($this->getTimestamp('PT5M'));
-        $newAssertion->setIssuer($this->getIdentityProvider()->entityId());
+        $newAssertion->setIssuer($this->gatewayConfiguration->getIdentityProviderEntityId());
         $newAssertion->setIssueInstant($this->getTimestamp());
         $this->signAssertion($newAssertion);
         $this->addSubjectConfirmationFor($newAssertion, $destination, $requestId);
@@ -263,7 +265,7 @@ class MockSfoGateway
             'Format' => Constants::NAMEID_UNSPECIFIED,
             'Value' => $nameId,
         ]);
-        $newAssertion->setValidAudiences([$this->getServiceProvider()->entityId()]);
+        $newAssertion->setValidAudiences([$this->gatewayConfiguration->getServiceProviderEntityId()]);
         $this->addAuthenticationStatementTo($newAssertion, $authnContextClassRef);
 
         return $newAssertion;
@@ -297,7 +299,7 @@ class MockSfoGateway
     {
         $assertion->setAuthnInstant($this->getTimestamp());
         $assertion->setAuthnContextClassRef($authnContextClassRef);
-        $assertion->setAuthenticatingAuthority([$this->getIdentityProvider()->entityId()]);
+        $assertion->setAuthenticatingAuthority([$this->gatewayConfiguration->getIdentityProviderEntityId()]);
     }
 
     /**
@@ -333,7 +335,7 @@ class MockSfoGateway
     private function loadPrivateKey()
     {
         $xmlSecurityKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
-        $xmlSecurityKey->loadKey($this->getIdentityProvider()->getPrivateKeyPem());
+        $xmlSecurityKey->loadKey($this->gatewayConfiguration->getIdentityProviderGetPrivateKeyPem());
 
         return $xmlSecurityKey;
     }
@@ -343,7 +345,7 @@ class MockSfoGateway
      */
     private function getPublicCertificate()
     {
-        return $this->getIdentityProvider()->publicKeyCertData();
+        return $this->gatewayConfiguration->getIdentityProviderPublicKeyCertData();
     }
 
     private function isValidResponseStatus($status)
@@ -381,28 +383,8 @@ class MockSfoGateway
         ]);
     }
 
-    /**
-     * @return MockIdentityProvider
-     */
-    private function getIdentityProvider()
+    private function addPublicKeyEnvelope($key)
     {
-        $identityProvider = $this->gatewayConfiguration->getMockIdentityProvider();
-        if (!$identityProvider) {
-            throw new RuntimeException('No hosted IDP configured in gateway mock');
-        }
-        return $identityProvider;
-    }
-
-    /**
-     * @return MockServiceProvider
-     */
-    private function getServiceProvider()
-    {
-        $serviceProvider = $this->gatewayConfiguration->getMockServiceProvider();
-        if (!$serviceProvider) {
-            throw new RuntimeException('No hosted IDP configured in gateway mock');
-        }
-
-        return $serviceProvider;
+        return "-----BEGIN CERTIFICATE-----\n" . wordwrap($key, 64, "\n", true) . "\n-----END CERTIFICATE-----";
     }
 }
