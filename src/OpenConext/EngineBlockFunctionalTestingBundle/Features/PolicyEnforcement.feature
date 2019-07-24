@@ -36,7 +36,7 @@ Feature:
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-      And I should see "Error - No access"
+      And I should see "Error - Access denied"
       And I should see "Message from your organisation:"
 
   Scenario: Access is permitted because of a Permit policy

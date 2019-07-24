@@ -106,7 +106,7 @@ Feature:
 
   Scenario: I want to log on, but this Service Provider may not access any Identity Providers
     When I log in at "Unconnected SP"
-    Then I should see "No Identity Providers found"
+    Then I should see "No organisations found"
      And I should see "UR ID:"
      And I should see "IP:"
      And I should see "EC:"
@@ -175,7 +175,7 @@ Feature:
   Scenario: An SP sends a AuthnRequest transparently for an IdP that doesn't exist
      When I log in at SP "Dummy SP" which attempts to preselect nonexistent IdP "DoesNotExist"
      Then the url should match "/authentication/feedback/unknown-preselected-idp"
-      And I should see "No connection between organisation and service"
+      And I should see "This service is not accessible through organisation"
       And I should see "UR ID:"
       And I should see "IP:"
       And I should see "EC:"
@@ -191,7 +191,7 @@ Feature:
     And I pass through the IdP
     And I give my consent
   Then I should see "Attribute value not allowed"
-    And I should see "Your organisation used a value for attribute schacHomeOrganization (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
+    And I should see "Your organisation sends a value for attribute schacHomeOrganization (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
     And I should see "UR ID:"
     And I should see "IP:"
     And I should see "EC:"
@@ -208,7 +208,7 @@ Feature:
     And I pass through the IdP
     And I give my consent
   Then I should not see "Attribute value not allowed"
-    And I should not see "Your organisation used a value for attribute schacHomeOrganization"
+    And I should not see "Your organisation sends a value for attribute schacHomeOrganization"
 
   Scenario: I log in at my Identity Provider, that has the 'block_user_on_violation' feature activated, and has an invalid eduPersonPrincipalName attribute.
     Given feature "eb.block_user_on_violation" is enabled
@@ -220,7 +220,7 @@ Feature:
       And I pass through the IdP
       And I give my consent
     Then I should see "Attribute value not allowed"
-      And I should see "Your organisation used a value for attribute eduPersonPrincipalName (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
+      And I should see "Your organisation sends a value for attribute eduPersonPrincipalName (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
       And I should see "UR ID:"
       And I should see "IP:"
       And I should see "EC:"
@@ -238,7 +238,7 @@ Feature:
       And I pass through the IdP
       And I give my consent
     Then I should not see "Attribute value not allowed"
-      And I should not see "Your organisation used a value for attribute eduPersonPrincipalName"
+      And I should not see "Your organisation sends a value for attribute eduPersonPrincipalName"
 
   Scenario: The session has been lost after passing through EngineBlock
     When I log in at "Dummy SP"
@@ -256,7 +256,7 @@ Feature:
 
   Scenario: A session is not started while expected
     When I go to Engineblock URL "/authentication/sp/process-consent"
-    Then I should see "your session was not found"
+    Then I should see "no session was found"
 
   Scenario: The SP uses the wrong request parameter while using HTTP Redirect binding
    Given the SP "Dummy SP" sends a malformed AuthNRequest
@@ -304,7 +304,7 @@ Feature:
    Given EngineBlock raises an unexpected error
     When I log in at "Dummy SP"
     Then I should see "Error - An error occurred"
-     And I should see "Your log-in has failed and we don't know exactly why."
+     And I should see "Logging in has failed and we don't know exactly why."
      And I write down the request id as seen on the error page
      And I reload the page
     Then I should see the same request id on the error page
@@ -313,7 +313,7 @@ Feature:
    Given EngineBlock raises an unexpected error
     When I log in at "Dummy SP"
     Then I should see "Error - An error occurred"
-     And I should see "Your log-in has failed and we don't know exactly why."
+     And I should see "Logging in has failed and we don't know exactly why."
      And I write down the request id as seen on the error page
      And I lose my session and reload
      And I should see "Error - An error occurred"
