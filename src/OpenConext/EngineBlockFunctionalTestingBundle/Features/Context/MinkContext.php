@@ -84,7 +84,7 @@ class MinkContext extends BaseMinkContext
         foreach ($tabs as $tab) {
             $this->getMink()
                 ->getSession()
-                ->evaluateScript("return window.open('https://engine.vm.openconext.org', '_blank');");
+                ->executeScript("window.open('/','_blank');");
 
             $windowsNames = $this->getSession()->getWindowNames();
 
