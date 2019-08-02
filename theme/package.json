@@ -7,7 +7,7 @@
   "main": "index.js",
   "scripts": {
     "test": "BABEL_ENV=test jest",
-    "audit": "npm audit",
+    "audit": "npm audit --audit-level=high",
     "lint": "npm run lint:js && npm run lint:css",
     "lint:js": "jshint material/javascripts/",
     "lint:css": "stylelint 'material/stylesheets/**/*.sass' --syntax sass",
