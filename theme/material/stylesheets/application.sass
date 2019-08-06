@@ -1,4 +1,7 @@
 @import "shared/vars.css.sass"
+
+@import "vars.overrides.css.sass" // Vars imported with --include-path in code-sass
+
 @import "../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome"
 @import "shared/utilities/reset.css.sass"
 @import "shared/utilities/mixins.css.sass"
@@ -29,5 +32,4 @@
 @import "application/modules/tabs.css.sass"
 @import "application/modules/tooltip.css.scss"
 
-// Theming imported with --include-path in code-sass
-@import "theme"
+@import "theme" // Theming imported with --include-path in code-sass
