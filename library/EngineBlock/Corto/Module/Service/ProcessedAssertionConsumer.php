@@ -29,8 +29,10 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer implements Eng
      */
     public function serve($serviceName, Request $httpRequest)
     {
-        $serviceEntityId = $this->_server->getUrl('assertionConsumerService');
-        $response = $this->_server->getBindingsModule()->receiveResponse($serviceEntityId, $serviceEntityId);
+        $serviceEntityId = $this->_server->getUrl('spMetadataService');
+        $expectedDestination = $this->_server->getUrl('assertionConsumerService');
+
+        $response = $this->_server->getBindingsModule()->receiveResponse($serviceEntityId, $expectedDestination);
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($response);
 
         if ($receivedRequest->getKeyId()) {

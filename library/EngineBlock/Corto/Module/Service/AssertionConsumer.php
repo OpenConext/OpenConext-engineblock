@@ -4,7 +4,6 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\EngineBlockBundle\Sfo\SfoGatewayCallOutHelper;
-use OpenConext\EngineBlockBundle\Sfo\SfoIdentityProvider;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
@@ -57,8 +56,10 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
      */
     public function serve($serviceName, Request $httpRequest)
     {
-        $serviceEntityId = $this->_server->getUrl('assertionConsumerService');
-        $receivedResponse = $this->_server->getBindingsModule()->receiveResponse($serviceEntityId, $serviceEntityId);
+        $serviceEntityId = $this->_server->getUrl('spMetadataService');
+        $expectedDestination = $this->_server->getUrl('assertionConsumerService');
+
+        $receivedResponse = $this->_server->getBindingsModule()->receiveResponse($serviceEntityId, $expectedDestination);
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
 
         $application = EngineBlock_ApplicationSingleton::getInstance();

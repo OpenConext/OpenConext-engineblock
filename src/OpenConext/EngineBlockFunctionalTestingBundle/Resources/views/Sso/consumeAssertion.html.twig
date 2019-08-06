@@ -3,14 +3,18 @@
         <b>Note: </b> javascript is disabled, please click the button below to proceed
     </noscript>
     One moment please...
-    <form method="post" action="{{ acu }}">
-        <input type="hidden" name="SAMLResponse" value="{{ response }}" />
-    {% if relayState|length > 0 %}
-        <input type="hidden" name="RelayState" value="{{ relayState|escape }}" />
-    {% endif %}
-        <input type="submit" class="hidden" />
-    <noscript>
-        <input type="submit" value="SubmitSfo"/>
-    </noscript>
-    </form>
+
+    {% for id, response in responses %}
+        <h2>{{ id }}</h2>
+        <form method="post" action="{{ response.acu }}">
+            <input type="hidden" name="SAMLResponse" value="{{ response.encodedResponse }}" />
+        {% if response.relayState|length > 0 %}
+            <input type="hidden" name="RelayState" value="{{ response.relayState|escape }}" />
+        {% endif %}
+            <input type="submit" class="hidden" />
+        <noscript>
+            <input type="submit" value="Submit-{{ id }}"/>
+        </noscript>
+        </form>
+    {% endfor %}
 </html>

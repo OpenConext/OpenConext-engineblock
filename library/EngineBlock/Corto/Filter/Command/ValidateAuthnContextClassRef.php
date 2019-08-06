@@ -56,8 +56,19 @@ class EngineBlock_Corto_Filter_Command_ValidateAuthnContextClassRef extends Engi
      */
     private function validateAuthnContextClassRef($value, $regex)
     {
-        if (preg_match($regex, $value)) {
+        $match = preg_match($regex, $value);
+        if ($match) {
             return false;
+        }
+
+        if ($match === false) {
+            $this->logger->notice('No authn_context_class_ref_blacklist_regex found in the configuration, not validating AuthnContextClassRef');
+
+            throw new EngineBlock_Exception(
+                sprintf(
+                    'Invalid authn_context_class_ref_blacklist_regex found in the configuration'
+                )
+            );
         }
 
         return true;

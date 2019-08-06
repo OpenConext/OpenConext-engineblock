@@ -15,6 +15,7 @@ use SAML2\AuthnRequest;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Response;
+use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\saml\SubjectConfirmationData;
 
@@ -421,7 +422,7 @@ class EngineBlock_Corto_ProxyServer
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $spRequest,
         IdentityProvider $identityProvider,
         $authnContextClassRef,
-        $nameId
+        NameID $nameId
     ) {
         $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest($spRequest, $identityProvider, $this);
 
@@ -438,7 +439,7 @@ class EngineBlock_Corto_ProxyServer
             'Comparison' => 'minimal',
         ]);
         $sspMessage->setNameId([
-            'Value' => $nameId,
+            'Value' => $nameId->value,
             'Format' => Constants::NAMEID_UNSPECIFIED,
         ]);
 
