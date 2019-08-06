@@ -146,4 +146,41 @@ class SfoContext extends AbstractSubContext
             ->setSpSfoRequireLoa($mockSp->entityId(), $requiredLoa)
             ->save();
     }
+
+    /**
+     * @Given /^I authenticate with SFO$/
+     */
+    public function iAuthenticateWithSfo()
+    {
+        $mink = $this->getMinkContext();
+
+        $mink->pressButton('SubmitSfo');
+    }
+
+
+    /**
+     * @Given /^the SP "([^"]*)" allows no SFO token$/
+     */
+    public function spAllowsNoSfo($spName)
+    {
+        /** @var MockServiceProvider $mockSp */
+        $mockSp = $this->mockSpRegistry->get($spName);
+
+        $this->serviceRegistryFixture
+            ->setSpSfoAllowNoToken($mockSp->entityId())
+            ->save();
+    }
+
+    /**
+     * @Given /^the SP "([^"]*)" requires SFO loa "([^"]*)"$/
+     */
+    public function setSpSfoRequireLoa($spName, $requiredLoa)
+    {
+        /** @var MockServiceProvider $mockSp */
+        $mockSp = $this->mockSpRegistry->get($spName);
+
+        $this->serviceRegistryFixture
+            ->setSpSfoRequireLoa($mockSp->entityId(), $requiredLoa)
+            ->save();
+    }
 }

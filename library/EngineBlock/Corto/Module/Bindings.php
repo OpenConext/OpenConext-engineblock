@@ -345,7 +345,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 if ($sspResponse->getDestination() === null) {
                     // SAML2 requires a destination, while EngineBlock allows
                     // messages without Destination element.
-                    $sspResponse->setDestination($serviceEntityId);
+                    $sspResponse->setDestination($expectedDestination);
                 }
 
                 // We don't actually require IDPs to encrypt their assertions, but if the
@@ -401,6 +401,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 );
                 $exception->setFeedbackStatusCode($statusCodeDescription);
                 $exception->setFeedbackStatusMessage($statusMessage);
+                $exception->setResponse(new EngineBlock_Saml2_ResponseAnnotationDecorator($sspResponse));
 
                 throw $exception;
 

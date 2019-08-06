@@ -433,6 +433,39 @@ class FeedbackController
     }
 
     /**
+     * @return Response
+     */
+    public function sfoCalloutUserCancelledAction(Request $request)
+    {
+        return new Response(
+            $this->twig->render('@theme/Authentication/View/Feedback/sfo-callout-user-cancelled.html.twig'),
+            400
+        );
+    }
+
+    /**
+     * @return Response
+     */
+    public function sfoCalloutUnmetLoaAction(Request $request)
+    {
+        return new Response(
+            $this->twig->render('@theme/Authentication/View/Feedback/sfo-callout-unmet-loa.html.twig'),
+            400
+        );
+    }
+
+    /**
+     * @return Response
+     */
+    public function sfoCalloutUnknownAction(Request $request)
+    {
+        return new Response(
+            $this->twig->render('@theme/Authentication/View/Feedback/sfo-callout-unknown.html.twig'),
+            400
+        );
+    }
+
+    /**
      * @param SessionInterface $session
      * @param array $customFeedbackInfo
      */

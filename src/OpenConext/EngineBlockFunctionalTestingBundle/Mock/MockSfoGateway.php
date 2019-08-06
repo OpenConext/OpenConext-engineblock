@@ -30,7 +30,6 @@ use SAML2\Message;
 use SAML2\Response;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\saml\SubjectConfirmationData;
-use Surfnet\SamlBundle\Http\Exception\SignatureValidationFailedException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
@@ -65,7 +64,7 @@ class MockSfoGateway
      * @return Response
      * @throws \Exception
      */
-    public function handleSso($samlRequest, $fullRequestUri)
+    public function handleSsoSuccess($samlRequest, $fullRequestUri)
     {
         // parse the authnRequest
         $authnRequest = $this->parsePostRequest($samlRequest, $fullRequestUri);
@@ -76,16 +75,6 @@ class MockSfoGateway
         $authnContextClassRef = current($authnRequest->getRequestedAuthnContext()['AuthnContextClassRef']);
         $requestId = $authnRequest->getId();
 
-        // handle failure
-        // TODO: set response in same request!
-        if ($this->gatewayConfiguration->hasFailure()) {
-            $status = $this->gatewayConfiguration->getStatus();
-            $subStatus = $this->gatewayConfiguration->getSubStatus();
-            $message = $this->gatewayConfiguration->getMessage();
-
-            return $this->createFailureResponse($destination, $requestId, $status, $subStatus, $message);
-        }
-
         // handle success
         return $this->createSecondFactorOnlyResponse(
             $nameId,
@@ -94,6 +83,28 @@ class MockSfoGateway
             $requestId
         );
     }
+
+    /**
+     * @param string $samlRequest
+     * @param string $fullRequestUri
+     * @param string $status
+     * @param string $subStatus
+     * @param string $message
+     * @return Response
+     * @throws \Exception
+     */
+    public function handleSsoFailure($samlRequest, $fullRequestUri, $status, $subStatus, $message = '')
+    {
+        // parse the authnRequest
+        $authnRequest = $this->parsePostRequest($samlRequest, $fullRequestUri);
+
+        // get parameters from authnRequest
+        $destination = $authnRequest->getAssertionConsumerServiceURL();
+        $requestId = $authnRequest->getId();
+
+        return $this->createFailureResponse($destination, $requestId, $status, $subStatus, $message);
+    }
+
 
     /**
      * @param string $nameId
@@ -161,7 +172,7 @@ class MockSfoGateway
         // 5. Validate key
         // Note: $authnRequest->validate throws an Exception when the signature does not match.
         $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, array('type' => 'public'));
-        $key->loadKey($this->addPublicKeyEnvelope($this->gatewayConfiguration->getIdentityProviderPublicKeyCertData()));
+        $key->loadKey($this->gatewayConfiguration->getIdentityProviderPublicKeyCertData());
         if (!$authnRequest->validate($key)) {
             throw new BadRequestHttpException(
                 'Validation of the signature in the AuthnRequest failed'
@@ -381,10 +392,5 @@ class MockSfoGateway
             Constants::STATUS_UNKNOWN_PRINCIPAL,
             Constants::STATUS_UNSUPPORTED_BINDING,
         ]);
-    }
-
-    private function addPublicKeyEnvelope($key)
-    {
-        return "-----BEGIN CERTIFICATE-----\n" . wordwrap($key, 64, "\n", true) . "\n-----END CERTIFICATE-----";
     }
 }

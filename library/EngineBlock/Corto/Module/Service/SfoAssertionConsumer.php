@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
+use OpenConext\EngineBlockBundle\Sfo\SfoGatewayCallOutHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -38,14 +38,21 @@ class EngineBlock_Corto_Module_Service_SfoAssertionConsumer implements EngineBlo
      */
     private $_session;
 
+    /**
+     * @var SfoGatewayCallOutHelper
+     */
+    private $_sfoGatewayCallOutHelper;
+
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         Session $session,
-        ProcessingStateHelperInterface $processingStateHelper
+        ProcessingStateHelperInterface $processingStateHelper,
+        SfoGatewayCallOutHelper $sfoGatewayCallOutHelper
     ) {
         $this->_server = $server;
         $this->_session = $session;
         $this->_processingStateHelper = $processingStateHelper;
+        $this->_sfoGatewayCallOutHelper = $sfoGatewayCallOutHelper;
     }
 
     /**
@@ -56,13 +63,28 @@ class EngineBlock_Corto_Module_Service_SfoAssertionConsumer implements EngineBlo
     {
         $serviceEntityId = $this->_server->getUrl('sfoMetadataService');
         $expectedDestination = $this->_server->getUrl('sfoAssertionConsumerService');
-        $receivedResponse = $this->_server->getBindingsModule()->receiveResponse($serviceEntityId, $expectedDestination);
+
+        $checkResponseSignature = true;
+        try {
+            $receivedResponse = $this->_server->getBindingsModule()->receiveResponse($serviceEntityId, $expectedDestination);
+        } catch (EngineBlock_Corto_Exception_ReceivedErrorStatusCode $e) {
+            // Handle exceptions
+            // - only continue if the loa level is not met but no sfo authentication is allowed
+            $this->handleInvalidGatewayResponse($e);
+
+            $receivedResponse = $e->getResponse();
+
+            $checkResponseSignature = false; // error responses from gateway are not signed
+        }
+
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
 
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $log = $application->getLogInstance();
 
-        $this->_server->checkResponseSignatureMethods($receivedResponse);
+        if ($checkResponseSignature) {
+            $this->_server->checkResponseSignatureMethods($receivedResponse);
+        }
 
         $sp  = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
 
@@ -75,11 +97,6 @@ class EngineBlock_Corto_Module_Service_SfoAssertionConsumer implements EngineBlo
 
         // Get active request
         $processStep = $this->_processingStateHelper->getStepByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_SFO);
-
-
-        // TODO validate return status
-
-        ///////
         $receivedResponse = $processStep->getResponse();
 
         $nextProcessStep = $this->_processingStateHelper->getStepByRequestId(
@@ -98,5 +115,52 @@ class EngineBlock_Corto_Module_Service_SfoAssertionConsumer implements EngineBlo
     private function getAuthenticationState()
     {
         return $this->_session->get('authentication_state');
+    }
+
+    /**
+     * @param EngineBlock_Corto_Exception_ReceivedErrorStatusCode $e
+     * @throws EngineBlock_Corto_Exception_InvalidSfoCalloutResponse
+     * @throws EngineBlock_Corto_Exception_InvalidSfoLoaLevel
+     * @throws EngineBlock_Corto_Exception_UserCancelledSfoCallout
+     */
+    private function handleInvalidGatewayResponse(EngineBlock_Corto_Exception_ReceivedErrorStatusCode $e)
+    {
+        switch (true) {
+            case ($e->getFeedbackStatusCode() === 'Responder/AuthnFailed' && $e->getFeedbackStatusMessage() === 'Authentication cancelled by user'):
+                // user cancelled
+                throw new EngineBlock_Corto_Exception_UserCancelledSfoCallout(
+                    'User cancelled SFO callout'
+                );
+
+            case ($e->getFeedbackStatusCode() == 'Responder/NoAuthnContext' && $e->getFeedbackStatusMessage() === '(No message provided)'):
+                // invalid loa level
+                // should continue if no valid token is allowed
+                $receivedResponse = $e->getResponse();
+                $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
+
+                // check if no token allowed
+                $processStep = $this->_processingStateHelper->getStepByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_SFO);
+                $receivedResponse = $processStep->getResponse();
+                $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
+
+                $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($receivedResponse->getIssuer());
+                $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
+
+                if ($this->_sfoGatewayCallOutHelper->allowNoToken($idp, $sp)) {
+                    return;
+                }
+
+                throw new EngineBlock_Corto_Exception_InvalidSfoLoaLevel(
+                    'Invalid loa level encountered during SFO callout'
+                );
+        }
+
+        throw new EngineBlock_Corto_Exception_InvalidSfoCalloutResponse(
+            sprintf(
+                "Invalid status received from sfo gateway: '%s' '%s' ",
+                $e->getFeedbackStatusCode(),
+                $e->getFeedbackStatusMessage()
+            )
+        );
     }
 }
