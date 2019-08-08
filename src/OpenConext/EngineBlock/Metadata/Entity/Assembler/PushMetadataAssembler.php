@@ -280,7 +280,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->setPathFromObjectString(array($connection, 'state'), 'workflowState');
         $properties += $this->assembleContactPersons($connection);
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:NameIDFormat'), 'nameIdFormat');
-        $properties += $this->setPathFromObjectString(array($connection, 'metadata:NameIDFormats'), 'supportedNameIdFormats');
+        $properties += $this->setPathFromObjectArray(array($connection, 'metadata:NameIDFormats'), 'supportedNameIdFormats');
         $properties += $this->assembleSingleLogoutServices($connection);
         $properties += $this->assemblePublishInEdugainDate($connection);
         $properties += $this->setPathFromObjectBool(array($connection, 'metadata:coin:disable_scoping'), 'disableScoping');
@@ -414,6 +414,15 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
             return array($to => null);
         }
         return array($to => (string)$reference);
+    }
+
+    private function setPathFromObjectArray($from, $to)
+    {
+        $reference = $this->getValueFromPath($from);
+        if (!array($reference)) {
+            return array();
+        }
+        return array($to => $reference);
     }
 
     private function setPathFromObjectBool($from, $to)
