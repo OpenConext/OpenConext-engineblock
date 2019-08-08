@@ -48,7 +48,6 @@ class SfoIdentityProvider extends ServiceProvider
         $entity->certificates[] = $publicKeyFactory->fromFile($sfoEndpoint->getKeyFile());
         $entity->singleSignOnServices[] = new Service($sfoEndpoint->getSsoLocation(), Constants::BINDING_HTTP_POST);
         $entity->requestsMustBeSigned = true;
-        // Is this wanted?
         $entity->signatureMethod = XMLSecurityKey::RSA_SHA256;
 
         return $entity;

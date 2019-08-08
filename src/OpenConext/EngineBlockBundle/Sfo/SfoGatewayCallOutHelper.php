@@ -63,7 +63,7 @@ final class SfoGatewayCallOutHelper
     public function getSfoLoa(IdentityProvider $identityProvider, ServiceProvider $serviceProvider)
     {
         $sfoDecision = new SfoDecision($identityProvider, $serviceProvider);
-        return $sfoDecision->getSfoLoa();
+        return $this->gatewayLoaMapping->transformToGatewayLoa($sfoDecision->getSfoLoa());
     }
 
     /**

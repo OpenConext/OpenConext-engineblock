@@ -126,6 +126,8 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             return;
         }
 
+        $log->info('Handle SFO callout', array('key_id' => $receivedRequest->getId()));
+
         // Update AuthnClassRef and NameId
         $nameId = clone $receivedResponse->getNameId();
         $authnClassRef = $this->_sfoGatewayCallOutHelper->getSfoLoa($idp, $sp);
