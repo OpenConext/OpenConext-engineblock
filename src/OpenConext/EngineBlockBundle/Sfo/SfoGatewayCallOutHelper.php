@@ -67,6 +67,14 @@ final class SfoGatewayCallOutHelper
     }
 
     /**
+     * @return string
+     */
+    public function getSfoLoa1()
+    {
+        return $this->gatewayLoaMapping->getGatewayLoa1();
+    }
+
+    /**
      * @param IdentityProvider $identityProvider
      * @param ServiceProvider $serviceProvider
      * @return bool

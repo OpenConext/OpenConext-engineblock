@@ -71,6 +71,7 @@ class EngineBlock_Corto_Module_Service_SfoAssertionConsumer implements EngineBlo
         $checkResponseSignature = true;
         try {
             $receivedResponse = $this->_server->getBindingsModule()->receiveResponse($serviceEntityId, $expectedDestination);
+            $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
         } catch (EngineBlock_Corto_Exception_ReceivedErrorStatusCode $e) {
 
             // Handle exceptions
@@ -78,11 +79,15 @@ class EngineBlock_Corto_Module_Service_SfoAssertionConsumer implements EngineBlo
             $this->handleInvalidGatewayResponse($e, $log);
 
             $receivedResponse = $e->getResponse();
+            $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
 
             $checkResponseSignature = false; // error responses from gateway are not signed
-        }
 
-        $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
+            // set response to loa1
+            $processStep = $this->_processingStateHelper->getStepByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_SFO);
+            $processStep->getResponse()->getAssertion()->setAuthnContextClassRef($this->_sfoGatewayCallOutHelper->getSfoLoa1());
+            $this->_processingStateHelper->updateStepResponseByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_SFO, $processStep->getResponse());
+        }
 
         if ($checkResponseSignature) {
             $this->_server->checkResponseSignatureMethods($receivedResponse);
