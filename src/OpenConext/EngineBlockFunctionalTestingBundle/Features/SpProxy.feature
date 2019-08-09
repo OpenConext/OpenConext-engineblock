@@ -246,6 +246,6 @@ Feature:
      And SP "Second SP" is not connected to IdP "AlwaysAuth"
     When I log in at "Second SP"
          # Bug report: https://www.pivotaltracker.com/story/show/164069793
-    Then I should not see "Error - No Identity Providers found"
+    Then I should not see "Error - No organisations found"
          # The WAYF should be visible
      And I should see "Select an organisation to login to the service"
