@@ -37,8 +37,6 @@ final class FunctionalTestingSfoGatewayMockConfiguration
         $this->mockIdentityProviderFactory = $mockIdentityProviderFactory;
         $this->mockServiceProviderFactory = $mockServiceProviderFactory;
 
-        $basePath = realpath(__DIR__.'/../../../../');
-
         // Set gateway configured IDP
         $mockEbIdp = $this->mockIdentityProviderFactory->createNew('Sfo gateway');
         $mockEbIdp->setEntityId('https://engine.vm.openconext.org/authentication/sfo/metadata');

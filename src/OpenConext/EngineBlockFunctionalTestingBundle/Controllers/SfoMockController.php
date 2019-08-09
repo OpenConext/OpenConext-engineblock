@@ -96,15 +96,31 @@ class SfoMockController extends Controller
         $results['success'] = $this->getResponseData($request, $samlResponse);
 
         // Parse user cancelled
-        $samlResponse = $this->mockSfoGateway->handleSsoFailure($decodedSamlRequest, $this->getFullRequestUri($request), Constants::STATUS_RESPONDER, Constants::STATUS_AUTHN_FAILED, 'Authentication cancelled by user');
+        $samlResponse = $this->mockSfoGateway->handleSsoFailure(
+            $decodedSamlRequest,
+            $this->getFullRequestUri($request),
+            Constants::STATUS_RESPONDER,
+            Constants::STATUS_AUTHN_FAILED,
+            'Authentication cancelled by user'
+        );
         $results['user-cancelled'] = $this->getResponseData($request, $samlResponse);
 
         // Parse unmet Loa
-        $samlResponse = $this->mockSfoGateway->handleSsoFailure($decodedSamlRequest, $this->getFullRequestUri($request), Constants::STATUS_RESPONDER, Constants::STATUS_NO_AUTHN_CONTEXT);
+        $samlResponse = $this->mockSfoGateway->handleSsoFailure(
+            $decodedSamlRequest,
+            $this->getFullRequestUri($request),
+            Constants::STATUS_RESPONDER,
+            Constants::STATUS_NO_AUTHN_CONTEXT
+        );
         $results['unmet-loa'] = $this->getResponseData($request, $samlResponse);
 
         // Parse unknown
-        $samlResponse = $this->mockSfoGateway->handleSsoFailure($decodedSamlRequest, $this->getFullRequestUri($request), Constants::STATUS_RESPONDER, Constants::STATUS_AUTHN_FAILED);
+        $samlResponse = $this->mockSfoGateway->handleSsoFailure(
+            $decodedSamlRequest,
+            $this->getFullRequestUri($request),
+            Constants::STATUS_RESPONDER,
+            Constants::STATUS_AUTHN_FAILED
+        );
         $results['unknown'] = $this->getResponseData($request, $samlResponse);
 
         return $results;
