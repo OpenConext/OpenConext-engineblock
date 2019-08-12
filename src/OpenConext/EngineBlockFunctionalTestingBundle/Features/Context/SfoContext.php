@@ -5,9 +5,8 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingSfoGatewayMockConfiguration;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
-use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProviderFactory;
+use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
-use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProviderFactory;
 
 class SfoContext extends AbstractSubContext
 {
@@ -128,6 +127,22 @@ class SfoContext extends AbstractSubContext
 
         $this->serviceRegistryFixture
             ->setSpSfoRequireLoa($mockSp->entityId(), $requiredLoa)
+            ->save();
+    }
+
+    /**
+     * @Given /^the IdP "([^"]*)" requires SFO loa "([^"]*)" for SP "([^"]*)"$/
+     */
+    public function setIdpSfoRequireLoaFor($idpName, $requiredLoa, $spName)
+    {
+        /** @var MockIdentityProvider $mockIdp */
+        $mockIdp = $this->mockIdpRegistry->get($idpName);
+
+        /** @var MockServiceProvider $mockSp */
+        $mockSp = $this->mockSpRegistry->get($spName);
+
+        $this->serviceRegistryFixture
+            ->setIdpSfoConnections($mockIdp->entityId(), [$mockSp->entityId() => $requiredLoa])
             ->save();
     }
 }

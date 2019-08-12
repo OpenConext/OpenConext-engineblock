@@ -230,15 +230,6 @@ class MockSfoGateway
     }
 
     /**
-     * @param Response $response
-     * @return string
-     */
-    public function getResponseAsXML(Response $response)
-    {
-        return base64_encode($response->toUnsignedXML()->ownerDocument->saveXML());
-    }
-
-    /**
      * @param Assertion $newAssertion
      * @param string $destination The ACS location
      * @param string $requestId The requestId
