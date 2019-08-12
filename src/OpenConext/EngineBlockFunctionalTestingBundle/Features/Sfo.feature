@@ -12,7 +12,7 @@ Feature:
       And an Identity Provider named "Dummy-IdP"
       And a Service Provider named "Dummy-SP"
 
-  Scenario: Sfo should be supported
+  Scenario: Sfo should be supported if set through sp configuration
     Given SFO is used
       And the SP "SSO-SP" requires SFO loa "http://test.openconext.nl/assurance/loa2"
     When I log in at "SSO-SP"
@@ -24,6 +24,30 @@ Feature:
       And I give my consent
       And I pass through EngineBlock
     Then the url should match "/functional-testing/SSO-SP/acs"
+
+    Scenario: Sfo should be supported if set trough idp configuration mapping
+        Given SFO is used
+        And the IdP "SSO-IdP" requires SFO loa "http://test.openconext.nl/assurance/loa2" for SP "SSO-SP"
+        When I log in at "SSO-SP"
+        And I select "SSO-IdP" on the WAYF
+        And I pass through EngineBlock
+        And I pass through the IdP
+        And I pass through EngineBlock
+        And SFO will successfully verify a user
+        And I give my consent
+        And I pass through EngineBlock
+        Then the url should match "/functional-testing/SSO-SP/acs"
+
+    Scenario: Sfo should throw exception if set trough both IdP and SP
+        Given SFO is used
+        And the IdP "SSO-IdP" requires SFO loa "http://test.openconext.nl/assurance/loa2" for SP "SSO-SP"
+        And the SP "SSO-SP" requires SFO loa "http://test.openconext.nl/assurance/loa3"
+        When I log in at "SSO-SP"
+        And I select "SSO-IdP" on the WAYF
+        And I pass through EngineBlock
+        And I pass through the IdP
+        Then I should see "Error - An error occurred"
+        And the url should match "/feedback/unknown-error"
 
     Scenario: If sfo is not used we should still go trough consent
       When I log in at "Dummy-SP"
