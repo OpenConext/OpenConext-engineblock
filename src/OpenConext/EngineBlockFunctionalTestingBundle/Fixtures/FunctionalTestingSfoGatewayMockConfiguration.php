@@ -2,7 +2,6 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProviderFactory;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;

@@ -146,7 +146,7 @@ class EngineBlock_Corto_Module_Service_SfoAssertionConsumer implements EngineBlo
                     'User cancelled SFO callout'
                 );
 
-            case ($e->getFeedbackStatusCode() == 'Responder/NoAuthnContext' && $e->getFeedbackStatusMessage() === '(No message provided)'):
+            case ($e->getFeedbackStatusCode() == 'Responder/NoAuthnContext' && $e->getFeedbackStatusMessage() === EngineBlock_Corto_Module_Bindings::SAML_STATUS_MESSAGE_EMPTY):
                 // invalid loa level
                 // should continue if no valid token is allowed
 

@@ -128,10 +128,6 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
 
         $log->info('Handle SFO callout', array('key_id' => $receivedRequest->getId()));
 
-        // Update AuthnClassRef and NameId
-        $nameId = clone $receivedResponse->getNameId();
-        $authnClassRef = $this->_sfoGatewayCallOutHelper->getSfoLoa($idp, $sp);
-
         // Add sfo step
         $currentProcessStep = $this->_processingStateHelper->addStep(
             $receivedRequest->getId(),
@@ -139,6 +135,10 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             $application->getDiContainer()->getSfoIdentityProvider($this->_server),
             $receivedResponse
         );
+
+        // Get mapped AuthnClassRef and get NameId
+        $nameId = clone $receivedResponse->getNameId();
+        $authnClassRef = $this->_sfoGatewayCallOutHelper->getSfoLoa($idp, $sp);
 
         $this->_server->sendSfoAuthenticationRequest($receivedRequest, $currentProcessStep->getRole(), $authnClassRef, $nameId);
     }

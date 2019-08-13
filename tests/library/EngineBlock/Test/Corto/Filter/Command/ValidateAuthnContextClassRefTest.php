@@ -39,19 +39,13 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateAuthnContextClassRefTest ext
         $this->response = new EngineBlock_Saml2_ResponseAnnotationDecorator($response);
     }
 
-    public function testNoConfiguredBlacklistRegexLeadsToNoValidation()
+    public function testNoConfiguredBlacklistRegexShouldPass()
     {
         $verifier = new EngineBlock_Corto_Filter_Command_ValidateAuthnContextClassRef($this->logger, '');
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider(new IdentityProvider('OpenConext'));
 
         $verifier->execute();
-
-        $notConfiguredMessageLogged = $this->handler->hasNotice(
-            'No authn_context_class_ref_blacklist_regex found in the configuration, not validating AuthnContextClassRef'
-        );
-
-        $this->assertTrue($notConfiguredMessageLogged, 'Logging that no shibmd:scope is configured is required');
     }
 
     public function testNotMatchedBlacklistedRegexpPasses()
@@ -69,6 +63,18 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateAuthnContextClassRefTest ext
         $this->expectExceptionMessage('Assertion from IdP contains a blacklisted AuthnContextClassRef "urn:oasis:names:tc:SAML:2.0:ac:classes:Password"');
 
         $verifier = new EngineBlock_Corto_Filter_Command_ValidateAuthnContextClassRef($this->logger, '/urn:oasis:names:tc:SAML:2\.0:ac:classes:Password/');
+        $verifier->setResponse($this->response);
+        $verifier->setIdentityProvider(new IdentityProvider('OpenConext'));
+
+        $verifier->execute();
+    }
+
+    public function testInvalidBlacklistedRegexpThrowsException()
+    {
+        $this->expectException(EngineBlock_Exception::class);
+        $this->expectExceptionMessage('Invalid authn_context_class_ref_blacklist_regex found in the configuration');
+
+        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAuthnContextClassRef($this->logger, 'an invalid regex/');
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider(new IdentityProvider('OpenConext'));
 

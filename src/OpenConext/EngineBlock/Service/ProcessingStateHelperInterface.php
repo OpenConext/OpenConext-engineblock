@@ -66,7 +66,6 @@ interface ProcessingStateHelperInterface
     );
 
     /**
-     * @param string $name
      * @param string $requestId
      * @return void
      * @throws EngineBlock_Corto_Module_Services_SessionLostException

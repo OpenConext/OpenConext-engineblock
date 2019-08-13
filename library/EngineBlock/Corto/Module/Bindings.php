@@ -31,6 +31,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     const KEY_REQUEST  = 'SAMLRequest';
     const KEY_RESPONSE = 'SAMLResponse';
 
+    const SAML_STATUS_MESSAGE_EMPTY = '(No message provided)';
+
     protected static $ASSERTION_SEQUENCE = array(
         'saml:Issuer',
         'ds:Signature',
@@ -390,7 +392,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 }
                 $statusCodeDescription = str_replace('urn:oasis:names:tc:SAML:2.0:status:', '', $statusCodeDescription);
 
-                $statusMessage = !empty($status['Message']) ? $status['Message'] : '(No message provided)';
+                $statusMessage = !empty($status['Message']) ? $status['Message'] : self::SAML_STATUS_MESSAGE_EMPTY;
 
                 // Throw the exception here instead of in the Corto Filters as Corto assumes the presence of an Assertion
                 $exception = new EngineBlock_Corto_Exception_ReceivedErrorStatusCode(
