@@ -8,7 +8,7 @@
 
 {% block errorMessage %}
 
-    {{ 'error_authorization_policy_violation_info'|trans|raw }}
+    <h2>{{ 'error_authorization_policy_violation_info'|trans|raw }}</h2>
 
     {% if logo is not null %}
         <img src="{{ logo.url }}"
@@ -19,9 +19,15 @@
     {% endif %}
 
     {% if policyDecisionMessage is not null %}
-        <h2>{{ policyDecisionMessage }}</h2>
+        <p class="error-title__error-message--institution">{{ policyDecisionMessage }}</p>
+
+        <div class="horizontal-rule">
+            <hr class="horizontal-rule__line">
+        </div>
+
     {% endif %}
     {{ 'error_authorization_policy_violation_desc'|trans|raw }}
+
 {% endblock %}
 
 {# The PDP error page should not show the table with the feedback information and back button. #}
