@@ -39,7 +39,7 @@ class EngineBlock_Corto_Filter_Command_ValidateAuthnContextClassRef extends Engi
 
         $authnContextClassRef = $this->_response->getAssertion()->getAuthnContextClassRef();
 
-        if (!$this->validateAuthnContextClassRef($authnContextClassRef, $this->authnContextClassRefBlacklistPattern)) {
+        if (!$this->isAuthnContextClassRefAllowed($authnContextClassRef, $this->authnContextClassRefBlacklistPattern)) {
             throw new EngineBlock_Corto_Exception_AuthnContextClassRefBlacklisted(
                 sprintf(
                     'Assertion from IdP contains a blacklisted AuthnContextClassRef "%s"',
@@ -53,8 +53,9 @@ class EngineBlock_Corto_Filter_Command_ValidateAuthnContextClassRef extends Engi
      * @param string $value
      * @param string $regex
      * @return bool
+     * @throws EngineBlock_Exception
      */
-    private function validateAuthnContextClassRef($value, $regex)
+    private function isAuthnContextClassRefAllowed($value, $regex)
     {
         $match = preg_match($regex, $value);
         if ($match) {
@@ -62,11 +63,10 @@ class EngineBlock_Corto_Filter_Command_ValidateAuthnContextClassRef extends Engi
         }
 
         if ($match === false) {
-            $this->logger->notice('No authn_context_class_ref_blacklist_regex found in the configuration, not validating AuthnContextClassRef');
-
             throw new EngineBlock_Exception(
                 sprintf(
-                    'Invalid authn_context_class_ref_blacklist_regex found in the configuration'
+                    'Invalid authn_context_class_ref_blacklist_regex found in the configuration: "%s"',
+                    $regex
                 )
             );
         }

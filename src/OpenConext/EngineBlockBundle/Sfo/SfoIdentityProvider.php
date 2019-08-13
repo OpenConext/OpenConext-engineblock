@@ -20,7 +20,6 @@ namespace OpenConext\EngineBlockBundle\Sfo;
 use EngineBlock_X509_CertificateFactory;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Service;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
@@ -30,16 +29,16 @@ class SfoIdentityProvider extends ServiceProvider
 
     /**
      * @param SfoEndpoint $sfoEndpoint
-     * @param string $acsUrl
+     * @param string $acsLocation
      * @return IdentityProvider
      * @throws \EngineBlock_Exception
      */
-    public static function fromSfoEndpoint(SfoEndpoint $sfoEndpoint, $acsUrl)
+    public static function fromSfoEndpoint(SfoEndpoint $sfoEndpoint, $acsLocation)
     {
         $entity = new IdentityProvider($sfoEndpoint->getEntityId());
 
         $entity->responseProcessingService = new Service(
-            $acsUrl,
+            $acsLocation,
             Constants::BINDING_HTTP_POST
         );
 

@@ -178,7 +178,6 @@ class EngineBlockContext extends AbstractSubContext
         $mink->pressButton('Submit');
     }
 
-
     /**
      * @Given /^EngineBlock raises an unexpected error$/
      */

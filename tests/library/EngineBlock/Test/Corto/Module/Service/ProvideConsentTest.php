@@ -161,10 +161,6 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
             ->sendOutput(Phake::anyParameters())
             ->thenReturn(null);
 
-//        Phake::when($proxyServerMock)
-//            ->getReceivedRequestFromResponse(Phake::anyParameters())
-//            ->thenReturn($this->sspResponseMock);
-
         return $proxyServerMock;
     }
 
@@ -311,26 +307,6 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
 
     private function mockSspResponse()
     {
-//        $assertion = new Assertion();
-//        $assertion->setAttributes(array(
-//            'urn:mace:dir:attribute-def:mail' => 'test@test.test'
-//        ));
-//
-//        $spRequest = new AuthnRequest();
-//        $spRequest->setId('SPREQUEST');
-//        $spRequest->setIssuer('https://sp.example.edu');
-//        $spRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($spRequest);
-//
-//        $ebRequest = new AuthnRequest();
-//        $ebRequest->setId('EBREQUEST');
-//        $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($ebRequest);
-//
-//        $dummySessionLog = new Psr\Log\NullLogger();
-//        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($dummySessionLog);
-//        $authnRequestRepository->store($spRequest);
-//        $authnRequestRepository->store($ebRequest);
-//        $authnRequestRepository->link($ebRequest, $spRequest);
-
         $sspResponse = new Response();
         $sspResponse->setInResponseTo('EBREQUEST');
         $sspResponse->setIssuer('testSp');
