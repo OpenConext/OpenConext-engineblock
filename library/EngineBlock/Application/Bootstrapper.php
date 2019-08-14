@@ -64,19 +64,6 @@ class EngineBlock_Application_Bootstrapper
         session_name('main');
     }
 
-    /**
-     * Return a list of config files (default and environment overrides) that should be loaded
-     *
-     * @return array
-     */
-    protected function _getAllConfigFiles()
-    {
-        return array(
-            ENGINEBLOCK_FOLDER_APPLICATION . self::CONFIG_FILE_DEFAULT,
-            self::CONFIG_FILE_ENVIRONMENT,
-        );
-    }
-
     protected function _bootstrapHttpCommunication()
     {
         $httpRequest = EngineBlock_Http_Request::createFromEnvironment();

@@ -30,11 +30,11 @@ class SfoEndpointTest extends TestCase
      */
     public function the_sfo_endpoint_object_should_be_successful_populated()
     {
-        $endpoint = new SfoEndpoint('entity-id', 'https://sso-location', '/etc/openconext/engineblock.crt');
+        $endpoint = new SfoEndpoint('entity-id', 'https://sso-location', 'tests/resources/key/engineblock.crt');
 
         $this->assertSame('entity-id', $endpoint->getEntityId());
         $this->assertSame('https://sso-location', $endpoint->getSsoLocation());
-        $this->assertSame('/etc/openconext/engineblock.crt', $endpoint->getKeyFile());
+        $this->assertSame('tests/resources/key/engineblock.crt', $endpoint->getKeyFile());
     }
 
     /**
@@ -80,7 +80,7 @@ class SfoEndpointTest extends TestCase
     public function the_sfo_endpoint_object_keyFile_should_be_a_file()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Keyfile should be a valid file');
+        $this->expectExceptionMessage("Keyfile 'tests/resources/key/non-existent-file.key' should be a valid file");
 
         $endpoint = new SfoEndpoint('entity-id', 'https://sso-location', 'tests/resources/key/non-existent-file.key');
     }

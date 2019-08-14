@@ -47,32 +47,18 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
         return '/invalid-authn-context-class-ref/';
     }
 
-
     /**
      * @return array
      */
     public function getEncryptionKeysConfiguration()
     {
-        $basePath = realpath(__DIR__.'/../../../');
+        $basePath = $this->container->getParameter('kernel.project_dir');
 
         return [
             'default' => [
-                'publicFile' => $basePath . '/ci/travis/files/engineblock.crt',
-                'privateFile' => $basePath . '/ci/travis/files/engineblock.pem',
+                'publicFile' => $basePath . '/tests/resources/key/engineblock.crt',
+                'privateFile' => $basePath . '/tests/resources/key/engineblock.pem',
             ],
         ];
-    }
-
-    /**
-     * @return \OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
-     */
-    protected function getSfoEndpoint()
-    {
-        $basePath = realpath(__DIR__.'/../../../');
-        $keyFile = $basePath . '/ci/travis/files/engineblock.crt';
-
-        $endpoint = parent::getSfoEndpoint();
-
-        return new SfoEndpoint($endpoint->getEntityId(), $endpoint->getSsoLocation(), $keyFile);
     }
 }

@@ -43,7 +43,7 @@ class SfoEndpoint
         Assertion::string($entityId, 'EntityId should be a string');
         Assertion::string($ssoLocation, 'SSO location should be a string');
         Assertion::string($keyFile, 'KeyFile should be a string');
-        Assertion::file($keyFile, 'Keyfile should be a valid file');
+        Assertion::file($keyFile, sprintf("Keyfile '%s' should be a valid file", $keyFile));
 
         $this->entityId = $entityId;
         $this->ssoLocation = $ssoLocation;
