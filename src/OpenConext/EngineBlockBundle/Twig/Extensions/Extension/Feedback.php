@@ -19,6 +19,8 @@
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use EngineBlock_ApplicationSingleton;
+use OpenConext\EngineBlockBundle\Configuration\ErrorFeedbackConfigurationInterface;
+use OpenConext\EngineBlockBundle\Configuration\WikiLink;
 use OpenConext\EngineBlockBundle\Value\FeedbackInformation;
 use OpenConext\EngineBlockBundle\Value\FeedbackInformationMap;
 use Twig\TwigFunction;
@@ -31,9 +33,17 @@ class Feedback extends Twig_Extension
      */
     private $application;
 
-    public function __construct(EngineBlock_ApplicationSingleton $application)
-    {
+    /**
+     * @var ErrorFeedbackConfigurationInterface
+     */
+    private $errorFeedbackConfiguration;
+
+    public function __construct(
+        EngineBlock_ApplicationSingleton $application,
+        ErrorFeedbackConfigurationInterface $errorFeedbackConfiguration
+    ) {
         $this->application = $application;
+        $this->errorFeedbackConfiguration = $errorFeedbackConfiguration;
     }
 
     public function getFunctions()
@@ -41,6 +51,8 @@ class Feedback extends Twig_Extension
         return [
             new TwigFunction('feedbackInfo', [$this, 'getFeedbackInfo']),
             new TwigFunction('flushLog', [$this, 'flushLog']),
+            new TwigFunction('hasWikiLink', [$this, 'hasWikiLink']),
+            new TwigFunction('getWikiLink', [$this, 'getWikiLink']),
         ];
     }
 
@@ -56,6 +68,26 @@ class Feedback extends Twig_Extension
     public function getFeedbackInfo()
     {
         return $this->retrieveFeedbackInfo();
+    }
+
+    /**
+     * @param string $templateName
+     * @return bool
+     */
+    public function hasWikiLink($templateName)
+    {
+        $pageIdentifier = $this->convertTemplateName($templateName);
+        return $this->errorFeedbackConfiguration->hasWikiLink($pageIdentifier);
+    }
+
+    /**
+     * @param string $templateName
+     * @return WikiLink
+     */
+    public function getWikiLink($templateName)
+    {
+        $pageIdentifier = $this->convertTemplateName($templateName);
+        return $this->errorFeedbackConfiguration->getWikiLink($pageIdentifier);
     }
 
     /**
@@ -83,5 +115,13 @@ class Feedback extends Twig_Extension
         $feedbackInfoMap->sort();
 
         return $feedbackInfoMap;
+    }
+
+    private function convertTemplateName($templateName)
+    {
+        $template = end(explode('/', $templateName));
+        $stripped = array_shift(explode('.', $template));
+        $convertedDashes = str_replace('-', '_', $stripped);
+        return $convertedDashes;
     }
 }
