@@ -72,14 +72,16 @@ class SfoMockController extends Controller
             $encodedResponse = base64_encode($rawResponse);
 
             // Present response
-            return $this->twig->render(
-                'EngineBlockFunctionalTestingBundle:Sso:consumeAssertion.html.twig',
+            $body = $this->twig->render(
+                '@OpenConextEngineBlockFunctionalTesting/Sso/consumeAssertion.html.twig',
                 [
                     'acu' => $samlResponse->getDestination(),
                     'response' => $encodedResponse,
                     'relayState' => $relayState
                 ]
             );
+
+            return new Response($body);
         } catch (BadRequestHttpException $e) {
             return new Response($e->getMessage(), $e->getStatusCode());
         } catch (Exception $e) {

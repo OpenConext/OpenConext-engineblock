@@ -3,6 +3,8 @@
 use Doctrine\ORM\EntityManager;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
+use OpenConext\EngineBlockBundle\Sfo\SfoGatewayCallOutHelper;
+use OpenConext\EngineBlockBundle\Sfo\SfoIdentityProvider;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
 class EngineBlock_Application_DiContainer extends Pimple
@@ -302,6 +304,26 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
+     * @param EngineBlock_Corto_ProxyServer $server
+     * @return \OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
+     */
+    public function getSfoIdentityProvider(EngineBlock_Corto_ProxyServer $server)
+    {
+        return SfoIdentityProvider::fromSfoEndpoint(
+            $this->getSfoEndpoint(),
+            $server->getUrl('sfoAssertionConsumerService')
+        );
+    }
+
+    /**
+     * @return SfoGatewayCallOutHelper
+     */
+    public function getSfoGatewayCallOutHelper()
+    {
+        return $this->container->get('engineblock.service.sfo.gateway_callout_helper');
+    }
+
+    /**
      * @return array
      */
     public function getEncryptionKeysConfiguration()
@@ -360,6 +382,14 @@ class EngineBlock_Application_DiContainer extends Pimple
     public function getAuthenticationStateHelper()
     {
         return $this->container->get('engineblock.service.authentication_state_helper');
+    }
+
+    /**
+     * @return \OpenConext\EngineBlock\Service\ProcessingStateHelperInterface
+     */
+    public function getProcessingStateHelper()
+    {
+        return $this->container->get('engineblock.service.processing_state_helper');
     }
 
     /**
@@ -448,5 +478,11 @@ class EngineBlock_Application_DiContainer extends Pimple
     public function getAuthnContextClassRefBlacklistRegex()
     {
         return (string) $this->container->getParameter('sfo.authn_context_class_ref_blacklist_regex');
+    }
+
+    /** @return \OpenConext\EngineBlockBundle\Sfo\SfoEndpoint $sfoEndpoint */
+    protected function getSfoEndpoint()
+    {
+        return  $this->container->get('engineblock.configuration.sfo.endpoint');
     }
 }

@@ -24,6 +24,7 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
         'idpCertificateService'         => 'Certificate',
         'spMetadataService'             => 'Metadata',
         'idpMetadataService'            => 'Metadata',
+        'sfoMetadataService'            => 'Metadata',
         'unsolicitedSingleSignOnService'=> 'singleSignOn',
         'debugSingleSignOnService'      => 'singleSignOn',
     );
@@ -53,9 +54,10 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
             $className = substr($className, 0, -1 * strlen('service'));
         }
         if (class_exists($className, true)) {
+            $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
             /** @var $serviceName EngineBlock_Corto_Module_Service_Abstract */
             $service = $this->factoryService($className, $this->_server);
-            $service->serve($serviceName);
+            $service->serve($serviceName, $diContainer->getSymfonyRequest());
             return;
         }
 
@@ -88,20 +90,35 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer->getConsentFactory(),
                     $diContainer->getConsentService(),
                     $diContainer->getAuthenticationStateHelper(),
-                    $diContainer->getTwigEnvironment()
+                    $diContainer->getTwigEnvironment(),
+                    $diContainer->getProcessingStateHelper()
                 );
             case EngineBlock_Corto_Module_Service_ProcessConsent::class :
                 return new EngineBlock_Corto_Module_Service_ProcessConsent(
                     $server,
                     $diContainer->getXmlConverter(),
                     $diContainer->getConsentFactory(),
-                    $diContainer->getAuthenticationStateHelper()
+                    $diContainer->getAuthenticationStateHelper(),
+                    $diContainer->getProcessingStateHelper()
                 );
             case EngineBlock_Corto_Module_Service_AssertionConsumer::class :
                 return new EngineBlock_Corto_Module_Service_AssertionConsumer(
                     $server,
                     $diContainer->getXmlConverter(),
-                    $diContainer->getSession()
+                    $diContainer->getSession(),
+                    $diContainer->getProcessingStateHelper(),
+                    $diContainer->getSfoGatewayCallOutHelper()
+                );
+            case EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer::class :
+                return new EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer(
+                    $server,
+                    $diContainer->getProcessingStateHelper()
+                );
+            case EngineBlock_Corto_Module_Service_SfoAssertionConsumer::class :
+                return new EngineBlock_Corto_Module_Service_SfoAssertionConsumer(
+                    $server,
+                    $diContainer->getSession(),
+                    $diContainer->getProcessingStateHelper()
                 );
             default :
                 return new $className($server, $diContainer->getXmlConverter(), $diContainer->getTwigEnvironment());

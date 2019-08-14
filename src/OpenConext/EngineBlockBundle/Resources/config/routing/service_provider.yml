@@ -9,3 +9,10 @@ authentication_sp_process_consent:
     methods:  [GET,POST]
     defaults:
         _controller: engineblock.controller.authentication.service_provider:processConsentAction
+
+# SFO
+authentication_sfo_consume_assertion:
+    path:     /authentication/sfo/consume-assertion
+    methods:  [POST,GET]
+    defaults:
+        _controller: engineblock.controller.authentication.sfo:consumeAssertionAction

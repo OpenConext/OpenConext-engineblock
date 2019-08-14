@@ -1,20 +1,4 @@
-{% extends '::base.html.twig' %}
-{% block head_style %}
-    {% stylesheets
-        '@SurfnetStepupGatewayGatewayBundle/Resources/public/css/hiddensubmit.css' %}
-    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
-    {% endstylesheets %}
-{% endblock head_style %}
-{% block head_script %}
-    {% javascripts
-    '@SurfnetStepupGatewayGatewayBundle/Resources/public/js/submitonload.js'%}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock head_script %}
-
-{% block page_title %}{{ 'gateway.gateway.consume_assertion.title'|trans }}{% endblock %}
-
-{% block body %}
+<html>
     <noscript>
         <b>Note: </b> javascript is disabled, please click the button below to proceed
     </noscript>
@@ -26,7 +10,7 @@
     {% endif %}
         <input type="submit" class="hidden" />
     <noscript>
-        <input type="submit" value="Submit"/>
+        <input type="submit" value="SubmitSfo"/>
     </noscript>
     </form>
-{% endblock %}
+</html>
