@@ -3,6 +3,7 @@
 namespace OpenConext\EngineBlockBundle\DependencyInjection;
 
 use OpenConext\EngineBlockBundle\Configuration\Feature;
+use OpenConext\EngineBlockBundle\Configuration\WikiLink;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Definition;
@@ -29,6 +30,7 @@ class OpenConextEngineBlockExtension extends Extension
         $this->overwriteDefaultLogger($container);
         $this->setUrlParameterBasedOnEnv($container);
         $this->setFeatureConfiguration($container, $configuration['features']);
+        $this->setErrorFeedbackConfiguration($container, $configuration['error_feedback']);
     }
 
     /**
@@ -70,5 +72,23 @@ class OpenConextEngineBlockExtension extends Extension
 
         $featureConfigurationService = $container->getDefinition('engineblock.features');
         $featureConfigurationService->replaceArgument(0, $features);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param array $errorFeedbackConfiguration
+     */
+    private function setErrorFeedbackConfiguration(ContainerBuilder $container, array $errorFeedbackConfiguration)
+    {
+        $wikiLinkConfig = $errorFeedbackConfiguration['wiki_links'];
+        $fallbackLink = $wikiLinkConfig['fallback'];
+
+        $wikiLinks = [];
+        foreach ($wikiLinkConfig['specified'] as $pageIdentifier => $wikiLinkEntries) {
+            $wikiLinks[$pageIdentifier] = new Definition(WikiLink::class, [$wikiLinkEntries, $fallbackLink]);
+        }
+
+        $featureConfigurationService = $container->getDefinition('engineblock.error_feedback');
+        $featureConfigurationService->replaceArgument(0, $wikiLinks);
     }
 }
