@@ -49,3 +49,8 @@ functional_testing_feedback:
     path: "/feedback"
     defaults:
         _controller: engineblock.functional_test.controller.feedback:feedbackAction
+
+functional_testing_gateway:
+    path: "/gateway/second-factor-only/single-sign-on"
+    defaults:
+        _controller: engineblock.functional_test.controller.sfo_mock:ssoAction

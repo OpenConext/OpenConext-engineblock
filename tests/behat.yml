@@ -32,6 +32,12 @@ default:
                     mockSpFactory: '@engineblock.mock_entities.sp_factory'
                     mockSpRegistry: '@engineblock.mock_entities.sp_registry'
                     mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\SfoContext:
+                    mockSpRegistry: '@engineblock.mock_entities.sp_registry'
+                    mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
+                    idpFactory: '@engineblock.mock_entities.idp_factory'
+                    spFactory: '@engineblock.mock_entities.sp_factory'
+                    gatewayMockConfiguration: '@engineblock.functional_testing.fixture.sfo_gateway_mock'
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext
         selenium:
             paths:
