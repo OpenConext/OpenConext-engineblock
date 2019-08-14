@@ -24,6 +24,14 @@ open_conext_engine_block:
         eb.encrypted_assertions_require_outer_signature: "%feature_eb_encrypted_assertions_require_outer_signature%"
         eb.run_all_manipulations_prior_to_consent: "%feature_run_all_manipulations_prior_to_consent%"
         eb.block_user_on_violation: "%feature_block_user_on_violation%"
+    error_feedback:
+        # Wiki links can configured for specific error feedback pages. The pages are identified by the template name of the
+        # error page. This name is the first part of the twig template name found in:
+        # theme/material/templates/modules/Authentication/View/Feedback
+        # So no-authentication-request-received.html.twig would be identified as: no-authentication-request-received
+        # The wiki links are internationalized, so specify wiki links for the languages that are supported in your
+        # installation. Failing to configure one of the languages will cause fallback to the fallback wiki link.
+        wiki_links: "%error_feedback_wiki_links%"
 
 swiftmailer:
     transport: sendmail

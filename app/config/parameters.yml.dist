@@ -4,3 +4,16 @@
 parameters:
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    # The fallback link is displayed by default on a specified page, when a locale is not configured/set
+    error_feedback_wiki_links:
+        fallback: "https://link-to-your-default-wiki.org/index"
+        # Specify the template names as the 'key' (where the - is converted to _), and provide an array of wiki links as the 'value'. See example below.
+        specified:
+            received_invalid_response:
+                en: "https://example.co.uk/wiki/page1"
+                nl: "https://example.nl/wiki/page1"
+                pt: "https://example.pt/wiki/page1"
+            clock_issue:
+                en: "https://example.co.uk/wiki/page2"
+                # The other languages visiting this error page will fall back on the 'fallback' wiki link
