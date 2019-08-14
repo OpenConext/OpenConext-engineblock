@@ -2,160 +2,91 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
+use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProviderFactory;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
-use RuntimeException;
+use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProviderFactory;
 
 final class FunctionalTestingSfoGatewayMockConfiguration
 {
-    private $data = [];
+    /**
+     * @var MockIdentityProviderFactory
+     */
+    private $mockIdentityProviderFactory;
 
     /**
-     * @var null|string
+     * @var MockServiceProviderFactory
      */
-    private $messageStatus = null;
+    private $mockServiceProviderFactory;
 
     /**
-     * @var null|string
+     * @var MockIdentityProvider
      */
-    private $messageSubStatus = null;
+    private $mockIdentityProvider;
 
     /**
-     * @var null|string
+     * @var MockServiceProvider
      */
-    private $messageMessage = null;
+    private $mockServiceProvider;
 
-    /**
-     * @var AbstractDataStore
-     */
-    private $dataStore;
+    public function __construct(
+        MockIdentityProviderFactory $mockIdentityProviderFactory,
+        MockServiceProviderFactory $mockServiceProviderFactory
+    ) {
+        $this->mockIdentityProviderFactory = $mockIdentityProviderFactory;
+        $this->mockServiceProviderFactory = $mockServiceProviderFactory;
 
-    public function __construct(AbstractDataStore $dataStore)
-    {
-        $this->dataStore            = $dataStore;
+        $basePath = realpath(__DIR__.'/../../../../');
 
-        $data = $dataStore->load();
+        // Set gateway configured IDP
+        $mockEbIdp = $this->mockIdentityProviderFactory->createNew('Sfo gateway');
+        $mockEbIdp->setEntityId('https://engine.vm.openconext.org/authentication/sfo/metadata');
+        $mockEbIdp->setPrivateKey($basePath . '/ci/travis/files/engineblock.pem');
+        $mockEbIdp->setCertificate($basePath . '/ci/travis/files/engineblock.crt');
 
-        $this->data = (isset($data['data']) && is_array($data['data']) ? $data['data'] : []);
-        $this->messageStatus = (isset($data['messageStatus']) ? $data['messageStatus'] : []);
-        $this->messageSubStatus = (isset($data['messageSubStatus']) ? $data['messageSubStatus'] : []);
-        $this->messageMessage = (isset($data['messageMessage']) ? $data['messageMessage'] : []);
+        $this->mockIdentityProvider = $mockEbIdp;
+
+        // Set gateway configured SP
+        $mockSp = $this->mockServiceProviderFactory->createNew('ebSfoSp');
+        $mockSp->setEntityId('https://engine.vm.openconext.org/authentication/sfo/metadata');
+
+        $this->mockServiceProvider = $mockSp;
     }
 
     /**
-     * @return MockIdentityProvider|null
+     * @return string
      */
     public function getIdentityProviderEntityId()
     {
-        return $this->data['idp-entity-id'];
+        return $this->mockIdentityProvider->entityId();
     }
 
+    /**
+     * @return string
+     */
     public function getIdentityProviderPublicKeyCertData()
     {
-        return $this->data['idp-public-key'];
+        return $this->addPublicKeyEnvelope($this->mockIdentityProvider->publicKeyCertData());
     }
 
+    /**
+     * @return string
+     */
     public function getIdentityProviderGetPrivateKeyPem()
     {
-        return $this->data['idp-private-key'];
+        return $this->mockIdentityProvider->getPrivateKeyPem();
     }
 
     /**
-     * @param MockIdentityProvider|null $mockIdentityProvider
-     */
-    public function setMockIdentityProvider($mockIdentityProvider)
-    {
-        $this->data['idp-entity-id'] = $mockIdentityProvider->entityId();
-        $this->data['idp-public-key'] = $mockIdentityProvider->publicKeyCertData();
-        $this->data['idp-private-key'] = $mockIdentityProvider->getPrivateKeyPem();
-    }
-
-    /**
-     * @return MockIdentityProvider|null
+     * @return string
      */
     public function getServiceProviderEntityId()
     {
-        return $this->data['sp-entity-id'];
+        return $this->mockServiceProvider->entityId();
     }
 
-    /**
-     * @return MockIdentityProvider|null
-     */
-    public function getServiceProviderPublicKeyCertData()
+    private function addPublicKeyEnvelope($key)
     {
-        return $this->data['sp-public-key'];
-    }
-
-    /**
-     * @param MockServiceProvider|null $mockServiceProvider
-     */
-    public function setMockServiceProvider($mockServiceProvider)
-    {
-        $this->data['sp-entity-id'] = $mockServiceProvider->entityId();
-        $this->data['sp-public-key'] = $mockServiceProvider->publicKeyCertData();
-    }
-
-    /**
-     * @param $status
-     * @param null $subStatus
-     * @param array $message
-     */
-    public function setMessage($status, $subStatus = null, $message = null)
-    {
-        $this->messageStatus = $status;
-        $this->messageSubStatus = $subStatus;
-        $this->messageMessage = $message;
-    }
-
-    public function unsetMessage()
-    {
-        $this->messageStatus = null;
-        $this->messageSubStatus = null;
-        $this->messageMessage = null;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getStatus()
-    {
-        return $this->messageStatus;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getSubStatus()
-    {
-        return $this->messageSubStatus;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getMessage()
-    {
-        return $this->messageMessage;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasFailure()
-    {
-        return !empty($this->messageStatus);
-    }
-
-    public function save()
-    {
-        $data = [
-            'data' => $this->data,
-            'messageStatus' => $this->messageStatus,
-            'messageSubStatus' => $this->messageSubStatus,
-            'messageMessage' => $this->messageMessage,
-        ];
-
-        $this->dataStore->save($data);
+        return "-----BEGIN CERTIFICATE-----\n" . wordwrap($key, 64, "\n", true) . "\n-----END CERTIFICATE-----";
     }
 }

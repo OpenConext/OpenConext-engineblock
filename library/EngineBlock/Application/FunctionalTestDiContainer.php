@@ -58,7 +58,7 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
         return [
             'default' => [
                 'publicFile' => $basePath . '/ci/travis/files/engineblock.crt',
-                'privateFile' => $basePath . '/ci/travis/files/engineblock.key',
+                'privateFile' => $basePath . '/ci/travis/files/engineblock.pem',
             ],
         ];
     }

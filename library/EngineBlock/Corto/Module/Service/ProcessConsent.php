@@ -61,9 +61,6 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
      */
     public function serve($serviceName, Request $httpRequest)
     {
-
-        //TODO: fix post var usage
-        // TODO: check if safe?
         $processStep = $this->_processingStateHelper->getStepByRequestId($httpRequest->get('ID'), ProcessingStateHelperInterface::STEP_CONSENT);
 
         /** @var Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */

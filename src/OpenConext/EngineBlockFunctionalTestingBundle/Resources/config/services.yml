@@ -50,7 +50,8 @@ services:
     engineblock.functional_testing.fixture.sfo_gateway_mock:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingSfoGatewayMockConfiguration
         arguments:
-        - '@engineblock.function_testing.data_store.sfo_gateway_mock'
+            - '@engineblock.mock_entities.idp_factory'
+            - '@engineblock.mock_entities.sp_factory'
     #endregion Fixtures
 
     #region Data Stores

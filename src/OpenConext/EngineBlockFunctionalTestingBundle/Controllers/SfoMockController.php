@@ -19,6 +19,8 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Controllers;
 
 use Exception;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockSfoGateway;
+use SAML2\Constants;
+use SAML2\Response as SamlResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,24 +62,14 @@ class SfoMockController extends Controller
                 ));
             }
 
-            // Decode samlrequest
-            $decodedSamlRequest = base64_decode($request->request->get(self::PARAMETER_REQUEST), true);
-
-            // Parse request
-            $samlResponse = $this->mockSfoGateway->handleSso($decodedSamlRequest, $this->getFullRequestUri($request));
-            $rawResponse = $this->mockSfoGateway->parsePostResponse($samlResponse);
-            $relayState = $request->request->get(self::PARAMETER_RELAY_STATE);
-
-            // Encode response
-            $encodedResponse = base64_encode($rawResponse);
+            // Parse available responses
+            $responses = $this->getAvailableResponses($request);
 
             // Present response
             $body = $this->twig->render(
                 '@OpenConextEngineBlockFunctionalTesting/Sso/consumeAssertion.html.twig',
                 [
-                    'acu' => $samlResponse->getDestination(),
-                    'response' => $encodedResponse,
-                    'relayState' => $relayState
+                    'responses' => $responses,
                 ]
             );
 
@@ -87,6 +79,68 @@ class SfoMockController extends Controller
         } catch (Exception $e) {
             return new Response($e->getMessage(), 500);
         }
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     * @throws Exception
+     */
+    private function getAvailableResponses(Request $request)
+    {
+        // Decode samlrequest
+        $decodedSamlRequest = base64_decode($request->request->get(self::PARAMETER_REQUEST), true);
+
+        // Parse success
+        $samlResponse = $this->mockSfoGateway->handleSsoSuccess($decodedSamlRequest, $this->getFullRequestUri($request));
+        $results['success'] = $this->getResponseData($request, $samlResponse);
+
+        // Parse user cancelled
+        $samlResponse = $this->mockSfoGateway->handleSsoFailure(
+            $decodedSamlRequest,
+            $this->getFullRequestUri($request),
+            Constants::STATUS_RESPONDER,
+            Constants::STATUS_AUTHN_FAILED,
+            'Authentication cancelled by user'
+        );
+        $results['user-cancelled'] = $this->getResponseData($request, $samlResponse);
+
+        // Parse unmet Loa
+        $samlResponse = $this->mockSfoGateway->handleSsoFailure(
+            $decodedSamlRequest,
+            $this->getFullRequestUri($request),
+            Constants::STATUS_RESPONDER,
+            Constants::STATUS_NO_AUTHN_CONTEXT
+        );
+        $results['unmet-loa'] = $this->getResponseData($request, $samlResponse);
+
+        // Parse unknown
+        $samlResponse = $this->mockSfoGateway->handleSsoFailure(
+            $decodedSamlRequest,
+            $this->getFullRequestUri($request),
+            Constants::STATUS_RESPONDER,
+            Constants::STATUS_AUTHN_FAILED
+        );
+        $results['unknown'] = $this->getResponseData($request, $samlResponse);
+
+        return $results;
+    }
+
+    /**
+     * @param Request $request
+     * @param SamlResponse $samlResponse
+     * @return array
+     */
+    private function getResponseData(Request $request, SamlResponse $samlResponse)
+    {
+        $rawResponse = $this->mockSfoGateway->parsePostResponse($samlResponse);
+
+        return [
+            'acu' => $samlResponse->getDestination(),
+            'rawResponse' => $rawResponse,
+            'encodedResponse' => base64_encode($rawResponse),
+            'relayState' => $request->request->get(self::PARAMETER_RELAY_STATE),
+        ];
     }
 
     /**

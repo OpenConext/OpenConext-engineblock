@@ -118,7 +118,8 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                 return new EngineBlock_Corto_Module_Service_SfoAssertionConsumer(
                     $server,
                     $diContainer->getSession(),
-                    $diContainer->getProcessingStateHelper()
+                    $diContainer->getProcessingStateHelper(),
+                    $diContainer->getSfoGatewayCallOutHelper()
                 );
             default :
                 return new $className($server, $diContainer->getXmlConverter(), $diContainer->getTwigEnvironment());
