@@ -178,6 +178,7 @@ services:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Feedback
         arguments:
             - "@engineblock.compat.application"
+            - "@engineblock.error_feedback"
         tags:
              - { name: 'twig.extension' }
 
