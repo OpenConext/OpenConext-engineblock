@@ -85,3 +85,10 @@ services:
     # test stand ins
     engineblock.validator.sso_request_validator:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Validator\SsoRequestValidator
+
+    engineblock.configuration.sfo.endpoint:
+        class: OpenConext\EngineBlockBundle\Sfo\SfoEndpoint
+        arguments:
+            - "%sfo.gateway.sso.entity_id%"
+            - "%sfo.gateway.sso.sso_location%"
+            - "%kernel.project_dir%/tests/resources/key/engineblock.crt"
