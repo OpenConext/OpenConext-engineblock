@@ -74,8 +74,8 @@ class EngineBlock_Corto_Module_Service_SfoAssertionConsumer implements EngineBlo
             $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
         } catch (EngineBlock_Corto_Exception_ReceivedErrorStatusCode $e) {
 
-            // Handle exceptions
-            // - only continue if the loa level is not met but no sfo authentication is allowed
+            // The user is allowed to continue upon subcode: NoAuthnContext when the SP is configured with the coin: coin:stepup:allow_no_token == true
+            // See: https://www.pivotaltracker.com/story/show/166729912
             $this->handleInvalidGatewayResponse($e, $log);
 
             $receivedResponse = $e->getResponse();
@@ -83,7 +83,7 @@ class EngineBlock_Corto_Module_Service_SfoAssertionConsumer implements EngineBlo
 
             $checkResponseSignature = false; // error responses from gateway are not signed
 
-            // set response to loa1
+            // Update the AuthnContextClassRef to LoA 1
             $processStep = $this->_processingStateHelper->getStepByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_SFO);
             $processStep->getResponse()->getAssertion()->setAuthnContextClassRef($this->_sfoGatewayCallOutHelper->getSfoLoa1());
             $this->_processingStateHelper->updateStepResponseByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_SFO, $processStep->getResponse());
