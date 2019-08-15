@@ -93,7 +93,7 @@ Modifies:
 log a warning if received `schacHomeOrganization` is not allowed by the configured shibmd:scopes for the used IdP.
 Log a notice otherwise.
 
-If the `eb.block_user_on_violation` feature toggle however is set it will throw an exception which will prevent access.
+If however the eb.block_user_on_violation feature toggle is set, it will throw an exception which will prevent access.
 
 Uses:
 - EngineBlock_Saml2_ResponseAnnotationDecorator
@@ -103,7 +103,7 @@ Uses:
 log a warning if received `eduPersonPrincipalName` is not allowed by configured shibmd:scopes for the used IdP. Log a
 notice otherwise.
 
-If the `eb.block_user_on_violation` feature toggle however is set it will throw an exception which will prevent access.
+If however the eb.block_user_on_violation feature toggle is set, it will throw an exception which will prevent access.
 
 Uses:
 - EngineBlock_Saml2_ResponseAnnotationDecorator
@@ -336,9 +336,13 @@ Uses:
 
 
 ### ValidateAuthnContextClassRef
-The validator will block any incoming IdP assertion with a blacklisted `AuthnContextClassRef`.
-It will prevent an IdP to use the blacklisted values used for AuthnContextClassRef.
-This is being used to prevent the use internal used AuthnContextClassRef values which are currently being used for Stepup 2fa gateway authentications.
+Block any incoming IdP assertion with a blacklisted `AuthnContextClassRef`.
+This is used to prevent an IdP to impersonate 'our' AuthnContextClassRef values.
+
+
+
+Configured with:
+ - `sfo.authn_context_class_ref_blacklist_regex`
 
 Uses:
 - EngineBlock_Saml2_ResponseAnnotationDecorator
