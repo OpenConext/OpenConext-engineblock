@@ -93,6 +93,8 @@ Modifies:
 log a warning if received `schacHomeOrganization` is not allowed by the configured shibmd:scopes for the used IdP.
 Log a notice otherwise.
 
+If the `eb.block_user_on_violation` feature toggle however is set it will throw an exception which will prevent access.
+
 Uses:
 - EngineBlock_Saml2_ResponseAnnotationDecorator
 - OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
@@ -100,6 +102,8 @@ Uses:
 ### VerifyShibMdScopingAllowsEduPersonPrincipalName
 log a warning if received `eduPersonPrincipalName` is not allowed by configured shibmd:scopes for the used IdP. Log a
 notice otherwise.
+
+If the `eb.block_user_on_violation` feature toggle however is set it will throw an exception which will prevent access.
 
 Uses:
 - EngineBlock_Saml2_ResponseAnnotationDecorator
@@ -213,16 +217,6 @@ handling an internal request (e.g. from a received Reponse to Consent).
 
 Uses:
  - EngineBlock_Corto_ProxyServer
-
-### AddCollabPersonIdAttribute
-Sets the collabPersonId attribute on the Response Attributes
-
-Uses:
-- responseAttributes
-- collabPersonId
-
-Modifies:
-- responseAttributes
 
 ### RunAttributeManipulations (for SP)
 Run the configured Attribute Manipulations for the current Service Provider. Attribute Manipulations are code that is
@@ -338,6 +332,18 @@ Uses:
 - OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
 - OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
 - EngineBlock_Saml2_AuthnRequestAnnotationDecorator
+
+
+
+### ValidateAuthnContextClassRef
+The validator will block any incoming IdP assertion with a blacklisted `AuthnContextClassRef`.
+It will prevent an IdP to use the blacklisted values used for AuthnContextClassRef.
+This is being used to prevent the use internal used AuthnContextClassRef values which are currently being used for Stepup 2fa gateway authentications.
+
+Uses:
+- EngineBlock_Saml2_ResponseAnnotationDecorator
+
+
 
 [input]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/library/EngineBlock/Corto/Filter/Input.php
 [output]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/library/EngineBlock/Corto/Filter/Output.php
