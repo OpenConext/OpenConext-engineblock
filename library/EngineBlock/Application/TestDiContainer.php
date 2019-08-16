@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\EngineBlockBundle\Sfo\SfoEndpoint;
+use OpenConext\EngineBlockBundle\Stepup\StepupEndpoint;
 
 /**
  * Creates mocked versions of dependencies for unit testing

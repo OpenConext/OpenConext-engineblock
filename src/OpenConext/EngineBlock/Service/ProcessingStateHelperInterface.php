@@ -24,12 +24,12 @@ use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Service\Dto\ProcessingStateStep;
 
 /**
- * Used to manage the process state for SFO and Consent flows
+ * Used to manage the process state for Stepup authentication and Consent flows
  */
 interface ProcessingStateHelperInterface
 {
     const STEP_CONSENT = 'consent';
-    const STEP_SFO = 'sfo';
+    const STEP_STEPUP = 'stepup';
 
     /**
      * @param string $requestId

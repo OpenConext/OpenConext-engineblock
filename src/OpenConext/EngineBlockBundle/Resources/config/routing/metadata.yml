@@ -64,18 +64,18 @@ metadata_edugain_key:
     requirements:
         keyId: .+
 
-### Sfo
-metdata_sfo:
-    path:       'authentication/sfo/metadata'
+### Stepup
+metdata_stepup:
+    path:       'authentication/stepup/metadata'
     methods:    [GET]
     defaults:
-        _controller: engineblock.controller.authentication.sfo:metadataAction
+        _controller: engineblock.controller.authentication.stepup:metadataAction
         keyId: ~
 
-metdata_sfo_key:
-    path:       '/authentication/sfo/metadata/key:{keyId}'
+metdata_stepup_key:
+    path:       '/authentication/stepup/metadata/key:{keyId}'
     methods:    [GET]
     defaults:
-        _controller: engineblock.controller.authentication.sfo:metadataAction
+        _controller: engineblock.controller.authentication.stepup:metadataAction
     requirements:
         keyId: .+

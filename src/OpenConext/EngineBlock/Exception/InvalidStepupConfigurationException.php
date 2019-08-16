@@ -20,7 +20,7 @@ namespace OpenConext\EngineBlock\Exception;
 
 use InvalidArgumentException as CoreInvalidArgumentException;
 
-class InvalidSfoConfigurationException extends CoreInvalidArgumentException implements Exception
+class InvalidStepupConfigurationException extends CoreInvalidArgumentException implements Exception
 {
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\EngineBlockBundle\Sfo\SfoEndpoint;
+use OpenConext\EngineBlockBundle\Stepup\StepupEndpoint;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\FakeUserDirectory;
 use Symfony\Component\Filesystem\Filesystem;
 

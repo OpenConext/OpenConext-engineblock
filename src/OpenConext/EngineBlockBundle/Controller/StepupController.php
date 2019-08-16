@@ -25,7 +25,7 @@ use OpenConext\EngineBlockBridge\ResponseFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 
-class SfoController implements AuthenticationLoopThrottlingController
+class StepupController implements AuthenticationLoopThrottlingController
 {
     /**
      * @var EngineBlock_ApplicationSingleton
@@ -68,7 +68,7 @@ class SfoController implements AuthenticationLoopThrottlingController
         $this->bindingValidator->isValid($request);
 
         $proxyServer = new EngineBlock_Corto_Adapter();
-        $proxyServer->sfoConsumeAssertion();
+        $proxyServer->stepupConsumeAssertion();
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
@@ -85,7 +85,7 @@ class SfoController implements AuthenticationLoopThrottlingController
             $proxyServer->setKeyId($keyId);
         }
 
-        $proxyServer->sfoMetadata();
+        $proxyServer->stepupMetadata();
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }

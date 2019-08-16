@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Sfo;
+namespace OpenConext\EngineBlockBundle\Stepup;
 
 use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
@@ -24,24 +24,24 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use SAML2\AuthnRequest;
 use SAML2\Constants;
 
-final class SfoGatewayCallOutHelper
+final class StepupGatewayCallOutHelper
 {
     /**
-     * @var SfoGatewayLoaMapping
+     * @var StepupGatewayLoaMapping
      */
     private $gatewayLoaMapping;
 
     /**
-     * @var SfoEndpoint
+     * @var StepupEndpoint
      */
-    private $sfoEndpoint;
+    private $stepupEndpoint;
 
     public function __construct(
-        SfoGatewayLoaMapping $gatewayLoaMapping,
-        SfoEndpoint $sfoEndpoint
+        StepupGatewayLoaMapping $gatewayLoaMapping,
+        StepupEndpoint $stepupEndpoint
     ) {
         $this->gatewayLoaMapping = $gatewayLoaMapping;
-        $this->sfoEndpoint = $sfoEndpoint;
+        $this->stepupEndpoint = $stepupEndpoint;
     }
 
     /**
@@ -49,10 +49,10 @@ final class SfoGatewayCallOutHelper
      * @param ServiceProvider $serviceProvider
      * @return bool
      */
-    public function shouldUseSfo(IdentityProvider $identityProvider, ServiceProvider $serviceProvider)
+    public function shouldUseStepup(IdentityProvider $identityProvider, ServiceProvider $serviceProvider)
     {
-        $sfoDecision = new SfoDecision($identityProvider, $serviceProvider);
-        return $sfoDecision->shouldUseSfo();
+        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider);
+        return $stepupDecision->shouldUseStepup();
     }
 
     /**
@@ -60,16 +60,16 @@ final class SfoGatewayCallOutHelper
      * @param ServiceProvider $serviceProvider
      * @return string|null
      */
-    public function getSfoLoa(IdentityProvider $identityProvider, ServiceProvider $serviceProvider)
+    public function getStepupLoa(IdentityProvider $identityProvider, ServiceProvider $serviceProvider)
     {
-        $sfoDecision = new SfoDecision($identityProvider, $serviceProvider);
-        return $this->gatewayLoaMapping->transformToGatewayLoa($sfoDecision->getSfoLoa());
+        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider);
+        return $this->gatewayLoaMapping->transformToGatewayLoa($stepupDecision->getStepupLoa());
     }
 
     /**
      * @return string
      */
-    public function getSfoLoa1()
+    public function getStepupLoa1()
     {
         return $this->gatewayLoaMapping->getGatewayLoa1();
     }
@@ -81,7 +81,7 @@ final class SfoGatewayCallOutHelper
      */
     public function allowNoToken(IdentityProvider $identityProvider, ServiceProvider $serviceProvider)
     {
-        $sfoDecision = new SfoDecision($identityProvider, $serviceProvider);
-        return $sfoDecision->allowNoToken();
+        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider);
+        return $stepupDecision->allowNoToken();
     }
 }

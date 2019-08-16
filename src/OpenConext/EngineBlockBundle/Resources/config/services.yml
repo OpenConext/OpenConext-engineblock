@@ -14,18 +14,18 @@ services:
         arguments:
             - "%minimum_execution_time_on_invalid_received_response%"
 
-    engineblock.configuration.sfo.endpoint:
-        class: OpenConext\EngineBlockBundle\Sfo\SfoEndpoint
+    engineblock.configuration.stepup.endpoint:
+        class: OpenConext\EngineBlockBundle\Stepup\StepupEndpoint
         arguments:
-            - "%sfo.gateway.sso.entity_id%"
-            - "%sfo.gateway.sso.sso_location%"
-            - "%sfo.gateway.sso.key_file%"
+            - "%stepup.gateway.sfo.entity_id%"
+            - "%stepup.gateway.sfo.sso_location%"
+            - "%stepup.gateway.sfo.key_file%"
 
-    engineblock.configuration.sfo.gateway_loa_mapping:
-        class: OpenConext\EngineBlockBundle\Sfo\SfoGatewayLoaMapping
+    engineblock.configuration.stepup.gateway_loa_mapping:
+        class: OpenConext\EngineBlockBundle\Stepup\StepupGatewayLoaMapping
         arguments:
-            - "%sfo.gateway.loa.mapping%"
-            - "%sfo.gateway.loa.loa1%"
+            - "%stepup.loa.mapping%"
+            - "%stepup.loa.loa1%"
 
     engineblock.request.request_id_generator:
         public: false
@@ -52,11 +52,11 @@ services:
         arguments:
             - "@session"
 
-    engineblock.service.sfo.gateway_callout_helper:
-        class: OpenConext\EngineBlockBundle\Sfo\SfoGatewayCallOutHelper
+    engineblock.service.stepup.gateway_callout_helper:
+        class: OpenConext\EngineBlockBundle\Stepup\StepupGatewayCallOutHelper
         arguments:
-            - "@engineblock.configuration.sfo.gateway_loa_mapping"
-            - "@engineblock.configuration.sfo.endpoint"
+            - "@engineblock.configuration.stepup.gateway_loa_mapping"
+            - "@engineblock.configuration.stepup.endpoint"
 
 
     engineblock.service.consent:
