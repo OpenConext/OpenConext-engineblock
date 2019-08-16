@@ -3,7 +3,7 @@
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
-use OpenConext\EngineBlockBundle\Sfo\SfoGatewayCallOutHelper;
+use OpenConext\EngineBlockBundle\Stepup\StepupGatewayCallOutHelper;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
@@ -32,22 +32,22 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
      */
     private $_processingStateHelper;
     /**
-     * @var SfoGatewayCallOutHelper
+     * @var StepupGatewayCallOutHelper
      */
-    private $_sfoGatewayCallOutHelper;
+    private $_stepupGatewayCallOutHelper;
 
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
         Session $session,
         ProcessingStateHelperInterface $processingStateHelper,
-        SfoGatewayCallOutHelper $sfoGatewayCallOutHelper
+        StepupGatewayCallOutHelper $stepupGatewayCallOutHelper
     ) {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->_session = $session;
         $this->_processingStateHelper = $processingStateHelper;
-        $this->_sfoGatewayCallOutHelper = $sfoGatewayCallOutHelper;
+        $this->_stepupGatewayCallOutHelper = $stepupGatewayCallOutHelper;
     }
 
     /**
@@ -120,27 +120,27 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             $receivedResponse
         );
 
-        // Goto consent if no SFO needed
-        if (!$this->_sfoGatewayCallOutHelper->shouldUseSfo($idp, $sp)) {
+        // Goto consent if no Stepup authentication is needed
+        if (!$this->_stepupGatewayCallOutHelper->shouldUseStepup($idp, $sp)) {
             $this->_server->sendConsentAuthenticationRequest($receivedResponse, $receivedRequest, $currentProcessStep->getRole(), $this->getAuthenticationState());
             return;
         }
 
-        $log->info('Handle SFO callout', array('key_id' => $receivedRequest->getId()));
+        $log->info('Handle Stepup authentication callout', array('key_id' => $receivedRequest->getId()));
 
-        // Add sfo step
+        // Add Stepup authentication step
         $currentProcessStep = $this->_processingStateHelper->addStep(
             $receivedRequest->getId(),
-            ProcessingStateHelperInterface::STEP_SFO,
-            $application->getDiContainer()->getSfoIdentityProvider($this->_server),
+            ProcessingStateHelperInterface::STEP_STEPUP,
+            $application->getDiContainer()->getStepupIdentityProvider($this->_server),
             $receivedResponse
         );
 
         // Get mapped AuthnClassRef and get NameId
         $nameId = clone $receivedResponse->getNameId();
-        $authnClassRef = $this->_sfoGatewayCallOutHelper->getSfoLoa($idp, $sp);
+        $authnClassRef = $this->_stepupGatewayCallOutHelper->getStepupLoa($idp, $sp);
 
-        $this->_server->sendSfoAuthenticationRequest($receivedRequest, $currentProcessStep->getRole(), $authnClassRef, $nameId);
+        $this->_server->sendStepupAuthenticationRequest($receivedRequest, $currentProcessStep->getRole(), $authnClassRef, $nameId);
     }
 
     /**

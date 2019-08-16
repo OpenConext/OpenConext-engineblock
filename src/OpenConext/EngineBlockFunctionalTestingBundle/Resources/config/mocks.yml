@@ -26,7 +26,7 @@ services:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\SerializedDataStore
         arguments: ['%sp_fixture_file%']
 
-    engineblock.mock_clients.mock_sfo_gateway:
-        class: OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockSfoGateway
+    engineblock.mock_clients.mock_stepup_gateway:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockStepupGateway
         arguments:
-            - "@engineblock.functional_testing.fixture.sfo_gateway_mock"
+            - "@engineblock.functional_testing.fixture.stepup_gateway_mock"

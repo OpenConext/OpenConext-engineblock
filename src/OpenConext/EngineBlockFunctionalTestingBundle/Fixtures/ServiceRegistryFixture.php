@@ -368,21 +368,21 @@ QUERY;
         return $this;
     }
 
-    public function setSpSfoRequireLoa($entityId, $requiredLoa)
+    public function setSpStepupRequireLoa($entityId, $requiredLoa)
     {
         $this->setCoin($this->getServiceProvider($entityId), 'stepupRequireLoa', $requiredLoa);
 
         return $this;
     }
 
-    public function setSpSfoAllowNoToken($entityId)
+    public function setSpStepupAllowNoToken($entityId)
     {
         $this->setCoin($this->getServiceProvider($entityId), 'stepupAllowNoToken', true);
 
         return $this;
     }
 
-    public function setIdpSfoConnections($entityId, array $spLoaMapping)
+    public function setIdpStepupConnections($entityId, array $spLoaMapping)
     {
         $connections = new StepupConnections($spLoaMapping);
         $this->setCoin($this->getIdentityProvider($entityId), 'stepupConnections', $connections);

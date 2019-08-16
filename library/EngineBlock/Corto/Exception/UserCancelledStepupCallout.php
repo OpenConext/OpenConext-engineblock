@@ -1,6 +1,6 @@
 <?php
 
-class EngineBlock_Corto_Exception_InvalidSfoCalloutResponse extends EngineBlock_Exception
+class EngineBlock_Corto_Exception_UserCancelledStepupCallout extends EngineBlock_Exception
 {
     public function __construct($message, $severity = self::CODE_NOTICE, Exception $previous = null)
     {

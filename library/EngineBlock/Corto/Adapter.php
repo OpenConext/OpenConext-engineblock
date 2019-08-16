@@ -76,9 +76,9 @@ class EngineBlock_Corto_Adapter
         $this->_callCortoServiceUri('spMetadataService');
     }
 
-    public function sfoMetadata()
+    public function stepupMetadata()
     {
-        $this->_callCortoServiceUri('sfoMetadataService');
+        $this->_callCortoServiceUri('stepupMetadataService');
     }
 
     public function spCertificate()
@@ -91,9 +91,9 @@ class EngineBlock_Corto_Adapter
         $this->_callCortoServiceUri('assertionConsumerService');
     }
 
-    public function sfoConsumeAssertion()
+    public function stepupConsumeAssertion()
     {
-        $this->_callCortoServiceUri('sfoAssertionConsumerService');
+        $this->_callCortoServiceUri('stepupAssertionConsumerService');
     }
 
     public function edugainMetadata()

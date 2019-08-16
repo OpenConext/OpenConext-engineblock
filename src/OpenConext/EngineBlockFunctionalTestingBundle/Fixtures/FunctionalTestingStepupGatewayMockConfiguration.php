@@ -7,7 +7,7 @@ use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProviderFacto
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProviderFactory;
 
-final class FunctionalTestingSfoGatewayMockConfiguration
+final class FunctionalTestingStepupGatewayMockConfiguration
 {
     /**
      * @var MockIdentityProviderFactory
@@ -39,16 +39,16 @@ final class FunctionalTestingSfoGatewayMockConfiguration
         $basePath = realpath(__DIR__.'/../../../../');
 
         // Set gateway configured IDP
-        $mockEbIdp = $this->mockIdentityProviderFactory->createNew('Sfo gateway');
-        $mockEbIdp->setEntityId('https://engine.vm.openconext.org/authentication/sfo/metadata');
+        $mockEbIdp = $this->mockIdentityProviderFactory->createNew('Stepup gateway');
+        $mockEbIdp->setEntityId('https://engine.vm.openconext.org/authentication/stepup/metadata');
         $mockEbIdp->setPrivateKey($basePath . '/tests/resources/key/engineblock.pem');
         $mockEbIdp->setCertificate($basePath . '/tests/resources/key/engineblock.crt');
 
         $this->mockIdentityProvider = $mockEbIdp;
 
         // Set gateway configured SP
-        $mockSp = $this->mockServiceProviderFactory->createNew('ebSfoSp');
-        $mockSp->setEntityId('https://engine.vm.openconext.org/authentication/sfo/metadata');
+        $mockSp = $this->mockServiceProviderFactory->createNew('ebStepupSp');
+        $mockSp->setEntityId('https://engine.vm.openconext.org/authentication/stepup/metadata');
 
         $this->mockServiceProvider = $mockSp;
     }

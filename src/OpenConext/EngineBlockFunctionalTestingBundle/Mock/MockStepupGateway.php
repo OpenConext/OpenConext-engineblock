@@ -19,7 +19,7 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
 use DateTime;
 use LogicException;
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingSfoGatewayMockConfiguration;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingStepupGatewayMockConfiguration;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use RuntimeException;
 use SAML2\Assertion;
@@ -35,7 +35,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MockSfoGateway
+class MockStepupGateway
 {
     /**
      * @var DateTime
@@ -43,16 +43,16 @@ class MockSfoGateway
     private $currentTime;
 
     /**
-     * @var FunctionalTestingSfoGatewayMockConfiguration
+     * @var FunctionalTestingStepupGatewayMockConfiguration
      */
     private $gatewayConfiguration;
 
     /**
-     * @param FunctionalTestingSfoGatewayMockConfiguration $gatewayConfiguration
+     * @param FunctionalTestingStepupGatewayMockConfiguration $gatewayConfiguration
      * @throws \Exception
      */
     public function __construct(
-        FunctionalTestingSfoGatewayMockConfiguration $gatewayConfiguration
+        FunctionalTestingStepupGatewayMockConfiguration $gatewayConfiguration
     ) {
         $this->gatewayConfiguration = $gatewayConfiguration;
         $this->currentTime = new DateTime();

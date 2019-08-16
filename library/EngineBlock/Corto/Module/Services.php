@@ -24,7 +24,7 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
         'idpCertificateService'         => 'Certificate',
         'spMetadataService'             => 'Metadata',
         'idpMetadataService'            => 'Metadata',
-        'sfoMetadataService'            => 'Metadata',
+        'stepupMetadataService'            => 'Metadata',
         'unsolicitedSingleSignOnService'=> 'singleSignOn',
         'debugSingleSignOnService'      => 'singleSignOn',
     );
@@ -107,19 +107,19 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer->getXmlConverter(),
                     $diContainer->getSession(),
                     $diContainer->getProcessingStateHelper(),
-                    $diContainer->getSfoGatewayCallOutHelper()
+                    $diContainer->getStepupGatewayCallOutHelper()
                 );
             case EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer::class :
                 return new EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer(
                     $server,
                     $diContainer->getProcessingStateHelper()
                 );
-            case EngineBlock_Corto_Module_Service_SfoAssertionConsumer::class :
-                return new EngineBlock_Corto_Module_Service_SfoAssertionConsumer(
+            case EngineBlock_Corto_Module_Service_StepupAssertionConsumer::class :
+                return new EngineBlock_Corto_Module_Service_StepupAssertionConsumer(
                     $server,
                     $diContainer->getSession(),
                     $diContainer->getProcessingStateHelper(),
-                    $diContainer->getSfoGatewayCallOutHelper()
+                    $diContainer->getStepupGatewayCallOutHelper()
                 );
             default :
                 return new $className($server, $diContainer->getXmlConverter(), $diContainer->getTwigEnvironment());

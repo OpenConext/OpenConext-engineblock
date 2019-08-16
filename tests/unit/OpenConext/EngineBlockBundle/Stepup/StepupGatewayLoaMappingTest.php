@@ -19,39 +19,39 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
-use OpenConext\EngineBlockBundle\Sfo\SfoGatewayLoaMapping;
+use OpenConext\EngineBlockBundle\Stepup\StepupGatewayLoaMapping;
 use PHPUnit_Framework_TestCase as TestCase;
 
-class SfoGatewayLoaMappingTest extends TestCase
+class StepupGatewayLoaMappingTest extends TestCase
 {
     /**
      * @test
-     * @group Sfo
+     * @group Stepup
      */
-    public function the_sfo_loa_mapping_object_should_be_successful_populated()
+    public function the_stepup_loa_mapping_object_should_be_successful_populated()
     {
-        $sfoLoaMapping = new SfoGatewayLoaMapping([
+        $stepupLoaMapping = new StepupGatewayLoaMapping([
             'manageLoa2' => 'gatewayLoa2',
             'manageLoa3' => 'gatewayLoa3',
         ],
             'gatewayLoa1'
         );
 
-        $this->assertSame('gatewayLoa2', $sfoLoaMapping->transformToGatewayLoa('manageLoa2'));
-        $this->assertSame('gatewayLoa2', $sfoLoaMapping->transformToGatewayLoa('manageLoa2'));
-        $this->assertSame('gatewayLoa1', $sfoLoaMapping->getGatewayLoa1());
+        $this->assertSame('gatewayLoa2', $stepupLoaMapping->transformToGatewayLoa('manageLoa2'));
+        $this->assertSame('gatewayLoa2', $stepupLoaMapping->transformToGatewayLoa('manageLoa2'));
+        $this->assertSame('gatewayLoa1', $stepupLoaMapping->getGatewayLoa1());
     }
 
     /**
      * @test
-     * @group Sfo
+     * @group Stepup
      */
-    public function the_sfo_loa_mapping_object_key_should_be_a_string_or_throw_an_exception()
+    public function the_stepup_loa_mapping_object_key_should_be_a_string_or_throw_an_exception()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The sfo.gateway_loa_mapping configuration must be a map, key is not a string');
+        $this->expectExceptionMessage('The stepup.gateway_loa_mapping configuration must be a map, key is not a string');
 
-        $sfoLoaMapping = new SfoGatewayLoaMapping([
+        $stepupLoaMapping = new StepupGatewayLoaMapping([
             5 => 'gatewayLoa2',
         ],
             'gatewayLoa1'
@@ -60,14 +60,14 @@ class SfoGatewayLoaMappingTest extends TestCase
 
     /**
      * @test
-     * @group Sfo
+     * @group Stepup
      */
-    public function the_sfo_loa_mapping_object_value_should_be_a_string_or_throw_an_exception()
+    public function the_stepup_loa_mapping_object_value_should_be_a_string_or_throw_an_exception()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The sfo.gateway_loa_mapping configuration must be a map, value is not a string');
+        $this->expectExceptionMessage('The stepup.gateway_loa_mapping configuration must be a map, value is not a string');
 
-        $sfoLoaMapping = new SfoGatewayLoaMapping([
+        $stepupLoaMapping = new StepupGatewayLoaMapping([
             'manageLoa2' => 3,
         ],
             'gatewayLoa1'
@@ -76,14 +76,14 @@ class SfoGatewayLoaMappingTest extends TestCase
 
     /**
      * @test
-     * @group Sfo
+     * @group Stepup
      */
-    public function the_sfo_loa_mapping_loa1_should_be_a_string_or_throw_an_exception()
+    public function the_stepup_loa_mapping_loa1_should_be_a_string_or_throw_an_exception()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The sfo.gateway.loa.loa1 configuration must be a string');
+        $this->expectExceptionMessage('The stepup.gateway.loa.loa1 configuration must be a string');
 
-        $sfoLoaMapping = new SfoGatewayLoaMapping([
+        $stepupLoaMapping = new StepupGatewayLoaMapping([
             'manageLoa2' => 'gatewayLoa2',
         ],
             5

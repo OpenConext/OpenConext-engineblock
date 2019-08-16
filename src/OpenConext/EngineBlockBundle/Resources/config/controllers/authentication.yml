@@ -59,8 +59,8 @@ services:
         arguments:
             - "@engineblock.compat.application"
 
-    engineblock.controller.authentication.sfo:
-        class: OpenConext\EngineBlockBundle\Controller\SfoController
+    engineblock.controller.authentication.stepup:
+        class: OpenConext\EngineBlockBundle\Controller\StepupController
         arguments:
             - "@engineblock.compat.application"
             - "@session"
