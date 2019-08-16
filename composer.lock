@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c16949605a9251ebc612ab0b0b99b4d1",
+    "content-hash": "632fa4194186db124663ede4ce522692",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -4255,6 +4255,57 @@
                 "Symfony2"
             ],
             "time": "2018-08-10T18:22:42+00:00"
+        },
+        {
+            "name": "malukenho/docheader",
+            "version": "0.1.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/malukenho/docheader.git",
+                "reference": "3eb59f0621125c0dc40775f1bcc3206c37993703"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/malukenho/docheader/zipball/3eb59f0621125c0dc40775f1bcc3206c37993703",
+                "reference": "3eb59f0621125c0dc40775f1bcc3206c37993703",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~5.5|^7.0",
+                "symfony/console": "~2.0 || ^3.0 || ^4.0",
+                "symfony/finder": "~2.0 || ^3.0 || ^4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.7",
+                "squizlabs/php_codesniffer": "^2.8"
+            },
+            "bin": [
+                "bin/docheader"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DocHeader\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jefersson Nathan",
+                    "email": "malukenho@phpse.net"
+                }
+            ],
+            "description": "A small library to check header docs",
+            "homepage": "https://github.com/malukenho/docheader",
+            "keywords": [
+                "Code style",
+                "code standard",
+                "license"
+            ],
+            "time": "2017-12-18T09:16:11+00:00"
         },
         {
             "name": "mockery/mockery",

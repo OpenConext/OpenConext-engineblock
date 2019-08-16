@@ -6,8 +6,8 @@
     <target name="functional-tests" depends="api-functional-tests,behat-travis" />
     <target name="functional-tests-wip" depends="behat-travis-wip" />
     <target name="functional-tests-selenium" depends="behat-travis-selenium"/>
-    <target name="code-quality-ci" depends="test-suites,code-quality,npm-lint"/>
-    <target name="code-quality" depends="php-lint,phpmd,phpcs,phpcs-legacy"/>
+    <target name="code-quality-ci" depends="test-suites,code-quality,npm-lint,doc-header"/>
+    <target name="code-quality" depends="php-lint,phpmd,phpcs,phpcs-legacy,doc-header"/>
     <target name="security-tests" depends="security-checker,npm-audit" />
     <target name="test-suites" depends="eb4-tests,unit-tests,integration-tests,js-unit-tests,js-smoke-tests"/>
     <target name="validate" depends="composer-validate"/>
@@ -121,6 +121,12 @@
             <arg value="testVersion" />
             <arg value="7.2-" />
             <arg path="library" />
+        </exec>
+    </target>
+
+    <target name="doc-header" description="Check if the copyright header is valid">
+        <exec executable="vendor/bin/docheader" failonerror="true">
+            <arg line="check src/ tests/ library/ --exclude-dir resources" />
         </exec>
     </target>
 
