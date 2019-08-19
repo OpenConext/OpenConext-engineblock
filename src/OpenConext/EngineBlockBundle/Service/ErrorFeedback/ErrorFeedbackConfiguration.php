@@ -16,9 +16,11 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Configuration;
+namespace OpenConext\EngineBlockBundle\Service\ErrorFeedback;
 
 use OpenConext\EngineBlock\Assert\Assertion;
+use OpenConext\EngineBlockBundle\Configuration\Feature;
+use OpenConext\EngineBlockBundle\Configuration\WikiLink;
 
 class ErrorFeedbackConfiguration implements ErrorFeedbackConfigurationInterface
 {

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2018 SURFnet B.V.
+ * Copyright 2019 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,12 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
+namespace OpenConext\EngineBlockBundle\Service\ErrorFeedback;
 
 use EngineBlock_ApplicationSingleton;
-use OpenConext\EngineBlockBundle\Value\FeedbackInformation;
 use OpenConext\EngineBlockBundle\Value\FeedbackInformationMap;
-use Twig\TwigFunction;
-use Twig_Extension;
 
-class Feedback extends Twig_Extension
+class FeedbackInformationLoader implements FeedbackInformationLoaderInterface
 {
     /**
      * @var EngineBlock_ApplicationSingleton
@@ -36,43 +33,15 @@ class Feedback extends Twig_Extension
         $this->application = $application;
     }
 
-    public function getFunctions()
-    {
-        return [
-            new TwigFunction('flushLog', [$this, 'flushLog']),
-        ];
-    }
-
-    public function flushLog($message)
-    {
-        // For now use the EngineBlock_ApplicationSingleton to flush the log
-        $this->application->flushLog($message);
-    }
-
     /**
      * Loads the feedbackInfo from the session and filters out empty valued entries.
      *
      * @return FeedbackInformationMap
      */
-    private function retrieveFeedbackInfo()
+    public function load()
     {
         $feedbackInfo = $this->application->getSession()->get('feedbackInfo');
 
-        $feedbackInfoMap = new FeedbackInformationMap();
-
-        // Remove the empty valued feedback info entries.
-        if (!empty($feedbackInfo)) {
-            foreach ($feedbackInfo as $key => $value) {
-                if (empty($value)) {
-                    unset($feedbackInfo[$key]);
-                    continue;
-                }
-                $feedbackInfoMap->add(new FeedbackInformation($key, $value));
-            }
-        }
-
-        $feedbackInfoMap->sort();
-
-        return $feedbackInfoMap;
+        return FeedbackInformationMap::fromData($feedbackInfo);
     }
 }

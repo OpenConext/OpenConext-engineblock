@@ -27,6 +27,25 @@ class FeedbackInformationMap
      */
     private $data = [];
 
+    public static function fromData($feedbackInfo)
+    {
+        $feedbackInfoMap = new self();
+        // Remove the empty valued feedback info entries.
+        if (!empty($feedbackInfo)) {
+            foreach ($feedbackInfo as $key => $value) {
+                if (empty($value)) {
+                    unset($feedbackInfo[$key]);
+                    continue;
+                }
+                $feedbackInfoMap->add(new FeedbackInformation($key, $value));
+            }
+        }
+
+        $feedbackInfoMap->sort();
+
+        return $feedbackInfoMap;
+    }
+
     public function add(FeedbackInformation $feedbackInformation)
     {
         $key = $feedbackInformation->getKey();

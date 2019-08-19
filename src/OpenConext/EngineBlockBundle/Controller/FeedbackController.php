@@ -5,6 +5,7 @@ namespace OpenConext\EngineBlockBundle\Controller;
 use EngineBlock_Corto_ProxyServer;
 use OpenConext\EngineBlockBundle\Exception\RuntimeException;
 use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
+use OpenConext\EngineBlockBundle\Service\ErrorFeedback\FeedbackInformationLoaderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +20,11 @@ use Twig_Error_Loader;
  */
 class FeedbackController
 {
+    /**
+     * @var FeedbackInformationLoaderInterface
+     */
+    private $feedbackInformationLoader;
+
     /**
      * @var TranslatorInterface
      */
@@ -35,10 +41,12 @@ class FeedbackController
     private $logger;
 
     public function __construct(
+        FeedbackInformationLoaderInterface $feedbackInformationLoader,
         TranslatorInterface $translator,
         Twig_Environment $twig,
         LoggerInterface $logger
     ) {
+        $this->feedbackInformationLoader = $feedbackInformationLoader;
         $this->translator = $translator;
         $this->twig = $twig;
         $this->logger = $logger;
@@ -54,8 +62,16 @@ class FeedbackController
         $statusCode = $request->get('error_code');
         $template = $this->getTemplateNameByIdentifier($pageIdentifier);
 
+        $feedbackInformation = $this->feedbackInformationLoader->load();
+
+        $title = $this->createTranslationKey('title', $pageIdentifier);
+        $description = $this->createTranslationKey('desc', $pageIdentifier);
+
         return new Response(
-            $this->twig->render($template),
+            $this->twig->render(
+                $template,
+                ['title' => $title, 'description' => $description, 'feedbackInformation' => $feedbackInformation, 'wikiLink' => null]
+            ),
             $statusCode
         );
     }
@@ -90,7 +106,7 @@ class FeedbackController
                 ->render(
                     '@theme/Authentication/View/Feedback/unsupported-signature-method.html.twig',
                     [
-                        'signatureMethod' => $request->get('signature-method')
+                        'signatureMethod' => $request->get('signature-method'),
                     ]
                 ),
             400
@@ -113,7 +129,7 @@ class FeedbackController
         $body = $this->twig->render(
             '@theme/Authentication/View/Feedback/unknown-service-provider.html.twig',
             [
-                'entityId' => $entityId
+                'entityId' => $entityId,
             ]
         );
 
@@ -281,5 +297,12 @@ class FeedbackController
             );
         }
         return $templateName;
+    }
+
+    private function createTranslationKey($target, $pageIdentifier)
+    {
+        $format = 'error_%s_%s';
+        $pageIdentifier = str_replace('-', '_', $pageIdentifier);
+        return sprintf($format, $pageIdentifier, $target);
     }
 }

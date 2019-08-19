@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Configuration;
+namespace OpenConext\EngineBlockBundle\Service\ErrorFeedback;
 
 interface ErrorFeedbackConfigurationInterface
 {
