@@ -23,7 +23,7 @@ use OpenConext\EngineBlock\Assert\Assertion;
 final class WikiLink
 {
     /**
-     * @var string
+     * @var string[]
      */
     private $fallback;
 
@@ -42,14 +42,14 @@ final class WikiLink
     public function __construct($links, $fallback)
     {
         Assertion::allNonEmptyString($links, 'links');
-        Assertion::nonEmptyString($fallback, 'fallback');
+        Assertion::allNonEmptyString($fallback, 'fallback');
 
         $this->links  = $links;
         $this->fallback = $fallback;
     }
 
     /**
-     * Load the wiki link for a given languae, falls back on the fallback wiki link if the language can not be found
+     * Load the wiki link for a given language, falls back on the fallback wiki link if the language can not be found
      * @return string
      */
     public function getLink($language)
@@ -57,7 +57,6 @@ final class WikiLink
         if (isset($this->links[$language])) {
             return $this->links[$language];
         }
-
-        return $this->fallback;
+        return $this->fallback[$language];
     }
 }

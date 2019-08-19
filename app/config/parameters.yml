@@ -2,7 +2,10 @@
 parameters:
     secret: c91af5fd03c961b8f675563c2d075a3ef54e3c0a
     error_feedback_wiki_links:
-        fallback: '%openconext_support_url%'
+        fallback:
+            en: '%openconext_support_url%'
+            nl: '%openconext_support_url%'
+            pt: '%openconext_support_url%'
         specified:
             received_invalid_response:
                 en: 'https://example.org/wiki/page1'

@@ -4,6 +4,7 @@ namespace OpenConext\EngineBlockBundle\DependencyInjection;
 
 use OpenConext\EngineBlockBundle\Configuration\Feature;
 use OpenConext\EngineBlockBundle\Configuration\WikiLink;
+use OpenConext\EngineBlockBundle\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Definition;
@@ -39,7 +40,7 @@ class OpenConextEngineBlockExtension extends Extension
     private function overwriteDefaultLogger(ContainerBuilder $container)
     {
         $container->removeAlias('logger');
-        $container->setAlias('logger', 'monolog.logger.' . $container->getParameter('logger.channel'));
+        $container->setAlias('logger', 'monolog.logger.'.$container->getParameter('logger.channel'));
     }
 
     /**
@@ -59,7 +60,7 @@ class OpenConextEngineBlockExtension extends Extension
      * Loads the feature configuration in a manner that can be dumped in the container cache
      *
      * @param ContainerBuilder $container
-     * @param array            $featureConfiguration
+     * @param array $featureConfiguration
      */
     private function setFeatureConfiguration(ContainerBuilder $container, array $featureConfiguration)
     {
@@ -82,10 +83,25 @@ class OpenConextEngineBlockExtension extends Extension
     {
         $wikiLinkConfig = $errorFeedbackConfiguration['wiki_links'];
         $fallbackLink = $wikiLinkConfig['fallback'];
+        $fallbackLanguages = array_keys($fallbackLink);
 
         $wikiLinks = [];
+        $specifiedLanguages = [];
         foreach ($wikiLinkConfig['specified'] as $pageIdentifier => $wikiLinkEntries) {
             $wikiLinks[$pageIdentifier] = new Definition(WikiLink::class, [$wikiLinkEntries, $fallbackLink]);
+            $specifiedLanguages = array_unique(array_merge($specifiedLanguages, array_keys($wikiLinkEntries)));
+        }
+
+        $diff = array_diff($specifiedLanguages, $fallbackLanguages);
+
+        if (!empty($diff)) {
+            throw new RuntimeException(
+                sprintf(
+                    'Please configure fallback links for every language configured in the "specified" section, missing 
+                    languages are: "%s"',
+                    implode(', ', $diff)
+                )
+            );
         }
 
         $featureConfigurationService = $container->getDefinition('engineblock.error_feedback');
