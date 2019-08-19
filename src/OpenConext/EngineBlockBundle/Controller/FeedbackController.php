@@ -3,6 +3,7 @@
 namespace OpenConext\EngineBlockBundle\Controller;
 
 use EngineBlock_Corto_ProxyServer;
+use OpenConext\EngineBlockBundle\Exception\RuntimeException;
 use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig_Environment;
+use Twig_Error_Loader;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Mimics the previous methodology, will be refactored
@@ -46,34 +48,16 @@ class FeedbackController
         $server->startSession();
     }
 
-    /**
-     * @return Response
-     * @throws \EngineBlock_Exception
-     */
-    public function unableToReceiveMessageAction()
+    public function feedbackAction(Request $request)
     {
+        $pageIdentifier = $request->get('identifier');
+        $statusCode = $request->get('error_code');
+        $template = $this->getTemplateNameByIdentifier($pageIdentifier);
+
         return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/unable-to-receive-message.html.twig'),
-            400
+            $this->twig->render($template),
+            $statusCode
         );
-    }
-
-    /**
-     * @return Response
-     * @throws \EngineBlock_Exception
-     */
-    public function sessionLostAction()
-    {
-        return new Response($this->twig->render('@theme/Authentication/View/Feedback/session-lost.html.twig'), 400);
-    }
-
-    /**
-     * @return Response
-     * @throws \EngineBlock_Exception
-     */
-    public function sessionNotStartedAction()
-    {
-        return new Response($this->twig->render('@theme/Authentication/View/Feedback/session-not-started.html.twig'), 400);
     }
 
     /**
@@ -95,29 +79,6 @@ class FeedbackController
     }
 
     /**
-     * @return Response
-     * @throws \EngineBlock_Exception
-     */
-    public function noIdpsAction()
-    {
-        // @todo Send 4xx or 5xx header?
-
-        return new Response($this->twig->render('@theme/Authentication/View/Feedback/no-idps.html.twig'));
-    }
-
-    /**
-     * @return Response
-     * @throws \EngineBlock_Exception
-     */
-    public function invalidAcsLocationAction()
-    {
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/invalid-acs-location.html.twig'),
-            400
-        );
-    }
-
-    /**
      * @param Request $request
      * @return Response
      * @throws \EngineBlock_Exception
@@ -131,21 +92,6 @@ class FeedbackController
                     [
                         'signatureMethod' => $request->get('signature-method')
                     ]
-                ),
-            400
-        );
-    }
-
-    /**
-     * @return Response
-     * @throws \EngineBlock_Exception
-     */
-    public function unsupportedAcsLocationSchemeAction()
-    {
-        return new Response(
-            $this->twig
-                ->render(
-                    '@theme/Authentication/View/Feedback/unsupported-acs-location-scheme.html.twig'
                 ),
             400
         );
@@ -175,18 +121,6 @@ class FeedbackController
     }
 
     /**
-     * @return Response
-     * @throws \EngineBlock_Exception
-     */
-    public function missingRequiredFieldsAction()
-    {
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/missing-required-fields.html.twig'),
-            400
-        );
-    }
-
-    /**
      * @param Request $request
      * @return Response
      */
@@ -208,7 +142,6 @@ class FeedbackController
             403
         );
     }
-
 
     /**
      * @param Request $request
@@ -241,73 +174,6 @@ class FeedbackController
                     'description' => $description,
                 ]
             )
-        );
-    }
-
-    /**
-     * @return Response
-     * @throws \EngineBlock_Exception
-     */
-    public function invalidAcsBindingAction()
-    {
-        // @todo Send 4xx or 5xx header depending on invalid binding came from request or configured metadata
-        return new Response($this->twig->render('@theme/Authentication/View/Feedback/invalid-acs-binding.html.twig'));
-    }
-
-    /**
-     * @return Response
-     * @throws \EngineBlock_Exception
-     */
-    public function receivedErrorStatusCodeAction()
-    {
-        // @todo Send 4xx or 5xx header?
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/received-error-status-code.html.twig')
-        );
-    }
-
-    /**
-     * @return Response
-     * @throws \EngineBlock_Exception
-     */
-    public function signatureVerificationFailedAction()
-    {
-        // @todo Send 4xx or 5xx header?
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/received-invalid-signed-response.html.twig')
-        );
-    }
-
-    /**
-     * @return Response
-     * @throws \EngineBlock_Exception
-     */
-    public function receivedInvalidResponseAction()
-    {
-        // @todo Send 4xx or 5xx header?
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/received-invalid-response.html.twig')
-        );
-    }
-
-    /**
-     * @return Response
-     * @throws \EngineBlock_Exception
-     */
-    public function noConsentAction()
-    {
-        return new Response($this->twig->render('@theme/Authentication/View/Feedback/no-consent.html.twig'));
-    }
-
-    /**
-     * @return Response
-     * @throws \EngineBlock_Exception
-     */
-    public function unknownServiceAction()
-    {
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/unknown-service.html.twig'),
-            400
         );
     }
 
@@ -366,17 +232,6 @@ class FeedbackController
     /**
      * @return Response
      */
-    public function stuckInAuthenticationLoopAction()
-    {
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/stuck-in-authentication-loop.html.twig'),
-            400
-        );
-    }
-
-    /**
-     * @return Response
-     */
     public function noAuthenticationRequestReceivedAction(Request $request)
     {
         // The exception message is used on the error page. As mostly developers or other tech-savvy people will see
@@ -402,17 +257,6 @@ class FeedbackController
     }
 
     /**
-     * @return Response
-     */
-    public function clockIssueAction()
-    {
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/clock-issue.html.twig'),
-            400
-        );
-    }
-
-    /**
      * @param SessionInterface $session
      * @param array $customFeedbackInfo
      */
@@ -420,5 +264,22 @@ class FeedbackController
     {
         $feedbackInfo = $session->get('feedbackInfo', []);
         $session->set('feedbackInfo', array_merge($customFeedbackInfo, $feedbackInfo));
+    }
+
+    private function getTemplateNameByIdentifier($pageIdentifier)
+    {
+        $templateName = sprintf('@theme/Authentication/View/Feedback/%s.html.twig', $pageIdentifier);
+        try {
+            $this->twig->loadTemplate($templateName);
+        } catch (Twig_Error_Loader $e) {
+            // The template does not exist
+            throw new RuntimeException(
+                sprintf(
+                    'The requested error template "%s" can not be loaded. Please review the feedback.yml route configuration.',
+                    $templateName
+                )
+            );
+        }
+        return $templateName;
     }
 }

@@ -1,114 +1,183 @@
 authentication_feedback_unable_to_receive_message:
     path:       '/unable-to-receive-message'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:unableToReceiveMessageAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: unable-to-receive-message
+        error_code: 400
 
 authentication_feedback_session_lost:
     path:       '/session-lost'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:sessionLostAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: session-lost
+        error_code: 400
 
 authentication_feedback_session_not_started:
     path:       '/session-not-started'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:sessionNotStartedAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: session-not-started
+        error_code: 400
 
 authentication_feedback_unknown_issuer:
     path:       '/unknown-issuer'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:unknownIssuerAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: unknown-issuer
+        error_code: 404
 
 authentication_feedback_no_idps:
     path:       '/no-idps'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:noIdpsAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: no-idps
+        error_code: 500
 
 authentication_feedback_invalid_acs_location:
     path:       '/invalidAcsLocation'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:invalidAcsLocationAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: invalid-acs-location
+        error_code: 400
 
 authentication_feedback_unsupported_signature_method:
     path:       '/unsupportedSignatureMethod'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:unsupportedSignatureMethodAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: unsupported-signature-method
+        error_code: 400
 
 authentication_feedback_unsupported_acs_location_uri_scheme:
     path:       '/unsupported-acs-location-scheme'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:unsupportedAcsLocationSchemeAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: unsupported-acs-location-scheme
+        error_code: 400
 
 authentication_feedback_unknown_service_provider:
     path:       '/unknown-service-provider'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:unknownServiceProviderAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: unknown-service-provider
+        error_code: 400
 
 authentication_feedback_missing_required_fields:
     path:       '/missing-required-fields'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:missingRequiredFieldsAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: missing-required-fields
+        error_code: 400
 
 authentication_feedback_invalid_attribute_value:
     path:       '/invalid-attribute-value'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:invalidAttributeValueAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: invalid-attribute-value
+        error_code: 403
 
 authentication_feedback_custom:
     path:       '/custom'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:customAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: custom
+        error_code: 400
 
 authentication_feedback_invalid_acs_binding:
     path:       '/invalid-acs-binding'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:invalidAcsBindingAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: invalid-acs-binding
+        error_code: 400
 
 authentication_feedback_received_error_status_code:
     path:       '/received-error-status-code'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:receivedErrorStatusCodeAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: received-error-status-code
+        error_code: 400
 
 authentication_feedback_signature_verification_failed:
     path:       '/received-invalid-signed-response'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:signatureVerificationFailedAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: received-invalid-signed-response
+        error_code: 400
 
 authentication_feedback_verification_failed:
     path:       '/received-invalid-response'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:receivedInvalidResponseAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: received-invalid-response
+        error_code: 400
 
 authentication_feedback_no_consent:
     path:       '/no-consent'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:noConsentAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: no-consent
+        error_code: 400
 
 authentication_feedback_unknown_service:
     path:       '/unknown-service'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:unknownServiceAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: unknown-service
+        error_code: 400
 
 authentication_feedback_pep_violation:
     path:       '/authorization-policy-violation'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:authorizationPolicyViolationAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: authorization-policy-violation
+        error_code: 400
 
 authentication_feedback_unknown_preselected_idp:
     path:       '/unknown-preselected-idp'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:unknownPreselectedIdpAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: unknown-preselected-idp
+        error_code: 400
 
 authentication_feedback_stuck_in_authentication_loop:
     path:       '/stuck-in-authentication-loop'
     methods:    [GET]
-    defaults:    { _controller: engineblock.controller.authentication.feedback:stuckInAuthenticationLoopAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: stuck-in-authentication-loop
+        error_code: 400
 
 authentication_feedback_no_authentication_request_received:
     path:       '/invalid-request-method-on-sso'
     methods:    [GET]
-    defaults:    { _controller: engineblock.controller.authentication.feedback:noAuthenticationRequestReceivedAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: no-authentication-request-received
+        error_code: 400
 
 authentication_feedback_response_clock_issue:
     path:       '/clock-issue'
     methods:    [GET]
-    defaults:    { _controller: engineblock.controller.authentication.feedback:clockIssueAction }
+    defaults:
+        _controller: engineblock.controller.authentication.feedback:feedbackAction
+        identifier: clock-issue
+        error_code: 400
