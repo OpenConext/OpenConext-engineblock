@@ -5,6 +5,24 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 5.11.3
+The footer links have been made configurable to a greater extent in this release.
+
+ * Make Wiki links configurable #736
+ * Conditionally show a IdP support link on error pages #740
+
+And in addition to those functional changes, the PDP error page has been restyled:
+
+ * Improve PDP error screen styling #733
+
+## 5.11.2
+The 5.11.2 release was aimed at fixing visually unsound issues. And in addition the uncaught error page has been made reloadable. 
+ 
+ * Make uncaught error page reloadable #696
+ * Increase language switch z-index on the error page #718
+ * Hide language switch on 400 and 405 page #722 
+ * Decrease the surfboard offset on the error page #717
+
 ## 5.11.1
 This release have all backported issues from release 5.10.2 and 5.10.3  
 
