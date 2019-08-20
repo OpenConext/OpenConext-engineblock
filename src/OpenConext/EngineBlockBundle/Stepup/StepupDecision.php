@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2019 SURFnet B.V.
+ * Copyright 2014 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Sfo;
+namespace OpenConext\EngineBlockBundle\Stepup;
 
-use OpenConext\EngineBlock\Exception\InvalidSfoConfigurationException;
+use OpenConext\EngineBlock\Exception\InvalidStepupConfigurationException;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 
-class SfoDecision
+class StepupDecision
 {
     /**
      * @var string|null
@@ -39,7 +39,7 @@ class SfoDecision
     /**
      * @param IdentityProvider $idp
      * @param ServiceProvider $sp
-     * @throws InvalidSfoConfigurationException
+     * @throws InvalidStepupConfigurationException
      */
     public function __construct(IdentityProvider $idp, ServiceProvider $sp)
     {
@@ -48,7 +48,7 @@ class SfoDecision
         $this->spNoToken = $sp->getCoins()->stepupAllowNoToken();
 
         if ($this->spLoa && $this->idpLoa) {
-            throw new InvalidSfoConfigurationException(sprintf(
+            throw new InvalidStepupConfigurationException(sprintf(
                 'Both IdP "%s" and SP "%s" where configured to use stepup authentication. This is not allowed',
                 $idp->entityId,
                 $sp->entityId
@@ -59,7 +59,7 @@ class SfoDecision
     /**
      * @return  bool
      */
-    public function shouldUseSfo()
+    public function shouldUseStepup()
     {
         return ($this->spLoa || $this->idpLoa);
     }
@@ -67,7 +67,7 @@ class SfoDecision
     /**
      * @return string|null
      */
-    public function getSfoLoa()
+    public function getStepupLoa()
     {
         if ($this->spLoa) {
             return $this->spLoa;

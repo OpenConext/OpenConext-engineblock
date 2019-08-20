@@ -10,9 +10,9 @@ authentication_sp_process_consent:
     defaults:
         _controller: engineblock.controller.authentication.service_provider:processConsentAction
 
-# SFO
+# Stepup authentication
 authentication_sfo_consume_assertion:
-    path:     /authentication/sfo/consume-assertion
+    path:     /authentication/stepup/consume-assertion
     methods:  [POST,GET]
     defaults:
-        _controller: engineblock.controller.authentication.sfo:consumeAssertionAction
+        _controller: engineblock.controller.authentication.stepup:consumeAssertionAction

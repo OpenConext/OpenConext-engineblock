@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2019 SURFnet B.V.
+ * Copyright 2014 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Sfo;
+namespace OpenConext\EngineBlockBundle\Stepup;
 
 use EngineBlock_X509_CertificateFactory;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
@@ -24,18 +24,18 @@ use OpenConext\EngineBlock\Metadata\Service;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 
-class SfoIdentityProvider extends ServiceProvider
+class StepupIdentityProvider extends ServiceProvider
 {
 
     /**
-     * @param SfoEndpoint $sfoEndpoint
+     * @param StepupEndpoint $stepupEndpoint
      * @param string $acsLocation
      * @return IdentityProvider
      * @throws \EngineBlock_Exception
      */
-    public static function fromSfoEndpoint(SfoEndpoint $sfoEndpoint, $acsLocation)
+    public static function fromStepupEndpoint(StepupEndpoint $stepupEndpoint, $acsLocation)
     {
-        $entity = new IdentityProvider($sfoEndpoint->getEntityId());
+        $entity = new IdentityProvider($stepupEndpoint->getEntityId());
 
         $entity->responseProcessingService = new Service(
             $acsLocation,
@@ -44,8 +44,8 @@ class SfoIdentityProvider extends ServiceProvider
 
         $publicKeyFactory = new EngineBlock_X509_CertificateFactory();
 
-        $entity->certificates[] = $publicKeyFactory->fromFile($sfoEndpoint->getKeyFile());
-        $entity->singleSignOnServices[] = new Service($sfoEndpoint->getSsoLocation(), Constants::BINDING_HTTP_POST);
+        $entity->certificates[] = $publicKeyFactory->fromFile($stepupEndpoint->getKeyFile());
+        $entity->singleSignOnServices[] = new Service($stepupEndpoint->getSsoLocation(), Constants::BINDING_HTTP_POST);
         $entity->requestsMustBeSigned = true;
         $entity->signatureMethod = XMLSecurityKey::RSA_SHA256;
 

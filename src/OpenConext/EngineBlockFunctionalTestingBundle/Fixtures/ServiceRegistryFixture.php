@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * Copyright 2014 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
 use Doctrine\ORM\EntityManager;
@@ -368,21 +384,21 @@ QUERY;
         return $this;
     }
 
-    public function setSpSfoRequireLoa($entityId, $requiredLoa)
+    public function setSpStepupRequireLoa($entityId, $requiredLoa)
     {
         $this->setCoin($this->getServiceProvider($entityId), 'stepupRequireLoa', $requiredLoa);
 
         return $this;
     }
 
-    public function setSpSfoAllowNoToken($entityId)
+    public function setSpStepupAllowNoToken($entityId)
     {
         $this->setCoin($this->getServiceProvider($entityId), 'stepupAllowNoToken', true);
 
         return $this;
     }
 
-    public function setIdpSfoConnections($entityId, array $spLoaMapping)
+    public function setIdpStepupConnections($entityId, array $spLoaMapping)
     {
         $connections = new StepupConnections($spLoaMapping);
         $this->setCoin($this->getIdentityProvider($entityId), 'stepupConnections', $connections);

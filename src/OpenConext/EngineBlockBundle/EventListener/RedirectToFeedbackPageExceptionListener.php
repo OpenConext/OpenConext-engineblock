@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2015 SURFnet bv
+ * Copyright 2014 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@ use EngineBlock_ApplicationSingleton;
 use EngineBlock_Attributes_Manipulator_CustomException;
 use EngineBlock_Corto_Exception_AuthnContextClassRefBlacklisted;
 use EngineBlock_Corto_Exception_InvalidAcsLocation;
-use EngineBlock_Corto_Exception_InvalidSfoCalloutResponse;
-use EngineBlock_Corto_Exception_InvalidSfoLoaLevel;
+use EngineBlock_Corto_Exception_InvalidStepupCalloutResponse;
+use EngineBlock_Corto_Exception_InvalidStepupLoaLevel;
 use EngineBlock_Corto_Exception_MissingRequiredFields;
 use EngineBlock_Corto_Exception_NoConsentProvided;
 use EngineBlock_Corto_Exception_PEPNoAccess;
@@ -31,7 +31,7 @@ use EngineBlock_Corto_Exception_ReceivedErrorStatusCode;
 use EngineBlock_Corto_Exception_UnknownIssuer;
 use EngineBlock_Corto_Exception_UnknownPreselectedIdp;
 use EngineBlock_Corto_Exception_InvalidAttributeValue;
-use EngineBlock_Corto_Exception_UserCancelledSfoCallout;
+use EngineBlock_Corto_Exception_UserCancelledStepupCallout;
 use EngineBlock_Corto_Module_Bindings_SignatureVerificationException;
 use EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException;
 use EngineBlock_Corto_Module_Bindings_UnsupportedAcsLocationSchemeException;
@@ -187,15 +187,15 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof \EngineBlock_Corto_Module_Bindings_ClockIssueException) {
             $message = $exception->getMessage();
             $redirectToRoute = 'authentication_feedback_response_clock_issue';
-        } elseif ($exception instanceof EngineBlock_Corto_Exception_UserCancelledSfoCallout) {
+        } elseif ($exception instanceof EngineBlock_Corto_Exception_UserCancelledStepupCallout) {
             $message = $exception->getMessage();
-            $redirectToRoute = 'authentication_feedback_sfo_callout_user_cancelled';
-        } else if ($exception instanceof EngineBlock_Corto_Exception_InvalidSfoLoaLevel) {
+            $redirectToRoute = 'authentication_feedback_stepup_callout_user_cancelled';
+        } else if ($exception instanceof EngineBlock_Corto_Exception_InvalidStepupLoaLevel) {
             $message = $exception->getMessage();
-            $redirectToRoute = 'authentication_feedback_sfo_callout_unmet_loa';
-        } else if ($exception instanceof EngineBlock_Corto_Exception_InvalidSfoCalloutResponse) {
+            $redirectToRoute = 'authentication_feedback_stepup_callout_unmet_loa';
+        } else if ($exception instanceof EngineBlock_Corto_Exception_InvalidStepupCalloutResponse) {
             $message = $exception->getMessage();
-            $redirectToRoute = 'authentication_feedback_sfo_callout_unknown';
+            $redirectToRoute = 'authentication_feedback_stepup_callout_unknown';
         } else {
             return;
         }

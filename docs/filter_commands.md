@@ -342,7 +342,7 @@ This is used to prevent an IdP to impersonate 'our' AuthnContextClassRef values.
 
 
 Configured with:
- - `sfo.authn_context_class_ref_blacklist_regex`
+ - `stepup.authn_context_class_ref_blacklist_regex`
 
 Uses:
 - EngineBlock_Saml2_ResponseAnnotationDecorator

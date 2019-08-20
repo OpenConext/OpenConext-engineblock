@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * Copyright 2014 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
@@ -38,7 +54,7 @@ class EngineBlock_Corto_ProxyServer
         'continueToIdP'                     => '/authentication/idp/process-wayf',
 
         'assertionConsumerService'          => '/authentication/sp/consume-assertion',
-        'sfoAssertionConsumerService'       => '/authentication/sfo/consume-assertion',
+        'stepupAssertionConsumerService'    => '/authentication/stepup/consume-assertion',
         'continueToSP'                      => '/authentication/sp/process-consent',
         'provideConsentService'             => '/authentication/idp/provide-consent',
         'processConsentService'             => '/authentication/idp/process-consent',
@@ -46,7 +62,7 @@ class EngineBlock_Corto_ProxyServer
 
         'idpMetadataService'                => '/authentication/idp/metadata',
         'spMetadataService'                 => '/authentication/sp/metadata',
-        'sfoMetadataService'                => '/authentication/sfo/metadata',
+        'stepupMetadataService'             => '/authentication/stepup/metadata',
         'singleLogoutService'               => '/logout'
     );
 
@@ -59,7 +75,7 @@ class EngineBlock_Corto_ProxyServer
         'singleLogoutService',
         'singleSignOnService',
         'spMetadataService',
-        'sfoMetadataService',
+        'stepupMetadataService',
         'unsolicitedSingleSignOnService',
     );
 
@@ -418,7 +434,7 @@ class EngineBlock_Corto_ProxyServer
         $this->getBindingsModule()->send($ebRequest, $identityProvider);
     }
 
-    public function sendSfoAuthenticationRequest(
+    public function sendStepupAuthenticationRequest(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $spRequest,
         IdentityProvider $identityProvider,
         $authnContextClassRef,
@@ -431,7 +447,7 @@ class EngineBlock_Corto_ProxyServer
             throw new \RuntimeException(sprintf('Unknown message type: "%s"', get_class($sspMessage)));
         }
 
-        // Add sfo specific data
+        // Add Stepup specific data
         $sspMessage->setRequestedAuthnContext([
             'AuthnContextClassRef' => [
                 $authnContextClassRef
@@ -445,9 +461,9 @@ class EngineBlock_Corto_ProxyServer
 
         // Add gateway data
         $sspMessage->setDestination($identityProvider->singleSignOnServices[0]->location);
-        $sspMessage->setAssertionConsumerServiceURL($this->_server->getUrl('sfoAssertionConsumerService'));
+        $sspMessage->setAssertionConsumerServiceURL($this->_server->getUrl('stepupAssertionConsumerService'));
         $sspMessage->setProtocolBinding(Constants::BINDING_HTTP_POST);
-        $sspMessage->setIssuer($this->_server->getUrl('sfoMetadataService'));
+        $sspMessage->setIssuer($this->_server->getUrl('stepupMetadataService'));
 
         // Add the SP to the requesterIds
         $requesterIds = $sspMessage->getRequesterID();

@@ -1,11 +1,27 @@
 <?php
 
+/**
+ * Copyright 2014 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use OpenConext\EngineBlockBundle\Exception\ResponseProcessingFailedException;
-use OpenConext\EngineBlockBundle\Sfo\SfoIdentityProvider;
+use OpenConext\EngineBlockBundle\Stepup\StepupIdentityProvider;
 use SAML2\AuthnRequest;
 use SAML2\Binding;
 use SAML2\Certificate\KeyLoader;
@@ -89,9 +105,9 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     private $acsLocationSchemeValidator;
 
     /**
-     * @var SfoIdentityProvider
+     * @var StepupIdentityProvider
      */
-    private $sfoIdentityProvider;
+    private $stepupIdentityProvider;
 
     public function __construct(EngineBlock_Corto_ProxyServer $server)
     {
@@ -102,7 +118,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $this->_logger = EngineBlock_ApplicationSingleton::getLog();
         $this->twig = $diContainer->getTwigEnvironment();
         $this->acsLocationSchemeValidator = $diContainer->getAcsLocationSchemeValidator();
-        $this->sfoIdentityProvider = $diContainer->getSfoIdentityProvider($this->_server);
+        $this->stepupIdentityProvider = $diContainer->getStepupIdentityProvider($this->_server);
     }
 
     /**
@@ -517,8 +533,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     protected function _verifyKnownIdP($messageIssuer, $destination = '')
     {
-        if ($this->sfoIdentityProvider->entityId === $messageIssuer) {
-            return $this->sfoIdentityProvider;
+        if ($this->stepupIdentityProvider->entityId === $messageIssuer) {
+            return $this->stepupIdentityProvider;
         }
 
         $remoteEntity = $this->_server->getRepository()->findIdentityProviderByEntityId($messageIssuer);

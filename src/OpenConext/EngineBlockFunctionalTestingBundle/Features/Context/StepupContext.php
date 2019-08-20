@@ -1,14 +1,30 @@
 <?php
 
+/**
+ * Copyright 2014 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingSfoGatewayMockConfiguration;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingStepupGatewayMockConfiguration;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
 
-class SfoContext extends AbstractSubContext
+class StepupContext extends AbstractSubContext
 {
     /**
      * @var EntityRegistry
@@ -19,7 +35,7 @@ class SfoContext extends AbstractSubContext
      */
     private $mockIdpRegistry;
     /**
-     * @var FunctionalTestingSfoGatewayMockConfiguration
+     * @var FunctionalTestingStepupGatewayMockConfiguration
      */
     private $gatewayMockConfiguration;
     /**
@@ -30,13 +46,13 @@ class SfoContext extends AbstractSubContext
     /**
      * @param EntityRegistry $mockSpRegistry
      * @param EntityRegistry $mockIdpRegistry
-     * @param FunctionalTestingSfoGatewayMockConfiguration $gatewayMockConfiguration
+     * @param FunctionalTestingStepupGatewayMockConfiguration $gatewayMockConfiguration
      * @param ServiceRegistryFixture $serviceRegistryFixture
      */
     public function __construct(
         EntityRegistry $mockSpRegistry,
         EntityRegistry $mockIdpRegistry,
-        FunctionalTestingSfoGatewayMockConfiguration $gatewayMockConfiguration,
+        FunctionalTestingStepupGatewayMockConfiguration $gatewayMockConfiguration,
         ServiceRegistryFixture $serviceRegistryFixture
     ) {
         $this->mockSpRegistry = $mockSpRegistry;
@@ -46,17 +62,9 @@ class SfoContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^SFO is used$/
+     * @Given /^Stepup will successfully verify a user$/
      */
-    public function sfoIsUsed()
-    {
-        //todo: set feature flag?
-    }
-
-    /**
-     * @Given /^SFO will successfully verify a user$/
-     */
-    public function sfoWillsSuccessfullyVerifyAUser()
+    public function stepupWillsSuccessfullyVerifyAUser()
     {
         $mink = $this->getMinkContext();
 
@@ -64,9 +72,9 @@ class SfoContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^I authenticate with SFO$/
+     * @Given /^I authenticate with Stepup$/
      */
-    public function iAuthenticateWithSfo()
+    public function iAuthenticateWithStepup()
     {
         $mink = $this->getMinkContext();
 
@@ -74,9 +82,9 @@ class SfoContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^SFO will fail as the user cancelled$/
+     * @Given /^Stepup will fail as the user cancelled$/
      */
-    public function sfoWillFailAsTheUserCancelled()
+    public function stepupWillFailAsTheUserCancelled()
     {
         $mink = $this->getMinkContext();
 
@@ -84,9 +92,9 @@ class SfoContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^SFO will fail if the loa can not be given$/
+     * @Given /^Stepup will fail if the LoA can not be given$/
      */
-    public function sfoWillFailIfTheLoaCanNotBeGiven()
+    public function stepupWillFailIfTheLoaCanNotBeGiven()
     {
         $mink = $this->getMinkContext();
 
@@ -94,9 +102,9 @@ class SfoContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^SFO will fail on unknown invalid status$/
+     * @Given /^Stepup will fail on unknown invalid status$/
      */
-    public function sfoWillFailOnUnknownInvalidStatus()
+    public function stepupWillFailOnUnknownInvalidStatus()
     {
         $mink = $this->getMinkContext();
 
@@ -105,35 +113,35 @@ class SfoContext extends AbstractSubContext
 
 
     /**
-     * @Given /^the SP "([^"]*)" allows no SFO token$/
+     * @Given /^the SP "([^"]*)" allows no Stepup token$/
      */
-    public function spAllowsNoSfo($spName)
+    public function spAllowsNoStepup($spName)
     {
         /** @var MockServiceProvider $mockSp */
         $mockSp = $this->mockSpRegistry->get($spName);
 
         $this->serviceRegistryFixture
-            ->setSpSfoAllowNoToken($mockSp->entityId())
+            ->setSpStepupAllowNoToken($mockSp->entityId())
             ->save();
     }
 
     /**
-     * @Given /^the SP "([^"]*)" requires SFO loa "([^"]*)"$/
+     * @Given /^the SP "([^"]*)" requires Stepup LoA "([^"]*)"$/
      */
-    public function setSpSfoRequireLoa($spName, $requiredLoa)
+    public function setSpStepupRequireLoa($spName, $requiredLoa)
     {
         /** @var MockServiceProvider $mockSp */
         $mockSp = $this->mockSpRegistry->get($spName);
 
         $this->serviceRegistryFixture
-            ->setSpSfoRequireLoa($mockSp->entityId(), $requiredLoa)
+            ->setSpStepupRequireLoa($mockSp->entityId(), $requiredLoa)
             ->save();
     }
 
     /**
-     * @Given /^the IdP "([^"]*)" requires SFO loa "([^"]*)" for SP "([^"]*)"$/
+     * @Given /^the IdP "([^"]*)" requires Stepup LoA "([^"]*)" for SP "([^"]*)"$/
      */
-    public function setIdpSfoRequireLoaFor($idpName, $requiredLoa, $spName)
+    public function setIdpStepupRequireLoaFor($idpName, $requiredLoa, $spName)
     {
         /** @var MockIdentityProvider $mockIdp */
         $mockIdp = $this->mockIdpRegistry->get($idpName);
@@ -142,7 +150,7 @@ class SfoContext extends AbstractSubContext
         $mockSp = $this->mockSpRegistry->get($spName);
 
         $this->serviceRegistryFixture
-            ->setIdpSfoConnections($mockIdp->entityId(), [$mockSp->entityId() => $requiredLoa])
+            ->setIdpStepupConnections($mockIdp->entityId(), [$mockSp->entityId() => $requiredLoa])
             ->save();
     }
 }

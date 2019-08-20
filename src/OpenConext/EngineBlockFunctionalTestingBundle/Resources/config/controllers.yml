@@ -24,8 +24,8 @@ services:
             - "@twig"
             - "@engineblock.compat.logger"
 
-    engineblock.functional_test.controller.sfo_mock:
-        class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\SfoMockController
+    engineblock.functional_test.controller.stepup_mock:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\StepupMockController
         arguments:
-            - "@engineblock.mock_clients.mock_sfo_gateway"
+            - "@engineblock.mock_clients.mock_stepup_gateway"
             - "@twig"

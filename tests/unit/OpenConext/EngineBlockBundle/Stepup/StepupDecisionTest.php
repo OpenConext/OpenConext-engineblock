@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2019 SURFnet B.V.
+ * Copyright 2014 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,25 +18,25 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
-use OpenConext\EngineBlock\Exception\InvalidSfoConfigurationException;
+use OpenConext\EngineBlock\Exception\InvalidStepupConfigurationException;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlock\Metadata\Utils;
-use OpenConext\EngineBlockBundle\Sfo\SfoDecision;
+use OpenConext\EngineBlockBundle\Stepup\StepupDecision;
 use PHPUnit_Framework_TestCase as TestCase;
 
-class SfoDecisionTest extends TestCase
+class StepupDecisionTest extends TestCase
 {
     /**
      * @test
-     * @group Sfo
-     * @dataProvider sfoCoinsAndExpectedResultProvider
+     * @group Stepup
+     * @dataProvider stepupCoinsAndExpectedResultProvider
      *
      * @param array $input
      * @param array $expectedResult
      */
-    public function the_correct_sfo_decision_should_be_made_based_on_a_coin_data(
+    public function the_correct_stepup_decision_should_be_made_based_on_a_coin_data(
         $input,
         $expectedResult
     ) {
@@ -59,29 +59,29 @@ class SfoDecisionTest extends TestCase
             ]
         );
 
-        $sfoDecision = new SfoDecision($idp, $sp);
+        $stepupDecision = new StepupDecision($idp, $sp);
 
-        $useSfo = $sfoDecision->shouldUseSfo();
-        $sfoLoa = $sfoDecision->getSfoLoa();
-        $allowNoToken = $sfoDecision->allowNoToken();
+        $useStepup = $stepupDecision->shouldUseStepup();
+        $stepupLoa = $stepupDecision->getStepupLoa();
+        $allowNoToken = $stepupDecision->allowNoToken();
 
-        $this->assertEquals($useSfo, $expectedResult[0]);
-        $this->assertEquals($sfoLoa, $expectedResult[1]);
+        $this->assertEquals($useStepup, $expectedResult[0]);
+        $this->assertEquals($stepupLoa, $expectedResult[1]);
         $this->assertEquals($allowNoToken, $expectedResult[2]);
     }
 
     /**
      * @test
-     * @group Sfo
-     * @dataProvider sfoCoinsExceptionProvider
+     * @group Stepup
+     * @dataProvider stepupCoinsExceptionProvider
      *
      * @param array $input
      */
-    public function invalid_input_for_sfo_decision_should_throw_exception(
+    public function invalid_input_for_stepup_decision_should_throw_exception(
         $input
     ) {
 
-        $this->expectException(InvalidSfoConfigurationException::class);
+        $this->expectException(InvalidStepupConfigurationException::class);
         $this->expectExceptionMessage('Both IdP "idp" and SP "sp" where configured to use stepup authentication. This is not allowed');
 
         $sp = Utils::instantiate(
@@ -102,29 +102,29 @@ class SfoDecisionTest extends TestCase
             ]
         );
 
-        $sfoDecision = new SfoDecision($idp, $sp);
+        $stepupDecision = new StepupDecision($idp, $sp);
     }
 
 
-    public function sfoCoinsAndExpectedResultProvider()
+    public function stepupCoinsAndExpectedResultProvider()
     {
         return [
-            'Use no SFO if no coins set for IDP and SP (do not allow no sfo)' => [[null, null, false], [false, '', false]],
-            'Use no SFO if coins empty for IDP and SP (do not allow no sfo)' => [['', '', false], [false, '', false]],
-            'Use SP loa if only SP loa set (do not allow no sfo)' => [['loa2', '', false], [true, 'loa2', false]],
-            'Use IDP loa if only IDP loa set (do not allow no sfo)' => [['', 'loa3', false], [true, 'loa3', false]],
+            'Use no stepup if no coins set for IdP and SP (do not allow no stepup)' => [[null, null, false], [false, '', false]],
+            'Use no stepup if coins empty for IdP and SP (do not allow no stepup)' => [['', '', false], [false, '', false]],
+            'Use SP LoA if only SP LoA set (do not allow no stepup)' => [['loa2', '', false], [true, 'loa2', false]],
+            'Use IdP LoA if only IdP LoA set (do not allow no stepup)' => [['', 'loa3', false], [true, 'loa3', false]],
 
-            'Use no SFO if no coins set for IDP and SP (allow no sfo)' => [[null, null, true], [false, '', false]],
-            'Use no SFO if coins empty for IDP and SP (allow no sfo)' => [['', '', true], [false, '', false]],
-            'Use SP loa if only SP loa set (allow no sfo)' => [['loa2', '', true], [true, 'loa2', true]],
-            'Use IDP loa if only IDP loa set (allow no sfo)' => [['', 'loa3', true], [true, 'loa3', true]],
+            'Use no stepup if no coins set for IdP and SP (allow no stepup)' => [[null, null, true], [false, '', false]],
+            'Use no stepup if coins empty for IdP and SP (allow no stepup)' => [['', '', true], [false, '', false]],
+            'Use SP LoA if only SP LoA set (allow no stepup)' => [['loa2', '', true], [true, 'loa2', true]],
+            'Use IdP LoA if only IdP LoA set (allow no stepup)' => [['', 'loa3', true], [true, 'loa3', true]],
         ];
     }
 
-    public function sfoCoinsExceptionProvider()
+    public function stepupCoinsExceptionProvider()
     {
         return [
-            'Throw exception if both SP and IDP loa set (unable to make decision)' => [['loa2', 'loa3', false]],
+            'Throw exception if both SP and IdP LoA set (unable to make decision)' => [['loa2', 'loa3', false]],
         ];
     }
 }

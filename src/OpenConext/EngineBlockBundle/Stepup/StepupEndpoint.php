@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2019 SURFnet B.V.
+ * Copyright 2014 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Sfo;
+namespace OpenConext\EngineBlockBundle\Stepup;
 
 use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlock\Exception\RuntimeException;
 
-class SfoEndpoint
+class StepupEndpoint
 {
     /**
      * @var string

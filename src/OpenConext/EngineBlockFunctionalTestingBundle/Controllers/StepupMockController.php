@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2019 SURFnet B.V.
+ * Copyright 2014 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Controllers;
 
 use Exception;
-use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockSfoGateway;
+use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockStepupGateway;
 use SAML2\Constants;
 use SAML2\Response as SamlResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -27,23 +27,23 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Twig_Environment;
 
-class SfoMockController extends Controller
+class StepupMockController extends Controller
 {
     const PARAMETER_REQUEST = 'SAMLRequest';
     const PARAMETER_RELAY_STATE = 'RelayState';
 
     /**
-     * @var MockSfoGateway
+     * @var MockStepupGateway
      */
-    private $mockSfoGateway;
+    private $mockStepupGateway;
     /**
      * @var Twig_Environment
      */
     private $twig;
 
-    public function __construct(MockSfoGateway $mockSfoGateway, Twig_Environment $twig)
+    public function __construct(MockStepupGateway $mockStepupGateway, Twig_Environment $twig)
     {
-        $this->mockSfoGateway = $mockSfoGateway;
+        $this->mockStepupGateway = $mockStepupGateway;
         $this->twig = $twig;
     }
 
@@ -92,11 +92,11 @@ class SfoMockController extends Controller
         $decodedSamlRequest = base64_decode($request->request->get(self::PARAMETER_REQUEST), true);
 
         // Parse success
-        $samlResponse = $this->mockSfoGateway->handleSsoSuccess($decodedSamlRequest, $this->getFullRequestUri($request));
+        $samlResponse = $this->mockStepupGateway->handleSsoSuccess($decodedSamlRequest, $this->getFullRequestUri($request));
         $results['success'] = $this->getResponseData($request, $samlResponse);
 
         // Parse user cancelled
-        $samlResponse = $this->mockSfoGateway->handleSsoFailure(
+        $samlResponse = $this->mockStepupGateway->handleSsoFailure(
             $decodedSamlRequest,
             $this->getFullRequestUri($request),
             Constants::STATUS_RESPONDER,
@@ -106,7 +106,7 @@ class SfoMockController extends Controller
         $results['user-cancelled'] = $this->getResponseData($request, $samlResponse);
 
         // Parse unmet Loa
-        $samlResponse = $this->mockSfoGateway->handleSsoFailure(
+        $samlResponse = $this->mockStepupGateway->handleSsoFailure(
             $decodedSamlRequest,
             $this->getFullRequestUri($request),
             Constants::STATUS_RESPONDER,
@@ -115,7 +115,7 @@ class SfoMockController extends Controller
         $results['unmet-loa'] = $this->getResponseData($request, $samlResponse);
 
         // Parse unknown
-        $samlResponse = $this->mockSfoGateway->handleSsoFailure(
+        $samlResponse = $this->mockStepupGateway->handleSsoFailure(
             $decodedSamlRequest,
             $this->getFullRequestUri($request),
             Constants::STATUS_RESPONDER,
@@ -133,7 +133,7 @@ class SfoMockController extends Controller
      */
     private function getResponseData(Request $request, SamlResponse $samlResponse)
     {
-        $rawResponse = $this->mockSfoGateway->parsePostResponse($samlResponse);
+        $rawResponse = $this->mockStepupGateway->parsePostResponse($samlResponse);
 
         return [
             'acu' => $samlResponse->getDestination(),

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2019 SURFnet bv
+ * Copyright 2014 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+
 namespace OpenConext\EngineBlockBundle\Controller;
 
 use EngineBlock_ApplicationSingleton;
@@ -25,7 +26,7 @@ use OpenConext\EngineBlockBridge\ResponseFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 
-class SfoController implements AuthenticationLoopThrottlingController
+class StepupController implements AuthenticationLoopThrottlingController
 {
     /**
      * @var EngineBlock_ApplicationSingleton
@@ -68,7 +69,7 @@ class SfoController implements AuthenticationLoopThrottlingController
         $this->bindingValidator->isValid($request);
 
         $proxyServer = new EngineBlock_Corto_Adapter();
-        $proxyServer->sfoConsumeAssertion();
+        $proxyServer->stepupConsumeAssertion();
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
@@ -85,7 +86,7 @@ class SfoController implements AuthenticationLoopThrottlingController
             $proxyServer->setKeyId($keyId);
         }
 
-        $proxyServer->sfoMetadata();
+        $proxyServer->stepupMetadata();
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }

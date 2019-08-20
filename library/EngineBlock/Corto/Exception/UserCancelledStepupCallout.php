@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2019 SURFnet B.V.
+ * Copyright 2014 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,10 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Exception;
-
-use InvalidArgumentException as CoreInvalidArgumentException;
-
-class InvalidSfoConfigurationException extends CoreInvalidArgumentException implements Exception
+class EngineBlock_Corto_Exception_UserCancelledStepupCallout extends EngineBlock_Exception
 {
-
+    public function __construct($message, $severity = self::CODE_NOTICE, Exception $previous = null)
+    {
+        parent::__construct($message, $severity, $previous);
+    }
 }

@@ -1,8 +1,24 @@
 <?php
 
+/**
+ * Copyright 2014 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\EntityNotFoundException;
-use OpenConext\EngineBlockBundle\Sfo\SfoIdentityProvider;
+use OpenConext\EngineBlockBundle\Stepup\StepupIdentityProvider;
 
 class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module_Service_Abstract
 {
@@ -26,8 +42,8 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
             case 'spMetadataService':
                 $engineEntity = $this->_server->getRepository()->fetchServiceProviderByEntityId($engineEntityId);
                 break;
-            case 'sfoMetadataService':
-                $engineEntity = $container->getSfoIdentityProvider($this->_server);
+            case 'stepupMetadataService':
+                $engineEntity = $container->getStepupIdentityProvider($this->_server);
                 break;
             default:
                 // If an unsupported serviceName is used, first try to resolve a SP, then try IdP. This is a fallback

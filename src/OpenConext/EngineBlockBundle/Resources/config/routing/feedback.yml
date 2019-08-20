@@ -118,17 +118,17 @@ authentication_feedback_response_clock_issue:
     methods:    [GET]
     defaults:    { _controller: engineblock.controller.authentication.feedback:clockIssueAction }
 
-authentication_feedback_sfo_callout_user_cancelled:
-    path:       '/sfo-callout-user-cancelled'
+authentication_feedback_stepup_callout_user_cancelled:
+    path:       '/stepup-callout-user-cancelled'
     methods:    [GET]
-    defaults:    { _controller: engineblock.controller.authentication.feedback:sfoCalloutUserCancelledAction }
+    defaults:    { _controller: engineblock.controller.authentication.feedback:stepupCalloutUserCancelledAction }
 
-authentication_feedback_sfo_callout_unmet_loa:
-    path:       '/sfo-callout-unmet-loa'
+authentication_feedback_stepup_callout_unmet_loa:
+    path:       '/stepup-callout-unmet-loa'
     methods:    [GET]
-    defaults:    { _controller: engineblock.controller.authentication.feedback:sfoCalloutUnmetLoaAction }
+    defaults:    { _controller: engineblock.controller.authentication.feedback:stepupCalloutUnmetLoaAction }
 
-authentication_feedback_sfo_callout_unknown:
-    path:       '/sfo-callout-unknown'
+authentication_feedback_stepup_callout_unknown:
+    path:       '/stepup-callout-unknown'
     methods:    [GET]
-    defaults:    { _controller: engineblock.controller.authentication.feedback:sfoCalloutUnknownAction }
+    defaults:    { _controller: engineblock.controller.authentication.feedback:stepupCalloutUnknownAction }

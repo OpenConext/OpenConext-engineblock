@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2019 SURFnet B.V.
+ * Copyright 2014 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Sfo;
+namespace OpenConext\EngineBlockBundle\Stepup;
 
 use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlock\Exception\RuntimeException;
 
-class SfoGatewayLoaMapping
+class StepupGatewayLoaMapping
 {
     private $mapping = [];
     private $gatewayLoa1 = '';
@@ -33,13 +33,13 @@ class SfoGatewayLoaMapping
     public function __construct(array $loaMapping, $gatewayLoa1)
     {
         foreach ($loaMapping as $from => $to) {
-            Assertion::string($from, 'The sfo.gateway_loa_mapping configuration must be a map, key is not a string');
-            Assertion::string($to, 'The sfo.gateway_loa_mapping configuration must be a map, value is not a string');
+            Assertion::string($from, 'The stepup.gateway_loa_mapping configuration must be a map, key is not a string');
+            Assertion::string($to, 'The stepup.gateway_loa_mapping configuration must be a map, value is not a string');
 
             $this->mapping[$from] = $to;
         }
 
-        Assertion::string($gatewayLoa1, 'The sfo.gateway.loa.loa1 configuration must be a string');
+        Assertion::string($gatewayLoa1, 'The stepup.gateway.loa.loa1 configuration must be a string');
 
         $this->gatewayLoa1 = $gatewayLoa1;
     }
