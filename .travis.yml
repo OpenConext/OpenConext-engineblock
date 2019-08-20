@@ -75,7 +75,6 @@ script:
 
 branches:
   only:
-    - 5.x-dev
     - master
     - release/5.11
     - feature/error-page-styling
