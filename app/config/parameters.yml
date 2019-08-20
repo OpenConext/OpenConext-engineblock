@@ -15,3 +15,6 @@ parameters:
                 en: 'https://example.org/wiki/page1'
             clock_issue:
                 en: 'https://example.org/wiki/page1'
+    error_feedback_idp_contact:
+        - clock_issue
+        - received_invalid_signed_response

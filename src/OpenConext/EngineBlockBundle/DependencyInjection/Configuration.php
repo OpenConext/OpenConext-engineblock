@@ -60,6 +60,11 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
+                        ->arrayNode('idp_contact')
+                            ->scalarPrototype()
+                                ->info('Specify page identifiers to show the IdP mailto link on.')
+                            ->end()
+                        ->end()
                     ->end()
                 ->end()
             ->end();
