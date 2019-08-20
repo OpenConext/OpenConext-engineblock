@@ -1,3 +1,17 @@
 # This file is auto-generated during the composer install
 parameters:
     secret: c91af5fd03c961b8f675563c2d075a3ef54e3c0a
+    error_feedback_wiki_links:
+        fallback:
+            en: '%openconext_support_url%'
+            nl: '%openconext_support_url%'
+            pt: '%openconext_support_url%'
+        specified:
+            received_invalid_response:
+                en: 'https://example.org/wiki/page1'
+                nl: 'https://example.nl/wiki/page1'
+                pt: 'https://example.pt/wiki/page1'
+            received_invalid_signed_response:
+                en: 'https://example.org/wiki/page1'
+            clock_issue:
+                en: 'https://example.org/wiki/page1'

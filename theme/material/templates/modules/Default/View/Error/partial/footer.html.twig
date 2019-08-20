@@ -1,9 +1,10 @@
 <footer class="error-page-footer-buttons">
     <div class="error-page-footer-buttons__container">
         <div class="error-page-footer-buttons__row">
-            {% if showWikiButton is defined and showWikiButton %}
+            {% if template is defined and hasWikiLink(template) %}
             <div class="footer-button">
-                <a href="{{ 'error_wiki-href'|trans }}" target="_blank" class="footer-button__link" title="{{ 'error_wiki-link-text'|trans }}">
+                {# The template var is set in the individual error Twigs, that's te place where we can determine what template is loaded. #}
+                <a href="{{ getWikiLink(template).link(locale()) }}" target="_blank" class="footer-button__link" title="{{ 'error_wiki-link-text'|trans }}">
                     <i class="footer-button__icon fa-wikipedia-w"></i>
                     <p class="footer-button__text">{{ 'error_wiki-link-text'|trans }}</p>
                     <p class="footer-button__text footer-button__text--small">{{ 'error_wiki-link-text-short'|trans }}</p>

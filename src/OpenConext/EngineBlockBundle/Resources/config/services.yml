@@ -65,6 +65,11 @@ services:
         arguments:
             - # replaced in the extension
 
+    engineblock.error_feedback:
+        class: OpenConext\EngineBlockBundle\Configuration\ErrorFeedbackConfiguration
+        arguments:
+            - # replaced in the extension
+
     engineblock.pdp.pdp_client:
         class: OpenConext\EngineBlockBundle\Pdp\PdpClient
         arguments:
@@ -173,6 +178,7 @@ services:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Feedback
         arguments:
             - "@engineblock.compat.application"
+            - "@engineblock.error_feedback"
         tags:
              - { name: 'twig.extension' }
 

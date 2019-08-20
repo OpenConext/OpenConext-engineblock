@@ -173,7 +173,7 @@ TXT
     'error_405_desc'                    => 'The HTTP method "%requestMethod%" is not allowed for location "%uri%". Supported methods are: %allowedMethods%.',
     'error_help_desc'               => '<p></p>',
     'error_no_consent'              => 'Unable to continue to service',
-    'error_no_consent_desc'         => 'This application can only be used when you share the mentioned information.<br /><br />
+        'error_no_consent_desc'         => 'This application can only be used when you share the mentioned information.<br /><br />
 
 If you want to use this application you have to:<br />
 <ul><li>restart your browser</li>

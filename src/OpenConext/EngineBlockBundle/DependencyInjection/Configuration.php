@@ -14,6 +14,7 @@ class Configuration implements ConfigurationInterface
         $root = $treeBuilder->root('open_conext_engine_block');
 
         $this->appendFeatureConfiguration($root);
+        $this->appendErrorFeedbackConfiguration($root);
 
         return $treeBuilder;
     }
@@ -26,6 +27,39 @@ class Configuration implements ConfigurationInterface
                     ->prototype('boolean')
                         ->example('some.feature.key: true')
                         ->info('Allows configuring a feature, identified by the feature key as enabled or disabled')
+                    ->end()
+                ->end()
+            ->end();
+    }
+
+    private function appendErrorFeedbackConfiguration(ArrayNodeDefinition $rootNode)
+    {
+        $rootNode
+            ->children()
+                ->arrayNode('error_feedback')
+                    ->children()
+                        ->arrayNode('wiki_links')
+                            ->children()
+                                ->arrayNode('fallback')
+                                    ->isRequired()
+                                    ->info('Provide a fallback wiki link that is used when a language/page combination cannot be found.')
+                                    ->scalarPrototype()
+                                        ->info('Provide a URI to the default/fallback wiki page for this specific error page language combination. 
+                                        Please review the example in parameter.yml.dist')
+                                    ->end()
+                                ->end()
+                                ->arrayNode('specified')
+                                    ->arrayPrototype()
+                                        ->info('Please specify an array of i18n language abbreviation keys, mapped to wiki links matching 
+                                        that language. Example: [en => https://wiki.example.com/page1, pt => https://wiki.example.pt/page1].')
+                                        ->scalarPrototype()
+                                            ->info('Provide a URI to the wiki page for this specific error page language combination. 
+                                            Please review the example in parameter.yml.dist')
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
                     ->end()
                 ->end()
             ->end();
