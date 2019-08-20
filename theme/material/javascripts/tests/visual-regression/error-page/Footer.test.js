@@ -38,20 +38,30 @@ describe(
             jest.setTimeout(20000);
         }, timeout);
 
-        for (const footer of footerDifferences) {
+        let sets = [];
+        for (const footerDifference of footerDifferences) {
             for (const viewport of viewports) {
-                it(`${footer.name}-${viewport.width}x${viewport.height}`, async (page, expect) => {
-
-                    await page.goto(footer.url);
-                    await page.setViewport(viewport);
-                    await page.waitFor(".error-container");
-                    const screenshot = await page.screenshot({
-                        fullPage: true,
-                        path: `./material/javascripts/tests/visual-regression/error-page/screenshots/footer/${footer.name}-${viewport.width}x${viewport.height}.png`
-                    });
-                    expect(screenshot).toMatchImageSnapshot();
+                sets.push({
+                    name: footerDifference.name,
+                    url: footerDifference.url,
+                    viewport: viewport,
+                    expect: expect,
+                    page: page,
                 });
             }
+        }
+
+        for (const s of sets) {
+            it(`${s.name}-${s.viewport.width}x${s.viewport.height}`, async () => {
+                await s.page.goto(s.url);
+                await s.page.setViewport(s.viewport);
+                await s.page.waitFor(".error-container");
+                const screenshot = await s.page.screenshot({
+                    fullPage: true,
+                    path: `./material/javascripts/tests/visual-regression/error-page/screenshots/footer/${s.name}-${s.viewport.width}x${s.viewport.height}.png`
+                });
+                s.expect(screenshot).toMatchImageSnapshot();
+            });
         }
     },
     timeout,

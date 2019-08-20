@@ -74,6 +74,7 @@ Feature:
         And Stepup will fail if the LoA can not be given
       Then I should see "Error - No suitable token found"
         And the url should match "/feedback/stepup-callout-unmet-loa"
+        And the response status code should be 400
 
     Scenario: Stepup authentication should show exception when user does cancel
       Given the SP "SSO-SP" requires Stepup LoA "http://test.openconext.nl/assurance/loa2"
@@ -84,6 +85,7 @@ Feature:
         And Stepup will fail as the user cancelled
       Then I should see "Error - Logging in cancelled"
         And the url should match "/feedback/stepup-callout-user-cancelled"
+        And the response status code should be 400
 
     Scenario: Stepup authentication should show exception when an unknown status is returned
       Given the SP "SSO-SP" requires Stepup LoA "http://test.openconext.nl/assurance/loa2"
@@ -94,3 +96,4 @@ Feature:
         And Stepup will fail on unknown invalid status
       Then I should see "Error - Unknown strong authentication failure"
         And the url should match "/feedback/stepup-callout-unknown"
+        And the response status code should be 400
