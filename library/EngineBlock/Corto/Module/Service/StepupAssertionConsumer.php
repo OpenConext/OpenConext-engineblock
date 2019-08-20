@@ -143,7 +143,8 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
                 $log->info('User cancelled Stepup authentication callout', array('key_id' => $receivedRequest->getId(), 'result' => $e->getFeedbackInfo()));
 
                 throw new EngineBlock_Corto_Exception_UserCancelledStepupCallout(
-                    'User cancelled Stepup authentication callout'
+                    'User cancelled Stepup authentication callout',
+                    $e
                 );
 
             case ($e->getFeedbackStatusCode() == 'Responder/NoAuthnContext' && $e->getFeedbackStatusMessage() === EngineBlock_Corto_Module_Bindings::SAML_STATUS_MESSAGE_EMPTY):
@@ -167,7 +168,8 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
                 }
 
                 throw new EngineBlock_Corto_Exception_InvalidStepupLoaLevel(
-                    'Invalid loa level encountered during Stepup authentication callout'
+                    'Invalid loa level encountered during Stepup authentication callout',
+                    $e
                 );
         }
 
@@ -178,7 +180,8 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
                 "Invalid status received from stepup gateway: '%s' '%s' ",
                 $e->getFeedbackStatusCode(),
                 $e->getFeedbackStatusMessage()
-            )
+            ),
+            $e
         );
     }
 }

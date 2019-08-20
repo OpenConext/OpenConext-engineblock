@@ -73,7 +73,7 @@ class EngineBlock_Corto_Filter_Command_ValidateAuthnContextClassRef extends Engi
      */
     private function isAuthnContextClassRefAllowed($value, $regex)
     {
-        $match = preg_match($regex, $value);
+        $match = @preg_match($regex, $value);
         if ($match) {
             return false;
         }

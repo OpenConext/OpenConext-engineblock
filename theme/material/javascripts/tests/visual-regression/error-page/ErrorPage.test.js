@@ -100,7 +100,20 @@ const errorPages = [
     {
         name: 'authn-context-class-ref-blacklisted',
         url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=authn-context-class-ref-blacklisted&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata","serviceProviderName":"OpenConext Drop Supplies SP","identityProvider":"https://current-idp.entity-id.org/metadata"}'
-    }
+    },
+
+    {
+        name: 'stepup-callout-unmet-loa',
+        url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=stepup-callout-unmet-loa&feedback-info=%7B%22statusCode%22%3A%22Responder%2FAuthnFailed%22%2C%22statusMessage%22%3A%22Authentication+cancelled+by+user%22%2C%22requestId%22%3A%225cb4bd3879b49%22%2C%22ipAddress%22%3A%22192.168.66.98%22%2C%22artCode%22%3A%2231914%22%7D&lang=nl'
+    },
+    {
+        name: 'stepup-callout-user-cancelled',
+        url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=stepup-callout-user-cancelled&feedback-info=%7B%22statusCode%22%3A%22Responder%2FAuthnFailed%22%2C%22statusMessage%22%3A%22Authentication+cancelled+by+user%22%2C%22requestId%22%3A%225cb4bd3879b49%22%2C%22ipAddress%22%3A%22192.168.66.98%22%2C%22artCode%22%3A%2231914%22%7D&lang=nl'
+    },
+    {
+        name: 'stepup-callout-unknown',
+        url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=stepup-callout-unknown&feedback-info=%7B%22statusCode%22%3A%22Responder%2FAuthnFailed%22%2C%22statusMessage%22%3A%22Authentication+cancelled+by+user%22%2C%22requestId%22%3A%225cb4bd3879b49%22%2C%22ipAddress%22%3A%22192.168.66.98%22%2C%22artCode%22%3A%2231914%22%7D&lang=nl'
+    },
 ];
 
 const viewports = [
@@ -118,20 +131,30 @@ describe(
             jest.setTimeout(20000);
         }, timeout);
 
+        let sets = [];
         for (const errorPage of errorPages) {
             for (const viewport of viewports) {
-                it(`${errorPage.name}-${viewport.width}x${viewport.height}`, async (page, expect) => {
-
-                    await page.goto(errorPage.url);
-                    await page.setViewport(viewport);
-                    await page.waitFor(".error-container");
-                    const screenshot = await page.screenshot({
-                        fullPage: true,
-                        path: `./material/javascripts/tests/visual-regression/error-page/screenshots/error-page/${errorPage.name}-${viewport.width}x${viewport.height}.png`
-                    });
-                    expect(screenshot).toMatchImageSnapshot();
+                sets.push({
+                    name: erroPage.name,
+                    url: erroPage.url,
+                    viewport: viewport,
+                    expect: expect,
+                    page: page,
                 });
             }
+        }
+
+        for (const s of sets) {
+            it(`${s.name}-${s.viewport.width}x${s.viewport.height}`, async () => {
+                await s.page.goto(s.url);
+                await s.page.setViewport(s.viewport);
+                await s.page.waitFor(".error-container");
+                const screenshot = await s.page.screenshot({
+                    fullPage: true,
+                    path: `./material/javascripts/tests/visual-regression/error-page/screenshots/error-page/${s.name}-${s.viewport.width}x${s.viewport.height}.png`
+                });
+                s.expect(screenshot).toMatchImageSnapshot();
+            });
         }
     },
     timeout,
