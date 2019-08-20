@@ -34,14 +34,21 @@ class ErrorFeedbackConfiguration implements ErrorFeedbackConfigurationInterface
 
     /**
      * @param Feature[] $wikiLinks indexed by feature key
+     * @param IdPContactPage[] $idpContactPages
      */
     public function __construct(array $wikiLinks, array $idpContactPages)
     {
         Assertion::allIsInstanceOf($wikiLinks, WikiLink::class);
-        Assertion::allString(array_keys($wikiLinks), 'All keys for wikiLinks must be a string (the page identifier the wiki link is intended for).');
+        Assertion::allString(
+            array_keys($wikiLinks),
+            'All keys for wikiLinks must be a string (the page identifier the wiki link is intended for).'
+        );
 
         Assertion::allIsInstanceOf($idpContactPages, IdPContactPage::class);
-        Assertion::allString(array_keys($idpContactPages), 'All keys for idpContactPages must be a string (the page identifier the idpContactPages are intended for).');
+        Assertion::allString(
+            array_keys($idpContactPages),
+            'All keys for idpContactPages must be a string (the page identifier the idpContactPages are intended for).'
+        );
 
         $this->wikiLinks = $wikiLinks;
 

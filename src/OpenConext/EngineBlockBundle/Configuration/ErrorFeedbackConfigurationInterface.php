@@ -31,4 +31,10 @@ interface ErrorFeedbackConfigurationInterface
      * @return WikiLink
      */
     public function getWikiLink($page);
+
+    /**
+     * @param string $page
+     * @return bool
+     */
+    public function isIdPContactPage($page);
 }
