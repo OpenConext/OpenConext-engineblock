@@ -28,14 +28,24 @@ class ErrorFeedbackConfiguration implements ErrorFeedbackConfigurationInterface
     private $wikiLinks;
 
     /**
+     * @var
+     */
+    private $idpContactPages;
+
+    /**
      * @param Feature[] $wikiLinks indexed by feature key
      */
-    public function __construct(array $wikiLinks)
+    public function __construct(array $wikiLinks, array $idpContactPages)
     {
         Assertion::allIsInstanceOf($wikiLinks, WikiLink::class);
         Assertion::allString(array_keys($wikiLinks), 'All keys for wikiLinks must be a string (the page identifier the wiki link is intended for).');
 
+        Assertion::allIsInstanceOf($idpContactPages, IdPContactPage::class);
+        Assertion::allString(array_keys($idpContactPages), 'All keys for idpContactPages must be a string (the page identifier the idpContactPages are intended for).');
+
         $this->wikiLinks = $wikiLinks;
+
+        $this->idpContactPages = $idpContactPages;
     }
 
     /**
@@ -57,5 +67,14 @@ class ErrorFeedbackConfiguration implements ErrorFeedbackConfigurationInterface
     {
         Assertion::nonEmptyString($page, 'page');
         return $this->wikiLinks[$page];
+    }
+
+    /**
+     * @param string $page
+     * @return bool
+     */
+    public function isIdPContactPage($page)
+    {
+        return array_key_exists($page, $this->idpContactPages);
     }
 }

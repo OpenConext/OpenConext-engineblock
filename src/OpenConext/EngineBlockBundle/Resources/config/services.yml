@@ -69,6 +69,7 @@ services:
         class: OpenConext\EngineBlockBundle\Configuration\ErrorFeedbackConfiguration
         arguments:
             - # replaced in the extension
+            - # replaced in the extension
 
     engineblock.pdp.pdp_client:
         class: OpenConext\EngineBlockBundle\Pdp\PdpClient

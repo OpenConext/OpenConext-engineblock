@@ -37,9 +37,11 @@ class ErrorFeedbackConfigurationTest extends UnitTest
             'foo' => new stdClass()
         ];
 
+        $idpContacts = ['clock-issue' => new IdPContactPage('clock-issue')];
+
         $this->expectException(InvalidArgumentException::class);
 
-        new ErrorFeedbackConfiguration($wikiLinks);
+        new ErrorFeedbackConfiguration($wikiLinks, $idpContacts);
     }
 
     /**
@@ -54,9 +56,11 @@ class ErrorFeedbackConfigurationTest extends UnitTest
             1 => new WikiLink(['a' => 'b'], ['a' => 'https://fallback.uri']),
         ];
 
+        $idpContacts = ['clock-issue' => new IdPContactPage('clock-issue')];
+
         $this->expectException(InvalidArgumentException::class);
 
-        new ErrorFeedbackConfiguration($wikiLinks);
+        new ErrorFeedbackConfiguration($wikiLinks, $idpContacts);
     }
 
     /**
@@ -71,7 +75,9 @@ class ErrorFeedbackConfigurationTest extends UnitTest
             'invalid-response' => new WikiLink(['a' => 'b'], ['a' => 'https://fallback.uri']),
         ];
 
-        $errorFeedbackConfiguration = new ErrorFeedbackConfiguration($wikiLinks);
+        $idpContacts = ['clock-issue' => new IdPContactPage('clock-issue')];
+
+        $errorFeedbackConfiguration = new ErrorFeedbackConfiguration($wikiLinks, $idpContacts);
 
         $this->assertTrue($errorFeedbackConfiguration->hasWikiLink('no-session-found'));
         $this->assertTrue($errorFeedbackConfiguration->hasWikiLink('invalid-response'));
@@ -89,8 +95,65 @@ class ErrorFeedbackConfigurationTest extends UnitTest
             'no-session-found' => new WikiLink(['a' => 'b'], ['a' => 'https://fallback.uri']),
         ];
 
-        $errorFeedbackConfiguration = new ErrorFeedbackConfiguration($wikiLinks);
+        $idpContacts = ['clock-issue' => new IdPContactPage('clock-issue')];
+
+        $errorFeedbackConfiguration = new ErrorFeedbackConfiguration($wikiLinks, $idpContacts);
         $noSessionFound = $errorFeedbackConfiguration->getWikiLink('no-session-found');
         $this->assertInstanceOf(WikiLink::class, $noSessionFound);
+    }
+
+    /**
+     * @test
+     * @group EngineBlockBundle
+     * @group Configuration
+     */
+    public function an_idp_empty_wiki_link_configuration_can_provided()
+    {
+        $wikiLinks = [];
+
+        $idpContacts = [];
+
+        $errorFeedbackConfiguration = new ErrorFeedbackConfiguration($wikiLinks, $idpContacts);
+
+        $this->assertFalse($errorFeedbackConfiguration->hasWikiLink('clock-issue'));
+    }
+
+    /**
+     * @test
+     * @group EngineBlockBundle
+     * @group Configuration
+     */
+    public function an_idp_contact_page_can_be_tested()
+    {
+        $wikiLinks = [
+            'no-session-found' => new WikiLink(['a' => 'b'], ['a' => 'https://fallback.uri']),
+            'invalid-response' => new WikiLink(['a' => 'b'], ['a' => 'https://fallback.uri']),
+        ];
+
+        $idpContacts = ['clock-issue' => new IdPContactPage('clock-issue')];
+
+        $errorFeedbackConfiguration = new ErrorFeedbackConfiguration($wikiLinks, $idpContacts);
+
+        $this->assertTrue($errorFeedbackConfiguration->isIdPContactPage('clock-issue'));
+        $this->assertFalse($errorFeedbackConfiguration->isIdPContactPage('no-session-found'));
+    }
+
+    /**
+     * @test
+     * @group EngineBlockBundle
+     * @group Configuration
+     */
+    public function an_idp_empty_contact_page_configuration_can_provided()
+    {
+        $wikiLinks = [
+            'invalid-response' => new WikiLink(['a' => 'b'], ['a' => 'https://fallback.uri']),
+        ];
+
+        $idpContacts = [];
+
+        $errorFeedbackConfiguration = new ErrorFeedbackConfiguration($wikiLinks, $idpContacts);
+
+        $this->assertFalse($errorFeedbackConfiguration->isIdPContactPage('clock-issue'));
+        $this->assertFalse($errorFeedbackConfiguration->isIdPContactPage('no-session-found'));
     }
 }
