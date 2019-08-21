@@ -35,19 +35,54 @@ class StepupIdentityProvider extends ServiceProvider
      */
     public static function fromStepupEndpoint(StepupEndpoint $stepupEndpoint, $acsLocation)
     {
-        $entity = new IdentityProvider($stepupEndpoint->getEntityId());
-
-        $entity->responseProcessingService = new Service(
+        $publicKeyFactory = new EngineBlock_X509_CertificateFactory();
+        $certificates[] = $publicKeyFactory->fromFile($stepupEndpoint->getKeyFile());
+        $responseProcessingService = new Service(
             $acsLocation,
             Constants::BINDING_HTTP_POST
         );
+        $singleSignOnServices[] = new Service($stepupEndpoint->getSsoLocation(), Constants::BINDING_HTTP_POST);
 
-        $publicKeyFactory = new EngineBlock_X509_CertificateFactory();
-
-        $entity->certificates[] = $publicKeyFactory->fromFile($stepupEndpoint->getKeyFile());
-        $entity->singleSignOnServices[] = new Service($stepupEndpoint->getSsoLocation(), Constants::BINDING_HTTP_POST);
-        $entity->requestsMustBeSigned = true;
-        $entity->signatureMethod = XMLSecurityKey::RSA_SHA256;
+        $entity = new IdentityProvider(
+            $stepupEndpoint->getEntityId(),
+            null,
+            null,
+            null,
+            false,
+            $certificates,
+            [],
+            '',
+            '',
+            false,
+            '',
+            '',
+            '',
+            '',
+            null,
+            '',
+            '',
+            null,
+            array(
+                Constants::NAMEID_TRANSIENT,
+                Constants::NAMEID_PERSISTENT,
+            ),
+            null,
+            false,
+            true,
+            XMLSecurityKey::RSA_SHA256,
+            $responseProcessingService,
+            IdentityProvider::WORKFLOW_STATE_DEFAULT,
+            '',
+            null,
+            false,
+            IdentityProvider::GUEST_QUALIFIER_ALL,
+            true,
+            null,
+            [],
+            $singleSignOnServices,
+            null,
+            null
+        );
 
         return $entity;
     }

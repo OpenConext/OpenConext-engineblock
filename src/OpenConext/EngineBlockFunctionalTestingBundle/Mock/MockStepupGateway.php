@@ -30,6 +30,7 @@ use SAML2\Message;
 use SAML2\Response;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\saml\SubjectConfirmationData;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
@@ -37,6 +38,12 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  */
 class MockStepupGateway
 {
+
+    const PARAMETER_REQUEST = 'SAMLRequest';
+    const PARAMETER_RELAY_STATE = 'RelayState';
+    const PARAMETER_SIGNATURE = 'Signature';
+    const PARAMETER_SIGNATURE_ALGORITHM = 'SigAlg';
+
     /**
      * @var DateTime
      */
@@ -59,15 +66,14 @@ class MockStepupGateway
     }
 
     /**
-     * @param string $samlRequest
+     * @param Request $request
      * @param string $fullRequestUri
      * @return Response
-     * @throws \Exception
      */
-    public function handleSsoSuccess($samlRequest, $fullRequestUri)
+    public function handleSsoSuccess(Request $request, $fullRequestUri)
     {
         // parse the authnRequest
-        $authnRequest = $this->parsePostRequest($samlRequest, $fullRequestUri);
+         $authnRequest = $this->parseRequest($request, $fullRequestUri);
 
         // get parameters from authnRequest
         $nameId = $authnRequest->getNameId()->value;
@@ -85,18 +91,17 @@ class MockStepupGateway
     }
 
     /**
-     * @param string $samlRequest
+     * @param Request $request
      * @param string $fullRequestUri
      * @param string $status
      * @param string $subStatus
      * @param string $message
      * @return Response
-     * @throws \Exception
      */
-    public function handleSsoFailure($samlRequest, $fullRequestUri, $status, $subStatus, $message = '')
+    public function handleSsoFailure(Request $request, $fullRequestUri, $status, $subStatus, $message = '')
     {
         // parse the authnRequest
-        $authnRequest = $this->parsePostRequest($samlRequest, $fullRequestUri);
+        $authnRequest = $this->parseRequest($request, $fullRequestUri);
 
         // get parameters from authnRequest
         $destination = $authnRequest->getAssertionConsumerServiceURL();
@@ -133,8 +138,32 @@ class MockStepupGateway
      * @return SAML2AuthnRequest
      * @throws \Exception
      */
-    private function parsePostRequest($samlRequest, $fullRequestUri)
+    private function parseRequest(Request $request, $fullRequestUri)
     {
+        // the GET parameter is already urldecoded by Symfony, so we should not do it again.
+        $requestData = $request->get(self::PARAMETER_REQUEST);
+        $samlRequest = base64_decode($requestData, true);
+        if ($samlRequest === false) {
+            throw new BadRequestHttpException('Failed decoding the request, did not receive a valid base64 string');
+        }
+
+        // Catch any errors gzinflate triggers
+        $errorNo = $errorMessage = null;
+        set_error_handler(function ($number, $message) use (&$errorNo, &$errorMessage) {
+            $errorNo      = $number;
+            $errorMessage = $message;
+        });
+        $samlRequest = gzinflate($samlRequest);
+        restore_error_handler();
+
+        if ($samlRequest === false) {
+            throw new BadRequestHttpException(sprintf(
+                'Failed inflating the request; error "%d": "%s"',
+                $errorNo,
+                $errorMessage
+            ));
+        }
+
         // 1. Parse to xml object
         // additional security against XXE Processing vulnerability
         $previous = libxml_disable_entity_loader(true);
@@ -173,7 +202,12 @@ class MockStepupGateway
         // Note: $authnRequest->validate throws an Exception when the signature does not match.
         $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, array('type' => 'public'));
         $key->loadKey($this->gatewayConfiguration->getIdentityProviderPublicKeyCertData());
-        if (!$authnRequest->validate($key)) {
+
+        // The query string to vaklidate needs to be urlencoded again because Symfony ha already decoded this for us
+        $query = self::PARAMETER_REQUEST . '=' . urlencode($requestData) . '&' . self::PARAMETER_SIGNATURE_ALGORITHM . '=' . urlencode($request->get(self::PARAMETER_SIGNATURE_ALGORITHM));
+        $signature = base64_decode($request->get(self::PARAMETER_SIGNATURE));
+
+        if (!$key->verifySignature($query, $signature)) {
             throw new BadRequestHttpException(
                 'Validation of the signature in the AuthnRequest failed'
             );
