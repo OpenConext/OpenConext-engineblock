@@ -68,7 +68,8 @@ services:
     engineblock.error_feedback:
         class: OpenConext\EngineBlockBundle\Configuration\ErrorFeedbackConfiguration
         arguments:
-            - # replaced in the extension
+            - # The WikiLinks are constructed and injected in the extension based on the config found in parameters.yml
+            - # The IdPContactPage entries are constructed and injected in the extension based on the config found in parameters.yml
 
     engineblock.pdp.pdp_client:
         class: OpenConext\EngineBlockBundle\Pdp\PdpClient
@@ -179,6 +180,7 @@ services:
         arguments:
             - "@engineblock.compat.application"
             - "@engineblock.error_feedback"
+            - "@engineblock.compat.repository.metadata"
         tags:
              - { name: 'twig.extension' }
 

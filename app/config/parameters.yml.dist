@@ -21,3 +21,7 @@ parameters:
             clock_issue:
                 en: "https://example.co.uk/wiki/page2"
                 # The other languages visiting this error page will fall back on the 'fallback' wiki link
+    error_feedback_idp_contact:
+        - clock_issue
+        - missing_required_fields
+        - unable_to_receive_message

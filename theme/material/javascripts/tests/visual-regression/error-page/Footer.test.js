@@ -7,19 +7,19 @@ expect.extend({toMatchImageSnapshot});
 const footerDifferences = [
     {
         name: 'all-buttons-visible',
-        url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=unable-to-receive-message&parameters={"supportEmail":"support@openconext.nl","showWikiButton":true}'
+        url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=unable-to-receive-message&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata", "serviceProviderName": "OpenConext Drop Supplies SP","identityProvider":"http://mock-idp"}'
     },
     {
         name: 'only-support-email-hidden',
-        url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=unable-to-receive-message&parameters={"showWikiButton":true}'
+        url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=unable-to-receive-message'
     },
     {
         name: 'only-wiki-hidden',
-        url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=unable-to-receive-message&parameters={"supportEmail":"support@openconext.nl"}'
+        url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=missing-required-fields&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata", "serviceProviderName": "OpenConext Drop Supplies SP","identityProvider":"http://mock-idp"}'
     },
     {
         name: 'support-email-and-wiki-button-hidden',
-        url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=unable-to-receive-message&parameters={}'
+        url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=missing-required-fields'
     },
 ];
 

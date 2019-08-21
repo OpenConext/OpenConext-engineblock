@@ -18,11 +18,12 @@
                     <p class="footer-button__text footer-button__text--small">{{ 'error_help-desk-link-text-short'|trans }}</p>
                 </a>
             </div>
-            {% if supportEmail is defined %}
+            {% if template is defined and hasIdPContactMailLink(template) and getIdPContactMailLink() is not empty %}
+            {% set supportMail = getIdPContactMailLink() %}
             <div class="footer-button">
-                <a href="mailto:{{ supportEmail }}" target="_blank" class="footer-button__link">
+                <a href="mailto:{{ supportMail }}" target="_blank" class="footer-button__link">
                     <i class="footer-button__icon fa-paper-plane"></i>
-                    <p class="footer-button__text">{{ supportEmail }}</p>
+                    <p class="footer-button__text">{{ supportMail }}</p>
                     <p class="footer-button__text footer-button__text--small">{{ 'error_help-desk-email-text-short'|trans }}</p>
                 </a>
             </div>

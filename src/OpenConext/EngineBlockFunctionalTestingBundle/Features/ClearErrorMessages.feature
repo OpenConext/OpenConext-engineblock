@@ -299,6 +299,9 @@ Feature:
      And I give my consent
     Then I should see "Error - The Assertion is not yet valid or has expired"
      And I should see ART code "44601"
+      # The Wiki link and IdP support mailto link should be visible on this page.
+     And I should see "OpenConext Wiki"
+     And I should see "support@openconext.org"
 
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a location
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a binding

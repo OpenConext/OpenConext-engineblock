@@ -3,6 +3,7 @@
 namespace OpenConext\EngineBlockBundle\DependencyInjection;
 
 use OpenConext\EngineBlockBundle\Configuration\Feature;
+use OpenConext\EngineBlockBundle\Configuration\IdPContactPage;
 use OpenConext\EngineBlockBundle\Configuration\WikiLink;
 use OpenConext\EngineBlockBundle\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -104,7 +105,15 @@ class OpenConextEngineBlockExtension extends Extension
             );
         }
 
+        $idpContactConfig = $errorFeedbackConfiguration['idp_contact'];
+        $idpContactPages = [];
+
+        foreach ($idpContactConfig as $idpContactPage) {
+            $idpContactPages[$idpContactPage] = new Definition(IdPContactPage::class, [$idpContactPage]);
+        }
+
         $featureConfigurationService = $container->getDefinition('engineblock.error_feedback');
         $featureConfigurationService->replaceArgument(0, $wikiLinks);
+        $featureConfigurationService->replaceArgument(1, $idpContactPages);
     }
 }

@@ -15,3 +15,10 @@ parameters:
                 en: 'https://example.org/wiki/page1'
             clock_issue:
                 en: 'https://example.org/wiki/page1'
+            unable_to_receive_message:
+                en: 'https://example.org/wiki/page1'
+    error_feedback_idp_contact:
+        - clock_issue
+        - missing_required_fields
+        - unable_to_receive_message
+        - received_invalid_signed_response

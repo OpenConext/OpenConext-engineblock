@@ -18,23 +18,30 @@
 
 namespace OpenConext\EngineBlockBundle\Configuration;
 
-interface ErrorFeedbackConfigurationInterface
+use OpenConext\EngineBlock\Assert\Assertion;
+
+final class IdPContactPage
 {
     /**
-     * @param string $page
-     * @return bool
+     * @var string
      */
-    public function hasWikiLink($page);
+    private $pageIdentifier;
 
     /**
-     * @param string $page
-     * @return WikiLink
+     * @param string $pageIdentifier
+     * @throws \Assert\AssertionFailedException
      */
-    public function getWikiLink($page);
+    public function __construct($pageIdentifier)
+    {
+        Assertion::string($pageIdentifier, 'The page identifier should be of type string.');
+        $this->pageIdentifier  = $pageIdentifier;
+    }
 
     /**
-     * @param string $page
-     * @return bool
+     * @return string
      */
-    public function isIdPContactPage($page);
+    public function getPageIdentifier()
+    {
+        return $this->pageIdentifier;
+    }
 }

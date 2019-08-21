@@ -48,4 +48,14 @@ class FeedbackInformationMap
     {
         return $this->data;
     }
+
+    public function has($key)
+    {
+        return array_key_exists($key, $this->data);
+    }
+
+    public function get($key)
+    {
+        return $this->data[$key];
+    }
 }

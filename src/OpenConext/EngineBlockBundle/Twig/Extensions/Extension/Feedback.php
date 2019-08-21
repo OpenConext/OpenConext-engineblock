@@ -19,6 +19,8 @@
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use EngineBlock_ApplicationSingleton;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlockBundle\Configuration\ErrorFeedbackConfigurationInterface;
 use OpenConext\EngineBlockBundle\Configuration\WikiLink;
 use OpenConext\EngineBlockBundle\Value\FeedbackInformation;
@@ -38,12 +40,19 @@ class Feedback extends Twig_Extension
      */
     private $errorFeedbackConfiguration;
 
+    /**
+     * @var MetadataRepositoryInterface
+     */
+    private $metadataRepository;
+
     public function __construct(
         EngineBlock_ApplicationSingleton $application,
-        ErrorFeedbackConfigurationInterface $errorFeedbackConfiguration
+        ErrorFeedbackConfigurationInterface $errorFeedbackConfiguration,
+        MetadataRepositoryInterface $metadataRepository
     ) {
         $this->application = $application;
         $this->errorFeedbackConfiguration = $errorFeedbackConfiguration;
+        $this->metadataRepository = $metadataRepository;
     }
 
     public function getFunctions()
@@ -53,6 +62,8 @@ class Feedback extends Twig_Extension
             new TwigFunction('flushLog', [$this, 'flushLog']),
             new TwigFunction('hasWikiLink', [$this, 'hasWikiLink']),
             new TwigFunction('getWikiLink', [$this, 'getWikiLink']),
+            new TwigFunction('hasIdPContactMailLink', [$this, 'hasIdPContactMailLink']),
+            new TwigFunction('getIdPContactMailLink', [$this, 'getIdPContactMailLink']),
         ];
     }
 
@@ -88,6 +99,39 @@ class Feedback extends Twig_Extension
     {
         $pageIdentifier = $this->convertTemplateName($templateName);
         return $this->errorFeedbackConfiguration->getWikiLink($pageIdentifier);
+    }
+
+    /**
+     * @param string $templateName
+     * @return bool
+     */
+    public function hasIdPContactMailLink($templateName)
+    {
+        $pageIdentifier = $this->convertTemplateName($templateName);
+        return $this->errorFeedbackConfiguration->isIdPContactPage($pageIdentifier);
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdPContactMailLink()
+    {
+        $feedbackInfo = $this->retrieveFeedbackInfo();
+        if ($feedbackInfo->has('identityProvider')) {
+            /** @var IdentityProvider $idp */
+            $idp = $this->metadataRepository->findIdentityProviderByEntityId($feedbackInfo->get('identityProvider'));
+            if ($idp) {
+                foreach ($idp->contactPersons as $contactPerson) {
+                    if ($contactPerson->contactType === 'support' && !empty($contactPerson->emailAddress)) {
+                        return $contactPerson->emailAddress;
+                    }
+                }
+                $this->application->getLogInstance()->info(
+                    'Showing de IdP support contact mailto link failed, no support email address was found in the IdP metadata'
+                );
+            }
+        }
+        return '';
     }
 
     /**
