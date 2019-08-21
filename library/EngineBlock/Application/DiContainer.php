@@ -20,7 +20,7 @@ use Doctrine\ORM\EntityManager;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use OpenConext\EngineBlockBundle\Stepup\StepupGatewayCallOutHelper;
-use OpenConext\EngineBlockBundle\Stepup\StepupIdentityProvider;
+use OpenConext\EngineBlockBundle\Stepup\StepupEntity;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
 class EngineBlock_Application_DiContainer extends Pimple
@@ -325,7 +325,19 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getStepupIdentityProvider(EngineBlock_Corto_ProxyServer $server)
     {
-        return StepupIdentityProvider::fromStepupEndpoint(
+        return StepupEntity::idpFromStepupEndpoint(
+            $this->getStepupEndpoint(),
+            $server->getUrl('stepupAssertionConsumerService')
+        );
+    }
+
+    /**
+     * @param EngineBlock_Corto_ProxyServer $server
+     * @return \OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
+     */
+    public function getStepupServiceProvider(EngineBlock_Corto_ProxyServer $server)
+    {
+        return StepupEntity::spFromStepupEndpoint(
             $this->getStepupEndpoint(),
             $server->getUrl('stepupAssertionConsumerService')
         );

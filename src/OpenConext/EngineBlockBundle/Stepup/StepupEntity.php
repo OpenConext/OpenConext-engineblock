@@ -20,11 +20,12 @@ namespace OpenConext\EngineBlockBundle\Stepup;
 use EngineBlock_X509_CertificateFactory;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Service;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 
-class StepupIdentityProvider extends ServiceProvider
+class StepupEntity
 {
 
     /**
@@ -33,7 +34,7 @@ class StepupIdentityProvider extends ServiceProvider
      * @return IdentityProvider
      * @throws \EngineBlock_Exception
      */
-    public static function fromStepupEndpoint(StepupEndpoint $stepupEndpoint, $acsLocation)
+    public static function idpFromStepupEndpoint(StepupEndpoint $stepupEndpoint, $acsLocation)
     {
         $publicKeyFactory = new EngineBlock_X509_CertificateFactory();
         $certificates[] = $publicKeyFactory->fromFile($stepupEndpoint->getKeyFile());
@@ -80,6 +81,76 @@ class StepupIdentityProvider extends ServiceProvider
             null,
             [],
             $singleSignOnServices,
+            null,
+            null
+        );
+
+        return $entity;
+    }
+
+
+    /**
+     * @param StepupEndpoint $stepupEndpoint
+     * @param string $acsLocation
+     * @return ServiceProvider
+     * @throws \EngineBlock_Exception
+     */
+    public static function spFromStepupEndpoint(StepupEndpoint $stepupEndpoint, $acsLocation)
+    {
+        $publicKeyFactory = new EngineBlock_X509_CertificateFactory();
+        $certificates[] = $publicKeyFactory->fromFile($stepupEndpoint->getKeyFile());
+        $assertionConsumerServices[] = new IndexedService(
+            $acsLocation,
+            Constants::BINDING_HTTP_POST,
+            0
+        );
+
+        $entity = new ServiceProvider(
+            $stepupEndpoint->getEntityId(),
+            null,
+            null,
+            null,
+            false,
+            $certificates,
+            [],
+            '',
+            '',
+            false,
+            '',
+            '',
+            '',
+            '',
+            null,
+            '',
+            '',
+            null,
+            array(
+                Constants::NAMEID_TRANSIENT,
+                Constants::NAMEID_PERSISTENT,
+            ),
+            null,
+            false,
+            true,
+            XMLSecurityKey::RSA_SHA256,
+            null,
+            IdentityProvider::WORKFLOW_STATE_DEFAULT,
+            [],
+            false,
+            $assertionConsumerServices,
+            IdentityProvider::GUEST_QUALIFIER_ALL,
+            true,
+            null,
+            [],
+            [],
+            null,
+            false,
+            false,
+            false,
+            true,
+            '',
+            null,
+            null,
+            null,
             null,
             null
         );
