@@ -18,7 +18,6 @@
 
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\EntityNotFoundException;
-use OpenConext\EngineBlockBundle\Stepup\StepupIdentityProvider;
 
 class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module_Service_Abstract
 {
@@ -43,7 +42,7 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
                 $engineEntity = $this->_server->getRepository()->fetchServiceProviderByEntityId($engineEntityId);
                 break;
             case 'stepupMetadataService':
-                $engineEntity = $container->getStepupIdentityProvider($this->_server);
+                $engineEntity = $container->getStepupServiceProvider($this->_server);
                 break;
             default:
                 // If an unsupported serviceName is used, first try to resolve a SP, then try IdP. This is a fallback
