@@ -274,7 +274,7 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
     'error_sfo_callout_unknown_title'            => 'Fout - Onbekend sterke authenticatie probleem',
     'error_sfo_callout_unknown_desc'       => 'Inloggen met sterke authenticatie is niet gelukt en we weten niet precies waarom. Probeer het eerst eens opnieuw door terug te gaan naar de dienst en opnieuw in te loggen. Lukt dit niet, neem dan contact op met de helpdesk van je %organisationNoun%.',
     'error_sfo_callout_unmet_loa_title'            => 'Fout - Geen geschikt token gevonden',
-    'error_sfo_callout_unmet_loa_desc'       => 'Om toegang te krijgen tot deze dienst heb je een geregistreerd token nodig met een bepaald zekerheidsniveau. Je hebt nu ofwel geen token geregistreerd, of het zekerheidsniveau van token wat je hebt geregistreerd is te laag. Volg de link hieronder voor meer informatie over het registratieproces.',
+    'error_sfo_callout_unmet_loa_desc'       => 'Om toegang te krijgen tot deze dienst heb je een geregistreerd token nodig met een bepaald zekerheidsniveau. Je hebt nu ofwel geen token geregistreerd, of het zekerheidsniveau van het token dat je hebt geregistreerd is te laag. Volg de link hieronder voor meer informatie over het registratieproces.',
     'error_sfo_callout_user_cancelled_title'            => 'Fout - Inloggen afgebroken',
     'error_sfo_callout_user_cancelled_desc'       => 'Je hebt het inloggen afgebroken. Ga terug naar de dienst als je het opnieuw wilt proberen.',
     'attributes_validation_succeeded' => 'Authenticatie geslaagd',
