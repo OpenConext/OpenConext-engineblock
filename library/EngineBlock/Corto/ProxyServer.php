@@ -460,9 +460,9 @@ class EngineBlock_Corto_ProxyServer
         ]);
 
         // Add gateway data
-        $sspMessage->setDestination($identityProvider->singleSignOnServices[0]->location);
-        $sspMessage->setAssertionConsumerServiceURL($this->_server->getUrl('stepupAssertionConsumerService'));
-        $sspMessage->setIssuer($this->_server->getUrl('stepupMetadataService'));
+        $sspMessage->setDestination($identityProvider->responseProcessingService->location);
+        $sspMessage->setAssertionConsumerServiceURL($identityProvider->singleSignOnServices[0]->location);
+        $sspMessage->setIssuer($identityProvider->entityId);
 
         // Add the SP to the requesterIds
         $requesterIds = $sspMessage->getRequesterID();
@@ -475,7 +475,7 @@ class EngineBlock_Corto_ProxyServer
         $authnRequestRepository->link($ebRequest, $spRequest);
 
         // Set binding
-        $ebRequest->setDeliverByBinding(Constants::BINDING_HTTP_REDIRECT);
+        $ebRequest->setDeliverByBinding($identityProvider->responseProcessingService->binding);
 
         $this->getBindingsModule()->send($ebRequest, $identityProvider);
     }
