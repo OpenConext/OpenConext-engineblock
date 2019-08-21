@@ -72,6 +72,11 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
         try {
             $receivedResponse = $this->_server->getBindingsModule()->receiveResponse($serviceEntityId, $expectedDestination);
             $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
+
+            // Update the AuthnContextClassRef to the loa returned
+            $processStep = $this->_processingStateHelper->getStepByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_STEPUP);
+            $processStep->getResponse()->getAssertion()->setAuthnContextClassRef($this->_stepupGatewayCallOutHelper->getEbLoa($receivedResponse->getAssertion()->getAuthnContextClassRef()));
+            $this->_processingStateHelper->updateStepResponseByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_STEPUP, $processStep->getResponse());
         } catch (EngineBlock_Corto_Exception_ReceivedErrorStatusCode $e) {
 
             // The user is allowed to continue upon subcode: NoAuthnContext when the SP is configured with the coin: coin:stepup:allow_no_token == true

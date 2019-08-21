@@ -57,6 +57,21 @@ class StepupGatewayLoaMapping
         return $this->mapping[$input];
     }
 
+
+    /**
+     * @param $input
+     * @return string
+     */
+    public function transformToEbLoa($input)
+    {
+        $loa = array_search($input, $this->mapping);
+        if ($loa === false) {
+            throw new RuntimeException('Unable to determine manage LOA for gateway LOA');
+        }
+
+        return $loa;
+    }
+
     /**
      * @return string
      */
