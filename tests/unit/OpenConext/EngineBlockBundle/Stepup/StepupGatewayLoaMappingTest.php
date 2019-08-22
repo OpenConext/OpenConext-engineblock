@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
+use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\EngineBlockBundle\Stepup\StepupGatewayLoaMapping;
 use PHPUnit_Framework_TestCase as TestCase;
 
@@ -31,14 +32,14 @@ class StepupGatewayLoaMappingTest extends TestCase
     public function the_stepup_loa_mapping_object_should_be_successful_populated()
     {
         $stepupLoaMapping = new StepupGatewayLoaMapping([
-            'manageLoa2' => 'gatewayLoa2',
-            'manageLoa3' => 'gatewayLoa3',
+            'ebLoa2' => 'gatewayLoa2',
+            'ebLoa3' => 'gatewayLoa3',
         ],
             'gatewayLoa1'
         );
 
-        $this->assertSame('gatewayLoa2', $stepupLoaMapping->transformToGatewayLoa('manageLoa2'));
-        $this->assertSame('gatewayLoa2', $stepupLoaMapping->transformToGatewayLoa('manageLoa2'));
+        $this->assertSame('gatewayLoa2', $stepupLoaMapping->transformToGatewayLoa('ebLoa2'));
+        $this->assertSame('gatewayLoa2', $stepupLoaMapping->transformToGatewayLoa('ebLoa2'));
         $this->assertSame('gatewayLoa1', $stepupLoaMapping->getGatewayLoa1());
     }
 
@@ -68,7 +69,7 @@ class StepupGatewayLoaMappingTest extends TestCase
         $this->expectExceptionMessage('The stepup.gateway_loa_mapping configuration must be a map, value is not a string');
 
         $stepupLoaMapping = new StepupGatewayLoaMapping([
-            'manageLoa2' => 3,
+            'ebLoa2' => 3,
         ],
             'gatewayLoa1'
         );
@@ -84,9 +85,44 @@ class StepupGatewayLoaMappingTest extends TestCase
         $this->expectExceptionMessage('The stepup.gateway.loa.loa1 configuration must be a string');
 
         $stepupLoaMapping = new StepupGatewayLoaMapping([
-            'manageLoa2' => 'gatewayLoa2',
+            'ebLoa2' => 'gatewayLoa2',
         ],
             5
         );
+    }
+
+    /**
+     * @test
+     * @group Stepup
+     */
+    public function the_stepup_loa_mapping_object_should_successful_map_back()
+    {
+        $stepupLoaMapping = new StepupGatewayLoaMapping([
+            'ebLoa2' => 'gatewayLoa2',
+            'ebLoa3' => 'gatewayLoa3',
+        ],
+            'gatewayLoa1'
+        );
+
+        $this->assertSame('ebLoa2', $stepupLoaMapping->transformToEbLoa('gatewayLoa2'));
+        $this->assertSame('ebLoa3', $stepupLoaMapping->transformToEbLoa('gatewayLoa3'));
+    }
+
+    /**
+     * @test
+     * @group Stepup
+     */
+    public function the_stepup_loa_mapping_object_should_return_an_exception_when_unable_to_map_back()
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Unable to find the received stepup LoA in the configured EngineBlock LoA');
+
+        $stepupLoaMapping = new StepupGatewayLoaMapping([
+            'ebLoa2' => 'gatewayLoa2',
+        ],
+            'gatewayLoa1'
+        );
+
+        $stepupLoaMapping->transformToEbLoa('gatewayLoa3');
     }
 }

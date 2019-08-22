@@ -30,19 +30,19 @@ class StepupEntityFactory
 
     /**
      * @param StepupEndpoint $stepupEndpoint
-     * @param string $ssoLocation
+     * @param string $acsLocation
      * @return IdentityProvider
      * @throws \EngineBlock_Exception
      */
-    public static function idpFrom(StepupEndpoint $stepupEndpoint, $ssoLocation)
+    public static function idpFrom(StepupEndpoint $stepupEndpoint, $acsLocation)
     {
         $publicKeyFactory = new EngineBlock_X509_CertificateFactory();
         $certificates[] = $publicKeyFactory->fromFile($stepupEndpoint->getKeyFile());
         $responseProcessingService = new Service(
-            $stepupEndpoint->getSsoLocation(),
+            $acsLocation,
             Constants::BINDING_HTTP_REDIRECT
         );
-        $singleSignOnServices[] = new Service($ssoLocation, Constants::BINDING_HTTP_POST);
+        $singleSignOnServices[] = new Service($stepupEndpoint->getSsoLocation(), Constants::BINDING_HTTP_REDIRECT);
 
         $entity = new IdentityProvider(
             $stepupEndpoint->getEntityId(),
