@@ -204,7 +204,9 @@ class MockStepupGateway
         $key->loadKey($this->gatewayConfiguration->getIdentityProviderPublicKeyCertData());
 
         // The query string to vaklidate needs to be urlencoded again because Symfony ha already decoded this for us
-        $query = self::PARAMETER_REQUEST . '=' . urlencode($requestData) . '&' . self::PARAMETER_SIGNATURE_ALGORITHM . '=' . urlencode($request->get(self::PARAMETER_SIGNATURE_ALGORITHM));
+        $query = self::PARAMETER_REQUEST . '=' . urlencode($requestData);
+        $query .= '&' . self::PARAMETER_SIGNATURE_ALGORITHM . '=' . urlencode($request->get(self::PARAMETER_SIGNATURE_ALGORITHM));
+
         $signature = base64_decode($request->get(self::PARAMETER_SIGNATURE));
 
         if (!$key->verifySignature($query, $signature)) {
