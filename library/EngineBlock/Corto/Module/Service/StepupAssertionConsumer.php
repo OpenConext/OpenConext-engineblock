@@ -72,6 +72,12 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
         try {
             $receivedResponse = $this->_server->getBindingsModule()->receiveResponse($serviceEntityId, $expectedDestination);
             $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
+
+            // Update the AuthnContextClassRef to the loa returned
+            $mappedLoa = $this->_stepupGatewayCallOutHelper->getEbLoa($receivedResponse->getAssertion()->getAuthnContextClassRef());
+            $this->updateProcessingStateLoa($receivedRequest, $receivedResponse, $mappedLoa);
+
+            $log->warning('After Stepup authentication update received LoA', array('key_id' => $receivedRequest->getId(), 'result' => $mappedLoa));
         } catch (EngineBlock_Corto_Exception_ReceivedErrorStatusCode $e) {
 
             // The user is allowed to continue upon subcode: NoAuthnContext when the SP is configured with the coin: coin:stepup:allow_no_token == true
@@ -84,9 +90,9 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
             $checkResponseSignature = false; // error responses from gateway are not signed
 
             // Update the AuthnContextClassRef to LoA 1
-            $processStep = $this->_processingStateHelper->getStepByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_STEPUP);
-            $processStep->getResponse()->getAssertion()->setAuthnContextClassRef($this->_stepupGatewayCallOutHelper->getStepupLoa1());
-            $this->_processingStateHelper->updateStepResponseByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_STEPUP, $processStep->getResponse());
+            $mappedLoa = $this->_stepupGatewayCallOutHelper->getStepupLoa1();
+            $this->updateProcessingStateLoa($receivedRequest, $receivedResponse, $mappedLoa);
+            $log->warning('After failed Stepup authentication set LoA to Loa1', array('key_id' => $receivedRequest->getId(), 'result' => $mappedLoa));
         }
 
         if ($checkResponseSignature) {
@@ -180,5 +186,18 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
                 $e->getFeedbackStatusMessage()
             )
         );
+    }
+
+    /**
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest
+     * @param EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse
+     * @param string $loa
+     * @throws EngineBlock_Corto_Module_Services_SessionLostException
+     */
+    private function updateProcessingStateLoa(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest, EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse, $loa)
+    {
+        $processStep = $this->_processingStateHelper->getStepByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_STEPUP);
+        $processStep->getResponse()->getAssertion()->setAuthnContextClassRef($loa);
+        $this->_processingStateHelper->updateStepResponseByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_STEPUP, $processStep->getResponse());
     }
 }

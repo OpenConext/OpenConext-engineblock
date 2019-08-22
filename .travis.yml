@@ -82,6 +82,7 @@ branches:
   only:
     - master
     - feature/sfo
+    - /^feature\/sfo.*$/
     - /^feature\/serialize-coins.*$/
     - feature/error-page-styling
 

@@ -26,7 +26,8 @@ class EngineBlock_Saml2_AuthnRequestFactory
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $originalRequest,
         IdentityProvider $idpMetadata,
         EngineBlock_Corto_ProxyServer $server,
-        $serviceName = 'spMetadataService'
+        $issuerServiceName = 'spMetadataService',
+        $acsServiceName = 'assertionConsumerService'
     ) {
         $nameIdPolicy = array('AllowCreate' => true);
         /**
@@ -50,9 +51,9 @@ class EngineBlock_Saml2_AuthnRequestFactory
         $sspRequest->setDestination($idpMetadata->singleSignOnServices[0]->location);
         $sspRequest->setForceAuthn($originalRequest->getForceAuthn());
         $sspRequest->setIsPassive($originalRequest->getIsPassive());
-        $sspRequest->setAssertionConsumerServiceURL($server->getUrl('assertionConsumerService'));
+        $sspRequest->setAssertionConsumerServiceURL($server->getUrl($acsServiceName));
         $sspRequest->setProtocolBinding(Constants::BINDING_HTTP_POST);
-        $sspRequest->setIssuer($server->getUrl($serviceName));
+        $sspRequest->setIssuer($server->getUrl($issuerServiceName));
         $sspRequest->setNameIdPolicy($nameIdPolicy);
 
         if (empty($idpMetadata->getCoins()->disableScoping())) {

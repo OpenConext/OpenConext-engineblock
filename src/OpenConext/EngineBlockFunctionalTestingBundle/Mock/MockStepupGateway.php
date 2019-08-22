@@ -73,7 +73,7 @@ class MockStepupGateway
     public function handleSsoSuccess(Request $request, $fullRequestUri)
     {
         // parse the authnRequest
-         $authnRequest = $this->parseRequest($request, $fullRequestUri);
+        $authnRequest = $this->parseRequest($request, $fullRequestUri);
 
         // get parameters from authnRequest
         $nameId = $authnRequest->getNameId()->value;
@@ -203,7 +203,7 @@ class MockStepupGateway
         $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, array('type' => 'public'));
         $key->loadKey($this->gatewayConfiguration->getIdentityProviderPublicKeyCertData());
 
-        // The query string to vaklidate needs to be urlencoded again because Symfony ha already decoded this for us
+        // The query string to validate needs to be urlencoded again because Symfony has already decoded this for us
         $query = self::PARAMETER_REQUEST . '=' . urlencode($requestData);
         $query .= '&' . self::PARAMETER_SIGNATURE_ALGORITHM . '=' . urlencode($request->get(self::PARAMETER_SIGNATURE_ALGORITHM));
 
