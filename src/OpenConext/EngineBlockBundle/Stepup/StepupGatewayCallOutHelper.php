@@ -75,6 +75,15 @@ final class StepupGatewayCallOutHelper
     }
 
     /**
+     * @param string $gatewayLoa
+     * @return string
+     */
+    public function getEbLoa($gatewayLoa)
+    {
+        return $this->gatewayLoaMapping->transformToEbLoa($gatewayLoa);
+    }
+
+    /**
      * @param IdentityProvider $identityProvider
      * @param ServiceProvider $serviceProvider
      * @return bool

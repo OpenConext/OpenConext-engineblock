@@ -51,10 +51,25 @@ class StepupGatewayLoaMapping
     public function transformToGatewayLoa($input)
     {
         if (!array_key_exists($input, $this->mapping)) {
-            throw new RuntimeException('Unable to determine gateway LOA for manage LOA');
+            throw new RuntimeException('Unable to find the EngineBlock LoA in the configured stepup LoA mapping');
         }
 
         return $this->mapping[$input];
+    }
+
+
+    /**
+     * @param $input
+     * @return string
+     */
+    public function transformToEbLoa($input)
+    {
+        $loa = array_search($input, $this->mapping);
+        if ($loa === false) {
+            throw new RuntimeException('Unable to find the received stepup LoA in the configured EngineBlock LoA');
+        }
+
+        return $loa;
     }
 
     /**
