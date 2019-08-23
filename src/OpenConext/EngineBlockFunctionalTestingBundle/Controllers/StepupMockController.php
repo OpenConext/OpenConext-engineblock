@@ -29,9 +29,6 @@ use Twig_Environment;
 
 class StepupMockController extends Controller
 {
-    const PARAMETER_REQUEST = 'SAMLRequest';
-    const PARAMETER_RELAY_STATE = 'RelayState';
-
     /**
      * @var MockStepupGateway
      */
@@ -55,9 +52,9 @@ class StepupMockController extends Controller
     {
         try {
             // Check binding
-            if (!$request->isMethod(Request::METHOD_POST)) {
+            if (!$request->isMethod(Request::METHOD_GET)) {
                 throw new BadRequestHttpException(sprintf(
-                    'Could not receive AuthnRequest from HTTP Request: expected a POST method, got %s',
+                    'Could not receive AuthnRequest from HTTP Request: expected a GET method, got %s',
                     $request->getMethod()
                 ));
             }
@@ -88,16 +85,13 @@ class StepupMockController extends Controller
      */
     private function getAvailableResponses(Request $request)
     {
-        // Decode samlrequest
-        $decodedSamlRequest = base64_decode($request->request->get(self::PARAMETER_REQUEST), true);
-
         // Parse success
-        $samlResponse = $this->mockStepupGateway->handleSsoSuccess($decodedSamlRequest, $this->getFullRequestUri($request));
+        $samlResponse = $this->mockStepupGateway->handleSsoSuccess($request, $this->getFullRequestUri($request));
         $results['success'] = $this->getResponseData($request, $samlResponse);
 
         // Parse user cancelled
         $samlResponse = $this->mockStepupGateway->handleSsoFailure(
-            $decodedSamlRequest,
+            $request,
             $this->getFullRequestUri($request),
             Constants::STATUS_RESPONDER,
             Constants::STATUS_AUTHN_FAILED,
@@ -107,7 +101,7 @@ class StepupMockController extends Controller
 
         // Parse unmet Loa
         $samlResponse = $this->mockStepupGateway->handleSsoFailure(
-            $decodedSamlRequest,
+            $request,
             $this->getFullRequestUri($request),
             Constants::STATUS_RESPONDER,
             Constants::STATUS_NO_AUTHN_CONTEXT
@@ -116,7 +110,7 @@ class StepupMockController extends Controller
 
         // Parse unknown
         $samlResponse = $this->mockStepupGateway->handleSsoFailure(
-            $decodedSamlRequest,
+            $request,
             $this->getFullRequestUri($request),
             Constants::STATUS_RESPONDER,
             Constants::STATUS_AUTHN_FAILED
@@ -139,7 +133,7 @@ class StepupMockController extends Controller
             'acu' => $samlResponse->getDestination(),
             'rawResponse' => $rawResponse,
             'encodedResponse' => base64_encode($rawResponse),
-            'relayState' => $request->request->get(self::PARAMETER_RELAY_STATE),
+            'relayState' => $request->request->get(MockStepupGateway::PARAMETER_RELAY_STATE),
         ];
     }
 

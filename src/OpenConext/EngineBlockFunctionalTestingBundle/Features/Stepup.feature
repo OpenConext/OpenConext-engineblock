@@ -18,7 +18,6 @@ Feature:
       And I select "SSO-IdP" on the WAYF
       And I pass through EngineBlock
       And I pass through the IdP
-      And I pass through EngineBlock
       And Stepup will successfully verify a user
       And I give my consent
       And I pass through EngineBlock
@@ -30,7 +29,6 @@ Feature:
         And I select "SSO-IdP" on the WAYF
         And I pass through EngineBlock
         And I pass through the IdP
-        And I pass through EngineBlock
         And Stepup will successfully verify a user
         And I give my consent
         And I pass through EngineBlock
@@ -62,7 +60,6 @@ Feature:
         And I select "SSO-IdP" on the WAYF
         And I pass through EngineBlock
         And I pass through the IdP
-        And I pass through EngineBlock
         And Stepup will fail if the LoA can not be given
         And I give my consent
         And I pass through EngineBlock
@@ -74,7 +71,6 @@ Feature:
         And I select "SSO-IdP" on the WAYF
         And I pass through EngineBlock
         And I pass through the IdP
-        And I pass through EngineBlock
         And Stepup will fail if the LoA can not be given
       Then I should see "Error - No suitable token found"
         And the url should match "/feedback/stepup-callout-unmet-loa"
@@ -85,7 +81,6 @@ Feature:
         And I select "SSO-IdP" on the WAYF
         And I pass through EngineBlock
         And I pass through the IdP
-        And I pass through EngineBlock
         And Stepup will fail as the user cancelled
       Then I should see "Error - Logging in cancelled"
         And the url should match "/feedback/stepup-callout-user-cancelled"
@@ -96,7 +91,6 @@ Feature:
         And I select "SSO-IdP" on the WAYF
         And I pass through EngineBlock
         And I pass through the IdP
-        And I pass through EngineBlock
         And Stepup will fail on unknown invalid status
       Then I should see "Error - Unknown strong authentication failure"
         And the url should match "/feedback/stepup-callout-unknown"

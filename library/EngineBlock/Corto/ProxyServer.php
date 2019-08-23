@@ -440,7 +440,13 @@ class EngineBlock_Corto_ProxyServer
         $authnContextClassRef,
         NameID $nameId
     ) {
-        $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest($spRequest, $identityProvider, $this);
+        $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
+            $spRequest,
+            $identityProvider,
+            $this,
+            'stepupMetadataService',
+            'stepupAssertionConsumerService'
+        );
 
         $sspMessage = $ebRequest->getSspMessage();
         if (!$sspMessage instanceof AuthnRequest) {
@@ -454,21 +460,10 @@ class EngineBlock_Corto_ProxyServer
             ],
             'Comparison' => 'minimal',
         ]);
-        $sspMessage->setNameId([
+        $sspMessage->setNameId(NameID::fromArray([
             'Value' => $nameId->value,
             'Format' => Constants::NAMEID_UNSPECIFIED,
-        ]);
-
-        // Add gateway data
-        $sspMessage->setDestination($identityProvider->singleSignOnServices[0]->location);
-        $sspMessage->setAssertionConsumerServiceURL($this->_server->getUrl('stepupAssertionConsumerService'));
-        $sspMessage->setProtocolBinding(Constants::BINDING_HTTP_POST);
-        $sspMessage->setIssuer($this->_server->getUrl('stepupMetadataService'));
-
-        // Add the SP to the requesterIds
-        $requesterIds = $sspMessage->getRequesterID();
-        $requesterIds[] = $sspMessage->getIssuer();
-        $sspMessage->setRequesterID($requesterIds);
+        ]));
 
         // Link with the original Request
         $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_logger);
