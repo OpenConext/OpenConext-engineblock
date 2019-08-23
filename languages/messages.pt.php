@@ -253,7 +253,7 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_stepup_callout_unknown_title' => 'Erro - falha por autenticação forte desconhecida',
     'error_stepup_callout_unknown_desc' => 'O login com autenticação forte falhou e não sabemos exatamente qual o motivo. Tente aceder de novo ao serviço e efetuar uma nova autenticação. Se voltar a não funcionar, entre em contato com o suporte técnico da sua %organisationNoun%.',
     'error_stepup_callout_unmet_loa_title' => 'Erro - não foi encontrado nenhum token adequado',
-    'error_stepup_callout_unmet_loa_desc' => 'Para continuar neste serviço, é necessário que o token registado tenho um determinado nível de confiança. Atualmente, você não tem um token registado, ou o nível de confiança do seu token é muito baixo. Veja o endereço abaixo para mais informações sobre o processo de registo.<br/><br/><a target="_blank" href="""https://support.surfconext.nl/stepup-noauthncontext">Leia mais sobre o processo de registro.</a>',
+    'error_stepup_callout_unmet_loa_desc' => 'Para continuar neste serviço, é necessário que o token registado tenho um determinado nível de confiança. Atualmente, você não tem um token registado, ou o nível de confiança do seu token é muito baixo. Veja o endereço abaixo para mais informações sobre o processo de registo.<br/><br/><a target="_blank" href="https://support.surfconext.nl/stepup-noauthncontext">Leia mais sobre o processo de registro.</a>',
     'error_stepup_callout_user_cancelled_title' => 'Erro - Carregamento cancelado',
     'error_stepup_callout_user_cancelled_desc' => 'Você cancelou o processo de autenticação. Volte ao serviço se você pretender tentar de novo.',
     'attributes_validation_succeeded' => 'Autenticação com sucesso',
