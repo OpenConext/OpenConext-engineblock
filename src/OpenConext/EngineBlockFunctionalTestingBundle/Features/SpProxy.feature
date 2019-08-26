@@ -94,7 +94,7 @@ Feature:
       And SP "Step Up" is a trusted proxy
       And SP "Step Up" signs its requests
      When I log in at "Step Up"
-     Then I should see "Select an organisation to login to the service: Loa SP"
+     Then I should see "Select an organisation to login to the service Loa SP"
       And I select "AlwaysAuth" on the WAYF
       And I pass through EngineBlock
       And I pass through the IdP
