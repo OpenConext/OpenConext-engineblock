@@ -511,6 +511,6 @@ class EngineBlock_Application_DiContainer extends Pimple
     /** @return \OpenConext\EngineBlockBundle\Stepup\StepupEndpoint $stepupEndpoint */
     protected function getStepupEndpoint()
     {
-        return  $this->container->get('engineblock.configuration.stepup.endpoint');
+        return $this->container->get('engineblock.configuration.stepup.endpoint');
     }
 }

@@ -13,7 +13,7 @@ Feature:
   Scenario: EngineBlock accepts RSA Encrypted Responses
     Given the SP uses the HTTP POST Binding
       And feature "eb.encrypted_assertions" is enabled
-      And the IdP encrypts its assertions with the public key in "tests/resources/key/engineblock.crt"
+      And the IdP encrypts its assertions with the public key in "/etc/openconext/engineblock.crt"
      When I log in at "Dummy SP"
       And I pass through the SP
       And I pass through EngineBlock
