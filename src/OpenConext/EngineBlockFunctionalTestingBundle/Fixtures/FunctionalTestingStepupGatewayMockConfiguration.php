@@ -47,18 +47,19 @@ final class FunctionalTestingStepupGatewayMockConfiguration
 
     public function __construct(
         MockIdentityProviderFactory $mockIdentityProviderFactory,
-        MockServiceProviderFactory $mockServiceProviderFactory
+        MockServiceProviderFactory $mockServiceProviderFactory,
+        \EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton
     ) {
         $this->mockIdentityProviderFactory = $mockIdentityProviderFactory;
         $this->mockServiceProviderFactory = $mockServiceProviderFactory;
 
-        $basePath = realpath(__DIR__.'/../../../../');
+        $keysConfig = $engineBlockApplicationSingleton->getDiContainer()->getEncryptionKeysConfiguration();
 
         // Set gateway configured IDP
         $mockEbIdp = $this->mockIdentityProviderFactory->createNew('Stepup gateway');
         $mockEbIdp->setEntityId('https://engine.vm.openconext.org/authentication/stepup/metadata');
-        $mockEbIdp->setPrivateKey($basePath . '/tests/resources/key/engineblock.pem');
-        $mockEbIdp->setCertificate($basePath . '/tests/resources/key/engineblock.crt');
+        $mockEbIdp->setPrivateKey($keysConfig['default']['privateFile']);
+        $mockEbIdp->setCertificate($keysConfig['default']['publicFile']);
 
         $this->mockIdentityProvider = $mockEbIdp;
 

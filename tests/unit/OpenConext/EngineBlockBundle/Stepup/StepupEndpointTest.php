@@ -46,7 +46,7 @@ class StepupEndpointTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('EntityId should be a string');
 
-        $endpoint = new StepupEndpoint(null, 'https://sso-location', 'tests/resources/key/engineblock.key');
+        $endpoint = new StepupEndpoint(null, 'https://sso-location', 'tests/resources/key/engineblock.crt');
     }
 
     /**
@@ -58,7 +58,7 @@ class StepupEndpointTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('SSO location should be a string');
 
-        $endpoint = new StepupEndpoint('entity-id', null, 'tests/resources/key/engineblock.key');
+        $endpoint = new StepupEndpoint('entity-id', null, 'tests/resources/key/engineblock.crt');
     }
 
     /**
