@@ -74,6 +74,7 @@ before_script:
   - app/console cache:clear --env=test
   - npm ci --prefix=theme
   - cd theme && npm run build && cd ..
+
 script:
   - ant $COMMAND
 
