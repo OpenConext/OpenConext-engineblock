@@ -64,16 +64,20 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
     }
 
     /**
+     * This method is used to mock the private key and will return the same private key as in /etc/openconext/engineblock.pem
+     * The file /etc/openconext/engineblock.pem is not readable for all users and would break running tests because the
+     * key file could not be opened so therefore a different file is used.
+     * The private key is needed to validate stepup authentication responses which will use the same key for the gateway
+     *
      * @return array
      */
     public function getEncryptionKeysConfiguration()
     {
         $basePath = $this->container->getParameter('kernel.project_dir');
-
         return [
             'default' => [
-                'publicFile' => $basePath . '/tests/resources/key/engineblock.crt',
-                'privateFile' => $basePath . '/tests/resources/key/engineblock.pem',
+                'publicFile' => '/etc/openconext/engineblock.crt',
+                'privateFile' => $basePath . '/ci/travis/files/engineblock.pem',
             ],
         ];
     }

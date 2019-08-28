@@ -52,6 +52,7 @@ services:
         arguments:
             - '@engineblock.mock_entities.idp_factory'
             - '@engineblock.mock_entities.sp_factory'
+            - "@engineblock.compat.application"
     #endregion Fixtures
 
     #region Data Stores
@@ -91,4 +92,4 @@ services:
         arguments:
             - "https://engine.vm.openconext.org/authentication/stepup/metadata"
             - "https://engine.vm.openconext.org/functional-testing/gateway/second-factor-only/single-sign-on"
-            - "%kernel.project_dir%/tests/resources/key/engineblock.crt"
+            - "%stepup.gateway.sfo.key_file%"

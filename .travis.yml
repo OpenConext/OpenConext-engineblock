@@ -43,12 +43,12 @@ before_script:
   # Copy apache keys
   - sudo ln -s "$(pwd)"/ci/travis/files/ /etc/openconext
   # Set rights to private key to reflect prod
-  - sudo chown travis:root ~/build/OpenConext/OpenConext-engineblock/tests/resources/key/engineblock.pem
-  - sudo chmod 0440 ~/build/OpenConext/OpenConext-engineblock/tests/resources/key/engineblock.pem
+  - sudo chown travis:root /etc/openconext/engineblock.pem
+  - sudo chmod 0440 /etc/openconext/engineblock.pem
   ###
   - mkdir -p /tmp/engineblock/cache/test
   - mkdir -p /tmp/engineblock/logs/test
-  - sudo apt-get update
+  #- sudo apt-get update
   - sudo apt-get install apache2 libapache2-mod-fastcgi ant
   - if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf; fi
   - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
@@ -74,7 +74,6 @@ before_script:
   - app/console cache:clear --env=test
   - npm ci --prefix=theme
   - cd theme && npm run build && cd ..
-
 script:
   - ant $COMMAND
 
