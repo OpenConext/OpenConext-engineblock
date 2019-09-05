@@ -1,5 +1,12 @@
 # UPGRADE NOTES
 
+## 5.10 -> 5.11
+
+### Improved error feedback
+The 5.11 release solely improves the error pages. Some new features have been made available to improve the error pages. Most notable, and requiring changes to the parameters.yml, is the possibility to provide custom Wiki links for specific error pages. You are now also able to display an IdP support button, for IdP related error pages.
+
+The parameters.yml.dist file goes into more detail on how to configure this. 
+
 ## 5.9 -> 5.10.0
 
 ### Add the possibility to sign a SAML response
