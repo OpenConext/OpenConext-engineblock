@@ -11,7 +11,7 @@ authentication_sp_process_consent:
         _controller: engineblock.controller.authentication.service_provider:processConsentAction
 
 # Stepup authentication
-authentication_sfo_consume_assertion:
+authentication_stepup_consume_assertion:
     path:     /authentication/stepup/consume-assertion
     methods:  [POST]
     defaults:
