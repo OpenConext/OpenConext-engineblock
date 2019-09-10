@@ -1,12 +1,34 @@
 <?php
 
+/**
+ * Copyright 2010 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
+use OpenConext\EngineBlock\Service\Dto\ProcessingStateStep;
+use OpenConext\EngineBlock\Service\ProcessingStateHelper;
+use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationStateInterface;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_Framework_TestCase
 {
@@ -26,9 +48,30 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
     private $consentFactoryMock;
 
     /**
-     * @var \OpenConext\EngineBlock\Service\AuthenticationStateHelperInterfacee
+     * @var AuthenticationStateHelperInterface
      */
     private $authnStateHelperMock;
+
+    /**
+     * @var ProcessingStateHelperInterface
+     */
+    private $processingStateHelperMock;
+
+    /**
+     * @var Response
+     */
+    private $sspResponseMock;
+
+    /**
+     * @var Request
+     */
+    private $httpRequestMock;
+
+    /**
+     * @var MockArraySessionStorage
+     */
+    private $sessionMock;
+
 
     public function setup()
     {
@@ -38,7 +81,9 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
         $this->xmlConverterMock   = $this->mockXmlConverter($diContainer->getXmlConverter());
         $this->consentFactoryMock = $diContainer->getConsentFactory();
         $this->authnStateHelperMock = $this->mockAuthnStateHelper();
-        $this->mockGlobals();
+        $this->sspResponseMock = $this->mockSspResponse();
+        $this->processingStateHelperMock = $this->mockProcessingStateHelper();
+        $this->httpRequestMock = $this->mockHttpRequest();
     }
 
     public function testSessionLostExceptionIfNoSession()
@@ -46,11 +91,14 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
         $this->expectException(EngineBlock_Corto_Module_Services_SessionLostException::class);
         $this->expectExceptionMessage('Session lost after consent');
 
+        $sessionData = [
+            'Processing' => [],
+        ];
+        $this->sessionMock->setSessionData(['_sf2_attributes' => $sessionData]);
+
         $processConsentService = $this->factoryService();
 
-        unset($_SESSION['consent']);
-
-        $processConsentService->serve(null);
+        $processConsentService->serve(null, $this->httpRequestMock);
     }
 
     public function testSessionLostExceptionIfPostIdNotInSession()
@@ -58,10 +106,15 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
         $this->expectException(EngineBlock_Corto_Module_Services_SessionLostException::class);
         $this->expectExceptionMessage('Stored response for ResponseID "test" not found');
 
-        unset($_SESSION['consent']['test']);
+        $sessionData = [
+            'Processing' => [
+                'unknown' => null,
+            ],
+        ];
+        $this->sessionMock->setSessionData(['_sf2_attributes' => $sessionData]);
 
         $processConsentService = $this->factoryService();
-        $processConsentService->serve(null);
+        $processConsentService->serve(null, $this->httpRequestMock);
     }
 
     public function testRedirectToFeedbackPageIfConsentNotInPost()
@@ -70,8 +123,7 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
 
         $processConsentService = $this->factoryService();
 
-        unset($_POST['consent']);
-        $processConsentService->serve(null);
+        $processConsentService->serve(null, $this->mockHttpRequestNoConsent());
     }
 
     public function testConsentIsStored()
@@ -83,7 +135,7 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
             ->giveExplicitConsentFor(Phake::anyParameters())
             ->thenReturn(true);
 
-        $processConsentService->serve(null);
+        $processConsentService->serve(null, $this->httpRequestMock);
 
         Phake::verify(($consentMock))->giveExplicitConsentFor(Phake::anyParameters());
     }
@@ -99,7 +151,7 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
             ->send(Phake::anyParameters())
             ->thenReturn(null);
 
-        $processConsentService->serve(null);
+        $processConsentService->serve(null, $this->httpRequestMock);
 
         Phake::verify(($this->proxyServerMock->getBindingsModule()))->send(Phake::anyParameters());
     }
@@ -154,37 +206,6 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
         return $xmlConverterMock;
     }
 
-    private function mockGlobals()
-    {
-        $_POST['ID'] = 'test';
-        $_POST['consent'] = 'yes';
-
-        $assertion = new Assertion();
-        $assertion->setAttributes(array(
-            'urn:mace:dir:attribute-def:mail' => 'test@test.test'
-        ));
-
-        $spRequest = new AuthnRequest();
-        $spRequest->setId('SPREQUEST');
-        $spRequest->setIssuer('https://sp.example.edu');
-        $spRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($spRequest);
-
-        $ebRequest = new AuthnRequest();
-        $ebRequest->setId('EBREQUEST');
-        $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($ebRequest);
-
-        $dummySessionLog = new Psr\Log\NullLogger();
-        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($dummySessionLog);
-        $authnRequestRepository->store($spRequest);
-        $authnRequestRepository->store($ebRequest);
-        $authnRequestRepository->link($ebRequest, $spRequest);
-
-        $sspResponse = new Response();
-        $sspResponse->setInResponseTo('EBREQUEST');
-        $sspResponse->setAssertions(array($assertion));
-        $_SESSION['consent']['test']['response'] = new EngineBlock_Saml2_ResponseAnnotationDecorator($sspResponse);
-    }
-
     /**
      * @return EngineBlock_Corto_Model_Consent
      */
@@ -213,6 +234,86 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
         return $helperMock;
     }
 
+    private function mockSspResponse()
+    {
+        $assertion = new Assertion();
+        $assertion->setAttributes(array(
+            'urn:mace:dir:attribute-def:mail' => 'test@test.test'
+        ));
+
+        $spRequest = new AuthnRequest();
+        $spRequest->setId('SPREQUEST');
+        $spRequest->setIssuer('https://sp.example.edu');
+        $spRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($spRequest);
+
+        $ebRequest = new AuthnRequest();
+        $ebRequest->setId('EBREQUEST');
+        $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($ebRequest);
+
+        $dummySessionLog = new Psr\Log\NullLogger();
+        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($dummySessionLog);
+        $authnRequestRepository->store($spRequest);
+        $authnRequestRepository->store($ebRequest);
+        $authnRequestRepository->link($ebRequest, $spRequest);
+
+        $sspResponse = new Response();
+        $sspResponse->setInResponseTo('EBREQUEST');
+        $sspResponse->setAssertions(array($assertion));
+
+        $sspResponse = new EngineBlock_Saml2_ResponseAnnotationDecorator($sspResponse);
+
+        return $sspResponse;
+    }
+
+    private function mockProcessingStateHelper()
+    {
+        $this->sessionMock = new MockArraySessionStorage();
+
+        $sessionData = [
+            'Processing' => [
+                'test' => [
+                    'consent' => new ProcessingStateStep($this->sspResponseMock, new ServiceProvider('https://sp.example.edu')),
+                ],
+            ],
+        ];
+
+        $this->sessionMock->setSessionData(['_sf2_attributes' => $sessionData]);
+
+        $session = new Session($this->sessionMock);
+        return new ProcessingStateHelper($session);
+    }
+
+
+    private function mockHttpRequest()
+    {
+        $helperMock = Phake::mock(Request::class);
+        Phake::when($helperMock)
+            ->get('ID')
+            ->thenReturn('test')
+        ;
+
+        Phake::when($helperMock)
+            ->get('consent', 'no')
+            ->thenReturn('yes');
+
+        return $helperMock;
+    }
+
+    private function mockHttpRequestNoConsent()
+    {
+        $helperMock = Phake::mock(Request::class);
+        Phake::when($helperMock)
+            ->get('ID')
+            ->thenReturn('test')
+        ;
+
+        Phake::when($helperMock)
+            ->get('consent', 'no')
+            ->thenReturn('no');
+
+        return $helperMock;
+    }
+
     /**
      * @return EngineBlock_Corto_Module_Service_ProcessConsent
      */
@@ -222,7 +323,8 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
             $this->proxyServerMock,
             $this->xmlConverterMock,
             $this->consentFactoryMock,
-            $this->authnStateHelperMock
+            $this->authnStateHelperMock,
+            $this->processingStateHelperMock
         );
     }
 }

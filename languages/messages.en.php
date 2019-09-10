@@ -227,6 +227,8 @@ Your %organisationNoun% has denied you access to this service. You will have to 
     'error_stuck_in_authentication_loop' => 'Error - You got stuck in a black hole',
     'error_stuck_in_authentication_loop_desc' => 'You\'ve successfully authenticated at your %organisationNoun% but the service you are trying to access sends you back again to %suiteName%. Because you are already logged in, %suiteName% then sends you back to the service, which results in an infinite black hole. Likely, this is caused by an error at the Service Provider.',
     'error_no_authentication_request_received' => 'Error - No authentication request received.',
+    'error_authn_context_class_ref_blacklisted'                     => 'Error - AuthnContextClassRef value is disallowed',
+    'error_authn_context_class_ref_blacklisted_desc'                => '<p>You cannot login because your %organisationNoun% sent a value for AuthnContextClassRef that is not allowed.</p>',
     /**
      * %1 AttributeName
      * %2 Options
@@ -251,7 +253,12 @@ Your %organisationNoun% has denied you access to this service. You will have to 
     'error_unknown_service_desc'    => '<p>Your requested service couldn\'t be found.</p>',
     'error_clock_issue_title' => 'Error - The Assertion is not yet valid or has expired',
     'error_clock_issue_desc' => 'This is likely because the difference in time between %organisationNoun% and %suiteName% it too large. Please verify that the time on the IdP is correct.',
-
+    'error_stepup_callout_unknown_title' => 'Error - Unknown strong authentication failure',
+    'error_stepup_callout_unknown_desc' => 'Logging in with strong authentication has failed and we don\'t know exactly why . Please try again first by going back to the service and logging in again . If this doesn\'t work, please contact the help desk of your %organisationNoun%.',
+    'error_stepup_callout_unmet_loa_title' => 'Error - No suitable token found',
+    'error_stepup_callout_unmet_loa_desc' => 'To continue to this service, a registered token with a certain level of assurance is required. Currently, you either haven\'t registered a token at all, or the level of assurance of token you did register is too low . See the link below for more information about the registration process.',
+    'error_stepup_callout_user_cancelled_title' => 'Error - Logging in cancelled',
+    'error_stepup_callout_user_cancelled_desc' => 'You have aborted the login process. Go back to the service if you want to try again.',
     'attributes_validation_succeeded' => 'Authentication success',
     'attributes_validation_failed'    => 'Some attributes failed validation',
     'attributes_data_mailed'          => 'Attribute data have been mailed',

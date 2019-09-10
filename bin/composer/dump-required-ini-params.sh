@@ -236,7 +236,15 @@ $ymlContent = array(
                 'attributeDefinitionFile', $projectRoot . 'application/configs/attributes-v2.2.0.json'
             )
         ),
-        'monitor_database_health_check_query'                     => $config->get('openconext.monitor_bundle_health_query', '')
+        'monitor_database_health_check_query'                     => $config->get('openconext.monitor_bundle_health_query', ''),
+
+        // Stepup authentication
+        'stepup.authn_context_class_ref_blacklist_regex'             => escapeYamlValue($config->get('stepup.authn_context_class_ref_blacklist_regex')),
+        'stepup.loa.mapping'                                         => $config->get('stepup.loa.mapping', array())->toArray(),
+        'stepup.loa.loa1'                                            => escapeYamlValue($config->get('stepup.loa.loa1')),
+        'stepup.gateway.sfo.entity_id'                               => escapeYamlValue($config->get('stepup.gateway.sfo.entityId')),
+        'stepup.gateway.sfo.sso_location'                            => escapeYamlValue($config->get('stepup.gateway.sfo.ssoLocation')),
+        'stepup.gateway.sfo.key_file'                                => escapeYamlValue($config->get('stepup.gateway.sfo.keyFile'))
     )
 );
 

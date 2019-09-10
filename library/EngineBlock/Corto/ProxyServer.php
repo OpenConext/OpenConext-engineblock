@@ -1,5 +1,23 @@
 <?php
 
+/**
+ * Copyright 2010 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
+use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
@@ -13,6 +31,7 @@ use SAML2\AuthnRequest;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Response;
+use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\saml\SubjectConfirmationData;
 
@@ -35,6 +54,7 @@ class EngineBlock_Corto_ProxyServer
         'continueToIdP'                     => '/authentication/idp/process-wayf',
 
         'assertionConsumerService'          => '/authentication/sp/consume-assertion',
+        'stepupAssertionConsumerService'    => '/authentication/stepup/consume-assertion',
         'continueToSP'                      => '/authentication/sp/process-consent',
         'provideConsentService'             => '/authentication/idp/provide-consent',
         'processConsentService'             => '/authentication/idp/process-consent',
@@ -42,6 +62,7 @@ class EngineBlock_Corto_ProxyServer
 
         'idpMetadataService'                => '/authentication/idp/metadata',
         'spMetadataService'                 => '/authentication/sp/metadata',
+        'stepupMetadataService'             => '/authentication/stepup/metadata',
         'singleLogoutService'               => '/logout'
     );
 
@@ -54,6 +75,7 @@ class EngineBlock_Corto_ProxyServer
         'singleLogoutService',
         'singleSignOnService',
         'spMetadataService',
+        'stepupMetadataService',
         'unsolicitedSingleSignOnService',
     );
 
@@ -408,7 +430,70 @@ class EngineBlock_Corto_ProxyServer
         $authnRequestRepository->store($spRequest);
         $authnRequestRepository->link($ebRequest, $spRequest);
 
+
         $this->getBindingsModule()->send($ebRequest, $identityProvider);
+    }
+
+    public function sendStepupAuthenticationRequest(
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $spRequest,
+        IdentityProvider $identityProvider,
+        $authnContextClassRef,
+        NameID $nameId
+    ) {
+        $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
+            $spRequest,
+            $identityProvider,
+            $this,
+            'stepupMetadataService',
+            'stepupAssertionConsumerService'
+        );
+
+        $sspMessage = $ebRequest->getSspMessage();
+        if (!$sspMessage instanceof AuthnRequest) {
+            throw new \RuntimeException(sprintf('Unknown message type: "%s"', get_class($sspMessage)));
+        }
+
+        // Add Stepup specific data
+        $sspMessage->setRequestedAuthnContext([
+            'AuthnContextClassRef' => [
+                $authnContextClassRef
+            ],
+            'Comparison' => 'minimal',
+        ]);
+        $sspMessage->setNameId(NameID::fromArray([
+            'Value' => $nameId->value,
+            'Format' => Constants::NAMEID_UNSPECIFIED,
+        ]));
+
+        // Link with the original Request
+        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_logger);
+        $authnRequestRepository->store($spRequest);
+        $authnRequestRepository->link($ebRequest, $spRequest);
+
+        $this->getBindingsModule()->send($ebRequest, $identityProvider);
+    }
+
+    function sendConsentAuthenticationRequest(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest,
+        AbstractRole $serviceProvider,
+        AuthenticationState $authenticationState
+    ) {
+        $this->setProcessingMode();
+        $newResponse = $this->_server->createEnhancedResponse($receivedRequest, $receivedResponse);
+
+        // Change the destiny of the received response
+        $inResponseTo = $receivedResponse->getInResponseTo();
+        $newResponse->setInResponseTo($inResponseTo);
+        $newResponse->setDestination($serviceProvider->responseProcessingService->location);
+        $newResponse->setDeliverByBinding($serviceProvider->responseProcessingService->binding);
+        $newResponse->setReturn($this->_server->getUrl('processedAssertionConsumerService'));
+
+        $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($receivedResponse->getIssuer());
+        $identityProvider = new Entity(new EntityId($idp->entityId), EntityType::IdP());
+        $authenticationState->authenticatedAt($inResponseTo, $identityProvider);
+
+        $this->_server->getBindingsModule()->send($newResponse, $serviceProvider);
     }
 
 //////// RESPONSE HANDLING ////////
@@ -983,6 +1068,50 @@ class EngineBlock_Corto_ProxyServer
         $element[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Signed'] = true;
 
         return $element;
+    }
+
+    /**
+     * Log and verify the signature methods used.
+     *
+     * The signatures are not validated here, but the used methods
+     * (algorithms) are logged and an error is thrown if they're explicitly
+     * prohibited from use.
+     *
+     * @param EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse
+     */
+    public function checkResponseSignatureMethods(EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse)
+    {
+        $issuer = $receivedResponse->getIssuer();
+        $log = EngineBlock_ApplicationSingleton::getInstance()
+            ->getLogInstance();
+
+        $log->notice(
+            sprintf(
+                'Received Assertion from Issuer "%s" with signature method algorithms Response: "%s" and Assertion: "%s"',
+                $issuer,
+                $receivedResponse->getSignatureMethod(),
+                $receivedResponse->getAssertion()->getSignatureMethod()
+            )
+        );
+
+        if ($receivedResponse->getSignatureMethod() !== null) {
+            $this->assertSignatureMethodIsAllowed($receivedResponse->getSignatureMethod());
+        }
+
+        if ($receivedResponse->getAssertion()->getSignatureMethod() !== null) {
+            $this->assertSignatureMethodIsAllowed($receivedResponse->getAssertion()->getSignatureMethod());
+        }
+    }
+
+    /**
+     * @param string $signatureMethod
+     * @throws EngineBlock_Corto_Module_Bindings_Exception
+     */
+    private function assertSignatureMethodIsAllowed($signatureMethod)
+    {
+        if (in_array($signatureMethod, $this->getConfig('forbiddenSignatureMethods'))) {
+            throw new EngineBlock_Corto_Module_Bindings_UnsupportedSignatureMethodException($signatureMethod);
+        }
     }
 
     /**

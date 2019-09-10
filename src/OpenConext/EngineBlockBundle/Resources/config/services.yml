@@ -14,6 +14,19 @@ services:
         arguments:
             - "%minimum_execution_time_on_invalid_received_response%"
 
+    engineblock.configuration.stepup.endpoint:
+        class: OpenConext\EngineBlockBundle\Stepup\StepupEndpoint
+        arguments:
+            - "%stepup.gateway.sfo.entity_id%"
+            - "%stepup.gateway.sfo.sso_location%"
+            - "%stepup.gateway.sfo.key_file%"
+
+    engineblock.configuration.stepup.gateway_loa_mapping:
+        class: OpenConext\EngineBlockBundle\Stepup\StepupGatewayLoaMapping
+        arguments:
+            - "%stepup.loa.mapping%"
+            - "%stepup.loa.loa1%"
+
     engineblock.request.request_id_generator:
         public: false
         class: OpenConext\EngineBlock\Request\UniqidGenerator
@@ -33,6 +46,18 @@ services:
         class: OpenConext\EngineBlock\Service\AuthenticationStateHelper
         arguments:
             - "@session"
+
+    engineblock.service.processing_state_helper:
+        class: OpenConext\EngineBlock\Service\ProcessingStateHelper
+        arguments:
+            - "@session"
+
+    engineblock.service.stepup.gateway_callout_helper:
+        class: OpenConext\EngineBlockBundle\Stepup\StepupGatewayCallOutHelper
+        arguments:
+            - "@engineblock.configuration.stepup.gateway_loa_mapping"
+            - "@engineblock.configuration.stepup.endpoint"
+
 
     engineblock.service.consent:
         class: OpenConext\EngineBlock\Service\ConsentService

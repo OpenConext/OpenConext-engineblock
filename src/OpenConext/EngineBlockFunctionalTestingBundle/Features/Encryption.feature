@@ -46,7 +46,7 @@ Feature:
   Scenario: EngineBlock rejects encrypted responses if the feature "eb.encrypted_assertions" is not enabled
     Given the SP uses the HTTP POST Binding
       And feature "eb.encrypted_assertions" is disabled
-      And the IdP encrypts its assertions with the public key in "/etc/openconext/engineblock.crt"
+      And the IdP encrypts its assertions with the public key in "tests/resources/key/engineblock.crt"
      When I log in at "Dummy SP"
       And I pass through the SP
       And I pass through EngineBlock
@@ -58,7 +58,7 @@ Feature:
     Given the SP uses the HTTP POST Binding
       And feature "eb.encrypted_assertions" is enabled
       And feature "eb.encrypted_assertions_require_outer_signature" is enabled
-      And the IdP encrypts its assertions with the public key in "/etc/openconext/engineblock.crt"
+      And the IdP encrypts its assertions with the public key in "tests/resources/key/engineblock.crt"
       And the IdP does not sign its responses
      When I log in at "Dummy SP"
       And I pass through the SP
@@ -75,7 +75,7 @@ Feature:
       And feature "eb.encrypted_assertions" is enabled
       And feature "eb.encrypted_assertions_require_outer_signature" is disabled
      When I log in at "Dummy SP"
-      And the IdP encrypts its assertions with the public key in "/etc/openconext/engineblock.crt"
+      And the IdP encrypts its assertions with the public key in "tests/resources/key/engineblock.crt"
       And the IdP does not sign its responses
       And I pass through the SP
       And I pass through EngineBlock

@@ -118,6 +118,24 @@
           </dl>
       </div>
 
+
+      <div class="main">
+          <h1>Stepup authentication Certificate and Metadata</h1>
+          <dl class="metadata-certificates-list">
+              <dt>
+                  The Public SAML metadata (the entity descriptor) of the {{ 'suite_name'|trans }} stepup authentication Proxy
+              </dt>
+              <dd>
+                  <ul>
+                      <li><a href="/authentication/stepup/metadata">Open link</a></li>
+                      {% for keyId in keyPairIds %}
+                          <li><a href="/authentication/stepup/metadata/key:{{ keyId }}">Open link</a></li>
+                      {% endfor %}
+                  </ul>
+              </dd>
+          </dl>
+      </div>
+
     </div>
   </div>
 </div>

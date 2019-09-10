@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * Copyright 2010 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 namespace OpenConext\EngineBlock\Metadata;
 
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
@@ -23,6 +39,8 @@ class Coins
         $policyEnforcementDecisionRequired,
         $requesteridRequired,
         $signResponse,
+        $stepupAllowNoToken,
+        $stepupRequireLoa,
         $disableScoping,
         $additionalLogging,
         $signatureMethod
@@ -40,6 +58,8 @@ class Coins
             'disableScoping' => $disableScoping,
             'additionalLogging' => $additionalLogging,
             'signatureMethod' => $signatureMethod,
+            'stepupAllowNoToken' => $stepupAllowNoToken,
+            'stepupRequireLoa' => $stepupRequireLoa,
         ]);
     }
 
@@ -47,6 +67,7 @@ class Coins
         $guestQualifier,
         $schacHomeOrganization,
         $hidden,
+        $stepupConnections,
         $disableScoping,
         $additionalLogging,
         $signatureMethod
@@ -58,6 +79,7 @@ class Coins
             'disableScoping' => $disableScoping,
             'additionalLogging' => $additionalLogging,
             'signatureMethod' => $signatureMethod,
+            'stepupConnections' => $stepupConnections,
         ]);
     }
 
@@ -86,6 +108,10 @@ class Coins
     public static function fromJson($data)
     {
         $data = json_decode($data, true);
+
+        if (isset($data['stepupConnections'])) {
+            $data['stepupConnections'] = new StepupConnections($data['stepupConnections']);
+        }
 
         return new self($data);
     }
@@ -136,6 +162,16 @@ class Coins
         return $this->getValue('signResponse', false);
     }
 
+    public function stepupAllowNoToken()
+    {
+        return $this->getValue('stepupAllowNoToken', false);
+    }
+
+    public function stepupRequireLoa()
+    {
+        return $this->getValue('stepupRequireLoa', '');
+    }
+
     // IDP
     public function guestQualifier()
     {
@@ -150,6 +186,14 @@ class Coins
     public function hidden()
     {
         return $this->getValue('hidden', false);
+    }
+
+    /**
+     * @return StepupConnections
+     */
+    public function stepupConnections()
+    {
+        return $this->getValue('stepupConnections', new StepupConnections());
     }
 
     // Abstract

@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * Copyright 2010 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use SAML2\AuthnRequest;
 use SAML2\Constants;
@@ -9,7 +25,9 @@ class EngineBlock_Saml2_AuthnRequestFactory
     public static function createFromRequest(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $originalRequest,
         IdentityProvider $idpMetadata,
-        EngineBlock_Corto_ProxyServer $server
+        EngineBlock_Corto_ProxyServer $server,
+        $issuerServiceName = 'spMetadataService',
+        $acsServiceName = 'assertionConsumerService'
     ) {
         $nameIdPolicy = array('AllowCreate' => true);
         /**
@@ -33,9 +51,9 @@ class EngineBlock_Saml2_AuthnRequestFactory
         $sspRequest->setDestination($idpMetadata->singleSignOnServices[0]->location);
         $sspRequest->setForceAuthn($originalRequest->getForceAuthn());
         $sspRequest->setIsPassive($originalRequest->getIsPassive());
-        $sspRequest->setAssertionConsumerServiceURL($server->getUrl('assertionConsumerService'));
+        $sspRequest->setAssertionConsumerServiceURL($server->getUrl($acsServiceName));
         $sspRequest->setProtocolBinding(Constants::BINDING_HTTP_POST);
-        $sspRequest->setIssuer($server->getUrl('spMetadataService'));
+        $sspRequest->setIssuer($server->getUrl($issuerServiceName));
         $sspRequest->setNameIdPolicy($nameIdPolicy);
 
         if (empty($idpMetadata->getCoins()->disableScoping())) {

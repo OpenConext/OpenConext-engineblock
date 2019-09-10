@@ -1,19 +1,62 @@
 <?php
 
-use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
+/**
+ * Copyright 2010 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends EngineBlock_Corto_Module_Service_Abstract
+use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
+use Symfony\Component\HttpFoundation\Request;
+
+class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
-    public function serve($serviceName)
+    /**
+     * @var EngineBlock_Corto_ProxyServer
+     */
+    private $_server;
+
+    /**
+     * @var ProcessingStateHelperInterface
+     */
+    private $_processingStateHelper;
+
+    public function __construct(
+        EngineBlock_Corto_ProxyServer $server,
+        ProcessingStateHelperInterface $processingStateHelper
+    ) {
+        $this->_server = $server;
+        $this->_processingStateHelper = $processingStateHelper;
+    }
+
+    /**
+     * @param $serviceName
+     * @param Request $httpRequest
+     */
+    public function serve($serviceName, Request $httpRequest)
     {
-        $response = $this->_server->getBindingsModule()->receiveResponse();
+        $serviceEntityId = $this->_server->getUrl('spMetadataService');
+        $expectedDestination = $this->_server->getUrl('assertionConsumerService');
+
+        $response = $this->_server->getBindingsModule()->receiveResponse($serviceEntityId, $expectedDestination);
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($response);
 
         if ($receivedRequest->getKeyId()) {
             $this->_server->setKeyId($receivedRequest->getKeyId());
         }
 
-        $remainingProcessingEntities = &$_SESSION['Processing'][$receivedRequest->getId()]['RemainingEntities'];
+        $currentProcess = $this->_processingStateHelper->getStepByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_CONSENT);
+        $this->_processingStateHelper->clearStepByRequestId($receivedRequest->getId());
 
         $wantlogging = true;
         $application = EngineBlock_ApplicationSingleton::getInstance();
@@ -37,33 +80,16 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends Engine
             $log->info('Raw HTTP request', array('http_request' => (string)$application->getHttpRequest()));
         }
 
-        if (!empty($remainingProcessingEntities)) { // Moar processing!
-            /** @var AbstractRole $nextProcessingEntity */
-            $nextProcessingEntity = array_shift($remainingProcessingEntities);
+         // Done processing! Send off to SP
+        $nextResponse = $currentProcess->getResponse();
+        $response->setDestination($nextResponse->getDestination());
+        $response->setDeliverByBinding($nextResponse->getOriginalIssuer());
+        $response->setOriginalIssuer($nextResponse->getOriginalBinding());
 
-            $this->_server->setProcessingMode();
+        $this->_server->unsetProcessingMode();
 
-            $newResponse = $this->_server->createEnhancedResponse($receivedRequest, $response);
-
-            // Change the destiny of the received response
-            $newResponse->setId($response->getId());
-            $newResponse->setDestination($nextProcessingEntity->responseProcessingService->location);
-            $newResponse->setDeliverByBinding($nextProcessingEntity->responseProcessingService->binding);
-            $newResponse->setReturn($this->_server->getUrl('processedAssertionConsumerService'));
-
-            $this->_server->getBindingsModule()->send($newResponse, $nextProcessingEntity);
-            return;
-        }
-        else { // Done processing! Send off to SP
-            $response->setDestination($_SESSION['Processing'][$receivedRequest->getId()]['OriginalDestination']);
-            $response->setDeliverByBinding($_SESSION['Processing'][$receivedRequest->getId()]['OriginalBinding']);
-            $response->setOriginalIssuer($_SESSION['Processing'][$receivedRequest->getId()]['OriginalIssuer']);
-
-            $this->_server->unsetProcessingMode();
-
-            $sentResponse = $this->_server->createEnhancedResponse($receivedRequest, $response);
-            $this->_server->sendResponseToRequestIssuer($receivedRequest, $sentResponse);
-            return;
-        }
+        $sentResponse = $this->_server->createEnhancedResponse($receivedRequest, $response);
+        $this->_server->sendResponseToRequestIssuer($receivedRequest, $sentResponse);
+        return;
     }
 }

@@ -1,10 +1,28 @@
 <?php
 
+/**
+ * Copyright 2010 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\ConsentServiceInterface;
+use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use SAML2\Constants;
+use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
 /**
@@ -36,13 +54,19 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
      */
     private $twig;
 
+    /**
+     * @var ProcessingStateHelperInterface
+     */
+    private $_processingStateHelper;
+
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
         EngineBlock_Corto_Model_Consent_Factory $consentFactory,
         ConsentServiceInterface $consentService,
         AuthenticationStateHelperInterface $authStateHelper,
-        Environment $twig
+        Environment $twig,
+        ProcessingStateHelperInterface $processingStateHelper
     ) {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
@@ -50,12 +74,26 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $this->_consentService = $consentService;
         $this->_authenticationStateHelper = $authStateHelper;
         $this->twig = $twig;
+        $this->_processingStateHelper = $processingStateHelper;
     }
 
-    public function serve($serviceName)
+    /**
+     * @param $serviceName
+     * @param Request $httpRequest
+     */
+    public function serve($serviceName, Request $httpRequest)
     {
-        $response = $this->_server->getBindingsModule()->receiveResponse();
-        $_SESSION['consent'][$response->getId()]['response'] = $response;
+        $serviceEntityId = $this->_server->getUrl('assertionConsumerService');
+        $response = $this->_server->getBindingsModule()->receiveResponse($serviceEntityId, $serviceEntityId);
+
+        $receivedRequest = $this->_server->getReceivedRequestFromResponse($response);
+
+        // update previous response with current response
+        $this->_processingStateHelper->updateStepResponseByRequestId(
+            $receivedRequest->getId(),
+            ProcessingStateHelperInterface::STEP_CONSENT,
+            $response
+        );
 
         $request = $this->_server->getReceivedRequestFromResponse($response);
         $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
@@ -170,7 +208,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             '@theme/Authentication/View/Proxy/consent.html.twig',
             [
                 'action' => $this->_server->getUrl('processConsentService'),
-                'responseId' => $response->getId(),
+                'responseId' => $receivedRequest->getId(),
                 'sp' => $serviceProviderMetadata,
                 'idp' => $identityProvider,
                 'idpSupport' => $this->getSupportContact($identityProvider),

@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * Copyright 2010 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\RemoveDisallowedIdentityProvidersFilter;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\RemoveOtherWorkflowStatesFilter;
@@ -76,6 +92,11 @@ class EngineBlock_Corto_Adapter
         $this->_callCortoServiceUri('spMetadataService');
     }
 
+    public function stepupMetadata()
+    {
+        $this->_callCortoServiceUri('stepupMetadataService');
+    }
+
     public function spCertificate()
     {
         $this->_callCortoServiceUri('idpCertificateService');
@@ -84,6 +105,11 @@ class EngineBlock_Corto_Adapter
     public function consumeAssertion()
     {
         $this->_callCortoServiceUri('assertionConsumerService');
+    }
+
+    public function stepupConsumeAssertion()
+    {
+        $this->_callCortoServiceUri('stepupAssertionConsumerService');
     }
 
     public function edugainMetadata()
@@ -352,7 +378,6 @@ class EngineBlock_Corto_Adapter
         $this->enrichEngineBlockMetadata($proxyServer);
 
         $proxyServer->setRepository($this->getMetadataRepository());
-        $proxyServer->setConfig('Processing', ['Consent' => $this->getEngineSpRole($proxyServer)]);
         $proxyServer->setBindingsModule(new EngineBlock_Corto_Module_Bindings($proxyServer));
         $proxyServer->setServicesModule(new EngineBlock_Corto_Module_Services($proxyServer));
     }
@@ -494,27 +519,5 @@ class EngineBlock_Corto_Adapter
         );
 
         $this->getMetadataRepository()->appendVisitor($visitor);
-    }
-
-    /**
-     * @param EngineBlock_Corto_ProxyServer $proxyServer
-     * @return ServiceProvider
-     * @throws EngineBlock_Corto_ProxyServer_Exception
-     * @throws EngineBlock_Exception
-     */
-    protected function getEngineSpRole(EngineBlock_Corto_ProxyServer $proxyServer)
-    {
-        $spEntityId = $proxyServer->getUrl('spMetadataService');
-        $engineServiceProvider = $proxyServer->getRepository()->findServiceProviderByEntityId($spEntityId);
-        if (!$engineServiceProvider) {
-            throw new EngineBlock_Exception(
-                sprintf(
-                    "Unable to find EngineBlock configured as Service Provider. No '%s' in repository!",
-                    $spEntityId
-                )
-            );
-        }
-
-        return $engineServiceProvider;
     }
 }

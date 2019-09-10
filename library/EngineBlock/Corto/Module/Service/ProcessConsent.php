@@ -1,8 +1,26 @@
 <?php
 
+/**
+ * Copyright 2010 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
+use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use SAML2\Constants;
 use SAML2\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 class EngineBlock_Corto_Module_Service_ProcessConsent
     implements EngineBlock_Corto_Module_Service_ServiceInterface
@@ -28,34 +46,41 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
     private $_authenticationStateHelper;
 
     /**
+     * @var ProcessingStateHelperInterface
+     */
+    private $_processingStateHelper;
+
+    /**
      * @param EngineBlock_Corto_ProxyServer $server
      * @param EngineBlock_Corto_XmlToArray $xmlConverter
      * @param EngineBlock_Corto_Model_Consent_Factory $consentFactory
+     * @param AuthenticationStateHelperInterface $stateHelper
+     * @param ProcessingStateHelperInterface $processingStateHelper
      */
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
         EngineBlock_Corto_Model_Consent_Factory $consentFactory,
-        AuthenticationStateHelperInterface $stateHelper
+        AuthenticationStateHelperInterface $stateHelper,
+        ProcessingStateHelperInterface $processingStateHelper
     ) {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->_consentFactory = $consentFactory;
         $this->_authenticationStateHelper = $stateHelper;
+        $this->_processingStateHelper = $processingStateHelper;
     }
 
-    public function serve($serviceName)
+    /**
+     * @param $serviceName
+     * @param Request $httpRequest
+     */
+    public function serve($serviceName, Request $httpRequest)
     {
-        if (!isset($_SESSION['consent'])) {
-            throw new EngineBlock_Corto_Module_Services_SessionLostException('Session lost after consent');
-        }
-        if (!isset($_SESSION['consent'][$_POST['ID']]['response'])) {
-            throw new EngineBlock_Corto_Module_Services_SessionLostException(
-                sprintf('Stored response for ResponseID "%s" not found', $_POST['ID'])
-            );
-        }
+        $processStep = $this->_processingStateHelper->getStepByRequestId($httpRequest->get('ID'), ProcessingStateHelperInterface::STEP_CONSENT);
+
         /** @var Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
-        $response = $_SESSION['consent'][$_POST['ID']]['response'];
+        $response = $processStep->getResponse();
 
         $request = $this->_server->getReceivedRequestFromResponse($response);
         $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
@@ -66,7 +91,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
             $this->_server->getRepository()
         );
 
-        if (!isset($_POST['consent']) || $_POST['consent'] !== 'yes') {
+        if ($httpRequest->get('consent', 'no') !== 'yes') {
             throw new EngineBlock_Corto_Exception_NoConsentProvided('No consent given...');
         }
 

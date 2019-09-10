@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * Copyright 2010 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
@@ -7,10 +23,16 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\ConsentServiceInterface;
+use OpenConext\EngineBlock\Service\Dto\ProcessingStateStep;
+use OpenConext\EngineBlock\Service\ProcessingStateHelper;
+use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationStateInterface;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framework_TestCase
 {
@@ -35,9 +57,30 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
     /** @var AuthenticationStateHelperInterface|Mock */
     private $authStateHelperMock;
 
+    /**
+     * @var ProcessingStateHelperInterface
+     */
+    private $processingStateHelperMock;
+
+    /**
+     * @var Response
+     */
+    private $sspResponseMock;
+
+    /**
+     * @var Request
+     */
+    private $httpRequestMock;
+
+    /**
+     * @var MockArraySessionStorage
+     */
+    private $sessionMock;
+
     public function setup() {
         $diContainer              = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
 
+        $this->sspResponseMock = $this->mockSspResponse();
         $this->proxyServerMock    = $this->mockProxyServer();
         $this->xmlConverterMock   = $this->mockXmlConverter($diContainer->getXmlConverter());
         $this->consentFactoryMock = $diContainer->getConsentFactory();
@@ -45,13 +88,15 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $this->consentService     = $this->mockConsentService();
         $this->authStateHelperMock = $this->mockAuthStateHelper();
         $this->twig               = $this->mockTwig();
+        $this->processingStateHelperMock = $this->mockProcessingStateHelper();
+        $this->httpRequestMock = $this->mockHttpRequest();
     }
 
     public function testConsentRequested()
     {
         $provideConsentService = $this->factoryService();
 
-        $provideConsentService->serve(null);
+        $provideConsentService->serve(null, $this->httpRequestMock);
     }
 
     public function testConsentIsSkippedWhenPriorConsentIsStored()
@@ -62,7 +107,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
             ->explicitConsentWasGivenFor(Phake::anyParameters())
             ->thenReturn(true);
 
-        $provideConsentService->serve(null);
+        $provideConsentService->serve(null, $this->httpRequestMock);
 
         Phake::verify($this->proxyServerMock->getBindingsModule())
             ->send(Phake::capture($message), Phake::capture($metadata));
@@ -75,7 +120,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
 
         $provideConsentService = $this->factoryService();
 
-        $provideConsentService->serve(null);
+        $provideConsentService->serve(null, $this->httpRequestMock);
 
         Phake::verify($this->proxyServerMock->getBindingsModule())
             ->send(Phake::capture($message), Phake::capture($metadata));
@@ -97,7 +142,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
 
         $provideConsentService = $this->factoryService();
 
-        $provideConsentService->serve(null);
+        $provideConsentService->serve(null, $this->httpRequestMock);
 
         Phake::verify($this->proxyServerMock->getBindingsModule())
             ->send(Phake::capture($message), Phake::capture($metadata));
@@ -178,7 +223,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         /** @var EngineBlock_Corto_Module_Bindings $bindingsModuleMock */
         $bindingsModuleMock = Phake::mock('EngineBlock_Corto_Module_Bindings');
         Phake::when($bindingsModuleMock)
-            ->receiveResponse()
+            ->receiveResponse(Phake::anyParameters())
             ->thenReturn($responseFixture);
 
         return $bindingsModuleMock;
@@ -271,8 +316,46 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
             $this->consentFactoryMock,
             $this->consentService,
             $this->authStateHelperMock,
-            $this->twig
+            $this->twig,
+            $this->processingStateHelperMock
         );
+    }
+
+    private function mockSspResponse()
+    {
+        $sspResponse = new Response();
+        $sspResponse->setInResponseTo('EBREQUEST');
+        $sspResponse->setIssuer('testSp');
+        $sspResponse->setAssertions([]);
+
+        $sspResponse = new EngineBlock_Saml2_ResponseAnnotationDecorator($sspResponse);
+
+        return $sspResponse;
+    }
+
+    private function mockProcessingStateHelper()
+    {
+        $this->sessionMock = new MockArraySessionStorage();
+
+        $sessionData = [
+            'Processing' => [
+                'SPREQUEST' => [
+                    'consent' => new ProcessingStateStep($this->sspResponseMock, new ServiceProvider('https://sp.example.edu')),
+                ],
+            ],
+        ];
+
+        $this->sessionMock->setSessionData(['_sf2_attributes' => $sessionData]);
+
+        $session = new Session($this->sessionMock);
+        return new ProcessingStateHelper($session);
+    }
+
+    private function mockHttpRequest()
+    {
+        $helperMock = Phake::mock(Request::class);
+
+        return $helperMock;
     }
 
     private function setCoin(ServiceProvider $sp, $key, $name)

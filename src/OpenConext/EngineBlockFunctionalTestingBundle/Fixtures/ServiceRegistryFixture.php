@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * Copyright 2010 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
 use Doctrine\ORM\EntityManager;
@@ -15,6 +31,7 @@ use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
+use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy;
 use SAML2\Constants;
@@ -367,6 +384,28 @@ QUERY;
         return $this;
     }
 
+    public function setSpStepupRequireLoa($entityId, $requiredLoa)
+    {
+        $this->setCoin($this->getServiceProvider($entityId), 'stepupRequireLoa', $requiredLoa);
+
+        return $this;
+    }
+
+    public function setSpStepupAllowNoToken($entityId)
+    {
+        $this->setCoin($this->getServiceProvider($entityId), 'stepupAllowNoToken', true);
+
+        return $this;
+    }
+
+    public function setIdpStepupConnections($entityId, array $spLoaMapping)
+    {
+        $connections = new StepupConnections($spLoaMapping);
+        $this->setCoin($this->getIdentityProvider($entityId), 'stepupConnections', $connections);
+
+        return $this;
+    }
+
     public function setIdpLogo($entityId, $url)
     {
         $logo = new Logo($url);
@@ -374,6 +413,23 @@ QUERY;
         $logo->width = 100;
 
         $this->getIdentityProvider($entityId)->logo = $logo;
+
+        return $this;
+    }
+
+
+    public function setHidden($entityId)
+    {
+        $idp = $this->getIdentityProvider($entityId);
+
+        $this->setCoin($idp, 'hidden', true);
+
+        return $this;
+    }
+
+    public function setIdpEntityWantsSignature($entityId)
+    {
+        $this->getIdentityProvider($entityId)->requestsMustBeSigned = true;
 
         return $this;
     }
@@ -406,19 +462,19 @@ QUERY;
         return $this;
     }
 
-    private function setCoin(ServiceProvider $sp, $key, $name)
+    private function setCoin(AbstractRole $role, $key, $name)
     {
-        $jsonData = $sp->getCoins()->toJson();
+        $jsonData = $role->getCoins()->toJson();
         $data = json_decode($jsonData, true);
         $data[$key] = $name;
         $jsonData = json_encode($data);
 
         $coins = Coins::fromJson($jsonData);
 
-        $object = new \ReflectionClass($sp);
+        $object = new \ReflectionClass($role);
 
         $property = $object->getProperty('coins');
         $property->setAccessible(true);
-        $property->setValue($sp, $coins);
+        $property->setValue($role, $coins);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2015 SURFnet bv
+ * Copyright 2010 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,10 @@ namespace OpenConext\EngineBlockBundle\EventListener;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Attributes_Manipulator_CustomException;
+use EngineBlock_Corto_Exception_AuthnContextClassRefBlacklisted;
 use EngineBlock_Corto_Exception_InvalidAcsLocation;
+use EngineBlock_Corto_Exception_InvalidStepupCalloutResponse;
+use EngineBlock_Corto_Exception_InvalidStepupLoaLevel;
 use EngineBlock_Corto_Exception_MissingRequiredFields;
 use EngineBlock_Corto_Exception_NoConsentProvided;
 use EngineBlock_Corto_Exception_PEPNoAccess;
@@ -28,6 +31,7 @@ use EngineBlock_Corto_Exception_ReceivedErrorStatusCode;
 use EngineBlock_Corto_Exception_UnknownIssuer;
 use EngineBlock_Corto_Exception_UnknownPreselectedIdp;
 use EngineBlock_Corto_Exception_InvalidAttributeValue;
+use EngineBlock_Corto_Exception_UserCancelledStepupCallout;
 use EngineBlock_Corto_Module_Bindings_SignatureVerificationException;
 use EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException;
 use EngineBlock_Corto_Module_Bindings_UnsupportedAcsLocationSchemeException;
@@ -124,6 +128,9 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof EngineBlock_Corto_Exception_MissingRequiredFields) {
             $message         = 'Missing Required Fields';
             $redirectToRoute = 'authentication_feedback_missing_required_fields';
+        } elseif ($exception instanceof EngineBlock_Corto_Exception_AuthnContextClassRefBlacklisted) {
+            $message         = $exception->getMessage();
+            $redirectToRoute = 'authentication_authn_context_class_ref_blacklisted';
         } elseif ($exception instanceof EngineBlock_Attributes_Manipulator_CustomException) {
             // @todo this must be done differently, for now don't see how as state is managed by EB.
             $event->getRequest()->getSession()->set('feedback_custom', $exception->getFeedback());
@@ -180,6 +187,15 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof \EngineBlock_Corto_Module_Bindings_ClockIssueException) {
             $message = $exception->getMessage();
             $redirectToRoute = 'authentication_feedback_response_clock_issue';
+        } elseif ($exception instanceof EngineBlock_Corto_Exception_UserCancelledStepupCallout) {
+            $message = $exception->getMessage();
+            $redirectToRoute = 'authentication_feedback_stepup_callout_user_cancelled';
+        } else if ($exception instanceof EngineBlock_Corto_Exception_InvalidStepupLoaLevel) {
+            $message = $exception->getMessage();
+            $redirectToRoute = 'authentication_feedback_stepup_callout_unmet_loa';
+        } else if ($exception instanceof EngineBlock_Corto_Exception_InvalidStepupCalloutResponse) {
+            $message = $exception->getMessage();
+            $redirectToRoute = 'authentication_feedback_stepup_callout_unknown';
         } else {
             return;
         }

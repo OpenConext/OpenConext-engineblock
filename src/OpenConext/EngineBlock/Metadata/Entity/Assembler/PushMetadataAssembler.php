@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * Copyright 2010 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 namespace OpenConext\EngineBlock\Metadata\Entity\Assembler;
 
 use DateTime;
@@ -13,6 +29,7 @@ use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
+use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlock\Metadata\Utils;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy;
@@ -214,6 +231,20 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
             ),
             'signResponse'
         );
+        $properties += $this->setPathFromObjectString(
+            array(
+                $connection,
+                'metadata:coin:stepup:requireloa'
+            ),
+            'stepupRequireLoa'
+        );
+        $properties += $this->setPathFromObjectBool(
+            array(
+                $connection,
+                'metadata:coin:stepup:allow_no_token'
+            ),
+            'stepupAllowNoToken'
+        );
 
         return Utils::instantiate(
             ServiceProvider::class,
@@ -235,6 +266,8 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->assembleConsentSettings($connection);
         $properties += $this->setPathFromObjectBool(array($connection, 'metadata:coin:hidden'), 'hidden');
         $properties += $this->assembleShibMdScopes($connection);
+
+        $properties += $this->assembleStepupConnections($connection);
 
         return Utils::instantiate(
             IdentityProvider::class,
@@ -488,6 +521,24 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         }
 
         return array('shibMdScopes' => $shibMdScopes);
+    }
+
+    private function assembleStepupConnections(stdClass $connection)
+    {
+        if (empty($connection->stepup_connections)) {
+            return array();
+        }
+
+        $connections = [];
+        foreach ($connection->stepup_connections as $sp) {
+            $connections[(string)$sp->name] = (string)$sp->level;
+        }
+
+        return array(
+            'stepupConnections' => new StepupConnections(
+                $connections
+            ),
+        );
     }
 
     private function assembleAssertionConsumerServices(stdClass $connection)

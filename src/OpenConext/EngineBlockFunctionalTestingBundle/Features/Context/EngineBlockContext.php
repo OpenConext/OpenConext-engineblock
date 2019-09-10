@@ -1,8 +1,25 @@
 <?php
 
+/**
+ * Copyright 2010 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 use DOMDocument;
 use DOMXPath;
@@ -22,6 +39,7 @@ use RuntimeException;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity) Both set up and tasks can be a lot...
  * @SuppressWarnings(PHPMD.TooManyMethods) Both set up and tasks can be a lot...
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to all integration specific features
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount) Both set up and tasks can be a lot...
  */
 class EngineBlockContext extends AbstractSubContext
 {
@@ -233,6 +251,7 @@ HTML;
     public function iGiveMyConsent()
     {
         $mink = $this->getMinkContext();
+
         if (strstr($mink->getSession()->getPage()->getHtml(), 'accept_terms_button')) {
             $mink->pressButton('accept_terms_button');
         }

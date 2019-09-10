@@ -5,6 +5,7 @@ parameters:
     engineblock.functional_testing.authentication_loop_guard_data_store.file: "%kernel.root_dir%/../tmp/eb-fixtures/authentication-loop-guard.json"
     engineblock.functional_testing.pdp_data_store.file:                       "%kernel.root_dir%/../tmp/eb-fixtures/policy_decision.json"
     engineblock.functional_testing.attribute_aggregation_data_store.file:     "%kernel.root_dir%/../tmp/eb-fixtures/attribute_aggregation.json"
+    engineblock.functional_testing.stepup_gateway_mock_data_store.file:          "%kernel.root_dir%/../tmp/eb-fixtures/stepup_gateway_mock.json"
 
 services:
     engineblock.functional_testing.service.engine_block:
@@ -45,6 +46,13 @@ services:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient
         arguments:
             - '@engineblock.function_testing.data_store.attribute_aggregation_client'
+
+    engineblock.functional_testing.fixture.stepup_gateway_mock:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingStepupGatewayMockConfiguration
+        arguments:
+            - '@engineblock.mock_entities.idp_factory'
+            - '@engineblock.mock_entities.sp_factory'
+            - "@engineblock.compat.application"
     #endregion Fixtures
 
     #region Data Stores
@@ -67,8 +75,21 @@ services:
     engineblock.function_testing.data_store.attribute_aggregation_client:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
         arguments: ['%engineblock.functional_testing.attribute_aggregation_data_store.file%']
+
+    engineblock.function_testing.data_store.stepup_gateway_mock:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
+        arguments: ['%engineblock.functional_testing.stepup_gateway_mock_data_store.file%']
+
+
     #endregion Data Stores
 
     # test stand ins
     engineblock.validator.sso_request_validator:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Validator\SsoRequestValidator
+
+    engineblock.configuration.stepup.endpoint:
+        class: OpenConext\EngineBlockBundle\Stepup\StepupEndpoint
+        arguments:
+            - "https://engine.vm.openconext.org/authentication/stepup/metadata"
+            - "https://engine.vm.openconext.org/functional-testing/gateway/second-factor-only/single-sign-on"
+            - "%stepup.gateway.sfo.key_file%"

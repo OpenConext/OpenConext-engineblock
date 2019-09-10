@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * Copyright 2010 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 namespace OpenConext\EngineBlock\Metadata\Entity;
 
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
@@ -176,10 +192,13 @@ class ServiceProvider extends AbstractRole
      * @param bool $policyEnforcementDecisionRequired
      * @param bool $requesteridRequired
      * #param bool $signResponse
+     * @param bool $signResponse
      * @param string $manipulation
      * @param AttributeReleasePolicy $attributeReleasePolicy
      * @param string|null $supportUrlEn
      * @param string|null $supportUrlNl
+     * @param bool|null $stepupAllowNoToken
+     * @param bool|null $stepupRequireLoa
      */
     public function __construct(
         $entityId,
@@ -226,7 +245,9 @@ class ServiceProvider extends AbstractRole
         $manipulation = '',
         AttributeReleasePolicy $attributeReleasePolicy = null,
         $supportUrlEn = null,
-        $supportUrlNl = null
+        $supportUrlNl = null,
+        $stepupAllowNoToken = null,
+        $stepupRequireLoa = null
     ) {
         parent::__construct(
             $entityId,
@@ -284,6 +305,8 @@ class ServiceProvider extends AbstractRole
             $policyEnforcementDecisionRequired,
             $requesteridRequired,
             $signResponse,
+            $stepupAllowNoToken,
+            $stepupRequireLoa,
             $disableScoping,
             $additionalLogging,
             $signatureMethod

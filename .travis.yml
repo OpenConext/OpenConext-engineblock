@@ -12,8 +12,6 @@ matrix:
   - php: 7.2
   - env: COMMAND="functional-tests-wip"
 
-sudo: true # sudo is required for behat
-
 env:
   matrix:
     - COMMAND="functional-tests"
@@ -42,10 +40,15 @@ before_script:
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.6" ]]; then printf "\n" | pecl uninstall apcu; fi
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.6" ]]; then printf "\n" | pecl install apcu-4.0.10; fi
   - if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then sed -i 's,apc,array,' ~/build/OpenConext/OpenConext-engineblock/app/config/config.yml; fi
+  # Copy apache keys
   - sudo ln -s "$(pwd)"/ci/travis/files/ /etc/openconext
+  # Set rights to private key to reflect prod
+  - sudo chown travis:root /etc/openconext/engineblock.pem
+  - sudo chmod 0440 /etc/openconext/engineblock.pem
+  ###
   - mkdir -p /tmp/engineblock/cache/test
   - mkdir -p /tmp/engineblock/logs/test
-  - sudo apt-get update
+  #- sudo apt-get update
   - sudo apt-get install apache2 libapache2-mod-fastcgi ant
   - if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf; fi
   - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
@@ -59,10 +62,12 @@ before_script:
   - sudo a2dissite 000-default
   - sudo a2ensite default-ssl
   - sudo service apache2 restart
+  # Add selenium stack
   - echo "Chrome version `google-chrome --version`"
   - sudo mkdir -p /opt/selenium && wget http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar && sudo mv selenium-server-standalone-2.53.1.jar /opt/selenium/
   - wget https://chromedriver.storage.googleapis.com/76.0.3809.68/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && rm chromedriver_linux64.zip && chmod +x chromedriver && sudo mv chromedriver /opt/selenium/chromedriver
   - sudo /usr/bin/java -jar /opt/selenium/selenium-server-standalone-2.53.1.jar -Dwebdriver.chrome.driver=/opt/selenium/chromedriver -host 127.0.0.1 -port 4444 &
+  ###
   - composer self-update
   - composer config secure-http false
   - composer install --prefer-dist -n -o

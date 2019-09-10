@@ -93,6 +93,8 @@ Modifies:
 log a warning if received `schacHomeOrganization` is not allowed by the configured shibmd:scopes for the used IdP.
 Log a notice otherwise.
 
+If however the eb.block_user_on_violation feature toggle is set, it will throw an exception which will prevent access.
+
 Uses:
 - EngineBlock_Saml2_ResponseAnnotationDecorator
 - OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
@@ -100,6 +102,8 @@ Uses:
 ### VerifyShibMdScopingAllowsEduPersonPrincipalName
 log a warning if received `eduPersonPrincipalName` is not allowed by configured shibmd:scopes for the used IdP. Log a
 notice otherwise.
+
+If however the eb.block_user_on_violation feature toggle is set, it will throw an exception which will prevent access.
 
 Uses:
 - EngineBlock_Saml2_ResponseAnnotationDecorator
@@ -213,16 +217,6 @@ handling an internal request (e.g. from a received Reponse to Consent).
 
 Uses:
  - EngineBlock_Corto_ProxyServer
-
-### AddCollabPersonIdAttribute
-Sets the collabPersonId attribute on the Response Attributes
-
-Uses:
-- responseAttributes
-- collabPersonId
-
-Modifies:
-- responseAttributes
 
 ### RunAttributeManipulations (for SP)
 Run the configured Attribute Manipulations for the current Service Provider. Attribute Manipulations are code that is
@@ -338,6 +332,22 @@ Uses:
 - OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
 - OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
 - EngineBlock_Saml2_AuthnRequestAnnotationDecorator
+
+
+
+### ValidateAuthnContextClassRef
+Block any incoming IdP assertion with a blacklisted `AuthnContextClassRef`.
+This is used to prevent an IdP to impersonate 'our' AuthnContextClassRef values.
+
+
+
+Configured with:
+ - `stepup.authn_context_class_ref_blacklist_regex`
+
+Uses:
+- EngineBlock_Saml2_ResponseAnnotationDecorator
+
+
 
 [input]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/library/EngineBlock/Corto/Filter/Input.php
 [output]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/library/EngineBlock/Corto/Filter/Output.php

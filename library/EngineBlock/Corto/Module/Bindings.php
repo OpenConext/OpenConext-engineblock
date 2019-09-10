@@ -1,10 +1,27 @@
 <?php
 
+/**
+ * Copyright 2010 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use OpenConext\EngineBlockBundle\Exception\ResponseProcessingFailedException;
+use OpenConext\EngineBlockBundle\Stepup\StepupEntityFactory;
 use SAML2\AuthnRequest;
 use SAML2\Binding;
 use SAML2\Certificate\KeyLoader;
@@ -29,6 +46,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 {
     const KEY_REQUEST  = 'SAMLRequest';
     const KEY_RESPONSE = 'SAMLResponse';
+
+    const SAML_STATUS_MESSAGE_EMPTY = '(No message provided)';
 
     protected static $ASSERTION_SEQUENCE = array(
         'saml:Issuer',
@@ -85,6 +104,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     private $acsLocationSchemeValidator;
 
+    /**
+     * @var IdentityProvider
+     */
+    private $stepupIdentityProvider;
+
     public function __construct(EngineBlock_Corto_ProxyServer $server)
     {
         parent::__construct($server);
@@ -94,6 +118,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $this->_logger = EngineBlock_ApplicationSingleton::getLog();
         $this->twig = $diContainer->getTwigEnvironment();
         $this->acsLocationSchemeValidator = $diContainer->getAcsLocationSchemeValidator();
+        $this->stepupIdentityProvider = $diContainer->getStepupIdentityProvider($this->_server);
     }
 
     /**
@@ -243,15 +268,18 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     }
 
     /**
+     * @param string $serviceEntityId
+     * @param string $expectedDestination
      * @return bool|EngineBlock_Saml2_ResponseAnnotationDecorator|Response
      *
      * @throws EngineBlock_Corto_Exception_ReceivedErrorStatusCode
+     * @throws EngineBlock_Corto_Exception_UnknownIssuer
+     * @throws EngineBlock_Corto_Module_Bindings_ClockIssueException
      * @throws EngineBlock_Corto_Module_Bindings_Exception
      * @throws EngineBlock_Corto_Module_Bindings_SignatureVerificationException
-     * @throws EngineBlock_Corto_Module_Bindings_UnsupportedBindingException
      * @throws EngineBlock_Corto_Module_Bindings_VerificationException
      */
-    public function receiveResponse()
+    public function receiveResponse($serviceEntityId, $expectedDestination)
     {
         // First check if we parked a Response somewhere in memory and are just faking a SSO
         if ($sspResponse = $this->_receiveMessageFromInternalBinding(self::KEY_RESPONSE)) {
@@ -332,7 +360,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             }
 
             try {
-                $expectedDestination = $this->_server->getUrl('assertionConsumerService');
                 if ($sspResponse->getDestination() === null) {
                     // SAML2 requires a destination, while EngineBlock allows
                     // messages without Destination element.
@@ -346,7 +373,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
                 $processor = new Response\Processor($this->_logger);
                 $assertions = $processor->process(
-                    $this->getSaml2OwnMetadata($requireEncryption),
+                    $this->getSaml2OwnMetadata($serviceEntityId, $requireEncryption),
                     $this->mapEngineBlockIdpToSaml2Idp($cortoIdpMetadata, $requireEncryption),
                     new Destination($expectedDestination),
                     $sspResponse
@@ -381,7 +408,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 }
                 $statusCodeDescription = str_replace('urn:oasis:names:tc:SAML:2.0:status:', '', $statusCodeDescription);
 
-                $statusMessage = !empty($status['Message']) ? $status['Message'] : '(No message provided)';
+                $statusMessage = !empty($status['Message']) ? $status['Message'] : self::SAML_STATUS_MESSAGE_EMPTY;
 
                 // Throw the exception here instead of in the Corto Filters as Corto assumes the presence of an Assertion
                 $exception = new EngineBlock_Corto_Exception_ReceivedErrorStatusCode(
@@ -392,6 +419,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 );
                 $exception->setFeedbackStatusCode($statusCodeDescription);
                 $exception->setFeedbackStatusMessage($statusMessage);
+                $exception->setResponse(new EngineBlock_Saml2_ResponseAnnotationDecorator($sspResponse));
 
                 throw $exception;
 
@@ -505,6 +533,10 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     protected function _verifyKnownIdP($messageIssuer, $destination = '')
     {
+        if ($this->stepupIdentityProvider->entityId === $messageIssuer) {
+            return $this->stepupIdentityProvider;
+        }
+
         $remoteEntity = $this->_server->getRepository()->findIdentityProviderByEntityId($messageIssuer);
 
         if ($remoteEntity) {
@@ -795,14 +827,16 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     }
 
     /**
+     * @param string $serviceEntityId
      * @param bool $requireEncryption
      * @return Saml2ServiceProvider
+     * @throws EngineBlock_Corto_ProxyServer_Exception
      */
-    protected function getSaml2OwnMetadata($requireEncryption = true)
+    protected function getSaml2OwnMetadata($serviceEntityId, $requireEncryption = true)
     {
         $keyPair = $this->_server->getSigningCertificates();
         $config = array(
-            'entityId'                   => $this->_server->getUrl('spMetadataService'),
+            'entityId'                   => $serviceEntityId,
             'assertionEncryptionEnabled' => $requireEncryption,
             'keys'                       => array(
                 array(

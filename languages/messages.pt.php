@@ -224,6 +224,8 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_stuck_in_authentication_loop_desc' => '<p>
         Autenticou-se com sucesso no seu Fornecedor de Identidade, mas o serviço ao qual está a tentar aceder reencaminhou-o de volta para %suiteName%. Como já está autenticado, o %suiteName% o reencaminha de volta para o serviço, o que resulta num ciclo infinito. Muito provavelmente, isto é provocado por um erro no Fornecedor de Serviço.
     </p>',
+    'error_authn_context_class_ref_blacklisted'                     => 'Erro - O valor para AuthnContextClassRef não é permitido',
+    'error_authn_context_class_ref_blacklisted_desc'                => '<p>Não pode autenticar-se porque a sua %organisationNoun% enviou um valor para AuthnContextClassRef que não é permitido.</p>',
     'error_no_authentication_request_received' => 'Nenhuma solicitação de autenticação recebida.',
     /**
      * %1 AttributeName
@@ -248,6 +250,12 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_unknown_service_desc'    => '<p>O serviço solicitado não foi encontrado.</p>',
     'error_clock_issue_title' => 'Erro - A asserção ainda não é válida ou pode ter expirado',
     'error_clock_issue_desc' => '<p>Por favor, verifique se a hora no IdP está correta.</p>',
+    'error_stepup_callout_unknown_title' => 'Erro - falha por autenticação forte desconhecida',
+    'error_stepup_callout_unknown_desc' => 'O login com autenticação forte falhou e não sabemos exatamente qual o motivo. Tente aceder de novo ao serviço e efetuar uma nova autenticação. Se voltar a não funcionar, entre em contato com o suporte técnico da sua %organisationNoun%.',
+    'error_stepup_callout_unmet_loa_title' => 'Erro - não foi encontrado nenhum token adequado',
+    'error_stepup_callout_unmet_loa_desc' => 'Para continuar neste serviço, é necessário que o token registado tenho um determinado nível de confiança. Atualmente, você não tem um token registado, ou o nível de confiança do seu token é muito baixo. Veja o endereço abaixo para mais informações sobre o processo de registo.<br/><br/><a target="_blank" href="https://support.surfconext.nl/stepup-noauthncontext">Leia mais sobre o processo de registro.</a>',
+    'error_stepup_callout_user_cancelled_title' => 'Erro - Carregamento cancelado',
+    'error_stepup_callout_user_cancelled_desc' => 'Você cancelou o processo de autenticação. Volte ao serviço se você pretender tentar de novo.',
     'attributes_validation_succeeded' => 'Autenticação com sucesso',
     'attributes_validation_failed'    => 'Alguns atributos falharam na validação',
     'attributes_data_mailed'          => 'Os dados dos atributos foram enviados',

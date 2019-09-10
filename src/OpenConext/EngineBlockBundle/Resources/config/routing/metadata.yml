@@ -63,3 +63,19 @@ metadata_edugain_key:
         _controller: engineblock.controller.authentication.metadata:edugainMetadataAction
     requirements:
         keyId: .+
+
+### Stepup
+metdata_stepup:
+    path:       'authentication/stepup/metadata'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.stepup:metadataAction
+        keyId: ~
+
+metdata_stepup_key:
+    path:       '/authentication/stepup/metadata/key:{keyId}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.stepup:metadataAction
+    requirements:
+        keyId: .+

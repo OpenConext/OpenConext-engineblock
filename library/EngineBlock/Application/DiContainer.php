@@ -1,8 +1,26 @@
 <?php
 
+/**
+ * Copyright 2010 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 use Doctrine\ORM\EntityManager;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
+use OpenConext\EngineBlockBundle\Stepup\StepupGatewayCallOutHelper;
+use OpenConext\EngineBlockBundle\Stepup\StepupEntityFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
 class EngineBlock_Application_DiContainer extends Pimple
@@ -302,6 +320,38 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
+     * @param EngineBlock_Corto_ProxyServer $server
+     * @return \OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
+     */
+    public function getStepupIdentityProvider(EngineBlock_Corto_ProxyServer $server)
+    {
+        return StepupEntityFactory::idpFrom(
+            $this->getStepupEndpoint(),
+            $server->getUrl('stepupAssertionConsumerService')
+        );
+    }
+
+    /**
+     * @param EngineBlock_Corto_ProxyServer $server
+     * @return \OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
+     */
+    public function getStepupServiceProvider(EngineBlock_Corto_ProxyServer $server)
+    {
+        return StepupEntityFactory::spFrom(
+            $this->getStepupEndpoint(),
+            $server->getUrl('stepupAssertionConsumerService')
+        );
+    }
+
+    /**
+     * @return StepupGatewayCallOutHelper
+     */
+    public function getStepupGatewayCallOutHelper()
+    {
+        return $this->container->get('engineblock.service.stepup.gateway_callout_helper');
+    }
+
+    /**
      * @return array
      */
     public function getEncryptionKeysConfiguration()
@@ -360,6 +410,14 @@ class EngineBlock_Application_DiContainer extends Pimple
     public function getAuthenticationStateHelper()
     {
         return $this->container->get('engineblock.service.authentication_state_helper');
+    }
+
+    /**
+     * @return \OpenConext\EngineBlock\Service\ProcessingStateHelperInterface
+     */
+    public function getProcessingStateHelper()
+    {
+        return $this->container->get('engineblock.service.processing_state_helper');
     }
 
     /**
@@ -440,5 +498,19 @@ class EngineBlock_Application_DiContainer extends Pimple
     public function getAttributeDefinitionFilePath()
     {
         return (string) $this->container->getParameter('attribute_definition_file_path');
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthnContextClassRefBlacklistRegex()
+    {
+        return (string) $this->container->getParameter('stepup.authn_context_class_ref_blacklist_regex');
+    }
+
+    /** @return \OpenConext\EngineBlockBundle\Stepup\StepupEndpoint $stepupEndpoint */
+    protected function getStepupEndpoint()
+    {
+        return $this->container->get('engineblock.configuration.stepup.endpoint');
     }
 }

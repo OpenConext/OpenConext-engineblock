@@ -48,6 +48,11 @@ authentication_feedback_missing_required_fields:
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:missingRequiredFieldsAction }
 
+authentication_authn_context_class_ref_blacklisted:
+    path:       '/authn-context-class-ref-blacklisted'
+    methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:authnContextClassRefBlacklistedAction }
+
 authentication_feedback_invalid_attribute_value:
     path:       '/invalid-attribute-value'
     methods:    [GET]
@@ -112,3 +117,18 @@ authentication_feedback_response_clock_issue:
     path:       '/clock-issue'
     methods:    [GET]
     defaults:    { _controller: engineblock.controller.authentication.feedback:clockIssueAction }
+
+authentication_feedback_stepup_callout_user_cancelled:
+    path:       '/stepup-callout-user-cancelled'
+    methods:    [GET]
+    defaults:    { _controller: engineblock.controller.authentication.feedback:stepupCalloutUserCancelledAction }
+
+authentication_feedback_stepup_callout_unmet_loa:
+    path:       '/stepup-callout-unmet-loa'
+    methods:    [GET]
+    defaults:    { _controller: engineblock.controller.authentication.feedback:stepupCalloutUnmetLoaAction }
+
+authentication_feedback_stepup_callout_unknown:
+    path:       '/stepup-callout-unknown'
+    methods:    [GET]
+    defaults:    { _controller: engineblock.controller.authentication.feedback:stepupCalloutUnknownAction }

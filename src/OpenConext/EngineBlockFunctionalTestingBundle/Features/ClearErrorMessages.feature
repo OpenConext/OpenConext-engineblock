@@ -303,6 +303,34 @@ Feature:
      And I should see "OpenConext Wiki"
      And I should see "support@openconext.org"
 
+  Scenario: I log in at my Identity Provider, that has an invalid AuthnContextClassRef attribute.
+    Given the IdP "Dummy Idp" sends AuthnContextClassRef with value "invalid-authn-context-class-ref"
+    When I log in at "Dummy SP"
+      And I pass through EngineBlock
+      And I pass through the IdP
+      And I give my consent
+    Then I should see "Error - AuthnContextClassRef value is disallowed"
+
+  Scenario: I encounter an unexpected error, and can reload the error feedback page
+   Given EngineBlock raises an unexpected error
+    When I log in at "Dummy SP"
+    Then I should see "Error - An error occurred"
+     And I should see "Logging in has failed and we don't know exactly why."
+     And I write down the request id as seen on the error page
+     And I reload the page
+    Then I should see the same request id on the error page
+
+  Scenario: I encounter an unexpected error, and see the same message after losing my session
+    Given EngineBlock raises an unexpected error
+    When I log in at "Dummy SP"
+    Then I should see "Error - An error occurred"
+     And I should see "Logging in has failed and we don't know exactly why."
+     And I write down the request id as seen on the error page
+     And I lose my session and reload
+     And I should see "Error - An error occurred"
+      # The session is lost, so the feedback information (containing the request id) can no longer be rendered on page
+    Then I should not see the same request id on the error page
+
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a location
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a binding
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying an invalid index

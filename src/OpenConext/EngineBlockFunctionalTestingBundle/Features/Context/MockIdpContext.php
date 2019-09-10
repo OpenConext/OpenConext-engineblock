@@ -1,8 +1,25 @@
 <?php
 
+/**
+ * Copyright 2010 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
@@ -237,6 +254,7 @@ class MockIdpContext extends AbstractSubContext
     public function iPassThroughTheIdp()
     {
         $mink = $this->getMinkContext();
+
         $mink->pressButton('GO');
     }
 
@@ -291,6 +309,22 @@ class MockIdpContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^the IdP "([^"]*)" sends AuthnContextClassRef with value "([^"]*)"$/
+     * @param string $idpName
+     * @param string $authnContextClassRefValue
+     */
+    public function theIdPSendsAuthnContextClassRefValue($idpName, $authnContextClassRefValue)
+    {
+        /** @var MockIdentityProvider $mockIdp */
+        $mockIdp = $this->mockIdpRegistry->get($idpName);
+
+        $mockIdp->setAuthnContextClassRef($authnContextClassRefValue);
+
+        $this->mockIdpRegistry->save();
+    }
+
+
+    /**
      * @Given /^the IdP "([^"]*)" requires minimal consent for SP "([^"]*)"$/
      * @param string $idpName
      * @param string $spName
@@ -318,7 +352,7 @@ class MockIdpContext extends AbstractSubContext
         $this->serviceRegistryFixture->setConsentSettings($idp->entityId(), $sp->entityId(), ConsentSettings::CONSENT_DEFAULT, $message);
         $this->serviceRegistryFixture->save();
     }
-    
+
     /**
      * @Given /^the IdP "([^"]*)" requires default consent for SP "([^"]*)"$/
      * @param string $idpName

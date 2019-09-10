@@ -47,6 +47,7 @@
         "ingenerator/behat-tableassert": "^1.1",
         "league/flysystem": "^1.0",
         "liip/functional-test-bundle": "^1.7",
+        "malukenho/docheader": "^0.1.7",
         "mockery/mockery": "0.9.4",
         "phake/phake": "2.1",
         "phpcompatibility/php-compatibility": "^8.2",

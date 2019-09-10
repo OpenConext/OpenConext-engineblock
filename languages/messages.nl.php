@@ -226,9 +226,12 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
     </p>',
     'error_received_invalid_response'        => 'Fout - Ongeldig SAML-bericht van %organisationNoun%',
     'error_received_invalid_signed_response' => 'Fout - Ongeldige handtekening op antwoord %organisationNoun%',
-    'error_stuck_in_authentication_loop' => 'Error - Je zit vast in een zwart gat',
+    'error_stuck_in_authentication_loop' => 'Fout - Je zit vast in een zwart gat',
     'error_stuck_in_authentication_loop_desc' => 'Je bent succesvol ingelogd bij je %organisationNoun% maar de dienst waar je naartoe wilt stuurt je weer terug naar %suiteName%. Omdat je succesvol bent ingelogd, stuurt %suiteName% je weer naar de dienst, wat resulteert in een oneindig zwart gat. Dit komt waarschijnlijk door een foutje aan de kant van de dienst.',
     'error_no_authentication_request_received' => 'Fout - Geen authenticatie-aanvraag ontvangen.',
+    'error_authn_context_class_ref_blacklisted' => 'Fout - Waarde van AuthnContextClassRef is niet toegestaan',
+    'error_authn_context_class_ref_blacklisted_desc' => '<p>Je kunt niet inloggen omdat je %organisationNoun% een waarde stuurde voor AuthnContextClassRef die niet is toegestaan.</p>',
+
     /**
      * %1 AttributeName
      * %2 Options
@@ -253,7 +256,12 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
     'error_unknown_service_desc'    => '<p>Deze dienst is niet bekend.</p>',
     'error_clock_issue_title' => 'Fout - De Assertion is nog niet geldig of is verlopen',
     'error_clock_issue_desc' => 'Dit komt waarschijnlijk doordat de tijd tussen de %organisationNoun% en %suiteName% te ver uiteen loopt. Controleer de tijd op de IdP.',
-
+    'error_stepup_callout_unknown_title' => 'Fout - Onbekend sterke authenticatie probleem',
+    'error_stepup_callout_unknown_desc' => 'Inloggen met sterke authenticatie is niet gelukt en we weten niet precies waarom. Probeer het eerst eens opnieuw door terug te gaan naar de dienst en opnieuw in te loggen. Lukt dit niet, neem dan contact op met de helpdesk van je %organisationNoun%.',
+    'error_stepup_callout_unmet_loa_title' => 'Fout - Geen geschikt token gevonden',
+    'error_stepup_callout_unmet_loa_desc' => 'Om toegang te krijgen tot deze dienst heb je een geregistreerd token nodig met een bepaald zekerheidsniveau. Je hebt nu ofwel geen token geregistreerd, of het zekerheidsniveau van het token dat je hebt geregistreerd is te laag. Volg de link hieronder voor meer informatie over het registratieproces.<br/><br/><a target="_blank" href="https://support.surfconext.nl/stepup-noauthncontext-nl">Lees meer over het registratieproces.</a>',
+    'error_stepup_callout_user_cancelled_title' => 'Fout - Inloggen afgebroken',
+    'error_stepup_callout_user_cancelled_desc' => 'Je hebt het inloggen afgebroken. Ga terug naar de dienst als je het opnieuw wilt proberen.',
     'attributes_validation_succeeded' => 'Authenticatie geslaagd',
     'attributes_validation_failed'    => 'Sommige attributen kunnen niet gevalideerd worden',
     'attributes_data_mailed'          => 'De attribuutdata zijn gemaild',
