@@ -81,11 +81,158 @@ class PushMetadataAssemblerTest extends PHPUnit_Framework_TestCase
         $this->assembler->assemble($input);
     }
 
+    /**
+     * @dataProvider validCoins
+     *
+     * @param string $coinName The name of the coin and used to set the coin in the meta push data
+     * @param string $roleType The type of the role and used to set the coin in the meta push data
+     * @param string $parameter The name of the parameter used in the coin
+     * @param string $type The type of coin data to run possible assertions against see the validCoinValues* helper
+     *                     methods below which are used to assert the data after it went through the assembler.
+     */
+    public function testCoins($coinName, $roleType, $parameter, $type) {
+        $connection = '{
+            "2d96e27a-76cf-4ca2-ac70-ece5d4c49523": {
+                "allow_all_entities": true,
+                "allowed_connections": [],
+                "metadata": {
+                    "coin": {}
+                },
+                "name": "https:\/\/role/sp",
+                "state": "prodaccepted",
+                "type": "saml20-sp"
+            }
+        }';
+
+        $input = json_decode($connection);
+        $input->{"2d96e27a-76cf-4ca2-ac70-ece5d4c49523"}->type = $roleType;
+
+        switch ($type) {
+            case 'bool';
+                $values = $this->validCoinValuesBool();
+                break;
+            case 'bool-negative';
+                $values = $this->validCoinValuesBoolNegative();
+                break;
+            case 'string';
+                $values = $this->validCoinValuesString();
+                break;
+            case 'string-signature-method';
+                $values = $this->validCoinValuesStringSignatureMethod();
+                break;
+            case 'string-guest-qualifier';
+                $values = $this->validCoinValuesStringGuestQualifier();
+                break;
+            default:
+                throw new RuntimeException('Unknown coin type');
+        }
+
+        foreach ($values as $assertion) {
+            $input->{"2d96e27a-76cf-4ca2-ac70-ece5d4c49523"}->metadata->coin->$coinName = $assertion[0];
+
+            $roles = $this->assembler->assemble($input);
+
+            $this->assertSame($assertion[1], $roles[0]->getCoins()->{$parameter}(), "Invalid coin conversion for {$roleType}:{$coinName}($type) expected '{$assertion[1]}' but encountered '{$roles[0]->getCoins()->{$parameter}()}'");
+        }
+    }
+
     public function invalidAcsLocations()
     {
         return [
             'invalid-scheme' => ['javascript:alert("hello world");'],
             'no-scheme' => ['www.sp.example.com'],
+        ];
+    }
+
+    public function validCoins()
+    {
+        return [
+            // SP
+            ['no_consent_required', 'saml20-sp', 'isConsentRequired', 'bool-negative'],
+            ['transparant_issuer', 'saml20-sp', 'isTransparentIssuer', 'bool'],
+            ['trusted_proxy', 'saml20-sp', 'isTrustedProxy', 'bool'],
+            ['display_unconnected_idps_wayf', 'saml20-sp', 'displayUnconnectedIdpsWayf', 'bool'],
+            ['eula', 'saml20-sp', 'termsOfServiceUrl', 'string'],
+            ['do_not_add_attribute_aliases', 'saml20-sp', 'skipDenormalization', 'bool'],
+            ['policy_enforcement_decision_required', 'saml20-sp', 'policyEnforcementDecisionRequired', 'bool'],
+            ['requesterid_required', 'saml20-sp', 'requesteridRequired', 'bool'],
+            ['sign_response', 'saml20-sp', 'signResponse', 'bool'],
+
+            // IDP
+            ['guest_qualifier', 'saml20-idp', 'guestQualifier', 'string-guest-qualifier'],
+            ['schachomeorganization', 'saml20-idp', 'schacHomeOrganization', 'string'],
+            ['hidden', 'saml20-idp', 'hidden', 'bool'],
+
+            // Abstract
+            ['disable_scoping', 'saml20-idp', 'disableScoping', 'bool'],
+            ['additional_logging', 'saml20-idp', 'additionalLogging', 'bool'],
+            ['signature_method', 'saml20-idp', 'signatureMethod', 'string-signature-method'],
+        ];
+    }
+
+    /**
+     * The first option is the manage coin value, the second is the expected entity coin value after assembling
+     * @return array
+     */
+    private function validCoinValuesBool() {
+        return [
+            [null, false],
+            [true, true],
+            [false, false],
+            ["1", true],
+            ["0", false],
+            ["-1", true],
+        ];
+    }
+
+    /**
+     * The first option is the manage coin value, the second is the expected entity coin value after assembling
+     * @return array
+     */
+    private function validCoinValuesBoolNegative() {
+        return [
+            [null, true],
+            [true, false],
+            [false, true],
+            ["1", false],
+            ["0", true],
+            ["-1", false],
+        ];
+    }
+
+    /**
+     * The first option is the manage coin value, the second is the expected entity coin value after assembling
+     * @return array
+     */
+    private function validCoinValuesString() {
+        return [
+            [null, null],
+            ["", ""],
+            ["string", "string"],
+        ];
+    }
+
+    /**
+     * The first option is the manage coin value, the second is the expected entity coin value after assembling
+     * @return array
+     */
+    private function validCoinValuesStringSignatureMethod() {
+        return [
+            [null, "http://www.w3.org/2000/09/xmldsig#rsa-sha1"],
+            ["", ""],
+            ["string", "string"],
+        ];
+    }
+
+    /**
+     * The first option is the manage coin value, the second is the expected entity coin value after assembling
+     * @return array
+     */
+    private function validCoinValuesStringGuestQualifier() {
+        return [
+            [null, "All"],
+            ["", ""],
+            ["string", "string"],
         ];
     }
 }

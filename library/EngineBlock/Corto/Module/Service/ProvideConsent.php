@@ -203,7 +203,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
     private function isConsentDisabled(array $serviceProviders, IdentityProvider $identityProvider)
     {
         foreach ($serviceProviders as $serviceProvider) {
-            if (!$serviceProvider->isConsentRequired) {
+            if (!$serviceProvider->getCoins()->isConsentRequired()) {
                 return true;
             }
 

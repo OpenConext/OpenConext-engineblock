@@ -1,5 +1,21 @@
 # UPGRADE NOTES
 
+## 5.11 > 5.12.0
+
+### Serialised column cleanup
+In version 5.12.0 multiple `coin` columns are serialised into a single column with serialised data.
+This change will allow easier maintenance because then no migrations are needed when adding or removing a `coin`.
+There is no migration to populate the old `coin` columns to the new serialised column while this is needed to let EB function properly with the new changes. 
+Therefore you should push the data from Manage after you have updated the codebase and ran the `Version20190703235333`.
+
+Be aware that you need to be logged in into manage to push the data after updating the codebase and database schema. 
+
+In order to let this work you need to do the following:
+ 1. Login into manage
+ 1. Update codebase
+ 1. Run migrations
+ 1. Push metadata
+
 ## 5.10 -> 5.11
 
 ### Improved error feedback

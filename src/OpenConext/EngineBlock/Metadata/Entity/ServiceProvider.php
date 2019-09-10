@@ -3,6 +3,7 @@
 namespace OpenConext\EngineBlock\Metadata\Entity;
 
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
+use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\Organization;
@@ -20,6 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 class ServiceProvider extends AbstractRole
 {
@@ -271,6 +273,21 @@ class ServiceProvider extends AbstractRole
         $this->signResponse = $signResponse;
         $this->supportUrlEn = $supportUrlEn;
         $this->supportUrlNl = $supportUrlNl;
+
+        $this->coins = Coins::createForServiceProvider(
+            $isConsentRequired,
+            $isTransparentIssuer,
+            $isTrustedProxy,
+            $displayUnconnectedIdpsWayf,
+            $termsOfServiceUrl,
+            $skipDenormalization,
+            $policyEnforcementDecisionRequired,
+            $requesteridRequired,
+            $signResponse,
+            $disableScoping,
+            $additionalLogging,
+            $signatureMethod
+        );
     }
 
     /**

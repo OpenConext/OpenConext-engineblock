@@ -568,7 +568,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $sspMessage->setCertificates(array($keyPair->getCertificate()->toPem()));
             $sspMessage->setSignatureKey(
                 $keyPair->getPrivateKey()->toXmlSecurityKey(
-                    $remoteEntity->signatureMethod
+                    $remoteEntity->getCoins()->signatureMethod()
                 )
             );
         }
@@ -588,7 +588,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 // This suffices for most SP's. However, some SP's require the outer Response element to be signed directly.
                 // If configured to do so for that SP, Engineblock will sign the outer response element in addition to the signed Assertion element.
                 // It might make sense in the future to always sign both, if it has been shown that this causes no problems.
-                if ($remoteEntity instanceof ServiceProvider && $remoteEntity->signResponse) {
+                if ($remoteEntity instanceof ServiceProvider && $remoteEntity->getCoins()->signResponse()) {
                     $messageElement = $sspMessage->toSignedXML();
                 } else {
                     $messageElement = $sspMessage->toUnsignedXML();

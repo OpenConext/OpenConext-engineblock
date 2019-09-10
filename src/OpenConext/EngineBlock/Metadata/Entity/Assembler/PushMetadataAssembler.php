@@ -153,21 +153,21 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
 
         $properties += $this->assembleAttributeReleasePolicy($connection);
         $properties += $this->assembleAssertionConsumerServices($connection);
-        $properties += $this->setPathFromObject(
+        $properties += $this->setPathFromObjectBool(
             array(
                 $connection,
                 'metadata:coin:transparant_issuer'
             ),
             'isTransparentIssuer'
         );
-        $properties += $this->setPathFromObject(
+        $properties += $this->setPathFromObjectBool(
             array(
                 $connection,
                 'metadata:coin:trusted_proxy'
             ),
             'isTrustedProxy'
         );
-        $properties += $this->setPathFromObject(
+        $properties += $this->setPathFromObjectBool(
             array(
                 $connection,
                 'metadata:coin:display_unconnected_idps_wayf'
@@ -177,21 +177,21 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
 
         $properties += $this->assembleIsConsentRequired($connection);
 
-        $properties += $this->setPathFromObject(
+        $properties += $this->setPathFromObjectString(
             array(
                 $connection,
                 'metadata:coin:eula'
             ),
             'termsOfServiceUrl'
         );
-        $properties += $this->setPathFromObject(
+        $properties += $this->setPathFromObjectBool(
             array(
                 $connection,
                 'metadata:coin:do_not_add_attribute_aliases'
             ),
             'skipDenormalization'
         );
-        $properties += $this->setPathFromObject(
+        $properties += $this->setPathFromObjectBool(
             array(
                 $connection,
                 'metadata:coin:policy_enforcement_decision_required'
@@ -199,7 +199,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
             'policyEnforcementDecisionRequired'
         );
 
-        $properties += $this->setPathFromObject(
+        $properties += $this->setPathFromObjectBool(
             array(
                 $connection,
                 'metadata:coin:requesterid_required'
@@ -207,7 +207,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
             'requesteridRequired'
         );
 
-        $properties += $this->setPathFromObject(
+        $properties += $this->setPathFromObjectBool(
             array(
                 $connection,
                 'metadata:coin:sign_response'
@@ -216,7 +216,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         );
 
         return Utils::instantiate(
-            'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider',
+            ServiceProvider::class,
             $properties
         );
     }
@@ -230,14 +230,14 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties = $this->assembleCommon($connection);
 
         $properties += $this->assembleSingleSignOnServices($connection);
-        $properties += $this->setPathFromObject(array($connection, 'metadata:coin:guest_qualifier'), 'guestQualifier');
-        $properties += $this->setPathFromObject(array($connection, 'metadata:coin:schachomeorganization'), 'schacHomeOrganization');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:coin:guest_qualifier'), 'guestQualifier');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:coin:schachomeorganization'), 'schacHomeOrganization');
         $properties += $this->assembleConsentSettings($connection);
-        $properties += $this->setPathFromObject(array($connection, 'metadata:coin:hidden'), 'hidden');
+        $properties += $this->setPathFromObjectBool(array($connection, 'metadata:coin:hidden'), 'hidden');
         $properties += $this->assembleShibMdScopes($connection);
 
         return Utils::instantiate(
-            'OpenConext\EngineBlock\Metadata\Entity\IdentityProvider',
+            IdentityProvider::class,
             $properties
         );
     }
@@ -246,33 +246,33 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
     {
         $properties = array();
 
-        $properties += $this->setPathFromObject(array($connection, 'name'), 'entityId');
-        $properties += $this->setPathFromObject(array($connection, 'metadata:name:nl'), 'nameNl');
-        $properties += $this->setPathFromObject(array($connection, 'metadata:name:en'), 'nameEn');
-        $properties += $this->setPathFromObject(array($connection, 'metadata:displayName:nl'), 'displayNameNl');
-        $properties += $this->setPathFromObject(array($connection, 'metadata:displayName:en'), 'displayNameEn');
-        $properties += $this->setPathFromObject(array($connection, 'metadata:description:nl'), 'descriptionNl');
-        $properties += $this->setPathFromObject(array($connection, 'metadata:description:en'), 'descriptionEn');
+        $properties += $this->setPathFromObjectString(array($connection, 'name'), 'entityId');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:name:nl'), 'nameNl');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:name:en'), 'nameEn');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:displayName:nl'), 'displayNameNl');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:displayName:en'), 'displayNameEn');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:description:nl'), 'descriptionNl');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:description:en'), 'descriptionEn');
         $properties += $this->assembleLogo($connection);
         $properties += $this->assembleOrganization($connection, 'nl');
         $properties += $this->assembleOrganization($connection, 'en');
-        $properties += $this->setPathFromObject(array($connection, 'metadata:keywords:en'), 'keywordsEn');
-        $properties += $this->setPathFromObject(array($connection, 'metadata:keywords:nl'), 'keywordsNl');
-        $properties += $this->setPathFromObject(array($connection, 'metadata:coin:publish_in_edugain'), 'publishInEdugain');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:keywords:en'), 'keywordsEn');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:keywords:nl'), 'keywordsNl');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:coin:publish_in_edugain'), 'publishInEdugain');
         $properties += $this->assembleCertificates($connection);
-        $properties += $this->setPathFromObject(array($connection, 'state'), 'workflowState');
+        $properties += $this->setPathFromObjectString(array($connection, 'state'), 'workflowState');
         $properties += $this->assembleContactPersons($connection);
-        $properties += $this->setPathFromObject(array($connection, 'metadata:NameIDFormat'), 'nameIdFormat');
-        $properties += $this->setPathFromObject(array($connection, 'metadata:NameIDFormats'), 'supportedNameIdFormats');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:NameIDFormat'), 'nameIdFormat');
+        $properties += $this->setPathFromObjectArray(array($connection, 'metadata:NameIDFormats'), 'supportedNameIdFormats');
         $properties += $this->assembleSingleLogoutServices($connection);
         $properties += $this->assemblePublishInEdugainDate($connection);
-        $properties += $this->setPathFromObject(array($connection, 'metadata:coin:disable_scoping'), 'disableScoping');
-        $properties += $this->setPathFromObject(array($connection, 'metadata:coin:additional_logging'), 'additionalLogging');
-        $properties += $this->setPathFromObject(array($connection, 'metadata:coin:signature_method'), 'signatureMethod');
-        $properties += $this->setPathFromObject(array($connection, 'metadata:redirect:sign'), 'requestsMustBeSigned');
-        $properties += $this->setPathFromObject(array($connection, 'manipulation_code'), 'manipulation');
-        $properties += $this->setPathFromObject(array($connection, 'metadata:url:en'), 'supportUrlEn');
-        $properties += $this->setPathFromObject(array($connection, 'metadata:url:nl'), 'supportUrlNl');
+        $properties += $this->setPathFromObjectBool(array($connection, 'metadata:coin:disable_scoping'), 'disableScoping');
+        $properties += $this->setPathFromObjectBool(array($connection, 'metadata:coin:additional_logging'), 'additionalLogging');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:coin:signature_method'), 'signatureMethod');
+        $properties += $this->setPathFromObjectBool(array($connection, 'metadata:redirect:sign'), 'requestsMustBeSigned');
+        $properties += $this->setPathFromObjectString(array($connection, 'manipulation_code'), 'manipulation');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:url:en'), 'supportUrlEn');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:url:nl'), 'supportUrlNl');
 
         return $properties;
     }
@@ -390,19 +390,47 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         ));
     }
 
-    private function setPathFromObject($from, $to)
+    private function setPathFromObjectString($from, $to)
+    {
+        $reference = $this->getValueFromPath($from);
+        if (is_null($reference)) {
+            return array($to => null);
+        }
+        return array($to => (string)$reference);
+    }
+
+    private function setPathFromObjectArray($from, $to)
+    {
+        $reference = $this->getValueFromPath($from);
+        if (!array($reference)) {
+            return array();
+        }
+        return array($to => $reference);
+    }
+
+    private function setPathFromObjectBool($from, $to)
+    {
+        $reference = $this->getValueFromPath($from);
+        if (is_null($reference)) {
+            return array($to => null);
+        }
+        return array($to => (bool)$reference);
+    }
+
+    private function getValueFromPath($from)
     {
         $pathParts = explode(':', $from[1]);
 
         $reference = $from[0];
         while ($pathPart = array_shift($pathParts)) {
             if (!isset($reference->$pathPart)) {
-                return array();
+                return null;
             }
 
             $reference = $reference->$pathPart;
         }
-        return array($to => $reference);
+
+        return $reference;
     }
 
     private function assembleSingleSignOnServices($connection)

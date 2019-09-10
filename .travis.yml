@@ -76,8 +76,6 @@ script:
 branches:
   only:
     - master
-    - release/5.11
-    - feature/error-page-styling
 
 after_failure:
   - sudo tail -500 /var/log/apache2/error.log
