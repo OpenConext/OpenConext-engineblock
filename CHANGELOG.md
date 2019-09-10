@@ -5,6 +5,12 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 5.13.0
+Add stepup authentication to EB to be able to reap the benefits of the SFO functionality of the strong authentication stack.
+
+ * Add stepup authentication #754
+
+
 ## 5.12.0
 We've changed the way how coin entity properties are stored in the database. As of now, they will be stored in a serialized manner, in a single column. This greatly simplifies adding or removing coins in the future, as this no longer requires database schema changes. 
 
