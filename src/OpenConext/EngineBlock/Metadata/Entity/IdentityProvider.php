@@ -69,32 +69,11 @@ class IdentityProvider extends AbstractRole
     public $singleSignOnServices = array();
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="guest_qualifier", type="string")
-     */
-    public $guestQualifier = self::GUEST_QUALIFIER_ALL;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="schac_home_organization", type="string")
-     */
-    public $schacHomeOrganization = null;
-
-    /**
      * @var ConsentSettings
      *
      * @ORM\Column(name="consent_settings", type="json_array")
      */
     private $consentSettings;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="hidden", type="boolean")
-     */
-    public $hidden = false;
 
     /**
      * @var ShibMdScope[]
@@ -185,12 +164,10 @@ class IdentityProvider extends AbstractRole
             $organizationEn,
             $organizationNl,
             $singleLogoutService,
-            $additionalLogging,
             $certificates,
             $contactPersons,
             $descriptionEn,
             $descriptionNl,
-            $disableScoping,
             $displayNameEn,
             $displayNameNl,
             $keywordsEn,
@@ -203,7 +180,6 @@ class IdentityProvider extends AbstractRole
             $publishInEduGainDate,
             $publishInEdugain,
             $requestsMustBeSigned,
-            $signatureMethod,
             $responseProcessingService,
             $workflowState,
             $manipulation
@@ -211,9 +187,6 @@ class IdentityProvider extends AbstractRole
 
         $this->attributeReleasePolicy = $attributeReleasePolicy;
         $this->enabledInWayf = $enabledInWayf;
-        $this->guestQualifier = $guestQualifier;
-        $this->hidden = $hidden;
-        $this->schacHomeOrganization = $schacHomeOrganization;
         $this->shibMdScopes = $shibMdScopes;
         $this->singleSignOnServices = $singleSignOnServices;
         $this->consentSettings = $consentSettings;
