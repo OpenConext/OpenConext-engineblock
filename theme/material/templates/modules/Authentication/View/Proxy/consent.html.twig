@@ -22,11 +22,11 @@
                 <p>
                     {{ 'consent_header_text'|trans({'%arg1%': spName})|raw }}
                 </p>
-                {% if sp.termsOfServiceUrl is not null %}
+                {% if sp.coins.termsOfServiceUrl is not null %}
                     <p>
                         <br>
                         <a class="small"
-                           href="{{ sp.termsOfServiceUrl }}"
+                           href="{{ sp.coins.termsOfServiceUrl }}"
                            target="_blank"><span>{{ 'consent_privacy_link'|trans }}</span></a>
                     </p>
                 {% endif %}
