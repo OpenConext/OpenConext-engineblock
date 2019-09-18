@@ -52,3 +52,7 @@ doctrine:
                 port:     "%database.test.port%"
                 user:     "%database.test.user%"
                 password: "%database.test.password%"
+
+twig:
+    debug: true
+    strict_variables: true
