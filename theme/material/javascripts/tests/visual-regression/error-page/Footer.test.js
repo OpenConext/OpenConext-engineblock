@@ -31,12 +31,6 @@ const viewports = [
 describe(
     'Verify',
     () => {
-        let page;
-
-        beforeAll(async () => {
-            page = await global.__BROWSER__.newPage();
-            jest.setTimeout(20000);
-        }, timeout);
 
         let sets = [];
         for (const footerDifference of footerDifferences) {
@@ -45,22 +39,23 @@ describe(
                     name: footerDifference.name,
                     url: footerDifference.url,
                     viewport: viewport,
-                    expect: expect,
-                    page: page,
+                    expect: expect
                 });
             }
         }
 
         for (const s of sets) {
             it(`${s.name}-${s.viewport.width}x${s.viewport.height}`, async () => {
-                await s.page.goto(s.url);
-                await s.page.setViewport(s.viewport);
-                await s.page.waitFor(".error-container");
-                const screenshot = await s.page.screenshot({
+                const page = await global.__BROWSER__.newPage();
+                await page.goto(s.url, {waitUntil: 'networkidle2'});
+                await page.setViewport(s.viewport);
+                const screenshot = await page.screenshot({
                     fullPage: true,
                     path: `./material/javascripts/tests/visual-regression/error-page/screenshots/footer/${s.name}-${s.viewport.width}x${s.viewport.height}.png`
                 });
                 s.expect(screenshot).toMatchImageSnapshot();
+
+                page.close();
             });
         }
     },
