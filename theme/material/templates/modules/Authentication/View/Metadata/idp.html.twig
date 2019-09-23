@@ -1,0 +1,45 @@
+{% spaceless %}
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="{{ id }}" entityID="https://engine.vm.openconext.org/authentication/idp/metadata" validUntil="2019-09-19T14:51:43Z">
+    <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <md:Extensions>
+            <mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
+                <mdui:DisplayName xml:lang="nl">OpenConext Engine</mdui:DisplayName>
+                <mdui:DisplayName xml:lang="en">OpenConext Engine</mdui:DisplayName>
+                <mdui:Description xml:lang="nl">OpenConext SSO Proxy</mdui:Description>
+                <mdui:Description xml:lang="en">OpenConext SSO Proxy</mdui:Description>
+                <mdui:Logo height="96" width="96">https://static.vm.openconext.org/media/conext_logo.png</mdui:Logo>
+                <mdui:Keywords xml:lang="en">openconext engine engineblock proxy sso saml2</mdui:Keywords>
+                <mdui:Keywords xml:lang="nl">openconext engine engineblock proxy sso saml2</mdui:Keywords>
+            </mdui:UIInfo>
+        </md:Extensions>
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>
+                        {{ publicKey }}
+                    </ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://engine.vm.openconext.org/authentication/idp/single-sign-on"></md:SingleSignOnService>
+    </md:IDPSSODescriptor>
+    <md:ContactPerson contactType="technical">
+        <md:GivenName>Support</md:GivenName>
+        <md:SurName>OpenConext</md:SurName>
+        <md:EmailAddress>help@example.org</md:EmailAddress>
+    </md:ContactPerson>
+    <md:ContactPerson contactType="support">
+        <md:GivenName>Support</md:GivenName>
+        <md:SurName>OpenConext</md:SurName>
+        <md:EmailAddress>help@example.org</md:EmailAddress>
+    </md:ContactPerson>
+    <md:ContactPerson contactType="administrative">
+        <md:GivenName>Support</md:GivenName>
+        <md:SurName>OpenConext</md:SurName>
+        <md:EmailAddress>help@example.org</md:EmailAddress>
+    </md:ContactPerson>
+</md:EntityDescriptor>
+{% endspaceless %}
