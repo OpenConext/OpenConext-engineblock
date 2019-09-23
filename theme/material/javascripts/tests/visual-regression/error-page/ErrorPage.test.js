@@ -75,7 +75,7 @@ const errorPages = [
     },
     {
         name: 'unsupported-signature-method',
-        url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=unsupported-signature-method&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata","serviceProviderName":"OpenConext Drop Supplies SP"}&parameters={"signatureMethod":"http://www.w3.org/2000/09/xmldsig%23%0Arsa-sha1"}'
+        url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=unsupported-signature-method&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata","serviceProviderName":"OpenConext Drop Supplies SP"}&parameters={"signatureMethod":"rsa-sha1"}'
     },
     {
         name: 'unknown-service-provider',
