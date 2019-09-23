@@ -22,4 +22,4 @@ bin/ignore_me.php
 /theme/node_modules
 /theme/.sass-cache
 /theme/**/screenshots
-/theme/**/__image_snapshots__
+/theme/**/__image_snapshots__/__diff_output__
