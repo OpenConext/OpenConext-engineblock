@@ -183,7 +183,7 @@ class EngineBlock_ApplicationSingleton
      * @param string $messageSuffix
      * @return bool
      */
-    public function reportError(Exception $exception, $messageSuffix = '')
+    public function reportError(Throwable $exception, $messageSuffix = '')
     {
         $log = $this->getLogInstance();
         if (!$log) {
@@ -233,7 +233,7 @@ class EngineBlock_ApplicationSingleton
      * @param Exception $exception
      * @return array
      */
-    public function collectFeedbackInfo(Exception $exception)
+    public function collectFeedbackInfo(Throwable $exception)
     {
         $logRequestId = $this->getLogRequestId();
         if ($logRequestId === null) {
