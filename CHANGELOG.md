@@ -5,6 +5,25 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.0.0
+In this release, PHP 5.6 support was dropped in favour of PHP 7.2. We are not migrating to the latest PHP version for some reasons. Chief amongst which is that PHP 7.2 was best compatible with the current EngineBlock code base. 
+An upgrade to 7.3 or even 7.4 would force us to upgrade many third party dependencies at the same time, making this release much bigger.
+
+For installation instructions, see the UPGRADING.md entry for this version.
+
+The following changes where introduced in this release:
+
+**Improvements**
+* PHP 7.2 compatibility changes #713
+* Prevent WAYF button from floating left #760
+
+**Bugfix**
+* Get termsOfServiceUrl from coins, not SP metadata entity #756
+
+**Other chores**
+* Cleanup old coin columns #755
+* Bump handlebars to version 4.3.1 #761
+
 ## 5.13.0
 Add stepup authentication to EB to be able to reap the benefits of the SFO functionality of the strong authentication stack.
 

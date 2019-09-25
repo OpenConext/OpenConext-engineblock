@@ -35,8 +35,10 @@ To setup the required tooling on the VM, the following steps might be useful:
 
 * Linux
 * Apache
-* PHP 5.6:
+* PHP 7.2:
     - libxml
+    - apcu
+    - apcu-bc (a requirement while we are using an older Doctrine version)
 * MySQL > 5.x with settings:
     - default-storage-engine=InnoDB
     - default-collation=utf8_unicode_ci
@@ -189,8 +191,7 @@ If you are using this pattern, an update can be done with the following:
 
 1. Download and deploy a new version in a new directory.
 
-2. Check out the release notes in docs/release_notes/X.Y.Z.md (where X.Y.Z is the version number) for any
-   additional steps.
+2. Check out the release notes in UPGRADING.md
 
 3. Prepare your environment (see above)
 
