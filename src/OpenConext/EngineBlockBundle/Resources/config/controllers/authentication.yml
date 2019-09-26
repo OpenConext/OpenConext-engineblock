@@ -1,4 +1,7 @@
 services:
+    _defaults:
+        autowire: true
+
     engineblock.controller.authentication.service_provider:
         class: OpenConext\EngineBlockBundle\Controller\ServiceProviderController
         arguments:
@@ -36,6 +39,7 @@ services:
         class: OpenConext\EngineBlockBundle\Controller\MetadataController
         arguments:
             - "@engineblock.compat.application"
+            - '@OpenConext\EngineBlockBundle\Metadata\Service\ServiceProviderMetadataService'
 
     engineblock.controller.authentication.certificate:
         class: OpenConext\EngineBlockBundle\Controller\CertificateController
