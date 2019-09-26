@@ -18,6 +18,8 @@
 
 namespace OpenConext\EngineBlock\Metadata;
 
+use InvalidArgumentException;
+
 /**
  * Class AttributeReleasePolicy
  * @package OpenConext\EngineBlock\Metadata
@@ -50,11 +52,11 @@ class AttributeReleasePolicy
     {
         foreach ($attributeRules as $key => $rules) {
             if (!is_string($key)) {
-                throw new \InvalidArgumentException(sprintf('Invalid key: "%s"', var_export($key, true)));
+                throw new InvalidArgumentException(sprintf('Invalid key: "%s"', var_export($key, true)));
             }
 
             if (!is_array($rules)) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     sprintf('Invalid values for attribute "%s", not an array: "%s"', $key, var_export($rules, true))
                 );
             }
@@ -70,13 +72,13 @@ class AttributeReleasePolicy
     /**
      * @param string $key
      * @param mixed $rule
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function validateRule($key, $rule)
     {
         if (is_array($rule)) {
             if (!isset($rule['value'])) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     sprintf(
                         'Invalid value for attribute "%s", rule must contain a value key, got: "%s"',
                         $key,
@@ -91,7 +93,7 @@ class AttributeReleasePolicy
         }
 
         if (!is_string($value)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('Invalid value for attribute "%s", not a string: "%s"', $key, var_export($value, true))
             );
         }

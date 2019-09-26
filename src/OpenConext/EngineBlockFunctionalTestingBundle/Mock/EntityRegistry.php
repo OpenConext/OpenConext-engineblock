@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 class EntityRegistry extends ParameterBag
@@ -40,18 +41,18 @@ class EntityRegistry extends ParameterBag
 
     /**
      * @return MockIdentityProvider|MockServiceProvider
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function getOnly()
     {
         $count = $this->count();
 
         if ($count === 0) {
-            throw new \RuntimeException("No entities registered yet (use before definition)");
+            throw new RuntimeException("No entities registered yet (use before definition)");
         }
 
         if ($count !== 1) {
-            throw new \RuntimeException("More than 1 entities registered, unable to get a single entity");
+            throw new RuntimeException("More than 1 entities registered, unable to get a single entity");
         }
 
         return $this->getIterator()->current();

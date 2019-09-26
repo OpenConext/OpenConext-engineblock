@@ -23,6 +23,7 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 use DOMDocument;
 use DOMXPath;
+use Ingenerator\BehatTableAssert\AssertTable;
 use Ingenerator\BehatTableAssert\TableParser\HTMLTable;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard;
@@ -241,7 +242,7 @@ HTML;
 
         $actualTable = new TableNode($rows);
 
-        $assert = new \Ingenerator\BehatTableAssert\AssertTable;
+        $assert = new AssertTable;
         $assert->isComparable($attributes, $actualTable, []);
     }
 

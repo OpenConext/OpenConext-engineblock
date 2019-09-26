@@ -17,6 +17,7 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
+use DateInterval;
 use DateTime;
 use LogicException;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingStepupGatewayMockConfiguration;
@@ -341,7 +342,7 @@ class MockStepupGateway
     }
 
     /**
-     * @param string $interval a \DateInterval compatible interval to skew the time with
+     * @param string $interval a DateInterval compatible interval to skew the time with
      * @return int
      */
     private function getTimestamp($interval = null)
@@ -349,7 +350,7 @@ class MockStepupGateway
         $time = clone $this->currentTime;
 
         if ($interval) {
-            $time->add(new \DateInterval($interval));
+            $time->add(new DateInterval($interval));
         }
 
         return $time->getTimestamp();

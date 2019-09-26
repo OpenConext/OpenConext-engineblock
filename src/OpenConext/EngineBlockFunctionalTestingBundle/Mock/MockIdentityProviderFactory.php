@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
+use DOMDocument;
 use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Response;
 use SAML2\Compat\ContainerSingleton;
 use SAML2\Constants;
@@ -101,7 +102,7 @@ class MockIdentityProviderFactory extends AbstractMockEntityFactory
         $schacHomeOrganization  = 'engine-test-stand.openconext.org';
         $nameId = 'ETS-MOCK-IDP-' . time();
 
-        $document = new \DOMDocument();
+        $document = new DOMDocument();
         $document->loadXML(<<<RESPONSE
 <samlp:Response
   xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"

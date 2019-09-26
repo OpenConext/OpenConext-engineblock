@@ -22,6 +22,7 @@ use DateTime;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use function count;
 
 /**
  * The Corto disassembler disassembles an entity to legacy Corto arrays.
@@ -349,6 +350,8 @@ class CortoDisassembler
      *
      * @param mixed $value
      * @param array $to
+     *
+     * @SuppressWarnings(PHPMD.CountInLoopExpression)
      */
     private function mapMultilang($value, array &$to)
     {

@@ -28,6 +28,7 @@ use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use RuntimeException;
 use SAML2\Constants;
 
 /**
@@ -360,7 +361,7 @@ abstract class AbstractRole
             return $this;
         }
 
-        throw new \RuntimeException('Unknown workflow state');
+        throw new RuntimeException('Unknown workflow state');
     }
 
     /**
