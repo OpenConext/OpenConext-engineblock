@@ -21,6 +21,7 @@ use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Utils;
+use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlock\Metadata\X509\X509PrivateKey;
@@ -53,7 +54,13 @@ class MetadataFactoryTest extends TestCase
         $twigLoader = new \Twig_Loader_Filesystem();
         $twigLoader->addPath($basePath . '/theme/material/templates/modules', 'theme');
         $environment = new Environment($twigLoader);
-        $this->metadataFactory = new MetadataFactory($environment, $samlIdGenerator, $keyPair);
+
+        $keyPairFactory = $this->createMock(KeyPairFactory::class);
+        $keyPairFactory
+            ->method('buildFromIdentifier')
+            ->willReturn($keyPair);
+
+        $this->metadataFactory = new MetadataFactory($environment, $samlIdGenerator, $keyPairFactory);
 
         parent::setUp();
     }

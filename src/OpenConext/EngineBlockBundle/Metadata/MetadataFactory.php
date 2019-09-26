@@ -21,6 +21,7 @@ use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use Twig\Environment;
@@ -45,11 +46,12 @@ class MetadataFactory
      */
     private $signingKeyPair;
 
-    public function __construct(Environment $twig, EngineBlock_Saml2_IdGenerator $samlIdGenerator, X509KeyPair $signingKeyPair)
+    public function __construct(Environment $twig, EngineBlock_Saml2_IdGenerator $samlIdGenerator, KeyPairFactory $keyPairFactory)
     {
         $this->twig = $twig;
         $this->samlIdGenerator = $samlIdGenerator;
-        $this->signingKeyPair = $signingKeyPair;
+        // Use the default configured key as default
+        $this->signingKeyPair = $keyPairFactory->buildFromIdentifier();
     }
 
     public function fromServiceProviderEntity(ServiceProvider $role)
@@ -77,6 +79,7 @@ class MetadataFactory
         $params = [
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
             'entity' => $role,
+            'publicKey' => $this->signingKeyPair->getCertificate()->toCertData()
         ];
 
         return $this->twig->render($template, $params);
