@@ -1,4 +1,9 @@
 services:
+    OpenConext\EngineBlockBundle\Metadata\:
+        resource: '../../Metadata'
+        autowire: true
+        autoconfigure: true
+
     openconext.monitor.database_health_check:
         class: OpenConext\EngineBlockBundle\HealthCheck\DoctrineConnectionHealthCheck
         arguments:
@@ -158,6 +163,8 @@ services:
         arguments:
             - "@engineblock.metadata.repository.doctrine"
 
+    OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface: '@engineblock.metadata.repository.cached_doctrine'
+
     engineblock.metadata.repository.doctrine:
         public: false
         class: OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository
@@ -177,6 +184,10 @@ services:
         class: OpenConext\EngineBlock\Metadata\Entity\Assembler\PushMetadataAssembler
         arguments:
             - "@engineblock.validator.allowed_scheme_validator"
+
+    OpenConext\EngineBlock\Metadata\X509\KeyPairFactory:
+        arguments:
+            - '%encryption_keys%'
 
     engineblock.validator.allowed_scheme_validator:
         class: OpenConext\EngineBlock\Validator\AllowedSchemeValidator

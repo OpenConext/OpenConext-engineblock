@@ -1,4 +1,3 @@
-{% spaceless %}
 <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="{{ id }}" entityID="https://engine.vm.openconext.org/authentication/sp/metadata" validUntil="2019-09-20T08:12:41Z">
     <md:SPSSODescriptor WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
         <md:Extensions>
@@ -13,9 +12,7 @@
         <md:KeyDescriptor use="signing">
             <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
                 <ds:X509Data>
-                    <ds:X509Certificate>
-                        {{ publicKey }}
-                    </ds:X509Certificate>
+                    <ds:X509Certificate>{{ publicKey }}</ds:X509Certificate>
                 </ds:X509Data>
             </ds:KeyInfo>
         </md:KeyDescriptor>
@@ -49,4 +46,3 @@
         <md:EmailAddress>help@example.org</md:EmailAddress>
     </md:ContactPerson>
 </md:EntityDescriptor>
-{% endspaceless %}
