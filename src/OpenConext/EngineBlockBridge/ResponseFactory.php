@@ -36,4 +36,11 @@ class ResponseFactory
 
         return new Response($response->getBody(), $response->getStatusCode(), $response->getHeaders());
     }
+
+    public static function fromXml(string $metadataFrom)
+    {
+        $response = new Response($metadataFrom);
+        $response->headers->set('Content-Type', 'text/xml');
+        return $response;
+    }
 }
