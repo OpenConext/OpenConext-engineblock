@@ -8,9 +8,7 @@ Expect more significant upgrades from a PHP 7 standpoint in the near future.
 ### For OpenConext-deploy users
 Use an OpenConext-deploy release containing [this revision](https://github.com/OpenConext/OpenConext-deploy/commit/21e75357b1802f346aea0077b8081393865c6112). No release has been tagged after adding the PHP 7.2 support.
 
-In order to get the setup to work afterwards follow the steps described in [this PR](https://github.com/OpenConext/OpenConext-engineblock/pull/713#issue-287892008). Expect updates to OpenConext-deploy in the near future.
-
-### For non-OpencCnext-deploy users
+### For non-OpenConext-deploy users
 In order to upgrade your EngineBlock instance, simply upgrade your PHP version to 7.2 and install the following PHP extensions for that version:
 - fpm (if you are using php-fpm)
 - cli
