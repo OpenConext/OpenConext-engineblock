@@ -17,6 +17,7 @@
 
 namespace OpenConext\EngineBlockBundle\Metadata;
 
+use DOMDocument;
 use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
@@ -46,10 +47,17 @@ class MetadataFactory
      */
     private $signingKeyPair;
 
+    /**
+     * @var KeyPairFactory
+     */
+    private $keyPairFactory;
+
     public function __construct(Environment $twig, EngineBlock_Saml2_IdGenerator $samlIdGenerator, KeyPairFactory $keyPairFactory)
     {
         $this->twig = $twig;
         $this->samlIdGenerator = $samlIdGenerator;
+        $this->keyPairFactory = $keyPairFactory;
+
         // Use the default configured key as default
         $this->signingKeyPair = $keyPairFactory->buildFromIdentifier();
     }
@@ -74,6 +82,11 @@ class MetadataFactory
         return $signedXml;
     }
 
+    public function setKey(string $keyId)
+    {
+        $this->signingKeyPair = $this->keyPairFactory->buildFromIdentifier($keyId);
+    }
+
     private function renderMetadataXml(AbstractRole $role, $template)
     {
         $params = [
@@ -88,7 +101,7 @@ class MetadataFactory
     private function signXml($source, X509KeyPair $signingKeyPair)
     {
         // Load the XML to be signed
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $doc->loadXML($source);
 
         // Create sign object
