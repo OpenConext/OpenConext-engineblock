@@ -542,7 +542,6 @@ class ConnectionsControllerTest extends WebTestCase
                     'requesterid_required' => '1',
                     'sign_response' => '0',
                     // abstract
-                    'publish_in_edugain' => '1',
                     'disable_scoping' => '0',
                     'additional_logging' => '1',
                     'signature_method' => 'signature-method',
@@ -573,7 +572,6 @@ class ConnectionsControllerTest extends WebTestCase
                     'schachomeorganization' => 'schac-home-organization',
                     'hidden' => '0',
                     // abstract
-                    'publish_in_edugain' => '1',
                     'disable_scoping' => '0',
                     'additional_logging' => '1',
                     'signature_method' => 'signature-method',

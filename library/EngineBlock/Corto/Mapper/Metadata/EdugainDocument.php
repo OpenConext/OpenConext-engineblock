@@ -18,24 +18,25 @@
 
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 
+/**
+ * TODO: Not yet removed with the story: https://www.pivotaltracker.com/story/show/164925138
+ * this should have been made obsolete once all Metadata related logic is moved out of Corto
+ */
 class EngineBlock_Corto_Mapper_Metadata_EdugainDocument
 {
     private $_id;
     private $_validUntil;
-    private $_eduGain;
     private $_entities;
     private $_entity;
 
     /**
      * @param string $id
      * @param $validUntil
-     * @param boolean $eduGain
      */
-    public function __construct($id, $validUntil, $eduGain)
+    public function __construct($id, $validUntil)
     {
         $this->_id = $id;
         $this->_validUntil = $validUntil;
-        $this->_eduGain = $eduGain;
     }
 
     public function map()
@@ -44,9 +45,7 @@ class EngineBlock_Corto_Mapper_Metadata_EdugainDocument
         $rootElement[EngineBlock_Corto_XmlToArray::COMMENT_PFX] = $this->_getTermsOfUse();
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:md'] = 'urn:oasis:names:tc:SAML:2.0:metadata';
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:mdui'] = 'urn:oasis:names:tc:SAML:metadata:ui';
-        if ($this->_eduGain) {
-            $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:mdrpi'] = 'urn:oasis:names:tc:SAML:metadata:rpi';
-        }
+
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'validUntil'] = $this->_validUntil;
 
         if (isset($this->_entities)) {
@@ -68,13 +67,13 @@ class EngineBlock_Corto_Mapper_Metadata_EdugainDocument
 
     protected function _mapEntities(array $rootElement)
     {
-        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entities($this->_entities, $this->_eduGain);
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entities($this->_entities);
         return $mapper->mapTo($rootElement);
     }
 
     protected function _mapEntity(array $rootElement)
     {
-        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity($this->_entity, $this->_eduGain);
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity($this->_entity);
         return $mapper->mapTo($rootElement);
     }
 
@@ -98,8 +97,6 @@ class EngineBlock_Corto_Mapper_Metadata_EdugainDocument
     {
         $settings = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
 
-        return $this->_eduGain ?
-            $settings->getEdugainMetadataConfiguration()['termsOfUse'] :
-            $settings->getOpenConextTermsOfUseUrl();
+        return $settings->getOpenConextTermsOfUseUrl();
     }
 }

@@ -165,33 +165,6 @@ class InMemoryMetadataRepository extends AbstractMetadataRepository
     }
 
     /**
-     * @return AbstractRole[]
-     */
-    public function findEntitiesPublishableInEdugain()
-    {
-        /** @var AbstractRole[] $roles */
-        $roles = array_merge($this->identityProviders, $this->serviceProviders);
-
-        $publishableRoles = array();
-        foreach ($roles as $role) {
-            if (!$role->publishInEdugain) {
-                continue;
-            }
-
-            $publishableRoles[] = $role;
-        }
-
-        $roles = $this->compositeFilter->filterRoles(
-            $publishableRoles
-        );
-
-        foreach ($roles as $role) {
-            $role->accept($this->compositeVisitor);
-        }
-        return $roles;
-    }
-
-    /**
      * @param array $scope
      * @return string[]
      */

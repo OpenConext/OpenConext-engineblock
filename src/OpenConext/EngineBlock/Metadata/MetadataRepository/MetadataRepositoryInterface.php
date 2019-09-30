@@ -96,9 +96,4 @@ interface MetadataRepositoryInterface
      * @return string[]
      */
     public function findReservedSchacHomeOrganizations();
-
-    /**
-     * @return AbstractRole[]
-     */
-    public function findEntitiesPublishableInEdugain();
 }
