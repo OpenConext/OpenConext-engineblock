@@ -21,7 +21,7 @@ namespace OpenConext\EngineBlockBundle\Controller;
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
 use OpenConext\EngineBlockBridge\ResponseFactory;
-use OpenConext\EngineBlockBundle\Metadata\Service\MetadataService;
+use OpenConext\EngineBlockBundle\Metadata\Service\MetadataServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class MetadataController
@@ -32,13 +32,13 @@ class MetadataController
     private $engineBlockApplicationSingleton;
 
     /**
-     * @var MetadataService
+     * @var MetadataServiceInterface
      */
     private $spMetadataService;
 
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        MetadataService $spMetadataService
+        MetadataServiceInterface $spMetadataService
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->spMetadataService = $spMetadataService;
@@ -67,11 +67,7 @@ class MetadataController
      */
     public function spMetadataAction($keyId = null)
     {
-        if ($keyId !== null) {
-            $this->spMetadataService->setKeyId($keyId);
-        }
-        $serviceProvider = $this->spMetadataService->getRoleByEntityId('https://engine.vm.openconext.org/authentication/sp/metadata');
-        $metadataXml = $this->spMetadataService->metadataFrom($serviceProvider);
+        $metadataXml = $this->spMetadataService->metadataFor('https://engine.vm.openconext.org/authentication/sp/metadata', $keyId);
 
         return ResponseFactory::fromXml($metadataXml);
     }
