@@ -18,10 +18,13 @@
 
 namespace OpenConext\EngineBlock\Metadata\X509;
 
+use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlock\Exception\RuntimeException;
 
 class KeyPairFactory
 {
+    const DEFAULT_KEY_PAIR_IDENTIFIER = 'default';
+
     private $keyPairConfiguration = [];
 
     /**
@@ -38,8 +41,10 @@ class KeyPairFactory
      *
      * @throws RuntimeException
      */
-    public function buildFromIdentifier(string $identifier = 'default') : X509KeyPair
+    public function buildFromIdentifier(string $identifier) : X509KeyPair
     {
+        Assertion::nonEmptyString($identifier, 'identifier');
+
         if (array_key_exists($identifier, $this->keyPairConfiguration)) {
             $keys = $this->keyPairConfiguration[$identifier];
             $privateKey = new X509PrivateKey($keys['privateFile']);

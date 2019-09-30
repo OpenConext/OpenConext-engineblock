@@ -20,9 +20,12 @@ namespace OpenConext\EngineBlockBundle\Controller;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
+use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlockBridge\ResponseFactory;
 use OpenConext\EngineBlockBundle\Metadata\Service\MetadataServiceInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class MetadataController
 {
@@ -46,7 +49,7 @@ class MetadataController
 
     /**
      * @param null|string $keyId
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function idpMetadataAction($keyId = null)
     {
@@ -63,19 +66,29 @@ class MetadataController
 
     /**
      * @param null|string $keyId
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function spMetadataAction($keyId = null)
     {
-        $metadataXml = $this->spMetadataService->metadataFor('https://engine.vm.openconext.org/authentication/sp/metadata', $keyId);
+        if (is_null($keyId)) {
+            $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
+        }
 
-        return ResponseFactory::fromXml($metadataXml);
+        $metadataXml = $this->spMetadataService->metadataFor(
+            'https://engine.vm.openconext.org/authentication/sp/metadata',
+            $keyId
+        );
+
+        $response = new Response($metadataXml);
+        $response->headers->set('Content-Type', 'text/xml');
+
+        return $response;
     }
 
     /**
      * @param null|string $keyId
      * @param Request     $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function allIdpsMetadataAction(Request $request, $keyId = null)
     {
@@ -93,7 +106,7 @@ class MetadataController
     /**
      * @param null|string $keyId
      * @param Request     $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function edugainMetadataAction(Request $request, $keyId = null)
     {
