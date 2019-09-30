@@ -51,14 +51,12 @@ class ServiceProviderMetadataService implements MetadataServiceInterface
      * @param string $keyId
      * @return string
      */
-    public function metadataFor(string $entityId, string $keyId = null): string
+    public function metadataFor(string $entityId, string $keyId): string
     {
         $serviceProvider = $this->metadataRepository->findServiceProviderByEntityId($entityId);
 
         if ($serviceProvider) {
-            if (!is_null($keyId)) {
-                $this->factory->setKey($keyId);
-            }
+            $this->factory->setKey($keyId);
             return $this->factory->fromServiceProviderEntity($serviceProvider);
         }
         throw new EntityCanNotBeFoundException(sprintf('Unable to find the SP with entity ID "%s".', $entityId));
