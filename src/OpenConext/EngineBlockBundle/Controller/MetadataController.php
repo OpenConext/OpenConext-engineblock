@@ -65,12 +65,12 @@ class MetadataController
     }
 
     /**
-     * @param null|string $keyId
+     * @param string $keyId
      * @return Response
      */
-    public function spMetadataAction($keyId = null)
+    public function spMetadataAction(string $keyId)
     {
-        if (is_null($keyId)) {
+        if (empty($keyId)) {
             $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
         }
 
