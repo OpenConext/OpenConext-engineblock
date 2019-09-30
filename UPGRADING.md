@@ -1,5 +1,29 @@
 # UPGRADE NOTES
 
+## 5.x > 6.0
+In version 6 EngineBlock dropped PHP 5.6 support. The amount of backwards breaking changes was kept to a minimum. For example we did not yet upgrade to Symfony 4. But we did use some PHP 7.2 features like the Throwable interface.
+
+Expect more significant upgrades from a PHP 7 standpoint in the near future.  
+
+### For OpenConext-deploy users
+Use an OpenConext-deploy release containing [this revision](https://github.com/OpenConext/OpenConext-deploy/commit/21e75357b1802f346aea0077b8081393865c6112). No release has been tagged after adding the PHP 7.2 support.
+
+### For non-OpenConext-deploy users
+In order to upgrade your EngineBlock instance, simply upgrade your PHP version to 7.2 and install the following PHP extensions for that version:
+- fpm (if you are using php-fpm)
+- cli
+- pecl-apcu
+- pecl-apcu-bc
+- curl
+- mbstring
+- mysql
+- soap
+- xml
+- gd
+- xdebug (if you plan to do some development)
+
+Upgrade your webserver to use PHP 7.2 for your EngineBlock application.
+
 ## 5.11 > 5.12.0
 
 ### Serialised column cleanup
