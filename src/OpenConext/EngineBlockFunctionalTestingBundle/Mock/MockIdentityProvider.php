@@ -19,7 +19,9 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
 use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Response;
+use ReflectionClass;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use RuntimeException;
 use SAML2\Constants;
 use SAML2\XML\md\IDPSSODescriptor;
 
@@ -86,7 +88,7 @@ class MockIdentityProvider extends AbstractMockEntityRole
 
     private function getFullyQualifiedStatusCode($shortStatusCode)
     {
-        $class = new \ReflectionClass(Constants::class);
+        $class = new ReflectionClass(Constants::class);
         $constants = $class->getConstants();
         foreach ($constants as $constName => $constValue) {
             if (strpos($constName, 'STATUS_') !== 0) {
@@ -100,7 +102,7 @@ class MockIdentityProvider extends AbstractMockEntityRole
             return $constValue;
         }
 
-        throw new \RuntimeException(sprintf('"%s" is not a valid status code', $shortStatusCode));
+        throw new RuntimeException(sprintf('"%s" is not a valid status code', $shortStatusCode));
     }
 
     /**

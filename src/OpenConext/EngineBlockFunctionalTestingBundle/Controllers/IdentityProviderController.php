@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Controllers;
 
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
+use RuntimeException;
 use SAML2\AuthnRequest;
 use SAML2\HTTPPost;
 use SAML2\HTTPRedirect;
@@ -70,7 +71,7 @@ class IdentityProviderController extends Controller
      * @param Request $request
      * @param $idpName
      * @return Response
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function singleSignOnAction(Request $request, $idpName)
     {
@@ -81,11 +82,11 @@ class IdentityProviderController extends Controller
             $postBinding = new HTTPPost();
             $message = $postBinding->receive();
         } else {
-            throw new \RuntimeException('Unsupported HTTP method');
+            throw new RuntimeException('Unsupported HTTP method');
         }
 
         if (!$message instanceof AuthnRequest) {
-            throw new \RuntimeException(sprintf('Unknown message type: "%s"', get_class($message)));
+            throw new RuntimeException(sprintf('Unknown message type: "%s"', get_class($message)));
         }
         $authnRequest = $message;
 

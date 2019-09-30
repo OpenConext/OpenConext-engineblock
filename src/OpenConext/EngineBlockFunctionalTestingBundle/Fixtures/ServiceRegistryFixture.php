@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
 use Doctrine\ORM\EntityManager;
+use Exception;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
@@ -34,6 +35,7 @@ use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy;
+use ReflectionClass;
 use SAML2\Constants;
 
 /**
@@ -71,14 +73,14 @@ class ServiceRegistryFixture
     /**
      * @param $entityId
      * @return ServiceProvider
-     * @throws \Exception
+     * @throws Exception
      */
     private function getServiceProvider($entityId)
     {
         $entity = $this->repository->findServiceProviderByEntityId($entityId);
 
         if ($entity === null) {
-            throw new \Exception(
+            throw new Exception(
                 sprintf('Entity "%s" was not registered with registerSp()', $entityId)
             );
         }
@@ -91,14 +93,14 @@ class ServiceRegistryFixture
     /**
      * @param $entityId
      * @return IdentityProvider
-     * @throws \Exception
+     * @throws Exception
      */
     private function getIdentityProvider($entityId)
     {
         $entity = $this->repository->findIdentityProviderByEntityId($entityId);
 
         if ($entity === null) {
-            throw new \Exception(
+            throw new Exception(
                 sprintf('Entity "%s" was not registered with registerIdp()', $entityId)
             );
         }
@@ -471,7 +473,7 @@ QUERY;
 
         $coins = Coins::fromJson($jsonData);
 
-        $object = new \ReflectionClass($role);
+        $object = new ReflectionClass($role);
 
         $property = $object->getProperty('coins');
         $property->setAccessible(true);
