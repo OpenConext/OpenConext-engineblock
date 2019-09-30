@@ -47,7 +47,7 @@ class KeyPairFactory
             return new X509KeyPair($publicKey, $privateKey);
         }
         throw new RuntimeException(
-            sprintf('Unable to find the encryption keypair identified by "%s"', $identifier)
+            sprintf('Unable to find the encryption key pair identified by "%s"', $identifier)
         );
     }
 }

@@ -56,7 +56,7 @@ class KeyPairFactoryTest extends PHPUnit_Framework_TestCase
     public function test_it_raises_exception_when_requesting_invalid_key_pair()
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Unable to find the encryption keypair identified by "ahnk-morpork"');
+        $this->expectExceptionMessage('Unable to find the encryption key pair identified by "ahnk-morpork"');
         $this->factory->buildFromIdentifier('ahnk-morpork');
     }
 }
