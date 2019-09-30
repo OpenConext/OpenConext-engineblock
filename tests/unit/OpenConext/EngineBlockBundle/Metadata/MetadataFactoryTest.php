@@ -77,8 +77,8 @@ class MetadataFactoryTest extends TestCase
                 'entityId' => 'idp',
             ]
         );
-        $this->metadataFactory->setKey('default');
-        $xml = $this->metadataFactory->fromIdentityProviderEntity($idp);
+
+        $xml = $this->metadataFactory->fromIdentityProviderEntity($idp, 'default');
 
         // Validate signature and digest
         $this->assertTrue($this->validateXml($xml));
@@ -102,8 +102,7 @@ class MetadataFactoryTest extends TestCase
             ]
         );
 
-        $this->metadataFactory->setKey('default');
-        $xml = $this->metadataFactory->fromServiceProviderEntity($sp);
+        $xml = $this->metadataFactory->fromServiceProviderEntity($sp, 'default');
 
         // Validate signature and digest
         $this->assertTrue($this->validateXml($xml));

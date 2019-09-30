@@ -60,9 +60,9 @@ class MetadataFactory
         $this->keyPairFactory = $keyPairFactory;
     }
 
-    public function fromServiceProviderEntity(ServiceProvider $role)
+    public function fromServiceProviderEntity(ServiceProvider $role, string $keyId)
     {
-        $this->verifyKeyPair();
+        $this->signingKeyPair = $this->keyPairFactory->buildFromIdentifier($keyId);
         $template = '@theme/Authentication/View/Metadata/sp.html.twig';
 
         $xml = $this->renderMetadataXml($role, $template);
@@ -71,20 +71,15 @@ class MetadataFactory
         return $signedXml;
     }
 
-    public function fromIdentityProviderEntity(IdentityProvider $role)
+    public function fromIdentityProviderEntity(IdentityProvider $role, string $keyId)
     {
-        $this->verifyKeyPair();
+        $this->signingKeyPair = $this->keyPairFactory->buildFromIdentifier($keyId);
         $template = '@theme/Authentication/View/Metadata/idp.html.twig';
 
         $xml = $this->renderMetadataXml($role, $template);
         $signedXml = $this->signXml($xml, $this->signingKeyPair);
 
         return $signedXml;
-    }
-
-    public function setKey(string $keyId)
-    {
-        $this->signingKeyPair = $this->keyPairFactory->buildFromIdentifier($keyId);
     }
 
     private function renderMetadataXml(AbstractRole $role, $template)
@@ -128,16 +123,5 @@ class MetadataFactory
 
         // Save the signed XML
         return $doc->saveXML();
-    }
-
-    /**
-     * Verify if the keypair is loaded on the factory. If not, this method will throw a runtime exception.
-     * @throws RuntimeException
-     */
-    private function verifyKeyPair()
-    {
-        if (is_null($this->signingKeyPair)) {
-            throw new RuntimeException('Please set the signing key pair before generating metadata');
-        }
     }
 }
