@@ -102,6 +102,8 @@ class IdentityProvider extends AbstractRole
      * @param string $nameNl
      * @param null $nameIdFormat
      * @param array $supportedNameIdFormats
+     * @param null $publishInEduGainDate
+     * @param bool $publishInEdugain
      * @param bool $requestsMustBeSigned
      * @param string $signatureMethod
      * @param Service $responseProcessingService
@@ -140,6 +142,8 @@ class IdentityProvider extends AbstractRole
             Constants::NAMEID_TRANSIENT,
             Constants::NAMEID_PERSISTENT,
         ),
+        $publishInEduGainDate = null,
+        $publishInEdugain = false,
         $requestsMustBeSigned = false,
         $signatureMethod = XMLSecurityKey::RSA_SHA1,
         Service $responseProcessingService = null,
@@ -173,6 +177,11 @@ class IdentityProvider extends AbstractRole
             $nameNl,
             $nameIdFormat,
             $supportedNameIdFormats,
+            /**
+             * @deprecated: These coins are no longer used in EngineBlock and will be removed in release 6.2
+             */
+            $publishInEduGainDate,
+            $publishInEdugain,
             $requestsMustBeSigned,
             $responseProcessingService,
             $workflowState,
