@@ -56,6 +56,10 @@ use SAML2\Constants;
  *              name="idx_sso_provider_roles_entity_id",
  *              columns={"entity_id"}
  *          ),
+ *          @ORM\Index(
+ *              name="idx_sso_provider_roles_publish_in_edugain",
+ *              columns={"publish_in_edugain"}
+ *          ),
  *      }
  * )
  * @ORM\InheritanceType("SINGLE_TABLE")
@@ -167,6 +171,15 @@ abstract class AbstractRole
     public $keywordsEn;
 
     /**
+     * @var bool
+     *
+     * @deprecated: This coin is no longer used in EngineBlock and will be removed in release 6.2
+     *
+     * @ORM\Column(name="publish_in_edugain", type="boolean")
+     */
+    public $publishInEdugain;
+
+    /**
      * @var X509Certificate[]
      *
      * @ORM\Column(name="certificates", type="array")
@@ -207,6 +220,15 @@ abstract class AbstractRole
      * @ORM\Column(name="single_logout_service", type="object", nullable=true)
      */
     public $singleLogoutService;
+
+    /**
+     * @var DateTime
+     *
+     * @deprecated: This coin is no longer used in EngineBlock and will be removed in release 6.2
+     *
+     * @ORM\Column(name="publish_in_edu_gain_date", type="date", nullable=true)
+     */
+    public $publishInEduGainDate;
 
     /**
      * @var bool
@@ -254,6 +276,8 @@ abstract class AbstractRole
      * @param string $nameNl
      * @param null $nameIdFormat
      * @param array $supportedNameIdFormats
+     * @param null $publishInEduGainDate
+     * @param bool $publishInEdugain
      * @param bool $requestsMustBeSigned
      * @param Service $responseProcessingService
      * @param string $workflowState
@@ -280,6 +304,8 @@ abstract class AbstractRole
             Constants::NAMEID_TRANSIENT,
             Constants::NAMEID_PERSISTENT,
         ),
+        $publishInEduGainDate = null,
+        $publishInEdugain = false,
         $requestsMustBeSigned = false,
         Service $responseProcessingService = null,
         $workflowState = self::WORKFLOW_STATE_DEFAULT,
@@ -301,6 +327,8 @@ abstract class AbstractRole
         $this->nameNl = $nameNl;
         $this->organizationEn = $organizationEn;
         $this->organizationNl = $organizationNl;
+        $this->publishInEduGainDate = $publishInEduGainDate;
+        $this->publishInEdugain = $publishInEdugain;
         $this->requestsMustBeSigned = $requestsMustBeSigned;
         $this->responseProcessingService = $responseProcessingService;
         $this->singleLogoutService = $singleLogoutService;
