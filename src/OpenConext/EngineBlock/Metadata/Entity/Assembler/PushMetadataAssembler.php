@@ -291,14 +291,12 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->assembleOrganization($connection, 'en');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:keywords:en'), 'keywordsEn');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:keywords:nl'), 'keywordsNl');
-        $properties += $this->setPathFromObjectString(array($connection, 'metadata:coin:publish_in_edugain'), 'publishInEdugain');
         $properties += $this->assembleCertificates($connection);
         $properties += $this->setPathFromObjectString(array($connection, 'state'), 'workflowState');
         $properties += $this->assembleContactPersons($connection);
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:NameIDFormat'), 'nameIdFormat');
         $properties += $this->setPathFromObjectArray(array($connection, 'metadata:NameIDFormats'), 'supportedNameIdFormats');
         $properties += $this->assembleSingleLogoutServices($connection);
-        $properties += $this->assemblePublishInEdugainDate($connection);
         $properties += $this->setPathFromObjectBool(array($connection, 'metadata:coin:disable_scoping'), 'disableScoping');
         $properties += $this->setPathFromObjectBool(array($connection, 'metadata:coin:additional_logging'), 'additionalLogging');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:coin:signature_method'), 'signatureMethod');
@@ -345,15 +343,6 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
             $connection->metadata->OrganizationDisplayName->$langCode,
             $connection->metadata->OrganizationURL->$langCode
         ));
-    }
-
-    private function assemblePublishInEdugainDate(stdClass $connection)
-    {
-        if (empty($connection->coin->publish_in_edugain)) {
-            return array();
-        }
-
-        return new DateTime($connection->coin->publish_in_edugain);
     }
 
     private function assembleCertificates(stdClass $connection)

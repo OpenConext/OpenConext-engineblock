@@ -112,16 +112,6 @@ class EngineBlock_Corto_Adapter
         $this->_callCortoServiceUri('stepupAssertionConsumerService');
     }
 
-    public function edugainMetadata()
-    {
-        $this->_initProxy();
-
-        $this->_filterRemoteEntitiesBySpQueryParam();
-        $this->_filterRemoteEntitiesByClaimedSpWorkflowState();
-
-        $this->_callCortoServiceUri('edugainMetadataService');
-    }
-
     public function idPsMetadata()
     {
         $this->_initProxy();

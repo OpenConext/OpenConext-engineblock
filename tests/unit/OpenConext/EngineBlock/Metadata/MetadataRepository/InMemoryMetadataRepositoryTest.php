@@ -83,15 +83,6 @@ class MetadataRepositoryTest extends TestCase
         $this->assertEquals($idp, $idps[$idp->entityId]);
     }
 
-    public function testFindEntitiesPublishableInEdugain()
-    {
-        $repository = $this->getFilledRepository();
-
-        $publishable = $repository->findEntitiesPublishableInEdugain();
-        $this->assertCount(1, $publishable);
-        $this->assertEquals('https://idp1.example.edu', $publishable[0]->entityId);
-    }
-
     public function testFindReservedSchacHomeOrganizations()
     {
         $repository = $this->getFilledRepository();
@@ -172,7 +163,6 @@ class MetadataRepositoryTest extends TestCase
                     'OpenConext\EngineBlock\Metadata\Entity\IdentityProvider',
                     array(
                         'entityId' => 'https://idp1.example.edu',
-                        'publishInEdugain'=>true,
                         'schacHomeOrganization'=> 'idp1.example.edu'
                     )
                 ),
