@@ -22,7 +22,7 @@ metadata_sp:
     methods:    [GET]
     defaults:
         _controller: engineblock.controller.authentication.metadata:spMetadataAction
-        keyId: ~
+        keyId: ''
 
 metadata_sp_key:
     path:       '/authentication/sp/metadata/key:{keyId}'
