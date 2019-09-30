@@ -421,14 +421,6 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return array
-     */
-    public function getEdugainMetadataConfiguration()
-    {
-        return (array) $this->container->getParameter('edugain');
-    }
-
-    /**
      * @return string
      */
     public function getGuestStatusQualifier()
