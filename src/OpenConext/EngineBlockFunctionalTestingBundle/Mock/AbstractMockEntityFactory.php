@@ -18,6 +18,8 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
+use DOMDocument;
+use DOMElement;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\KeyName;
@@ -50,10 +52,10 @@ abstract class AbstractMockEntityFactory
         $certificate = new X509Certificate();
         $certificate->certificate = trim(file_get_contents(__DIR__ . '/../Resources/keys/snakeoil.certData'));
 
-        $domElement = new \DOMElement('PrivateKey');
+        $domElement = new DOMElement('PrivateKey');
         $domElement->nodeValue = trim(file_get_contents(__DIR__ . '/../Resources/keys/snakeoil.key'));
 
-        $document = new \DOMDocument();
+        $document = new DOMDocument();
         $document->appendChild($domElement);
         $privateKeyChunk = new Chunk($domElement);
 

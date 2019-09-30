@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Compat;
 
+use DOMDocument;
 use Psr;
 use SAML2\Compat\AbstractContainer;
 use Symfony\Component\HttpFoundation\Response;
@@ -169,7 +170,7 @@ HTML
      */
     public static function formatXml($xml)
     {
-        $dom = new \DOMDocument;
+        $dom = new DOMDocument;
         $dom->preserveWhiteSpace = false;
         $dom->loadXML($xml);
         $dom->formatOutput = true;
