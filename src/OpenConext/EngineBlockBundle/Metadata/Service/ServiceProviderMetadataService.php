@@ -18,14 +18,11 @@
 
 namespace OpenConext\EngineBlockBundle\Metadata\Service;
 
-use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
-use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlockBundle\Exception\EntityCanNotBeFoundException;
 use OpenConext\EngineBlockBundle\Metadata\MetadataFactory;
-use Webmozart\Assert\Assert;
 
-class ServiceProviderMetadataService implements MetadataService
+class ServiceProviderMetadataService implements MetadataServiceInterface
 {
     /**
      * @var MetadataFactory
@@ -38,8 +35,8 @@ class ServiceProviderMetadataService implements MetadataService
     private $metadataRepository;
 
     /**
-     * ServiceProviderMetadataService constructor.
      * @param MetadataFactory $factory
+     * @param MetadataRepositoryInterface $metadataRepository
      */
     public function __construct(MetadataFactory $factory, MetadataRepositoryInterface $metadataRepository)
     {
@@ -48,39 +45,22 @@ class ServiceProviderMetadataService implements MetadataService
     }
 
     /**
-     * Set the optional key (for key rollover)
-     * @param string $keyId
-     */
-    public function setKeyId(string $keyId): void
-    {
-        // Todo
-    }
-
-    /**
-     * Finds the Service Provider or throws an EntityCanNotBeFoundException
+     * Generate XML metadata for a role (either IdP or SP)
+     *
      * @param string $entityId
-     * @return AbstractRole
-     * @throws EntityCanNotBeFoundException
+     * @param string $keyId
+     * @return string
      */
-    public function getRoleByEntityId(string $entityId): AbstractRole
+    public function metadataFor(string $entityId, string $keyId = null): string
     {
         $serviceProvider = $this->metadataRepository->findServiceProviderByEntityId($entityId);
 
         if ($serviceProvider) {
-            return $serviceProvider;
+            if (!is_null($keyId)) {
+                $this->factory->setKey($keyId);
+            }
+            return $this->factory->fromServiceProviderEntity($serviceProvider);
         }
         throw new EntityCanNotBeFoundException(sprintf('Unable to find the SP with entity ID "%s".', $entityId));
-    }
-
-    /**
-     * Generate XML metadata for a role (either IdP or SP)
-     *
-     * @param AbstractRole $role
-     * @return string
-     */
-    public function metadataFrom(AbstractRole $role): string
-    {
-        Assert::isInstanceOf($role, ServiceProvider::class, 'Please provide a Service Provider instance');
-        return $this->factory->fromServiceProviderEntity($role);
     }
 }

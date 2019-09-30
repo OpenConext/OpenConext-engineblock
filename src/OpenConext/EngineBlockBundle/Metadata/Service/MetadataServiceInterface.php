@@ -20,27 +20,13 @@ namespace OpenConext\EngineBlockBundle\Metadata\Service;
 
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 
-interface MetadataService
+interface MetadataServiceInterface
 {
-    /**
-     * Set the optional key (for key rollover)
-     * @param string $keyId
-     */
-    public function setKeyId(string $keyId): void;
-
     /**
      * Generate XML metadata for a role (either IdP or SP)
      *
      * @param AbstractRole $role
      * @return string
      */
-    public function metadataFrom(AbstractRole $role): string;
-
-    /**
-     * Find the IdP or SP entity associated with the provided entityId
-     *
-     * @param string $entityId
-     * @return AbstractRole
-     */
-    public function getRoleByEntityId(string $entityId) : AbstractRole;
+    public function metadataFor(string $entityId, string $keyId = null): string;
 }
