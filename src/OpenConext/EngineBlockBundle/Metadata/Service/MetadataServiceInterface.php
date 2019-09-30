@@ -18,15 +18,14 @@
 
 namespace OpenConext\EngineBlockBundle\Metadata\Service;
 
-use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
-
 interface MetadataServiceInterface
 {
     /**
      * Generate XML metadata for a role (either IdP or SP)
      *
-     * @param AbstractRole $role
+     * @param string $entityId
+     * @param string $keyId
      * @return string
      */
-    public function metadataFor(string $entityId, string $keyId = null): string;
+    public function metadataFor(string $entityId, string $keyId): string;
 }

@@ -24,6 +24,7 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
+use OpenConext\EngineBlockBundle\Exception\RuntimeException;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use Twig\Environment;
 
@@ -57,13 +58,11 @@ class MetadataFactory
         $this->twig = $twig;
         $this->samlIdGenerator = $samlIdGenerator;
         $this->keyPairFactory = $keyPairFactory;
-
-        // Use the default configured key as default
-        $this->signingKeyPair = $keyPairFactory->buildFromIdentifier();
     }
 
     public function fromServiceProviderEntity(ServiceProvider $role)
     {
+        $this->verifyKeyPair();
         $template = '@theme/Authentication/View/Metadata/sp.html.twig';
 
         $xml = $this->renderMetadataXml($role, $template);
@@ -74,6 +73,7 @@ class MetadataFactory
 
     public function fromIdentityProviderEntity(IdentityProvider $role)
     {
+        $this->verifyKeyPair();
         $template = '@theme/Authentication/View/Metadata/idp.html.twig';
 
         $xml = $this->renderMetadataXml($role, $template);
@@ -128,5 +128,16 @@ class MetadataFactory
 
         // Save the signed XML
         return $doc->saveXML();
+    }
+
+    /**
+     * Verify if the keypair is loaded on the factory. If not, this method will throw a runtime exception.
+     * @throws RuntimeException
+     */
+    private function verifyKeyPair()
+    {
+        if (is_null($this->signingKeyPair)) {
+            throw new RuntimeException('Please set the signing key pair before generating metadata');
+        }
     }
 }

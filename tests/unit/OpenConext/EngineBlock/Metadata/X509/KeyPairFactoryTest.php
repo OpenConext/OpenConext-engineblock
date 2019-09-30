@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlock\Metadata\X509;
 
+use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use OpenConext\EngineBlock\Exception\RuntimeException;
 use PHPUnit_Framework_TestCase;
 
@@ -41,7 +42,7 @@ class KeyPairFactoryTest extends PHPUnit_Framework_TestCase
 
     public function test_builds_key_pair_from_default_config()
     {
-        $defaultKeyPair = $this->factory->buildFromIdentifier();
+        $defaultKeyPair = $this->factory->buildFromIdentifier('default');
         $this->assertEquals(file_get_contents('file://' . __DIR__ . '/test.pem.crt'), $defaultKeyPair->getCertificate()->toPem());
         $this->assertEquals('file://' . __DIR__ . '/test.pem.key', $defaultKeyPair->getPrivateKey()->getFilePath());
     }
@@ -51,6 +52,13 @@ class KeyPairFactoryTest extends PHPUnit_Framework_TestCase
         $defaultKeyPair = $this->factory->buildFromIdentifier('rollover');
         $this->assertEquals(file_get_contents('file://' . __DIR__ . '/test2.pem.crt'), $defaultKeyPair->getCertificate()->toPem());
         $this->assertEquals('file://' . __DIR__ . '/test.pem.key', $defaultKeyPair->getPrivateKey()->getFilePath());
+    }
+
+    public function test_it_raises_exception_when_requesting_empty_key_pair_identifier()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected non-empty string for "identifier", "" given');
+        $this->factory->buildFromIdentifier('');
     }
 
     public function test_it_raises_exception_when_requesting_invalid_key_pair()
