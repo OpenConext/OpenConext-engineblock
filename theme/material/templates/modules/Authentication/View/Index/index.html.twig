@@ -48,21 +48,6 @@
                     case you want a custom WAYF for your SP</p>
             </dt>
             <dt>
-                The Public SAML metadata (the entity descriptor) of the {{ 'suite_name'|trans }} IdP Proxy for SP
-                with entityID "urn:example.org". Please replace "urn:example.org" with the entityID
-                of your own SP before testing this metadata request. The resulting metadata will include
-                the public key specific to your Service Provider, which, in the case of key rollover,
-                MAY be different from the regular public key.
-            </dt>
-            <dd>
-                <ul>
-                    <li><a href="/authentication/idp/metadata?sp-entity-id=urn:example.org">Open link</a></li>
-                    {% for keyId in keyPairIds %}
-                    <li><a href="/authentication/idp/metadata/key:{{ keyId }}?sp-entity-id=urn:example.org">Open link</a></li>
-                    {% endfor %}
-                </ul>
-            </dd>
-            <dt>
                 The Public SAML metadata (the entities descriptor) of the {{ 'suite_name'|trans }} IdPs which allow
                 access to SP with entityID "urn:example.org". Please replace "urn:example.org" with
                 the entityID of your own SP before testing. The resulting metadata will include all
