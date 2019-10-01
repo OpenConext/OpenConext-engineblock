@@ -245,6 +245,29 @@ class FeedbackController
         );
     }
 
+    public function metadataEntityNotFoundAction(Request $request)
+    {
+        // The exception message is used on the error page. As mostly developers or other tech-savvy people will see
+        // this message. The ExceptionListener is responsible for setting the message on the feedback_custom field.
+        $session = $request->getSession();
+        if ($session->has('feedback_custom')) {
+            $message = $session->get('feedback_custom');
+        } else {
+            // This should never occur, when it does, this error page is called from outside the application context
+            // or the exception that shows this page was triggered elsewhere in code without a message.
+            $message = 'More elaborate error details could not be found..';
+        }
+
+        return new Response(
+            $this->twig->render(
+                '@theme/Authentication/View/Feedback/metadata-entity-not-found.html.twig',
+                [
+                    'message' => $message,
+                ]
+            ),
+            404
+        );
+    }
 
     /**
      * @param Request $request
