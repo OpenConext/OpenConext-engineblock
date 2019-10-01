@@ -20,6 +20,8 @@ namespace OpenConext\EngineBlockBundle\Metadata;
 use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\IndexedService;
+use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\Utils;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
@@ -28,6 +30,7 @@ use OpenConext\EngineBlock\Metadata\X509\X509PrivateKey;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
+use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\md\EntityDescriptor;
 use Twig\Environment;
@@ -71,10 +74,15 @@ class MetadataFactoryTest extends TestCase
      */
     public function the_metadata_factory_should_return_valid_signed_xml_for_idp()
     {
+        $ssoLocation = 'https://example.com/sso';
+        $singleSignOnServices[] = new Service($ssoLocation, Constants::BINDING_HTTP_POST);
+        $singleSignOnServices[] = new Service($ssoLocation, Constants::BINDING_HTTP_REDIRECT);
+
         $idp = Utils::instantiate(
             IdentityProvider::class,
             [
                 'entityId' => 'idp',
+                'singleSignOnServices' => $singleSignOnServices,
             ]
         );
 
@@ -95,10 +103,17 @@ class MetadataFactoryTest extends TestCase
      */
     public function the_metadata_factory_should_return_valid_signed_xml_for_sp()
     {
+        $assertionConsumerServices[] = new IndexedService(
+            'https://example.com/acs',
+            Constants::BINDING_HTTP_POST,
+            0
+        );
+
         $sp = Utils::instantiate(
             ServiceProvider::class,
             [
                 'entityId' => 'sp',
+                'assertionConsumerServices' => $assertionConsumerServices,
             ]
         );
 
