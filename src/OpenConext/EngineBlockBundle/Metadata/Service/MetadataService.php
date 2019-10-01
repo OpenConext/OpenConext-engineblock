@@ -18,45 +18,64 @@
 
 namespace OpenConext\EngineBlockBundle\Metadata\Service;
 
-use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlockBundle\Exception\EntityCanNotBeFoundException;
+use OpenConext\EngineBlockBundle\Metadata\MetadataEntityFactory;
 use OpenConext\EngineBlockBundle\Metadata\MetadataFactory;
 
-class ServiceProviderMetadataService implements MetadataServiceInterface
+class MetadataService
 {
     /**
      * @var MetadataFactory
      */
     private $factory;
-
     /**
-     * @var MetadataRepositoryInterface
+     * @var MetadataEntityFactory
      */
-    private $metadataRepository;
+    private $metadataEntityFactory;
 
     /**
      * @param MetadataFactory $factory
-     * @param MetadataRepositoryInterface $metadataRepository
+     * @param MetadataEntityFactory $metadataEntityFactory
      */
-    public function __construct(MetadataFactory $factory, MetadataRepositoryInterface $metadataRepository)
+    public function __construct(MetadataFactory $factory, MetadataEntityFactory $metadataEntityFactory)
     {
         $this->factory = $factory;
-        $this->metadataRepository = $metadataRepository;
+        $this->metadataEntityFactory = $metadataEntityFactory;
     }
 
     /**
-     * Generate XML metadata for a role (either IdP or SP)
+     * Generate XML metadata for a SP
      *
      * @param string $entityId
+     * @param string $acsLocation
      * @param string $keyId
      * @return string
      */
-    public function metadataFor(string $entityId, string $keyId): string
+    public function metadataForSp(string $entityId, string $acsLocation, string $keyId): string
     {
-        $serviceProvider = $this->metadataRepository->findServiceProviderByEntityId($entityId);
+        $serviceProvider = $this->metadataEntityFactory->metadataSpFrom($entityId, $acsLocation, $keyId);
 
         if ($serviceProvider) {
             return $this->factory->fromServiceProviderEntity($serviceProvider, $keyId);
+        }
+        throw new EntityCanNotBeFoundException(sprintf('Unable to find the SP with entity ID "%s".', $entityId));
+    }
+
+
+    /**
+     * Generate XML metadata for an IdP
+     *
+     * @param string $entityId
+     * @param string $ssoLocation
+     * @param string $keyId
+     * @return string
+     */
+    public function metadataForIdp(string $entityId, string $ssoLocation, string $keyId): string
+    {
+        $identityProvider = $this->metadataEntityFactory->metadataIdpFrom($entityId, $ssoLocation, $keyId);
+
+        if ($identityProvider) {
+            return $this->factory->fromIdentityProviderEntity($identityProvider, $keyId);
         }
         throw new EntityCanNotBeFoundException(sprintf('Unable to find the SP with entity ID "%s".', $entityId));
     }
