@@ -114,6 +114,10 @@ const errorPages = [
         name: 'stepup-callout-unknown',
         url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=stepup-callout-unknown&feedback-info=%7B%22statusCode%22%3A%22Responder%2FAuthnFailed%22%2C%22statusMessage%22%3A%22Authentication+cancelled+by+user%22%2C%22requestId%22%3A%225cb4bd3879b49%22%2C%22ipAddress%22%3A%22192.168.66.98%22%2C%22artCode%22%3A%2231914%22%7D&lang=nl'
     },
+    {
+        name: 'metadata-entity-id-not-found',
+        url: 'https://engine.vm.openconext.org/functional-testing/feedback?template=metadata-entity-not-found&parameters={"message":"Could not find your entity"}&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98"}'
+    },
 ];
 
 const viewports = [
