@@ -20,8 +20,12 @@ namespace OpenConext\EngineBlockBundle\Controller;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
+use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlockBridge\ResponseFactory;
+use OpenConext\EngineBlockBundle\Metadata\Service\MetadataServiceInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class MetadataController
 {
@@ -30,15 +34,22 @@ class MetadataController
      */
     private $engineBlockApplicationSingleton;
 
+    /**
+     * @var MetadataServiceInterface
+     */
+    private $spMetadataService;
+
     public function __construct(
-        EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton
+        EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
+        MetadataServiceInterface $spMetadataService
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
+        $this->spMetadataService = $spMetadataService;
     }
 
     /**
      * @param null|string $keyId
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function idpMetadataAction($keyId = null)
     {
@@ -54,26 +65,30 @@ class MetadataController
     }
 
     /**
-     * @param null|string $keyId
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @param string $keyId
+     * @return Response
      */
-    public function spMetadataAction($keyId = null)
+    public function spMetadataAction(string $keyId)
     {
-        $proxyServer = new EngineBlock_Corto_Adapter();
-
-        if ($keyId !== null) {
-            $proxyServer->setKeyId($keyId);
+        if (empty($keyId)) {
+            $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
         }
 
-        $proxyServer->sPMetadata();
+        $metadataXml = $this->spMetadataService->metadataFor(
+            'https://engine.vm.openconext.org/authentication/sp/metadata',
+            $keyId
+        );
 
-        return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
+        $response = new Response($metadataXml);
+        $response->headers->set('Content-Type', 'text/xml');
+
+        return $response;
     }
 
     /**
      * @param null|string $keyId
      * @param Request     $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function allIdpsMetadataAction(Request $request, $keyId = null)
     {
@@ -91,7 +106,7 @@ class MetadataController
     /**
      * @param null|string $keyId
      * @param Request     $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function edugainMetadataAction(Request $request, $keyId = null)
     {
