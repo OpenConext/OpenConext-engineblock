@@ -6685,6 +6685,7 @@
     "prefer-lowest": false,
     "platform": {
         "php": "7.2",
+        "ext-dom": "*",
         "ext-json": "*",
         "ext-mbstring": "*"
     },

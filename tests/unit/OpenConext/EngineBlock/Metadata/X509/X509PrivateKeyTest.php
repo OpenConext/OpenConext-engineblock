@@ -52,6 +52,6 @@ class X509PrivateKeyTest extends TestCase
 
         $publicKey = new X509Certificate(openssl_pkey_get_public('file://' . __DIR__ . '/test.pem.crt'));
 
-        $this->assertEquals(1, openssl_verify($data, $signature, $publicKey->toResource()));
+        $this->assertEquals(1, openssl_verify($data, $signature, $publicKey->toResource(), OPENSSL_ALGO_SHA1));
     }
 }
