@@ -46,6 +46,7 @@ use OpenConext\EngineBlock\Exception\InvalidBindingException;
 use OpenConext\EngineBlock\Exception\InvalidRequestMethodException;
 use OpenConext\EngineBlock\Exception\MissingParameterException;
 use OpenConext\EngineBlockBridge\ErrorReporter;
+use OpenConext\EngineBlockBundle\Exception\EntityCanNotBeFoundException;
 use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -196,6 +197,9 @@ class RedirectToFeedbackPageExceptionListener
         } else if ($exception instanceof EngineBlock_Corto_Exception_InvalidStepupCalloutResponse) {
             $message = $exception->getMessage();
             $redirectToRoute = 'authentication_feedback_stepup_callout_unknown';
+        } else if ($exception instanceof EntityCanNotBeFoundException) {
+            $event->getRequest()->getSession()->set('feedback_custom', $exception->getMessage());
+            $redirectToRoute = 'authentication_feedback_metadata_entity_not_found';
         } else {
             return;
         }
