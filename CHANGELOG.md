@@ -25,6 +25,10 @@ The following changes where introduced in this release:
 * Bump handlebars to version 4.3.1 #761
 * Update Composer settings for improved PHP 7.2 support #763 
 
+## 5.13.1
+* Hotfix use of coins in consent template #756
+
+
 ## 5.13.0
 Add stepup authentication to EB to be able to reap the benefits of the SFO functionality of the strong authentication stack.
 
