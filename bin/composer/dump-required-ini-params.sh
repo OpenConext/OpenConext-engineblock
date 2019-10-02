@@ -208,9 +208,6 @@ $ymlContent = array(
         // given again.
         'consent_store_values'                                    => (bool) $config->get('authentication.storeValues', true),
 
-        // Edugain metadata
-        'edugain'                                                 => $config->get('edugain', array())->toArray(),
-
         // Guest qualifier for the AddGuestStatus filter.
         'addgueststatus_guestqualifier'                           => $config->get('addgueststatus.guestqualifier', ''),
 

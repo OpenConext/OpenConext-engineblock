@@ -173,6 +173,8 @@ abstract class AbstractRole
     /**
      * @var bool
      *
+     * @deprecated: This coin is no longer used in EngineBlock and will be removed in release 6.2
+     *
      * @ORM\Column(name="publish_in_edugain", type="boolean")
      */
     public $publishInEdugain;
@@ -221,6 +223,8 @@ abstract class AbstractRole
 
     /**
      * @var DateTime
+     *
+     * @deprecated: This coin is no longer used in EngineBlock and will be removed in release 6.2
      *
      * @ORM\Column(name="publish_in_edu_gain_date", type="date", nullable=true)
      */

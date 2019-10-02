@@ -204,6 +204,9 @@ class ServiceProvider extends AbstractRole
             $nameNl,
             $nameIdFormat,
             $supportedNameIdFormats,
+            /**
+             * @deprecated: These coins are no longer used in EngineBlock and will be removed in release 6.2
+             */
             $publishInEduGainDate,
             $publishInEdugain,
             $requestsMustBeSigned,

@@ -48,22 +48,6 @@ metadata_all_idps_key:
     requirements:
         keyId: .+
 
-### Edugain
-metadata_edugain:
-    path:       '/authentication/proxy/edugain-metadata'
-    methods:    [GET]
-    defaults:
-        _controller: engineblock.controller.authentication.metadata:edugainMetadataAction
-        keyId: ~
-
-metadata_edugain_key:
-    path:       '/authentication/proxy/edugain-metadata/key:{keyId}'
-    methods:    [GET]
-    defaults:
-        _controller: engineblock.controller.authentication.metadata:edugainMetadataAction
-    requirements:
-        keyId: .+
-
 ### Stepup
 metdata_stepup:
     path:       'authentication/stepup/metadata'
