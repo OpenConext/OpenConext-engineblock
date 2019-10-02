@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\MinkExtension\Context\MinkContext as BaseMinkContext;
 use DOMDocument;
@@ -85,6 +86,22 @@ class MinkContext extends BaseMinkContext
     }
 
     /**
+     * @Given /^I should see URL "([^"]*)"$/
+     */
+    public function iShouldSeeUrl($url)
+    {
+        $this->assertSession()->responseContains($url);
+    }
+
+    /**
+     * @Given /^I should not see URL "([^"]*)"$/
+     */
+    public function iShouldNotSeeUrl($url)
+    {
+        $this->assertSession()->responseNotContains($url);
+    }
+
+    /**
      * @Given /^I open (\d+) browser tabs identified by "([^"]*)"$/
      */
     public function iOpenTwoBrowserTabsIdentifiedBy($numberOfTabs, $tabNames)
@@ -130,5 +147,22 @@ class MinkContext extends BaseMinkContext
             throw new RuntimeException(sprintf('Unknown window/tab name "%s"', $windowName));
         }
         $this->getSession()->switchToWindow($this->windows[$windowName]);
+    }
+
+    /**
+     * @Then /^I should see (\d+) links on the front page$/
+     */
+    public function iShouldSeeLinksOnTheFrontPage($expectedNumberOfLinks)
+    {
+        $anchors = $this->getSession()->getPage()->findAll('css', '.mod-content a');
+        if (count($anchors) != $expectedNumberOfLinks) {
+            throw new ExpectationException(
+                sprintf(
+                    'The expected amount (%d) of metadata links could not be found on the page',
+                    $expectedNumberOfLinks
+                ),
+                $this->getSession()
+            );
+        }
     }
 }
