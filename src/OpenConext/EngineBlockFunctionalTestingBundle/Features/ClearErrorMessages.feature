@@ -175,7 +175,7 @@ Feature:
   Scenario: An SP sends a AuthnRequest transparently for an IdP that doesn't exist
      When I log in at SP "Dummy SP" which attempts to preselect nonexistent IdP "DoesNotExist"
      Then the url should match "/authentication/feedback/unknown-preselected-idp"
-      And I should see "This service is not accessible through organisation"
+      And I should see "Service not accessible through organisation"
       And I should see "UR ID:"
       And I should see "IP:"
       And I should see "EC:"
