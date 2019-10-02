@@ -195,8 +195,8 @@ If you want to use this application you have to:<br />
     'error_invalid_acs_binding_desc'     => 'The provided or configured "Assertion Consumer Service" Binding Type is unknown or invalid.',
     'error_unsupported_signature_method' => 'Error - Signature method is not supported',
     'error_unsupported_signature_method_desc' => 'The signature method %arg1% is not supported, please upgrade to RSA-SHA256 (http://www.w3.org/2001/04/xmldsig-more#rsa-sha256).',
-    'error_unknown_preselected_idp' => 'Error - This service is not accessible through %organisationNoun%',
-    'error_unknown_preselected_idp_desc' => 'The %organisationNoun% that you want to use to login to this service did not activate access to this service. This means you are unable to use this service through %suiteName%. Please contact the helpdesk of your %organisationNoun% to request access to this service. State what service it is about (the &lsquo;Service Provider&rsquo;) and why you need access.',
+    'error_unknown_preselected_idp' => 'Error - Service not accessible through %organisationNoun%',
+    'error_unknown_preselected_idp_desc' => 'The %organisationNoun% that you want to use to login to this service did not activate access to this service. This means you are unable to use this service through %suiteName%. Please contact the helpdesk of your %organisationNoun% to request access to this service. State what service it is about (the &lsquo;SP&rsquo;) and why you need access.',
     'error_unknown_service_provider'          => 'Error - Unkown service',
     'error_unknown_service_provider_desc'     => 'No Service Provider could be found with the EntityID \'%arg1%\'.',
 
