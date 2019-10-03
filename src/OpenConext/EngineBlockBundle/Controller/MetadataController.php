@@ -119,24 +119,6 @@ class MetadataController
     }
 
     /**
-     * @param null|string $keyId
-     * @param Request $request
-     * @return Response
-     */
-    public function edugainMetadataAction(Request $request, $keyId = null)
-    {
-        $proxyServer = new EngineBlock_Corto_Adapter();
-
-        if ($keyId !== null) {
-            $proxyServer->setKeyId($keyId);
-        }
-
-        $proxyServer->edugainMetadata();
-
-        return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
-    }
-
-    /**
      * @param string $route
      * @return string
      */
