@@ -134,7 +134,8 @@ class MetadataFactory
         $objDSig->add509Cert($signingKeyPair->getCertificate()->toPem());
 
         // Append the signature to the XML
-        $objDSig->appendSignature($doc->documentElement);
+        //$objDSig->appendSignature($doc->documentElement);
+        $objDSig->insertSignature($doc->documentElement, $doc->documentElement->firstChild);
 
         // Save the signed XML
         return $doc->saveXML();

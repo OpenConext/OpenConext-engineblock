@@ -33,6 +33,7 @@ use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\md\EntityDescriptor;
+use Surfnet\ServiceProviderDashboard\Legacy\Metadata\Exception\ParserException;
 use Twig\Environment;
 
 class MetadataFactoryTest extends TestCase
@@ -95,6 +96,9 @@ class MetadataFactoryTest extends TestCase
         $dom = DOMDocumentFactory::fromString($xml);
         $entityDescriptor = new EntityDescriptor($dom->firstChild);
         $this->assertInstanceOf(EntityDescriptor::class, $entityDescriptor);
+
+        // Assert schema
+        $this->validateSchema($xml);
     }
 
     /**
@@ -126,6 +130,9 @@ class MetadataFactoryTest extends TestCase
         $dom = DOMDocumentFactory::fromString($xml);
         $entityDescriptor = new EntityDescriptor($dom->firstChild);
         $this->assertInstanceOf(EntityDescriptor::class, $entityDescriptor);
+
+        // Assert schema
+        $this->validateSchema($xml);
     }
 
     private function validateXml($xml)
@@ -153,6 +160,26 @@ class MetadataFactoryTest extends TestCase
         }
 
         return true;
+    }
+
+    private function validateSchema($xml)
+    {
+        libxml_use_internal_errors(true);
+
+        // Web tests use the dom crawler, if any xml errors are encountered by using the crawler they are stored in the
+        // error buffer. Clearing the buffer before validating the schema prevents the showing of irrelevant messages to
+        //the end user.
+        libxml_clear_errors();
+
+        $doc = new \DOMDocument();
+        $doc->loadXml($xml);
+
+        if (!$doc->schemaValidate(__DIR__.'/schema/surf.xsd')) {
+            $errors = libxml_get_errors();
+            libxml_clear_errors();
+
+            throw new \Exception(json_encode($errors));
+        }
     }
 
 }
