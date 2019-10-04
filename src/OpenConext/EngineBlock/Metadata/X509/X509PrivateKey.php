@@ -61,7 +61,7 @@ class X509PrivateKey
      */
     public function toXmlSecurityKey()
     {
-        $privateKeyObj = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'private'));
+        $privateKeyObj = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, array('type' => 'private'));
         $privateKeyObj->loadKey($this->filePath, true);
         return $privateKeyObj;
     }
