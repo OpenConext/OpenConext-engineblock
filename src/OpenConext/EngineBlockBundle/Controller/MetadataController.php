@@ -19,12 +19,9 @@
 namespace OpenConext\EngineBlockBundle\Controller;
 
 use EngineBlock_ApplicationSingleton;
-use EngineBlock_Corto_Adapter;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
-use OpenConext\EngineBlockBridge\ResponseFactory;
 use OpenConext\EngineBlockBundle\Metadata\Service\MetadataService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -67,8 +64,8 @@ class MetadataController
         }
 
         $metadataXml = $this->metadataService->metadataForIdp(
-            $this->getEntityId('metadata_idp'),
-            $this->getEntityId('authentication_idp_sso'),
+            $this->getAbsoluteUrlForRoute('metadata_idp'),
+            $this->getAbsoluteUrlForRoute('authentication_idp_sso'),
             $keyId
         );
 
@@ -89,8 +86,8 @@ class MetadataController
         }
 
         $metadataXml = $this->metadataService->metadataForSp(
-            $this->getEntityId('metadata_sp'),
-            $this->getEntityId('authentication_sp_consume_assertion'),
+            $this->getAbsoluteUrlForRoute('metadata_sp'),
+            $this->getAbsoluteUrlForRoute('authentication_sp_consume_assertion'),
             $keyId
         );
 
@@ -102,27 +99,53 @@ class MetadataController
 
     /**
      * @param null|string $keyId
-     * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function allIdpsMetadataAction(Request $request, $keyId = null)
+    public function allIdpsMetadataAction($keyId = null)
     {
-        $proxyServer = new EngineBlock_Corto_Adapter();
+        if (empty($keyId)) {
+            $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
+        }
+        // Todo: implement sp filter sp-entity-id to list only allowed idps
 
-        if ($keyId !== null) {
-            $proxyServer->setKeyId($keyId);
+        $metadataXml = $this->metadataService->metadataForIdpsOfSp(
+            $this->getAbsoluteUrlForRoute('metadata_sp'),
+            $keyId,
+            null
+        );
+
+        $response = new Response($metadataXml);
+        $response->headers->set('Content-Type', 'text/xml');
+
+        return $response;
+    }
+
+    /**
+     * @param null|string $keyId
+     * @return Response
+     */
+    public function stepupMetadataAction($keyId = null)
+    {
+        if (empty($keyId)) {
+            $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
         }
 
-        $proxyServer->idPsMetadata();
+        $metadataXml = $this->metadataService->metadataForStepup(
+            $this->getAbsoluteUrlForRoute('authentication_stepup_consume_assertion'),
+            $keyId
+        );
 
-        return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
+        $response = new Response($metadataXml);
+        $response->headers->set('Content-Type', 'text/xml');
+
+        return $response;
     }
 
     /**
      * @param string $route
      * @return string
      */
-    private function getEntityId(string $route)
+    private function getAbsoluteUrlForRoute(string $route)
     {
         return $this->router->generate($route, [], UrlGeneratorInterface::ABSOLUTE_URL);
     }

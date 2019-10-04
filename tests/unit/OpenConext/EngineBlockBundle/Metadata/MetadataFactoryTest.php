@@ -32,6 +32,7 @@ use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use SAML2\XML\md\EntitiesDescriptor;
 use SAML2\XML\md\EntityDescriptor;
 use Surfnet\ServiceProviderDashboard\Legacy\Metadata\Exception\ParserException;
 use Twig\Environment;
@@ -134,6 +135,47 @@ class MetadataFactoryTest extends TestCase
         // Assert schema
         $this->validateSchema($xml);
     }
+
+    /**
+     * @test
+     * @group Metadata
+     */
+    public function the_metadata_factory_should_return_valid_signed_xml_for_idps_of_sp()
+    {
+        $ssoLocation = 'https://example.com/sso';
+        $singleSignOnServices[] = new Service($ssoLocation, Constants::BINDING_HTTP_POST);
+        $singleSignOnServices[] = new Service($ssoLocation, Constants::BINDING_HTTP_REDIRECT);
+
+        $idp1 = Utils::instantiate(
+            IdentityProvider::class,
+            [
+                'entityId' => 'idp1',
+                'singleSignOnServices' => $singleSignOnServices,
+            ]
+        );
+
+        $idp2 = Utils::instantiate(
+            IdentityProvider::class,
+            [
+                'entityId' => 'idp2',
+                'singleSignOnServices' => $singleSignOnServices,
+            ]
+        );
+
+        $xml = $this->metadataFactory->fromIdentityProviderEntities([$idp1, $idp2], 'default');
+
+        // Validate signature and digest
+        $this->assertTrue($this->validateXml($xml));
+
+        // Assert descriptor
+        $dom = DOMDocumentFactory::fromString($xml);
+        $entityDescriptor = new EntitiesDescriptor($dom->firstChild);
+        $this->assertInstanceOf(EntitiesDescriptor::class, $entityDescriptor);
+
+        // Assert schema
+        $this->validateSchema($xml);
+    }
+
 
     private function validateXml($xml)
     {
