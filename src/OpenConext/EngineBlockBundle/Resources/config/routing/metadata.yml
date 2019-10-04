@@ -49,17 +49,17 @@ metadata_all_idps_key:
         keyId: .+
 
 ### Stepup
-metdata_stepup:
-    path:       'authentication/stepup/metadata'
+metadata_stepup:
+    path:       '/authentication/stepup/metadata'
     methods:    [GET]
     defaults:
-        _controller: engineblock.controller.authentication.stepup:metadataAction
+        _controller: engineblock.controller.authentication.metadata:stepupMetadataAction
         keyId: ~
 
-metdata_stepup_key:
+metadata_stepup_key:
     path:       '/authentication/stepup/metadata/key:{keyId}'
     methods:    [GET]
     defaults:
-        _controller: engineblock.controller.authentication.stepup:metadataAction
+        _controller: engineblock.controller.authentication.metadata:stepupMetadataAction
     requirements:
         keyId: .+
