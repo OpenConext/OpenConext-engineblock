@@ -32,7 +32,7 @@ use Twig\Environment;
 
 class MetadataFactory
 {
-    const SIGN_ALGORITHM = XMLSecurityDSig::SHA1;
+    const SIGN_ALGORITHM = XMLSecurityDSig::SHA256;
     const ID_PREFIX = 'EB';
 
     /**
