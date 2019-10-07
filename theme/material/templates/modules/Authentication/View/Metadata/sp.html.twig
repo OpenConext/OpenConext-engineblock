@@ -1,4 +1,4 @@
-<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="{{ id }}" entityID="https://engine.vm.openconext.org/authentication/sp/metadata" validUntil="2019-09-20T08:12:41Z">
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="{{ id }}" entityID="{{ metadata.entityId }}" validUntil="2019-09-20T08:12:41Z">
     <md:SPSSODescriptor WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
         <md:Extensions>
             <mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
@@ -9,15 +9,17 @@
                 <mdui:Logo height="96" width="96">https://static.vm.openconext.org/media/conext_logo.png</mdui:Logo>
             </mdui:UIInfo>
         </md:Extensions>
+        {% for key in metadata.publicKeys %}
         <md:KeyDescriptor use="signing">
             <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
                 <ds:X509Data>
-                    <ds:X509Certificate>{{ publicKey }}</ds:X509Certificate>
+                    <ds:X509Certificate>{{ key }}</ds:X509Certificate>
                 </ds:X509Data>
             </ds:KeyInfo>
         </md:KeyDescriptor>
+        {% endfor %}
         <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-                                     Location="https://engine.vm.openconext.org/authentication/sp/consume-assertion"
+                                     Location="{{ metadata.acsLocation }}"
                                      index="0"></md:AssertionConsumerService>
         <md:AttributeConsumingService index="0">
             <md:ServiceName xml:lang="nl">OpenConext Engine</md:ServiceName>

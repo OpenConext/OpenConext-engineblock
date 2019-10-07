@@ -22,10 +22,12 @@ use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlockBridge\ResponseFactory;
-use OpenConext\EngineBlockBundle\Metadata\Service\MetadataServiceInterface;
+use OpenConext\EngineBlockBundle\Metadata\Service\MetadataService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 class MetadataController
 {
@@ -35,16 +37,23 @@ class MetadataController
     private $engineBlockApplicationSingleton;
 
     /**
-     * @var MetadataServiceInterface
+     * @var MetadataService
      */
-    private $spMetadataService;
+    private $metadataService;
+
+    /**
+     * @var RouterInterface
+     */
+    private $router;
 
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        MetadataServiceInterface $spMetadataService
+        MetadataService $metadataService,
+        RouterInterface $router
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
-        $this->spMetadataService = $spMetadataService;
+        $this->metadataService = $metadataService;
+        $this->router = $router;
     }
 
     /**
@@ -53,15 +62,20 @@ class MetadataController
      */
     public function idpMetadataAction($keyId = null)
     {
-        $proxyServer = new EngineBlock_Corto_Adapter();
-
-        if ($keyId !== null) {
-            $proxyServer->setKeyId($keyId);
+        if (empty($keyId)) {
+            $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
         }
 
-        $proxyServer->idPMetadata();
+        $metadataXml = $this->metadataService->metadataForIdp(
+            $this->getEntityId('metadata_idp'),
+            $this->getEntityId('authentication_idp_sso'),
+            $keyId
+        );
 
-        return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
+        $response = new Response($metadataXml);
+        $response->headers->set('Content-Type', 'text/xml');
+
+        return $response;
     }
 
     /**
@@ -74,8 +88,9 @@ class MetadataController
             $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
         }
 
-        $metadataXml = $this->spMetadataService->metadataFor(
-            'https://engine.vm.openconext.org/authentication/sp/metadata',
+        $metadataXml = $this->metadataService->metadataForSp(
+            $this->getEntityId('metadata_sp'),
+            $this->getEntityId('authentication_sp_consume_assertion'),
             $keyId
         );
 
@@ -87,7 +102,7 @@ class MetadataController
 
     /**
      * @param null|string $keyId
-     * @param Request     $request
+     * @param Request $request
      * @return RedirectResponse|Response
      */
     public function allIdpsMetadataAction(Request $request, $keyId = null)
@@ -101,5 +116,14 @@ class MetadataController
         $proxyServer->idPsMetadata();
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
+    }
+
+    /**
+     * @param string $route
+     * @return string
+     */
+    private function getEntityId(string $route)
+    {
+        return $this->router->generate($route, [], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 }
