@@ -32,8 +32,8 @@ Feature:
      And I should see text matching "The Public SAML metadata \(the entity descriptor\) of the OpenConext SP Proxy"
      And I should see URL "/authentication/sp/metadata"
      And I should see URL "/authentication/sp/metadata/key:default"
-     And I should see text matching "Stepup authentication Certificate and Metadata"
-     And I should see text matching "The Public SAML metadata \(the entity descriptor\) of the OpenConext stepup authentication Proxy"
+     And I should see text matching "Step-up authentication Certificate and Metadata"
+     And I should see text matching "The Public SAML metadata \(the entity descriptor\) of the OpenConext step-up authentication Proxy"
      And I should see URL "/authentication/stepup/metadata"
      And I should see URL "/authentication/stepup/metadata/key:default"
      # eduGAIN metadata is no longer created by EngineBlock
