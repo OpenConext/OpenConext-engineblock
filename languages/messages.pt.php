@@ -256,6 +256,8 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_stepup_callout_unmet_loa_desc' => 'Para continuar neste serviço, é necessário que o token registado tenho um determinado nível de confiança. Atualmente, você não tem um token registado, ou o nível de confiança do seu token é muito baixo. Veja o endereço abaixo para mais informações sobre o processo de registo.<br/><br/><a target="_blank" href="https://support.surfconext.nl/stepup-noauthncontext">Leia mais sobre o processo de registro.</a>',
     'error_stepup_callout_user_cancelled_title' => 'Erro - Carregamento cancelado',
     'error_stepup_callout_user_cancelled_desc' => 'Você cancelou o processo de autenticação. Volte ao serviço se você pretender tentar de novo.',
+    'error_metadata_entity_id_not_found' => 'Metadata can not be generated',
+    'error_metadata_entity_id_not_found_desc' => 'The following error occurred: %message%',
     'attributes_validation_succeeded' => 'Autenticação com sucesso',
     'attributes_validation_failed'    => 'Alguns atributos falharam na validação',
     'attributes_data_mailed'          => 'Os dados dos atributos foram enviados',

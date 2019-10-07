@@ -262,6 +262,8 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
     'error_stepup_callout_unmet_loa_desc' => 'Om toegang te krijgen tot deze dienst heb je een geregistreerd token nodig met een bepaald zekerheidsniveau. Je hebt nu ofwel geen token geregistreerd, of het zekerheidsniveau van het token dat je hebt geregistreerd is te laag. Volg de link hieronder voor meer informatie over het registratieproces.<br/><br/><a target="_blank" href="https://support.surfconext.nl/stepup-noauthncontext-nl">Lees meer over het registratieproces.</a>',
     'error_stepup_callout_user_cancelled_title' => 'Fout - Inloggen afgebroken',
     'error_stepup_callout_user_cancelled_desc' => 'Je hebt het inloggen afgebroken. Ga terug naar de dienst als je het opnieuw wilt proberen.',
+    'error_metadata_entity_id_not_found' => 'Metadata kan niet gegenereerd worden',
+    'error_metadata_entity_id_not_found_desc' => 'De volgende fout is opgetreden: %message%',
     'attributes_validation_succeeded' => 'Authenticatie geslaagd',
     'attributes_validation_failed'    => 'Sommige attributen kunnen niet gevalideerd worden',
     'attributes_data_mailed'          => 'De attribuutdata zijn gemaild',
