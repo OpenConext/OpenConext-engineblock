@@ -79,7 +79,7 @@ script:
 branches:
   only:
     - master
-    - /^feature/metadata-*.$/
+    - /^feature\/metadata-.*$/
 
 after_failure:
   - sudo tail -500 /var/log/apache2/error.log
