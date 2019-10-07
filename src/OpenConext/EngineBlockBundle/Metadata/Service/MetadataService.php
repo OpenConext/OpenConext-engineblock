@@ -50,8 +50,12 @@ class MetadataService
      * @param MetadataRepositoryInterface $metadataRepository
      * @param StepupEndpoint $stepupEndpoint
      */
-    public function __construct(MetadataFactory $factory, MetadataEntityFactory $metadataEntityFactory, MetadataRepositoryInterface $metadataRepository, StepupEndpoint $stepupEndpoint)
-    {
+    public function __construct(
+        MetadataFactory $factory,
+        MetadataEntityFactory $metadataEntityFactory,
+        MetadataRepositoryInterface $metadataRepository,
+        StepupEndpoint $stepupEndpoint
+    ) {
         $this->factory = $factory;
         $this->metadataEntityFactory = $metadataEntityFactory;
         $this->metadataRepository = $metadataRepository;
@@ -97,7 +101,7 @@ class MetadataService
 
     /**
      * Generate XML proxy metadata for the IdP's of an SP
-     * This will be used to generate the WAYF
+     * This can be used to generate the WAYF
      *
      * @param string $entityId
      * @param string $keyId
