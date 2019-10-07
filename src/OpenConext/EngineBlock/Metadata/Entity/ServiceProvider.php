@@ -163,7 +163,7 @@ class ServiceProvider extends AbstractRole
         $publishInEduGainDate = null,
         $publishInEdugain = false,
         $requestsMustBeSigned = false,
-        $signatureMethod = XMLSecurityKey::RSA_SHA1,
+        $signatureMethod = XMLSecurityKey::RSA_SHA256,
         Service $responseProcessingService = null,
         $workflowState = self::WORKFLOW_STATE_DEFAULT,
         array $allowedIdpEntityIds = array(),

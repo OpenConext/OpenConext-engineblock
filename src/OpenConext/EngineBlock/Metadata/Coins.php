@@ -209,7 +209,7 @@ class Coins
 
     public function signatureMethod()
     {
-        return $this->getValue('signatureMethod', XMLSecurityKey::RSA_SHA1);
+        return $this->getValue('signatureMethod', XMLSecurityKey::RSA_SHA256);
     }
 
     private function getValue($key, $default = null)
