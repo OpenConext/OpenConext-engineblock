@@ -323,7 +323,7 @@ class PushMetadataAssemblerTest extends PHPUnit_Framework_TestCase
      */
     private function validCoinValuesStringSignatureMethod() {
         return [
-            [null, "http://www.w3.org/2000/09/xmldsig#rsa-sha1"],
+            [null, "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"],
             ["", ""],
             ["string", "string"],
         ];
