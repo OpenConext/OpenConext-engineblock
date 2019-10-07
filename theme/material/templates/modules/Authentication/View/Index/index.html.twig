@@ -3,11 +3,20 @@
 {% block title %}{{ parent() }} - Metadata & Certificates{% endblock %}
 {% block pageHeading %}{{ subHeader }}{% endblock %}
 
+{% block stylesheets %}{% spaceless %}
+    <link href="/stylesheets/front-page.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
+{% endspaceless %}{% endblock %}
+
 {% block content %}
 <div id="engine-main-page" class="box">
   <div class="mod-content">
+    <header>
+      <img class="logo" src="{{ defaultLogo }}" alt=""/>
+      <h1>{{ 'suite_name'|trans }} EngineBlock</h1>
+    </header>
 
     <div class="main">
+
         <h1>{{ subHeader }}</h1>
         <dl class="metadata-certificates-list">
             <dt>
@@ -105,7 +114,7 @@
 
 
       <div class="main">
-          <h1>Stepup authentication Certificate and Metadata</h1>
+          <h2>Step-up authentication Certificate and Metadata</h2>
           <dl class="metadata-certificates-list">
               <dt>
                   The Public SAML metadata (the entity descriptor) of the {{ 'suite_name'|trans }} stepup authentication Proxy
