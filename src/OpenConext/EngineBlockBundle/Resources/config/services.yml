@@ -86,6 +86,9 @@ services:
             - "@engineblock.compat.repository.metadata"
             - "@engineblock.compat.logger"
 
+    engineblock.service.time_provider:
+        class: OpenConext\EngineBlock\Service\TimeProvider\TimeProvider
+
     engineblock.authentication.user_directory:
         class: OpenConext\EngineBlockBundle\Authentication\Service\UserService
         arguments:
