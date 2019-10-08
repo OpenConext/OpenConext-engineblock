@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Metadata;
+namespace OpenConext\EngineBlock\Xml;
 
 use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
@@ -34,13 +34,12 @@ use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\md\EntitiesDescriptor;
 use SAML2\XML\md\EntityDescriptor;
-use Surfnet\ServiceProviderDashboard\Legacy\Metadata\Exception\ParserException;
 use Twig\Environment;
 
-class MetadataFactoryTest extends TestCase
+class MetadataRendererTest extends TestCase
 {
     /**
-     * @var MetadataFactory
+     * @var MetadataRenderer
      */
     private $metadataFactory;
 
@@ -65,7 +64,7 @@ class MetadataFactoryTest extends TestCase
             ->method('buildFromIdentifier')
             ->willReturn($keyPair);
 
-        $this->metadataFactory = new MetadataFactory($environment, $samlIdGenerator, $keyPairFactory);
+        $this->metadataFactory = new MetadataRenderer($environment, $samlIdGenerator, $keyPairFactory);
 
         parent::setUp();
     }
@@ -216,7 +215,7 @@ class MetadataFactoryTest extends TestCase
         $doc = new \DOMDocument();
         $doc->loadXml($xml);
 
-        if (!$doc->schemaValidate(__DIR__.'/schema/surf.xsd')) {
+        if (!$doc->schemaValidate(__DIR__ . '/schema/surf.xsd')) {
             $errors = libxml_get_errors();
             libxml_clear_errors();
 

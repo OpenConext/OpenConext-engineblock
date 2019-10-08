@@ -20,7 +20,7 @@ namespace OpenConext\EngineBlockBundle\Controller;
 
 use EngineBlock_ApplicationSingleton;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
-use OpenConext\EngineBlockBundle\Metadata\Service\MetadataService;
+use OpenConext\EngineBlock\Xml\MetadataProvider;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -34,7 +34,7 @@ class MetadataController
     private $engineBlockApplicationSingleton;
 
     /**
-     * @var MetadataService
+     * @var MetadataProvider
      */
     private $metadataService;
 
@@ -45,7 +45,7 @@ class MetadataController
 
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        MetadataService $metadataService,
+        MetadataProvider $metadataService,
         RouterInterface $router
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;

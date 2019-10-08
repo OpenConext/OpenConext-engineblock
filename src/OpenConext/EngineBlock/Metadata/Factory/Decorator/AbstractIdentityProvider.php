@@ -15,15 +15,12 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Entities\Decorator;
+namespace OpenConext\EngineBlock\Factory\Decorator;
 
-use DateTime;
-use OpenConext\EngineBlock\Entities\IdentityProviderEntityInterface;
-use OpenConext\EngineBlock\Entities\ServiceProviderEntityInterface;
+use OpenConext\EngineBlock\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
-use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;

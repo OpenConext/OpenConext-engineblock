@@ -1,7 +1,7 @@
 services:
-    OpenConext\EngineBlockBundle\Metadata\:
-        resource: '../../Metadata'
-        exclude: '../../Metadata/ValueObjects'
+    OpenConext\EngineBlock\Xml\:
+        resource: '../../../EngineBlock/Xml'
+        exclude: '../../../EngineBlock/Xml/ValueObjects'
         autowire: true
         autoconfigure: true
 

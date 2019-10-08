@@ -17,7 +17,7 @@ declare(strict_types=1);
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Metadata\ValueObjects;
+namespace OpenConext\EngineBlock\Xml\ValueObjects;
 
 use ArrayIterator;
 use IteratorAggregate;

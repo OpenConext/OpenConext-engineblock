@@ -39,7 +39,7 @@ services:
         class: OpenConext\EngineBlockBundle\Controller\MetadataController
         arguments:
             - "@engineblock.compat.application"
-            - '@OpenConext\EngineBlockBundle\Metadata\Service\MetadataService'
+            - '@OpenConext\EngineBlock\Xml\MetadataProvider'
 
     engineblock.controller.authentication.certificate:
         class: OpenConext\EngineBlockBundle\Controller\CertificateController
