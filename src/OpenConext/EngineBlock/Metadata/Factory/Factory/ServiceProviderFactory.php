@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Entities\Factory;
+namespace OpenConext\EngineBlock\Factory\Factory;
 
 use EngineBlock_Attributes_Metadata as AttributesMetadata;
-use OpenConext\EngineBlock\Entities\Adapter\ServiceProviderEntity;
-use OpenConext\EngineBlock\Entities\Decorator\ServiceProviderProxy;
-use OpenConext\EngineBlock\Entities\ServiceProviderEntityInterface;
+use OpenConext\EngineBlock\Factory\Adapter\ServiceProviderEntity;
+use OpenConext\EngineBlock\Factory\Decorator\ServiceProviderProxy;
+use OpenConext\EngineBlock\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Service;

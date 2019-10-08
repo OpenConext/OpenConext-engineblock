@@ -17,7 +17,7 @@ declare(strict_types=1);
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Metadata;
+namespace OpenConext\EngineBlock\Xml;
 
 use DOMDocument;
 use EngineBlock_Saml2_IdGenerator;
@@ -25,13 +25,13 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
-use OpenConext\EngineBlockBundle\Metadata\ValueObjects\IdentityProviderMetadata;
-use OpenConext\EngineBlockBundle\Metadata\ValueObjects\IdentityProviderMetadataCollection;
-use OpenConext\EngineBlockBundle\Metadata\ValueObjects\ServiceProviderMetadata;
+use OpenConext\EngineBlock\Xml\ValueObjects\IdentityProviderMetadata;
+use OpenConext\EngineBlock\Xml\ValueObjects\IdentityProviderMetadataCollection;
+use OpenConext\EngineBlock\Xml\ValueObjects\ServiceProviderMetadata;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use Twig\Environment;
 
-class MetadataFactory
+class MetadataRenderer
 {
     const SIGN_ALGORITHM = XMLSecurityDSig::SHA256;
     const ID_PREFIX = 'EB';

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Entities;
+namespace OpenConext\EngineBlock\Factory;
 
 use DateTime;
 use OpenConext\EngineBlock\Metadata\Coins;

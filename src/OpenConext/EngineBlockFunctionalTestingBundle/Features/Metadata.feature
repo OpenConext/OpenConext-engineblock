@@ -13,6 +13,6 @@ Feature:
     # Verify the entity id is correctly set in the metadata
     Then the response should match xpath '/md:EntityDescriptor[@entityID="https://engine.vm.openconext.org/authentication/sp/metadata"]'
      # Verify the display name (EN) correctly set in the metadata
-     And the response should match xpath '//mdui:DisplayName[@xml:lang="en" and text()="OpenConext Engine"]'
-     # Verify the signature method is set to sha1
-     And the response should match xpath '//ds:SignatureMethod[@xml:Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"]'
+     And the response should match xpath '//mdui:*[@xml:lang="en" and text()="OpenConext Engine"]'
+     # Verify the signature method is set to sha256
+     And the response should match xpath '//ds:SignatureMethod[@Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"]'

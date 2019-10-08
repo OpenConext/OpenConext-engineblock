@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
+
 /**
  * Copyright 2010 SURFnet B.V.
  *
@@ -15,19 +17,36 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Entities\Decorator;
+namespace OpenConext\EngineBlock\Xml\ValueObjects;
 
-class ServiceProviderStepup extends AbstractServiceProvider
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+
+class IdentityProviderMetadata
 {
-    public function getAcsLocation(): string
+    /**
+     * @var IdentityProvider
+     */
+    private $entity;
+
+    public function __construct(IdentityProvider $entity)
     {
-        return $this->entity->getAssertionConsumerServices()[0]->location;
+        $this->entity = $entity;
+    }
+
+    public function getEntityId(): string
+    {
+        return $this->entity->entityId;
+    }
+
+    public function getSsoLocation(): string
+    {
+        return $this->entity->singleSignOnServices[0]->location;
     }
 
     public function getPublicKeys(): array
     {
         $keys = [];
-        foreach ($this->entity->getCertificates() as $certificate) {
+        foreach ($this->entity->certificates as $certificate) {
             $pem = $certificate->toCertData();
             $keys[$pem] = $pem;
         }

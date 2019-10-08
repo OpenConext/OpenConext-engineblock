@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Entities\Factory;
+namespace OpenConext\EngineBlock\Factory\Factory;
 
-use OpenConext\EngineBlock\Entities\Adapter\IdentityProviderEntity;
-use OpenConext\EngineBlock\Entities\Decorator\IdentityProviderProxy;
-use OpenConext\EngineBlock\Entities\Decorator\IdentityProviderStepup;
-use OpenConext\EngineBlock\Entities\IdentityProviderEntityInterface;
+use OpenConext\EngineBlock\Factory\Adapter\IdentityProviderEntity;
+use OpenConext\EngineBlock\Factory\Decorator\IdentityProviderProxy;
+use OpenConext\EngineBlock\Factory\Decorator\IdentityProviderStepup;
+use OpenConext\EngineBlock\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;

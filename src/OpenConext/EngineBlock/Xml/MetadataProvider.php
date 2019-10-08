@@ -16,19 +16,17 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Metadata\Service;
+namespace OpenConext\EngineBlock\Xml;
 
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlockBundle\Exception\EntityCanNotBeFoundException;
-use OpenConext\EngineBlockBundle\Metadata\MetadataEntityFactory;
-use OpenConext\EngineBlockBundle\Metadata\MetadataFactory;
 use OpenConext\EngineBlockBundle\Stepup\StepupEndpoint;
 use OpenConext\EngineBlockBundle\Stepup\StepupEntityFactory;
 
-class MetadataService
+class MetadataProvider
 {
     /**
-     * @var MetadataFactory
+     * @var MetadataRenderer
      */
     private $factory;
     /**
@@ -45,13 +43,13 @@ class MetadataService
     private $stepupEndpoint;
 
     /**
-     * @param MetadataFactory $factory
+     * @param MetadataRenderer $factory
      * @param MetadataEntityFactory $metadataEntityFactory
      * @param MetadataRepositoryInterface $metadataRepository
      * @param StepupEndpoint $stepupEndpoint
      */
     public function __construct(
-        MetadataFactory $factory,
+        MetadataRenderer $factory,
         MetadataEntityFactory $metadataEntityFactory,
         MetadataRepositoryInterface $metadataRepository,
         StepupEndpoint $stepupEndpoint
