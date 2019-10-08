@@ -16,7 +16,9 @@
  * limitations under the License.
  */
 
-interface EngineBlock_TimeProvider_Interface
+namespace OpenConext\EngineBlock\Service\TimeProvider;
+
+interface TimeProviderInterface
 {
     public function timestamp($deltaSeconds = 0, $time = null);
 
