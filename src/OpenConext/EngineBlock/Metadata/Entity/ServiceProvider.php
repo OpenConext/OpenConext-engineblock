@@ -38,6 +38,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ *
+ *
+ * PLEASE DON'T USE THIS ENTITY DIRECTLY BUT USE `\OpenConext\EngineBlock\Factory\Factory\ServiceProviderFactory`
  */
 class ServiceProvider extends AbstractRole
 {
@@ -91,6 +94,8 @@ class ServiceProvider extends AbstractRole
     public $supportUrlNl;
 
     /**
+     * PLEASE DON'T USE THIS ENTITY DIRECTLY BUT USE `\OpenConext\EngineBlock\Factory\Factory\ServiceProviderFactory`
+     *
      * @param string $entityId
      * @param Organization $organizationEn
      * @param Organization $organizationNl

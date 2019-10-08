@@ -27,6 +27,10 @@ use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use SAML2\Constants;
 
+/**
+ * This factory is used for instantiating an entity with the required adapters and/or decorators set
+ * It also makes sure that static entities could be generated without the use of the database
+ */
 class IdentityProviderFactory
 {
     /**
