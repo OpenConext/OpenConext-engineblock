@@ -18,9 +18,12 @@
 
 namespace OpenConext\EngineBlockBundle\Metadata\Service;
 
+use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlockBundle\Exception\EntityCanNotBeFoundException;
 use OpenConext\EngineBlockBundle\Metadata\MetadataEntityFactory;
 use OpenConext\EngineBlockBundle\Metadata\MetadataFactory;
+use OpenConext\EngineBlockBundle\Stepup\StepupEndpoint;
+use OpenConext\EngineBlockBundle\Stepup\StepupEntityFactory;
 
 class MetadataService
 {
@@ -32,19 +35,35 @@ class MetadataService
      * @var MetadataEntityFactory
      */
     private $metadataEntityFactory;
+    /**
+     * @var MetadataRepositoryInterface
+     */
+    private $metadataRepository;
+    /**
+     * @var StepupEndpoint
+     */
+    private $stepupEndpoint;
 
     /**
      * @param MetadataFactory $factory
      * @param MetadataEntityFactory $metadataEntityFactory
+     * @param MetadataRepositoryInterface $metadataRepository
+     * @param StepupEndpoint $stepupEndpoint
      */
-    public function __construct(MetadataFactory $factory, MetadataEntityFactory $metadataEntityFactory)
-    {
+    public function __construct(
+        MetadataFactory $factory,
+        MetadataEntityFactory $metadataEntityFactory,
+        MetadataRepositoryInterface $metadataRepository,
+        StepupEndpoint $stepupEndpoint
+    ) {
         $this->factory = $factory;
         $this->metadataEntityFactory = $metadataEntityFactory;
+        $this->metadataRepository = $metadataRepository;
+        $this->stepupEndpoint = $stepupEndpoint;
     }
 
     /**
-     * Generate XML metadata for a SP
+     * Generate XML metadata for an SP
      *
      * @param string $entityId
      * @param string $acsLocation
@@ -60,7 +79,6 @@ class MetadataService
         }
         throw new EntityCanNotBeFoundException(sprintf('Unable to find the SP with entity ID "%s".', $entityId));
     }
-
 
     /**
      * Generate XML metadata for an IdP
@@ -78,5 +96,44 @@ class MetadataService
             return $this->factory->fromIdentityProviderEntity($identityProvider, $keyId);
         }
         throw new EntityCanNotBeFoundException(sprintf('Unable to find the SP with entity ID "%s".', $entityId));
+    }
+
+
+    /**
+     * Generate XML proxy metadata for the IdP's of an SP
+     * This can be used to generate the WAYF
+     *
+     * @param string $entityId
+     * @param string $keyId
+     * @param string|null $serviceProviderEntityId
+     * @return string
+     */
+    public function metadataForIdpsOfSp(string $entityId, string $keyId, string $serviceProviderEntityId = null): string
+    {
+        $identityProviders = $this->metadataRepository->findIdentityProviders();
+
+        // Todo: implement sp filter sp-entity-id to list only allowed idps
+        // Todo: hide on coin hidden
+
+        return $this->factory->fromIdentityProviderEntities($identityProviders, $keyId);
+    }
+
+
+    /**
+     * Generate XML metadata for the internal used stepup authentication SP
+     *
+     * @param string $acsLocation
+     * @param string $keyId
+     * @return string
+     * @throws \EngineBlock_Exception
+     */
+    public function metadataForStepup(string $acsLocation, string $keyId): string
+    {
+        $serviceProvider = StepupEntityFactory::spFrom(
+            $this->stepupEndpoint,
+            $acsLocation
+        );
+
+        return $this->factory->fromServiceProviderEntity($serviceProvider, $keyId);
     }
 }

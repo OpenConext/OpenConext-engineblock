@@ -26,6 +26,7 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlockBundle\Metadata\ValueObjects\IdentityProviderMetadata;
+use OpenConext\EngineBlockBundle\Metadata\ValueObjects\IdentityProviderMetadataCollection;
 use OpenConext\EngineBlockBundle\Metadata\ValueObjects\ServiceProviderMetadata;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use Twig\Environment;
@@ -88,6 +89,28 @@ class MetadataFactory
         return $signedXml;
     }
 
+    /**
+     * @param IdentityProvider[] $idps
+     * @param string $keyId
+     * @return string
+     */
+    public function fromIdentityProviderEntities(array $idps, string $keyId)
+    {
+        $this->signingKeyPair = $this->keyPairFactory->buildFromIdentifier($keyId);
+        $template = '@theme/Authentication/View/Metadata/idps.html.twig';
+
+        $metadata = new IdentityProviderMetadataCollection();
+        foreach ($idps as $role) {
+            $metadata->add(new IdentityProviderMetadata($role));
+        }
+
+        $xml = $this->renderMetadataXmlIdentityProviderCollection($metadata, $template);
+
+        $signedXml = $this->signXml($xml, $this->signingKeyPair);
+
+        return $signedXml;
+    }
+
     private function renderMetadataXmlServiceProvider(ServiceProviderMetadata $metadata, string $template)
     {
         $params = [
@@ -103,6 +126,16 @@ class MetadataFactory
         $params = [
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
             'metadata' => $metadata,
+        ];
+
+        return $this->twig->render($template, $params);
+    }
+
+    private function renderMetadataXmlIdentityProviderCollection(IdentityProviderMetadataCollection $metadataCollection, string $template)
+    {
+        $params = [
+            'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
+            'metadataCollection' => $metadataCollection,
         ];
 
         return $this->twig->render($template, $params);
@@ -134,7 +167,6 @@ class MetadataFactory
         $objDSig->add509Cert($signingKeyPair->getCertificate()->toPem());
 
         // Append the signature to the XML
-        //$objDSig->appendSignature($doc->documentElement);
         $objDSig->insertSignature($doc->documentElement, $doc->documentElement->firstChild);
 
         // Save the signed XML

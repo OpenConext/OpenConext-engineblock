@@ -21,8 +21,6 @@ namespace OpenConext\EngineBlockBundle\Controller;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
-use EngineBlock_Corto_Exception_ReceivedErrorStatusCode;
-use EngineBlock_Corto_Exception_UserCancelledStepupCallout;
 use OpenConext\EngineBlock\Validator\RequestValidator;
 use OpenConext\EngineBlockBridge\ResponseFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,23 +70,6 @@ class StepupController implements AuthenticationLoopThrottlingController
 
         $proxyServer = new EngineBlock_Corto_Adapter();
         $proxyServer->stepupConsumeAssertion();
-
-        return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
-    }
-
-    /**
-     * @param null|string $keyId
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     */
-    public function metadataAction($keyId = null)
-    {
-        $proxyServer = new EngineBlock_Corto_Adapter();
-
-        if ($keyId !== null) {
-            $proxyServer->setKeyId($keyId);
-        }
-
-        $proxyServer->stepupMetadata();
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
