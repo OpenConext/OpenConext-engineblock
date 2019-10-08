@@ -15,28 +15,28 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Entities\Adapter;
+namespace OpenConext\EngineBlock\Factory\Adapter;
 
-use OpenConext\EngineBlock\Entities\ServiceProviderEntityInterface;
-use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
+use DateTime;
+use OpenConext\EngineBlock\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Coins;
+use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
-use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use OpenConext\EngineBlock\Metadata\IndexedService;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
-use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\Service;
+use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 
-class ServiceProviderEntity implements ServiceProviderEntityInterface
+class IdentityProviderEntity implements IdentityProviderEntityInterface
 {
     /**
-     * @var ServiceProvider
+     * @var IdentityProvider
      */
     private $entity;
 
-    public function __construct(ServiceProvider $entity)
+    public function __construct(IdentityProvider $entity)
     {
         $this->entity = $entity;
     }
@@ -226,58 +226,34 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     }
 
     /**
-     * @return AttributeReleasePolicy|null
-     */
-    public function getAttributeReleasePolicy(): ?AttributeReleasePolicy
-    {
-        return $this->entity->attributeReleasePolicy;
-    }
-
-    /**
-     * @return IndexedService[]
-     */
-    public function getAssertionConsumerServices(): array
-    {
-        return $this->entity->assertionConsumerServices;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getAllowedIdpEntityIds(): array
-    {
-        return $this->entity->allowedIdpEntityIds;
-    }
-
-    /**
      * @return bool
      */
-    public function isAllowAll(): bool
+    public function isEnabledInWayf(): bool
     {
-        return $this->entity->allowAll;
+        return $this->entity->enabledInWayf;
     }
 
     /**
-     * @return RequestedAttribute[]|null
+     * @return Service[]
      */
-    public function getRequestedAttributes(): ?array
+    public function getSingleSignOnServices(): array
     {
-        return $this->entity->requestedAttributes;
+        return $this->entity->singleSignOnServices;
     }
 
     /**
-     * @return string|null
+     * @return ConsentSettings
      */
-    public function getSupportUrlEn(): ?string
+    public function getConsentSettings(): ConsentSettings
     {
-        return $this->entity->supportUrlEn;
+        return $this->entity->getConsentSettings();
     }
 
     /**
-     * @return string|null
+     * @return ShibMdScope[]
      */
-    public function getSupportUrlNl(): ?string
+    public function getShibMdScopes(): array
     {
-        return $this->entity->supportUrlNl;
+        return $this->entity->shibMdScopes;
     }
 }

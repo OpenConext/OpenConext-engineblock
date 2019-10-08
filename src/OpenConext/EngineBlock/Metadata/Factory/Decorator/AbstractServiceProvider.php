@@ -15,28 +15,31 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Entities\Adapter;
+namespace OpenConext\EngineBlock\Factory\Decorator;
 
-use DateTime;
-use OpenConext\EngineBlock\Entities\IdentityProviderEntityInterface;
+use OpenConext\EngineBlock\Factory\ServiceProviderEntityInterface;
+use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Coins;
-use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
-use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
+use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\Service;
-use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 
-class IdentityProviderEntity implements IdentityProviderEntityInterface
+class AbstractServiceProvider implements ServiceProviderEntityInterface
 {
-    /**
-     * @var IdentityProvider
-     */
-    private $entity;
 
-    public function __construct(IdentityProvider $entity)
+    /**
+     * @var ServiceProviderEntityInterface
+     */
+    protected $entity;
+
+    /**
+     * @param ServiceProviderEntityInterface $entity
+     */
+    public function __construct(ServiceProviderEntityInterface $entity)
     {
         $this->entity = $entity;
     }
@@ -46,7 +49,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getId(): int
     {
-        return $this->entity->id;
+        return $this->entity->getId();
     }
 
     /**
@@ -54,7 +57,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getEntityId(): string
     {
-        return $this->entity->entityId;
+        return $this->entity->getEntityId();
     }
 
     /**
@@ -62,7 +65,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getNameNl(): string
     {
-        return $this->entity->nameNl;
+        return $this->entity->getNameNl();
     }
 
     /**
@@ -70,7 +73,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getNameEn(): string
     {
-        return $this->entity->nameEn;
+        return $this->entity->getNameEn();
     }
 
     /**
@@ -78,7 +81,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getDescriptionNl(): string
     {
-        return $this->entity->descriptionNl;
+        return $this->entity->getDescriptionNl();
     }
 
     /**
@@ -86,7 +89,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getDescriptionEn(): string
     {
-        return $this->entity->descriptionEn;
+        return $this->entity->getDescriptionEn();
     }
 
     /**
@@ -94,7 +97,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getDisplayNameNl(): string
     {
-        return $this->entity->displayNameNl;
+        return $this->entity->getDisplayNameNl();
     }
 
     /**
@@ -102,7 +105,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getDisplayNameEn(): string
     {
-        return $this->entity->displayNameEn;
+        return $this->entity->getDisplayNameEn();
     }
 
     /**
@@ -110,7 +113,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getLogo(): Logo
     {
-        return $this->entity->logo;
+        return $this->entity->getLogo();
     }
 
     /**
@@ -118,7 +121,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getOrganizationNl(): Organization
     {
-        return $this->entity->organizationNl;
+        return $this->entity->getOrganizationNl();
     }
 
     /**
@@ -126,7 +129,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getOrganizationEn(): Organization
     {
-        return $this->entity->organizationEn;
+        return $this->entity->getOrganizationEn();
     }
 
     /**
@@ -134,7 +137,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getKeywordsNl(): string
     {
-        return $this->entity->keywordsNl;
+        return $this->entity->getKeywordsNl();
     }
 
     /**
@@ -142,7 +145,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getKeywordsEn(): string
     {
-        return $this->entity->keywordsEn;
+        return $this->entity->getKeywordsEn();
     }
 
     /**
@@ -150,7 +153,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getCertificates(): array
     {
-        return $this->entity->certificates;
+        return $this->entity->getCertificates();
     }
 
     /**
@@ -158,7 +161,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getWorkflowState(): string
     {
-        return $this->entity->workflowState;
+        return $this->entity->getWorkflowState();
     }
 
     /**
@@ -166,7 +169,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getContactPersons(): array
     {
-        return $this->entity->contactPersons;
+        return $this->entity->getContactPersons();
     }
 
     /**
@@ -174,7 +177,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getNameIdFormat(): string
     {
-        return $this->entity->nameIdFormat;
+        return $this->entity->getNameIdFormat();
     }
 
     /**
@@ -182,7 +185,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getSupportedNameIdFormats(): array
     {
-        return $this->entity->supportedNameIdFormats;
+        return $this->entity->getSupportedNameIdFormats();
     }
 
     /**
@@ -190,7 +193,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getSingleLogoutService(): Service
     {
-        return $this->entity->singleLogoutService;
+        return $this->entity->getSingleLogoutService();
     }
 
     /**
@@ -198,7 +201,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function isRequestsMustBeSigned(): bool
     {
-        return $this->entity->requestsMustBeSigned;
+        return $this->entity->isRequestsMustBeSigned();
     }
 
     /**
@@ -206,7 +209,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getResponseProcessingService(): string
     {
-        return $this->entity->responseProcessingService;
+        return $this->entity->getResponseProcessingService();
     }
 
     /**
@@ -214,7 +217,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
      */
     public function getManipulation(): string
     {
-        return $this->entity->manipulation;
+        return $this->entity->getManipulation();
     }
 
     /**
@@ -226,34 +229,58 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
     }
 
     /**
+     * @return AttributeReleasePolicy|null
+     */
+    public function getAttributeReleasePolicy(): ?AttributeReleasePolicy
+    {
+        return $this->entity->getAttributeReleasePolicy();
+    }
+
+    /**
+     * @return IndexedService[]
+     */
+    public function getAssertionConsumerServices(): array
+    {
+        return $this->entity->getAssertionConsumerServices();
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAllowedIdpEntityIds(): array
+    {
+        return $this->entity->getAllowedIdpEntityIds();
+    }
+
+    /**
      * @return bool
      */
-    public function isEnabledInWayf(): bool
+    public function isAllowAll(): bool
     {
-        return $this->entity->enabledInWayf;
+        return $this->entity->isAllowAll();
     }
 
     /**
-     * @return Service[]
+     * @return RequestedAttribute[]|null
      */
-    public function getSingleSignOnServices(): array
+    public function getRequestedAttributes(): ?array
     {
-        return $this->entity->singleSignOnServices;
+        return $this->entity->getRequestedAttributes();
     }
 
     /**
-     * @return ConsentSettings
+     * @return string|null
      */
-    public function getConsentSettings(): ConsentSettings
+    public function getSupportUrlEn(): ?string
     {
-        return $this->entity->getConsentSettings();
+        return $this->entity->getSupportUrlEn();
     }
 
     /**
-     * @return ShibMdScope[]
+     * @return string|null
      */
-    public function getShibMdScopes(): array
+    public function getSupportUrlNl(): ?string
     {
-        return $this->entity->shibMdScopes;
+        return $this->entity->getSupportUrlNl();
     }
 }

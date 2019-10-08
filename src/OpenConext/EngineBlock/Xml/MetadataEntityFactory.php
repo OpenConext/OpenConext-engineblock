@@ -17,7 +17,7 @@ declare(strict_types=1);
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Metadata;
+namespace OpenConext\EngineBlock\Xml;
 
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;

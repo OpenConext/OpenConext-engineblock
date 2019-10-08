@@ -25,6 +25,7 @@ use DOMDocument;
 use DOMXPath;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RuntimeException;
+use SAML2\XML\mdui\Common;
 
 /**
  * Mink-enabled context.
@@ -55,6 +56,7 @@ class MinkContext extends BaseMinkContext
 
         $xpathObj = new DOMXPath($document);
         $xpathObj->registerNamespace('ds', XMLSecurityDSig::XMLDSIGNS);
+        $xpathObj->registerNamespace('mdui', Common::NS);
         $nodeList = $xpathObj->query($xpath);
 
         if (!$nodeList || $nodeList->length === 0) {

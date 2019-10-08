@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Entities\Decorator;
+namespace OpenConext\EngineBlock\Factory\Decorator;
 
-use OpenConext\EngineBlock\Entities\IdentityProviderEntityInterface;
+use OpenConext\EngineBlock\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use SAML2\Constants;
 

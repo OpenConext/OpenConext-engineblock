@@ -15,36 +15,28 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Entities\Decorator;
+namespace OpenConext\EngineBlock\Factory\Adapter;
 
-use DateTime;
-use OpenConext\EngineBlock\Entities\IdentityProviderEntityInterface;
-use OpenConext\EngineBlock\Entities\ServiceProviderEntityInterface;
+use OpenConext\EngineBlock\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Coins;
-use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
-use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\Service;
-use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 
-class AbstractServiceProvider implements ServiceProviderEntityInterface
+class ServiceProviderEntity implements ServiceProviderEntityInterface
 {
-
     /**
-     * @var ServiceProviderEntityInterface
+     * @var ServiceProvider
      */
-    protected $entity;
+    private $entity;
 
-    /**
-     * @param ServiceProviderEntityInterface $entity
-     */
-    public function __construct(ServiceProviderEntityInterface $entity)
+    public function __construct(ServiceProvider $entity)
     {
         $this->entity = $entity;
     }
@@ -54,7 +46,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getId(): int
     {
-        return $this->entity->getId();
+        return $this->entity->id;
     }
 
     /**
@@ -62,7 +54,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getEntityId(): string
     {
-        return $this->entity->getEntityId();
+        return $this->entity->entityId;
     }
 
     /**
@@ -70,7 +62,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getNameNl(): string
     {
-        return $this->entity->getNameNl();
+        return $this->entity->nameNl;
     }
 
     /**
@@ -78,7 +70,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getNameEn(): string
     {
-        return $this->entity->getNameEn();
+        return $this->entity->nameEn;
     }
 
     /**
@@ -86,7 +78,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getDescriptionNl(): string
     {
-        return $this->entity->getDescriptionNl();
+        return $this->entity->descriptionNl;
     }
 
     /**
@@ -94,7 +86,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getDescriptionEn(): string
     {
-        return $this->entity->getDescriptionEn();
+        return $this->entity->descriptionEn;
     }
 
     /**
@@ -102,7 +94,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getDisplayNameNl(): string
     {
-        return $this->entity->getDisplayNameNl();
+        return $this->entity->displayNameNl;
     }
 
     /**
@@ -110,7 +102,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getDisplayNameEn(): string
     {
-        return $this->entity->getDisplayNameEn();
+        return $this->entity->displayNameEn;
     }
 
     /**
@@ -118,7 +110,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getLogo(): Logo
     {
-        return $this->entity->getLogo();
+        return $this->entity->logo;
     }
 
     /**
@@ -126,7 +118,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getOrganizationNl(): Organization
     {
-        return $this->entity->getOrganizationNl();
+        return $this->entity->organizationNl;
     }
 
     /**
@@ -134,7 +126,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getOrganizationEn(): Organization
     {
-        return $this->entity->getOrganizationEn();
+        return $this->entity->organizationEn;
     }
 
     /**
@@ -142,7 +134,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getKeywordsNl(): string
     {
-        return $this->entity->getKeywordsNl();
+        return $this->entity->keywordsNl;
     }
 
     /**
@@ -150,7 +142,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getKeywordsEn(): string
     {
-        return $this->entity->getKeywordsEn();
+        return $this->entity->keywordsEn;
     }
 
     /**
@@ -158,7 +150,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getCertificates(): array
     {
-        return $this->entity->getCertificates();
+        return $this->entity->certificates;
     }
 
     /**
@@ -166,7 +158,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getWorkflowState(): string
     {
-        return $this->entity->getWorkflowState();
+        return $this->entity->workflowState;
     }
 
     /**
@@ -174,7 +166,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getContactPersons(): array
     {
-        return $this->entity->getContactPersons();
+        return $this->entity->contactPersons;
     }
 
     /**
@@ -182,7 +174,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getNameIdFormat(): string
     {
-        return $this->entity->getNameIdFormat();
+        return $this->entity->nameIdFormat;
     }
 
     /**
@@ -190,7 +182,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getSupportedNameIdFormats(): array
     {
-        return $this->entity->getSupportedNameIdFormats();
+        return $this->entity->supportedNameIdFormats;
     }
 
     /**
@@ -198,7 +190,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getSingleLogoutService(): Service
     {
-        return $this->entity->getSingleLogoutService();
+        return $this->entity->singleLogoutService;
     }
 
     /**
@@ -206,7 +198,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function isRequestsMustBeSigned(): bool
     {
-        return $this->entity->isRequestsMustBeSigned();
+        return $this->entity->requestsMustBeSigned;
     }
 
     /**
@@ -214,7 +206,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getResponseProcessingService(): string
     {
-        return $this->entity->getResponseProcessingService();
+        return $this->entity->responseProcessingService;
     }
 
     /**
@@ -222,7 +214,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getManipulation(): string
     {
-        return $this->entity->getManipulation();
+        return $this->entity->manipulation;
     }
 
     /**
@@ -238,7 +230,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getAttributeReleasePolicy(): ?AttributeReleasePolicy
     {
-        return $this->entity->getAttributeReleasePolicy();
+        return $this->entity->attributeReleasePolicy;
     }
 
     /**
@@ -246,7 +238,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getAssertionConsumerServices(): array
     {
-        return $this->entity->getAssertionConsumerServices();
+        return $this->entity->assertionConsumerServices;
     }
 
     /**
@@ -254,7 +246,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getAllowedIdpEntityIds(): array
     {
-        return $this->entity->getAllowedIdpEntityIds();
+        return $this->entity->allowedIdpEntityIds;
     }
 
     /**
@@ -262,7 +254,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function isAllowAll(): bool
     {
-        return $this->entity->isAllowAll();
+        return $this->entity->allowAll;
     }
 
     /**
@@ -270,7 +262,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getRequestedAttributes(): ?array
     {
-        return $this->entity->getRequestedAttributes();
+        return $this->entity->requestedAttributes;
     }
 
     /**
@@ -278,7 +270,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getSupportUrlEn(): ?string
     {
-        return $this->entity->getSupportUrlEn();
+        return $this->entity->supportUrlEn;
     }
 
     /**
@@ -286,6 +278,6 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
      */
     public function getSupportUrlNl(): ?string
     {
-        return $this->entity->getSupportUrlNl();
+        return $this->entity->supportUrlNl;
     }
 }

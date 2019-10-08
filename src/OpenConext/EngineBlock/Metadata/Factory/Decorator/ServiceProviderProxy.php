@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Entities\Decorator;
+namespace OpenConext\EngineBlock\Factory\Decorator;
 
 use EngineBlock_Attributes_Metadata as AttributesMetadata;
-use OpenConext\EngineBlock\Entities\ServiceProviderEntityInterface;
+use OpenConext\EngineBlock\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
