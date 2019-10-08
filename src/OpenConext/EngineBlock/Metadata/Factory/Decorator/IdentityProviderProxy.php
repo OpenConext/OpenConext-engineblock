@@ -21,6 +21,10 @@ use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use SAML2\Constants;
 
+/**
+ * This decorator is used for using an entity when EB is used as authentication proxy
+ * It will make sure all required parameters to support EB are set
+ */
 class IdentityProviderProxy extends AbstractIdentityProvider
 {
     /**

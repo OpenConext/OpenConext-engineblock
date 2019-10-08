@@ -36,6 +36,9 @@ use SAML2\Constants;
  * @ORM\Entity
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ *
+ *
+ * PLEASE DON'T USE THIS ENTITY DIRECTLY BUT USE `\OpenConext\EngineBlock\Factory\Factory\IdentityProviderFactory`
  */
 class IdentityProvider extends AbstractRole
 {
@@ -83,6 +86,8 @@ class IdentityProvider extends AbstractRole
     public $shibMdScopes = array();
 
     /**
+     * PLEASE DON'T USE THIS ENTITY DIRECTLY BUT USE `\OpenConext\EngineBlock\Factory\Factory\IdentityProviderFactory`
+     *
      * @param string $entityId
      * @param Organization $organizationEn
      * @param Organization $organizationNl

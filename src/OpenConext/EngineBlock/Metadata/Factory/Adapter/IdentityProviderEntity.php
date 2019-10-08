@@ -29,6 +29,10 @@ use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 
+/**
+ * This Entity is the immutable counterpart of the legacy Entity
+ * This adapter is used to support the old legacy entity so it would be easier to remove the legacy entity ultimately
+ */
 class IdentityProviderEntity implements IdentityProviderEntityInterface
 {
     /**
