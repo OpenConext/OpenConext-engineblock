@@ -64,7 +64,6 @@ services:
             - "@engineblock.configuration.stepup.gateway_loa_mapping"
             - "@engineblock.configuration.stepup.endpoint"
 
-
     engineblock.service.consent:
         class: OpenConext\EngineBlock\Service\ConsentService
         arguments:
@@ -88,6 +87,16 @@ services:
 
     engineblock.service.time_provider:
         class: OpenConext\EngineBlock\Service\TimeProvider\TimeProvider
+
+    engineblock.factory.service_provider_factory:
+        class: OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory
+        arguments:
+            ['@engineblock.compat.metadata.definitions', '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory']
+
+    engineblock.factory.identity_provider_factory:
+        class: OpenConext\EngineBlock\Metadata\Factory\Factory\IdentityProviderFactory
+        arguments:
+            ['@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory']
 
     engineblock.authentication.user_directory:
         class: OpenConext\EngineBlockBundle\Authentication\Service\UserService

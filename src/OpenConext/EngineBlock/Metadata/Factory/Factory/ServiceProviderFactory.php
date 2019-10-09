@@ -24,33 +24,25 @@ use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Service;
-use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
+use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use SAML2\Constants;
 
 class ServiceProviderFactory
 {
     /**
-     * @var X509KeyPair
-     */
-    private $proxyKeyPair;
-    /**
      * @var AttributesMetadata
      */
     private $attributes;
-    /**
-     * @var Service
-     */
-    private $consentService;
 
-    public function __construct(
-        X509KeyPair $proxyKeyPair,
-        AttributesMetadata $attributes,
-        Service $consentService
-    ) {
-        $this->proxyKeyPair = $proxyKeyPair;
+    /**
+     * @var KeyPairFactory
+     */
+    private $keyPairFactory;
+
+    public function __construct(AttributesMetadata $attributes, KeyPairFactory $keyPairFactory) {
         $this->attributes = $attributes;
-        $this->consentService = $consentService;
+        $this->keyPairFactory = $keyPairFactory;
     }
 
     public function createEntityFromEntity(ServiceProvider $entity): ServiceProviderEntityInterface
@@ -58,19 +50,22 @@ class ServiceProviderFactory
         return new ServiceProviderEntity($entity);
     }
 
-    public function createProxyFromEntity(ServiceProvider $entity): ServiceProviderEntityInterface
-    {
-        return new ServiceProviderProxy($this->createEntityFromEntity($entity), $this->proxyKeyPair, $this->attributes, $this->consentService);
+    public function createProxyFromEntity(
+        ServiceProvider $entity,
+        X509KeyPair $proxyKeyPair,
+        Service $consentService
+    ): ServiceProviderEntityInterface {
+        return new ServiceProviderProxy($this->createEntityFromEntity($entity), $proxyKeyPair, $this->attributes, $consentService);
     }
 
     public function createMinimalEntity(
         string $entityId,
         string $acsLocation,
-        X509Certificate $certificate,
+        string $keyId,
         string $acsBindingMethod = Constants::BINDING_HTTP_POST
     ): ServiceProviderEntityInterface {
         $entity = new ServiceProvider($entityId);
-        $entity->certificates[] = $certificate;
+        $entity->certificates[] = $this->keyPairFactory->buildFromIdentifier($keyId)->getCertificate();
         $entity->assertionConsumerServices[] = new IndexedService(
             $acsLocation,
             $acsBindingMethod,
