@@ -18,9 +18,9 @@
 namespace OpenConext\EngineBlock\Factory\Factory;
 
 use EngineBlock_Attributes_Metadata as AttributesMetadata;
-use OpenConext\EngineBlock\Factory\Adapter\ServiceProviderEntity;
-use OpenConext\EngineBlock\Factory\Decorator\ServiceProviderProxy;
-use OpenConext\EngineBlock\Factory\ServiceProviderEntityInterface;
+use OpenConext\EngineBlock\Metadata\Factory\Adapter\ServiceProviderEntity;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\ServiceProviderProxy;
+use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Service;
