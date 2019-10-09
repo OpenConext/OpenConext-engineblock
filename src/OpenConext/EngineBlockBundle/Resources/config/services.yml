@@ -91,7 +91,15 @@ services:
     engineblock.factory.service_provider_factory:
         class: OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory
         arguments:
-            ['@engineblock.compat.metadata.definitions', '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory']
+            - '@engineblock.compat.metadata.definitions'
+            - '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory'
+            - '@translator'
+            - '%view_default_header%'
+            - '%openconext_support_url%'
+            - '%email_request_access_address%'
+            - '%view_default_logo%'
+            - '%view_default_logo_width%'
+            - '%view_default_logo_height%'
 
     engineblock.factory.identity_provider_factory:
         class: OpenConext\EngineBlock\Metadata\Factory\Factory\IdentityProviderFactory

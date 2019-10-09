@@ -31,6 +31,7 @@ use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use SAML2\Constants;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * This factory is used for instantiating an entity with the required adapters and/or decorators set.
@@ -48,9 +49,52 @@ class ServiceProviderFactory
      */
     private $keyPairFactory;
 
-    public function __construct(AttributesMetadata $attributes, KeyPairFactory $keyPairFactory) {
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
+     * @var Logo
+     */
+    private $logo;
+
+    /**
+     * @var string
+     */
+    private $supportUrl;
+
+    /**
+     * @var string
+     */
+    private $supportMail;
+
+    /**
+     * @var string
+     */
+    private $description;
+
+    public function __construct(
+        AttributesMetadata $attributes,
+        KeyPairFactory $keyPairFactory,
+        TranslatorInterface $translator,
+        string $description,
+        string $supportUrl,
+        string $supportMail,
+        string $logoUrl,
+        int $logoWidth,
+        int $logoHeight
+    ) {
         $this->attributes = $attributes;
         $this->keyPairFactory = $keyPairFactory;
+        $this->translator = $translator;
+        $this->description = $description;
+        $this->supportUrl = $supportUrl;
+        $this->supportMail = $supportMail;
+        // A logo VO is created during construction time
+        $this->logo = new Logo($logoUrl);
+        $this->logo->width = $logoWidth;
+        $this->logo->height = $logoHeight;
     }
 
     public function createEntityFromEntity(ServiceProvider $entity): ServiceProviderEntityInterface
@@ -63,37 +107,30 @@ class ServiceProviderFactory
         string $acsLocation,
         string $keyId
     ): ServiceProviderEntityInterface {
-        $entity = $this->buildServiceProviderEntity($entityId,$acsLocation, $keyId);
-        $entity->nameEn = 'NAME EN';
-        $entity->nameNl = 'NAME NL';
-        $entity->descriptionEn = 'DESCRIPTION EN';
-        $entity->descriptionNl = 'DESCRIPTION NL';
-        $entity->organizationEn = new Organization('ORG EN', 'ORG EN', 'SUPPORT URL EN');
+        $entity = $this->buildServiceProviderEntity($entityId, $acsLocation, $keyId);
 
-        $administrative = new ContactPerson('administrative');
-        $administrative->givenName = 'To';
-        $administrative->surName = 'Do';
-        $administrative->emailAddress = 'todo@todo.com';
+        // Obtain the suite name (set in translations) this is used to create several other entity properties
+        // (name, description, and so forth)
+        $suiteName = $this->translator->trans('suite_name');
 
-        $technical = new ContactPerson('technical');
-        $technical->emailAddress = 'todo@todo.com';
-        $technical->givenName = 'To';
-        $technical->surName = 'Do';
+        // Create the contact person data for the EB SP entity
+        $administrative = ContactPerson::from('administrative', $suiteName, 'Support', $this->supportMail);
+        $technical = ContactPerson::from('technical', $suiteName, 'Support', $this->supportMail);
+        $support = ContactPerson::from('support', $suiteName, 'Support', $this->supportMail);
 
-        $support = new ContactPerson('support');
-        $support->emailAddress = 'todo@todo.com';
-        $support->givenName = 'To';
-        $support->surName = 'Do';
-
+        // Load the additional EB SP metadata onto the entity
+        $entity->nameEn = $suiteName . ' EngineBlock';
+        $entity->nameNl = $suiteName . ' EngineBlock';
+        $entity->descriptionEn = $this->description;
+        $entity->descriptionNl = $this->description;
+        $entity->organizationEn = new Organization($suiteName, $suiteName, $this->supportUrl);
         $entity->contactPersons = [
             $administrative,
             $technical,
-            $support
+            $support,
         ];
 
-        $entity->logo = new Logo('https://example.logo.com/logo.gif');
-        $entity->logo->height = 200;
-        $entity->logo->width = 200;
+        $entity->logo = $this->logo;
 
         return new EngineBlockServiceProviderMetadata($this->createEntityFromEntity($entity));
     }
@@ -103,7 +140,12 @@ class ServiceProviderFactory
         X509KeyPair $proxyKeyPair,
         Service $consentService
     ): ServiceProviderEntityInterface {
-        return new ServiceProviderProxy($this->createEntityFromEntity($entity), $proxyKeyPair, $this->attributes, $consentService);
+        return new ServiceProviderProxy(
+            $this->createEntityFromEntity($entity),
+            $proxyKeyPair,
+            $this->attributes,
+            $consentService
+        );
     }
 
     public function createMinimalEntity(
@@ -113,6 +155,7 @@ class ServiceProviderFactory
         string $acsBindingMethod = Constants::BINDING_HTTP_POST
     ): ServiceProviderEntityInterface {
         $entity = $this->buildServiceProviderEntity($entityId, $acsLocation, $keyId, $acsBindingMethod);
+
         return $this->createEntityFromEntity($entity);
     }
 
@@ -121,7 +164,7 @@ class ServiceProviderFactory
         string $acsLocation,
         string $keyId,
         string $acsBindingMethod = Constants::BINDING_HTTP_POST
-    ) : ServiceProvider {
+    ): ServiceProvider {
         $entity = new ServiceProvider($entityId);
         $entity->certificates[] = $this->keyPairFactory->buildFromIdentifier($keyId)->getCertificate();
         $entity->assertionConsumerServices[] = new IndexedService(
