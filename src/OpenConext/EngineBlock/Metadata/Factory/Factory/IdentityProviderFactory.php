@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Factory\Factory;
+namespace OpenConext\EngineBlock\Metadata\Factory\Factory;
 
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\IdentityProviderProxy;
