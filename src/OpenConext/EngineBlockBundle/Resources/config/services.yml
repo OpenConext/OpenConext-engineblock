@@ -98,6 +98,15 @@ services:
         arguments:
             ['@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory']
 
+    OpenConext\EngineBlock\Xml\MetadataProvider:
+        class: OpenConext\EngineBlock\Xml\MetadataProvider
+        arguments:
+            - '@OpenConext\EngineBlock\Xml\MetadataRenderer'
+            - '@engineblock.factory.service_provider_factory'
+            - '@engineblock.factory.identity_provider_factory'
+            - '@engineblock.compat.repository.metadata'
+            - '@engineblock.configuration.stepup.endpoint'
+
     engineblock.authentication.user_directory:
         class: OpenConext\EngineBlockBundle\Authentication\Service\UserService
         arguments:
