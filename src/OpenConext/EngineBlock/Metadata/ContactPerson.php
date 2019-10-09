@@ -37,4 +37,28 @@ class ContactPerson
     {
         $this->contactType = $contactType;
     }
+
+    /**
+     * A convenience static constructor for the contact person.
+     * @param string $type
+     * @param string $givenName
+     * @param string $surname
+     * @param string $emailAddress
+     * @param string $telephoneNumber
+     * @return ContactPerson
+     */
+    public static function from(
+        string $type,
+        string $givenName,
+        string $surname,
+        string $emailAddress,
+        string $telephoneNumber = ''
+    ): ContactPerson {
+        $contact = new self($type);
+        $contact->givenName = $givenName;
+        $contact->surName = $surname;
+        $contact->emailAddress = $emailAddress;
+        $contact->telephoneNumber = $telephoneNumber;
+        return $contact;
+    }
 }
