@@ -18,6 +18,8 @@
 
 namespace OpenConext\EngineBlock\Xml;
 
+use OpenConext\EngineBlock\Factory\Factory\IdentityProviderFactory;
+use OpenConext\EngineBlock\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlockBundle\Exception\EntityCanNotBeFoundException;
 use OpenConext\EngineBlockBundle\Stepup\StepupEndpoint;
@@ -29,14 +31,22 @@ class MetadataProvider
      * @var MetadataRenderer
      */
     private $factory;
+
     /**
-     * @var MetadataEntityFactory
+     * @var ServiceProviderFactory
      */
-    private $metadataEntityFactory;
+    private $spFactory;
+
+    /**
+     * @var IdentityProviderFactory
+     */
+    private $idpFactory;
+
     /**
      * @var MetadataRepositoryInterface
      */
     private $metadataRepository;
+
     /**
      * @var StepupEndpoint
      */
@@ -44,18 +54,21 @@ class MetadataProvider
 
     /**
      * @param MetadataRenderer $factory
-     * @param MetadataEntityFactory $metadataEntityFactory
+     * @param ServiceProviderFactory $spFactory
+     * @param IdentityProviderFactory $idpFactory
      * @param MetadataRepositoryInterface $metadataRepository
      * @param StepupEndpoint $stepupEndpoint
      */
     public function __construct(
         MetadataRenderer $factory,
-        MetadataEntityFactory $metadataEntityFactory,
+        ServiceProviderFactory $spFactory,
+        IdentityProviderFactory $idpFactory,
         MetadataRepositoryInterface $metadataRepository,
         StepupEndpoint $stepupEndpoint
     ) {
         $this->factory = $factory;
-        $this->metadataEntityFactory = $metadataEntityFactory;
+        $this->spFactory = $spFactory;
+        $this->idpFactory = $idpFactory;
         $this->metadataRepository = $metadataRepository;
         $this->stepupEndpoint = $stepupEndpoint;
     }
@@ -70,7 +83,7 @@ class MetadataProvider
      */
     public function metadataForSp(string $entityId, string $acsLocation, string $keyId): string
     {
-        $serviceProvider = $this->metadataEntityFactory->metadataSpFrom($entityId, $acsLocation, $keyId);
+        $serviceProvider = $this->spFactory->createMinimalEntity($entityId, $acsLocation, $keyId);
 
         if ($serviceProvider) {
             return $this->factory->fromServiceProviderEntity($serviceProvider, $keyId);
@@ -88,7 +101,7 @@ class MetadataProvider
      */
     public function metadataForIdp(string $entityId, string $ssoLocation, string $keyId): string
     {
-        $identityProvider = $this->metadataEntityFactory->metadataIdpFrom($entityId, $ssoLocation, $keyId);
+        $identityProvider = $this->idpFactory->createMinimalEntity($entityId, $ssoLocation, $keyId);
 
         if ($identityProvider) {
             return $this->factory->fromIdentityProviderEntity($identityProvider, $keyId);
