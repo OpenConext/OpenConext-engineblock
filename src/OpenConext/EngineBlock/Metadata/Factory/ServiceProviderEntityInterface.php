@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Factory;
+namespace OpenConext\EngineBlock\Metadata\Factory;
 
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Coins;

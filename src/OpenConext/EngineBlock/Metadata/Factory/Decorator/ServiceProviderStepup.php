@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Factory\Decorator;
+namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
 class ServiceProviderStepup extends AbstractServiceProvider
 {

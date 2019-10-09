@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Factory\Decorator;
+namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
-use OpenConext\EngineBlock\Factory\IdentityProviderEntityInterface;
+use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
