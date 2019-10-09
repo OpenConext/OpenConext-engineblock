@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Factory\Factory;
+namespace OpenConext\EngineBlock\Metadata\Factory\Factory;
 
 use EngineBlock_Attributes_Metadata as AttributesMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\ServiceProviderEntity;
