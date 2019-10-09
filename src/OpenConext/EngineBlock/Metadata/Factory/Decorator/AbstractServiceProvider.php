@@ -29,8 +29,9 @@ use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 
 /**
- * This Abstract class is used to circumvent the implementation of all methods of the EntityInterface
- * so only the wanted methods could be implemented if this abstract class is extended
+ * This abstract class is used to circumvent the implementation of all methods of the ServiceProviderEntityInterface.
+ * So only the methods required for the specific implementation have to be created on the decorated Entity that is
+ * extended from this abstract SP entity.
  */
 class AbstractServiceProvider implements ServiceProviderEntityInterface
 {

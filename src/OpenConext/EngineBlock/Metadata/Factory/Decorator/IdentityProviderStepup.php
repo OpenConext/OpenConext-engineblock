@@ -18,8 +18,8 @@
 namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
 /**
- * This decorator is used for using an entity when EB is doing a stepup callout during authentication
- * It will make sure all required parameters to support EB are set
+ * This decoration is used to represent EngineBlock in it's step-up authentication IdP role. It will make sure all
+ * required parameters to support EB are set.
  */
 class IdentityProviderStepup extends AbstractIdentityProvider
 {
