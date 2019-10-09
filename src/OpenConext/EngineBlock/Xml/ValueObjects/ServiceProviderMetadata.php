@@ -19,34 +19,88 @@ declare(strict_types=1);
 
 namespace OpenConext\EngineBlock\Xml\ValueObjects;
 
-use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\ContactPerson;
+use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
+use OpenConext\EngineBlock\Metadata\IndexedService;
+use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
 
 class ServiceProviderMetadata
 {
     /**
-     * @var ServiceProvider
+     * The number of seconds a Metadata document is deemed valid
+     */
+    const METADATA_EXPIRATION_TIME = 86400;
+    /**
+     * @var ServiceProviderEntityInterface
      */
     private $entity;
 
-    public function __construct(ServiceProvider $entity)
+    public function __construct(ServiceProviderEntityInterface $entity)
     {
         $this->entity = $entity;
     }
 
     public function getEntityId(): string
     {
-        return $this->entity->entityId;
+        return $this->entity->getEntityId();
     }
 
-    public function getAcsLocation(): string
+    public function getValidUntil()
     {
-        return $this->entity->assertionConsumerServices[0]->location;
+        $timeProvider = new TimeProvider();
+        return $timeProvider->timestamp(self::METADATA_EXPIRATION_TIME);
+    }
+
+    public function getAssertionConsumerServices() : IndexedService
+    {
+        return reset($this->entity->getAssertionConsumerServices());
+    }
+
+    public function getContactPersons()
+    {
+        $administrative = new ContactPerson('administrative');
+        $administrative->givenName = 'To';
+        $administrative->surName = 'Do';
+        $administrative->emailAddress = 'todo@todo.com';
+
+        $technical = new ContactPerson('technical');
+        $technical->emailAddress = 'todo@todo.com';
+        $technical->givenName = 'To';
+        $technical->surName = 'Do';
+
+        $support = new ContactPerson('support');
+        $support->emailAddress = 'todo@todo.com';
+        $support->givenName = 'To';
+        $support->surName = 'Do';
+
+        return [
+            $administrative,
+            $technical,
+            $support
+        ];
+    }
+
+    public function getUiInfo()
+    {
+        return [
+            'nameNl' => 'SuiteName + EngineBlock',
+            'nameEn' => 'SuiteName + EngineBlock',
+            'descriptionNl' => 'SuiteName + EngineBlock',
+            'descriptionEn' => 'SuiteName + EngineBlock',
+            'organization' => 'SuitName',
+            'organizationSupportUrl' => 'supportUrl',
+            'logo' => [
+                'url' => 'https://www.google.com',
+                'width' => 200,
+                'height' => 200,
+            ]
+        ];
     }
 
     public function getPublicKeys(): array
     {
         $keys = [];
-        foreach ($this->entity->certificates as $certificate) {
+        foreach ($this->entity->getCertificates() as $certificate) {
             $pem = $certificate->toCertData();
             $keys[$pem] = $pem;
         }

@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 /**
  * Copyright 2010 SURFnet B.V.
@@ -22,7 +21,8 @@ namespace OpenConext\EngineBlock\Xml;
 use DOMDocument;
 use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
-use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
+use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlock\Xml\ValueObjects\IdentityProviderMetadata;
@@ -63,12 +63,12 @@ class MetadataRenderer
         $this->keyPairFactory = $keyPairFactory;
     }
 
-    public function fromServiceProviderEntity(ServiceProvider $role, string $keyId)
+    public function fromServiceProviderEntity(ServiceProviderEntityInterface $sp, string $keyId) : string
     {
         $this->signingKeyPair = $this->keyPairFactory->buildFromIdentifier($keyId);
-        $template = '@theme/Authentication/View/Metadata/sp.html.twig';
+        $template = '@theme/Authentication/View/Metadata/sp.xml.twig';
 
-        $metadata = new ServiceProviderMetadata($role);
+        $metadata = new ServiceProviderMetadata($sp);
 
         $xml = $this->renderMetadataXmlServiceProvider($metadata, $template);
         $signedXml = $this->signXml($xml, $this->signingKeyPair);
@@ -76,12 +76,12 @@ class MetadataRenderer
         return $signedXml;
     }
 
-    public function fromIdentityProviderEntity(IdentityProvider $role, string $keyId)
+    public function fromIdentityProviderEntity(IdentityProviderEntityInterface $idp, string $keyId) : string
     {
         $this->signingKeyPair = $this->keyPairFactory->buildFromIdentifier($keyId);
-        $template = '@theme/Authentication/View/Metadata/idp.html.twig';
+        $template = '@theme/Authentication/View/Metadata/idp.xml.twig';
 
-        $metadata = new IdentityProviderMetadata($role);
+        $metadata = new IdentityProviderMetadata($idp);
 
         $xml = $this->renderMetadataXmlIdentityProvider($metadata, $template);
         $signedXml = $this->signXml($xml, $this->signingKeyPair);
@@ -94,10 +94,10 @@ class MetadataRenderer
      * @param string $keyId
      * @return string
      */
-    public function fromIdentityProviderEntities(array $idps, string $keyId)
+    public function fromIdentityProviderEntities(array $idps, string $keyId) : string
     {
         $this->signingKeyPair = $this->keyPairFactory->buildFromIdentifier($keyId);
-        $template = '@theme/Authentication/View/Metadata/idps.html.twig';
+        $template = '@theme/Authentication/View/Metadata/idps.xml.twig';
 
         $metadata = new IdentityProviderMetadataCollection();
         foreach ($idps as $role) {
@@ -111,7 +111,7 @@ class MetadataRenderer
         return $signedXml;
     }
 
-    private function renderMetadataXmlServiceProvider(ServiceProviderMetadata $metadata, string $template)
+    private function renderMetadataXmlServiceProvider(ServiceProviderMetadata $metadata, string $template) : string
     {
         $params = [
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
@@ -121,7 +121,7 @@ class MetadataRenderer
         return $this->twig->render($template, $params);
     }
 
-    private function renderMetadataXmlIdentityProvider(IdentityProviderMetadata $metadata, string $template)
+    private function renderMetadataXmlIdentityProvider(IdentityProviderMetadata $metadata, string $template) : string
     {
         $params = [
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
@@ -131,7 +131,7 @@ class MetadataRenderer
         return $this->twig->render($template, $params);
     }
 
-    private function renderMetadataXmlIdentityProviderCollection(IdentityProviderMetadataCollection $metadataCollection, string $template)
+    private function renderMetadataXmlIdentityProviderCollection(IdentityProviderMetadataCollection $metadataCollection, string $template) : string
     {
         $params = [
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
@@ -141,7 +141,7 @@ class MetadataRenderer
         return $this->twig->render($template, $params);
     }
 
-    private function signXml(string $source, X509KeyPair $signingKeyPair)
+    private function signXml(string $source, X509KeyPair $signingKeyPair) : string
     {
         // Load the XML to be signed
         $doc = new DOMDocument();

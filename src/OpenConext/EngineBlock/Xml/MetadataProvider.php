@@ -18,12 +18,11 @@
 
 namespace OpenConext\EngineBlock\Xml;
 
-use OpenConext\EngineBlock\Factory\Factory\IdentityProviderFactory;
-use OpenConext\EngineBlock\Factory\Factory\ServiceProviderFactory;
+use OpenConext\EngineBlock\Metadata\Factory\Factory\IdentityProviderFactory;
+use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlockBundle\Exception\EntityCanNotBeFoundException;
 use OpenConext\EngineBlockBundle\Stepup\StepupEndpoint;
-use OpenConext\EngineBlockBundle\Stepup\StepupEntityFactory;
 
 class MetadataProvider
 {
@@ -140,9 +139,10 @@ class MetadataProvider
      */
     public function metadataForStepup(string $acsLocation, string $keyId): string
     {
-        $serviceProvider = StepupEntityFactory::spFrom(
-            $this->stepupEndpoint,
-            $acsLocation
+        $serviceProvider = $this->spFactory->createMinimalEntity(
+            $this->stepupEndpoint->getEntityId(),
+            $acsLocation,
+            $keyId
         );
 
         return $this->factory->fromServiceProviderEntity($serviceProvider, $keyId);
