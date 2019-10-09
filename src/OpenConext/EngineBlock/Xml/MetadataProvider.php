@@ -82,7 +82,7 @@ class MetadataProvider
      */
     public function metadataForSp(string $entityId, string $acsLocation, string $keyId): string
     {
-        $serviceProvider = $this->spFactory->createMinimalEntity($entityId, $acsLocation, $keyId);
+        $serviceProvider = $this->spFactory->createEngineBlockEntityFrom($entityId, $acsLocation, $keyId);
 
         if ($serviceProvider) {
             return $this->factory->fromServiceProviderEntity($serviceProvider, $keyId);

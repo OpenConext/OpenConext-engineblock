@@ -21,13 +21,13 @@ namespace OpenConext\EngineBlock\Xml;
 use DOMDocument;
 use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProviderMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlock\Xml\ValueObjects\IdentityProviderMetadata;
 use OpenConext\EngineBlock\Xml\ValueObjects\IdentityProviderMetadataCollection;
-use OpenConext\EngineBlock\Xml\ValueObjects\ServiceProviderMetadata;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use Twig\Environment;
 
@@ -68,7 +68,7 @@ class MetadataRenderer
         $this->signingKeyPair = $this->keyPairFactory->buildFromIdentifier($keyId);
         $template = '@theme/Authentication/View/Metadata/sp.xml.twig';
 
-        $metadata = new ServiceProviderMetadata($sp);
+        $metadata = new EngineBlockServiceProviderMetadata($sp);
 
         $xml = $this->renderMetadataXmlServiceProvider($metadata, $template);
         $signedXml = $this->signXml($xml, $this->signingKeyPair);
@@ -81,9 +81,7 @@ class MetadataRenderer
         $this->signingKeyPair = $this->keyPairFactory->buildFromIdentifier($keyId);
         $template = '@theme/Authentication/View/Metadata/idp.xml.twig';
 
-        $metadata = new IdentityProviderMetadata($idp);
-
-        $xml = $this->renderMetadataXmlIdentityProvider($metadata, $template);
+        $xml = $this->renderMetadataXmlIdentityProvider($idp, $template);
         $signedXml = $this->signXml($xml, $this->signingKeyPair);
 
         return $signedXml;
@@ -111,7 +109,7 @@ class MetadataRenderer
         return $signedXml;
     }
 
-    private function renderMetadataXmlServiceProvider(ServiceProviderMetadata $metadata, string $template) : string
+    private function renderMetadataXmlServiceProvider(EngineBlockServiceProviderMetadata $metadata, string $template) : string
     {
         $params = [
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
@@ -121,7 +119,7 @@ class MetadataRenderer
         return $this->twig->render($template, $params);
     }
 
-    private function renderMetadataXmlIdentityProvider(IdentityProviderMetadata $metadata, string $template) : string
+    private function renderMetadataXmlIdentityProvider(EngineBlockServiceProviderMetadata $metadata, string $template) : string
     {
         $params = [
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
