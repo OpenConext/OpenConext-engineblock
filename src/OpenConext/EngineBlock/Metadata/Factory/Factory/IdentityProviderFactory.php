@@ -17,13 +17,13 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory\Factory;
 
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\IdentityProviderProxy;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\IdentityProviderStepup;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
-use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Service;
-use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
+use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use SAML2\Constants;
 
@@ -34,13 +34,12 @@ use SAML2\Constants;
 class IdentityProviderFactory
 {
     /**
-     * @var X509KeyPair
+     * @var KeyPairFactory
      */
-    private $proxyKeyPair;
+    private $keyPairFactory;
 
-    public function __construct(X509KeyPair $proxyKeyPair)
-    {
-        $this->proxyKeyPair = $proxyKeyPair;
+    public function __construct(KeyPairFactory $keyPairFactory) {
+        $this->keyPairFactory = $keyPairFactory;
     }
 
     public function createEntityFromEntity(IdentityProvider $entity): IdentityProviderEntityInterface
@@ -48,9 +47,9 @@ class IdentityProviderFactory
         return new IdentityProviderEntity($entity);
     }
 
-    public function createProxyFromEntity(IdentityProvider $entity): IdentityProviderEntityInterface
+    public function createProxyFromEntity(IdentityProvider $entity, X509KeyPair $proxyKeyPair): IdentityProviderEntityInterface
     {
-        return new IdentityProviderProxy($this->createEntityFromEntity($entity), $this->proxyKeyPair);
+        return new IdentityProviderProxy($this->createEntityFromEntity($entity), $proxyKeyPair);
     }
 
     public function createStepupFromEntity(IdentityProvider $entity): IdentityProviderEntityInterface
@@ -61,12 +60,12 @@ class IdentityProviderFactory
     public function createMinimalEntity(
         string $entityId,
         string $ssoLocation,
-        X509Certificate $certificate,
+        string $keyId,
         string $ssoBindingMethod = Constants::BINDING_HTTP_REDIRECT
     ): IdentityProviderEntityInterface {
         $entity = new IdentityProvider($entityId);
         $entity->singleSignOnServices[] = new Service($ssoLocation, $ssoBindingMethod);
-        $entity->certificates[] = $certificate;
+        $entity->certificates[] = $this->keyPairFactory->buildFromIdentifier($keyId)->getCertificate();
 
         return $this->createEntityFromEntity($entity);
     }
