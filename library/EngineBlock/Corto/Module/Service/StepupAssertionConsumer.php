@@ -167,6 +167,12 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
                 $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($originalReceivedResponse->getIssuer());
                 $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($originalReceivedRequest->getIssuer());
 
+                // When dealing with an SP that acts as a trusted proxy, we should use the proxying SP and not the proxy itself.
+                if ($sp->getCoins()->isTrustedProxy()) {
+                    // Overwrite the trusted proxy SP instance with that of the SP that uses the trusted proxy.
+                    $sp = $this->_server->findOriginalServiceProvider($receivedRequest, $log);
+                }
+
                 if ($this->_stepupGatewayCallOutHelper->allowNoToken($idp, $sp)) {
 
                     $log->warning('Allow no token allowed from sp/idp configuration, continuing', array('key_id' => $receivedRequest->getId(), 'result' => $e->getFeedbackInfo()));

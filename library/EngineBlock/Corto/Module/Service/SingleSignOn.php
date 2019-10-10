@@ -45,7 +45,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         // proxy itself.
         if ($sp->getCoins()->isTrustedProxy()) {
             // Overwrite the trusted proxy SP instance with that of the SP that uses the trusted proxy.
-            $sp = $this->findOriginalServiceProvider($request, $log);
+            $sp = $this->_server->findOriginalServiceProvider($request, $log);
         }
 
         // Exposing entityId to be used when tracking the start of an authentication procedure
@@ -370,7 +370,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $currentLocale = $container->getLocaleProvider()->getLocale();
 
         $cookies = $container->getSymfonyRequest()->cookies->all();
-        $serviceProvider = $this->findOriginalServiceProvider($request, $application->getLogInstance());
+        $serviceProvider = $this->_server->findOriginalServiceProvider($request, $application->getLogInstance());
         $idpList = $this->_transformIdpsForWAYF($candidateIdpEntityIds, $request->isDebugRequest(), $currentLocale);
         $rememberChoiceFeature = $container->getRememberChoice();
 
@@ -392,37 +392,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             ]
         );
         $this->_server->sendOutput($output);
-    }
-
-    /**
-     * Find a ServiceProvider instance based on the received AuthnRequest.
-     *
-     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
-     * @param LoggerInterface $logger
-     * @return ServiceProvider
-     */
-    private function findOriginalServiceProvider(
-        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
-        LoggerInterface $logger
-    ) {
-
-        $issuingServiceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
-
-        // Find the original requester SP
-        $originalRequesterServiceProvider = EngineBlock_SamlHelper::findRequesterServiceProvider(
-            $issuingServiceProvider,
-            $request,
-            $this->_server->getRepository(),
-            $logger
-        );
-
-        // If the SamlHelper found us the correct SP, return it
-        if ($originalRequesterServiceProvider) {
-            return $originalRequesterServiceProvider;
-        }
-
-        // Return the SP based on the Issuer.
-        return $issuingServiceProvider;
     }
 
     protected function _transformIdpsForWayf(array $idpEntityIds, $isDebugRequest, $currentLocale)

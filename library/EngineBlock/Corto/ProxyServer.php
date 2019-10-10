@@ -1211,6 +1211,37 @@ class EngineBlock_Corto_ProxyServer
         return $privateKey;
     }
 
+    /**
+     * Find a ServiceProvider instance based on the received AuthnRequest.
+     *
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+     * @param LoggerInterface $logger
+     * @return ServiceProvider
+     */
+    public function findOriginalServiceProvider(
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
+        LoggerInterface $logger
+    ) {
+
+        $issuingServiceProvider = $this->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
+
+        // Find the original requester SP
+        $originalRequesterServiceProvider = EngineBlock_SamlHelper::findRequesterServiceProvider(
+            $issuingServiceProvider,
+            $request,
+            $this->getRepository(),
+            $logger
+        );
+
+        // If the SamlHelper found us the correct SP, return it
+        if ($originalRequesterServiceProvider) {
+            return $originalRequesterServiceProvider;
+        }
+
+        // Return the SP based on the Issuer.
+        return $issuingServiceProvider;
+    }
+
     public function setLogger(LoggerInterface $logger)
     {
         $this->_logger = $logger;
