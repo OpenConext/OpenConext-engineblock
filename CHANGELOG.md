@@ -23,7 +23,8 @@ The following changes where introduced in this release:
 **Other chores**
 * Cleanup old coin columns #755
 * Bump handlebars to version 4.3.1 #761
-* Update Composer settings for improved PHP 7.2 support #763 
+* Update Composer settings for improved PHP 7.2 support #763
+* Update testing tools (PHPUnit, Mockery & Phake) #777
 
 ## 5.13.1
 * Hotfix use of coins in consent template #756
