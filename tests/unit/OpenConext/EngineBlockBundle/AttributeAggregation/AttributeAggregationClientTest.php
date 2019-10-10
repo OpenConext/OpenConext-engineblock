@@ -21,19 +21,21 @@ namespace OpenConext\EngineBlockBundle\Tests\AttributeAggregation;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
-use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use OpenConext\EngineBlock\Http\HttpClient;
 use OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClient;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\AttributeRule;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Request;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Response;
-use OpenConext\EngineBlock\Http\HttpClient;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group AttributeAggregation
  */
 class AttributeAggregationClientTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      */

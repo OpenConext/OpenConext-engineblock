@@ -19,9 +19,9 @@
 namespace OpenConext\EngineBlock\Authentication\Value;
 
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
-use PHPUnit_Framework_TestCase as UnitTest;
+use PHPUnit\Framework\TestCase;
 
-class KeyIdTest extends UnitTest
+class KeyIdTest extends TestCase
 {
     /**
      * @test

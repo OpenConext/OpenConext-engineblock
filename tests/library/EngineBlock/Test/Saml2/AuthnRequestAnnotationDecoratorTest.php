@@ -16,10 +16,14 @@
  * limitations under the License.
  */
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
 use SAML2\AuthnRequest;
 
-class EngineBlock_Test_Saml2_AuthnRequestAnnotationDecoratorTest extends PHPUnit_Framework_TestCase
+class EngineBlock_Test_Saml2_AuthnRequestAnnotationDecoratorTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function testToString()
     {
         $request = new AuthnRequest();

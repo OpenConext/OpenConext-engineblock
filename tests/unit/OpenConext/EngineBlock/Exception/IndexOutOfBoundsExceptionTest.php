@@ -18,10 +18,13 @@
 
 namespace OpenConext\EngineBlock\Exception;
 
-use PHPUnit_Framework_TestCase as UnitTest;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
 
-class IndexOutOfBoundsExceptionTest extends UnitTest
+class IndexOutOfBoundsExceptionTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      * @group EngineBlock

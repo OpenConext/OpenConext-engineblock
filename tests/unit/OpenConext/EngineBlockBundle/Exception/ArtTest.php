@@ -19,12 +19,15 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use Exception;
-use PHPUnit_Framework_TestCase as TestCase;
-use RuntimeException;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlockBundle\Exception\Art;
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 class ArtTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      * @group art

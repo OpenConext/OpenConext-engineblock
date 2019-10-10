@@ -16,16 +16,18 @@
  * limitations under the License.
  */
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
-use OpenConext\EngineBlock\Metadata\ShibMdScope;
-use PHPUnit_Framework_TestCase as UnitTest;
+use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
 use SAML2\Response;
 
-class EngineBlock_Test_Corto_Filter_Command_ValidateAuthnContextClassRefTest extends UnitTest
+class EngineBlock_Test_Corto_Filter_Command_ValidateAuthnContextClassRefTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var TestHandler
      */
@@ -57,6 +59,8 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateAuthnContextClassRefTest ext
 
     public function testNoConfiguredBlacklistRegexShouldPass()
     {
+        $this->expectNotToPerformAssertions();
+
         $verifier = new EngineBlock_Corto_Filter_Command_ValidateAuthnContextClassRef($this->logger, '');
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider(new IdentityProvider('OpenConext'));
@@ -66,6 +70,8 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateAuthnContextClassRefTest ext
 
     public function testNotMatchedBlacklistedRegexpPasses()
     {
+        $this->expectNotToPerformAssertions();
+
         $verifier = new EngineBlock_Corto_Filter_Command_ValidateAuthnContextClassRef($this->logger, '/test/');
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider(new IdentityProvider('OpenConext'));

@@ -18,17 +18,14 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository\Filter;
 
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\Expr\Expression;
 use Mockery;
-use PHPUnit_Framework_TestCase;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class FilterCollectionTest
- * @package OpenConext\EngineBlock\Metadata\MetadataRepository\Filter
- */
-class FilterCollectionTest extends PHPUnit_Framework_TestCase
+class FilterCollectionTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function testFilterRoleFailure()
     {
         $mockFilter = Mockery::mock(

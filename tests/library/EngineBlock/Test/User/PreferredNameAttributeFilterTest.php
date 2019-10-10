@@ -16,8 +16,13 @@
  * limitations under the License.
  */
 
-class EngineBlock_Test_User_PreferredNameAttributeFilterTest extends PHPUnit_Framework_TestCase
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
+
+class EngineBlock_Test_User_PreferredNameAttributeFilterTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var EngineBlock_User_PreferredpreferredNameAttributeFilter
      */

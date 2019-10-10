@@ -16,15 +16,19 @@
  * limitations under the License.
  */
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
+use PHPUnit\Framework\TestCase;
 use SAML2\AuthnRequest;
 
 /**
  * Note: this Test only tests setting of NameIDFormat, add other tests if required
  */
-class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
+class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function testNameIDFormatIsNotSetByDefault()
     {
         $proxyServer = $this->factoryProxyServer();

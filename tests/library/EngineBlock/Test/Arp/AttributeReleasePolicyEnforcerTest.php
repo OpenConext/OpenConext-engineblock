@@ -17,8 +17,9 @@
  */
 
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
+use PHPUnit\Framework\TestCase;
 
-class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcer extends PHPUnit_Framework_TestCase
+class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcer extends TestCase
 {
     /**
      * @var EngineBlock_Arp_AttributeReleasePolicyEnforcer

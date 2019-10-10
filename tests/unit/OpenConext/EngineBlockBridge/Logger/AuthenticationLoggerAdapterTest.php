@@ -20,21 +20,24 @@ namespace OpenConext\EngineBlockBridge\Logger;
 
 use EngineBlock_UserDirectory;
 use Mockery as m;
-use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
-use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
-use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlock\Authentication\Value\KeyId;
 use OpenConext\EngineBlock\Logger\AuthenticationLogger;
+use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\Mockery\Matcher\ValueObjectEqualsMatcher;
 use OpenConext\Mockery\Matcher\ValueObjectListEqualsMatcher;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
-use PHPUnit_Framework_TestCase as UnitTest;
+use PHPUnit\Framework\TestCase;
 
-class AuthenticationLoggerAdapterTest extends UnitTest
+class AuthenticationLoggerAdapterTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      * @group EngineBlockBridge

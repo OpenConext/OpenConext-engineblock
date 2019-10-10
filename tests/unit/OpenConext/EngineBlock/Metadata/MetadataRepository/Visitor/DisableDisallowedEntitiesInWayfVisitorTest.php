@@ -19,12 +19,9 @@
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor;
 
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class DisableDisallowedEntitiesInWayfVisitorTest
- * @package OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor
- */
-class DisableDisallowedEntitiesInWayfVisitorTest extends \PHPUnit_Framework_TestCase
+class DisableDisallowedEntitiesInWayfVisitorTest extends TestCase
 {
     public function testVisitor()
     {

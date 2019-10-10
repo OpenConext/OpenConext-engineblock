@@ -16,7 +16,9 @@
  * limitations under the License.
  */
 
-class EngineBlock_Test_Attributes_MaxTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class EngineBlock_Test_Attributes_MaxTest extends TestCase
 {
     public function testMaxEmpty()
     {

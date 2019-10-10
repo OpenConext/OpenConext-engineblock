@@ -18,11 +18,9 @@
 
 namespace OpenConext\EngineBlock\Metadata\X509;
 
-/**
- * Class X509PublicKeyFactoryTest
- * @package OpenConext\EngineBlock\Metadata\X509
- */
-class X509PublicKeyFactoryTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class X509PublicKeyFactoryTest extends TestCase
 {
     /**
      * @var X509CertificateFactory
@@ -32,7 +30,7 @@ class X509PublicKeyFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      *
      */
-    public function __construct()
+    public function setUp()
     {
         $this->factory = new X509CertificateFactory();
     }

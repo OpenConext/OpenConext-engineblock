@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
@@ -24,7 +25,7 @@ use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterfa
 use OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClientInterface;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Response;
 use OpenConext\EngineBlock\Http\Exception\HttpException;
-use PHPUnit_Framework_TestCase as UnitTest;
+use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Response as SAMLResponse;
@@ -32,8 +33,10 @@ use SAML2\Response as SAMLResponse;
 /**
  * @group AttributeAggregation
  */
-class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends UnitTest
+class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var TestHandler
      */

@@ -19,12 +19,14 @@
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class LocaleTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
 
     public function test_get_locale_en()
     {

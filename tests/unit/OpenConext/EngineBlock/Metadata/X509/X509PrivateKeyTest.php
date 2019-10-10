@@ -18,11 +18,13 @@
 
 namespace OpenConext\EngineBlock\Metadata\X509;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Class PrivateKeyTest
  * @package OpenConext\EngineBlock\Metadata\X509
  */
-class X509PrivateKeyTest extends \PHPUnit_Framework_TestCase
+class X509PrivateKeyTest extends TestCase
 {
     public function testSigning()
     {

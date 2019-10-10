@@ -18,10 +18,10 @@
 
 namespace OpenConext\EngineBlockBundle\Localization;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class LocaleProviderTest extends PHPUnit_Framework_TestCase
+class LocaleProviderTest extends TestCase
 {
     /**
      * @test

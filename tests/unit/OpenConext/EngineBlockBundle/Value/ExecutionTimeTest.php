@@ -19,11 +19,14 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use InvalidArgumentException;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlockBundle\Value\ExecutionTime;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ExecutionTimeTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      * @group execution-time

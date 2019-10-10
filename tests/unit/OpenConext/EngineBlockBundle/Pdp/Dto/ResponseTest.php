@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Attribute;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response\AssociatedAdvice;
@@ -29,10 +30,12 @@ use OpenConext\EngineBlockBundle\Pdp\Dto\Response\PolicySetIdReference;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response\Status;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response\StatusCode;
 use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ResponseTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      * @group Pdp

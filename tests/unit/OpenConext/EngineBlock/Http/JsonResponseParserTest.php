@@ -18,12 +18,15 @@
 
 namespace OpenConext\EngineBlock\Http;
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use OpenConext\EngineBlock\Exception\InvalidJsonException;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class JsonResponseParserTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      * @group Http

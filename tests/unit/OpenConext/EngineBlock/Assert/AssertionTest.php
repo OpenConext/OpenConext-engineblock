@@ -19,9 +19,9 @@
 namespace OpenConext\EngineBlock\Assert;
 
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
-use PHPUnit_Framework_TestCase as UnitTest;
+use PHPUnit\Framework\TestCase;
 
-class AssertionTest extends UnitTest
+class AssertionTest extends TestCase
 {
     /**
      * @test
@@ -30,6 +30,7 @@ class AssertionTest extends UnitTest
      */
     public function non_empty_strings_are_valid()
     {
+        $this->expectNotToPerformAssertions();
         Assertion::nonEmptyString('0', 'test');
         Assertion::nonEmptyString('text', 'test');
         Assertion::nonEmptyString("new\nlines\nincluded", 'test');

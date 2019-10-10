@@ -19,14 +19,17 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use Mockery;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlockBundle\EventListener\ExecutionTimeTracker;
 use OpenConext\EngineBlockBundle\Value\ExecutionTime;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Stopwatch\StopwatchEvent;
 
 class ExecutionTimeTrackerEventListenerTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      * @group execution-time

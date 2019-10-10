@@ -19,15 +19,18 @@
 namespace OpenConext\EngineBlockBundle\Tests\AttributeAggregation\Dto;
 
 use InvalidArgumentException;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\AttributeRule;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Request;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group AttributeAggregation
  */
 class RequestTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      */

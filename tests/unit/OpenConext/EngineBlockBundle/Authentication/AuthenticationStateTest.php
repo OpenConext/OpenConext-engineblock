@@ -18,16 +18,19 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\EngineBlockBundle\Exception\LogicException;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class AuthenticationStateTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      * @group Authentication

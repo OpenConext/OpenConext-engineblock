@@ -20,7 +20,7 @@ namespace OpenConext\EngineBlock\Authentication\Tests\Value;
 
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ConsentTypeTest extends TestCase
 {

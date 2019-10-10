@@ -20,11 +20,14 @@ namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use EngineBlock_Attributes_Metadata;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class MetadataTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var Metadata
      */

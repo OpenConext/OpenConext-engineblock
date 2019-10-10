@@ -41,14 +41,15 @@ namespace OpenConext\EngineBlock\Http;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
-use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Http\Exception\AccessDeniedException;
 use OpenConext\EngineBlock\Http\Exception\MalformedResponseException;
-use OpenConext\EngineBlock\Http\Exception\RequestException;
-use PHPUnit_Framework_TestCase as UnitTest;
+use PHPUnit\Framework\TestCase;
 
-class HttpClientTest extends UnitTest
+class HttpClientTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      * @group EngineBlock

@@ -19,19 +19,18 @@
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository;
 
 use Exception;
-use InvalidArgumentException;
 use Mockery;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Utils;
 use PHPUnit_Framework_Error;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class MetadataRepositoryTest
  * @package OpenConext\EngineBlock\Metadata\MetadataRepository
  */
-class MetadataRepositoryTest extends PHPUnit_Framework_TestCase
+class MetadataRepositoryTest extends TestCase
 {
     const MOCK_IDP_NAME = 'https://idp.example.edu';
 

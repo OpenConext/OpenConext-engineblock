@@ -16,16 +16,19 @@
  * limitations under the License.
  */
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
-use PHPUnit_Framework_TestCase as UnitTest;
+use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
 use SAML2\Response;
 
-class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalNameTest extends UnitTest
+class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalNameTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     const URN_MACE    = 'urn:mace:dir:attribute-def:eduPersonPrincipalName';
     const URN_OID     = 'urn:oid:1.3.6.1.4.1.5923.1.1.1.6';
     const EPPN_SUFFIX = 'openconext.org';

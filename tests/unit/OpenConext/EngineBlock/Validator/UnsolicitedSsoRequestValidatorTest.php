@@ -18,13 +18,15 @@
 
 namespace OpenConext\EngineBlock\Validator;
 
-use OpenConext\EngineBlock\Exception\MissingParameterException;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Exception\RuntimeException;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 class UnsolicitedSsoRequestValidatorTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var UnsolicitedSsoRequestValidator
      */
@@ -40,6 +42,9 @@ class UnsolicitedSsoRequestValidatorTest extends TestCase
         $_SERVER = [];
     }
 
+    /**
+     * @backupGlobals enabled
+     */
     public function test_happy_flow_get()
     {
         // Under the hood, the Binding::getCurrentBinding method is used, which directly reads from the super globals
@@ -51,6 +56,9 @@ class UnsolicitedSsoRequestValidatorTest extends TestCase
         $this->assertTrue($this->validator->isValid($request));
     }
 
+    /**
+     * @backupGlobals enabled
+     */
     public function test_post_is_not_allowed()
     {
         $this->expectException(RuntimeException::class);
@@ -63,6 +71,9 @@ class UnsolicitedSsoRequestValidatorTest extends TestCase
         $this->validator->isValid($request);
     }
 
+    /**
+     * @backupGlobals enabled
+     */
     public function test_put_binding_is_not_supported()
     {
         $this->expectException(RuntimeException::class);
@@ -75,6 +86,9 @@ class UnsolicitedSsoRequestValidatorTest extends TestCase
         $this->validator->isValid($request);
     }
 
+    /**
+     * @backupGlobals enabled
+     */
     public function test_malformed_argument()
     {
         $this->expectException(RuntimeException::class);
@@ -88,6 +102,9 @@ class UnsolicitedSsoRequestValidatorTest extends TestCase
         $this->validator->isValid($request);
     }
 
+    /**
+     * @backupGlobals enabled
+     */
     public function test_missing_argument()
     {
         $this->expectException(RuntimeException::class);

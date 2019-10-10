@@ -18,14 +18,13 @@
 
 namespace OpenConext\EngineBlock\Metadata\Entity;
 
-use PHPUnit_Framework_TestCase;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class IdentityProviderTest
- * @package OpenConext\EngineBlock\Metadata\Entity
- */
-class IdentityProviderTest extends PHPUnit_Framework_TestCase
+class IdentityProviderTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function testInstantiation()
     {
         $entityId = 'https://idp.example.edu';

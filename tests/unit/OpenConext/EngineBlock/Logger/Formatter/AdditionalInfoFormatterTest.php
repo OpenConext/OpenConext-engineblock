@@ -18,13 +18,15 @@
 
 namespace OpenConext\EngineBlock\Logger\Formatter;
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use EngineBlock_Exception;
 use Exception;
-use Mockery as m;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class AdditionalInfoFormatterTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      * @group EngineBlock

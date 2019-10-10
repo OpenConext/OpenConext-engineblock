@@ -18,17 +18,19 @@
 
 namespace OpenConext\EngineBlockBundle\Tests\AttributeAggregation\Dto;
 
-use InvalidArgumentException;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\AggregatedAttribute;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Response;
 use OpenConext\EngineBlockBundle\Exception\InvalidAttributeAggregationResponseException;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group AttributeAggregation
  */
 class ResponseTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      */

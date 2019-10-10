@@ -18,13 +18,16 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response;
 use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class PolicyDecisionTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      * @group Pdp
