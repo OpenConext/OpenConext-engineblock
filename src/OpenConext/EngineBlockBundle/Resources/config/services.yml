@@ -93,10 +93,15 @@ services:
         arguments:
             - '@engineblock.compat.metadata.definitions'
             - '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory'
+            - '@OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration'
+
+    OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration:
+        public: false
+        arguments:
             - '@translator'
-            - '%view_default_header%'
             - '%openconext_support_url%'
             - '%email_request_access_address%'
+            - '%view_default_header%'
             - '%view_default_logo%'
             - '%view_default_logo_width%'
             - '%view_default_logo_height%'

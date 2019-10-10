@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+
 /**
  * Copyright 2010 SURFnet B.V.
  *
@@ -18,20 +19,17 @@
 namespace OpenConext\EngineBlock\Metadata\Factory\Factory;
 
 use EngineBlock_Attributes_Metadata as AttributesMetadata;
-use OpenConext\EngineBlock\Metadata\ContactPerson;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\ServiceProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProviderMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\ServiceProviderProxy;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
-use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\IndexedService;
-use OpenConext\EngineBlock\Metadata\Logo;
-use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use SAML2\Constants;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * This factory is used for instantiating an entity with the required adapters and/or decorators set.
@@ -50,51 +48,18 @@ class ServiceProviderFactory
     private $keyPairFactory;
 
     /**
-     * @var TranslatorInterface
+     * @var EngineBlockConfiguration
      */
-    private $translator;
-
-    /**
-     * @var Logo
-     */
-    private $logo;
-
-    /**
-     * @var string
-     */
-    private $supportUrl;
-
-    /**
-     * @var string
-     */
-    private $supportMail;
-
-    /**
-     * @var string
-     */
-    private $description;
+    private $engineBlockConfiguration;
 
     public function __construct(
         AttributesMetadata $attributes,
         KeyPairFactory $keyPairFactory,
-        TranslatorInterface $translator,
-        string $description,
-        string $supportUrl,
-        string $supportMail,
-        string $logoUrl,
-        int $logoWidth,
-        int $logoHeight
+        EngineBlockConfiguration $engineBlockConfiguration
     ) {
         $this->attributes = $attributes;
         $this->keyPairFactory = $keyPairFactory;
-        $this->translator = $translator;
-        $this->description = $description;
-        $this->supportUrl = $supportUrl;
-        $this->supportMail = $supportMail;
-        // A logo VO is created during construction time
-        $this->logo = new Logo($logoUrl);
-        $this->logo->width = $logoWidth;
-        $this->logo->height = $logoHeight;
+        $this->engineBlockConfiguration = $engineBlockConfiguration;
     }
 
     public function createEntityFromEntity(ServiceProvider $entity): ServiceProviderEntityInterface
@@ -109,28 +74,14 @@ class ServiceProviderFactory
     ): ServiceProviderEntityInterface {
         $entity = $this->buildServiceProviderEntity($entityId, $acsLocation, $keyId);
 
-        // Obtain the suite name (set in translations) this is used to create several other entity properties
-        // (name, description, and so forth)
-        $suiteName = $this->translator->trans('suite_name');
-
-        // Create the contact person data for the EB SP entity
-        $administrative = ContactPerson::from('administrative', $suiteName, 'Support', $this->supportMail);
-        $technical = ContactPerson::from('technical', $suiteName, 'Support', $this->supportMail);
-        $support = ContactPerson::from('support', $suiteName, 'Support', $this->supportMail);
-
         // Load the additional EB SP metadata onto the entity
-        $entity->nameEn = $suiteName . ' EngineBlock';
-        $entity->nameNl = $suiteName . ' EngineBlock';
-        $entity->descriptionEn = $this->description;
-        $entity->descriptionNl = $this->description;
-        $entity->organizationEn = new Organization($suiteName, $suiteName, $this->supportUrl);
-        $entity->contactPersons = [
-            $administrative,
-            $technical,
-            $support,
-        ];
-
-        $entity->logo = $this->logo;
+        $entity->nameEn = $this->engineBlockConfiguration->getName();
+        $entity->nameNl = $this->engineBlockConfiguration->getName();
+        $entity->descriptionEn = $this->engineBlockConfiguration->getDescription();
+        $entity->descriptionNl = $this->engineBlockConfiguration->getDescription();
+        $entity->organizationEn = $this->engineBlockConfiguration->getOrganization();
+        $entity->contactPersons = $this->engineBlockConfiguration->getContactPersons();
+        $entity->logo = $this->engineBlockConfiguration->getLogo();
 
         return new EngineBlockServiceProviderMetadata($this->createEntityFromEntity($entity));
     }
