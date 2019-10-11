@@ -150,13 +150,7 @@ class EngineBlockMetadataVisitor implements VisitorInterface
      */
     private function setRequestedAttributes(ServiceProvider $entity)
     {
-        foreach ($this->attributes->findRequestedAttributeIds() as $attributeId) {
-            $entity->requestedAttributes[] = new RequestedAttribute($attributeId);
-        }
-
-        foreach ($this->attributes->findRequiredAttributeIds() as $attributeId) {
-            $entity->requestedAttributes[] = new RequestedAttribute($attributeId, true);
-        }
+        $entity->requestedAttributes = $this->attributes->getRequestedAttributes();
     }
 
     /**

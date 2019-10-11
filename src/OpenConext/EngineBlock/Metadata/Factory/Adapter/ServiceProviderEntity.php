@@ -208,9 +208,9 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     }
 
     /**
-     * @return string
+     * @return Service
      */
-    public function getResponseProcessingService(): string
+    public function getResponseProcessingService(): Service
     {
         return $this->entity->responseProcessingService;
     }
@@ -285,5 +285,31 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     public function getSupportUrlNl(): ?string
     {
         return $this->entity->supportUrlNl;
+    }
+
+    /**
+     * @param string $idpEntityId
+     * @return bool
+     */
+    public function isAllowed(string $idpEntityId): bool
+    {
+        return $this->entity->isAllowed($idpEntityId);
+    }
+
+    /**
+     * @param string $preferredLocale
+     * @return string
+     */
+    public function getDisplayName(string $preferredLocale = ''): string
+    {
+        return $this->entity->getDisplayName($preferredLocale);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAttributeAggregationRequired(): bool
+    {
+        return $this->entity->isAttributeAggregationRequired();
     }
 }

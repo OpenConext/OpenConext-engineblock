@@ -73,19 +73,10 @@ class ServiceProviderProxy extends AbstractServiceProvider
 
     public function getRequestedAttributes(): ?array
     {
-        $attributes = [];
-        foreach ($this->attributes->findRequestedAttributeIds() as $attributeId) {
-            $attributes[] = new RequestedAttribute($attributeId);
-        }
-
-        foreach ($this->attributes->findRequiredAttributeIds() as $attributeId) {
-            $attributes[] = new RequestedAttribute($attributeId, true);
-        }
-
-        return $attributes;
+        return $this->attributes->getRequestedAttributes();
     }
 
-    public function getResponseProcessingService(): string
+    public function getResponseProcessingService(): Service
     {
         return $this->consentService;
     }

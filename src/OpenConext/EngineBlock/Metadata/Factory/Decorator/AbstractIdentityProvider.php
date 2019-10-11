@@ -211,7 +211,7 @@ class AbstractIdentityProvider implements IdentityProviderEntityInterface
     /**
      * @return string
      */
-    public function getResponseProcessingService(): string
+    public function getResponseProcessingService(): Service
     {
         return $this->entity->getResponseProcessingService();
     }
