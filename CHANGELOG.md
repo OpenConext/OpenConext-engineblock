@@ -25,6 +25,13 @@ The following changes where introduced in this release:
 * Bump handlebars to version 4.3.1 #761
 * Update Composer settings for improved PHP 7.2 support #763 
 
+
+## 5.13.2
+A missing feature was implemented
+
+* Add missing trusted proxy to stepup callout #778
+
+
 ## 5.13.1
 * Hotfix use of coins in consent template #756
 
