@@ -74,7 +74,6 @@ class StepupEntityFactory
             $responseProcessingService,
             IdentityProvider::WORKFLOW_STATE_DEFAULT,
             '',
-            null,
             false,
             IdentityProvider::GUEST_QUALIFIER_ALL,
             true,
