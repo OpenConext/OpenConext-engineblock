@@ -241,8 +241,6 @@ abstract class AbstractRole
      * This seems to be used only to inject a ConsentService when initiating consent...
      *
      * @var Service
-     *
-     * @ORM\Column(name="response_processing_service_binding", type="string", nullable=true)
      */
     public $responseProcessingService;
 
