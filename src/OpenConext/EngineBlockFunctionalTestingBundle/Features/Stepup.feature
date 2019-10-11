@@ -11,6 +11,7 @@ Feature:
       And a Service Provider named "SSO-SP"
       And an Identity Provider named "Dummy-IdP"
       And a Service Provider named "Dummy-SP"
+      And a Service Provider named "Proxy-SP"
 
   Scenario: Stepup authentication should be supported if set through SP configuration
     Given the SP "SSO-SP" requires Stepup LoA "http://test.openconext.nl/assurance/loa2"
@@ -97,3 +98,33 @@ Feature:
       Then I should see "Error - Unknown strong authentication failure"
         And the url should match "/feedback/stepup-callout-unknown"
         And the response status code should be 400
+
+    # Trusted proxy logic
+    Scenario: Step-up authentication should be requested for the proxied SP when using a trusted proxy setup and if configured in the proxied SP
+      Given the SP "SSO-SP" requires Stepup LoA "http://test.openconext.nl/assurance/loa2"
+        And SP "Proxy-SP" is authenticating for SP "SSO-SP"
+        And SP "Proxy-SP" is a trusted proxy
+        And SP "Proxy-SP" signs its requests
+      When I log in at "Proxy-SP"
+        And I select "SSO-IdP" on the WAYF
+        And I pass through EngineBlock
+        And I pass through the IdP
+        And Stepup will successfully verify a user
+        And I give my consent
+        And I pass through EngineBlock
+      Then the url should match "/functional-testing/Proxy-SP/acs"
+
+    Scenario: Stepup authentication should succeed for the proxied SP when using a trusted prroxy setup, if LoA level is not met but when no token is allowed is configured in the proxied SP
+      Given the SP "SSO-SP" requires Stepup LoA "http://test.openconext.nl/assurance/loa2"
+        And the SP "SSO-SP" allows no Stepup token
+        And SP "Proxy-SP" is authenticating for SP "SSO-SP"
+        And SP "Proxy-SP" is a trusted proxy
+        And SP "Proxy-SP" signs its requests
+      When I log in at "Proxy-SP"
+        And I select "SSO-IdP" on the WAYF
+        And I pass through EngineBlock
+        And I pass through the IdP
+        And Stepup will fail if the LoA can not be given
+        And I give my consent
+        And I pass through EngineBlock
+      Then the url should match "/functional-testing/Proxy-SP/acs"

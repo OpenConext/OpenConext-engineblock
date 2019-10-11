@@ -136,6 +136,12 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             $receivedResponse
         );
 
+        // When dealing with an SP that acts as a trusted proxy, we should use the proxying SP and not the proxy itself.
+        if ($sp->getCoins()->isTrustedProxy()) {
+            // Overwrite the trusted proxy SP instance with that of the SP that uses the trusted proxy.
+            $sp = $this->_server->findOriginalServiceProvider($receivedRequest, $log);
+        }
+
         // Goto consent if no Stepup authentication is needed
         if (!$this->_stepupGatewayCallOutHelper->shouldUseStepup($idp, $sp)) {
             $this->_server->sendConsentAuthenticationRequest($receivedResponse, $receivedRequest, $currentProcessStep->getRole(), $this->getAuthenticationState());
