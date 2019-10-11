@@ -133,7 +133,7 @@ interface ServiceProviderEntityInterface
     /**
      * @return string
      */
-    public function getResponseProcessingService(): string;
+    public function getResponseProcessingService(): Service;
 
     /**
      * @return string
@@ -179,4 +179,21 @@ interface ServiceProviderEntityInterface
      * @return string|null
      */
     public function getSupportUrlNl(): ?string;
+
+    /**
+     * @param string $idpEntityId
+     * @return bool
+     */
+    public function isAllowed(string $idpEntityId): bool;
+
+    /**
+     * @param string $preferredLocale
+     * @return string
+     */
+    public function getDisplayName(string $preferredLocale = ''): string;
+
+    /**
+     * @return bool
+     */
+    public function isAttributeAggregationRequired(): bool;
 }

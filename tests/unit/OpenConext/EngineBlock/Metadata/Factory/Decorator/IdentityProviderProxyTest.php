@@ -17,43 +17,34 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
-use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
+use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use SAML2\Constants;
 
-/**
- * This decoration is used to represent EngineBlock in it's IdP role when EngineBlock is used as authentication
- * proxy. It will make sure all required parameters to support EB are set.
- */
-class IdentityProviderProxy extends AbstractIdentityProvider
+class IdentityProviderProxyTest extends AbstractIdentityProviderDecoratorTest
 {
-    /**
-     * @var X509KeyPair
-     */
-    private $keyPair;
-
-    public function __construct(
-        IdentityProviderEntityInterface $entity,
-        X509KeyPair $keyPair
-    ) {
-        parent::__construct($entity);
-
-        $this->keyPair = $keyPair;
-    }
-
-    public function getCertificates(): array
+    public function test_methods()
     {
-        return [
-            $this->keyPair->getCertificate(),
-        ];
-    }
+        $adapter = $this->createIdentityProviderAdapter();
 
-    public function getSupportedNameIdFormats(): array
-    {
-        return [
+        $certificateMock = $this->createMock(X509Certificate::class);
+        $keyPairMock = $this->createMock(X509KeyPair::class);
+        $keyPairMock->method('getCertificate')
+            ->willReturn($certificateMock);
+
+        $decorator = new IdentityProviderProxy($adapter, $keyPairMock);
+
+        $assertions = $this->getIdentityProviderAssertions($adapter, $decorator);
+
+        $supportedNameIdFormats = [
             Constants::NAMEID_PERSISTENT,
             Constants::NAMEID_TRANSIENT,
             Constants::NAMEID_UNSPECIFIED,
         ];
+
+        $assertions['certificates'] = [[$certificateMock], $decorator->getCertificates()];
+        $assertions['supportedNameIdFormats'] = [$supportedNameIdFormats, $decorator->getSupportedNameIdFormats()];
+
+        $this->runIdentityProviderAssertions($assertions);
     }
 }

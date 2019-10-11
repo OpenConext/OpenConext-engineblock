@@ -218,6 +218,10 @@ class IdentityProvider extends AbstractRole
         $visitor->visitIdentityProvider($this);
     }
 
+    /**
+     * @param string $preferredLocale
+     * @return string
+     */
     public function getDisplayName($preferredLocale = '')
     {
         $idpName = '';
