@@ -100,7 +100,7 @@ class MetadataProvider
      */
     public function metadataForIdp(string $entityId, string $ssoLocation, string $keyId): string
     {
-        $identityProvider = $this->idpFactory->createMinimalEntity($entityId, $ssoLocation, $keyId);
+        $identityProvider = $this->idpFactory->createEngineBlockEntityFrom($entityId, $ssoLocation, $keyId);
 
         if ($identityProvider) {
             return $this->factory->fromIdentityProviderEntity($identityProvider, $keyId);
