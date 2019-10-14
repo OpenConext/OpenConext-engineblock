@@ -209,7 +209,7 @@ class AbstractIdentityProvider implements IdentityProviderEntityInterface
     }
 
     /**
-     * @return string
+     * @return Service
      */
     public function getResponseProcessingService(): Service
     {

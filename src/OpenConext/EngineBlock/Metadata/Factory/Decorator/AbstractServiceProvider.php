@@ -210,7 +210,7 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
     }
 
     /**
-     * @return string
+     * @return Service
      */
     public function getResponseProcessingService(): Service
     {
