@@ -19,9 +19,11 @@ namespace OpenConext\EngineBlock\Metadata\Factory\Factory;
 
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProviderMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\IdentityProviderProxy;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\IdentityProviderStepup;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
+use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
@@ -38,8 +40,15 @@ class IdentityProviderFactory
      */
     private $keyPairFactory;
 
-    public function __construct(KeyPairFactory $keyPairFactory) {
+    /**
+     * @var EngineBlockConfiguration
+     */
+    private $engineBlockConfiguration;
+
+    public function __construct(KeyPairFactory $keyPairFactory, EngineBlockConfiguration $engineBlockConfiguration)
+    {
         $this->keyPairFactory = $keyPairFactory;
+        $this->engineBlockConfiguration = $engineBlockConfiguration;
     }
 
     public function createEntityFromEntity(IdentityProvider $entity): IdentityProviderEntityInterface
@@ -57,6 +66,23 @@ class IdentityProviderFactory
         return new IdentityProviderStepup($this->createEntityFromEntity($entity));
     }
 
+    public function createEngineBlockEntityFrom(
+        string $entityId,
+        string $ssoLocation,
+        string $keyId
+    ): IdentityProviderEntityInterface {
+        $entity = $this->buildIdentityProviderEntity($entityId, $ssoLocation, $keyId);
+        // Load the additional EB SP metadata onto the entity
+        $entity->nameEn = $this->engineBlockConfiguration->getName();
+        $entity->nameNl = $this->engineBlockConfiguration->getName();
+        $entity->descriptionEn = $this->engineBlockConfiguration->getDescription();
+        $entity->descriptionNl = $this->engineBlockConfiguration->getDescription();
+        $entity->organizationEn = $this->engineBlockConfiguration->getOrganization();
+        $entity->contactPersons = $this->engineBlockConfiguration->getContactPersons();
+        $entity->logo = $this->engineBlockConfiguration->getLogo();
+        return new EngineBlockIdentityProviderMetadata($this->createEntityFromEntity($entity));
+    }
+
     public function createMinimalEntity(
         string $entityId,
         string $ssoLocation,
@@ -68,5 +94,19 @@ class IdentityProviderFactory
         $entity->certificates[] = $this->keyPairFactory->buildFromIdentifier($keyId)->getCertificate();
 
         return $this->createEntityFromEntity($entity);
+    }
+
+    private function buildIdentityProviderEntity(
+        string $entityId,
+        string $ssoLocation,
+        string $keyId
+    ): IdentityProvider {
+        $singleSignOnServices[] = new Service($ssoLocation, Constants::BINDING_HTTP_REDIRECT);
+
+        $entity = new IdentityProvider($entityId);
+        $entity->certificates[] = $this->keyPairFactory->buildFromIdentifier($keyId)->getCertificate();
+        $entity->singleSignOnServices = $singleSignOnServices;
+
+        return $entity;
     }
 }
