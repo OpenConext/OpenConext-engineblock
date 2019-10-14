@@ -28,6 +28,11 @@ use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 
+/**
+ * This abstract class is used to circumvent the implementation of all methods of the ServiceProviderEntityInterface.
+ * So only the methods required for the specific implementation have to be created on the decorated Entity that is
+ * extended from this abstract SP entity.
+ */
 class AbstractServiceProvider implements ServiceProviderEntityInterface
 {
 

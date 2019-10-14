@@ -24,6 +24,10 @@ use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use SAML2\Constants;
 
+/**
+ * This decoration is used to represent EngineBlock in it's SP role when EngineBlock is used as authentication
+ * proxy. It will make sure all required parameters to support EB are set.
+ */
 class ServiceProviderProxy extends AbstractServiceProvider
 {
     /**

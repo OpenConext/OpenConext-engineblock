@@ -17,6 +17,10 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
+/**
+ * This decoration is used to represent EngineBlock in it's step-up authentication SP role. It will make sure all
+ * required parameters to support EB are set.
+ */
 class ServiceProviderStepup extends AbstractServiceProvider
 {
     public function getAcsLocation(): string

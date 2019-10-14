@@ -31,13 +31,15 @@ use SAML2\Constants;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class ServiceProvider
  * @package OpenConext\EngineBlock\Metadata\Entity
  * @ORM\Entity
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ *
+ * WARNING: Please don't use this entity directly but use the dedicated factory instead.
+ * @see \OpenConext\EngineBlock\Factory\Factory\ServiceProviderFactory
  */
 class ServiceProvider extends AbstractRole
 {
@@ -91,6 +93,9 @@ class ServiceProvider extends AbstractRole
     public $supportUrlNl;
 
     /**
+     * WARNING: Please don't use this entity directly but use the dedicated factory instead.
+     * @see \OpenConext\EngineBlock\Factory\Factory\ServiceProviderFactory
+     *
      * @param string $entityId
      * @param Organization $organizationEn
      * @param Organization $organizationNl

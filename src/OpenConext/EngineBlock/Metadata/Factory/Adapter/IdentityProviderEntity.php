@@ -17,7 +17,6 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory\Adapter;
 
-use DateTime;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
@@ -29,6 +28,12 @@ use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 
+/**
+ * This IdentityProviderEntity is an immutable counterpart of the IdentityProvider Doctrine ORM Entity.
+ *
+ * This adapter is used to support the ORM entity by encapsulating it. This will make it easier to replace the ORM
+ * entity ultimately.
+ */
 class IdentityProviderEntity implements IdentityProviderEntityInterface
 {
     /**

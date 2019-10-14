@@ -31,11 +31,13 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 
 /**
- * Class IdentityProvider
  * @package OpenConext\EngineBlock\Metadata\Entity
  * @ORM\Entity
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ *
+ * WARNING: Please don't use this entity directly but use the dedicated factory instead.
+ * @see \OpenConext\EngineBlock\Factory\Factory\IdentityProviderFactory
  */
 class IdentityProvider extends AbstractRole
 {
@@ -83,6 +85,9 @@ class IdentityProvider extends AbstractRole
     public $shibMdScopes = array();
 
     /**
+     * WARNING: Please don't use this entity directly but use the dedicated factory instead.
+     * @see \OpenConext\EngineBlock\Factory\Factory\IdentityProviderFactory
+     *
      * @param string $entityId
      * @param Organization $organizationEn
      * @param Organization $organizationNl

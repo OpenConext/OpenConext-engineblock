@@ -29,6 +29,12 @@ use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 
+/**
+ * This ServiceProviderEntity is an immutable counterpart of the ServiceProvider Doctrine ORM Entity.
+ *
+ * This adapter is used to support the ORM entity by encapsulating it. This will make it easier to replace the ORM
+ * entity ultimately.
+ */
 class ServiceProviderEntity implements ServiceProviderEntityInterface
 {
     /**

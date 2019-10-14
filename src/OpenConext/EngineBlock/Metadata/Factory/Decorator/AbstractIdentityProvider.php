@@ -27,6 +27,11 @@ use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 
+/**
+ * This abstract class is used to circumvent the implementation of all methods of the IdentityProviderEntityInterface.
+ * So only the methods required for the specific implementation have to be created on the decorated Entity that is
+ * extended from this abstract IdP entity.
+ */
 class AbstractIdentityProvider implements IdentityProviderEntityInterface
 {
 
