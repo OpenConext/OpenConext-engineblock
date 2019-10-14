@@ -20,13 +20,13 @@ namespace OpenConext\EngineBlock\Metadata\X509;
 
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use OpenConext\EngineBlock\Exception\RuntimeException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class KeyPairFactoryTest extends PHPUnit_Framework_TestCase
+class KeyPairFactoryTest extends TestCase
 {
     private $factory;
 
-    public function __construct()
+    public function setUp()
     {
         $this->factory = new KeyPairFactory([
             'default' => [
