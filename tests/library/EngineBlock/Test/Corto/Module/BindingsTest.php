@@ -17,19 +17,23 @@
  */
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
-use SAML2\Assertion\Validation\Result;
 use SAML2\Assertion\Validation\ConstraintValidator\NotBefore;
 use SAML2\Assertion\Validation\ConstraintValidator\NotOnOrAfter;
+use SAML2\Assertion\Validation\Result;
 use SAML2\Constants;
 use SAML2\Response;
 
 /**
  * @todo test all other functionalities of Bindings, currently tests a small part of redirection
  */
-class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestCase
+class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var EngineBlock_Corto_Module_Bindings
      */

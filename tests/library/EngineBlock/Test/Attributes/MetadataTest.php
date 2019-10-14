@@ -16,7 +16,9 @@
  * limitations under the License.
  */
 
-class EngineBlock_Test_Attributes_MetadataTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class EngineBlock_Test_Attributes_MetadataTest extends TestCase
 {
     public function testGetName()
     {

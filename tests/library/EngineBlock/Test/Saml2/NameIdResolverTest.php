@@ -16,7 +16,9 @@
  * limitations under the License.
  */
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Constants;
@@ -28,8 +30,10 @@ use SAML2\XML\saml\NameID;
  *
  * @group saml2
  */
-class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCase
+class EngineBlock_Test_Saml2_NameIdResolverTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var EngineBlock_Saml2_NameIdResolver
      */

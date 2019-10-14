@@ -19,18 +19,16 @@
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository\Filter;
 
 use Mockery;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class RemoveDisallowedIdentityProvidersFilter
- *
- * @package OpenConext\EngineBlock\Metadata\MetadataRepository\Filter
- */
-class RemoveDisallowedIdentityProvidersFilterTest extends PHPUnit_Framework_TestCase
+class RemoveDisallowedIdentityProvidersFilterTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function testRemove()
     {
         $filter = new RemoveDisallowedIdentityProvidersFilter(

@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlockBundle\Tests;
 
 use EngineBlock_Arp_AttributeReleasePolicyEnforcer;
 use Mockery;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
@@ -27,12 +28,14 @@ use OpenConext\EngineBlock\Service\MetadataService;
 use OpenConext\EngineBlockBundle\Controller\Api\AttributeReleasePolicyController;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class AttributeReleasePolicyControllerTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      * @group AttributeReleasePolicy

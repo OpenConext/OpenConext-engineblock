@@ -18,11 +18,14 @@
 
 namespace OpenConext\EngineBlockBundle\Configuration;
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
-use PHPUnit_Framework_TestCase as UnitTest;
+use PHPUnit\Framework\TestCase;
 
-class IdPContactPageTest extends UnitTest
+class IdPContactPageTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      * @group EngineBlockBundle

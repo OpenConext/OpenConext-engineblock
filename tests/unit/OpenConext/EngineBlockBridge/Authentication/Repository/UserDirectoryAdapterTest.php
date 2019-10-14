@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockBridge\Authentication\Repository;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Mockery\Mock;
 use OpenConext\EngineBlock\Authentication\Model\User;
 use OpenConext\EngineBlock\Authentication\Repository\UserDirectory;
@@ -26,14 +27,14 @@ use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonUuid;
 use OpenConext\EngineBlock\Authentication\Value\SchacHomeOrganization;
 use OpenConext\EngineBlock\Authentication\Value\Uid;
-use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\Mockery\Matcher\ValueObjectEqualsMatcher;
-use PHPUnit_Framework_TestCase as UnitTest;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Ramsey\Uuid\Uuid;
 
-class UserDirectoryAdapterTest extends UnitTest
+class UserDirectoryAdapterTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var Mock
      */

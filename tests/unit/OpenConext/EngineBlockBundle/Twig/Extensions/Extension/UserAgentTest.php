@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlockBundle\Exception\RuntimeException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,6 +28,8 @@ use Symfony\Component\HttpFoundation\ServerBag;
 
 class UserAgentTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function test_get_user_agent()
     {
         $this->assertEquals('safari5', $this->buildUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/534.59.10 (KHTML, like Gecko) Version/5.1.9 Safari/534.59.10')->userAgent('safari'));

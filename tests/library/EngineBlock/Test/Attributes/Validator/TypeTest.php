@@ -16,7 +16,9 @@
  * limitations under the License.
  */
 
-class EngineBlock_Test_TypeTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class EngineBlock_Test_TypeTest extends TestCase
 {
     /**
      * @dataProvider validAttributesProvider

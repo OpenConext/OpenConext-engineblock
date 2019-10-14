@@ -19,10 +19,13 @@
 namespace OpenConext\EngineBlock\Logger\Message;
 
 use EngineBlock_Exception;
-use PHPUnit_Framework_TestCase as TestCase;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
 
 final class AdditionalInfoTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      * @group EngineBlock

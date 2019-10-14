@@ -19,10 +19,13 @@
 namespace OpenConext\EngineBlock\Request;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase as TestCase;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
 
 class RequestIdTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      * @group EngineBlock

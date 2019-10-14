@@ -18,23 +18,27 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use OpenConext\EngineBlockBundle\Stepup\StepupEndpoint;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class StepupEndpointTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      * @group Stepup
      */
     public function the_sfo_endpoint_object_should_be_successful_populated()
     {
-        $endpoint = new StepupEndpoint('entity-id', 'https://sso-location', 'tests/resources/key/engineblock.crt');
+        $fileLocation = __DIR__ . '/../../../../resources/key/engineblock.crt';
+        $endpoint = new StepupEndpoint('entity-id', 'https://sso-location', $fileLocation);
 
         $this->assertSame('entity-id', $endpoint->getEntityId());
         $this->assertSame('https://sso-location', $endpoint->getSsoLocation());
-        $this->assertSame('tests/resources/key/engineblock.crt', $endpoint->getKeyFile());
+        $this->assertSame($fileLocation, $endpoint->getKeyFile());
     }
 
     /**

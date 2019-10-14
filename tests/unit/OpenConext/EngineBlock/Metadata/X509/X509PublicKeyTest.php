@@ -18,20 +18,16 @@
 
 namespace OpenConext\EngineBlock\Metadata\X509;
 
-use PHPUnit_Framework_TestCase;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class X509KeyTest
- * @package OpenConext\EngineBlock\Metadata\X509
- */
-class X509KeyTest extends PHPUnit_Framework_TestCase
+class X509KeyTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     private $filePath;
 
-    /**
-     *
-     */
-    public function __construct()
+    public function setUp()
     {
         $this->filePath = 'file://' . __DIR__ . '/test.pem.crt';
         $this->filePath2 = 'file://' . __DIR__ . '/test2.pem.crt';

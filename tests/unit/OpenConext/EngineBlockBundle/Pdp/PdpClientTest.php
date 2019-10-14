@@ -21,15 +21,17 @@ namespace OpenConext\EngineBlockBundle\Tests;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
-use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Http\HttpClient;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
 use OpenConext\EngineBlockBundle\Pdp\PdpClient;
 use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class PdpClientTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      * @group Pdp

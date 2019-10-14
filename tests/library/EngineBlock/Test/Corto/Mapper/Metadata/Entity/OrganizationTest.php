@@ -16,11 +16,15 @@
  * limitations under the License.
  */
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Organization;
+use PHPUnit\Framework\TestCase;
 
-class EngineBlock_Test_Corto_Mapper_Metadata_Entity_OrganizationTest extends PHPUnit_Framework_TestCase
+class EngineBlock_Test_Corto_Mapper_Metadata_Entity_OrganizationTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function testOrganizationIsCorrectlyAddedToRootElement()
     {
         $entity = $this->factoryEntity();

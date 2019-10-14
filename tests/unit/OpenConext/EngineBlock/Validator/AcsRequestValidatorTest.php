@@ -18,13 +18,16 @@
 
 namespace OpenConext\EngineBlock\Validator;
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Exception\InvalidRequestMethodException;
 use OpenConext\EngineBlock\Exception\MissingParameterException;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 class AcsRequestValidatorTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var AcsRequestValidator
      */
@@ -40,6 +43,9 @@ class AcsRequestValidatorTest extends TestCase
         $_SERVER = [];
     }
 
+    /**
+     * @backupGlobals enabled
+     */
     public function test_happy_flow_get()
     {
         // Under the hood, the Binding::getCurrentBinding method is used, which directly reads from the super globals
@@ -51,6 +57,9 @@ class AcsRequestValidatorTest extends TestCase
         $this->assertTrue($this->validator->isValid($request));
     }
 
+    /**
+     * @backupGlobals enabled
+     */
     public function test_happy_flow_post()
     {
         // Under the hood, the Binding::getCurrentBinding method is used, which directly reads from the super globals
@@ -62,6 +71,9 @@ class AcsRequestValidatorTest extends TestCase
         $this->assertTrue($this->validator->isValid($request));
     }
 
+    /**
+     * @backupGlobals enabled
+     */
     public function test_patch_method_is_not_supported()
     {
         $this->expectException(InvalidRequestMethodException::class);
@@ -74,6 +86,9 @@ class AcsRequestValidatorTest extends TestCase
         $this->validator->isValid($request);
     }
 
+    /**
+     * @backupGlobals enabled
+     */
     public function test_missing_saml_argument_on_post()
     {
         $this->expectException(MissingParameterException::class);
@@ -86,6 +101,9 @@ class AcsRequestValidatorTest extends TestCase
         $this->validator->isValid($request);
     }
 
+    /**
+     * @backupGlobals enabled
+     */
     public function test_missing_saml_argument_on_get()
     {
         $this->expectException(MissingParameterException::class);

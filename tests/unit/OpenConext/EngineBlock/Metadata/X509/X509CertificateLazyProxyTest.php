@@ -19,13 +19,13 @@
 namespace OpenConext\EngineBlock\Metadata\X509;
 
 use Exception;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class PrivateKeyTest
  * @package OpenConext\EngineBlock\Metadata\X509
  */
-class X509CertificateLazyProxyTest extends PHPUnit_Framework_TestCase
+class X509CertificateLazyProxyTest extends TestCase
 {
     public function testDeferralOfException()
     {

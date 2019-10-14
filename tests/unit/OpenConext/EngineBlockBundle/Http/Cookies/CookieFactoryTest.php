@@ -19,10 +19,13 @@
 namespace OpenConext\EngineBlockBundle\Http\Cookies;
 
 use DateTimeImmutable;
-use PHPUnit_Framework_TestCase;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
 
-class CookieFactoryTest extends PHPUnit_Framework_TestCase
+class CookieFactoryTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      */

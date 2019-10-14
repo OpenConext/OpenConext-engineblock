@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
@@ -27,6 +28,7 @@ use OpenConext\EngineBlock\Service\Dto\ProcessingStateStep;
 use OpenConext\EngineBlock\Service\ProcessingStateHelper;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationStateInterface;
+use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Response;
@@ -34,8 +36,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
-class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framework_TestCase
+class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /** @var EngineBlock_Corto_XmlToArray */
     private $xmlConverterMock;
 
@@ -94,6 +98,8 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
 
     public function testConsentRequested()
     {
+        $this->expectNotToPerformAssertions();
+
         $provideConsentService = $this->factoryService();
 
         $provideConsentService->serve(null, $this->httpRequestMock);

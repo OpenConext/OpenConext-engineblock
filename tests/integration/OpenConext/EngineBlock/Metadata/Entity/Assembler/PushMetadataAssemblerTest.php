@@ -23,10 +23,10 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-class PushMetadataAssemblerTest extends PHPUnit_Framework_TestCase
+class PushMetadataAssemblerTest extends TestCase
 {
     private $assembler;
 

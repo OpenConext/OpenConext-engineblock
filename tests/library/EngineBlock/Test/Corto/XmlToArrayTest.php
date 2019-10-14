@@ -16,14 +16,19 @@
  * limitations under the License.
  */
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Incomplete test class EngineBlock_Test_for xml conversion
  *
  * @todo test also array2attributes
  * @todo test also formatXml *
  */
-class EngineBlock_Test_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
+class EngineBlock_Test_Corto_Module_XMlToArrayTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function testNamespacedAttributes()
     {
         $hash = EngineBlock_Corto_XmlToArray::xml2array(

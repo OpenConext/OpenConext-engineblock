@@ -21,16 +21,19 @@ namespace OpenConext\EngineBlock\Logger;
 use DateTime;
 use EngineBlock_UserDirectory;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlock\Authentication\Value\KeyId;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
-use PHPUnit_Framework_TestCase as UnitTest;
+use PHPUnit\Framework\TestCase;
 
-class AuthenticationLoggerTest extends UnitTest
+class AuthenticationLoggerTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * This test may seem a bit overdone, however the format and values of logging
      * are actually very valuable: they are used for statistical purpose. Other

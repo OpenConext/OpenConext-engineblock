@@ -18,18 +18,16 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository;
 
-use Doctrine\DBAL\Query\QueryBuilder;
 use Mockery;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\DisableDisallowedEntitiesInWayfVisitor;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class DoctrineMetadataRepositoryTest
- * @package OpenConext\EngineBlock\Metadata\MetadataRepository
- */
-class DoctrineMetadataRepositoryTest extends PHPUnit_Framework_TestCase
+class DoctrineMetadataRepositoryTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function testFindIdentityProviders()
     {
         $mockQueryBuilder = Mockery::mock('Doctrine\ORM\QueryBuilder');

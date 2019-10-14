@@ -18,10 +18,13 @@
 
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 
 class DebugTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var Debug
      */

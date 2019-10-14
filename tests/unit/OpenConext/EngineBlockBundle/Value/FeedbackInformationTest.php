@@ -18,11 +18,14 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlockBundle\Value\FeedbackInformation;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class FeedbackInformationTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @dataProvider attributePredictions
      */

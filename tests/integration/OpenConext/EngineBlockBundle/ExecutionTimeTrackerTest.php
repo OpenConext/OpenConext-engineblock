@@ -20,7 +20,7 @@ namespace OpenConext\EngineBlockBundle\Tests;
 
 use OpenConext\EngineBlockBundle\EventListener\ExecutionTimeTracker;
 use OpenConext\EngineBlockBundle\Value\ExecutionTime;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\PhpUnit\ClockMock;
 use Symfony\Component\Stopwatch\Stopwatch;
 

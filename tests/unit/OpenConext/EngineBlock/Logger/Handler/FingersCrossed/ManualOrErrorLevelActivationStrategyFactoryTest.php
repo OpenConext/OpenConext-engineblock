@@ -19,7 +19,7 @@
 namespace OpenConext\EngineBlock\Logger\Handler\FingersCrossed;
 
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ManualOrErrorLevelActivationStrategyFactoryTest extends TestCase
 {
@@ -30,6 +30,7 @@ class ManualOrErrorLevelActivationStrategyFactoryTest extends TestCase
      */
     public function factory_creates_a_manual_or_decorated_activation_strategy()
     {
+        $this->expectNotToPerformAssertions();
         ManualOrErrorLevelActivationStrategyFactory::createActivationStrategy(['action_level' => 'INFO']);
     }
 

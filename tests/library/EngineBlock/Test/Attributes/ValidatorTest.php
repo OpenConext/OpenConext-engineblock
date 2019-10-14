@@ -1,5 +1,7 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Copyright 2010 SURFnet B.V.
  *
@@ -16,7 +18,7 @@
  * limitations under the License.
  */
 
-class EngineBlock_Test_Attributes_ValidatorTest extends \PHPUnit_Framework_TestCase
+class EngineBlock_Test_Attributes_ValidatorTest extends TestCase
 {
     public function testValidator()
     {

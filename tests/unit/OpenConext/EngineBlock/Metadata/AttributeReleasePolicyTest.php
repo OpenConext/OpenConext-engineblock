@@ -19,15 +19,14 @@
 namespace OpenConext\EngineBlock\Metadata;
 
 use InvalidArgumentException;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_Error;
-use PHPUnit_Framework_TestCase;
 
-/**
- * Class AttributeReleasePolicy
- * @package OpenConext\EngineBlock\Metadata
- */
-class AttributeReleasePolicyTest extends PHPUnit_Framework_TestCase
+class AttributeReleasePolicyTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function testSimple()
     {
         $policy = new AttributeReleasePolicy(

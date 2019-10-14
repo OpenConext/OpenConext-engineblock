@@ -19,19 +19,16 @@
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository\Filter;
 
 use Mockery;
-use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Utils;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class RemoveDisallowedIdentityProvidersFilter
- *
- * @package OpenConext\EngineBlock\Metadata\MetadataRepository\Filter
- */
-class RemoveOtherWorkflowStatesTest extends PHPUnit_Framework_TestCase
+class RemoveOtherWorkflowStatesTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function testRemoveOtherWorkflowState()
     {
         $prodSp = Utils::instantiate(

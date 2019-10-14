@@ -21,14 +21,17 @@ namespace OpenConext\EngineBlockBundle\Doctrine\Type;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlock\Authentication\Value\SchacHomeOrganization;
 use OpenConext\EngineBlock\Authentication\Value\Uid;
 use OpenConext\TestDataProvider;
-use PHPUnit_Framework_TestCase as UnitTest;
+use PHPUnit\Framework\TestCase;
 
-class CollabPersonIdTypeTest extends UnitTest
+class CollabPersonIdTypeTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var MySqlPlatform
      */

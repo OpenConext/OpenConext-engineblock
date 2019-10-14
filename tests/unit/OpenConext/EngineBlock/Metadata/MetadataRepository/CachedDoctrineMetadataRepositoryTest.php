@@ -18,21 +18,16 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\DBAL\Query\QueryBuilder;
 use Mockery;
-use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface;
-use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\DisableDisallowedEntitiesInWayfVisitor;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CachedDoctrineMetadataRepositoryTest
- * @package OpenConext\EngineBlock\Metadata\MetadataRepository
- */
-class CachedDoctrineMetadataRepositoryTest extends PHPUnit_Framework_TestCase
+class CachedDoctrineMetadataRepositoryTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function testMethodsCallsAreProxied()
     {
         $doctrineRepository = Mockery::mock('OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository');

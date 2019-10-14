@@ -19,15 +19,18 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use Assert\InvalidArgumentException;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Attribute;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Request\AccessSubject;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Request\Resource;
 use OpenConext\Value\Saml\NameIdFormat;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class RequestTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     private $validSubjectId;
     private $validIdpEntityId;
     private $validSpEntityId;

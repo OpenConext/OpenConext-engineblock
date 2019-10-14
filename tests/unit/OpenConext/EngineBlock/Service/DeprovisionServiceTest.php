@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlock\Service;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Authentication\Model\User;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use OpenConext\EngineBlock\Authentication\Repository\UserDirectory;
@@ -28,10 +29,12 @@ use OpenConext\EngineBlockBundle\Authentication\Entity\SamlPersistentId;
 use OpenConext\EngineBlockBundle\Authentication\Entity\ServiceProviderUuid;
 use OpenConext\EngineBlockBundle\Authentication\Repository\SamlPersistentIdRepository;
 use OpenConext\EngineBlockBundle\Authentication\Repository\ServiceProviderUuidRepository;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class DeprovisionServiceTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var ConsentRepository
      */

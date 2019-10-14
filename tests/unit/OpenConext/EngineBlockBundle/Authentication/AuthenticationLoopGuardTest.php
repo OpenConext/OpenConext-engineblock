@@ -19,17 +19,19 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use DateTimeImmutable;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedure;
-use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedureList;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedureMap;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 
 class AuthenticationLoopGuardTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @test
      * @group AuthenticationState

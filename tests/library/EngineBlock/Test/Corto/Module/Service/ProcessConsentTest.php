@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
@@ -23,6 +24,7 @@ use OpenConext\EngineBlock\Service\Dto\ProcessingStateStep;
 use OpenConext\EngineBlock\Service\ProcessingStateHelper;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationStateInterface;
+use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Response;
@@ -30,8 +32,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
-class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_Framework_TestCase
+class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var EngineBlock_Corto_ProxyServer
      */

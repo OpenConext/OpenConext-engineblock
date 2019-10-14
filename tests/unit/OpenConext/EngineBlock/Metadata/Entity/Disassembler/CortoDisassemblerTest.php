@@ -18,19 +18,18 @@
 
 namespace OpenConext\EngineBlock\Metadata\Entity\Disassembler;
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Utils;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CortoDisassemblerTest
- * @package OpenConext\EngineBlock\Metadata\Entity\Disassembler
- */
-class CortoDisassemblerTest extends PHPUnit_Framework_TestCase
+class CortoDisassemblerTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function testSpDisassemble()
     {
         $serviceProvider = Utils::instantiate(

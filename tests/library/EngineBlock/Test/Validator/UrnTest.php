@@ -16,8 +16,13 @@
  * limitations under the License.
  */
 
-class EngineBlock_Test_Validator_UrnTest extends PHPUnit_Framework_TestCase
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
+
+class EngineBlock_Test_Validator_UrnTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var EngineBlock_Validator_Urn
      */

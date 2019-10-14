@@ -17,12 +17,16 @@
  */
 
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Service;
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 
-class EngineBlock_Test_ServiceReplacerTest extends PHPUnit_Framework_TestCase
+class EngineBlock_Test_ServiceReplacerTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var IdentityProvider
      */
@@ -80,6 +84,8 @@ class EngineBlock_Test_ServiceReplacerTest extends PHPUnit_Framework_TestCase
 
     public function testMissingServiceMetadataIsAllowedWhenOptional()
     {
+        $this->expectNotToPerformAssertions();
+
         unset($this->proxyEntity->singleSignOnServices);
         new ServiceReplacer($this->proxyEntity, 'SingleSignOnService', ServiceReplacer::OPTIONAL);
     }
@@ -122,6 +128,8 @@ class EngineBlock_Test_ServiceReplacerTest extends PHPUnit_Framework_TestCase
 
     public function testNoValidServiceBindingsFoundInMetadataIsAllowedWhenOptional()
     {
+        $this->expectNotToPerformAssertions();
+
         $this->proxyEntity->singleSignOnServices = array();
         $replacer = new ServiceReplacer($this->proxyEntity, 'SingleSignOnService', ServiceReplacer::OPTIONAL);
         $replacer->replace($this->entity, 'newLocation');

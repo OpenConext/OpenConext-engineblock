@@ -18,13 +18,16 @@
 
 namespace OpenConext\EngineBlock\Metadata;
 
-use PHPUnit_Framework_TestCase;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @package OpenConext\EngineBlock\Metadata
  */
-class ConsentSettingsTest extends PHPUnit_Framework_TestCase
+class ConsentSettingsTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     public function testWorkWithEmptySettings()
     {
         $settings = new ConsentSettings([]);
