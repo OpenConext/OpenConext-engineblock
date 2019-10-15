@@ -1,6 +1,4 @@
-<?php
-declare(strict_types=1);
-
+<?php declare(strict_types=1);
 /**
  * Copyright 2010 SURFnet B.V.
  *
@@ -17,32 +15,26 @@ declare(strict_types=1);
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Xml\ValueObjects;
+namespace OpenConext\EngineBlock\Metadata\Factory\Collection;
 
-use ArrayIterator;
-use IteratorAggregate;
-use Traversable;
+use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 
-class IdentityProviderMetadataCollection implements IteratorAggregate
+class IdentityProviderEntityCollection
 {
-    /**
-     * @var IdentityProviderMetadata[]
-     */
-    private $entities = [];
+    private $map;
 
-    /**
-     * @param IdentityProviderMetadata $identityProvider
-     */
-    public function add(IdentityProviderMetadata $identityProvider)
+    public function add(IdentityProviderEntityInterface $identityProvider) : void
     {
-        $this->entities[] = $identityProvider;
+        $this->map[$identityProvider->getEntityId()] = $identityProvider;
     }
 
-    /**
-     * @return Traversable
-     */
-    public function getIterator(): Traversable
+    public function has(string $entityId) : bool
     {
-        return new ArrayIterator($this->entities);
+        return array_key_exists($entityId, $this->map);
+    }
+
+    public function get(string $entityId) : IdentityProviderEntityInterface
+    {
+        return $this->map[$entityId];
     }
 }
