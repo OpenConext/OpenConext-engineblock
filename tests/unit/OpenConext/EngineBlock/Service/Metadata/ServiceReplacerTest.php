@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Copyright 2010 SURFnet B.V.
@@ -16,14 +16,16 @@
  * limitations under the License.
  */
 
-use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
+namespace OpenConext\EngineBlock\Service\Metadata;
+
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use OpenConext\EngineBlock\Exception\ServiceReplacingException;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Service;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 
-class EngineBlock_Test_ServiceReplacerTest extends TestCase
+class ServiceReplacerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
@@ -47,7 +49,7 @@ class EngineBlock_Test_ServiceReplacerTest extends TestCase
         $this->proxyEntity->singleSignOnServices[] = new Service('proxyPostLocation', Constants::BINDING_HTTP_POST);
     }
 
-    public function testServicesAreReplaced()
+    public function test_services_are_replaced()
     {
         $replacer = new ServiceReplacer($this->proxyEntity, 'SingleSignOnService', ServiceReplacer::REQUIRED);
         $replacer->replace($this->entity, 'newLocation');
@@ -59,7 +61,7 @@ class EngineBlock_Test_ServiceReplacerTest extends TestCase
         $this->assertEquals($expectedBinding, $this->entity->singleSignOnServices);
     }
 
-    public function testServicesAreAdded()
+    public function test_services_are_added()
     {
         $replacer = new ServiceReplacer($this->proxyEntity, 'SingleSignOnService', ServiceReplacer::REQUIRED);
         unset($this->entity->singleSignOnServices);
@@ -72,9 +74,9 @@ class EngineBlock_Test_ServiceReplacerTest extends TestCase
         $this->assertEquals($expectedBinding, $this->entity->singleSignOnServices);
     }
 
-    public function testMissingServiceMetadataThrowsException()
+    public function test_missing_service_metadata_throws_exception()
     {
-        $this->expectException(EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception::class);
+        $this->expectException(ServiceReplacingException::class);
         $this->expectExceptionMessage('No service "singleSignOnServices" is configured in EngineBlock metadata');
 
         unset($this->proxyEntity->singleSignOnServices);
@@ -82,7 +84,7 @@ class EngineBlock_Test_ServiceReplacerTest extends TestCase
 
     }
 
-    public function testMissingServiceMetadataIsAllowedWhenOptional()
+    public function test_missing_service_metadata_is_allowed_when_optional()
     {
         $this->expectNotToPerformAssertions();
 
@@ -90,43 +92,43 @@ class EngineBlock_Test_ServiceReplacerTest extends TestCase
         new ServiceReplacer($this->proxyEntity, 'SingleSignOnService', ServiceReplacer::OPTIONAL);
     }
 
-    public function testInvalidServiceMetadataThrowsException()
+    public function test_invalid_service_metadata_throws_exception()
     {
-        $this->expectException(EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception::class);
+        $this->expectException(ServiceReplacingException::class);
         $this->expectExceptionMessage('Service "SingleSignOnService" in EngineBlock metadata is not an array');
 
         $this->proxyEntity->singleSignOnServices = false;
         new ServiceReplacer($this->proxyEntity, 'SingleSignOnService', ServiceReplacer::REQUIRED);
     }
 
-    public function testMissingServiceBindingMetadataThrowsException()
+    public function test_missing_service_binding_metadata_throws_exception()
     {
-        $this->expectException(EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception::class);
+        $this->expectException(ServiceReplacingException::class);
         $this->expectExceptionMessage('Service "SingleSignOnService" configured without a Binding in EngineBlock metadata');
 
         unset($this->proxyEntity->singleSignOnServices[0]->binding);
         new ServiceReplacer($this->proxyEntity, 'SingleSignOnService', ServiceReplacer::REQUIRED);
     }
 
-    public function testInvalidServiceBindingMetadataThrowsException()
+    public function test_invalid_service_binding_metadata_throws_exception()
     {
-        $this->expectException(EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception::class);
+        $this->expectException(ServiceReplacingException::class);
         $this->expectExceptionMessage('Service "SingleSignOnService" has an invalid binding "foo" configured in EngineBlock metadata');
 
         $this->proxyEntity->singleSignOnServices[0]->binding = 'foo';
         new ServiceReplacer($this->proxyEntity, 'SingleSignOnService', ServiceReplacer::REQUIRED);
     }
 
-    public function testNoValidServiceBindingsFoundInMetadataThrowsException()
+    public function test_no_valid_service_bindings_found_in_metadata_throws_exception()
     {
-        $this->expectException(EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception::class);
+        $this->expectException(ServiceReplacingException::class);
         $this->expectExceptionMessage('No "singleSignOnServices" service bindings configured in EngineBlock metadata');
 
         $this->proxyEntity->singleSignOnServices = array();
         new ServiceReplacer($this->proxyEntity, 'SingleSignOnService', ServiceReplacer::REQUIRED);
     }
 
-    public function testNoValidServiceBindingsFoundInMetadataIsAllowedWhenOptional()
+    public function test_no_valid_service_bindings_found_in_metadata_is_allowed_when_optional()
     {
         $this->expectNotToPerformAssertions();
 
