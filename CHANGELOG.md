@@ -5,6 +5,15 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.1.0
+The metadata endpoints of EngineBlock have been under heavy maintenance in this release. Some highlights include the
+move of all generation logic to the new Symfony EngineBlock application. But maybe more important, EngineBlock no longer
+relies on entity information from the `sso_provider_roles_eb5` table. All EngineBlock metadata is either loaded from
+ini config, or is hardcoded into the application.
+
+**Other chores**
+* Move the dev cache location outside the project root #780 
+
 ## 6.0.0
 In this release, PHP 5.6 support was dropped in favour of PHP 7.2. We are not migrating to the latest PHP version for some reasons. Chief amongst which is that PHP 7.2 was best compatible with the current EngineBlock code base. 
 An upgrade to 7.3 or even 7.4 would force us to upgrade many third party dependencies at the same time, making this release much bigger.
