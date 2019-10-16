@@ -271,6 +271,10 @@ class ServiceProvider extends AbstractRole
         return $this->allowAll || in_array($idpEntityId, $this->allowedIdpEntityIds);
     }
 
+    /**
+     * @param string $preferredLocale
+     * @return string
+     */
     public function getDisplayName($preferredLocale = '')
     {
         $spName = '';

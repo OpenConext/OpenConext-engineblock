@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use SAML2\Constants;
 use SAML2\XML\saml\NameID;
 
@@ -143,9 +144,26 @@ class EngineBlock_Attributes_Metadata
     }
 
     /**
+     * @return RequestedAttribute[]
+     */
+    public function getRequestedAttributes()
+    {
+        $attributes = [];
+        foreach ($this->findRequestedAttributeIds() as $attributeId) {
+            $attributes[] = new RequestedAttribute($attributeId);
+        }
+
+        foreach ($this->findRequiredAttributeIds() as $attributeId) {
+            $attributes[] = new RequestedAttribute($attributeId, true);
+        }
+
+        return $attributes;
+    }
+
+    /**
      * @return string[]
      */
-    public function findRequestedAttributeIds()
+    private function findRequestedAttributeIds()
     {
         return $this->findAttributeIdsWithMinConditionForType('warning');
     }
@@ -153,7 +171,7 @@ class EngineBlock_Attributes_Metadata
     /**
      * @return string[]
      */
-    public function findRequiredAttributeIds()
+    private function findRequiredAttributeIds()
     {
         return $this->findAttributeIdsWithMinConditionForType('error');
     }

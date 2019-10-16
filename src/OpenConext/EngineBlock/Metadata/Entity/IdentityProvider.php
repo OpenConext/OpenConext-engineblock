@@ -114,7 +114,6 @@ class IdentityProvider extends AbstractRole
      * @param Service $responseProcessingService
      * @param string $workflowState
      * @param string $manipulation
-     * @param null $attributeReleasePolicy
      * @param bool $enabledInWayf
      * @param string $guestQualifier
      * @param bool $hidden
@@ -154,7 +153,6 @@ class IdentityProvider extends AbstractRole
         Service $responseProcessingService = null,
         $workflowState = self::WORKFLOW_STATE_DEFAULT,
         $manipulation = '',
-        $attributeReleasePolicy = null,
         $enabledInWayf = true,
         $guestQualifier = self::GUEST_QUALIFIER_ALL,
         $hidden = false,
@@ -193,7 +191,6 @@ class IdentityProvider extends AbstractRole
             $manipulation
         );
 
-        $this->attributeReleasePolicy = $attributeReleasePolicy;
         $this->enabledInWayf = $enabledInWayf;
         $this->shibMdScopes = $shibMdScopes;
         $this->singleSignOnServices = $singleSignOnServices;
@@ -218,6 +215,10 @@ class IdentityProvider extends AbstractRole
         $visitor->visitIdentityProvider($this);
     }
 
+    /**
+     * @param string $preferredLocale
+     * @return string
+     */
     public function getDisplayName($preferredLocale = '')
     {
         $idpName = '';

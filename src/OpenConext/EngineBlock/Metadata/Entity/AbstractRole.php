@@ -238,9 +238,9 @@ abstract class AbstractRole
     public $requestsMustBeSigned = false;
 
     /**
-     * @var string
+     * This seems to be used only to inject a ConsentService when initiating consent...
      *
-     * @ORM\Column(name="response_processing_service_binding", type="string", nullable=true)
+     * @var Service
      */
     public $responseProcessingService;
 
