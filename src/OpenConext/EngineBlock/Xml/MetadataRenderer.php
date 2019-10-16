@@ -19,20 +19,24 @@
 namespace OpenConext\EngineBlock\Xml;
 
 use EngineBlock_Saml2_IdGenerator;
-use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Factory\Collection\IdentityProviderEntityCollection;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProviderMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProviderMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
-use OpenConext\EngineBlock\Xml\ValueObjects\IdentityProviderMetadata;
-use OpenConext\EngineBlock\Xml\ValueObjects\IdentityProviderMetadataCollection;
+use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
 use Twig\Environment;
 
 class MetadataRenderer
 {
     const ID_PREFIX = 'EB';
+
+    /**
+     * The number of seconds a Metadata document is deemed valid
+     */
+    const METADATA_EXPIRATION_TIME = 86400;
 
     /**
      * @var Environment
@@ -69,6 +73,7 @@ class MetadataRenderer
         $this->samlIdGenerator = $samlIdGenerator;
         $this->keyPairFactory = $keyPairFactory;
         $this->documentSigner = $documentSigner;
+        $this->timeProvider = new TimeProvider();
     }
 
     public function fromServiceProviderEntity(ServiceProviderEntityInterface $sp, string $keyId) : string
@@ -93,22 +98,12 @@ class MetadataRenderer
         return $signedXml;
     }
 
-    /**
-     * @param IdentityProvider[] $idps
-     * @param string $keyId
-     * @return string
-     */
-    public function fromIdentityProviderEntities(array $idps, string $keyId) : string
+    public function fromIdentityProviderEntities(IdentityProviderEntityCollection $idps, string $keyId) : string
     {
         $this->signingKeyPair = $this->keyPairFactory->buildFromIdentifier($keyId);
         $template = '@theme/Authentication/View/Metadata/idps.xml.twig';
 
-        $metadata = new IdentityProviderMetadataCollection();
-        foreach ($idps as $role) {
-            $metadata->add(new IdentityProviderMetadata($role));
-        }
-
-        $xml = $this->renderMetadataXmlIdentityProviderCollection($metadata, $template);
+        $xml = $this->renderMetadataXmlIdentityProviderCollection($idps, $template);
 
         $signedXml = $this->documentSigner->sign($xml, $this->signingKeyPair);
 
@@ -119,6 +114,7 @@ class MetadataRenderer
     {
         $params = [
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
+            'validUntil' => $this->getValidUntil(),
             'metadata' => $metadata,
         ];
 
@@ -129,19 +125,26 @@ class MetadataRenderer
     {
         $params = [
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
+            'validUntil' => $this->getValidUntil(),
             'metadata' => $metadata,
         ];
 
         return $this->twig->render($template, $params);
     }
 
-    private function renderMetadataXmlIdentityProviderCollection(IdentityProviderMetadataCollection $metadataCollection, string $template) : string
+    private function renderMetadataXmlIdentityProviderCollection(IdentityProviderEntityCollection $metadataCollection, string $template) : string
     {
         $params = [
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
+            'validUntil' => $this->getValidUntil(),
             'metadataCollection' => $metadataCollection,
         ];
 
         return $this->twig->render($template, $params);
+    }
+
+    private function getValidUntil(): string
+    {
+        return $this->timeProvider->timestamp(self::METADATA_EXPIRATION_TIME);
     }
 }

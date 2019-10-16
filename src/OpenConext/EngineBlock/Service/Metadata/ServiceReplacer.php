@@ -15,10 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 namespace OpenConext\EngineBlock\Service\Metadata;
 
 use OpenConext\EngineBlock\Exception\ServiceReplacingException;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProviderMetadata;
 use OpenConext\EngineBlock\Metadata\Service;
 use SAML2\Constants;
 
@@ -33,6 +35,7 @@ use SAML2\Constants;
  * - Entity has service configured, Proxy has service configured -> Service replaced by proxy configuration
  * - Entity has no service configured, Proxy has service configured -> Service replaced by proxy configuration
  */
+
 class ServiceReplacer
 {
     const REQUIRED = true;
@@ -57,11 +60,11 @@ class ServiceReplacer
     private $supportedBindings;
 
     /**
-     * @param AbstractRole $proxyEntity
+     * @param EngineBlockIdentityProviderMetadata $proxyEntity
      * @param string $serviceName
      * @param bool $required (use either REQUIRED or OPTIONAL const)
      */
-    public function __construct(AbstractRole $proxyEntity, string $serviceName, bool $required)
+    public function __construct(EngineBlockIdentityProviderMetadata $proxyEntity, string $serviceName, bool $required)
     {
         $this->serviceName = $serviceName;
         $this->supportedBindings = $this->getSupportedBindingsFromProxy($proxyEntity, $required);
@@ -85,11 +88,11 @@ class ServiceReplacer
      * Builds a list of services supported by the proxy
      * @throws ServiceReplacingException
      */
-    private function getSupportedBindingsFromProxy(AbstractRole $proxyEntity, bool $required) : ?array
+    private function getSupportedBindingsFromProxy(EngineBlockIdentityProviderMetadata $proxyEntity, bool $required) : ?array
     {
-        $serviceName = lcfirst($this->serviceName.'s');
+        $serviceName = 'get' . $this->serviceName . 's';
 
-        if (!isset($proxyEntity->$serviceName)) {
+        if (!method_exists($proxyEntity, $serviceName)) {
             if ($required == self::OPTIONAL) {
                 return null;
             }
@@ -99,12 +102,7 @@ class ServiceReplacer
             );
         }
 
-        $services = $proxyEntity->$serviceName;
-        if (!is_array($services)) {
-            throw new ServiceReplacingException(
-                sprintf('Service "%s" in EngineBlock metadata is not an array', $this->serviceName)
-            );
-        }
+        $services = $proxyEntity->{$serviceName}();
 
         $supportedBindings = $this->parseBindingsFromServices($services);
 

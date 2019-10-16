@@ -18,9 +18,11 @@
 
 namespace OpenConext\EngineBlock\Service\Metadata;
 
+use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Exception\ServiceReplacingException;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProviderMetadata;
 use OpenConext\EngineBlock\Metadata\Service;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
@@ -44,13 +46,20 @@ class ServiceReplacerTest extends TestCase
         $this->entity = new IdentityProvider('https://sp.example.edu');
         $this->entity->singleSignOnServices[] = new Service(Constants::BINDING_HTTP_REDIRECT, 'redirectlocation');
 
-        $this->proxyEntity = new IdentityProvider('https://proxy.example.edu');
-        $this->proxyEntity->singleSignOnServices[] = new Service('proxyRedirectLocation', Constants::BINDING_HTTP_REDIRECT);
-        $this->proxyEntity->singleSignOnServices[] = new Service('proxyPostLocation', Constants::BINDING_HTTP_POST);
+        $this->proxyEntity = m::mock(EngineBlockIdentityProviderMetadata::class);
     }
 
     public function test_services_are_replaced()
     {
+        $ssoServices = [];
+        $ssoServices[] = new Service('proxyRedirectLocation', Constants::BINDING_HTTP_REDIRECT);
+        $ssoServices[] = new Service('proxyPostLocation', Constants::BINDING_HTTP_POST);
+
+        $this->proxyEntity = m::mock(EngineBlockIdentityProviderMetadata::class);
+        $this->proxyEntity
+            ->shouldReceive('getSingleSignOnServices')
+            ->andReturn($ssoServices);
+
         $replacer = new ServiceReplacer($this->proxyEntity, 'SingleSignOnService', ServiceReplacer::REQUIRED);
         $replacer->replace($this->entity, 'newLocation');
 
@@ -63,6 +72,14 @@ class ServiceReplacerTest extends TestCase
 
     public function test_services_are_added()
     {
+        $ssoServices = [];
+        $ssoServices[] = new Service('proxyRedirectLocation', Constants::BINDING_HTTP_REDIRECT);
+        $ssoServices[] = new Service('proxyPostLocation', Constants::BINDING_HTTP_POST);
+
+        $this->proxyEntity
+            ->shouldReceive('getSingleSignOnServices')
+            ->andReturn($ssoServices);
+
         $replacer = new ServiceReplacer($this->proxyEntity, 'SingleSignOnService', ServiceReplacer::REQUIRED);
         unset($this->entity->singleSignOnServices);
         $replacer->replace($this->entity, 'newLocation');
@@ -76,33 +93,27 @@ class ServiceReplacerTest extends TestCase
 
     public function test_missing_service_metadata_throws_exception()
     {
-        $this->expectException(ServiceReplacingException::class);
-        $this->expectExceptionMessage('No service "singleSignOnServices" is configured in EngineBlock metadata');
+        $this->proxyEntity
+            ->shouldReceive('getSingleSignOnServices')
+            ->andReturn([]);
 
-        unset($this->proxyEntity->singleSignOnServices);
+        $this->expectException(ServiceReplacingException::class);
+        $this->expectExceptionMessage('No "getSingleSignOnServices" service bindings configured in EngineBlock metadata');
+
         new ServiceReplacer($this->proxyEntity, 'SingleSignOnService', ServiceReplacer::REQUIRED);
 
-    }
-
-    public function test_missing_service_metadata_is_allowed_when_optional()
-    {
-        $this->expectNotToPerformAssertions();
-
-        unset($this->proxyEntity->singleSignOnServices);
-        new ServiceReplacer($this->proxyEntity, 'SingleSignOnService', ServiceReplacer::OPTIONAL);
-    }
-
-    public function test_invalid_service_metadata_throws_exception()
-    {
-        $this->expectException(ServiceReplacingException::class);
-        $this->expectExceptionMessage('Service "SingleSignOnService" in EngineBlock metadata is not an array');
-
-        $this->proxyEntity->singleSignOnServices = false;
-        new ServiceReplacer($this->proxyEntity, 'SingleSignOnService', ServiceReplacer::REQUIRED);
     }
 
     public function test_missing_service_binding_metadata_throws_exception()
     {
+        $ssoServices = [];
+        $ssoServices[] = new Service('proxyRedirectLocation', Constants::BINDING_HTTP_REDIRECT);
+        $ssoServices[] = new Service('proxyPostLocation', null);
+
+        $this->proxyEntity
+            ->shouldReceive('getSingleSignOnServices')
+            ->andReturn($ssoServices);
+
         $this->expectException(ServiceReplacingException::class);
         $this->expectExceptionMessage('Service "SingleSignOnService" configured without a Binding in EngineBlock metadata');
 
@@ -112,17 +123,28 @@ class ServiceReplacerTest extends TestCase
 
     public function test_invalid_service_binding_metadata_throws_exception()
     {
+        $ssoServices = [];
+        $ssoServices[] = new Service('proxyRedirectLocation', Constants::BINDING_HTTP_REDIRECT);
+        $ssoServices[] = new Service('proxyPostLocation', 'foo');
+
+        $this->proxyEntity
+            ->shouldReceive('getSingleSignOnServices')
+            ->andReturn($ssoServices);
+
         $this->expectException(ServiceReplacingException::class);
         $this->expectExceptionMessage('Service "SingleSignOnService" has an invalid binding "foo" configured in EngineBlock metadata');
 
-        $this->proxyEntity->singleSignOnServices[0]->binding = 'foo';
         new ServiceReplacer($this->proxyEntity, 'SingleSignOnService', ServiceReplacer::REQUIRED);
     }
 
     public function test_no_valid_service_bindings_found_in_metadata_throws_exception()
     {
+        $this->proxyEntity
+            ->shouldReceive('getSingleSignOnServices')
+            ->andReturn([]);
+
         $this->expectException(ServiceReplacingException::class);
-        $this->expectExceptionMessage('No "singleSignOnServices" service bindings configured in EngineBlock metadata');
+        $this->expectExceptionMessage('No "getSingleSignOnServices" service bindings configured in EngineBlock metadata');
 
         $this->proxyEntity->singleSignOnServices = array();
         new ServiceReplacer($this->proxyEntity, 'SingleSignOnService', ServiceReplacer::REQUIRED);
@@ -130,9 +152,10 @@ class ServiceReplacerTest extends TestCase
 
     public function test_no_valid_service_bindings_found_in_metadata_is_allowed_when_optional()
     {
-        $this->expectNotToPerformAssertions();
+        $this->proxyEntity
+            ->shouldReceive('getSingleSignOnServices')
+            ->andReturn([]);
 
-        $this->proxyEntity->singleSignOnServices = array();
         $replacer = new ServiceReplacer($this->proxyEntity, 'SingleSignOnService', ServiceReplacer::OPTIONAL);
         $replacer->replace($this->entity, 'newLocation');
     }

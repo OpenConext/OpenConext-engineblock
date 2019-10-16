@@ -1,10 +1,10 @@
 {% spaceless %}
-<md:EntitiesDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" validUntil="{{ metadata.validUntil }}" ID="{{ id }}">
+<md:EntitiesDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" validUntil="{{ validUntil }}" ID="{{ id }}">
     {% for metadata in metadataCollection %}
         <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="{{ metadata.entityId }}">
             <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
                 <md:Extensions>
-                    {% include '@theme/Authentication/View/Metadata/partial/@theme/Authentication/View/Metadata/partial/ui_info.xml.twig' with metadata.uiInfo only %}
+                    {% include '@theme/Authentication/View/Metadata/partial/ui_info.xml.twig' %}
                 </md:Extensions>
                 {% for key in metadata.publicKeys %}
                     <md:KeyDescriptor use="signing">
@@ -15,13 +15,13 @@
                         </ds:KeyInfo>
                     </md:KeyDescriptor>
                 {% endfor %}
-                {% for nameIdFormat in metadata.nameIdFormats %}
+                {% for nameIdFormat in metadata.supportedNameIdFormats %}
                 <md:NameIDFormat>{{ nameIdFormat }}</md:NameIDFormat>
                 {% endfor %}
                 <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="{{ metadata.ssoLocation }}"></md:SingleSignOnService>
             </md:IDPSSODescriptor>
             {% for contactPerson in metadata.contactPersons %}
-                {% include '@theme/Authentication/View/Metadata/partial/contact_person.xml.twig' with contactPerson only %}
+                {% include '@theme/Authentication/View/Metadata/partial/contact_person.xml.twig' %}
             {% endfor %}
         </md:EntityDescriptor>
     {% endfor %}

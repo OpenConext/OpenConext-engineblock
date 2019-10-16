@@ -195,7 +195,7 @@ class AbstractIdentityProvider implements IdentityProviderEntityInterface
     /**
      * @return Service
      */
-    public function getSingleLogoutService(): Service
+    public function getSingleLogoutService(): ?Service
     {
         return $this->entity->getSingleLogoutService();
     }

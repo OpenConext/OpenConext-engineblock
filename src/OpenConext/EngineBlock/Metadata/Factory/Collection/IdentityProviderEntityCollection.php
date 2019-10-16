@@ -17,9 +17,11 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory\Collection;
 
+use ArrayIterator;
+use IteratorAggregate;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 
-class IdentityProviderEntityCollection
+class IdentityProviderEntityCollection implements IteratorAggregate
 {
     private $map;
 
@@ -36,5 +38,10 @@ class IdentityProviderEntityCollection
     public function get(string $entityId) : IdentityProviderEntityInterface
     {
         return $this->map[$entityId];
+    }
+
+    public function getIterator()
+    {
+        return new ArrayIterator($this->map);
     }
 }

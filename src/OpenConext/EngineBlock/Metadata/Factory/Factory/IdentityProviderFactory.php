@@ -26,7 +26,6 @@ use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
-use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use SAML2\Constants;
 
 /**
@@ -56,8 +55,9 @@ class IdentityProviderFactory
         return new IdentityProviderEntity($entity);
     }
 
-    public function createProxyFromEntity(IdentityProvider $entity, X509KeyPair $proxyKeyPair): IdentityProviderEntityInterface
+    public function createProxyFromEntity(IdentityProvider $entity, string $proxyKeyId): IdentityProviderEntityInterface
     {
+        $proxyKeyPair = $this->keyPairFactory->buildFromIdentifier($proxyKeyId);
         return new IdentityProviderProxy($this->createEntityFromEntity($entity), $proxyKeyPair);
     }
 
