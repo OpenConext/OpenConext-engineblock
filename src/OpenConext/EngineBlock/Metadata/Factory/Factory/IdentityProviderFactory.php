@@ -61,11 +61,6 @@ class IdentityProviderFactory
         return new IdentityProviderProxy($this->createEntityFromEntity($entity), $proxyKeyPair);
     }
 
-    public function createStepupFromEntity(IdentityProvider $entity): IdentityProviderEntityInterface
-    {
-        return new IdentityProviderStepup($this->createEntityFromEntity($entity));
-    }
-
     public function createEngineBlockEntityFrom(
         string $entityId,
         string $ssoLocation,

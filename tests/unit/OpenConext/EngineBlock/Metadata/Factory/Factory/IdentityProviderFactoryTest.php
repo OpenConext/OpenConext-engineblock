@@ -19,7 +19,8 @@ namespace OpenConext\EngineBlock\Metadata\Factory\Factory;
 
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
-use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
+use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
+use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
@@ -33,8 +34,10 @@ class IdentityProviderFactoryTest extends TestCase
 
     public function setup()
     {
-        $proxyKeyPair = $this->createMock(X509KeyPair::class);
-        $this->factory = new IdentityProviderFactory($proxyKeyPair);
+        $keyPairFactory = $this->createMock(KeyPairFactory::class);
+        $configuration = $this->createMock(EngineBlockConfiguration::class);
+
+        $this->factory = new IdentityProviderFactory($keyPairFactory, $configuration);
     }
 
     public function test_create_entity_from_entity()
@@ -47,28 +50,20 @@ class IdentityProviderFactoryTest extends TestCase
 
     public function test_create_proxy_from_entity()
     {
-        $entity = new IdentityProvider('entityId');
-        $entity = $this->factory->createProxyFromEntity($entity);
+        $proxyKeyPair = $this->createMock(X509KeyPair::class);
 
-        $this->assertInstanceOf(IdentityProviderEntityInterface::class, $entity);
-    }
-
-    public function test_create_stepup_from_entity()
-    {
         $entity = new IdentityProvider('entityId');
-        $entity = $this->factory->createProxyFromEntity($entity);
+        $entity = $this->factory->createProxyFromEntity($entity, $proxyKeyPair);
 
         $this->assertInstanceOf(IdentityProviderEntityInterface::class, $entity);
     }
 
     public function test_create_minimal_entity()
     {
-        $certificate = $this->createMock(X509Certificate::class);
-
         $entity = $this->factory->createMinimalEntity(
             'entityId',
             'ssoLocation',
-            $certificate,
+            'default',
             Constants::BINDING_HTTP_REDIRECT
         );
 

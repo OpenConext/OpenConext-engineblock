@@ -20,7 +20,9 @@ namespace OpenConext\EngineBlock\Metadata\Factory\Factory;
 use EngineBlock_Attributes_Metadata as AttributesMetadata;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
+use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\Service;
+use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use PHPUnit\Framework\TestCase;
@@ -35,11 +37,11 @@ class ServiceProviderFactoryTest extends TestCase
 
     public function setup()
     {
-        $proxyKeyPair = $this->createMock(X509KeyPair::class);
         $attributes = $this->createMock(AttributesMetadata::class);
-        $consentService = $this->createMock(Service::class);
+        $keyPairFactory = $this->createMock(KeyPairFactory::class);
+        $configuration = $this->createMock(EngineBlockConfiguration::class);
 
-        $this->factory = new ServiceProviderFactory($proxyKeyPair, $attributes, $consentService);
+        $this->factory = new ServiceProviderFactory($attributes, $keyPairFactory, $configuration);
     }
 
 
@@ -53,8 +55,11 @@ class ServiceProviderFactoryTest extends TestCase
 
     public function test_create_proxy_from_entity()
     {
+        $proxyKeyPair = $this->createMock(X509KeyPair::class);
+        $consentService = $this->createMock(Service::class);
+
         $entity = new ServiceProvider('entityId');
-        $entity = $this->factory->createProxyFromEntity($entity);
+        $entity = $this->factory->createProxyFromEntity($entity, $proxyKeyPair,$consentService);
 
         $this->assertInstanceOf(ServiceProviderEntityInterface::class, $entity);
     }
@@ -66,7 +71,7 @@ class ServiceProviderFactoryTest extends TestCase
         $entity = $this->factory->createMinimalEntity(
             'entityId',
             'acsLocation',
-            $certificate,
+            'default',
             Constants::BINDING_HTTP_POST
         );
 
