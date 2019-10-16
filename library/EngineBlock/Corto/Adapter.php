@@ -354,8 +354,6 @@ class EngineBlock_Corto_Adapter
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $settings = $application->getDiContainer();
 
-        $proxyServer->setHostName($settings->getHostname());
-
         $proxyServer->setConfigs(array(
             'debug' => $settings->isDebug(),
             'ConsentStoreValues' => $settings->isConsentStoreValuesActive(),
@@ -503,7 +501,7 @@ class EngineBlock_Corto_Adapter
             $keyPair,
             EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAttributeMetadata(),
             new Service(
-                $proxyServer->getUrl('provideConsentService'),
+                '/authentication/idp/provide-consent',
                 'INTERNAL'
             )
         );

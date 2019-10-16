@@ -168,6 +168,11 @@ services:
             - ['en', 'nl']
             - '%kernel.default_locale%'
 
+    engineblock.url_provider:
+        class: OpenConext\EngineBlockBundle\Url\UrlProvider
+        arguments:
+            - '@Symfony\Component\Routing\Generator\UrlGeneratorInterface'
+
     engineblock.locale.cookie_factory:
         class: OpenConext\EngineBlockBundle\Http\Cookies\CookieFactory
         arguments:

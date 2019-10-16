@@ -48,6 +48,7 @@ class EngineBlock_Corto_ProxyServer
     const MESSAGE_TYPE_REQUEST = 'SAMLRequest';
     const MESSAGE_TYPE_RESPONSE = 'SAMLResponse';
 
+    // Todo: Make this mapping obsolete by rewriting the `getParametersFromUrl` method
     protected $_serviceToControllerMapping = array(
         'singleSignOnService'               => '/authentication/idp/single-sign-on',
         'debugSingleSignOnService'          => '/authentication/sp/debug',
@@ -64,6 +65,25 @@ class EngineBlock_Corto_ProxyServer
         'spMetadataService'                 => '/authentication/sp/metadata',
         'stepupMetadataService'             => '/authentication/stepup/metadata',
         'singleLogoutService'               => '/logout'
+    );
+
+    // Todo: Make this mapping obsolete by updating all proxyserver getUrl callers. If they would reference the correct
+    // route name in the first place, this mapping can be removed
+    protected $_serviceToRouteNameMapping = array(
+        'singleSignOnService'               => 'authentication_idp_sso',
+        'debugSingleSignOnService'          => 'authentication_sp_debug',
+        'continueToIdP'                     => 'authentication_wayf_process_wayf',
+
+        'assertionConsumerService'          => 'authentication_sp_consume_assertion',
+        'stepupAssertionConsumerService'    => 'authentication_stepup_consume_assertion',
+        'continueToSP'                      => 'authentication_sp_process_consent',
+        'processConsentService'             => 'authentication_idp_process_consent',
+        'processedAssertionConsumerService' => 'authentication_proxy_processed_assertion',
+
+        'idpMetadataService'                => 'metadata_idp',
+        'spMetadataService'                 => 'metadata_sp',
+        'stepupMetadataService'             => 'metadata_stepup',
+        'singleLogoutService'               => 'authentication_logout'
     );
 
     protected $_servicesNotNeedingSession = array(
@@ -96,7 +116,6 @@ class EngineBlock_Corto_ProxyServer
     protected $_modules = array();
     protected $_templateSource;
     protected $_processingMode = false;
-    private $_hostName;
 
     /**
      * @var EngineBlock_Saml2_AuthnRequestAnnotationDecorator
@@ -166,14 +185,6 @@ class EngineBlock_Corto_ProxyServer
     public function isInProcessingMode()
     {
         return $this->_processingMode;
-    }
-
-    /**
-     * @param mixed $hostName
-     */
-    public function setHostName($hostName)
-    {
-        $this->_hostName = $hostName;
     }
 
     /**
@@ -303,39 +314,16 @@ class EngineBlock_Corto_ProxyServer
 
     public function getUrl($serviceName = "", $remoteEntityId = "")
     {
-        if (!isset($this->_serviceToControllerMapping[$serviceName])) {
+        $urlProvider = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getUrlProvider();
+
+        if (!isset($this->_serviceToRouteNameMapping[$serviceName])) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
-                sprintf('Unable to map service "%s" to a controller!', $serviceName)
+                sprintf('Unable to map service "%s" to a Symfony route.', $serviceName)
             );
         }
+        $routeName = $this->_serviceToRouteNameMapping[$serviceName];
 
-        $scheme = 'http';
-        if (isset($_SERVER['HTTPS'])) {
-            $scheme = 'https';
-        }
-
-        $host = $this->_hostName;
-        if (!$host) {
-            throw new EngineBlock_Corto_ProxyServer_Exception('No hostname set on building URL');
-        }
-
-        $mappedUri = $this->_serviceToControllerMapping[$serviceName];
-
-        if (!$this->_processingMode) {
-            // Append the key identifier
-            if ($this->_keyId && $serviceName === 'singleSignOnService') {
-                $mappedUri .= '/key:'.$this->_keyId;
-            }
-        }
-
-        // Append the Transparent identifier
-        if ($remoteEntityId) {
-            if (!$this->_processingMode && $serviceName !== 'idpMetadataService' && $serviceName !== 'singleLogoutService') {
-                $mappedUri .= '/'.md5($remoteEntityId);
-            }
-        }
-
-        return $scheme.'://'.$host.$mappedUri;
+        return $urlProvider->getUrl($routeName, $this->_processingMode, $this->_keyId, $remoteEntityId);
     }
 
     /**

@@ -321,6 +321,14 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
+     * @return \OpenConext\EngineBlockBundle\Url\UrlProvider
+     */
+    public function getUrlProvider()
+    {
+        return $this->container->get('engineblock.url_provider');
+    }
+
+    /**
      * @param EngineBlock_Corto_ProxyServer $server
      * @return \OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
      */
