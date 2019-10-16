@@ -191,9 +191,9 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
     }
 
     /**
-     * @return Service
+     * @return Service|null
      */
-    public function getSingleLogoutService(): Service
+    public function getSingleLogoutService(): ?Service
     {
         return $this->entity->singleLogoutService;
     }
