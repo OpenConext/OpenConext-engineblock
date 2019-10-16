@@ -113,7 +113,6 @@ class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
     {
         $twig = Mockery::mock(Twig_Environment::class);
         $proxyServer = new EngineBlock_Corto_ProxyServer($twig);
-        $proxyServer->setHostName('test-host');
 
         $proxyServer->setRepository(new InMemoryMetadataRepository(
             array(new IdentityProvider('testIdp')),
