@@ -25,6 +25,7 @@ use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProvide
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\IdentityProviderProxy;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\IdentityProviderFactory;
 use OpenConext\EngineBlock\Service\Metadata\ServiceReplacer;
+use OpenConext\EngineBlockBundle\Exception\EntityCanNotBeFoundException;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
 
 class IdpsMetadataRepository
@@ -52,24 +53,6 @@ class IdpsMetadataRepository
         $this->repository = $repository;
         $this->idpFactory = $idpFactory;
         $this->urlProvider = $urlProvider;
-
-        // Can use SP Proxy decoration
-//        $idpEntityId = $proxyServer->getUrl('idpMetadataService');
-//        $spEntityId = $proxyServer->getUrl('spMetadataService');
-//        $keyPair = $proxyServer->getSigningCertificates();
-//
-//        $visitor = new EngineBlockMetadataVisitor(
-//            $idpEntityId,
-//            $spEntityId,
-//            $keyPair,
-//            EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAttributeMetadata(),
-//            new Service(
-//                $proxyServer->getUrl('provideConsentService'),
-//                'INTERNAL'
-//            )
-//        );
-//
-//        $this->getMetadataRepository()->appendVisitor($visitor);
     }
 
     /**
@@ -79,7 +62,11 @@ class IdpsMetadataRepository
      */
     public function fetchServiceProviderByEntityId($entityId)
     {
-        return $this->repository->fetchServiceProviderByEntityId($entityId);
+        try {
+            return $this->repository->fetchServiceProviderByEntityId($entityId);
+        } catch (EntityNotFoundException $e) {
+            throw new EntityCanNotBeFoundException(sprintf('Unable to find the SP with entity ID "%s".', $entityId));
+        }
     }
 
     /**
@@ -136,11 +123,6 @@ class IdpsMetadataRepository
 
             // Use EngineBlock certificates
             $idp->certificates = $engineBlockIdentityProvider->certificates;
-
-            // Ignore the NameIDFormats the IdP supports, any requests made on this endpoint will use EngineBlock
-            // NameIDs, so advertise that.
-            unset($idp->nameIdFormat);
-            $idp->supportedNameIdFormats = $engineBlockIdentityProvider->supportedNameIdFormats;
 
             // Replace service locations and bindings with those of EB
             $transparentSsoUrl = $this->urlProvider->getUrl('authentication_idp_sso', false, null, $idp->entityId);
