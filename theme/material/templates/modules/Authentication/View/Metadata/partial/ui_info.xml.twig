@@ -1,0 +1,7 @@
+<mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
+    <mdui:DisplayName xml:lang="nl">{{ metadata.nameNl }}</mdui:DisplayName>
+    <mdui:DisplayName xml:lang="en">{{ metadata.nameEn }}</mdui:DisplayName>
+    <mdui:Description xml:lang="nl">{{ metadata.descriptionNl }}</mdui:Description>
+    <mdui:Description xml:lang="en">{{ metadata.descriptionEn }}</mdui:Description>
+    <mdui:Logo height="{{ metadata.logo.height }}" width="{{ metadata.logo.width }}">{{ app.request.getSchemeAndHttpHost() ~ metadata.logo.url }}</mdui:Logo>
+</mdui:UIInfo>

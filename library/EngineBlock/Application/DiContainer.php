@@ -18,9 +18,10 @@
 
 use Doctrine\ORM\EntityManager;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Service\TimeProvider\TimeProviderInterface;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
-use OpenConext\EngineBlockBundle\Stepup\StepupGatewayCallOutHelper;
 use OpenConext\EngineBlockBundle\Stepup\StepupEntityFactory;
+use OpenConext\EngineBlockBundle\Stepup\StepupGatewayCallOutHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
 class EngineBlock_Application_DiContainer extends Pimple
@@ -164,11 +165,11 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return EngineBlock_TimeProvider_Interface
+     * @return TimeProviderInterface
      */
     public function getTimeProvider()
     {
-        return $this->container->get('engineblock.compat.time_provider');
+        return $this->container->get('engineblock.service.time_provider');
     }
 
     /**

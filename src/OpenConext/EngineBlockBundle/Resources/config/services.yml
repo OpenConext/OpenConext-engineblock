@@ -64,7 +64,6 @@ services:
             - "@engineblock.configuration.stepup.gateway_loa_mapping"
             - "@engineblock.configuration.stepup.endpoint"
 
-
     engineblock.service.consent:
         class: OpenConext\EngineBlock\Service\ConsentService
         arguments:
@@ -85,6 +84,41 @@ services:
         arguments:
             - "@engineblock.compat.repository.metadata"
             - "@engineblock.compat.logger"
+
+    engineblock.service.time_provider:
+        class: OpenConext\EngineBlock\Service\TimeProvider\TimeProvider
+
+    engineblock.factory.service_provider_factory:
+        class: OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory
+        arguments:
+            - '@engineblock.compat.metadata.definitions'
+            - '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory'
+            - '@OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration'
+
+    OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration:
+        public: false
+        arguments:
+            - '@translator'
+            - '%openconext_support_url%'
+            - '%email_request_access_address%'
+            - '%view_default_header%'
+            - '%view_default_logo%'
+            - '%view_default_logo_width%'
+            - '%view_default_logo_height%'
+
+    engineblock.factory.identity_provider_factory:
+        class: OpenConext\EngineBlock\Metadata\Factory\Factory\IdentityProviderFactory
+        arguments:
+            ['@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory', '@OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration']
+
+    OpenConext\EngineBlock\Xml\MetadataProvider:
+        class: OpenConext\EngineBlock\Xml\MetadataProvider
+        arguments:
+            - '@OpenConext\EngineBlock\Xml\MetadataRenderer'
+            - '@engineblock.factory.service_provider_factory'
+            - '@engineblock.factory.identity_provider_factory'
+            - '@engineblock.compat.repository.metadata'
+            - '@engineblock.configuration.stepup.endpoint'
 
     engineblock.authentication.user_directory:
         class: OpenConext\EngineBlockBundle\Authentication\Service\UserService

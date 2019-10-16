@@ -20,7 +20,13 @@ namespace OpenConext\EngineBlock\Xml;
 use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
+use OpenConext\EngineBlock\Metadata\Factory\Adapter\ServiceProviderEntity;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProviderMetadata;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProviderMetadata;
 use OpenConext\EngineBlock\Metadata\IndexedService;
+use OpenConext\EngineBlock\Metadata\Logo;
+use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\Utils;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
@@ -64,7 +70,9 @@ class MetadataRendererTest extends TestCase
             ->method('buildFromIdentifier')
             ->willReturn($keyPair);
 
-        $this->metadataFactory = new MetadataRenderer($environment, $samlIdGenerator, $keyPairFactory);
+        $documentSigner = new DocumentSigner();
+
+        $this->metadataFactory = new MetadataRenderer($environment, $samlIdGenerator, $keyPairFactory, $documentSigner);
 
         parent::setUp();
     }
@@ -84,8 +92,11 @@ class MetadataRendererTest extends TestCase
             [
                 'entityId' => 'idp',
                 'singleSignOnServices' => $singleSignOnServices,
+                'logo' => new Logo('/images/logo.gif'),
             ]
         );
+
+        $idp = new EngineBlockIdentityProviderMetadata(new IdentityProviderEntity($idp));
 
         $xml = $this->metadataFactory->fromIdentityProviderEntity($idp, 'default');
 
@@ -118,8 +129,12 @@ class MetadataRendererTest extends TestCase
             [
                 'entityId' => 'sp',
                 'assertionConsumerServices' => $assertionConsumerServices,
+                'logo' => new Logo('/images/logo.gif'),
+                'organizationEn' => new Organization('Org', 'Organization', 'https://example.org')
             ]
         );
+
+        $sp = new EngineBlockServiceProviderMetadata(new ServiceProviderEntity($sp));
 
         $xml = $this->metadataFactory->fromServiceProviderEntity($sp, 'default');
 
@@ -141,6 +156,7 @@ class MetadataRendererTest extends TestCase
      */
     public function the_metadata_factory_should_return_valid_signed_xml_for_idps_of_sp()
     {
+        $this->markTestSkipped('Enable this test when we are starting to generate the IdPs metadata');
         $ssoLocation = 'https://example.com/sso';
         $singleSignOnServices[] = new Service($ssoLocation, Constants::BINDING_HTTP_POST);
         $singleSignOnServices[] = new Service($ssoLocation, Constants::BINDING_HTTP_REDIRECT);

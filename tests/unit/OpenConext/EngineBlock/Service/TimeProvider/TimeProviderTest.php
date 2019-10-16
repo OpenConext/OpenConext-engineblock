@@ -16,20 +16,25 @@
  * limitations under the License.
  */
 
-class EngineBlock_TimeProvider_Default implements EngineBlock_TimeProvider_Interface
-{
-    const TIMESTAMP_FORMAT = 'Y-m-d\TH:i:s\Z';
+namespace OpenConext\EngineBlock\Service\TimeProvider;
 
-    public function timestamp($deltaSeconds = 0, $time = null)
+use PHPUnit\Framework\TestCase;
+
+class TimeProviderTest extends TestCase
+{
+    public function test_renders_time_in_expected_format()
     {
-        if (is_null($time)) {
-            $time = time();
-        }
-        return gmdate(self::TIMESTAMP_FORMAT, $time + $deltaSeconds);
+        $time = 1571054255;
+        $provider = new TimeProvider();
+        $formatted = $provider->timestamp(0, $time);
+        $this->assertEquals('2019-10-14T11:57:35Z', $formatted);
     }
 
-    public function time()
+    public function test_renders_time_in_the_future()
     {
-        return time();
+        $time = 1571054255;
+        $provider = new TimeProvider();
+        $formatted = $provider->timestamp(604800, $time);
+        $this->assertEquals('2019-10-21T11:57:35Z', $formatted);
     }
 }
