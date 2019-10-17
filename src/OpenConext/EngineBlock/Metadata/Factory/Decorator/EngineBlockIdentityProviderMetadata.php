@@ -31,11 +31,17 @@ class EngineBlockIdentityProviderMetadata extends AbstractIdentityProvider
 
     public function getOrganization() : string
     {
+        if (!$this->entity->getOrganizationEn()) {
+            return '';
+        }
         return $this->entity->getOrganizationEn()->name;
     }
 
     public function getOrganizationSupportUrl() : string
     {
+        if (!$this->entity->getOrganizationEn()) {
+            return '';
+        }
         return $this->entity->getOrganizationEn()->url;
     }
 

@@ -114,25 +114,25 @@ class AbstractServiceProvider implements ServiceProviderEntityInterface
     }
 
     /**
-     * @return Logo
+     * @return Logo|null
      */
-    public function getLogo(): Logo
+    public function getLogo(): ?Logo
     {
         return $this->entity->getLogo();
     }
 
     /**
-     * @return Organization
+     * @return Organization|null
      */
-    public function getOrganizationNl(): Organization
+    public function getOrganizationNl(): ?Organization
     {
         return $this->entity->getOrganizationNl();
     }
 
     /**
-     * @return Organization
+     * @return Organization|null
      */
-    public function getOrganizationEn(): Organization
+    public function getOrganizationEn(): ?Organization
     {
         return $this->entity->getOrganizationEn();
     }

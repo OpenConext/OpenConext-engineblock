@@ -21,15 +21,13 @@ namespace OpenConext\EngineBlock\Metadata\Factory\Factory;
 use EngineBlock_Attributes_Metadata as AttributesMetadata;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\ServiceProviderEntity;
-use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProviderMetadata;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProviderInformation;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProviderMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\ServiceProviderProxy;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\IndexedService;
-use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
-use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use SAML2\Constants;
 
 /**
@@ -63,62 +61,44 @@ class ServiceProviderFactory
         $this->engineBlockConfiguration = $engineBlockConfiguration;
     }
 
-    public function createEntityFromEntity(ServiceProvider $entity): ServiceProviderEntityInterface
-    {
-        return new ServiceProviderEntity($entity);
-    }
-
     public function createEngineBlockEntityFrom(
         string $entityId,
         string $acsLocation,
         string $keyId
     ): ServiceProviderEntityInterface {
-        $entity = $this->buildServiceProviderEntity($entityId, $acsLocation, $keyId);
+        $entity = $this->buildServiceProviderOrmEntity($entityId, $acsLocation, $keyId);
 
-        // Load the additional EB SP metadata onto the entity
-        $entity->nameEn = $this->engineBlockConfiguration->getName();
-        $entity->nameNl = $this->engineBlockConfiguration->getName();
-        $entity->descriptionEn = $this->engineBlockConfiguration->getDescription();
-        $entity->descriptionNl = $this->engineBlockConfiguration->getDescription();
-        $entity->organizationEn = $this->engineBlockConfiguration->getOrganization();
-        $entity->contactPersons = $this->engineBlockConfiguration->getContactPersons();
-        $entity->logo = $this->engineBlockConfiguration->getLogo();
-
-        return new EngineBlockServiceProviderMetadata($this->createEntityFromEntity($entity));
-    }
-
-    public function createProxyFromEntity(
-        ServiceProvider $entity,
-        X509KeyPair $proxyKeyPair,
-        Service $consentService
-    ): ServiceProviderEntityInterface {
-        return new ServiceProviderProxy(
-            $this->createEntityFromEntity($entity),
-            $proxyKeyPair,
-            $this->attributes,
-            $consentService
+        return new EngineBlockServiceProviderMetadata(
+            new ServiceProviderProxy( // Add EB proxy data
+                new EngineBlockServiceProviderInformation(  // Add EB specific information
+                    new ServiceProviderEntity($entity),
+                    $this->engineBlockConfiguration
+                ),
+                $this->keyPairFactory->buildFromIdentifier($keyId),
+                $this->attributes
+            )
         );
     }
 
-    public function createMinimalEntity(
+    public function createStepupEntityFrom(
         string $entityId,
         string $acsLocation,
-        string $keyId,
-        string $acsBindingMethod = Constants::BINDING_HTTP_POST
+        string $keyId
     ): ServiceProviderEntityInterface {
-        $entity = $this->buildServiceProviderEntity($entityId, $acsLocation, $keyId, $acsBindingMethod);
+        $entity = $this->buildServiceProviderOrmEntity($entityId, $acsLocation, $keyId);
 
-        return $this->createEntityFromEntity($entity);
+        return new EngineBlockServiceProviderMetadata(
+            new ServiceProviderEntity($entity)
+        );
     }
 
-    private function buildServiceProviderEntity(
+    private function buildServiceProviderOrmEntity(
         string $entityId,
         string $acsLocation,
         string $keyId,
         string $acsBindingMethod = Constants::BINDING_HTTP_POST
     ): ServiceProvider {
         $entity = new ServiceProvider($entityId);
-        $entity->certificates[] = $this->keyPairFactory->buildFromIdentifier($keyId)->getCertificate();
         $entity->assertionConsumerServices[] = new IndexedService(
             $acsLocation,
             $acsBindingMethod,

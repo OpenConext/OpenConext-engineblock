@@ -21,7 +21,6 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
-use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 
@@ -39,6 +38,18 @@ class IdentityProviderFactoryTest extends TestCase
 
         $this->factory = new IdentityProviderFactory($keyPairFactory, $configuration);
     }
+
+    public function test_create_entity_from_entity()
+    {
+        $entity = $this->factory->createEngineBlockEntityFrom(
+            'entityID',
+            'ssoLocation',
+            'default'
+        );
+
+        $this->assertInstanceOf(IdentityProviderEntityInterface::class, $entity);
+    }
+
 
     public function test_create_entity_from_entity()
     {

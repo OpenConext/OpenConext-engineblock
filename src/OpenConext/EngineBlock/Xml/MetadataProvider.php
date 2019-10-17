@@ -71,6 +71,7 @@ class MetadataProvider
      * @param string $entityId
      * @param string $acsLocation
      * @param string $keyId
+     * @param string $consentUrl
      * @return string
      */
     public function metadataForSp(string $entityId, string $acsLocation, string $keyId): string
@@ -156,7 +157,7 @@ class MetadataProvider
      */
     public function metadataForStepup(string $acsLocation, string $keyId): string
     {
-        $serviceProvider = $this->spFactory->createMinimalEntity(
+        $serviceProvider = $this->spFactory->createStepupEntityFrom(
             $this->stepupEndpoint->getEntityId(),
             $acsLocation,
             $keyId
