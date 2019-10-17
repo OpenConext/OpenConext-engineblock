@@ -121,7 +121,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
     /**
      * @return Organization
      */
-    public function getOrganizationNl(): Organization
+    public function getOrganizationNl(): ?Organization
     {
         return $this->entity->organizationNl;
     }
@@ -129,7 +129,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
     /**
      * @return Organization
      */
-    public function getOrganizationEn(): Organization
+    public function getOrganizationEn(): ?Organization
     {
         return $this->entity->organizationEn;
     }

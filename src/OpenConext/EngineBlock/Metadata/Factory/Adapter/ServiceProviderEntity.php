@@ -114,23 +114,23 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     /**
      * @return Logo
      */
-    public function getLogo(): Logo
+    public function getLogo(): ?Logo
     {
         return $this->entity->logo;
     }
 
     /**
-     * @return Organization
+     * @return Organization|null
      */
-    public function getOrganizationNl(): Organization
+    public function getOrganizationNl(): ?Organization
     {
         return $this->entity->organizationNl;
     }
 
     /**
-     * @return Organization
+     * @return Organization|null
      */
-    public function getOrganizationEn(): Organization
+    public function getOrganizationEn(): ?Organization
     {
         return $this->entity->organizationEn;
     }

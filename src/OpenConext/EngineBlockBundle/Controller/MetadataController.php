@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Controller;
 
 use EngineBlock_ApplicationSingleton;
+use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Xml\MetadataProvider;
 use Symfony\Component\HttpFoundation\RedirectResponse;

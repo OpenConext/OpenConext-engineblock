@@ -19,8 +19,6 @@ namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
 use EngineBlock_Attributes_Metadata as AttributesMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
-use OpenConext\EngineBlock\Metadata\RequestedAttribute;
-use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use SAML2\Constants;
 
@@ -38,22 +36,16 @@ class ServiceProviderProxy extends AbstractServiceProvider
      * @var AttributesMetadata
      */
     private $attributes;
-    /**
-     * @var Service
-     */
-    private $consentService;
 
     public function __construct(
         ServiceProviderEntityInterface $entity,
         X509KeyPair $keyPair,
-        AttributesMetadata $attributes,
-        Service $consentService
+        AttributesMetadata $attributes
     ) {
         parent::__construct($entity);
 
         $this->keyPair = $keyPair;
         $this->attributes = $attributes;
-        $this->consentService = $consentService;
     }
 
 
@@ -74,11 +66,6 @@ class ServiceProviderProxy extends AbstractServiceProvider
     public function getRequestedAttributes(): ?array
     {
         return $this->attributes->getRequestedAttributes();
-    }
-
-    public function getResponseProcessingService(): Service
-    {
-        return $this->consentService;
     }
 
     public function isAllowAll(): bool

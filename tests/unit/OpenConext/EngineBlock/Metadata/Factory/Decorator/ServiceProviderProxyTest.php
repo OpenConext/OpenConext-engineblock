@@ -45,9 +45,7 @@ class ServiceProviderProxyTest extends AbstractServiceProviderDecoratorTest
         $attributesMock->method('getRequestedAttributes')
             ->willReturn($attributes);
 
-        $consentServiceMock = $this->createMock(Service::class);
-
-        $decorator = new ServiceProviderProxy($adapter, $keyPairMock, $attributesMock, $consentServiceMock);
+        $decorator = new ServiceProviderProxy($adapter, $keyPairMock, $attributesMock);
 
         $assertions = $this->getServiceProviderAssertions($adapter, $decorator);
 
@@ -60,7 +58,6 @@ class ServiceProviderProxyTest extends AbstractServiceProviderDecoratorTest
         $assertions['certificates'] = [[$certificateMock], $decorator->getCertificates()];
         $assertions['supportedNameIdFormats'] = [$supportedNameIdFormats, $decorator->getSupportedNameIdFormats()];
         $assertions['requestedAttributes'] = [$attributes, $decorator->getRequestedAttributes()];
-        $assertions['responseProcessingService'] = [$consentServiceMock, $decorator->getResponseProcessingService()];
 
         $this->runServiceProviderAssertions($assertions);
     }

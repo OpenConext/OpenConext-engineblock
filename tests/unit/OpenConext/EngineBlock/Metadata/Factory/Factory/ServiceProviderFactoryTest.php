@@ -31,7 +31,7 @@ use SAML2\Constants;
 class ServiceProviderFactoryTest extends TestCase
 {
     /**
-     * @var IdentityProviderFactory
+     * @var ServiceProviderFactory
      */
     private $factory;
 
@@ -45,36 +45,28 @@ class ServiceProviderFactoryTest extends TestCase
     }
 
 
-    public function test_create_entity_from_entity()
+    public function test_create_engineblock_entity_from()
     {
         $entity = new ServiceProvider('entityId');
-        $entity = $this->factory->createEntityFromEntity($entity);
-
-        $this->assertInstanceOf(ServiceProviderEntityInterface::class, $entity);
-    }
-
-    public function test_create_proxy_from_entity()
-    {
-        $proxyKeyPair = $this->createMock(X509KeyPair::class);
-        $consentService = $this->createMock(Service::class);
-
-        $entity = new ServiceProvider('entityId');
-        $entity = $this->factory->createProxyFromEntity($entity, $proxyKeyPair,$consentService);
-
-        $this->assertInstanceOf(ServiceProviderEntityInterface::class, $entity);
-    }
-
-    public function test_create_minimal_entity()
-    {
-        $certificate = $this->createMock(X509Certificate::class);
-
-        $entity = $this->factory->createMinimalEntity(
-            'entityId',
+        $entity = $this->factory->createEngineBlockEntityFrom(
+            'entityID',
             'acsLocation',
-            'default',
-            Constants::BINDING_HTTP_POST
+            'default'
         );
 
         $this->assertInstanceOf(ServiceProviderEntityInterface::class, $entity);
     }
+
+    public function test_create_stepup_entity_from()
+    {
+        $entity = new ServiceProvider('entityId');
+        $entity = $this->factory->createStepupEntityFrom(
+            'entityID',
+            'acsLocation',
+            'default'
+        );
+
+        $this->assertInstanceOf(ServiceProviderEntityInterface::class, $entity);
+    }
+
 }
