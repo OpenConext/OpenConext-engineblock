@@ -379,6 +379,23 @@ class MockIdpContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^the IdP "([^"]*)" is hidden$/
+     * @param string $idpName
+     * @param string $attributeName
+     * @param string $attributeValue
+     */
+    public function theIdpIsHidden($idpName)
+    {
+        $idp = $this->mockIdpRegistry->get($idpName);
+
+        $this->serviceRegistryFixture
+            ->setHidden($idp->entityId())
+            ->save();
+
+        $this->mockIdpRegistry->save();
+    }
+
+    /**
      * @Given /^The clock on the IdP "([^"]*)" is behind$/
      */
     public function theClockOnTheIdPIsBehind($idpName)
