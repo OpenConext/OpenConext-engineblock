@@ -73,7 +73,7 @@ interface IdentityProviderEntityInterface
     /**
      * @return Logo
      */
-    public function getLogo(): Logo;
+    public function getLogo(): ?Logo;
 
     /**
      * @return Organization

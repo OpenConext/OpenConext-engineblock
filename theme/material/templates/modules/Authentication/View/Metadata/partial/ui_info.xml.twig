@@ -3,5 +3,7 @@
     <mdui:DisplayName xml:lang="en">{{ metadata.nameEn }}</mdui:DisplayName>
     <mdui:Description xml:lang="nl">{{ metadata.descriptionNl }}</mdui:Description>
     <mdui:Description xml:lang="en">{{ metadata.descriptionEn }}</mdui:Description>
+    {% if metadata.logo is not null %}
     <mdui:Logo height="{{ metadata.logo.height }}" width="{{ metadata.logo.width }}">{{ app.request.getSchemeAndHttpHost() ~ metadata.logo.url }}</mdui:Logo>
+    {% endif %}
 </mdui:UIInfo>
