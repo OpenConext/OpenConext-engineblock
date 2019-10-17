@@ -26,6 +26,7 @@ use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
+use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
 
 /**
@@ -44,10 +45,16 @@ class IdentityProviderFactory
      */
     private $engineBlockConfiguration;
 
-    public function __construct(KeyPairFactory $keyPairFactory, EngineBlockConfiguration $engineBlockConfiguration)
+    /**
+     * @var UrlProvider
+     */
+    private $urlProvider;
+
+    public function __construct(KeyPairFactory $keyPairFactory, EngineBlockConfiguration $engineBlockConfiguration, UrlProvider $urlProvider)
     {
         $this->keyPairFactory = $keyPairFactory;
         $this->engineBlockConfiguration = $engineBlockConfiguration;
+        $this->urlProvider = $urlProvider;
     }
 
     /**
@@ -101,7 +108,8 @@ class IdentityProviderFactory
                     new IdentityProviderEntity($entity),
                     $this->engineBlockConfiguration
                 ),
-                $this->keyPairFactory->buildFromIdentifier($keyId)
+                $this->keyPairFactory->buildFromIdentifier($keyId),
+                $this->urlProvider
             )
         );
     }

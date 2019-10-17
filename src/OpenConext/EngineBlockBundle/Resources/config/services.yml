@@ -109,7 +109,9 @@ services:
     engineblock.factory.identity_provider_factory:
         class: OpenConext\EngineBlock\Metadata\Factory\Factory\IdentityProviderFactory
         arguments:
-            ['@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory', '@OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration']
+            - '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory'
+            - '@OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration'
+            - '@engineblock.url_provider'
 
     OpenConext\EngineBlock\Xml\MetadataProvider:
         class: OpenConext\EngineBlock\Xml\MetadataProvider

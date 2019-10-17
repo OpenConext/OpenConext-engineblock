@@ -102,14 +102,6 @@ class MetadataController
     /**
      * Render the IdPs metadata
      *
-     * The following steps are required to generate the IdPs metadata:
-     * 1. Determine if the IdP metadata is requested for a specific SP based on the 'sp-entity-id' parameter.
-     * 2. Load the EngineBlock IdP entity (used to override the certificates and contact persons)
-     * 3. Load the IdPs (either based on 'allowedIdpEntityIds' of the specified IdP, or loading all.
-     * 4. Replace the services of the IdP's (SSO and SLO)
-     * 5. Render and sign the document
-     * 6. Return the signed metadata as an XML response
-     *
      * @param Request $request
      * @param null|string $keyId
      * @return RedirectResponse|Response
@@ -120,13 +112,9 @@ class MetadataController
             $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
         }
 
-        // 1. Determine if the IdP metadata is requested for a specific SP based on the 'sp-entity-id' parameter.
         $spEntityId = $request->query->get('sp-entity-id', null);
 
-        // 2..5
-        $engineEntityId = $this->getAbsoluteUrlForRoute('metadata_idp');
-        $ssoLocation = $this->getAbsoluteUrlForRoute('authentication_idp_sso');
-        $metadataXml = $this->metadataService->metadataForIdps($engineEntityId, $ssoLocation, $spEntityId, $keyId);
+        $metadataXml = $this->metadataService->metadataForIdps($spEntityId, $keyId);
 
         // 6. Return the signed metadata as an XML response
         $response = new Response($metadataXml);

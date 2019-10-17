@@ -21,6 +21,7 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
+use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use PHPUnit\Framework\TestCase;
 
 class IdentityProviderFactoryTest extends TestCase
@@ -34,8 +35,9 @@ class IdentityProviderFactoryTest extends TestCase
     {
         $keyPairFactory = $this->createMock(KeyPairFactory::class);
         $configuration = $this->createMock(EngineBlockConfiguration::class);
+        $urlProvider = $this->createMock(UrlProvider::class);
 
-        $this->factory = new IdentityProviderFactory($keyPairFactory, $configuration);
+        $this->factory = new IdentityProviderFactory($keyPairFactory, $configuration, $urlProvider);
     }
 
     public function test_create_entity_from()

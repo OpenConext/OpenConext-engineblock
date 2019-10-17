@@ -76,7 +76,7 @@ class MetadataRenderer
         $this->timeProvider = new TimeProvider();
     }
 
-    public function fromServiceProviderEntity(ServiceProviderEntityInterface $sp, string $keyId) : string
+    public function fromServiceProviderEntity(EngineBlockServiceProviderMetadata $sp, string $keyId) : string
     {
         $this->signingKeyPair = $this->keyPairFactory->buildFromIdentifier($keyId);
         $template = '@theme/Authentication/View/Metadata/sp.xml.twig';
@@ -87,7 +87,7 @@ class MetadataRenderer
         return $signedXml;
     }
 
-    public function fromIdentityProviderEntity(IdentityProviderEntityInterface $idp, string $keyId) : string
+    public function fromIdentityProviderEntity(EngineBlockIdentityProviderMetadata $idp, string $keyId) : string
     {
         $this->signingKeyPair = $this->keyPairFactory->buildFromIdentifier($keyId);
         $template = '@theme/Authentication/View/Metadata/idp.xml.twig';
