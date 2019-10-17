@@ -331,6 +331,11 @@ Feature:
       # The session is lost, so the feedback information (containing the request id) can no longer be rendered on page
     Then I should not see the same request id on the error page
 
+  Scenario: I request IdPs metadata for an unknown SP entity
+    When I go to Engineblock URL "/authentication/proxy/idps-metadata?sp-entity-id=does:not:exist"
+    Then I should see "Metadata can not be generated"
+     And I should see "The following error occurred: Unable to find the SP with entity ID \"does:not:exist\"."
+
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a location
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a binding
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying an invalid index
