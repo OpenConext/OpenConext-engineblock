@@ -20,7 +20,7 @@ namespace OpenConext\EngineBlock\Xml;
 
 use OpenConext\EngineBlock\Metadata\Factory\Factory\IdentityProviderFactory;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
-use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\IdpsMetadataRepository;
 use OpenConext\EngineBlockBundle\Exception\EntityCanNotBeFoundException;
 use OpenConext\EngineBlockBundle\Stepup\StepupEndpoint;
 
@@ -42,7 +42,7 @@ class MetadataProvider
     private $idpFactory;
 
     /**
-     * @var MetadataRepositoryInterface
+     * @var IdpsMetadataRepository
      */
     private $metadataRepository;
 
@@ -51,18 +51,11 @@ class MetadataProvider
      */
     private $stepupEndpoint;
 
-    /**
-     * @param MetadataRenderer $factory
-     * @param ServiceProviderFactory $spFactory
-     * @param IdentityProviderFactory $idpFactory
-     * @param MetadataRepositoryInterface $metadataRepository
-     * @param StepupEndpoint $stepupEndpoint
-     */
     public function __construct(
         MetadataRenderer $factory,
         ServiceProviderFactory $spFactory,
         IdentityProviderFactory $idpFactory,
-        MetadataRepositoryInterface $metadataRepository,
+        IdpsMetadataRepository $metadataRepository,
         StepupEndpoint $stepupEndpoint
     ) {
         $this->factory = $factory;
@@ -113,18 +106,42 @@ class MetadataProvider
      * Generate XML proxy metadata for the IdP's of an SP
      * This can be used to generate the WAYF
      *
-     * @param string $entityId
-     * @param string $keyId
-     * @param string|null $serviceProviderEntityId
-     * @return string
+     * The following steps are taken
+     * 1. Load the EngineBlock IdP entity (used to override the certificates and contact persons)
+     *    Using the appropriate filters and visitors.
+     * 2. Load the IdPs (either based on 'allowedIdpEntityIds' of the specified IdP, or loading all.
+     * 3. Render and sign the document
      */
-    public function metadataForIdpsOfSp(string $entityId, string $keyId, string $serviceProviderEntityId = null): string
-    {
-        $identityProviders = $this->metadataRepository->findIdentityProviders();
+    public function metadataForIdps(
+        string $engineIdpEntityId,
+        string $ssoLocation,
+        ?string $spEntityId,
+        string $keyId
+    ): string {
+        // 1. Load the EngineBlock IdP entity (used to override the certificates and contact persons)
+        $engineBlockIdentityProvider = $this->idpFactory->createEngineBlockEntityFrom(
+            $engineIdpEntityId,
+            $ssoLocation,
+            $keyId
+        );
 
-        // Todo: implement sp filter sp-entity-id to list only allowed idps
-        // Todo: hide on coin hidden
+        // 2. Load the IdPs (either based on 'allowedIdpEntityIds' of the specified IdP, or loading all.
+        if ($spEntityId) {
+            // See if an sp-entity-id was specified for which we need to use sp specific metadata
+            $spEntity = $this->metadataRepository->fetchServiceProviderByEntityId($spEntityId, $keyId);
+            if (!$spEntity->allowAll) {
+                $identityProviders = $this->metadataRepository->findIdentityProvidersByEntityId(
+                    $engineBlockIdentityProvider,
+                    $spEntity->allowedIdpEntityIds,
+                    $keyId
+                );
+            }
+        }
+        if (!isset($identityProviders)) {
+            $identityProviders = $this->metadataRepository->findIdentityProviders($engineBlockIdentityProvider, $keyId);
+        }
 
+        // 3. Render and sign the document
         return $this->factory->fromIdentityProviderEntities($identityProviders, $keyId);
     }
 

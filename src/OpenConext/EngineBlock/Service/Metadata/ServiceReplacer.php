@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Copyright 2010 SURFnet B.V.
@@ -16,6 +16,14 @@
  * limitations under the License.
  */
 
+namespace OpenConext\EngineBlock\Service\Metadata;
+
+use OpenConext\EngineBlock\Exception\ServiceReplacingException;
+use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProviderMetadata;
+use OpenConext\EngineBlock\Metadata\Service;
+use SAML2\Constants;
+
 /**
  * Replaces services like SingleSignOn and SingleLogout with services of EngineBlock
  *
@@ -28,23 +36,22 @@
  * - Entity has no service configured, Proxy has service configured -> Service replaced by proxy configuration
  */
 
-use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception as Exception;
-use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
-use OpenConext\EngineBlock\Metadata\Service;
-
-class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
+class ServiceReplacer
 {
     const REQUIRED = true;
     const OPTIONAL = false;
 
+    /**
+     * @var string
+     */
     private $serviceName;
 
     /**
      * @var array
      */
     private $knownBindings = array(
-        EngineBlock_Corto_Module_Services::BINDING_TYPE_HTTP_REDIRECT,
-        EngineBlock_Corto_Module_Services::BINDING_TYPE_HTTP_POST
+        Constants::BINDING_HTTP_REDIRECT,
+        Constants::BINDING_HTTP_POST,
     );
 
     /**
@@ -53,67 +60,54 @@ class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
     private $supportedBindings;
 
     /**
-     * @param AbstractRole $proxyEntity
+     * @param EngineBlockIdentityProviderMetadata $proxyEntity
      * @param string $serviceName
      * @param bool $required (use either REQUIRED or OPTIONAL const)
      */
-    public function __construct(AbstractRole $proxyEntity, $serviceName, $required)
+    public function __construct(EngineBlockIdentityProviderMetadata $proxyEntity, string $serviceName, bool $required)
     {
         $this->serviceName = $serviceName;
         $this->supportedBindings = $this->getSupportedBindingsFromProxy($proxyEntity, $required);
     }
 
-    /**
-     * @param AbstractRole $entity
-     * @param $location
-     */
-    public function replace(AbstractRole $entity, $location)
+    public function replace(AbstractRole $entity, string $location): void
     {
-        $serviceName = lcfirst($this->serviceName . 's');
+        $serviceName = lcfirst($this->serviceName.'s');
 
         $entity->$serviceName = array();
         if (empty($this->supportedBindings)) {
             return;
         }
 
-        foreach($this->supportedBindings as $binding) {
+        foreach ($this->supportedBindings as $binding) {
             $entity->{$serviceName}[] = new Service($location, $binding);
         }
     }
 
     /**
      * Builds a list of services supported by the proxy
-     *
-     * @param AbstractRole $proxyEntity
-     * @param bool $required
-     * @return array
-     * @throws Exception
+     * @throws ServiceReplacingException
      */
-    private function getSupportedBindingsFromProxy(AbstractRole $proxyEntity, $required)
+    private function getSupportedBindingsFromProxy(EngineBlockIdentityProviderMetadata $proxyEntity, bool $required) : ?array
     {
-        $serviceName = lcfirst($this->serviceName . 's');
+        $serviceName = 'get' . $this->serviceName . 's';
 
-        if (!isset($proxyEntity->$serviceName)) {
+        if (!method_exists($proxyEntity, $serviceName)) {
             if ($required == self::OPTIONAL) {
-                return;
+                return null;
             }
 
-            throw new EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception(
+            throw new ServiceReplacingException(
                 sprintf('No service "%s" is configured in EngineBlock metadata', $serviceName)
             );
         }
 
-        $services = $proxyEntity->$serviceName;
-        if (!is_array($services)) {
-            throw new EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception(
-                sprintf('Service "%s" in EngineBlock metadata is not an array', $this->serviceName)
-            );
-        }
+        $services = $proxyEntity->{$serviceName}();
 
         $supportedBindings = $this->parseBindingsFromServices($services);
 
         if (count($supportedBindings) === 0 && $required == self::REQUIRED) {
-            throw new EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception(
+            throw new ServiceReplacingException(
                 sprintf('No "%s" service bindings configured in EngineBlock metadata', $serviceName)
             );
         }
@@ -124,21 +118,21 @@ class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
     /**
      * @param Service[] $services
      * @return string[]
-     * @throws EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception
+     * @throws ServiceReplacingException
      */
-    private function parseBindingsFromServices(array $services)
+    private function parseBindingsFromServices(array $services): array
     {
         $supportedBindings = array();
-        foreach($services as $serviceInfo) {
+        foreach ($services as $serviceInfo) {
             if (!isset($serviceInfo->binding)) {
-                throw new EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception(
+                throw new ServiceReplacingException(
                     sprintf('Service "%s" configured without a Binding in EngineBlock metadata', $this->serviceName)
                 );
             }
 
             $binding = $serviceInfo->binding;
             if (!in_array($binding, $this->knownBindings)) {
-                throw new EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception(
+                throw new ServiceReplacingException(
                     sprintf(
                         'Service "%s" has an invalid binding "%s" configured in EngineBlock metadata',
                         $this->serviceName,

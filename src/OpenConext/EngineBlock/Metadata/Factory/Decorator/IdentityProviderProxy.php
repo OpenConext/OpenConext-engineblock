@@ -18,11 +18,13 @@
 namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
+use OpenConext\EngineBlock\Metadata\Factory\ServiceReplacableEntityInterface;
+use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use SAML2\Constants;
 
 /**
- * This decoration is used to represent EngineBlock in it's IdP role when EngineBlock is used as authentication
+ * This decoration is used to represent Idp's EngineBlock in it's IdP role when EngineBlock is used as authentication
  * proxy. It will make sure all required parameters to support EB are set.
  */
 class IdentityProviderProxy extends AbstractIdentityProvider
@@ -55,5 +57,32 @@ class IdentityProviderProxy extends AbstractIdentityProvider
             Constants::NAMEID_TRANSIENT,
             Constants::NAMEID_UNSPECIFIED,
         ];
+    }
+
+    public function getPublicKeys(): array
+    {
+        $keys = [];
+        foreach ($this->getCertificates() as $certificate) {
+            $pem = $certificate->toCertData();
+            $keys[$pem] = $pem;
+        }
+        return $keys;
+    }
+
+    public function getOrganization() : string
+    {
+        return $this->entity->getOrganizationEn()->name;
+    }
+
+    public function getOrganizationSupportUrl() : string
+    {
+        return $this->entity->getOrganizationEn()->url;
+    }
+
+    public function getSsoLocation() : string
+    {
+        /** @var Service $service */
+        $service = reset($this->entity->getSingleSignOnServices());
+        return $service->location;
     }
 }

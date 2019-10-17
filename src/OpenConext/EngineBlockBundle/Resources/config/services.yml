@@ -117,7 +117,7 @@ services:
             - '@OpenConext\EngineBlock\Xml\MetadataRenderer'
             - '@engineblock.factory.service_provider_factory'
             - '@engineblock.factory.identity_provider_factory'
-            - '@engineblock.compat.repository.metadata'
+            - '@engineblock.metadata.repository.idps_metadata'
             - '@engineblock.configuration.stepup.endpoint'
 
     engineblock.authentication.user_directory:
@@ -168,6 +168,11 @@ services:
             - ['en', 'nl']
             - '%kernel.default_locale%'
 
+    engineblock.url_provider:
+        class: OpenConext\EngineBlockBundle\Url\UrlProvider
+        arguments:
+            - '@Symfony\Component\Routing\Generator\UrlGeneratorInterface'
+
     engineblock.locale.cookie_factory:
         class: OpenConext\EngineBlockBundle\Http\Cookies\CookieFactory
         arguments:
@@ -197,6 +202,13 @@ services:
         class: OpenConext\EngineBlock\Metadata\MetadataRepository\CachedDoctrineMetadataRepository
         arguments:
             - "@engineblock.metadata.repository.doctrine"
+
+    engineblock.metadata.repository.idps_metadata:
+        class: OpenConext\EngineBlock\Metadata\MetadataRepository\IdpsMetadataRepository
+        arguments:
+            - "@engineblock.metadata.repository.cached_doctrine"
+            - "@engineblock.factory.identity_provider_factory"
+            - "@engineblock.url_provider"
 
     OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface: '@engineblock.metadata.repository.cached_doctrine'
 

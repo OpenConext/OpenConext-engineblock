@@ -73,7 +73,7 @@ interface IdentityProviderEntityInterface
     /**
      * @return Logo
      */
-    public function getLogo(): Logo;
+    public function getLogo(): ?Logo;
 
     /**
      * @return Organization
@@ -121,9 +121,9 @@ interface IdentityProviderEntityInterface
     public function getSupportedNameIdFormats(): array;
 
     /**
-     * @return Service
+     * @return Service|null
      */
-    public function getSingleLogoutService(): Service;
+    public function getSingleLogoutService(): ?Service;
 
     /**
      * @return bool

@@ -18,12 +18,16 @@
 namespace OpenConext\EngineBlock\Xml;
 
 use EngineBlock_Saml2_IdGenerator;
+use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\ServiceProviderEntity;
+use OpenConext\EngineBlock\Metadata\Factory\Collection\IdentityProviderEntityCollection;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProviderMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProviderMetadata;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\IdentityProviderProxy;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
@@ -44,6 +48,8 @@ use Twig\Environment;
 
 class MetadataRendererTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var MetadataRenderer
      */
@@ -156,28 +162,41 @@ class MetadataRendererTest extends TestCase
      */
     public function the_metadata_factory_should_return_valid_signed_xml_for_idps_of_sp()
     {
-        $this->markTestSkipped('Enable this test when we are starting to generate the IdPs metadata');
         $ssoLocation = 'https://example.com/sso';
         $singleSignOnServices[] = new Service($ssoLocation, Constants::BINDING_HTTP_POST);
         $singleSignOnServices[] = new Service($ssoLocation, Constants::BINDING_HTTP_REDIRECT);
 
-        $idp1 = Utils::instantiate(
-            IdentityProvider::class,
-            [
-                'entityId' => 'idp1',
-                'singleSignOnServices' => $singleSignOnServices,
-            ]
-        );
+        $logo = new Logo('logo-url');
+        $logo->width = 100;
+        $logo->height = 100;
 
-        $idp2 = Utils::instantiate(
-            IdentityProvider::class,
-            [
-                'entityId' => 'idp2',
-                'singleSignOnServices' => $singleSignOnServices,
-            ]
-        );
+        $idp1 = m::mock(IdentityProviderProxy::class);
+        $idp1
+            ->shouldReceive('getEntityId')
+            ->andReturn('idp1')
+            ->shouldReceive('getNameNl', 'getNameEn', 'getDescriptionNl', 'getDescriptionEn')
+            ->andReturn('IdP number 1')
+            ->shouldReceive('getLogo')
+            ->andReturn($logo)
+        ;
+        $idp1->shouldIgnoreMissing();
 
-        $xml = $this->metadataFactory->fromIdentityProviderEntities([$idp1, $idp2], 'default');
+        $idp2 = m::mock(IdentityProviderProxy::class);
+        $idp2
+            ->shouldReceive('getEntityId')
+            ->andReturn('idp2')
+            ->shouldReceive('getNameNl', 'getNameEn', 'getDescriptionNl', 'getDescriptionEn')
+            ->andReturn('IdP number 2')
+            ->shouldReceive('getLogo')
+            ->andReturn($logo)
+        ;
+        $idp2->shouldIgnoreMissing();
+
+        $collection = new IdentityProviderEntityCollection();
+        $collection->add($idp1);
+        $collection->add($idp2);
+
+        $xml = $this->metadataFactory->fromIdentityProviderEntities($collection, 'default');
 
         // Validate signature and digest
         $this->assertTrue($this->validateXml($xml));

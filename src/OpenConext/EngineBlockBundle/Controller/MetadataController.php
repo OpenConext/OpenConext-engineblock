@@ -22,6 +22,7 @@ use EngineBlock_ApplicationSingleton;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Xml\MetadataProvider;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -98,22 +99,35 @@ class MetadataController
     }
 
     /**
+     * Render the IdPs metadata
+     *
+     * The following steps are required to generate the IdPs metadata:
+     * 1. Determine if the IdP metadata is requested for a specific SP based on the 'sp-entity-id' parameter.
+     * 2. Load the EngineBlock IdP entity (used to override the certificates and contact persons)
+     * 3. Load the IdPs (either based on 'allowedIdpEntityIds' of the specified IdP, or loading all.
+     * 4. Replace the services of the IdP's (SSO and SLO)
+     * 5. Render and sign the document
+     * 6. Return the signed metadata as an XML response
+     *
+     * @param Request $request
      * @param null|string $keyId
      * @return RedirectResponse|Response
      */
-    public function allIdpsMetadataAction($keyId = null)
+    public function allIdpsMetadataAction(Request $request, $keyId = null)
     {
         if (empty($keyId)) {
             $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
         }
-        // Todo: implement sp filter sp-entity-id to list only allowed idps
 
-        $metadataXml = $this->metadataService->metadataForIdpsOfSp(
-            $this->getAbsoluteUrlForRoute('metadata_sp'),
-            $keyId,
-            null
-        );
+        // 1. Determine if the IdP metadata is requested for a specific SP based on the 'sp-entity-id' parameter.
+        $spEntityId = $request->query->get('sp-entity-id', null);
 
+        // 2..5
+        $engineEntityId = $this->getAbsoluteUrlForRoute('metadata_idp');
+        $ssoLocation = $this->getAbsoluteUrlForRoute('authentication_idp_sso');
+        $metadataXml = $this->metadataService->metadataForIdps($engineEntityId, $ssoLocation, $spEntityId, $keyId);
+
+        // 6. Return the signed metadata as an XML response
         $response = new Response($metadataXml);
         $response->headers->set('Content-Type', 'text/xml');
 

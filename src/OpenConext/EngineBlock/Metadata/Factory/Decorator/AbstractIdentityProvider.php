@@ -115,7 +115,7 @@ class AbstractIdentityProvider implements IdentityProviderEntityInterface
     /**
      * @return Logo
      */
-    public function getLogo(): Logo
+    public function getLogo(): ?Logo
     {
         return $this->entity->getLogo();
     }
@@ -195,7 +195,7 @@ class AbstractIdentityProvider implements IdentityProviderEntityInterface
     /**
      * @return Service
      */
-    public function getSingleLogoutService(): Service
+    public function getSingleLogoutService(): ?Service
     {
         return $this->entity->getSingleLogoutService();
     }

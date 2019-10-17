@@ -24,11 +24,6 @@ use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
 
 class EngineBlockIdentityProviderMetadata extends AbstractIdentityProvider
 {
-    /**
-     * The number of seconds a Metadata document is deemed valid
-     */
-    const METADATA_EXPIRATION_TIME = 86400;
-
     public function __construct(IdentityProviderEntityInterface $entity)
     {
         parent::__construct($entity);
@@ -42,12 +37,6 @@ class EngineBlockIdentityProviderMetadata extends AbstractIdentityProvider
     public function getOrganizationSupportUrl() : string
     {
         return $this->entity->getOrganizationEn()->url;
-    }
-
-    public function getValidUntil()
-    {
-        $timeProvider = new TimeProvider();
-        return $timeProvider->timestamp(self::METADATA_EXPIRATION_TIME);
     }
 
     public function getSsoLocation() : string

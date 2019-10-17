@@ -50,10 +50,8 @@ class IdentityProviderFactoryTest extends TestCase
 
     public function test_create_proxy_from_entity()
     {
-        $proxyKeyPair = $this->createMock(X509KeyPair::class);
-
         $entity = new IdentityProvider('entityId');
-        $entity = $this->factory->createProxyFromEntity($entity, $proxyKeyPair);
+        $entity = $this->factory->createProxyFromEntity($entity, 'default');
 
         $this->assertInstanceOf(IdentityProviderEntityInterface::class, $entity);
     }
