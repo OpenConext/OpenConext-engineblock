@@ -1,4 +1,5 @@
 {% spaceless %}
+<!-- {{ termsOfUse }} -->
 <md:EntitiesDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" validUntil="{{ validUntil }}" ID="{{ id }}">
     {% for metadata in metadataCollection %}
         <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="{{ metadata.entityId }}">
