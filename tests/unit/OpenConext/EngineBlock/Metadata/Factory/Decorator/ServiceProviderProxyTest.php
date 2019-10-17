@@ -18,13 +18,13 @@
 namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
 use EngineBlock_Attributes_Metadata as AttributesMetadata;
+use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
-use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use SAML2\Constants;
 
-class ServiceProviderProxyTest extends AbstractServiceProviderDecoratorTest
+class ServiceProviderProxyTest extends AbstractEntityTest
 {
 
     public function test_methods()
@@ -47,18 +47,16 @@ class ServiceProviderProxyTest extends AbstractServiceProviderDecoratorTest
 
         $decorator = new ServiceProviderProxy($adapter, $keyPairMock, $attributesMock);
 
-        $assertions = $this->getServiceProviderAssertions($adapter, $decorator);
-
         $supportedNameIdFormats = [
             Constants::NAMEID_PERSISTENT,
             Constants::NAMEID_TRANSIENT,
             Constants::NAMEID_UNSPECIFIED,
         ];
 
-        $assertions['certificates'] = [[$certificateMock], $decorator->getCertificates()];
-        $assertions['supportedNameIdFormats'] = [$supportedNameIdFormats, $decorator->getSupportedNameIdFormats()];
-        $assertions['requestedAttributes'] = [$attributes, $decorator->getRequestedAttributes()];
+        $poverrides['certificates'] = [$certificateMock];
+        $poverrides['supportedNameIdFormats'] = $supportedNameIdFormats;
+        $poverrides['requestedAttributes'] = $attributes;
 
-        $this->runServiceProviderAssertions($assertions);
+        $this->runServiceProviderAssertions($adapter, $decorator, $poverrides);
     }
 }

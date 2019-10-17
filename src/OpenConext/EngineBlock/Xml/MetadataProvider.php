@@ -114,32 +114,22 @@ class MetadataProvider
      * 3. Render and sign the document
      */
     public function metadataForIdps(
-        string $engineIdpEntityId,
-        string $ssoLocation,
         ?string $spEntityId,
         string $keyId
     ): string {
-        // 1. Load the EngineBlock IdP entity (used to override the certificates and contact persons)
-        $engineBlockIdentityProvider = $this->idpFactory->createEngineBlockEntityFrom(
-            $engineIdpEntityId,
-            $ssoLocation,
-            $keyId
-        );
 
-        // 2. Load the IdPs (either based on 'allowedIdpEntityIds' of the specified IdP, or loading all.
         if ($spEntityId) {
             // See if an sp-entity-id was specified for which we need to use sp specific metadata
             $spEntity = $this->metadataRepository->fetchServiceProviderByEntityId($spEntityId, $keyId);
             if (!$spEntity->allowAll) {
                 $identityProviders = $this->metadataRepository->findIdentityProvidersByEntityId(
-                    $engineBlockIdentityProvider,
                     $spEntity->allowedIdpEntityIds,
                     $keyId
                 );
             }
         }
         if (!isset($identityProviders)) {
-            $identityProviders = $this->metadataRepository->findIdentityProviders($engineBlockIdentityProvider, $keyId);
+            $identityProviders = $this->metadataRepository->findIdentityProviders($keyId);
         }
 
         // 3. Render and sign the document

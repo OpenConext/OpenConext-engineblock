@@ -27,40 +27,40 @@ class IdentityProviderEntityTest extends AbstractEntityTest
     public function test_if_all_methods_will_work()
     {
         $values = $this->getIdentityProviderMockProperties();
-        $ormEntity = $this->getOrmEntityIdentityProviderMock($values);
 
+        $ormEntity = $this->getOrmEntityIdentityProviderMock($values);
         $adapter = new IdentityProviderEntity($ormEntity);
 
-        $assertions = [
-            'id' => [$ormEntity->id, $adapter->getId()],
-            'entityId' => [$ormEntity->entityId, $adapter->getEntityId()],
-            'nameNl' => [$ormEntity->nameNl, $adapter->getNameNl()],
-            'nameEn' => [$ormEntity->nameEn, $adapter->getNameEn()],
-            'descriptionNl' => [$ormEntity->descriptionNl, $adapter->getDescriptionNl()],
-            'descriptionEn' => [$ormEntity->descriptionEn, $adapter->getDescriptionEn()],
-            'displayNameNl' => [$ormEntity->displayNameNl, $adapter->getDisplayNameNl()],
-            'displayNameEn' => [$ormEntity->displayNameEn, $adapter->getDisplayNameEn()],
-            'logo' => [$ormEntity->logo, $adapter->getLogo()],
-            'organizationNl' => [$ormEntity->organizationNl, $adapter->getOrganizationNl()],
-            'organizationEn' => [$ormEntity->organizationEn, $adapter->getOrganizationEn()],
-            'keywordsNl' => [$ormEntity->keywordsNl, $adapter->getKeywordsNl()],
-            'keywordsEn' => [$ormEntity->keywordsEn, $adapter->getKeywordsEn()],
-            'certificates' => [$ormEntity->certificates, $adapter->getCertificates()],
-            'workflowState' => [$ormEntity->workflowState, $adapter->getWorkflowState()],
-            'contactPersons' => [$ormEntity->contactPersons, $adapter->getContactPersons()],
-            'nameIdFormat' => [$ormEntity->nameIdFormat, $adapter->getNameIdFormat()],
-            'supportedNameIdFormats' => [$ormEntity->supportedNameIdFormats, $adapter->getSupportedNameIdFormats()],
-            'singleLogoutService' => [$ormEntity->singleLogoutService, $adapter->getSingleLogoutService()],
-            'requestsMustBeSigned' => [$ormEntity->requestsMustBeSigned, $adapter->isRequestsMustBeSigned()],
-            'responseProcessingService' => [$ormEntity->responseProcessingService, $adapter->getResponseProcessingService()],
-            'manipulation' => [$ormEntity->manipulation, $adapter->getManipulation()],
-            'coins' => [$ormEntity->getCoins(), $adapter->getCoins()],
-            'enabledInWayf' => [$ormEntity->enabledInWayf, $adapter->isEnabledInWayf()],
-            'singleSignOnServices' => [$ormEntity->singleSignOnServices, $adapter->getSingleSignOnServices()],
-            'consentSettings' => [$ormEntity->getConsentSettings(), $adapter->getConsentSettings()],
-            'shibMdScopes' => [$ormEntity->shibMdScopes, $adapter->getShibMdScopes()],
+        $overrides = [
+            'id' =>  $ormEntity->id,
+            'entityId' => $ormEntity->entityId,
+            'nameNl' => $ormEntity->nameNl,
+            'nameEn' => $ormEntity->nameEn,
+            'descriptionNl' => $ormEntity->descriptionNl,
+            'descriptionEn' => $ormEntity->descriptionEn,
+            'displayNameNl' => $ormEntity->displayNameNl,
+            'displayNameEn' => $ormEntity->displayNameEn,
+            'logo' => $ormEntity->logo,
+            'organizationNl' => $ormEntity->organizationNl,
+            'organizationEn' => $ormEntity->organizationEn,
+            'keywordsNl' => $ormEntity->keywordsNl,
+            'keywordsEn' => $ormEntity->keywordsEn,
+            'certificates' => $ormEntity->certificates,
+            'workflowState' => $ormEntity->workflowState,
+            'contactPersons' => $ormEntity->contactPersons,
+            'nameIdFormat' => $ormEntity->nameIdFormat,
+            'supportedNameIdFormats' => $ormEntity->supportedNameIdFormats,
+            'singleLogoutService' => $ormEntity->singleLogoutService,
+            'requestsMustBeSigned' => $ormEntity->requestsMustBeSigned,
+            'responseProcessingService' => $ormEntity->responseProcessingService,
+            'manipulation' => $ormEntity->manipulation,
+            'coins' => $ormEntity->getCoins(),
+            'enabledInWayf' => $ormEntity->enabledInWayf,
+            'singleSignOnServices' => $ormEntity->singleSignOnServices,
+            'consentSettings' => $ormEntity->getConsentSettings(),
+            'shibMdScopes' => $ormEntity->shibMdScopes,
         ];
 
-        $this->runIdentityProviderAssertions($assertions);
+        $this->runIdentityProviderAssertions($adapter, $adapter, $overrides);
     }
 }
