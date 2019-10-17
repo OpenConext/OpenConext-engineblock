@@ -113,8 +113,15 @@ services:
             - '@OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration'
             - '@engineblock.url_provider'
 
+    OpenConext\EngineBlock\Xml\MetadataRenderer:
+        arguments:
+            - "@twig"
+            - "@engineblock.compat.saml2_id_generator"
+            - "@OpenConext\\EngineBlock\\Metadata\\X509\\KeyPairFactory"
+            - "@OpenConext\\EngineBlock\\Xml\\DocumentSigner"
+            - "%openconext_terms_of_use_url%"
+
     OpenConext\EngineBlock\Xml\MetadataProvider:
-        class: OpenConext\EngineBlock\Xml\MetadataProvider
         arguments:
             - '@OpenConext\EngineBlock\Xml\MetadataRenderer'
             - '@engineblock.factory.service_provider_factory'

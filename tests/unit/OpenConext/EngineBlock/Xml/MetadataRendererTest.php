@@ -53,7 +53,7 @@ class MetadataRendererTest extends TestCase
     /**
      * @var MetadataRenderer
      */
-    private $metadataFactory;
+    private $metadataRenderer;
 
     protected function setUp()
     {
@@ -78,7 +78,13 @@ class MetadataRendererTest extends TestCase
 
         $documentSigner = new DocumentSigner();
 
-        $this->metadataFactory = new MetadataRenderer($environment, $samlIdGenerator, $keyPairFactory, $documentSigner);
+        $this->metadataRenderer = new MetadataRenderer(
+            $environment,
+            $samlIdGenerator,
+            $keyPairFactory,
+            $documentSigner,
+            'terms-of-use'
+        );
 
         parent::setUp();
     }
@@ -104,14 +110,20 @@ class MetadataRendererTest extends TestCase
 
         $idp = new EngineBlockIdentityProviderMetadata(new IdentityProviderEntity($idp));
 
-        $xml = $this->metadataFactory->fromIdentityProviderEntity($idp, 'default');
+        $xml = $this->metadataRenderer->fromIdentityProviderEntity($idp, 'default');
 
         // Validate signature and digest
         $this->assertTrue($this->validateXml($xml));
 
-        // Assert descriptor
         $dom = DOMDocumentFactory::fromString($xml);
-        $entityDescriptor = new EntityDescriptor($dom->firstChild);
+
+        // Ensure the terms of use comment is present
+        $comment = $dom->firstChild;
+        $this->assertContains('terms-of-use', $comment->nodeValue);
+
+        // Assert descriptor
+
+        $entityDescriptor = new EntityDescriptor($dom->childNodes->item(1));
         $this->assertInstanceOf(EntityDescriptor::class, $entityDescriptor);
 
         // Assert schema
@@ -142,14 +154,19 @@ class MetadataRendererTest extends TestCase
 
         $sp = new EngineBlockServiceProviderMetadata(new ServiceProviderEntity($sp));
 
-        $xml = $this->metadataFactory->fromServiceProviderEntity($sp, 'default');
+        $xml = $this->metadataRenderer->fromServiceProviderEntity($sp, 'default');
 
         // Validate signature and digest
         $this->assertTrue($this->validateXml($xml));
 
-        // Assert descriptor
         $dom = DOMDocumentFactory::fromString($xml);
-        $entityDescriptor = new EntityDescriptor($dom->firstChild);
+
+        // Ensure the terms of use comment is present
+        $comment = $dom->firstChild;
+        $this->assertContains('terms-of-use', $comment->nodeValue);
+
+        // Assert descriptor
+        $entityDescriptor = new EntityDescriptor($dom->childNodes->item(1));
         $this->assertInstanceOf(EntityDescriptor::class, $entityDescriptor);
 
         // Assert schema
@@ -196,14 +213,19 @@ class MetadataRendererTest extends TestCase
         $collection->add($idp1);
         $collection->add($idp2);
 
-        $xml = $this->metadataFactory->fromIdentityProviderEntities($collection, 'default');
+        $xml = $this->metadataRenderer->fromIdentityProviderEntities($collection, 'default');
 
         // Validate signature and digest
         $this->assertTrue($this->validateXml($xml));
 
-        // Assert descriptor
         $dom = DOMDocumentFactory::fromString($xml);
-        $entityDescriptor = new EntitiesDescriptor($dom->firstChild);
+
+        // Ensure the terms of use comment is present
+        $comment = $dom->firstChild;
+        $this->assertContains('terms-of-use', $comment->nodeValue);
+
+        // Assert descriptor
+        $entityDescriptor = new EntitiesDescriptor($dom->childNodes->item(1));
         $this->assertInstanceOf(EntitiesDescriptor::class, $entityDescriptor);
 
         // Assert schema
