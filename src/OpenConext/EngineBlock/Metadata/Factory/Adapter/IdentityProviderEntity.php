@@ -17,11 +17,11 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory\Adapter;
 
-use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
@@ -111,9 +111,9 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
     }
 
     /**
-     * @return Logo
+     * @return Logo|null
      */
-    public function getLogo(): Logo
+    public function getLogo(): ?Logo
     {
         return $this->entity->logo;
     }
