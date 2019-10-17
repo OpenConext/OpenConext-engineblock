@@ -4,6 +4,7 @@
         <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="{{ metadata.entityId }}">
             <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
                 <md:Extensions>
+                    {% include '@theme/Authentication/View/Metadata/partial/shibmd_scope.xml.twig' %}
                     {% include '@theme/Authentication/View/Metadata/partial/ui_info.xml.twig' %}
                 </md:Extensions>
                 {% for key in metadata.publicKeys %}
