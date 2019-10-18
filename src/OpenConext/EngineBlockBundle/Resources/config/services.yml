@@ -21,14 +21,14 @@ services:
             - "%minimum_execution_time_on_invalid_received_response%"
 
     engineblock.configuration.stepup.endpoint:
-        class: OpenConext\EngineBlockBundle\Stepup\StepupEndpoint
+        class: OpenConext\EngineBlock\Stepup\StepupEndpoint
         arguments:
             - "%stepup.gateway.sfo.entity_id%"
             - "%stepup.gateway.sfo.sso_location%"
             - "%stepup.gateway.sfo.key_file%"
 
     engineblock.configuration.stepup.gateway_loa_mapping:
-        class: OpenConext\EngineBlockBundle\Stepup\StepupGatewayLoaMapping
+        class: OpenConext\EngineBlock\Stepup\StepupGatewayLoaMapping
         arguments:
             - "%stepup.loa.mapping%"
             - "%stepup.loa.loa1%"
@@ -59,7 +59,7 @@ services:
             - "@session"
 
     engineblock.service.stepup.gateway_callout_helper:
-        class: OpenConext\EngineBlockBundle\Stepup\StepupGatewayCallOutHelper
+        class: OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper
         arguments:
             - "@engineblock.configuration.stepup.gateway_loa_mapping"
             - "@engineblock.configuration.stepup.endpoint"
