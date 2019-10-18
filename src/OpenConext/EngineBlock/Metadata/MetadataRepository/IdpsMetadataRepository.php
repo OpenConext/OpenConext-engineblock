@@ -132,7 +132,7 @@ class IdpsMetadataRepository
 
             $idp->contactPersons = $engineBlockIdentityProvider->getContactPersons();
 
-            $collection->add($this->idpFactory->createProxyFromEntity($idp, $keyId));
+            $collection->add($this->idpFactory->createEngineBlockEntityFromEntity($idp, $keyId));
         }
         return $collection;
     }

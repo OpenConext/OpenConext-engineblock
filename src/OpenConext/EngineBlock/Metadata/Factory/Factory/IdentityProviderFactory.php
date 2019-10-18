@@ -50,6 +50,9 @@ class IdentityProviderFactory
         $this->engineBlockConfiguration = $engineBlockConfiguration;
     }
 
+    /**
+     * Use this method to create an entity which could act as proxy
+     */
     public function createEngineBlockEntityFrom(
         string $entityId,
         string $ssoLocation,
@@ -57,15 +60,15 @@ class IdentityProviderFactory
     ): IdentityProviderEntityInterface {
         $entity = $this->buildIdentityProviderOrmEntity($entityId, $ssoLocation, $keyId);
 
-        return new EngineBlockIdentityProviderMetadata(
-            new IdentityProviderProxy(  // Add EB proxy data
-                new EngineBlockIdentityProviderInformation( // Add EB specific information
-                    new IdentityProviderEntity($entity),
-                    $this->engineBlockConfiguration
-                ),
-                $this->keyPairFactory->buildFromIdentifier($keyId)
-            )
-        );
+        return $this->buildEngineBlockEntityFromEntity($entity, $keyId);
+    }
+
+    /**
+     * Use this method to create an entity which could act as proxy
+     */
+    public function createEngineBlockEntityFromEntity(IdentityProvider $entity, string $keyId): IdentityProviderEntityInterface
+    {
+        return $this->buildEngineBlockEntityFromEntity($entity, $keyId);
     }
 
     private function buildIdentityProviderOrmEntity(
@@ -79,5 +82,27 @@ class IdentityProviderFactory
         $entity->singleSignOnServices = $singleSignOnServices;
 
         return $entity;
+    }
+
+    /**
+     * This method will create an EngineBlock entity from a regular entity
+     * On the returned entity all values are replaced by values where EB is acting as proxy
+     *
+     * - IdentityProviderEntity: The adapter to convert the ORM entity to support the immutable IdentityProviderEntityInterface interface
+     * - EngineBlockIdentityProviderInformation: Information used to add EB contact and UI info
+     * - IdentityProviderProxy: Set the functional fields to act as proxy:
+     *   (signing certificate, supported nameid formats, sso/slo services, response processing service)
+     */
+    private function buildEngineBlockEntityFromEntity(IdentityProvider $entity, string $keyId): IdentityProviderEntityInterface
+    {
+        return new EngineBlockIdentityProviderMetadata(
+            new IdentityProviderProxy(  // Add EB proxy data
+                new EngineBlockIdentityProviderInformation( // Add EB specific information
+                    new IdentityProviderEntity($entity),
+                    $this->engineBlockConfiguration
+                ),
+                $this->keyPairFactory->buildFromIdentifier($keyId)
+            )
+        );
     }
 }
