@@ -22,7 +22,6 @@ use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
 
 class IdentityProviderFactoryTest extends TestCase
 {
@@ -39,7 +38,7 @@ class IdentityProviderFactoryTest extends TestCase
         $this->factory = new IdentityProviderFactory($keyPairFactory, $configuration);
     }
 
-    public function test_create_entity_from_entity()
+    public function test_create_entity_from()
     {
         $entity = $this->factory->createEngineBlockEntityFrom(
             'entityID',
@@ -50,31 +49,10 @@ class IdentityProviderFactoryTest extends TestCase
         $this->assertInstanceOf(IdentityProviderEntityInterface::class, $entity);
     }
 
-
-    public function test_create_entity_from_entity()
-    {
-        $entity = new IdentityProvider('entityId');
-        $entity = $this->factory->createEntityFromEntity($entity);
-
-        $this->assertInstanceOf(IdentityProviderEntityInterface::class, $entity);
-    }
-
     public function test_create_proxy_from_entity()
     {
         $entity = new IdentityProvider('entityId');
-        $entity = $this->factory->createProxyFromEntity($entity, 'default');
-
-        $this->assertInstanceOf(IdentityProviderEntityInterface::class, $entity);
-    }
-
-    public function test_create_minimal_entity()
-    {
-        $entity = $this->factory->createMinimalEntity(
-            'entityId',
-            'ssoLocation',
-            'default',
-            Constants::BINDING_HTTP_REDIRECT
-        );
+        $entity = $this->factory->createEngineBlockEntityFromEntity($entity, 'default');
 
         $this->assertInstanceOf(IdentityProviderEntityInterface::class, $entity);
     }
