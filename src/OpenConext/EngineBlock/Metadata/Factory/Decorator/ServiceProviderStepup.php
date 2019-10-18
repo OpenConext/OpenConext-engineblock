@@ -24,29 +24,23 @@ use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use SAML2\Constants;
 
 /**
- * This decoration is used to represent EngineBlock in it's SP role when EngineBlock is used as authentication
- * proxy. It will make sure all required parameters to support EB are set.
+ * This decoration is used to represent EngineBlock in it's Stepup role when EngineBlock is doing a stepup callout
+ * It will make sure the right acs location is used to consume the response back to EB.
  */
-class ServiceProviderProxy extends AbstractServiceProvider
+class ServiceProviderStepup extends AbstractServiceProvider
 {
     /**
      * @var X509KeyPair
      */
     private $keyPair;
-    /**
-     * @var AttributesMetadata
-     */
-    private $attributes;
 
     public function __construct(
         ServiceProviderEntityInterface $entity,
-        X509KeyPair $keyPair,
-        AttributesMetadata $attributes
+        X509KeyPair $keyPair
     ) {
         parent::__construct($entity);
 
         $this->keyPair = $keyPair;
-        $this->attributes = $attributes;
     }
 
 
@@ -57,23 +51,6 @@ class ServiceProviderProxy extends AbstractServiceProvider
 
     public function getSupportedNameIdFormats(): array
     {
-        return [
-            Constants::NAMEID_PERSISTENT,
-            Constants::NAMEID_TRANSIENT,
-            Constants::NAMEID_UNSPECIFIED,
-        ];
-    }
-
-    /**
-     * @return RequestedAttribute[]|null
-     */
-    public function getRequestedAttributes(): ?array
-    {
-        return $this->attributes->getRequestedAttributes();
-    }
-
-    public function isAllowAll(): bool
-    {
-        return true;
+        return [];
     }
 }
