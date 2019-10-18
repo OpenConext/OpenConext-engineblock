@@ -24,6 +24,7 @@ use OpenConext\EngineBlock\Metadata\Factory\Adapter\ServiceProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProviderInformation;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProviderMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\ServiceProviderProxy;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\ServiceProviderStepup;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\IndexedService;
@@ -68,7 +69,7 @@ class ServiceProviderFactory
     ): ServiceProviderEntityInterface {
         $entity = $this->buildServiceProviderOrmEntity($entityId, $acsLocation, $keyId);
 
-        return new EngineBlockServiceProviderMetadata(
+        return new EngineBlockServiceProviderMetadata( // Add metadata helper functions for presenting data
             new ServiceProviderProxy( // Add EB proxy data
                 new EngineBlockServiceProviderInformation(  // Add EB specific information
                     new ServiceProviderEntity($entity),
@@ -87,8 +88,11 @@ class ServiceProviderFactory
     ): ServiceProviderEntityInterface {
         $entity = $this->buildServiceProviderOrmEntity($entityId, $acsLocation, $keyId);
 
-        return new EngineBlockServiceProviderMetadata(
-            new ServiceProviderEntity($entity)
+        return new EngineBlockServiceProviderMetadata( // Add metadata helper functions for presenting data
+            new ServiceProviderStepup( // Add stepup data
+                new ServiceProviderEntity($entity),
+                $this->keyPairFactory->buildFromIdentifier($keyId)
+            )
         );
     }
 

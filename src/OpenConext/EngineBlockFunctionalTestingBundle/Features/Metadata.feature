@@ -30,6 +30,15 @@ Feature:
       # Verify SSO location and binding is set correctly
       And the response should match xpath '//md:SingleSignOnService[@Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" and @Location="https://engine.vm.openconext.org/authentication/idp/single-sign-on"]'
 
+  Scenario: A user can request the EngineBlock stepup metadata
+    When I go to Engineblock URL "/authentication/stepup/metadata"
+    # Verify the entity id is correctly set in the metadata
+    Then the response should match xpath '//md:EntityDescriptor[@entityID="https://engine.vm.openconext.org/authentication/stepup/metadata"]'
+    # Verify the signature method is set to sha256
+    And the response should match xpath '//ds:SignatureMethod[@Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"]'
+    # Verify the ACS location and binding
+    And the response should match xpath '//md:AssertionConsumerService[@Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" and @Location="https://engine.vm.openconext.org/authentication/stepup/consume-assertion"]'
+
 #  Scenario: A user can request the metadata of all known and visible IdPs
 #      Given an Identity Provider named "Known-IdP"
 #      And an Identity Provider named "Second-IdP"

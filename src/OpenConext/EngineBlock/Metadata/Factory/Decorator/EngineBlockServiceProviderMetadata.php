@@ -20,7 +20,6 @@ namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\IndexedService;
-use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
 
 class EngineBlockServiceProviderMetadata extends AbstractServiceProvider
 {
@@ -58,5 +57,27 @@ class EngineBlockServiceProviderMetadata extends AbstractServiceProvider
             $keys[$pem] = $pem;
         }
         return $keys;
+    }
+
+    public function hasUiInfo(): bool
+    {
+        $info = [
+            $this->getDisplayNameEn(),
+            $this->getDisplayNameNl(),
+            $this->getOrganizationEn(),
+            $this->getOrganizationNl(),
+        ];
+
+        return !empty(array_filter($info));
+    }
+
+    public function hasOrganizationInfo(): bool
+    {
+        $info = [
+            $this->getOrganizationEn(),
+            $this->getOrganizationNl(),
+        ];
+
+        return !empty(array_filter($info));
     }
 }
