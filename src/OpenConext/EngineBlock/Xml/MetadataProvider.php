@@ -22,7 +22,7 @@ use OpenConext\EngineBlock\Metadata\Factory\Factory\IdentityProviderFactory;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\IdpsMetadataRepository;
 use OpenConext\EngineBlockBundle\Exception\EntityCanNotBeFoundException;
-use OpenConext\EngineBlockBundle\Stepup\StepupEndpoint;
+use OpenConext\EngineBlock\Stepup\StepupEndpoint;
 
 class MetadataProvider
 {

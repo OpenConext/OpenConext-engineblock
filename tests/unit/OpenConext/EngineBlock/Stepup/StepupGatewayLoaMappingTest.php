@@ -21,7 +21,7 @@ namespace OpenConext\EngineBlockBundle\Tests;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use OpenConext\EngineBlock\Exception\RuntimeException;
-use OpenConext\EngineBlockBundle\Stepup\StepupGatewayLoaMapping;
+use OpenConext\EngineBlock\Stepup\StepupGatewayLoaMapping;
 use PHPUnit\Framework\TestCase;
 
 class StepupGatewayLoaMappingTest extends TestCase

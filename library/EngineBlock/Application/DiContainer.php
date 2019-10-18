@@ -20,8 +20,8 @@ use Doctrine\ORM\EntityManager;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlock\Service\TimeProvider\TimeProviderInterface;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
-use OpenConext\EngineBlockBundle\Stepup\StepupEntityFactory;
-use OpenConext\EngineBlockBundle\Stepup\StepupGatewayCallOutHelper;
+use OpenConext\EngineBlock\Stepup\StepupEntityFactory;
+use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
 class EngineBlock_Application_DiContainer extends Pimple
@@ -509,7 +509,7 @@ class EngineBlock_Application_DiContainer extends Pimple
         return (string) $this->container->getParameter('stepup.authn_context_class_ref_blacklist_regex');
     }
 
-    /** @return \OpenConext\EngineBlockBundle\Stepup\StepupEndpoint $stepupEndpoint */
+    /** @return \OpenConext\EngineBlock\Stepup\StepupEndpoint $stepupEndpoint */
     protected function getStepupEndpoint()
     {
         return $this->container->get('engineblock.configuration.stepup.endpoint');

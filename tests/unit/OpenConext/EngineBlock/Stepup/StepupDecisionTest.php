@@ -24,7 +24,7 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlock\Metadata\Utils;
-use OpenConext\EngineBlockBundle\Stepup\StepupDecision;
+use OpenConext\EngineBlock\Stepup\StepupDecision;
 use PHPUnit\Framework\TestCase;
 
 class StepupDecisionTest extends TestCase

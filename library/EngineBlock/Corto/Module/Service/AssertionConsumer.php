@@ -19,7 +19,7 @@
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
-use OpenConext\EngineBlockBundle\Stepup\StepupGatewayCallOutHelper;
+use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;

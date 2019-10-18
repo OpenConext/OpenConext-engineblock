@@ -21,7 +21,7 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use OpenConext\EngineBlockBundle\Exception\ResponseProcessingFailedException;
-use OpenConext\EngineBlockBundle\Stepup\StepupEntityFactory;
+use OpenConext\EngineBlock\Stepup\StepupEntityFactory;
 use SAML2\AuthnRequest;
 use SAML2\Binding;
 use SAML2\Certificate\KeyLoader;

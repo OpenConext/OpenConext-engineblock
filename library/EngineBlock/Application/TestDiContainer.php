@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-use OpenConext\EngineBlockBundle\Stepup\StepupEndpoint;
+use OpenConext\EngineBlock\Stepup\StepupEndpoint;
 
 /**
  * Creates mocked versions of dependencies for unit testing

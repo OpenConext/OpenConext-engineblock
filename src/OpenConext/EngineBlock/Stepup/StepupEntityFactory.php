@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Stepup;
+namespace OpenConext\EngineBlock\Stepup;
 
 use EngineBlock_X509_CertificateFactory;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
