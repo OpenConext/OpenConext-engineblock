@@ -67,9 +67,8 @@ class IdentityProviderProxy extends AbstractIdentityProvider
 
     public function getSingleLogoutService(): ?Service
     {
-        if ($this->isEngineBlock()) {
-            $sloLocation = $this->urlProvider->getUrl('authentication_logout', false, null, null);
-            return new Service($sloLocation, Constants::BINDING_HTTP_REDIRECT);
+        if (is_null($this->entity->getSingleLogoutService())) {
+            return null;
         }
 
         $sloLocation = $this->urlProvider->getUrl('authentication_logout', false, null, null);
@@ -78,18 +77,19 @@ class IdentityProviderProxy extends AbstractIdentityProvider
 
     public function getResponseProcessingService(): Service
     {
-        if ($this->isEngineBlock()) {
-            // TODO:  test if this works or could be removed
-            // @see https://www.pivotaltracker.com/story/show/169204880
-            return new Service('/authentication/idp/provide-consent', 'INTERNAL');
-        }
+        // TODO:  test if this works or could be removed
+        // @see https://www.pivotaltracker.com/story/show/169204880
 
         return new Service('/authentication/idp/provide-consent', 'INTERNAL');
     }
 
+    /**
+     * When the service is requested for an entity other then EB we should replace service locations and bindings with those of EB
+     * - if the entity is not EB we should add the entityId so EB could determine the IdP we are acting for.
+     */
     public function getSingleSignOnServices(): array
     {
-        if ($this->isEngineBlock()) {
+        if (!$this->isEngineBlock()) {
             $ssoLocation = $this->urlProvider->getUrl('authentication_idp_sso', false, null, $this->getEntityId());
             return [new Service($ssoLocation, Constants::BINDING_HTTP_REDIRECT)];
         }
@@ -100,7 +100,7 @@ class IdentityProviderProxy extends AbstractIdentityProvider
 
     public function isEngineBlock()
     {
-        $url = $this->urlProvider->getUrl('authentication_idp_sso', false, null, null);
+        $url = $this->urlProvider->getUrl('metadata_idp', false, null, null);
         return $this->getEntityId() === $url;
     }
 }

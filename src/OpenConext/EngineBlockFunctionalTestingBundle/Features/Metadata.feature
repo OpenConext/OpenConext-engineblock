@@ -39,17 +39,17 @@ Feature:
     # Verify the ACS location and binding
     And the response should match xpath '//md:AssertionConsumerService[@Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" and @Location="https://engine.vm.openconext.org/authentication/stepup/consume-assertion"]'
 
-#  Scenario: A user can request the metadata of all known and visible IdPs
-#      Given an Identity Provider named "Known-IdP"
-#      And an Identity Provider named "Second-IdP"
-#      And an Identity Provider named "Regular-IdP"
-#      When I go to Engineblock URL "/authentication/proxy/idps-metadata"
-#      # Verify the three IdPs are present in the list
-#      Then the response should match xpath '//md:EntityDescriptor[@entityID="https://engine.vm.openconext.org/functional-testing/Known-IdP/metadata"]'
-#      And the response should match xpath '//md:EntityDescriptor[@entityID="https://engine.vm.openconext.org/functional-testing/Second-IdP/metadata"]'
-#      And the response should match xpath '//md:EntityDescriptor[@entityID="https://engine.vm.openconext.org/functional-testing/Regular-IdP/metadata"]'
-#      # And Engine IdP is not listed
-#      And the response should not match xpath '//md:EntityDescriptor[@entityID="https://engine.vm.openconext.org/authentication/idp/metadata"]'
+  Scenario: A user can request the metadata of all known and visible IdPs
+      Given an Identity Provider named "Known-IdP"
+      And an Identity Provider named "Second-IdP"
+      And an Identity Provider named "Regular-IdP"
+      When I go to Engineblock URL "/authentication/proxy/idps-metadata"
+      # Verify the three IdPs are present in the list
+      Then the response should match xpath '//md:EntityDescriptor[@entityID="https://engine.vm.openconext.org/functional-testing/Known-IdP/metadata"]'
+      And the response should match xpath '//md:EntityDescriptor[@entityID="https://engine.vm.openconext.org/functional-testing/Second-IdP/metadata"]'
+      And the response should match xpath '//md:EntityDescriptor[@entityID="https://engine.vm.openconext.org/functional-testing/Regular-IdP/metadata"]'
+      # And Engine IdP is not listed
+      And the response should not match xpath '//md:EntityDescriptor[@entityID="https://engine.vm.openconext.org/authentication/idp/metadata"]'
 
   Scenario: A user can request the metadata and does not see invisible IdPs
       Given an Identity Provider named "Known-IdP"

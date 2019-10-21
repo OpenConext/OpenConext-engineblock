@@ -37,18 +37,18 @@ class IdentityProviderProxyTest extends AbstractEntityTest
 
         $urlProvider = $this->createMock(UrlProvider::class);
 
-        $urlProvider->expects($this->exactly(5))
+        $urlProvider->expects($this->exactly(3))
             ->method('getUrl')
             ->withConsecutive(
-                ['authentication_idp_sso', false, null, null], // check if entity is EB (SLO)
+                // SLO: IdentityProviderProxy::getSingleLogoutService
                 ['authentication_logout', false, null, null],
-                ['authentication_idp_sso', false, null, null], // check if entity is EB (RPS)
-                ['authentication_idp_sso', false, null, null], // check if entity is EB (SSO)
-                ['authentication_idp_sso', false, null, null]
+                // SSO: IdentityProviderProxy::getSingleSignOnServices
+                ['metadata_idp', false, null, null], // check if entity is EB
+                ['authentication_idp_sso', false, null, 'entity-id']
             ) ->willReturnOnConsecutiveCalls(
-                'ssoLocation',
+                // SLO
                 'sloLocation',
-                'ssoLocation',
+                // SSO
                 'ssoLocation',
                 'ssoLocation'
             );
