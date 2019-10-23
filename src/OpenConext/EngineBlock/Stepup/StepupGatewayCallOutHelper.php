@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Stepup;
+namespace OpenConext\EngineBlock\Stepup;
 
 use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;

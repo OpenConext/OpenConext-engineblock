@@ -61,35 +61,110 @@ abstract class AbstractEntityTest extends TestCase
     /**
      * Run the supplied assertions this is used to test the decorators
      */
-    protected function runIdentityProviderAssertions(array $assertions)
+    protected function runIdentityProviderAssertions(IdentityProviderEntityInterface $adapter, IdentityProviderEntityInterface $decorator, array $overrides = [])
     {
         $implemented = $this->getIdentityProviderValues(IdentityProviderEntityInterface::class);
 
-        foreach ($assertions as $name => $assertion) {
-            $this->assertSame($assertion[0], $assertion[1], 'Invalid '.$name);
-        }
+        $assertions = [
+            'id' => function(IdentityProviderEntityInterface $entity) { return $entity->getId(); },
+            'entityId' => function(IdentityProviderEntityInterface $entity) { return $entity->getEntityId(); },
+            'nameNl' => function(IdentityProviderEntityInterface $entity) { return  $entity->getNameNl(); },
+            'nameEn' => function(IdentityProviderEntityInterface $entity) { return  $entity->getNameEn(); },
+            'descriptionNl' => function(IdentityProviderEntityInterface $entity) { return  $entity->getDescriptionNl(); },
+            'descriptionEn' => function(IdentityProviderEntityInterface $entity) { return  $entity->getDescriptionEn(); },
+            'displayNameNl' => function(IdentityProviderEntityInterface $entity) { return  $entity->getDisplayNameNl(); },
+            'displayNameEn' => function(IdentityProviderEntityInterface $entity) { return  $entity->getDisplayNameEn(); },
+            'logo' => function(IdentityProviderEntityInterface $entity) { return  $entity->getLogo(); },
+            'organizationNl' => function(IdentityProviderEntityInterface $entity) { return  $entity->getOrganizationNl(); },
+            'organizationEn' => function(IdentityProviderEntityInterface $entity) { return  $entity->getOrganizationEn(); },
+            'keywordsNl' => function(IdentityProviderEntityInterface $entity) { return  $entity->getKeywordsNl(); },
+            'keywordsEn' => function(IdentityProviderEntityInterface $entity) { return  $entity->getKeywordsEn(); },
+            'certificates' => function(IdentityProviderEntityInterface $entity) { return  $entity->getCertificates(); },
+            'workflowState' => function(IdentityProviderEntityInterface $entity) { return  $entity->getWorkflowState(); },
+            'contactPersons' => function(IdentityProviderEntityInterface $entity) { return  $entity->getContactPersons(); },
+            'nameIdFormat' => function(IdentityProviderEntityInterface $entity) { return  $entity->getNameIdFormat(); },
+            'supportedNameIdFormats' => function(IdentityProviderEntityInterface $entity) { return  $entity->getSupportedNameIdFormats(); },
+            'singleLogoutService' => function(IdentityProviderEntityInterface $entity) { return  $entity->getSingleLogoutService(); },
+            'requestsMustBeSigned' => function(IdentityProviderEntityInterface $entity) { return  $entity->isRequestsMustBeSigned(); },
+            'responseProcessingService' => function(IdentityProviderEntityInterface $entity) { return  $entity->getResponseProcessingService(); },
+            'manipulation' => function(IdentityProviderEntityInterface $entity) { return  $entity->getManipulation(); },
+            'coins' => function(IdentityProviderEntityInterface $entity) { return  $entity->getCoins(); },
+            'enabledInWayf' => function(IdentityProviderEntityInterface $entity) { return  $entity->isEnabledInWayf(); },
+            'singleSignOnServices' => function(IdentityProviderEntityInterface $entity) { return  $entity->getSingleSignOnServices(); },
+            'consentSettings' => function(IdentityProviderEntityInterface $entity) { return  $entity->getConsentSettings(); },
+            'shibMdScopes' => function(IdentityProviderEntityInterface $entity) { return  $entity->getShibMdScopes(); },
+        ];
 
         $missing = array_diff_key($implemented, $assertions);
-        $this->assertCount(0, $missing, 'missing tests for: ' . json_encode($missing));
+        $this->assertCount(0, $missing, 'missing tests for: '. json_encode($missing));
         $this->assertCount(27, $implemented);
         $this->assertCount(count($implemented), $assertions);
+
+        foreach ($assertions as $name => $assertion) {
+            if (array_key_exists($name, $overrides)) {
+                $this->assertEquals($overrides[$name], $assertion($decorator), sprintf("Invalid expectancy in method override for property '%s'", $name));
+            } else {
+                $this->assertSame($assertion($adapter), $assertion($decorator), sprintf("Invalid expectancy in abstract method for property '%s'", $name));
+            }
+        }
     }
 
     /**
      * Run the supplied assertions this is used to test the decorators
      */
-    protected function runServiceProviderAssertions(array $assertions)
+    protected function runServiceProviderAssertions(ServiceProviderEntityInterface $adapter, ServiceProviderEntityInterface $decorator, array $overrides = [])
     {
         $implemented = $this->getIdentityProviderValues(ServiceProviderEntityInterface::class);
 
-        foreach ($assertions as $name => $assertion) {
-            $this->assertSame($assertion[0], $assertion[1], 'Invalid '.$name);
-        }
+        $assertions = [
+            'id' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getId(); },
+            'entityId' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getEntityId(); },
+            'nameNl' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getNameNl(); },
+            'nameEn' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getNameEn(); },
+            'descriptionNl' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getDescriptionNl(); },
+            'descriptionEn' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getDescriptionEn(); },
+            'displayNameNl' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getDisplayNameNl(); },
+            'displayNameEn' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getDisplayNameEn(); },
+            'logo' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getLogo(); },
+            'organizationNl' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getOrganizationNl(); },
+            'organizationEn' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getOrganizationEn(); },
+            'keywordsNl' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getKeywordsNl(); },
+            'keywordsEn' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getKeywordsEn(); },
+            'certificates' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getCertificates(); },
+            'workflowState' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getWorkflowState(); },
+            'contactPersons' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getContactPersons(); },
+            'nameIdFormat' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getNameIdFormat(); },
+            'supportedNameIdFormats' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getSupportedNameIdFormats(); },
+            'singleLogoutService' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getSingleLogoutService(); },
+            'requestsMustBeSigned' => function(ServiceProviderEntityInterface $decorator) { return $decorator->isRequestsMustBeSigned(); },
+            'responseProcessingService' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getResponseProcessingService(); },
+            'manipulation' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getManipulation(); },
+            'coins' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getCoins(); },
+            'attributeReleasePolicy' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getAttributeReleasePolicy(); },
+            'assertionConsumerServices' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getAssertionConsumerServices(); },
+            'allowedIdpEntityIds' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getAllowedIdpEntityIds(); },
+            'allowAll' => function(ServiceProviderEntityInterface $decorator) { return $decorator->isAllowAll(); },
+            'requestedAttributes' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getRequestedAttributes(); },
+            'supportUrlEn' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getSupportUrlEn(); },
+            'supportUrlNl' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getSupportUrlNl(); },
+
+            'allowed' => function(ServiceProviderEntityInterface $decorator, $entityId = 'entity-id-2') { return $decorator->isAllowed('entity-id-2'); },
+            'displayName'  => function(ServiceProviderEntityInterface $decorator, $locale = 'EN') { return $decorator->getDisplayName($locale); },
+            'attributeAggregationRequired' => function(ServiceProviderEntityInterface $decorator) { return $decorator->isAttributeAggregationRequired(); },
+        ];
 
         $missing = array_diff_key($implemented, $assertions);
         $this->assertCount(0, $missing, 'missing tests for: ' . json_encode($missing));
         $this->assertCount(33, $implemented);
         $this->assertCount(count($implemented), $assertions);
+
+        foreach ($assertions as $name => $assertion) {
+            if (array_key_exists($name, $overrides)) {
+                $this->assertEquals($overrides[$name], $assertion($decorator), sprintf("Invalid expectancy in method override for property '%s'", $name));
+            } else {
+                $this->assertSame($assertion($adapter), $assertion($decorator), sprintf("Invalid expectancy in abstract method for property '%s'", $name));
+            }
+        }
     }
 
     /**

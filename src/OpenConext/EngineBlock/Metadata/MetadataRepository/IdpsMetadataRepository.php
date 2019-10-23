@@ -72,10 +72,9 @@ class IdpsMetadataRepository
     /**
      * @return IdentityProviderProxy[]
      */
-    public function findIdentityProviders(EngineBlockIdentityProviderMetadata $engineBlockIdentityProvider, string $keyId)
+    public function findIdentityProviders(string $keyId)
     {
         return $this->convertIdentityProviders(
-            $engineBlockIdentityProvider,
             $this->repository->findIdentityProviders(),
             $keyId
         );
@@ -86,12 +85,10 @@ class IdpsMetadataRepository
      * @return IdentityProvider[]
      */
     public function findIdentityProvidersByEntityId(
-        EngineBlockIdentityProviderMetadata $engineBlockIdentityProvider,
         array $identityProviderEntityIds,
         string $keyId
     ) {
         return $this->convertIdentityProviders(
-            $engineBlockIdentityProvider,
             $this->repository->findIdentityProvidersByEntityId($identityProviderEntityIds),
             $keyId
         );
@@ -101,18 +98,17 @@ class IdpsMetadataRepository
      * @param IdentityProvider[] $idps
      */
     private function convertIdentityProviders(
-        EngineBlockIdentityProviderMetadata $engineBlockIdentityProvider,
         array $idps,
         string $keyId
     ): IdentityProviderEntityCollection {
-        // Replace the services of the IdP's (SSO and SLO)
-        $ssoServiceReplacer = new ServiceReplacer($engineBlockIdentityProvider, 'SingleSignOnService', ServiceReplacer::REQUIRED);
-        $slServiceReplacer  = new ServiceReplacer($engineBlockIdentityProvider, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
 
         $collection = new IdentityProviderEntityCollection();
+
         foreach ($idps as $idp) {
             // Don't add ourselves
-            if ($idp->entityId === $engineBlockIdentityProvider->getEntityId()) {
+            // TODO: remove after the 'magic' entities are removed
+            // @see: https://www.pivotaltracker.com/story/show/168249058
+            if ($idp->entityId === $this->urlProvider->getUrl('metadata_idp', false, null, null)) {
                 continue;
             }
 
@@ -121,18 +117,7 @@ class IdpsMetadataRepository
                 continue;
             }
 
-            // Use EngineBlock certificates
-            $idp->certificates = $engineBlockIdentityProvider->certificates;
-
-            // Replace service locations and bindings with those of EB
-            $transparentSsoUrl = $this->urlProvider->getUrl('authentication_idp_sso', false, null, $idp->entityId);
-            $ssoServiceReplacer->replace($idp, $transparentSsoUrl);
-            $transparentSlUrl = $this->urlProvider->getUrl('authentication_logout', false, null, null);
-            $slServiceReplacer->replace($idp, $transparentSlUrl);
-
-            $idp->contactPersons = $engineBlockIdentityProvider->getContactPersons();
-
-            $collection->add($this->idpFactory->createProxyFromEntity($idp, $keyId));
+            $collection->add($this->idpFactory->createEngineBlockEntityFromEntity($idp, $keyId));
         }
         return $collection;
     }

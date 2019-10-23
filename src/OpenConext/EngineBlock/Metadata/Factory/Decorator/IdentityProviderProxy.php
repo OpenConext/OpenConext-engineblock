@@ -18,9 +18,9 @@
 namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
-use OpenConext\EngineBlock\Metadata\Factory\ServiceReplacableEntityInterface;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
+use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
 
 /**
@@ -33,14 +33,20 @@ class IdentityProviderProxy extends AbstractIdentityProvider
      * @var X509KeyPair
      */
     private $keyPair;
+    /**
+     * @var UrlProvider
+     */
+    private $urlProvider;
 
     public function __construct(
         IdentityProviderEntityInterface $entity,
-        X509KeyPair $keyPair
+        X509KeyPair $keyPair,
+        UrlProvider $urlProvider
     ) {
         parent::__construct($entity);
 
         $this->keyPair = $keyPair;
+        $this->urlProvider = $urlProvider;
     }
 
     public function getCertificates(): array
@@ -59,30 +65,42 @@ class IdentityProviderProxy extends AbstractIdentityProvider
         ];
     }
 
-    public function getPublicKeys(): array
+    public function getSingleLogoutService(): ?Service
     {
-        $keys = [];
-        foreach ($this->getCertificates() as $certificate) {
-            $pem = $certificate->toCertData();
-            $keys[$pem] = $pem;
+        if (is_null($this->entity->getSingleLogoutService())) {
+            return null;
         }
-        return $keys;
+
+        $sloLocation = $this->urlProvider->getUrl('authentication_logout', false, null, null);
+        return new Service($sloLocation, Constants::BINDING_HTTP_REDIRECT);
     }
 
-    public function getOrganization() : string
+    public function getResponseProcessingService(): Service
     {
-        return $this->entity->getOrganizationEn()->name;
+        // TODO:  test if this works or could be removed
+        // @see https://www.pivotaltracker.com/story/show/169204880
+
+        return new Service('/authentication/idp/provide-consent', 'INTERNAL');
     }
 
-    public function getOrganizationSupportUrl() : string
+    /**
+     * When the service is requested for an entity other then EB we should replace service locations and bindings with those of EB
+     * - if the entity is not EB we should add the entityId so EB could determine the IdP we are acting for.
+     */
+    public function getSingleSignOnServices(): array
     {
-        return $this->entity->getOrganizationEn()->url;
+        if (!$this->isEngineBlock()) {
+            $ssoLocation = $this->urlProvider->getUrl('authentication_idp_sso', false, null, $this->getEntityId());
+            return [new Service($ssoLocation, Constants::BINDING_HTTP_REDIRECT)];
+        }
+
+        $ssoLocation = $this->urlProvider->getUrl('authentication_idp_sso', false, null, null);
+        return [new Service($ssoLocation, Constants::BINDING_HTTP_REDIRECT)];
     }
 
-    public function getSsoLocation() : string
+    public function isEngineBlock()
     {
-        /** @var Service $service */
-        $service = reset($this->entity->getSingleSignOnServices());
-        return $service->location;
+        $url = $this->urlProvider->getUrl('metadata_idp', false, null, null);
+        return $this->getEntityId() === $url;
     }
 }

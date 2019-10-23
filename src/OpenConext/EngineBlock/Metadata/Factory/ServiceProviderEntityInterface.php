@@ -71,19 +71,19 @@ interface ServiceProviderEntityInterface
     public function getDisplayNameEn(): string;
 
     /**
-     * @return Logo
+     * @return Logo|null
      */
-    public function getLogo(): Logo;
+    public function getLogo(): ?Logo;
 
     /**
-     * @return Organization
+     * @return Organization|null
      */
-    public function getOrganizationNl(): Organization;
+    public function getOrganizationNl(): ?Organization;
 
     /**
-     * @return Organization
+     * @return Organization|null
      */
-    public function getOrganizationEn(): Organization;
+    public function getOrganizationEn(): ?Organization;
 
     /**
      * @return string

@@ -20,7 +20,7 @@ namespace OpenConext\EngineBlockBundle\Tests;
 
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
-use OpenConext\EngineBlockBundle\Stepup\StepupEndpoint;
+use OpenConext\EngineBlock\Stepup\StepupEndpoint;
 use PHPUnit\Framework\TestCase;
 
 class StepupEndpointTest extends TestCase

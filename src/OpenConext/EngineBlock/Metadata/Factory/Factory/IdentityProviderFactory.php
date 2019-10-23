@@ -19,13 +19,14 @@ namespace OpenConext\EngineBlock\Metadata\Factory\Factory;
 
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProviderInformation;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProviderMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\IdentityProviderProxy;
-use OpenConext\EngineBlock\Metadata\Factory\Decorator\IdentityProviderStepup;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
+use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
 
 /**
@@ -44,54 +45,40 @@ class IdentityProviderFactory
      */
     private $engineBlockConfiguration;
 
-    public function __construct(KeyPairFactory $keyPairFactory, EngineBlockConfiguration $engineBlockConfiguration)
+    /**
+     * @var UrlProvider
+     */
+    private $urlProvider;
+
+    public function __construct(KeyPairFactory $keyPairFactory, EngineBlockConfiguration $engineBlockConfiguration, UrlProvider $urlProvider)
     {
         $this->keyPairFactory = $keyPairFactory;
         $this->engineBlockConfiguration = $engineBlockConfiguration;
+        $this->urlProvider = $urlProvider;
     }
 
-    public function createEntityFromEntity(IdentityProvider $entity): IdentityProviderEntityInterface
-    {
-        return new IdentityProviderEntity($entity);
-    }
-
-    public function createProxyFromEntity(IdentityProvider $entity, string $proxyKeyId): IdentityProviderEntityInterface
-    {
-        $proxyKeyPair = $this->keyPairFactory->buildFromIdentifier($proxyKeyId);
-        return new IdentityProviderProxy($this->createEntityFromEntity($entity), $proxyKeyPair);
-    }
-
+    /**
+     * Use this method to create an entity which could act as proxy
+     */
     public function createEngineBlockEntityFrom(
         string $entityId,
         string $ssoLocation,
         string $keyId
     ): IdentityProviderEntityInterface {
-        $entity = $this->buildIdentityProviderEntity($entityId, $ssoLocation, $keyId);
-        // Load the additional EB SP metadata onto the entity
-        $entity->nameEn = $this->engineBlockConfiguration->getName();
-        $entity->nameNl = $this->engineBlockConfiguration->getName();
-        $entity->descriptionEn = $this->engineBlockConfiguration->getDescription();
-        $entity->descriptionNl = $this->engineBlockConfiguration->getDescription();
-        $entity->organizationEn = $this->engineBlockConfiguration->getOrganization();
-        $entity->contactPersons = $this->engineBlockConfiguration->getContactPersons();
-        $entity->logo = $this->engineBlockConfiguration->getLogo();
-        return new EngineBlockIdentityProviderMetadata($this->createEntityFromEntity($entity));
+        $entity = $this->buildIdentityProviderOrmEntity($entityId, $ssoLocation, $keyId);
+
+        return $this->buildEngineBlockEntityFromEntity($entity, $keyId);
     }
 
-    public function createMinimalEntity(
-        string $entityId,
-        string $ssoLocation,
-        string $keyId,
-        string $ssoBindingMethod = Constants::BINDING_HTTP_REDIRECT
-    ): IdentityProviderEntityInterface {
-        $entity = new IdentityProvider($entityId);
-        $entity->singleSignOnServices[] = new Service($ssoLocation, $ssoBindingMethod);
-        $entity->certificates[] = $this->keyPairFactory->buildFromIdentifier($keyId)->getCertificate();
-
-        return $this->createEntityFromEntity($entity);
+    /**
+     * Use this method to create an entity which could act as proxy
+     */
+    public function createEngineBlockEntityFromEntity(IdentityProvider $entity, string $keyId): IdentityProviderEntityInterface
+    {
+        return $this->buildEngineBlockEntityFromEntity($entity, $keyId);
     }
 
-    private function buildIdentityProviderEntity(
+    private function buildIdentityProviderOrmEntity(
         string $entityId,
         string $ssoLocation,
         string $keyId
@@ -99,9 +86,31 @@ class IdentityProviderFactory
         $singleSignOnServices[] = new Service($ssoLocation, Constants::BINDING_HTTP_REDIRECT);
 
         $entity = new IdentityProvider($entityId);
-        $entity->certificates[] = $this->keyPairFactory->buildFromIdentifier($keyId)->getCertificate();
         $entity->singleSignOnServices = $singleSignOnServices;
 
         return $entity;
+    }
+
+    /**
+     * This method will create an EngineBlock entity from a regular entity
+     * On the returned entity all values are replaced by values where EB is acting as proxy
+     *
+     * - IdentityProviderEntity: The adapter to convert the ORM entity to support the immutable IdentityProviderEntityInterface interface
+     * - EngineBlockIdentityProviderInformation: Information used to add EB contact and UI info
+     * - IdentityProviderProxy: Set the functional fields to act as proxy:
+     *   (signing certificate, supported nameid formats, sso/slo services, response processing service)
+     */
+    private function buildEngineBlockEntityFromEntity(IdentityProvider $entity, string $keyId): IdentityProviderEntityInterface
+    {
+        return new EngineBlockIdentityProviderMetadata( // Add metadata helper functions for presenting data
+            new IdentityProviderProxy(  // Add EB proxy data
+                new EngineBlockIdentityProviderInformation( // Add EB specific information
+                    new IdentityProviderEntity($entity),
+                    $this->engineBlockConfiguration
+                ),
+                $this->keyPairFactory->buildFromIdentifier($keyId),
+                $this->urlProvider
+            )
+        );
     }
 }

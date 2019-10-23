@@ -17,11 +17,14 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
+use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
+use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
+use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
 
-class IdentityProviderProxyTest extends AbstractIdentityProviderDecoratorTest
+class IdentityProviderProxyTest extends AbstractEntityTest
 {
     public function test_methods()
     {
@@ -32,9 +35,25 @@ class IdentityProviderProxyTest extends AbstractIdentityProviderDecoratorTest
         $keyPairMock->method('getCertificate')
             ->willReturn($certificateMock);
 
-        $decorator = new IdentityProviderProxy($adapter, $keyPairMock);
+        $urlProvider = $this->createMock(UrlProvider::class);
 
-        $assertions = $this->getIdentityProviderAssertions($adapter, $decorator);
+        $urlProvider->expects($this->exactly(3))
+            ->method('getUrl')
+            ->withConsecutive(
+                // SLO: IdentityProviderProxy::getSingleLogoutService
+                ['authentication_logout', false, null, null],
+                // SSO: IdentityProviderProxy::getSingleSignOnServices
+                ['metadata_idp', false, null, null], // check if entity is EB
+                ['authentication_idp_sso', false, null, 'entity-id']
+            ) ->willReturnOnConsecutiveCalls(
+                // SLO
+                'sloLocation',
+                // SSO
+                'ssoLocation',
+                'ssoLocation'
+            );
+
+        $decorator = new IdentityProviderProxy($adapter, $keyPairMock, $urlProvider);
 
         $supportedNameIdFormats = [
             Constants::NAMEID_PERSISTENT,
@@ -42,9 +61,12 @@ class IdentityProviderProxyTest extends AbstractIdentityProviderDecoratorTest
             Constants::NAMEID_UNSPECIFIED,
         ];
 
-        $assertions['certificates'] = [[$certificateMock], $decorator->getCertificates()];
-        $assertions['supportedNameIdFormats'] = [$supportedNameIdFormats, $decorator->getSupportedNameIdFormats()];
+        $overrides['certificates'] = [$certificateMock];
+        $overrides['supportedNameIdFormats'] = $supportedNameIdFormats;
+        $overrides['singleSignOnServices'] = [new Service('ssoLocation', Constants::BINDING_HTTP_REDIRECT)];
+        $overrides['singleLogoutService'] = new Service('sloLocation', Constants::BINDING_HTTP_REDIRECT);
+        $overrides['responseProcessingService'] = new Service('/authentication/idp/provide-consent', 'INTERNAL');
 
-        $this->runIdentityProviderAssertions($assertions);
+        $this->runIdentityProviderAssertions($adapter, $decorator, $overrides);
     }
 }
