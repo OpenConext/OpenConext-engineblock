@@ -70,7 +70,7 @@ class IdpsMetadataRepository
     }
 
     /**
-     * @return IdentityProviderProxy[]
+     * @return IdentityProviderEntityCollection
      */
     public function findIdentityProviders(string $keyId)
     {
@@ -82,7 +82,7 @@ class IdpsMetadataRepository
 
     /**
      * @param array $identityProviderEntityIds
-     * @return IdentityProvider[]
+     * @return IdentityProviderEntityCollection
      */
     public function findIdentityProvidersByEntityId(
         array $identityProviderEntityIds,

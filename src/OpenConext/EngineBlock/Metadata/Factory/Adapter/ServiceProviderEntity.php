@@ -48,9 +48,9 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     }
 
     /**
-     * @return int
+     * @return null|int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->entity->id;
     }
@@ -176,9 +176,9 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getNameIdFormat(): string
+    public function getNameIdFormat(): ?string
     {
         return $this->entity->nameIdFormat;
     }
@@ -192,9 +192,9 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     }
 
     /**
-     * @return Service
+     * @return null|Service
      */
-    public function getSingleLogoutService(): Service
+    public function getSingleLogoutService(): ?Service
     {
         return $this->entity->singleLogoutService;
     }
@@ -208,9 +208,9 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     }
 
     /**
-     * @return Service
+     * @return null|Service
      */
-    public function getResponseProcessingService(): Service
+    public function getResponseProcessingService(): ?Service
     {
         return $this->entity->responseProcessingService;
     }

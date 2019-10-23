@@ -94,6 +94,7 @@ services:
             - '@engineblock.compat.metadata.definitions'
             - '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory'
             - '@OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration'
+            - '@engineblock.url_provider'
 
     OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration:
         public: false

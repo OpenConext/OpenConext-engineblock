@@ -19,8 +19,10 @@ namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
 use EngineBlock_Attributes_Metadata as AttributesMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
+use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
+use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
 
 /**
@@ -33,14 +35,20 @@ class ServiceProviderStepup extends AbstractServiceProvider
      * @var X509KeyPair
      */
     private $keyPair;
+    /**
+     * @var UrlProvider
+     */
+    private $urlProvider;
 
     public function __construct(
         ServiceProviderEntityInterface $entity,
-        X509KeyPair $keyPair
+        X509KeyPair $keyPair,
+        UrlProvider $urlProvider
     ) {
         parent::__construct($entity);
 
         $this->keyPair = $keyPair;
+        $this->urlProvider = $urlProvider;
     }
 
 
@@ -49,8 +57,20 @@ class ServiceProviderStepup extends AbstractServiceProvider
         return [$this->keyPair->getCertificate()];
     }
 
+    /**
+     * @return string[]
+     */
     public function getSupportedNameIdFormats(): array
     {
         return [];
+    }
+
+    /**
+     * @return IndexedService[]
+     */
+    public function getAssertionConsumerServices(): array
+    {
+        $acsLocation = $this->urlProvider->getUrl('authentication_stepup_consume_assertion', false, null, null);
+        return [new IndexedService($acsLocation, Constants::BINDING_HTTP_POST, 0)];
     }
 }

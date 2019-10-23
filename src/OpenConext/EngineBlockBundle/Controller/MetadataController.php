@@ -67,7 +67,6 @@ class MetadataController
 
         $metadataXml = $this->metadataService->metadataForIdp(
             $this->getAbsoluteUrlForRoute('metadata_idp'),
-            $this->getAbsoluteUrlForRoute('authentication_idp_sso'),
             $keyId
         );
 
@@ -89,7 +88,6 @@ class MetadataController
 
         $metadataXml = $this->metadataService->metadataForSp(
             $this->getAbsoluteUrlForRoute('metadata_sp'),
-            $this->getAbsoluteUrlForRoute('authentication_sp_consume_assertion'),
             $keyId
         );
 
@@ -134,7 +132,6 @@ class MetadataController
         }
 
         $metadataXml = $this->metadataService->metadataForStepup(
-            $this->getAbsoluteUrlForRoute('authentication_stepup_consume_assertion'),
             $keyId
         );
 

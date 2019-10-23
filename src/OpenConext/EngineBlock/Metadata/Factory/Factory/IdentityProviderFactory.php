@@ -62,10 +62,9 @@ class IdentityProviderFactory
      */
     public function createEngineBlockEntityFrom(
         string $entityId,
-        string $ssoLocation,
         string $keyId
     ): IdentityProviderEntityInterface {
-        $entity = $this->buildIdentityProviderOrmEntity($entityId, $ssoLocation, $keyId);
+        $entity = $this->buildIdentityProviderOrmEntity($entityId);
 
         return $this->buildEngineBlockEntityFromEntity($entity, $keyId);
     }
@@ -79,15 +78,9 @@ class IdentityProviderFactory
     }
 
     private function buildIdentityProviderOrmEntity(
-        string $entityId,
-        string $ssoLocation,
-        string $keyId
+        string $entityId
     ): IdentityProvider {
-        $singleSignOnServices[] = new Service($ssoLocation, Constants::BINDING_HTTP_REDIRECT);
-
         $entity = new IdentityProvider($entityId);
-        $entity->singleSignOnServices = $singleSignOnServices;
-
         return $entity;
     }
 

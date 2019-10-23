@@ -49,6 +49,9 @@ class EngineBlockServiceProviderMetadata extends AbstractServiceProvider
         return reset($this->entity->getAssertionConsumerServices());
     }
 
+    /**
+     * @return string[]
+     */
     public function getPublicKeys(): array
     {
         $keys = [];
