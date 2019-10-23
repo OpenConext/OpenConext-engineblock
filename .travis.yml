@@ -61,9 +61,14 @@ before_script:
   - sudo a2ensite default-ssl
   - sudo service apache2 restart
   # Add selenium stack
-  - echo "Chrome version `google-chrome --version`"
+  - |-
+    CHROME_VERSION="$(google-chrome --version | grep -Eo '[0-9.]{10,20}' | grep -Eo '^[0-9]*')"
+  - echo "chrome version ${CHROME_VERSION}"
+  - |-
+    CHROME_DRIVER_VERSION="$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION})"
+  - echo "chrome driver version ${CHROME_DRIVER_VERSION}"
   - sudo mkdir -p /opt/selenium && wget http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar && sudo mv selenium-server-standalone-2.53.1.jar /opt/selenium/
-  - wget https://chromedriver.storage.googleapis.com/76.0.3809.68/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && rm chromedriver_linux64.zip && chmod +x chromedriver && sudo mv chromedriver /opt/selenium/chromedriver
+  - wget https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && rm chromedriver_linux64.zip && chmod +x chromedriver && sudo mv chromedriver /opt/selenium/chromedriver
   - sudo /usr/bin/java -jar /opt/selenium/selenium-server-standalone-2.53.1.jar -Dwebdriver.chrome.driver=/opt/selenium/chromedriver -host 127.0.0.1 -port 4444 &
   ###
   - composer self-update
