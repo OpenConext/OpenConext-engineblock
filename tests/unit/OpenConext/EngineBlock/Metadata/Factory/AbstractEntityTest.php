@@ -41,9 +41,10 @@ abstract class AbstractEntityTest extends TestCase
     /**
      * Create an instance which could be used by decorators
      */
-    public function createIdentityProviderAdapter()
+    public function createIdentityProviderAdapter(array $overrides = []): IdentityProviderEntity
     {
         $values = $this->getIdentityProviderMockProperties();
+        $values = array_merge($values, $overrides);
         $ormEntity = $this->getOrmEntityIdentityProviderMock($values);
         return new IdentityProviderEntity($ormEntity);
     }
@@ -51,9 +52,10 @@ abstract class AbstractEntityTest extends TestCase
     /**
      * Create an instance which could be used by decorators
      */
-    public function createServiceProviderAdapter()
+    public function createServiceProviderAdapter(array $overrides = []): ServiceProviderEntity
     {
         $values = $this->getServiceProviderMockProperties();
+        $values = array_merge($values, $overrides);
         $ormEntity = $this->getOrmEntityServiceProviderMock($values);
         return new ServiceProviderEntity($ormEntity);
     }

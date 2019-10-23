@@ -29,6 +29,7 @@ use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
+use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
 
 /**
@@ -51,23 +52,28 @@ class ServiceProviderFactory
      * @var EngineBlockConfiguration
      */
     private $engineBlockConfiguration;
+    /**
+     * @var UrlProvider
+     */
+    private $urlProvider;
 
     public function __construct(
         AttributesMetadata $attributes,
         KeyPairFactory $keyPairFactory,
-        EngineBlockConfiguration $engineBlockConfiguration
+        EngineBlockConfiguration $engineBlockConfiguration,
+        UrlProvider $urlProvider
     ) {
         $this->attributes = $attributes;
         $this->keyPairFactory = $keyPairFactory;
         $this->engineBlockConfiguration = $engineBlockConfiguration;
+        $this->urlProvider = $urlProvider;
     }
 
     public function createEngineBlockEntityFrom(
         string $entityId,
-        string $acsLocation,
         string $keyId
     ): ServiceProviderEntityInterface {
-        $entity = $this->buildServiceProviderOrmEntity($entityId, $acsLocation, $keyId);
+        $entity = $this->buildServiceProviderOrmEntity($entityId);
 
         return new EngineBlockServiceProviderMetadata( // Add metadata helper functions for presenting data
             new ServiceProviderProxy( // Add EB proxy data
@@ -76,39 +82,31 @@ class ServiceProviderFactory
                     $this->engineBlockConfiguration
                 ),
                 $this->keyPairFactory->buildFromIdentifier($keyId),
-                $this->attributes
+                $this->attributes,
+                $this->urlProvider
             )
         );
     }
 
     public function createStepupEntityFrom(
         string $entityId,
-        string $acsLocation,
         string $keyId
     ): ServiceProviderEntityInterface {
-        $entity = $this->buildServiceProviderOrmEntity($entityId, $acsLocation, $keyId);
+        $entity = $this->buildServiceProviderOrmEntity($entityId);
 
         return new EngineBlockServiceProviderMetadata( // Add metadata helper functions for presenting data
             new ServiceProviderStepup( // Add stepup data
                 new ServiceProviderEntity($entity),
-                $this->keyPairFactory->buildFromIdentifier($keyId)
+                $this->keyPairFactory->buildFromIdentifier($keyId),
+                $this->urlProvider
             )
         );
     }
 
     private function buildServiceProviderOrmEntity(
-        string $entityId,
-        string $acsLocation,
-        string $keyId,
-        string $acsBindingMethod = Constants::BINDING_HTTP_POST
+        string $entityId
     ): ServiceProvider {
         $entity = new ServiceProvider($entityId);
-        $entity->assertionConsumerServices[] = new IndexedService(
-            $acsLocation,
-            $acsBindingMethod,
-            0
-        );
-
         return $entity;
     }
 }

@@ -52,6 +52,9 @@ class EngineBlockIdentityProviderMetadata extends AbstractIdentityProvider
         return $service->location;
     }
 
+    /**
+     * @return string[]
+     */
     public function getPublicKeys(): array
     {
         $keys = [];

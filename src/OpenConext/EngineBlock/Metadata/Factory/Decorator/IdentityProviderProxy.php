@@ -86,6 +86,8 @@ class IdentityProviderProxy extends AbstractIdentityProvider
     /**
      * When the service is requested for an entity other then EB we should replace service locations and bindings with those of EB
      * - if the entity is not EB we should add the entityId so EB could determine the IdP we are acting for.
+     *
+     * @return Service[]
      */
     public function getSingleSignOnServices(): array
     {
@@ -98,7 +100,7 @@ class IdentityProviderProxy extends AbstractIdentityProvider
         return [new Service($ssoLocation, Constants::BINDING_HTTP_REDIRECT)];
     }
 
-    public function isEngineBlock()
+    public function isEngineBlock(): bool
     {
         $url = $this->urlProvider->getUrl('metadata_idp', false, null, null);
         return $this->getEntityId() === $url;

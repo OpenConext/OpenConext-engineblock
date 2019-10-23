@@ -31,9 +31,9 @@ interface ServiceProviderEntityInterface
 {
 
     /**
-     * @return int
+     * @return null|int
      */
-    public function getId(): int;
+    public function getId(): ?int;
 
     /**
      * @return string
@@ -111,9 +111,9 @@ interface ServiceProviderEntityInterface
     public function getContactPersons(): array;
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getNameIdFormat(): string;
+    public function getNameIdFormat(): ?string;
 
     /**
      * @return string[]
@@ -121,9 +121,9 @@ interface ServiceProviderEntityInterface
     public function getSupportedNameIdFormats(): array;
 
     /**
-     * @return Service
+     * @return null|Service
      */
-    public function getSingleLogoutService(): Service;
+    public function getSingleLogoutService(): ?Service;
 
     /**
      * @return bool
@@ -131,9 +131,9 @@ interface ServiceProviderEntityInterface
     public function isRequestsMustBeSigned(): bool;
 
     /**
-     * @return Service
+     * @return null|Service
      */
-    public function getResponseProcessingService(): Service;
+    public function getResponseProcessingService(): ?Service;
 
     /**
      * @return string

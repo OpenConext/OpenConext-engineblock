@@ -69,14 +69,12 @@ class MetadataProvider
      * Generate XML metadata for an SP
      *
      * @param string $entityId
-     * @param string $acsLocation
      * @param string $keyId
-     * @param string $consentUrl
      * @return string
      */
-    public function metadataForSp(string $entityId, string $acsLocation, string $keyId): string
+    public function metadataForSp(string $entityId, string $keyId): string
     {
-        $serviceProvider = $this->spFactory->createEngineBlockEntityFrom($entityId, $acsLocation, $keyId);
+        $serviceProvider = $this->spFactory->createEngineBlockEntityFrom($entityId, $keyId);
 
         if ($serviceProvider) {
             return $this->factory->fromServiceProviderEntity($serviceProvider, $keyId);
@@ -88,13 +86,12 @@ class MetadataProvider
      * Generate XML metadata for an IdP
      *
      * @param string $entityId
-     * @param string $ssoLocation
      * @param string $keyId
      * @return string
      */
-    public function metadataForIdp(string $entityId, string $ssoLocation, string $keyId): string
+    public function metadataForIdp(string $entityId, string $keyId): string
     {
-        $identityProvider = $this->idpFactory->createEngineBlockEntityFrom($entityId, $ssoLocation, $keyId);
+        $identityProvider = $this->idpFactory->createEngineBlockEntityFrom($entityId, $keyId);
 
         if ($identityProvider) {
             return $this->factory->fromIdentityProviderEntity($identityProvider, $keyId);
@@ -145,11 +142,10 @@ class MetadataProvider
      * @return string
      * @throws \EngineBlock_Exception
      */
-    public function metadataForStepup(string $acsLocation, string $keyId): string
+    public function metadataForStepup(string $keyId): string
     {
         $serviceProvider = $this->spFactory->createStepupEntityFrom(
             $this->stepupEndpoint->getEntityId(),
-            $acsLocation,
             $keyId
         );
 

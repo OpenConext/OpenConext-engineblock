@@ -26,8 +26,9 @@ use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
 
-class ServiceProviderProxyTest extends AbstractEntityTest
+class ServiceProviderStepupTest extends AbstractEntityTest
 {
+
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject|UrlProvider
      */
@@ -40,7 +41,6 @@ class ServiceProviderProxyTest extends AbstractEntityTest
         $this->urlProvider = $this->createMock(UrlProvider::class);
     }
 
-
     public function test_methods()
     {
         $adapter = $this->createServiceProviderAdapter();
@@ -48,8 +48,8 @@ class ServiceProviderProxyTest extends AbstractEntityTest
         $this->urlProvider->expects($this->exactly(1))
             ->method('getUrl')
             ->withConsecutive(
-                // ACS: ServiceProviderProxy::getAssertionConsumerServices
-                ['authentication_sp_consume_assertion', false, null, null]
+                // ACS: ServiceProviderStepup::getAssertionConsumerServices
+                ['authentication_stepup_consume_assertion', false, null, null]
             ) ->willReturnOnConsecutiveCalls(
                 // ACS
                 'acsLocation'
@@ -69,17 +69,12 @@ class ServiceProviderProxyTest extends AbstractEntityTest
         $attributesMock->method('getRequestedAttributes')
             ->willReturn($attributes);
 
-        $decorator = new ServiceProviderProxy($adapter, $keyPairMock, $attributesMock, $this->urlProvider);
+        $decorator = new ServiceProviderStepup($adapter, $keyPairMock, $this->urlProvider);
 
-        $supportedNameIdFormats = [
-            Constants::NAMEID_PERSISTENT,
-            Constants::NAMEID_TRANSIENT,
-            Constants::NAMEID_UNSPECIFIED,
-        ];
+        $supportedNameIdFormats = [];
 
         $overrides['certificates'] = [$certificateMock];
         $overrides['supportedNameIdFormats'] = $supportedNameIdFormats;
-        $overrides['requestedAttributes'] = $attributes;
         $overrides['assertionConsumerServices'] = [new IndexedService('acsLocation', Constants::BINDING_HTTP_POST, 0)];
 
         $this->runServiceProviderAssertions($adapter, $decorator, $overrides);
