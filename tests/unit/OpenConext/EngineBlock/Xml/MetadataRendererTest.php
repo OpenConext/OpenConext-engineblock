@@ -136,7 +136,7 @@ class MetadataRendererTest extends TestCase
                 'entityId' => 'sp',
                 'assertionConsumerServices' => $assertionConsumerServices,
                 'logo' => new Logo('/images/logo.gif'),
-                'organizationEn' => new Organization('Org', 'Organization', 'https://example.org')
+                'organizationEn' => new Organization('Org', 'Organization', 'https://example.org'),
             ]
         );
 

@@ -17,7 +17,7 @@
         <md:AssertionConsumerService Binding="{{ metadata.assertionConsumerService.binding }}"
                                      Location="{{ metadata.assertionConsumerService.location }}"
                                      index="0"></md:AssertionConsumerService>
-        {% if metadata.requestedAttributes is not empty%}
+        {% if metadata.requestedAttributes is not empty %}
             <md:AttributeConsumingService index="0">
                 <md:ServiceName xml:lang="nl">{{ metadata.nameNl }}</md:ServiceName>
                 <md:ServiceName xml:lang="en">{{ metadata.nameEn }}</md:ServiceName>
