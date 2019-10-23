@@ -105,6 +105,13 @@ class IdpsMetadataRepository
         $collection = new IdentityProviderEntityCollection();
 
         foreach ($idps as $idp) {
+            // Don't add ourselves
+            // TODO: remove after the 'magic' entities are removed
+            // @see: https://www.pivotaltracker.com/story/show/168249058
+            if ($idp->entityId === $this->urlProvider->getUrl('metadata_idp', false, null, null)) {
+                continue;
+            }
+
             // Do not reveal hidden IdP's
             if ($idp->getCoins()->hidden()) {
                 continue;

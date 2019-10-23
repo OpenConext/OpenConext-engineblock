@@ -13,15 +13,17 @@
                 </ds:KeyInfo>
             </md:KeyDescriptor>
         {% endfor %}
-        {# The supported NameIdFormats for the EngineBlock IdP are hard coded into this template. #}
-        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
-        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
-        <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat>
+        {% for nameId in metadata.supportedNameIdFormats  %}
+            <md:NameIDFormat>{{ nameId }}</md:NameIDFormat>
+        {% endfor %}
         {# Formally we only allow redirect binding on the SSO location #}
         <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="{{ metadata.ssoLocation }}"></md:SingleSignOnService>
     </md:IDPSSODescriptor>
-    {% for contactPerson in metadata.contactPersons %}
-        {% include '@theme/Authentication/View/Metadata/partial/contact_person.xml.twig' %}
-    {% endfor %}
+    {% if metadata.contactPersons is not empty%}
+        {% for contactPerson in metadata.contactPersons %}
+            {% include '@theme/Authentication/View/Metadata/partial/contact_person.xml.twig' %}
+        {% endfor %}
+    {% endif %}
+
 </md:EntityDescriptor>
 {% endspaceless %}

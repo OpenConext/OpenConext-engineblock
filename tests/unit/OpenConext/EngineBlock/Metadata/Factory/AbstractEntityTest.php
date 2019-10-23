@@ -102,9 +102,9 @@ abstract class AbstractEntityTest extends TestCase
 
         foreach ($assertions as $name => $assertion) {
             if (array_key_exists($name, $overrides)) {
-                $this->assertEquals($overrides[$name], $assertion($decorator), 'Invalid override ' . $name);
+                $this->assertEquals($overrides[$name], $assertion($decorator), sprintf("Invalid expectancy in method override for property '%s'", $name));
             } else {
-                $this->assertSame($assertion($adapter), $assertion($decorator), 'Invalid abstract ' . $name);
+                $this->assertSame($assertion($adapter), $assertion($decorator), sprintf("Invalid expectancy in abstract method for property '%s'", $name));
             }
         }
     }
@@ -160,9 +160,9 @@ abstract class AbstractEntityTest extends TestCase
 
         foreach ($assertions as $name => $assertion) {
             if (array_key_exists($name, $overrides)) {
-                $this->assertEquals($overrides[$name], $assertion($decorator), 'Invalid override ' . $name);
+                $this->assertEquals($overrides[$name], $assertion($decorator), sprintf("Invalid expectancy in method override for property '%s'", $name));
             } else {
-                $this->assertSame($assertion($adapter), $assertion($decorator), 'Invalid abstract ' . $name);
+                $this->assertSame($assertion($adapter), $assertion($decorator), sprintf("Invalid expectancy in abstract method for property '%s'", $name));
             }
         }
     }
