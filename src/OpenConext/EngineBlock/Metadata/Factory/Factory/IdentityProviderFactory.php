@@ -94,15 +94,13 @@ class IdentityProviderFactory
      */
     private function buildEngineBlockEntityFromEntity(IdentityProvider $entity, string $keyId): IdentityProviderEntityInterface
     {
-        return new EngineBlockIdentityProviderMetadata( // Add metadata helper functions for presenting data
-            new IdentityProviderProxy(  // Add EB proxy data
-                new EngineBlockIdentityProviderInformation( // Add EB specific information
-                    new IdentityProviderEntity($entity),
-                    $this->engineBlockConfiguration
-                ),
-                $this->keyPairFactory->buildFromIdentifier($keyId),
-                $this->urlProvider
-            )
+        return new IdentityProviderProxy(  // Add EB proxy data
+            new EngineBlockIdentityProviderInformation( // Add EB specific information
+                new IdentityProviderEntity($entity),
+                $this->engineBlockConfiguration
+            ),
+            $this->keyPairFactory->buildFromIdentifier($keyId),
+            $this->urlProvider
         );
     }
 }

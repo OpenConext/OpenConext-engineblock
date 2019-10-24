@@ -156,6 +156,8 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
         // EngineblockIdentityProviderInformation
         $overrides['nameNl'] = 'test-suite EngineBlock';
         $overrides['nameEn'] = 'test-suite EngineBlock';
+        $overrides['displayNameNl'] = 'test-suite EngineBlock';
+        $overrides['displayNameEn'] = 'test-suite EngineBlock';
         $overrides['descriptionNl'] = 'configuredDescription';
         $overrides['descriptionEn'] = 'configuredDescription';
         $overrides['logo'] = $logo;

@@ -16,18 +16,16 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
+namespace OpenConext\EngineBlock\Metadata\Factory\Helper;
 
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\AbstractServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\IndexedService;
+use OpenConext\EngineBlock\Metadata\Logo;
+use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 
 class EngineBlockServiceProviderMetadata extends AbstractServiceProvider
 {
-    public function __construct(ServiceProviderEntityInterface $entity)
-    {
-        parent::__construct($entity);
-    }
-
     public function getOrganization() : string
     {
         if (!$this->entity->getOrganizationEn()) {
@@ -65,10 +63,10 @@ class EngineBlockServiceProviderMetadata extends AbstractServiceProvider
     public function hasUiInfo(): bool
     {
         $info = [
-            $this->getDisplayNameEn(),
-            $this->getDisplayNameNl(),
-            $this->getOrganizationEn(),
-            $this->getOrganizationNl(),
+            $this->entity->getDisplayNameEn(),
+            $this->entity->getDisplayNameNl(),
+            $this->entity->getOrganizationEn(),
+            $this->entity->getOrganizationNl(),
         ];
 
         return !empty(array_filter($info));
@@ -77,8 +75,8 @@ class EngineBlockServiceProviderMetadata extends AbstractServiceProvider
     public function hasOrganizationInfo(): bool
     {
         $info = [
-            $this->getOrganizationEn(),
-            $this->getOrganizationNl(),
+            $this->entity->getOrganizationEn(),
+            $this->entity->getOrganizationNl(),
         ];
 
         return !empty(array_filter($info));

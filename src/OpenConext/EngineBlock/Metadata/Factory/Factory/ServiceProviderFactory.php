@@ -75,31 +75,27 @@ class ServiceProviderFactory
 
         $entity = $this->buildServiceProviderOrmEntity($entityId);
 
-        return new EngineBlockServiceProviderMetadata( // Add metadata helper functions for presenting data
-            new ServiceProviderProxy( // Add EB proxy data
-                new EngineBlockServiceProviderInformation(  // Add EB specific information
-                    new ServiceProviderEntity($entity),
-                    $this->engineBlockConfiguration
-                ),
-                $this->keyPairFactory->buildFromIdentifier($keyId),
-                $this->attributes,
-                $this->urlProvider
-            )
+        return new ServiceProviderProxy( // Add EB proxy data
+            new EngineBlockServiceProviderInformation(  // Add EB specific information
+                new ServiceProviderEntity($entity),
+                $this->engineBlockConfiguration
+            ),
+            $this->keyPairFactory->buildFromIdentifier($keyId),
+            $this->attributes,
+            $this->urlProvider
         );
     }
 
     public function createStepupEntityFrom(string $keyId): ServiceProviderEntityInterface
     {
-        $entityId = $this->urlProvider->getUrl('metadata_sp', false, null, null);
+        $entityId = $this->urlProvider->getUrl('metadata_stepup', false, null, null);
 
         $entity = $this->buildServiceProviderOrmEntity($entityId);
 
-        return new EngineBlockServiceProviderMetadata( // Add metadata helper functions for presenting data
-            new ServiceProviderStepup( // Add stepup data
-                new ServiceProviderEntity($entity),
-                $this->keyPairFactory->buildFromIdentifier($keyId),
-                $this->urlProvider
-            )
+        return new ServiceProviderStepup( // Add stepup data
+            new ServiceProviderEntity($entity),
+            $this->keyPairFactory->buildFromIdentifier($keyId),
+            $this->urlProvider
         );
     }
 
