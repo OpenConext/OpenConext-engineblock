@@ -68,13 +68,12 @@ class MetadataProvider
     /**
      * Generate XML metadata for an SP
      *
-     * @param string $entityId
      * @param string $keyId
      * @return string
      */
-    public function metadataForSp(string $entityId, string $keyId): string
+    public function metadataForSp(string $keyId): string
     {
-        $serviceProvider = $this->spFactory->createEngineBlockEntityFrom($entityId, $keyId);
+        $serviceProvider = $this->spFactory->createEngineBlockEntityFrom($keyId);
 
         if ($serviceProvider) {
             return $this->factory->fromServiceProviderEntity($serviceProvider, $keyId);
@@ -85,18 +84,17 @@ class MetadataProvider
     /**
      * Generate XML metadata for an IdP
      *
-     * @param string $entityId
      * @param string $keyId
      * @return string
      */
-    public function metadataForIdp(string $entityId, string $keyId): string
+    public function metadataForIdp(string $keyId): string
     {
-        $identityProvider = $this->idpFactory->createEngineBlockEntityFrom($entityId, $keyId);
+        $identityProvider = $this->idpFactory->createEngineBlockEntityFrom($keyId);
 
         if ($identityProvider) {
             return $this->factory->fromIdentityProviderEntity($identityProvider, $keyId);
         }
-        throw new EntityCanNotBeFoundException(sprintf('Unable to find the SP with entity ID "%s".', $entityId));
+        throw new EntityCanNotBeFoundException(sprintf('Unable to find the SP with entity ID "%s".', $identityProvider->getEntityId()));
     }
 
 
@@ -117,12 +115,9 @@ class MetadataProvider
 
         if ($spEntityId) {
             // See if an sp-entity-id was specified for which we need to use sp specific metadata
-            $spEntity = $this->metadataRepository->fetchServiceProviderByEntityId($spEntityId, $keyId);
+            $spEntity = $this->metadataRepository->fetchServiceProviderByEntityId($spEntityId);
             if (!$spEntity->allowAll) {
-                $identityProviders = $this->metadataRepository->findIdentityProvidersByEntityId(
-                    $spEntity->allowedIdpEntityIds,
-                    $keyId
-                );
+                $identityProviders = $this->metadataRepository->findIdentityProvidersByEntityId($spEntity->allowedIdpEntityIds);
             }
         }
         if (!isset($identityProviders)) {
@@ -144,10 +139,7 @@ class MetadataProvider
      */
     public function metadataForStepup(string $keyId): string
     {
-        $serviceProvider = $this->spFactory->createStepupEntityFrom(
-            $this->stepupEndpoint->getEntityId(),
-            $keyId
-        );
+        $serviceProvider = $this->spFactory->createStepupEntityFrom($keyId);
 
         return $this->factory->fromServiceProviderEntity($serviceProvider, $keyId);
     }

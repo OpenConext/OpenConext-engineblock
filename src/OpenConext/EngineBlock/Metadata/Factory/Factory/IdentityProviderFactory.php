@@ -60,10 +60,10 @@ class IdentityProviderFactory
     /**
      * Use this method to create an entity which could act as proxy
      */
-    public function createEngineBlockEntityFrom(
-        string $entityId,
-        string $keyId
-    ): IdentityProviderEntityInterface {
+    public function createEngineBlockEntityFrom(string $keyId): IdentityProviderEntityInterface
+    {
+        $entityId = $this->urlProvider->getUrl('metadata_idp', false, null, null);
+
         $entity = $this->buildIdentityProviderOrmEntity($entityId);
 
         return $this->buildEngineBlockEntityFromEntity($entity, $keyId);
@@ -77,9 +77,8 @@ class IdentityProviderFactory
         return $this->buildEngineBlockEntityFromEntity($entity, $keyId);
     }
 
-    private function buildIdentityProviderOrmEntity(
-        string $entityId
-    ): IdentityProvider {
+    private function buildIdentityProviderOrmEntity(string $entityId): IdentityProvider
+    {
         $entity = new IdentityProvider($entityId);
         return $entity;
     }

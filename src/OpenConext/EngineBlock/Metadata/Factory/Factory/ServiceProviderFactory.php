@@ -69,10 +69,10 @@ class ServiceProviderFactory
         $this->urlProvider = $urlProvider;
     }
 
-    public function createEngineBlockEntityFrom(
-        string $entityId,
-        string $keyId
-    ): ServiceProviderEntityInterface {
+    public function createEngineBlockEntityFrom(string $keyId): ServiceProviderEntityInterface
+    {
+        $entityId = $this->urlProvider->getUrl('metadata_sp', false, null, null);
+
         $entity = $this->buildServiceProviderOrmEntity($entityId);
 
         return new EngineBlockServiceProviderMetadata( // Add metadata helper functions for presenting data
@@ -88,10 +88,10 @@ class ServiceProviderFactory
         );
     }
 
-    public function createStepupEntityFrom(
-        string $entityId,
-        string $keyId
-    ): ServiceProviderEntityInterface {
+    public function createStepupEntityFrom(string $keyId): ServiceProviderEntityInterface
+    {
+        $entityId = $this->urlProvider->getUrl('metadata_sp', false, null, null);
+
         $entity = $this->buildServiceProviderOrmEntity($entityId);
 
         return new EngineBlockServiceProviderMetadata( // Add metadata helper functions for presenting data
