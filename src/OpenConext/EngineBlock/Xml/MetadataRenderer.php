@@ -20,8 +20,10 @@ namespace OpenConext\EngineBlock\Xml;
 
 use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlock\Metadata\Factory\Collection\IdentityProviderEntityCollection;
-use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProviderMetadata;
-use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProviderMetadata;
+use OpenConext\EngineBlock\Metadata\Factory\Helper\EngineBlockIdentityProviderMetadata;
+use OpenConext\EngineBlock\Metadata\Factory\Helper\EngineBlockServiceProviderMetadata;
+use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
+use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
@@ -81,7 +83,7 @@ class MetadataRenderer
         $this->termsOfUse = $termsOfUse;
     }
 
-    public function fromServiceProviderEntity(EngineBlockServiceProviderMetadata $sp, string $keyId) : string
+    public function fromServiceProviderEntity(ServiceProviderEntityInterface $sp, string $keyId) : string
     {
         $this->signingKeyPair = $this->keyPairFactory->buildFromIdentifier($keyId);
         $template = '@theme/Authentication/View/Metadata/sp.xml.twig';
@@ -92,7 +94,7 @@ class MetadataRenderer
         return $signedXml;
     }
 
-    public function fromIdentityProviderEntity(EngineBlockIdentityProviderMetadata $idp, string $keyId) : string
+    public function fromIdentityProviderEntity(IdentityProviderEntityInterface $idp, string $keyId) : string
     {
         $this->signingKeyPair = $this->keyPairFactory->buildFromIdentifier($keyId);
         $template = '@theme/Authentication/View/Metadata/idp.xml.twig';
@@ -115,8 +117,10 @@ class MetadataRenderer
         return $signedXml;
     }
 
-    private function renderMetadataXmlServiceProvider(EngineBlockServiceProviderMetadata $metadata, string $template) : string
+    private function renderMetadataXmlServiceProvider(ServiceProviderEntityInterface $sp, string $template) : string
     {
+        $metadata = new EngineBlockServiceProviderMetadata($sp);
+
         $params = [
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
             'validUntil' => $this->getValidUntil(),
@@ -127,8 +131,10 @@ class MetadataRenderer
         return $this->twig->render($template, $params);
     }
 
-    private function renderMetadataXmlIdentityProvider(EngineBlockIdentityProviderMetadata $metadata, string $template) : string
+    private function renderMetadataXmlIdentityProvider(IdentityProviderEntityInterface $idp, string $template) : string
     {
+        $metadata = new EngineBlockIdentityProviderMetadata($idp);
+
         $params = [
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
             'validUntil' => $this->getValidUntil(),
@@ -139,8 +145,13 @@ class MetadataRenderer
         return $this->twig->render($template, $params);
     }
 
-    private function renderMetadataXmlIdentityProviderCollection(IdentityProviderEntityCollection $metadataCollection, string $template) : string
+    private function renderMetadataXmlIdentityProviderCollection(IdentityProviderEntityCollection $idpCollection, string $template) : string
     {
+        $metadataCollection = new IdentityProviderEntityCollection();
+        foreach ($idpCollection as $idp) {
+            $metadataCollection->add(new EngineBlockIdentityProviderMetadata($idp));
+        }
+
         $params = [
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
             'validUntil' => $this->getValidUntil(),

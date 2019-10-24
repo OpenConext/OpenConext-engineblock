@@ -16,19 +16,14 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
+namespace OpenConext\EngineBlock\Metadata\Factory\Helper;
 
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\AbstractIdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Service;
-use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
 
 class EngineBlockIdentityProviderMetadata extends AbstractIdentityProvider
 {
-    public function __construct(IdentityProviderEntityInterface $entity)
-    {
-        parent::__construct($entity);
-    }
-
     public function getOrganization() : string
     {
         if (!$this->entity->getOrganizationEn()) {

@@ -32,7 +32,7 @@ use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
  * So only the methods required for the specific implementation have to be created on the decorated Entity that is
  * extended from this abstract IdP entity.
  */
-class AbstractIdentityProvider implements IdentityProviderEntityInterface
+abstract class AbstractIdentityProvider implements IdentityProviderEntityInterface
 {
 
     /**

@@ -25,8 +25,8 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\ServiceProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Collection\IdentityProviderEntityCollection;
-use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProviderMetadata;
-use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProviderMetadata;
+use OpenConext\EngineBlock\Metadata\Factory\Helper\EngineBlockIdentityProviderMetadata;
+use OpenConext\EngineBlock\Metadata\Factory\Helper\EngineBlockServiceProviderMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\IdentityProviderProxy;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
@@ -108,7 +108,7 @@ class MetadataRendererTest extends TestCase
             ]
         );
 
-        $idp = new EngineBlockIdentityProviderMetadata(new IdentityProviderEntity($idp));
+        $idp = new IdentityProviderEntity($idp);
 
         $xml = $this->metadataRenderer->fromIdentityProviderEntity($idp, 'default');
 
@@ -152,7 +152,7 @@ class MetadataRendererTest extends TestCase
             ]
         );
 
-        $sp = new EngineBlockServiceProviderMetadata(new ServiceProviderEntity($sp));
+        $sp = new ServiceProviderEntity($sp);
 
         $xml = $this->metadataRenderer->fromServiceProviderEntity($sp, 'default');
 
@@ -195,6 +195,8 @@ class MetadataRendererTest extends TestCase
             ->andReturn('IdP number 1')
             ->shouldReceive('getLogo')
             ->andReturn($logo)
+            ->shouldReceive('getSingleSignOnServices')
+            ->andReturn($singleSignOnServices)
         ;
         $idp1->shouldIgnoreMissing();
 
@@ -206,6 +208,8 @@ class MetadataRendererTest extends TestCase
             ->andReturn('IdP number 2')
             ->shouldReceive('getLogo')
             ->andReturn($logo)
+            ->shouldReceive('getSingleSignOnServices')
+            ->andReturn($singleSignOnServices)
         ;
         $idp2->shouldIgnoreMissing();
 

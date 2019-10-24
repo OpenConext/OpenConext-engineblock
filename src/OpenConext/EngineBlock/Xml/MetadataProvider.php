@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlock\Xml;
 
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProviderMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\IdentityProviderFactory;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\IdpsMetadataRepository;
@@ -29,7 +30,7 @@ class MetadataProvider
     /**
      * @var MetadataRenderer
      */
-    private $factory;
+    private $renderer;
 
     /**
      * @var ServiceProviderFactory
@@ -52,13 +53,13 @@ class MetadataProvider
     private $stepupEndpoint;
 
     public function __construct(
-        MetadataRenderer $factory,
+        MetadataRenderer $renderer,
         ServiceProviderFactory $spFactory,
         IdentityProviderFactory $idpFactory,
         IdpsMetadataRepository $metadataRepository,
         StepupEndpoint $stepupEndpoint
     ) {
-        $this->factory = $factory;
+        $this->renderer = $renderer;
         $this->spFactory = $spFactory;
         $this->idpFactory = $idpFactory;
         $this->metadataRepository = $metadataRepository;
@@ -76,9 +77,9 @@ class MetadataProvider
         $serviceProvider = $this->spFactory->createEngineBlockEntityFrom($keyId);
 
         if ($serviceProvider) {
-            return $this->factory->fromServiceProviderEntity($serviceProvider, $keyId);
+            return $this->renderer->fromServiceProviderEntity($serviceProvider, $keyId);
         }
-        throw new EntityCanNotBeFoundException(sprintf('Unable to find the SP with entity ID "%s".', $entityId));
+        throw new EntityCanNotBeFoundException(sprintf('Unable to find the SP with entity ID "%s".', $serviceProvider->getEntityId()));
     }
 
     /**
@@ -92,7 +93,7 @@ class MetadataProvider
         $identityProvider = $this->idpFactory->createEngineBlockEntityFrom($keyId);
 
         if ($identityProvider) {
-            return $this->factory->fromIdentityProviderEntity($identityProvider, $keyId);
+            return $this->renderer->fromIdentityProviderEntity($identityProvider, $keyId);
         }
         throw new EntityCanNotBeFoundException(sprintf('Unable to find the SP with entity ID "%s".', $identityProvider->getEntityId()));
     }
@@ -117,7 +118,7 @@ class MetadataProvider
             // See if an sp-entity-id was specified for which we need to use sp specific metadata
             $spEntity = $this->metadataRepository->fetchServiceProviderByEntityId($spEntityId);
             if (!$spEntity->allowAll) {
-                $identityProviders = $this->metadataRepository->findIdentityProvidersByEntityId($spEntity->allowedIdpEntityIds);
+                $identityProviders = $this->metadataRepository->findIdentityProvidersByEntityId($spEntity->allowedIdpEntityIds, $keyId);
             }
         }
         if (!isset($identityProviders)) {
@@ -125,7 +126,7 @@ class MetadataProvider
         }
 
         // 3. Render and sign the document
-        return $this->factory->fromIdentityProviderEntities($identityProviders, $keyId);
+        return $this->renderer->fromIdentityProviderEntities($identityProviders, $keyId);
     }
 
 
@@ -141,6 +142,6 @@ class MetadataProvider
     {
         $serviceProvider = $this->spFactory->createStepupEntityFrom($keyId);
 
-        return $this->factory->fromServiceProviderEntity($serviceProvider, $keyId);
+        return $this->renderer->fromServiceProviderEntity($serviceProvider, $keyId);
     }
 }

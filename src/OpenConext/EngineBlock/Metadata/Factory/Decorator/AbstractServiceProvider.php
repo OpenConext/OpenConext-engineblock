@@ -33,7 +33,7 @@ use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
  * So only the methods required for the specific implementation have to be created on the decorated Entity that is
  * extended from this abstract SP entity.
  */
-class AbstractServiceProvider implements ServiceProviderEntityInterface
+abstract class AbstractServiceProvider implements ServiceProviderEntityInterface
 {
 
     /**

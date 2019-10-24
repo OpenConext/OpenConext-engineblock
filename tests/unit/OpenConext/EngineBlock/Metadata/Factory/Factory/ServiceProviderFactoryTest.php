@@ -137,12 +137,16 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
             ->willReturn($attributes);
 
 
-        $this->urlProvider->expects($this->exactly(1))
+        $this->urlProvider->expects($this->exactly(2))
             ->method('getUrl')
             ->withConsecutive(
+                // EntityId: ServiceProviderProxy::getEntityId
+                ['metadata_sp', false, null, null],
                 // ACS: ServiceProviderProxy::getAssertionConsumerService
                 ['authentication_sp_consume_assertion', false, null, null]
             ) ->willReturnOnConsecutiveCalls(
+                // EntityId
+                'EbEntityId',
                 // ACS
                 'proxiedAcsLocation'
             );
@@ -151,7 +155,7 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         $this->factory = new ServiceProviderFactory($this->attributes, $this->keyPairFactory, $this->configuration, $this->urlProvider);
 
         $adapter = $this->createServiceProviderAdapter();
-        $decorator = $this->factory->createEngineBlockEntityFrom('initial-entity-id', 'initial-key-id');
+        $decorator = $this->factory->createEngineBlockEntityFrom('initial-key-id');
 
 
 
@@ -184,9 +188,6 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         // the actual assertions
         $overrides = [];
 
-        // initial values
-        $overrides['entityId'] = 'initial-entity-id';
-
         // default values
         $overrides['id'] = null;
         $overrides['displayNameNl'] = '';
@@ -218,7 +219,7 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         $overrides['attributeReleasePolicy'] = null;
         $overrides['allowedIdpEntityIds'] = [];
         $overrides['allowed'] = true;
-        $overrides['displayName'] = 'initial-entity-id';
+        $overrides['displayName'] = 'EbEntityId'; // DisplayName uses entityId as fallback
         $overrides['attributeAggregationRequired'] = false;
 
 
@@ -232,6 +233,8 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         // EngineblockIdentityProviderInformation
         $overrides['nameNl'] = 'test-suite EngineBlock';
         $overrides['nameEn'] = 'test-suite EngineBlock';
+        $overrides['displayNameNl'] = 'test-suite EngineBlock';
+        $overrides['displayNameEn'] = 'test-suite EngineBlock';
         $overrides['descriptionNl'] = 'configuredDescription';
         $overrides['descriptionEn'] = 'configuredDescription';
         $overrides['logo'] = $logo;
@@ -240,6 +243,7 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         $overrides['contactPersons'] = $contactPersons;
 
         // ServiceProviderProxy
+        $overrides['entityId'] = 'EbEntityId';
         $overrides['certificates'] = [$certificateMock];
         $overrides['supportedNameIdFormats'] = $supportedNameIdFormats;
         $overrides['requestedAttributes'] = $attributes;
@@ -288,13 +292,17 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
             ->willReturn($attributes);
 
 
-        $this->urlProvider->expects($this->exactly(1))
+        $this->urlProvider->expects($this->exactly(2))
             ->method('getUrl')
             ->withConsecutive(
-            // ACS: ServiceProvider::getAssertionConsumerService
+                // EntityId
+                ['metadata_stepup', false, null, null],
+                // ACS: ServiceProvider::getAssertionConsumerService
                 ['authentication_stepup_consume_assertion', false, null, null]
             ) ->willReturnOnConsecutiveCalls(
-            // ACS
+                // EntityId
+                'StepupEntityId',
+                // ACS
                 'proxiedAcsLocation'
             );
 
@@ -302,14 +310,11 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         $this->factory = new ServiceProviderFactory($this->attributes, $this->keyPairFactory, $this->configuration, $this->urlProvider);
 
         $adapter = $this->createServiceProviderAdapter();
-        $decorator = $this->factory->createStepupEntityFrom('initial-entity-id', 'initial-key-id');
+        $decorator = $this->factory->createStepupEntityFrom('initial-key-id');
 
 
         // the actual assertions
         $overrides = [];
-
-        // initial values
-        $overrides['entityId'] = 'initial-entity-id';
 
         // default values
         $overrides['id'] = null;
@@ -342,7 +347,7 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         $overrides['attributeReleasePolicy'] = null;
         $overrides['allowedIdpEntityIds'] = [];
         $overrides['allowed'] = false;
-        $overrides['displayName'] = 'initial-entity-id';
+        $overrides['displayName'] = 'StepupEntityId'; // DisplayName uses entityId as fallback
         $overrides['attributeAggregationRequired'] = false;
         $overrides['requestedAttributes'] = null;
 
@@ -361,6 +366,7 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         $overrides['contactPersons'] = [];
 
         // Stepup
+        $overrides['entityId'] = 'StepupEntityId';
         $overrides['certificates'] = [$certificateMock];
         $overrides['supportedNameIdFormats'] = [];
         $overrides['assertionConsumerServices'] = [new IndexedService('proxiedAcsLocation', Constants::BINDING_HTTP_POST, 0)];

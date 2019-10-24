@@ -132,13 +132,4 @@ class MetadataController
 
         return $response;
     }
-
-    /**
-     * @param string $route
-     * @return string
-     */
-    private function getAbsoluteUrlForRoute(string $route)
-    {
-        return $this->router->generate($route, [], UrlGeneratorInterface::ABSOLUTE_URL);
-    }
 }
