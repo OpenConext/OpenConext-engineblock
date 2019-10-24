@@ -22,8 +22,6 @@ use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlock\Metadata\Factory\Collection\IdentityProviderEntityCollection;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProviderMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProviderMetadata;
-use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
-use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
@@ -63,17 +61,24 @@ class MetadataRenderer
      */
     private $documentSigner;
 
+    /**
+     * @var string
+     */
+    private $termsOfUse;
+
     public function __construct(
         Environment $twig,
         EngineBlock_Saml2_IdGenerator $samlIdGenerator,
         KeyPairFactory $keyPairFactory,
-        DocumentSigner $documentSigner
+        DocumentSigner $documentSigner,
+        string $termsOfUse
     ) {
         $this->twig = $twig;
         $this->samlIdGenerator = $samlIdGenerator;
         $this->keyPairFactory = $keyPairFactory;
         $this->documentSigner = $documentSigner;
         $this->timeProvider = new TimeProvider();
+        $this->termsOfUse = $termsOfUse;
     }
 
     public function fromServiceProviderEntity(EngineBlockServiceProviderMetadata $sp, string $keyId) : string
@@ -116,6 +121,7 @@ class MetadataRenderer
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
             'validUntil' => $this->getValidUntil(),
             'metadata' => $metadata,
+            'termsOfUse' => $this->termsOfUse,
         ];
 
         return $this->twig->render($template, $params);
@@ -127,6 +133,7 @@ class MetadataRenderer
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
             'validUntil' => $this->getValidUntil(),
             'metadata' => $metadata,
+            'termsOfUse' => $this->termsOfUse,
         ];
 
         return $this->twig->render($template, $params);
@@ -138,6 +145,7 @@ class MetadataRenderer
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
             'validUntil' => $this->getValidUntil(),
             'metadataCollection' => $metadataCollection,
+            'termsOfUse' => $this->termsOfUse,
         ];
 
         return $this->twig->render($template, $params);
