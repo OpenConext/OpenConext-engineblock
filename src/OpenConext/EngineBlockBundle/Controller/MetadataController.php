@@ -65,10 +65,7 @@ class MetadataController
             $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
         }
 
-        $metadataXml = $this->metadataService->metadataForIdp(
-            $this->getAbsoluteUrlForRoute('metadata_idp'),
-            $keyId
-        );
+        $metadataXml = $this->metadataService->metadataForIdp($keyId);
 
         $response = new Response($metadataXml);
         $response->headers->set('Content-Type', 'text/xml');
@@ -86,10 +83,7 @@ class MetadataController
             $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
         }
 
-        $metadataXml = $this->metadataService->metadataForSp(
-            $this->getAbsoluteUrlForRoute('metadata_sp'),
-            $keyId
-        );
+        $metadataXml = $this->metadataService->metadataForSp($keyId);
 
         $response = new Response($metadataXml);
         $response->headers->set('Content-Type', 'text/xml');
@@ -131,9 +125,7 @@ class MetadataController
             $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
         }
 
-        $metadataXml = $this->metadataService->metadataForStepup(
-            $keyId
-        );
+        $metadataXml = $this->metadataService->metadataForStepup($keyId);
 
         $response = new Response($metadataXml);
         $response->headers->set('Content-Type', 'text/xml');
