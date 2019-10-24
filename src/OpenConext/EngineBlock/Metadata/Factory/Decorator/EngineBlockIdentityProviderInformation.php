@@ -47,6 +47,16 @@ class EngineBlockIdentityProviderInformation extends AbstractIdentityProvider
         return $this->engineBlockConfiguration->getName();
     }
 
+    public function getDisplayNameNl(): string
+    {
+        return $this->engineBlockConfiguration->getName();
+    }
+
+    public function getDisplayNameEn(): string
+    {
+        return $this->engineBlockConfiguration->getName();
+    }
+
     public function getDescriptionNl(): string
     {
         return $this->engineBlockConfiguration->getDescription();
