@@ -32,7 +32,7 @@ class EngineBlockIdentityProviderMetadataTest extends AbstractEntityTest
     {
         $adapter = $this->createIdentityProviderAdapter();
 
-        $decorator = new EngineBlockIdentityProviderMetadata($adapter);
+        $decorator = new IdentityProviderMetadataHelper($adapter);
 
         $this->runIdentityProviderAssertions($adapter, $decorator);
     }
@@ -65,7 +65,7 @@ class EngineBlockIdentityProviderMetadataTest extends AbstractEntityTest
             $cert1, $cert2,
         ]);
 
-        $decorator = new EngineBlockIdentityProviderMetadata($adapter);
+        $decorator = new IdentityProviderMetadataHelper($adapter);
 
         $this->assertEquals('metadata-organization-name-en', $decorator->getOrganizationNameEn());
         $this->assertEquals('metadata-organization-name-nl', $decorator->getOrganizationNameNl());

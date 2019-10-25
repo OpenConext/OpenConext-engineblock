@@ -25,7 +25,7 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\ServiceProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Collection\IdentityProviderEntityCollection;
-use OpenConext\EngineBlock\Metadata\Factory\Decorator\IdentityProviderProxy;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProvider;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
@@ -187,7 +187,7 @@ class MetadataRendererTest extends TestCase
         $logo->width = 100;
         $logo->height = 100;
 
-        $idp1 = m::mock(IdentityProviderProxy::class);
+        $idp1 = m::mock(EngineBlockIdentityProvider::class);
         $idp1
             ->shouldReceive('getEntityId')
             ->andReturn('idp1')
@@ -200,7 +200,7 @@ class MetadataRendererTest extends TestCase
         ;
         $idp1->shouldIgnoreMissing();
 
-        $idp2 = m::mock(IdentityProviderProxy::class);
+        $idp2 = m::mock(EngineBlockIdentityProvider::class);
         $idp2
             ->shouldReceive('getEntityId')
             ->andReturn('idp2')

@@ -18,10 +18,10 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory\Helper;
 
-use OpenConext\EngineBlock\Metadata\Factory\Decorator\AbstractIdentityProvider;
-use OpenConext\EngineBlock\Metadata\Service;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\AbstractServiceProvider;
+use OpenConext\EngineBlock\Metadata\IndexedService;
 
-class EngineBlockIdentityProviderMetadata extends AbstractIdentityProvider
+class ServiceProviderMetadataHelper extends AbstractServiceProvider
 {
     public function getOrganizationNameEn() : string
     {
@@ -55,11 +55,9 @@ class EngineBlockIdentityProviderMetadata extends AbstractIdentityProvider
         return $this->entity->getOrganizationNl()->url;
     }
 
-    public function getSsoLocation() : string
+    public function getAssertionConsumerService() : IndexedService
     {
-        /** @var Service $service */
-        $service = reset($this->entity->getSingleSignOnServices());
-        return $service->location;
+        return reset($this->entity->getAssertionConsumerServices());
     }
 
     /**
@@ -73,5 +71,27 @@ class EngineBlockIdentityProviderMetadata extends AbstractIdentityProvider
             $keys[$pem] = $pem;
         }
         return $keys;
+    }
+
+    public function hasUiInfo(): bool
+    {
+        $info = [
+            $this->entity->getDisplayNameEn(),
+            $this->entity->getDisplayNameNl(),
+            $this->entity->getOrganizationEn(),
+            $this->entity->getOrganizationNl(),
+        ];
+
+        return !empty(array_filter($info));
+    }
+
+    public function hasOrganizationInfo(): bool
+    {
+        $info = [
+            $this->entity->getOrganizationEn(),
+            $this->entity->getOrganizationNl(),
+        ];
+
+        return !empty(array_filter($info));
     }
 }

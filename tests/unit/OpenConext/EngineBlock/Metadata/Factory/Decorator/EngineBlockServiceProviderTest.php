@@ -26,7 +26,7 @@ use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
 
-class ServiceProviderProxyTest extends AbstractEntityTest
+class EngineBlockServiceProviderTest extends AbstractEntityTest
 {
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject|UrlProvider
@@ -48,7 +48,7 @@ class ServiceProviderProxyTest extends AbstractEntityTest
         $this->urlProvider->expects($this->exactly(1))
             ->method('getUrl')
             ->withConsecutive(
-                // ACS: ServiceProviderProxy::getAssertionConsumerServices
+                // ACS: EngineBlockServiceProvider::getAssertionConsumerServices
                 ['authentication_sp_consume_assertion', false, null, null]
             ) ->willReturnOnConsecutiveCalls(
                 // ACS
@@ -69,7 +69,7 @@ class ServiceProviderProxyTest extends AbstractEntityTest
         $attributesMock->method('getRequestedAttributes')
             ->willReturn($attributes);
 
-        $decorator = new ServiceProviderProxy($adapter, $keyPairMock, $attributesMock, $this->urlProvider);
+        $decorator = new EngineBlockServiceProvider($adapter, $keyPairMock, $attributesMock, $this->urlProvider);
 
         $supportedNameIdFormats = [
             Constants::NAMEID_PERSISTENT,

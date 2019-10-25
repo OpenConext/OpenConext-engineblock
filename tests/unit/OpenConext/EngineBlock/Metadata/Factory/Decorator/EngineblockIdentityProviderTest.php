@@ -25,7 +25,7 @@ use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
 
-class IdentityProviderProxyTest extends AbstractEntityTest
+class EngineblockIdentityProviderTest extends AbstractEntityTest
 {
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject
@@ -65,9 +65,9 @@ class IdentityProviderProxyTest extends AbstractEntityTest
         $this->urlProvider->expects($this->exactly(3))
             ->method('getUrl')
             ->withConsecutive(
-                // SLO: IdentityProviderProxy::getSingleLogoutService
+                // SLO: EngineBlockIdentityProvider::getSingleLogoutService
                 ['authentication_logout', false, null, null],
-                // SSO: IdentityProviderProxy::getSingleSignOnServices
+                // SSO: EngineBlockIdentityProvider::getSingleSignOnServices
                 ['metadata_idp', false, null, null], // check if entity is EB
                 ['authentication_idp_sso', false, null, 'entity-id']
             ) ->willReturnOnConsecutiveCalls(
@@ -78,7 +78,7 @@ class IdentityProviderProxyTest extends AbstractEntityTest
                 'ssoLocation'
             );
 
-        $decorator = new IdentityProviderProxy($this->adapter, $this->keyPairMock, $this->urlProvider);
+        $decorator = new EngineBlockIdentityProvider($this->adapter, $this->keyPairMock, $this->urlProvider);
 
         $supportedNameIdFormats = [
             Constants::NAMEID_PERSISTENT,
@@ -103,7 +103,7 @@ class IdentityProviderProxyTest extends AbstractEntityTest
             ->with('authentication_logout', false, null, null)
             ->willReturn('sloLocation');
 
-        $decorator = new IdentityProviderProxy($this->adapter, $this->keyPairMock, $this->urlProvider);
+        $decorator = new EngineBlockIdentityProvider($this->adapter, $this->keyPairMock, $this->urlProvider);
 
         $this->assertEquals($decorator->getSingleLogoutService(), new Service('sloLocation', Constants::BINDING_HTTP_REDIRECT));
     }
@@ -114,7 +114,7 @@ class IdentityProviderProxyTest extends AbstractEntityTest
             'singleLogoutService' => null,
         ]);
 
-        $decorator = new IdentityProviderProxy($this->adapter, $this->keyPairMock, $this->urlProvider);
+        $decorator = new EngineBlockIdentityProvider($this->adapter, $this->keyPairMock, $this->urlProvider);
 
         $this->assertEquals($decorator->getSingleLogoutService(), null);
     }
@@ -126,7 +126,7 @@ class IdentityProviderProxyTest extends AbstractEntityTest
         $this->urlProvider->expects($this->exactly(2))
             ->method('getUrl')
             ->withConsecutive(
-                // SSO: IdentityProviderProxy::getSingleSignOnServices
+                // SSO: EngineBlockIdentityProvider::getSingleSignOnServices
                 ['metadata_idp', false, null, null], // check if entity is EB
                 ['authentication_idp_sso', false, null, null]  // we would expect the fourth paremeter to be null and not 'entity-id' becasue we are EB
             ) ->willReturnOnConsecutiveCalls(
@@ -137,7 +137,7 @@ class IdentityProviderProxyTest extends AbstractEntityTest
             );
 
 
-        $decorator = new IdentityProviderProxy($this->adapter, $this->keyPairMock, $this->urlProvider);
+        $decorator = new EngineBlockIdentityProvider($this->adapter, $this->keyPairMock, $this->urlProvider);
 
         $this->assertEquals([new Service('ssoLocation', Constants::BINDING_HTTP_REDIRECT)], $decorator->getSingleSignOnServices());
     }
@@ -151,7 +151,7 @@ class IdentityProviderProxyTest extends AbstractEntityTest
         $this->urlProvider->expects($this->exactly(2))
             ->method('getUrl')
             ->withConsecutive(
-            // SSO: IdentityProviderProxy::getSingleSignOnServices
+            // SSO: EngineBlockIdentityProvider::getSingleSignOnServices
                 ['metadata_idp', false, null, null], // check if entity is EB
                 ['authentication_idp_sso', false, null, 'entity-id']  // we would expect the fourth paremeter to be null and not 'entity-id' becasue we are EB
             ) ->willReturnOnConsecutiveCalls(
@@ -162,7 +162,7 @@ class IdentityProviderProxyTest extends AbstractEntityTest
             );
 
 
-        $decorator = new IdentityProviderProxy($this->adapter, $this->keyPairMock, $this->urlProvider);
+        $decorator = new EngineBlockIdentityProvider($this->adapter, $this->keyPairMock, $this->urlProvider);
 
         $this->assertEquals([new Service('ssoLocation?entityIdHash', Constants::BINDING_HTTP_REDIRECT)], $decorator->getSingleSignOnServices());
     }

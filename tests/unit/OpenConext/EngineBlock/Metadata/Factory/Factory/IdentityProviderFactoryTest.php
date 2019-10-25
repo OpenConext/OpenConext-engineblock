@@ -21,7 +21,7 @@ use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
-use OpenConext\EngineBlock\Metadata\Factory\Decorator\IdentityProviderProxy;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\Logo;
@@ -130,9 +130,9 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
         $this->urlProvider->expects($this->exactly(3))
             ->method('getUrl')
             ->withConsecutive(
-            // SLO: IdentityProviderProxy::getSingleLogoutService
+            // SLO: EngineBlockIdentityProvider::getSingleLogoutService
                 ['authentication_logout', false, null, null],
-                // SSO: IdentityProviderProxy::getSingleSignOnServices
+                // SSO: EngineBlockIdentityProvider::getSingleSignOnServices
                 ['metadata_idp', false, null, null], // check if entity is EB
                 ['authentication_idp_sso', false, null, 'entity-id']
             ) ->willReturnOnConsecutiveCalls(
@@ -165,7 +165,7 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
         $overrides['organizationEn'] = $organization;
         $overrides['contactPersons'] = $contactPersons;
 
-        // IdentityProviderProxy
+        // EngineBlockIdentityProvider
         $overrides['certificates'] = [$this->certificateMock];
         $overrides['supportedNameIdFormats'] = $supportedNameIdFormats;
         $overrides['singleSignOnServices'] = [new Service('ssoLocation', Constants::BINDING_HTTP_REDIRECT)];

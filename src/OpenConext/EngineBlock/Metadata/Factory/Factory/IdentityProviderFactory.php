@@ -19,15 +19,12 @@ namespace OpenConext\EngineBlock\Metadata\Factory\Factory;
 
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProviderInformation;
-use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProviderMetadata;
-use OpenConext\EngineBlock\Metadata\Factory\Decorator\IdentityProviderProxy;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
-use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
-use SAML2\Constants;
 
 /**
  * This factory is used for instantiating an entity with the required adapters and/or decorators set.
@@ -58,7 +55,7 @@ class IdentityProviderFactory
     }
 
     /**
-     * Use this method to create an entity which could act as proxy
+     * Use this method to create a bare Engineblock IdP entity
      */
     public function createEngineBlockEntityFrom(string $keyId): IdentityProviderEntityInterface
     {
@@ -89,13 +86,13 @@ class IdentityProviderFactory
      *
      * - IdentityProviderEntity: The adapter to convert the ORM entity to support the immutable IdentityProviderEntityInterface interface
      * - EngineBlockIdentityProviderInformation: Information used to add EB contact and UI info
-     * - IdentityProviderProxy: Set the functional fields to act as proxy:
+     * - EngineBlockIdentityProvider: Set the functional fields to act as proxy:
      *   (signing certificate, supported nameid formats, sso/slo services, response processing service)
      */
     private function buildEngineBlockEntityFromEntity(IdentityProvider $entity, string $keyId): IdentityProviderEntityInterface
     {
-        return new IdentityProviderProxy(  // Add EB proxy data
-            new EngineBlockIdentityProviderInformation( // Add EB specific information
+        return new EngineBlockIdentityProvider(  // Set EngineBlock specific functional properties so EB could act as proxy
+            new EngineBlockIdentityProviderInformation( // Set EngineBlock specific presentation properties
                 new IdentityProviderEntity($entity),
                 $this->engineBlockConfiguration
             ),
