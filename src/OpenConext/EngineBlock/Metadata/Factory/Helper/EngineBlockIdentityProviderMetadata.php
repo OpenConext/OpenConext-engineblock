@@ -19,12 +19,11 @@
 namespace OpenConext\EngineBlock\Metadata\Factory\Helper;
 
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\AbstractIdentityProvider;
-use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Service;
 
 class EngineBlockIdentityProviderMetadata extends AbstractIdentityProvider
 {
-    public function getOrganization() : string
+    public function getOrganizationNameEn() : string
     {
         if (!$this->entity->getOrganizationEn()) {
             return '';
@@ -32,12 +31,28 @@ class EngineBlockIdentityProviderMetadata extends AbstractIdentityProvider
         return $this->entity->getOrganizationEn()->name;
     }
 
-    public function getOrganizationSupportUrl() : string
+    public function getOrganizationNameNl() : string
+    {
+        if (!$this->entity->getOrganizationNl()) {
+            return '';
+        }
+        return $this->entity->getOrganizationNl()->name;
+    }
+
+    public function getOrganizationUrlEn() : string
     {
         if (!$this->entity->getOrganizationEn()) {
             return '';
         }
         return $this->entity->getOrganizationEn()->url;
+    }
+
+    public function getOrganizationUrlNl() : string
+    {
+        if (!$this->entity->getOrganizationNl()) {
+            return '';
+        }
+        return $this->entity->getOrganizationNl()->url;
     }
 
     public function getSsoLocation() : string

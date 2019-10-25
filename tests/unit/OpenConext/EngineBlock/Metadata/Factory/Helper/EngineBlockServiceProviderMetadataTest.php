@@ -68,8 +68,10 @@ class EngineBlockServiceProviderMetadataTest extends AbstractEntityTest
 
         $decorator = new EngineBlockServiceProviderMetadata($adapter);
 
-        $this->assertEquals('metadata-organization-name-en', $decorator->getOrganization());
-        $this->assertEquals('metadata-organization-url-en', $decorator->getOrganizationSupportUrl());
+        $this->assertEquals('metadata-organization-name-en', $decorator->getOrganizationNameEn());
+        $this->assertEquals('metadata-organization-name-nl', $decorator->getOrganizationNameNl());
+        $this->assertEquals('metadata-organization-url-en', $decorator->getOrganizationUrlEn());
+        $this->assertEquals('metadata-organization-url-nl', $decorator->getOrganizationUrlNl());
         $this->assertEquals( new IndexedService('location1','binding1', 0), $decorator->getAssertionConsumerService());
         $this->assertEquals(true, $decorator->hasUiInfo());
         $this->assertEquals(true, $decorator->hasOrganizationInfo());
