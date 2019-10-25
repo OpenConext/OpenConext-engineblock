@@ -75,14 +75,6 @@ class IdentityProviderProxy extends AbstractIdentityProvider
         return new Service($sloLocation, Constants::BINDING_HTTP_REDIRECT);
     }
 
-    public function getResponseProcessingService(): Service
-    {
-        // TODO:  test if this works or could be removed
-        // @see https://www.pivotaltracker.com/story/show/169204880
-
-        return new Service('/authentication/idp/provide-consent', 'INTERNAL');
-    }
-
     /**
      * When the service is requested for an entity other then EB we should replace service locations and bindings with those of EB
      * - if the entity is not EB we should add the entityId so EB could determine the IdP we are acting for.

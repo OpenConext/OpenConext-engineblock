@@ -208,14 +208,6 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     }
 
     /**
-     * @return null|Service
-     */
-    public function getResponseProcessingService(): ?Service
-    {
-        return $this->entity->responseProcessingService;
-    }
-
-    /**
      * @return string
      */
     public function getManipulation(): string

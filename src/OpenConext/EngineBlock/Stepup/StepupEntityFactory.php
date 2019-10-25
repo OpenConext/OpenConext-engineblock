@@ -38,10 +38,6 @@ class StepupEntityFactory
     {
         $publicKeyFactory = new EngineBlock_X509_CertificateFactory();
         $certificates[] = $publicKeyFactory->fromFile($stepupEndpoint->getKeyFile());
-        $responseProcessingService = new Service(
-            $acsLocation,
-            Constants::BINDING_HTTP_REDIRECT
-        );
         $singleSignOnServices[] = new Service($stepupEndpoint->getSsoLocation(), Constants::BINDING_HTTP_REDIRECT);
 
         $entity = new IdentityProvider(
@@ -71,7 +67,6 @@ class StepupEntityFactory
             false,
             true,
             XMLSecurityKey::RSA_SHA256,
-            $responseProcessingService,
             IdentityProvider::WORKFLOW_STATE_DEFAULT,
             '',
             false,
@@ -131,7 +126,6 @@ class StepupEntityFactory
             false,
             true,
             XMLSecurityKey::RSA_SHA256,
-            null,
             IdentityProvider::WORKFLOW_STATE_DEFAULT,
             [],
             false,

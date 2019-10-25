@@ -198,7 +198,6 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         $overrides['nameIdFormat'] = null;
         $overrides['singleLogoutService'] = null;
         $overrides['requestsMustBeSigned'] = false;
-        $overrides['responseProcessingService'] = null;
         $overrides['manipulation'] = null;
         $overrides['coins'] = Coins::createForServiceProvider(
             true,
@@ -326,7 +325,6 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         $overrides['nameIdFormat'] = null;
         $overrides['singleLogoutService'] = null;
         $overrides['requestsMustBeSigned'] = false;
-        $overrides['responseProcessingService'] = null;
         $overrides['manipulation'] = null;
         $overrides['coins'] = Coins::createForServiceProvider(
             true,

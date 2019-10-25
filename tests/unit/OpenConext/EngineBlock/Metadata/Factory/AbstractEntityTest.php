@@ -88,7 +88,6 @@ abstract class AbstractEntityTest extends TestCase
             'supportedNameIdFormats' => function(IdentityProviderEntityInterface $entity) { return  $entity->getSupportedNameIdFormats(); },
             'singleLogoutService' => function(IdentityProviderEntityInterface $entity) { return  $entity->getSingleLogoutService(); },
             'requestsMustBeSigned' => function(IdentityProviderEntityInterface $entity) { return  $entity->isRequestsMustBeSigned(); },
-            'responseProcessingService' => function(IdentityProviderEntityInterface $entity) { return  $entity->getResponseProcessingService(); },
             'manipulation' => function(IdentityProviderEntityInterface $entity) { return  $entity->getManipulation(); },
             'coins' => function(IdentityProviderEntityInterface $entity) { return  $entity->getCoins(); },
             'enabledInWayf' => function(IdentityProviderEntityInterface $entity) { return  $entity->isEnabledInWayf(); },
@@ -99,7 +98,7 @@ abstract class AbstractEntityTest extends TestCase
 
         $missing = array_diff_key($implemented, $assertions);
         $this->assertCount(0, $missing, 'missing tests for: '. json_encode($missing));
-        $this->assertCount(27, $implemented);
+        $this->assertCount(26, $implemented);
         $this->assertCount(count($implemented), $assertions);
 
         foreach ($assertions as $name => $assertion) {
@@ -139,7 +138,6 @@ abstract class AbstractEntityTest extends TestCase
             'supportedNameIdFormats' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getSupportedNameIdFormats(); },
             'singleLogoutService' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getSingleLogoutService(); },
             'requestsMustBeSigned' => function(ServiceProviderEntityInterface $decorator) { return $decorator->isRequestsMustBeSigned(); },
-            'responseProcessingService' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getResponseProcessingService(); },
             'manipulation' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getManipulation(); },
             'coins' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getCoins(); },
             'attributeReleasePolicy' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getAttributeReleasePolicy(); },
@@ -157,7 +155,7 @@ abstract class AbstractEntityTest extends TestCase
 
         $missing = array_diff_key($implemented, $assertions);
         $this->assertCount(0, $missing, 'missing tests for: ' . json_encode($missing));
-        $this->assertCount(33, $implemented);
+        $this->assertCount(32, $implemented);
         $this->assertCount(count($implemented), $assertions);
 
         foreach ($assertions as $name => $assertion) {
@@ -306,7 +304,6 @@ abstract class AbstractEntityTest extends TestCase
             ],
             'singleLogoutService' => $this->createMock(Service::class),
             'requestsMustBeSigned' => true,
-            'responseProcessingService' => $this->createMock(Service::class),
             'manipulation' => 'manipulation',
             'coins' => $this->createMock(Coins::class),
             'enabledInWayf' => true,
@@ -363,7 +360,6 @@ abstract class AbstractEntityTest extends TestCase
             ],
             'singleLogoutService' => $this->createMock(Service::class),
             'requestsMustBeSigned' => true,
-            'responseProcessingService' => $this->createMock(Service::class),
             'manipulation' => 'manipulation',
             'coins' => $this->createMock(Coins::class),
             'attributeReleasePolicy' => $attributeReleasePolicy,

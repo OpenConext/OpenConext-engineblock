@@ -238,13 +238,6 @@ abstract class AbstractRole
     public $requestsMustBeSigned = false;
 
     /**
-     * This seems to be used only to inject a ConsentService when initiating consent...
-     *
-     * @var Service
-     */
-    public $responseProcessingService;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="manipulation", type="text")
@@ -279,7 +272,6 @@ abstract class AbstractRole
      * @param null $publishInEduGainDate
      * @param bool $publishInEdugain
      * @param bool $requestsMustBeSigned
-     * @param Service $responseProcessingService
      * @param string $workflowState
      * @param string $manipulation
      */
@@ -307,7 +299,6 @@ abstract class AbstractRole
         $publishInEduGainDate = null,
         $publishInEdugain = false,
         $requestsMustBeSigned = false,
-        Service $responseProcessingService = null,
         $workflowState = self::WORKFLOW_STATE_DEFAULT,
         $manipulation = ''
     ) {
@@ -330,7 +321,6 @@ abstract class AbstractRole
         $this->publishInEduGainDate = $publishInEduGainDate;
         $this->publishInEdugain = $publishInEdugain;
         $this->requestsMustBeSigned = $requestsMustBeSigned;
-        $this->responseProcessingService = $responseProcessingService;
         $this->singleLogoutService = $singleLogoutService;
         $this->workflowState = $workflowState;
         $this->manipulation = $manipulation;

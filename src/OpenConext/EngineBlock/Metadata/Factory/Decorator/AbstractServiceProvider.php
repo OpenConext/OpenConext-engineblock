@@ -210,14 +210,6 @@ abstract class AbstractServiceProvider implements ServiceProviderEntityInterface
     }
 
     /**
-     * @return null|Service
-     */
-    public function getResponseProcessingService(): ?Service
-    {
-        return $this->entity->getResponseProcessingService();
-    }
-
-    /**
      * @return string
      */
     public function getManipulation(): string

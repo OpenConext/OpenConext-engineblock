@@ -19,10 +19,7 @@
 namespace OpenConext\EngineBlock\Metadata\Factory\Helper;
 
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\AbstractServiceProvider;
-use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\IndexedService;
-use OpenConext\EngineBlock\Metadata\Logo;
-use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 
 class EngineBlockServiceProviderMetadata extends AbstractServiceProvider
 {

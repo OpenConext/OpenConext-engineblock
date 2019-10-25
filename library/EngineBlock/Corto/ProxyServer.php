@@ -472,8 +472,8 @@ class EngineBlock_Corto_ProxyServer
         // Change the destiny of the received response
         $inResponseTo = $receivedResponse->getInResponseTo();
         $newResponse->setInResponseTo($inResponseTo);
-        $newResponse->setDestination($serviceProvider->responseProcessingService->location);
-        $newResponse->setDeliverByBinding($serviceProvider->responseProcessingService->binding);
+        $newResponse->setDestination('/authentication/idp/provide-consent');
+        $newResponse->setDeliverByBinding('INTERNAL');
         $newResponse->setReturn($this->_server->getUrl('processedAssertionConsumerService'));
 
         $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($receivedResponse->getIssuer());

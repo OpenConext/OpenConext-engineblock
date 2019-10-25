@@ -119,7 +119,6 @@ class ServiceProvider extends AbstractRole
      * @param bool $publishInEdugain
      * @param bool $requestsMustBeSigned
      * @param string $signatureMethod
-     * @param Service $responseProcessingService
      * @param string $workflowState
      * @param array $allowedIdpEntityIds
      * @param bool $allowAll
@@ -169,7 +168,6 @@ class ServiceProvider extends AbstractRole
         $publishInEdugain = false,
         $requestsMustBeSigned = false,
         $signatureMethod = XMLSecurityKey::RSA_SHA256,
-        Service $responseProcessingService = null,
         $workflowState = self::WORKFLOW_STATE_DEFAULT,
         array $allowedIdpEntityIds = array(),
         $allowAll = false,
@@ -215,7 +213,6 @@ class ServiceProvider extends AbstractRole
             $publishInEduGainDate,
             $publishInEdugain,
             $requestsMustBeSigned,
-            $responseProcessingService,
             $workflowState,
             $manipulation
         );

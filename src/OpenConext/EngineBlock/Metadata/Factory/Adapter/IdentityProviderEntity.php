@@ -207,14 +207,6 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
     }
 
     /**
-     * @return Service
-     */
-    public function getResponseProcessingService(): Service
-    {
-        return $this->entity->responseProcessingService;
-    }
-
-    /**
      * @return string
      */
     public function getManipulation(): string

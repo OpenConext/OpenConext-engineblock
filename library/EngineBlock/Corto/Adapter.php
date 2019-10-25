@@ -499,11 +499,7 @@ class EngineBlock_Corto_Adapter
             $idpEntityId,
             $spEntityId,
             $keyPair,
-            EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAttributeMetadata(),
-            new Service(
-                '/authentication/idp/provide-consent',
-                'INTERNAL'
-            )
+            EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAttributeMetadata()
         );
 
         $this->getMetadataRepository()->appendVisitor($visitor);
