@@ -31,6 +31,11 @@ final class Request implements JsonSerializable
     /**
      * @var string
      */
+    public $idpEntityId;
+
+    /**
+     * @var string
+     */
     public $subjectId;
 
     /**
@@ -52,9 +57,10 @@ final class Request implements JsonSerializable
      * @param AttributeRule[] $rules
      * @return Request $request
      */
-    public static function from($spEntityId, $subjectId, array $attributes, array $rules)
+    public static function from($spEntityId, $idpEntityId, $subjectId, array $attributes, array $rules)
     {
         Assertion::string($spEntityId, 'The SP entity ID must be a string, received "%s" (%s)');
+        Assertion::string($idpEntityId, 'The IDP entity ID must be a string, received "%s" (%s)');
         Assertion::string($subjectId, 'The SubjectId must be a string, received "%s" (%s)');
         Assertion::allIsInstanceOf($rules, AttributeRule::class, 'All attributes must be of type AttributeRule');
 
@@ -63,6 +69,7 @@ final class Request implements JsonSerializable
 
         $request = new self;
         $request->spEntityId = $spEntityId;
+        $request->idpEntityId = $idpEntityId;
         $request->subjectId = $subjectId;
         $request->attributes = $attributes;
         $request->rules = $rules;
@@ -94,6 +101,10 @@ final class Request implements JsonSerializable
                     [
                         'name' => 'SPentityID',
                         'values' => [$this->spEntityId],
+                    ],
+                    [
+                        'name' => 'IDPentityID',
+                        'values' => [$this->idpEntityId],
                     ]
                 ],
                 array_map(

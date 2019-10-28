@@ -43,6 +43,7 @@ class AttributeAggregationClientTest extends TestCase
     {
         $request = Request::from(
             'sp-entity-id',
+            'idp-entity-id',
             'subject',
             [],
             [

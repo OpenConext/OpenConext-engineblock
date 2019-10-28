@@ -38,6 +38,7 @@ class RequestTest extends TestCase
     {
         $request = Request::from(
             'sp-entity-id',
+            'idp-entity-id',
             'subject',
             [
                 'attr' => ['1', '2', '3'],
@@ -92,6 +93,7 @@ class RequestTest extends TestCase
     {
         $request = Request::from(
             'sp-entity-id',
+            'idp-entity-id',
             'subject',
             [
                 'attr' => ['1', ['foo' => 'bar'], '3'],
@@ -150,7 +152,16 @@ class RequestTest extends TestCase
     public function request_sp_entity_id_must_be_set()
     {
         $this->expectException(InvalidArgumentException::class);
-        Request::from(NULL,'subject-id', [], []);
+        Request::from(NULL, 'idp-entity-id', 'subject-id', [], []);
+    }
+
+    /**
+     * @test
+     */
+    public function request_idp_entity_id_must_be_set()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        Request::from('sp-entity-id', 'idp-entity-id', NULL, 'subject-id', [], []);
     }
 
     /**
@@ -159,6 +170,6 @@ class RequestTest extends TestCase
     public function request_attributes_must_be_of_type_dto()
     {
         $this->expectException(InvalidArgumentException::class);
-        Request::from('sp-entity-id', 'subject', [], [['invalid']]);
+        Request::from('sp-entity-id', 'idp-entity-id', 'subject', [], [['invalid']]);
     }
 }
