@@ -20,6 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClientInterface;
@@ -53,6 +54,11 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Test
     private $sp;
 
     /**
+     * @var IdentityProvider
+     */
+    private $idp;
+
+    /**
      * @var MetadataRepositoryInterface
      */
     private $repository;
@@ -73,6 +79,7 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Test
         $this->logger  = new Logger('Test', array($this->handler));
 
         $this->sp = new ServiceProvider('SP');
+        $this->idp = new IdentityProvider('IdP');
 
         $this->repository = Mockery::mock(MetadataRepositoryInterface::class);
         $this->repository->shouldReceive('findServiceProviderByEntityId')
@@ -163,7 +170,7 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Test
         $command->setRequest($this->request);
         $command->setResponse($this->response);
         $command->setServiceProvider($this->sp);
-
+        $command->setIdentityProvider($this->idp);
         $command->execute();
     }
 
@@ -192,6 +199,7 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Test
         $command->setRequest($this->request);
         $command->setResponse($this->response);
         $command->setServiceProvider($this->sp);
+        $command->setIdentityProvider($this->idp);
 
         $command->execute();
 
@@ -236,6 +244,7 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Test
           'name' => ['non-aggregated-value'],
         ]);
         $command->setServiceProvider($this->sp);
+        $command->setIdentityProvider($this->idp);
 
         $command->execute();
 
@@ -285,6 +294,7 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Test
         ]);
 
         $command->setServiceProvider($this->sp);
+        $command->setIdentityProvider($this->idp);
 
         $command->execute();
 
@@ -321,6 +331,7 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Test
         $command->setRequest($this->request);
         $command->setResponse($this->response);
         $command->setServiceProvider($this->sp);
+        $command->setIdentityProvider($this->idp);
 
         $command->execute();
     }
@@ -348,6 +359,7 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Test
         $command->setRequest($this->request);
         $command->setResponse($this->response);
         $command->setServiceProvider($this->sp);
+        $command->setIdentityProvider($this->idp);
 
         $command->execute();
 

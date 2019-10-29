@@ -113,6 +113,7 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
         // The AA request contains all response attributes.
         $request = Request::from(
             $serviceProvider->entityId,
+            $this->_identityProvider->entityId,
             $this->_collabPersonId,
             (array) $this->_responseAttributes,
             $rules
