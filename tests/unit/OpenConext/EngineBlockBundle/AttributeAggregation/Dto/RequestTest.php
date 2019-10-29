@@ -61,6 +61,10 @@ class RequestTest extends TestCase
                         'values' => ['sp-entity-id'],
                     ],
                     [
+                        'name' => 'IDPentityID',
+                        'values' => ['idp-entity-id'],
+                    ],
+                    [
                         'name' => 'attr',
                         'values' => ['1', '2', '3'],
                     ],
@@ -115,6 +119,10 @@ class RequestTest extends TestCase
                         'name' => 'SPentityID',
                         'values' => ['sp-entity-id'],
                     ],
+                    [
+                        'name' => 'IDPentityID',
+                        'values' => ['idp-entity-id'],
+                    ]
                 ],
                 'arpAttributes' => [
                     'name' => [
@@ -143,7 +151,7 @@ class RequestTest extends TestCase
     public function request_subject_must_be_set()
     {
         $this->expectException(InvalidArgumentException::class);
-        Request::from('sp-entity-id', NULL, [], []);
+        Request::from('sp-entity-id', 'idp-entity-id',NULL, [], []);
     }
 
     /**
@@ -161,7 +169,7 @@ class RequestTest extends TestCase
     public function request_idp_entity_id_must_be_set()
     {
         $this->expectException(InvalidArgumentException::class);
-        Request::from('sp-entity-id', 'idp-entity-id', NULL, 'subject-id', [], []);
+        Request::from('sp-entity-id', NULL, 'subject-id', [], []);
     }
 
     /**
