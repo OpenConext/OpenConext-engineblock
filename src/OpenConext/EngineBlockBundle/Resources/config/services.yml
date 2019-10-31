@@ -21,11 +21,17 @@ services:
             - "%stepup.gateway.sfo.sso_location%"
             - "%stepup.gateway.sfo.key_file%"
 
+    engineblock.configuration.stepup.loa_repository:
+        class: OpenConext\EngineBlock\Metadata\LoaRepository
+        arguments:
+            - "%stepup.loa.mapping%"
+
     engineblock.configuration.stepup.gateway_loa_mapping:
         class: OpenConext\EngineBlockBundle\Stepup\StepupGatewayLoaMapping
         arguments:
             - "%stepup.loa.mapping%"
             - "%stepup.loa.loa1%"
+            - "@engineblock.configuration.stepup.loa_repository"
 
     engineblock.request.request_id_generator:
         public: false
