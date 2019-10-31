@@ -14,7 +14,7 @@ Feature:
       And a Service Provider named "Proxy-SP"
 
   Scenario: Stepup authentication should be supported if set through SP configuration
-    Given the SP "SSO-SP" requires Stepup LoA "http://test.openconext.nl/assurance/loa2"
+    Given the SP "SSO-SP" requires Stepup LoA "http://example.org/assurance/loa2"
     When I log in at "SSO-SP"
       And I select "SSO-IdP" on the WAYF
       And I pass through EngineBlock
@@ -25,7 +25,7 @@ Feature:
     Then the url should match "/functional-testing/SSO-SP/acs"
 
     Scenario: Stepup authentication should be supported if set trough IdP configuration mapping
-      Given the IdP "SSO-IdP" requires Stepup LoA "http://test.openconext.nl/assurance/loa2" for SP "SSO-SP"
+      Given the IdP "SSO-IdP" requires Stepup LoA "http://example.org/assurance/loa2" for SP "SSO-SP"
       When I log in at "SSO-SP"
         And I select "SSO-IdP" on the WAYF
         And I pass through EngineBlock
@@ -36,8 +36,8 @@ Feature:
       Then the url should match "/functional-testing/SSO-SP/acs"
 
     Scenario: Stepup authentication should throw exception if set trough both IdP and SP
-      Given the IdP "SSO-IdP" requires Stepup LoA "http://test.openconext.nl/assurance/loa2" for SP "SSO-SP"
-        And the SP "SSO-SP" requires Stepup LoA "http://test.openconext.nl/assurance/loa3"
+      Given the IdP "SSO-IdP" requires Stepup LoA "http://example.org/assurance/loa2" for SP "SSO-SP"
+        And the SP "SSO-SP" requires Stepup LoA "http://example.org/assurance/loa3"
       When I log in at "SSO-SP"
         And I select "SSO-IdP" on the WAYF
         And I pass through EngineBlock
@@ -55,7 +55,7 @@ Feature:
       Then the url should match "/functional-testing/Dummy-SP/acs"
 
     Scenario: Stepup authentication should handle stepup if LoA level is not met but no token is allowed
-      Given the SP "SSO-SP" requires Stepup LoA "http://test.openconext.nl/assurance/loa2"
+      Given the SP "SSO-SP" requires Stepup LoA "http://example.org/assurance/loa2"
         And the SP "SSO-SP" allows no Stepup token
       When I log in at "SSO-SP"
         And I select "SSO-IdP" on the WAYF
@@ -67,7 +67,7 @@ Feature:
       Then the url should match "/functional-testing/SSO-SP/acs"
 
     Scenario: Stepup authentication should show exception when LoA level is not met
-      Given the SP "SSO-SP" requires Stepup LoA "http://test.openconext.nl/assurance/loa2"
+      Given the SP "SSO-SP" requires Stepup LoA "http://example.org/assurance/loa2"
       When I log in at "SSO-SP"
         And I select "SSO-IdP" on the WAYF
         And I pass through EngineBlock
@@ -78,7 +78,7 @@ Feature:
         And the response status code should be 400
 
     Scenario: Stepup authentication should show exception when user does cancel
-      Given the SP "SSO-SP" requires Stepup LoA "http://test.openconext.nl/assurance/loa2"
+      Given the SP "SSO-SP" requires Stepup LoA "http://example.org/assurance/loa2"
       When I log in at "SSO-SP"
         And I select "SSO-IdP" on the WAYF
         And I pass through EngineBlock
@@ -89,7 +89,7 @@ Feature:
         And the response status code should be 400
 
     Scenario: Stepup authentication should show exception when an unknown status is returned
-      Given the SP "SSO-SP" requires Stepup LoA "http://test.openconext.nl/assurance/loa2"
+      Given the SP "SSO-SP" requires Stepup LoA "http://example.org/assurance/loa2"
       When I log in at "SSO-SP"
         And I select "SSO-IdP" on the WAYF
         And I pass through EngineBlock
@@ -101,7 +101,7 @@ Feature:
 
     # Trusted proxy logic
     Scenario: Step-up authentication should be requested for the proxied SP when using a trusted proxy setup and if configured in the proxied SP
-      Given the SP "SSO-SP" requires Stepup LoA "http://test.openconext.nl/assurance/loa2"
+      Given the SP "SSO-SP" requires Stepup LoA "http://example.org/assurance/loa2"
         And SP "Proxy-SP" is authenticating for SP "SSO-SP"
         And SP "Proxy-SP" is a trusted proxy
         And SP "Proxy-SP" signs its requests
@@ -115,7 +115,7 @@ Feature:
       Then the url should match "/functional-testing/Proxy-SP/acs"
 
     Scenario: Stepup authentication should succeed for the proxied SP when using a trusted prroxy setup, if LoA level is not met but when no token is allowed is configured in the proxied SP
-      Given the SP "SSO-SP" requires Stepup LoA "http://test.openconext.nl/assurance/loa2"
+      Given the SP "SSO-SP" requires Stepup LoA "http://example.org/assurance/loa2"
         And the SP "SSO-SP" allows no Stepup token
         And SP "Proxy-SP" is authenticating for SP "SSO-SP"
         And SP "Proxy-SP" is a trusted proxy
