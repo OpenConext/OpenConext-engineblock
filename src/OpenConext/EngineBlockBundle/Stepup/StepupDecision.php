@@ -20,17 +20,19 @@ namespace OpenConext\EngineBlockBundle\Stepup;
 use OpenConext\EngineBlock\Exception\InvalidStepupConfigurationException;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Loa;
+use OpenConext\EngineBlock\Metadata\LoaRepository;
 
 class StepupDecision
 {
     /**
      * @var string|null
      */
-    private $idpLoa;
+    private $idpLoa = null;
     /**
      * @var string|null
      */
-    private $spLoa;
+    private $spLoa = null;
     /**
      * @var bool
      */
@@ -39,12 +41,23 @@ class StepupDecision
     /**
      * @param IdentityProvider $idp
      * @param ServiceProvider $sp
+     * @param LoaRepository $loaRepository
      * @throws InvalidStepupConfigurationException
      */
-    public function __construct(IdentityProvider $idp, ServiceProvider $sp)
+    public function __construct(IdentityProvider $idp, ServiceProvider $sp, LoaRepository $loaRepository)
     {
-        $this->idpLoa = $idp->getCoins()->stepupConnections()->getLoa($sp->entityId);
-        $this->spLoa = $sp->getCoins()->stepupRequireLoa();
+        $idpLoa = $idp->getCoins()->stepupConnections()->getLoa($sp->entityId);
+        // Only load the IdP LoA if configured in the stepup connection coin data
+        if ($idpLoa) {
+            $this->idpLoa = $loaRepository->getByIdentifier($idpLoa);
+        }
+
+        $spLoa = $sp->getCoins()->stepupRequireLoa();
+        // Only load the SP LoA if configured in Manage
+        if ($spLoa) {
+            $this->spLoa = $loaRepository->getByIdentifier($spLoa);
+        }
+
         $this->spNoToken = $sp->getCoins()->stepupAllowNoToken();
 
         if ($this->spLoa && $this->idpLoa) {
@@ -65,7 +78,7 @@ class StepupDecision
     }
 
     /**
-     * @return string|null
+     * @return Loa|null
      */
     public function getStepupLoa()
     {

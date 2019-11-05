@@ -48,19 +48,19 @@ class StepupGatewayLoaMappingTest extends TestCase
             ],
         ];
 
-        $ebLoa1 = Loa::fromConfig(1, 'ebLoa1');
-        $ebLoa2 = Loa::fromConfig(2, 'ebLoa2');
+        $ebLoa1 = Loa::create(1, 'ebLoa1');
+        $ebLoa2 = Loa::create(2, 'ebLoa2');
 
         $loaRepository = m::mock(LoaRepository::class);
         $loaRepository
             ->shouldReceive('findByIdentifier')
             ->with('gatewayLoa1')
-            ->andReturn(Loa::fromConfig(1, 'gatewayLoa1'));
+            ->andReturn(Loa::create(1, 'gatewayLoa1'));
 
         $loaRepository
             ->shouldReceive('findByIdentifier')
             ->with('gatewayLoa2')
-            ->andReturn(Loa::fromConfig(2, 'gatewayLoa2'));
+            ->andReturn(Loa::create(2, 'gatewayLoa2'));
 
         $loaRepository
             ->shouldReceive('findByIdentifier')
@@ -81,7 +81,7 @@ class StepupGatewayLoaMappingTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to find the EngineBlock LoA in the configured stepup LoA mapping');
 
-        $stepupLoaMapping->transformToGatewayLoa(Loa::fromConfig(2, 'loa2'));
+        $stepupLoaMapping->transformToGatewayLoa(Loa::create(2, 'loa2'));
 
     }
 
@@ -126,14 +126,14 @@ class StepupGatewayLoaMappingTest extends TestCase
             ],
         ];
 
-        $gwLoa2 = Loa::fromConfig(2, 'gatewayLoa2');
-        $gwLoa3 = Loa::fromConfig(3, 'gatewayLoa3');
+        $gwLoa2 = Loa::create(2, 'gatewayLoa2');
+        $gwLoa3 = Loa::create(3, 'gatewayLoa3');
 
         $loaRepository = m::mock(LoaRepository::class);
         $loaRepository
             ->shouldReceive('findByIdentifier')
             ->with('gatewayLoa1')
-            ->andReturn(Loa::fromConfig(1, 'gatewayLoa1'));
+            ->andReturn(Loa::create(1, 'gatewayLoa1'));
 
         $loaRepository
             ->shouldReceive('findByIdentifier')
@@ -148,17 +148,17 @@ class StepupGatewayLoaMappingTest extends TestCase
         $loaRepository
             ->shouldReceive('findByIdentifier')
             ->with('ebLoa1')
-            ->andReturn(Loa::fromConfig(1, 'ebLoa1'));
+            ->andReturn(Loa::create(1, 'ebLoa1'));
 
         $loaRepository
             ->shouldReceive('findByIdentifier')
             ->with('ebLoa2')
-            ->andReturn(Loa::fromConfig(2, 'ebLoa2'));
+            ->andReturn(Loa::create(2, 'ebLoa2'));
 
         $loaRepository
             ->shouldReceive('findByIdentifier')
             ->with('ebLoa3')
-            ->andReturn(Loa::fromConfig(3, 'ebLoa3'));
+            ->andReturn(Loa::create(3, 'ebLoa3'));
 
         $stepupLoaMapping = new StepupGatewayLoaMapping($mapping, 'gatewayLoa1', $loaRepository);
 
@@ -184,23 +184,23 @@ class StepupGatewayLoaMappingTest extends TestCase
         $loaRepository
             ->shouldReceive('findByIdentifier')
             ->with('gatewayLoa1')
-            ->andReturn(Loa::fromConfig(1, 'gatewayLoa1'));
+            ->andReturn(Loa::create(1, 'gatewayLoa1'));
 
         $loaRepository
             ->shouldReceive('findByIdentifier')
             ->with('gatewayLoa3')
-            ->andReturn(Loa::fromConfig(3, 'gatewayLoa3'));
+            ->andReturn(Loa::create(3, 'gatewayLoa3'));
 
         $loaRepository
             ->shouldReceive('findByIdentifier')
             ->with('ebLoa3')
-            ->andReturn(Loa::fromConfig(3, 'ebLoa3'));
+            ->andReturn(Loa::create(3, 'ebLoa3'));
 
         $stepupLoaMapping = new StepupGatewayLoaMapping($mapping, 'gatewayLoa1', $loaRepository);
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to find the received stepup LoA in the configured EngineBlock LoA');
 
-        $stepupLoaMapping->transformToEbLoa(Loa::fromConfig(2, 'loa2'));
+        $stepupLoaMapping->transformToEbLoa(Loa::create(2, 'loa2'));
     }
 }

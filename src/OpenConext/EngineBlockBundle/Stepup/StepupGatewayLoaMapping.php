@@ -37,18 +37,27 @@ class StepupGatewayLoaMapping
     public function __construct(array $loaMapping, $gatewayLoa1, LoaRepository $loaRepository)
     {
         Assertion::string($gatewayLoa1, 'The stepup.loa.loa1 configuration must be a string');
-        $this->gatewayLoa1 = $loaRepository->findByIdentifier($gatewayLoa1);
+        $this->gatewayLoa1 = $loaRepository->getByIdentifier($gatewayLoa1);
 
-        foreach ($loaMapping as $level => $mapping) {
-            $gwLoa = $loaRepository->findByIdentifier($mapping['gateway']);
-            $ebLoa = $loaRepository->findByIdentifier($mapping['engineblock']);
+        foreach ($loaMapping as $mapping) {
+            Assertion::nonEmptyString(
+                $mapping['gateway'],
+                sprintf('The gateway LoA must be a non empty string. "%s" given', $mapping['gateway'])
+            );
+            Assertion::nonEmptyString(
+                $mapping['engineblock'],
+                sprintf('The engineblock LoA must be a non empty string. "%s" given', $mapping['engineblock'])
+            );
+
+            $gwLoa = $loaRepository->getByIdentifier($mapping['gateway']);
+            $ebLoa = $loaRepository->getByIdentifier($mapping['engineblock']);
             $this->gatewayToEngine[$gwLoa->getIdentifier()] = $ebLoa;
             $this->engineToGateway[$ebLoa->getIdentifier()] = $gwLoa;
         }
     }
 
     /**
-     * @param $input
+     * @param Loa $engineBlockLoa
      * @return Loa
      */
     public function transformToGatewayLoa(Loa $engineBlockLoa)

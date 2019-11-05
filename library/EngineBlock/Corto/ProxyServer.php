@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlock\Metadata\Loa;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
@@ -437,7 +438,7 @@ class EngineBlock_Corto_ProxyServer
     public function sendStepupAuthenticationRequest(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $spRequest,
         IdentityProvider $identityProvider,
-        $authnContextClassRef,
+        Loa $authnContextClassRef,
         NameID $nameId
     ) {
         $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
@@ -456,7 +457,7 @@ class EngineBlock_Corto_ProxyServer
         // Add Stepup specific data
         $sspMessage->setRequestedAuthnContext([
             'AuthnContextClassRef' => [
-                $authnContextClassRef
+                $authnContextClassRef->getIdentifier()
             ],
             'Comparison' => 'minimal',
         ]);
