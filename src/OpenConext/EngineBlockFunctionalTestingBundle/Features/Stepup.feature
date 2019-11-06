@@ -128,3 +128,24 @@ Feature:
         And I give my consent
         And I pass through EngineBlock
       Then the url should match "/functional-testing/Proxy-SP/acs"
+
+    Scenario: Stepup authentication should fail when stepup is misconfigured
+      Given the SP "SSO-SP" requires Stepup LoA "http://typo-in-config.org/assurance/laos3"
+      When I log in at "SSO-SP"
+        And I select "SSO-IdP" on the WAYF
+        And I pass through EngineBlock
+        And I pass through the IdP
+      Then I should see "Error - An error occurred"
+
+    Scenario: Stepup authentication should fail when LoA 3 is requested, but LoA 2 is provided
+      Given the SP "SSO-SP" requires Stepup LoA "http://example.org/assurance/loa3"
+      When I log in at "SSO-SP"
+        And I select "SSO-IdP" on the WAYF
+        And I pass through EngineBlock
+        And I pass through the IdP
+        # This should not happen, GW would normally return an unmet loa error response. But a misconfigured stepup
+        # provider, or a malicious login attempt should not cause EngineBlock to fully trust the gatway but verify the
+        # returned LoA level
+        And Stepup will successfully verify a user with a LoA 2 token
+      Then I should see "Error - An error occurred"
+        And the url should match "/feedback/unknown-error"
