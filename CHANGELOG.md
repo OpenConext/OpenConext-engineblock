@@ -27,6 +27,10 @@ The following changes where introduced in this release:
 * Update testing tools (PHPUnit, Mockery & Phake) #777
 
 
+## 5.13.3
+This is a security release that will harden the application against CVE 2019-3465
+* Implement countermeasures against CVE 2019-3465 #802
+
 ## 5.13.2
 A missing feature was implemented
 
