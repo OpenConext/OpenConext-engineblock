@@ -5,6 +5,15 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 5.13.3
+This is a security release that will harden the application against CVE 2019-3465 #803
+
+## 5.13.2
+Add missing trusted proxy to stepup callout
+
+## 5.13.1
+Hotfix use of coins in consent template
+
 ## 5.13.0
 Add stepup authentication to EB to be able to reap the benefits of the SFO functionality of the strong authentication stack.
 
