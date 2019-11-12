@@ -11,8 +11,21 @@ move of all generation logic to the new Symfony EngineBlock application. But may
 relies on entity information from the `sso_provider_roles_eb5` table. All EngineBlock metadata is either loaded from
 ini config, or is hardcoded into the application.
 
+**Features**
+ * Twig is used as template engine #759
+ * User friendly errors are displayed when metadata can not be created #770 (resolves issue #211)
+ * Metadata is now generated in the Symfony EngineBlock application #765 #771 #772 #773 #776 #783 #784 #785 #791 
+ * The EngineBlock home screen was updated (slightly) #768 #769
+ * eduGAIN support was removed from the project #767
+ 
+**Improvements**
+ * Test coverage was a high priority (unit and functional tests are provided for every important feature) #766 #779 #780 #794 #795
+
 **Other chores**
-* Move the dev cache location outside the project root #780 
+ * Third party dependencies: Doctrine ORM, PHPUnit, Phake and Mockery have been updated  #764 #777
+ * Update ChromeDriver to match Chrome version #793
+ * The dev and test cache locations have been moved to a location outside the project directory #780
+ * Technical documentation was added to the wiki.
 
 ## 6.0.0
 In this release, PHP 5.6 support was dropped in favour of PHP 7.2. We are not migrating to the latest PHP version for some reasons. Chief amongst which is that PHP 7.2 was best compatible with the current EngineBlock code base. 
