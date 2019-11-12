@@ -15,8 +15,11 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider as ServiceProvider;
+use OpenConext\EngineBlock\Metadata\LoaRepository;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
+use OpenConext\EngineBlockBundle\Stepup\StepupDecision;
 use OpenConext\EngineBlockBundle\Stepup\StepupGatewayCallOutHelper;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,16 +47,23 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
      */
     private $_stepupGatewayCallOutHelper;
 
+    /**
+     * @var LoaRepository
+     */
+    private $_loaRepository;
+
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         Session $session,
         ProcessingStateHelperInterface $processingStateHelper,
-        StepupGatewayCallOutHelper $stepupGatewayCallOutHelper
+        StepupGatewayCallOutHelper $stepupGatewayCallOutHelper,
+        LoaRepository $loaRepository
     ) {
         $this->_server = $server;
         $this->_session = $session;
         $this->_processingStateHelper = $processingStateHelper;
         $this->_stepupGatewayCallOutHelper = $stepupGatewayCallOutHelper;
+        $this->_loaRepository = $loaRepository;
     }
 
     /**
@@ -73,11 +83,13 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
             $receivedResponse = $this->_server->getBindingsModule()->receiveResponse($serviceEntityId, $expectedDestination);
             $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
 
-            // Update the AuthnContextClassRef to the loa returned
-            $mappedLoa = $this->_stepupGatewayCallOutHelper->getEbLoa($receivedResponse->getAssertion()->getAuthnContextClassRef());
-            $this->updateProcessingStateLoa($receivedRequest, $receivedResponse, $mappedLoa);
+            $this->verifyReceivedLoa($receivedRequest, $receivedResponse, $log);
 
-            $log->warning('After Stepup authentication update received LoA', array('key_id' => $receivedRequest->getId(), 'result' => $mappedLoa));
+            // Update the AuthnContextClassRef to the loa returned
+            $receivedLoa = $this->_stepupGatewayCallOutHelper->getEbLoa($receivedResponse->getAssertion()->getAuthnContextClassRef());
+            $this->updateProcessingStateLoa($receivedRequest, $receivedResponse, $receivedLoa);
+
+            $log->warning('After Stepup authentication update received LoA', array('key_id' => $receivedRequest->getId(), 'result' => $receivedLoa));
         } catch (EngineBlock_Corto_Exception_ReceivedErrorStatusCode $e) {
 
             // The user is allowed to continue upon subcode: NoAuthnContext when the SP is configured with the coin: coin:stepup:allow_no_token == true
@@ -99,9 +111,10 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
             $this->_server->checkResponseSignatureMethods($receivedResponse);
         }
 
-        $sp  = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
-
         // Verify the SP requester chain.
+        // Retrieve the SP again to verify the requester chain. This verification step requires the furthest in chain SP
+        // first, thats why the self::getSp method is not used here.
+        $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
         EngineBlock_SamlHelper::getSpRequesterChain(
             $sp,
             $receivedRequest,
@@ -165,13 +178,7 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
                 $originalReceivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
 
                 $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($originalReceivedResponse->getIssuer());
-                $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($originalReceivedRequest->getIssuer());
-
-                // When dealing with an SP that acts as a trusted proxy, we should use the proxying SP and not the proxy itself.
-                if ($sp->getCoins()->isTrustedProxy()) {
-                    // Overwrite the trusted proxy SP instance with that of the SP that uses the trusted proxy.
-                    $sp = $this->_server->findOriginalServiceProvider($receivedRequest, $log);
-                }
+                $sp = $this->getSp($originalReceivedRequest);
 
                 if ($this->_stepupGatewayCallOutHelper->allowNoToken($idp, $sp)) {
 
@@ -199,6 +206,23 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
 
     /**
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest
+     * @return ServiceProvider
+     */
+    private function getSp(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest)
+    {
+        $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($spEntityId);
+
+        // When dealing with an SP that acts as a trusted proxy, we should use the proxying SP and not the proxy itself.
+        if ($sp->getCoins()->isTrustedProxy()) {
+            // Overwrite the trusted proxy SP instance with that of the SP that uses the trusted proxy.
+            $sp = $this->_server->findOriginalServiceProvider($receivedRequest, $log);
+        }
+
+        return $sp;
+    }
+
+    /**
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest
      * @param EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse
      * @param string $loa
      * @throws EngineBlock_Corto_Module_Services_SessionLostException
@@ -208,5 +232,48 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
         $processStep = $this->_processingStateHelper->getStepByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_STEPUP);
         $processStep->getResponse()->getAssertion()->setAuthnContextClassRef($loa);
         $this->_processingStateHelper->updateStepResponseByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_STEPUP, $processStep->getResponse());
+    }
+
+    /**
+     * Verify the requested level of assurance is met (LoA should be equal or greater than the SP/IdP requirement)
+     *
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest
+     * @param EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse
+     * @return void
+     * @throws EngineBlock_Corto_Module_Services_SessionLostException
+     * @throws EngineBlock_Exception
+     */
+    private function verifyReceivedLoa(
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest,
+        EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
+        LoggerInterface $log
+    ) {
+        $log->info('Test if the received LoA meets the LoA requirements stated by the SP or IdP');
+        // First get the original issuer (SP)
+        $sp = $this->getSp($receivedRequest);
+        // Then retrieve the IdP to be able to determine the required SP/IdP LoA requirement
+        $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId(
+            $this->_processingStateHelper->getStepByRequestId(
+                $receivedRequest->getId(),
+                ProcessingStateHelperInterface::STEP_STEPUP
+            )->getResponse()->getIssuer()
+        );
+
+        $stepupDecision = new StepupDecision($idp, $sp, $this->_loaRepository);
+        $requiredLoa = $stepupDecision->getStepupLoa();
+        $receivedLoa = $this->_stepupGatewayCallOutHelper->getEbLoa(
+            $receivedResponse->getAssertion()->getAuthnContextClassRef()
+        );
+
+        if (!$receivedLoa->levelIsHigherOrEqualTo($requiredLoa->getLevel())) {
+            throw new EngineBlock_Exception(
+                sprintf(
+                    'Stepup authentication failed, the required LoA ("%s") was not met. The stepup gateway should have enforced this. Received LoA was "%s"',
+                    $requiredLoa->getIdentifier(),
+                    $receivedLoa->getIdentifier()
+                )
+            );
+        }
+        $log->info('Received a suitable LoA response from the stepup gateway.');
     }
 }

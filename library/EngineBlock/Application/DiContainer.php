@@ -352,6 +352,14 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
+     * @return StepupGatewayCallOutHelper
+     */
+    public function getLoaRepository()
+    {
+        return $this->container->get('engineblock.configuration.stepup.loa_repository');
+    }
+
+    /**
      * @return array
      */
     public function getEncryptionKeysConfiguration()

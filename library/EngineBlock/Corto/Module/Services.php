@@ -135,7 +135,8 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $server,
                     $diContainer->getSession(),
                     $diContainer->getProcessingStateHelper(),
-                    $diContainer->getStepupGatewayCallOutHelper()
+                    $diContainer->getStepupGatewayCallOutHelper(),
+                    $diContainer->getLoaRepository()
                 );
             default :
                 return new $className($server, $diContainer->getXmlConverter(), $diContainer->getTwigEnvironment());
