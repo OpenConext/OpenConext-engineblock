@@ -25,8 +25,6 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\ServiceProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Collection\IdentityProviderEntityCollection;
-use OpenConext\EngineBlock\Metadata\Factory\Helper\EngineBlockIdentityProviderMetadata;
-use OpenConext\EngineBlock\Metadata\Factory\Helper\EngineBlockServiceProviderMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\IdentityProviderProxy;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
@@ -37,6 +35,7 @@ use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlock\Metadata\X509\X509PrivateKey;
+use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
@@ -83,6 +82,7 @@ class MetadataRendererTest extends TestCase
             $samlIdGenerator,
             $keyPairFactory,
             $documentSigner,
+            new TimeProvider(),
             'terms-of-use'
         );
 

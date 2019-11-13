@@ -67,19 +67,24 @@ class MetadataRenderer
      * @var string
      */
     private $termsOfUse;
+    /**
+     * @var TimeProvider
+     */
+    private $timeProvider;
 
     public function __construct(
         Environment $twig,
         EngineBlock_Saml2_IdGenerator $samlIdGenerator,
         KeyPairFactory $keyPairFactory,
         DocumentSigner $documentSigner,
+        TimeProvider $timeProvider,
         string $termsOfUse
     ) {
         $this->twig = $twig;
         $this->samlIdGenerator = $samlIdGenerator;
         $this->keyPairFactory = $keyPairFactory;
         $this->documentSigner = $documentSigner;
-        $this->timeProvider = new TimeProvider();
+        $this->timeProvider = $timeProvider;
         $this->termsOfUse = $termsOfUse;
     }
 

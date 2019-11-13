@@ -23,7 +23,7 @@ use OpenConext\EngineBlock\Metadata\IndexedService;
 
 class EngineBlockServiceProviderMetadata extends AbstractServiceProvider
 {
-    public function getOrganization() : string
+    public function getOrganizationNameEn() : string
     {
         if (!$this->entity->getOrganizationEn()) {
             return '';
@@ -31,12 +31,28 @@ class EngineBlockServiceProviderMetadata extends AbstractServiceProvider
         return $this->entity->getOrganizationEn()->name;
     }
 
-    public function getOrganizationSupportUrl() : string
+    public function getOrganizationNameNl() : string
+    {
+        if (!$this->entity->getOrganizationNl()) {
+            return '';
+        }
+        return $this->entity->getOrganizationNl()->name;
+    }
+
+    public function getOrganizationUrlEn() : string
     {
         if (!$this->entity->getOrganizationEn()) {
             return '';
         }
         return $this->entity->getOrganizationEn()->url;
+    }
+
+    public function getOrganizationUrlNl() : string
+    {
+        if (!$this->entity->getOrganizationNl()) {
+            return '';
+        }
+        return $this->entity->getOrganizationNl()->url;
     }
 
     public function getAssertionConsumerService() : IndexedService

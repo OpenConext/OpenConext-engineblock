@@ -17,10 +17,8 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
-use EngineBlock_Attributes_Metadata as AttributesMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\IndexedService;
-use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
@@ -50,7 +48,6 @@ class ServiceProviderStepup extends AbstractServiceProvider
         $this->keyPair = $keyPair;
         $this->urlProvider = $urlProvider;
     }
-
 
     public function getCertificates(): array
     {
