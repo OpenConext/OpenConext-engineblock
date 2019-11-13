@@ -111,7 +111,6 @@ class IdentityProvider extends AbstractRole
      * @param bool $publishInEdugain
      * @param bool $requestsMustBeSigned
      * @param string $signatureMethod
-     * @param Service $responseProcessingService
      * @param string $workflowState
      * @param string $manipulation
      * @param bool $enabledInWayf
@@ -150,7 +149,6 @@ class IdentityProvider extends AbstractRole
         $publishInEdugain = false,
         $requestsMustBeSigned = false,
         $signatureMethod = XMLSecurityKey::RSA_SHA256,
-        Service $responseProcessingService = null,
         $workflowState = self::WORKFLOW_STATE_DEFAULT,
         $manipulation = '',
         $enabledInWayf = true,
@@ -186,7 +184,6 @@ class IdentityProvider extends AbstractRole
             $publishInEduGainDate,
             $publishInEdugain,
             $requestsMustBeSigned,
-            $responseProcessingService,
             $workflowState,
             $manipulation
         );

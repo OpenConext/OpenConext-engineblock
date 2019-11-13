@@ -170,8 +170,6 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
         $overrides['supportedNameIdFormats'] = $supportedNameIdFormats;
         $overrides['singleSignOnServices'] = [new Service('ssoLocation', Constants::BINDING_HTTP_REDIRECT)];
         $overrides['singleLogoutService'] = new Service('sloLocation', Constants::BINDING_HTTP_REDIRECT);
-        $overrides['responseProcessingService'] = new Service('/authentication/idp/provide-consent', 'INTERNAL');
-
 
         $this->runIdentityProviderAssertions($adapter, $decorator, $overrides);
 

@@ -52,7 +52,6 @@ class ServiceProviderEntityTest extends AbstractEntityTest
             'supportedNameIdFormats' => $ormEntity->supportedNameIdFormats,
             'singleLogoutService' => $ormEntity->singleLogoutService,
             'requestsMustBeSigned' => $ormEntity->requestsMustBeSigned,
-            'responseProcessingService' => $ormEntity->responseProcessingService,
             'manipulation' => $ormEntity->manipulation,
             'coins' => $ormEntity->getCoins(),
 

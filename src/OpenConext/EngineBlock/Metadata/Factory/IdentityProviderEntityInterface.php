@@ -131,11 +131,6 @@ interface IdentityProviderEntityInterface
     public function isRequestsMustBeSigned(): bool;
 
     /**
-     * @return Service
-     */
-    public function getResponseProcessingService(): Service;
-
-    /**
      * @return string
      */
     public function getManipulation(): string;

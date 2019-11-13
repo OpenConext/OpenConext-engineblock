@@ -131,11 +131,6 @@ interface ServiceProviderEntityInterface
     public function isRequestsMustBeSigned(): bool;
 
     /**
-     * @return null|Service
-     */
-    public function getResponseProcessingService(): ?Service;
-
-    /**
      * @return string
      */
     public function getManipulation(): string;
