@@ -66,6 +66,8 @@ Feature:
       And the response should match xpath '//md:KeyDescriptor[@use="signing"]//ds:X509Certificate[starts-with(.,"MIIDuDCCAqCgAwIBAgIJAPdqJ9JQKN6vMA0GCSqGSIb3DQEBBQUAMEYxDzANBgNVBAMT")]'
       # Verify the used signing key is EB key
       And the response should match xpath '//ds:Signature//ds:X509Certificate[starts-with(.,"MIIDuDCCAqCgAwIBAgIJAPdqJ9JQKN6vMA0GCSqGSIb3DQEBBQUAMEYxDzANBgNVBAMT")]'
+      # Verify the schema and hostname are not appende twice as was done prior to resolving: https://www.pivotaltracker.com/story/show/169724838
+      And the response should not match xpath '//mdui:Logo[text()="https://engine.vm.openconext.orghttps://engine.vm.openconext.org/images/logo.png"]'
 
   Scenario: A user can request the metadata and does not see invisible IdPs
     Given an Identity Provider named "Known-IdP"

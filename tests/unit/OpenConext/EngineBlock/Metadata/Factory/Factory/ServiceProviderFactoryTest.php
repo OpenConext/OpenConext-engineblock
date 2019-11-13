@@ -80,7 +80,6 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         $this->translator = $this->createMock(TranslatorInterface::class);
     }
 
-
     public function test_create_engineblock_entity_from()
     {
         $entity = new ServiceProvider('entityId');
@@ -115,7 +114,8 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
             'configuredSupportUrl',
             'configuredSupportMail',
             'configuredDescription',
-            'configuredLogoUrl',
+            'example.org',
+            '/configuredLogoUrl.gif',
             1209,
             1009
         );
@@ -136,7 +136,6 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         $this->attributes->method('getRequestedAttributes')
             ->willReturn($attributes);
 
-
         $this->urlProvider->expects($this->exactly(2))
             ->method('getUrl')
             ->withConsecutive(
@@ -151,16 +150,13 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
                 'proxiedAcsLocation'
             );
 
-
         $this->factory = new ServiceProviderFactory($this->attributes, $this->keyPairFactory, $this->configuration, $this->urlProvider);
 
         $adapter = $this->createServiceProviderAdapter();
         $decorator = $this->factory->createEngineBlockEntityFrom('initial-key-id');
 
-
-
         // Logo we would expect
-        $logo = new Logo('configuredLogoUrl');
+        $logo = new Logo('https://example.org/configuredLogoUrl.gif');
         $logo->width = 1209;
         $logo->height = 1009;
 
@@ -174,16 +170,11 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
             ContactPerson::from('administrative', 'test-suite', 'Support', 'configuredSupportMail'),
         ];
 
-
-
         $supportedNameIdFormats = [
             Constants::NAMEID_PERSISTENT,
             Constants::NAMEID_TRANSIENT,
             Constants::NAMEID_UNSPECIFIED,
         ];
-
-
-
 
         // the actual assertions
         $overrides = [];
@@ -226,9 +217,6 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         $overrides['supportUrlEn'] = null;
         $overrides['supportUrlNl'] = null;
 
-
-
-
         // EngineblockIdentityProviderInformation
         $overrides['nameNl'] = 'test-suite EngineBlock';
         $overrides['nameEn'] = 'test-suite EngineBlock';
@@ -250,7 +238,6 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         $overrides['allowed'] = true;
         $overrides['allowAll'] = true;
 
-
         $this->runServiceProviderAssertions($adapter, $decorator, $overrides);
 
         $this->assertInstanceOf(ServiceProviderEntityInterface::class, $decorator);
@@ -269,6 +256,7 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
             'configuredSupportUrl',
             'configuredSupportMail',
             'configuredDescription',
+            'example.org',
             'configuredLogoUrl',
             1209,
             1009
@@ -304,7 +292,6 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
                 // ACS
                 'proxiedAcsLocation'
             );
-
 
         $this->factory = new ServiceProviderFactory($this->attributes, $this->keyPairFactory, $this->configuration, $this->urlProvider);
 
@@ -349,7 +336,6 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         $overrides['attributeAggregationRequired'] = false;
         $overrides['requestedAttributes'] = null;
 
-
         // TODO: should the methods below not set trough EBIdPInfo?
         $overrides['supportUrlEn'] = null;
         $overrides['supportUrlNl'] = null;
@@ -369,7 +355,6 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         $overrides['supportedNameIdFormats'] = [];
         $overrides['assertionConsumerServices'] = [new IndexedService('proxiedAcsLocation', Constants::BINDING_HTTP_POST, 0)];
         $overrides['allowAll'] = false;
-
 
         $this->runServiceProviderAssertions($adapter, $decorator, $overrides);
 

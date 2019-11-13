@@ -110,6 +110,7 @@ services:
             - '%openconext_support_url%'
             - '%email_request_access_address%'
             - '%view_default_header%'
+            - '%hostname%'
             - '%view_default_logo%'
             - '%view_default_logo_width%'
             - '%view_default_logo_height%'
