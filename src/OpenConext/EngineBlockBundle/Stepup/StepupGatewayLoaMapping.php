@@ -51,6 +51,16 @@ class StepupGatewayLoaMapping
 
             $gwLoa = $loaRepository->getByIdentifier($mapping['gateway']);
             $ebLoa = $loaRepository->getByIdentifier($mapping['engineblock']);
+            Assertion::keyNotExists(
+                $this->gatewayToEngine,
+                $gwLoa->getIdentifier(),
+                'Found a duplicate Gateway LoA identifier, this is not allowed.'
+            );
+            Assertion::keyNotExists(
+                $this->engineToGateway,
+                $ebLoa->getIdentifier(),
+                'Found a duplicate EngineBlock LoA identifier, this is not allowed.'
+            );
             $this->gatewayToEngine[$gwLoa->getIdentifier()] = $ebLoa;
             $this->engineToGateway[$ebLoa->getIdentifier()] = $gwLoa;
         }
