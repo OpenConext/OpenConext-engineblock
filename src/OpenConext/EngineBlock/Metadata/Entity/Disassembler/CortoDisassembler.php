@@ -133,16 +133,6 @@ class CortoDisassembler
     {
         $cortoEntity['EntityID'] = $entity->entityId;
 
-        /**
-         * @deprecated: The coins below are no longer used in EngineBlock and will be removed in release 6.2
-         */
-        if ($entity->publishInEdugain) {
-            $cortoEntity['PublishInEdugain'] = true;
-        }
-        if ($entity->publishInEduGainDate) {
-            $cortoEntity['PublishInEdugainDate'] = $entity->publishInEduGainDate->format(DateTime::W3C);
-        }
-
         if ($entity->getCoins()->disableScoping()) {
             $cortoEntity['DisableScoping'] = true;
         }

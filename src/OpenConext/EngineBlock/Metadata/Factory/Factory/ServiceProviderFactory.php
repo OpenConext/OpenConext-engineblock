@@ -27,10 +27,8 @@ use OpenConext\EngineBlock\Metadata\Factory\Decorator\ServiceProviderProxy;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\ServiceProviderStepup;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
-use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
-use SAML2\Constants;
 
 /**
  * This factory is used for instantiating an entity with the required adapters and/or decorators set.
