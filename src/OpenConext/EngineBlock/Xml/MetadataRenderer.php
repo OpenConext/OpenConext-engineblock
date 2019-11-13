@@ -20,8 +20,8 @@ namespace OpenConext\EngineBlock\Xml;
 
 use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlock\Metadata\Factory\Collection\IdentityProviderEntityCollection;
-use OpenConext\EngineBlock\Metadata\Factory\Helper\EngineBlockIdentityProviderMetadata;
-use OpenConext\EngineBlock\Metadata\Factory\Helper\EngineBlockServiceProviderMetadata;
+use OpenConext\EngineBlock\Metadata\Factory\Helper\IdentityProviderMetadataHelper;
+use OpenConext\EngineBlock\Metadata\Factory\Helper\ServiceProviderMetadataHelper;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
@@ -124,7 +124,7 @@ class MetadataRenderer
 
     private function renderMetadataXmlServiceProvider(ServiceProviderEntityInterface $sp, string $template) : string
     {
-        $metadata = new EngineBlockServiceProviderMetadata($sp);
+        $metadata = new ServiceProviderMetadataHelper($sp);
 
         $params = [
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
@@ -138,7 +138,7 @@ class MetadataRenderer
 
     private function renderMetadataXmlIdentityProvider(IdentityProviderEntityInterface $idp, string $template) : string
     {
-        $metadata = new EngineBlockIdentityProviderMetadata($idp);
+        $metadata = new IdentityProviderMetadataHelper($idp);
 
         $params = [
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
@@ -154,7 +154,7 @@ class MetadataRenderer
     {
         $metadataCollection = new IdentityProviderEntityCollection();
         foreach ($idpCollection as $idp) {
-            $metadataCollection->add(new EngineBlockIdentityProviderMetadata($idp));
+            $metadataCollection->add(new IdentityProviderMetadataHelper($idp));
         }
 
         $params = [

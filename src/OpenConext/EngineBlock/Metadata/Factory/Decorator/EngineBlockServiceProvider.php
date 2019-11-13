@@ -21,7 +21,6 @@ use EngineBlock_Attributes_Metadata as AttributesMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
-use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
@@ -30,7 +29,7 @@ use SAML2\Constants;
  * This decoration is used to represent EngineBlock in it's SP role when EngineBlock is used as authentication
  * proxy. It will make sure all required parameters to support EB are set.
  */
-class ServiceProviderProxy extends AbstractServiceProvider
+class EngineBlockServiceProvider extends AbstractServiceProvider
 {
     /**
      * @var X509KeyPair

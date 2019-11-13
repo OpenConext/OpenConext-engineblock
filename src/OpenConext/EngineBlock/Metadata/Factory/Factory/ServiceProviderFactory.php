@@ -21,9 +21,8 @@ namespace OpenConext\EngineBlock\Metadata\Factory\Factory;
 use EngineBlock_Attributes_Metadata as AttributesMetadata;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\ServiceProviderEntity;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProviderInformation;
-use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProviderMetadata;
-use OpenConext\EngineBlock\Metadata\Factory\Decorator\ServiceProviderProxy;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\ServiceProviderStepup;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
@@ -73,8 +72,8 @@ class ServiceProviderFactory
 
         $entity = $this->buildServiceProviderOrmEntity($entityId);
 
-        return new ServiceProviderProxy( // Add EB proxy data
-            new EngineBlockServiceProviderInformation(  // Add EB specific information
+        return new EngineBlockServiceProvider( // Set EngineBlock specific functional properties so EB could act as proxy
+            new EngineBlockServiceProviderInformation(  // Set EngineBlock specific presentation properties
                 new ServiceProviderEntity($entity),
                 $this->engineBlockConfiguration
             ),

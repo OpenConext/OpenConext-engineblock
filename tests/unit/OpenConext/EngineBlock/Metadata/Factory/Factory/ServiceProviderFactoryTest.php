@@ -24,7 +24,7 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\ServiceProviderEntity;
-use OpenConext\EngineBlock\Metadata\Factory\Decorator\ServiceProviderProxy;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\IndexedService;
@@ -140,9 +140,9 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         $this->urlProvider->expects($this->exactly(2))
             ->method('getUrl')
             ->withConsecutive(
-                // EntityId: ServiceProviderProxy::getEntityId
+                // EntityId: EngineBlockServiceProvider::getEntityId
                 ['metadata_sp', false, null, null],
-                // ACS: ServiceProviderProxy::getAssertionConsumerService
+                // ACS: EngineBlockServiceProvider::getAssertionConsumerService
                 ['authentication_sp_consume_assertion', false, null, null]
             ) ->willReturnOnConsecutiveCalls(
                 // EntityId
@@ -241,7 +241,7 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         $overrides['organizationEn'] = $organization;
         $overrides['contactPersons'] = $contactPersons;
 
-        // ServiceProviderProxy
+        // EngineBlockServiceProvider
         $overrides['entityId'] = 'EbEntityId';
         $overrides['certificates'] = [$certificateMock];
         $overrides['supportedNameIdFormats'] = $supportedNameIdFormats;

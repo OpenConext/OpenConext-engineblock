@@ -24,6 +24,9 @@ use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
 
+/**
+ * This decoration is used to add non functional and strictly informational data to an entity
+ */
 class EngineBlockIdentityProviderInformation extends AbstractIdentityProvider
 {
     /**

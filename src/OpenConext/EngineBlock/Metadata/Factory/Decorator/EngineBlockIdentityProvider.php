@@ -27,7 +27,7 @@ use SAML2\Constants;
  * This decoration is used to represent Idp's EngineBlock in it's IdP role when EngineBlock is used as authentication
  * proxy. It will make sure all required parameters to support EB are set.
  */
-class IdentityProviderProxy extends AbstractIdentityProvider
+class EngineBlockIdentityProvider extends AbstractIdentityProvider
 {
     /**
      * @var X509KeyPair
