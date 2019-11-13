@@ -178,7 +178,7 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
                 $originalReceivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
 
                 $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($originalReceivedResponse->getIssuer());
-                $sp = $this->getSp($originalReceivedRequest);
+                $sp = $this->getSp($originalReceivedRequest, $log);
 
                 if ($this->_stepupGatewayCallOutHelper->allowNoToken($idp, $sp)) {
 
@@ -206,11 +206,12 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
 
     /**
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest
+     * @param LoggerInterface $log
      * @return ServiceProvider
      */
-    private function getSp(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest)
+    private function getSp(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest, LoggerInterface $log)
     {
-        $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($spEntityId);
+        $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
 
         // When dealing with an SP that acts as a trusted proxy, we should use the proxying SP and not the proxy itself.
         if ($sp->getCoins()->isTrustedProxy()) {
@@ -250,7 +251,7 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
     ) {
         $log->info('Test if the received LoA meets the LoA requirements stated by the SP or IdP');
         // First get the original issuer (SP)
-        $sp = $this->getSp($receivedRequest);
+        $sp = $this->getSp($receivedRequest, $log);
         // Then retrieve the IdP to be able to determine the required SP/IdP LoA requirement
         $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId(
             $this->_processingStateHelper->getStepByRequestId(
@@ -265,7 +266,7 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
             $receivedResponse->getAssertion()->getAuthnContextClassRef()
         );
 
-        if (!$receivedLoa->levelIsHigherOrEqualTo($requiredLoa->getLevel())) {
+        if (!$receivedLoa->levelIsHigherOrEqualTo($requiredLoa)) {
             throw new EngineBlock_Exception(
                 sprintf(
                     'Stepup authentication failed, the required LoA ("%s") was not met. The stepup gateway should have enforced this. Received LoA was "%s"',

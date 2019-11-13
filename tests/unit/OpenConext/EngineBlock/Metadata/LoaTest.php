@@ -26,7 +26,7 @@ class LoaTest extends TestCase
     /**
      * @dataProvider provideValidLoaParameters
      */
-    public function test_loa_happy_flow($level, $identifier, $expectationDescription)
+    public function test_loa_happy_flow(int $level, string $identifier, $expectationDescription)
     {
         $loa = Loa::create($level, $identifier);
 
@@ -50,44 +50,17 @@ class LoaTest extends TestCase
         $loa2 = Loa::create(2, 'https://vm.openconext.org/assurance/loa2');
         $loa3 = Loa::create(3, 'https://vm.openconext.org/assurance/loa3');
 
-        $this->assertTrue($loa3->levelIsHigherOrEqualTo($loa3->getLevel()));
-        $this->assertTrue($loa3->levelIsHigherOrEqualTo($loa2->getLevel()));
-        $this->assertTrue($loa3->levelIsHigherOrEqualTo($loa1->getLevel()));
+        $this->assertTrue($loa3->levelIsHigherOrEqualTo($loa3));
+        $this->assertTrue($loa3->levelIsHigherOrEqualTo($loa2));
+        $this->assertTrue($loa3->levelIsHigherOrEqualTo($loa1));
 
-        $this->assertTrue($loa2->levelIsHigherOrEqualTo($loa2->getLevel()));
-        $this->assertTrue($loa2->levelIsHigherOrEqualTo($loa1->getLevel()));
-        $this->assertFalse($loa2->levelIsHigherOrEqualTo($loa3->getLevel()));
+        $this->assertTrue($loa2->levelIsHigherOrEqualTo($loa2));
+        $this->assertTrue($loa2->levelIsHigherOrEqualTo($loa1));
+        $this->assertFalse($loa2->levelIsHigherOrEqualTo($loa3));
 
-        $this->assertTrue($loa1->levelIsHigherOrEqualTo($loa1->getLevel()));
-        $this->assertFalse($loa1->levelIsHigherOrEqualTo($loa2->getLevel()));
-        $this->assertFalse($loa1->levelIsHigherOrEqualTo($loa3->getLevel()));
-    }
-
-    /**
-     * @dataProvider provideInvalidComparisonOptions
-     */
-    public function test_loa_comparison_is_to_be_used_correctly($badComparisonOption, $expectedException)
-    {
-        $loa = Loa::create(1, 'https://vm.openconext.org/assurance/loa2');
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage($expectedException);
-
-        $loa->levelIsHigherOrEqualTo($badComparisonOption);
-    }
-
-    public function provideInvalidComparisonOptions()
-    {
-        return [
-            ['1', 'Provide the integer value representing the LoA level'],
-            [true, 'Provide the integer value representing the LoA level'],
-            [false, 'Provide the integer value representing the LoA level'],
-            [1.5, 'Provide the integer value representing the LoA level'],
-            [9999999999999999999999999999, 'Provide the integer value representing the LoA level'],
-            [-9999999999999999999999999999, 'Provide the integer value representing the LoA level'],
-            [0, 'Please provide a positive integer value'],
-            [-1, 'Please provide a positive integer value'],
-        ];
+        $this->assertTrue($loa1->levelIsHigherOrEqualTo($loa1));
+        $this->assertFalse($loa1->levelIsHigherOrEqualTo($loa2));
+        $this->assertFalse($loa1->levelIsHigherOrEqualTo($loa3));
     }
 
     public function provideValidLoaParameters()

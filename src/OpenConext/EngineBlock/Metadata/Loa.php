@@ -67,14 +67,12 @@ class Loa
     }
 
     /**
-     * @param int $level
+     * @param Loa $loa
      * @return bool
      */
-    public function levelIsHigherOrEqualTo($level)
+    public function levelIsHigherOrEqualTo(Loa $loa)
     {
-        Assertion::integer($level, 'Provide the integer value representing the LoA level');
-        Assertion::greaterThan($level, 0, 'Please provide a positive integer value');
-        $isHigherOrEqualTo = $this->level >= $level;
+        $isHigherOrEqualTo = $this->level >= $loa->getLevel();
         return $isHigherOrEqualTo;
     }
 
