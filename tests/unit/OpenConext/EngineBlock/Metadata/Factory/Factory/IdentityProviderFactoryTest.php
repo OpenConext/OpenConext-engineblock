@@ -17,11 +17,13 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory\Factory;
 
+use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
-use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProvider;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\ProxiedIdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\Logo;
@@ -29,12 +31,13 @@ use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
-use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class IdentityProviderFactoryTest extends AbstractEntityTest
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var IdentityProviderFactory
      */
@@ -80,13 +83,12 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
     public function test_create_proxy_from_entity()
     {
         $entity = new IdentityProvider('entityId');
-        $entity = $this->factory->createEngineBlockEntityFromEntity($entity, 'default');
+        $entity = $this->factory->createIdentityProviderEntityFromEntity($entity, 'default');
 
         $this->assertInstanceOf(IdentityProviderEntityInterface::class, $entity);
     }
 
-
-    public function test_create_engineblock_entity_from_entity_properties()
+    public function test_create_idp_entity_from_entity_properties()
     {
         $this->translator->expects($this->exactly(1))
             ->method('trans')
@@ -108,8 +110,7 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
         $values = $this->getIdentityProviderMockProperties();
         $entity = $this->getOrmEntityIdentityProviderMock($values);
         $adapter = new IdentityProviderEntity($entity);
-        $decorator = $this->factory->createEngineBlockEntityFromEntity($entity, 'default');
-
+        $decorator = $this->factory->createIdentityProviderEntityFromEntity($entity, 'default');
 
         // Logo we would expect
         $logo = new Logo('configuredLogoUrl');
@@ -126,21 +127,14 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
             ContactPerson::from('administrative', 'test-suite', 'Support', 'configuredSupportMail'),
         ];
 
-
-        $this->urlProvider->expects($this->exactly(3))
+        $this->urlProvider->expects($this->exactly(1))
             ->method('getUrl')
             ->withConsecutive(
-            // SLO: EngineBlockIdentityProvider::getSingleLogoutService
-                ['authentication_logout', false, null, null],
-                // SSO: EngineBlockIdentityProvider::getSingleSignOnServices
-                ['metadata_idp', false, null, null], // check if entity is EB
+            // SSO: EngineBlockIdentityProvider::getSingleSignOnServices
                 ['authentication_idp_sso', false, null, 'entity-id']
             ) ->willReturnOnConsecutiveCalls(
-            // SLO
-                'sloLocation',
-                // SSO
-                'entityId',
-                'ssoLocation'
+            // SSO
+                'proxiedSsoLocation'
             );
 
         $supportedNameIdFormats = [
@@ -149,30 +143,33 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
             Constants::NAMEID_UNSPECIFIED,
         ];
 
-
         // the actual assertions
         $overrides = [];
 
         // EngineblockIdentityProviderInformation
-        $overrides['nameNl'] = 'test-suite EngineBlock';
-        $overrides['nameEn'] = 'test-suite EngineBlock';
-        $overrides['displayNameNl'] = 'test-suite EngineBlock';
-        $overrides['displayNameEn'] = 'test-suite EngineBlock';
-        $overrides['descriptionNl'] = 'configuredDescription';
-        $overrides['descriptionEn'] = 'configuredDescription';
-        $overrides['logo'] = $logo;
-        $overrides['organizationNl'] = $organization;
-        $overrides['organizationEn'] = $organization;
+        $overrides['nameNl'] = 'name-nl';
+        $overrides['nameEn'] = 'name-en';
+        $overrides['displayNameNl'] = 'display-name-nl';
+        $overrides['displayNameEn'] = 'display-name-en';
+        $overrides['descriptionNl'] = 'description-nl';
+        $overrides['descriptionEn'] = 'description-en';
         $overrides['contactPersons'] = $contactPersons;
 
         // EngineBlockIdentityProvider
         $overrides['certificates'] = [$this->certificateMock];
         $overrides['supportedNameIdFormats'] = $supportedNameIdFormats;
-        $overrides['singleSignOnServices'] = [new Service('ssoLocation', Constants::BINDING_HTTP_REDIRECT)];
-        $overrides['singleLogoutService'] = new Service('sloLocation', Constants::BINDING_HTTP_REDIRECT);
+        $overrides['singleSignOnServices'] = [new Service('proxiedSsoLocation', Constants::BINDING_HTTP_REDIRECT)];
+        $overrides['singleLogoutService'] = new Service(null, null);
 
         $this->runIdentityProviderAssertions($adapter, $decorator, $overrides);
 
         $this->assertInstanceOf(IdentityProviderEntityInterface::class, $decorator);
+    }
+
+    public function test_create_engineblock_entity_from_entity_properties()
+    {
+        $entity = m::mock(IdentityProvider::class);
+        $decorator = $this->factory->createIdentityProviderEntityFromEntity($entity, 'default');
+        $this->assertInstanceOf(ProxiedIdentityProvider::class, $decorator);
     }
 }
