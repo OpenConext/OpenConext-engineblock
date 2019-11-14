@@ -38,8 +38,6 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
     protected $_aliases = array(
         'spCertificateService'          => 'Certificate',
         'idpCertificateService'         => 'Certificate',
-        'spMetadataService'             => 'Metadata',
-        'idpMetadataService'            => 'Metadata',
         'stepupMetadataService'            => 'Metadata',
         'unsolicitedSingleSignOnService'=> 'singleSignOn',
         'debugSingleSignOnService'      => 'singleSignOn',
@@ -123,7 +121,8 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer->getXmlConverter(),
                     $diContainer->getSession(),
                     $diContainer->getProcessingStateHelper(),
-                    $diContainer->getStepupGatewayCallOutHelper()
+                    $diContainer->getStepupGatewayCallOutHelper(),
+                    $diContainer->getServiceProviderFactory()
                 );
             case EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer::class :
                 return new EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer(

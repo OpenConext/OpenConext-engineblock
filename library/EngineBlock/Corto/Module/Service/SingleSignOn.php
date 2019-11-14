@@ -113,6 +113,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         if ($posOfOwnIdp !== false) {
             $log->info("Removed ourselves from the candidate IdP list");
             unset($candidateIDPs[$posOfOwnIdp]);
+            // This could be removed after the magic entities are removed completely https://www.pivotaltracker.com/story/show/168249058
         }
 
         if (count($scopedIdps) > 0) {
@@ -402,6 +403,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         foreach ($identityProviders as $identityProvider) {
             if ($identityProvider->entityId === $this->_server->getUrl('idpMetadataService')) {
                 // Skip ourselves as a valid Idp
+                // This could be removed after the magic entities are removed completely https://www.pivotaltracker.com/story/show/168249058
                 continue;
             }
 

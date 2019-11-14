@@ -154,16 +154,6 @@ class EngineBlockContext extends AbstractSubContext
         // Add all known IdPs
         $this->serviceRegistryFixture
             ->reset()
-            ->registerSp(
-                "OpenConext EngineBlock",
-                "https://engine.$domain/authentication/sp/metadata",
-                "https://engine.$domain/authentication/sp/consume-assertion"
-            )
-            ->registerIdp(
-                "OpenConext EngineBlock",
-                "https://engine.$domain/authentication/idp/metadata",
-                "https://engine.$domain/authentication/idp/single-sign-on"
-            )
             ->save();
 
         $this->engineBlockDomain = 'https://engine.' . $domain;
