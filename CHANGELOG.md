@@ -16,16 +16,23 @@ The following changes where introduced in this release:
 **Improvements**
 * PHP 7.2 compatibility changes #713
 * Prevent WAYF button from floating left #760
+* Verify received LoA in StepUp ACS processing step #800
+* Added IDPentityID to the Attribute Aggregation request #799 (thanks @ohastra)
 
 **Bugfix**
 * Get termsOfServiceUrl from coins, not SP metadata entity #756
 
 **Other chores**
 * Cleanup old coin columns #755
-* Bump handlebars to version 4.3.1 #761
 * Update Composer settings for improved PHP 7.2 support #763
 * Update testing tools (PHPUnit, Mockery & Phake) #777
+* Fixed typos #790 #809
 
+**Security**
+* Upgrade xmlseclibs to version 3.0.4 #802 
+* Upgrade symfony/mime to v4.3.8 #805
+* Bump handlebars to version 4.3.1 #761
+* Upgrade handlebars to 4.5.1 #805
 
 ## 5.13.3
 This is a security release that will harden the application against CVE 2019-3465
