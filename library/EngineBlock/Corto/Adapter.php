@@ -112,16 +112,6 @@ class EngineBlock_Corto_Adapter
         $this->_callCortoServiceUri('stepupAssertionConsumerService');
     }
 
-    public function edugainMetadata()
-    {
-        $this->_initProxy();
-
-        $this->_filterRemoteEntitiesBySpQueryParam();
-        $this->_filterRemoteEntitiesByClaimedSpWorkflowState();
-
-        $this->_callCortoServiceUri('edugainMetadataService');
-    }
-
     public function idPsMetadata()
     {
         $this->_initProxy();
@@ -364,8 +354,6 @@ class EngineBlock_Corto_Adapter
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $settings = $application->getDiContainer();
 
-        $proxyServer->setHostName($settings->getHostname());
-
         $proxyServer->setConfigs(array(
             'debug' => $settings->isDebug(),
             'ConsentStoreValues' => $settings->isConsentStoreValuesActive(),
@@ -511,11 +499,7 @@ class EngineBlock_Corto_Adapter
             $idpEntityId,
             $spEntityId,
             $keyPair,
-            EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAttributeMetadata(),
-            new Service(
-                $proxyServer->getUrl('provideConsentService'),
-                'INTERNAL'
-            )
+            EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAttributeMetadata()
         );
 
         $this->getMetadataRepository()->appendVisitor($visitor);

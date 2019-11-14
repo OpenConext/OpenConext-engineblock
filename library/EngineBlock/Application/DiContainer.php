@@ -18,9 +18,10 @@
 
 use Doctrine\ORM\EntityManager;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Service\TimeProvider\TimeProviderInterface;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
-use OpenConext\EngineBlockBundle\Stepup\StepupGatewayCallOutHelper;
-use OpenConext\EngineBlockBundle\Stepup\StepupEntityFactory;
+use OpenConext\EngineBlock\Stepup\StepupEntityFactory;
+use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
 class EngineBlock_Application_DiContainer extends Pimple
@@ -164,11 +165,11 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return EngineBlock_TimeProvider_Interface
+     * @return TimeProviderInterface
      */
     public function getTimeProvider()
     {
-        return $this->container->get('engineblock.compat.time_provider');
+        return $this->container->get('engineblock.service.time_provider');
     }
 
     /**
@@ -320,6 +321,14 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
+     * @return \OpenConext\EngineBlockBundle\Url\UrlProvider
+     */
+    public function getUrlProvider()
+    {
+        return $this->container->get('engineblock.url_provider');
+    }
+
+    /**
      * @param EngineBlock_Corto_ProxyServer $server
      * @return \OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
      */
@@ -429,14 +438,6 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return array
-     */
-    public function getEdugainMetadataConfiguration()
-    {
-        return (array) $this->container->getParameter('edugain');
-    }
-
-    /**
      * @return string
      */
     public function getGuestStatusQualifier()
@@ -516,7 +517,7 @@ class EngineBlock_Application_DiContainer extends Pimple
         return (string) $this->container->getParameter('stepup.authn_context_class_ref_blacklist_regex');
     }
 
-    /** @return \OpenConext\EngineBlockBundle\Stepup\StepupEndpoint $stepupEndpoint */
+    /** @return \OpenConext\EngineBlock\Stepup\StepupEndpoint $stepupEndpoint */
     protected function getStepupEndpoint()
     {
         return $this->container->get('engineblock.configuration.stepup.endpoint');

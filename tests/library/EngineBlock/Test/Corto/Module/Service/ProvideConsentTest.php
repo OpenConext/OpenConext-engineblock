@@ -165,7 +165,6 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
         // Mock proxy server
         /** @var EngineBlock_Corto_ProxyServer $proxyServerMock */
         $proxyServerMock = Phake::partialMock('EngineBlock_Corto_ProxyServer', $twigMock);
-        $proxyServerMock->setHostname('test-host');
 
         $proxyServerMock->setRepository(new InMemoryMetadataRepository(
             array(new IdentityProvider('testIdP')),

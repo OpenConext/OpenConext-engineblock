@@ -1,4 +1,10 @@
 services:
+    OpenConext\EngineBlock\Xml\:
+        resource: '../../../EngineBlock/Xml'
+        exclude: '../../../EngineBlock/Xml/ValueObjects'
+        autowire: true
+        autoconfigure: true
+
     openconext.monitor.database_health_check:
         class: OpenConext\EngineBlockBundle\HealthCheck\DoctrineConnectionHealthCheck
         arguments:
@@ -15,7 +21,7 @@ services:
             - "%minimum_execution_time_on_invalid_received_response%"
 
     engineblock.configuration.stepup.endpoint:
-        class: OpenConext\EngineBlockBundle\Stepup\StepupEndpoint
+        class: OpenConext\EngineBlock\Stepup\StepupEndpoint
         arguments:
             - "%stepup.gateway.sfo.entity_id%"
             - "%stepup.gateway.sfo.sso_location%"
@@ -27,7 +33,7 @@ services:
             - "%stepup.loa.mapping%"
 
     engineblock.configuration.stepup.gateway_loa_mapping:
-        class: OpenConext\EngineBlockBundle\Stepup\StepupGatewayLoaMapping
+        class: OpenConext\EngineBlock\Stepup\StepupGatewayLoaMapping
         arguments:
             - "%stepup.loa.mapping%"
             - "%stepup.loa.loa1%"
@@ -59,12 +65,11 @@ services:
             - "@session"
 
     engineblock.service.stepup.gateway_callout_helper:
-        class: OpenConext\EngineBlockBundle\Stepup\StepupGatewayCallOutHelper
+        class: OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper
         arguments:
             - "@engineblock.configuration.stepup.gateway_loa_mapping"
             - "@engineblock.configuration.stepup.endpoint"
             - "@engineblock.configuration.stepup.loa_repository"
-
 
     engineblock.service.consent:
         class: OpenConext\EngineBlock\Service\ConsentService
@@ -86,6 +91,52 @@ services:
         arguments:
             - "@engineblock.compat.repository.metadata"
             - "@engineblock.compat.logger"
+
+    engineblock.service.time_provider:
+        class: OpenConext\EngineBlock\Service\TimeProvider\TimeProvider
+
+    engineblock.factory.service_provider_factory:
+        class: OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory
+        arguments:
+            - '@engineblock.compat.metadata.definitions'
+            - '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory'
+            - '@OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration'
+            - '@engineblock.url_provider'
+
+    OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration:
+        public: false
+        arguments:
+            - '@translator'
+            - '%openconext_support_url%'
+            - '%email_request_access_address%'
+            - '%view_default_header%'
+            - '%view_default_logo%'
+            - '%view_default_logo_width%'
+            - '%view_default_logo_height%'
+
+    engineblock.factory.identity_provider_factory:
+        class: OpenConext\EngineBlock\Metadata\Factory\Factory\IdentityProviderFactory
+        arguments:
+            - '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory'
+            - '@OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration'
+            - '@engineblock.url_provider'
+
+    OpenConext\EngineBlock\Xml\MetadataRenderer:
+        arguments:
+            - "@twig"
+            - "@engineblock.compat.saml2_id_generator"
+            - "@OpenConext\\EngineBlock\\Metadata\\X509\\KeyPairFactory"
+            - "@OpenConext\\EngineBlock\\Xml\\DocumentSigner"
+            - "@engineblock.service.time_provider"
+            - "%openconext_terms_of_use_url%"
+
+    OpenConext\EngineBlock\Xml\MetadataProvider:
+        arguments:
+            - '@OpenConext\EngineBlock\Xml\MetadataRenderer'
+            - '@engineblock.factory.service_provider_factory'
+            - '@engineblock.factory.identity_provider_factory'
+            - '@engineblock.metadata.repository.idps_metadata'
+            - '@engineblock.configuration.stepup.endpoint'
 
     engineblock.authentication.user_directory:
         class: OpenConext\EngineBlockBundle\Authentication\Service\UserService
@@ -135,6 +186,11 @@ services:
             - ['en', 'nl']
             - '%kernel.default_locale%'
 
+    engineblock.url_provider:
+        class: OpenConext\EngineBlockBundle\Url\UrlProvider
+        arguments:
+            - '@Symfony\Component\Routing\Generator\UrlGeneratorInterface'
+
     engineblock.locale.cookie_factory:
         class: OpenConext\EngineBlockBundle\Http\Cookies\CookieFactory
         arguments:
@@ -165,6 +221,15 @@ services:
         arguments:
             - "@engineblock.metadata.repository.doctrine"
 
+    engineblock.metadata.repository.idps_metadata:
+        class: OpenConext\EngineBlock\Metadata\MetadataRepository\IdpsMetadataRepository
+        arguments:
+            - "@engineblock.metadata.repository.cached_doctrine"
+            - "@engineblock.factory.identity_provider_factory"
+            - "@engineblock.url_provider"
+
+    OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface: '@engineblock.metadata.repository.cached_doctrine'
+
     engineblock.metadata.repository.doctrine:
         public: false
         class: OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository
@@ -184,6 +249,10 @@ services:
         class: OpenConext\EngineBlock\Metadata\Entity\Assembler\PushMetadataAssembler
         arguments:
             - "@engineblock.validator.allowed_scheme_validator"
+
+    OpenConext\EngineBlock\Metadata\X509\KeyPairFactory:
+        arguments:
+            - '%encryption_keys%'
 
     engineblock.validator.allowed_scheme_validator:
         class: OpenConext\EngineBlock\Validator\AllowedSchemeValidator

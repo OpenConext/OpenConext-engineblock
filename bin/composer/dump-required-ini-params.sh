@@ -200,16 +200,15 @@ $ymlContent = array(
         'maximum_authentication_procedures_allowed'               => (int) $config->get('engineblock.maximumAuthenticationProceduresAllowed'),
         'view_default_title'                                      => $config->get('defaults.title'),
         'view_default_header'                                     => $config->get('defaults.header'),
-        'view_default_logo'                                       => $config->get('defaults.logo'),
+        'view_default_logo'                                       => (string) $config->get('defaults.logo'),
+        'view_default_logo_width'                                 => (int) $config->get('defaults.logo_width'),
+        'view_default_logo_height'                                => (int) $config->get('defaults.logo_height'),
         'ui_return_to_sp_link'                                    => (bool) $config->get('ui.return_to_sp_link.active'),
 
         // Store attributes with their values, meaning that if an Idp suddenly
         // sends a new value (like a new e-mail address) consent has to be
         // given again.
         'consent_store_values'                                    => (bool) $config->get('authentication.storeValues', true),
-
-        // Edugain metadata
-        'edugain'                                                 => $config->get('edugain', array())->toArray(),
 
         // Guest qualifier for the AddGuestStatus filter.
         'addgueststatus_guestqualifier'                           => $config->get('addgueststatus.guestqualifier', ''),

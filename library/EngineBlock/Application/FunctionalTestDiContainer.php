@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-use OpenConext\EngineBlockBundle\Stepup\StepupEndpoint;
+use OpenConext\EngineBlock\Stepup\StepupEndpoint;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\FakeUserDirectory;
 use Symfony\Component\Filesystem\Filesystem;
 

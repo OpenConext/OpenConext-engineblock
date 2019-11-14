@@ -18,13 +18,11 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor;
 
-use EngineBlock_X509_KeyPair as KeyPair;
 use EngineBlock_Attributes_Metadata as AttributesMetadata;
+use EngineBlock_X509_KeyPair as KeyPair;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use OpenConext\EngineBlock\Metadata\RequestedAttribute;
-use OpenConext\EngineBlock\Metadata\Service;
 use SAML2\Constants;
 
 /**
@@ -53,29 +51,21 @@ class EngineBlockMetadataVisitor implements VisitorInterface
     private $attributes;
 
     /**
-     * @var Service
-     */
-    private $consentService;
-
-    /**
      * @param string $idpEntityId
      * @param string $spEntityId
      * @param KeyPair $keyPair
      * @param AttributesMetadata $attributes
-     * @param Service $consentService
      */
     public function __construct(
         $idpEntityId,
         $spEntityId,
         KeyPair $keyPair,
-        AttributesMetadata $attributes,
-        Service $consentService
+        AttributesMetadata $attributes
     ) {
         $this->idpEntityId = $idpEntityId;
         $this->spEntityId = $spEntityId;
         $this->keyPair = $keyPair;
         $this->attributes = $attributes;
-        $this->consentService = $consentService;
     }
 
     /**
@@ -90,6 +80,8 @@ class EngineBlockMetadataVisitor implements VisitorInterface
     }
 
     /**
+     * The allowAll was needed for the dynamically set ConsentService but it's unclear if the 'allow all entity ids' is still required.
+     *
      * {@inheritdoc}
      */
     public function visitServiceProvider(ServiceProvider $entity)
@@ -97,8 +89,9 @@ class EngineBlockMetadataVisitor implements VisitorInterface
         if ($entity->entityId === $this->spEntityId) {
             $this->setCertificate($entity);
             $this->setNameIdFormats($entity);
-            $this->setConsentService($entity);
             $this->setRequestedAttributes($entity);
+
+            $entity->allowAll = true;
         }
     }
 
@@ -150,31 +143,6 @@ class EngineBlockMetadataVisitor implements VisitorInterface
      */
     private function setRequestedAttributes(ServiceProvider $entity)
     {
-        foreach ($this->attributes->findRequestedAttributeIds() as $attributeId) {
-            $entity->requestedAttributes[] = new RequestedAttribute($attributeId);
-        }
-
-        foreach ($this->attributes->findRequiredAttributeIds() as $attributeId) {
-            $entity->requestedAttributes[] = new RequestedAttribute($attributeId, true);
-        }
-    }
-
-    /**
-     * Configure the consent service.
-     *
-     * The consent service is implemented using a so-called 'internal
-     * binding'. This can be considered an implementation detail, and can not
-     * and should not be configured in service registry / manage. This method
-     * overrides the metadata so the internal consent service is used.
-     *
-     * It's unclear if the 'allow all entity ids' is still required for the
-     * consent service to function.
-     *
-     * @param ServiceProvider $entity
-     */
-    private function setConsentService(ServiceProvider $entity)
-    {
-        $entity->responseProcessingService = $this->consentService;
-        $entity->allowAll = true;
+        $entity->requestedAttributes = $this->attributes->getRequestedAttributes();
     }
 }

@@ -62,6 +62,12 @@ class AppKernel extends Kernel
 
     public function getCacheDir()
     {
+        // In the dev & test environments use a folder outside the shared filesystem. This greatly improves cache clear
+        // and warmup time.
+        if ($this->getEnvironment() === 'dev' || $this->getEnvironment() === 'test') {
+            return sprintf('/tmp/eb_cache/%s', $this->getEnvironment());
+        }
+
         return $this->rootDir . '/cache/' . $this->environment;
     }
 

@@ -259,6 +259,8 @@ Your %organisationNoun% has denied you access to this service. You will have to 
     'error_stepup_callout_unmet_loa_desc' => 'To continue to this service, a registered token with a certain level of assurance is required. Currently, you either haven\'t registered a token at all, or the level of assurance of the token you did register is too low. See the link below for more information about the registration process.<br/><br/><a target="_blank" href="https://support.surfconext.nl/stepup-noauthncontext-en">Read more about the registration process.</a>',
     'error_stepup_callout_user_cancelled_title' => 'Error - Logging in cancelled',
     'error_stepup_callout_user_cancelled_desc' => 'You have aborted the login process. Go back to the service if you want to try again.',
+    'error_metadata_entity_id_not_found' => 'Metadata can not be generated',
+    'error_metadata_entity_id_not_found_desc' => 'The following error occurred: %message%',
     'attributes_validation_succeeded' => 'Authentication success',
     'attributes_validation_failed'    => 'Some attributes failed validation',
     'attributes_data_mailed'          => 'Attribute data have been mailed',

@@ -18,12 +18,15 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\MinkExtension\Context\MinkContext as BaseMinkContext;
 use DOMDocument;
 use DOMXPath;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RuntimeException;
+use SAML2\XML\mdui\Common;
+use SAML2\XML\shibmd\Scope;
 
 /**
  * Mink-enabled context.
@@ -54,6 +57,8 @@ class MinkContext extends BaseMinkContext
 
         $xpathObj = new DOMXPath($document);
         $xpathObj->registerNamespace('ds', XMLSecurityDSig::XMLDSIGNS);
+        $xpathObj->registerNamespace('mdui', Common::NS);
+        $xpathObj->registerNamespace('shibmd', Scope::NS);
         $nodeList = $xpathObj->query($xpath);
 
         if (!$nodeList || $nodeList->length === 0) {
@@ -82,6 +87,22 @@ class MinkContext extends BaseMinkContext
             );
             throw new ExpectationException($message, $this->getSession());
         }
+    }
+
+    /**
+     * @Given /^I should see URL "([^"]*)"$/
+     */
+    public function iShouldSeeUrl($url)
+    {
+        $this->assertSession()->responseContains($url);
+    }
+
+    /**
+     * @Given /^I should not see URL "([^"]*)"$/
+     */
+    public function iShouldNotSeeUrl($url)
+    {
+        $this->assertSession()->responseNotContains($url);
     }
 
     /**
@@ -130,5 +151,22 @@ class MinkContext extends BaseMinkContext
             throw new RuntimeException(sprintf('Unknown window/tab name "%s"', $windowName));
         }
         $this->getSession()->switchToWindow($this->windows[$windowName]);
+    }
+
+    /**
+     * @Then /^I should see (\d+) links on the front page$/
+     */
+    public function iShouldSeeLinksOnTheFrontPage($expectedNumberOfLinks)
+    {
+        $anchors = $this->getSession()->getPage()->findAll('css', '.mod-content a');
+        if (count($anchors) != $expectedNumberOfLinks) {
+            throw new ExpectationException(
+                sprintf(
+                    'The expected amount (%d) of metadata links could not be found on the page',
+                    $expectedNumberOfLinks
+                ),
+                $this->getSession()
+            );
+        }
     }
 }

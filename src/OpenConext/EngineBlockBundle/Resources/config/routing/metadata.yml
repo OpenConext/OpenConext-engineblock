@@ -22,7 +22,7 @@ metadata_sp:
     methods:    [GET]
     defaults:
         _controller: engineblock.controller.authentication.metadata:spMetadataAction
-        keyId: ~
+        keyId: ''
 
 metadata_sp_key:
     path:       '/authentication/sp/metadata/key:{keyId}'
@@ -48,34 +48,18 @@ metadata_all_idps_key:
     requirements:
         keyId: .+
 
-### Edugain
-metadata_edugain:
-    path:       '/authentication/proxy/edugain-metadata'
-    methods:    [GET]
-    defaults:
-        _controller: engineblock.controller.authentication.metadata:edugainMetadataAction
-        keyId: ~
-
-metadata_edugain_key:
-    path:       '/authentication/proxy/edugain-metadata/key:{keyId}'
-    methods:    [GET]
-    defaults:
-        _controller: engineblock.controller.authentication.metadata:edugainMetadataAction
-    requirements:
-        keyId: .+
-
 ### Stepup
-metdata_stepup:
-    path:       'authentication/stepup/metadata'
+metadata_stepup:
+    path:       '/authentication/stepup/metadata'
     methods:    [GET]
     defaults:
-        _controller: engineblock.controller.authentication.stepup:metadataAction
+        _controller: engineblock.controller.authentication.metadata:stepupMetadataAction
         keyId: ~
 
-metdata_stepup_key:
+metadata_stepup_key:
     path:       '/authentication/stepup/metadata/key:{keyId}'
     methods:    [GET]
     defaults:
-        _controller: engineblock.controller.authentication.stepup:metadataAction
+        _controller: engineblock.controller.authentication.metadata:stepupMetadataAction
     requirements:
         keyId: .+

@@ -31,13 +31,15 @@ use SAML2\Constants;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class ServiceProvider
  * @package OpenConext\EngineBlock\Metadata\Entity
  * @ORM\Entity
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ *
+ * WARNING: Please don't use this entity directly but use the dedicated factory instead.
+ * @see \OpenConext\EngineBlock\Factory\Factory\ServiceProviderFactory
  */
 class ServiceProvider extends AbstractRole
 {
@@ -91,6 +93,9 @@ class ServiceProvider extends AbstractRole
     public $supportUrlNl;
 
     /**
+     * WARNING: Please don't use this entity directly but use the dedicated factory instead.
+     * @see \OpenConext\EngineBlock\Factory\Factory\ServiceProviderFactory
+     *
      * @param string $entityId
      * @param Organization $organizationEn
      * @param Organization $organizationNl
@@ -114,7 +119,6 @@ class ServiceProvider extends AbstractRole
      * @param bool $publishInEdugain
      * @param bool $requestsMustBeSigned
      * @param string $signatureMethod
-     * @param Service $responseProcessingService
      * @param string $workflowState
      * @param array $allowedIdpEntityIds
      * @param bool $allowAll
@@ -163,8 +167,7 @@ class ServiceProvider extends AbstractRole
         $publishInEduGainDate = null,
         $publishInEdugain = false,
         $requestsMustBeSigned = false,
-        $signatureMethod = XMLSecurityKey::RSA_SHA1,
-        Service $responseProcessingService = null,
+        $signatureMethod = XMLSecurityKey::RSA_SHA256,
         $workflowState = self::WORKFLOW_STATE_DEFAULT,
         array $allowedIdpEntityIds = array(),
         $allowAll = false,
@@ -204,10 +207,12 @@ class ServiceProvider extends AbstractRole
             $nameNl,
             $nameIdFormat,
             $supportedNameIdFormats,
+            /**
+             * @deprecated: These coins are no longer used in EngineBlock and will be removed in release 6.2
+             */
             $publishInEduGainDate,
             $publishInEdugain,
             $requestsMustBeSigned,
-            $responseProcessingService,
             $workflowState,
             $manipulation
         );
@@ -263,6 +268,10 @@ class ServiceProvider extends AbstractRole
         return $this->allowAll || in_array($idpEntityId, $this->allowedIdpEntityIds);
     }
 
+    /**
+     * @param string $preferredLocale
+     * @return string
+     */
     public function getDisplayName($preferredLocale = '')
     {
         $spName = '';

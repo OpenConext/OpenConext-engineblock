@@ -20,7 +20,7 @@ use OpenConext\EngineBlock\Metadata\LoaRepository;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\EngineBlockBundle\Stepup\StepupDecision;
-use OpenConext\EngineBlockBundle\Stepup\StepupGatewayCallOutHelper;
+use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;

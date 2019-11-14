@@ -173,6 +173,8 @@ abstract class AbstractRole
     /**
      * @var bool
      *
+     * @deprecated: This coin is no longer used in EngineBlock and will be removed in release 6.2
+     *
      * @ORM\Column(name="publish_in_edugain", type="boolean")
      */
     public $publishInEdugain;
@@ -222,6 +224,8 @@ abstract class AbstractRole
     /**
      * @var DateTime
      *
+     * @deprecated: This coin is no longer used in EngineBlock and will be removed in release 6.2
+     *
      * @ORM\Column(name="publish_in_edu_gain_date", type="date", nullable=true)
      */
     public $publishInEduGainDate;
@@ -232,13 +236,6 @@ abstract class AbstractRole
      * @ORM\Column(name="requests_must_be_signed", type="boolean")
      */
     public $requestsMustBeSigned = false;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="response_processing_service_binding", type="string", nullable=true)
-     */
-    public $responseProcessingService;
 
     /**
      * @var string
@@ -275,7 +272,6 @@ abstract class AbstractRole
      * @param null $publishInEduGainDate
      * @param bool $publishInEdugain
      * @param bool $requestsMustBeSigned
-     * @param Service $responseProcessingService
      * @param string $workflowState
      * @param string $manipulation
      */
@@ -303,7 +299,6 @@ abstract class AbstractRole
         $publishInEduGainDate = null,
         $publishInEdugain = false,
         $requestsMustBeSigned = false,
-        Service $responseProcessingService = null,
         $workflowState = self::WORKFLOW_STATE_DEFAULT,
         $manipulation = ''
     ) {
@@ -326,7 +321,6 @@ abstract class AbstractRole
         $this->publishInEduGainDate = $publishInEduGainDate;
         $this->publishInEdugain = $publishInEdugain;
         $this->requestsMustBeSigned = $requestsMustBeSigned;
-        $this->responseProcessingService = $responseProcessingService;
         $this->singleLogoutService = $singleLogoutService;
         $this->workflowState = $workflowState;
         $this->manipulation = $manipulation;

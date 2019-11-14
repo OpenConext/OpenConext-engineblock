@@ -132,12 +132,7 @@ class CortoDisassembler
     private function translateCommon(AbstractRole $entity, array $cortoEntity)
     {
         $cortoEntity['EntityID'] = $entity->entityId;
-        if ($entity->publishInEdugain) {
-            $cortoEntity['PublishInEdugain'] = true;
-        }
-        if ($entity->publishInEduGainDate) {
-            $cortoEntity['PublishInEdugainDate'] = $entity->publishInEduGainDate->format(DateTime::W3C);
-        }
+
         if ($entity->getCoins()->disableScoping()) {
             $cortoEntity['DisableScoping'] = true;
         }

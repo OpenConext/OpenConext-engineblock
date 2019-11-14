@@ -88,7 +88,7 @@ services:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Validator\SsoRequestValidator
 
     engineblock.configuration.stepup.endpoint:
-        class: OpenConext\EngineBlockBundle\Stepup\StepupEndpoint
+        class: OpenConext\EngineBlock\Stepup\StepupEndpoint
         arguments:
             - "https://engine.vm.openconext.org/authentication/stepup/metadata"
             - "https://engine.vm.openconext.org/functional-testing/gateway/second-factor-only/single-sign-on"

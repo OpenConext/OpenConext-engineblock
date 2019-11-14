@@ -1,0 +1,42 @@
+<!-- {{ termsOfUse }} -->
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="{{ id }}" entityID="{{ metadata.entityId }}" validUntil="{{ validUntil }}">
+    <md:SPSSODescriptor WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        {% if metadata.hasUiInfo %}
+        <md:Extensions>
+            {% include '@theme/Authentication/View/Metadata/partial/ui_info.xml.twig' %}
+        </md:Extensions>
+        {% endif %}
+        {% for key in metadata.publicKeys %}
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>{{ key }}</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        {% endfor %}
+        <md:AssertionConsumerService Binding="{{ metadata.assertionConsumerService.binding }}"
+                                     Location="{{ metadata.assertionConsumerService.location }}"
+                                     index="0"></md:AssertionConsumerService>
+        {% if metadata.requestedAttributes is not empty %}
+            <md:AttributeConsumingService index="0">
+                <md:ServiceName xml:lang="nl">{{ metadata.nameNl }}</md:ServiceName>
+                <md:ServiceName xml:lang="en">{{ metadata.nameEn }}</md:ServiceName>
+                <md:ServiceDescription xml:lang="nl">{{ metadata.descriptionNl }}</md:ServiceDescription>
+                <md:ServiceDescription xml:lang="en">{{ metadata.descriptionEn }}</md:ServiceDescription>
+                {% for attribute in metadata.requestedAttributes %}
+                    <md:RequestedAttribute Name="{{ attribute.name }}" NameFormat="{{ attribute.nameFormat }}" isRequired="{{ attribute.required ? 'true' : 'false' }}"></md:RequestedAttribute>
+                {% endfor %}
+            </md:AttributeConsumingService>
+        {%  endif %}
+
+    </md:SPSSODescriptor>
+    {% if metadata.hasOrganizationInfo %}
+    {% include '@theme/Authentication/View/Metadata/partial/organization.xml.twig' %}
+    {% endif %}
+    {% if metadata.contactPersons is not empty%}
+        {% for contactPerson in metadata.contactPersons %}
+            {% include '@theme/Authentication/View/Metadata/partial/contact_person.xml.twig' %}
+        {% endfor %}
+    {% endif %}
+</md:EntityDescriptor>

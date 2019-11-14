@@ -49,9 +49,6 @@ services:
             - "@engineblock.compat.corto_filter_command_factory"
             - "@engineblock.compat.database_connection_factory"
 
-    engineblock.compat.time_provider:
-        class: EngineBlock_TimeProvider_Default
-
     engineblock.compat.saml2_id_generator:
         class: EngineBlock_Saml2_IdGenerator_Default
 
