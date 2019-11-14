@@ -18,10 +18,13 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
+use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Exception\InvalidStepupConfigurationException;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Loa;
+use OpenConext\EngineBlock\Metadata\LoaRepository;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlock\Metadata\Utils;
 use OpenConext\EngineBlockBundle\Stepup\StepupDecision;
@@ -62,15 +65,46 @@ class StepupDecisionTest extends TestCase
             ]
         );
 
-        $stepupDecision = new StepupDecision($idp, $sp);
+        $repo = $this->buildMockRepository($input);
+
+        $stepupDecision = new StepupDecision($idp, $sp, $repo);
 
         $useStepup = $stepupDecision->shouldUseStepup();
         $stepupLoa = $stepupDecision->getStepupLoa();
+        // StepupLoa is either of type Loa or null, the test expectation verifies the identifier (string)
+        if ($stepupLoa) {
+            $stepupLoa = $stepupLoa->getIdentifier();
+        }
         $allowNoToken = $stepupDecision->allowNoToken();
 
         $this->assertEquals($useStepup, $expectedResult[0]);
         $this->assertEquals($stepupLoa, $expectedResult[1]);
         $this->assertEquals($allowNoToken, $expectedResult[2]);
+    }
+
+    private function buildMockRepository($input)
+    {
+        $repo = m::mock(LoaRepository::class);
+
+        // In the StepupDecision, the IdP is retrieved before the SP
+        if (is_string($input[1]) && !empty($input[1])) {
+            $repo
+                ->shouldReceive('getByIdentifier')
+                ->with($input[1])
+                ->andReturn(Loa::create(2, $input[1]))
+            ;
+        }
+
+        // Now set the SP expectation
+        if (is_string($input[0]) && !empty($input[0])) {
+            $repo
+                ->shouldReceive('getByIdentifier')
+                ->with($input[0])
+                ->andReturn(Loa::create(2, $input[0]))
+            ;
+        }
+
+        return $repo;
     }
 
     /**
@@ -86,6 +120,8 @@ class StepupDecisionTest extends TestCase
 
         $this->expectException(InvalidStepupConfigurationException::class);
         $this->expectExceptionMessage('Both IdP "idp" and SP "sp" where configured to use stepup authentication. This is not allowed');
+
+        $repo = $this->buildMockRepository($input);
 
         $sp = Utils::instantiate(
             ServiceProvider::class,
@@ -105,7 +141,7 @@ class StepupDecisionTest extends TestCase
             ]
         );
 
-        $stepupDecision = new StepupDecision($idp, $sp);
+        $stepupDecision = new StepupDecision($idp, $sp, $repo);
     }
 
 

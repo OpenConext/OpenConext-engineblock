@@ -94,6 +94,31 @@ class MockStepupGateway
     /**
      * @param Request $request
      * @param string $fullRequestUri
+     * @return Response
+     */
+    public function handleSsoSuccessLoa2(Request $request, $fullRequestUri)
+    {
+        // parse the authnRequest
+        $authnRequest = $this->parseRequest($request, $fullRequestUri);
+
+        // get parameters from authnRequest
+        $nameId = $authnRequest->getNameId()->value;
+        $destination = $authnRequest->getAssertionConsumerServiceURL();
+        $authnContextClassRef = 'https://gateway.tld/authentication/loa2';
+        $requestId = $authnRequest->getId();
+
+        // handle success
+        return $this->createSecondFactorOnlyResponse(
+            $nameId,
+            $destination,
+            $authnContextClassRef,
+            $requestId
+        );
+    }
+
+    /**
+     * @param Request $request
+     * @param string $fullRequestUri
      * @param string $status
      * @param string $subStatus
      * @param string $message

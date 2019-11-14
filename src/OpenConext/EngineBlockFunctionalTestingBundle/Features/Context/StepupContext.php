@@ -72,6 +72,16 @@ class StepupContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^Stepup will successfully verify a user with a LoA 2 token$/
+     */
+    public function stepupWillsSuccessfullyVerifyAUserLoa2()
+    {
+        $mink = $this->getMinkContext();
+
+        $mink->pressButton('Submit-loa2');
+    }
+
+    /**
      * @Given /^I authenticate with Stepup$/
      */
     public function iAuthenticateWithStepup()

@@ -18,11 +18,11 @@
 
 namespace OpenConext\EngineBlockBundle\Stepup;
 
-use EngineBlock_Saml2_IdGenerator;
+use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use SAML2\AuthnRequest;
-use SAML2\Constants;
+use OpenConext\EngineBlock\Metadata\Loa;
+use OpenConext\EngineBlock\Metadata\LoaRepository;
 
 final class StepupGatewayCallOutHelper
 {
@@ -38,10 +38,12 @@ final class StepupGatewayCallOutHelper
 
     public function __construct(
         StepupGatewayLoaMapping $gatewayLoaMapping,
-        StepupEndpoint $stepupEndpoint
+        StepupEndpoint $stepupEndpoint,
+        LoaRepository $loaRepository
     ) {
         $this->gatewayLoaMapping = $gatewayLoaMapping;
         $this->stepupEndpoint = $stepupEndpoint;
+        $this->loaRepository = $loaRepository;
     }
 
     /**
@@ -51,7 +53,7 @@ final class StepupGatewayCallOutHelper
      */
     public function shouldUseStepup(IdentityProvider $identityProvider, ServiceProvider $serviceProvider)
     {
-        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider);
+        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider, $this->loaRepository);
         return $stepupDecision->shouldUseStepup();
     }
 
@@ -62,12 +64,12 @@ final class StepupGatewayCallOutHelper
      */
     public function getStepupLoa(IdentityProvider $identityProvider, ServiceProvider $serviceProvider)
     {
-        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider);
+        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider, $this->loaRepository);
         return $this->gatewayLoaMapping->transformToGatewayLoa($stepupDecision->getStepupLoa());
     }
 
     /**
-     * @return string
+     * @return Loa
      */
     public function getStepupLoa1()
     {
@@ -76,11 +78,16 @@ final class StepupGatewayCallOutHelper
 
     /**
      * @param string $gatewayLoa
-     * @return string
+     * @return Loa
      */
     public function getEbLoa($gatewayLoa)
     {
-        return $this->gatewayLoaMapping->transformToEbLoa($gatewayLoa);
+        Assertion::nonEmptyString(
+            $gatewayLoa,
+            sprintf('The gatewayLoa should be a non empty string. "%s" was provided', $gatewayLoa)
+        );
+        $loa = $this->loaRepository->getByIdentifier($gatewayLoa);
+        return $this->gatewayLoaMapping->transformToEbLoa($loa);
     }
 
     /**
@@ -90,7 +97,7 @@ final class StepupGatewayCallOutHelper
      */
     public function allowNoToken(IdentityProvider $identityProvider, ServiceProvider $serviceProvider)
     {
-        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider);
+        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider, $this->loaRepository);
         return $stepupDecision->allowNoToken();
     }
 }
