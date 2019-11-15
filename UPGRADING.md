@@ -24,7 +24,7 @@ In order to upgrade your EngineBlock instance, simply upgrade your PHP version t
 
 Upgrade your webserver to use PHP 7.2 for your EngineBlock application.
 
-## Changed Stepup LoA Configuration
+### Changed Stepup LoA Configuration
 
 In engineblock.ini, change this form:
 ```ini
