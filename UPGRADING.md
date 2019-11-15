@@ -24,6 +24,24 @@ In order to upgrade your EngineBlock instance, simply upgrade your PHP version t
 
 Upgrade your webserver to use PHP 7.2 for your EngineBlock application.
 
+## Changed Stepup LoA Configuration
+
+In engineblock.ini, change this form:
+```ini
+stepup.loa.mapping[http://example.org/assurance/loa2] = "https://gateway.tld/authentication/loa2"
+stepup.loa.mapping[http://example.org/assurance/loa3] = "https://gateway.tld/authentication/loa3"
+```
+to this form:
+```ini
+stepup.loa.mapping.1.engineblock = "http://example.org/assurance/loa1"
+stepup.loa.mapping.1.gateway = "https://gateway.tld/authentication/loa1"
+stepup.loa.mapping.2.engineblock = "http://example.org/assurance/loa2"
+stepup.loa.mapping.2.gateway = "https://gateway.tld/authentication/loa3"
+stepup.loa.mapping.3.engineblock = "http://example.org/assurance/loa3"
+stepup.loa.mapping.3.gateway = "https://gateway.tld/authentication/loa3"
+```
+
+
 ## 5.11 > 5.12.0
 
 ### Serialised column cleanup
