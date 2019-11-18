@@ -41,7 +41,7 @@ class EngineBlockConfigurationTest extends TestCase
         $url = 'https://www.example.org';
         $mail = 'mail@example.org';
         $description = 'The EngineBlock';
-        $logo = 'images/logo.png';
+        $logo = '/images/logo.png';
         $height = 120;
         $width = 120;
 
@@ -50,6 +50,7 @@ class EngineBlockConfigurationTest extends TestCase
             $url,
             $mail,
             $description,
+            'example.org',
             $logo,
             $width,
             $height
@@ -77,7 +78,7 @@ class EngineBlockConfigurationTest extends TestCase
         $this->assertEquals('administrative', $contactPersons[2]->contactType);
 
         $this->assertInstanceOf(Logo::class, $configuration->getLogo());
-        $this->assertEquals($logo, $configuration->getLogo()->url);
+        $this->assertEquals('https://example.org/images/logo.png', $configuration->getLogo()->url);
         $this->assertEquals($width, $configuration->getLogo()->width);
         $this->assertEquals($height, $configuration->getLogo()->height);
 

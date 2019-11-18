@@ -43,7 +43,8 @@ class EngineblockServiceProviderInformationTest extends AbstractEntityTest
             'configuredSupportUrl',
             'configuredSupportMail',
             'configuredDescription',
-            'configuredLogoUrl',
+            'example.org',
+            '/configuredLogoUrl.gif',
             1209,
             1009
         );
@@ -51,7 +52,7 @@ class EngineblockServiceProviderInformationTest extends AbstractEntityTest
         $decorator = new EngineBlockServiceProviderInformation($adapter, $configuration);
 
         // Logo we would expect
-        $logo = new Logo('configuredLogoUrl');
+        $logo = new Logo('https://example.org/configuredLogoUrl.gif');
         $logo->width = 1209;
         $logo->height = 1009;
 

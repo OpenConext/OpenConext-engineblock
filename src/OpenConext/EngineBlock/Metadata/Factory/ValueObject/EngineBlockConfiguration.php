@@ -65,7 +65,8 @@ class EngineBlockConfiguration
         string $supportUrl,
         string $supportMail,
         string $description,
-        string $logoUrl,
+        string $engineHostName,
+        string $logoPath,
         int $logoWidth,
         int $logoHeight
     ) {
@@ -73,7 +74,11 @@ class EngineBlockConfiguration
         $this->supportUrl = $supportUrl;
         $this->supportMail = $supportMail;
         $this->description = $description;
-        // A logo VO is created during construction time
+
+        // A logo VO is created during construction time, the schema for the url is hard coded, we assume engine is
+        // configured with TLS. The host name is read from the `hostname` ini config setting.
+        $logoUrl = 'https://' . $engineHostName . $logoPath;
+
         $this->logo = new Logo($logoUrl);
         $this->logo->width = $logoWidth;
         $this->logo->height = $logoHeight;
