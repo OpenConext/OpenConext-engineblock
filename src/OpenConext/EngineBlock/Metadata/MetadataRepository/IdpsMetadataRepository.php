@@ -114,7 +114,7 @@ class IdpsMetadataRepository
                 continue;
             }
 
-            $collection->add($this->idpFactory->createEngineBlockEntityFromEntity($idp, $keyId));
+            $collection->add($this->idpFactory->createIdentityProviderEntityFromEntity($idp, $keyId));
         }
         return $collection;
     }

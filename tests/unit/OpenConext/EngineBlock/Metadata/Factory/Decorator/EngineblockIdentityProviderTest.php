@@ -62,19 +62,17 @@ class EngineblockIdentityProviderTest extends AbstractEntityTest
     {
         $this->adapter = $this->createIdentityProviderAdapter();
 
-        $this->urlProvider->expects($this->exactly(3))
+        $this->urlProvider->expects($this->exactly(2))
             ->method('getUrl')
             ->withConsecutive(
                 // SLO: EngineBlockIdentityProvider::getSingleLogoutService
                 ['authentication_logout', false, null, null],
                 // SSO: EngineBlockIdentityProvider::getSingleSignOnServices
-                ['metadata_idp', false, null, null], // check if entity is EB
-                ['authentication_idp_sso', false, null, 'entity-id']
+                ['authentication_idp_sso', false, null, null]
             ) ->willReturnOnConsecutiveCalls(
                 // SLO
                 'sloLocation',
                 // SSO
-                'entityId',
                 'ssoLocation'
             );
 
@@ -123,47 +121,18 @@ class EngineblockIdentityProviderTest extends AbstractEntityTest
     {
         $this->adapter = $this->createIdentityProviderAdapter();
 
-        $this->urlProvider->expects($this->exactly(2))
+        $this->urlProvider->expects($this->exactly(1))
             ->method('getUrl')
             ->withConsecutive(
                 // SSO: EngineBlockIdentityProvider::getSingleSignOnServices
-                ['metadata_idp', false, null, null], // check if entity is EB
                 ['authentication_idp_sso', false, null, null]  // we would expect the fourth paremeter to be null and not 'entity-id' becasue we are EB
             ) ->willReturnOnConsecutiveCalls(
-            // SLO
                 // SSO
-                'entity-id', // The entity id should be the metadata url to test if EB becasue we are EB
                 'ssoLocation'
             );
-
 
         $decorator = new EngineBlockIdentityProvider($this->adapter, $this->keyPairMock, $this->urlProvider);
 
         $this->assertEquals([new Service('ssoLocation', Constants::BINDING_HTTP_REDIRECT)], $decorator->getSingleSignOnServices());
-    }
-
-    public function test_only_add_entity_id_hash_for_sso_service_url_if_not_eb_self()
-    {
-        $this->adapter = $this->createIdentityProviderAdapter([
-            'singleSignOnServices' => null,
-        ]);
-
-        $this->urlProvider->expects($this->exactly(2))
-            ->method('getUrl')
-            ->withConsecutive(
-            // SSO: EngineBlockIdentityProvider::getSingleSignOnServices
-                ['metadata_idp', false, null, null], // check if entity is EB
-                ['authentication_idp_sso', false, null, 'entity-id']  // we would expect the fourth paremeter to be null and not 'entity-id' becasue we are EB
-            ) ->willReturnOnConsecutiveCalls(
-            // SLO
-            // SSO
-                'other-entity-id', // The entity id should be the metadata url to test if EB becasue we are EB
-                'ssoLocation?entityIdHash'
-            );
-
-
-        $decorator = new EngineBlockIdentityProvider($this->adapter, $this->keyPairMock, $this->urlProvider);
-
-        $this->assertEquals([new Service('ssoLocation?entityIdHash', Constants::BINDING_HTTP_REDIRECT)], $decorator->getSingleSignOnServices());
     }
 }

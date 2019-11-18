@@ -21,6 +21,7 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProviderInformation;
+use OpenConext\EngineBlock\Metadata\Factory\Decorator\ProxiedIdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
@@ -67,11 +68,11 @@ class IdentityProviderFactory
     }
 
     /**
-     * Use this method to create an entity which could act as proxy
+     * Use this method to create an IdP entity that is displayed on the IdPs metadata overview.
      */
-    public function createEngineBlockEntityFromEntity(IdentityProvider $entity, string $keyId): IdentityProviderEntityInterface
+    public function createIdentityProviderEntityFromEntity(IdentityProvider $entity, string $keyId): IdentityProviderEntityInterface
     {
-        return $this->buildEngineBlockEntityFromEntity($entity, $keyId);
+        return $this->buildIdentityProviderFromEntity($entity, $keyId);
     }
 
     private function buildIdentityProviderOrmEntity(string $entityId): IdentityProvider
@@ -96,6 +97,27 @@ class IdentityProviderFactory
                 new IdentityProviderEntity($entity),
                 $this->engineBlockConfiguration
             ),
+            $this->keyPairFactory->buildFromIdentifier($keyId),
+            $this->urlProvider
+        );
+    }
+
+    /**
+     * This method will create an IdP entity from a regular entity
+     *
+     * The IdP is decorated with several EngineBlock properties like the SSO location, Contact Persons and so forth.
+     * This because EngineBlock proxies for these IdPs.
+     *
+     * - IdentityProviderEntity: The adapter to convert the ORM entity to support the immutable IdentityProviderEntityInterface interface
+     * - ProxiedIdentityProvider: Set the functional fields to act as an IdP proxied by EngineBlock
+     */
+    private function buildIdentityProviderFromEntity(IdentityProvider $entity, string $keyId): IdentityProviderEntityInterface
+    {
+        // Set IdP specific properties where the IdP is proxied by EngineBlock. So the EB certificate, contact persons
+        // and SSO location are overridden
+        return new ProxiedIdentityProvider(
+            new IdentityProviderEntity($entity),
+            $this->engineBlockConfiguration,
             $this->keyPairFactory->buildFromIdentifier($keyId),
             $this->urlProvider
         );

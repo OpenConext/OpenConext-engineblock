@@ -17,22 +17,31 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
+use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
+use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
 
 /**
- * This decoration is used to represent EngineBlock in it's IdP role when EngineBlock is used as authentication
- * proxy. It will make sure all required parameters to support EB are set.
+ * Represents an IdentityProvider that EngineBlock proxies
+ *
+ * IdP metadata is rendered for these IdPs in EngineBlocks IdPs metadata document.
  */
-class EngineBlockIdentityProvider extends AbstractIdentityProvider
+class ProxiedIdentityProvider extends AbstractIdentityProvider
 {
+    /**
+     * @var EngineBlockConfiguration
+     */
+    private $engineBlockConfiguration;
+
     /**
      * @var X509KeyPair
      */
     private $keyPair;
+
     /**
      * @var UrlProvider
      */
@@ -40,13 +49,23 @@ class EngineBlockIdentityProvider extends AbstractIdentityProvider
 
     public function __construct(
         IdentityProviderEntityInterface $entity,
+        EngineBlockConfiguration $engineBlockConfiguration,
         X509KeyPair $keyPair,
         UrlProvider $urlProvider
     ) {
         parent::__construct($entity);
-
+        $this->engineBlockConfiguration = $engineBlockConfiguration;
         $this->keyPair = $keyPair;
         $this->urlProvider = $urlProvider;
+    }
+
+    public function getSingleLogoutService(): ?Service
+    {
+        if (is_null($this->entity->getSingleLogoutService())) {
+            return null;
+        }
+        $sloService = $this->entity->getSingleLogoutService();
+        return new Service($sloService->location, $sloService->binding);
     }
 
     public function getCertificates(): array
@@ -65,25 +84,18 @@ class EngineBlockIdentityProvider extends AbstractIdentityProvider
         ];
     }
 
-    public function getSingleLogoutService(): ?Service
+    /**
+     * The configured EB contact persons are displayed for IdP entities that EngineBlock proxies.
+     * @return ContactPerson[]
+     */
+    public function getContactPersons(): array
     {
-        if (is_null($this->entity->getSingleLogoutService())) {
-            return null;
-        }
-
-        $sloLocation = $this->urlProvider->getUrl('authentication_logout', false, null, null);
-        return new Service($sloLocation, Constants::BINDING_HTTP_REDIRECT);
+        return $this->engineBlockConfiguration->getContactPersons();
     }
 
-    /**
-     * When the service is requested for an entity other then EB we should replace service locations and bindings with those of EB
-     * - if the entity is not EB we should add the entityId so EB could determine the IdP we are acting for.
-     *
-     * @return Service[]
-     */
     public function getSingleSignOnServices(): array
     {
-        $ssoLocation = $this->urlProvider->getUrl('authentication_idp_sso', false, null, null);
+        $ssoLocation = $this->urlProvider->getUrl('authentication_idp_sso', false, null, $this->getEntityId());
         return [new Service($ssoLocation, Constants::BINDING_HTTP_REDIRECT)];
     }
 }
