@@ -86,6 +86,7 @@ class ProxiedIdentityProviderTest extends AbstractEntityTest
             'configuredSupportMail',
             'configuredDescription',
             'configuredLogoUrl',
+            'logopath',
             1209,
             1009
         );
