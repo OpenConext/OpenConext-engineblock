@@ -16,17 +16,53 @@
  * limitations under the License.
  */
 
-class EngineBlock_Corto_Module_Service_ContinueToIdp extends EngineBlock_Corto_Module_Service_Abstract
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
+use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
+use Symfony\Component\HttpFoundation\Request;
+
+class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
+    /** @var \EngineBlock_Corto_ProxyServer */
+    protected $_server;
+
+    /**
+     * @var EngineBlock_Corto_XmlToArray
+     */
+    protected $_xmlConverter;
+
+    /**
+     * @var Twig_Environment
+     */
+    protected $twig;
+
+    /**
+     * @var ServiceProviderFactory
+     */
+    private $_serviceProviderFactory;
+
+    public function __construct(
+        EngineBlock_Corto_ProxyServer $server,
+        EngineBlock_Corto_XmlToArray $xmlConverter,
+        Twig_Environment $twig,
+        ServiceProviderFactory $serviceProviderFactory
+    ) {
+        $this->_server = $server;
+        $this->_xmlConverter = $xmlConverter;
+        $this->twig = $twig;
+        $this->_serviceProviderFactory = $serviceProviderFactory;
+    }
+
     /**
      * Handle the forwarding of the user to the proper IdP0 after the WAYF screen.
      *
      * @param string $serviceName
+     * @param Request $httpRequest
      * @throws EngineBlock_Corto_Module_Services_Exception
-     * @throws EngineBlock_Exception
      * @throws EngineBlock_Corto_Module_Services_SessionLostException
+     * @throws EngineBlock_Exception
      */
-    public function serve($serviceName)
+    public function serve($serviceName, Request $httpRequest)
     {
         $selectedIdp = urldecode($_REQUEST['idp']);
         if (!$selectedIdp) {
@@ -54,7 +90,11 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp extends EngineBlock_Corto_M
         }
 
         // Flush log if SP or IdP has additional logging enabled
-        $sp  = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
+        if ($request->isDebugRequest()) {
+            $sp = $this->getEngineSpRole($this->_server);
+        } else {
+            $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
+        }
         $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($selectedIdp);
         if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(array($sp, $idp))) {
             $application = EngineBlock_ApplicationSingleton::getInstance();
@@ -65,5 +105,20 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp extends EngineBlock_Corto_M
         }
 
         $this->_server->sendAuthenticationRequest($request, $selectedIdp);
+    }
+
+    /**
+     * @param EngineBlock_Corto_ProxyServer $proxyServer
+     * @return ServiceProvider
+     */
+    protected function getEngineSpRole(EngineBlock_Corto_ProxyServer $proxyServer)
+    {
+        $keyId = $proxyServer->getKeyId();
+        if (!$keyId) {
+            $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
+        }
+
+        $serviceProvider = $this->_serviceProviderFactory->createEngineBlockEntityFrom($keyId);
+        return ServiceProvider::fromServiceProviderEntity($serviceProvider);
     }
 }

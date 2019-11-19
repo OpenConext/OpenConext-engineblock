@@ -16,16 +16,48 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlock\Logger\Message\AdditionalInfo;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use OpenConext\EngineBlock\Logger\Message\AdditionalInfo;
-use Psr\Log\LoggerInterface;
+use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
+use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use SAML2\AuthnRequest;
 use SAML2\Response;
+use Symfony\Component\HttpFoundation\Request;
 
-class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Module_Service_Abstract
+class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
-    public function serve($serviceName)
+    /** @var \EngineBlock_Corto_ProxyServer */
+    protected $_server;
+
+    /**
+     * @var EngineBlock_Corto_XmlToArray
+     */
+    protected $_xmlConverter;
+
+    /**
+     * @var Twig_Environment
+     */
+    protected $twig;
+
+    /**
+     * @var ServiceProviderFactory
+     */
+    private $_serviceProviderFactory;
+
+    public function __construct(
+        EngineBlock_Corto_ProxyServer $server,
+        EngineBlock_Corto_XmlToArray $xmlConverter,
+        Twig_Environment $twig,
+        ServiceProviderFactory $serviceProviderFactory
+    ) {
+        $this->_server = $server;
+        $this->_xmlConverter = $xmlConverter;
+        $this->twig = $twig;
+        $this->_serviceProviderFactory = $serviceProviderFactory;
+    }
+
+    public function serve($serviceName, Request $httpRequest)
     {
         $application = EngineBlock_ApplicationSingleton::getInstance();
 
@@ -39,7 +71,12 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $request = $this->_getRequest($serviceName);
 
         $log->info(sprintf("Fetching service provider matching request issuer '%s'", $request->getIssuer()));
-        $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
+
+        if ($serviceName === 'debugSingleSignOnService') {
+            $sp = $this->getEngineSpRole($this->_server);
+        } else {
+            $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
+        }
 
         // When dealing with an SP that acts as a trusted proxy, we should perform SSO on the proxying SP and not the
         // proxy itself.
@@ -371,7 +408,12 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $currentLocale = $container->getLocaleProvider()->getLocale();
 
         $cookies = $container->getSymfonyRequest()->cookies->all();
-        $serviceProvider = $this->_server->findOriginalServiceProvider($request, $application->getLogInstance());
+
+        if ($request->isDebugRequest()) {
+            $serviceProvider = $this->getEngineSpRole($this->_server);
+        } else {
+            $serviceProvider = $this->_server->findOriginalServiceProvider($request, $application->getLogInstance());
+        }
         $idpList = $this->_transformIdpsForWAYF($candidateIdpEntityIds, $request->isDebugRequest(), $currentLocale);
         $rememberChoiceFeature = $container->getRememberChoice();
 
@@ -576,5 +618,20 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             ]
         ));
         return true;
+    }
+
+    /**
+     * @param EngineBlock_Corto_ProxyServer $proxyServer
+     * @return ServiceProvider
+     */
+    protected function getEngineSpRole(EngineBlock_Corto_ProxyServer $proxyServer)
+    {
+        $keyId = $proxyServer->getKeyId();
+        if (!$keyId) {
+            $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
+        }
+
+        $serviceProvider = $this->_serviceProviderFactory->createEngineBlockEntityFrom($keyId);
+        return ServiceProvider::fromServiceProviderEntity($serviceProvider);
     }
 }

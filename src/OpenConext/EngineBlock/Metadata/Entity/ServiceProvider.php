@@ -104,8 +104,8 @@ class ServiceProvider extends AbstractRole
      * @param Organization $organizationNl
      * @param Service $singleLogoutService
      * @param bool $additionalLogging
-     * @param array $certificates
-     * @param array $contactPersons
+     * @param X509Certificate[] $certificates
+     * @param ContactPerson[] $contactPersons
      * @param string $descriptionEn
      * @param string $descriptionNl
      * @param bool $disableScoping
@@ -246,6 +246,12 @@ class ServiceProvider extends AbstractRole
         );
     }
 
+    /**
+     * This is a factory method to convert the immutable ServiceProviderEntityInterface to the legacy domain entity.
+     *
+     * @param ServiceProviderEntityInterface $serviceProvider
+     * @return ServiceProvider
+     */
     public static function fromServiceProviderEntity(ServiceProviderEntityInterface $serviceProvider): ServiceProvider
     {
         $entity = new self($serviceProvider->getEntityId());

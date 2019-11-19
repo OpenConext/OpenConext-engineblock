@@ -205,40 +205,6 @@ class IdentityProvider extends AbstractRole
         );
     }
 
-
-    public static function fromIdentityProviderEntity(IdentityProviderEntityInterface $identityProvider): IdentityProvider
-    {
-        $entity = new self($identityProvider->getEntityId());
-        $entity->id = $identityProvider->getId();
-        $entity->entityId = $identityProvider->getEntityId();
-        $entity->nameNl = $identityProvider->getNameNl();
-        $entity->nameEn = $identityProvider->getNameEn();
-        $entity->descriptionNl = $identityProvider->getDescriptionNl();
-        $entity->descriptionEn = $identityProvider->getDescriptionEn();
-        $entity->displayNameNl = $identityProvider->getDisplayNameNl();
-        $entity->displayNameEn = $identityProvider->getDisplayNameEn();
-        $entity->logo = $identityProvider->getLogo();
-        $entity->organizationNl = $identityProvider->getOrganizationNl();
-        $entity->organizationEn = $identityProvider->getOrganizationEn();
-        $entity->keywordsNl = $identityProvider->getKeywordsNl();
-        $entity->keywordsEn = $identityProvider->getKeywordsEn();
-        $entity->certificates = $identityProvider->getCertificates();
-        $entity->workflowState = $identityProvider->getWorkflowState();
-        $entity->contactPersons = $identityProvider->getContactPersons();
-        $entity->nameIdFormat = $identityProvider->getNameIdFormat();
-        $entity->supportedNameIdFormats = $identityProvider->getSupportedNameIdFormats();
-        $entity->singleLogoutService = $identityProvider->getSingleLogoutService();
-        $entity->requestsMustBeSigned = $identityProvider->isRequestsMustBeSigned();
-        $entity->manipulation = $identityProvider->getManipulation();
-        $entity->coins = $identityProvider->getCoins();
-        $entity->enabledInWayf = $identityProvider->isEnabledInWayf();
-        $entity->singleSignOnServices = $identityProvider->getSingleSignOnServices();
-        $entity->consentSettings = $identityProvider->getConsentSettings();
-        $entity->shibMdScopes = $identityProvider->getShibMdScopes();
-
-        return $entity;
-    }
-
     /**
      * {@inheritdoc}
      */

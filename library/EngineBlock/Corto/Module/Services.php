@@ -137,6 +137,20 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer->getStepupGatewayCallOutHelper(),
                     $diContainer->getLoaRepository()
                 );
+            case EngineBlock_Corto_Module_Service_SingleSignOn::class :
+                return new EngineBlock_Corto_Module_Service_SingleSignOn(
+                    $server,
+                    $diContainer->getXmlConverter(),
+                    $diContainer->getTwigEnvironment(),
+                    $diContainer->getServiceProviderFactory()
+                );
+            case EngineBlock_Corto_Module_Service_ContinueToIdp::class :
+                return new EngineBlock_Corto_Module_Service_ContinueToIdp(
+                    $server,
+                    $diContainer->getXmlConverter(),
+                    $diContainer->getTwigEnvironment(),
+                    $diContainer->getServiceProviderFactory()
+                );
             default :
                 return new $className($server, $diContainer->getXmlConverter(), $diContainer->getTwigEnvironment());
         }

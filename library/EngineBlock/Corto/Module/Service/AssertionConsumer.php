@@ -18,6 +18,7 @@
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
+use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
@@ -90,7 +91,11 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
 
         $this->_server->checkResponseSignatureMethods($receivedResponse);
 
-        $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
+        if ($receivedRequest->isDebugRequest()) {
+            $sp = $this->getEngineSpRole($this->_server);
+        } else {
+            $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
+        }
 
         // Verify the SP requester chain.
         EngineBlock_SamlHelper::getSpRequesterChain(
@@ -188,7 +193,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
     {
         $keyId = $proxyServer->getKeyId();
         if (!$keyId) {
-            $keyId = 'default';
+            $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
         }
 
         $serviceProvider = $this->_serviceProviderFactory->createEngineBlockEntityFrom($keyId);
