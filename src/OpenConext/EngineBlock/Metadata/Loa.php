@@ -91,9 +91,4 @@ class Loa
     {
         return $this->identifier;
     }
-
-    public function __toString()
-    {
-        return $this->identifier;
-    }
 }
