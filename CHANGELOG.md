@@ -9,7 +9,12 @@ More information about our release strategy can be found in the [Development Gui
 The metadata endpoints of EngineBlock have been under heavy maintenance in this release. Some highlights include the
 move of all generation logic to the new Symfony EngineBlock application. But maybe more important, EngineBlock no longer
 relies on entity information from the `sso_provider_roles_eb5` table. All EngineBlock metadata is either loaded from
-ini config, or is hardcoded into the application.
+ini config, or is hardcoded into the application. Because the Eb entities were purely an internal EB necessity you could
+now remove them by removing them from Manage and then execute a metadata push.
+
+The unused metadata entities are the following:
+* engine.{{ base_domain}./authentication/sp/metadata
+* engine.{{ base_domain}//authentication/idp/metadata
 
 **Features**
  * Twig is used as template engine #759
@@ -17,6 +22,7 @@ ini config, or is hardcoded into the application.
  * Metadata is now generated in the Symfony EngineBlock application #765 #771 #772 #773 #776 #783 #784 #785 #791 
  * The EngineBlock home screen was updated (slightly) #768 #769
  * eduGAIN support was removed from the project #767
+ * Remove unused metadata entities and logic #811
  
 **Improvements**
  * Test coverage was a high priority (unit and functional tests are provided for every important feature) #766 #779 #780 #794 #795
