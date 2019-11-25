@@ -1,0 +1,36 @@
+name: test-integration
+on: [pull_request]
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        steps:
+            - name: Checkout
+              uses: actions/checkout@master
+            - name: Init environment
+              run: cd docker && ./init.sh
+            - name: Run unit tests
+              run: |
+                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                      ./app/console doctrine:schema:drop --force --env=test && \
+                      ./app/console doctrine:schema:create --env=test && \
+                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=eb4 && \
+                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=unit && \
+                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=integration
+                  '
+              env:
+                  SYMFONY_ENV: test
+            - name: Run acceptance tests
+              run: |
+                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                      ./app/console doctrine:schema:drop --force --env=test && \
+                      ./app/console doctrine:schema:create --env=test && \
+                      ./vendor/bin/behat -c ./tests/behat.yml --suite default -vv --format progress --strict && \
+                      ./vendor/bin/behat -c ./tests/behat.yml --suite selenium -vv --format progress --strict
+                  '
+              env:
+                  SYMFONY_ENV: test
+            - name: Show log on failure
+              if: failure()
+              run:  |
+                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org cat app/logs/test/test.log

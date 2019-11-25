@@ -1,0 +1,81 @@
+version: '2.4'
+
+services:
+    engine.vm.openconext.org:
+        image: nginx:latest
+        container_name: eb-nginx
+        volumes:
+            -  ../docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+            - ../web:/var/www/web
+            - ../ci/travis/files/engine.vm.openconext.org.crt:/etc/nginx/certs/engine.vm.openconext.org.crt
+            - ../ci/travis/files/engine.vm.openconext.org.key:/etc/nginx/certs/engine.vm.openconext.org.key
+        ports:
+            - 443:443
+        depends_on:
+            - php-fpm.vm.openconext.org
+
+    db.vm.openconext.org:
+        image: mariadb:10.2
+        restart: always
+        container_name: eb-db
+        environment:
+            MYSQL_ROOT_PASSWORD: "root"
+            MYSQL_DATABASE: "eb"
+            MYSQL_USER: "eb_rw"
+            MYSQL_PASSWORD: "secret"
+            MYSQL_INITDB_SKIP_TZINFO: 1
+        volumes:
+            - eb-mysql-data:/var/lib/mysql
+        healthcheck:
+            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+            timeout: 2s
+            retries: 20
+
+    db-test.vm.openconext.org:
+        image: mariadb:10.2
+        restart: always
+        container_name: eb-db-test
+        environment:
+            MYSQL_ROOT_PASSWORD: "root"
+            MYSQL_DATABASE: "eb_test"
+            MYSQL_USER: "eb_testrw"
+            MYSQL_PASSWORD: "secret"
+            MYSQL_INITDB_SKIP_TZINFO: 1
+        volumes:
+            - eb-mysql-test-data:/var/lib/mysql
+        healthcheck:
+            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+            timeout: 2s
+            retries: 20
+
+    php-fpm.vm.openconext.org:
+        build:
+            context: ../
+            dockerfile: docker/php-fpm/Dockerfile
+        container_name: eb-phpfpm
+        volumes:
+            - ../:/var/www
+
+        user: '${UID}:${GID}'
+        ports:
+            - 9000:9000
+        depends_on:
+            db.vm.openconext.org:
+                condition: service_healthy
+            db-test.vm.openconext.org:
+                condition: service_healthy
+
+    selenium.vm.openconext.org:
+        image: selenium/standalone-chrome:2.53.1
+        container_name: eb-selenium
+        user: '${UID}:${GID}'
+        environment:
+            START_XVFB: "false"
+        ports:
+            - 4444:4444
+        volumes:
+            - /dev/shm:/dev/shm
+
+volumes:
+    eb-mysql-data:
+    eb-mysql-test-data:
