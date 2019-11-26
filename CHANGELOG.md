@@ -27,6 +27,15 @@ ini config, or is hardcoded into the application.
  * The dev and test cache locations have been moved to a location outside the project directory #780
  * Technical documentation was added to the wiki.
 
+## 6.0.1
+This release is a bugfix release to prevent the 5.13 release from becoming broken after migrations running the migrations in the 5.13 release.
+The migratoins dropped columns which still were in  use by 5.13 and is needed to support the rolling updates.
+
+**Bugfix**
+ * Remove migration to support 5.13 #817
+ * Prevent invalid assertion when stepup LoA is set #819
+
+
 ## 6.0.0
 In this release, PHP 5.6 support was dropped in favour of PHP 7.2. We are not migrating to the latest PHP version for some reasons. Chief amongst which is that PHP 7.2 was best compatible with the current EngineBlock code base. 
 An upgrade to 7.3 or even 7.4 would force us to upgrade many third party dependencies at the same time, making this release much bigger.
