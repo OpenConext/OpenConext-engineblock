@@ -16,11 +16,12 @@
  */
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider as ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Loa;
 use OpenConext\EngineBlock\Metadata\LoaRepository;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
-use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\EngineBlock\Stepup\StepupDecision;
 use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
+use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -228,10 +229,10 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
      * @param string $loa
      * @throws EngineBlock_Corto_Module_Services_SessionLostException
      */
-    private function updateProcessingStateLoa(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest, EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse, $loa)
+    private function updateProcessingStateLoa(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest, EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse, Loa $loa)
     {
         $processStep = $this->_processingStateHelper->getStepByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_STEPUP);
-        $processStep->getResponse()->getAssertion()->setAuthnContextClassRef($loa);
+        $processStep->getResponse()->getAssertion()->setAuthnContextClassRef($loa->getIdentifier());
         $this->_processingStateHelper->updateStepResponseByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_STEPUP, $processStep->getResponse());
     }
 
