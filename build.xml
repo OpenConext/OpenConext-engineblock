@@ -211,8 +211,6 @@
     </target>
 
     <target name="behat-dev">
-        <echo message="Preparing the dev env to run in functional testing mode" />
-        <antcall target="prepare-env"/>
         <echo message="${line.separator}${line.separator}Running Behat"/>
         <antcall target="run-behat">
             <param name="suite" value="default"/>
@@ -233,8 +231,6 @@
     </target>
 
     <target name="behat-dev-wip">
-        <echo message="Preparing the dev env to run in functional testing mode" />
-        <antcall target="prepare-env"/>
         <echo message="${line.separator}${line.separator}Running Behat"/>
         <antcall target="run-behat">
             <param name="suite" value="wip"/>
@@ -270,14 +266,6 @@
             <arg line="--suite ${suite} -vv"/>
             <arg line="--format progress"/>
             <arg line="--strict"/>
-        </exec>
-    </target>
-
-    <target name="prepare-env"
-            description="ensures that the environment cache is rebuilt">
-        <exec executable="composer" failonerror="true">
-            <env key="SYMFONY_ENV" value="test"/>
-            <arg line="prepare-env"/>
         </exec>
     </target>
 

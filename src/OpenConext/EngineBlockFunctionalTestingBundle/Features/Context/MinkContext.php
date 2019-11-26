@@ -111,7 +111,9 @@ class MinkContext extends BaseMinkContext
      */
     public function iOpenTwoBrowserTabsIdentifiedBy($numberOfTabs, $tabNames)
     {
-        $this->getMink()->setDefaultSessionName(AbstractSubContext::SESSION_CHROME);
+        // Make sure the browser is ready (without this other browser interactions fail)
+        $this->getSession()->visit($this->locatePath('#'));
+
         $tabs = explode(',', $tabNames);
         if (count($tabs) != $numberOfTabs) {
             throw new RuntimeException(
@@ -141,8 +143,6 @@ class MinkContext extends BaseMinkContext
      */
     public function iSwitchToWindow($windowName)
     {
-        // (re) set the default session to the chrome session.
-        $this->getMink()->setDefaultSessionName(AbstractSubContext::SESSION_CHROME);
         $this->switchToWindow($windowName);
     }
 

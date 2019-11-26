@@ -18,8 +18,6 @@
 
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
-use EngineBlock_ApplicationSingleton;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\TwigFunction;
 use Twig_Extension;
 

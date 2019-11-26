@@ -156,7 +156,7 @@ class EngineBlock_ApplicationSingleton
         //  - DiContainer: for dev and prod env
         //  - TestDiContainer: for phpunit tests
         //  - FunctionalTestDiContainer: for behat tests
-        if ($container->getParameter('kernel.environment') === 'test') {
+        if (in_array($container->getParameter('kernel.environment'), ['test', 'ci'])) {
             if (php_sapi_name() === 'cli') {
                 // phpunit tests run in CLI, so if the environment is test and
                 // we're on CLI: use the test container.

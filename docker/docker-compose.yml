@@ -47,11 +47,13 @@ services:
             test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
             timeout: 2s
             retries: 20
+            interval: 2s
 
     php-fpm.vm.openconext.org:
         build:
             context: ../
-            dockerfile: docker/php-fpm/Dockerfile
+            # override this in a dedicated dockerfile per php version
+            # dockerfile: docker/php-fpm/Dockerfile
         container_name: eb-phpfpm
         volumes:
             - ../:/var/www
@@ -71,10 +73,13 @@ services:
         user: '${UID}:${GID}'
         environment:
             START_XVFB: "false"
-        ports:
-            - 4444:4444
         volumes:
             - /dev/shm:/dev/shm
+        healthcheck:
+            test: ["CMD", "/opt/bin/check-grid.sh:", "--host", "0.0.0.0", "--port", "4444"]
+            timeout: 30s
+            retries: 5
+            interval: 15s
 
 volumes:
     eb-mysql-data:
