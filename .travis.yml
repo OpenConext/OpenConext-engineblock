@@ -87,6 +87,7 @@ branches:
     - /^feature\/(.*)$/
     - /^hotfix\/(.*)$/
     - /^bugfix\/(.*)$/
+    - /^release\/(.*)$/
 
 after_failure:
   - sudo tail -500 /var/log/apache2/error.log
