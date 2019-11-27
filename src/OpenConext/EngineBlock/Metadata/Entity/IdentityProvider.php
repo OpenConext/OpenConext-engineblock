@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlock\Metadata\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
+use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\Organization;

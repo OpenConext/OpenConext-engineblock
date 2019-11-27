@@ -1,5 +1,12 @@
 # UPGRADE NOTES
 
+## 6.0 > 6.1
+In version 6.1 the special EngineBlock entities in the roles table aren't used anymore in favor of static entities.
+You could now remove the entities below from manage and then execute a metadata push.
+* engine.{{ base_domain}./authentication/sp/metadata
+* engine.{{ base_domain}//authentication/idp/metadata
+
+
 ## 5.x > 6.0
 In version 6 EngineBlock dropped PHP 5.6 support. The amount of backwards breaking changes was kept to a minimum. For example we did not yet upgrade to Symfony 4. But we did use some PHP 7.2 features like the Throwable interface.
 

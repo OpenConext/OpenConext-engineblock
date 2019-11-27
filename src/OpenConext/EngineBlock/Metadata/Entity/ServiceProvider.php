@@ -20,12 +20,15 @@ namespace OpenConext\EngineBlock\Metadata\Entity;
 
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Coins;
+use OpenConext\EngineBlock\Metadata\ContactPerson;
+use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Service;
+use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 use Doctrine\ORM\Mapping as ORM;
@@ -101,8 +104,8 @@ class ServiceProvider extends AbstractRole
      * @param Organization $organizationNl
      * @param Service $singleLogoutService
      * @param bool $additionalLogging
-     * @param array $certificates
-     * @param array $contactPersons
+     * @param X509Certificate[] $certificates
+     * @param ContactPerson[] $contactPersons
      * @param string $descriptionEn
      * @param string $descriptionNl
      * @param bool $disableScoping
@@ -241,6 +244,48 @@ class ServiceProvider extends AbstractRole
             $additionalLogging,
             $signatureMethod
         );
+    }
+
+    /**
+     * This is a factory method to convert the immutable ServiceProviderEntityInterface to the legacy domain entity.
+     *
+     * @param ServiceProviderEntityInterface $serviceProvider
+     * @return ServiceProvider
+     */
+    public static function fromServiceProviderEntity(ServiceProviderEntityInterface $serviceProvider): ServiceProvider
+    {
+        $entity = new self($serviceProvider->getEntityId());
+        $entity->id = $serviceProvider->getId();
+        $entity->entityId = $serviceProvider->getEntityId();
+        $entity->nameNl = $serviceProvider->getNameNl();
+        $entity->nameEn = $serviceProvider->getNameEn();
+        $entity->descriptionNl = $serviceProvider->getDescriptionNl();
+        $entity->descriptionEn = $serviceProvider->getDescriptionEn();
+        $entity->displayNameNl = $serviceProvider->getDisplayNameNl();
+        $entity->displayNameEn = $serviceProvider->getDisplayNameEn();
+        $entity->logo = $serviceProvider->getLogo();
+        $entity->organizationNl = $serviceProvider->getOrganizationNl();
+        $entity->organizationEn = $serviceProvider->getOrganizationEn();
+        $entity->keywordsNl = $serviceProvider->getKeywordsNl();
+        $entity->keywordsEn = $serviceProvider->getKeywordsEn();
+        $entity->certificates = $serviceProvider->getCertificates();
+        $entity->workflowState = $serviceProvider->getWorkflowState();
+        $entity->contactPersons = $serviceProvider->getContactPersons();
+        $entity->nameIdFormat = $serviceProvider->getNameIdFormat();
+        $entity->supportedNameIdFormats = $serviceProvider->getSupportedNameIdFormats();
+        $entity->singleLogoutService = $serviceProvider->getSingleLogoutService();
+        $entity->requestsMustBeSigned = $serviceProvider->isRequestsMustBeSigned();
+        $entity->manipulation = $serviceProvider->getManipulation();
+        $entity->coins = $serviceProvider->getCoins();
+        $entity->attributeReleasePolicy = $serviceProvider->getAttributeReleasePolicy();
+        $entity->assertionConsumerServices = $serviceProvider->getAssertionConsumerServices();
+        $entity->allowedIdpEntityIds = $serviceProvider->getAllowedIdpEntityIds();
+        $entity->allowAll = $serviceProvider->isAllowAll();
+        $entity->requestedAttributes = $serviceProvider->getRequestedAttributes();
+        $entity->supportUrlEn = $serviceProvider->getSupportUrlEn();
+        $entity->supportUrlNl = $serviceProvider->getSupportUrlNl();
+
+        return $entity;
     }
 
     /**

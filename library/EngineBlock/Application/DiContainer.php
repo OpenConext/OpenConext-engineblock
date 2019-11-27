@@ -17,11 +17,12 @@
  */
 
 use Doctrine\ORM\EntityManager;
+use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactor;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlock\Service\TimeProvider\TimeProviderInterface;
-use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use OpenConext\EngineBlock\Stepup\StepupEntityFactory;
 use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
+use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
 class EngineBlock_Application_DiContainer extends Pimple
@@ -358,6 +359,15 @@ class EngineBlock_Application_DiContainer extends Pimple
     public function getStepupGatewayCallOutHelper()
     {
         return $this->container->get('engineblock.service.stepup.gateway_callout_helper');
+    }
+
+
+    /**
+     * @return ServiceProviderFactory
+     */
+    public function getServiceProviderFactory()
+    {
+        return $this->container->get('engineblock.factory.service_provider_factory');
     }
 
     /**

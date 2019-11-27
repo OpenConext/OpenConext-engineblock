@@ -17,14 +17,16 @@
  */
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
+use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
-use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
+use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
@@ -51,19 +53,25 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
      * @var StepupGatewayCallOutHelper
      */
     private $_stepupGatewayCallOutHelper;
+    /**
+     * @var ServiceProviderFactory
+     */
+    private $_serviceProviderFactory;
 
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
         Session $session,
         ProcessingStateHelperInterface $processingStateHelper,
-        StepupGatewayCallOutHelper $stepupGatewayCallOutHelper
+        StepupGatewayCallOutHelper $stepupGatewayCallOutHelper,
+        ServiceProviderFactory $serviceProviderFactory
     ) {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->_session = $session;
         $this->_processingStateHelper = $processingStateHelper;
         $this->_stepupGatewayCallOutHelper = $stepupGatewayCallOutHelper;
+        $this->_serviceProviderFactory = $serviceProviderFactory;
     }
 
     /**
@@ -83,7 +91,11 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
 
         $this->_server->checkResponseSignatureMethods($receivedResponse);
 
-        $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
+        if ($receivedRequest->isDebugRequest()) {
+            $sp = $this->getEngineSpRole($this->_server);
+        } else {
+            $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
+        }
 
         // Verify the SP requester chain.
         EngineBlock_SamlHelper::getSpRequesterChain(
@@ -176,22 +188,15 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
     /**
      * @param EngineBlock_Corto_ProxyServer $proxyServer
      * @return ServiceProvider
-     * @throws EngineBlock_Corto_ProxyServer_Exception
-     * @throws EngineBlock_Exception
      */
     protected function getEngineSpRole(EngineBlock_Corto_ProxyServer $proxyServer)
     {
-        $spEntityId = $proxyServer->getUrl('spMetadataService');
-        $engineServiceProvider = $proxyServer->getRepository()->findServiceProviderByEntityId($spEntityId);
-        if (!$engineServiceProvider) {
-            throw new EngineBlock_Exception(
-                sprintf(
-                    "Unable to find EngineBlock configured as Service Provider. No '%s' in repository!",
-                    $spEntityId
-                )
-            );
+        $keyId = $proxyServer->getKeyId();
+        if (!$keyId) {
+            $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
         }
 
-        return $engineServiceProvider;
+        $serviceProvider = $this->_serviceProviderFactory->createEngineBlockEntityFrom($keyId);
+        return ServiceProvider::fromServiceProviderEntity($serviceProvider);
     }
 }
