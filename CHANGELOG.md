@@ -33,6 +33,13 @@ The unused metadata entities are the following:
  * The dev and test cache locations have been moved to a location outside the project directory #780
  * Technical documentation was added to the wiki.
 
+## 6.0.2
+This is a hotfix to fix namespaces after a commit was cherry picked.
+
+**Bugfix**
+ * Fix namespace after cherry picked bugfix #820
+
+
 ## 6.0.1
 This release is a bugfix release to prevent the 5.13 release from becoming broken after migrations running the migrations in the 5.13 release.
 The migratoins dropped columns which still were in  use by 5.13 and is needed to support the rolling updates.
