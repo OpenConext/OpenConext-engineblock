@@ -1,8 +1,20 @@
 <md:Organization>
+    {% if metadata.organizationNameNl is not empty %}
     <md:OrganizationName xml:lang="nl">{{ metadata.organizationNameNl }}</md:OrganizationName>
+    {% endif %}
+    {% if metadata.organizationNameEn is not empty %}
     <md:OrganizationName xml:lang="en">{{ metadata.organizationNameEn }}</md:OrganizationName>
+    {% endif %}
+    {% if metadata.organizationNameNl is not empty %}
     <md:OrganizationDisplayName xml:lang="nl">{{ metadata.organizationNameNl }}</md:OrganizationDisplayName>
+    {% endif %}
+    {% if metadata.organizationNameEn is not empty %}
     <md:OrganizationDisplayName xml:lang="en">{{ metadata.organizationNameEn }}</md:OrganizationDisplayName>
-    <md:OrganizationURL xml:lang="nl">{{ metadata.supportUrlNl }}</md:OrganizationURL>
-    <md:OrganizationURL xml:lang="en">{{ metadata.supportUrlEn }}</md:OrganizationURL>
+    {% endif %}
+    {% if metadata.organizationUrlNl is not null and metadata.organizationUrlNl is not empty %}
+    <md:OrganizationURL xml:lang="nl">{{ metadata.organizationUrlNl }}</md:OrganizationURL>
+    {% endif %}
+    {% if metadata.organizationUrlEn is not null and metadata.organizationUrlEn is not empty %}
+    <md:OrganizationURL xml:lang="en">{{ metadata.organizationUrlEn }}</md:OrganizationURL>
+    {% endif %}
 </md:Organization>
