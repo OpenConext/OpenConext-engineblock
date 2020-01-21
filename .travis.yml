@@ -100,4 +100,3 @@ addons:
   hosts:
     - engine.vm.openconext.org
   mariadb: '10.2'
-  chrome: stable
