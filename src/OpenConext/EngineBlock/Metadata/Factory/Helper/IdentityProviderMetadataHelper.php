@@ -74,4 +74,14 @@ class IdentityProviderMetadataHelper extends AbstractIdentityProvider
         }
         return $keys;
     }
+
+    public function hasOrganizationInfo(): bool
+    {
+        $info = [
+            $this->entity->getOrganizationEn(),
+            $this->entity->getOrganizationNl(),
+        ];
+
+        return !empty(array_filter($info));
+    }
 }

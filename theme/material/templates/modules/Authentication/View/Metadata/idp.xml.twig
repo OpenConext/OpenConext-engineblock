@@ -20,6 +20,9 @@
         {# Formally we only allow redirect binding on the SSO location #}
         <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="{{ metadata.ssoLocation }}"></md:SingleSignOnService>
     </md:IDPSSODescriptor>
+    {% if metadata.hasOrganizationInfo %}
+        {% include '@theme/Authentication/View/Metadata/partial/organization.xml.twig' %}
+    {% endif %}
     {% if metadata.contactPersons is not empty%}
         {% for contactPerson in metadata.contactPersons %}
             {% include '@theme/Authentication/View/Metadata/partial/contact_person.xml.twig' %}
