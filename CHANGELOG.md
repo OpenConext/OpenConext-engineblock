@@ -1,9 +1,16 @@
 # CHANGELOG
-All release notes between version 4.7.5 and 5.8.0 can be found on [GitHub](https://github.com/OpenConext/OpenConext-engineblock/releases). Release notes for version <= 4.7.5 are in the repository under `docs/release_notes`. 
+All release notes between version 4.7.5 and 5.8.0 can be found on [GitHub](https://github.com/OpenConext/OpenConext-engineblock/releases). Release notes for version <= 4.7.5 are in the repository under `docs/release_notes`.
 
-We will continue to post relevant release notes on the GitHub release page. More detailed release notes should be placed in this document. 
+We will continue to post relevant release notes on the GitHub release page. More detailed release notes should be placed in this document.
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
+
+## 6.1.1
+Changes to make the metadata more aligned with the SAML metadata specification.
+
+ * Add keywords to each idp entry in idps-metadata #825
+ * Empty displayname/description in idps-metadata #825
+ * md:Organization block missing in idp metadata and misses url #826
 
 ## 6.1.0
 The metadata endpoints of EngineBlock have been under heavy maintenance in this release. Some highlights include the
@@ -19,11 +26,11 @@ The unused metadata entities are the following:
 **Features**
  * Twig is used as template engine #759
  * User friendly errors are displayed when metadata can not be created #770 (resolves issue #211)
- * Metadata is now generated in the Symfony EngineBlock application #765 #771 #772 #773 #776 #783 #784 #785 #791 
+ * Metadata is now generated in the Symfony EngineBlock application #765 #771 #772 #773 #776 #783 #784 #785 #791
  * The EngineBlock home screen was updated (slightly) #768 #769
  * eduGAIN support was removed from the project #767
- * Remove unused metadata entities and logic #811
- 
+ * Remove unused metadatagetOrganizationUrlNl entities and logic #811
+
 **Improvements**
  * Test coverage was a high priority (unit and functional tests are provided for every important feature) #766 #779 #780 #794 #795
 
@@ -50,7 +57,7 @@ The migratoins dropped columns which still were in  use by 5.13 and is needed to
 
 
 ## 6.0.0
-In this release, PHP 5.6 support was dropped in favour of PHP 7.2. We are not migrating to the latest PHP version for some reasons. Chief amongst which is that PHP 7.2 was best compatible with the current EngineBlock code base. 
+In this release, PHP 5.6 support was dropped in favour of PHP 7.2. We are not migrating to the latest PHP version for some reasons. Chief amongst which is that PHP 7.2 was best compatible with the current EngineBlock code base.
 An upgrade to 7.3 or even 7.4 would force us to upgrade many third party dependencies at the same time, making this release much bigger.
 
 For installation instructions, see the UPGRADING.md entry for this version.
@@ -73,7 +80,7 @@ The following changes where introduced in this release:
 * Fixed typos #790 #809
 
 **Security**
-* Upgrade xmlseclibs to version 3.0.4 #802 
+* Upgrade xmlseclibs to version 3.0.4 #802
 * Upgrade symfony/mime to v4.3.8 #805
 * Bump handlebars to version 4.3.1 #761
 * Upgrade handlebars to 4.5.1 #805
@@ -99,9 +106,9 @@ Add stepup authentication to EB to be able to reap the benefits of the SFO funct
 
 
 ## 5.12.0
-We've changed the way how coin entity properties are stored in the database. As of now, they will be stored in a serialized manner, in a single column. This greatly simplifies adding or removing coins in the future, as this no longer requires database schema changes. 
+We've changed the way how coin entity properties are stored in the database. As of now, they will be stored in a serialized manner, in a single column. This greatly simplifies adding or removing coins in the future, as this no longer requires database schema changes.
 
- *  Store coin properties in a single column #752  
+ *  Store coin properties in a single column #752
 
 ## 5.11.3
 The footer links have been made configurable to a greater extent in this release.
@@ -114,36 +121,36 @@ And in addition to those functional changes, the PDP error page has been restyle
  * Improve PDP error screen styling #733
 
 ## 5.11.2
-The 5.11.2 release was aimed at fixing visually unsound issues. And in addition the uncaught error page has been made reloadable. 
- 
+The 5.11.2 release was aimed at fixing visually unsound issues. And in addition the uncaught error page has been made reloadable.
+
  * Make uncaught error page reloadable #696
  * Increase language switch z-index on the error page #718
- * Hide language switch on 400 and 405 page #722 
+ * Hide language switch on 400 and 405 page #722
  * Decrease the surfboard offset on the error page #717
 
 ## 5.11.1
-This release have all backported issues from release 5.10.2 and 5.10.3  
+This release have all backported issues from release 5.10.2 and 5.10.3
 
 ## 5.11.0
-The error feedback pages have been overhauled in this release. In addition, the theming solution that was previously used has been revised. 
+The error feedback pages have been overhauled in this release. In addition, the theming solution that was previously used has been revised.
 
 Be sure to read up on how to work with the new theming solution in the [README.md]()
 
 The most notable changes are:
  * Grunt is no longer used, npm run scripts are used instead. #672
  * Theming has changed, allowing for more easy theme overrides for JS and Sass resources. [Wiki](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#theme-development)
- * The error page styling has been updated, making it more user friendly by being focused on the important information instead of overflowing the user with irrelevant information. 
- * The error pages have been made mobile friendly #673 
+ * The error page styling has been updated, making it more user friendly by being focused on the important information instead of overflowing the user with irrelevant information.
+ * The error pages have been made mobile friendly #673
  * Minified front-end assets are no longer kept in version control #667
  * Visual regression tests have been added for the error pages #687
  * The browser support policy has been made explicit #686
 
 ## 5.10.4
 This release changed the way the rolling upgrades are handled between version 5.9 and 5.10. In code we stop using two
-database columns we no longer use. But the database migration that accompanies that change was also included in this 
+database columns we no longer use. But the database migration that accompanies that change was also included in this
 release. This change was removed in this release and will be executed in 5.11.
 
-See #704 for details. 
+See #704 for details.
 
 ## 5.10.3
 The unsolicited SSO endpoint received some TLC. In addition to adding request input validation, we also added additional test coverage and cleaned up some unused routes.
@@ -151,14 +158,14 @@ The unsolicited SSO endpoint received some TLC. In addition to adding request in
 * Enrich unsolicited SSO test coverage #699
 * Unsolicited request validation #700
 * Remove unused SSO routes #701
- 
+
 ## 5.10.2
 
 Two regressions where fixed in this release:
 
  * Whitelist debugSingleSignOnService for access without session #697
- * Remove validation on unsolicitedSingleSignOnAction #698  
- 
+ * Remove validation on unsolicitedSingleSignOnAction #698
+
 ## 5.10.1
 
 ### Features
@@ -185,7 +192,7 @@ The 5.10 release focuses on making EngineBlock more robust. The biggest aim is t
 ## 5.9.4
 
 ### Bugfix
- * Prevent blurring the search bar #656 
+ * Prevent blurring the search bar #656
  * Make sure the mouse responds after removing previous IdP selection #661
  * Unconnected IdP mouse hover should also highlight the IdP #662
 
@@ -199,11 +206,11 @@ This release improves upon some of the previous consent changes
 
  * Display the no_attributes text in the IdP table #637
  * Apply XS viewport UI improvements #638
- 
+
 But also adds Jest unit and smoke tests for the WAYF
 
  * Provide JS smoke tests for the WAYF #635
- 
+
 ## 5.9.1
 
 ### Bugfix
@@ -216,8 +223,8 @@ Most effort for this release was invested in upgrading Symfony to version 3.4.
  * Portuguese language support and other language related work #615 #612 thanks @domgon and @tvdijen!
  * Allow selecting unconnected IdP's with keyboard #634
  * Stop releasing the SURFconextId attribute #631
- 
-### Improvements 
+
+### Improvements
  * Replace un needed polyfills #606 thanks @BackEndTea
  * Add an editorconfig #607 thanks @BackEndTea
  * Harden against hypothetical XXE vulnerability #621
@@ -231,16 +238,16 @@ Most effort for this release was invested in upgrading Symfony to version 3.4.
 **Bugfix**: Stop overwriting the NameId before giving consent #610
 
 ## 5.8.5
-Bugfix for a possible break after giving consent. This release is preventing a crash when the original issuer is null #604   
+Bugfix for a possible break after giving consent. This release is preventing a crash when the original issuer is null #604
 
 ## 5.8.4
-A security patch, fixing a possible XSS vulnerability. 
+A security patch, fixing a possible XSS vulnerability.
 Described in more detail in #598
 
 ## 5.8.3
 This is a release mainly focused on the rolling updates. Be aware that 5.8 releases prior to 5.8.3 do have some
 breaking changes in migrations due to the rolling update implementation added in this release . In order to update you
-should skip releases <5.8.3. 
+should skip releases <5.8.3.
 
 ### Chores and other improvements
  * Symfony was upgrade from version 2.8 to 3.4. This required the upgrade of quite some other (mainly dev) dependencies. #590
@@ -251,7 +258,7 @@ should skip releases <5.8.3.
  * Add Rolling update support #595
 
 ## 5.8.2
-This is mainly a release that consists of fixes of technical debt, longer standing quirks and other maintenance related 
+This is mainly a release that consists of fixes of technical debt, longer standing quirks and other maintenance related
 features.
 
 ### Features
