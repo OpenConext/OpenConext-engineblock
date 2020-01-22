@@ -5,6 +5,11 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.1.2
+Adds a PR that was missing in 6.1.1 which will ensure a suitable displayname is displayed in the metadata EB produces.
+
+  * Metadata UI Info optimalisation #824
+
 ## 6.1.1
 Changes to make the metadata more aligned with the SAML metadata specification.
 
