@@ -1,8 +1,12 @@
 <mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
     <mdui:DisplayName xml:lang="nl">{{ metadata.displayNameNl }}</mdui:DisplayName>
     <mdui:DisplayName xml:lang="en">{{ metadata.displayNameEn }}</mdui:DisplayName>
+    {% if metadata.descriptionNl is not empty %}
     <mdui:Description xml:lang="nl">{{ metadata.descriptionNl }}</mdui:Description>
+    {% endif %}
+    {% if metadata.descriptionEn is not empty %}
     <mdui:Description xml:lang="en">{{ metadata.descriptionEn }}</mdui:Description>
+    {% endif %}
     {% if metadata.logo is not null %}
     <mdui:Logo height="{{ metadata.logo.height }}" width="{{ metadata.logo.width }}">{{ metadata.logo.url }}</mdui:Logo>
     {% endif %}
