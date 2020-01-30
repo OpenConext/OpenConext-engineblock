@@ -232,7 +232,7 @@ $ymlContent = array(
             'ENGINEBLOCK_FOLDER_APPLICATION',
             $projectRoot . 'application/',
             $config->get(
-                'attributeDefinitionFile', $projectRoot . 'application/configs/attributes-v2.2.0.json'
+                'attributeDefinitionFile', $projectRoot . 'application/configs/attributes.json'
             )
         ),
         'monitor_database_health_check_query'                     => $config->get('openconext.monitor_bundle_health_query', ''),
