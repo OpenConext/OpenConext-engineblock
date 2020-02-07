@@ -243,6 +243,7 @@ class MetadataRendererTest extends TestCase
         $doc->loadXML($xml);
 
         $objXMLSecDSig = new XMLSecurityDSig();
+        $objXMLSecDSig->idKeys = ['ID'];
 
         $objDSig = $objXMLSecDSig->locateSignature($doc);
         if (!$objDSig) {
