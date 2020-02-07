@@ -32,13 +32,18 @@ class DocumentSigner
         $doc = new DOMDocument();
         $doc->loadXML($source);
 
+        // Find root element to sign. The firstChild is the TOS comment,
+        // so need to skip over that.
+        $rootNode = $doc->childNodes[1];
+
         // Create sign object
         $objDSig = new XMLSecurityDSig();
         $objDSig->setCanonicalMethod(XMLSecurityDSig::EXC_C14N);
         $objDSig->addReference(
-            $doc,
+            $rootNode,
             self::SIGN_ALGORITHM,
-            array('http://www.w3.org/2000/09/xmldsig#enveloped-signature')
+            ['http://www.w3.org/2000/09/xmldsig#enveloped-signature'],
+            ['id_name' => 'ID', 'overwrite' => false]
         );
 
         // Load private key
