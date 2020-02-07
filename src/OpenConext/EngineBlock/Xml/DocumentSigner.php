@@ -19,6 +19,8 @@
 namespace OpenConext\EngineBlock\Xml;
 
 use DOMDocument;
+use DOMElement;
+use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 
@@ -34,6 +36,9 @@ class DocumentSigner
 
         // Find root element to sign. The firstChild is the TOS comment,
         // so need to skip over that.
+        if (!isset($doc->childNodes[1]) || !$doc->childNodes[1] instanceof DOMElement) {
+            throw new RuntimeException("Could not locate root element to sign");
+        }
         $rootNode = $doc->childNodes[1];
 
         // Create sign object
