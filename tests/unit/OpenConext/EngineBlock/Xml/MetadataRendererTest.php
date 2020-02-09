@@ -236,6 +236,39 @@ class MetadataRendererTest extends TestCase
         $this->validateSchema($xml);
     }
 
+    /**
+     * @test
+     * @group Metadata
+     */
+    public function modified_metadata_should_not_pass_signature_validation()
+    {
+        $assertionConsumerServices[] = new IndexedService(
+            'https://example.com/acs',
+            Constants::BINDING_HTTP_POST,
+            0
+        );
+
+        $sp = Utils::instantiate(
+            ServiceProvider::class,
+            [
+                'entityId' => 'sp',
+                'assertionConsumerServices' => $assertionConsumerServices,
+                'logo' => new Logo('/images/logo.gif'),
+                'organizationEn' => new Organization('Org', 'Organization', 'https://example.org'),
+            ]
+        );
+
+        $sp = new ServiceProviderEntity($sp);
+
+        $xml = $this->metadataRenderer->fromServiceProviderEntity($sp, 'default');
+        $xml = str_replace('https://example.com/acs', 'https://example.org/acs', $xml);
+
+        // Validate signature and digest
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('validation failed');
+        $this->assertFalse($this->validateXml($xml));
+    }
+
 
     private function validateXml($xml)
     {

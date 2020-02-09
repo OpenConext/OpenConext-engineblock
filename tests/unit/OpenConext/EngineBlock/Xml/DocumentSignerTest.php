@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlock\Xml;
 
+use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
@@ -89,5 +90,34 @@ XML;
         $output = $signer->sign($xml, $keyPair);
 
         $this->assertXmlStringEqualsXmlString($expextedOutput, $output);
+    }
+
+    public function test_element_to_sign_must_be_second_child()
+    {
+        $signer = new DocumentSigner();
+        $xml = <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="EB12345" validUntil="2019-10-16T12:41:12Z" cacheDuration="PT604800S" entityID="Test Entity">
+   <md:SPSSODescriptor AuthnRequestsSigned="true" WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+      <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat>
+      <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://example.com/acs" index="1" />
+   </md:SPSSODescriptor>
+   <md:Organization>
+      <md:OrganizationName xml:lang="en-US">Test Organization</md:OrganizationName>
+      <md:OrganizationDisplayName xml:lang="en-US">Test</md:OrganizationDisplayName>
+      <md:OrganizationURL xml:lang="en-US">https://examle.org</md:OrganizationURL>
+   </md:Organization>
+</md:EntityDescriptor>
+XML;
+        $publicKeyFactory = new X509CertificateFactory();
+
+        // Warning: certificates expire on May 11, 2024
+        $publicKey = $publicKeyFactory->fromFile(__DIR__ . '/test.pem.crt');
+        $privateKey = new X509PrivateKey(__DIR__ . '/test.pem.key');
+        $keyPair = new X509KeyPair($publicKey, $privateKey);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Could not locate root element to sign');
+        $output = $signer->sign($xml, $keyPair);
     }
 }
