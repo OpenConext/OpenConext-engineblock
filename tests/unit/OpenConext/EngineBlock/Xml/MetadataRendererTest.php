@@ -26,6 +26,7 @@ use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\ServiceProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Collection\IdentityProviderEntityCollection;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProvider;
+use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
@@ -141,6 +142,12 @@ class MetadataRendererTest extends TestCase
             Constants::BINDING_HTTP_POST,
             0
         );
+        $contactPersons[] = ContactPerson::from(
+            'administrative',
+            'John',
+            'Doe',
+            'admin@example.org'
+        );
 
         $sp = Utils::instantiate(
             ServiceProvider::class,
@@ -149,6 +156,7 @@ class MetadataRendererTest extends TestCase
                 'assertionConsumerServices' => $assertionConsumerServices,
                 'logo' => new Logo('/images/logo.gif'),
                 'organizationEn' => new Organization('Org', 'Organization', 'https://example.org'),
+                'contactPersons' => $contactPersons,
             ]
         );
 
@@ -168,6 +176,8 @@ class MetadataRendererTest extends TestCase
         // Assert descriptor
         $entityDescriptor = new EntityDescriptor($dom->childNodes->item(1));
         $this->assertInstanceOf(EntityDescriptor::class, $entityDescriptor);
+
+        $this->assertContains('<md:EmailAddress>mailto:admin@example.org</md:EmailAddress>', $xml);
 
         // Assert schema
         $this->validateSchema($xml);
