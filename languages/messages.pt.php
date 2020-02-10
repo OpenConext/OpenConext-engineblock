@@ -265,6 +265,7 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'retry'                           => 'Tente novamente',
     'attributes' => 'Atributos',
     'validation' => 'Validação',
+    'remarks' => 'Observações',
     'idp_debugging_mail_explain' => 'Quando solicitado por %suiteName%,
                                         utilize o botão "Enviar Email a %suiteName%" em baixo
                                         para enviar o email com a informação deste ecrã.',

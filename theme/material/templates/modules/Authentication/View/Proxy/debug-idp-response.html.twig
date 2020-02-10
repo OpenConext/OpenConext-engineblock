@@ -113,6 +113,9 @@
                     <thead>
                     <tr>
                         <th>
+                            {{ 'validation'|trans }}
+                        </th>
+                        <th>
                             {{ 'suite_name'|trans }} Display Name
                         </th>
                         <th>
@@ -122,13 +125,27 @@
                             {{ 'value'|trans }}
                         </th>
                         <th>
-                            {{ 'validation'|trans }}
+                            {{ 'remarks'|trans }}
                         </th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for attributeName, attributeValues in attributes %}
                         <tr>
+                            <td>
+                                {% if validationResult.isValid(attributeName) %}
+                                    <i class="c-icon c-icon-checkmark fa-check" alt="&#9989;"></i>
+                                {% else %}
+                                    {% if validationResult.errors(attributeName).length > 0 %}
+                                        <p class="error">
+                                            <i class="c-icon c-icon-error fa-exclamation"></i>
+                                        </p>
+                                    {% else %}
+                                        <p class="warning"><i class="c-icon c-icon-warning fa-exclamation"></i>
+                                        </p>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
                             <td>
                                 {{ attributeName(attributeName, 'en') }}
                             </td>
@@ -147,23 +164,19 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {% if validationResult.isValid(attributeName) %}
-                                    <i class="c-icon c-icon-checkmark fa-check" alt="&#9989;"></i>
-                                {% else %}
+                                {% if not validationResult.isValid(attributeName) %}
+                                <em>
                                     {% for error in validationResult.errors(attributeName) %}
-                                        <p class="error">
-                                            <i class="c-icon c-icon-error fa-exclamation"></i>
                                             {{ error[0]|trans({'%arg1%': error[1], '%arg2%': error[2], '%arg3%': error[3]}) }}
-                                        </p>
                                     {% endfor %}
                                     {% for warning in validationResult.warnings(attributeName) %}
-                                        <p class="warning"><i class="c-icon c-icon-warning fa-exclamation"></i>
                                            {{ warning[0]|trans({'%arg1%': warning[1], '%arg2%': warning[2], '%arg3%': warning[3]}) }}
-                                        </p>
                                     {% endfor %}
+                                 </em>
                                 {% endif %}
                             </td>
                         </tr>
+
                     {% endfor %}
                     </tbody>
                 </table>
