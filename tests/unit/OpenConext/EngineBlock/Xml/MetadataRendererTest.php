@@ -177,6 +177,7 @@ class MetadataRendererTest extends TestCase
         $entityDescriptor = new EntityDescriptor($dom->childNodes->item(1));
         $this->assertInstanceOf(EntityDescriptor::class, $entityDescriptor);
 
+        // Verify that the requried "mailto:" prefix is present for the EmailAdress tag
         $this->assertContains('<md:EmailAddress>mailto:admin@example.org</md:EmailAddress>', $xml);
 
         // Assert schema
