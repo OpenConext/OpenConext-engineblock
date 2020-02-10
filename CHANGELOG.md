@@ -5,6 +5,14 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.1.3
+Changes done in order to confine to metadata spec to pass validation.
+
+ * According to the spec, EmailAddress needs to have a mailto: prefix #827
+ * Remove version number from attributes.json config file. #828
+ * Add explicit reference to metadata xml signature. #830
+
+
 ## 6.1.2
 Adds a PR that was missing in 6.1.1 which will ensure a suitable displayname is displayed in the metadata EB produces.
 
