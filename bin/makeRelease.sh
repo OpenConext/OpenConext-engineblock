@@ -49,7 +49,7 @@ cd ${PROJECT_DIR} &&
 git checkout ${TAG} &&
 
 echo "Running Composer Install" &&
-php ./bin/composer.phar install -n --no-dev --prefer-dist -o &&
+php72 ./bin/composer.phar install -n --no-dev --prefer-dist -o &&
 
 # --unsafe-perm because we do branch install as root.
 # can be removed when we stop doing that
