@@ -292,11 +292,6 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:keywords:en'), 'keywordsEn');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:keywords:nl'), 'keywordsNl');
 
-        /**
-         * @deprecated: This coin is no longer used in EngineBlock and will be removed in release 6.2
-         */
-        $properties += $this->setPathFromObjectString(array($connection, 'metadata:coin:publish_in_edugain'), 'publishInEdugain');
-
         $properties += $this->assembleCertificates($connection);
         $properties += $this->setPathFromObjectString(array($connection, 'state'), 'workflowState');
         $properties += $this->assembleContactPersons($connection);
@@ -304,11 +299,6 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->setPathFromObjectArray(array($connection, 'metadata:NameIDFormats'), 'supportedNameIdFormats');
         $properties += $this->assembleSingleLogoutServices($connection);
         $properties += $this->setPathFromObjectBool(array($connection, 'metadata:coin:disable_scoping'), 'disableScoping');
-
-        /**
-         * @deprecated: This coin is no longer used in EngineBlock and will be removed in release 6.2
-         */
-        $properties += $this->assemblePublishInEdugainDate($connection);
 
         $properties += $this->setPathFromObjectBool(array($connection, 'metadata:coin:additional_logging'), 'additionalLogging');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:coin:signature_method'), 'signatureMethod');
@@ -355,18 +345,6 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
             $connection->metadata->OrganizationDisplayName->$langCode,
             $connection->metadata->OrganizationURL->$langCode
         ));
-    }
-
-    /**
-     * @deprecated: The coins assembled in this method are longer used in EngineBlock and will be removed in release 6.2
-     */
-    private function assemblePublishInEdugainDate(stdClass $connection)
-    {
-        if (empty($connection->coin->publish_in_edugain)) {
-            return array();
-        }
-
-        return new DateTime($connection->coin->publish_in_edugain);
     }
 
     private function assembleCertificates(stdClass $connection)
