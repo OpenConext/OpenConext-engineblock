@@ -23,7 +23,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="OpenConext\EngineBlockBundle\Authentication\Repository\ServiceProviderUuidRepository")
  * @ORM\Table(indexes={
- *     @ORM\Index(name="service_provider_entity_id", columns={"service_provider_entity_id"}),
+ *     @ORM\Index(
+ *         name="service_provider_entity_id",
+ *         columns={"service_provider_entity_id"},
+ *         options={"lengths" = {255}}
+ *     ),
  * })
  */
 class ServiceProviderUuid
