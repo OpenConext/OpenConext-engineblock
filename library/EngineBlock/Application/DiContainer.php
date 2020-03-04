@@ -46,14 +46,6 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return bool
-     */
-    public function isDebug()
-    {
-        return (bool) $this->container->getParameter('debug');
-    }
-
-    /**
      * @return string
      */
     public function getHostname()

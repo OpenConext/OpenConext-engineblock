@@ -49,30 +49,4 @@ class DebugTest extends TestCase
         $output = $this->debug->varExport(['testString']);
         $this->assertContains('0 => \'testString\'', $output);
     }
-
-    /**
-     * @dataProvider varDumpTestValues
-     * @param $input
-     * @param $expectation
-     */
-    public function testVarDump($input, $expectation)
-    {
-        $output = $this->debug->varDump($input);
-        $this->assertContains($expectation, $output);
-    }
-
-    public function varDumpTestValues()
-    {
-        return [
-            ['testString', 'string(10) "testString"'],
-            [123, 'int(123)'],
-            [['testString', 123], 'array(2) {
-    [0] =>
-    string(10) "testString"
-    [1] =>
-    int(123)
-  }']
-        ];
-    }
-
 }

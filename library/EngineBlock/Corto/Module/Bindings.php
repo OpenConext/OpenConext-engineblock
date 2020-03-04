@@ -21,7 +21,6 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use OpenConext\EngineBlockBundle\Exception\ResponseProcessingFailedException;
-use OpenConext\EngineBlock\Stepup\StepupEntityFactory;
 use SAML2\AuthnRequest;
 use SAML2\Binding;
 use SAML2\Certificate\KeyLoader;
@@ -29,7 +28,6 @@ use SAML2\Configuration\Destination;
 use SAML2\Configuration\IdentityProvider as Saml2IdentityProvider;
 use SAML2\Configuration\PrivateKey;
 use SAML2\Configuration\ServiceProvider as Saml2ServiceProvider;
-use SAML2\DOMDocumentFactory;
 use SAML2\EncryptedAssertion;
 use SAML2\Response\Exception\PreconditionNotMetException;
 use SAML2\HTTPPost;
@@ -632,8 +630,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
             $xml = $messageElement->ownerDocument->saveXML($messageElement);
 
-            $this->validateXml($xml);
-
             $extra = '';
 
             // If the processed assertion consumer service is set on the response, it is posted back to the SP using the
@@ -670,7 +666,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                     'message' => $encodedMessage,
                     'xtra' => $extra,
                     'name' => $type,
-                    'trace' => $this->getTraceHtml($xml),
                 ]
             );
             $this->_server->sendOutput($output);
@@ -689,17 +684,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             throw new EngineBlock_Corto_Module_Bindings_Exception(
                 'Unsupported Binding'
             );
-        }
-    }
-
-    protected function validateXml($xml)
-    {
-        $schemaUrl = 'http://docs.oasis-open.org/security/saml/v2.0/saml-schema-protocol-2.0.xsd';
-        if ($this->_server->getConfig('debug') && ini_get('allow_url_fopen') && file_exists($schemaUrl)) {
-            $dom = DOMDocumentFactory::fromString($xml);
-            if (!$dom->schemaValidate($schemaUrl)) {
-                throw new Exception('Message XML doesnt validate against XSD at Oasis-open.org?!');
-            }
         }
     }
 
@@ -875,20 +859,5 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             }
         }
         return $hasEncryptedAssertion;
-    }
-
-    private function getTraceHtml($xml)
-    {
-        if (!$this->_server->getConfig('debug', false)) {
-            return '';
-        }
-
-        $doc = new DOMDocument();
-        $doc->preserveWhiteSpace = false;
-        $doc->formatOutput = true;
-        $doc->loadXML($xml);
-        $xml = $doc->saveXML();
-
-        return htmlentities(trim($xml));
     }
 }
