@@ -8,7 +8,6 @@ bin/ignore_me.php
 /web/stylesheets/*
 /web/images/*
 /app/cache
-/app/bootstrap.php.cache
 /app/logs
 /app/SymfonyRequirements.php
 /app/check.php
