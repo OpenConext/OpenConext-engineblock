@@ -932,20 +932,7 @@ class EngineBlock_Corto_ProxyServer
     public function redirect($location, $message)
     {
         $this->getLogger()->info("Redirecting to $location");
-
-        if ($this->getConfig('debug', true)) {
-            $output = $this->twig->render(
-                '@theme/Authentication/View/Proxy/redirect.html.twig',
-                [
-                    'location' => $location,
-                    'message' => $message,
-                ]
-            );
-            $this->sendOutput($output);
-        } else {
-            $this->sendHeader('Location', $location);
-        }
-
+        $this->sendHeader('Location', $location);
     }
 
     public function setCookie($name, $value, $expire = null, $path = null, $domain = null, $secure = null, $httpOnly = null)

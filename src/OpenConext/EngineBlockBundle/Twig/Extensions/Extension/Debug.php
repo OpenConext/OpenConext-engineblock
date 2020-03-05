@@ -32,25 +32,8 @@ class Debug extends Twig_Extension
     {
         return [
             new TwigFunction('var_export', [$this, 'varExport']),
-            new TwigFunction('var_dump', [$this, 'varDump']),
             new TwigFunction('print_r', [$this, 'printHumanReadable']),
         ];
-    }
-
-    /**
-     * Provides var dump functionality for use in Twig templates
-     *
-     * @SuppressWarnings(PHPMD.CamelCaseParameterName)
-     *
-     * @param mixed $expression
-     * @param mixed $_
-     * @return string
-     */
-    public function varDump($expression, $_ = null)
-    {
-        ob_start();
-        var_dump(func_get_args());
-        return ob_get_clean();
     }
 
     /**

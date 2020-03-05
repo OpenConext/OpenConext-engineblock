@@ -13,7 +13,7 @@
         <link href="/stylesheets/application.css" rel="stylesheet" type="text/css"/>
         <title>{{ defaultTitle }} - {{ 'post_data'|trans }}</title>
     </head>
-    <body class="index" {% if trace is empty %}onload="document.forms[0].submit()"{% endif %}>
+    <body class="index" onload="document.forms[0].submit()">
     <div class="mod-redirect">
         <img class="rotate-img" src="/images/spinner.svg" alt=""/>
 
@@ -34,17 +34,6 @@
             {{ xtra|raw }}
 
             <noscript><input type="submit" value="Submit" class="c-button"/></noscript>
-
-            {% if trace is not empty %}
-                <input id="submitbutton" type="submit" value="Submit" class="c-button"/>
-                <pre class="trace">
-                    {{ trace }}
-                </pre>
-                <script type="text/javascript">
-                    document.getElementById('submitbutton').focus();
-                </script>
-            {% endif %}
-
         </form>
     </div>
 

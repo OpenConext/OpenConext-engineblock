@@ -61,20 +61,6 @@
 
             <p>{{ 'error_help_desc'|trans|raw }}</p>
 
-            {% if exception is defined %}
-                <div class="l-overflow">
-                    <strong>{{ exception.message }}</strong>
-                    <pre>
-                    {{ var_dump(exception) }}
-
-                    {% if exception.xdebug_message is defined %}
-                        {{ exception.xdebug_message|raw }}
-                    {% endif %}
-                    </pre>
-                </div>
-            {% endif %}
-
-
         </div>
         {% spaceless %}{% include "@theme/Default/View/Error/partial/footer.html.twig" %}{% endspaceless %}
     </div>
