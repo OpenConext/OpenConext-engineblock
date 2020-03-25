@@ -64,9 +64,6 @@
         "symfony/polyfill-php56": "1.99"
     },
     "scripts": {
-        "post-autoload-dump": [
-            "bin/composer/dump-required-ini-params.sh"
-        ],
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",

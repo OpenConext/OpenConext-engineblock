@@ -1,6 +1,5 @@
 imports:
     - { resource: parameters.yml }
-    - { resource: ini_parameters.yml }
     - { resource: security.yml }
     - { resource: logging.yml }
 
