@@ -87,7 +87,7 @@ class EngineBlock_Application_Bootstrapper
         $configuredHostname = $this->_application->getDiContainer()->getHostname();
         if (empty($configuredHostname)) {
             throw new RuntimeException(
-                "The 'hostname' application.ini setting is required"
+                "The 'hostname' parameters.yml setting is required"
             );
         }
         $httpRequest->setHostName($configuredHostname);

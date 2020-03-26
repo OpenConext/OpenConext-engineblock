@@ -43,6 +43,7 @@ To setup the required tooling on the VM, the following steps might be useful:
     - default-storage-engine=InnoDB
     - default-collation=utf8_unicode_ci
 * [Manage][manage]
+* Composer (for php dendency management)
 * NPM (optional for theme deployment)
 
 _**Note**:
@@ -51,12 +52,12 @@ it is only regularly tested with RedHat Enterprise Linux and CentOS._
 
 ## Installation
 
-_**Note**: you are advised to use [OpenConext-Deploy][op-dep] to deploy OpenConext installations._
+_**Note**: you are highly encouraged to use [OpenConext-Deploy][op-dep] to deploy OpenConext installations._
 
 If you are reading this then you've probably already installed a copy of EngineBlock somewhere on the destination server,
 if not, then that would be step 1 for the installation.
 
-If you do not use [OpenConext-Deploy][op-dep] and have an installed copy and your server meets all the requirements 
+If you do not use [OpenConext-Deploy][op-dep] and have an installed copy and your server meets all the requirements
 above, then please follow the steps below to start your installation.
 
 ### First, create an empty database
@@ -74,31 +75,21 @@ above, then please follow the steps below to start your installation.
     mysql> create database engineblock default charset utf8 default collate utf8_unicode_ci;
 
 
-### Then configure application config
+### Then configure application
 
-Copy over the example configuration file from the *docs* directory to */etc/openconext/engineblock.ini*:
+EngineBlock requires you to have the folders below writable by your webserver user.
 
-    sudo mkdir /etc/openconext
-    sudo cp docs/example.engineblock.ini /etc/openconext/engineblock.ini
+     app/cache
+     app/logs
 
-For the development VM, you should replace all occurrences of demo.openconext.org with vm.openconext.org.
+Run the command below in the root of your project to install the required dependencies.
 
-Then edit this file with your favorite editor and review the settings to make sure it matches your configuration.
-The settings in the *example.engineblock.ini* are a subset of all configuration options, which can be found, along
-with their default value in *application/configs/application.ini*.
+    composer install --no-interaction --optimize-autoloader --prefer-dist --no-dev
 
-Note that EngineBlock requires you to set a path to a logfile, but you have to make sure that this file
-is writable by your webserver user.
+ **Note**:
+The command above assumes that the application must be build for production, and omits development dependencies.
 
-After that, you are required to ensure the application is in bootable state. Assuming you are preparing your 
-installation for a production environment, you have to run:
-
-    composer prepare-env
-
-should you not have access to a local installation of [composer][comp], a version is shipped with EngineBlock, replace
-the `composer` part above with `bin/composer.phar`. This version is regularly updated, but may give warnings about
-being outdated.
-
+Then edit the `parameters.yml` with your favorite editor and review the settings to make sure it matches your configuration.
 
 ### Install database schema updates
 
@@ -108,16 +99,16 @@ To install possible database updates, call doctrine migrations by using the foll
 
 _**Note**:
 EngineBlock requires database settings, without it doctrine migrate will not function. Furthermore, this assumes that
-the application must use the production settings (`--env=prod`), this could be replaced with `dev` should you run a 
+the application must use the production settings (`--env=prod`), this could be replaced with `dev` should you run a
 development version._
 
 
 ### Configure HTTP server
 
-Configure a single virtual host, this should point to the `web` directory: 
+Configure a single virtual host, this should point to the `web` directory:
 
     DocumentRoot    /opt/www/engineblock/web
-    
+
 It should also serve both the `engine.yourdomain.example` and `engine-api.yourdomain.example` domains.
 
 Make sure the `ENGINEBLOCK_ENV` is set, and that the `SYMFONY_ENV` is set, this can be mapped from `ENGINEBLOCK_ENV` as:
@@ -205,7 +196,7 @@ If you are using this pattern, an update can be done with the following:
 
 ## Browsers support
 
-The list of browsers that should be supported: 
+The list of browsers that should be supported:
 
 | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari-ios/safari-ios_48x48.png" alt="iOS Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>iOS Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/samsung-internet/samsung-internet_48x48.png" alt="Samsung" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Samsung | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" alt="Opera" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Opera |
 | --------- | --------- | --------- | --------- | --------- | --------- | --------- |
