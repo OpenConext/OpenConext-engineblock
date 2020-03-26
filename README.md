@@ -80,7 +80,6 @@ above, then please follow the steps below to start your installation.
 EngineBlock requires you to have the folders below writable by your webserver user.
 
      app/cache
-     app/logs
 
 Run the command below in the root of your project to install the required dependencies.
 

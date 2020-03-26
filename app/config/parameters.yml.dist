@@ -238,7 +238,7 @@ parameters:
     ##########################################################################################
     ## ERROR PAGES
     ##########################################################################################
-    ## This is the configuration top be used on the error feedback pages.
+    ## This is the configuration to be used on the error feedback pages.
     error_feedback_wiki_links:
         fallback:
             en: '%openconext_support_url%'
