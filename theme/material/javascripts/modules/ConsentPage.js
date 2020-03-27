@@ -1,5 +1,6 @@
+import tippy from 'tippy.js';
+
 export function initConsentPage() {
-    const tippy = require('./../../../node_modules/tippy.js/dist/tippy.all.min.js');
 
     focusAcceptButton();
     initAttributesToggle();
