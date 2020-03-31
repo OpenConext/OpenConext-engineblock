@@ -130,4 +130,19 @@ class TestEntitySeeder
         $serviceProvider->logo = new Logo('/images/logo.png');
         return $serviceProvider;
     }
+
+    /**
+     * Build a very rudimentary IdP entity
+     * @return IdentityProvider
+     */
+    public static function buildIdP()
+    {
+        $identityProvider = new IdentityProvider('https://acme-idp.example.com');
+        $identityProvider->nameNl = 'DisplayName';
+        $identityProvider->nameEn = 'DisplayName';
+        $identityProvider->displayNameNl = 'DisplayName';
+        $identityProvider->displayNameEn = 'DisplayName';
+        $identityProvider->logo = new Logo('/images/logo.png');
+        return $identityProvider;
+    }
 }

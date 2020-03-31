@@ -16,13 +16,17 @@ services:
         arguments:
             - "@twig"
 
-
     engineblock.functional_test.controller.feedback:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\FeedbackController
         arguments:
             - "@translator"
             - "@twig"
             - "@engineblock.compat.logger"
+
+    engineblock.functional_test.controller.consent:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\ConsentController
+        arguments:
+            - "@twig"
 
     engineblock.functional_test.controller.stepup_mock:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\StepupMockController
