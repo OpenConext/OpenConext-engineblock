@@ -78,7 +78,7 @@ class FeedbackController
     public function unknownErrorAction()
     {
         return new Response(
-            $this->twig->render('@theme/Default/View/Error/display.html.twig'),
+            $this->twig->render('@theme/Authentication/View/Feedback/generic.html.twig'),
             500
         );
     }
