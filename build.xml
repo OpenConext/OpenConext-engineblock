@@ -189,14 +189,13 @@
 
     <target name="js-visual-regression-tests">
         <exec dir="${basedir}/theme" executable="node_modules/.bin/jest" failonerror="true">
-            <arg line="--runInBand" />
             <arg line="material/javascripts/tests/visual-regression" />
         </exec>
     </target>
 
     <target name="js-visual-regression-tests-update-snapshots">
         <exec dir="${basedir}/theme" executable="node_modules/.bin/jest" failonerror="true">
-            <arg line="-u --runInBand" />
+            <arg line="-u" />
             <arg line="material/javascripts/tests/visual-regression" />
         </exec>
     </target>
