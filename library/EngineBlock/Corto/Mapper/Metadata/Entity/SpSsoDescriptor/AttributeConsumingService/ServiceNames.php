@@ -39,6 +39,9 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor_AttributeConsumin
         if ($this->_entity->nameEn) {
             $names['en'] = $this->_entity->nameEn;
         }
+        if ($this->_entity->namePt) {
+            $names['pt'] = $this->_entity->namePt;
+        }
         if (empty($names)) {
             return $rootElement;
         }

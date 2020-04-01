@@ -42,6 +42,9 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_DisplayName
         if ($this->_entity->displayNameEn) {
             $displayNames['en'] = $this->_entity->displayNameEn;
         }
+        if ($this->_entity->displayNamePt) {
+            $displayNames['pt'] = $this->_entity->displayNamePt;
+        }
         if (empty($displayNames)) {
             return $rootElement;
         }
