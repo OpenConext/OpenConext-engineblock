@@ -98,35 +98,4 @@ class ProxiedIdentityProvider extends AbstractIdentityProvider
         $ssoLocation = $this->urlProvider->getUrl('authentication_idp_sso', false, null, $this->getEntityId());
         return [new Service($ssoLocation, Constants::BINDING_HTTP_REDIRECT)];
     }
-
-    /**
-     * Best effort to show a Dutch display name.
-     *
-     * Buisiness rule:
-     * displayname:nl, name:nl, name:en
-     */
-    public function getDisplayNameNl(): string
-    {
-        if (empty($this->entity->getDisplayNameNl())) {
-            if (!empty($this->entity->getNameNl())) {
-                return $this->entity->getNameNl();
-            }
-            return $this->entity->getNameEn();
-        }
-        return $this->entity->getDisplayNameNl();
-    }
-
-    /**
-     * Best effort to show an English display name.
-     *
-     * Buisiness rule:
-     * displayname:en, name:en
-     */
-    public function getDisplayNameEn(): string
-    {
-        if (empty($this->entity->getDisplayNameEn())) {
-            return $this->entity->getNameEn();
-        }
-        return $this->entity->getDisplayNameEn();
-    }
 }

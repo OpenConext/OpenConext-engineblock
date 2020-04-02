@@ -81,6 +81,14 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
     /**
      * @return string
      */
+    public function getNamePt(): string
+    {
+        return $this->entity->namePt;
+    }
+
+    /**
+     * @return string
+     */
     public function getDescriptionNl(): string
     {
         return $this->entity->descriptionNl;
@@ -97,6 +105,14 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
     /**
      * @return string
      */
+    public function getDescriptionPt(): string
+    {
+        return $this->entity->descriptionPt;
+    }
+
+    /**
+     * @return string
+     */
     public function getDisplayNameNl(): string
     {
         return $this->entity->displayNameNl;
@@ -108,6 +124,14 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
     public function getDisplayNameEn(): string
     {
         return $this->entity->displayNameEn;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisplayNamePt(): string
+    {
+        return $this->entity->displayNamePt;
     }
 
     /**
@@ -135,6 +159,14 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
     }
 
     /**
+     * @return Organization
+     */
+    public function getOrganizationPt(): ?Organization
+    {
+        return $this->entity->organizationPt;
+    }
+
+    /**
      * @return string
      */
     public function getKeywordsNl(): string
@@ -148,6 +180,14 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
     public function getKeywordsEn(): string
     {
         return $this->entity->keywordsEn;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKeywordsPt(): string
+    {
+        return $this->entity->keywordsPt;
     }
 
     /**

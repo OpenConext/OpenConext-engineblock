@@ -84,6 +84,14 @@ abstract class AbstractServiceProvider implements ServiceProviderEntityInterface
     /**
      * @return string
      */
+    public function getNamePt(): string
+    {
+        return $this->entity->getNamePt();
+    }
+
+    /**
+     * @return string
+     */
     public function getDescriptionNl(): string
     {
         return $this->entity->getDescriptionNl();
@@ -100,6 +108,14 @@ abstract class AbstractServiceProvider implements ServiceProviderEntityInterface
     /**
      * @return string
      */
+    public function getDescriptionPt(): string
+    {
+        return $this->entity->getDescriptionPt();
+    }
+
+    /**
+     * @return string
+     */
     public function getDisplayNameNl(): string
     {
         return $this->entity->getDisplayNameNl();
@@ -111,6 +127,14 @@ abstract class AbstractServiceProvider implements ServiceProviderEntityInterface
     public function getDisplayNameEn(): string
     {
         return $this->entity->getDisplayNameEn();
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisplayNamePt(): string
+    {
+        return $this->entity->getDisplayNamePt();
     }
 
     /**
@@ -138,6 +162,14 @@ abstract class AbstractServiceProvider implements ServiceProviderEntityInterface
     }
 
     /**
+     * @return Organization|null
+     */
+    public function getOrganizationPt(): ?Organization
+    {
+        return $this->entity->getOrganizationPt();
+    }
+
+    /**
      * @return string
      */
     public function getKeywordsNl(): string
@@ -151,6 +183,14 @@ abstract class AbstractServiceProvider implements ServiceProviderEntityInterface
     public function getKeywordsEn(): string
     {
         return $this->entity->getKeywordsEn();
+    }
+
+    /**
+     * @return string
+     */
+    public function getKeywordsPt(): string
+    {
+        return $this->entity->getKeywordsPt();
     }
 
     /**
@@ -279,6 +319,14 @@ abstract class AbstractServiceProvider implements ServiceProviderEntityInterface
     public function getSupportUrlNl(): ?string
     {
         return $this->entity->getSupportUrlNl();
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSupportUrlPt(): ?string
+    {
+        return $this->entity->getSupportUrlPt();
     }
 
     /**

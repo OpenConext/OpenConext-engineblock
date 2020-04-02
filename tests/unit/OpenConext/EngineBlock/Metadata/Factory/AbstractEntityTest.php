@@ -72,15 +72,20 @@ abstract class AbstractEntityTest extends TestCase
             'entityId' => function(IdentityProviderEntityInterface $entity) { return $entity->getEntityId(); },
             'nameNl' => function(IdentityProviderEntityInterface $entity) { return  $entity->getNameNl(); },
             'nameEn' => function(IdentityProviderEntityInterface $entity) { return  $entity->getNameEn(); },
+            'namePt' => function(IdentityProviderEntityInterface $entity) { return  $entity->getNamePt(); },
             'descriptionNl' => function(IdentityProviderEntityInterface $entity) { return  $entity->getDescriptionNl(); },
             'descriptionEn' => function(IdentityProviderEntityInterface $entity) { return  $entity->getDescriptionEn(); },
+            'descriptionPt' => function(IdentityProviderEntityInterface $entity) { return  $entity->getDescriptionPt(); },
             'displayNameNl' => function(IdentityProviderEntityInterface $entity) { return  $entity->getDisplayNameNl(); },
             'displayNameEn' => function(IdentityProviderEntityInterface $entity) { return  $entity->getDisplayNameEn(); },
+            'displayNamePt' => function(IdentityProviderEntityInterface $entity) { return  $entity->getDisplayNamePt(); },
             'logo' => function(IdentityProviderEntityInterface $entity) { return  $entity->getLogo(); },
             'organizationNl' => function(IdentityProviderEntityInterface $entity) { return  $entity->getOrganizationNl(); },
             'organizationEn' => function(IdentityProviderEntityInterface $entity) { return  $entity->getOrganizationEn(); },
+            'organizationPt' => function(IdentityProviderEntityInterface $entity) { return  $entity->getOrganizationPt(); },
             'keywordsNl' => function(IdentityProviderEntityInterface $entity) { return  $entity->getKeywordsNl(); },
             'keywordsEn' => function(IdentityProviderEntityInterface $entity) { return  $entity->getKeywordsEn(); },
+            'keywordsPt' => function(IdentityProviderEntityInterface $entity) { return  $entity->getKeywordsPt(); },
             'certificates' => function(IdentityProviderEntityInterface $entity) { return  $entity->getCertificates(); },
             'workflowState' => function(IdentityProviderEntityInterface $entity) { return  $entity->getWorkflowState(); },
             'contactPersons' => function(IdentityProviderEntityInterface $entity) { return  $entity->getContactPersons(); },
@@ -98,7 +103,7 @@ abstract class AbstractEntityTest extends TestCase
 
         $missing = array_diff_key($implemented, $assertions);
         $this->assertCount(0, $missing, 'missing tests for: '. json_encode($missing));
-        $this->assertCount(26, $implemented);
+        $this->assertCount(31, $implemented);
         $this->assertCount(count($implemented), $assertions);
 
         foreach ($assertions as $name => $assertion) {
@@ -122,15 +127,20 @@ abstract class AbstractEntityTest extends TestCase
             'entityId' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getEntityId(); },
             'nameNl' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getNameNl(); },
             'nameEn' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getNameEn(); },
+            'namePt' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getNamePt(); },
             'descriptionNl' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getDescriptionNl(); },
             'descriptionEn' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getDescriptionEn(); },
+            'descriptionPt' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getDescriptionPt(); },
             'displayNameNl' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getDisplayNameNl(); },
             'displayNameEn' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getDisplayNameEn(); },
+            'displayNamePt' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getDisplayNamePt(); },
             'logo' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getLogo(); },
             'organizationNl' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getOrganizationNl(); },
             'organizationEn' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getOrganizationEn(); },
+            'organizationPt' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getOrganizationPt(); },
             'keywordsNl' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getKeywordsNl(); },
             'keywordsEn' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getKeywordsEn(); },
+            'keywordsPt' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getKeywordsPt(); },
             'certificates' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getCertificates(); },
             'workflowState' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getWorkflowState(); },
             'contactPersons' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getContactPersons(); },
@@ -147,6 +157,7 @@ abstract class AbstractEntityTest extends TestCase
             'requestedAttributes' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getRequestedAttributes(); },
             'supportUrlEn' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getSupportUrlEn(); },
             'supportUrlNl' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getSupportUrlNl(); },
+            'supportUrlPt' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getSupportUrlPt(); },
 
             'allowed' => function(ServiceProviderEntityInterface $decorator, $entityId = 'entity-id-2') { return $decorator->isAllowed('entity-id-2'); },
             'displayName'  => function(ServiceProviderEntityInterface $decorator, $locale = 'EN') { return $decorator->getDisplayName($locale); },
@@ -155,7 +166,7 @@ abstract class AbstractEntityTest extends TestCase
 
         $missing = array_diff_key($implemented, $assertions);
         $this->assertCount(0, $missing, 'missing tests for: ' . json_encode($missing));
-        $this->assertCount(32, $implemented);
+        $this->assertCount(38, $implemented);
         $this->assertCount(count($implemented), $assertions);
 
         foreach ($assertions as $name => $assertion) {
@@ -279,15 +290,20 @@ abstract class AbstractEntityTest extends TestCase
             'entityId' => 'entity-id',
             'nameNl' => 'name-nl',
             'nameEn' => 'name-en',
+            'namePt' => 'name-pt',
             'descriptionNl' => 'description-nl',
             'descriptionEn' => 'description-en',
+            'descriptionPt' => 'description-pt',
             'displayNameNl' => 'display-name-nl',
             'displayNameEn' => 'display-name-en',
+            'displayNamePt' => 'display-name-pt',
             'logo' => $this->createMock(Logo::class),
             'organizationNl' => $this->createMock(Organization::class),
             'organizationEn' => $this->createMock(Organization::class),
+            'organizationPt' => $this->createMock(Organization::class),
             'keywordsNl' => 'keywords-nl',
             'keywordsEn' => 'keyword-en',
+            'keywordsPt' => 'keyword-pt',
             'certificates' => [
                 $this->createMock(X509Certificate::class),
                 $this->createMock(X509Certificate::class),
@@ -335,15 +351,19 @@ abstract class AbstractEntityTest extends TestCase
             'entityId' => 'entity-id',
             'nameNl' => 'name-nl',
             'nameEn' => 'name-en',
+            'namePt' => 'name-pt',
             'descriptionNl' => 'description-nl',
             'descriptionEn' => 'description-en',
+            'descriptionPt' => 'description-pt',
             'displayNameNl' => 'display-name-nl',
             'displayNameEn' => 'display-name-en',
+            'displayNamePt' => 'display-name-pt',
             'logo' => $this->createMock(Logo::class),
             'organizationNl' => $this->createMock(Organization::class),
             'organizationEn' => $this->createMock(Organization::class),
             'keywordsNl' => 'keywords-nl',
             'keywordsEn' => 'keyword-en',
+            'keywordsPt' => 'keyword-pt',
             'certificates' => [
                 $this->createMock(X509Certificate::class),
                 $this->createMock(X509Certificate::class),
@@ -378,6 +398,7 @@ abstract class AbstractEntityTest extends TestCase
             ],
             'supportUrlEn' => 'support-url-en',
             'supportUrlNl' => 'support-url-nl',
+            'supportUrlPt' => 'support-url-pt',
         ];
     }
 

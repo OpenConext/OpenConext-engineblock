@@ -183,8 +183,10 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         $overrides['id'] = null;
         $overrides['displayNameNl'] = '';
         $overrides['displayNameEn'] = '';
+        $overrides['displayNamePt'] = '';
         $overrides['keywordsNl'] = '';
         $overrides['keywordsEn'] = '';
+        $overrides['keywordsPt'] = '';
         $overrides['workflowState'] = 'prodaccepted';
         $overrides['nameIdFormat'] = null;
         $overrides['singleLogoutService'] = null;
@@ -216,17 +218,22 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         // TODO: should the methods below not set trough EBIdPInfo?
         $overrides['supportUrlEn'] = null;
         $overrides['supportUrlNl'] = null;
+        $overrides['supportUrlPt'] = null;
 
         // EngineblockIdentityProviderInformation
         $overrides['nameNl'] = 'test-suite EngineBlock';
         $overrides['nameEn'] = 'test-suite EngineBlock';
+        $overrides['namePt'] = 'test-suite EngineBlock';
         $overrides['displayNameNl'] = 'test-suite EngineBlock';
         $overrides['displayNameEn'] = 'test-suite EngineBlock';
+        $overrides['displayNamePt'] = 'test-suite EngineBlock';
         $overrides['descriptionNl'] = 'configuredDescription';
         $overrides['descriptionEn'] = 'configuredDescription';
+        $overrides['descriptionPt'] = 'configuredDescription';
         $overrides['logo'] = $logo;
         $overrides['organizationNl'] = $organization;
         $overrides['organizationEn'] = $organization;
+        $overrides['organizationPt'] = $organization;
         $overrides['contactPersons'] = $contactPersons;
 
         // EngineBlockServiceProvider
@@ -306,8 +313,10 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         $overrides['id'] = null;
         $overrides['displayNameNl'] = '';
         $overrides['displayNameEn'] = '';
+        $overrides['displayNamePt'] = '';
         $overrides['keywordsNl'] = '';
         $overrides['keywordsEn'] = '';
+        $overrides['keywordsPt'] = '';
         $overrides['workflowState'] = 'prodaccepted';
         $overrides['nameIdFormat'] = null;
         $overrides['singleLogoutService'] = null;
@@ -339,14 +348,18 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         // TODO: should the methods below not set trough EBIdPInfo?
         $overrides['supportUrlEn'] = null;
         $overrides['supportUrlNl'] = null;
+        $overrides['supportUrlPt'] = null;
 
         $overrides['nameNl'] = '';
         $overrides['nameEn'] = '';
+        $overrides['namePt'] = '';
         $overrides['descriptionNl'] = '';
         $overrides['descriptionEn'] = '';
+        $overrides['descriptionPt'] = '';
         $overrides['logo'] = null;
         $overrides['organizationNl'] = '';
         $overrides['organizationEn'] = '';
+        $overrides['organizationPt'] = '';
         $overrides['contactPersons'] = [];
 
         // Stepup

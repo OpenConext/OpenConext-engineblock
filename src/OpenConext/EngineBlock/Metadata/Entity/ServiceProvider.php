@@ -274,15 +274,20 @@ class ServiceProvider extends AbstractRole
         $entity->entityId = $serviceProvider->getEntityId();
         $entity->nameNl = $serviceProvider->getNameNl();
         $entity->nameEn = $serviceProvider->getNameEn();
+        $entity->namePt = $serviceProvider->getNamePt();
         $entity->descriptionNl = $serviceProvider->getDescriptionNl();
         $entity->descriptionEn = $serviceProvider->getDescriptionEn();
+        $entity->descriptionPt = $serviceProvider->getDescriptionPt();
         $entity->displayNameNl = $serviceProvider->getDisplayNameNl();
         $entity->displayNameEn = $serviceProvider->getDisplayNameEn();
+        $entity->displayNamePt = $serviceProvider->getDisplayNamePt();
         $entity->logo = $serviceProvider->getLogo();
         $entity->organizationNl = $serviceProvider->getOrganizationNl();
         $entity->organizationEn = $serviceProvider->getOrganizationEn();
+        $entity->organizationPt = $serviceProvider->getOrganizationPt();
         $entity->keywordsNl = $serviceProvider->getKeywordsNl();
         $entity->keywordsEn = $serviceProvider->getKeywordsEn();
+        $entity->keywordsPt = $serviceProvider->getKeywordsPt();
         $entity->certificates = $serviceProvider->getCertificates();
         $entity->workflowState = $serviceProvider->getWorkflowState();
         $entity->contactPersons = $serviceProvider->getContactPersons();
@@ -299,6 +304,7 @@ class ServiceProvider extends AbstractRole
         $entity->requestedAttributes = $serviceProvider->getRequestedAttributes();
         $entity->supportUrlEn = $serviceProvider->getSupportUrlEn();
         $entity->supportUrlNl = $serviceProvider->getSupportUrlNl();
+        $entity->supportUrlPt = $serviceProvider->getSupportUrlPt();
 
         return $entity;
     }
