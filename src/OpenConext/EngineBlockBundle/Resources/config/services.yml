@@ -181,10 +181,16 @@ services:
             - "%maximum_authentication_procedures_allowed%"
             - "%time_frame_for_authentication_loop_in_seconds%"
 
+    engineblock.language_support_provider:
+        class: OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider
+        arguments:
+            - ['en', 'nl', 'pt']
+            - ['en', 'nl']
+
     engineblock.locale_provider:
         class: OpenConext\EngineBlockBundle\Localization\LocaleProvider
         arguments:
-            - ['en', 'nl', 'pt']
+            - '@engineblock.language_support_provider'
             - '%kernel.default_locale%'
 
     engineblock.url_provider:
