@@ -38,12 +38,14 @@ class LanguageSupportProvider
             if (in_array($language, $availableLanguages)) {
                 $languages[$language] = $language;
             } else {
-                throw new UnsupportedLanguageException('A supported language is enabled while not available');
+                throw new UnsupportedLanguageException(
+                    sprintf("Unable to activate unsupported language '%s', please check your configuration", $language)
+                );
             }
         }
 
         if (empty($languages)) {
-            throw new UnsupportedLanguageException('No supported languages found');
+            throw new UnsupportedLanguageException('No active languages are configured, please check your configuration');
         }
 
         $this->supportedLanguages = array_values($languages);

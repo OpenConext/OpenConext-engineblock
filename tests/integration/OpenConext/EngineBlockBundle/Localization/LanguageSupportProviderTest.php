@@ -49,7 +49,7 @@ class LanguageSupportProviderTest extends TestCase
     public function an_unsupported_language_should_throw_an_exception()
     {
         $this->expectException(UnsupportedLanguageException::class);
-        $this->expectExceptionMessage('A supported language is enabled while not available');
+        $this->expectExceptionMessage("Unable to activate unsupported language 'de'");
 
         $LanguageSupportProvider = new LanguageSupportProvider(['nl', 'en', 'pt'], ['de']);
     }
@@ -60,7 +60,7 @@ class LanguageSupportProviderTest extends TestCase
     public function no_setting_enabled_languages_should_result_in_an_exception()
     {
         $this->expectException(UnsupportedLanguageException::class);
-        $this->expectExceptionMessage('No supported languages found');
+        $this->expectExceptionMessage('No active languages are configured, please check your configuration');
 
         $LanguageSupportProvider = new LanguageSupportProvider(['nl', 'en', 'pt'], []);
     }
@@ -71,7 +71,7 @@ class LanguageSupportProviderTest extends TestCase
     public function no_active_languages_should_result_in_an__excpetion()
     {
         $this->expectException(UnsupportedLanguageException::class);
-        $this->expectExceptionMessage('A supported language is enabled while not available');
+        $this->expectExceptionMessage("Unable to activate unsupported language 'nl', please check your configuration");
 
         $LanguageSupportProvider = new LanguageSupportProvider([], ['nl', 'en']);
     }

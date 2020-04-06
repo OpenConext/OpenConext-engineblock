@@ -185,7 +185,7 @@ services:
         class: OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider
         arguments:
             - ['en', 'nl', 'pt']
-            - ['en', 'nl']
+            - '%enabled_languages%'
 
     engineblock.locale_provider:
         class: OpenConext\EngineBlockBundle\Localization\LocaleProvider
@@ -306,6 +306,7 @@ services:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Locale
         arguments:
             - "@request_stack"
+            - "@engineblock.language_support_provider"
             - "%locale%"
         tags:
              - { name: 'twig.extension' }
