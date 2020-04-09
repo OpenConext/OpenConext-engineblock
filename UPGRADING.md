@@ -1,5 +1,12 @@
 # UPGRADE NOTES
 
+## 6.1 > 6.2
+Among the cleanup tasks some unused scripts have been removed from the project.
+ 1. The bootstrap.cache.php file, previously used by Symfony was removed
+ 2. config/cli-config.php (once used to run Doctrine interactions) was removed
+
+If you happen to use these files please migrate your scripts to using the new standard.
+
 ## 6.0 > 6.1
 In version 6.1 the special EngineBlock entities in the roles table aren't used anymore in favor of static entities.
 You could now remove the entities below from manage and then execute a metadata push.
@@ -10,7 +17,7 @@ You could now remove the entities below from manage and then execute a metadata 
 ## 5.x > 6.0
 In version 6 EngineBlock dropped PHP 5.6 support. The amount of backwards breaking changes was kept to a minimum. For example we did not yet upgrade to Symfony 4. But we did use some PHP 7.2 features like the Throwable interface.
 
-Expect more significant upgrades from a PHP 7 standpoint in the near future.  
+Expect more significant upgrades from a PHP 7 standpoint in the near future.
 
 ### For OpenConext-deploy users
 Use an OpenConext-deploy release containing [this revision](https://github.com/OpenConext/OpenConext-deploy/commit/21e75357b1802f346aea0077b8081393865c6112). No release has been tagged after adding the PHP 7.2 support.
@@ -54,10 +61,10 @@ stepup.loa.mapping.3.gateway = "https://gateway.tld/authentication/loa3"
 ### Serialised column cleanup
 In version 5.12.0 multiple `coin` columns are serialised into a single column with serialised data.
 This change will allow easier maintenance because then no migrations are needed when adding or removing a `coin`.
-There is no migration to populate the old `coin` columns to the new serialised column while this is needed to let EB function properly with the new changes. 
+There is no migration to populate the old `coin` columns to the new serialised column while this is needed to let EB function properly with the new changes.
 Therefore you should push the data from Manage after you have updated the codebase and ran the `Version20190703235333`.
 
-Be aware that you need to be logged in into manage to push the data after updating the codebase and database schema. 
+Be aware that you need to be logged in into manage to push the data after updating the codebase and database schema.
 
 In order to let this work you need to do the following:
  1. Login into manage
@@ -70,7 +77,7 @@ In order to let this work you need to do the following:
 ### Improved error feedback
 The 5.11 release solely improves the error pages. Some new features have been made available to improve the error pages. Most notable, and requiring changes to the parameters.yml, is the possibility to provide custom Wiki links for specific error pages. You are now also able to display an IdP support button, for IdP related error pages.
 
-The parameters.yml.dist file goes into more detail on how to configure this. 
+The parameters.yml.dist file goes into more detail on how to configure this.
 
 ## 5.9 -> 5.10.0
 
@@ -90,7 +97,7 @@ Running the migrations `Version20180910134145` and `Version20180910175453` will 
 Be aware that the logic used to update the columns are also dropped in this release. So you first have to update the
 code and after that you should run the migrations to drop the columns.
 
-The features were introduced in 5.8 but were partially reverted to support rolling updates in 5.8.3 because in 
+The features were introduced in 5.8 but were partially reverted to support rolling updates in 5.8.3 because in
 these features table columns were dropped. To be able to role back to a version before 5.8.3 while maintaining database
 integrity both version were kept. Currently the columns aren't used anymore so therefore the old implementations could
 be dropped completely.
@@ -101,7 +108,7 @@ be dropped completely.
 Metadata pushed to EngineBlock in earlier versions (EB<5.8) is not compatible with this version. A metadata push is
 required after upgrading to EB 5.8.
 In order to upgrade from 5.7 to 5.8 you need to go to 5.8.3 to prevent backwards compatibility
-breaking changes. From version 5.8.3 rolling updates are supported.  
+breaking changes. From version 5.8.3 rolling updates are supported.
 
 ### New user data deprovision API
 
@@ -228,7 +235,7 @@ the platform.
 
 ### Migration to Twig as template render engine
 All .phtml templates (Zend_Layout) have been rewritten to Twig templates. Any custom theme should be rewritten to
-utilize Twig templates. 
+utilize Twig templates.
 
 https://www.pivotaltracker.com/story/show/155358923
 
@@ -303,7 +310,7 @@ In the 4.x range, the entrypoint for the EngineBlock application was the `www` f
 
 #### PHP Versions
 
-As of version 5.0.0-alpha4 the minimum PHP version requirement has been upped to 5.6. This to ensure using a 
+As of version 5.0.0-alpha4 the minimum PHP version requirement has been upped to 5.6. This to ensure using a
 [safe and supported version of PHP][php1] to run the platform on. This is a strict requirement - components may no
 longer work correctly with a version below PHP 5.6
 
@@ -324,31 +331,31 @@ Part of the configuration is now also used in `.yml` configuration. In order to 
  parameters when booting, `app/config/ini_parameter.yml` must be present. This file is created automatically
  by composer during installation, but can be recreated manually using `bin/composer/dump-required-ini-params.sh`.
  Also, please ensure that after unpacking a release, before using the installation, `composer prepare-env --env=prod`
- is run so that all requirements for a fully functioning application are met (correct configuration, a warmed cache, etc) 
+ is run so that all requirements for a fully functioning application are met (correct configuration, a warmed cache, etc)
 
 ##### Removed Configuration
 
-- `subjectIdAttribute` Due to the migration from LDAP to database storage for registered users, the configuration 
+- `subjectIdAttribute` Due to the migration from LDAP to database storage for registered users, the configuration
   `subjectIdAttribute` has been removed. The equivalent of the `collabpersonid` configuration value will now always be used.
-  
+
 ##### Added Configuration
 
 Several feature toggles have been added, and several users can now be configured.
 
 - `engineblock.feature.ldap_integration` see below for more information
-- `engineApi.features.metadataPush` controls the availability of the metadata push api. Setting this to `1` will enable it.  
+- `engineApi.features.metadataPush` controls the availability of the metadata push api. Setting this to `1` will enable it.
    Only available for the user with the role `ROLE_API_USER_JANUS` - can be configured through the `api.users.janus.username`
    and `api.users.janus.password` settings, which must authenticate using [HTTP Basic Authentication][basic-auth]
-- `engineApi.features.consentListing` controls the availability of the consent listing API. Setting this to `1` will enable it.  
+- `engineApi.features.consentListing` controls the availability of the consent listing API. Setting this to `1` will enable it.
    Only available for the user with the role `ROLE_API_USER_PROFILE` - can be configured through the `api.users.profile.username`
    and `api.users.profile.password` settings, which must authenticate using [HTTP Basic Authentication][basic-auth]
-- `engineApi.features.metadatApi` controls the availability of the metadata read API. Setting this to `1` will enable it.  
+- `engineApi.features.metadatApi` controls the availability of the metadata read API. Setting this to `1` will enable it.
    Only available for the user with the role `ROLE_API_USER_PROFILE` - can be configured through the `api.users.profile.username`
    and `api.users.profile.password` settings, which must authenticate using [HTTP Basic Authentication][basic-auth]
-   
+
 For [Attribute Aggregation][op-aag] usage, which can be enabled per service provider by setting the `attributeAggregationRequired`
  configuration value to true, the following configuration has been added:
- 
+
 - `attribute_aggregation.base_url` the base_url of the attribute aggregation service
 - `attribute.aggregation.username` the username used to authenticate with the attribute aggregation service
 - `attribute.aggregation.password` the password used to authenticate with the attribute aggregation service
