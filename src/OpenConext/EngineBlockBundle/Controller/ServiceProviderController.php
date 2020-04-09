@@ -36,6 +36,7 @@ class ServiceProviderController implements AuthenticationLoopThrottlingControlle
      * @var Session
      */
     private $session;
+
     /**
      * @var RequestValidator
      */
@@ -46,16 +47,23 @@ class ServiceProviderController implements AuthenticationLoopThrottlingControlle
      */
     private $bindingValidator;
 
+    /**
+     * @var RequestValidator
+     */
+    private $responseValidator;
+
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
         Session $session,
         RequestValidator $requestValidator,
-        RequestValidator $bindingValidator
+        RequestValidator $bindingValidator,
+        RequestValidator $samlResponseValidator
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->session                         = $session;
         $this->requestValidator = $requestValidator;
         $this->bindingValidator = $bindingValidator;
+        $this->responseValidator = $samlResponseValidator;
     }
 
     /**
@@ -66,6 +74,7 @@ class ServiceProviderController implements AuthenticationLoopThrottlingControlle
     {
         $this->requestValidator->isValid($request);
         $this->bindingValidator->isValid($request);
+        $this->responseValidator->isValid($request);
 
         $proxyServer = new EngineBlock_Corto_Adapter();
         $proxyServer->consumeAssertion();

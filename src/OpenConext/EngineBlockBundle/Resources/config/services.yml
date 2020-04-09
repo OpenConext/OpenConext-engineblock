@@ -272,6 +272,9 @@ services:
     engineblock.validator.unsolicited_sso_request_validator:
         class: OpenConext\EngineBlock\Validator\UnsolicitedSsoRequestValidator
 
+    engineblock.validator.saml_response_validator:
+        class: OpenConext\EngineBlock\Validator\SamlResponseValidator
+
     engineblock.twig.extension.debug:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Debug
         tags:

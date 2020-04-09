@@ -16,7 +16,6 @@
  * limitations under the License.
  */
 
-
 namespace OpenConext\EngineBlockBundle\Controller;
 
 use EngineBlock_ApplicationSingleton;
@@ -37,6 +36,7 @@ class StepupController implements AuthenticationLoopThrottlingController
      * @var Session
      */
     private $session;
+
     /**
      * @var RequestValidator
      */
@@ -47,16 +47,23 @@ class StepupController implements AuthenticationLoopThrottlingController
      */
     private $bindingValidator;
 
+    /**
+     * @var RequestValidator
+     */
+    private $responseValidator;
+
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
         Session $session,
         RequestValidator $requestValidator,
-        RequestValidator $bindingValidator
+        RequestValidator $bindingValidator,
+        RequestValidator $samlResponseValidator
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
-        $this->session                         = $session;
+        $this->session = $session;
         $this->requestValidator = $requestValidator;
         $this->bindingValidator = $bindingValidator;
+        $this->responseValidator = $samlResponseValidator;
     }
 
     /**
@@ -67,6 +74,7 @@ class StepupController implements AuthenticationLoopThrottlingController
     {
         $this->requestValidator->isValid($request);
         $this->bindingValidator->isValid($request);
+        $this->responseValidator->isValid($request);
 
         $proxyServer = new EngineBlock_Corto_Adapter();
         $proxyServer->stepupConsumeAssertion();
