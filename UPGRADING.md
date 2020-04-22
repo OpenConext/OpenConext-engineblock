@@ -1,11 +1,23 @@
 # UPGRADE NOTES
 
 ## 6.1 > 6.2
+
+# Remove legacy application.ini configuration
+The legacy application.ini configuration support is removed in favour of the Symfony configuration.
+From now on the `application/configs/application.ini` and the `/etc/openconext/engineblock.ini` are not being evaluated anymore.
+The legacy configuration (`app/config/ini_parameters.yml`) which was generated from those files is now merged into the `parameters.yml`.
+
+If you're using OpenConext-Deploy, Ansible is configured to do this for you and will generate a `parameters.yml` for you.
+
+If you don't use OpenConext-Deploy you should manually add the `ini_parameters.yml` variables to the`parameters.yml` and you're good to go.
+
+# Remove Symfony bootstrap cache
 Among the cleanup tasks some unused scripts have been removed from the project.
  1. The bootstrap.cache.php file, previously used by Symfony was removed
  2. config/cli-config.php (once used to run Doctrine interactions) was removed
 
 If you happen to use these files please migrate your scripts to using the new standard.
+
 
 ## 6.0 > 6.1
 In version 6.1 the special EngineBlock entities in the roles table aren't used anymore in favor of static entities.
