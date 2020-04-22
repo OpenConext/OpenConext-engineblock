@@ -282,15 +282,20 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->setPathFromObjectString(array($connection, 'name'), 'entityId');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:name:nl'), 'nameNl');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:name:en'), 'nameEn');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:name:pt'), 'namePt');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:displayName:nl'), 'displayNameNl');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:displayName:en'), 'displayNameEn');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:displayName:pt'), 'displayNamePt');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:description:nl'), 'descriptionNl');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:description:en'), 'descriptionEn');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:description:pt'), 'descriptionPt');
         $properties += $this->assembleLogo($connection);
         $properties += $this->assembleOrganization($connection, 'nl');
         $properties += $this->assembleOrganization($connection, 'en');
+        $properties += $this->assembleOrganization($connection, 'pt');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:keywords:en'), 'keywordsEn');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:keywords:nl'), 'keywordsNl');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:keywords:pt'), 'keywordsPt');
 
         $properties += $this->assembleCertificates($connection);
         $properties += $this->setPathFromObjectString(array($connection, 'state'), 'workflowState');
@@ -306,6 +311,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->setPathFromObjectString(array($connection, 'manipulation_code'), 'manipulation');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:url:en'), 'supportUrlEn');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:url:nl'), 'supportUrlNl');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:url:pt'), 'supportUrlPt');
 
         return $properties;
     }

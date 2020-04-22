@@ -47,6 +47,10 @@ class EngineBlockIdentityProviderMetadataTest extends AbstractEntityTest
         $organizationNl->name = 'metadata-organization-name-nl';
         $organizationNl->url = 'metadata-organization-url-nl';
 
+        $organizationPt = Mockery::mock(Organization::class);
+        $organizationPt->name = 'metadata-organization-name-pt';
+        $organizationPt->url = 'metadata-organization-url-pt';
+
         $cert1 = Mockery::mock(X509Certificate::class);
         $cert1->shouldReceive('toCertData')->andReturn('pem1-abc');
         $cert2 = Mockery::mock(X509Certificate::class);
@@ -56,6 +60,7 @@ class EngineBlockIdentityProviderMetadataTest extends AbstractEntityTest
 
         $adapter->shouldReceive('getOrganizationEn')->andReturn($organizationEn);
         $adapter->shouldReceive('getOrganizationNl')->andReturn($organizationNl);
+        $adapter->shouldReceive('getOrganizationPt')->andReturn($organizationPt);
         $adapter->shouldReceive('getSingleSignOnServices')->andReturn([
             new Service('location1', 'binding1'),
             new Service('location2', 'binding2'),
@@ -69,9 +74,12 @@ class EngineBlockIdentityProviderMetadataTest extends AbstractEntityTest
 
         $this->assertEquals('metadata-organization-name-en', $decorator->getOrganizationNameEn());
         $this->assertEquals('metadata-organization-name-nl', $decorator->getOrganizationNameNl());
+        $this->assertEquals('metadata-organization-name-pt', $decorator->getOrganizationNamePt());
         $this->assertEquals('metadata-organization-url-en', $decorator->getOrganizationUrlEn());
         $this->assertEquals('metadata-organization-url-nl', $decorator->getOrganizationUrlNl());
+        $this->assertEquals('metadata-organization-url-pt', $decorator->getOrganizationUrlPt());
         $this->assertEquals('location1', $decorator->getSsoLocation());
+        $this->assertEquals(true, $decorator->hasOrganizationInfo());
         $this->assertEquals(['pem1-abc' => 'pem1-abc', 'pem2-abc' => 'pem2-abc'], $decorator->getPublicKeys());
     }
 }

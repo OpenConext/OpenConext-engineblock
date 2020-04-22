@@ -17,6 +17,7 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory\Adapter;
 
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
 
 class ServiceProviderEntityTest extends AbstractEntityTest
@@ -36,15 +37,20 @@ class ServiceProviderEntityTest extends AbstractEntityTest
             'entityId' => $ormEntity->entityId,
             'nameNl' => $ormEntity->nameNl,
             'nameEn' => $ormEntity->nameEn,
+            'namePt' => $ormEntity->namePt,
             'descriptionNl' => $ormEntity->descriptionNl,
             'descriptionEn' => $ormEntity->descriptionEn,
+            'descriptionPt' => $ormEntity->descriptionPt,
             'displayNameNl' => $ormEntity->displayNameNl,
             'displayNameEn' => $ormEntity->displayNameEn,
+            'displayNamePt' => $ormEntity->displayNamePt,
             'logo' => $ormEntity->logo,
             'organizationNl' => $ormEntity->organizationNl,
             'organizationEn' => $ormEntity->organizationEn,
+            'organizationPt' => $ormEntity->organizationPt,
             'keywordsNl' => $ormEntity->keywordsNl,
             'keywordsEn' => $ormEntity->keywordsEn,
+            'keywordsPt' => $ormEntity->keywordsPt,
             'certificates' => $ormEntity->certificates,
             'workflowState' => $ormEntity->workflowState,
             'contactPersons' => $ormEntity->contactPersons,
@@ -58,13 +64,73 @@ class ServiceProviderEntityTest extends AbstractEntityTest
             'requestedAttributes' => $ormEntity->requestedAttributes,
             'supportUrlEn' => $ormEntity->supportUrlEn,
             'supportUrlNl' => $ormEntity->supportUrlNl,
+            'supportUrlPt' => $ormEntity->supportUrlPt,
             'attributeReleasePolicy' => $ormEntity->attributeReleasePolicy,
             'assertionConsumerServices' => $ormEntity->assertionConsumerServices,
             'allowedIdpEntityIds' => $ormEntity->allowedIdpEntityIds,
             'allowAll' => $ormEntity->allowAll,
             'attributeAggregationRequired' => $ormEntity->isAttributeAggregationRequired(),
             'allowed' => $ormEntity->isAllowed('entity-id'),
-            'displayName' => $ormEntity->getDisplayName('EN')
+            'displayName' => $ormEntity->getDisplayName('EN'),
+        ];
+
+        $this->runServiceProviderAssertions($adapter, $adapter, $assertions);
+    }
+
+    /**
+     * This test will test if all methods work
+     */
+    public function test_if_conversion_to_legacy_entity_works()
+    {
+        $values = $this->getServiceProviderMockProperties();
+        $ormEntity = $this->getOrmEntityServiceProviderMock($values);
+
+        $adapter = new ServiceProviderEntity($ormEntity);
+
+        // Convert the adapter which implements `ServiceProviderEntityInterface` to the legacy entity and back
+        $legacyServiceProviderEntity = ServiceProvider::fromServiceProviderEntity($adapter);
+        $adapter = new ServiceProviderEntity($legacyServiceProviderEntity);
+
+        $assertions = [
+            'id' =>  $ormEntity->id,
+            'entityId' => $ormEntity->entityId,
+            'nameNl' => $ormEntity->nameNl,
+            'nameEn' => $ormEntity->nameEn,
+            'namePt' => $ormEntity->namePt,
+            'descriptionNl' => $ormEntity->descriptionNl,
+            'descriptionEn' => $ormEntity->descriptionEn,
+            'descriptionPt' => $ormEntity->descriptionPt,
+            'displayNameNl' => $ormEntity->displayNameNl,
+            'displayNameEn' => $ormEntity->displayNameEn,
+            'displayNamePt' => $ormEntity->displayNamePt,
+            'logo' => $ormEntity->logo,
+            'organizationNl' => $ormEntity->organizationNl,
+            'organizationEn' => $ormEntity->organizationEn,
+            'organizationPt' => $ormEntity->organizationPt,
+            'keywordsNl' => $ormEntity->keywordsNl,
+            'keywordsEn' => $ormEntity->keywordsEn,
+            'keywordsPt' => $ormEntity->keywordsPt,
+            'certificates' => $ormEntity->certificates,
+            'workflowState' => $ormEntity->workflowState,
+            'contactPersons' => $ormEntity->contactPersons,
+            'nameIdFormat' => $ormEntity->nameIdFormat,
+            'supportedNameIdFormats' => $ormEntity->supportedNameIdFormats,
+            'singleLogoutService' => $ormEntity->singleLogoutService,
+            'requestsMustBeSigned' => $ormEntity->requestsMustBeSigned,
+            'manipulation' => $ormEntity->manipulation,
+            'coins' => $ormEntity->getCoins(),
+
+            'requestedAttributes' => $ormEntity->requestedAttributes,
+            'supportUrlEn' => $ormEntity->supportUrlEn,
+            'supportUrlNl' => $ormEntity->supportUrlNl,
+            'supportUrlPt' => $ormEntity->supportUrlPt,
+            'attributeReleasePolicy' => $ormEntity->attributeReleasePolicy,
+            'assertionConsumerServices' => $ormEntity->assertionConsumerServices,
+            'allowedIdpEntityIds' => $ormEntity->allowedIdpEntityIds,
+            'allowAll' => $ormEntity->allowAll,
+            'attributeAggregationRequired' => $ormEntity->isAttributeAggregationRequired(),
+            'allowed' => $ormEntity->isAllowed('entity-id'),
+            'displayName' => $ormEntity->getDisplayName('EN'),
         ];
 
         $this->runServiceProviderAssertions($adapter, $adapter, $assertions);

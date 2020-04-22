@@ -50,6 +50,11 @@ class EngineBlockIdentityProviderInformation extends AbstractIdentityProvider
         return $this->engineBlockConfiguration->getName();
     }
 
+    public function getNamePt(): string
+    {
+        return $this->engineBlockConfiguration->getName();
+    }
+
     public function getDisplayNameNl(): string
     {
         return $this->engineBlockConfiguration->getName();
@@ -60,12 +65,22 @@ class EngineBlockIdentityProviderInformation extends AbstractIdentityProvider
         return $this->engineBlockConfiguration->getName();
     }
 
+    public function getDisplayNamePt(): string
+    {
+        return $this->engineBlockConfiguration->getName();
+    }
+
     public function getDescriptionNl(): string
     {
         return $this->engineBlockConfiguration->getDescription();
     }
 
     public function getDescriptionEn(): string
+    {
+        return $this->engineBlockConfiguration->getDescription();
+    }
+
+    public function getDescriptionPt(): string
     {
         return $this->engineBlockConfiguration->getDescription();
     }
@@ -81,6 +96,11 @@ class EngineBlockIdentityProviderInformation extends AbstractIdentityProvider
     }
 
     public function getOrganizationEn(): ?Organization
+    {
+        return $this->engineBlockConfiguration->getOrganization();
+    }
+
+    public function getOrganizationPt(): ?Organization
     {
         return $this->engineBlockConfiguration->getOrganization();
     }

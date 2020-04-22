@@ -96,26 +96,38 @@ class ServiceProvider extends AbstractRole
     public $supportUrlNl;
 
     /**
+     * @var null|string
+     *
+     * @ORM\Column(name="support_url_pt", type="string", nullable=true)
+     */
+    public $supportUrlPt;
+
+    /**
      * WARNING: Please don't use this entity directly but use the dedicated factory instead.
      * @see \OpenConext\EngineBlock\Factory\Factory\ServiceProviderFactory
      *
      * @param string $entityId
      * @param Organization $organizationEn
      * @param Organization $organizationNl
+     * @param Organization $organizationPt
      * @param Service $singleLogoutService
      * @param bool $additionalLogging
      * @param X509Certificate[] $certificates
      * @param ContactPerson[] $contactPersons
      * @param string $descriptionEn
      * @param string $descriptionNl
+     * @param string $descriptionPt
      * @param bool $disableScoping
      * @param string $displayNameEn
      * @param string $displayNameNl
+     * @param string $displayNamePt
      * @param string $keywordsEn
      * @param string $keywordsNl
+     * @param string $keywordsPt
      * @param Logo $logo
      * @param string $nameEn
      * @param string $nameNl
+     * @param string $namePt
      * @param null $nameIdFormat
      * @param array $supportedNameIdFormats
      * @param bool $requestsMustBeSigned
@@ -138,6 +150,7 @@ class ServiceProvider extends AbstractRole
      * @param AttributeReleasePolicy $attributeReleasePolicy
      * @param string|null $supportUrlEn
      * @param string|null $supportUrlNl
+     * @param string|null $supportUrlPt
      * @param bool|null $stepupAllowNoToken
      * @param bool|null $stepupRequireLoa
      */
@@ -145,20 +158,25 @@ class ServiceProvider extends AbstractRole
         $entityId,
         Organization $organizationEn = null,
         Organization $organizationNl = null,
+        Organization $organizationPt = null,
         Service $singleLogoutService = null,
         $additionalLogging = false,
         array $certificates = array(),
         array $contactPersons = array(),
         $descriptionEn = '',
         $descriptionNl = '',
+        $descriptionPt = '',
         $disableScoping = false,
         $displayNameEn = '',
         $displayNameNl = '',
+        $displayNamePt = '',
         $keywordsEn = '',
         $keywordsNl = '',
+        $keywordsPt = '',
         Logo $logo = null,
         $nameEn = '',
         $nameNl = '',
+        $namePt = '',
         $nameIdFormat = null,
         $supportedNameIdFormats = array(
             Constants::NAMEID_TRANSIENT,
@@ -184,6 +202,7 @@ class ServiceProvider extends AbstractRole
         AttributeReleasePolicy $attributeReleasePolicy = null,
         $supportUrlEn = null,
         $supportUrlNl = null,
+        $supportUrlPt = null,
         $stepupAllowNoToken = null,
         $stepupRequireLoa = null
     ) {
@@ -191,18 +210,23 @@ class ServiceProvider extends AbstractRole
             $entityId,
             $organizationEn,
             $organizationNl,
+            $organizationPt,
             $singleLogoutService,
             $certificates,
             $contactPersons,
             $descriptionEn,
             $descriptionNl,
+            $descriptionPt,
             $displayNameEn,
             $displayNameNl,
+            $displayNamePt,
             $keywordsEn,
             $keywordsNl,
+            $keywordsPt,
             $logo,
             $nameEn,
             $nameNl,
+            $namePt,
             $nameIdFormat,
             $supportedNameIdFormats,
             $requestsMustBeSigned,
@@ -217,6 +241,7 @@ class ServiceProvider extends AbstractRole
         $this->requestedAttributes = $requestedAttributes;
         $this->supportUrlEn = $supportUrlEn;
         $this->supportUrlNl = $supportUrlNl;
+        $this->supportUrlPt = $supportUrlPt;
 
         $this->coins = Coins::createForServiceProvider(
             $isConsentRequired,
@@ -249,15 +274,20 @@ class ServiceProvider extends AbstractRole
         $entity->entityId = $serviceProvider->getEntityId();
         $entity->nameNl = $serviceProvider->getNameNl();
         $entity->nameEn = $serviceProvider->getNameEn();
+        $entity->namePt = $serviceProvider->getNamePt();
         $entity->descriptionNl = $serviceProvider->getDescriptionNl();
         $entity->descriptionEn = $serviceProvider->getDescriptionEn();
+        $entity->descriptionPt = $serviceProvider->getDescriptionPt();
         $entity->displayNameNl = $serviceProvider->getDisplayNameNl();
         $entity->displayNameEn = $serviceProvider->getDisplayNameEn();
+        $entity->displayNamePt = $serviceProvider->getDisplayNamePt();
         $entity->logo = $serviceProvider->getLogo();
         $entity->organizationNl = $serviceProvider->getOrganizationNl();
         $entity->organizationEn = $serviceProvider->getOrganizationEn();
+        $entity->organizationPt = $serviceProvider->getOrganizationPt();
         $entity->keywordsNl = $serviceProvider->getKeywordsNl();
         $entity->keywordsEn = $serviceProvider->getKeywordsEn();
+        $entity->keywordsPt = $serviceProvider->getKeywordsPt();
         $entity->certificates = $serviceProvider->getCertificates();
         $entity->workflowState = $serviceProvider->getWorkflowState();
         $entity->contactPersons = $serviceProvider->getContactPersons();
@@ -274,6 +304,7 @@ class ServiceProvider extends AbstractRole
         $entity->requestedAttributes = $serviceProvider->getRequestedAttributes();
         $entity->supportUrlEn = $serviceProvider->getSupportUrlEn();
         $entity->supportUrlNl = $serviceProvider->getSupportUrlNl();
+        $entity->supportUrlPt = $serviceProvider->getSupportUrlPt();
 
         return $entity;
     }
@@ -315,12 +346,18 @@ class ServiceProvider extends AbstractRole
             if (empty($spName)) {
                 $spName = $this->nameNl;
             }
-        } else {
+        } elseif ($preferredLocale === 'en') {
             $spName = $this->displayNameEn;
             if (empty($spName)) {
                 $spName = $this->nameEn;
             }
+        } elseif ($preferredLocale === 'pt') {
+            $spName = $this->displayNamePt;
+            if (empty($spName)) {
+                $spName = $this->namePt;
+            }
         }
+
         if (empty($spName)) {
             $spName = $this->entityId;
         }

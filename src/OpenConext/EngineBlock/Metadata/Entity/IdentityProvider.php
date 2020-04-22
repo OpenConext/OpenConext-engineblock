@@ -92,20 +92,25 @@ class IdentityProvider extends AbstractRole
      * @param string $entityId
      * @param Organization $organizationEn
      * @param Organization $organizationNl
+     * @param Organization $organizationPt
      * @param Service $singleLogoutService
      * @param bool $additionalLogging
      * @param array $certificates
      * @param array $contactPersons
      * @param string $descriptionEn
      * @param string $descriptionNl
+     * @param string $descriptionPt
      * @param bool $disableScoping
      * @param string $displayNameEn
      * @param string $displayNameNl
+     * @param string $displayNamePt
      * @param string $keywordsEn
      * @param string $keywordsNl
+     * @param string $keywordsPt
      * @param Logo $logo
      * @param string $nameEn
      * @param string $nameNl
+     * @param string $namePt
      * @param null $nameIdFormat
      * @param array $supportedNameIdFormats
      * @param bool $requestsMustBeSigned
@@ -125,20 +130,25 @@ class IdentityProvider extends AbstractRole
         $entityId,
         Organization $organizationEn = null,
         Organization $organizationNl = null,
+        Organization $organizationPt = null,
         Service $singleLogoutService = null,
         $additionalLogging = false,
         array $certificates = array(),
         array $contactPersons = array(),
         $descriptionEn = '',
         $descriptionNl = '',
+        $descriptionPt = '',
         $disableScoping = false,
         $displayNameEn = '',
         $displayNameNl = '',
+        $displayNamePt = '',
         $keywordsEn = '',
         $keywordsNl = '',
+        $keywordsPt = '',
         Logo $logo = null,
         $nameEn = '',
         $nameNl = '',
+        $namePt = '',
         $nameIdFormat = null,
         $supportedNameIdFormats = array(
             Constants::NAMEID_TRANSIENT,
@@ -161,18 +171,23 @@ class IdentityProvider extends AbstractRole
             $entityId,
             $organizationEn,
             $organizationNl,
+            $organizationPt,
             $singleLogoutService,
             $certificates,
             $contactPersons,
             $descriptionEn,
             $descriptionNl,
+            $descriptionPt,
             $displayNameEn,
             $displayNameNl,
+            $displayNamePt,
             $keywordsEn,
             $keywordsNl,
+            $keywordsPt,
             $logo,
             $nameEn,
             $nameNl,
+            $namePt,
             $nameIdFormat,
             $supportedNameIdFormats,
             $requestsMustBeSigned,
@@ -213,9 +228,10 @@ class IdentityProvider extends AbstractRole
         $idpName = '';
         if ($preferredLocale === 'nl') {
             $idpName = $this->nameNl;
-        }
-        if (empty($idpName)) {
+        } elseif ($preferredLocale === 'en') {
             $idpName = $this->nameEn;
+        } elseif ($preferredLocale === 'pt') {
+            $idpName = $this->namePt;
         }
         if (empty($idpName)) {
             $idpName = $this->entityId;

@@ -39,6 +39,15 @@ class IdentityProviderMetadataHelper extends AbstractIdentityProvider
         return $this->entity->getOrganizationNl()->name;
     }
 
+
+    public function getOrganizationNamePt() : string
+    {
+        if (!$this->entity->getOrganizationPt()) {
+            return '';
+        }
+        return $this->entity->getOrganizationPt()->name;
+    }
+
     public function getOrganizationUrlEn() : string
     {
         if (!$this->entity->getOrganizationEn()) {
@@ -53,6 +62,14 @@ class IdentityProviderMetadataHelper extends AbstractIdentityProvider
             return '';
         }
         return $this->entity->getOrganizationNl()->url;
+    }
+
+    public function getOrganizationUrlPt() : string
+    {
+        if (!$this->entity->getOrganizationPt()) {
+            return '';
+        }
+        return $this->entity->getOrganizationPt()->url;
     }
 
     public function getSsoLocation() : string
@@ -80,6 +97,7 @@ class IdentityProviderMetadataHelper extends AbstractIdentityProvider
         $info = [
             $this->entity->getOrganizationEn(),
             $this->entity->getOrganizationNl(),
+            $this->entity->getOrganizationPt(),
         ];
 
         return !empty(array_filter($info));

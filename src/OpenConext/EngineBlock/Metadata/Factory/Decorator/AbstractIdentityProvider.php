@@ -83,6 +83,14 @@ abstract class AbstractIdentityProvider implements IdentityProviderEntityInterfa
     /**
      * @return string
      */
+    public function getNamePt(): string
+    {
+        return $this->entity->getNamePt();
+    }
+
+    /**
+     * @return string
+     */
     public function getDescriptionNl(): string
     {
         return $this->entity->getDescriptionNl();
@@ -99,17 +107,39 @@ abstract class AbstractIdentityProvider implements IdentityProviderEntityInterfa
     /**
      * @return string
      */
+    public function getDescriptionPt(): string
+    {
+        return $this->entity->getDescriptionPt();
+    }
+
+    public function getDisplayNameEn(): string
+    {
+        if (empty($this->entity->getDisplayNameEn())) {
+            return $this->entity->getNameEn();
+        }
+        return $this->entity->getDisplayNameEn();
+    }
+
     public function getDisplayNameNl(): string
     {
+        if (empty($this->entity->getDisplayNameNl())) {
+            if (!empty($this->entity->getNameNl())) {
+                return $this->entity->getNameNl();
+            }
+            return $this->entity->getNameEn();
+        }
         return $this->entity->getDisplayNameNl();
     }
 
-    /**
-     * @return string
-     */
-    public function getDisplayNameEn(): string
+    public function getDisplayNamePt(): string
     {
-        return $this->entity->getDisplayNameEn();
+        if (empty($this->entity->getDisplayNamePt())) {
+            if (!empty($this->entity->getNamePt())) {
+                return $this->entity->getNamePt();
+            }
+            return $this->entity->getNamePt();
+        }
+        return $this->entity->getDisplayNamePt();
     }
 
     /**
@@ -137,6 +167,14 @@ abstract class AbstractIdentityProvider implements IdentityProviderEntityInterfa
     }
 
     /**
+     * @return Organization|null
+     */
+    public function getOrganizationPt(): ?Organization
+    {
+        return $this->entity->getOrganizationPt();
+    }
+
+    /**
      * @return string
      */
     public function getKeywordsNl(): string
@@ -150,6 +188,14 @@ abstract class AbstractIdentityProvider implements IdentityProviderEntityInterfa
     public function getKeywordsEn(): string
     {
         return $this->entity->getKeywordsEn();
+    }
+
+    /**
+     * @return string
+     */
+    public function getKeywordsPt(): string
+    {
+        return $this->entity->getKeywordsPt();
     }
 
     /**

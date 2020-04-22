@@ -39,6 +39,14 @@ class ServiceProviderMetadataHelper extends AbstractServiceProvider
         return $this->entity->getOrganizationNl()->name;
     }
 
+    public function getOrganizationNamePt() : string
+    {
+        if (!$this->entity->getOrganizationPt()) {
+            return '';
+        }
+        return $this->entity->getOrganizationPt()->name;
+    }
+
     public function getOrganizationUrlEn() : string
     {
         if (!$this->entity->getOrganizationEn()) {
@@ -53,6 +61,14 @@ class ServiceProviderMetadataHelper extends AbstractServiceProvider
             return '';
         }
         return $this->entity->getOrganizationNl()->url;
+    }
+
+    public function getOrganizationUrlPt() : string
+    {
+        if (!$this->entity->getOrganizationPt()) {
+            return '';
+        }
+        return $this->entity->getOrganizationPt()->url;
     }
 
     public function getAssertionConsumerService() : IndexedService
@@ -78,8 +94,10 @@ class ServiceProviderMetadataHelper extends AbstractServiceProvider
         $info = [
             $this->entity->getDisplayNameEn(),
             $this->entity->getDisplayNameNl(),
+            $this->entity->getDisplayNamePt(),
             $this->entity->getOrganizationEn(),
             $this->entity->getOrganizationNl(),
+            $this->entity->getOrganizationPt(),
         ];
 
         return !empty(array_filter($info));
@@ -90,6 +108,7 @@ class ServiceProviderMetadataHelper extends AbstractServiceProvider
         $info = [
             $this->entity->getOrganizationEn(),
             $this->entity->getOrganizationNl(),
+            $this->entity->getOrganizationPt(),
         ];
 
         return !empty(array_filter($info));

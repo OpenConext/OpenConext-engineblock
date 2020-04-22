@@ -11,6 +11,9 @@
             <li>
                 <button type="submit" name="lang" value="nl" {% if currentLanguage == 'nl' %} class="selected" {% endif %}>NL</button>
             </li>
+            <li>
+                <button type="submit" name="lang" value="pt" {% if currentLanguage == 'pt' %} class="selected" {% endif %}>PT</button>
+            </li>
         </ul>
     </form>
     {% else %}
@@ -20,6 +23,9 @@
             </li>
             <li>
                 <a{% if currentLanguage == 'nl' %} class="selected"{% endif %} href="{{ queryStringFor('nl')|escape('html_attr') }}">NL</a>
+            </li>
+            <li>
+                <a{% if currentLanguage == 'pt' %} class="selected"{% endif %} href="{{ queryStringFor('pt')|escape('html_attr') }}">PT</a>
             </li>
         </ul>
     {% endif %}

@@ -70,13 +70,17 @@ class EngineblockServiceProviderInformationTest extends AbstractEntityTest
         $overrides = [];
         $overrides['nameNl'] = 'test-suite EngineBlock';
         $overrides['nameEn'] = 'test-suite EngineBlock';
+        $overrides['namePt'] = 'test-suite EngineBlock';
         $overrides['displayNameNl'] = 'test-suite EngineBlock';
         $overrides['displayNameEn'] = 'test-suite EngineBlock';
+        $overrides['displayNamePt'] = 'test-suite EngineBlock';
         $overrides['descriptionNl'] = 'configuredDescription';
         $overrides['descriptionEn'] = 'configuredDescription';
+        $overrides['descriptionPt'] = 'configuredDescription';
         $overrides['logo'] = $logo;
         $overrides['organizationNl'] = $organization;
         $overrides['organizationEn'] = $organization;
+        $overrides['organizationPt'] = $organization;
         $overrides['contactPersons'] = $contactPersons;
 
         $this->runServiceProviderAssertions($adapter, $decorator, $overrides);

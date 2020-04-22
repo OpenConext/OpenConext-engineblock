@@ -53,6 +53,11 @@ interface IdentityProviderEntityInterface
     /**
      * @return string
      */
+    public function getNamePt(): string;
+
+    /**
+     * @return string
+     */
     public function getDescriptionNl(): string;
 
     /**
@@ -63,12 +68,22 @@ interface IdentityProviderEntityInterface
     /**
      * @return string
      */
+    public function getDescriptionPt(): string;
+
+    /**
+     * @return string
+     */
     public function getDisplayNameNl(): string;
 
     /**
      * @return string
      */
     public function getDisplayNameEn(): string;
+
+    /**
+     * @return string
+     */
+    public function getDisplayNamePt(): string;
 
     /**
      * @return Logo|null
@@ -86,6 +101,11 @@ interface IdentityProviderEntityInterface
     public function getOrganizationEn(): ?Organization;
 
     /**
+     * @return Organization|null
+     */
+    public function getOrganizationPt(): ?Organization;
+
+    /**
      * @return string
      */
     public function getKeywordsNl(): string;
@@ -94,6 +114,11 @@ interface IdentityProviderEntityInterface
      * @return string
      */
     public function getKeywordsEn(): string;
+
+    /**
+     * @return string
+     */
+    public function getKeywordsPt(): string;
 
     /**
      * @return X509Certificate[]

@@ -82,6 +82,14 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     /**
      * @return string
      */
+    public function getNamePt(): string
+    {
+        return $this->entity->namePt;
+    }
+
+    /**
+     * @return string
+     */
     public function getDescriptionNl(): string
     {
         return $this->entity->descriptionNl;
@@ -98,6 +106,14 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     /**
      * @return string
      */
+    public function getDescriptionPt(): string
+    {
+        return $this->entity->descriptionPt;
+    }
+
+    /**
+     * @return string
+     */
     public function getDisplayNameNl(): string
     {
         return $this->entity->displayNameNl;
@@ -109,6 +125,14 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     public function getDisplayNameEn(): string
     {
         return $this->entity->displayNameEn;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisplayNamePt(): string
+    {
+        return $this->entity->displayNamePt;
     }
 
     /**
@@ -136,6 +160,14 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     }
 
     /**
+     * @return Organization|null
+     */
+    public function getOrganizationPt(): ?Organization
+    {
+        return $this->entity->organizationPt;
+    }
+
+    /**
      * @return string
      */
     public function getKeywordsNl(): string
@@ -149,6 +181,14 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     public function getKeywordsEn(): string
     {
         return $this->entity->keywordsEn;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKeywordsPt(): string
+    {
+        return $this->entity->keywordsPt;
     }
 
     /**
@@ -277,6 +317,14 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     public function getSupportUrlNl(): ?string
     {
         return $this->entity->supportUrlNl;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSupportUrlPt(): ?string
+    {
+        return $this->entity->supportUrlPt;
     }
 
     /**
