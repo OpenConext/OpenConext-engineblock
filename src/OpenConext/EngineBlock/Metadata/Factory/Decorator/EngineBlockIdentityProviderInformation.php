@@ -40,47 +40,17 @@ class EngineBlockIdentityProviderInformation extends AbstractIdentityProvider
         $this->engineBlockConfiguration = $engineBlockConfiguration;
     }
 
-    public function getNameNl(): string
+    public function getName($locale): string
     {
         return $this->engineBlockConfiguration->getName();
     }
 
-    public function getNameEn(): string
+    public function getDisplayName($locale): string
     {
         return $this->engineBlockConfiguration->getName();
     }
 
-    public function getNamePt(): string
-    {
-        return $this->engineBlockConfiguration->getName();
-    }
-
-    public function getDisplayNameNl(): string
-    {
-        return $this->engineBlockConfiguration->getName();
-    }
-
-    public function getDisplayNameEn(): string
-    {
-        return $this->engineBlockConfiguration->getName();
-    }
-
-    public function getDisplayNamePt(): string
-    {
-        return $this->engineBlockConfiguration->getName();
-    }
-
-    public function getDescriptionNl(): string
-    {
-        return $this->engineBlockConfiguration->getDescription();
-    }
-
-    public function getDescriptionEn(): string
-    {
-        return $this->engineBlockConfiguration->getDescription();
-    }
-
-    public function getDescriptionPt(): string
+    public function getDescription($locale): string
     {
         return $this->engineBlockConfiguration->getDescription();
     }
@@ -90,17 +60,7 @@ class EngineBlockIdentityProviderInformation extends AbstractIdentityProvider
         return $this->engineBlockConfiguration->getLogo();
     }
 
-    public function getOrganizationNl(): ?Organization
-    {
-        return $this->engineBlockConfiguration->getOrganization();
-    }
-
-    public function getOrganizationEn(): ?Organization
-    {
-        return $this->engineBlockConfiguration->getOrganization();
-    }
-
-    public function getOrganizationPt(): ?Organization
+    public function getOrganization($locale): ?Organization
     {
         return $this->engineBlockConfiguration->getOrganization();
     }

@@ -169,11 +169,4 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
 
         $this->assertInstanceOf(IdentityProviderEntityInterface::class, $decorator);
     }
-
-    public function test_create_engineblock_entity_from_entity_properties()
-    {
-        $entity = m::mock(IdentityProvider::class);
-        $decorator = $this->factory->createIdentityProviderEntityFromEntity($entity, 'default');
-        $this->assertInstanceOf(ProxiedIdentityProvider::class, $decorator);
-    }
 }

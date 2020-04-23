@@ -64,75 +64,57 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     }
 
     /**
+     * @param $locale
      * @return string
      */
-    public function getNameNl(): string
+    public function getName($locale): string
     {
-        return $this->entity->nameNl;
+        switch (true) {
+            case ($locale == 'nl'):
+                return $this->entity->nameNl;
+            case ($locale == 'en'):
+                return $this->entity->nameEn;
+            case ($locale == 'pt'):
+                return $this->entity->namePt;
+        }
+
+        return '';
     }
 
     /**
+     * @param $locale
      * @return string
      */
-    public function getNameEn(): string
+    public function getDescription($locale): string
     {
-        return $this->entity->nameEn;
+        switch (true) {
+            case ($locale == 'nl'):
+                return $this->entity->descriptionNl;
+            case ($locale == 'en'):
+                return $this->entity->descriptionEn;
+            case ($locale == 'pt'):
+                return $this->entity->descriptionPt;
+        }
+
+        return '';
     }
 
     /**
+     * @param $locale
      * @return string
      */
-    public function getNamePt(): string
+    public function getDisplayName($locale): string
     {
-        return $this->entity->namePt;
-    }
+        switch (true) {
+            case ($locale == 'nl'):
+                return $this->entity->displayNameNl;
+            case ($locale == 'en'):
+                return $this->entity->displayNameEn;
+            case ($locale == 'pt'):
+                return $this->entity->displayNamePt;
+        }
 
-    /**
-     * @return string
-     */
-    public function getDescriptionNl(): string
-    {
-        return $this->entity->descriptionNl;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescriptionEn(): string
-    {
-        return $this->entity->descriptionEn;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescriptionPt(): string
-    {
-        return $this->entity->descriptionPt;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDisplayNameNl(): string
-    {
-        return $this->entity->displayNameNl;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDisplayNameEn(): string
-    {
-        return $this->entity->displayNameEn;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDisplayNamePt(): string
-    {
-        return $this->entity->displayNamePt;
+        return '';
     }
 
     /**
@@ -144,51 +126,39 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     }
 
     /**
-     * @return Organization|null
+     * @param $locale
+     * @return Organization
      */
-    public function getOrganizationNl(): ?Organization
+    public function getOrganization($locale): ?Organization
     {
-        return $this->entity->organizationNl;
+        switch (true) {
+            case ($locale == 'nl'):
+                return $this->entity->organizationNl;
+            case ($locale == 'en'):
+                return $this->entity->organizationEn;
+            case ($locale == 'pt'):
+                return $this->entity->organizationPt;
+        }
+
+        return null;
     }
 
     /**
-     * @return Organization|null
-     */
-    public function getOrganizationEn(): ?Organization
-    {
-        return $this->entity->organizationEn;
-    }
-
-    /**
-     * @return Organization|null
-     */
-    public function getOrganizationPt(): ?Organization
-    {
-        return $this->entity->organizationPt;
-    }
-
-    /**
+     * @param $locale
      * @return string
      */
-    public function getKeywordsNl(): string
+    public function getKeywords($locale): string
     {
-        return $this->entity->keywordsNl;
-    }
+        switch (true) {
+            case ($locale == 'nl'):
+                return $this->entity->keywordsNl;
+            case ($locale == 'en'):
+                return $this->entity->keywordsEn;
+            case ($locale == 'pt'):
+                return $this->entity->keywordsPt;
+        }
 
-    /**
-     * @return string
-     */
-    public function getKeywordsEn(): string
-    {
-        return $this->entity->keywordsEn;
-    }
-
-    /**
-     * @return string
-     */
-    public function getKeywordsPt(): string
-    {
-        return $this->entity->keywordsPt;
+        return '';
     }
 
     /**
@@ -304,27 +274,21 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     }
 
     /**
+     * @param $locale
      * @return string|null
      */
-    public function getSupportUrlEn(): ?string
+    public function getSupportUrl($locale): ?string
     {
-        return $this->entity->supportUrlEn;
-    }
+        switch (true) {
+            case ($locale == 'nl'):
+                return $this->entity->supportUrlNl;
+            case ($locale == 'en'):
+                return $this->entity->supportUrlEn;
+            case ($locale == 'pt'):
+                return $this->entity->supportUrlPt;
+        }
 
-    /**
-     * @return string|null
-     */
-    public function getSupportUrlNl(): ?string
-    {
-        return $this->entity->supportUrlNl;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getSupportUrlPt(): ?string
-    {
-        return $this->entity->supportUrlPt;
+        return '';
     }
 
     /**
@@ -334,15 +298,6 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     public function isAllowed(string $idpEntityId): bool
     {
         return $this->entity->isAllowed($idpEntityId);
-    }
-
-    /**
-     * @param string $preferredLocale
-     * @return string
-     */
-    public function getDisplayName(string $preferredLocale = ''): string
-    {
-        return $this->entity->getDisplayName($preferredLocale);
     }
 
     /**

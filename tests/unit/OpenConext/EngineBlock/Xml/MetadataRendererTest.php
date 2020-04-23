@@ -37,6 +37,7 @@ use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlock\Metadata\X509\X509PrivateKey;
 use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
+use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
@@ -78,7 +79,11 @@ class MetadataRendererTest extends TestCase
 
         $documentSigner = new DocumentSigner();
 
+        $languages = ['nl', 'en'];
+        $supportedLanguageProvider = new LanguageSupportProvider($languages, $languages);
+
         $this->metadataRenderer = new MetadataRenderer(
+            $supportedLanguageProvider,
             $environment,
             $samlIdGenerator,
             $keyPairFactory,

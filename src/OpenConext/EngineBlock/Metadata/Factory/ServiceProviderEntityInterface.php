@@ -41,49 +41,22 @@ interface ServiceProviderEntityInterface
     public function getEntityId(): string;
 
     /**
+     * @param $locale
      * @return string
      */
-    public function getNameNl(): string;
+    public function getName($locale): string;
 
     /**
+     * @param $locale
      * @return string
      */
-    public function getNameEn(): string;
+    public function getDescription($locale): string;
 
     /**
+     * @param $locale
      * @return string
      */
-    public function getNamePt(): string;
-
-    /**
-     * @return string
-     */
-    public function getDescriptionNl(): string;
-
-    /**
-     * @return string
-     */
-    public function getDescriptionEn(): string;
-
-    /**
-     * @return string
-     */
-    public function getDescriptionPt(): string;
-
-    /**
-     * @return string
-     */
-    public function getDisplayNameNl(): string;
-
-    /**
-     * @return string
-     */
-    public function getDisplayNameEn(): string;
-
-    /**
-     * @return string
-     */
-    public function getDisplayNamePt(): string;
+    public function getDisplayName($locale): string;
 
     /**
      * @return Logo|null
@@ -91,34 +64,16 @@ interface ServiceProviderEntityInterface
     public function getLogo(): ?Logo;
 
     /**
+     * @param $locale
      * @return Organization|null
      */
-    public function getOrganizationNl(): ?Organization;
+    public function getOrganization($locale): ?Organization;
 
     /**
-     * @return Organization|null
-     */
-    public function getOrganizationEn(): ?Organization;
-
-    /**
-     * @return Organization|null
-     */
-    public function getOrganizationPt(): ?Organization;
-
-    /**
+     * @param $locale
      * @return string
      */
-    public function getKeywordsNl(): string;
-
-    /**
-     * @return string
-     */
-    public function getKeywordsEn(): string;
-
-    /**
-     * @return string
-     */
-    public function getKeywordsPt(): string;
+    public function getKeywords($locale): string;
 
     /**
      * @return X509Certificate[]
@@ -191,31 +146,16 @@ interface ServiceProviderEntityInterface
     public function getRequestedAttributes(): ?array;
 
     /**
+     * @param $locale
      * @return string|null
      */
-    public function getSupportUrlEn(): ?string;
-
-    /**
-     * @return string|null
-     */
-    public function getSupportUrlNl(): ?string;
-
-    /**
-     * @return string|null
-     */
-    public function getSupportUrlPt(): ?string;
+    public function getSupportUrl($locale): ?string;
 
     /**
      * @param string $idpEntityId
      * @return bool
      */
     public function isAllowed(string $idpEntityId): bool;
-
-    /**
-     * @param string $preferredLocale
-     * @return string
-     */
-    public function getDisplayName(string $preferredLocale = ''): string;
 
     /**
      * @return bool

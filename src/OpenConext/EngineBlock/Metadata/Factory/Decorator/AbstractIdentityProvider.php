@@ -65,81 +65,30 @@ abstract class AbstractIdentityProvider implements IdentityProviderEntityInterfa
     }
 
     /**
+     * @param $locale
      * @return string
      */
-    public function getNameNl(): string
+    public function getName($locale): string
     {
-        return $this->entity->getNameNl();
+        return $this->entity->getName($locale);
     }
 
     /**
+     * @param $locale
      * @return string
      */
-    public function getNameEn(): string
+    public function getDescription($locale): string
     {
-        return $this->entity->getNameEn();
+        return $this->entity->getDescription($locale);
     }
 
     /**
+     * @param $locale
      * @return string
      */
-    public function getNamePt(): string
+    public function getDisplayName($locale): string
     {
-        return $this->entity->getNamePt();
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescriptionNl(): string
-    {
-        return $this->entity->getDescriptionNl();
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescriptionEn(): string
-    {
-        return $this->entity->getDescriptionEn();
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescriptionPt(): string
-    {
-        return $this->entity->getDescriptionPt();
-    }
-
-    public function getDisplayNameEn(): string
-    {
-        if (empty($this->entity->getDisplayNameEn())) {
-            return $this->entity->getNameEn();
-        }
-        return $this->entity->getDisplayNameEn();
-    }
-
-    public function getDisplayNameNl(): string
-    {
-        if (empty($this->entity->getDisplayNameNl())) {
-            if (!empty($this->entity->getNameNl())) {
-                return $this->entity->getNameNl();
-            }
-            return $this->entity->getNameEn();
-        }
-        return $this->entity->getDisplayNameNl();
-    }
-
-    public function getDisplayNamePt(): string
-    {
-        if (empty($this->entity->getDisplayNamePt())) {
-            if (!empty($this->entity->getNamePt())) {
-                return $this->entity->getNamePt();
-            }
-            return $this->entity->getNamePt();
-        }
-        return $this->entity->getDisplayNamePt();
+        return $this->entity->getDisplayName($locale);
     }
 
     /**
@@ -151,51 +100,21 @@ abstract class AbstractIdentityProvider implements IdentityProviderEntityInterfa
     }
 
     /**
+     * @param $locale
      * @return Organization|null
      */
-    public function getOrganizationNl(): ?Organization
+    public function getOrganization($locale): ?Organization
     {
-        return $this->entity->getOrganizationNl();
+        return $this->entity->getOrganization($locale);
     }
 
     /**
-     * @return Organization|null
-     */
-    public function getOrganizationEn(): ?Organization
-    {
-        return $this->entity->getOrganizationEn();
-    }
-
-    /**
-     * @return Organization|null
-     */
-    public function getOrganizationPt(): ?Organization
-    {
-        return $this->entity->getOrganizationPt();
-    }
-
-    /**
+     * @param $locale
      * @return string
      */
-    public function getKeywordsNl(): string
+    public function getKeywords($locale): string
     {
-        return $this->entity->getKeywordsNl();
-    }
-
-    /**
-     * @return string
-     */
-    public function getKeywordsEn(): string
-    {
-        return $this->entity->getKeywordsEn();
-    }
-
-    /**
-     * @return string
-     */
-    public function getKeywordsPt(): string
-    {
-        return $this->entity->getKeywordsPt();
+        return $this->entity->getKeywords($locale);
     }
 
     /**

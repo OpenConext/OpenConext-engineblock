@@ -19,64 +19,46 @@
 namespace OpenConext\EngineBlock\Metadata\Factory\Helper;
 
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\AbstractIdentityProvider;
+use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Service;
+use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 
 class IdentityProviderMetadataHelper extends AbstractIdentityProvider
 {
-    public function getOrganizationNameEn() : string
-    {
-        if (!$this->entity->getOrganizationEn()) {
-            return '';
-        }
-        return $this->entity->getOrganizationEn()->name;
-    }
+    /**
+     * @var LanguageSupportProvider
+     */
+    private $languageSupportProvider;
 
-    public function getOrganizationNameNl() : string
+    public function __construct(IdentityProviderEntityInterface $entity, LanguageSupportProvider $languageSupportProvider)
     {
-        if (!$this->entity->getOrganizationNl()) {
-            return '';
-        }
-        return $this->entity->getOrganizationNl()->name;
-    }
+        $this->languageSupportProvider = $languageSupportProvider;
 
-
-    public function getOrganizationNamePt() : string
-    {
-        if (!$this->entity->getOrganizationPt()) {
-            return '';
-        }
-        return $this->entity->getOrganizationPt()->name;
-    }
-
-    public function getOrganizationUrlEn() : string
-    {
-        if (!$this->entity->getOrganizationEn()) {
-            return '';
-        }
-        return $this->entity->getOrganizationEn()->url;
-    }
-
-    public function getOrganizationUrlNl() : string
-    {
-        if (!$this->entity->getOrganizationNl()) {
-            return '';
-        }
-        return $this->entity->getOrganizationNl()->url;
-    }
-
-    public function getOrganizationUrlPt() : string
-    {
-        if (!$this->entity->getOrganizationPt()) {
-            return '';
-        }
-        return $this->entity->getOrganizationPt()->url;
+        parent::__construct($entity);
     }
 
     public function getSsoLocation() : string
     {
         /** @var Service $service */
-        $service = reset($this->entity->getSingleSignOnServices());
+        $services = $this->entity->getSingleSignOnServices();
+        $service = reset($services);
         return $service->location;
+    }
+
+    public function getOrganizationName($locale) : string
+    {
+        if (!$this->entity->getOrganization($locale)) {
+            return '';
+        }
+        return $this->entity->getOrganization($locale)->name;
+    }
+
+    public function getOrganizationUrl($locale) : string
+    {
+        if (!$this->entity->getOrganization($locale)) {
+            return '';
+        }
+        return $this->entity->getOrganization($locale)->url;
     }
 
     /**
@@ -94,11 +76,12 @@ class IdentityProviderMetadataHelper extends AbstractIdentityProvider
 
     public function hasOrganizationInfo(): bool
     {
-        $info = [
-            $this->entity->getOrganizationEn(),
-            $this->entity->getOrganizationNl(),
-            $this->entity->getOrganizationPt(),
-        ];
+        $supported = $this->languageSupportProvider->getSupportedLanguages();
+
+        $info = [];
+        foreach ($supported as $locale) {
+            $info[] = $this->getOrganization($locale);
+        }
 
         return !empty(array_filter($info));
     }

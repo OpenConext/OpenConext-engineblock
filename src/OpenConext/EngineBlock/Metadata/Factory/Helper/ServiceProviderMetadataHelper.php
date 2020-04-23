@@ -19,61 +19,44 @@
 namespace OpenConext\EngineBlock\Metadata\Factory\Helper;
 
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\AbstractServiceProvider;
+use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\IndexedService;
+use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 
 class ServiceProviderMetadataHelper extends AbstractServiceProvider
 {
-    public function getOrganizationNameEn() : string
+    /**
+     * @var LanguageSupportProvider
+     */
+    private $languageSupportProvider;
+
+    public function __construct(ServiceProviderEntityInterface $entity, LanguageSupportProvider $languageSupportProvider)
     {
-        if (!$this->entity->getOrganizationEn()) {
-            return '';
-        }
-        return $this->entity->getOrganizationEn()->name;
+        $this->languageSupportProvider = $languageSupportProvider;
+
+        parent::__construct($entity);
     }
 
-    public function getOrganizationNameNl() : string
+    public function getOrganizationName($locale) : string
     {
-        if (!$this->entity->getOrganizationNl()) {
+        if (!$this->entity->getOrganization($locale)) {
             return '';
         }
-        return $this->entity->getOrganizationNl()->name;
+        return $this->entity->getOrganization($locale)->name;
     }
 
-    public function getOrganizationNamePt() : string
+    public function getOrganizationUrl($locale) : string
     {
-        if (!$this->entity->getOrganizationPt()) {
+        if (!$this->entity->getOrganization($locale)) {
             return '';
         }
-        return $this->entity->getOrganizationPt()->name;
-    }
-
-    public function getOrganizationUrlEn() : string
-    {
-        if (!$this->entity->getOrganizationEn()) {
-            return '';
-        }
-        return $this->entity->getOrganizationEn()->url;
-    }
-
-    public function getOrganizationUrlNl() : string
-    {
-        if (!$this->entity->getOrganizationNl()) {
-            return '';
-        }
-        return $this->entity->getOrganizationNl()->url;
-    }
-
-    public function getOrganizationUrlPt() : string
-    {
-        if (!$this->entity->getOrganizationPt()) {
-            return '';
-        }
-        return $this->entity->getOrganizationPt()->url;
+        return $this->entity->getOrganization($locale)->url;
     }
 
     public function getAssertionConsumerService() : IndexedService
     {
-        return reset($this->entity->getAssertionConsumerServices());
+        $services = $this->entity->getAssertionConsumerServices();
+        return reset($services);
     }
 
     /**
@@ -91,25 +74,25 @@ class ServiceProviderMetadataHelper extends AbstractServiceProvider
 
     public function hasUiInfo(): bool
     {
-        $info = [
-            $this->entity->getDisplayNameEn(),
-            $this->entity->getDisplayNameNl(),
-            $this->entity->getDisplayNamePt(),
-            $this->entity->getOrganizationEn(),
-            $this->entity->getOrganizationNl(),
-            $this->entity->getOrganizationPt(),
-        ];
+        $supported = $this->languageSupportProvider->getSupportedLanguages();
+
+        $info = [];
+        foreach ($supported as $locale) {
+            $info[] = $this->getDisplayName($locale);
+            $info[] = $this->getOrganization($locale);
+        }
 
         return !empty(array_filter($info));
     }
 
     public function hasOrganizationInfo(): bool
     {
-        $info = [
-            $this->entity->getOrganizationEn(),
-            $this->entity->getOrganizationNl(),
-            $this->entity->getOrganizationPt(),
-        ];
+        $supported = $this->languageSupportProvider->getSupportedLanguages();
+
+        $info = [];
+        foreach ($supported as $locale) {
+            $info[] = $this->getOrganization($locale);
+        }
 
         return !empty(array_filter($info));
     }

@@ -124,6 +124,7 @@ services:
 
     OpenConext\EngineBlock\Xml\MetadataRenderer:
         arguments:
+            - "@engineblock.language_support_provider"
             - "@twig"
             - "@engineblock.compat.saml2_id_generator"
             - "@OpenConext\\EngineBlock\\Metadata\\X509\\KeyPairFactory"
