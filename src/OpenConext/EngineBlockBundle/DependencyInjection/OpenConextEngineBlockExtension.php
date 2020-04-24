@@ -19,9 +19,6 @@
 namespace OpenConext\EngineBlockBundle\DependencyInjection;
 
 use OpenConext\EngineBlockBundle\Configuration\Feature;
-use OpenConext\EngineBlockBundle\Configuration\IdPContactPage;
-use OpenConext\EngineBlockBundle\Configuration\WikiLink;
-use OpenConext\EngineBlockBundle\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Definition;
@@ -48,7 +45,6 @@ class OpenConextEngineBlockExtension extends Extension
         $this->overwriteDefaultLogger($container);
         $this->setUrlParameterBasedOnEnv($container);
         $this->setFeatureConfiguration($container, $configuration['features']);
-        $this->setErrorFeedbackConfiguration($container, $configuration['error_feedback']);
     }
 
     /**
@@ -90,46 +86,5 @@ class OpenConextEngineBlockExtension extends Extension
 
         $featureConfigurationService = $container->getDefinition('engineblock.features');
         $featureConfigurationService->replaceArgument(0, $features);
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     * @param array $errorFeedbackConfiguration
-     */
-    private function setErrorFeedbackConfiguration(ContainerBuilder $container, array $errorFeedbackConfiguration)
-    {
-        $wikiLinkConfig = $errorFeedbackConfiguration['wiki_links'];
-        $fallbackLink = $wikiLinkConfig['fallback'];
-        $fallbackLanguages = array_keys($fallbackLink);
-
-        $wikiLinks = [];
-        $specifiedLanguages = [];
-        foreach ($wikiLinkConfig['specified'] as $pageIdentifier => $wikiLinkEntries) {
-            $wikiLinks[$pageIdentifier] = new Definition(WikiLink::class, [$wikiLinkEntries, $fallbackLink]);
-            $specifiedLanguages = array_unique(array_merge($specifiedLanguages, array_keys($wikiLinkEntries)));
-        }
-
-        $diff = array_diff($specifiedLanguages, $fallbackLanguages);
-
-        if (!empty($diff)) {
-            throw new RuntimeException(
-                sprintf(
-                    'Please configure fallback links for every language configured in the "specified" section, missing 
-                    languages are: "%s"',
-                    implode(', ', $diff)
-                )
-            );
-        }
-
-        $idpContactConfig = $errorFeedbackConfiguration['idp_contact'];
-        $idpContactPages = [];
-
-        foreach ($idpContactConfig as $idpContactPage) {
-            $idpContactPages[$idpContactPage] = new Definition(IdPContactPage::class, [$idpContactPage]);
-        }
-
-        $featureConfigurationService = $container->getDefinition('engineblock.error_feedback');
-        $featureConfigurationService->replaceArgument(0, $wikiLinks);
-        $featureConfigurationService->replaceArgument(1, $idpContactPages);
     }
 }

@@ -19,51 +19,24 @@
 namespace OpenConext\EngineBlockBundle\Configuration;
 
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use stdClass;
+use Mockery as m;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class ErrorFeedbackConfigurationTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
     /**
-     * @test
-     * @group EngineBlockBundle
-     * @group Configuration
+     * @var TranslatorInterface|m\MockInterface
      */
-    public function all_links_must_be_an_instance_of_wiki_link()
+    private $translator;
+
+    protected function setUp()
     {
-        $wikiLinks = [
-            'no-session-found' => new WikiLink(['a' => 'b'], ['a' => 'https://fallback.uri']),
-            'invalid-response' => new WikiLink(['a' => 'b'], ['a' => 'https://fallback.uri']),
-            'foo' => new stdClass()
-        ];
+        parent::setUp();
 
-        $idpContacts = ['clock-issue' => new IdPContactPage('clock-issue')];
-
-        $this->expectException(InvalidArgumentException::class);
-
-        new ErrorFeedbackConfiguration($wikiLinks, $idpContacts);
-    }
-
-    /**
-     * @test
-     * @group EngineBlockBundle
-     * @group Configuration
-     */
-    public function all_links_must_have_a_string_key()
-    {
-        $wikiLinks = [
-            'no-session-found'  => new WikiLink(['a' => 'b'], ['a' => 'https://fallback.uri']),
-            1 => new WikiLink(['a' => 'b'], ['a' => 'https://fallback.uri']),
-        ];
-
-        $idpContacts = ['clock-issue' => new IdPContactPage('clock-issue')];
-
-        $this->expectException(InvalidArgumentException::class);
-
-        new ErrorFeedbackConfiguration($wikiLinks, $idpContacts);
+        $this->translator = m::mock(TranslatorInterface::class);
     }
 
     /**
@@ -73,14 +46,13 @@ class ErrorFeedbackConfigurationTest extends TestCase
      */
     public function a_link_can_be_queried_for_presence()
     {
-        $wikiLinks = [
-            'no-session-found' => new WikiLink(['a' => 'b'], ['a' => 'https://fallback.uri']),
-            'invalid-response' => new WikiLink(['a' => 'b'], ['a' => 'https://fallback.uri']),
-        ];
+        $this->boostrapWikiTranslations([
+            'no-session-found' => 'https://support/no-session-found',
+            'invalid-response' => 'https://support/invalid-response',
+            'not-configured' => 'error_feedback_wiki_links_not-configured',
+        ]);
 
-        $idpContacts = ['clock-issue' => new IdPContactPage('clock-issue')];
-
-        $errorFeedbackConfiguration = new ErrorFeedbackConfiguration($wikiLinks, $idpContacts);
+        $errorFeedbackConfiguration = new ErrorFeedbackConfiguration($this->translator);
 
         $this->assertTrue($errorFeedbackConfiguration->hasWikiLink('no-session-found'));
         $this->assertTrue($errorFeedbackConfiguration->hasWikiLink('invalid-response'));
@@ -94,15 +66,13 @@ class ErrorFeedbackConfigurationTest extends TestCase
      */
     public function a_link_can_be_retrieved()
     {
-        $wikiLinks = [
-            'no-session-found' => new WikiLink(['a' => 'b'], ['a' => 'https://fallback.uri']),
-        ];
+        $this->boostrapWikiTranslations([
+            'no-session-found' => 'https://support/no-session-found',
+        ]);
 
-        $idpContacts = ['clock-issue' => new IdPContactPage('clock-issue')];
-
-        $errorFeedbackConfiguration = new ErrorFeedbackConfiguration($wikiLinks, $idpContacts);
+        $errorFeedbackConfiguration = new ErrorFeedbackConfiguration($this->translator);
         $noSessionFound = $errorFeedbackConfiguration->getWikiLink('no-session-found');
-        $this->assertInstanceOf(WikiLink::class, $noSessionFound);
+        $this->assertSame('https://support/no-session-found', $noSessionFound);
     }
 
     /**
@@ -110,13 +80,13 @@ class ErrorFeedbackConfigurationTest extends TestCase
      * @group EngineBlockBundle
      * @group Configuration
      */
-    public function an_idp_empty_wiki_link_configuration_can_provided()
+    public function an_idp_empty_wiki_link_configuration_can_be_provided()
     {
-        $wikiLinks = [];
+        $this->boostrapWikiTranslations([
+            'clock-issue' => '',
+        ]);
 
-        $idpContacts = [];
-
-        $errorFeedbackConfiguration = new ErrorFeedbackConfiguration($wikiLinks, $idpContacts);
+        $errorFeedbackConfiguration = new ErrorFeedbackConfiguration($this->translator);
 
         $this->assertFalse($errorFeedbackConfiguration->hasWikiLink('clock-issue'));
     }
@@ -128,17 +98,18 @@ class ErrorFeedbackConfigurationTest extends TestCase
      */
     public function an_idp_contact_page_can_be_tested()
     {
-        $wikiLinks = [
-            'no-session-found' => new WikiLink(['a' => 'b'], ['a' => 'https://fallback.uri']),
-            'invalid-response' => new WikiLink(['a' => 'b'], ['a' => 'https://fallback.uri']),
-        ];
+        $this->boostrapIdpTranslations([
+            'clock-issue' => 'Mail',
+            'no-session-found' => '',
+        ]);
 
-        $idpContacts = ['clock-issue' => new IdPContactPage('clock-issue')];
-
-        $errorFeedbackConfiguration = new ErrorFeedbackConfiguration($wikiLinks, $idpContacts);
+        $errorFeedbackConfiguration = new ErrorFeedbackConfiguration($this->translator);
 
         $this->assertTrue($errorFeedbackConfiguration->isIdPContactPage('clock-issue'));
         $this->assertFalse($errorFeedbackConfiguration->isIdPContactPage('no-session-found'));
+
+        $this->assertSame('Mail', $errorFeedbackConfiguration->getIdpContactShortLabel('clock-issue'));
+        $this->assertSame('', $errorFeedbackConfiguration->getIdpContactShortLabel('no-session-found'));
     }
 
     /**
@@ -148,15 +119,33 @@ class ErrorFeedbackConfigurationTest extends TestCase
      */
     public function an_idp_empty_contact_page_configuration_can_provided()
     {
-        $wikiLinks = [
-            'invalid-response' => new WikiLink(['a' => 'b'], ['a' => 'https://fallback.uri']),
-        ];
+        $this->boostrapIdpTranslations([
+            'clock-issue' => '',
+            'no-session-found' => '',
+        ]);
 
-        $idpContacts = [];
-
-        $errorFeedbackConfiguration = new ErrorFeedbackConfiguration($wikiLinks, $idpContacts);
+        $errorFeedbackConfiguration = new ErrorFeedbackConfiguration($this->translator);
 
         $this->assertFalse($errorFeedbackConfiguration->isIdPContactPage('clock-issue'));
         $this->assertFalse($errorFeedbackConfiguration->isIdPContactPage('no-session-found'));
+    }
+
+    private function boostrapWikiTranslations(array $translations)
+    {
+        foreach ($translations as $key => $value) {
+            $key = 'error_feedback_wiki_links_' . $key;
+            $this->translator->shouldReceive('trans')
+                ->with($key)->andReturn($value);
+        }
+    }
+
+
+    private function boostrapIdpTranslations(array $translations)
+    {
+        foreach ($translations as $key => $value) {
+            $key = 'error_feedback_idp_contact_label_small_' . $key;
+            $this->translator->shouldReceive('trans')
+                ->with($key)->andReturn($value);
+        }
     }
 }

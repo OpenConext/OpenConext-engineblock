@@ -21,20 +21,26 @@ namespace OpenConext\EngineBlockBundle\Configuration;
 interface ErrorFeedbackConfigurationInterface
 {
     /**
-     * @param string $page
+     * @param string $route
      * @return bool
      */
-    public function hasWikiLink($page);
+    public function hasWikiLink($route);
 
     /**
-     * @param string $page
+     * @param string $route
      * @return WikiLink
      */
-    public function getWikiLink($page);
+    public function getWikiLink($route);
 
     /**
-     * @param string $page
+     * @param string $route
      * @return bool
      */
-    public function isIdPContactPage($page);
+    public function isIdPContactPage($route);
+
+    /**
+     * @param string $route
+     * @return mixed
+     */
+    public function getIdpContactShortLabel($route);
 }

@@ -153,8 +153,7 @@ services:
     engineblock.error_feedback:
         class: OpenConext\EngineBlockBundle\Configuration\ErrorFeedbackConfiguration
         arguments:
-            - # The WikiLinks are constructed and injected in the extension based on the config found in parameters.yml
-            - # The IdPContactPage entries are constructed and injected in the extension based on the config found in parameters.yml
+            - "@translator"
 
     engineblock.pdp.pdp_client:
         class: OpenConext\EngineBlockBundle\Pdp\PdpClient

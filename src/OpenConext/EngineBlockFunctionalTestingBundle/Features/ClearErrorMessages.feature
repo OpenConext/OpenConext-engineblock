@@ -299,9 +299,6 @@ Feature:
      And I give my consent
     Then I should see "Error - The Assertion is not yet valid or has expired"
      And I should see ART code "44601"
-      # The Wiki link and IdP support mailto link should be visible on this page.
-     And I should see "OpenConext Wiki"
-     And I should see "support@openconext.org"
 
   Scenario: I log in at my Identity Provider, that has an invalid AuthnContextClassRef attribute.
     Given the IdP "Dummy Idp" sends AuthnContextClassRef with value "invalid-authn-context-class-ref"
