@@ -24,6 +24,7 @@ export class IdpListElementFactory {
 
             const logoElement = document.createElement('img');
             logoElement.className = 'logo';
+            logoElement.setAttribute('loading', 'lazy');
             setLogoAndFallbackUrlOnElement(idpList[i].logo, placeholderImage, logoElement);
 
             const titleElement = document.createElement('h3');
@@ -60,6 +61,7 @@ export class IdpListElementFactory {
             const logoElement = document.createElement('img');
             logoElement.className = 'logo';
             logoElement.setAttribute('alt', '');
+            logoElement.setAttribute('loading', 'lazy');
             setLogoAndFallbackUrlOnElement(idpList[i].logo, placeholderImage, logoElement);
 
             const titleElement = document.createElement('h3');

@@ -71,8 +71,7 @@
                         {% for key, idp in connectedIdps.mergedIdpList %}
                             <a class="result active access" href="#" tabindex="-1">
                                 <div class="logo">
-                                    <img class="logo" src="/images/placeholder.png"
-                                         data-original="{{ idp['logo'] }}"/>
+                                    <img class="logo" loading="lazy" src="{{ idp['logo'] }}">
                                 </div>
                                 <h3>{{ idp['displayTitle'] }}</h3>
                                 <form class="mod-search login" method="post" action="{{ action }}">
