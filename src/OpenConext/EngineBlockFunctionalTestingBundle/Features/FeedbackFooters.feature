@@ -1,5 +1,5 @@
 Feature:
-  In order to present an enduser on an error page with additiotnal info
+  In order to present an end-user on an error page with additional info
   As a user
   I need to see useful footer blocks when something goes wrong
 
