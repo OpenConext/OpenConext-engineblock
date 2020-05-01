@@ -51,6 +51,7 @@ class EngineBlock_Saml2_AuthnRequestFactory
         $sspRequest->setDestination($idpMetadata->singleSignOnServices[0]->location);
         $sspRequest->setForceAuthn($originalRequest->getForceAuthn());
         $sspRequest->setIsPassive($originalRequest->getIsPassive());
+        $sspRequest->setRequestedAuthnContext($originalRequest->getRequestedAuthnContext());
         $sspRequest->setAssertionConsumerServiceURL($server->getUrl($acsServiceName));
         $sspRequest->setProtocolBinding(Constants::BINDING_HTTP_POST);
         $sspRequest->setIssuer($server->getUrl($issuerServiceName));
