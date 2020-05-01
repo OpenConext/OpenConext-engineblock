@@ -1,10 +1,6 @@
 {% import "@themeLayouts/scripts/language-switcher.html.twig" as languageSwitcher %}
 <!DOCTYPE html>
-<!--[if lt IE 7]> <html class="no-js lt-ie10 lt-ie9 lt-ie8 lt-ie7" lang="{{ locale()|escape('html_attr') }}"> <![endif]-->
-<!--[if IE 7]> <html class="no-js ie7 lt-ie10 lt-ie9 lt-ie8" lang="{{ locale()|escape('html_attr') }}"> <![endif]-->
-<!--[if IE 8]> <html class="no-js ie8 lt-ie10 lt-ie9" lang="{{ locale()|escape('html_attr') }}"> <![endif]-->
-<!--[if IE 9]> <html class="no-js ie9 lt-ie10" lang="{{ locale()|escape('html_attr') }}"> <![endif]-->
-<!--[if gt IE 9]> <html class="no-js" lang="{{ locale()|escape('html_attr') }}"> <![endif]-->
+<!--[if IE 10]> <html class="no-js" lang="{{ locale()|escape('html_attr') }}"> <![endif]-->
 <!--[if !IE]><!--> <html class="no-js {{ userAgent('safari')|escape('html_attr') }}" lang="{{ locale()|escape('html_attr') }}"> <!--<![endif]-->
 <head>
     <title>{% block title %}{{ defaultTitle }}{% endblock %}</title>
