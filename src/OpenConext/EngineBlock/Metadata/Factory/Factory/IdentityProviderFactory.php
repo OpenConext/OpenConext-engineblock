@@ -22,6 +22,7 @@ use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProviderInformation;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\ProxiedIdentityProvider;
+use OpenConext\EngineBlock\Metadata\Factory\Helper\IdentityProviderNameFallbackHelper;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
@@ -115,11 +116,13 @@ class IdentityProviderFactory
     {
         // Set IdP specific properties where the IdP is proxied by EngineBlock. So the EB certificate, contact persons
         // and SSO location are overridden
-        return new ProxiedIdentityProvider(
-            new IdentityProviderEntity($entity),
-            $this->engineBlockConfiguration,
-            $this->keyPairFactory->buildFromIdentifier($keyId),
-            $this->urlProvider
+        return new IdentityProviderNameFallbackHelper(
+            new ProxiedIdentityProvider(
+                new IdentityProviderEntity($entity),
+                $this->engineBlockConfiguration,
+                $this->keyPairFactory->buildFromIdentifier($keyId),
+                $this->urlProvider
+            )
         );
     }
 }

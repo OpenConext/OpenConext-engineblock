@@ -38,12 +38,12 @@ final class LocaleProvider
     private $request;
 
     /**
-     * @param string[] $availableLocales
-     * @param string   $defaultLocale
+     * @param LanguageSupportProvider $languageSupportProvider
+     * @param string $defaultLocale
      */
-    public function __construct(array $availableLocales, $defaultLocale)
+    public function __construct(LanguageSupportProvider $languageSupportProvider, $defaultLocale)
     {
-        $this->availableLocales = $availableLocales;
+        $this->availableLocales = $languageSupportProvider->getSupportedLanguages();
         $this->defaultLocale = $defaultLocale;
     }
 

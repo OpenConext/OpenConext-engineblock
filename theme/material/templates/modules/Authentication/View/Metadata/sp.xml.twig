@@ -20,10 +20,12 @@
                                      index="0"></md:AssertionConsumerService>
         {% if metadata.requestedAttributes is not empty %}
             <md:AttributeConsumingService index="0">
-                <md:ServiceName xml:lang="nl">{{ metadata.nameNl }}</md:ServiceName>
-                <md:ServiceName xml:lang="en">{{ metadata.nameEn }}</md:ServiceName>
-                <md:ServiceDescription xml:lang="nl">{{ metadata.descriptionNl }}</md:ServiceDescription>
-                <md:ServiceDescription xml:lang="en">{{ metadata.descriptionEn }}</md:ServiceDescription>
+                {% for locale in locales %}
+                    <md:ServiceName xml:lang="{{ locale }}">{{ metadata.name(locale) }}</md:ServiceName>
+                {% endfor %}
+                {% for locale in locales %}
+                    <md:ServiceDescription xml:lang="{{ locale }}">{{ metadata.description(locale) }}</md:ServiceDescription>
+                {% endfor %}
                 {% for attribute in metadata.requestedAttributes %}
                     <md:RequestedAttribute Name="{{ attribute.name }}" NameFormat="{{ attribute.nameFormat }}" isRequired="{{ attribute.required ? 'true' : 'false' }}"></md:RequestedAttribute>
                 {% endfor %}

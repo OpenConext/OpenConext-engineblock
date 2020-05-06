@@ -1,32 +1,25 @@
 {% macro form(currentLanguage, postData) %}
+
     {% if postData is not empty %}
     <form method="post" action="">
         {% for name, value in postData %}
             <input type="hidden" name="{{ name|escape('html_attr') }}" value="{{ value|escape('html_attr') }}">
         {% endfor %}
         <ul class="comp-language">
+            {% for locale in supportedLocales() %}
             <li>
-                <button type="submit" name="lang" value="en" {% if currentLanguage == 'en' %} class="selected" {% endif %}>EN</button>
+                <button type="submit" name="lang" value="{{ locale }}" {% if currentLanguage == locale %} class="selected" {% endif %}>{{ locale | upper }}</button>
             </li>
-            <li>
-                <button type="submit" name="lang" value="nl" {% if currentLanguage == 'nl' %} class="selected" {% endif %}>NL</button>
-            </li>
-            <li>
-                <button type="submit" name="lang" value="pt" {% if currentLanguage == 'pt' %} class="selected" {% endif %}>PT</button>
-            </li>
+            {%  endfor %}
         </ul>
     </form>
     {% else %}
         <ul class="comp-language">
+            {% for locale in supportedLocales() %}
             <li>
-                <a{% if currentLanguage == 'en' %} class="selected"{% endif %} href="{{ queryStringFor('en')|escape('html_attr') }}">EN</a>
+                <a{% if currentLanguage == locale %} class="selected"{% endif %} href="{{ queryStringFor(locale)|escape('html_attr') }}">{{ locale | upper}}</a>
             </li>
-            <li>
-                <a{% if currentLanguage == 'nl' %} class="selected"{% endif %} href="{{ queryStringFor('nl')|escape('html_attr') }}">NL</a>
-            </li>
-            <li>
-                <a{% if currentLanguage == 'pt' %} class="selected"{% endif %} href="{{ queryStringFor('pt')|escape('html_attr') }}">PT</a>
-            </li>
+            {% endfor %}
         </ul>
     {% endif %}
 {% endmacro form %}

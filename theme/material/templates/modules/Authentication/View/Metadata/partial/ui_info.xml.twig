@@ -1,19 +1,20 @@
 <mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
-    <mdui:DisplayName xml:lang="nl">{{ metadata.displayNameNl }}</mdui:DisplayName>
-    <mdui:DisplayName xml:lang="en">{{ metadata.displayNameEn }}</mdui:DisplayName>
-    {% if metadata.descriptionNl is not empty %}
-    <mdui:Description xml:lang="nl">{{ metadata.descriptionNl }}</mdui:Description>
-    {% endif %}
-    {% if metadata.descriptionEn is not empty %}
-    <mdui:Description xml:lang="en">{{ metadata.descriptionEn }}</mdui:Description>
-    {% endif %}
+    {% for locale in locales %}
+        {% if metadata.displayName(locale) is not empty %}
+            <mdui:DisplayName xml:lang="{{ locale }}">{{ metadata.displayName(locale) }}</mdui:DisplayName>
+        {% endif %}
+    {% endfor %}
+    {% for locale in locales %}
+        {% if metadata.description(locale) is not empty %}
+            <mdui:Description xml:lang="{{ locale }}">{{ metadata.description(locale) }}</mdui:Description>
+        {% endif %}
+    {% endfor %}
     {% if metadata.logo is not null %}
-    <mdui:Logo height="{{ metadata.logo.height }}" width="{{ metadata.logo.width }}">{{ metadata.logo.url }}</mdui:Logo>
+        <mdui:Logo height="{{ metadata.logo.height }}" width="{{ metadata.logo.width }}">{{ metadata.logo.url }}</mdui:Logo>
     {% endif %}
-    {% if metadata.keywordsNl is not empty %}
-        <mdui:Keywords xml:lang="nl">{{ metadata.keywordsNl }}</mdui:Keywords>
-    {% endif %}
-    {% if metadata.keywordsEn is not empty %}
-    <mdui:Keywords xml:lang="en">{{ metadata.keywordsEn }}</mdui:Keywords>
-    {% endif %}
+    {% for locale in locales %}
+        {% if metadata.keywords(locale) is not empty %}
+            <mdui:Keywords xml:lang="{{ locale }}">{{ metadata.keywords(locale) }}</mdui:Keywords>
+        {% endif %}
+    {% endfor %}
 </mdui:UIInfo>

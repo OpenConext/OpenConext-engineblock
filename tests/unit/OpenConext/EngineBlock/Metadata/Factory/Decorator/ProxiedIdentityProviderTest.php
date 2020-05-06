@@ -97,52 +97,6 @@ class ProxiedIdentityProviderTest extends AbstractEntityTest
         $this->runIdentityProviderAssertions($this->adapter, $decorator, $overrides);
     }
 
-    /**
-     * Verification test for display name related requirements stated in:
-     * https://www.pivotaltracker.com/story/show/170401452
-     */
-    public function test_name_fallback()
-    {
-        // If Display Name EN is not set, the decorator will fall back on the Name EN
-        $this->adapter = $this->createIdentityProviderAdapter(['displayNameEn' => '']);
-        $configuration = $this->createConfiguration();
-        $decorator = new ProxiedIdentityProvider(
-            $this->adapter,
-            $configuration,
-            $this->keyPairMock,
-            $this->urlProvider
-        );
-        // Falls back on the name EN when display name is not set (empty)
-        $this->assertEquals($decorator->getNameEn(), $decorator->getDisplayNameEn());
-
-        // If Display Name NL is not set, the decorator will fall back on the Name NL
-        $this->adapter = $this->createIdentityProviderAdapter(['displayNameNl' => '']);
-        $configuration = $this->createConfiguration();
-        $decorator = new ProxiedIdentityProvider(
-            $this->adapter,
-            $configuration,
-            $this->keyPairMock,
-            $this->urlProvider
-        );
-        // Falls back on the name NL when display name is not set (empty)
-        $this->assertEquals($decorator->getNameNl(), $decorator->getDisplayNameNl());
-
-        // If Display Name NL is not set, the decorator will fall back on the Name NL
-        $this->adapter = $this->createIdentityProviderAdapter([
-            'displayNameNl' => '',
-            'nameNl' => '',
-        ]);
-        $configuration = $this->createConfiguration();
-        $decorator = new ProxiedIdentityProvider(
-            $this->adapter,
-            $configuration,
-            $this->keyPairMock,
-            $this->urlProvider
-        );
-        // Falls back on the name EN when display name and name NL are not set (empty)
-        $this->assertEquals($decorator->getNameEn(), $decorator->getDisplayNameNl());
-    }
-
     private function createConfiguration(): EngineBlockConfiguration
     {
         $translator = $this->createMock(TranslatorInterface::class);

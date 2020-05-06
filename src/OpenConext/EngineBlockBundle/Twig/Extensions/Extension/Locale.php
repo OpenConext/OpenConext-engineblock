@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
+use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\TwigFunction;
@@ -38,11 +39,16 @@ class Locale extends Twig_Extension
      * @var null|Request
      */
     private $request;
+    /**
+     * @var LanguageSupportProvider
+     */
+    private $languageSupportProvider;
 
-    public function __construct(RequestStack $requestStack, $defaultLocale)
+    public function __construct(RequestStack $requestStack, LanguageSupportProvider $languageSupportProvider, $defaultLocale)
     {
         $this->request = $requestStack->getCurrentRequest();
         $this->locale = $this->retrieveLocale($requestStack, $defaultLocale);
+        $this->languageSupportProvider = $languageSupportProvider;
     }
 
     public function getFunctions()
@@ -50,7 +56,9 @@ class Locale extends Twig_Extension
         return [
             new TwigFunction('locale', [$this, 'getLocale']),
             new TwigFunction('postData', [$this, 'getPostData']),
-            new TwigFunction('queryStringFor', [$this, 'getQueryStringFor'])
+            new TwigFunction('queryStringFor', [$this, 'getQueryStringFor']),
+            new TwigFunction('supportedLocales', [$this, 'getSupportedLocales']),
+
         ];
     }
 
@@ -89,6 +97,11 @@ class Locale extends Twig_Extension
     public function getLocale()
     {
         return $this->locale;
+    }
+
+    public function getSupportedLocales()
+    {
+        return $this->languageSupportProvider->getSupportedLanguages();
     }
 
     private function retrieveLocale(RequestStack $requestStack, $defaultLocale)

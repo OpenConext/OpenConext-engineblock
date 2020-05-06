@@ -19,7 +19,7 @@ describe(
             expect(idps).toHaveLength(5);
 
             // Verify the IdP is set with a title
-            expect(idps[2]).toEqual('Connected IdP 3');
+            expect(idps[2]).toEqual('Connected IdP 3 en');
 
             // Test the search option by filtering on IdP 4, should yield one search result
             await page.type('.mod-search-input', 'IdP 4');
@@ -31,7 +31,7 @@ describe(
             // After filtering the search results, verify one result is visible
             idps = await page.evaluate(() => [...document.querySelectorAll('#idp-picker h3')].map(elem => elem.innerText));
             expect(idps).toHaveLength(1);
-            expect(idps[0]).toEqual('Connected IdP 4');
+            expect(idps[0]).toEqual('Connected IdP 4 en');
 
             const text = await page.evaluate(() => document.body.textContent);
 

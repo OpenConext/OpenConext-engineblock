@@ -23,16 +23,29 @@ use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
+use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 
 class EngineBlockIdentityProviderMetadataTest extends AbstractEntityTest
 {
     use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+    /**
+     * @var LanguageSupportProvider
+     */
+    private $languageProvider;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $languages = ['en','nl','pt'];
+        $this->languageProvider = new LanguageSupportProvider($languages, $languages);
+    }
 
     public function test_abstract_methods()
     {
         $adapter = $this->createIdentityProviderAdapter();
 
-        $decorator = new IdentityProviderMetadataHelper($adapter);
+        $decorator = new IdentityProviderMetadataHelper($adapter, $this->languageProvider);
 
         $this->runIdentityProviderAssertions($adapter, $decorator);
     }
@@ -58,9 +71,9 @@ class EngineBlockIdentityProviderMetadataTest extends AbstractEntityTest
 
         $adapter = Mockery::mock(IdentityProviderEntity::class);
 
-        $adapter->shouldReceive('getOrganizationEn')->andReturn($organizationEn);
-        $adapter->shouldReceive('getOrganizationNl')->andReturn($organizationNl);
-        $adapter->shouldReceive('getOrganizationPt')->andReturn($organizationPt);
+        $adapter->shouldReceive('getOrganization')->with('en')->andReturn($organizationEn);
+        $adapter->shouldReceive('getOrganization')->with('nl')->andReturn($organizationNl);
+        $adapter->shouldReceive('getOrganization')->with('pt')->andReturn($organizationPt);
         $adapter->shouldReceive('getSingleSignOnServices')->andReturn([
             new Service('location1', 'binding1'),
             new Service('location2', 'binding2'),
@@ -70,14 +83,14 @@ class EngineBlockIdentityProviderMetadataTest extends AbstractEntityTest
             $cert1, $cert2,
         ]);
 
-        $decorator = new IdentityProviderMetadataHelper($adapter);
+        $decorator = new IdentityProviderMetadataHelper($adapter, $this->languageProvider);
 
-        $this->assertEquals('metadata-organization-name-en', $decorator->getOrganizationNameEn());
-        $this->assertEquals('metadata-organization-name-nl', $decorator->getOrganizationNameNl());
-        $this->assertEquals('metadata-organization-name-pt', $decorator->getOrganizationNamePt());
-        $this->assertEquals('metadata-organization-url-en', $decorator->getOrganizationUrlEn());
-        $this->assertEquals('metadata-organization-url-nl', $decorator->getOrganizationUrlNl());
-        $this->assertEquals('metadata-organization-url-pt', $decorator->getOrganizationUrlPt());
+        $this->assertEquals('metadata-organization-name-en', $decorator->getOrganizationName('en'));
+        $this->assertEquals('metadata-organization-name-nl', $decorator->getOrganizationName('nl'));
+        $this->assertEquals('metadata-organization-name-pt', $decorator->getOrganizationName('pt'));
+        $this->assertEquals('metadata-organization-url-en', $decorator->getOrganizationUrl('en'));
+        $this->assertEquals('metadata-organization-url-nl', $decorator->getOrganizationUrl('nl'));
+        $this->assertEquals('metadata-organization-url-pt', $decorator->getOrganizationUrl('pt'));
         $this->assertEquals('location1', $decorator->getSsoLocation());
         $this->assertEquals(true, $decorator->hasOrganizationInfo());
         $this->assertEquals(['pem1-abc' => 'pem1-abc', 'pem2-abc' => 'pem2-abc'], $decorator->getPublicKeys());

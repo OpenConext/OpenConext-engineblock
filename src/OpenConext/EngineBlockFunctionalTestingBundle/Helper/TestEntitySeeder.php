@@ -51,14 +51,14 @@ class TestEntitySeeder
 
         for ($i=1; $i < (int) ($numberOfIdps - $numberOfUnconnectedIdps) + 1; $i++) {
             $entityId = sprintf("https://example.com/entityId/%d", $i);
-            $name = sprintf("%s IdP %d", 'Connected', $i);
+            $name = sprintf("%s IdP %d %s", 'Connected', $i, $locale);
             $idps[$entityId] = ['name' => $name, 'enabled' => true];
         }
 
         if ($numberOfUnconnectedIdps > 0) {
             for ($i=1; $i < (int) $numberOfUnconnectedIdps + 1; $i++) {
                 $entityId = sprintf("https://unconnected.example.com/entityId/%d", $i);
-                $name = sprintf("%s IdP %d", 'Disconnected', $i);
+                $name = sprintf("%s IdP %d %s", 'Disconnected', $i, $locale);
                 $idps[$entityId] = ['name' => $name, 'enabled' => false];
             }
         }
@@ -80,6 +80,7 @@ class TestEntitySeeder
             $wayfIdp = array(
                 'Name_nl' => $identityProvider->nameNl,
                 'Name_en' => $identityProvider->nameEn,
+                'Name_pt' => $identityProvider->namePt,
                 'Logo' => $identityProvider->logo ? $identityProvider->logo->url : '/images/placeholder.png',
                 'Keywords' => $identityProvider->keywordsEn,
                 'Access' => ($identityProvider->enabledInWayf) ? '1' : '0',
@@ -107,6 +108,7 @@ class TestEntitySeeder
             $idp->logo = new Logo('/images/logo.png');
             $idp->nameEn = $idpData['name'];
             $idp->nameNl = $idpData['name'];
+            $idp->namePt = $idpData['name'];
             $idp->keywordsEn = ['Awesome IdP', 'Another keyword', 'Example'];
             $idp->enabledInWayf = $idpData['enabled'];
 
@@ -123,10 +125,12 @@ class TestEntitySeeder
     public static function buildSp()
     {
         $serviceProvider = new ServiceProvider('https://acme-sp.example.com');
-        $serviceProvider->nameNl = 'DisplayName';
-        $serviceProvider->nameEn = 'DisplayName';
+        $serviceProvider->nameNl = 'DisplayName NL';
+        $serviceProvider->nameEn = 'DisplayName EN';
+        $serviceProvider->namePt = 'DisplayName PT';
         $serviceProvider->displayNameNl = 'DisplayName';
         $serviceProvider->displayNameEn = 'DisplayName';
+        $serviceProvider->displayNamePt = 'DisplayName';
         $serviceProvider->logo = new Logo('/images/logo.png');
         return $serviceProvider;
     }
@@ -138,10 +142,12 @@ class TestEntitySeeder
     public static function buildIdP()
     {
         $identityProvider = new IdentityProvider('https://acme-idp.example.com');
-        $identityProvider->nameNl = 'DisplayName';
-        $identityProvider->nameEn = 'DisplayName';
-        $identityProvider->displayNameNl = 'DisplayName';
-        $identityProvider->displayNameEn = 'DisplayName';
+        $identityProvider->nameNl = 'DisplayName NL';
+        $identityProvider->nameEn = 'DisplayName EN';
+        $identityProvider->namePt = 'DisplayName PT';
+        $identityProvider->displayNameNl = 'DisplayName NL';
+        $identityProvider->displayNameEn = 'DisplayName EN';
+        $identityProvider->displayNamePt = 'DisplayName PT';
         $identityProvider->logo = new Logo('/images/logo.png');
         return $identityProvider;
     }

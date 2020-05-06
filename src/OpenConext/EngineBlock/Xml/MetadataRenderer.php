@@ -27,6 +27,7 @@ use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
+use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 use Twig\Environment;
 
 class MetadataRenderer
@@ -71,8 +72,13 @@ class MetadataRenderer
      * @var TimeProvider
      */
     private $timeProvider;
+    /**
+     * @var LanguageSupportProvider
+     */
+    private $languageSupportProvider;
 
     public function __construct(
+        LanguageSupportProvider $languageSupportProvider,
         Environment $twig,
         EngineBlock_Saml2_IdGenerator $samlIdGenerator,
         KeyPairFactory $keyPairFactory,
@@ -80,6 +86,7 @@ class MetadataRenderer
         TimeProvider $timeProvider,
         string $termsOfUse
     ) {
+        $this->languageSupportProvider = $languageSupportProvider;
         $this->twig = $twig;
         $this->samlIdGenerator = $samlIdGenerator;
         $this->keyPairFactory = $keyPairFactory;
@@ -124,13 +131,14 @@ class MetadataRenderer
 
     private function renderMetadataXmlServiceProvider(ServiceProviderEntityInterface $sp, string $template) : string
     {
-        $metadata = new ServiceProviderMetadataHelper($sp);
+        $metadata = new ServiceProviderMetadataHelper($sp, $this->languageSupportProvider);
 
         $params = [
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
             'validUntil' => $this->getValidUntil(),
             'metadata' => $metadata,
             'termsOfUse' => $this->termsOfUse,
+            'locales' => $this->languageSupportProvider->getSupportedLanguages(),
         ];
 
         return $this->twig->render($template, $params);
@@ -138,13 +146,14 @@ class MetadataRenderer
 
     private function renderMetadataXmlIdentityProvider(IdentityProviderEntityInterface $idp, string $template) : string
     {
-        $metadata = new IdentityProviderMetadataHelper($idp);
+        $metadata = new IdentityProviderMetadataHelper($idp, $this->languageSupportProvider);
 
         $params = [
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
             'validUntil' => $this->getValidUntil(),
             'metadata' => $metadata,
             'termsOfUse' => $this->termsOfUse,
+            'locales' => $this->languageSupportProvider->getSupportedLanguages(),
         ];
 
         return $this->twig->render($template, $params);
@@ -154,7 +163,7 @@ class MetadataRenderer
     {
         $metadataCollection = new IdentityProviderEntityCollection();
         foreach ($idpCollection as $idp) {
-            $metadataCollection->add(new IdentityProviderMetadataHelper($idp));
+            $metadataCollection->add(new IdentityProviderMetadataHelper($idp, $this->languageSupportProvider));
         }
 
         $params = [
@@ -162,6 +171,7 @@ class MetadataRenderer
             'validUntil' => $this->getValidUntil(),
             'metadataCollection' => $metadataCollection,
             'termsOfUse' => $this->termsOfUse,
+            'locales' => $this->languageSupportProvider->getSupportedLanguages(),
         ];
 
         return $this->twig->render($template, $params);
