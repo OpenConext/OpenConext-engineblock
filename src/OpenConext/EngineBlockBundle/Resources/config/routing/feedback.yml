@@ -88,11 +88,6 @@ authentication_feedback_verification_failed:
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:receivedInvalidResponseAction }
 
-authentication_feedback_no_consent:
-    path:       '/authentication/feedback/no-consent'
-    methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:noConsentAction }
-
 authentication_feedback_unknown_service:
     path:       '/authentication/feedback/unknown-service'
     methods:    [GET]

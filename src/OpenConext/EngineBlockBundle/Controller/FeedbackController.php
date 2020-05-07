@@ -353,15 +353,6 @@ class FeedbackController
      * @return Response
      * @throws \EngineBlock_Exception
      */
-    public function noConsentAction()
-    {
-        return new Response($this->twig->render('@theme/Authentication/View/Feedback/no-consent.html.twig'));
-    }
-
-    /**
-     * @return Response
-     * @throws \EngineBlock_Exception
-     */
     public function unknownServiceAction()
     {
         return new Response(

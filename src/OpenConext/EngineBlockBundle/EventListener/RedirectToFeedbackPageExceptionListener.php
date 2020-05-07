@@ -25,7 +25,6 @@ use EngineBlock_Corto_Exception_InvalidAcsLocation;
 use EngineBlock_Corto_Exception_InvalidStepupCalloutResponse;
 use EngineBlock_Corto_Exception_InvalidStepupLoaLevel;
 use EngineBlock_Corto_Exception_MissingRequiredFields;
-use EngineBlock_Corto_Exception_NoConsentProvided;
 use EngineBlock_Corto_Exception_PEPNoAccess;
 use EngineBlock_Corto_Exception_ReceivedErrorStatusCode;
 use EngineBlock_Corto_Exception_UnknownIssuer;
@@ -158,9 +157,6 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof EngineBlock_Corto_Module_Bindings_VerificationException) {
             $message         = 'Unable to verify message';
             $redirectToRoute = 'authentication_feedback_verification_failed';
-        } elseif ($exception instanceof EngineBlock_Corto_Exception_NoConsentProvided) {
-            $message         = 'No Consent Provided';
-            $redirectToRoute = 'authentication_feedback_no_consent';
         } elseif ($exception instanceof EngineBlock_Exception_UnknownServiceProvider) {
             $message         = 'Encountered unknown RequesterID for the Service Provider (transparant proxying)';
             $redirectToRoute = 'authentication_feedback_unknown_service';

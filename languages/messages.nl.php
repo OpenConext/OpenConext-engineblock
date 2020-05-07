@@ -169,13 +169,6 @@ TXT
     'error_405'                         => 'HTTP methode is niet toegestaan',
     'error_405_desc'                    => 'De HTTP-methode "%requestMethod%" is niet toegestaan ​​voor locatie "%uri%". Ondersteunde methodes zijn: %allowedMethods%.',
     'error_help_desc'                   => '<p></p>',
-    'error_no_consent'                  => 'Niet mogelijk om verder te gaan naar dienst',
-    'error_no_consent_desc'             => 'Deze applicatie kan enkel worden gebruikt wanneer de vermelde informatie wordt gedeeld.<br /><br />
-
-Als je deze applicatie wilt gebruiken moet je:<br />
-<ul><li>de browser herstarten</li>
-<li>opnieuw inloggen</li>
-<li>jouw informatie delen</li></ul>',
     'error_no_idps'                     => 'Error - Geen %organisationNounPlural% gevonden',
     'error_no_idps_desc'                => 'Inloggen op de dienst via %suiteName% is onmogelijk. De dienst is niet gekoppeld met een %organizationNoun%.',
     'error_session_lost'                => 'Fout - Sessie is verloren gegaan',
@@ -302,7 +295,6 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
     'error_feedback_wiki_links_authentication_feedback_received_error_status_code' => '',
     'error_feedback_wiki_links_authentication_feedback_signature_verification_failed' => 'https://support.surfconext.nl/help-bindings',
     'error_feedback_wiki_links_authentication_feedback_verification_failed' => 'https://support.surfconext.nl/help-prepare-idp',
-    'error_feedback_wiki_links_authentication_feedback_no_consent' => '',
     'error_feedback_wiki_links_authentication_feedback_unknown_service' => '',
     'error_feedback_wiki_links_authentication_feedback_pep_violation' => 'https://support.surfconext.nl/help-pep-nl',
     'error_feedback_wiki_links_authentication_feedback_unknown_preselected_idp' => 'https://support.surfconext.nl/help-no-connection-nl',
@@ -333,7 +325,6 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
     'error_feedback_idp_contact_label_small_authentication_feedback_received_error_status_code' => '',
     'error_feedback_idp_contact_label_small_authentication_feedback_signature_verification_failed' => 'Mail',
     'error_feedback_idp_contact_label_small_authentication_feedback_verification_failed' => 'Mail',
-    'error_feedback_idp_contact_label_small_authentication_feedback_no_consent' => '',
     'error_feedback_idp_contact_label_small_authentication_feedback_unknown_service' => '',
     'error_feedback_idp_contact_label_small_authentication_feedback_pep_violation' => 'Mail',
     'error_feedback_idp_contact_label_small_authentication_feedback_unknown_preselected_idp' => 'Mail',

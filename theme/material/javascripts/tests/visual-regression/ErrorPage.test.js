@@ -35,9 +35,6 @@ const pageTests = [
         'received-invalid-response',
         'https://engine.vm.openconext.org/functional-testing/feedback?template=received-invalid-response&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata", "serviceProviderName": "OpenConext Drop Supplies SP","identityProvider":"https://current-idp.entity-id.org/metadata"}'
     ],[
-        'no-consent',
-        'https://engine.vm.openconext.org/functional-testing/feedback?template=no-consent&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata", "serviceProviderName": "OpenConext Drop Supplies SP","identityProvider":"https://current-idp.entity-id.org/metadata"}'
-    ],[
         'unknown-service',
         'https://engine.vm.openconext.org/functional-testing/feedback?template=unknown-service'
     ],[

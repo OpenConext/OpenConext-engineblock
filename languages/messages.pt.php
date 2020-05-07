@@ -152,12 +152,6 @@ TXT
     'error_405'                         => 'Método HTTP não permitido',
     'error_405_desc'                    => 'O método HTTP "%requestMethod%" não é permitido para o endereço "%uri%". Os métodos suportados são: %allowedMethods%.',
     'error_help_desc'               => '<p></p>',
-    'error_no_consent'              => 'Não é possivel continua para o serviço',
-    'error_no_consent_desc'         => 'Esta aplicação só pode ser utilizada quando a informação mencionada for partilhada.<br /><br />
-Se pretende utilizar esta aplicação devem:<br />
-<ul><li>reinicie o seu browser</li>
-<li>faça a autenticação de novo</li>
-<li>partilhe a sua informação</li></ul>',
     'error_no_idps'                 => 'Erro - Não foi encontrado nenhum Fornecedor de Identidade',
     'error_no_idps_desc'            => '<p>
 O serviço (&lsquo;Service Provider&rsquo;) a que pretende ligar-se não está acessível através da %suiteName%.<br /><br />
@@ -293,7 +287,6 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_feedback_wiki_links_authentication_feedback_received_error_status_code' => '',
     'error_feedback_wiki_links_authentication_feedback_signature_verification_failed' => '',
     'error_feedback_wiki_links_authentication_feedback_verification_failed' => '',
-    'error_feedback_wiki_links_authentication_feedback_no_consent' => '',
     'error_feedback_wiki_links_authentication_feedback_unknown_service' => '',
     'error_feedback_wiki_links_authentication_feedback_pep_violation' => '',
     'error_feedback_wiki_links_authentication_feedback_unknown_preselected_idp' => '',
@@ -324,7 +317,6 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_feedback_idp_contact_label_small_authentication_feedback_received_error_status_code' => '',
     'error_feedback_idp_contact_label_small_authentication_feedback_signature_verification_failed' => 'Mail',
     'error_feedback_idp_contact_label_small_authentication_feedback_verification_failed' => 'Mail',
-    'error_feedback_idp_contact_label_small_authentication_feedback_no_consent' => '',
     'error_feedback_idp_contact_label_small_authentication_feedback_unknown_service' => '',
     'error_feedback_idp_contact_label_small_authentication_feedback_pep_violation' => 'Mail',
     'error_feedback_idp_contact_label_small_authentication_feedback_unknown_preselected_idp' => 'Mail',
