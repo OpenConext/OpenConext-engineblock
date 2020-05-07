@@ -221,6 +221,17 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^SP "([^"]*)" requires a RequesterId$/
+     */
+    public function spRequiresARequesterId($spName)
+    {
+        $this->serviceRegistryFixture->setSpEntityRequesterIdRequired(
+            $this->mockSpRegistry->get($spName)->entityid()
+        );
+        $this->serviceRegistryFixture->save();
+    }
+
+    /**
      * @Given /^SP "([^"]*)" is not connected to IdP "([^"]*)"$/
      */
     public function disconnectSpToIdp($spName, $idpName)

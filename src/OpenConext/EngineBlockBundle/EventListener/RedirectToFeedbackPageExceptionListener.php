@@ -27,7 +27,6 @@ use EngineBlock_Corto_Exception_InvalidStepupLoaLevel;
 use EngineBlock_Corto_Exception_MissingRequiredFields;
 use EngineBlock_Corto_Exception_PEPNoAccess;
 use EngineBlock_Corto_Exception_ReceivedErrorStatusCode;
-use EngineBlock_Corto_Exception_UnknownIssuer;
 use EngineBlock_Corto_Exception_UnknownPreselectedIdp;
 use EngineBlock_Corto_Exception_InvalidAttributeValue;
 use EngineBlock_Corto_Exception_UserCancelledStepupCallout;
@@ -40,6 +39,8 @@ use EngineBlock_Corto_Module_Bindings_VerificationException;
 use EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException;
 use EngineBlock_Corto_Module_Services_SessionLostException;
 use EngineBlock_Corto_Module_Services_SessionNotStartedException;
+use EngineBlock_Exception_UnknownRequesterIdInAuthnRequest;
+use EngineBlock_Exception_UnknownIdentityProvider;
 use EngineBlock_Exception_UnknownServiceProvider;
 use OpenConext\EngineBlock\Exception\InvalidBindingException;
 use OpenConext\EngineBlock\Exception\InvalidRequestMethodException;
@@ -111,14 +112,6 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof EngineBlock_Corto_Module_Services_SessionNotStartedException) {
             $message         = 'Session not started';
             $redirectToRoute = 'authentication_feedback_session_not_started';
-        } elseif ($exception instanceof EngineBlock_Corto_Exception_UnknownIssuer) {
-            $message         = 'Unknown Issuer';
-            $redirectToRoute = 'authentication_feedback_unknown_issuer';
-
-            $redirectParams  = [
-                'entity-id'   => $exception->getEntityId(),
-                'destination' => $exception->getDestination()
-            ];
         } elseif ($exception instanceof EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException) {
             $message         = 'No Identity Provider';
             $redirectToRoute = 'authentication_feedback_no_idps';
@@ -158,8 +151,24 @@ class RedirectToFeedbackPageExceptionListener
             $message         = 'Unable to verify message';
             $redirectToRoute = 'authentication_feedback_verification_failed';
         } elseif ($exception instanceof EngineBlock_Exception_UnknownServiceProvider) {
+            $message         = 'Unknown Service Provider';
+            $redirectToRoute = 'authentication_feedback_unknown_service_provider';
+
+            $redirectParams  = [
+                'entity-id'   => $exception->getEntityId(),
+                'destination' => $exception->getDestination()
+            ];
+        } elseif ($exception instanceof EngineBlock_Exception_UnknownIdentityProvider) {
+            $message         = 'Unknown Identity Provider';
+            $redirectToRoute = 'authentication_feedback_unknown_identity_provider';
+
+            $redirectParams  = [
+                'entity-id'   => $exception->getEntityId(),
+                'destination' => $exception->getDestination()
+            ];
+        } elseif ($exception instanceof EngineBlock_Exception_UnknownRequesterIdInAuthnRequest) {
             $message         = 'Encountered unknown RequesterID for the Service Provider (transparant proxying)';
-            $redirectToRoute = 'authentication_feedback_unknown_service';
+            $redirectToRoute = 'authentication_feedback_unknown_requesterid_in_authnrequest';
         } elseif ($exception instanceof EngineBlock_Corto_Exception_PEPNoAccess) {
             $message         = 'PEP authorization rule violation';
             $redirectToRoute = 'authentication_feedback_pep_violation';

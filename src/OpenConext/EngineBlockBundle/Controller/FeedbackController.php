@@ -102,24 +102,6 @@ class FeedbackController
     }
 
     /**
-     * @param Request $request
-     * @return Response
-     * @throws \EngineBlock_Exception
-     */
-    public function unknownIssuerAction(Request $request)
-    {
-        // Add feedback info from url
-        $customFeedbackInfo['EntityID'] = $request->get('entity-id');
-        $customFeedbackInfo['Destination'] = $request->get('destination');
-
-        $this->setFeedbackInformationOnSession($request->getSession(), $customFeedbackInfo);
-
-        $body = $this->twig->render('@theme/Authentication/View/Feedback/unknown-issuer.html.twig');
-
-        return new Response($body, 404);
-    }
-
-    /**
      * @return Response
      * @throws \EngineBlock_Exception
      */
@@ -197,6 +179,24 @@ class FeedbackController
         );
 
         return new Response($body, 400);
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
+    public function unknownIdentityProviderAction(Request $request)
+    {
+        // Add feedback info from url
+        $customFeedbackInfo['EntityID'] = $request->get('entity-id');
+        $customFeedbackInfo['Destination'] = $request->get('destination');
+
+        $this->setFeedbackInformationOnSession($request->getSession(), $customFeedbackInfo);
+
+        $body = $this->twig->render('@theme/Authentication/View/Feedback/unknown-identity-provider.html.twig');
+
+        return new Response($body, 404);
     }
 
     /**
@@ -353,10 +353,10 @@ class FeedbackController
      * @return Response
      * @throws \EngineBlock_Exception
      */
-    public function unknownServiceAction()
+    public function unknownRequesterIdInAuthnRequestAction()
     {
         return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/unknown-service.html.twig'),
+            $this->twig->render('@theme/Authentication/View/Feedback/unknown-requesterid-in-authnrequest.html.twig'),
             400
         );
     }

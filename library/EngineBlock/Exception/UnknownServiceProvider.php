@@ -16,31 +16,25 @@
  * limitations under the License.
  */
 
-use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-
-class EngineBlock_Exception_UnknownServiceProvider extends \Exception
+class EngineBlock_Exception_UnknownServiceProvider extends Exception
 {
-    /**
-     * @var ServiceProvider
-     */
-    private $trustedProxyServiceProvider;
+    private $_entityId;
+    private $_destination;
 
-    /**
-     * @var string
-     */
-    private $requesterEntityId;
+    function __construct($message, $entityId, $destination)
+    {
+        parent::__construct($message);
+        $this->_entityId = $entityId;
+        $this->_destination = $destination;
+    }
 
-    /**
-     * EngineBlock_Exception_UnknownServiceProvider constructor.
-     *
-     * @param ServiceProvider $trustedProxyServiceProvider
-     * @param string          $requesterEntityId
-     */
-    public function __construct(
-        ServiceProvider $trustedProxyServiceProvider,
-        $requesterEntityId
-    ) {
-        $this->trustedProxyServiceProvider = $trustedProxyServiceProvider;
-        $this->requesterEntityId           = $requesterEntityId;
+    public function getEntityId()
+    {
+        return $this->_entityId;
+    }
+
+    public function getDestination()
+    {
+        return $this->_destination;
     }
 }

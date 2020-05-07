@@ -10,6 +10,7 @@ Feature:
       And an Identity Provider named "Dummy Idp"
       And a Service Provider named "Dummy SP"
       And a Service Provider named "Unconnected SP"
+      And a Service Provider named "Trusted SP"
       And an unregistered Service Provider named "Unregistered SP"
       And SP "Unconnected SP" is not connected to IdP "Dummy Idp"
 
@@ -116,7 +117,7 @@ Feature:
 
   Scenario: I want to log on but this Service Provider is not yet registered at OpenConext
     When I log in at "Unregistered SP"
-    Then I should see "Unknown service"
+    Then I should see "Error - Unknown service"
      And I should see "UR ID:"
      And I should see "IP:"
      And I should see "EC:"
@@ -128,7 +129,7 @@ Feature:
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Error - Unknown service"
+     Then I should see "Error - Unknown organisation"
       And I should see "UR ID:"
       And I should see "IP:"
       And I should see "EC:"
@@ -136,6 +137,20 @@ Feature:
       And I should see "SP Name:"
       And I should see "IdP:"
       And I should see "https://wrong.example.edu/metadata"
+
+  Scenario: A Trusted proxy which requires a RequesterId which isn't send
+    Given  SP "Trusted SP" is authenticating for SP "Dummy SP"
+      And SP "Trusted SP" is a trusted proxy
+      And SP "Trusted SP" signs its requests
+      And SP "Trusted SP" requires a RequesterId
+      And SP "Trusted SP" is authenticating and uses RequesterID ""
+     When I log in at "Trusted SP"
+     Then I should see "Error - Unknown service"
+      And I should see "UR ID:"
+      And I should see "IP:"
+      And I should see "EC:"
+      And I should see "SP:"
+      And I should see "SP Name:"
 
   Scenario: An Identity Provider tries to send a response over HTTP-Redirect, violating the spec
     Given the IdP uses the HTTP Redirect Binding

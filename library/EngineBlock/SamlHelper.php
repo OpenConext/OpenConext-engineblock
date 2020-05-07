@@ -83,6 +83,7 @@ class EngineBlock_SamlHelper
      * @param MetadataRepositoryInterface $repository
      * @param \Psr\Log\LoggerInterface $logger
      * @return null|ServiceProvider
+     * @throws EngineBlock_Exception_UnknownRequesterIdInAuthnRequest
      * @throws EngineBlock_Exception_UnknownServiceProvider
      */
     public static function findRequesterServiceProvider(
@@ -106,9 +107,8 @@ class EngineBlock_SamlHelper
 
         if (!$lastRequesterEntityId) {
             if ($serviceProvider->getCoins()->requesteridRequired()) {
-                throw new EngineBlock_Exception_UnknownServiceProvider(
-                    $serviceProvider,
-                    'No RequesterID specified'
+                throw new EngineBlock_Exception_UnknownRequesterIdInAuthnRequest(
+                    $serviceProvider
                 );
             }
             return null;
@@ -120,8 +120,9 @@ class EngineBlock_SamlHelper
         $lastRequesterEntity = $repository->findServiceProviderByEntityId($lastRequesterEntityId, $logger);
         if (!$lastRequesterEntity) {
             throw new EngineBlock_Exception_UnknownServiceProvider(
-                $serviceProvider,
-                $lastRequesterEntityId
+                'Invalid RequesterID specified',
+                $lastRequesterEntityId,
+                ''
             );
         }
 

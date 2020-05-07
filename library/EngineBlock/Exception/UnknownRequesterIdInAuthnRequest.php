@@ -16,6 +16,21 @@
  * limitations under the License.
  */
 
-class EngineBlock_Corto_Module_Bindings_UnknownIssuerException extends EngineBlock_Corto_Module_Bindings_VerificationException
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+
+class EngineBlock_Exception_UnknownRequesterIdInAuthnRequest extends \Exception
 {
+    /**
+     * @var ServiceProvider
+     */
+    private $trustedProxyServiceProvider;
+
+    /**
+     * @param ServiceProvider $trustedProxyServiceProvider
+     */
+    public function __construct(
+        ServiceProvider $trustedProxyServiceProvider
+    ) {
+        $this->trustedProxyServiceProvider = $trustedProxyServiceProvider;
+    }
 }

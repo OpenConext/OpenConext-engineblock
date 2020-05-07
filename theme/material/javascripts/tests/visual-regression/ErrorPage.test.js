@@ -35,8 +35,8 @@ const pageTests = [
         'received-invalid-response',
         'https://engine.vm.openconext.org/functional-testing/feedback?template=received-invalid-response&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata", "serviceProviderName": "OpenConext Drop Supplies SP","identityProvider":"https://current-idp.entity-id.org/metadata"}'
     ],[
-        'unknown-service',
-        'https://engine.vm.openconext.org/functional-testing/feedback?template=unknown-service'
+        'unknown_requesterid_in_authnrequest',
+        'https://engine.vm.openconext.org/functional-testing/feedback?template=unknown-requesterid-in-authnrequest&feedback-info={"Idp Hash": "64531cc179d0d2e66243c30e58125f0a", "requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata", "serviceProviderName": "OpenConext Drop Supplies SP"}'
     ],[
         'unknown-preselected-idp',
         'https://engine.vm.openconext.org/functional-testing/feedback?template=unknown-preselected-idp&feedback-info={"Idp Hash": "64531cc179d0d2e66243c30e58125f0a", "requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata", "serviceProviderName": "OpenConext Drop Supplies SP"}'
@@ -47,14 +47,14 @@ const pageTests = [
         'clock-issue',
         'https://engine.vm.openconext.org/functional-testing/feedback?template=clock-issue&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata", "serviceProviderName": "OpenConext Drop Supplies SP","identityProvider":"https://current-idp.entity-id.org/metadata"}'
     ],[
-        'unknown-issuer',
-        'https://engine.vm.openconext.org/functional-testing/feedback?template=unknown-issuer&feedback-info={"requestId":"5cb4bd3879b49","ipAddress":"192.168.66.98","artCode":"31914","EntityId":"https://serviceregistry.vm.openconext.org/simplesaml/module.php/saml/sp/metadata.php/default-sp","Destination":"https://serviceregistry.vm.openconext.org/simplesaml/module.php/saml/sp/metadata.php/destination"}'
-    ],[
         'unsupported-signature-method',
         'https://engine.vm.openconext.org/functional-testing/feedback?template=unsupported-signature-method&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata","serviceProviderName":"OpenConext Drop Supplies SP"}&parameters={"signatureMethod":"http://www.w3.org/2000/09/xmldsig%23rsa-sha1"}'
     ],[
         'unknown-service-provider',
         'https://engine.vm.openconext.org/functional-testing/feedback?template=unknown-service-provider&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata","serviceProviderName":"OpenConext Drop Supplies SP"}&parameters={"entityId":"https://serviceregistry.vm.openconext.org/simplesaml/module.php/saml/sp/metadata.php/default-sp"}'
+    ],[
+        'unknown-identity-provider',
+        'https://engine.vm.openconext.org/functional-testing/feedback?template=unknown-identity-provider&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","IdentityProvider":"https://current-idp.entity-id.org/metadata","serviceProviderName":"OpenConext Drop Supplies SP"}&parameters={"entityId":"https://serviceregistry.vm.openconext.org/simplesaml/module.php/saml/idp/metadata.php/default-idp"}'
     ],[
         'invalid-attribute-value',
         'https://engine.vm.openconext.org/functional-testing/feedback?template=invalid-attribute-value&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata","serviceProviderName":"OpenConext Drop Supplies SP","identityProvider":"https://current-idp.entity-id.org/metadata"}&parameters={"attributeName":"schacHomeOrganization","attributeValue":"openconext"}'

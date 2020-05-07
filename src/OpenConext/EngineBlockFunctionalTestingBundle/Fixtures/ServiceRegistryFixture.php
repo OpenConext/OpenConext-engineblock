@@ -268,6 +268,13 @@ QUERY;
         return $this;
     }
 
+    public function setSpEntityRequesterIdRequired($entityId)
+    {
+        $this->setCoin($this->getServiceProvider($entityId), 'requesteridRequired', true);
+
+        return $this;
+    }
+
     public function setSpEntityManipulation($entityId, $manipulation)
     {
         $this->getServiceProvider($entityId)->manipulation = $manipulation;

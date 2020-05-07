@@ -16,14 +16,14 @@
  * limitations under the License.
  */
 
-class EngineBlock_Corto_Exception_UnknownIssuer extends EngineBlock_Exception
+class EngineBlock_Exception_UnknownIdentityProvider extends Exception
 {
     private $_entityId;
     private $_destination;
 
     function __construct($message, $entityId, $destination)
     {
-        parent::__construct($message, self::CODE_NOTICE);
+        parent::__construct($message);
         $this->_entityId = $entityId;
         $this->_destination = $destination;
     }

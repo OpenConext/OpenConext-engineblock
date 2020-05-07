@@ -271,7 +271,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      * @return bool|EngineBlock_Saml2_ResponseAnnotationDecorator|Response
      *
      * @throws EngineBlock_Corto_Exception_ReceivedErrorStatusCode
-     * @throws EngineBlock_Corto_Exception_UnknownIssuer
+     * @throws EngineBlock_Exception_UnknownIdentityProvider
      * @throws EngineBlock_Corto_Module_Bindings_ClockIssueException
      * @throws EngineBlock_Corto_Module_Bindings_Exception
      * @throws EngineBlock_Corto_Module_Bindings_SignatureVerificationException
@@ -497,7 +497,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      * @param string $messageIssuer
      * @param string $destination
      * @return AbstractRole Remote Entity that issued the message
-     * @throws EngineBlock_Corto_Exception_UnknownIssuer
+     * @throws EngineBlock_Exception_UnknownServiceProvider
      */
     protected function _verifyKnownSP($messageIssuer, $destination = '')
     {
@@ -514,7 +514,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             )
         );
 
-        throw new EngineBlock_Corto_Exception_UnknownIssuer(
+        throw new EngineBlock_Exception_UnknownServiceProvider(
             sprintf('Issuer "%s" is not a known remote entity? (please add SP to Remote Entities)', $messageIssuer),
             $messageIssuer,
             $destination
@@ -527,7 +527,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      * @param string $messageIssuer
      * @param string $destination
      * @return AbstractRole Remote Entity that issued the message
-     * @throws EngineBlock_Corto_Exception_UnknownIssuer
+     * @throws EngineBlock_Exception_UnknownIdentityProvider
      */
     protected function _verifyKnownIdP($messageIssuer, $destination = '')
     {
@@ -548,7 +548,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             )
         );
 
-        throw new EngineBlock_Corto_Exception_UnknownIssuer(
+        throw new EngineBlock_Exception_UnknownIdentityProvider(
             sprintf('Issuer "%s" is not a known remote entity? (please add IdP to Remote Entities)', $messageIssuer),
             $messageIssuer,
             $destination
