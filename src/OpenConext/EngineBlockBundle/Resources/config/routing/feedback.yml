@@ -1,139 +1,144 @@
+feedback_unknown_error:
+    path: '/feedback/unknown-error'
+    methods: [GET]
+    defaults: { _controller: engineblock.controller.authentication.feedback:unknownErrorAction }
+
 authentication_feedback_unable_to_receive_message:
-    path:       '/unable-to-receive-message'
+    path:       '/authentication/feedback/unable-to-receive-message'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:unableToReceiveMessageAction }
 
 authentication_feedback_session_lost:
-    path:       '/session-lost'
+    path:       '/authentication/feedback/session-lost'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:sessionLostAction }
 
 authentication_feedback_session_not_started:
-    path:       '/session-not-started'
+    path:       '/authentication/feedback/session-not-started'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:sessionNotStartedAction }
 
 authentication_feedback_unknown_issuer:
-    path:       '/unknown-issuer'
+    path:       '/authentication/feedback/unknown-issuer'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:unknownIssuerAction }
 
 authentication_feedback_no_idps:
-    path:       '/no-idps'
+    path:       '/authentication/feedback/no-idps'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:noIdpsAction }
 
 authentication_feedback_invalid_acs_location:
-    path:       '/invalidAcsLocation'
+    path:       '/authentication/feedback/invalidAcsLocation'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:invalidAcsLocationAction }
 
 authentication_feedback_unsupported_signature_method:
-    path:       '/unsupportedSignatureMethod'
+    path:       '/authentication/feedback/unsupportedSignatureMethod'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:unsupportedSignatureMethodAction }
 
 authentication_feedback_unsupported_acs_location_uri_scheme:
-    path:       '/unsupported-acs-location-scheme'
+    path:       '/authentication/feedback/unsupported-acs-location-scheme'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:unsupportedAcsLocationSchemeAction }
 
 authentication_feedback_unknown_service_provider:
-    path:       '/unknown-service-provider'
+    path:       '/authentication/feedback/unknown-service-provider'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:unknownServiceProviderAction }
 
 authentication_feedback_missing_required_fields:
-    path:       '/missing-required-fields'
+    path:       '/authentication/feedback/missing-required-fields'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:missingRequiredFieldsAction }
 
 authentication_authn_context_class_ref_blacklisted:
-    path:       '/authn-context-class-ref-blacklisted'
+    path:       '/authentication/feedback/authn-context-class-ref-blacklisted'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:authnContextClassRefBlacklistedAction }
 
 authentication_feedback_invalid_attribute_value:
-    path:       '/invalid-attribute-value'
+    path:       '/authentication/feedback/invalid-attribute-value'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:invalidAttributeValueAction }
 
 authentication_feedback_custom:
-    path:       '/custom'
+    path:       '/authentication/feedback/custom'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:customAction }
 
 authentication_feedback_invalid_acs_binding:
-    path:       '/invalid-acs-binding'
+    path:       '/authentication/feedback/invalid-acs-binding'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:invalidAcsBindingAction }
 
 authentication_feedback_received_error_status_code:
-    path:       '/received-error-status-code'
+    path:       '/authentication/feedback/received-error-status-code'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:receivedErrorStatusCodeAction }
 
 authentication_feedback_signature_verification_failed:
-    path:       '/received-invalid-signed-response'
+    path:       '/authentication/feedback/received-invalid-signed-response'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:signatureVerificationFailedAction }
 
 authentication_feedback_verification_failed:
-    path:       '/received-invalid-response'
+    path:       '/authentication/feedback/received-invalid-response'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:receivedInvalidResponseAction }
 
 authentication_feedback_no_consent:
-    path:       '/no-consent'
+    path:       '/authentication/feedback/no-consent'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:noConsentAction }
 
 authentication_feedback_unknown_service:
-    path:       '/unknown-service'
+    path:       '/authentication/feedback/unknown-service'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:unknownServiceAction }
 
 authentication_feedback_pep_violation:
-    path:       '/authorization-policy-violation'
+    path:       '/authentication/feedback/authorization-policy-violation'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:authorizationPolicyViolationAction }
 
 authentication_feedback_unknown_preselected_idp:
-    path:       '/unknown-preselected-idp'
+    path:       '/authentication/feedback/unknown-preselected-idp'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:unknownPreselectedIdpAction }
 
 authentication_feedback_stuck_in_authentication_loop:
-    path:       '/stuck-in-authentication-loop'
+    path:       '/authentication/feedback/stuck-in-authentication-loop'
     methods:    [GET]
     defaults:    { _controller: engineblock.controller.authentication.feedback:stuckInAuthenticationLoopAction }
 
 authentication_feedback_no_authentication_request_received:
-    path:       '/invalid-request-method-on-sso'
+    path:       '/authentication/feedback/invalid-request-method-on-sso'
     methods:    [GET]
     defaults:    { _controller: engineblock.controller.authentication.feedback:noAuthenticationRequestReceivedAction }
 
 authentication_feedback_response_clock_issue:
-    path:       '/clock-issue'
+    path:       '/authentication/feedback/clock-issue'
     methods:    [GET]
     defaults:    { _controller: engineblock.controller.authentication.feedback:clockIssueAction }
 
 authentication_feedback_stepup_callout_user_cancelled:
-    path:       '/stepup-callout-user-cancelled'
+    path:       '/authentication/feedback/stepup-callout-user-cancelled'
     methods:    [GET]
     defaults:    { _controller: engineblock.controller.authentication.feedback:stepupCalloutUserCancelledAction }
 
 authentication_feedback_stepup_callout_unmet_loa:
-    path:       '/stepup-callout-unmet-loa'
+    path:       '/authentication/feedback/stepup-callout-unmet-loa'
     methods:    [GET]
     defaults:    { _controller: engineblock.controller.authentication.feedback:stepupCalloutUnmetLoaAction }
 
 authentication_feedback_stepup_callout_unknown:
-    path:       '/stepup-callout-unknown'
+    path:       '/authentication/feedback/stepup-callout-unknown'
     methods:    [GET]
     defaults:    { _controller: engineblock.controller.authentication.feedback:stepupCalloutUnknownAction }
 
 authentication_feedback_metadata_entity_not_found:
-    path:       '/metadata-entity-not-found'
+    path:       '/authentication/feedback/metadata-entity-not-found'
     methods:    [GET]
     defaults:    { _controller: engineblock.controller.authentication.feedback:metadataEntityNotFoundAction }

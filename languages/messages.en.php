@@ -88,10 +88,10 @@ HTML
 
     // Form
     'request_access_instructions' => '<h2>Unfortunately, you do not have access to the service you are looking for.
-                                   What can you do?</h2>
-                                <p>If you want to access this service, please fill out the form below.
-                                   We will then forward your request to the person responsible for the services
-                                   portfolio management at your %organisationNoun%.</p>',
+                               What can you do?</h2>
+                            <p>If you want to access this service, please fill out the form below.
+                               We will then forward your request to the person responsible for the services
+                               portfolio management at your %organisationNoun%.</p>',
     'name'                  => 'Name',
     'name_error'            => 'Enter your name',
     'email'                 => 'E-mail',
@@ -164,7 +164,6 @@ TXT
     'error_help-desk-href' => 'https://www.surf.nl/over-surf/dienstverlening-support-werkmaatschappijen',
     'error_help-desk-link-text' => 'Helpdesk',
     'error_help-desk-link-text-short' => 'Helpdesk',
-    'error_help-desk-email-text-short' => 'Mail',
 
 
     'error_404'                         => '404 - Page not found',
@@ -173,7 +172,7 @@ TXT
     'error_405_desc'                    => 'The HTTP method "%requestMethod%" is not allowed for location "%uri%". Supported methods are: %allowedMethods%.',
     'error_help_desc'               => '<p></p>',
     'error_no_consent'              => 'Unable to continue to service',
-        'error_no_consent_desc'         => 'This application can only be used when you share the mentioned information.<br /><br />
+    'error_no_consent_desc'         => 'This application can only be used when you share the mentioned information.<br /><br />
 
 If you want to use this application you have to:<br />
 <ul><li>restart your browser</li>
@@ -208,20 +207,20 @@ If you want to use this application you have to:<br />
     'error_generic_desc'                => 'Logging in has failed and we don\'t know exactly why. Please try again first by going back to the service and logging in again. If this doesn\'t work, please contact the help desk of your %organisationNoun%.',
     'error_missing_required_fields'     => 'Error - Missing required fields',
     'error_missing_required_fields_desc'=> '<p>
-    Your %organisationNoun% does not provide the mandatory information. Therefore, you can not use this service. Please contact your %organisationNoun% and tell them one or more of the the following required attribute(s) are missing within %suiteName%:
-    </p>
-    <p>
-        <ul>
-            <li>UID</li>
-            <li>schacHomeOrganization</li>
-        </ul>
-    </p>',
+Your %organisationNoun% does not provide the mandatory information. Therefore, you can not use this service. Please contact your %organisationNoun% and tell them one or more of the the following required attribute(s) are missing within %suiteName%:
+</p>
+<p>
+    <ul>
+        <li>UID</li>
+        <li>schacHomeOrganization</li>
+    </ul>
+</p>',
     'error_invalid_attribute_value' => 'Error - Attribute value not allowed',
     'error_invalid_attribute_value_desc' => 'Your %organisationNoun% sends a value for attribute %attributeName% ("%attributeValue%") which is not allowed for this %organisationNoun%. Therefore you cannot log in. Only your %organisationNoun% can resolve this. Please contact the help desk of your own %organisationNoun% to fix this problem.',
     'error_received_error_status_code'     => 'Error - Identity Provider error',
     'error_received_error_status_code_desc'=> '<p>
 Your %organisationNoun% has denied you access to this service. You will have to contact your own (IT-)servicedesk to see if this can be fixed.
-    </p>',
+</p>',
     'error_received_invalid_response'       => 'Error - Invalid %organisationNoun% SAML response',
     'error_received_invalid_signed_response'=> 'Error - Invalid signature on %organisationNoun% response',
     'error_stuck_in_authentication_loop' => 'Error - You got stuck in a black hole',
@@ -271,12 +270,74 @@ Your %organisationNoun% has denied you access to this service. You will have to 
     'validation' => 'Validation',
     'remarks' => 'Remarks',
     'idp_debugging_mail_explain' => 'When requested by %suiteName%,
-                                        use the "Mail to %suiteName%" button below
-                                        to mail the information in this screen.',
+                                    use the "Mail to %suiteName%" button below
+                                    to mail the information in this screen.',
     'idp_debugging_mail_button' => 'Mail to %suiteName%',
 
     // Logout
     'logout' => 'logout',
     'logout_description' => 'This application uses centralized log in, which provides single sign on for several applications. To be sure your log out is 100% secure you should close your browser completely.',
     'logout_information_link' => '',
+
+    // Error page wiki link in footer, keep empty to hide block in footer
+    'error_feedback_wiki_links_feedback_unknown_error' => 'https://support.surfconext.nl/help-error-error-en',
+    'error_feedback_wiki_links_authentication_feedback_unable_to_receive_message' => '',
+    'error_feedback_wiki_links_authentication_feedback_session_lost' => 'https://support.surfconext.nl/help-session-lost-en',
+    'error_feedback_wiki_links_authentication_feedback_session_not_started' => '',
+    'error_feedback_wiki_links_authentication_feedback_unknown_issuer' => 'https://support.surfconext.nl/help-unknown-sp-en',
+    'error_feedback_wiki_links_authentication_feedback_no_idps' => '',
+    'error_feedback_wiki_links_authentication_feedback_invalid_acs_location' => '',
+    'error_feedback_wiki_links_authentication_feedback_unsupported_signature_method' => '',
+    'error_feedback_wiki_links_authentication_feedback_unsupported_acs_location_uri_scheme' => '',
+    'error_feedback_wiki_links_authentication_feedback_unknown_service_provider' => 'https://support.surfconext.nl/help-unknown-sp-en',
+    'error_feedback_wiki_links_authentication_feedback_missing_required_fields' => 'https://support.surfconext.nl/help-missing-fields-en',
+    'error_feedback_wiki_links_authentication_authn_context_class_ref_blacklisted' => '',
+    'error_feedback_wiki_links_authentication_feedback_invalid_attribute_value' => 'https://support.surfconext.nl/help-scope-en',
+    'error_feedback_wiki_links_authentication_feedback_custom' => '',
+    'error_feedback_wiki_links_authentication_feedback_invalid_acs_binding' => 'https://support.surfconext.nl/help-bindings',
+    'error_feedback_wiki_links_authentication_feedback_received_error_status_code' => '',
+    'error_feedback_wiki_links_authentication_feedback_signature_verification_failed' => 'https://support.surfconext.nl/help-bindings',
+    'error_feedback_wiki_links_authentication_feedback_verification_failed' => 'https://support.surfconext.nl/help-prepare-idp',
+    'error_feedback_wiki_links_authentication_feedback_no_consent' => '',
+    'error_feedback_wiki_links_authentication_feedback_unknown_service' => '',
+    'error_feedback_wiki_links_authentication_feedback_pep_violation' => 'https://support.surfconext.nl/help-pep-en',
+    'error_feedback_wiki_links_authentication_feedback_unknown_preselected_idp' => 'https://support.surfconext.nl/help-no-connection-en',
+    'error_feedback_wiki_links_authentication_feedback_stuck_in_authentication_loop' => 'https://support.surfconext.nl/help-loop-en',
+    'error_feedback_wiki_links_authentication_feedback_no_authentication_request_received' => '',
+    'error_feedback_wiki_links_authentication_feedback_response_clock_issue' => 'https://support.surfconext.nl/help-ntp-en',
+    'error_feedback_wiki_links_authentication_feedback_stepup_callout_user_cancelled' => '',
+    'error_feedback_wiki_links_authentication_feedback_stepup_callout_unmet_loa' => '',
+    'error_feedback_wiki_links_authentication_feedback_stepup_callout_unknown' => '',
+    'error_feedback_wiki_links_authentication_feedback_metadata_entity_not_found' => '',
+
+    // Error page idp contact link in footer, keep empty to hide block in footer
+    'error_feedback_idp_contact_label_small_feedback_unknown_error' => '',
+    'error_feedback_idp_contact_label_small_authentication_feedback_unable_to_receive_message' => 'Mail',
+    'error_feedback_idp_contact_label_small_authentication_feedback_session_lost' => '',
+    'error_feedback_idp_contact_label_small_authentication_feedback_session_not_started' => 'Mail',
+    'error_feedback_idp_contact_label_small_authentication_feedback_unknown_issuer' => 'Mail',
+    'error_feedback_idp_contact_label_small_authentication_feedback_no_idps' => 'Mail',
+    'error_feedback_idp_contact_label_small_authentication_feedback_invalid_acs_location' => '',
+    'error_feedback_idp_contact_label_small_authentication_feedback_unsupported_signature_method' => 'Mail',
+    'error_feedback_idp_contact_label_small_authentication_feedback_unsupported_acs_location_uri_scheme' => '',
+    'error_feedback_idp_contact_label_small_authentication_feedback_unknown_service_provider' => 'Mail',
+    'error_feedback_idp_contact_label_small_authentication_feedback_missing_required_fields' => 'Mail',
+    'error_feedback_idp_contact_label_small_authentication_authn_context_class_ref_blacklisted' => '',
+    'error_feedback_idp_contact_label_small_authentication_feedback_invalid_attribute_value' => 'Mail',
+    'error_feedback_idp_contact_label_small_authentication_feedback_custom' => '',
+    'error_feedback_idp_contact_label_small_authentication_feedback_invalid_acs_binding' => '',
+    'error_feedback_idp_contact_label_small_authentication_feedback_received_error_status_code' => '',
+    'error_feedback_idp_contact_label_small_authentication_feedback_signature_verification_failed' => 'Mail',
+    'error_feedback_idp_contact_label_small_authentication_feedback_verification_failed' => 'Mail',
+    'error_feedback_idp_contact_label_small_authentication_feedback_no_consent' => '',
+    'error_feedback_idp_contact_label_small_authentication_feedback_unknown_service' => '',
+    'error_feedback_idp_contact_label_small_authentication_feedback_pep_violation' => 'Mail',
+    'error_feedback_idp_contact_label_small_authentication_feedback_unknown_preselected_idp' => 'Mail',
+    'error_feedback_idp_contact_label_small_authentication_feedback_stuck_in_authentication_loop' => 'Mail',
+    'error_feedback_idp_contact_label_small_authentication_feedback_no_authentication_request_received' => '',
+    'error_feedback_idp_contact_label_small_authentication_feedback_response_clock_issue' => 'Mail',
+    'error_feedback_idp_contact_label_small_authentication_feedback_stepup_callout_user_cancelled' => '',
+    'error_feedback_idp_contact_label_small_authentication_feedback_stepup_callout_unmet_loa' => '',
+    'error_feedback_idp_contact_label_small_authentication_feedback_stepup_callout_unknown' => '',
+    'error_feedback_idp_contact_label_small_authentication_feedback_metadata_entity_not_found' => '',
 ];

@@ -64,6 +64,7 @@ class Feedback extends Twig_Extension
             new TwigFunction('getWikiLink', [$this, 'getWikiLink']),
             new TwigFunction('hasIdPContactMailLink', [$this, 'hasIdPContactMailLink']),
             new TwigFunction('getIdPContactMailLink', [$this, 'getIdPContactMailLink']),
+            new TwigFunction('getIdpContactShortLabel', [$this, 'getIdpContactShortLabel']),
         ];
     }
 
@@ -87,18 +88,16 @@ class Feedback extends Twig_Extension
      */
     public function hasWikiLink($templateName)
     {
-        $pageIdentifier = $this->convertTemplateName($templateName);
-        return $this->errorFeedbackConfiguration->hasWikiLink($pageIdentifier);
+        return $this->errorFeedbackConfiguration->hasWikiLink($templateName);
     }
 
     /**
      * @param string $templateName
-     * @return WikiLink
+     * @return string
      */
     public function getWikiLink($templateName)
     {
-        $pageIdentifier = $this->convertTemplateName($templateName);
-        return $this->errorFeedbackConfiguration->getWikiLink($pageIdentifier);
+        return $this->errorFeedbackConfiguration->getWikiLink($templateName);
     }
 
     /**
@@ -107,8 +106,16 @@ class Feedback extends Twig_Extension
      */
     public function hasIdPContactMailLink($templateName)
     {
-        $pageIdentifier = $this->convertTemplateName($templateName);
-        return $this->errorFeedbackConfiguration->isIdPContactPage($pageIdentifier);
+        return $this->errorFeedbackConfiguration->isIdPContactPage($templateName) && $this->getIdPContactMailLink();
+    }
+
+    /**
+     * @param string $templateName
+     * @return string
+     */
+    public function getIdpContactShortLabel($templateName)
+    {
+        return $this->errorFeedbackConfiguration->getIdpContactShortLabel($templateName);
     }
 
     /**
@@ -159,13 +166,5 @@ class Feedback extends Twig_Extension
         $feedbackInfoMap->sort();
 
         return $feedbackInfoMap;
-    }
-
-    private function convertTemplateName($templateName)
-    {
-        $template = end(explode('/', $templateName));
-        $stripped = array_shift(explode('.', $template));
-        $convertedDashes = str_replace('-', '_', $stripped);
-        return $convertedDashes;
     }
 }

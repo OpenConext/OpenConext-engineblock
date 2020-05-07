@@ -18,70 +18,91 @@
 
 namespace OpenConext\EngineBlockBundle\Configuration;
 
-use OpenConext\EngineBlock\Assert\Assertion;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class ErrorFeedbackConfiguration implements ErrorFeedbackConfigurationInterface
 {
-    /**
-     * @var Feature[]
-     */
-    private $wikiLinks;
+    private $wikiLinksTranslationPrefix = 'error_feedback_wiki_links_';
+    private $idpContactTranslationPrefix = 'error_feedback_idp_contact_label_small_';
 
     /**
-     * @var
+     * @var TranslatorInterface
      */
-    private $idpContactPages;
+    private $translator;
 
     /**
-     * @param Feature[] $wikiLinks indexed by feature key
-     * @param IdPContactPage[] $idpContactPages
+     * @param TranslatorInterface $translator
      */
-    public function __construct(array $wikiLinks, array $idpContactPages)
+    public function __construct(TranslatorInterface $translator)
     {
-        Assertion::allIsInstanceOf($wikiLinks, WikiLink::class);
-        Assertion::allString(
-            array_keys($wikiLinks),
-            'All keys for wikiLinks must be a string (the page identifier the wiki link is intended for).'
-        );
-
-        Assertion::allIsInstanceOf($idpContactPages, IdPContactPage::class);
-        Assertion::allString(
-            array_keys($idpContactPages),
-            'All keys for idpContactPages must be a string (the page identifier the idpContactPages are intended for).'
-        );
-
-        $this->wikiLinks = $wikiLinks;
-
-        $this->idpContactPages = $idpContactPages;
+        $this->translator = $translator;
     }
 
     /**
-     * @param string $page
+     * @param string $route
      * @return bool
      */
-    public function hasWikiLink($page)
+    public function hasWikiLink($route)
     {
-        Assertion::nonEmptyString($page, 'page');
-
-        return array_key_exists($page, $this->wikiLinks);
+        $key = $this->getWikiLinksTranslationKey($route);
+        return $this->hasTranslation($key);
     }
 
     /**
-     * @param string $page
-     * @return WikiLink
+     * @param string $route
+     * @return string
      */
-    public function getWikiLink($page)
+    public function getWikiLink($route)
     {
-        Assertion::nonEmptyString($page, 'page');
-        return $this->wikiLinks[$page];
+        $key = $this->getWikiLinksTranslationKey($route);
+        return $this->translator->trans($key);
     }
 
     /**
-     * @param string $page
+     * @param string $route
+     * @return string
+     */
+    public function getIdpContactShortLabel($route)
+    {
+        $key = $this->getIdpContactTranslationKey($route);
+        return $this->translator->trans($key);
+    }
+
+    /**
+     * @param string $route
      * @return bool
      */
-    public function isIdPContactPage($page)
+    public function isIdPContactPage($route)
     {
-        return array_key_exists($page, $this->idpContactPages);
+        $key = $this->getIdpContactTranslationKey($route);
+        return $this->hasTranslation($key);
+    }
+
+    /**
+     * @param $key
+     * @return bool
+     */
+    private function hasTranslation($key)
+    {
+        $translation = $this->translator->trans($key);
+        return $translation != '' && $translation != $key;
+    }
+
+    /**
+     * @param string $route
+     * @return string
+     */
+    private function getWikiLinksTranslationKey($route)
+    {
+        return $this->wikiLinksTranslationPrefix.$route;
+    }
+
+    /**
+     * @param string $route
+     * @return string
+     */
+    private function getIdpContactTranslationKey($route)
+    {
+        return $this->idpContactTranslationPrefix.$route;
     }
 }
