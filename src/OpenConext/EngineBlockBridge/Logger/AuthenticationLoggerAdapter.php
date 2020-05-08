@@ -40,18 +40,22 @@ class AuthenticationLoggerAdapter
     }
 
     /**
-     * @param ServiceProvider   $serviceProvider
-     * @param IdentityProvider  $identityProvider
+     * @param ServiceProvider $serviceProvider
+     * @param IdentityProvider $identityProvider
      * @param                   $collabPersonId
      * @param                   $keyId
      * @param ServiceProvider[] $proxiedServiceProviders
+     * @param string $originalNameId
+     * @param string|null $attainedLoa
      */
     public function logLogin(
         ServiceProvider $serviceProvider,
         IdentityProvider $identityProvider,
         $collabPersonId,
         $keyId,
-        array $proxiedServiceProviders
+        array $proxiedServiceProviders,
+        $originalNameId,
+        $attainedLoa
     ) {
         $keyId = $keyId ? new KeyId($keyId) : null;
 
@@ -68,6 +72,8 @@ class AuthenticationLoggerAdapter
             new CollabPersonId($collabPersonId),
             $proxiedSpEntities,
             $serviceProvider->workflowState,
+            $originalNameId,
+            $attainedLoa,
             $keyId
         );
     }

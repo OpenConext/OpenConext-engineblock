@@ -43,12 +43,14 @@ class AuthenticationLogger
      * KeyId is nullable in order to be able to differentiate between asking no specific key,
      * the default key KeyId('default') and a specific key.
      *
-     * @param Entity         $serviceProvider
-     * @param Entity         $identityProvider
+     * @param Entity $serviceProvider
+     * @param Entity $identityProvider
      * @param CollabPersonId $collabPersonId
-     * @param array          $proxiedServiceProviders
-     * @param string         $workflowState
-     * @param KeyId|null     $keyId
+     * @param array $proxiedServiceProviders
+     * @param string $workflowState
+     * @param string $originalNameId
+     * @param string|null $attainedLoa
+     * @param KeyId|null $keyId
      */
     public function logGrantedLogin(
         Entity $serviceProvider,
@@ -56,6 +58,8 @@ class AuthenticationLogger
         CollabPersonId $collabPersonId,
         array $proxiedServiceProviders,
         $workflowState,
+        $originalNameId,
+        $attainedLoa,
         KeyId $keyId = null
     ) {
         $proxiedServiceProviderEntityIds = array_map(
@@ -76,7 +80,9 @@ class AuthenticationLogger
                 'idp_entity_id'         => $identityProvider->getEntityId()->getEntityId(),
                 'key_id'                => $keyId ? $keyId->getKeyId() : null,
                 'proxied_sp_entity_ids' => $proxiedServiceProviderEntityIds,
-                'workflow_state'        => $workflowState
+                'workflow_state'        => $workflowState,
+                'original_name_id'      => $originalNameId,
+                'attained_loa'          => $attainedLoa,
             ]
         );
     }

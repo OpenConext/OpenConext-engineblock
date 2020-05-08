@@ -75,6 +75,11 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     protected $intendedNameId;
 
     /**
+     * @var string|null
+     */
+    protected $attainedLoa;
+
+    /**
      * @param Response $response
      */
     function __construct(Response $response)
@@ -262,6 +267,22 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     public function getOriginalIssuer()
     {
         return $this->originalIssuer;
+    }
+
+    /**
+     * @return \OpenConext\EngineBlock\Metadata\Loa
+     */
+    public function getAttainedLoa()
+    {
+        return $this->attainedLoa;
+    }
+
+    /**
+     * @param string|null $attainedLoa
+     */
+    public function setAttainedLoa($attainedLoa)
+    {
+        $this->attainedLoa = $attainedLoa;
     }
 
     /**

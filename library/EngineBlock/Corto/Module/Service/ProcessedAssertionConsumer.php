@@ -81,11 +81,6 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer implements Eng
         }
 
          // Done processing! Send off to SP
-        $nextResponse = $currentProcess->getResponse();
-        $response->setDestination($nextResponse->getDestination());
-        $response->setDeliverByBinding($nextResponse->getOriginalIssuer());
-        $response->setOriginalIssuer($nextResponse->getOriginalBinding());
-
         $this->_server->unsetProcessingMode();
 
         $sentResponse = $this->_server->createEnhancedResponse($receivedRequest, $response);

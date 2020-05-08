@@ -27,6 +27,7 @@ use OpenConext\EngineBlock\Logger\AuthenticationLogger;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Loa;
 use OpenConext\Mockery\Matcher\ValueObjectEqualsMatcher;
 use OpenConext\Mockery\Matcher\ValueObjectListEqualsMatcher;
 use OpenConext\Value\Saml\Entity;
@@ -51,6 +52,8 @@ class AuthenticationLoggerAdapterTest extends TestCase
         $keyIdValue               = '20160403';
         $spProxy1EntityId         = 'SpProxy1EntityId';
         $spProxy2EntityId         = 'SpProxy2EntityId';
+        $originalNameId           = 'urn:collab:person:original:some-person';
+        $attainedLoa              = 'http://vm.openconext.org/assurance/loa1';
 
         $mockAuthenticationLogger = m::mock(AuthenticationLogger::class);
         $mockAuthenticationLogger
@@ -69,6 +72,8 @@ class AuthenticationLoggerAdapterTest extends TestCase
                         ]
                     ),
                     AbstractRole::WORKFLOW_STATE_PROD,
+                    $originalNameId,
+                    $attainedLoa,
                     new ValueObjectEqualsMatcher(new KeyId($keyIdValue)),
                 ]
             )
@@ -83,7 +88,9 @@ class AuthenticationLoggerAdapterTest extends TestCase
             [
                 new ServiceProvider($spProxy1EntityId),
                 new ServiceProvider($spProxy2EntityId),
-            ]
+            ],
+            $originalNameId,
+            $attainedLoa
         );
     }
 }
