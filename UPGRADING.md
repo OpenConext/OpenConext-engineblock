@@ -11,6 +11,8 @@ If you're using OpenConext-Deploy, Ansible is configured to do this for you and 
 
 If you don't use OpenConext-Deploy you should manually add the `ini_parameters.yml` variables to the`parameters.yml` and you're good to go.
 
+In version 6.2 the unused `response_processing_service_binding` column is removed from the `sso_provider_roles_eb5` table.
+
 # Remove Symfony bootstrap cache
 Among the cleanup tasks some unused scripts have been removed from the project.
  1. The bootstrap.cache.php file, previously used by Symfony was removed
