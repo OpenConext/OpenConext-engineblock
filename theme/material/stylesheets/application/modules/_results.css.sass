@@ -6,21 +6,15 @@
   @extend %box
   overflow: hidden
   margin-bottom: 2rem
-  .lt-ie9 &
-    margin-bottom: 2em
 
   +max-width($medium)
     margin-bottom: 1rem
-    .lt-ie9 &
-      margin-bottom: 1em
 
   header
     background: rgba($border,.5)
     padding: .75rem 1.25rem
     color: $medium-grey
     border-bottom: 1px solid $border
-    .lt-ie9 &
-      padding: 0.75em 1.25em
 
     a
       float: right
@@ -35,16 +29,6 @@
 
     *
       pointer-events: none
-
-    .lt-ie9 &
-      padding: 0.75em 1.25em
-
-    .lt-ie10 &, .safari5 &, .safari6 &
-      display: block
-      &.hidden
-        display: none
-      h3
-        display: inline
 
     &.focussed
       outline: none
@@ -63,11 +47,6 @@
       &.focussed
         .action
           display: inline-block
-    .lt-ie10 &, .safari5 &, .safari6
-      &.focus,
-      &.focussed
-        .action
-          display: inline-block
 
   .loading
     display: flex
@@ -75,29 +54,16 @@
     align-items: center
     color: $medium-grey
     border-bottom: 1px solid $border
-    .lt-ie9 &
-      padding: 0.75em 1.25em
 
     img
       max-width: 1.5rem !important
       max-height: 1.5rem !important
-      .lt-ie9 &
-        max-width: 1.5em !important
-        max-height: 1.5em !important
 
   .logo
     width: 4rem
     height: 3rem
     margin-right: 1.5rem
     display: inline-flex
-    .lt-ie9 &
-      width: 4em
-      height: 3em
-      margin-right: 1.5em
-
-    .lt-ie10 &, .safari5 &, .safari6 &
-      display: inline
-      vertical-align: middle
 
     img
       margin: 0
@@ -112,11 +78,6 @@
       line-height: 3rem
       border-radius: 1.5rem
       margin: auto
-      .lt-ie9 &
-        width: 3em
-        height: 3em
-        line-height: 3em
-        border-radius: 1.5em
 
     +max-width($medium)
       display: none
@@ -136,16 +97,6 @@
     // or it concerns the IdP preference removal button.
     html.no-js &, &.deleteable
       pointer-events: auto
-
-    .lt-ie9 &.deleteable
-      background: $blue
-      &:after
-        color: white
-        content: "\002A09"
-        display: block
-        text-align: center
-      img
-        display: none
 
 
   // Styling for remove list

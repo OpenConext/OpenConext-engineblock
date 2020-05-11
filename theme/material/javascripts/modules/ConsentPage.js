@@ -1,5 +1,11 @@
 import tippy from 'tippy.js';
 
+// The lines below are polyfills for Tippy
+import 'core-js/stable/promise';
+import 'core-js/stable/object/assign';
+import 'core-js/stable/array/find';
+//
+
 export function initConsentPage() {
 
     focusAcceptButton();
