@@ -169,13 +169,6 @@ TXT
     'error_405'                         => 'HTTP methode is niet toegestaan',
     'error_405_desc'                    => 'De HTTP-methode "%requestMethod%" is niet toegestaan ​​voor locatie "%uri%". Ondersteunde methodes zijn: %allowedMethods%.',
     'error_help_desc'                   => '<p></p>',
-    'error_no_consent'                  => 'Niet mogelijk om verder te gaan naar dienst',
-    'error_no_consent_desc'             => 'Deze applicatie kan enkel worden gebruikt wanneer de vermelde informatie wordt gedeeld.<br /><br />
-
-Als je deze applicatie wilt gebruiken moet je:<br />
-<ul><li>de browser herstarten</li>
-<li>opnieuw inloggen</li>
-<li>jouw informatie delen</li></ul>',
     'error_no_idps'                     => 'Error - Geen %organisationNounPlural% gevonden',
     'error_no_idps_desc'                => 'Inloggen op de dienst via %suiteName% is onmogelijk. De dienst is niet gekoppeld met een %organizationNoun%.',
     'error_session_lost'                => 'Fout - Sessie is verloren gegaan',
@@ -194,14 +187,14 @@ Als je deze applicatie wilt gebruiken moet je:<br />
     'error_unsupported_signature_method_desc' => 'De ondertekeningsmethode %arg1% wordt niet ondersteund, upgrade naar RSA-SHA256 (http://www.w3.org/2001/04/xmldsig-more#rsa-sha256).',
     'error_unknown_preselected_idp' => 'Fout - Dienst niet toegankelijk via %organisationNoun%',
     'error_unknown_preselected_idp_desc' => 'De %organisationNoun% waarmee je wilt inloggen heeft toegang tot deze dienst niet geactiveerd. Dat betekent dat jij geen gebruik kunt maken van deze dienst via %suiteName%. Neem contact op met de helpdesk van jouw %organisationNoun% als je toegang wilt krijgen tot deze dienst. Geef daarbij aan om welke dienst het gaat (de &lsquo;SP&rsquo;) en waarom je toegang wilt.',
-    'error_unknown_service_provider'              => 'Error - Unkown service',
+    'error_unknown_service_provider'              => 'Error - Onbekende dienst',
     'error_unknown_service_provider_desc'     => 'Er kon geen Service Provider worden gevonden met het EntityID \'%arg1%\'.',
 
 
         'error_unsupported_acs_location_scheme' => 'Fout - URI scheme van de ACS locatie wordt niet ondersteund',
 
-    'error_unknown_issuer'              => 'Error - Onbekende dienst',
-    'error_unknown_issuer_desc'     => 'Je probeert in te loggen op een dienst die niet bekend is binnen %suiteName%. Als je toch gebruik wilt maken van deze dienst, neem dan contact op met de helpdesk van je %organisationNoun%.',
+    'error_unknown_identity_provider'              => 'Error - Onbekende %organisationNoun%',
+    'error_unknown_identity_provider_desc'     => 'Je probeert in te loggen op een dienst die niet bekend is binnen %suiteName%. Als je toch gebruik wilt maken van deze dienst, neem dan contact op met de helpdesk van je %organisationNoun%.',
     'error_generic'                     => 'Fout - Generieke foutmelding',
     'error_generic_desc'                => 'Inloggen is niet gelukt en we weten niet precies waarom. Probeer het eerst eens opnieuw door terug te gaan naar de dienst en opnieuw in te loggen. Lukt dit niet, neem dan contact op met de helpdesk van je %organisationNoun%.',
     'error_missing_required_fields'     => 'Error - Verplichte velden ontbreken',
@@ -252,8 +245,8 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
     'error_attribute_validator_allowed'             => '\'%arg3%\' is geen toegestane waarde voor dit attribuut',
     'error_attribute_validator_availability'        => '\'%arg3%\' is a gereserveerde SchacHomeOrganization voor een andere Identity Provider',
 
-    'error_unknown_service'         => 'Error - Deze dienst is niet geregistreerd bij %suiteName%.',
-    'error_unknown_service_desc'    => '<p>Deze dienst is niet bekend.</p>',
+    'error_unknown_requesterid_in_authnrequest'         => 'Error - Deze dienst is niet geregistreerd bij %suiteName%.',
+    'error_unknown_requesterid_in_authnrequest_desc'    => '<p>Deze dienst is niet bekend.</p>',
     'error_clock_issue_title' => 'Fout - De Assertion is nog niet geldig of is verlopen',
     'error_clock_issue_desc' => 'Dit komt waarschijnlijk doordat de tijd tussen de %organisationNoun% en %suiteName% te ver uiteen loopt. Controleer de tijd op de IdP.',
     'error_stepup_callout_unknown_title' => 'Fout - Onbekend sterke authenticatie probleem',
@@ -288,7 +281,7 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
     'error_feedback_wiki_links_authentication_feedback_unable_to_receive_message' => '',
     'error_feedback_wiki_links_authentication_feedback_session_lost' => 'https://support.surfconext.nl/help-session-lost-nl',
     'error_feedback_wiki_links_authentication_feedback_session_not_started' => '',
-    'error_feedback_wiki_links_authentication_feedback_unknown_issuer' => 'https://support.surfconext.nl/help-unknown-sp-nl',
+    'error_feedback_wiki_links_authentication_feedback_unknown_identity_provider' => '',
     'error_feedback_wiki_links_authentication_feedback_no_idps' => '',
     'error_feedback_wiki_links_authentication_feedback_invalid_acs_location' => '',
     'error_feedback_wiki_links_authentication_feedback_unsupported_signature_method' => '',
@@ -302,8 +295,7 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
     'error_feedback_wiki_links_authentication_feedback_received_error_status_code' => '',
     'error_feedback_wiki_links_authentication_feedback_signature_verification_failed' => 'https://support.surfconext.nl/help-bindings',
     'error_feedback_wiki_links_authentication_feedback_verification_failed' => 'https://support.surfconext.nl/help-prepare-idp',
-    'error_feedback_wiki_links_authentication_feedback_no_consent' => '',
-    'error_feedback_wiki_links_authentication_feedback_unknown_service' => '',
+    'error_feedback_wiki_links_authentication_feedback_unknown_requesterid_in_authnrequest' => '',
     'error_feedback_wiki_links_authentication_feedback_pep_violation' => 'https://support.surfconext.nl/help-pep-nl',
     'error_feedback_wiki_links_authentication_feedback_unknown_preselected_idp' => 'https://support.surfconext.nl/help-no-connection-nl',
     'error_feedback_wiki_links_authentication_feedback_stuck_in_authentication_loop' => 'https://support.surfconext.nl/help-loop-nl',
@@ -319,7 +311,7 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
     'error_feedback_idp_contact_label_small_authentication_feedback_unable_to_receive_message' => 'Mail',
     'error_feedback_idp_contact_label_small_authentication_feedback_session_lost' => '',
     'error_feedback_idp_contact_label_small_authentication_feedback_session_not_started' => 'Mail',
-    'error_feedback_idp_contact_label_small_authentication_feedback_unknown_issuer' => 'Mail',
+    'error_feedback_idp_contact_label_small_authentication_feedback_unknown_identity_provider' => '',
     'error_feedback_idp_contact_label_small_authentication_feedback_no_idps' => 'Mail',
     'error_feedback_idp_contact_label_small_authentication_feedback_invalid_acs_location' => '',
     'error_feedback_idp_contact_label_small_authentication_feedback_unsupported_signature_method' => 'Mail',
@@ -333,8 +325,7 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
     'error_feedback_idp_contact_label_small_authentication_feedback_received_error_status_code' => '',
     'error_feedback_idp_contact_label_small_authentication_feedback_signature_verification_failed' => 'Mail',
     'error_feedback_idp_contact_label_small_authentication_feedback_verification_failed' => 'Mail',
-    'error_feedback_idp_contact_label_small_authentication_feedback_no_consent' => '',
-    'error_feedback_idp_contact_label_small_authentication_feedback_unknown_service' => '',
+    'error_feedback_idp_contact_label_small_authentication_feedback_unknown_requesterid_in_authnrequest' => '',
     'error_feedback_idp_contact_label_small_authentication_feedback_pep_violation' => 'Mail',
     'error_feedback_idp_contact_label_small_authentication_feedback_unknown_preselected_idp' => 'Mail',
     'error_feedback_idp_contact_label_small_authentication_feedback_stuck_in_authentication_loop' => 'Mail',

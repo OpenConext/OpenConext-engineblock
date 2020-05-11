@@ -152,12 +152,6 @@ TXT
     'error_405'                         => 'Método HTTP não permitido',
     'error_405_desc'                    => 'O método HTTP "%requestMethod%" não é permitido para o endereço "%uri%". Os métodos suportados são: %allowedMethods%.',
     'error_help_desc'               => '<p></p>',
-    'error_no_consent'              => 'Não é possivel continua para o serviço',
-    'error_no_consent_desc'         => 'Esta aplicação só pode ser utilizada quando a informação mencionada for partilhada.<br /><br />
-Se pretende utilizar esta aplicação devem:<br />
-<ul><li>reinicie o seu browser</li>
-<li>faça a autenticação de novo</li>
-<li>partilhe a sua informação</li></ul>',
     'error_no_idps'                 => 'Erro - Não foi encontrado nenhum Fornecedor de Identidade',
     'error_no_idps_desc'            => '<p>
 O serviço (&lsquo;Service Provider&rsquo;) a que pretende ligar-se não está acessível através da %suiteName%.<br /><br />
@@ -182,11 +176,13 @@ O serviço (&lsquo;Service Provider&rsquo;) a que pretende ligar-se não está a
     'error_unknown_preselected_idp_desc' => '<p>
         A %organisationNoun% que pretende utilizar para se autenticar e aceder ao serviço, não tem activado o acesso a este serviço. Isto significa que não pode aceder a este serviço através da %suiteName%. Entre em contacto com com o suporte da sua %organisationNoun% para solicitar o acesso a este serviço. Declare que serviço se trata (o &lsquo;Fornecedor de Serviço&rsquo;) e porque necessita do acesso.
     </p>',
-    'error_unknown_service_provider'          => 'Erro - Não é possível fornecer metadados para o EntityID \'%arg1%\'',
-    'error_unknown_service_provider_desc'     => '<p>O serviço solicitado não foi encontrado.</p>',
-    'error_unknown_issuer'          => 'Erro - Serviço desconhecido',
-    'error_unknown_issuer_desc'     => '<p>
-        O serviço a que pretende autenticar-se é desconhecido para a %suiteName%. Possivelmente a sua %organisationNoun% nunca permitiu o acesso a este serviço. Entre em contacto com o suporte da sua %organisationNoun% e fornecer-lhes as seguintes informações:
+    'error_unknown_service_provider'          => 'Erro - Serviço desconhecido',
+    'error_unknown_service_provider_desc'     => '<p>
+    O serviço a que pretende autenticar-se é desconhecido para a %suiteName%. Possivelmente a sua %organisationNoun% nunca permitiu o acesso a este serviço. Entre em contacto com o suporte da sua %organisationNoun% e fornecer-lhes as seguintes informações:
+</p>',
+    'error_unknown_identity_provider'          => 'Erro - %organisationNoun% desconhecido',
+    'error_unknown_identity_provider_desc'     => '<p>
+        O %organisationNoun% a que pretende autenticar-se é desconhecido para a %suiteName%.
     </p>',
     'error_generic'                     => 'Erro - Ocorreu um erro',
     'error_generic_desc'                => '<p>
@@ -245,8 +241,8 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_attribute_validator_not_in_definitions'  => '%arg1% não é conhecido no schema',
     'error_attribute_validator_allowed'             => '\'%arg3%\' não é um valor permitido para este atributo',
     'error_attribute_validator_availability'        => '\'%arg3%\' é um schacHomeOrganization reservado para outro Fornecedor de Identidade',
-    'error_unknown_service'         => 'Erro - Serviço desconhecido',
-    'error_unknown_service_desc'    => '<p>O serviço solicitado não foi encontrado.</p>',
+    'error_unknown_requesterid_in_authnrequest'         => 'Erro - Serviço desconhecido',
+    'error_unknown_requesterid_in_authnrequest_desc'    => '<p>O serviço solicitado não foi encontrado.</p>',
     'error_clock_issue_title' => 'Erro - A asserção ainda não é válida ou pode ter expirado',
     'error_clock_issue_desc' => '<p>Por favor, verifique se a hora no IdP está correta.</p>',
     'error_stepup_callout_unknown_title' => 'Erro - falha por autenticação forte desconhecida',
@@ -279,7 +275,7 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_feedback_wiki_links_authentication_feedback_unable_to_receive_message' => '',
     'error_feedback_wiki_links_authentication_feedback_session_lost' => '',
     'error_feedback_wiki_links_authentication_feedback_session_not_started' => '',
-    'error_feedback_wiki_links_authentication_feedback_unknown_issuer' => '',
+    'error_feedback_wiki_links_authentication_feedback_unknown_identity_provider' => '',
     'error_feedback_wiki_links_authentication_feedback_no_idps' => '',
     'error_feedback_wiki_links_authentication_feedback_invalid_acs_location' => '',
     'error_feedback_wiki_links_authentication_feedback_unsupported_signature_method' => '',
@@ -293,8 +289,7 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_feedback_wiki_links_authentication_feedback_received_error_status_code' => '',
     'error_feedback_wiki_links_authentication_feedback_signature_verification_failed' => '',
     'error_feedback_wiki_links_authentication_feedback_verification_failed' => '',
-    'error_feedback_wiki_links_authentication_feedback_no_consent' => '',
-    'error_feedback_wiki_links_authentication_feedback_unknown_service' => '',
+    'error_feedback_wiki_links_authentication_feedback_unknown_requesterid_in_authnrequest' => '',
     'error_feedback_wiki_links_authentication_feedback_pep_violation' => '',
     'error_feedback_wiki_links_authentication_feedback_unknown_preselected_idp' => '',
     'error_feedback_wiki_links_authentication_feedback_stuck_in_authentication_loop' => '',
@@ -310,7 +305,7 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_feedback_idp_contact_label_small_authentication_feedback_unable_to_receive_message' => 'Mail',
     'error_feedback_idp_contact_label_small_authentication_feedback_session_lost' => '',
     'error_feedback_idp_contact_label_small_authentication_feedback_session_not_started' => 'Mail',
-    'error_feedback_idp_contact_label_small_authentication_feedback_unknown_issuer' => 'Mail',
+    'error_feedback_idp_contact_label_small_authentication_feedback_unknown_identity_provider' => '',
     'error_feedback_idp_contact_label_small_authentication_feedback_no_idps' => 'Mail',
     'error_feedback_idp_contact_label_small_authentication_feedback_invalid_acs_location' => '',
     'error_feedback_idp_contact_label_small_authentication_feedback_unsupported_signature_method' => 'Mail',
@@ -324,8 +319,7 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_feedback_idp_contact_label_small_authentication_feedback_received_error_status_code' => '',
     'error_feedback_idp_contact_label_small_authentication_feedback_signature_verification_failed' => 'Mail',
     'error_feedback_idp_contact_label_small_authentication_feedback_verification_failed' => 'Mail',
-    'error_feedback_idp_contact_label_small_authentication_feedback_no_consent' => '',
-    'error_feedback_idp_contact_label_small_authentication_feedback_unknown_service' => '',
+    'error_feedback_idp_contact_label_small_authentication_feedback_unknown_requesterid_in_authnrequest' => '',
     'error_feedback_idp_contact_label_small_authentication_feedback_pep_violation' => 'Mail',
     'error_feedback_idp_contact_label_small_authentication_feedback_unknown_preselected_idp' => 'Mail',
     'error_feedback_idp_contact_label_small_authentication_feedback_stuck_in_authentication_loop' => 'Mail',

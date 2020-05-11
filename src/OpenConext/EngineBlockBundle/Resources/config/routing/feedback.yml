@@ -18,11 +18,6 @@ authentication_feedback_session_not_started:
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:sessionNotStartedAction }
 
-authentication_feedback_unknown_issuer:
-    path:       '/authentication/feedback/unknown-issuer'
-    methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:unknownIssuerAction }
-
 authentication_feedback_no_idps:
     path:       '/authentication/feedback/no-idps'
     methods:    [GET]
@@ -47,6 +42,11 @@ authentication_feedback_unknown_service_provider:
     path:       '/authentication/feedback/unknown-service-provider'
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:unknownServiceProviderAction }
+
+authentication_feedback_unknown_identity_provider:
+    path:       '/authentication/feedback/unknown-identity-provider'
+    methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:unknownIdentityProviderAction }
 
 authentication_feedback_missing_required_fields:
     path:       '/authentication/feedback/missing-required-fields'
@@ -88,15 +88,10 @@ authentication_feedback_verification_failed:
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:receivedInvalidResponseAction }
 
-authentication_feedback_no_consent:
-    path:       '/authentication/feedback/no-consent'
+authentication_feedback_unknown_requesterid_in_authnrequest:
+    path:       '/authentication/feedback/unknown_requesterid_in_authnrequest'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:noConsentAction }
-
-authentication_feedback_unknown_service:
-    path:       '/authentication/feedback/unknown-service'
-    methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:unknownServiceAction }
+    defaults:   { _controller: engineblock.controller.authentication.feedback:unknownRequesterIdInAuthnRequestAction }
 
 authentication_feedback_pep_violation:
     path:       '/authentication/feedback/authorization-policy-violation'
