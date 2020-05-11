@@ -320,13 +320,6 @@ services:
         tags:
              - { name: 'twig.extension' }
 
-    engineblock.twig.extension.user_agent:
-        class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\UserAgent
-        arguments:
-            - "@request_stack"
-        tags:
-             - { name: 'twig.extension' }
-
     engineblock.twig.extension.wayf:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Wayf
         arguments:
