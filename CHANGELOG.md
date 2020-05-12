@@ -5,6 +5,31 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.2.0
+This release replaces the legacy configuration with Symfony configuration. So effectively the `application.ini` is removed from EB and replaced in favour of a `parameters.yml`.
+Also, EB now has Portuguese language support, and the allowed languages are configurable.
+
+**Features**
+ * Remove legacy application.ini from EB #838
+ * Make the enabled languages configurable #842
+ * Add Portuguese language support #841
+ * Log original NameID and given LOA on successful login #845
+
+**Improvements**
+ * Move footer translations to translations #844
+ * Remove unused error pages #849
+ * Cleanup unused `response_processing_service_binding` column from the database #782
+ * Implement lazy loading of WAYF logos. #843
+
+**Chores**
+ * Stop generating bootstrap.php.cache #837
+ * Remove old (IE8 / IE9) browser support #846
+ * Defense in depth SAML Response validation #806
+ * Disassemble the EB debug feature #836
+ * Remove remaining eduGAIN code from EngineBlock #834
+ * Prevent recurring migration creation #833
+ * Change language cookie defaults #832
+
 ## 6.1.3
 Changes done in order to confine to metadata spec to pass validation.
 
