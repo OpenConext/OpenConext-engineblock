@@ -28,6 +28,11 @@ return $overrides + [
     // or: 'Use your institutional account' (when overridden)
     'account_noun' => 'organisatieaccount',
 
+    // Email
+    'openconext_support_url' => 'https://example.org',
+    'openconext_terms_of_use_url' => 'https://example.org',
+    'name_id_support_url' => 'https://example.org',
+
     // General
     'value'                 => 'Waarde',
     'post_data'             => 'POST Data',

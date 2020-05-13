@@ -100,14 +100,18 @@ class ProxiedIdentityProviderTest extends AbstractEntityTest
     private function createConfiguration(): EngineBlockConfiguration
     {
         $translator = $this->createMock(TranslatorInterface::class);
-        $translator->expects($this->exactly(1))
+        $translator->expects($this->at(0))
             ->method('trans')
             ->with('suite_name')
             ->willReturn('test-suite');
 
+        $translator->expects($this->at(1))
+            ->method('trans')
+            ->with('openconext_support_url')
+            ->willReturn('configuredSupportUrl');
+
         $configuration = new EngineBlockConfiguration(
             $translator,
-            'configuredSupportUrl',
             'configuredSupportMail',
             'configuredDescription',
             'configuredLogoUrl',

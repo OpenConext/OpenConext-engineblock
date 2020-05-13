@@ -50,11 +50,9 @@ class ConsentController
         $fakeResponseId = '918723649';
         $fakeSp = TestEntitySeeder::buildSp();
         $fakeIdP = TestEntitySeeder::buildIdP();
-        $supportEmail = 'support@openconext.org';
         $supportContact = 'Helpdesk';
         $nameId = NameID::fromArray(['Value' => 'user@openconext']);
         $profileUrl = 'profile.openconext.org';
-        $supportUrl = 'support.openconext.org';
         $attributes = [
             'urn:mace:dir:attribute-def:displayName' => ['John Doe'],
             'urn:mace:dir:attribute-def:uid' => ['joe-f12'],
@@ -83,10 +81,8 @@ class ConsentController
             'minimalConsent' => $fakeIdP->getConsentSettings()->isMinimal($fakeSp->entityId),
             'consentCount' => 5,
             'nameId' => $nameId,
-            'nameIdSupportUrl' => $supportEmail,
             'nameIdIsPersistent' => true,
             'profileUrl' => $profileUrl,
-            'supportUrl' => $supportUrl,
             'showConsentExplanation' => $fakeIdP->getConsentSettings()->hasConsentExplanation($fakeSp->entityId),
             'consentSettings' => $fakeIdP->getConsentSettings(),
             'spEntityId' => $fakeSp->entityId,

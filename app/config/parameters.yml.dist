@@ -175,13 +175,6 @@ parameters:
     ## given again.
     consent_store_values: true
 
-    ## terms of use openconext
-    openconext_support_url: 'https://example.org'
-    openconext_terms_of_use_url: 'https://example.org'
-
-    ## Consent view related settings
-    openconext_support_name_id_url: 'https://example.org'
-
     ## Email configuration
     email_idp_debugging:
         from:

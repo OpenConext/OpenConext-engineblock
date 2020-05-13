@@ -107,7 +107,6 @@ services:
         public: false
         arguments:
             - '@translator'
-            - '%openconext_support_url%'
             - '%email_request_access_address%'
             - '%view_default_header%'
             - '%hostname%'
@@ -130,7 +129,6 @@ services:
             - "@OpenConext\\EngineBlock\\Metadata\\X509\\KeyPairFactory"
             - "@OpenConext\\EngineBlock\\Xml\\DocumentSigner"
             - "@engineblock.service.time_provider"
-            - "%openconext_terms_of_use_url%"
 
     OpenConext\EngineBlock\Xml\MetadataProvider:
         arguments:

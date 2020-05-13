@@ -45,6 +45,8 @@ use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\md\EntitiesDescriptor;
 use SAML2\XML\md\EntityDescriptor;
+use Symfony\Bridge\Twig\Extension\TranslationExtension;
+use Symfony\Component\Translation\TranslatorInterface;
 use Twig\Environment;
 
 class MetadataRendererTest extends TestCase
@@ -71,6 +73,16 @@ class MetadataRendererTest extends TestCase
         $twigLoader = new \Twig_Loader_Filesystem();
         $twigLoader->addPath($basePath . '/theme/material/templates/modules', 'theme');
         $environment = new Environment($twigLoader);
+
+        $translator = m::mock(TranslatorInterface::class);
+        $translator
+            ->shouldReceive('trans')
+            ->andReturnUsing(function($key) {
+                return 'trans-'.$key;
+            });
+
+        $translatorExtension = new TranslationExtension($translator);
+        $environment->addExtension($translatorExtension);
 
         $keyPairFactory = $this->createMock(KeyPairFactory::class);
         $keyPairFactory
@@ -125,7 +137,7 @@ class MetadataRendererTest extends TestCase
 
         // Ensure the terms of use comment is present
         $comment = $dom->firstChild;
-        $this->assertContains('terms-of-use', $comment->nodeValue);
+        $this->assertContains('trans-openconext_terms_of_use_url', $comment->nodeValue);
 
         // Assert descriptor
 
@@ -176,7 +188,7 @@ class MetadataRendererTest extends TestCase
 
         // Ensure the terms of use comment is present
         $comment = $dom->firstChild;
-        $this->assertContains('terms-of-use', $comment->nodeValue);
+        $this->assertContains('trans-openconext_terms_of_use_url', $comment->nodeValue);
 
         // Assert descriptor
         $entityDescriptor = new EntityDescriptor($dom->childNodes->item(1));
@@ -242,7 +254,7 @@ class MetadataRendererTest extends TestCase
 
         // Ensure the terms of use comment is present
         $comment = $dom->firstChild;
-        $this->assertContains('terms-of-use', $comment->nodeValue);
+        $this->assertContains('trans-openconext_terms_of_use_url', $comment->nodeValue);
 
         // Assert descriptor
         $entityDescriptor = new EntitiesDescriptor($dom->childNodes->item(1));
