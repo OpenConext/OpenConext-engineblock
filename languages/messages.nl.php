@@ -194,7 +194,7 @@ TXT
         'error_unsupported_acs_location_scheme' => 'Fout - URI scheme van de ACS locatie wordt niet ondersteund',
 
     'error_unknown_identity_provider'              => 'Error - Onbekende %organisationNoun%',
-    'error_unknown_identity_provider_desc'     => 'Je probeert in te loggen op een dienst die niet bekend is binnen %suiteName%. Als je toch gebruik wilt maken van deze dienst, neem dan contact op met de helpdesk van je %organisationNoun%.',
+    'error_unknown_identity_provider_desc'     => 'De %organisationNoun% waarmee je probeert in te loggen is onbekend bij %suiteName%.',
     'error_generic'                     => 'Fout - Generieke foutmelding',
     'error_generic_desc'                => 'Inloggen is niet gelukt en we weten niet precies waarom. Probeer het eerst eens opnieuw door terug te gaan naar de dienst en opnieuw in te loggen. Lukt dit niet, neem dan contact op met de helpdesk van je %organisationNoun%.',
     'error_missing_required_fields'     => 'Error - Verplichte velden ontbreken',
