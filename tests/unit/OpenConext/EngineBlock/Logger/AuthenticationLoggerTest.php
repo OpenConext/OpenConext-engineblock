@@ -54,7 +54,7 @@ class AuthenticationLoggerTest extends TestCase
         $spProxy1EntityId         = 'SpProxy1EntityId';
         $spProxy2EntityId         = 'SpProxy2EntityId';
         $originalNameId           = 'urn:collab:person:original:some-person';
-        $attainedLoa              = 'http://vm.openconext.org/assurance/loa1';
+        $authnContextClassRef     = 'urn:oasis:names:tc:SAML:2.0:ac:classes:Password';
 
         $serviceProvider       = new Entity(new EntityId($serviceProviderEntityId), EntityType::SP());
         $identityProvider      = new Entity(new EntityId($identityProviderEntityId), EntityType::IdP());
@@ -72,7 +72,7 @@ class AuthenticationLoggerTest extends TestCase
             'proxied_sp_entity_ids' => [$spProxy1EntityId, $spProxy2EntityId],
             'workflow_state' => AbstractRole::WORKFLOW_STATE_PROD,
             'original_name_id' => $originalNameId,
-            'attained_loa' => $attainedLoa,
+            'authncontextclassref' => $authnContextClassRef,
         ];
 
         $mockLogger = m::mock('\Psr\Log\LoggerInterface');
@@ -112,7 +112,7 @@ class AuthenticationLoggerTest extends TestCase
             [$serviceProviderProxy1, $serviceProviderProxy2],
             AbstractRole::WORKFLOW_STATE_PROD,
             $originalNameId,
-            $attainedLoa,
+            $authnContextClassRef,
             $keyId
         );
     }

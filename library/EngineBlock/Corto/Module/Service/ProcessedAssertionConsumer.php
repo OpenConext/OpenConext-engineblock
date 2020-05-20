@@ -55,7 +55,6 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer implements Eng
             $this->_server->setKeyId($receivedRequest->getKeyId());
         }
 
-        $currentProcess = $this->_processingStateHelper->getStepByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_CONSENT);
         $this->_processingStateHelper->clearStepByRequestId($receivedRequest->getId());
 
         $wantlogging = true;

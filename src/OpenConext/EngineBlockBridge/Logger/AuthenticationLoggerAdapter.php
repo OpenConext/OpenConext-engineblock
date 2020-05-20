@@ -46,7 +46,7 @@ class AuthenticationLoggerAdapter
      * @param                   $keyId
      * @param ServiceProvider[] $proxiedServiceProviders
      * @param string $originalNameId
-     * @param string|null $attainedLoa
+     * @param string|null $authnContextClassRef
      */
     public function logLogin(
         ServiceProvider $serviceProvider,
@@ -55,7 +55,7 @@ class AuthenticationLoggerAdapter
         $keyId,
         array $proxiedServiceProviders,
         $originalNameId,
-        $attainedLoa
+        $authnContextClassRef
     ) {
         $keyId = $keyId ? new KeyId($keyId) : null;
 
@@ -73,7 +73,7 @@ class AuthenticationLoggerAdapter
             $proxiedSpEntities,
             $serviceProvider->workflowState,
             $originalNameId,
-            $attainedLoa,
+            $authnContextClassRef,
             $keyId
         );
     }
