@@ -16,11 +16,10 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Tests;
+namespace OpenConext\EngineBlock\Stepup;
 
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use OpenConext\EngineBlock\Exception\InvalidArgumentException;
-use OpenConext\EngineBlock\Stepup\StepupEndpoint;
+use OpenConext\EngineBlock\Exception\InvalidStepupConfigurationException;
 use PHPUnit\Framework\TestCase;
 
 class StepupEndpointTest extends TestCase
@@ -45,12 +44,43 @@ class StepupEndpointTest extends TestCase
      * @test
      * @group Stepup
      */
+    public function the_sfo_endpoint_object_entityId_should_not_throw_an_exception_on_initialization_when_invalid()
+    {
+        $endpoint = new StepupEndpoint(null, 'https://sso-location', 'tests/resources/key/engineblock.crt');
+        $this->assertInstanceOf(StepupEndpoint::class, $endpoint);
+    }
+
+    /**
+     * @test
+     * @group Stepup
+     */
+    public function the_sfo_endpoint_object_ssoLocation_should_not_throw_an_exception_on_initialization_when_invalid()
+    {
+        $endpoint = new StepupEndpoint('entity-id', null, 'tests/resources/key/engineblock.crt');
+        $this->assertInstanceOf(StepupEndpoint::class, $endpoint);
+    }
+
+    /**
+     * @test
+     * @group Stepup
+     */
+    public function the_sfo_endpoint_object_keyFile_should_not_throw_an_exception_on_initialization_when_invalid()
+    {
+        $endpoint = new StepupEndpoint('entity-id', 'https://sso-location', null);
+        $this->assertInstanceOf(StepupEndpoint::class, $endpoint);
+    }
+
+    /**
+     * @test
+     * @group Stepup
+     */
     public function the_sfo_endpoint_object_entityId_should_be_a_string()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('EntityId should be a string');
+        $this->expectException(InvalidStepupConfigurationException::class);
+        $this->expectExceptionMessage("Invalid stepup endpoint configuration: stepup.gateway.sfo.entity_id should be a string");
 
         $endpoint = new StepupEndpoint(null, 'https://sso-location', 'tests/resources/key/engineblock.crt');
+        $endpoint->getEntityId();
     }
 
     /**
@@ -59,10 +89,11 @@ class StepupEndpointTest extends TestCase
      */
     public function the_sfo_endpoint_object_ssoLocation_should_be_a_string()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('SSO location should be a string');
+        $this->expectException(InvalidStepupConfigurationException::class);
+        $this->expectExceptionMessage("Invalid stepup endpoint configuration: stepup.gateway.sfo.sso_location should be a string");
 
         $endpoint = new StepupEndpoint('entity-id', null, 'tests/resources/key/engineblock.crt');
+        $endpoint->getSsoLocation();
     }
 
     /**
@@ -71,10 +102,11 @@ class StepupEndpointTest extends TestCase
      */
     public function the_sfo_endpoint_object_keyFile_should_be_a_string()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('KeyFile should be a string');
+        $this->expectException(InvalidStepupConfigurationException::class);
+        $this->expectExceptionMessage("Invalid stepup endpoint configuration: stepup.gateway.sfo.key_file should be a string");
 
         $endpoint = new StepupEndpoint('entity-id', 'https://sso-location', null);
+        $endpoint->getKeyFile();
     }
 
     /**
@@ -83,9 +115,37 @@ class StepupEndpointTest extends TestCase
      */
     public function the_sfo_endpoint_object_keyFile_should_be_a_file()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("Keyfile 'tests/resources/key/non-existent-file.key' should be a valid file");
+        $this->expectException(InvalidStepupConfigurationException::class);
+        $this->expectExceptionMessage("Invalid stepup endpoint configuration: stepup.gateway.sfo.key_file should be a valid file");
 
         $endpoint = new StepupEndpoint('entity-id', 'https://sso-location', 'tests/resources/key/non-existent-file.key');
+        $endpoint->getKeyFile();
+    }
+
+    /**
+     * @dataProvider availableMethodProvider
+     * @test
+     * @group Stepup
+     *
+     * @param string $methodName
+     */
+    public function the_sfo_endpoint_object_mmethods_should_throw_an_exception_when_not_validated($methodName)
+    {
+        $this->expectException(InvalidStepupConfigurationException::class);
+
+        $endpoint = new StepupEndpoint('','','');
+
+        $endpoint->$methodName();
+    }
+
+    public function availableMethodProvider() {
+        $methods = [];
+        $class = new \ReflectionClass(StepupEndpoint::class);
+        foreach ($class->getMethods() as $method) {
+            if (!$method->isConstructor() && $method->isPublic()) {
+                $methods[] = [$method->getName()];
+            }
+        }
+        return $methods;
     }
 }

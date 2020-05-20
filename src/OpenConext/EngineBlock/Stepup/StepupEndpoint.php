@@ -18,7 +18,8 @@
 namespace OpenConext\EngineBlock\Stepup;
 
 use OpenConext\EngineBlock\Assert\Assertion;
-use OpenConext\EngineBlock\Exception\RuntimeException;
+use OpenConext\EngineBlock\Exception\InvalidStepupConfigurationException;
+use Assert\AssertionFailedException;
 
 class StepupEndpoint
 {
@@ -37,40 +38,67 @@ class StepupEndpoint
      */
     private $keyFile;
 
+    /**
+     * @var bool
+     */
+    private $isValidated;
 
     public function __construct($entityId, $ssoLocation, $keyFile)
     {
-        Assertion::string($entityId, 'EntityId should be a string');
-        Assertion::string($ssoLocation, 'SSO location should be a string');
-        Assertion::nullOrString($keyFile, 'KeyFile should be a string');
-        Assertion::nullOrFile($keyFile, sprintf("Keyfile '%s' should be a valid file", $keyFile));
-
         $this->entityId = $entityId;
         $this->ssoLocation = $ssoLocation;
         $this->keyFile = $keyFile;
+        $this->isValidated = false;
     }
 
     /**
      * @return string
+     * @throws InvalidStepupConfigurationException
      */
     public function getEntityId()
     {
+        $this->validate();
         return $this->entityId;
     }
 
     /**
      * @return string
+     * @throws InvalidStepupConfigurationException
      */
     public function getSsoLocation()
     {
+        $this->validate();
         return $this->ssoLocation;
     }
 
     /**
      * @return string
+     * @throws InvalidStepupConfigurationException
      */
     public function getKeyFile()
     {
+        $this->validate();
         return $this->keyFile;
+    }
+
+    /**
+     * @throws InvalidStepupConfigurationException
+     */
+    private function validate()
+    {
+        if ($this->isValidated) {
+            return;
+        }
+
+        try {
+            Assertion::string($this->entityId, 'stepup.gateway.sfo.entity_id should be a string');
+            Assertion::string($this->ssoLocation, 'stepup.gateway.sfo.sso_location should be a string');
+            Assertion::string($this->keyFile, 'stepup.gateway.sfo.key_file should be a string');
+            Assertion::file($this->keyFile, 'stepup.gateway.sfo.key_file should be a valid file');
+        } catch (AssertionFailedException $e) {
+            throw new InvalidStepupConfigurationException(sprintf('Invalid stepup endpoint configuration: %s', $e->getMessage()));
+        }
+
+        $this->isValidated = true;
     }
 }
