@@ -36,8 +36,13 @@ class EngineBlockConfigurationTest extends TestCase
         $translator = m::mock(TranslatorInterface::class);
         $translator
             ->shouldReceive('trans')
-            ->with('suite_name')
+            ->with('suite_name')->once()
             ->andReturn($suitName);
+        $translator
+            ->shouldReceive('trans')
+            ->with('openconext_support_url')->once()
+            ->andReturn('https://www.example.org');
+
         $url = 'https://www.example.org';
         $mail = 'mail@example.org';
         $description = 'The EngineBlock';
@@ -47,7 +52,6 @@ class EngineBlockConfigurationTest extends TestCase
 
         $configuration = new EngineBlockConfiguration(
             $translator,
-            $url,
             $mail,
             $description,
             'example.org',

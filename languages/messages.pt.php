@@ -23,6 +23,10 @@ return $overrides + [
     //     'Use your organisation account' (default)
     // or: 'Use your institutional account' (when overridden)
     'account_noun' => 'conta da organização',
+    // Email
+    'openconext_support_url' => 'https://example.org',
+    'openconext_terms_of_use_url' => 'https://example.org',
+    'name_id_support_url' => 'https://example.org',
     // General
     'value'                 => 'Valor',
     'post_data'             => 'POST Data',

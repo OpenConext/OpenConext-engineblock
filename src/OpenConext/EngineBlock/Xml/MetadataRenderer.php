@@ -63,11 +63,6 @@ class MetadataRenderer
      * @var DocumentSigner
      */
     private $documentSigner;
-
-    /**
-     * @var string
-     */
-    private $termsOfUse;
     /**
      * @var TimeProvider
      */
@@ -83,8 +78,7 @@ class MetadataRenderer
         EngineBlock_Saml2_IdGenerator $samlIdGenerator,
         KeyPairFactory $keyPairFactory,
         DocumentSigner $documentSigner,
-        TimeProvider $timeProvider,
-        string $termsOfUse
+        TimeProvider $timeProvider
     ) {
         $this->languageSupportProvider = $languageSupportProvider;
         $this->twig = $twig;
@@ -92,7 +86,6 @@ class MetadataRenderer
         $this->keyPairFactory = $keyPairFactory;
         $this->documentSigner = $documentSigner;
         $this->timeProvider = $timeProvider;
-        $this->termsOfUse = $termsOfUse;
     }
 
     public function fromServiceProviderEntity(ServiceProviderEntityInterface $sp, string $keyId) : string
@@ -137,7 +130,6 @@ class MetadataRenderer
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
             'validUntil' => $this->getValidUntil(),
             'metadata' => $metadata,
-            'termsOfUse' => $this->termsOfUse,
             'locales' => $this->languageSupportProvider->getSupportedLanguages(),
         ];
 
@@ -152,7 +144,6 @@ class MetadataRenderer
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
             'validUntil' => $this->getValidUntil(),
             'metadata' => $metadata,
-            'termsOfUse' => $this->termsOfUse,
             'locales' => $this->languageSupportProvider->getSupportedLanguages(),
         ];
 
@@ -170,7 +161,6 @@ class MetadataRenderer
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
             'validUntil' => $this->getValidUntil(),
             'metadataCollection' => $metadataCollection,
-            'termsOfUse' => $this->termsOfUse,
             'locales' => $this->languageSupportProvider->getSupportedLanguages(),
         ];
 

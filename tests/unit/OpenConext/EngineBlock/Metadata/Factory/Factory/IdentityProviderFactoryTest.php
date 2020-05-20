@@ -90,14 +90,18 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
 
     public function test_create_idp_entity_from_entity_properties()
     {
-        $this->translator->expects($this->exactly(1))
+        $this->translator->expects($this->at(0))
             ->method('trans')
             ->with('suite_name')
             ->willReturn('test-suite');
 
+        $this->translator->expects($this->at(1))
+            ->method('trans')
+            ->with('openconext_support_url')
+            ->willReturn('configuredSupportUrl');
+
         $this->configuration = new EngineBlockConfiguration(
             $this->translator,
-            'configuredSupportUrl',
             'configuredSupportMail',
             'configuredDescription',
             'example.org',

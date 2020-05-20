@@ -62,7 +62,6 @@ class EngineBlockConfiguration
 
     public function __construct(
         TranslatorInterface $translator,
-        string $supportUrl,
         string $supportMail,
         string $description,
         string $engineHostName,
@@ -71,7 +70,7 @@ class EngineBlockConfiguration
         int $logoHeight
     ) {
         $this->suiteName = $translator->trans('suite_name');
-        $this->supportUrl = $supportUrl;
+        $this->supportUrl = $translator->trans('openconext_support_url');
         $this->supportMail = $supportMail;
         $this->description = $description;
 
