@@ -49,7 +49,7 @@ class AuthenticationLogger
      * @param array $proxiedServiceProviders
      * @param string $workflowState
      * @param string $originalNameId
-     * @param string|null $attainedLoa
+     * @param string|null $authnContextClassRef
      * @param KeyId|null $keyId
      */
     public function logGrantedLogin(
@@ -59,7 +59,7 @@ class AuthenticationLogger
         array $proxiedServiceProviders,
         $workflowState,
         $originalNameId,
-        $attainedLoa,
+        $authnContextClassRef,
         KeyId $keyId = null
     ) {
         $proxiedServiceProviderEntityIds = array_map(
@@ -82,7 +82,7 @@ class AuthenticationLogger
                 'proxied_sp_entity_ids' => $proxiedServiceProviderEntityIds,
                 'workflow_state'        => $workflowState,
                 'original_name_id'      => $originalNameId,
-                'attained_loa'          => $attainedLoa,
+                'authncontextclassref'  => $authnContextClassRef,
             ]
         );
     }

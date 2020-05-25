@@ -233,7 +233,6 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
     {
         $processStep = $this->_processingStateHelper->getStepByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_STEPUP);
         $processStep->getResponse()->getAssertion()->setAuthnContextClassRef($loa->getIdentifier());
-        $processStep->getResponse()->setAttainedLoa($loa->getIdentifier()); // set attained loa so this could be logged later on
         $this->_processingStateHelper->updateStepResponseByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_STEPUP, $processStep->getResponse());
     }
 

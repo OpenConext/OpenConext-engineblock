@@ -48,16 +48,14 @@ class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter
         // Remove the SP that is our next hop
         array_pop($requesterChain);
 
-        $originalResponse = ($this->_response->getOriginalResponse() ? $this->_response->getOriginalResponse() : $this->_response);
-
         $this->authenticationLogger->logLogin(
             $this->_serviceProvider,
             $this->_identityProvider,
             $this->_collabPersonId,
             $this->_request->getKeyId(),
             $requesterChain,
-            $originalResponse->getIntendedNameId(),
-            $originalResponse->getAttainedLoa()
+            $this->_response->getNameIdValue(),
+            $this->_response->getAssertion()->getAuthnContextClassRef()
         );
     }
 }
