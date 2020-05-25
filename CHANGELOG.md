@@ -5,6 +5,15 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.2.1
+**Improvements**
+ * Make support urls translatable #851
+ * Allow empty sfo/stepup key and use JIT validation instead #853
+ * If the SP provided a RequestedAuthnContext in the AuthnRequest, replicate this to the IdP #848
+
+**Bugfix**
+ * Log AuthnContextClassRef and correct NameId on a successful login #854
+
 ## 6.2.0
 This release replaces the legacy configuration with Symfony configuration. So effectively the `application.ini` is removed from EB and replaced in favour of a `parameters.yml`.
 Also, EB now has Portuguese language support, and the allowed languages are configurable.
