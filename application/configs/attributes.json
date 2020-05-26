@@ -10,7 +10,13 @@
             "nl": "Volledige persoonsnaam"
         },
         "DisplayOrder" : 2,
-        "DisplayConsent" : true
+        "DisplayConsent" : true,
+        "Conditions": {
+            "warning": {
+                "min": "1",
+                "max": "1"
+            }
+        }
     },
     "urn:oid:2.16.840.1.113730.3.1.241": "urn:mace:dir:attribute-def:displayName",
     "urn:mace:dir:attribute-def:displayName": {
@@ -46,6 +52,7 @@
         "Conditions": {
             "caseInsensitive": true,
             "warning": {
+                "min": "1",
                 "allowed": [
                     "affiliate",
                     "employee",
@@ -95,6 +102,24 @@
             }
         }
     },
+    "urn:oid:1.3.6.1.4.1.5923.1.1.1.11": "urn:mace:dir:attribute-def:eduPersonAssurance",
+    "urn:mace:dir:attribute-def:eduPersonAssurance": {
+        "Description": {
+            "en": "Assert compliance with specific standards for identity assurance",
+            "nl": "Geeft compliance aan met bepaalde standaarden voor garanties omtrent identiteiten"
+        },
+        "Name": {
+            "en": "Assurance",
+            "nl": "Assurance"
+        },
+        "DisplayOrder" : 16,
+        "DisplayConsent" : true,
+        "Conditions": {
+            "warning": {
+                "type": "URI"
+            }
+        }
+    },
     "urn:mace:surf.nl:attribute-def:eckid": {
         "Description": {
             "en": "Pseudonymous identifier for educational content access",
@@ -103,6 +128,24 @@
         "Name": {
             "en": "ECK ID",
             "nl": "ECK ID"
+        },
+        "DisplayOrder" : 15,
+        "DisplayConsent" : true,
+        "Conditions": {
+            "warning": {
+                "max": "1",
+                "regex": "#^https://ketenid\\.nl#"
+            }
+        }
+    },
+    "urn:mace:eduid.nl:1.1": {
+        "Description": {
+            "en": "eduID",
+            "nl": "eduID"
+        },
+        "Name": {
+            "en": "eduID",
+            "nl": "eduID"
         },
         "DisplayOrder" : 15,
         "DisplayConsent" : true,
@@ -127,6 +170,7 @@
         "DisplayConsent" : true,
         "Conditions": {
             "warning": {
+                "min": "1",
                 "max": "1",
                 "regex": "\/[\\S]+@[\\S]+\/"
             },
@@ -147,6 +191,7 @@
         "DisplayConsent" : true,
         "Conditions": {
             "warning": {
+                "min": "1",
                 "max": "1"
             }
         }
@@ -203,6 +248,7 @@
         "DisplayConsent" : true,
         "Conditions": {
             "warning": {
+                "min": "1",
                 "max": "1"
             }
         }
@@ -301,6 +347,9 @@
                 "min": "1",
                 "max": "1",
                 "type": "HostName"
+            },
+            "warning": {
+                "regex": "#^[a-z0-9.-]+\\.[a-z]{2,4}#"
             }
         }
     },
@@ -465,13 +514,10 @@
             "nl": "Scoped affiliation"
         },
         "Conditions": {
-            "caseInsensitive": true
-        }
-    },
-    "urn:mace:dir:attribute-def:eduPersonAssurance": {
-        "Conditions": {
+            "caseInsensitive": true,
             "warning": {
-                "type": "URN"
+                "min": "1",
+                "regex": "\/[\\S]+@[\\S]+\/"
             }
         }
     },
