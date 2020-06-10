@@ -98,45 +98,6 @@ class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
         $this->assertEquals($nameIdPolicy['Format'], 'fooFormat');
     }
 
-    public function testRequestedAuthnContextNotSetByDefault()
-    {
-        $proxyServer = $this->factoryProxyServer();
-
-        $originalRequest = $this->factoryOriginalRequest();
-
-        $identityProvider = $proxyServer->getRepository()->fetchIdentityProviderByEntityId('testIdp');
-        /** @var AuthnRequest $enhancedRequest */
-        $enhancedRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
-            $originalRequest,
-            $identityProvider,
-            $proxyServer
-        );
-
-        $authnContext = $enhancedRequest->getRequestedAuthnContext();
-        $this->assertNull($authnContext);
-    }
-
-    public function testRequestedAuthnContextIsSetFromOriginalRequest()
-    {
-        $proxyServer = $this->factoryProxyServer();
-
-        $originalRequest = $this->factoryOriginalRequest();
-        $originalRequest->setRequestedAuthnContext(['AuthnContextClassRef' => ['urn:mace:surfnet.nl:my-context-class']]);
-
-        $identityProvider = $proxyServer->getRepository()->fetchIdentityProviderByEntityId('testIdp');
-        /** @var AuthnRequest $enhancedRequest */
-        $enhancedRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
-            $originalRequest,
-            $identityProvider,
-            $proxyServer
-        );
-
-        $authnContext = $enhancedRequest->getRequestedAuthnContext();
-        $this->assertCount(1, $authnContext);
-        $this->assertCount(1, $authnContext['AuthnContextClassRef']);
-        $this->assertEquals($authnContext['AuthnContextClassRef'][0], 'urn:mace:surfnet.nl:my-context-class');
-    }
-
     /**
      * @return array
      */
