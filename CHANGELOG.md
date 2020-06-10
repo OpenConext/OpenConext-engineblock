@@ -5,6 +5,11 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.2.2
+This change will revert #848 to prevent breaking flows because of misconfigured SP's
+
+ * If the SP provided a RequestedAuthnContext in the AuthnRequest, replicate this to the IdP #848
+
 ## 6.2.1
 **Improvements**
  * Make support urls translatable #851
