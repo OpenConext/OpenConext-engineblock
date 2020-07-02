@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlock\Tests;
 use OpenConext\EngineBlock\Metadata\Entity\Assembler\PushMetadataAssembler;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\MfaEntityCollection;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use PHPUnit\Framework\TestCase;
@@ -210,7 +211,6 @@ class PushMetadataAssemblerTest extends TestCase
         $this->assertNull($stepupConnections->getLoa('http://unknown-sp'));
     }
 
-
     public function test_it_does_not_assemble_invalid_sfo_settings()
     {
         $connection = '{
@@ -239,6 +239,57 @@ class PushMetadataAssemblerTest extends TestCase
 
         $this->assertInstanceOf(StepupConnections::class, $stepupConnections);
         $this->assertFalse($stepupConnections->hasConnections());
+    }
+
+    public function test_it_assembles_mfa_entity_settings()
+    {
+        $connection = '{
+            "2d96e27a-76cf-4ca2-ac70-ece5d4c49524": {
+                "mfa_entities": [{
+                    "name": "https://teams.vm.openconext.org/shibboleth",
+                    "level": "http://schemas.microsoft.com/claims/multipleauthn"
+                }, {
+                    "name": "https://aa.vm.openconext.org/shibboleth",
+                    "level": "http://schemas.microsoft.com/claims/multipleauthn"
+                }],
+                "name": "https:\/\/serviceregistry.vm.openconext.org\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-idp",
+                "state": "prodaccepted",
+                "type": "saml20-idp"
+            }
+	    }';
+
+        $input = json_decode($connection);
+
+        $connections = $this->assembler->assemble($input);
+
+        /** @var IdentityProvider $idp */
+        $idp = $connections[0];
+        $this->assertInstanceOf(IdentityProvider::class, $idp);
+        $mfaEntities = $idp->getCoins()->mfaEntities();
+        $this->assertInstanceOf(MfaEntityCollection::class, $mfaEntities);
+        $this->assertCount(2, $mfaEntities);
+    }
+
+    public function test_mfa_entity_settings_are_optional()
+    {
+        $connection = '{
+            "2d96e27a-76cf-4ca2-ac70-ece5d4c49524": {
+                "name": "https:\/\/serviceregistry.vm.openconext.org\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-idp",
+                "state": "prodaccepted",
+                "type": "saml20-idp"
+            }
+	    }';
+
+        $input = json_decode($connection);
+
+        $connections = $this->assembler->assemble($input);
+
+        /** @var IdentityProvider $idp */
+        $idp = $connections[0];
+        $this->assertInstanceOf(IdentityProvider::class, $idp);
+        $mfaEntities = $idp->getCoins()->mfaEntities();
+        $this->assertInstanceOf(MfaEntityCollection::class, $mfaEntities);
+        $this->assertCount(0, $mfaEntities);
     }
 
     public function invalidAcsLocations()
