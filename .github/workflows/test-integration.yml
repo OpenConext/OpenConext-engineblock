@@ -1,8 +1,9 @@
 name: test-integration
 on:
     pull_request:
+    # run every hour
     schedule:
-      - cron: '0 2 * * *' # run at 2 AM UTC
+      - cron: "0 * * * *"
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -60,7 +61,43 @@ jobs:
                   '
               env:
                   SYMFONY_ENV: ci
+            - name: Run frontend tests
+              run: |
+                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                      cd theme && \
+                      sudo npm run lint && \
+                     ./node_modules/.bin/jest material/javascripts/tests/unit && \
+                     ./node_modules/.bin/jest material/javascripts/tests/smoke
+                  '
+              env:
+                  SYMFONY_ENV: ci
+            - name: Run code quality tests
+              run: |
+                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                      ./vendor/bin/phpmd src text ci/travis/phpmd.xml --exclude */Tests/* && \
+                      ./vendor/bin/phpcs --report=full --standard=ci/travis/phpcs.xml --warning-severity=0 --extensions=php src  && \
+                      ./vendor/bin/phpcs --standard=ci/travis/phpcs-legacy.xml --warning-severity=0 --extensions=php -s library  && \
+                      ./vendor/bin/docheader check src/ tests/ library/ --exclude-dir resources
+                  '
+              env:
+                  SYMFONY_ENV: ci
+            - name: Run security audit
+              run: |
+                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                      ./vendor/bin/security-checker security:check && \
+                      cd theme && \
+                      npm run audit
+                  '
+              env:
+                  SYMFONY_ENV: ci
             - name: Show log on failure
               if: failure()
               run:  |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org cat app/logs/ci/ci.log
+            - uses: sonots/slack-notice-action@v3
+              with:
+                  status: ${{ job.status }}
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+              if: ${{ failure() && github.event == 'schedule'}}
