@@ -66,11 +66,11 @@ jobs:
             - name: Run frontend tests
               continue-on-error: ${{ matrix.php != env.PROD_PHP }}
               run: |
-                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                  cd docker && docker-compose exec -e CHROME_BIN="/usr/bin/chromium" -T php-fpm.vm.openconext.org bash -c '
                       cd theme && \
                       npm run lint && \
                      ./node_modules/.bin/jest material/javascripts/tests/unit && \
-                     ./node_modules/.bin/jest material/javascripts/tests/smoke
+                     ./node_modules/.bin/jest --runInBand material/javascripts/tests/smoke
                   '
               env:
                   SYMFONY_ENV: ci
