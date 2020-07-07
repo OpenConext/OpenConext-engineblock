@@ -31,6 +31,7 @@ jobs:
             - name: Init environment
               run: cd docker && ./init.sh && cat .env
             - name: Build Docker environmnent
+              continue-on-error: ${{ matrix.php != env.PROD_PHP }}
               run: |
                 cd docker &&
                 ${DOCKER_COMPOSE} up -d --build &&
@@ -52,6 +53,7 @@ jobs:
               env:
                   SYMFONY_ENV: ci
             - name: Run acceptance tests
+              continue-on-error: ${{ matrix.php != env.PROD_PHP }}
               run: |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                       ./app/console doctrine:schema:drop --force --env=ci && \
@@ -62,6 +64,7 @@ jobs:
               env:
                   SYMFONY_ENV: ci
             - name: Run frontend tests
+              continue-on-error: ${{ matrix.php != env.PROD_PHP }}
               run: |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                       cd theme && \
@@ -72,6 +75,7 @@ jobs:
               env:
                   SYMFONY_ENV: ci
             - name: Run code quality tests
+              continue-on-error: ${{ matrix.php != env.PROD_PHP }}
               run: |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                       ./vendor/bin/phpmd src text ci/travis/phpmd.xml --exclude */Tests/* && \
@@ -82,6 +86,7 @@ jobs:
               env:
                   SYMFONY_ENV: ci
             - name: Run security audit
+              continue-on-error: ${{ matrix.php != env.PROD_PHP }}
               run: |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                       ./vendor/bin/security-checker security:check && \
@@ -91,13 +96,15 @@ jobs:
               env:
                   SYMFONY_ENV: ci
             - name: Show log on failure
+              continue-on-error: ${{ matrix.php != env.PROD_PHP }}
               if: failure()
               run:  |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org cat app/logs/ci/ci.log
             - uses: sonots/slack-notice-action@v3
+              continue-on-error: ${{ matrix.php != env.PROD_PHP }}
               with:
                   status: ${{ job.status }}
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-              if: ${{ failure() && github.event == 'schedule'}}
+              if: ${{ failure() && github.event == 'schedule' && matrix.php != env.PROD_PHP }}
