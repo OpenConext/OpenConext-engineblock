@@ -54,13 +54,13 @@ services:
             context: ../
             # override this in a dedicated dockerfile per php version
             # dockerfile: docker/php-fpm/Dockerfile
+            args:
+                NPM_UID: "${UID}"
+                NPM_GID: "${GID}"
         container_name: eb-phpfpm
         volumes:
             - ../:/var/www
-
-        user: '${UID}:${GID}'
-        ports:
-            - 9000:9000
+        user: "${UID}:${GID}"
         depends_on:
             db.vm.openconext.org:
                 condition: service_healthy
@@ -70,7 +70,7 @@ services:
     selenium.vm.openconext.org:
         image: selenium/standalone-chrome:2.53.1
         container_name: eb-selenium
-        user: '${UID}:${GID}'
+        user: "${UID}:${GID}"
         environment:
             START_XVFB: "false"
         volumes:

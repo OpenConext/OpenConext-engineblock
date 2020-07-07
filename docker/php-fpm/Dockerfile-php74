@@ -1,5 +1,8 @@
 FROM php:7.4-fpm
 
+ARG NPM_UID=1000
+ARG NPM_GID=1000
+
 # Copy phpfpm config
 COPY docker/php-fpm/app.ini /usr/local/etc/php/conf.d/
 
@@ -21,10 +24,9 @@ RUN apt-get update && apt-get install -y \
 # Composer
 RUN curl -sL https://getcomposer.org/installer | php -- --install-dir /usr/bin --filename composer
 
-# Npm (this is a temporarily solution and should be fixed '--force --unsafe-perm')
-RUN npm cache clean --force --unsafe-perm
-RUN mkdir /.npm
-RUN chmod -R a+w /.npm
+# Fix npm
+RUN mkdir /.npm && chown -R "${NPM_UID}:${NPM_GID}" "/.npm"
+RUN mkdir /.config && chown -R "${NPM_UID}:${NPM_GID}" "/.config"
 
 # Cleanup
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
