@@ -61,7 +61,7 @@ class OpenConextEngineBlockExtension extends Extension
      */
     private function setUrlParameterBasedOnEnv(ContainerBuilder $container)
     {
-        if (in_array($container->getParameter('kernel.environment'), ['dev', 'test'])) {
+        if (in_array($container->getParameter('kernel.environment'), ['dev', 'test', 'ci'])) {
             $container->setParameter(
                 'engineblock_url',
                 sprintf('https://engine.%s', $container->getParameter('domain'))

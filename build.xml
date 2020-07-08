@@ -176,12 +176,14 @@
 
     <target name="js-unit-tests">
         <exec dir="${basedir}/theme" executable="node_modules/.bin/jest" failonerror="true">
+            <env key="CHROME_BIN" value="/usr/bin/google-chrome" />
             <arg value="material/javascripts/tests/unit" />
         </exec>
     </target>
 
     <target name="js-smoke-tests">
         <exec dir="${basedir}/theme" executable="node_modules/.bin/jest" failonerror="true">
+            <env key="CHROME_BIN" value="/usr/bin/google-chrome" />
             <arg line="--runInBand" />
             <arg line="material/javascripts/tests/smoke" />
         </exec>
@@ -211,8 +213,6 @@
     </target>
 
     <target name="behat-dev">
-        <echo message="Preparing the dev env to run in functional testing mode" />
-        <antcall target="prepare-env"/>
         <echo message="${line.separator}${line.separator}Running Behat"/>
         <antcall target="run-behat">
             <param name="suite" value="default"/>
@@ -223,8 +223,6 @@
         <echo message="Starting a new selenium instance" />
         <antcall target="selenium-stop"/>
         <antcall target="selenium-start"/>
-        <echo message="Preparing the dev env to run in functional testing mode" />
-        <antcall target="prepare-env"/>
         <echo message="${line.separator}${line.separator}Running Behat"/>
         <antcall target="run-behat">
             <param name="suite" value="selenium"/>
@@ -233,8 +231,6 @@
     </target>
 
     <target name="behat-dev-wip">
-        <echo message="Preparing the dev env to run in functional testing mode" />
-        <antcall target="prepare-env"/>
         <echo message="${line.separator}${line.separator}Running Behat"/>
         <antcall target="run-behat">
             <param name="suite" value="wip"/>
@@ -270,14 +266,6 @@
             <arg line="--suite ${suite} -vv"/>
             <arg line="--format progress"/>
             <arg line="--strict"/>
-        </exec>
-    </target>
-
-    <target name="prepare-env"
-            description="ensures that the environment cache is rebuilt">
-        <exec executable="composer" failonerror="true">
-            <env key="SYMFONY_ENV" value="test"/>
-            <arg line="prepare-env"/>
         </exec>
     </target>
 

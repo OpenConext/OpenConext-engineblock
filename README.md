@@ -183,15 +183,11 @@ If you are using this pattern, an update can be done with the following:
 
 2. Check out the release notes in UPGRADING.md
 
-3. Prepare your environment (see above)
-
-        SYMFONY_ENV=prod composer prepare-env
-
-4. Run the database migrations script.
+3. Run the database migrations script.
 
         app/console doctrine:migrations:migrate --env=prod
 
-5. Change the symlink.
+4. Change the symlink.
 
 ## Browsers support
 

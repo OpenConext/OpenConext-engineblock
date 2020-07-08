@@ -31,7 +31,7 @@ class AppKernel extends Kernel
             new OpenConext\EngineBlockBundle\OpenConextEngineBlockBundle(),
         ];
 
-        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+        if (in_array($this->getEnvironment(), array('dev', 'test', 'ci'))) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Liip\FunctionalTestBundle\LiipFunctionalTestBundle();

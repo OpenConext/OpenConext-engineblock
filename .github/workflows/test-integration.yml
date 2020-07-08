@@ -1,0 +1,111 @@
+name: test-integration
+on:
+    pull_request:
+    # run every hour
+    schedule:
+      - cron: "0 * * * *"
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        strategy:
+          matrix:
+            php: [php72, php74]
+        env:
+          PROD_PHP: php72
+          DOCKER_COMPOSE:  docker-compose -f docker-compose.yml -f docker-compose-${{matrix.php}}.yml
+        steps:
+            - name: Checkout
+              uses: actions/checkout@master
+            - name: Get Composer Cache Directory
+              id: composer-cache
+              run: |
+                echo "::set-output name=dir::$(composer config cache-files-dir)"
+            - name: Restore Composer cache
+              uses: actions/cache@v1
+              with:
+                path: ${{ steps.composer-cache.outputs.dir }}
+                key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                restore-keys: |
+                  ${{ runner.os }}-composer-
+            - name: Init environment
+              run: cd docker && ./init.sh && cat .env
+            - name: Build Docker environmnent
+              if: always()
+              run: |
+                cd docker &&
+                ${DOCKER_COMPOSE} up -d --build &&
+                docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                    SYMFONY_ENV=ci composer install --prefer-dist -n -o && \
+                    ./app/console cache:clear --env=ci && \
+                    cd theme && npm ci && npm run build
+                '
+            - name: Run unit tests
+              if: always()
+              run: |
+                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                      ./app/console doctrine:schema:drop --force --env=ci && \
+                      ./app/console doctrine:schema:create --env=ci && \
+                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=eb4 && \
+                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=unit && \
+                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=integration
+                  '
+              env:
+                  SYMFONY_ENV: ci
+            - name: Run acceptance tests
+              if: always()
+              run: |
+                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                      ./app/console doctrine:schema:drop --force --env=ci && \
+                      ./app/console doctrine:schema:create --env=ci && \
+                      ./vendor/bin/behat -c ./tests/behat-ci.yml --suite default -vv --format progress --strict && \
+                      ./vendor/bin/behat -c ./tests/behat-ci.yml --suite selenium -vv --format progress --strict
+                  '
+              env:
+                  SYMFONY_ENV: ci
+            - name: Run frontend tests
+              if: always()
+              run: |
+                  cd docker && docker-compose exec -e CHROME_BIN="/usr/bin/chromium" -T php-fpm.vm.openconext.org bash -c '
+                      cd theme && \
+                      npm run lint && \
+                     ./node_modules/.bin/jest material/javascripts/tests/unit && \
+                     ./node_modules/.bin/jest --runInBand material/javascripts/tests/smoke
+                  '
+              env:
+                  SYMFONY_ENV: ci
+            - name: Run code quality tests
+              if: always()
+              run: |
+                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                      ./vendor/bin/phpmd src text ci/travis/phpmd.xml --exclude */Tests/* && \
+                      ./vendor/bin/phpcs --report=full --standard=ci/travis/phpcs.xml --warning-severity=0 --extensions=php src  && \
+                      ./vendor/bin/phpcs --standard=ci/travis/phpcs-legacy.xml --warning-severity=0 --extensions=php -s library  && \
+                      ./vendor/bin/docheader check src/ tests/ library/ --exclude-dir resources
+                  '
+              env:
+                  SYMFONY_ENV: ci
+            - name: Run security audit
+              if: always()
+              run: |
+                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                      ./vendor/bin/security-checker security:check && \
+                      cd theme && \
+                      npm run audit
+                  '
+              env:
+                  SYMFONY_ENV: ci
+            - name: Show log on failure
+              continue-on-error: ${{ matrix.php != env.PROD_PHP }}
+              if: failure()
+              run:  |
+                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org cat app/logs/ci/ci.log
+            - name: Send notification on production build nightly build failure
+              uses: sonots/slack-notice-action@v3
+              continue-on-error: ${{ matrix.php != env.PROD_PHP }}
+              with:
+                  status: ${{ job.status }}
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+              if: ${{ failure() && github.event == 'schedule' && matrix.php != env.PROD_PHP }}

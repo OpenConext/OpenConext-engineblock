@@ -63,7 +63,7 @@ default:
 
     extensions:
         Behat\MinkExtension:
-            base_url: ~
+            base_url: https://engine.vm.openconext.org/
             goutte: ~
             sessions:
                 default:
@@ -73,7 +73,7 @@ default:
                 chrome:
                     selenium2:
                         browser: chrome
-                        wd_host: http://127.0.0.1:4444/wd/hub
+                        wd_host: http://selenium.vm.openconext.org:4444/wd/hub
                         capabilities:
                             chrome:
                                 switches:
@@ -81,6 +81,7 @@ default:
                                     - "--disable-gpu"
                                     - "--window-size=1920,1080"
                                     - "--no-sandbox"
-                                    - "--disable-dev-shm-usage"
-        Behat\Symfony2Extension: ~
-
+        Behat\Symfony2Extension:
+            kernel:
+                env: ci
+                debug: true

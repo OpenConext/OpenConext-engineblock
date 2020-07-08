@@ -12,7 +12,7 @@ module.exports = async function() {
         '--ignore-certificate-errors'
     ];
     const options = {
-        executablePath: '/usr/bin/google-chrome',
+        executablePath: process.env.CHROME_BIN || null,
         args,
         ignoreHTTPSErrors: true
     };
