@@ -111,9 +111,6 @@ class MinkContext extends BaseMinkContext
      */
     public function iOpenTwoBrowserTabsIdentifiedBy($numberOfTabs, $tabNames)
     {
-        // Make sure the browser is ready (without this other browser interactions fail)
-        $this->getSession()->visit($this->locatePath('#'));
-
         $tabs = explode(',', $tabNames);
         if (count($tabs) != $numberOfTabs) {
             throw new RuntimeException(

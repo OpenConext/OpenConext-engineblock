@@ -31,7 +31,7 @@ jobs:
             - name: Init environment
               run: cd docker && ./init.sh && cat .env
             - name: Build Docker environmnent
-              continue-on-error: ${{ matrix.php != env.PROD_PHP }}
+              if: always()
               run: |
                 cd docker &&
                 ${DOCKER_COMPOSE} up -d --build &&
@@ -41,7 +41,7 @@ jobs:
                     cd theme && npm ci && npm run build
                 '
             - name: Run unit tests
-              continue-on-error: ${{ matrix.php != env.PROD_PHP }}
+              if: always()
               run: |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                       ./app/console doctrine:schema:drop --force --env=ci && \
@@ -53,7 +53,7 @@ jobs:
               env:
                   SYMFONY_ENV: ci
             - name: Run acceptance tests
-              continue-on-error: ${{ matrix.php != env.PROD_PHP }}
+              if: always()
               run: |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                       ./app/console doctrine:schema:drop --force --env=ci && \
@@ -64,7 +64,7 @@ jobs:
               env:
                   SYMFONY_ENV: ci
             - name: Run frontend tests
-              continue-on-error: ${{ matrix.php != env.PROD_PHP }}
+              if: always()
               run: |
                   cd docker && docker-compose exec -e CHROME_BIN="/usr/bin/chromium" -T php-fpm.vm.openconext.org bash -c '
                       cd theme && \
@@ -75,7 +75,7 @@ jobs:
               env:
                   SYMFONY_ENV: ci
             - name: Run code quality tests
-              continue-on-error: ${{ matrix.php != env.PROD_PHP }}
+              if: always()
               run: |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                       ./vendor/bin/phpmd src text ci/travis/phpmd.xml --exclude */Tests/* && \
@@ -86,7 +86,7 @@ jobs:
               env:
                   SYMFONY_ENV: ci
             - name: Run security audit
-              continue-on-error: ${{ matrix.php != env.PROD_PHP }}
+              if: always()
               run: |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                       ./vendor/bin/security-checker security:check && \
@@ -100,7 +100,8 @@ jobs:
               if: failure()
               run:  |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org cat app/logs/ci/ci.log
-            - uses: sonots/slack-notice-action@v3
+            - name: Send notification on production build nightly build failure
+              uses: sonots/slack-notice-action@v3
               continue-on-error: ${{ matrix.php != env.PROD_PHP }}
               with:
                   status: ${{ job.status }}

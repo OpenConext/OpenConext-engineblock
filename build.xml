@@ -223,8 +223,6 @@
         <echo message="Starting a new selenium instance" />
         <antcall target="selenium-stop"/>
         <antcall target="selenium-start"/>
-        <echo message="Preparing the dev env to run in functional testing mode" />
-        <antcall target="prepare-env"/>
         <echo message="${line.separator}${line.separator}Running Behat"/>
         <antcall target="run-behat">
             <param name="suite" value="selenium"/>
