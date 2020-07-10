@@ -1,9 +1,9 @@
 name: test-integration
 on:
     pull_request:
-    # run every hour
+    # run at 6 hour UTC
     schedule:
-      - cron: "0 * * * *"
+      - cron: "0 6 * * *"
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -96,16 +96,14 @@ jobs:
               env:
                   SYMFONY_ENV: ci
             - name: Show log on failure
-              continue-on-error: ${{ matrix.php != env.PROD_PHP }}
               if: failure()
               run:  |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org cat app/logs/ci/ci.log
             - name: Send notification on production build nightly build failure
               uses: sonots/slack-notice-action@v3
-              continue-on-error: ${{ matrix.php != env.PROD_PHP }}
               with:
                   status: ${{ job.status }}
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-              if: ${{ failure() && github.event == 'schedule' && matrix.php != env.PROD_PHP }}
+              if: ${{ failure() && github.event_name == 'schedule' && matrix.php == env.PROD_PHP }}
