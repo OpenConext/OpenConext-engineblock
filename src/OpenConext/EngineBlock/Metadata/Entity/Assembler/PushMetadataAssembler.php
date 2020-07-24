@@ -26,6 +26,7 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
+use OpenConext\EngineBlock\Metadata\MfaEntityCollection;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
@@ -268,6 +269,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->assembleShibMdScopes($connection);
 
         $properties += $this->assembleStepupConnections($connection);
+        $properties += $this->assembleMfaEntities($connection);
 
         return Utils::instantiate(
             IdentityProvider::class,
@@ -606,5 +608,24 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
                 (array) $connection->arp_attributes
             )
         );
+    }
+
+    private function assembleMfaEntities(stdClass $connection): array
+    {
+        if (!isset($connection->mfa_entities)) {
+            return [];
+        }
+
+        $entities = [];
+        foreach ($connection->mfa_entities as $sp) {
+            $entities[] = [
+                'name' => (string)$sp->name,
+                'level' => (string)$sp->level,
+            ];
+        }
+
+        return [
+            'mfaEntities' => MfaEntityCollection::fromArray($entities)
+        ];
     }
 }

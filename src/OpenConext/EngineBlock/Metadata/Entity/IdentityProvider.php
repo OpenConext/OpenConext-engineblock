@@ -24,6 +24,7 @@ use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
+use OpenConext\EngineBlock\Metadata\MfaEntityCollection;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\Service;
@@ -125,6 +126,7 @@ class IdentityProvider extends AbstractRole
      * @param array $singleSignOnServices
      * @param ConsentSettings $consentSettings
      * @param StepupConnections|null $stepupConnections
+     * @param MfaEntityCollection|null $mfaEntities
      */
     public function __construct(
         $entityId,
@@ -165,7 +167,8 @@ class IdentityProvider extends AbstractRole
         $shibMdScopes = array(),
         $singleSignOnServices = array(),
         ConsentSettings $consentSettings = null,
-        StepupConnections $stepupConnections = null
+        StepupConnections $stepupConnections = null,
+        MfaEntityCollection $mfaEntities = null
     ) {
         parent::__construct(
             $entityId,
@@ -207,7 +210,8 @@ class IdentityProvider extends AbstractRole
             $stepupConnections,
             $disableScoping,
             $additionalLogging,
-            $signatureMethod
+            $signatureMethod,
+            $mfaEntities
         );
     }
 

@@ -70,7 +70,8 @@ class Coins
         $stepupConnections,
         $disableScoping,
         $additionalLogging,
-        $signatureMethod
+        $signatureMethod,
+        $mfaEntities
     ) {
         return new self([
             'guestQualifier' => $guestQualifier,
@@ -80,6 +81,7 @@ class Coins
             'additionalLogging' => $additionalLogging,
             'signatureMethod' => $signatureMethod,
             'stepupConnections' => $stepupConnections,
+            'mfaEntities' => $mfaEntities,
         ]);
     }
 
@@ -210,6 +212,11 @@ class Coins
     public function signatureMethod()
     {
         return $this->getValue('signatureMethod', XMLSecurityKey::RSA_SHA256);
+    }
+
+    public function mfaEntities(): MfaEntityCollection
+    {
+        return $this->getValue('mfaEntities', MfaEntityCollection::fromArray([]));
     }
 
     private function getValue($key, $default = null)
