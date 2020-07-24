@@ -31,14 +31,7 @@ class MfaEntityCollection implements JsonSerializable, Countable
 
     public static function fromArray(array $data): MfaEntityCollection
     {
-        $entities = [];
-        foreach ($data as $mfaEntityData) {
-            $entityId = (string) $mfaEntityData['name'];
-            $level = (string) $mfaEntityData['level'];
-            Assertion::keyNotExists($entities, $entityId, 'Duplicate SP entity ids are not allowed');
-            $entities[$entityId] = new MfaEntity($entityId, $level);
-        }
-        return new self($entities);
+        return new self($data);
     }
 
     public function findByEntityId(string $entityId): ?MfaEntity
@@ -46,7 +39,7 @@ class MfaEntityCollection implements JsonSerializable, Countable
         if (!array_key_exists($entityId, $this->entities)) {
             return null;
         }
-        return $this->entities[$entityId];
+        return new MfaEntity($this->entities[$entityId]['name'], $this->entities[$entityId]['level']);
     }
 
     public function count(): int
@@ -55,11 +48,28 @@ class MfaEntityCollection implements JsonSerializable, Countable
     }
 
     /**
-     * @param MfaEntity[] $entities
+     * @param array $entities
      */
-    private function __construct(array $entities)
+    private function __construct(array $mfaEntities)
     {
-        Assertion::allIsInstanceOf($entities, MfaEntity::class);
+        $entities = [];
+        foreach ($mfaEntities as $entity) {
+            Assertion::keyExists($entity, 'name', 'MFA entity name must be specified');
+            Assertion::keyExists($entity, 'level', 'MFA entity level must be specifieds');
+            Assertion::string($entity['name'], 'MFA name msut be of type string');
+            Assertion::string($entity['level'], 'MFA level must be of type string');
+
+            $entityId = (string) $entity['name'];
+            $level = (string) $entity['level'];
+
+            Assertion::keyNotExists($entities, $entityId, 'Duplicate SP entity ids are not allowed');
+
+            $entities[$entityId] = [
+                'name' => $entityId,
+                'level' => $level,
+            ];
+        }
+
         $this->entities = $entities;
     }
 

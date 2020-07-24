@@ -115,6 +115,10 @@ class Coins
             $data['stepupConnections'] = new StepupConnections($data['stepupConnections']);
         }
 
+        if (isset($data['mfaEntities'])) {
+            $data['mfaEntities'] = MfaEntityCollection::fromArray($data['mfaEntities']);
+        }
+
         return new self($data);
     }
 
