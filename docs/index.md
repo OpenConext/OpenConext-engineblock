@@ -5,6 +5,7 @@
 1. [EngineBlock Input and Output Command Chains][filter]
 1. [Attribute Aggregation](attribute_aggregation.md)
 1. [Stepup second factor integration](stepup_callout.md)
+1. [Configurable authncontextclassref](configurable_authncontextclassref.md)
 1. [Release notes for releases < 5.0.0][release-notes]
 1. [Javscript testing][js-testing]
 
