@@ -30,6 +30,7 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository;
+use OpenConext\EngineBlock\Metadata\MfaEntityCollection;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
@@ -411,6 +412,14 @@ QUERY;
     {
         $connections = new StepupConnections($spLoaMapping);
         $this->setCoin($this->getIdentityProvider($entityId), 'stepupConnections', $connections);
+
+        return $this;
+    }
+
+    public function setMfaEntities($entityId, array $mfaEntities)
+    {
+        $mfaEntities = MfaEntityCollection::fromArray($mfaEntities);
+        $this->setCoin($this->getIdentityProvider($entityId), 'mfaEntities', $mfaEntities);
 
         return $this;
     }
