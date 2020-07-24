@@ -615,7 +615,15 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         if (!isset($connection->mfa_entities)) {
             return [];
         }
-        $entities = json_decode(json_encode($connection->mfa_entities), true);
+
+        $entities = [];
+        foreach ($connection->mfa_entities as $sp) {
+            $entities[] = [
+                'name' => (string)$sp->name,
+                'level' => (string)$sp->level,
+            ];
+        }
+
         return [
             'mfaEntities' => MfaEntityCollection::fromArray($entities)
         ];
