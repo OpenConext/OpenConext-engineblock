@@ -55,9 +55,9 @@ class MfaEntitiesContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^the IdP "([^"]*)" is configured for authncontextclassref "([^"]*)" for SP "([^"]*)"$/
+     * @Given /^the IdP "([^"]*)" is configured for MFA authn method "([^"]*)" for SP "([^"]*)"$/
      */
-    public function setIdpConfiguredAuthncontextclassrefFor($idpName, $authncontextclassref, $spName)
+    public function setIdpConfiguredMfaAuthnMethodFor($idpName, $authncontextclassref, $spName)
     {
         /** @var MockIdentityProvider $mockIdp */
         $mockIdp = $this->mockIdpRegistry->get($idpName);
