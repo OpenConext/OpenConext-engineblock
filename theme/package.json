@@ -39,7 +39,7 @@
     "jest": "^25.2.4",
     "jest-image-snapshot": "^3.0.1",
     "jshint": "^2.11.0",
-    "node-sass": "^4.14.0",
+    "node-sass": "^4.14.1",
     "postcss-cli": "^7.1.0",
     "puppeteer-core": "^2.1.1",
     "rimraf": "^3.0.2",
@@ -54,7 +54,6 @@
     "tippy.js": "^6.1.0"
   },
   "resolutions": {
-    "minimist": "1.2.3",
-    "yargs-parser": "18.1.2"
+    "minimist": "1.2.3"
   }
 }
