@@ -23,3 +23,9 @@ Feature:
     Then the url should match "functional-testing/SSO-IdP/sso"
       And the response should not contain "http://schemas.microsoft.com/claims/multipleauthn"
 
+  Scenario: The configured authncontextclassref should be set if configured with the IdP configuration mapping also for unsolicited logins
+    Given the IdP "SSO-IdP" is configured for authncontextclassref "http://schemas.microsoft.com/claims/multipleauthn" for SP "SSO-SP"
+    When An IdP initiated Single Sign on for SP "SSO-SP" is triggered by IdP "SSO-IdP"
+      And I pass through EngineBlock
+    Then the url should match "functional-testing/SSO-IdP/sso"
+    And the AuthnRequest to submit should match xpath '/samlp:AuthnRequest/samlp:RequestedAuthnContext/saml:AuthnContextClassRef[text()="http://schemas.microsoft.com/claims/multipleauthn"]'
