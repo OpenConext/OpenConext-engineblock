@@ -81,7 +81,7 @@ jobs:
                       npm run lint && \
                       echo -e "\nJest unit tests\n" && \
                       ./node_modules/.bin/jest material/javascripts/tests/unit && \
-                      echo -e "\nJest smoke tests (visual regression tests)\n" && \
+                      echo -e "\nJest smoke tests\n" && \
                       ./node_modules/.bin/jest --runInBand material/javascripts/tests/smoke
                   '
               env:
@@ -110,6 +110,16 @@ jobs:
                       cd theme && \
                       echo -e "\nNPM Audit\n" && \
                       npm run audit
+                  '
+              env:
+                  SYMFONY_ENV: ci
+            - name: Run visual regression tests
+              if: always()
+              run: |
+                  cd docker && docker-compose exec -e CHROME_BIN="/usr/bin/chromium" -T php-fpm.vm.openconext.org bash -c '
+                      cd theme && \
+                      echo -e "\nJest visual regression tests\n" && \
+                      ./node_modules/.bin/jest material/javascripts/tests/visual-regression
                   '
               env:
                   SYMFONY_ENV: ci
