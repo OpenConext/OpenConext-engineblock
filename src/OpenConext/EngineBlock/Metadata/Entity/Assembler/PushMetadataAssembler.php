@@ -625,7 +625,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         }
 
         return [
-            'mfaEntities' => MfaEntityCollection::fromArray($entities)
+            'mfaEntities' => MfaEntityCollection::fromMetadataPush($entities)
         ];
     }
 }

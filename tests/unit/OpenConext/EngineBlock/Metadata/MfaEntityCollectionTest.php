@@ -25,13 +25,13 @@ class MfaEntityCollectionTest extends TestCase
 {
     public function test_works_with_empty_data()
     {
-        $collection = MfaEntityCollection::fromArray([]);
+        $collection = MfaEntityCollection::fromMetadataPush([]);
         $this->assertCount(0, $collection);
     }
 
     public function test_works_with_correct_data()
     {
-        $collection = MfaEntityCollection::fromArray($this->validData());
+        $collection = MfaEntityCollection::fromMetadataPush($this->validData());
         $this->assertCount(2, $collection);
         $entity = $collection->findByEntityId('https://teams.vm.openconext.org/shibboleth');
         $this->assertInstanceOf(MfaEntity::class, $entity);
@@ -52,7 +52,7 @@ class MfaEntityCollectionTest extends TestCase
                 "level" => "http://schemas.microsoft.com/claims/multipleauthn",
             ],
         ];
-        $collection = MfaEntityCollection::fromArray($data);
+        $collection = MfaEntityCollection::fromMetadataPush($data);
         $this->assertNull($collection->findByEntityId('tjoeptjoep'));
     }
 
@@ -71,7 +71,7 @@ class MfaEntityCollectionTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Duplicate SP entity ids are not allowed');
-        MfaEntityCollection::fromArray($data);
+        MfaEntityCollection::fromMetadataPush($data);
     }
 
     private function validData(): array

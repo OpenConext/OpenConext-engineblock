@@ -408,6 +408,21 @@ class EngineBlock_Corto_ProxyServer
         $spEntityId = $spRequest->getSspMessage()->getIssuer();
         $serviceProvider = new Entity(new EntityId($spEntityId), EntityType::SP());
 
+        $sspMessage = $ebRequest->getSspMessage();
+        if (!$sspMessage instanceof AuthnRequest) {
+            throw new EngineBlock_Corto_ProxyServer_Exception(sprintf('Unknown message type: "%s"', get_class($sspMessage)));
+        }
+
+        // Add authncontextclassref if configured
+        $service = $identityProvider->getCoins()->mfaEntities()->findByEntityId($serviceProvider->getEntityId());
+        if ($service) {
+            $sspMessage->setRequestedAuthnContext([
+                'AuthnContextClassRef' => [
+                    $service->level(),
+                ],
+            ]);
+        }
+
         $authenticationState = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()
             ->getAuthenticationStateHelper()
             ->getAuthenticationState();
@@ -438,7 +453,7 @@ class EngineBlock_Corto_ProxyServer
 
         $sspMessage = $ebRequest->getSspMessage();
         if (!$sspMessage instanceof AuthnRequest) {
-            throw new \RuntimeException(sprintf('Unknown message type: "%s"', get_class($sspMessage)));
+            throw new EngineBlock_Corto_ProxyServer_Exception(sprintf('Unknown message type: "%s"', get_class($sspMessage)));
         }
 
         // Add Stepup specific data
