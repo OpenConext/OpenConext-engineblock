@@ -29,9 +29,39 @@ class MfaEntityCollection implements JsonSerializable, Countable
      */
     private $entities = [];
 
-    public static function fromArray(array $data): MfaEntityCollection
+    /**
+     * This method is used to build the collection from a metadata push
+     * @param array $data
+     * @return MfaEntityCollection
+     * @throws \Assert\AssertionFailedException
+     */
+    public static function fromMetadataPush(array $data): MfaEntityCollection
     {
-        return new self($data);
+        $entities = [];
+        foreach ($data as $mfaEntityData) {
+            $entityId = (string) $mfaEntityData['name'];
+            $level = (string) $mfaEntityData['level'];
+            Assertion::keyNotExists($entities, $entityId, 'Duplicate SP entity ids are not allowed');
+            $entities[$entityId] = new MfaEntity($entityId, $level);
+        }
+        return new self($entities);
+    }
+
+    /**
+     * This method is used tto deserialize coin data
+     * @param array $data
+     * @return MfaEntityCollection
+     * @throws \Assert\AssertionFailedException
+     */
+    public static function fromCoin(array $data): MfaEntityCollection
+    {
+        $entities = [];
+        foreach ($data as $mfaEntityData) {
+            $entity = MfaEntity::fromJson($mfaEntityData);
+            Assertion::keyNotExists($entities, $entity->entityId(), 'Duplicate SP entity ids are not allowed');
+            $entities[$entity->entityId()] = $entity;
+        }
+        return new self($entities);
     }
 
     public function findByEntityId(string $entityId): ?MfaEntity
@@ -39,7 +69,7 @@ class MfaEntityCollection implements JsonSerializable, Countable
         if (!array_key_exists($entityId, $this->entities)) {
             return null;
         }
-        return new MfaEntity($this->entities[$entityId]['name'], $this->entities[$entityId]['level']);
+        return $this->entities[$entityId];
     }
 
     public function count(): int
@@ -48,28 +78,11 @@ class MfaEntityCollection implements JsonSerializable, Countable
     }
 
     /**
-     * @param array $entities
+     * @param MfaEntity[] $entities
      */
-    private function __construct(array $mfaEntities)
+    private function __construct(array $entities)
     {
-        $entities = [];
-        foreach ($mfaEntities as $entity) {
-            Assertion::keyExists($entity, 'name', 'MFA entity name must be specified');
-            Assertion::keyExists($entity, 'level', 'MFA entity level must be specifieds');
-            Assertion::string($entity['name'], 'MFA name msut be of type string');
-            Assertion::string($entity['level'], 'MFA level must be of type string');
-
-            $entityId = (string) $entity['name'];
-            $level = (string) $entity['level'];
-
-            Assertion::keyNotExists($entities, $entityId, 'Duplicate SP entity ids are not allowed');
-
-            $entities[$entityId] = [
-                'name' => $entityId,
-                'level' => $level,
-            ];
-        }
-
+        Assertion::allIsInstanceOf($entities, MfaEntity::class);
         $this->entities = $entities;
     }
 

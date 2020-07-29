@@ -410,7 +410,7 @@ class EngineBlock_Corto_ProxyServer
 
         $sspMessage = $ebRequest->getSspMessage();
         if (!$sspMessage instanceof AuthnRequest) {
-            throw new \RuntimeException(sprintf('Unknown message type: "%s"', get_class($sspMessage)));
+            throw new EngineBlock_Corto_ProxyServer_Exception(sprintf('Unknown message type: "%s"', get_class($sspMessage)));
         }
 
         // Add authncontextclassref if configured
@@ -453,7 +453,7 @@ class EngineBlock_Corto_ProxyServer
 
         $sspMessage = $ebRequest->getSspMessage();
         if (!$sspMessage instanceof AuthnRequest) {
-            throw new \RuntimeException(sprintf('Unknown message type: "%s"', get_class($sspMessage)));
+            throw new EngineBlock_Corto_ProxyServer_Exception(sprintf('Unknown message type: "%s"', get_class($sspMessage)));
         }
 
         // Add Stepup specific data

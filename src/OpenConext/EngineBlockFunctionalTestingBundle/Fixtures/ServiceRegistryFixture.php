@@ -418,7 +418,7 @@ QUERY;
 
     public function setMfaEntities($entityId, array $mfaEntities)
     {
-        $mfaEntities = MfaEntityCollection::fromArray($mfaEntities);
+        $mfaEntities = MfaEntityCollection::fromMetadataPush($mfaEntities);
         $this->setCoin($this->getIdentityProvider($entityId), 'mfaEntities', $mfaEntities);
 
         return $this;

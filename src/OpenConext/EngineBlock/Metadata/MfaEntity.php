@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlock\Metadata;
 
 use JsonSerializable;
+use OpenConext\EngineBlock\Assert\Assertion;
 
 class MfaEntity implements JsonSerializable
 {
@@ -36,6 +37,16 @@ class MfaEntity implements JsonSerializable
     {
         $this->entityId = $entityId;
         $this->level = $level;
+    }
+
+    public static function fromJson(array $array): MfaEntity
+    {
+        Assertion::keyExists($array, 'entityId', 'MFA entityId must be specified');
+        Assertion::keyExists($array, 'level', 'MFA entity level must be specified');
+        Assertion::string($array['entityId'], 'MFA entityId must be of type string');
+        Assertion::string($array['level'], 'MFA level must be of type string');
+
+        return new self($array['entityId'], $array['level']);
     }
 
     public function entityId(): string
