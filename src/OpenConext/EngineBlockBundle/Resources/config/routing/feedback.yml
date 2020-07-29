@@ -58,6 +58,11 @@ authentication_authn_context_class_ref_blacklisted:
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:authnContextClassRefBlacklistedAction }
 
+authentication_invalid_mfa_authn_context_class_ref:
+    path:       '/authentication/feedback/invalid-mfa-authn-context-class-ref'
+    methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:invalidMfAuthnContextClassRefAction }
+
 authentication_feedback_invalid_attribute_value:
     path:       '/authentication/feedback/invalid-attribute-value'
     methods:    [GET]

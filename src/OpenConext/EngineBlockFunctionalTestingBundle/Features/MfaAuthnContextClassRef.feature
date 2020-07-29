@@ -50,10 +50,10 @@ Feature:
       And I pass through EngineBlock
     Then the url should match "/functional-testing/SSO-SP/acs"
 
-  Scenario: A login should fail if the configured authn method is not in the IdP response as authnclassref or as a value in the http://schemas.microsoft.com/claims/authnmethodsreferences attribute
+  Scenario: A login should fail if the configured authn method is not in the IdP response as AuthnContextClassRef or as a value in the http://schemas.microsoft.com/claims/authnmethodsreferences attribute
     Given the IdP "SSO-IdP" is configured for MFA authn method "http://schemas.microsoft.com/claims/multipleauthn" for SP "SSO-SP"
     When I log in at "SSO-SP"
       And I pass through EngineBlock
       And I pass through the IdP
-    Then I should see "Error - An error occurred"
-      And the url should match "/feedback/unknown-error"
+    Then I should see "Error - Multi factor authentication failed"
+      And the url should match "/authentication/feedback/invalid-mfa-authn-context-class-ref"
