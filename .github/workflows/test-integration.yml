@@ -17,7 +17,7 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@master
-            - name: Get Composer Cache Directory
+            - name: Get Composer cache directory
               id: composer-cache
               run: |
                 echo "::set-output name=dir::$(composer config cache-files-dir)"
@@ -48,13 +48,13 @@ jobs:
                       ./app/console doctrine:schema:drop --force --env=ci && \
                       ./app/console doctrine:schema:create --env=ci && \
                       echo -e "\nPHPUnit legacy tests\n" && \
-                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=eb4 && \
+                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=eb4 --coverage-text && \
                       echo -e "\nPHPUnit unit tests\n" && \
-                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=unit && \
+                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=unit --coverage-text && \
                       echo -e "\nPHPUnit integration tests\n" && \
-                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=integration && \
+                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=integration --coverage-text && \
                       echo -e "\nPHPUnit API accpetance tests\n" && \
-                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=functional
+                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=functional --coverage-text
                   '
               env:
                   SYMFONY_ENV: ci
