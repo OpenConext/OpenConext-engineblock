@@ -224,8 +224,10 @@ Your %organisationNoun% has denied you access to this service. You will have to 
     'error_stuck_in_authentication_loop' => 'Error - You got stuck in a black hole',
     'error_stuck_in_authentication_loop_desc' => 'You\'ve successfully authenticated at your %organisationNoun% but the service you are trying to access sends you back again to %suiteName%. Because you are already logged in, %suiteName% then sends you back to the service, which results in an infinite black hole. Likely, this is caused by an error at the Service Provider.',
     'error_no_authentication_request_received' => 'Error - No authentication request received.',
-    'error_authn_context_class_ref_blacklisted'                     => 'Error - AuthnContextClassRef value is disallowed',
-    'error_authn_context_class_ref_blacklisted_desc'                => '<p>You cannot login because your %organisationNoun% sent a value for AuthnContextClassRef that is not allowed.</p>',
+    'error_authn_context_class_ref_blacklisted'                     => 'Error - AuthnContextClassRef value is not allowed',
+    'error_authn_context_class_ref_blacklisted_desc'                => '<p>You cannot login because your %organisationNoun% sent a value for AuthnContextClassRef that is not allowed. Please contact the service desk of your %organisationNoun% to solve this.</p>',
+    'error_invalid_mfa_authn_context_class_ref' => 'Error - Multi factor authentication failed',
+    'error_invalid_mfa_authn_context_class_ref_desc' => '<p>Your %organisationNoun% requires multi-factor authentication for this service. However, your second factor could not be validated. Please contact the service desk of your %organisationNoun% to solve this.</p>',
     /**
      * %1 AttributeName
      * %2 Options

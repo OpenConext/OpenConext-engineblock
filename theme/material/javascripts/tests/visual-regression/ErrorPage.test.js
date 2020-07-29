@@ -82,7 +82,10 @@ const pageTests = [
     ],[
         'metadata-entity-id-not-found',
         'https://engine.vm.openconext.org/functional-testing/feedback?template=metadata-entity-not-found&parameters={"message":"Could not find your entity"}&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98"}'
-    ],
+    ],[
+        'invalid-mfa-authn-context-class-ref',
+        'https://engine.vm.openconext.org/functional-testing/feedback?template=invalid-mfa-authn-context-class-ref&feedback-info={"requestId":"5cb4bd3879b49","artCode":"31914", "ipAddress":"192.168.66.98","serviceProvider":"https://current-sp.entity-id.org/metadata","serviceProviderName":"OpenConext Drop Supplies SP","identityProvider":"https://current-idp.entity-id.org/metadata"}',
+    ]
 ];
 
 

@@ -115,6 +115,10 @@ class Coins
             $data['stepupConnections'] = new StepupConnections($data['stepupConnections']);
         }
 
+        if (isset($data['mfaEntities'])) {
+            $data['mfaEntities'] = MfaEntityCollection::fromCoin($data['mfaEntities']);
+        }
+
         return new self($data);
     }
 
@@ -216,7 +220,7 @@ class Coins
 
     public function mfaEntities(): MfaEntityCollection
     {
-        return $this->getValue('mfaEntities', MfaEntityCollection::fromArray([]));
+        return $this->getValue('mfaEntities', MfaEntityCollection::fromCoin([]));
     }
 
     private function getValue($key, $default = null)

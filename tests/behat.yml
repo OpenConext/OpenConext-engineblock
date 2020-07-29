@@ -37,6 +37,10 @@ default:
                     mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
                     gatewayMockConfiguration: '@engineblock.functional_testing.fixture.stepup_gateway_mock'
                     serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MfaEntitiesContext:
+                    mockSpRegistry: '@engineblock.mock_entities.sp_registry'
+                    mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
+                    serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\TranslationContext:
                    mockTranslator: '@engineblock.functional_testing.mock.translator'
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext

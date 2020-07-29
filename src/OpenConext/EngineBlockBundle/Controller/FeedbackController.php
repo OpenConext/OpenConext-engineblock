@@ -222,6 +222,18 @@ class FeedbackController
         );
     }
 
+
+    /**
+     * @return Response
+     */
+    public function invalidMfAuthnContextClassRefAction()
+    {
+        return new Response(
+            $this->twig->render('@theme/Authentication/View/Feedback/invalid-mfa-authn-context-class-ref.html.twig'),
+            403
+        );
+    }
+
     /**
      * @param Request $request
      * @return Response

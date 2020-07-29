@@ -29,7 +29,13 @@ class MfaEntityCollection implements JsonSerializable, Countable
      */
     private $entities = [];
 
-    public static function fromArray(array $data): MfaEntityCollection
+    /**
+     * This method is used to build the collection from a metadata push
+     * @param array $data
+     * @return MfaEntityCollection
+     * @throws \Assert\AssertionFailedException
+     */
+    public static function fromMetadataPush(array $data): MfaEntityCollection
     {
         $entities = [];
         foreach ($data as $mfaEntityData) {
@@ -37,6 +43,23 @@ class MfaEntityCollection implements JsonSerializable, Countable
             $level = (string) $mfaEntityData['level'];
             Assertion::keyNotExists($entities, $entityId, 'Duplicate SP entity ids are not allowed');
             $entities[$entityId] = new MfaEntity($entityId, $level);
+        }
+        return new self($entities);
+    }
+
+    /**
+     * This method is used tto deserialize coin data
+     * @param array $data
+     * @return MfaEntityCollection
+     * @throws \Assert\AssertionFailedException
+     */
+    public static function fromCoin(array $data): MfaEntityCollection
+    {
+        $entities = [];
+        foreach ($data as $mfaEntityData) {
+            $entity = MfaEntity::fromJson($mfaEntityData);
+            Assertion::keyNotExists($entities, $entity->entityId(), 'Duplicate SP entity ids are not allowed');
+            $entities[$entity->entityId()] = $entity;
         }
         return new self($entities);
     }
