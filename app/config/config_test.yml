@@ -3,6 +3,10 @@ imports:
     - { resource: config_dev.yml }
 
 framework:
+    test: ~
+    session:
+        storage_id: session.storage.mock_file
+        name: MOCKSESSION
     router:
         resource: "%kernel.root_dir%/config/routing_test.yml"
         strict_requirements: true
@@ -48,3 +52,6 @@ doctrine:
                 port:     "%database.test.port%"
                 user:     "%database.test.user%"
                 password: "%database.test.password%"
+
+twig:
+    strict_variables: true
