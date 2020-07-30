@@ -77,7 +77,7 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
         return [
             'default' => [
                 'publicFile' => '/etc/openconext/engineblock.crt',
-                'privateFile' => $basePath . '/ci/travis/files/engineblock.pem',
+                'privateFile' => $basePath . '/ci/qa-config/files/engineblock.pem',
             ],
         ];
     }

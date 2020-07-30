@@ -91,11 +91,11 @@ jobs:
               run: |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                       echo -e "\nPHP Mess Detector\n" && \
-                      ./vendor/bin/phpmd src text ci/travis/phpmd.xml --exclude */Tests/* && \
+                      ./vendor/bin/phpmd src text ci/qa-config/phpmd.xml --exclude */Tests/* && \
                       echo -e "\nPHP CodeSniffer\n" && \
-                      ./vendor/bin/phpcs --report=full --standard=ci/travis/phpcs.xml --warning-severity=0 --extensions=php src  && \
+                      ./vendor/bin/phpcs --report=full --standard=ci/qa-config/phpcs.xml --warning-severity=0 --extensions=php src  && \
                       echo -e "\nPHP CodeSniffer (legacy code)\n" && \
-                      ./vendor/bin/phpcs --standard=ci/travis/phpcs-legacy.xml --warning-severity=0 --extensions=php -s library  && \
+                      ./vendor/bin/phpcs --standard=ci/qa-config/phpcs-legacy.xml --warning-severity=0 --extensions=php -s library  && \
                       echo -e "\nDoc header check\n" && \
                       ./vendor/bin/docheader check src/ tests/ library/ --exclude-dir resources
                   '

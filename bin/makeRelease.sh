@@ -112,7 +112,6 @@ rm -rf ${PROJECT_DIR}/behat.yml &&
 rm -rf ${PROJECT_DIR}/build.xml &&
 rm -rf ${PROJECT_DIR}/tests &&
 rm -rf ${PROJECT_DIR}/ci &&
-rm -rf ${PROJECT_DIR}/.travis.yml &&
 rm -rf ${PROJECT_DIR}/theme/node_modules &&
 rm -rf ${PROJECT_DIR}/theme/.sass-cache
 

@@ -17,7 +17,7 @@ web_profiler:
     toolbar: false
     intercept_redirects: false
 
-# override the logging settings so that we can log to readable files on travis
+# override the logging settings so that we can log to readable files on github actions
 monolog:
     channels: ["%logger.channel%", "authentication"]
     handlers:
