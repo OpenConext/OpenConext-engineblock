@@ -19,13 +19,14 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use DateTime;
-use Liip\FunctionalTestBundle\Test\WebTestCase;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlockBundle\Configuration\Feature;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\Value\Saml\NameIdFormat;
 use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ConsentControllerTest extends WebTestCase
@@ -55,7 +56,7 @@ final class ConsentControllerTest extends WebTestCase
     {
         $userId = 'my-name-id';
 
-        $unauthenticatedClient = $this->makeClient();
+        $unauthenticatedClient = static::createClient();;
         $unauthenticatedClient->request('GET', 'https://engine-api.vm.openconext.org/consent/' . $userId);
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
     }
@@ -73,9 +74,9 @@ final class ConsentControllerTest extends WebTestCase
     {
         $userId = 'my-name-id';
 
-        $client = $this->makeClient([
-            'username' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'password' => $this->getContainer()->getParameter('api.users.profile.password'),
+        $client = $client = static::createClient([], [
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
         ]);
 
         $client->request($invalidHttpMethod, 'https://engine-api.vm.openconext.org/consent/' . $userId);
@@ -96,9 +97,9 @@ final class ConsentControllerTest extends WebTestCase
     {
         $userId = 'my-name-id';
 
-        $client = $this->makeClient([
-            'username' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'password' => $this->getContainer()->getParameter('api.users.profile.password'),
+        $client = $client = static::createClient([], [
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
         ]);
 
         $this->disableConsentApiFeatureFor($client);
@@ -120,9 +121,9 @@ final class ConsentControllerTest extends WebTestCase
     {
         $userId = 'my-name-id';
 
-        $client = $this->makeClient([
-            'username' => 'no_roles',
-            'password' => 'no_roles',
+        $client = $client = static::createClient([], [
+            'PHP_AUTH_USER' => 'no_roles',
+            'PHP_AUTH_PW' => 'no_roles',
         ]);
 
         $this->enableConsentApiFeatureFor($client);
@@ -145,9 +146,9 @@ final class ConsentControllerTest extends WebTestCase
     {
         $userId = 'my-name-id';
 
-        $client = $this->makeClient([
-            'username' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'password' => $this->getContainer()->getParameter('api.users.profile.password'),
+        $client = $client = static::createClient([], [
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
         ]);
 
         $this->enableConsentApiFeatureFor($client);
@@ -172,6 +173,7 @@ final class ConsentControllerTest extends WebTestCase
      */
     public function a_consent_listing_for_a_given_user_is_retrieved_from_the_consent_api()
     {
+        $this->markTestSkipped('See https://www.pivotaltracker.com/story/show/174085599');
         $userId = 'my-name-id';
         $spEntityId = 'https://my-test-sp.test';
         $attributeHash = 'abe55dff15fe253d91220e945cd0f2c5f4727430';
@@ -199,9 +201,9 @@ final class ConsentControllerTest extends WebTestCase
             $secondSupportContact,
         ];
 
-        $client = $this->makeClient([
-            'username' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'password' => $this->getContainer()->getParameter('api.users.profile.password'),
+        $client = $client = static::createClient([], [
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
         ]);
 
         $this->addServiceProviderFixture($serviceProvider);
@@ -252,6 +254,17 @@ final class ConsentControllerTest extends WebTestCase
         ];
     }
 
+    private function assertStatusCode($expectedStatusCode, Client $client)
+    {
+        $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
+    }
+
+    private function getContainer() : ContainerInterface
+    {
+        self::bootKernel();
+        return self::$kernel->getContainer();
+    }
+
     private function enableConsentApiFeatureFor(Client $client)
     {
         $featureToggles = new FeatureConfiguration([
@@ -265,7 +278,8 @@ final class ConsentControllerTest extends WebTestCase
         $featureToggles = new FeatureConfiguration([
             'api.consent_listing' => new Feature('api.consent_listing', false)
         ]);
-        $client->getContainer()->set('engineblock.features', $featureToggles);
+        $container = $client->getContainer();
+        $container->set('engineblock.features', $featureToggles);
     }
 
     private function addConsentFixture($userId, $serviceId, $attributeHash, $consentType, $consentDate)
