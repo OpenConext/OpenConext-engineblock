@@ -5,6 +5,25 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+
+## 6.2.3
+This change will add the possibility to configure authn contexts for IdP/SP combinations which will be verified when returning from the IdP
+
+see: [documentation](docs/configurable_authncontextclassref.md)
+
+**Features**
+ * Add custom MFA error page #866
+ * Add MFA authncontext response validator #864
+ * Test unsolicited presence of authcontextclassref #863
+ * Add authncontextclassref to SP if configured in IdP #861
+ * Add authncontextclassref documentation #862
+ * Assemble authcontextclassref combinations #859
+ * Add dockerized actions testing #818
+
+**Improvements**
+ * Pt translation fix #870 thanks @domgon!
+
+
 ## 6.2.2
 This change will revert #848 to prevent breaking flows because of misconfigured SP's
 
