@@ -22,7 +22,7 @@ use OpenConext\EngineBlock\Assert\Assertion;
 
 class MfaEntityFactory
 {
-    private const TRANSPARENT_AUTHN_CONTEXT = 'transparant_authn_context';
+    private const TRANSPARENT_AUTHN_CONTEXT = 'transparent_authn_context';
 
     public static function from(string $entityId, string $level)
     {

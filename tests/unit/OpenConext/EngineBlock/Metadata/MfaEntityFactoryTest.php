@@ -24,7 +24,7 @@ class MfaEntityFactoryTest extends TestCase
 {
     public function test_it_distinguishes_between_regular_and_transparent_entities()
     {
-        $this->assertInstanceOf(TransparentMfaEntity::class, MfaEntityFactory::from('https://example.com', 'transparant_authn_context'));
+        $this->assertInstanceOf(TransparentMfaEntity::class, MfaEntityFactory::from('https://example.com', 'transparent_authn_context'));
         $this->assertInstanceOf(MfaEntity::class, MfaEntityFactory::from('https://example.com', 'http://schemas.microsoft.com/claims/multipleauthn'));
     }
 
@@ -32,7 +32,7 @@ class MfaEntityFactoryTest extends TestCase
     {
         $data = [
             'entityId' => 'https://example.com',
-            'level' => 'transparant_authn_context',
+            'level' => 'transparent_authn_context',
         ];
         $this->assertInstanceOf(TransparentMfaEntity::class, MfaEntityFactory::fromJson($data));
         $data['level'] = 'http://schemas.microsoft.com/claims/multipleauthn';
@@ -51,11 +51,11 @@ class MfaEntityFactoryTest extends TestCase
 
     public function provideInvalidJsonData()
     {
-        yield [['entityId' => null, 'level' => 'transparant_authn_context'], 'MFA entityId must be of type string'];
-        yield [['entityId' => 0, 'level' => 'transparant_authn_context'], 'MFA entityId must be of type string'];
-        yield [['entityId' => true, 'level' => 'transparant_authn_context'], 'MFA entityId must be of type string'];
-        yield [['entityIde' => true, 'level' => 'transparant_authn_context'], 'MFA entityId must be specified'];
-        yield [['level' => 'transparant_authn_context'], 'MFA entityId must be specified'];
+        yield [['entityId' => null, 'level' => 'transparent_authn_context'], 'MFA entityId must be of type string'];
+        yield [['entityId' => 0, 'level' => 'transparent_authn_context'], 'MFA entityId must be of type string'];
+        yield [['entityId' => true, 'level' => 'transparent_authn_context'], 'MFA entityId must be of type string'];
+        yield [['entityIde' => true, 'level' => 'transparent_authn_context'], 'MFA entityId must be specified'];
+        yield [['level' => 'transparent_authn_context'], 'MFA entityId must be specified'];
         yield [['entityId' => 'https://example.com', 'level' => 0], 'MFA level must be of type string'];
         yield [['entityId' => 'https://example.com', 'level' => false], 'MFA level must be of type string'];
         yield [['entityId' => 'https://example.com', 'level' => null], 'MFA level must be of type string'];
