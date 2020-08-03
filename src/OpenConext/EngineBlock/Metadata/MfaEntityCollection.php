@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlock\Metadata;
 
+use Assert\AssertionFailedException;
 use Countable;
 use JsonSerializable;
 use OpenConext\EngineBlock\Assert\Assertion;
@@ -33,7 +34,7 @@ class MfaEntityCollection implements JsonSerializable, Countable
      * This method is used to build the collection from a metadata push
      * @param array $data
      * @return MfaEntityCollection
-     * @throws \Assert\AssertionFailedException
+     * @throws AssertionFailedException
      */
     public static function fromMetadataPush(array $data): MfaEntityCollection
     {
@@ -42,7 +43,7 @@ class MfaEntityCollection implements JsonSerializable, Countable
             $entityId = (string) $mfaEntityData['name'];
             $level = (string) $mfaEntityData['level'];
             Assertion::keyNotExists($entities, $entityId, 'Duplicate SP entity ids are not allowed');
-            $entities[$entityId] = new MfaEntity($entityId, $level);
+            $entities[$entityId] = MfaEntityFactory::from($entityId, $level);
         }
         return new self($entities);
     }
@@ -51,20 +52,20 @@ class MfaEntityCollection implements JsonSerializable, Countable
      * This method is used tto deserialize coin data
      * @param array $data
      * @return MfaEntityCollection
-     * @throws \Assert\AssertionFailedException
+     * @throws AssertionFailedException
      */
     public static function fromCoin(array $data): MfaEntityCollection
     {
         $entities = [];
         foreach ($data as $mfaEntityData) {
-            $entity = MfaEntity::fromJson($mfaEntityData);
+            $entity = MfaEntityFactory::fromJson($mfaEntityData);
             Assertion::keyNotExists($entities, $entity->entityId(), 'Duplicate SP entity ids are not allowed');
             $entities[$entity->entityId()] = $entity;
         }
         return new self($entities);
     }
 
-    public function findByEntityId(string $entityId): ?MfaEntity
+    public function findByEntityId(string $entityId): ?MfaEntityInterface
     {
         if (!array_key_exists($entityId, $this->entities)) {
             return null;
@@ -78,11 +79,11 @@ class MfaEntityCollection implements JsonSerializable, Countable
     }
 
     /**
-     * @param MfaEntity[] $entities
+     * @param MfaEntityInterface[] $entities
      */
     private function __construct(array $entities)
     {
-        Assertion::allIsInstanceOf($entities, MfaEntity::class);
+        Assertion::allIsInstanceOf($entities, MfaEntityInterface::class);
         $this->entities = $entities;
     }
 
