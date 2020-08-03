@@ -18,7 +18,8 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
-use Liip\FunctionalTestBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 final class HeartbeatControllerTest extends WebTestCase
@@ -32,5 +33,10 @@ final class HeartbeatControllerTest extends WebTestCase
         $client = $this->createClient();
         $client->request('GET', 'https://engine-api.vm.openconext.org/');
         $this->assertStatusCode(Response::HTTP_OK, $client);
+    }
+
+    private function assertStatusCode($expectedStatusCode, Client $client)
+    {
+        $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
     }
 }

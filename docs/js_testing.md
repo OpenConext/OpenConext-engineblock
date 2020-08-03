@@ -1,21 +1,21 @@
 # JavaScript testing
 
-The EngineBlock components that interface with the user in a graphical user interface rely on Javascript to function 
-correctly. In order to prevent breakage of these components, Javascript (Jest) functional / acceptance tests have been 
+The EngineBlock components that interface with the user in a graphical user interface rely on Javascript to function
+correctly. In order to prevent breakage of these components, Javascript (Jest) functional / acceptance tests have been
 written to try and prevent regressions from happening.
 
 ## Running tests
-Jest is used to run unit tests. Puppeteer is used on top of Jest in order to run end to end (smoke) tests. These tests 
+Jest is used to run unit tests. Puppeteer is used on top of Jest in order to run end to end (smoke) tests. These tests
 can be run in several ways:
 
 **Unit tests**
 
-`ant js-unit-tests` should work after installing the NPM dependencies in the `theme` folder. This will only run the unit 
+`ant js-unit-tests` should work after installing the NPM dependencies in the `theme` folder. This will only run the unit
 tests from the `theme/material/javascripts/tests/unit` directory. If you are building a custom theme, be sure to update
 the `build.xml` file, and change the target to your theme.
 
 **Smoke tests**
- 
+
 `ant js-smoke-tests`
 
 Running  `npm run jest` can also be used from the `theme` folder, this will run all jest tests that can be found in the project.
@@ -24,7 +24,7 @@ Note that the `expect-puppeteer` package is used to perform more efficient inter
 
 > Writing integration test is very hard, especially when you are testing Single Page Applications. Data are loaded asynchronously and it is difficult to know exactly when an element will be displayed in the page.
   Puppeteer API is great, but it is low level and not designed for integration testing.
-  
+
 More info about this package can be found at their [GitHub](https://github.com/smooth-code/jest-puppeteer/tree/master/packages/expect-puppeteer)
 
 ## Test endpoints
@@ -42,13 +42,13 @@ parameters can be used to manipulate the behaviour of the wayf that is rendered.
 
 | **Query parameter** | **Default value** | **Explanation** |
 |---|----|----|
-| displayUnconnectedIdpsWayf | (bool) false | Type: boolean. Display unconnected IdPs on the WAYF. | 
-| rememberChoiceFeature | (bool) false | Type: boolean. Display the remember choice feature. | 
-| cutoffPointForShowingUnfilteredIdps | (int) 100 | Type: integer. The number of IdPs to display on the WAYF before cutting them off. | 
-| connectedIdps | (int) 5 | Type: integer. The number of IdPs to display on the WAYF. | 
-| unconnectedIdps | (int) 0 | Type: integer. The number of unconnected IdPs to display on the WAYF. | 
-| backLink | (bool) false | Type: boolean. Display the back link on the WAYF. | 
-| lang | (string) 'en' | Type: string. The language to use when rendering the WAYF. Note that it's possible that this is overridden by the cookie value. | 
+| displayUnconnectedIdpsWayf | (bool) false | Type: boolean. Display unconnected IdPs on the WAYF. |
+| rememberChoiceFeature | (bool) false | Type: boolean. Display the remember choice feature. |
+| cutoffPointForShowingUnfilteredIdps | (int) 100 | Type: integer. The number of IdPs to display on the WAYF before cutting them off. |
+| connectedIdps | (int) 5 | Type: integer. The number of IdPs to display on the WAYF. |
+| unconnectedIdps | (int) 0 | Type: integer. The number of unconnected IdPs to display on the WAYF. |
+| backLink | (bool) false | Type: boolean. Display the back link on the WAYF. |
+| lang | (string) 'en' | Type: string. The language to use when rendering the WAYF. Note that it's possible that this is overridden by the cookie value. |
 
 ### Feedback (error) pages
 Many different custom error pages can be raised in many different conditions. It is quite tedious to raise those errors from the code as it sometimes is hard to simulate the error situations. This called for a test endpoint that allows us to easily recreate error screens.
@@ -82,6 +82,6 @@ And to update the snapshots (should be performed after every controlled change):
 Snapshots are stored in `__image_snapshots__` directories in a subfolder of the `theme/material/javascripts/tests/visual-regression/` directory, here you will also find diffs if ever your snapshot diverges from the previous snapshot.
 Additional, more user friendly, screenshots are saved respective `screenshots` directories.
 
-:warning: These tests are considered risky tests and are not run on every Travis build. 
+:warning: These tests are considered risky tests and are not run on every QA build.
 
 [1] https://github.com/americanexpress/jest-image-snapshot

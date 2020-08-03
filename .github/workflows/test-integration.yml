@@ -20,7 +20,7 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@master
-            - name: Get Composer Cache Directory
+            - name: Get Composer cache directory
               id: composer-cache
               run: |
                 echo "::set-output name=dir::$(composer config cache-files-dir)"
@@ -46,12 +46,18 @@ jobs:
             - name: Run unit tests
               if: always()
               run: |
-                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                  cd docker && APP_ENV=ci docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                      echo -e "\nInstalling database fixtures...\n" && \
                       ./app/console doctrine:schema:drop --force --env=ci && \
                       ./app/console doctrine:schema:create --env=ci && \
-                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=eb4 && \
-                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=unit && \
-                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=integration
+                      echo -e "\nPHPUnit legacy tests\n" && \
+                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=eb4 --coverage-text && \
+                      echo -e "\nPHPUnit unit tests\n" && \
+                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=unit --coverage-text && \
+                      echo -e "\nPHPUnit API acceptance tests\n" && \
+                      APP_ENV=ci ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=functional --coverage-text && \
+                      echo -e "\nPHPUnit integration tests\n" && \
+                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=integration --coverage-text
                   '
               env:
                   SYMFONY_ENV: ci
@@ -59,9 +65,12 @@ jobs:
               if: always()
               run: |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                      echo -e "\nInstalling database fixtures...\n" && \
                       ./app/console doctrine:schema:drop --force --env=ci && \
                       ./app/console doctrine:schema:create --env=ci && \
+                      echo -e "\nBehat tests\n" && \
                       ./vendor/bin/behat -c ./tests/behat-ci.yml --suite default -vv --format progress --strict && \
+                      echo -e "\nBehat tests (with selenium and headless Chrome)\n" && \
                       ./vendor/bin/behat -c ./tests/behat-ci.yml --suite selenium -vv --format progress --strict
                   '
               env:
@@ -71,9 +80,12 @@ jobs:
               run: |
                   cd docker && docker-compose exec -e CHROME_BIN="/usr/bin/chromium" -T php-fpm.vm.openconext.org bash -c '
                       cd theme && \
+                      echo -e "\nNPM lint\n" && \
                       npm run lint && \
-                     ./node_modules/.bin/jest material/javascripts/tests/unit && \
-                     ./node_modules/.bin/jest --runInBand material/javascripts/tests/smoke
+                      echo -e "\nJest unit tests\n" && \
+                      ./node_modules/.bin/jest material/javascripts/tests/unit && \
+                      echo -e "\nJest smoke tests\n" && \
+                      ./node_modules/.bin/jest --runInBand material/javascripts/tests/smoke
                   '
               env:
                   SYMFONY_ENV: ci
@@ -81,9 +93,13 @@ jobs:
               if: always()
               run: |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
-                      ./vendor/bin/phpmd src text ci/travis/phpmd.xml --exclude */Tests/* && \
-                      ./vendor/bin/phpcs --report=full --standard=ci/travis/phpcs.xml --warning-severity=0 --extensions=php src  && \
-                      ./vendor/bin/phpcs --standard=ci/travis/phpcs-legacy.xml --warning-severity=0 --extensions=php -s library  && \
+                      echo -e "\nPHP Mess Detector\n" && \
+                      ./vendor/bin/phpmd src text ci/qa-config/phpmd.xml --exclude */Tests/* && \
+                      echo -e "\nPHP CodeSniffer\n" && \
+                      ./vendor/bin/phpcs --report=full --standard=ci/qa-config/phpcs.xml --warning-severity=0 --extensions=php src  && \
+                      echo -e "\nPHP CodeSniffer (legacy code)\n" && \
+                      ./vendor/bin/phpcs --standard=ci/qa-config/phpcs-legacy.xml --warning-severity=0 --extensions=php -s library  && \
+                      echo -e "\nDoc header check\n" && \
                       ./vendor/bin/docheader check src/ tests/ library/ --exclude-dir resources
                   '
               env:
@@ -92,9 +108,21 @@ jobs:
               if: always()
               run: |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                      echo -e "\nSensioLabs Security Check\n" && \
                       ./vendor/bin/security-checker security:check && \
                       cd theme && \
+                      echo -e "\nNPM Audit\n" && \
                       npm run audit
+                  '
+              env:
+                  SYMFONY_ENV: ci
+            - name: Run visual regression tests
+              if: always()
+              run: |
+                  cd docker && docker-compose exec -e CHROME_BIN="/usr/bin/chromium" -T php-fpm.vm.openconext.org bash -c '
+                      cd theme && \
+                      echo -e "\nJest visual regression tests\n" && \
+                      ./node_modules/.bin/jest material/javascripts/tests/visual-regression
                   '
               env:
                   SYMFONY_ENV: ci

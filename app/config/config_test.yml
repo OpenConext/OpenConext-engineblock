@@ -6,19 +6,18 @@ framework:
     test: ~
     session:
         storage_id: session.storage.mock_file
+        name: MOCKSESSION
     router:
         resource: "%kernel.root_dir%/config/routing_test.yml"
         strict_requirements: true
     profiler:
         collect: false
 
-liip_functional_test: ~
-
 web_profiler:
     toolbar: false
     intercept_redirects: false
 
-# override the logging settings so that we can log to readable files on travis
+# override the logging settings so that we can log to readable files on github actions
 monolog:
     channels: ["%logger.channel%", "authentication"]
     handlers:

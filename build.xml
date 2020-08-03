@@ -65,7 +65,7 @@
         <exec executable="vendor/bin/phpmd" failonerror="true">
             <arg path="src"/>
             <arg value="text"/>
-            <arg value="ci/travis/phpmd.xml"/>
+            <arg value="ci/qa-config/phpmd.xml"/>
             <arg value="--exclude"/>
             <arg value="*/Tests/*"/>
         </exec>
@@ -75,7 +75,7 @@
             description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
         <exec dir="${basedir}" executable="vendor/bin/phpcs" failonerror="true">
             <arg value="--report=full" />
-            <arg value="--standard=ci/travis/phpcs.xml" />
+            <arg value="--standard=ci/qa-config/phpcs.xml" />
             <arg value="--warning-severity=0" />
             <arg value="--extensions=php" />
             <arg path="src" />
@@ -86,7 +86,7 @@
             description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
         <exec dir="${basedir}" executable="vendor/bin/phpcs" failonerror="true">
 
-            <arg value="--standard=ci/travis/phpcs-legacy.xml" />
+            <arg value="--standard=ci/qa-config/phpcs-legacy.xml" />
             <arg value="--warning-severity=0" />
             <arg value="--extensions=php" />
             <arg value="-s" />
@@ -97,7 +97,7 @@
     <target name="phpcbf"
             description="Fix coding standard violations using PHP_CodeSniffer">
         <exec dir="${basedir}" executable="vendor/bin/phpcbf" failonerror="true">
-            <arg value="--standard=ci/travis/phpcs.xml" />
+            <arg value="--standard=ci/qa-config/phpcs.xml" />
             <arg value="--extensions=php" />
             <arg value="--no-patch" />
             <arg path="src" />
@@ -107,7 +107,7 @@
     <target name="phpcompat"
             description="Check code compatibilty using PHP_CodeSniffer">
         <exec dir="${basedir}" executable="vendor/bin/phpcs" failonerror="true">
-            <arg value="--standard=ci/travis/phpcompat.xml" />
+            <arg value="--standard=ci/qa-config/phpcompat.xml" />
             <arg value="--extensions=php" />
             <arg value="--runtime-set" />
             <arg value="testVersion" />
@@ -115,7 +115,7 @@
             <arg path="src" />
         </exec>
         <exec dir="${basedir}" executable="vendor/bin/phpcs" failonerror="true">
-            <arg value="--standard=ci/travis/phpcompat.xml" />
+            <arg value="--standard=ci/qa-config/phpcompat.xml" />
             <arg value="--extensions=php" />
             <arg value="--runtime-set" />
             <arg value="testVersion" />

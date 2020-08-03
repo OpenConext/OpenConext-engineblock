@@ -2,7 +2,7 @@
 
 Build Status:
 
-[![Build Status](https://travis-ci.org/OpenConext/OpenConext-engineblock.svg?branch=master)][travis-build]
+![test-integration](https://github.com/OpenConext/OpenConext-engineblock/workflows/test-integration/badge.svg)
 
 ## License
 
@@ -215,7 +215,7 @@ Also, the following documentation can be found in the [docs][docs] directory:
 1. [EngineBlock Input and Output Command Chains][docs-filter]
 1. [Release notes for releases < 5.0.0][docs-release-notes]
 
-[travis-build]: https://travis-ci.org/OpenConext/OpenConext-engineblock
+[qa-build]: https://github.com/OpenConext/OpenConext-engineblock/workflows/test-integration/badge.svg
 [license]: LICENSE-2.0.txt
 [notice]: NOTICE.txt
 [upgrading]: UPGRADING.md

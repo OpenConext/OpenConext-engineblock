@@ -19,10 +19,11 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use DateTime;
-use Liip\FunctionalTestBundle\Test\WebTestCase;
 use OpenConext\EngineBlockBundle\Configuration\Feature;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 final class DeprovisionControllerTest extends WebTestCase
@@ -41,15 +42,15 @@ final class DeprovisionControllerTest extends WebTestCase
     {
         $collabPersonId = 'urn:collab:person:test';
 
-        $unauthenticatedClient = $this->makeClient();
+        $unauthenticatedClient = static::createClient();;
         $unauthenticatedClient->request('GET', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId);
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
 
-        $unauthenticatedClient = $this->makeClient();
+        $unauthenticatedClient = static::createClient();;
         $unauthenticatedClient->request('DELETE', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId);
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
 
-        $unauthenticatedClient = $this->makeClient();
+        $unauthenticatedClient = static::createClient();;
         $unauthenticatedClient->request('DELETE', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId . '/dry-run');
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
     }
@@ -63,9 +64,9 @@ final class DeprovisionControllerTest extends WebTestCase
     {
         $collabPersonId = 'urn:collab:person:test';
 
-        $client = $this->makeClient([
-            'username' => $this->getContainer()->getParameter('api.users.deprovision.username'),
-            'password' => $this->getContainer()->getParameter('api.users.deprovision.password'),
+        $client = $client = static::createClient([], [
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
         ]);
 
         $client->request('PUT', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId);
@@ -90,9 +91,9 @@ final class DeprovisionControllerTest extends WebTestCase
     {
         $collabPersonId = 'urn:collab:person:test';
 
-        $client = $this->makeClient([
-            'username' => $this->getContainer()->getParameter('api.users.deprovision.username'),
-            'password' => $this->getContainer()->getParameter('api.users.deprovision.password'),
+        $client = $client = static::createClient([], [
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
         ]);
 
         $this->disableDeprovisionApiFeatureFor($client);
@@ -112,9 +113,9 @@ final class DeprovisionControllerTest extends WebTestCase
     {
         $collabPersonId = 'urn:collab:person:test';
 
-        $client = $this->makeClient([
-            'username' => 'no_roles',
-            'password' => 'no_roles',
+        $client = $client = static::createClient([], [
+            'PHP_AUTH_USER' => 'no_roles',
+            'PHP_AUTH_PW' => 'no_roles',
         ]);
 
         $this->enableDeprovisionApiFeatureFor($client);
@@ -136,9 +137,9 @@ final class DeprovisionControllerTest extends WebTestCase
     {
         $collabPersonId = 'urn:collab:person:test';
 
-        $client = $this->makeClient([
-            'username' => $this->getContainer()->getParameter('api.users.deprovision.username'),
-            'password' => $this->getContainer()->getParameter('api.users.deprovision.password'),
+        $client = $client = static::createClient([], [
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
         ]);
 
         $this->enableDeprovisionApiFeatureFor($client);
@@ -182,6 +183,7 @@ final class DeprovisionControllerTest extends WebTestCase
      */
     public function all_user_data_for_collab_person_id_is_retrieved_and_deleted($method, $path)
     {
+        $this->markTestSkipped('See https://www.pivotaltracker.com/story/show/174085599');
         $userId = 'urn:collab:person:test';
         $userUuid = '550e8400-e29b-41d4-a716-446655440000';
         $spEntityId1 = 'https://my-first-sp.test';
@@ -194,9 +196,9 @@ final class DeprovisionControllerTest extends WebTestCase
         $consentType = 'explicit';
         $consentDate = '2017-04-18 13:37:00';
 
-        $client = $this->makeClient([
-            'username' => $this->getContainer()->getParameter('api.users.deprovision.username'),
-            'password' => $this->getContainer()->getParameter('api.users.deprovision.password'),
+        $client = $client = static::createClient([], [
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
         ]);
 
         $this->addServiceProviderUuidFixture($spUuid1, $spEntityId1);
@@ -294,6 +296,17 @@ final class DeprovisionControllerTest extends WebTestCase
             ['DELETE', '/deprovision/urn:collab:person:test'],
             ['DELETE', '/deprovision/urn:collab:person:test/dry-run'],
         ];
+    }
+
+    private function assertStatusCode($expectedStatusCode, Client $client)
+    {
+        $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
+    }
+
+    private function getContainer() : ContainerInterface
+    {
+        self::bootKernel();
+        return self::$kernel->getContainer();
     }
 
     /**
