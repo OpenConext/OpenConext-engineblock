@@ -17,6 +17,8 @@
  */
 
 use OpenConext\EngineBlock\Metadata\Loa;
+use OpenConext\EngineBlock\Metadata\MfaEntity;
+use OpenConext\EngineBlock\Metadata\TransparentMfaEntity;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
@@ -415,12 +417,16 @@ class EngineBlock_Corto_ProxyServer
 
         // Add authncontextclassref if configured
         $service = $identityProvider->getCoins()->mfaEntities()->findByEntityId($serviceProvider->getEntityId());
-        if ($service) {
+        if ($service instanceof MfaEntity) {
             $sspMessage->setRequestedAuthnContext([
                 'AuthnContextClassRef' => [
                     $service->level(),
                 ],
             ]);
+        } elseif ($service instanceof TransparentMfaEntity) {
+            // When transparent_authn_context is configured, forward the SP AuthnClassRefContext to the IdP
+            // See: https://www.pivotaltracker.com/story/show/173305494
+            $sspMessage->setRequestedAuthnContext($spRequest->getRequestedAuthnContext());
         }
 
         $authenticationState = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()
