@@ -171,4 +171,14 @@ class MockServiceProvider extends AbstractMockEntityRole
     {
         return SPSSODescriptor::class;
     }
+
+    public function getAuthnContextClassRef(): string
+    {
+        return $this->descriptor->Extensions['AuthnContextClassRef'] ?? '';
+    }
+
+    public function setAuthnContextClassRef($classRef)
+    {
+        $this->descriptor->Extensions['AuthnContextClassRef'] = $classRef;
+    }
 }
