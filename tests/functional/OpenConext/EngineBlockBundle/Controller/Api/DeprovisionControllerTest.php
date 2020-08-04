@@ -118,8 +118,6 @@ final class DeprovisionControllerTest extends WebTestCase
             'PHP_AUTH_PW' => 'no_roles',
         ]);
 
-        $this->enableDeprovisionApiFeatureFor($client);
-
         $client->request('GET', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId);
 
         $this->assertStatusCode(Response::HTTP_FORBIDDEN, $client);
@@ -135,14 +133,10 @@ final class DeprovisionControllerTest extends WebTestCase
      */
     public function no_user_data_is_returned_if_collab_person_id_is_unknown($method, $path)
     {
-        $collabPersonId = 'urn:collab:person:test';
-
         $client = $client = static::createClient([], [
             'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
         ]);
-
-        $this->enableDeprovisionApiFeatureFor($client);
 
         $client->request($method, 'https://engine-api.vm.openconext.org/' . trim($path, '/'));
 
@@ -183,7 +177,6 @@ final class DeprovisionControllerTest extends WebTestCase
      */
     public function all_user_data_for_collab_person_id_is_retrieved_and_deleted($method, $path)
     {
-        $this->markTestSkipped('See https://www.pivotaltracker.com/story/show/174085599');
         $userId = 'urn:collab:person:test';
         $userUuid = '550e8400-e29b-41d4-a716-446655440000';
         $spEntityId1 = 'https://my-first-sp.test';
@@ -208,7 +201,6 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->addSamlPersistentIdFixture($userUuid, $spUuid2, $persistentId2);
         $this->addConsentFixture($userId, $spEntityId1, $attributeHash, $consentType, $consentDate);
         $this->addConsentFixture($userId, $spEntityId2, $attributeHash, $consentType, $consentDate);
-        $this->enableDeprovisionApiFeatureFor($client);
 
         $client->request($method, 'https://engine-api.vm.openconext.org/' . trim($path, '/'));
 
@@ -307,17 +299,6 @@ final class DeprovisionControllerTest extends WebTestCase
     {
         self::bootKernel();
         return self::$kernel->getContainer();
-    }
-
-    /**
-     * @param Client $client
-     */
-    private function enableDeprovisionApiFeatureFor(Client $client)
-    {
-        $featureToggles = new FeatureConfiguration([
-            'api.deprovision' => new Feature('api.deprovision', true)
-        ]);
-        $client->getContainer()->set('engineblock.features', $featureToggles);
     }
 
     /**

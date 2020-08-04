@@ -126,8 +126,6 @@ final class ConsentControllerTest extends WebTestCase
             'PHP_AUTH_PW' => 'no_roles',
         ]);
 
-        $this->enableConsentApiFeatureFor($client);
-
         $client->request('GET', 'https://engine-api.vm.openconext.org/consent/' . $userId);
 
         $this->assertStatusCode(Response::HTTP_FORBIDDEN, $client);
@@ -151,8 +149,6 @@ final class ConsentControllerTest extends WebTestCase
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
         ]);
 
-        $this->enableConsentApiFeatureFor($client);
-
         $client->request('GET', 'https://engine-api.vm.openconext.org/consent/' . $userId);
 
         $this->assertStatusCode(Response::HTTP_OK, $client);
@@ -173,7 +169,6 @@ final class ConsentControllerTest extends WebTestCase
      */
     public function a_consent_listing_for_a_given_user_is_retrieved_from_the_consent_api()
     {
-        $this->markTestSkipped('See https://www.pivotaltracker.com/story/show/174085599');
         $userId = 'my-name-id';
         $spEntityId = 'https://my-test-sp.test';
         $attributeHash = 'abe55dff15fe253d91220e945cd0f2c5f4727430';
@@ -208,7 +203,6 @@ final class ConsentControllerTest extends WebTestCase
 
         $this->addServiceProviderFixture($serviceProvider);
         $this->addConsentFixture($userId, $spEntityId, $attributeHash, $consentType, $consentDate);
-        $this->enableConsentApiFeatureFor($client);
 
         $client->request('GET', 'https://engine-api.vm.openconext.org/consent/' . $userId);
 
@@ -263,14 +257,6 @@ final class ConsentControllerTest extends WebTestCase
     {
         self::bootKernel();
         return self::$kernel->getContainer();
-    }
-
-    private function enableConsentApiFeatureFor(Client $client)
-    {
-        $featureToggles = new FeatureConfiguration([
-            'api.consent_listing' => new Feature('api.consent_listing', true)
-        ]);
-        $client->getContainer()->set('engineblock.features', $featureToggles);
     }
 
     private function disableConsentApiFeatureFor(Client $client)

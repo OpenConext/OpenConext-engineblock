@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockBundle\Controller\Api;
 use OpenConext\EngineBlock\Metadata\Entity\Assembler\MetadataAssemblerInterface;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataPushRepository;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
@@ -47,7 +48,7 @@ class ConnectionsController
     private $authorizationChecker;
 
     /**
-     * @var FeatureConfiguration
+     * @var FeatureConfigurationInterface
      */
     private $featureConfiguration;
 
@@ -64,14 +65,14 @@ class ConnectionsController
     /**
      * @param MetadataAssemblerInterface $assembler
      * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param FeatureConfiguration $featureConfiguration
+     * @param FeatureConfigurationInterface $featureConfiguration
      * @param DoctrineMetadataPushRepository $repository
      * @param string|null $memoryLimit
      */
     public function __construct(
         MetadataAssemblerInterface $assembler,
         AuthorizationCheckerInterface $authorizationChecker,
-        FeatureConfiguration $featureConfiguration,
+        FeatureConfigurationInterface $featureConfiguration,
         DoctrineMetadataPushRepository $repository,
         $memoryLimit
     ) {
