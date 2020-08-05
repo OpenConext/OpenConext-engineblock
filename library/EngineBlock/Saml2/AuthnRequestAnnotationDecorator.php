@@ -72,6 +72,14 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
         return $this->sspMessage->getRequesterID();
     }
 
+    /**
+     * @return array|null
+     */
+    public function getRequestedAuthnContext()
+    {
+        return $this->sspMessage->getRequestedAuthnContext();
+    }
+
     public function setDebugRequest()
     {
         $this->debug = true;

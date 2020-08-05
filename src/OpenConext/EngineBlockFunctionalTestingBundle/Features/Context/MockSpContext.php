@@ -637,4 +637,15 @@ class MockSpContext extends AbstractSubContext
 
         $this->mockSpRegistry->save();
     }
+
+    /**
+     * @Given /^the SP "([^"]*)" sends AuthnContextClassRef with value "([^"]*)"$/
+     */
+    public function theSPSendsAuthnContextClassRefWithValue($spName, $authnContextClassRefValue)
+    {
+        $mockSp = $this->mockSpRegistry->get($spName);
+        $request = $mockSp->getAuthnRequest();
+        $request->setRequestedAuthnContext(['AuthnContextClassRef' => [$authnContextClassRefValue]]);
+        $this->mockSpRegistry->save();
+    }
 }

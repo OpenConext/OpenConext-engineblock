@@ -19,9 +19,8 @@
 namespace OpenConext\EngineBlock\Metadata;
 
 use JsonSerializable;
-use OpenConext\EngineBlock\Assert\Assertion;
 
-class MfaEntity implements MfaEntityInterface, JsonSerializable
+class TransparentMfaEntity implements MfaEntityInterface, JsonSerializable
 {
     /**
      * @var string $entityId

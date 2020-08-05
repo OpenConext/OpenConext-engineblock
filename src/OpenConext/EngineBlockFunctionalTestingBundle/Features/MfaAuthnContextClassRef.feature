@@ -57,3 +57,19 @@ Feature:
       And I pass through the IdP
     Then I should see "Error - Multi factor authentication failed"
       And the url should match "/authentication/feedback/invalid-mfa-authn-context-class-ref"
+
+  Scenario: The SP provided authn method should be set as AuthnContextClassRef if SP configured with transparent_authn_context
+    Given the IdP "SSO-IdP" is configured for MFA authn method "transparent_authn_context" for SP "SSO-SP"
+    And the SP "SSO-SP" sends AuthnContextClassRef with value "http://my-very-own-context.example.com/level9"
+    When I log in at "SSO-SP"
+    And I pass through EngineBlock
+    Then the url should match "functional-testing/SSO-IdP/sso"
+    And the AuthnRequest to submit should match xpath '/samlp:AuthnRequest/samlp:RequestedAuthnContext/saml:AuthnContextClassRef[text()="http://my-very-own-context.example.com/level9"]'
+
+  Scenario: The SP provided authn method should NOT be set as AuthnContextClassRef if SP configured is not with transparent_authn_context
+    Given the IdP "SSO-IdP" is configured for MFA authn method "not_configured_transparent_authn_context" for SP "SSO-SP"
+    And the SP "SSO-SP" sends AuthnContextClassRef with value "http://my-very-own-context.example.com/level9"
+    When I log in at "SSO-SP"
+    And I pass through EngineBlock
+    Then the url should match "functional-testing/SSO-IdP/sso"
+    And the response should not contain "http://my-very-own-context.example.com/level9"
