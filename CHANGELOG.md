@@ -5,6 +5,16 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.2.4
+This release is the finalization of the AuthnContextClassRef changes
+that where started in 6.2.1 (and rolled back in 6.2.2).
+
+**Features**
+ * Add AuthnContextClassRef config option for transparent RequestedAuthnContext #873
+
+**Other chores**
+ * Final tweaks to Github Actions (termination of Travis) #867
+ * Enable skipped API tests #874
 
 ## 6.2.3
 This change will add the possibility to configure authn contexts for IdP/SP combinations which will be verified when returning from the IdP
