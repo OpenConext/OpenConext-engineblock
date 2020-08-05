@@ -48,6 +48,7 @@ return $overrides + [
     'identityProvider'      => 'IdP',
     'serviceProvider'       => 'SP',
     'serviceProviderName'   => 'SP Name',
+    'proxyServiceProvider'  => 'Proxy SP',
     'ipAddress'             => 'IP',
     'statusCode'            => 'Código de Estado',
     'artCode'               => 'EC',
