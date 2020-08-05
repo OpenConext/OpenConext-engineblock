@@ -102,8 +102,6 @@ class ConnectionsControllerTest extends WebTestCase
             'PHP_AUTH_PW' => 'no_roles',
         ]);
 
-        $this->enableMetadataPushApiFeatureFor($client);
-
         $client->request('POST', 'https://engine-api.vm.openconext.org/api/connections');
         $this->assertStatusCode(Response::HTTP_FORBIDDEN, $client);
 
@@ -126,8 +124,6 @@ class ConnectionsControllerTest extends WebTestCase
             'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
         ]);
-
-        $this->enableMetadataPushApiFeatureFor($client);
 
         $client->request(
             'POST',
@@ -158,8 +154,6 @@ class ConnectionsControllerTest extends WebTestCase
             'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
         ]);
-
-        $this->enableMetadataPushApiFeatureFor($client);
 
         foreach ($this->validConnectionsData() as $step) {
 
@@ -230,8 +224,6 @@ class ConnectionsControllerTest extends WebTestCase
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
         ]);
 
-        $this->enableMetadataPushApiFeatureFor($client);
-
         foreach ($this->validConnectionsWithCoinsData() as $connection) {
 
             $payload = $this->createJsonData([$connection]);
@@ -285,8 +277,6 @@ class ConnectionsControllerTest extends WebTestCase
             'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
         ]);
-
-        $this->enableMetadataPushApiFeatureFor($client);
 
         $payload = '{"connections" : {
             "2d96e27a-76cf-4ca2-ac70-ece5d4c49523": {
@@ -394,14 +384,6 @@ class ConnectionsControllerTest extends WebTestCase
     {
         self::bootKernel();
         return self::$kernel->getContainer();
-    }
-
-    private function enableMetadataPushApiFeatureFor(Client $client)
-    {
-        $featureToggles = new FeatureConfiguration([
-            'api.metadata_push' => new Feature('api.metadata_push', true)
-        ]);
-        $client->getContainer()->set('engineblock.features', $featureToggles);
     }
 
     private function disableMetadataPushApiFeatureFor(Client $client)
