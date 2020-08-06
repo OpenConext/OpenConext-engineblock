@@ -78,7 +78,6 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest 
         $this->assertInstanceOf(EngineBlock_Corto_Filter_Command_Abstract::class, $verifier);
     }
 
-
     public function testMatchedAuthnMethodsReferenceAttributeShouldPass()
     {
         $response = $this->createTestResponse('urn:oasis:names:tc:SAML:2.0:ac:classes:Password', ['http://schemas.microsoft.com/claims/multipleauthn']);
@@ -94,7 +93,6 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest 
 
         $this->assertInstanceOf(EngineBlock_Corto_Filter_Command_Abstract::class, $verifier);
     }
-
 
     public function testMatchedAuthnMethodsReferenceAttributeWithMultipleValuesShouldPass()
     {
@@ -136,7 +134,6 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest 
         $this->assertInstanceOf(EngineBlock_Corto_Filter_Command_Abstract::class, $verifier);
     }
 
-
     public function testNotMatchedAuthnContextClassRefShouldThrowException()
     {
         $this->expectException(EngineBlock_Corto_Exception_InvalidMfaAuthnContextClassRef::class);
@@ -170,6 +167,22 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest 
         ]);
 
         $identityProvider = $this->createConfiguredSpIdpCombination('Test IdP', "Test SP", "http://schemas.microsoft.com/claims/multipleauthn");
+
+        $verifier = new EngineBlock_Corto_Filter_Command_ValidateMfaAuthnContextClassRef($this->logger);
+        $verifier->setResponse($response);
+        $verifier->setIdentityProvider($identityProvider);
+        $verifier->setServiceProvider(new ServiceProvider('Test SP'));
+
+        $verifier->execute();
+
+        $this->assertInstanceOf(EngineBlock_Corto_Filter_Command_Abstract::class, $verifier);
+    }
+
+    public function testMatchedTransparentAuthnContextClassRefShouldPass()
+    {
+        $response = $this->createTestResponse('foobar.example.com');
+
+        $identityProvider = $this->createConfiguredSpIdpCombination('Test IdP', "Test SP", "transparent_authn_context");
 
         $verifier = new EngineBlock_Corto_Filter_Command_ValidateMfaAuthnContextClassRef($this->logger);
         $verifier->setResponse($response);
