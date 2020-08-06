@@ -17,6 +17,7 @@
  */
 
 use OpenConext\EngineBlock\Assert\Assertion;
+use OpenConext\EngineBlock\Metadata\TransparentMfaEntity;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -34,7 +35,8 @@ class EngineBlock_Corto_Filter_Command_ValidateMfaAuthnContextClassRef extends E
     public function execute()
     {
         $mfaEntity = $this->_identityProvider->getCoins()->mfaEntities()->findByEntityId($this->_serviceProvider->entityId);
-        if (!$mfaEntity) {
+        // SP's configured to pass auth context transparently are not checked for an expected (configured) class ref.
+        if (!$mfaEntity || $mfaEntity instanceof TransparentMfaEntity) {
             return;
         }
 
