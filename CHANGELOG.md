@@ -5,9 +5,14 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
-## 6.2.4
+## 6.3.0
 This release is the finalization of the AuthnContextClassRef changes
 that where started in 6.2.1 (and rolled back in 6.2.2).
+
+**Bugfix**
+* Do not apply ValidateMfaAuthnContextClassRef filter for transparent use case #876
+
+## 6.2.4
 
 **Features**
  * Add AuthnContextClassRef config option for transparent RequestedAuthnContext #873
