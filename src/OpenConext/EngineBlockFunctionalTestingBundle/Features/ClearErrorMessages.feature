@@ -115,6 +115,15 @@ Feature:
      And I should see "SP Name:"
      And I should not see "IdP:"
 
+  Scenario: I want to log on, but the proxied Service Provider may not access any Identity Providers
+    Given SP "Trusted SP" is a trusted proxy
+    And SP "Trusted SP" signs its requests
+    And  SP "Trusted SP" is authenticating for SP "Unconnected SP"
+    When I log in at "Trusted SP"
+    Then I should see "Error - No organisations found"
+    And I should see "SP Name: Unconnected SP"
+    And I should see "SP Proxy:"
+
   Scenario: I want to log on but this Service Provider is not yet registered at OpenConext
     When I log in at "Unregistered SP"
     Then I should see "Error - Unknown service"

@@ -252,6 +252,10 @@ class EngineBlock_ApplicationSingleton
             $feedbackInfo['serviceProviderName'] = $this->getServiceProviderName($_SESSION['currentServiceProvider']);
         }
 
+        if (isset($_SESSION['proxyServiceProvider'])) {
+            $feedbackInfo['proxyServiceProvider'] = $_SESSION['proxyServiceProvider'];
+        }
+
         // @todo  reset this when login is succesful
         // Find the current identity provider
         if (isset($_SESSION['currentIdentityProvider'])) {
