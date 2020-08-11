@@ -63,6 +63,8 @@ interface IdentityProviderEntityInterface
      */
     public function getLogo(): ?Logo;
 
+    public function hasValidOrganizationData(string $locale): bool;
+
     /**
      * @param $locale
      * @return Organization|null

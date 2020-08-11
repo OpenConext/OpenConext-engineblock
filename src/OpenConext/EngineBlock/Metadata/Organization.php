@@ -18,10 +18,6 @@
 
 namespace OpenConext\EngineBlock\Metadata;
 
-/**
- * Class Organization
- * @package OpenConext\EngineBlock\Metadata
- */
 class Organization
 {
     public $name;

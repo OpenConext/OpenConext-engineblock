@@ -100,6 +100,19 @@ abstract class AbstractServiceProvider implements ServiceProviderEntityInterface
         return $this->entity->getLogo();
     }
 
+    public function hasValidOrganizationData(string $locale): bool
+    {
+        $organization = $this->entity->getOrganization($locale);
+        if ($organization
+            && is_string($organization->displayName) && $organization->displayName !== ''
+            && is_string($organization->name) && $organization->name !== ''
+            && is_string($organization->url) && $organization->url !== ''
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @param $locale
      * @return Organization|null
