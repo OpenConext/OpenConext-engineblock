@@ -336,18 +336,6 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
 
     private function assembleOrganization(stdClass $connection, $langCode)
     {
-        if (empty($connection->metadata->OrganizationName->$langCode)) {
-            return array();
-        }
-
-        if (empty($connection->metadata->OrganizationDisplayName->$langCode)) {
-            return array();
-        }
-
-        if (empty($connection->metadata->OrganizationURL->$langCode)) {
-            return array();
-        }
-
         return array('organization' . ucfirst($langCode) => new Organization(
             $connection->metadata->OrganizationName->$langCode,
             $connection->metadata->OrganizationDisplayName->$langCode,
