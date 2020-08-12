@@ -76,19 +76,6 @@ Feature:
       And I should see "Step Up"
       And I should not see "Loa SP"
 
-  Scenario: User logs in via trusted proxy and sees consent for the destination
-    Given SP "Step Up" is authenticating for SP "Loa SP"
-      And SP "Step Up" is a trusted proxy
-      # Test to see that we don't trust trusted proxies without request signing
-      #And SP "Step Up" signs its requests
-     When I log in at "Step Up"
-      And I select "AlwaysAuth" on the WAYF
-      And I pass through EngineBlock
-      And I pass through the IdP
-     Then I should see "needs your information"
-      And I should see "Step Up"
-      And I should not see "Loa SP"
-
   Scenario: User logs in via trusted signing proxy and sees consent for the destination
     Given SP "Step Up" is authenticating for SP "Loa SP"
       And SP "Step Up" is a trusted proxy
@@ -234,6 +221,7 @@ Feature:
   Scenario: User logs in to two SPs via trusted proxy
    Given SP "Step Up" is authenticating for SP "Loa SP"
      And SP "Step Up" is a trusted proxy
+     And SP "Step Up" signs its requests
      And SP "Step Up" does not require consent
     When I log in at "Step Up"
      And I select "AlwaysAuth" on the WAYF
@@ -249,3 +237,9 @@ Feature:
     Then I should not see "Error - No organisations found"
          # The WAYF should be visible
      And I should see "Select an organisation to login to the service"
+
+  Scenario: Trusted proxy not signing requests results in an error
+    Given SP "Step Up" is authenticating for SP "Loa SP"
+    And SP "Step Up" is a trusted proxy
+    When I log in at "Step Up"
+    Then I should see "Error - An error occurred"

@@ -193,10 +193,22 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
 
+        $requestsMustBeSigned = $serviceProvider->requestsMustBeSigned;
+        $isTrustedProxy = $serviceProvider->getCoins()->isTrustedProxy();
+
+        if ($isTrustedProxy && !$requestsMustBeSigned){
+            throw new EngineBlock_Corto_Module_Bindings_Exception(
+                sprintf(
+                    'SP "%s" is marked as Trusted Proxy but does not have "redirect:sign" enabled.',
+                    $spEntityId
+                )
+            );
+        }
+
         // Determine if we should check the signature of the message
         $wantRequestsSigned = (
             // If the destination wants the AuthnRequests signed
-            $serviceProvider->requestsMustBeSigned
+            $requestsMustBeSigned
             ||
             // Or we currently demand that all AuthnRequests are sent signed
             $this->_server->getConfig('WantsAuthnRequestsSigned')
