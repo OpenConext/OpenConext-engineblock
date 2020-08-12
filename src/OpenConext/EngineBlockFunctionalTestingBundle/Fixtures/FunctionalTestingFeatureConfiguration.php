@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 use OpenConext\EngineBlockBundle\Configuration\Feature;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
+use OpenConext\EngineBlockBundle\Configuration\TestFeatureConfiguration;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use RuntimeException;
 
@@ -41,7 +42,7 @@ final class FunctionalTestingFeatureConfiguration implements FeatureConfiguratio
      */
     private $dataStore;
 
-    public function __construct(FeatureConfiguration $featureConfiguration, AbstractDataStore $dataStore)
+    public function __construct(TestFeatureConfiguration $featureConfiguration, AbstractDataStore $dataStore)
     {
         $this->featureConfiguration = $featureConfiguration;
         $this->dataStore            = $dataStore;
@@ -73,6 +74,7 @@ final class FunctionalTestingFeatureConfiguration implements FeatureConfiguratio
         }
 
         $this->featureConfigurationFixture[$featureKey] = $value;
+        $this->featureConfiguration->setFeature(new Feature($featureKey, $value));
         $this->dataStore->save($this->featureConfigurationFixture);
     }
 
