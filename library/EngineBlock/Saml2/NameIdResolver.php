@@ -69,6 +69,7 @@ class EngineBlock_Saml2_NameIdResolver
     ) {
         $customNameId = $response->getCustomNameId();
         if (!empty($customNameId)) {
+
             return NameID::fromArray($customNameId);
         }
 

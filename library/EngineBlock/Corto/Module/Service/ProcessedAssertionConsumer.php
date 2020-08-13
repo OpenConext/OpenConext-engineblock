@@ -63,7 +63,7 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer implements Eng
         $originalIssuer = $response->getOriginalIssuer();
 
         if ($originalIssuer) {
-            $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
+            $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer()->getValue());
             $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getOriginalIssuer());
             $wantlogging = EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging([$sp, $idp]);
         } else {

@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Compat;
 
 use DOMDocument;
 use Psr;
+use Psr\Log\LoggerInterface;
 use SAML2\Compat\AbstractContainer;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Exception\NotImplementedException;
@@ -54,9 +55,9 @@ class Container extends AbstractContainer
 
     /**
      * Get a PSR-3 compatible logger.
-     * @return Psr\Log\LoggerInterface
+     * @return LoggerInterface
      */
-    public function getLogger()
+    public function getLogger(): LoggerInterface
     {
         return new SyslogLogger();
     }
@@ -64,7 +65,7 @@ class Container extends AbstractContainer
     /**
      * Generate a random identifier for identifying SAML2 documents.
      */
-    public function generateId()
+    public function generateId(): string
     {
         return self::ID_PREFIX . rand(0, 100000000);
     }
@@ -82,7 +83,7 @@ class Container extends AbstractContainer
      * @param string $type
      * @return void
      */
-    public function debugMessage($message, $type)
+    public function debugMessage($message, $type): void
     {
         if ($message instanceof \DOMElement) {
             $message = $message->ownerDocument->saveXML();
@@ -98,7 +99,7 @@ class Container extends AbstractContainer
      * @param array $data
      * @return void
      */
-    public function redirect($url, $data = [])
+    public function redirect($url, $data = []): void
     {
         throw new NotImplementedException(sprintf('SSP/SAML2 Redirect not implemented! URL: "%s', $url));
     }
@@ -110,7 +111,7 @@ class Container extends AbstractContainer
      * @param array $data
      * @return $this
      */
-    public function postRedirect($url, $data = [])
+    public function postRedirect($url, $data = []): void
     {
         $formData = '';
         foreach ($data as $name => $value) {
@@ -156,7 +157,6 @@ class Container extends AbstractContainer
 </html>
 HTML
         );
-        return $this;
     }
 
     public function getPostResponse()
@@ -176,5 +176,15 @@ HTML
         $dom->formatOutput = true;
         $xml = $dom->saveXml();
         return $xml;
+    }
+
+    public function getTempDir(): string
+    {
+        throw new NotImplementedException(sprintf('getTempDir not implemented!'));
+    }
+
+    public function writeFile(string $filename, string $data, int $mode = null): void
+    {
+        throw new NotImplementedException(sprintf('writeFile not implemented!'));
     }
 }

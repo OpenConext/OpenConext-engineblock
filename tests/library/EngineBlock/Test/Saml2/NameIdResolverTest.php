@@ -101,7 +101,6 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends TestCase
             'Value' => $this->response->getIntendedNameId(),
         );
         $this->serviceProvider->supportedNameIdFormats[] = Constants::NAMEID_UNSPECIFIED;
-        /** @var SAML2_AuthnRequest $request */
         $request = $this->request;
         $request->setNameIdPolicy(array('Format' => $nameId['Format']));
 

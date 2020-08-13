@@ -39,7 +39,7 @@ final class EngineBlock_Saml2_Container extends AbstractContainer
         $this->logger = $logger;
     }
 
-    public function getLogger()
+    public function getLogger(): LoggerInterface
     {
         return $this->logger;
     }
@@ -49,32 +49,54 @@ final class EngineBlock_Saml2_Container extends AbstractContainer
      *
      * @return string
      */
-    public function generateId()
+    public function generateId(): string
     {
         return '_' . bin2hex(openssl_random_pseudo_bytes((int)((self::ID_LENGTH - 1)/2)));
     }
 
-    public function debugMessage($message, $type)
+    public function debugMessage($message, $type): void
     {
         $this->getLogger()->debug("SAML2 library debug message ($type)", array('message' => $message));
     }
 
-    public function redirect($url, $data = array())
+    public function redirect($url, $data = array()): void
     {
         throw new BadMethodCallException(
             sprintf(
-                '"%s":"%s" may not be called in the Surfnet\\SamlBundle as it doesn\'t work with Symfony2',
+                '"%s":"%s" may not be called in the Surfnet\\SamlBundle as it doesn\'t work with Symfony',
                 __CLASS__,
                 __METHOD__
             )
         );
     }
 
-    public function postRedirect($url, $data = array())
+    public function postRedirect($url, $data = array()): void
     {
         throw new BadMethodCallException(
             sprintf(
-                '"%s":"%s" may not be called in the Surfnet\\SamlBundle as it doesn\'t work with Symfony2"',
+                '"%s":"%s" may not be called in the Surfnet\\SamlBundle as it doesn\'t work with Symfony"',
+                __CLASS__,
+                __METHOD__
+            )
+        );
+    }
+
+    public function getTempDir(): string
+    {
+        throw new BadMethodCallException(
+            sprintf(
+                '"%s":"%s" may not be called in the Surfnet\\SamlBundle as it doesn\'t work with Symfony"',
+                __CLASS__,
+                __METHOD__
+            )
+        );
+    }
+
+    public function writeFile(string $filename, string $data, int $mode = null): void
+    {
+        throw new BadMethodCallException(
+            sprintf(
+                '"%s":"%s" may not be called in the Surfnet\\SamlBundle as it doesn\'t work with Symfony"',
                 __CLASS__,
                 __METHOD__
             )

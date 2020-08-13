@@ -19,6 +19,7 @@
 use SAML2\Message;
 use SAML2\Request;
 use SAML2\Response;
+use SAML2\XML\saml\Issuer;
 
 /**
  * @method getReturn()
@@ -70,9 +71,9 @@ class EngineBlock_Saml2_MessageAnnotationDecorator
     /**
      * Get the message Issuer.
      *
-     * @return NULL|string
+     * @return Issuer
      */
-    public function getIssuer()
+    public function getIssuer(): ?Issuer
     {
         return $this->sspMessage->getIssuer();
     }

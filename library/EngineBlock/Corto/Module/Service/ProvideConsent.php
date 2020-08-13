@@ -96,7 +96,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         );
 
         $request = $this->_server->getReceivedRequestFromResponse($response);
-        $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
+        $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer()->getValue());
         $spMetadataChain = EngineBlock_SamlHelper::getSpRequesterChain(
             $serviceProvider,
             $request,
@@ -184,7 +184,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $nameId = clone $response->getNameId();
 
         if ($isPersistent && !$amPriorToConsent) {
-            $collabPersonIdValue = $nameId->value;
+            $collabPersonIdValue = $nameId->getValue();
             // Load the persistent name id for this combination of SP/Identifier and update the local copy of the nameId
             // to ensure the correct identifier is shown on the consent screen.
             $resolver = new EngineBlock_Saml2_NameIdResolver();
@@ -201,7 +201,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         // name id copy that is used to render the correct identifier on the consent page. If AM was already performed,
         // use the nameIdFormat from the nameId, and do not overwrite it with the SP's preferred format.
         if (!$amPriorToConsent) {
-            $nameId->Format = $serviceProvider->nameIdFormat;
+            $nameId->setFormat($serviceProvider->nameIdFormat);
         }
 
         $html = $this->twig->render(

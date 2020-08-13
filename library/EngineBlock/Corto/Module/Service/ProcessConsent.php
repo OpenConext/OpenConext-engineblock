@@ -83,7 +83,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         $response = $processStep->getResponse();
 
         $request = $this->_server->getReceivedRequestFromResponse($response);
-        $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
+        $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer()->getValue());
 
         $destinationMetadata = EngineBlock_SamlHelper::getDestinationSpMetadata(
             $serviceProvider,
