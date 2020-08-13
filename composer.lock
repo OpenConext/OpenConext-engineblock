@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "195b6c92a67e92ebac75e76fa77f311c",
+    "content-hash": "a924cd537878a64579e06ece921d60eb",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2419,16 +2419,16 @@
         },
         {
             "name": "robrichards/xmlseclibs",
-            "version": "3.0.4",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/robrichards/xmlseclibs.git",
-                "reference": "0a53d3c3aa87564910cae4ed01416441d3ae0db5"
+                "reference": "8d8e56ca7914440a8c60caff1a865e7dff1d9a5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/robrichards/xmlseclibs/zipball/0a53d3c3aa87564910cae4ed01416441d3ae0db5",
-                "reference": "0a53d3c3aa87564910cae4ed01416441d3ae0db5",
+                "url": "https://api.github.com/repos/robrichards/xmlseclibs/zipball/8d8e56ca7914440a8c60caff1a865e7dff1d9a5a",
+                "reference": "8d8e56ca7914440a8c60caff1a865e7dff1d9a5a",
                 "shasum": ""
             },
             "require": {
@@ -2453,7 +2453,7 @@
                 "xml",
                 "xmldsig"
             ],
-            "time": "2019-11-05T11:44:22+00:00"
+            "time": "2020-04-22T17:19:51+00:00"
         },
         {
             "name": "sensio/distribution-bundle",
@@ -2505,6 +2505,7 @@
                 "configuration",
                 "distribution"
             ],
+            "abandoned": true,
             "time": "2019-06-18T15:43:58+00:00"
         },
         {
@@ -2682,47 +2683,45 @@
         },
         {
             "name": "simplesamlphp/saml2",
-            "version": "v3.2.6",
+            "version": "v4.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/saml2.git",
-                "reference": "a56e46ef8e0c5245a4ca7facc3d308b493215751"
+                "reference": "ff19d04d3af0689a13c1f75859e13f4a511343cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/a56e46ef8e0c5245a4ca7facc3d308b493215751",
-                "reference": "a56e46ef8e0c5245a4ca7facc3d308b493215751",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/ff19d04d3af0689a13c1f75859e13f4a511343cb",
+                "reference": "ff19d04d3af0689a13c1f75859e13f4a511343cb",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-openssl": "*",
                 "ext-zlib": "*",
-                "php": ">=5.4",
-                "psr/log": "~1.0",
-                "robrichards/xmlseclibs": "^3.0"
+                "php": ">=7.1",
+                "psr/log": "~1.1",
+                "robrichards/xmlseclibs": "^3.1.0",
+                "webmozart/assert": "^1.5"
             },
             "require-dev": {
-                "mockery/mockery": "~0.9",
-                "phpmd/phpmd": "~1.5",
-                "phpunit/phpunit": "~4",
-                "sebastian/phpcpd": "~1.4",
-                "sensiolabs/security-checker": "~1.1",
-                "squizlabs/php_codesniffer": "~1.4"
+                "mockery/mockery": "~1.2",
+                "phpunit/phpunit": "^7.5",
+                "sebastian/phpcpd": "~4.1",
+                "sensiolabs/security-checker": "~6.0",
+                "simplesamlphp/simplesamlphp-test-framework": "~0.1.0",
+                "squizlabs/php_codesniffer": "~3.5"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "v3.1.x-dev"
+                    "dev-master": "v4.0.x-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "SAML2\\": "src/"
-                },
-                "files": [
-                    "src/_autoload.php"
-                ]
+                "psr-4": {
+                    "SAML2\\": "src/SAML2"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -2735,7 +2734,7 @@
                 }
             ],
             "description": "SAML2 PHP library from SimpleSAMLphp",
-            "time": "2018-11-20T11:11:28+00:00"
+            "time": "2020-08-19T06:10:17+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -5934,6 +5933,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2019-09-17T06:23:10+00:00"
         },
         {

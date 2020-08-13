@@ -29,7 +29,7 @@
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0",
         "sensio/generator-bundle": "^3.0",
-        "simplesamlphp/saml2": "3.2.*",
+        "simplesamlphp/saml2": "^4.1",
         "swiftmailer/swiftmailer": "^5.4",
         "sybio/image-workshop": "~2.0.7",
         "symfony/monolog-bundle": "^3.1.0",
