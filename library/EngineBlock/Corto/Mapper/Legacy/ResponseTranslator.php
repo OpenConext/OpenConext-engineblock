@@ -108,18 +108,18 @@ class EngineBlock_Corto_Mapper_Legacy_ResponseTranslator
             }
 
             $value = $from[EngineBlock_Corto_XmlToArray::PRIVATE_PFX][$privateVar];
+            // NameIds need to be converted to their object representation (intended nameID is still a string)
+            if ($privateVar === 'CustomNameId' && is_array($value)) {
+                $nameId = new NameID();
+                $nameId->setValue($value['Value']);
+                $nameId->setFormat($value['Format']);
+                $value = $nameId;
+            }
 
             // Does this value have a __t tag? If so, make sure it's namespaces are registered.
             if (is_array($value) && isset($value[EngineBlock_Corto_XmlToArray::TAG_NAME_PFX])) {
                 $value = $this->fromOldFormat($value);
             }
-
-            // 'setCustomNameId' on the ResponseAnnotationDecorator requires an array representation of the NameID. So
-            // convert it if it's a NameID object.
-            if ($privateVar === 'CustomNameId' && $value instanceof NameID) {
-                $value = ['Value' => $value->value, 'Format' => $value->Format];
-            }
-
             $method = 'set' . $privateVar;
             $to->$method($value);
         }

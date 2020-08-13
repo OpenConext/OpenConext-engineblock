@@ -68,33 +68,32 @@ class EngineBlock_Saml2_NameIdResolver
         $collabPersonId
     ) {
         $customNameId = $response->getCustomNameId();
-        if (!empty($customNameId)) {
-
-            return NameID::fromArray($customNameId);
+        if ($customNameId !== null) {
+            return $customNameId;
         }
 
         $nameIdFormat = $this->_getNameIdFormat($request, $destinationMetadata);
 
         $requireUnspecified = ($nameIdFormat === Constants::NAMEID_UNSPECIFIED);
         if ($requireUnspecified) {
-            return NameID::fromArray([
-                'Format' => $nameIdFormat,
-                'Value' => $response->getIntendedNameId(),
-            ]);
+            $nameId = new NameID();
+            $nameId->setFormat($nameIdFormat);
+            $nameId->setValue($response->getIntendedNameId());
+            return $nameId;
         }
 
         $requireTransient = ($nameIdFormat === Constants::NAMEID_TRANSIENT);
         if ($requireTransient) {
-            return NameID::fromArray([
-                'Format' => $nameIdFormat,
-                'Value' => $this->_getTransientNameId($destinationMetadata->entityId, $response->getOriginalIssuer()),
-            ]);
+            $nameId = new NameID();
+            $nameId->setFormat($nameIdFormat);
+            $nameId->setValue($this->_getTransientNameId($destinationMetadata->entityId, $response->getOriginalIssuer()));
+            return $nameId;
         }
 
-        return NameID::fromArray([
-            'Format' => $nameIdFormat,
-            'Value' => $this->_getPersistentNameId($collabPersonId, $destinationMetadata->entityId),
-        ]);
+        $nameId = new NameID();
+        $nameId->setFormat($nameIdFormat);
+        $nameId->setValue($this->_getPersistentNameId($collabPersonId, $destinationMetadata->entityId));
+        return $nameId;
     }
 
     /**

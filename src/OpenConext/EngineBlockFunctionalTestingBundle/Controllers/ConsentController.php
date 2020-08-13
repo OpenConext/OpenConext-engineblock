@@ -51,7 +51,8 @@ class ConsentController
         $fakeSp = TestEntitySeeder::buildSp();
         $fakeIdP = TestEntitySeeder::buildIdP();
         $supportContact = 'Helpdesk';
-        $nameId = NameID::fromArray(['Value' => 'user@openconext']);
+        $nameId = new NameID();
+        $nameId->setValue('user@openconext');
         $profileUrl = 'profile.openconext.org';
         $attributes = [
             'urn:mace:dir:attribute-def:displayName' => ['John Doe'],

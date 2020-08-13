@@ -17,6 +17,7 @@
  */
 
 use SAML2\Constants;
+use SAML2\XML\saml\NameID;
 
 class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_Filter_Command_Abstract
     implements EngineBlock_Corto_Filter_Command_ResponseModificationInterface,
@@ -50,9 +51,10 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
         $this->_response->setOriginalNameId($this->_response->getNameId());
 
         // Adjust the NameID in the OLD response (for consent), set the collab:person uid
-        $this->_response->getAssertion()->setNameId(array(
-            'Value' => $collabPersonIdValue,
-            'Format' => Constants::NAMEID_PERSISTENT,
-        ));
+
+        $nameId = new NameID();
+        $nameId->setValue($collabPersonIdValue);
+        $nameId->setFormat(Constants::NAMEID_PERSISTENT);
+        $this->_response->getAssertion()->setNameId($nameId);
     }
 }

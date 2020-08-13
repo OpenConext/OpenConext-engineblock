@@ -19,6 +19,7 @@
 use SAML2\Assertion;
 use SAML2\EncryptedAssertion;
 use SAML2\Response;
+use SAML2\XML\saml\NameID;
 
 /**
  * Annotate the response with our own metadata
@@ -45,7 +46,7 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     protected $originalIssuer;
 
     /**
-     * @var null|\SAML2\XML\saml\NameID
+     * @var null|NameID
      */
     protected $originalNameId;
 
@@ -65,7 +66,7 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     protected $collabPersonId;
 
     /**
-     * @var array
+     * @var NameID
      */
     protected $customNameId;
 
@@ -90,13 +91,13 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     {
         $assertions = $this->sspMessage->getAssertions();
         if (empty($assertions)) {
-            throw new \RuntimeException('No assertions in response?');
+            throw new RuntimeException('No assertions in response?');
         }
         return $assertions[0];
     }
 
     /**
-     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
+     * @return NameID|null The name identifier of the assertion.
      */
     public function getNameId()
     {
@@ -108,18 +109,18 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     {
         $nameId = $this->getNameId();
         if (!$nameId) {
-            throw new \RuntimeException('No NameID in Assertion?');
+            throw new RuntimeException('No NameID in Assertion?');
         }
-        return $nameId->value;
+        return $nameId->getValue();
     }
 
     public function getNameIdFormat()
     {
         $nameId = $this->getNameId();
-        if (!$nameId->Format) {
-            throw new \RuntimeException('No NameID in Assertion?');
+        if (!$nameId->getFormat()) {
+            throw new RuntimeException('No NameID in Assertion?');
         }
-        return $nameId->Format;
+        return $nameId->getFormat();
     }
 
     /**
@@ -174,38 +175,24 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
         return $this->collabPersonId;
     }
 
-    /**
-     * @param null|\SAML2\XML\saml\NameID $originalNameId
-     * @return $this
-     */
-    public function setOriginalNameId($originalNameId)
+    public function setOriginalNameId(?NameID $originalNameId): EngineBlock_Saml2_ResponseAnnotationDecorator
     {
         $this->originalNameId = $originalNameId;
         return $this;
     }
 
-    /**
-     * @return null|\SAML2\XML\saml\NameID
-     */
-    public function getOriginalNameId()
+    public function getOriginalNameId(): ?NameID
     {
         return $this->originalNameId;
     }
 
-    /**
-     * @param array $customNameId
-     * @return $this
-     */
-    public function setCustomNameId(array $customNameId)
+    public function setCustomNameId(NameID $customNameId): EngineBlock_Saml2_ResponseAnnotationDecorator
     {
         $this->customNameId = $customNameId;
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function getCustomNameId()
+    public function getCustomNameId(): ?NameID
     {
         return $this->customNameId;
     }
