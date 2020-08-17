@@ -38,6 +38,7 @@ Feature:
         And I give my consent
        Then the url should match "functional-testing/SSO-SP/acs"
 
+    @SKIP
     Scenario: One solicited and one unsolicited authentication requests
        When I switch to "Browser tab 1"
         And I log in at "SSO-SP"
