@@ -121,8 +121,7 @@ Feature:
     And  SP "Trusted SP" is authenticating for SP "Unconnected SP"
     When I log in at "Trusted SP"
     Then I should see "Error - No organisations found"
-    And I should see "SP Name: Unconnected SP"
-    And I should see "SP Proxy:"
+    And I should see "Proxy SP:"
 
   Scenario: I want to log on but this Service Provider is not yet registered at OpenConext
     When I log in at "Unregistered SP"

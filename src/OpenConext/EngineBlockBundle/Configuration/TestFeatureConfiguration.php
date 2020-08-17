@@ -38,6 +38,9 @@ class TestFeatureConfiguration implements FeatureConfigurationInterface
         $this->setFeature(new Feature('api.metadata_push', true));
         $this->setFeature(new Feature('api.consent_listing', true));
         $this->setFeature(new Feature('eb.run_all_manipulations_prior_to_consent', true));
+        $this->setFeature(new Feature('eb.block_user_on_violation', true));
+        $this->setFeature(new Feature('eb.encrypted_assertions', true));
+        $this->setFeature(new Feature('eb.encrypted_assertions_require_outer_signature', true));
     }
 
     public function setFeature(Feature $feature): void

@@ -11,6 +11,7 @@ Feature:
     And an Identity Provider named "IdP-with-Attribute-Manipulations"
     And a Service Provider named "Dummy-SP"
     And a Service Provider named "SP-with-Attribute-Manipulations"
+    And feature "eb.run_all_manipulations_prior_to_consent" is disabled
 
   Scenario: The Service Provider can have an attribute added
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
