@@ -1,6 +1,6 @@
 {% set hasOrganizationData = false %}
 {% for locale in locales %}
-    {% if metadata.hasValidOrganizationData(locale) %}
+    {% if metadata.hasCompleteOrganizationData(locale) %}
         {% set hasOrganizationData = true %}
     {% endif %}
 {% endfor %}
@@ -8,7 +8,7 @@
 {% if hasOrganizationData %}
 <md:Organization>
     {% for locale in locales %}
-        {% if metadata.hasValidOrganizationData(locale) %}
+        {% if metadata.hasCompleteOrganizationData(locale) %}
             <md:OrganizationName xml:lang="{{ locale }}">{{ metadata.organizationName(locale) }}</md:OrganizationName>
             <md:OrganizationDisplayName xml:lang="{{ locale }}">{{ metadata.organizationDisplayName(locale) }}</md:OrganizationDisplayName>
             <md:OrganizationURL xml:lang="{{ locale }}">{{ metadata.organizationUrl(locale) }}</md:OrganizationURL>

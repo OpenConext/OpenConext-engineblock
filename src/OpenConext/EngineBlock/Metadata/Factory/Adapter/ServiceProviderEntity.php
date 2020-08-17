@@ -127,7 +127,7 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
         return $this->entity->logo;
     }
 
-    public function hasValidOrganizationData(string $locale): bool
+    public function hasCompleteOrganizationData(string $locale): bool
     {
         $organization = $this->entity->getOrganization($locale);
         if ($organization

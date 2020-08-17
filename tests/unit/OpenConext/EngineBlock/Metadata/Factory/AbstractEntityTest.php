@@ -195,7 +195,7 @@ abstract class AbstractEntityTest extends TestCase
             'getDisplayName',
             'setConsentSettings',
             'toggleWorkflowState',
-            'hasValidOrganizationData',
+            'hasCompleteOrganizationData',
         ];
 
         // Get all state from the old mutable entity
@@ -235,7 +235,7 @@ abstract class AbstractEntityTest extends TestCase
     protected function getIdentityProviderValues(string $identityProviderInterface)
     {
 
-        $values = $this->getGetterBaseNameFromMethodNames($this->getGettersFromMethodNames($this->getMethods($identityProviderInterface, ['hasValidOrganizationData'])));
+        $values = $this->getGetterBaseNameFromMethodNames($this->getGettersFromMethodNames($this->getMethods($identityProviderInterface, ['hasCompleteOrganizationData'])));
 
         $replaceParameters = [
             'name' => [
@@ -282,7 +282,7 @@ abstract class AbstractEntityTest extends TestCase
      */
     protected function getServiceProviderValues(string $serviceProviderInterface)
     {
-        $values = $this->getGetterBaseNameFromMethodNames($this->getGettersFromMethodNames($this->getMethods($serviceProviderInterface, ['hasValidOrganizationData'])));
+        $values = $this->getGetterBaseNameFromMethodNames($this->getGettersFromMethodNames($this->getMethods($serviceProviderInterface, ['hasCompleteOrganizationData'])));
 
         $replaceParameters = [
             'name' => [

@@ -99,7 +99,7 @@ abstract class AbstractIdentityProvider implements IdentityProviderEntityInterfa
         return $this->entity->getLogo();
     }
 
-    public function hasValidOrganizationData(string $locale): bool
+    public function hasCompleteOrganizationData(string $locale): bool
     {
         $organization = $this->entity->getOrganization($locale);
         if ($organization
