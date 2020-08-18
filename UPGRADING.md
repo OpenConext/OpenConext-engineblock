@@ -1,5 +1,21 @@
 # UPGRADE NOTES
 
+## 6.2 > 6.3
+# Removal of incorrect schacHomeOrganization ARP alias
+
+If your federation relies on the release of the urn:oid:1.3.6.1.4.1.1466.115.121.1.15 sHO alias in the ARP. Then please
+put the entry back manually. This config can be found in `application/configs/attributes.json` near line 330.
+
+The following alias can be added back (or review the git history):
+
+```
+     "urn:oid:1.3.6.1.4.1.25178.1.2.9": "urn:mace:terena.org:attribute-def:schacHomeOrganization",
+-->  "urn:oid:1.3.6.1.4.1.1466.115.121.1.15": "urn:mace:terena.org:attribute-def:schacHomeOrganization",
+     "urn:mace:terena.org:attribute-def:schacHomeOrganization": {
+         # Snipped config section for the sake of brevity
+     }
+```
+
 ## 6.1 > 6.2
 
 # Remove legacy application.ini configuration
