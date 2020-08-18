@@ -53,6 +53,14 @@ class IdentityProviderMetadataHelper extends AbstractIdentityProvider
         return $this->entity->getOrganization($locale)->name;
     }
 
+    public function getOrganizationDisplayName($locale) : string
+    {
+        if (!$this->entity->getOrganization($locale)) {
+            return '';
+        }
+        return $this->entity->getOrganization($locale)->displayName;
+    }
+
     public function getOrganizationUrl($locale) : string
     {
         if (!$this->entity->getOrganization($locale)) {

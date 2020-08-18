@@ -34,6 +34,8 @@ use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
  *
  * This adapter is used to support the ORM entity by encapsulating it. This will make it easier to replace the ORM
  * entity ultimately.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ServiceProviderEntity implements ServiceProviderEntityInterface
 {
@@ -123,6 +125,19 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     public function getLogo(): ?Logo
     {
         return $this->entity->logo;
+    }
+
+    public function hasCompleteOrganizationData(string $locale): bool
+    {
+        $organization = $this->entity->getOrganization($locale);
+        if ($organization
+            && is_string($organization->displayName) && $organization->displayName !== ''
+            && is_string($organization->name) && $organization->name !== ''
+            && is_string($organization->url) && $organization->url !== ''
+        ) {
+            return true;
+        }
+        return false;
     }
 
     /**

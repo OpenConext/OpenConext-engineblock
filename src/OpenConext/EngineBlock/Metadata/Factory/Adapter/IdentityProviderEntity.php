@@ -124,6 +124,19 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
         return $this->entity->logo;
     }
 
+    public function hasCompleteOrganizationData(string $locale): bool
+    {
+        $organization = $this->entity->getOrganization($locale);
+        if ($organization
+            && is_string($organization->displayName) && $organization->displayName !== ''
+            && is_string($organization->name) && $organization->name !== ''
+            && is_string($organization->url) && $organization->url !== ''
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @param $locale
      * @return Organization

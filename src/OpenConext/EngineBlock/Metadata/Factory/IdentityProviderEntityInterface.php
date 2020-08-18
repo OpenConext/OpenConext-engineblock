@@ -64,6 +64,12 @@ interface IdentityProviderEntityInterface
     public function getLogo(): ?Logo;
 
     /**
+     * The SAML2 metadata specification dictates to only display the OrganizationData when it is complete
+     * (url, display name and name). This method verifies the organization data is complete
+     */
+    public function hasCompleteOrganizationData(string $locale): bool;
+
+    /**
      * @param $locale
      * @return Organization|null
      */
