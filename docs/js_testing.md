@@ -69,6 +69,26 @@ The WAYF acceptance tests utilize the `/functional-testing/wayf` endpoint in ord
 the WAYF.
 
 ## Visual regression tests
+
+In order to run the visual regression tests additional requirements are:
+ - Chrome (Chromium should work too)
+ ```
+$ wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+$ sudo yum localinstall google-chrome-stable_current_x86_64.rpm
+$ rm google-chrome-stable_current_x86_64.rpm
+```
+
+ - Chrome-driver
+Ensure you download the matching chrome driver version
+```
+$ wget https://chromedriver.storage.googleapis.com/MATCH_THIS_TO_YOUR_CHROME_VERSION/chromedriver_linux64.zip
+$ unzip ./chromedriver_linux64.zip
+$ rm chromedriver_linux64.zip
+$ sudo mv -f chromedriver /usr/local/bin/chromedriver
+$ sudo chown root:root /usr/local/bin/chromedriver
+$ sudo chmod 0755 /usr/local/bin/chromedriver
+```
+
 While building the new error page styling, visual regression testing was utilized to take control over visual regressions. The `jest-image-snapshot` <sup>1</sup> package is used to perform these tests.
 
 Running them is as simple as:
