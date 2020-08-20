@@ -48,19 +48,19 @@ interface MetadataRepositoryInterface
      * @return ServiceProvider
      * @throws EntityNotFoundException
      */
-    public function fetchServiceProviderByEntityId($entityId);
+    public function fetchServiceProviderByEntityId(string $entityId);
 
     /**
      * @param string $entityId
      * @return IdentityProvider
      */
-    public function fetchIdentityProviderByEntityId($entityId);
+    public function fetchIdentityProviderByEntityId(string $entityId);
 
     /**
      * @param string $entityId
      * @return IdentityProvider|null
      */
-    public function findIdentityProviderByEntityId($entityId);
+    public function findIdentityProviderByEntityId(string $entityId);
 
     /**
      * @param string $hash
@@ -73,7 +73,7 @@ interface MetadataRepositoryInterface
      * @param LoggerInterface|null $logger
      * @return null|ServiceProvider
      */
-    public function findServiceProviderByEntityId($entityId, LoggerInterface $logger = null);
+    public function findServiceProviderByEntityId(string $entityId, LoggerInterface $logger = null);
 
     /**
      * @return IdentityProvider[]

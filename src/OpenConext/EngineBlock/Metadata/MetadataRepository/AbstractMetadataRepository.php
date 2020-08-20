@@ -73,7 +73,7 @@ abstract class AbstractMetadataRepository implements MetadataRepositoryInterface
      * @return ServiceProvider
      * @throws EntityNotFoundException
      */
-    public function fetchServiceProviderByEntityId($entityId)
+    public function fetchServiceProviderByEntityId(string $entityId)
     {
         $serviceProvider = $this->findServiceProviderByEntityId($entityId);
 
@@ -85,11 +85,11 @@ abstract class AbstractMetadataRepository implements MetadataRepositoryInterface
     }
 
     /**
-     * @param $entityId
+     * @param string $entityId
      * @return null|IdentityProvider|ServiceProvider
      * @throws EntityNotFoundException
      */
-    public function fetchIdentityProviderByEntityId($entityId)
+    public function fetchIdentityProviderByEntityId(string $entityId)
     {
         $identityProvider = $this->findIdentityProviderByEntityId($entityId);
 

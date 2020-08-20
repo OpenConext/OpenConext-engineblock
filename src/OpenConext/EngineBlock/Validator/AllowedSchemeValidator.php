@@ -38,7 +38,7 @@ class AllowedSchemeValidator implements ValidatorInterface
             return false;
         }
 
-        if ($acsLocation && !in_array($parts['scheme'], $this->allowedAcsLocationSchemes)) {
+        if ($acsLocation && !in_array($parts['scheme'], $this->allowedAcsLocationSchemes, true)) {
             return false;
         }
 

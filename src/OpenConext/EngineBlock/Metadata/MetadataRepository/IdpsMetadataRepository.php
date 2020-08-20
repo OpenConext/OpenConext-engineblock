@@ -57,7 +57,7 @@ class IdpsMetadataRepository
      * @return ServiceProvider
      * @throws EntityNotFoundException
      */
-    public function fetchServiceProviderByEntityId($entityId)
+    public function fetchServiceProviderByEntityId(string $entityId)
     {
         try {
             return $this->repository->fetchServiceProviderByEntityId($entityId);
