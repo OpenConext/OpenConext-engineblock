@@ -27,6 +27,7 @@ use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProviderFactory;
 use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
 use SAML2\AuthnRequest;
+use SAML2\XML\saml\Issuer;
 
 /**
  * Class MockSpContext
@@ -191,7 +192,9 @@ class MockSpContext extends AbstractSubContext
         $sp = $this->mockSpRegistry->get($spName);
 
         $request = new AuthnRequest();
-        $request->setIssuer($sp->entityId());
+        $issuer = new Issuer();
+        $issuer->setValue($sp->entityId());
+        $request->setIssuer($issuer);
         $request->setAssertionConsumerServiceURL($acsLocation);
         $sp->setAuthnRequest($request);
 

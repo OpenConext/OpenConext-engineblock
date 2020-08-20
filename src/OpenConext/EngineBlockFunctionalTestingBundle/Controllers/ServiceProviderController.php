@@ -79,7 +79,7 @@ class ServiceProviderController extends Controller
         $redirect = new HTTPRedirect();
         $url = $redirect->getRedirectURL($authnRequest);
 
-        if (isset($sp->getEntityDescriptor()->Extensions['Malformed'])) {
+        if (isset($sp->getEntityDescriptor()->getExtensions()['Malformed'])) {
             $url = str_replace('SAMLRequest', 'AuthNRequest', $url);
         }
 
@@ -111,7 +111,7 @@ class ServiceProviderController extends Controller
         $container = Utils::getContainer();
         $response = $container->getPostResponse();
 
-        if (isset($sp->getEntityDescriptor()->Extensions['Malformed'])) {
+        if (isset($sp->getEntityDescriptor()->getExtensions()['Malformed'])) {
             $body = $response->getContent();
             $response->setContent(str_replace('SAMLRequest', 'AuthNRequest', $body));
         }

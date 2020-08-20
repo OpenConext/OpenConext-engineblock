@@ -34,6 +34,18 @@ abstract class AbstractSubContext implements Context
     const SESSION_DEFAULT = 'default';
     const SESSION_CHROME = 'chrome';
 
+    // Usefull for step debugging in the executed code
+//    /**
+//     * @beforeStep
+//     *
+//     * @param BeforeStepScope $scope
+//     */
+//    public function putDebugCookie(BeforeStepScope $scope)
+//    {
+//        $driver = $this->getMinkContext()->getSession()->getDriver();
+//        $driver->setCookie('XDEBUG_SESSION', 'PHPSTORM');
+//    }
+
     /**
      * @BeforeScenario
      */

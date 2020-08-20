@@ -36,19 +36,19 @@ class MockServiceProvider extends AbstractMockEntityRole
 
     public function loginUrlRedirect()
     {
-        return $this->descriptor->Extensions['LoginRedirectUrl'];
+        return $this->descriptor->getExtensions()['LoginRedirectUrl'];
     }
 
     public function loginUrlPost()
     {
-        return $this->descriptor->Extensions['LoginPostUrl'];
+        return $this->descriptor->getExtensions()['LoginPostUrl'];
     }
 
     public function assertionConsumerServiceLocation()
     {
         /** @var SPSSODescriptor $role */
         $role = $this->getSsoRole();
-        return $role->AssertionConsumerService[0]->Location;
+        return $role->getAssertionConsumerService()[0]->getLocation();
     }
 
     /**
@@ -56,44 +56,56 @@ class MockServiceProvider extends AbstractMockEntityRole
      */
     public function getAuthnRequest()
     {
-        return $this->descriptor->Extensions['SAMLRequest'];
+        return $this->descriptor->getExtensions()['SAMLRequest'];
     }
 
     public function setAuthnRequest(SAMLAuthnRequest $authnRequest)
     {
-        $this->descriptor->Extensions['SAMLRequest'] = $authnRequest;
-        return $this;
+        $this->descriptor->setExtensions(
+            array_merge(
+                $this->descriptor->getExtensions(),
+                ['SAMLRequest' => $authnRequest]
+            )
+        );
     }
 
     public function useIdpTransparently($entityId)
     {
-        $this->descriptor->Extensions['TransparentIdp'] = $entityId;
-        return $this;
+        $this->descriptor->setExtensions(
+            array_merge(
+                $this->descriptor->getExtensions(),
+                ['TransparentIdp' => $entityId]
+            )
+        );
     }
 
     public function getTransparentIdp()
     {
-        return isset($this->descriptor->Extensions['TransparentIdp']) ?
-            $this->descriptor->Extensions['TransparentIdp'] :
-            '';
+        $extenstions = $this->descriptor->getExtensions();
+        return $extenstions['TransparentIdp'] ?? '';
     }
 
     public function useUnsolicited()
     {
-        $this->descriptor->Extensions['Unsolicited'] = true;
-        return $this;
+        $this->descriptor->setExtensions(
+            array_merge(
+                $this->descriptor->getExtensions(),
+                ['Unsolicited' => true]
+            )
+        );
     }
 
     public function mustUseUnsolicited()
     {
-        return isset($this->descriptor->Extensions['Unsolicited']) && $this->descriptor->Extensions['Unsolicited'];
+        $extension = $this->descriptor->getExtensions();
+        return isset($extension['Unsolicited']) && $extension['Unsolicited'];
     }
 
     public function signAuthnRequests()
     {
         /** @var SPSSODescriptor $role */
         $role = $this->getSsoRole();
-        $role->AuthnRequestsSigned = true;
+        $role->setAuthnRequestsSigned(true);
         return $this;
     }
 
@@ -101,46 +113,54 @@ class MockServiceProvider extends AbstractMockEntityRole
     {
         /** @var SPSSODescriptor $role */
         $role = $this->getSsoRole();
-        return $role->AuthnRequestsSigned;
+        return $role->getAuthnRequestsSigned();
     }
 
     public function useHttpPost()
     {
-        $this->descriptor->Extensions['UsePost'] = true;
-        return $this;
+        $this->descriptor->setExtensions(
+            array_merge(
+                $this->descriptor->getExtensions(),
+                ['UsePost' => true]
+            )
+        );
     }
 
     public function mustUsePost()
     {
-        return isset($this->descriptor->Extensions['UsePost']);
+        return isset($this->descriptor->getExtensions()['UsePost']);
     }
 
     public function useHttpRedirect()
     {
-        unset($this->descriptor->Extensions['UsePost']);
-        return $this;
+        unset($this->descriptor->getExtensions()['UsePost']);
     }
 
     public function isTrustedProxy()
     {
-        return isset($this->descriptor->Extensions['TrustedProxy']) && $this->descriptor->Extensions['TrustedProxy'];
+        $descriptor = $this->descriptor;
+        return isset($descriptor->getExtensions()['TrustedProxy']) && $descriptor->getExtensions()['TrustedProxy'];
     }
 
     public function trustedProxy()
     {
-        $this->descriptor->Extensions['TrustedProxy'] = true;
+        $this->descriptor->setExtensions(
+            array_merge(
+                $this->descriptor->getExtensions(),
+                ['TrustedProxy' => true]
+            )
+        );
         return $this;
     }
 
     public function setAuthnRequestProxyCountTo($proxyCount)
     {
-        $this->descriptor->Extensions['SAMLRequest']->setProxyCount($proxyCount);
-        return $this;
+        $this->descriptor->getExtensions()['SAMLRequest']->setProxyCount($proxyCount);
     }
 
     public function setAuthnRequestToPassive()
     {
-        $this->descriptor->Extensions['SAMLRequest']->setIsPassive(true);
+        $this->descriptor->getExtensions()['SAMLRequest']->setIsPassive(true);
     }
 
     /**
@@ -151,12 +171,17 @@ class MockServiceProvider extends AbstractMockEntityRole
         $scope = $this->getScoping();
         $scope[] = $idpEntityId;
 
-        $this->descriptor->Extensions['SAMLRequest']->setIDPList($scope);
+        $this->descriptor->getExtensions()['SAMLRequest']->setIDPList($scope);
     }
 
     public function sendMalformedAuthNRequest()
     {
-        $this->descriptor->Extensions['Malformed'] = true;
+        $this->descriptor->setExtensions(
+            array_merge(
+                $this->descriptor->getExtensions(),
+                ['Malformed' => true]
+            )
+        );
     }
 
     /**
@@ -164,7 +189,7 @@ class MockServiceProvider extends AbstractMockEntityRole
      */
     public function getScoping()
     {
-        return $this->descriptor->Extensions['SAMLRequest']->getIDPList();
+        return $this->descriptor->getExtensions()['SAMLRequest']->getIDPList();
     }
 
     protected function getRoleClass()
@@ -174,11 +199,16 @@ class MockServiceProvider extends AbstractMockEntityRole
 
     public function getAuthnContextClassRef(): string
     {
-        return $this->descriptor->Extensions['AuthnContextClassRef'] ?? '';
+        return $this->descriptor->getExtensions()['AuthnContextClassRef'] ?? '';
     }
 
     public function setAuthnContextClassRef($classRef)
     {
-        $this->descriptor->Extensions['AuthnContextClassRef'] = $classRef;
+        $this->descriptor->setExtensions(
+            array_merge(
+                $this->descriptor->getExtensions(),
+                ['AuthnContextClassRef' => $classRef]
+            )
+        );
     }
 }
