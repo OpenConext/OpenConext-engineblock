@@ -29,11 +29,6 @@ use SAML2\XML\md\SPSSODescriptor;
  */
 class MockServiceProvider extends AbstractMockEntityRole
 {
-    public function loginUrl()
-    {
-        return $this->loginUrlRedirect();
-    }
-
     public function loginUrlRedirect()
     {
         return $this->descriptor->getExtensions()['LoginRedirectUrl'];
@@ -85,16 +80,6 @@ class MockServiceProvider extends AbstractMockEntityRole
         return $extenstions['TransparentIdp'] ?? '';
     }
 
-    public function useUnsolicited()
-    {
-        $this->descriptor->setExtensions(
-            array_merge(
-                $this->descriptor->getExtensions(),
-                ['Unsolicited' => true]
-            )
-        );
-    }
-
     public function mustUseUnsolicited()
     {
         $extension = $this->descriptor->getExtensions();
@@ -142,17 +127,6 @@ class MockServiceProvider extends AbstractMockEntityRole
         return isset($descriptor->getExtensions()['TrustedProxy']) && $descriptor->getExtensions()['TrustedProxy'];
     }
 
-    public function trustedProxy()
-    {
-        $this->descriptor->setExtensions(
-            array_merge(
-                $this->descriptor->getExtensions(),
-                ['TrustedProxy' => true]
-            )
-        );
-        return $this;
-    }
-
     public function setAuthnRequestProxyCountTo($proxyCount)
     {
         $this->descriptor->getExtensions()['SAMLRequest']->setProxyCount($proxyCount);
@@ -195,11 +169,6 @@ class MockServiceProvider extends AbstractMockEntityRole
     protected function getRoleClass()
     {
         return SPSSODescriptor::class;
-    }
-
-    public function getAuthnContextClassRef(): string
-    {
-        return $this->descriptor->getExtensions()['AuthnContextClassRef'] ?? '';
     }
 
     public function setAuthnContextClassRef($classRef)

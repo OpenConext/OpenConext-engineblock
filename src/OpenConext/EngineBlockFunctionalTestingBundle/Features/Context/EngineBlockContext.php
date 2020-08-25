@@ -19,7 +19,6 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
 use Behat\Gherkin\Node\TableNode;
-use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 use DOMDocument;
 use DOMElement;
@@ -846,9 +845,7 @@ HTML;
     private function calculateDigest(DOMElement $element)
     {
         $xml = $element->C14N(true, false);
-        $digest = $this->digest($xml);
-
-        return $digest;
+        return $this->digest($xml);
     }
 
     /**
@@ -858,7 +855,6 @@ HTML;
     private function digest($data)
     {
         $digest = hash('sha256', $data, true);
-        $digest = base64_encode($digest);
-        return $digest;
+        return base64_encode($digest);
     }
 }

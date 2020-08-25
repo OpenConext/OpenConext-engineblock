@@ -27,7 +27,6 @@ use SAML2\XML\md\IDPSSODescriptor;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Allows for better control
- * @SuppressWarnings(PMD.ExcessiveClassComplexity)
  */
 class MockIdentityProvider extends AbstractMockEntityRole
 {
@@ -36,8 +35,6 @@ class MockIdentityProvider extends AbstractMockEntityRole
     private $turnBackTime = false;
 
     private $fromTheFuture = false;
-
-    private $logo = null;
 
     public function singleSignOnLocation()
     {
@@ -50,22 +47,6 @@ class MockIdentityProvider extends AbstractMockEntityRole
         $role->setExtensions(['SAMLResponse' => $response]);
 
         return $this;
-    }
-
-    public function overrideResponseDestination($acsUrl)
-    {
-        $descriptor = $this->descriptor;
-        $descriptor->setExtensions(array_merge($descriptor->getExtensions(), ['DestinationOverride' => $acsUrl]));
-    }
-
-    public function hasDestinationOverride()
-    {
-        return array_key_exists('DestinationOverride', $this->descriptor->getExtensions());
-    }
-
-    public function getDestinationOverride()
-    {
-        return $this->descriptor->getExtensions()['DestinationOverride'];
     }
 
     public function setStatusMessage($statusMessage)
@@ -311,12 +292,6 @@ class MockIdentityProvider extends AbstractMockEntityRole
         return $this;
     }
 
-    public function doNotUseAssertionSigning()
-    {
-        unset($this->descriptor->getExtensions()['SignAssertions']);
-        return $this;
-    }
-
     public function signAssertions()
     {
         $this->descriptor->setExtensions(
@@ -366,11 +341,6 @@ class MockIdentityProvider extends AbstractMockEntityRole
     public function shouldNotSendAssertions()
     {
         return $this->sendAssertions === false;
-    }
-
-    public function setLogo($logo)
-    {
-        $this->logo = $logo;
     }
 
     protected function getRoleClass()
