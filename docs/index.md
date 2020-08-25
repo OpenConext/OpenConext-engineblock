@@ -7,10 +7,12 @@
 1. [Stepup second factor integration](stepup_callout.md)
 1. [Configurable authncontextclassref](configurable_authncontextclassref.md)
 1. [Release notes for releases < 5.0.0][release-notes]
+1. [PHP testing][php-testing]
 1. [Javscript testing][js-testing]
 
 [license]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/LICENSE
 [release]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/release_procedure.md
 [filter]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/filter_commands.md
 [release-notes]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/release_notes
+[php-testing]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/php_testing.md
 [js-testing]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/js_testing.md

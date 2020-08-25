@@ -40,6 +40,15 @@ class MinkContext extends BaseMinkContext
     private $windows = [];
 
     /**
+     * @Given /^Xdebug step debugging is enabled in the browser$/
+     */
+    public function putDebugCookie()
+    {
+        $driver = $this->getSession()->getDriver();
+        $driver->setCookie('XDEBUG_SESSION', 'PHPSTORM');
+    }
+
+    /**
      * @Then /^the response should contain \'([^\']*)\'$/
      */
     public function theResponseShouldContain($string)
