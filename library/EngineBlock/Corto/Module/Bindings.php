@@ -28,6 +28,7 @@ use SAML2\Configuration\Destination;
 use SAML2\Configuration\IdentityProvider as Saml2IdentityProvider;
 use SAML2\Configuration\PrivateKey;
 use SAML2\Configuration\ServiceProvider as Saml2ServiceProvider;
+use SAML2\Constants;
 use SAML2\EncryptedAssertion;
 use SAML2\Response\Exception\PreconditionNotMetException;
 use SAML2\HTTPPost;
@@ -401,6 +402,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 }
 
                 $status = $sspResponse->getStatus();
+
+                if (isset($status['SubCode']) && $status['SubCode'] === Constants::STATUS_NO_PASSIVE) {
+                    // When a no passive response status was returned from the IdP, return the response back to the ACS
+                    return new EngineBlock_Saml2_ResponseAnnotationDecorator($sspResponse);
+                }
 
                 $log->notice(
                     'Received an Error Response',
