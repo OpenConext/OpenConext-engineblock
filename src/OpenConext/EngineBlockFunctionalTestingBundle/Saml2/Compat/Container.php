@@ -109,7 +109,6 @@ class Container extends AbstractContainer
      *
      * @param string $url
      * @param array $data
-     * @return $this
      */
     public function postRedirect($url, $data = []): void
     {

@@ -70,8 +70,6 @@ class EngineBlock_Saml2_MessageAnnotationDecorator
 
     /**
      * Get the message Issuer.
-     *
-     * @return Issuer
      */
     public function getIssuer(): ?Issuer
     {
