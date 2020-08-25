@@ -72,11 +72,11 @@ class ServiceRegistryFixture
     }
 
     /**
-     * @param $entityId
+     * @param string $entityId
      * @return ServiceProvider
      * @throws Exception
      */
-    private function getServiceProvider($entityId)
+    private function getServiceProvider(string $entityId)
     {
         $entity = $this->repository->findServiceProviderByEntityId($entityId);
 

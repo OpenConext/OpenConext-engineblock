@@ -62,28 +62,32 @@ class MockIdentityProviderFactory extends AbstractMockEntityFactory
     protected function generateDefaultEntityMetadata($idpName)
     {
         $entityMetadata = new EntityDescriptor();
-        $entityMetadata->entityID = $this->router->generate(
-            'functional_testing_idp_metadata',
-            ['idpName' => $idpName],
-            RouterInterface::ABSOLUTE_URL
+        $entityMetadata->setEntityID(
+            $this->router->generate(
+                'functional_testing_idp_metadata',
+                ['idpName' => $idpName],
+                RouterInterface::ABSOLUTE_URL
+            )
         );
 
         $acsService = new IndexedEndpointType();
-        $acsService->index = 0;
-        $acsService->Binding  = Constants::BINDING_HTTP_REDIRECT;
-        $acsService->Location = $this->router->generate(
-            'functional_testing_idp_sso',
-            ['idpName' => $idpName],
-            RouterInterface::ABSOLUTE_URL
+        $acsService->setIndex(0);
+        $acsService->setBinding(Constants::BINDING_HTTP_REDIRECT);
+        $acsService->setLocation(
+            $this->router->generate(
+                'functional_testing_idp_sso',
+                ['idpName' => $idpName],
+                RouterInterface::ABSOLUTE_URL
+            )
         );
 
         $idpSsoDescriptor = new IDPSSODescriptor();
-        $idpSsoDescriptor->protocolSupportEnumeration = [Constants::NS_SAMLP];
-        $idpSsoDescriptor->SingleSignOnService[] = $acsService;
+        $idpSsoDescriptor->setProtocolSupportEnumeration([Constants::NS_SAMLP]);
+        $idpSsoDescriptor->setSingleSignOnService([0 => $acsService]);
 
-        $idpSsoDescriptor->KeyDescriptor[] = $this->generateDefaultSigningKeyPair();
+        $idpSsoDescriptor->setKeyDescriptor([$this->generateDefaultSigningKeyPair()]);
 
-        $entityMetadata->RoleDescriptor[] = $idpSsoDescriptor;
+        $entityMetadata->setRoleDescriptor([$idpSsoDescriptor]);
 
         return $entityMetadata;
     }

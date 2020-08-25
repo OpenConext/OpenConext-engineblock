@@ -39,18 +39,18 @@ abstract class AbstractMockEntityFactory
     protected function generateDefaultSigningKeyPair()
     {
         $signingKey = new KeyDescriptor();
-        $signingKey->use = 'signing';
+        $signingKey->setUse('signing');
 
         $keyInfo = new KeyInfo();
-        $keyInfo->Id = "CONEXT-ETS-KEY-SNAKEOIL";
+        $keyInfo->setId('CONEXT-ETS-KEY-SNAKEOIL');
 
         $keyName = new KeyName();
-        $keyName->name = "snakeoil";
+        $keyName->setName('snakeoil');
 
         $x509Data = new X509Data();
 
         $certificate = new X509Certificate();
-        $certificate->certificate = trim(file_get_contents(__DIR__ . '/../Resources/keys/snakeoil.certData'));
+        $certificate->setCertificate(trim(file_get_contents(__DIR__ . '/../Resources/keys/snakeoil.certData')));
 
         $domElement = new DOMElement('PrivateKey');
         $domElement->nodeValue = trim(file_get_contents(__DIR__ . '/../Resources/keys/snakeoil.key'));
@@ -59,11 +59,10 @@ abstract class AbstractMockEntityFactory
         $document->appendChild($domElement);
         $privateKeyChunk = new Chunk($domElement);
 
-        $x509Data->data[] = $certificate;
-        $keyInfo->info[] = $keyName;
-        $keyInfo->info[] = $x509Data;
-        $keyInfo->info[] = $privateKeyChunk;
-        $signingKey->KeyInfo = $keyInfo;
+        $x509Data->setData([$certificate]);
+        $info = [$keyName, $x509Data, $privateKeyChunk];
+        $keyInfo->setInfo($info);
+        $signingKey->setKeyInfo($keyInfo);
 
         return $signingKey;
     }

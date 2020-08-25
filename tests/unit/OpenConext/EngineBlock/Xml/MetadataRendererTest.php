@@ -122,7 +122,7 @@ class MetadataRendererTest extends TestCase
             [
                 'entityId' => 'idp',
                 'singleSignOnServices' => $singleSignOnServices,
-                'logo' => new Logo('/images/logo.gif'),
+                'logo' => new Logo('https://www.example.com/images/logo.gif'),
             ]
         );
 
@@ -171,7 +171,7 @@ class MetadataRendererTest extends TestCase
             [
                 'entityId' => 'sp',
                 'assertionConsumerServices' => $assertionConsumerServices,
-                'logo' => new Logo('/images/logo.gif'),
+                'logo' => new Logo('https://www.example.com/images/logo.gif'),
                 'organizationEn' => new Organization('Org', 'Organization', 'https://example.org'),
                 'contactPersons' => $contactPersons,
             ]
@@ -211,7 +211,7 @@ class MetadataRendererTest extends TestCase
         $singleSignOnServices[] = new Service($ssoLocation, Constants::BINDING_HTTP_POST);
         $singleSignOnServices[] = new Service($ssoLocation, Constants::BINDING_HTTP_REDIRECT);
 
-        $logo = new Logo('logo-url');
+        $logo = new Logo('https://www.example.com/logo-url');
         $logo->width = 100;
         $logo->height = 100;
 

@@ -26,6 +26,7 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use Webmozart\Assert\Assert;
 
 /**
  * Class DoctrineMetadataRepository
@@ -138,7 +139,7 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
      * @param string $entityId
      * @return IdentityProvider|null
      */
-    public function findIdentityProviderByEntityId($entityId)
+    public function findIdentityProviderByEntityId(string $entityId)
     {
         $queryBuilder = $this->idpRepository->createQueryBuilder('role')
             ->andWhere('role.entityId = :id')
@@ -193,7 +194,7 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
      * @param LoggerInterface|null $logger
      * @return null|ServiceProvider
      */
-    public function findServiceProviderByEntityId($entityId, LoggerInterface $logger = null)
+    public function findServiceProviderByEntityId(string $entityId, LoggerInterface $logger = null)
     {
         $queryBuilder = $this->spRepository->createQueryBuilder('role')
             ->andWhere('role.entityId = :id')

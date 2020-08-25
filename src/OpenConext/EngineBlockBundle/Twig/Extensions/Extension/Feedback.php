@@ -25,6 +25,7 @@ use OpenConext\EngineBlockBundle\Configuration\ErrorFeedbackConfigurationInterfa
 use OpenConext\EngineBlockBundle\Configuration\WikiLink;
 use OpenConext\EngineBlockBundle\Value\FeedbackInformation;
 use OpenConext\EngineBlockBundle\Value\FeedbackInformationMap;
+use SAML2\XML\saml\Issuer;
 use Twig\TwigFunction;
 use Twig_Extension;
 
@@ -158,6 +159,9 @@ class Feedback extends Twig_Extension
                 if (empty($value)) {
                     unset($feedbackInfo[$key]);
                     continue;
+                }
+                if ($value instanceof Issuer) {
+                    $value = $value->getValue();
                 }
                 $feedbackInfoMap->add(new FeedbackInformation($key, $value));
             }

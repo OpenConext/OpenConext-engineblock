@@ -96,11 +96,9 @@ class IdentityProviderController extends Controller
         /** @var ResponseFactory $responseFactory */
         $response = $this->responseFactory->createForEntityWithRequest($mockIdp, $authnRequest);
 
-        $destination = ($mockIdp->hasDestinationOverride() ?
-            $mockIdp->getDestinationOverride() :
-            ($authnRequest->getAssertionConsumerServiceURL() ?
+        $destination = ($authnRequest->getAssertionConsumerServiceURL() ?
                 $authnRequest->getAssertionConsumerServiceURL() :
-                $response->getDestination()));
+                $response->getDestination());
 
         if ($mockIdp->mustUseHttpRedirect()) {
             $redirect = new HTTPRedirect();

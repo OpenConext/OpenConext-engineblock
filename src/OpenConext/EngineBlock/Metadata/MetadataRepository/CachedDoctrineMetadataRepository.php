@@ -121,7 +121,7 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
      * @return ServiceProvider
      * @throws EntityNotFoundException
      */
-    public function fetchServiceProviderByEntityId($entityId)
+    public function fetchServiceProviderByEntityId(string $entityId)
     {
         $serviceProvider = $this->findServiceProviderByEntityId($entityId);
 
@@ -136,7 +136,7 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
      * @param string $entityId
      * @return IdentityProvider
      */
-    public function fetchIdentityProviderByEntityId($entityId)
+    public function fetchIdentityProviderByEntityId(string $entityId)
     {
         $identityProvider = $this->findIdentityProviderByEntityId($entityId);
 
@@ -151,7 +151,7 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
      * @param string $entityId
      * @return IdentityProvider|null
      */
-    public function findIdentityProviderByEntityId($entityId)
+    public function findIdentityProviderByEntityId(string $entityId)
     {
         return $this->invoke(__FUNCTION__, func_get_args());
     }
@@ -166,11 +166,11 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
     }
 
     /**
-     * @param $entityId
+     * @param string $entityId
      * @param LoggerInterface|null $logger
      * @return null|ServiceProvider
      */
-    public function findServiceProviderByEntityId($entityId, LoggerInterface $logger = null)
+    public function findServiceProviderByEntityId(string $entityId, LoggerInterface $logger = null)
     {
         return $this->invoke(__FUNCTION__, func_get_args());
     }

@@ -18,7 +18,6 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\MinkExtension\Context\MinkContext as BaseMinkContext;
 use DOMDocument;
@@ -38,6 +37,15 @@ class MinkContext extends BaseMinkContext
      * @example ['My tab' => 'WindowNameGivenByBrowser', 'My other tab' => 'WindowNameGivenByBrowser']
      */
     private $windows = [];
+
+    /**
+     * @Given /^Xdebug step debugging is enabled in the browser$/
+     */
+    public function putDebugCookie()
+    {
+        $driver = $this->getSession()->getDriver();
+        $driver->setCookie('XDEBUG_SESSION', 'PHPSTORM');
+    }
 
     /**
      * @Then /^the response should contain \'([^\']*)\'$/

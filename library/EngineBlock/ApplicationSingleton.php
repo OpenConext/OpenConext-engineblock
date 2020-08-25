@@ -21,6 +21,7 @@ use OpenConext\EngineBlock\Metadata\MetadataRepository\EntityNotFoundException;
 use OpenConext\EngineBlock\Request\RequestId;
 use OpenConext\EngineBlockBundle\Exception\Art;
 use Psr\Log\LoggerInterface;
+use SAML2\XML\saml\Issuer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 define('ENGINEBLOCK_FOLDER_ROOT'       , realpath(__DIR__ . '/../../') . '/');
@@ -249,7 +250,11 @@ class EngineBlock_ApplicationSingleton
         // Find the current identity provider
         if (isset($_SESSION['currentServiceProvider'])) {
             $feedbackInfo['serviceProvider'] = $_SESSION['currentServiceProvider'];
-            $feedbackInfo['serviceProviderName'] = $this->getServiceProviderName($_SESSION['currentServiceProvider']);
+            $spEntityId = $_SESSION['currentServiceProvider'];
+            if ($spEntityId instanceof Issuer) {
+                $spEntityId = $spEntityId->getValue();
+            }
+            $feedbackInfo['serviceProviderName'] = $this->getServiceProviderName($spEntityId);
         }
 
         if (isset($_SESSION['proxyServiceProvider'])) {
@@ -427,7 +432,7 @@ class EngineBlock_ApplicationSingleton
      * @param string $serviceProviderId
      * @return string
      */
-    private function getServiceProviderName($serviceProviderId){
+    private function getServiceProviderName(string $serviceProviderId){
         try {
             $serviceProvider = $this->getDiContainer()->getMetadataRepository()->fetchServiceProviderByEntityId($serviceProviderId);
             return $serviceProvider->getDisplayName($this->getDiContainer()->getLocaleProvider()->getLocale());

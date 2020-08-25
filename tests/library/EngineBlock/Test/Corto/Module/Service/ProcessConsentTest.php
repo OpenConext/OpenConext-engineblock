@@ -28,6 +28,7 @@ use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Response;
+use SAML2\XML\saml\Issuer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -247,7 +248,9 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends TestCase
 
         $spRequest = new AuthnRequest();
         $spRequest->setId('SPREQUEST');
-        $spRequest->setIssuer('https://sp.example.edu');
+        $issuer = new Issuer();
+        $issuer->setValue('https://sp.example.edu');
+        $spRequest->setIssuer($issuer);
         $spRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($spRequest);
 
         $ebRequest = new AuthnRequest();

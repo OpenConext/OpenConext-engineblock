@@ -136,7 +136,7 @@ class EngineBlock_Attributes_Metadata
             }
 
             $attributes[$attributeName] = array_map(function (NameID $nameId) {
-                return $nameId->value;
+                return $nameId->getValue();
             }, $attributeValues);
         }
 

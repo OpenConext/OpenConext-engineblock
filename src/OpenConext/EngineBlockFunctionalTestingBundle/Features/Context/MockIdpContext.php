@@ -19,7 +19,6 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
-use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;

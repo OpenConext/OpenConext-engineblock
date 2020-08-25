@@ -23,6 +23,7 @@ use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use SAML2\AuthnRequest;
 use SAML2\Response;
+use SAML2\XML\saml\Issuer;
 use Symfony\Component\HttpFoundation\Request;
 
 class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto_Module_Service_ServiceInterface
@@ -70,12 +71,12 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
 
         $request = $this->_getRequest($serviceName);
 
-        $log->info(sprintf("Fetching service provider matching request issuer '%s'", $request->getIssuer()));
+        $log->info(sprintf("Fetching service provider matching request issuer '%s'", $request->getIssuer()->getValue()));
 
         if ($serviceName === 'debugSingleSignOnService') {
             $sp = $this->getEngineSpRole($this->_server);
         } else {
-            $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
+            $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer()->getValue());
         }
 
         // When dealing with an SP that acts as a trusted proxy, we should perform SSO on the proxying SP and not the
@@ -251,7 +252,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             $logMessage = sprintf(
                 "Binding received %s from '%s'",
                 $request->wasSigned() ? 'signed SAML request' : 'unsigned SAML request',
-                $request->getIssuer()
+                $request->getIssuer()->getValue()
             );
         }
 
@@ -316,7 +317,9 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
 
         $sspRequest = new AuthnRequest();
         $sspRequest->setId($this->_server->getNewId(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_REQUEST));
-        $sspRequest->setIssuer($entityId);
+        $issuer = new Issuer();
+        $issuer->setValue($entityId);
+        $sspRequest->setIssuer($issuer);
         $sspRequest->setRelayState($relayState);
 
         if ($acsLocation) {
@@ -345,7 +348,9 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
     {
         $sspRequest = new AuthnRequest();
         $sspRequest->setId($this->_server->getNewId(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_REQUEST));
-        $sspRequest->setIssuer($this->_server->getUrl('spMetadataService'));
+        $issuer = new Issuer();
+        $issuer->setValue($this->_server->getUrl('spMetadataService'));
+        $sspRequest->setIssuer($issuer);
 
         $request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
         $request->setDebug();
@@ -490,7 +495,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
      */
     protected function _sendDebugMail(EngineBlock_Saml2_ResponseAnnotationDecorator $response)
     {
-        $identityProvider = $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getIssuer());
+        $identityProvider = $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getIssuer()->getValue());
 
         $attributes = $response->getAssertion()->getAttributes();
 
@@ -642,7 +647,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             '@theme/Authentication/View/Proxy/debug-idp-response.html.twig',
             [
                 'wide' => true,
-                'idp' => $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getIssuer()),
+                'idp' => $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getIssuer()->getValue()),
                 'nameId' => $response->getAssertion()->getNameId(),
                 'attributes' => $attributes,
                 'validationResult' => $validationResult,

@@ -153,7 +153,7 @@ class EngineBlock_Corto_Adapter
     protected function _filterRemoteEntitiesByRequestSp(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request)
     {
         $repository = $this->getMetadataRepository();
-        $serviceProvider = $repository->fetchServiceProviderByEntityId($request->getIssuer());
+        $serviceProvider = $repository->fetchServiceProviderByEntityId($request->getIssuer()->getValue());
 
         if (!$serviceProvider->allowAll) {
             if ($serviceProvider->getCoins()->displayUnconnectedIdpsWayf()) {
@@ -264,7 +264,7 @@ class EngineBlock_Corto_Adapter
     protected function _filterRemoteEntitiesByRequestSpWorkflowState(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request)
     {
         $repository = $this->getMetadataRepository();
-        $serviceProvider = $repository->fetchServiceProviderByEntityId($request->getIssuer());
+        $serviceProvider = $repository->fetchServiceProviderByEntityId($request->getIssuer()->getValue());
 
         $filter = new RemoveOtherWorkflowStatesFilter(
             $serviceProvider,

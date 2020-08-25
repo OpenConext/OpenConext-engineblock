@@ -29,6 +29,8 @@ use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Message;
 use SAML2\Response;
+use SAML2\XML\saml\Issuer;
+use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\saml\SubjectConfirmationData;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,7 +79,7 @@ class MockStepupGateway
         $authnRequest = $this->parseRequest($request, $fullRequestUri);
 
         // get parameters from authnRequest
-        $nameId = $authnRequest->getNameId()->value;
+        $nameId = $authnRequest->getNameId()->getValue();
         $destination = $authnRequest->getAssertionConsumerServiceURL();
         $authnContextClassRef = current($authnRequest->getRequestedAuthnContext()['AuthnContextClassRef']);
         $requestId = $authnRequest->getId();
@@ -102,7 +104,7 @@ class MockStepupGateway
         $authnRequest = $this->parseRequest($request, $fullRequestUri);
 
         // get parameters from authnRequest
-        $nameId = $authnRequest->getNameId()->value;
+        $nameId = $authnRequest->getNameId()->getValue();
         $destination = $authnRequest->getAssertionConsumerServiceURL();
         $authnContextClassRef = 'https://gateway.tld/authentication/loa2';
         $requestId = $authnRequest->getId();
@@ -220,7 +222,7 @@ class MockStepupGateway
             throw new BadRequestHttpException(sprintf(
                 'Actual issuer "%s" does not match the AuthnRequest Issuer "%s"',
                 $this->gatewayConfiguration->getServiceProviderEntityId(),
-                $authnRequest->getIssuer()
+                $authnRequest->getIssuer()->getValue()
             ));
         }
 
@@ -265,7 +267,9 @@ class MockStepupGateway
     {
         $response = new Response();
         $response->setDestination($destination);
-        $response->setIssuer($this->gatewayConfiguration->getIdentityProviderEntityId());
+        $issuer = new Issuer();
+        $issuer->setValue($this->gatewayConfiguration->getIdentityProviderEntityId());
+        $response->setIssuer($issuer);
         $response->setIssueInstant($this->getTimestamp());
         $response->setInResponseTo($requestId);
 
@@ -301,7 +305,9 @@ class MockStepupGateway
     {
         $response = new Response();
         $response->setAssertions([$newAssertion]);
-        $response->setIssuer($this->gatewayConfiguration->getIdentityProviderEntityId());
+        $issuer = new Issuer();
+        $issuer->setValue($this->gatewayConfiguration->getIdentityProviderEntityId());
+        $response->setIssuer($issuer);
         $response->setIssueInstant($this->getTimestamp());
         $response->setDestination($destination);
         $response->setInResponseTo($requestId);
@@ -321,14 +327,16 @@ class MockStepupGateway
         $newAssertion = new Assertion();
         $newAssertion->setNotBefore($this->currentTime->getTimestamp());
         $newAssertion->setNotOnOrAfter($this->getTimestamp('PT5M'));
-        $newAssertion->setIssuer($this->gatewayConfiguration->getIdentityProviderEntityId());
+        $issuer = new Issuer();
+        $issuer->setValue($this->gatewayConfiguration->getIdentityProviderEntityId());
+        $newAssertion->setIssuer($issuer);
         $newAssertion->setIssueInstant($this->getTimestamp());
         $this->signAssertion($newAssertion);
         $this->addSubjectConfirmationFor($newAssertion, $destination, $requestId);
-        $newAssertion->setNameId([
-            'Format' => Constants::NAMEID_UNSPECIFIED,
-            'Value' => $nameId,
-        ]);
+        $newNameId = new NameID();
+        $newNameId->setValue($nameId);
+        $newNameId->setFormat(Constants::NAMEID_UNSPECIFIED);
+        $newAssertion->setNameId($newNameId);
         $newAssertion->setValidAudiences([$this->gatewayConfiguration->getServiceProviderEntityId()]);
         $this->addAuthenticationStatementTo($newAssertion, $authnContextClassRef);
 
@@ -342,15 +350,15 @@ class MockStepupGateway
      */
     private function addSubjectConfirmationFor(Assertion $newAssertion, $destination, $requestId)
     {
-        $confirmation         = new SubjectConfirmation();
-        $confirmation->Method = Constants::CM_BEARER;
+        $confirmation = new SubjectConfirmation();
+        $confirmation->setMethod(Constants::CM_BEARER);
 
-        $confirmationData                      = new SubjectConfirmationData();
-        $confirmationData->InResponseTo        = $requestId;
-        $confirmationData->Recipient           = $destination;
-        $confirmationData->NotOnOrAfter        = $newAssertion->getNotOnOrAfter();
+        $confirmationData = new SubjectConfirmationData();
+        $confirmationData->setInResponseTo($requestId);
+        $confirmationData->setRecipient($destination);
+        $confirmationData->setNotOnOrAfter($newAssertion->getNotOnOrAfter());
 
-        $confirmation->SubjectConfirmationData = $confirmationData;
+        $confirmation->setSubjectConfirmationData($confirmationData);
 
         $newAssertion->setSubjectConfirmation([$confirmation]);
     }

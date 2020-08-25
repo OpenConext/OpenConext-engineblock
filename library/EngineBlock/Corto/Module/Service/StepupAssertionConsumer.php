@@ -115,7 +115,7 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
         // Verify the SP requester chain.
         // Retrieve the SP again to verify the requester chain. This verification step requires the furthest in chain SP
         // first, thats why the self::getSp method is not used here.
-        $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
+        $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer()->getValue());
         EngineBlock_SamlHelper::getSpRequesterChain(
             $sp,
             $receivedRequest,
@@ -178,7 +178,7 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
                 $originalReceivedResponse = $processStep->getResponse();
                 $originalReceivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
 
-                $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($originalReceivedResponse->getIssuer());
+                $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($originalReceivedResponse->getIssuer()->getValue());
                 $sp = $this->getSp($originalReceivedRequest, $log);
 
                 if ($this->_stepupGatewayCallOutHelper->allowNoToken($idp, $sp)) {
@@ -212,7 +212,7 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
      */
     private function getSp(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest, LoggerInterface $log)
     {
-        $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
+        $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer()->getValue());
 
         // When dealing with an SP that acts as a trusted proxy, we should use the proxying SP and not the proxy itself.
         if ($sp->getCoins()->isTrustedProxy()) {
@@ -258,7 +258,7 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
             $this->_processingStateHelper->getStepByRequestId(
                 $receivedRequest->getId(),
                 ProcessingStateHelperInterface::STEP_STEPUP
-            )->getResponse()->getIssuer()
+            )->getResponse()->getIssuer()->getValue()
         );
 
         $stepupDecision = new StepupDecision($idp, $sp, $this->_loaRepository);

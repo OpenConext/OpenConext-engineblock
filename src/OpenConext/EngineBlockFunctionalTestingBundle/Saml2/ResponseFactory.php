@@ -22,6 +22,7 @@ use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\AuthnRequest as SAMLAuthnRequest;
 use SAML2\EncryptedAssertion;
+use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\SubjectConfirmation;
 
 class ResponseFactory
@@ -72,7 +73,7 @@ class ResponseFactory
         $subjectConfirmations = $assertions[0]->getSubjectConfirmation();
 
         foreach ($subjectConfirmations as $subjectConfirmation) {
-            $subjectConfirmation->SubjectConfirmationData->InResponseTo = $request->getId();
+            $subjectConfirmation->getSubjectConfirmationData()->setInResponseTo($request->getId());
         }
 
         $assertions[0]->setSubjectConfirmation($subjectConfirmations);
@@ -131,7 +132,9 @@ class ResponseFactory
 
     private function setResponseIssuer(MockIdentityProvider $mockIdp, Response $response)
     {
-        $response->setIssuer($mockIdp->entityId());
+        $issuer = new Issuer();
+        $issuer->setValue($mockIdp->entityId());
+        $response->setIssuer($issuer);
     }
 
     private function encryptAssertions(MockIdentityProvider $mockIdp, Response $response)

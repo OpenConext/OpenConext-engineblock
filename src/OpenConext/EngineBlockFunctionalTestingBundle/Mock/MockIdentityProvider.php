@@ -27,7 +27,6 @@ use SAML2\XML\md\IDPSSODescriptor;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Allows for better control
- * @SuppressWarnings(PMD.ExcessiveClassComplexity)
  */
 class MockIdentityProvider extends AbstractMockEntityRole
 {
@@ -37,52 +36,42 @@ class MockIdentityProvider extends AbstractMockEntityRole
 
     private $fromTheFuture = false;
 
-    private $logo = null;
-
     public function singleSignOnLocation()
     {
-        return $this->getSsoRole()->SingleSignOnService[0]->Location;
+        return $this->getSsoRole()->getSingleSignOnService()[0]->getLocation();
     }
 
     public function setResponse(Response $response)
     {
-        /** @var IDPSSODescriptor $role */
         $role = $this->getSsoRole();
-        $role->Extensions['SAMLResponse'] = $response;
+        $role->setExtensions(['SAMLResponse' => $response]);
 
         return $this;
-    }
-
-    public function overrideResponseDestination($acsUrl)
-    {
-        $this->descriptor->Extensions['DestinationOverride'] = $acsUrl;
-    }
-
-    public function hasDestinationOverride()
-    {
-        return isset($this->descriptor->Extensions['DestinationOverride']);
-    }
-
-    public function getDestinationOverride()
-    {
-        return $this->descriptor->Extensions['DestinationOverride'];
     }
 
     public function setStatusMessage($statusMessage)
     {
         $role = $this->getSsoRole();
-
-        $role->Extensions['StatusMessage'] = $statusMessage;
+        $role->setExtensions(array_merge($role->getExtensions(), ['StatusMessage' => $statusMessage]));
     }
 
     public function setStatusCode($topLevelStatusCode, $secondLevelStatusCode = '')
     {
         $role = $this->getSsoRole();
 
-        $role->Extensions['StatusCodeTop'] = $this->getFullyQualifiedStatusCode($topLevelStatusCode);
-
+        $role->setExtensions(
+            array_merge(
+                $role->getExtensions(),
+                ['StatusCodeTop' => $this->getFullyQualifiedStatusCode($topLevelStatusCode)]
+            )
+        );
         if (!empty($secondLevelStatusCode)) {
-            $role->Extensions['StatusCodeSecond'] = $this->getFullyQualifiedStatusCode($secondLevelStatusCode);
+            $role->setExtensions(
+                array_merge(
+                    $role->getExtensions(),
+                    ['StatusCodeSecond' => $this->getFullyQualifiedStatusCode($secondLevelStatusCode)]
+                )
+            );
         }
     }
 
@@ -110,53 +99,62 @@ class MockIdentityProvider extends AbstractMockEntityRole
      */
     public function getResponse()
     {
-        /** @var IDPSSODescriptor $role */
         $role = $this->getSsoRole();
-        return $role->Extensions['SAMLResponse'];
+        return $role->getExtensions()['SAMLResponse'];
     }
 
     public function getStatusCodeTop()
     {
         $role = $this->getSsoRole();
 
-        if (!isset($role->Extensions['StatusCodeTop'])) {
+        if (!isset($role->getExtensions()['StatusCodeTop'])) {
             return Constants::STATUS_SUCCESS;
         }
 
-        return $role->Extensions['StatusCodeTop'];
+        return $role->getExtensions()['StatusCodeTop'];
     }
 
     public function getStatusCodeSecond()
     {
         $role = $this->getSsoRole();
 
-        if (!isset($role->Extensions['StatusCodeSecond'])) {
+        if (!isset($role->getExtensions()['StatusCodeSecond'])) {
             return '';
         }
 
-        return $role->Extensions['StatusCodeSecond'];
+        return $role->getExtensions()['StatusCodeSecond'];
     }
 
     public function getStatusMessage()
     {
         $role = $this->getSsoRole();
 
-        if (!isset($role->Extensions['StatusMessage'])) {
+        if (!isset($role->getExtensions()['StatusMessage'])) {
             return '';
         }
 
-        return $role->Extensions['StatusMessage'];
+        return $role->getExtensions()['StatusMessage'];
     }
 
     public function useHttpRedirect()
     {
-        $this->descriptor->Extensions['UseRedirect'] = true;
+        $this->descriptor->setExtensions(
+            array_merge(
+                $this->descriptor->getExtensions(),
+                ['UseRedirect' => true]
+            )
+        );
         return $this;
     }
 
     public function useEncryptionCert($certFilePath)
     {
-        $this->descriptor->Extensions['EncryptionCert'] = $certFilePath;
+        $this->descriptor->setExtensions(
+            array_merge(
+                $this->descriptor->getExtensions(),
+                ['EncryptionCert' => $certFilePath]
+            )
+        );
         // an encrypted response must be signed
         $this->useResponseSigning();
 
@@ -165,7 +163,12 @@ class MockIdentityProvider extends AbstractMockEntityRole
 
     public function useEncryptionSharedKey($sharedKey)
     {
-        $this->descriptor->Extensions['EncryptionSharedKey'] = $sharedKey;
+        $this->descriptor->setExtensions(
+            array_merge(
+                $this->descriptor->getExtensions(),
+                ['EncryptionSharedKey' => $sharedKey]
+            )
+        );
         return $this;
     }
 
@@ -189,31 +192,32 @@ class MockIdentityProvider extends AbstractMockEntityRole
 
     protected function getRsaEncryptionKey()
     {
-        if (!isset($this->descriptor->Extensions['EncryptionCert'])) {
+        if (!isset($this->descriptor->getExtensions()['EncryptionCert'])) {
             return null;
         }
 
         $key = new XMLSecurityKey(XMLSecurityKey::RSA_OAEP_MGF1P, ['type' => 'public']);
-        $key->loadKey($this->findFile($this->descriptor->Extensions['EncryptionCert']), true, true);
+        $key->loadKey($this->findFile($this->descriptor->getExtensions()['EncryptionCert']), true, true);
 
         return $key;
     }
 
     protected function getSharedEncryptionKey()
     {
-        if (!isset($this->descriptor->Extensions['EncryptionSharedKey'])) {
+        if (!isset($this->descriptor->getExtensions()['EncryptionSharedKey'])) {
             return null;
         }
 
         $key = new XMLSecurityKey(XMLSecurityKey::AES128_CBC);
-        $key->loadKey($this->descriptor->Extensions['EncryptionSharedKey']);
+        $key->loadKey($this->descriptor->getExtensions()['EncryptionSharedKey']);
 
         return $key;
     }
 
     public function mustUseHttpRedirect()
     {
-        return isset($this->descriptor->Extensions['UseRedirect']) && $this->descriptor->Extensions['UseRedirect'];
+        $extensions = $this->descriptor->getExtensions();
+        return isset($extensions['UseRedirect']) && $extensions['UseRedirect'];
     }
 
     public function removeAttribute($forbiddenAttributeName)
@@ -221,7 +225,7 @@ class MockIdentityProvider extends AbstractMockEntityRole
         $role = $this->getSsoRole();
 
         /** @var Response $response */
-        $response = $role->Extensions['SAMLResponse'];
+        $response = $role->getExtensions()['SAMLResponse'];
         $assertions = $response->getAssertions();
 
         $newAttributes = [];
@@ -243,7 +247,7 @@ class MockIdentityProvider extends AbstractMockEntityRole
         $role = $this->getSsoRole();
 
         /** @var Response $response */
-        $response = $role->Extensions['SAMLResponse'];
+        $response = $role->getExtensions()['SAMLResponse'];
         $assertions = $response->getAssertions();
 
         $attributes = $assertions[0]->getAttributes();
@@ -259,7 +263,7 @@ class MockIdentityProvider extends AbstractMockEntityRole
         $role = $this->getSsoRole();
 
         /** @var Response $response */
-        $response = $role->Extensions['SAMLResponse'];
+        $response = $role->getExtensions()['SAMLResponse'];
         $assertions = $response->getAssertions();
 
         $assertions[0]->setAuthnContextClassRef($authnContextClassRefValue);
@@ -268,35 +272,39 @@ class MockIdentityProvider extends AbstractMockEntityRole
 
     public function useResponseSigning()
     {
-        $this->descriptor->Extensions['SignResponses'] = true;
+        $this->descriptor->setExtensions(
+            array_merge(
+                $this->descriptor->getExtensions(),
+                ['SignResponses' => true]
+            )
+        );
         return $this;
     }
 
     public function mustSignResponses()
     {
-        return isset($this->descriptor->Extensions['SignResponses']);
+        return isset($this->descriptor->getExtensions()['SignResponses']);
     }
 
     public function doNotUseResponseSigning()
     {
-        unset($this->descriptor->Extensions['SignResponses']);
-        return $this;
-    }
-
-    public function doNotUseAssertionSigning()
-    {
-        unset($this->descriptor->Extensions['SignAssertions']);
+        unset($this->descriptor->getExtensions()['SignResponses']);
         return $this;
     }
 
     public function signAssertions()
     {
-        return $this->descriptor->Extensions['SignAssertions'] = true;
+        $this->descriptor->setExtensions(
+            array_merge(
+                $this->descriptor->getExtensions(),
+                ['SignAssertions' => true]
+            )
+        );
     }
 
     public function mustSignAssertions()
     {
-        return isset($this->descriptor->Extensions['SignAssertions']);
+        return isset($this->descriptor->getExtensions()['SignAssertions']);
     }
 
     public function doNotSendAssertions()
@@ -333,11 +341,6 @@ class MockIdentityProvider extends AbstractMockEntityRole
     public function shouldNotSendAssertions()
     {
         return $this->sendAssertions === false;
-    }
-
-    public function setLogo($logo)
-    {
-        $this->logo = $logo;
     }
 
     protected function getRoleClass()

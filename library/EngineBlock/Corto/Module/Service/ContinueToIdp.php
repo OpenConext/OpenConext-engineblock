@@ -93,7 +93,7 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
         if ($request->isDebugRequest()) {
             $sp = $this->getEngineSpRole($this->_server);
         } else {
-            $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
+            $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer()->getValue());
         }
         $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($selectedIdp);
         if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(array($sp, $idp))) {

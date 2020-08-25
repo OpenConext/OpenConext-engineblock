@@ -183,13 +183,13 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // Verify that we know this SP and have metadata for it.
         $serviceProvider = $this->_verifyKnownSP(
-            $spEntityId,
+            $spEntityId->getValue(),
             $ebRequest->getDestination()
         );
 
         if (!$serviceProvider instanceof ServiceProvider) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
-                sprintf("Requesting entity '%s' is not a Service Provider", $spEntityId)
+                sprintf("Requesting entity '%s' is not a Service Provider", $spEntityId->getValue())
             );
         }
 
@@ -200,7 +200,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             throw new EngineBlock_Corto_Module_Bindings_Exception(
                 sprintf(
                     'SP "%s" is marked as Trusted Proxy but does not have "redirect:sign" enabled.',
-                    $spEntityId
+                    $spEntityId->getValue()
                 )
             );
         }
@@ -329,7 +329,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // Verify that we know this IdP and have metadata for it.
         $cortoIdpMetadata = $this->_verifyKnownIdP(
-            $idpEntityId,
+            $idpEntityId->getValue(),
             $sspResponse->getDestination()
         );
 
@@ -511,7 +511,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      * @return AbstractRole Remote Entity that issued the message
      * @throws EngineBlock_Exception_UnknownServiceProvider
      */
-    protected function _verifyKnownSP($messageIssuer, $destination = '')
+    protected function _verifyKnownSP(string $messageIssuer, string $destination = '')
     {
         $remoteEntity = $this->_server->getRepository()->findServiceProviderByEntityId($messageIssuer);
 

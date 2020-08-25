@@ -45,7 +45,7 @@ abstract class AbstractMockEntityRole
 
     public function entityId()
     {
-        return $this->descriptor->entityID;
+        return $this->descriptor->getEntityID();
     }
 
     public function getEntityDescriptor()
@@ -55,7 +55,7 @@ abstract class AbstractMockEntityRole
 
     public function setEntityId($entityId)
     {
-        $this->descriptor->entityID = $entityId;
+        $this->descriptor->setEntityID($entityId);
         return $this;
     }
 
@@ -63,17 +63,17 @@ abstract class AbstractMockEntityRole
     {
         $role = $this->getSsoRole();
 
-        foreach ($role->KeyDescriptor[0]->KeyInfo->info as $info) {
+        foreach ($role->getKeyDescriptor()[0]->getKeyInfo()->getInfo() as $info) {
             if (!$info instanceof X509Data) {
                 continue;
             }
 
-            foreach ($info->data as $data) {
+            foreach ($info->getData() as $data) {
                 if (!$data instanceof X509Certificate) {
                     continue;
                 }
 
-                return $data->certificate;
+                return $data->getCertificate();
             }
         }
         throw new RuntimeException("MockIdp does not have KeyInfo with an X509Certificate");
@@ -89,17 +89,17 @@ abstract class AbstractMockEntityRole
 
         $role = $this->getSsoRole();
 
-        foreach ($role->KeyDescriptor[0]->KeyInfo->info as $info) {
+        foreach ($role->getKeyDescriptor()[0]->getKeyInfo()->getInfo() as $info) {
             if (!$info instanceof X509Data) {
                 continue;
             }
 
-            foreach ($info->data as $data) {
+            foreach ($info->getData() as $data) {
                 if (!$data instanceof X509Certificate) {
                     continue;
                 }
 
-                $data->certificate = $certData;
+                $data->setCertificate($certData);
                 return;
             }
         }
@@ -110,16 +110,16 @@ abstract class AbstractMockEntityRole
     {
         $role = $this->getSsoRole();
 
-        foreach ($role->KeyDescriptor[0]->KeyInfo->info as $info) {
+        foreach ($role->getKeyDescriptor()[0]->getKeyInfo()->getInfo() as $info) {
             if (!$info instanceof Chunk) {
                 continue;
             }
 
-            if ($info->localName !== 'PrivateKey') {
+            if ($info->getLocalName() !== 'PrivateKey') {
                 continue;
             }
 
-            $info->xml->nodeValue = $this->readFile($privateKeyFile);
+            $info->getXML()->nodeValue = $this->readFile($privateKeyFile);
             return;
         }
 
@@ -133,13 +133,13 @@ abstract class AbstractMockEntityRole
 
         /** @var Chunk $certificate */
         $certificate = array_reduce(
-            $idpSsoRole->KeyDescriptor[0]->KeyInfo->info,
+            $idpSsoRole->getKeyDescriptor()[0]->getKeyInfo()->getInfo(),
             function ($carry, $info) {
                 return $carry ? $carry : $info instanceof Chunk ? $info : false;
             }
         );
 
-        return $certificate->xml->textContent;
+        return $certificate->getXML()->textContent;
     }
 
     /**
@@ -149,7 +149,7 @@ abstract class AbstractMockEntityRole
     protected function getSsoRole()
     {
         $roleClass = $this->getRoleClass();
-        foreach ($this->descriptor->RoleDescriptor as $role) {
+        foreach ($this->descriptor->getRoleDescriptor() as $role) {
             if (!$role instanceof $roleClass) {
                 continue;
             }

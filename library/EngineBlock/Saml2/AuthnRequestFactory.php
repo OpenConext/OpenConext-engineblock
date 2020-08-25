@@ -19,6 +19,7 @@
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use SAML2\AuthnRequest;
 use SAML2\Constants;
+use SAML2\XML\saml\Issuer;
 
 class EngineBlock_Saml2_AuthnRequestFactory
 {
@@ -53,7 +54,9 @@ class EngineBlock_Saml2_AuthnRequestFactory
         $sspRequest->setIsPassive($originalRequest->getIsPassive());
         $sspRequest->setAssertionConsumerServiceURL($server->getUrl($acsServiceName));
         $sspRequest->setProtocolBinding(Constants::BINDING_HTTP_POST);
-        $sspRequest->setIssuer($server->getUrl($issuerServiceName));
+        $issuer = new Issuer();
+        $issuer->setValue($server->getUrl($issuerServiceName));
+        $sspRequest->setIssuer($issuer);
         $sspRequest->setNameIdPolicy($nameIdPolicy);
 
         if (empty($idpMetadata->getCoins()->disableScoping())) {
@@ -69,7 +72,8 @@ class EngineBlock_Saml2_AuthnRequestFactory
 
             // Add the SP to the requesterIds
             $requesterIds = $originalRequest->getRequesterID();
-            $requesterIds[] = $originalRequest->getIssuer();
+            $issuer = $originalRequest->getIssuer() ? $originalRequest->getIssuer()->getValue() : '';
+            $requesterIds[] = $issuer;
 
             // Add the SP as the requester
             $sspRequest->setRequesterID($requesterIds);
