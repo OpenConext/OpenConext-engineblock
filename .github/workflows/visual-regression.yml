@@ -6,35 +6,48 @@ on:
             - '[0-9]+.[0-9]+.[0-9]+*'
     # run at 6 hour UTC
     schedule:
-      - cron: "0 6 * * *"
+        -   cron: "0 6 * * *"
 jobs:
     build:
         runs-on: ubuntu-latest
         timeout-minutes: 30
         env:
-          PROD_PHP: php72
-          DOCKER_COMPOSE:  docker-compose -f docker-compose.yml -f docker-compose-${{matrix.php}}.yml
-        container:
-            image: cypress/browsers:node12.16.1-chrome80-ff73
-            options: --user 1001
+            PROD_PHP: php72
+            DOCKER_COMPOSE: docker-compose -f docker-compose.yml -f docker-compose-visual-regression.yml
         steps:
             - name: Checkout
               uses: actions/checkout@master
+            - name: Get Composer cache directory
+              id: composer-cache
+              run: |
+                  echo "::set-output name=dir::$(composer config cache-files-dir)"
+            - name: Restore Composer cache
+              uses: actions/cache@v1
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-composer-
             - name: Init environment
               run: cd docker && ./init.sh && cat .env
             - name: Build Docker environmnent
               if: always()
               run: |
-                cd docker &&
-                ${DOCKER_COMPOSE} up -d --build &&
-                docker-compose exec -T php-fpm.vm.openconext.org bash -c '
-                    SYMFONY_ENV=ci composer install --prefer-dist -n -o && \
-                    ./app/console cache:clear --env=ci && \
-                    cd theme && npm ci && npm run build
-                '
-            - uses: actions/checkout@v1
-            - uses: cypress-io/github-action@v2
-              with:
-                  browser: firefox
+                  cd docker &&
+                  ${DOCKER_COMPOSE} up -d --build &&
+                  docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                      SYMFONY_ENV=ci composer install --no-dev --prefer-dist --no-scripts -n -o && \
+                      SYMFONY_ENV=ci composer run-script build-params && \
+                      ./app/console cache:clear --env=ci && \
+                      cd theme && npm install --also=dev && npm run build
+                  '
+            - name: Run Cypress tests
+              if: always()
+              run: |
+                  cd docker && docker-compose exec -e -T php-fpm.vm.openconext.org bash -c '
+                      cd theme && \
+                      npm run test && \
+                      npm run test:visual-regression
+                  '
               env:
                   SYMFONY_ENV: ci

@@ -41,7 +41,7 @@ jobs:
                 docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                     SYMFONY_ENV=ci composer install --prefer-dist -n -o && \
                     ./app/console cache:clear --env=ci && \
-                    cd theme && npm ci && npm run build
+                    cd theme && npm uninstall cypress && npm ci && npm run build
                 '
             - name: Run unit tests
               if: always()
@@ -81,11 +81,7 @@ jobs:
                   cd docker && docker-compose exec -e CHROME_BIN="/usr/bin/chromium" -T php-fpm.vm.openconext.org bash -c '
                       cd theme && \
                       echo -e "\nNPM lint\n" && \
-                      npm run lint && \
-                      echo -e "\nJest unit tests\n" && \
-                      ./node_modules/.bin/jest material/javascripts/tests/unit && \
-                      echo -e "\nJest smoke tests\n" && \
-                      ./node_modules/.bin/jest --runInBand material/javascripts/tests/smoke
+                      npm run lint
                   '
               env:
                   SYMFONY_ENV: ci
@@ -113,16 +109,6 @@ jobs:
                       cd theme && \
                       echo -e "\nNPM Audit\n" && \
                       npm run audit
-                  '
-              env:
-                  SYMFONY_ENV: ci
-            - name: Run visual regression tests
-              if: always()
-              run: |
-                  cd docker && docker-compose exec -e CHROME_BIN="/usr/bin/chromium" -T php-fpm.vm.openconext.org bash -c '
-                      cd theme && \
-                      echo -e "\nJest visual regression tests\n" && \
-                      ./node_modules/.bin/jest material/javascripts/tests/visual-regression
                   '
               env:
                   SYMFONY_ENV: ci
