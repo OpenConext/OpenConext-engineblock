@@ -13,6 +13,3 @@ indent_style=tab
 
 [*.feature]
 indent_size=2
-
-[*.spec.js]
-indent_size=2
