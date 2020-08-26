@@ -37,6 +37,7 @@
     "core-js": "^3.6.5",
     "cssnano": "^4.1.10",
     "cypress": "^5.0.0",
+    "cypress-plugin-snapshots": "^1.4.4",
     "jest": "^25.5.4",
     "jest-image-snapshot": "^3.1.0",
     "jshint": "^2.12.0",

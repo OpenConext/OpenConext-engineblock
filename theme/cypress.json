@@ -1,1 +1,17 @@
-{}
+{
+  "ignoreTestFiles": [
+    "**/__snapshots__/*",
+    "**/__image_snapshots__/*"
+  ],
+  "env": {
+    "cypress-plugin-snapshots": {
+      "imageConfig": {
+        "createDiffImage": true,
+        "threshold": 5,
+        "thresholdType": "pixel"
+      },
+      "backgroundBlend": "overlay"
+    }
+  }
+
+}
