@@ -154,3 +154,20 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
               if: ${{ failure() && github.event_name == 'schedule' && matrix.php == env.PROD_PHP }}
+    release:
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        needs: build
+        if: ${{ github.event_name == 'schedule' && matrix.php == env.PROD_PHP }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@master
+              path: checkout
+            - name: Make release
+              if: always()
+              run: |
+                  cd docker &&
+                  ${DOCKER_COMPOSE} up -d --build &&
+                  docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                    ./bin/makeReleaseDocker.sh
+                 '
