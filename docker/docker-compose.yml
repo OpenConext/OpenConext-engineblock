@@ -81,6 +81,17 @@ services:
             retries: 5
             interval: 15s
 
+    cypress:
+        image: "cypress/included:5.0.0"
+        depends_on:
+            - engine.vm.openconext.org
+        environment:
+            - CYPRESS_baseUrl=https://engine.vm.openconext.org
+        working_dir: /e2e
+        entrypoint: cypress open --project .
+        volumes:
+            - ../theme:/e2e
+
 volumes:
     eb-mysql-data:
     eb-mysql-test-data:

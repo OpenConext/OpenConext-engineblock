@@ -12,8 +12,8 @@
         "threshold": 5,
         "thresholdType": "pixel"
       },
-      "backgroundBlend": "overlay"
+      "backgroundBlend": "overlay",
+      "serverPort": 8081
     }
   }
-
 }

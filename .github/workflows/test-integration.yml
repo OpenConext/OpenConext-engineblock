@@ -41,7 +41,7 @@ jobs:
                 docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                     SYMFONY_ENV=ci composer install --prefer-dist -n -o && \
                     ./app/console cache:clear --env=ci && \
-                    cd theme && npm uninstall cypress && npm ci && npm run build
+                    cd theme && npm ci && npm run build
                 '
             - name: Run unit tests
               if: always()
@@ -75,13 +75,29 @@ jobs:
                   '
               env:
                   SYMFONY_ENV: ci
-            - name: Run frontend tests
+            - name: Run frontend linting tests
               if: always()
               run: |
-                  cd docker && docker-compose exec -e CHROME_BIN="/usr/bin/chromium" -T php-fpm.vm.openconext.org bash -c '
+                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                       cd theme && \
                       echo -e "\nNPM lint\n" && \
                       npm run lint
+                  '
+              env:
+                  SYMFONY_ENV: ci
+            - name: Run Cypress integration tests
+              if: always()
+              run: |
+                  cd docker && docker-compose exec -T cypress bash -c '
+                      cypress run --browser=chrome --headless
+                  '
+              env:
+                  SYMFONY_ENV: ci
+            - name: Run Cypress visual regression tests
+              if: always()
+              run: |
+                  cd docker && docker-compose exec -T cypress bash -c '
+                      CYPRESS_integrationFolder=cypress/visual-regression cypress run --browser=chrome --headless
                   '
               env:
                   SYMFONY_ENV: ci
