@@ -94,7 +94,7 @@ jobs:
               env:
                   SYMFONY_ENV: ci
             - name: Run Cypress visual regression tests
-              if: always()
+              if: ${{ github.event_name == 'schedule' && matrix.php == env.PROD_PHP }}
               run: |
                   cd docker && docker-compose exec -T cypress bash -c '
                       CYPRESS_integrationFolder=cypress/visual-regression cypress run --browser=chrome --headless
@@ -125,6 +125,14 @@ jobs:
                       cd theme && \
                       echo -e "\nNPM Audit\n" && \
                       npm run audit
+                  '
+              env:
+                  SYMFONY_ENV: ci
+            - name: Run Cypress visual regression tests
+              if: ${{ github.event_name == 'schedule' && matrix.php == env.PROD_PHP }}
+              run: |
+                  cd docker && docker-compose exec -T cypress bash -c '
+                      CYPRESS_integrationFolder=cypress/visual-regression cypress run --browser=chrome --headless
                   '
               env:
                   SYMFONY_ENV: ci
