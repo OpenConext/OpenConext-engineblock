@@ -158,7 +158,7 @@ jobs:
         runs-on: ubuntu-latest
         timeout-minutes: 30
         needs: build
-        if: ${{ github.event_name == 'schedule' && matrix.php == env.PROD_PHP }}
+        if: always()
         steps:
             - name: Checkout
               uses: actions/checkout@master
