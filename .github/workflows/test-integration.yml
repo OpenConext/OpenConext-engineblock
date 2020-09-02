@@ -41,7 +41,7 @@ jobs:
                 docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                     SYMFONY_ENV=ci composer install --prefer-dist -n -o && \
                     ./app/console cache:clear --env=ci && \
-                    cd theme && npm ci && npm run build
+                    cd theme && CYPRESS_INSTALL_BINARY=0 npm ci && npm run build
                 '
             - name: Run unit tests
               if: always()
@@ -75,17 +75,21 @@ jobs:
                   '
               env:
                   SYMFONY_ENV: ci
-            - name: Run frontend tests
+            - name: Run frontend linting tests
               if: always()
               run: |
-                  cd docker && docker-compose exec -e CHROME_BIN="/usr/bin/chromium" -T php-fpm.vm.openconext.org bash -c '
+                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                       cd theme && \
                       echo -e "\nNPM lint\n" && \
-                      npm run lint && \
-                      echo -e "\nJest unit tests\n" && \
-                      ./node_modules/.bin/jest material/javascripts/tests/unit && \
-                      echo -e "\nJest smoke tests\n" && \
-                      ./node_modules/.bin/jest --runInBand material/javascripts/tests/smoke
+                      npm run lint
+                  '
+              env:
+                  SYMFONY_ENV: ci
+            - name: Run Cypress integration tests
+              if: always()
+              run: |
+                  cd docker && docker-compose exec -T cypress bash -c '
+                      cypress run --browser=firefox --headless
                   '
               env:
                   SYMFONY_ENV: ci
@@ -116,13 +120,11 @@ jobs:
                   '
               env:
                   SYMFONY_ENV: ci
-            - name: Run visual regression tests
-              if: always()
+            - name: Run Cypress visual regression tests
+              if: ${{ github.event_name == 'schedule' && matrix.php == env.PROD_PHP }}
               run: |
-                  cd docker && docker-compose exec -e CHROME_BIN="/usr/bin/chromium" -T php-fpm.vm.openconext.org bash -c '
-                      cd theme && \
-                      echo -e "\nJest visual regression tests\n" && \
-                      ./node_modules/.bin/jest material/javascripts/tests/visual-regression
+                  cd docker && docker-compose exec -T cypress bash -c '
+                      CYPRESS_integrationFolder=cypress/visual-regression cypress run --browser=chrome --headless
                   '
               env:
                   SYMFONY_ENV: ci

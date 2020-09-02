@@ -5,8 +5,7 @@ correctly. In order to prevent breakage of these components, Javascript (Jest) f
 written to try and prevent regressions from happening.
 
 ## Running tests
-Jest is used to run unit tests. Puppeteer is used on top of Jest in order to run end to end (smoke) tests. These tests
-can be run in several ways:
+Cypress is used to run Javascript tests.
 
 **Unit tests**
 
@@ -62,7 +61,7 @@ parameters can be used to manipulate the behaviour of the wayf that is rendered.
 |feedbackInfo|Format: `JSON`<br>Value:`{"requestId":"5cb4bd3879b49","ipAddress":"192.168.66.98","artCode":"31914"}`|Can be filled with any parameter that can be rendered in the feedback information section of the feedback page.|
 |parameters|Format: `JSON`<br>Value:`{}`|Some templates might require additional twig parameters, this parameter allows you to pass these additional parameters in JSON format.|
 
-For a list of realistic reproductions of the available error pages, see this JavasScript test: `theme/material/javascripts/tests/visual-regression/error-page/ErrorPage.test.js`
+For a list of realistic reproductions of the available error pages, see this JavasScript test: `theme/cypress/integration/visual-regression/error-page/ErrorPage.spec.js`
 
 ## Acceptance tests
 The WAYF acceptance tests utilize the `/functional-testing/wayf` endpoint in order to test the correct inner working of
@@ -75,12 +74,7 @@ Running them is as simple as:
 
 `$ ant js-visual-regression-tests`
 
-And to update the snapshots (should be performed after every controlled change):
-
-`$ ant js-visual-regression-tests-update-snapshots`
-
-Snapshots are stored in `__image_snapshots__` directories in a subfolder of the `theme/material/javascripts/tests/visual-regression/` directory, here you will also find diffs if ever your snapshot diverges from the previous snapshot.
-Additional, more user friendly, screenshots are saved respective `screenshots` directories.
+Snapshots are stored in `__image_snapshots__` directories in a subfolder of the `theme/cypress/integration/visual-regression/` directory, here you will also find diffs if ever your snapshot diverges from the previous snapshot.
 
 :warning: These tests are considered risky tests and are not run on every QA build.
 
