@@ -89,7 +89,7 @@ jobs:
               if: always()
               run: |
                   cd docker && docker-compose exec -T cypress bash -c '
-                      cypress run --browser=chrome --headless
+                      cypress run --browser=firefox --headless
                   '
               env:
                   SYMFONY_ENV: ci
