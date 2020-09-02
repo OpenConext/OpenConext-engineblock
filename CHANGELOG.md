@@ -5,6 +5,28 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.3.1
+As of this release the old non conforming Schac Home Organization synonym: urn:oid:1.3.6.1.4.1.1466.115.121.1.15 is no longer released as an attribute. This was achieved by removing it from the attributes.json. If you need it, please place it back in ./application/configs/attributes.json. See UPGRADING.md for details.
+
+This release also includes the introduction of the Cypress test framework for JavaScript testing. The test framework does not yet run correctly on the GitHub Actions CI integration. This is corrected in the next release.
+
+**Features:**
+ - Remove non conforming SHO oid from config #877
+ - Send NoPassive status response back to issuing SP #885
+
+**Improvements:**
+ - Upgrade SAML2 library to version v4.1.9 #881
+ - Show proxied SP and proxy in feedback info #875
+ - Move metadata organization business rules away from metadata assembler #878
+ - Add trusted proxy signing verification #879
+ - Migrated a JavaScript test to Cypress (POC) #884
+
+**Chores:**
+ - Repair acceptance tests #880
+ - Upgrade dot-prop to version 5.2.0 #886
+ - Change symfony cache path to reflect deploy path #857
+
+## 6.3.0
 ## 6.2.4
 This release is the finalization of the AuthnContextClassRef changes
 that where started in 6.2.1 (and rolled back in 6.2.2).
