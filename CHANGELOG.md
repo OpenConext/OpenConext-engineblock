@@ -5,6 +5,13 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.3.2
+**Bugfix:**
+ - Store entityId of issuer, not the value object #889
+
+**Features:**
+ - Migrate existing JavaScript tests to Cypress #887
+
 ## 6.3.1
 As of this release the old non conforming Schac Home Organization synonym: urn:oid:1.3.6.1.4.1.1466.115.121.1.15 is no longer released as an attribute. This was achieved by removing it from the attributes.json. If you need it, please place it back in ./application/configs/attributes.json. See UPGRADING.md for details.
 
