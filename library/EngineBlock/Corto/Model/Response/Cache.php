@@ -39,8 +39,8 @@ class EngineBlock_Corto_Model_Response_Cache
         }
 
         $_SESSION['CachedResponses'][] = array(
-            'sp'  => $receivedRequest->getIssuer(),
-            'idp' => $receivedResponse->getIssuer(),
+            'sp'  => $receivedRequest->getIssuer()->getValue(),
+            'idp' => $receivedResponse->getIssuer()->getValue(),
         );
     }
 

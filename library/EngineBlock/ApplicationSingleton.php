@@ -251,9 +251,6 @@ class EngineBlock_ApplicationSingleton
         if (isset($_SESSION['currentServiceProvider'])) {
             $feedbackInfo['serviceProvider'] = $_SESSION['currentServiceProvider'];
             $spEntityId = $_SESSION['currentServiceProvider'];
-            if ($spEntityId instanceof Issuer) {
-                $spEntityId = $spEntityId->getValue();
-            }
             $feedbackInfo['serviceProviderName'] = $this->getServiceProviderName($spEntityId);
         }
 

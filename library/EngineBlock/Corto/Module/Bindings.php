@@ -153,7 +153,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
             $log->notice(sprintf(
                 'Received signed AuthnRequest from Issuer "%s" with signature method algorithm "%s"',
-                $sspRequest->getIssuer(),
+                $sspRequest->getIssuer()->getValue(),
                 $signatureMethod
             ));
 
@@ -168,7 +168,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $this->assertValidAcsLocationScheme($acsLocation);
 
         // check the IssueInstant against our own time to see if the SP's clock is getting out of sync
-        $this->_checkIssueInstant( $sspRequest->getIssueInstant(), 'SP',  $sspRequest->getIssuer() );
+        $this->_checkIssueInstant( $sspRequest->getIssueInstant(), 'SP',  $sspRequest->getIssuer()->getValue());
 
         $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
 
@@ -180,7 +180,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
         // Remember sp for debugging
-        $_SESSION['currentServiceProvider'] = $ebRequest->getIssuer();
+        $_SESSION['currentServiceProvider'] = $ebRequest->getIssuer()->getValue();
 
         // Verify that we know this SP and have metadata for it.
         $serviceProvider = $this->_verifyKnownSP(
