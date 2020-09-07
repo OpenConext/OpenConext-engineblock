@@ -90,6 +90,14 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $log = $application->getLogInstance();
 
+        // Test if we should return a no passive status response back to the SP
+        if (in_array(Constants::STATUS_NO_PASSIVE, $receivedResponse->getStatus())) {
+            $log->info('Response contains NoPassive status code: responding with NoPassive status to SP');
+            $response = $this->_server->createNoPassiveResponse($receivedRequest);
+            $this->_server->sendResponseToRequestIssuer($receivedRequest, $response);
+            return;
+        }
+
         $this->_server->checkResponseSignatureMethods($receivedResponse);
 
         if ($receivedRequest->isDebugRequest()) {
@@ -142,14 +150,6 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         EngineBlock_Corto_Model_Response_Cache::rememberIdp($receivedRequest, $receivedResponse);
 
         $this->_server->filterInputAssertionAttributes($receivedResponse, $receivedRequest);
-
-        // Test if we should return a no passive status response back to the SP
-        if (in_array(Constants::STATUS_NO_PASSIVE, $receivedResponse->getStatus())) {
-            $log->info('Response contains NoPassive status code: responding with NoPassive status to SP');
-            $response = $this->_server->createNoPassiveResponse($receivedRequest);
-            $this->_server->sendResponseToRequestIssuer($receivedRequest, $response);
-            return;
-        }
 
         // Add the consent step
         $currentProcessStep = $this->_processingStateHelper->addStep(
