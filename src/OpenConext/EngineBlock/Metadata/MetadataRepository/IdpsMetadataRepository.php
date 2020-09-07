@@ -69,7 +69,7 @@ class IdpsMetadataRepository
     /**
      * @return IdentityProviderEntityCollection
      */
-    public function findIdentityProviders(string $keyId)
+    public function findIdentityProviders(?string $keyId)
     {
         return $this->convertIdentityProviders(
             $this->repository->findIdentityProviders(),
@@ -83,7 +83,7 @@ class IdpsMetadataRepository
      */
     public function findIdentityProvidersByEntityId(
         array $identityProviderEntityIds,
-        string $keyId
+        ?string $keyId
     ) {
         return $this->convertIdentityProviders(
             $this->repository->findIdentityProvidersByEntityId($identityProviderEntityIds),
@@ -96,7 +96,7 @@ class IdpsMetadataRepository
      */
     private function convertIdentityProviders(
         array $idps,
-        string $keyId
+        ?string $keyId
     ): IdentityProviderEntityCollection {
 
         $collection = new IdentityProviderEntityCollection();

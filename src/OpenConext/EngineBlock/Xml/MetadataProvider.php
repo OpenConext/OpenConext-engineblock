@@ -84,11 +84,8 @@ class MetadataProvider
 
     /**
      * Generate XML metadata for an IdP
-     *
-     * @param string $keyId
-     * @return string
      */
-    public function metadataForIdp(string $keyId): string
+    public function metadataForIdp(?string $keyId): string
     {
         $identityProvider = $this->idpFactory->createEngineBlockEntityFrom($keyId);
 
@@ -111,7 +108,7 @@ class MetadataProvider
      */
     public function metadataForIdps(
         ?string $spEntityId,
-        string $keyId
+        ?string $keyId
     ): string {
 
         if ($spEntityId) {

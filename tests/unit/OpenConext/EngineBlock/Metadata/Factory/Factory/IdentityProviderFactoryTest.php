@@ -17,13 +17,11 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory\Factory;
 
-use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
-use OpenConext\EngineBlock\Metadata\Factory\Decorator\ProxiedIdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\Logo;
@@ -136,7 +134,7 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
             ->method('getUrl')
             ->withConsecutive(
             // SSO: EngineBlockIdentityProvider::getSingleSignOnServices
-                ['authentication_idp_sso', false, null, 'entity-id']
+                ['authentication_idp_sso', false, 'default', 'entity-id']
             ) ->willReturnOnConsecutiveCalls(
             // SSO
                 'proxiedSsoLocation'
