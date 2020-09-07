@@ -103,6 +103,7 @@ sed -i s,#ASSET_VERSION#,${TAG},g ${PROJECT_DIR}/app/config/config.yml &&
 echo "Cleaning build of dev files" &&
 rm -rf ${PROJECT_DIR}/.idea &&
 rm -rf ${PROJECT_DIR}/.git &&
+rm -rf ${PROJECT_DIR}/.github &&
 rm -f ${PROJECT_DIR}/.gitignore &&
 rm -f ${PROJECT_DIR}/makeRelease.sh &&
 rm -f ${PROJECT_DIR}/bin/composer.phar &&
@@ -113,6 +114,7 @@ rm -rf ${PROJECT_DIR}/build.xml &&
 rm -rf ${PROJECT_DIR}/tests &&
 rm -rf ${PROJECT_DIR}/ci &&
 rm -rf ${PROJECT_DIR}/theme/node_modules &&
+rm -rf ${PROJECT_DIR}/theme/cypress &&
 rm -rf ${PROJECT_DIR}/theme/.sass-cache
 
 if [ $? -eq 0 ]; then
