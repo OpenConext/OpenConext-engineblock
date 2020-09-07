@@ -5,6 +5,11 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.3.3
+**Bugfixes:**
+ - Move NoPassive response processing up in the ACS proces #890
+ - Print the key-id in the SSO locations of the IdP metadata #891
+
 ## 6.3.2
 **Bugfix:**
  - Store entityId of issuer, not the value object #889
