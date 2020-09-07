@@ -71,6 +71,7 @@ class ProxiedIdentityProviderTest extends AbstractEntityTest
         $decorator = new ProxiedIdentityProvider(
             $this->adapter,
             $configuration,
+            null,
             $this->keyPairMock,
             $this->urlProvider
         );

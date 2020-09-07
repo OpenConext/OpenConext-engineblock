@@ -41,8 +41,11 @@ class KeyPairFactory
      *
      * @throws RuntimeException
      */
-    public function buildFromIdentifier(string $identifier) : X509KeyPair
+    public function buildFromIdentifier(?string $identifier) : X509KeyPair
     {
+        if ($identifier === null) {
+            $identifier = self::DEFAULT_KEY_PAIR_IDENTIFIER;
+        }
         Assertion::nonEmptyString($identifier, 'identifier');
 
         if (array_key_exists($identifier, $this->keyPairConfiguration)) {

@@ -99,7 +99,7 @@ class MetadataRenderer
         return $signedXml;
     }
 
-    public function fromIdentityProviderEntity(IdentityProviderEntityInterface $idp, string $keyId) : string
+    public function fromIdentityProviderEntity(IdentityProviderEntityInterface $idp, ?string $keyId) : string
     {
         $this->signingKeyPair = $this->keyPairFactory->buildFromIdentifier($keyId);
         $template = '@theme/Authentication/View/Metadata/idp.xml.twig';
@@ -110,7 +110,7 @@ class MetadataRenderer
         return $signedXml;
     }
 
-    public function fromIdentityProviderEntities(IdentityProviderEntityCollection $idps, string $keyId) : string
+    public function fromIdentityProviderEntities(IdentityProviderEntityCollection $idps, ?string $keyId) : string
     {
         $this->signingKeyPair = $this->keyPairFactory->buildFromIdentifier($keyId);
         $template = '@theme/Authentication/View/Metadata/idps.xml.twig';

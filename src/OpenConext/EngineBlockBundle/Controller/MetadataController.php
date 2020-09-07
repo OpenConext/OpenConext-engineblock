@@ -61,10 +61,6 @@ class MetadataController
      */
     public function idpMetadataAction($keyId = null)
     {
-        if (empty($keyId)) {
-            $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
-        }
-
         $metadataXml = $this->metadataService->metadataForIdp($keyId);
 
         $response = new Response($metadataXml);
@@ -100,10 +96,6 @@ class MetadataController
      */
     public function allIdpsMetadataAction(Request $request, $keyId = null)
     {
-        if (empty($keyId)) {
-            $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
-        }
-
         $spEntityId = $request->query->get('sp-entity-id', null);
 
         $metadataXml = $this->metadataService->metadataForIdps($spEntityId, $keyId);

@@ -47,13 +47,20 @@ class ProxiedIdentityProvider extends AbstractIdentityProvider
      */
     private $urlProvider;
 
+    /**
+     * @var string|null
+     */
+    private $keyId;
+
     public function __construct(
         IdentityProviderEntityInterface $entity,
         EngineBlockConfiguration $engineBlockConfiguration,
+        ?string $keyId,
         X509KeyPair $keyPair,
         UrlProvider $urlProvider
     ) {
         parent::__construct($entity);
+        $this->keyId = $keyId;
         $this->engineBlockConfiguration = $engineBlockConfiguration;
         $this->keyPair = $keyPair;
         $this->urlProvider = $urlProvider;
@@ -95,7 +102,13 @@ class ProxiedIdentityProvider extends AbstractIdentityProvider
 
     public function getSingleSignOnServices(): array
     {
-        $ssoLocation = $this->urlProvider->getUrl('authentication_idp_sso', false, null, $this->getEntityId());
+        $ssoLocation = $this->urlProvider->getUrl(
+            'authentication_idp_sso',
+            false,
+            $this->keyId,
+            $this->getEntityId()
+        );
+
         return [new Service($ssoLocation, Constants::BINDING_HTTP_REDIRECT)];
     }
 }

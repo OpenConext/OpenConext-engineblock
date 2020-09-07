@@ -38,13 +38,19 @@ class EngineBlockIdentityProvider extends AbstractIdentityProvider
      */
     private $urlProvider;
 
+    /**
+     * @var string|null
+     */
+    private $keyId;
+
     public function __construct(
         IdentityProviderEntityInterface $entity,
+        ?string $keyId,
         X509KeyPair $keyPair,
         UrlProvider $urlProvider
     ) {
         parent::__construct($entity);
-
+        $this->keyId = $keyId;
         $this->keyPair = $keyPair;
         $this->urlProvider = $urlProvider;
     }
@@ -83,7 +89,7 @@ class EngineBlockIdentityProvider extends AbstractIdentityProvider
      */
     public function getSingleSignOnServices(): array
     {
-        $ssoLocation = $this->urlProvider->getUrl('authentication_idp_sso', false, null, null);
+        $ssoLocation = $this->urlProvider->getUrl('authentication_idp_sso', false, $this->keyId, null);
         return [new Service($ssoLocation, Constants::BINDING_HTTP_REDIRECT)];
     }
 }
