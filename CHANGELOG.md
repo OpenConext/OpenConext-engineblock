@@ -10,6 +10,9 @@ More information about our release strategy can be found in the [Development Gui
  - Move NoPassive response processing up in the ACS proces #890
  - Print the key-id in the SSO locations of the IdP metadata #891
 
+**Security**
+ - Upgrade jpeg-js to v0.4.0 #892
+
 ## 6.3.2
 **Bugfix:**
  - Store entityId of issuer, not the value object #889
