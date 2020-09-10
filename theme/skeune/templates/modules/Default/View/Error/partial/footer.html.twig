@@ -1,0 +1,35 @@
+{% set template = app.request.get('_route') %}
+<footer class="error-page-footer-buttons">
+    <div class="error-page-footer-buttons__container">
+        <div class="error-page-footer-buttons__row">
+            {% if hasWikiLink(template) %}
+            <div class="footer-button">
+                {# The template var is set in the individual error Twigs, that's te place where we can determine what template is loaded. #}
+                <a href="{{ getWikiLink(template) }}" target="_blank" class="footer-button__link" title="{{ 'error_wiki-link-text'|trans }}">
+                    <i class="footer-button__icon fa-wikipedia-w"></i>
+                    <p class="footer-button__text">{{ 'error_wiki-link-text'|trans }}</p>
+                    <p class="footer-button__text footer-button__text--small">{{ 'error_wiki-link-text-short'|trans }}</p>
+                </a>
+            </div>
+            {%  endif %}
+            <div class="footer-button">
+                <a href="{{ 'error_help-desk-href'|trans }}" target="_blank" class="footer-button__link" title="{{ 'error_help-desk-link-text'|trans }}">
+                    <i class="footer-button__icon fa-graduation-cap"></i>
+                    <p class="footer-button__text">{{ 'error_help-desk-link-text'|trans }}</p>
+                    <p class="footer-button__text footer-button__text--small">{{ 'error_help-desk-link-text-short'|trans }}</p>
+                </a>
+            </div>
+            {% if hasIdPContactMailLink(template) and getIdPContactMailLink() is not empty %}
+            {% set supportMail = getIdPContactMailLink() %}
+            {% set supportMailLabel = getIdpContactShortLabel(template) %}
+            <div class="footer-button">
+                <a href="mailto:{{ supportMail }}" target="_blank" class="footer-button__link">
+                    <i class="footer-button__icon fa-paper-plane"></i>
+                    <p class="footer-button__text">{{ supportMail }}</p>
+                    <p class="footer-button__text footer-button__text--small">{{ supportMailLabel }}</p>
+                </a>
+            </div>
+            {%  endif %}
+        </div>
+    </div>
+</footer>

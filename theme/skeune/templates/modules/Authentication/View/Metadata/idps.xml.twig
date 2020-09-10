@@ -1,0 +1,36 @@
+{% spaceless %}
+<!-- {{ 'openconext_terms_of_use_url'|trans }} -->
+<md:EntitiesDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" validUntil="{{ validUntil }}" ID="{{ id }}">
+    {% for metadata in metadataCollection %}
+        <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="{{ metadata.entityId }}">
+            <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+                <md:Extensions>
+                    {% include '@theme/Authentication/View/Metadata/partial/shibmd_scope.xml.twig' %}
+                    {% include '@theme/Authentication/View/Metadata/partial/ui_info.xml.twig' %}
+                </md:Extensions>
+                {% for key in metadata.publicKeys %}
+                    <md:KeyDescriptor use="signing">
+                        <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                            <ds:X509Data>
+                                <ds:X509Certificate>{{ key }}</ds:X509Certificate>
+                            </ds:X509Data>
+                        </ds:KeyInfo>
+                    </md:KeyDescriptor>
+                {% endfor %}
+                {% for nameIdFormat in metadata.supportedNameIdFormats %}
+                    <md:NameIDFormat>{{ nameIdFormat }}</md:NameIDFormat>
+                {% endfor %}
+                <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="{{ metadata.ssoLocation }}"></md:SingleSignOnService>
+            </md:IDPSSODescriptor>
+            {% if metadata.hasOrganizationInfo %}
+                {% include '@theme/Authentication/View/Metadata/partial/organization.xml.twig' %}
+            {% endif %}
+            {% if metadata.contactPersons is not empty%}
+                {% for contactPerson in metadata.contactPersons %}
+                    {% include '@theme/Authentication/View/Metadata/partial/contact_person.xml.twig' %}
+                {% endfor %}
+            {% endif %}
+        </md:EntityDescriptor>
+    {% endfor %}
+</md:EntitiesDescriptor>
+{% endspaceless %}
