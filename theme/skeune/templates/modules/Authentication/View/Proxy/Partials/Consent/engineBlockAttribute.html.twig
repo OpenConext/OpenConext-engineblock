@@ -1,0 +1,9 @@
+<li>
+    {% include '@theme/Authentication/View/Proxy/Partials/Consent/attributeName.html.twig' with { attributeName: 'consent_name_id_label'|trans } %}
+    {% include '@theme/Authentication/View/Proxy/Partials/Consent/attributeValue.html.twig' with { attributeValue: attributeValues } %}
+    {% if nameIdIsPersistent %}
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/attributeTooltip.html.twig' with {
+            tooltipValue: 'consent_name_id_value_tooltip'|trans({'%arg1%': 'suite_name'|trans })
+        } %}
+    {% endif %}
+</li>
