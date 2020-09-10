@@ -1,12 +1,13 @@
-{% import "@themeLayouts/scripts/language-switcher.html.twig" as languageSwitcher %}
+{% set surfConext = "SURFconext" %}
+
 <!DOCTYPE html>
-<html class="no-js" lang="{{ locale()|escape('html_attr') }}">
+<html lang="{{ locale()|escape('html_attr') }}">
 <head>
     <title>{% block title %}{{ defaultTitle }}{% endblock %}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="robots" content="noindex, nofollow"/>
     <meta content="ie=edge,chrome=1" http-equiv="x-ua-compatible">
-    <meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport">
+    <meta content="initial-scale=1.0,width=device-width" name="viewport">
     <meta content="yes" name="apple-mobile-web-app-capable">
     <meta content="translucent-black" name="apple-mobile-web-app-status-bar-style">
     <link href="/favicon.ico" rel="shortcut icon">
@@ -23,23 +24,14 @@
         }
     </style>
 </head>
-<body class="index">
-
-{% if hideHeader is not defined or hideHeader == false %}
-    {% include '@theme/Default/Partials/legacy_header.html.twig' %}
-    {% include '@theme/Default/Partials/legacy_header.html.twig' %}
-{% endif %}
-
+<body>
 {% block background %}{% endblock %}
 
-{% block languageSwitcher %}{% endblock %}
-<div class="l-container {% if wide is defined and wide == true %}wide{% endif %}">
-    {% block content %}{% endblock %}
-</div>
-
-{% if hideFooter is not defined or hideFooter == false %}
-    {% include '@theme/Default/Partials/legacy_footer.html.twig' %}
-{% endif %}
+{% block container %}
+    <div class="l-container {% if wide is defined and wide == true %}wide{% endif %}">
+        {% block content %}{% endblock %}
+    </div>
+{% endblock %}
 
 {% if beforeScriptHtml is defined %}
     {{ beforeScriptHtml|raw }}
