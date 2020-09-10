@@ -1,0 +1,8 @@
+{% extends '@theme/Default/View/Error/error.html.twig' %}
+
+{% set pageTitle = 'error_received_error_status_code'|trans %}
+{% block pageTitle %}{{ pageTitle }}{% endblock %}
+{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
+{% block pageHeading %}{{ pageTitle }}{% endblock %}
+
+{% block errorMessage %}{{ 'error_received_error_status_code_desc'|trans|raw }}{% endblock %}
