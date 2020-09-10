@@ -1,0 +1,31 @@
+<ul class="consent__disclaimer">
+    <li class="disclaimer__privacy">
+        {# todo adjust image #}
+        <img src="" alt="" />
+        <p>
+            {% if sp.coins.termsOfServiceUrl is not null %}
+                {{ 'consent_header_text'|trans({
+                    '%arg1%': spName,
+                    '%arg2%': sp.coins.termsOfServiceUrl
+                })|raw }}
+            {% else %}
+                {{ 'consent_header_text'|trans({'%arg1%': spName})|raw }}
+            {% endif %}
+        </p>
+    </li>
+    <li class="disclaimer__secure">
+        {# todo adjust image #}
+        <img src="" alt="" />
+        <p>
+            {# todo: adjust text/vars once i know what happens with the two bolded parts #}
+            {% if sp.coins.termsOfServiceUrl is not null %}
+                {{ 'consent_header_text'|trans({
+                    '%arg1%': spName,
+                    '%arg2%': sp.coins.termsOfServiceUrl
+                })|raw }}
+            {% else %}
+                {{ 'consent_header_text'|trans({'%arg1%': spName})|raw }}
+            {% endif %}
+        </p>
+    </li>
+</ul>

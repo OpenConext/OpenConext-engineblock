@@ -1,4 +1,4 @@
-{% extends '@themeLayouts/scripts/default.html.twig' %}
+{% extends '@themeLayouts/scripts/redesign_default.html.twig' %}
 
 {# SP and IdP name are stored in a local variable for convenience #}
 {% set spName = sp.displayName(locale()) %}
@@ -7,151 +7,24 @@
 {# Prepare the page title #}
 {% set pageTitle = 'consent_header_title'|trans({'%arg1%': spName}) %}
 
-{# Load the sorded/ordered and normalized attributes #}
+{# Load the sorted/ordered and normalized attributes #}
 {% set attributesBySource = sortByDisplayOrder(attributes, attributeSources, nameId) %}
 
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
-{% block pageHeading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
 
 {% block content %}
+<main class="consent">
+    <header>
+        {% include '@theme/Authentication/View/Proxy/Partials/Shared/LoginBar.html.twig' with { loginName: surfConext} %}
+        <h1>{{ pageTitle }}</h1>
+        <h2></h2>
+    </header>
+    <h2>{{ 'consent_privacy_title'|trans({'%arg1%': spName}) }}</h2>
 
-    <div class="box">
-        <div class="mod-content consent">
-            <header>
-                <h1>{{ pageTitle }}</h1>
-                <p>
-                    {{ 'consent_header_text'|trans({'%arg1%': spName})|raw }}
-                </p>
-                {% if sp.coins.termsOfServiceUrl is not null %}
-                    <p>
-                        <br>
-                        <a class="small"
-                           href="{{ sp.coins.termsOfServiceUrl }}"
-                           target="_blank"><span>{{ 'consent_privacy_link'|trans }}</span></a>
-                    </p>
-                {% endif %}
-            </header>
+    {% include '@theme/Authentication/View/Proxy/Partials/Consent/attributes.html.twig' %}
 
-            <section class="privacy">
-                <h2>{{ 'consent_privacy_title'|trans({'%arg1%': spName}) }}</h2>
-            </section>
-
-            <section class="attributes">
-                <table class="comp-table attributes">
-
-                    {% for attributeSource, attributes in attributesBySource %}
-
-                        <tbody data-attr-source="{{ attributeSource }}">
-                        <tr class="source-info">
-                            <td colspan="2">
-                                {% if attributeSource == 'engineblock' %}
-                                    <img class="logo-small" src="{{ defaultLogo }}"
-                                         alt=""/>
-                                    <h2>{{ 'suite_name'|trans }}</h2>
-                                {% elseif attributeSource != 'idp' %}
-                                    <img class="logo-small" src="{{ attributeSourceLogoUrl(attributeSource)|escape('html_attr') }}"
-                                         alt=""/>
-                                    <h2>{{ attributeSourceDisplayName(attributeSource) }}</h2>
-                                {% else %}
-                                    {% if idp.logo is not null %}
-                                        <img class="logo-small" src="{{ idp.logo.url }}" alt=""/>
-                                    {% else %}
-                                        <img class="logo-small" src="/images/placeholder.png" alt=""/>
-                                    {% endif %}
-                                    <h2>{{ idpName }}</h2>
-                                {% endif %}
-                                {% if attributeSource == 'engineblock' %}
-                                    <a class="small" href="{{ 'name_id_support_url'|trans }}" target="_blank">{{ 'consent_name_id_support_link'|trans }}</a>
-                                {% else %}
-                                    <a class="small" href="#"
-                                       data-slidein="correction-{{ attributeSource }}">{{ 'consent_attributes_correction_link'|trans }}</a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% if attributes|length == 0 %}
-                            <tr>
-                                <td class="attr-value full-width" colspan="2">{{ 'consent_no_attributes_text'|trans }}</td>
-                            </tr>
-                        {% else %}
-                            {% for attributeIdentifier, attributeValues in attributes %}
-
-                                {% if attributeSource == 'engineblock' %}
-                                    <tr>
-                                        <td class="attr-name" data-identifier="{{ attributeIdentifier }}">{{ 'consent_name_id_label'|trans }}</td>
-                                        <td class="attr-value" data-identifier="{{ attributeIdentifier }}">
-
-                                            {% spaceless %}
-                                                {% if nameIdIsPersistent %}
-                                                <a class="help tooltip" title="{{ 'consent_name_id_value_tooltip'|trans({'%arg1%': 'suite_name'|trans }) }}" href="#">
-                                                {% endif %}
-                                                    <span>{{ attributeValues }}</span>
-                                                {% if nameIdIsPersistent %}
-                                                </a>
-                                                {% endif %}
-                                            {% endspaceless %}
-                                        </td>
-                                    </tr>
-                                {% else %}
-                                    <tr>
-                                        <td class="attr-name" data-identifier="{{ attributeIdentifier }}">
-                                            {{ attributeShortName(attributeIdentifier, locale()) }}
-                                        </td>
-                                        <td class="attr-value">
-                                            {# Single attribute value #}
-                                            {% if attributeValues|length == 1 %}
-                                                {% if attributeMotivations[attributeIdentifier] is defined %}
-                                                    {% spaceless %}
-                                                    <a class="help tooltip" title="{{ attributeMotivations[attributeIdentifier] }}" href="#">
-                                                        <span>{{ attributeValues|first }}</span>
-                                                    </a>
-                                                    {% endspaceless %}
-                                                {% else %}
-                                                    {{ attributeValues|first }}
-                                                {% endif %}
-                                                {# Multiple attribute values #}
-                                            {% else %}
-                                                <ul>
-                                                    {% for value in attributeValues %}
-                                                        <li>
-                                                            {% if attributeMotivations[attributeIdentifier] is defined %}
-                                                                {% spaceless %}
-                                                                <a class="help tooltip" title="{{ attributeMotivations[attributeIdentifier] }}" href="#">
-                                                                    <span>{{ value }}</span>
-                                                                </a>
-                                                                {% endspaceless %}
-                                                            {% else %}
-                                                                {{ value }}
-                                                            {% endif %}
-                                                        </li>
-                                                    {% endfor %}
-                                                </ul>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                        <tr class="toggle-attributes">
-                            <td colspan="2">
-                                <a href="#">
-                                    <span class="show-more">
-                                        {{ 'consent_attributes_show_more'|trans }}
-                                    </span>
-                                    <span class="show-less">
-                                        {{ 'consent_attributes_show_less'|trans }}
-                                    </span>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr class="separator">
-                            <td colspan="2"></td>
-                        </tr>
-                        </tbody>
-                    {% endfor %}
-                </table>
-            </section>
-
-            {% if showConsentExplanation and consentSettings.consentExplanationIn(app.request.locale, spEntityId) %}
+    {# todo check what this is and if it needs to stay #}
+    {% if showConsentExplanation and consentSettings.consentExplanationIn(app.request.locale, spEntityId) %}
             <section class="idp-consent-explanation">
                 {% if idp.logo is not null %}
                     <div class="idp-logo">
@@ -164,57 +37,26 @@
             </section>
             {% endif %}
 
-            <section class="buttons">
-                {% if not minimalConsent %}
-                    <h2>{{ 'consent_buttons_title'|trans }}</h2>
-                {% endif %}
-                <!-- YES -->
-                <form id="accept" method="post"
-                      action="{{ action }}">
-                    <input type="hidden" name="ID"
-                           value="{{ responseId }}">
-                    <input type="hidden" name="consent" value="yes"/>
-                    <input id="accept_terms_button"
-                           class="submit c-button"
-                           type="submit"
-                            {%  if minimalConsent %}
-                                value="{{ 'consent_buttons_ok_minimal'|trans({'%arg1%': spName}) }}"
-                            {% else %}
-                                value="{{ 'consent_buttons_ok'|trans({'%arg1%': spName}) }}"
-                            {% endif %}
-                    />
-                </form>
-
-                <!-- NO -->
-                <a id="decline-terms" class="reject c-button c-button-link" href="#" data-slidein="reject">
-                    {%  if minimalConsent %}
-                        {{ 'consent_buttons_nok_minimal'|trans }}
-                    {% else %}
-                        {{ 'consent_buttons_nok'|trans }}
-                    {% endif %}
-                </a>
-            </section>
-
-            <footer>
-                <p>
-                    {% if consentCount == 0 %}
-                        {{ 'consent_footer_text_first_consent'|trans({'%arg1%': profileUrl})|raw }}
-                    {% elseif consentCount == 1 %}
-                        {{ 'consent_footer_text_singular'|trans({'%arg1%': profileUrl})|raw }}
-                    {% else %}
-                        {{ 'consent_footer_text_plural'|trans({'%arg1%': consentCount, '%arg2%': profileUrl})|raw }}
-                    {% endif %}
-                </p>
-            </footer>
-        </div>
+    <div class="ctas">
+        {# todo: link to where? #}
+        <a href="">{{ 'consent_buttons_ok'|trans }}</a>
+        <button>{{ 'consent_buttons_nok'|trans }}</button>
     </div>
-    {% include '@theme/Authentication/View/Proxy/consent-slidein-reject.html.twig' %}
 
-    {% for attributeSource in attributesBySource|keys %}
-        {% include '@theme/Authentication/View/Proxy/consent-slidein-correction.html.twig' %}
-    {% endfor %}
+    <footer>
 
-    {% include '@theme/Authentication/View/Proxy/consent-slidein-about.html.twig' %}
+        <a class="small"
+           href="{{ sp.coins.termsOfServiceUrl }}"
+           target="_blank"><span>{{ 'consent_privacy_link'|trans }}</span></a>
+    </footer>
+</main>
 
+{% include '@theme/Authentication/View/Proxy/consent-slidein-reject.html.twig' %}
+
+{% for attributeSource in attributesBySource|keys %}
+    {% include '@theme/Authentication/View/Proxy/consent-slidein-correction.html.twig' %}
+{% endfor %}
+
+{% include '@theme/Authentication/View/Proxy/consent-slidein-about.html.twig' %}
 
 {% endblock %}

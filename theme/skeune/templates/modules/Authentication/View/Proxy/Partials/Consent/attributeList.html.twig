@@ -1,0 +1,10 @@
+<ul class="consent__attributes">
+    {% for attributeIdentifier, attributeValues in attributes %}
+        {% if attributeSource == 'engineblock' %}
+            {% include '@theme/Authentication/View/Proxy/Partials/Consent/engineBlockAttribute.html.twig' %}
+        {% else %}
+            {% include '@theme/Authentication/View/Proxy/Partials/Consent/defaultAttribute.html.twig' %}
+        {% endif %}
+    {% endfor %}
+    {# todo add final line #}
+</ul>
