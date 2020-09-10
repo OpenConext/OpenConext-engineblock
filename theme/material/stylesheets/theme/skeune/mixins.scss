@@ -1,0 +1,119 @@
+@mixin appearance($value: none) {
+    -moz-appearance: $value;
+    -webkit-appearance: $value;
+    appearance: $value;
+}
+
+@mixin remove-outline {
+    outline: none;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+// Clear user-agent styles for button.
+// If no background-color is set on the body element, use with a background-color.
+// Else you'll see a grey background still in safari and IE.
+@mixin button-reset($background-color: inherit) {
+    @include appearance;
+    background-color: $background-color;
+    border: 0;
+    font-family: inherit;
+    font-size: 100%;
+    padding: 0;
+}
+
+// Controls whether the user can select text
+@mixin select($value: none) {
+    -moz-user-select: $value;
+    -ms-user-select: $value;
+    -webkit-user-select: $value;
+    user-select: $value;
+}
+
+// Do not use, use the helpers below
+// Example usage: .sub-menu {
+//  @include absolute(top 100% left 0 right 12px);
+//}
+@mixin position($position, $args) {
+    @each $o in top right bottom left {
+        $i: index($args, $o);
+        @if $i and $i + 1 <= length($args) and type-of(nth($args, $i + 1)) == number {
+            #{$o}: nth($args, $i + 1);
+        }
+    }
+    position: $position;
+}
+
+// Positioning helpers
+@mixin absolute($args: '') {
+    @include position(absolute, $args);
+}
+
+@mixin fixed($args: '') {
+    @include position(fixed, $args);
+}
+
+@mixin relative($args: '') {
+    @include position(relative, $args);
+}
+
+// A whole lot of grid mixins below
+// Ensure CSS grid works with IE 11 spec.
+// sass-lint:disable no-vendor-prefixes, no-duplicate-properties
+@mixin display-grid {
+    display: -ms-grid;
+    display: grid;
+}
+
+// $rows values should be delimited by a space
+@mixin grid-template-rows($rows...) {
+    -ms-grid-rows: $rows;
+    grid-template-rows: $rows;
+}
+
+// $columns values should be delimited by a space
+@mixin grid-template-columns($columns...) {
+    -ms-grid-columns: $columns;
+    grid-template-columns: $columns;
+}
+
+// Can be used in combination with above grid-template-X mixins.
+// These result in the same output:
+// @include grid-template-columns(10px grid-repeat(4, 20px) 30px);
+// @include grid-template-columns(10px 20px 20px 20px 20px 30px);
+@function grid-repeat($repeat, $stuff: 1fr) {
+    $list: ();
+    @for $i from 1 through $repeat {
+        $list: append($list, $stuff, space);
+    }
+    @return $list;
+}
+
+@mixin grid-position($row-start, $row-end, $col-start, $col-end) {
+    @include grid-column($col-start, $col-end);
+    @include grid-row($row-start, $row-end);
+}
+
+@mixin grid-row($row-start, $row-end) {
+    -ms-grid-row: $row-start;
+    -ms-grid-row-span: $row-end - $row-start;
+    grid-row: #{$row-start} / #{$row-end};
+}
+
+@mixin grid-column($col-start, $col-end) {
+    -ms-grid-column: $col-start;
+    -ms-grid-column-span: $col-end - $col-start;
+    grid-column: #{$col-start} / #{$col-end};
+}
+
+@mixin grid-align-self($value) {
+    -ms-grid-row-align: $value;
+    align-self: $value;
+}
+
+@mixin grid-justify-self($value) {
+    -ms-grid-column-align: $value;
+    justify-self: $value;
+}
