@@ -56,8 +56,8 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     paths:
-        "%kernel.root_dir%/../theme/skeune/templates/modules": theme
-        "%kernel.root_dir%/../theme/skeune/templates/layouts": themeLayouts
+        "%kernel.root_dir%/../theme/%theme.name%/templates/modules": theme
+        "%kernel.root_dir%/../theme/%theme.name%/templates/layouts": themeLayouts
     globals:
         assetsVersion: "%asset_version%"
         defaultTitle: "%view_default_title%"
