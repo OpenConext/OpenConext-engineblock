@@ -231,3 +231,8 @@ parameters:
     stepup.gateway.sfo.sso_location: 'https://gateway.stepup.vm.openconext.org/second-factor-only/single-sign-on'
     ## The public key from the Stepup Gateway IdP
     stepup.gateway.sfo.key_file: /etc/openconext/engineblock.crt
+
+##########################################################################################
+    ## THEME SETTINGS
+    ##########################################################################################
+    theme.name: 'material'
