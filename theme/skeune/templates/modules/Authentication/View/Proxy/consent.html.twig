@@ -5,7 +5,7 @@
 {% set idpName = idp.displayName(locale()) %}
 
 {# Prepare the page title #}
-{% set pageTitle = 'consent_header_title'|trans({'%arg1%': spName}) %}
+{% set pageTitle = 'consent_h1_text'|trans({'%arg1%': spName}) %}
 
 {# Load the sorted/ordered and normalized attributes #}
 {% set attributesBySource = sortByDisplayOrder(attributes, attributeSources, nameId) %}
@@ -13,45 +13,27 @@
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
 
 {% block content %}
-<main class="consent">
-    <header>
-        {% include '@theme/Authentication/View/Proxy/Partials/Shared/LoginBar.html.twig' with { loginName: surfConext} %}
-        <h1>{{ pageTitle }}</h1>
-        <h2></h2>
-    </header>
-    <h2>{{ 'consent_privacy_title'|trans({'%arg1%': spName}) }}</h2>
+    <main class="consent">
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/header.html.twig' %}
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/subheader.html.twig' %}
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/attributes.html.twig' %}
 
-    {% include '@theme/Authentication/View/Proxy/Partials/Consent/attributes.html.twig' %}
+        {# todo check what this is and if it needs to stay #}
+        {% if showConsentExplanation and consentSettings.consentExplanationIn(app.request.locale, spEntityId) %}
+                <section class="idp-consent-explanation">
+                    {% if idp.logo is not null %}
+                        <div class="idp-logo">
+                            <img class="idp-logo logo-small" src="{{ idp.logo.url }}" alt=""/>
+                        </div>
+                    {% endif %}
+                    <p class="title">{{ 'consent_explanation_title'|trans }}</p>
+                    <p class="text">{{ consentSettings.consentExplanationIn(app.request.locale, spEntityId) }}</p>
 
-    {# todo check what this is and if it needs to stay #}
-    {% if showConsentExplanation and consentSettings.consentExplanationIn(app.request.locale, spEntityId) %}
-            <section class="idp-consent-explanation">
-                {% if idp.logo is not null %}
-                    <div class="idp-logo">
-                        <img class="idp-logo logo-small" src="{{ idp.logo.url }}" alt=""/>
-                    </div>
+                </section>
                 {% endif %}
-                <p class="title">{{ 'consent_explanation_title'|trans }}</p>
-                <p class="text">{{ consentSettings.consentExplanationIn(app.request.locale, spEntityId) }}</p>
 
-            </section>
-            {% endif %}
-
-    <div class="ctas">
-        {# todo: link to where? #}
-        <a href="">{{ 'consent_buttons_ok'|trans }}</a>
-        <button>{{ 'consent_buttons_nok'|trans }}</button>
-    </div>
-
-    {% include '@theme/Default/Partials/footer.html.twig' %}
-</main>
-
-{% include '@theme/Authentication/View/Proxy/consent-slidein-reject.html.twig' %}
-
-{% for attributeSource in attributesBySource|keys %}
-    {% include '@theme/Authentication/View/Proxy/consent-slidein-correction.html.twig' %}
-{% endfor %}
-
-{% include '@theme/Authentication/View/Proxy/consent-slidein-about.html.twig' %}
-
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/ctas.html.twig' %}
+        {% include '@theme/Default/Partials/footer.html.twig' %}
+    </main>
+    {% include '@theme/Authentication/View/Proxy/Partials/Consent/slideIns.html.twig' %}
 {% endblock %}
