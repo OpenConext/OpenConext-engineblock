@@ -13,27 +13,32 @@
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
 
 {% block content %}
+    {% include '@theme/Default/Partials/LoginBar.html.twig' with { loginName: surfConext} %}
     <main class="consent">
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/header.html.twig' %}
-        {% include '@theme/Authentication/View/Proxy/Partials/Consent/subheader.html.twig' %}
-        {% include '@theme/Authentication/View/Proxy/Partials/Consent/attributes.html.twig' %}
 
-        {# todo check what this is and if it needs to stay #}
-        {% if showConsentExplanation and consentSettings.consentExplanationIn(app.request.locale, spEntityId) %}
-                <section class="idp-consent-explanation">
-                    {% if idp.logo is not null %}
-                        <div class="idp-logo">
-                            <img class="idp-logo logo-small" src="{{ idp.logo.url }}" alt=""/>
-                        </div>
-                    {% endif %}
-                    <p class="title">{{ 'consent_explanation_title'|trans }}</p>
-                    <p class="text">{{ consentSettings.consentExplanationIn(app.request.locale, spEntityId) }}</p>
+        {% block consent_content %}
+            <div class="consent__content">
+                {% include '@theme/Authentication/View/Proxy/Partials/Consent/attributes.html.twig' %}
 
-                </section>
-                {% endif %}
+                {# todo check what this is and if it needs to stay #}
+                {% if showConsentExplanation and consentSettings.consentExplanationIn(app.request.locale, spEntityId) %}
+                        <section class="idp-consent-explanation">
+                            {% if idp.logo is not null %}
+                                <div class="idp-logo">
+                                    <img class="idp-logo logo-small" src="{{ idp.logo.url }}" alt=""/>
+                                </div>
+                            {% endif %}
+                            <p class="title">{{ 'consent_explanation_title'|trans }}</p>
+                            <p class="text">{{ consentSettings.consentExplanationIn(app.request.locale, spEntityId) }}</p>
 
-        {% include '@theme/Authentication/View/Proxy/Partials/Consent/ctas.html.twig' %}
-        {% include '@theme/Default/Partials/footer.html.twig' %}
+                        </section>
+                        {% endif %}
+
+                {% include '@theme/Authentication/View/Proxy/Partials/Consent/ctas.html.twig' %}
+            </div>
+        {% endblock %}
     </main>
+    {% include '@theme/Default/Partials/footer.html.twig' %}
     {% include '@theme/Authentication/View/Proxy/Partials/Consent/slideIns.html.twig' %}
 {% endblock %}
