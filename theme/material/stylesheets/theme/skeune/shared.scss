@@ -1,0 +1,99 @@
+@import 'helpers.scss';
+
+// todo: add fonts
+// todo: default font sourcesanspro
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: $skeuneBlue;
+    font-size: 100%;
+
+    .l-container {
+
+        > p.loginBar {
+            // todo: font ProximaNovasoft
+            background-color: $skeuneBlue;
+            color: $skeuneLightBlue;
+            font-size: $f-xl;
+            line-height: 5rem;
+            padding: 0 calculateRem(32px);
+        }
+
+        > main {
+            background-color: $skeuneGray;
+            > header {
+                // todo: font ProximaNovasoft
+                h1 {
+                    background-color: $skeuneYellow;
+                    color: $black;
+                    font-size: $f-xl;
+                    font-weight: $bolder;
+                    line-height: calculateRem(26px);
+                    padding: calculateRem(26px) calculateRem(32px);
+                }
+
+                h2 {
+                    background-color: $skeuneGray;
+                    color: $skeuneGreen;
+                    font-size: $f-h2;
+                    font-weight: $bolder;
+                    line-height: 1.15;
+                    padding: calculateRem(24px) calculateRem(32px) calculateRem(34px);
+                }
+            }
+        }
+
+        footer.footer__general {
+            background-color: $skeuneBlue;
+            color: $skeuneLightBlue;
+            margin: calculateRem(16px) 0 calculateRem(11px);
+
+            > .footer__menu {
+                display: flex;
+                font-size: $f-normal;
+                font-weight: $bolder;
+                justify-content: space-between;
+                line-height: 1.5;
+
+                a {
+                    color: $skeuneLightBlue;
+
+                    &.selected,
+                    &:hover,
+                    &:focus{
+                        color: $white;
+                    }
+
+                    &:hover,
+                    &:focus {
+                        line-height: 1.75;
+                        outline: 2px dotted $white;
+                    }
+                }
+
+                ul.comp-language {
+                    display: inline-block;
+                    line-height: inherit;
+                    margin: 0;
+                    position: unset;
+
+                    > li {
+                        display: inline-block;
+
+                        > a {
+                            background-color: inherit;
+                        }
+
+                        &:nth-of-type(even) {
+                            border-left: 1px solid $white;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

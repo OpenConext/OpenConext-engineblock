@@ -117,3 +117,8 @@
     -ms-grid-column-align: $value;
     justify-self: $value;
 }
+
+@mixin border-bottom-radius($value) {
+    border-bottom-right-radius: $value;
+    border-bottom-left-radius: $value;
+}
