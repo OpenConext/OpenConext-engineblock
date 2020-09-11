@@ -44,7 +44,7 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
             new EngineBlock_Corto_Filter_Command_ValidateAuthnContextClassRef($logger, $authnContextClassRefBlacklistPattern),
 
             // Validate if the MFA authnContextClassRef is valid when configured
-            new EngineBlock_Corto_Filter_Command_ValidateMfaAuthnContextClassRef(),
+            new EngineBlock_Corto_Filter_Command_ValidateMfaAuthnContextClassRef($logger),
 
             // Convert all OID attributes to URN and remove the OID variant
             new EngineBlock_Corto_Filter_Command_NormalizeAttributes(),

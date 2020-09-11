@@ -27,14 +27,25 @@ use Psr\Log\LoggerInterface;
  **/
 class EngineBlock_Corto_Filter_Command_ValidateMfaAuthnContextClassRef extends EngineBlock_Corto_Filter_Command_Abstract
 {
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     const MICROSOFT_AUTHN_METHODS_REFERENCES_ATTRIBUTE = 'http://schemas.microsoft.com/claims/authnmethodsreferences';
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
 
     /**
      * @throws EngineBlock_Corto_Exception_AuthnContextClassRefBlacklisted
      */
     public function execute()
     {
-        $mfaEntity = $this->_identityProvider->getCoins()->mfaEntities()->findByEntityId($this->_serviceProvider->entityId);
+        $originalSP = $this->_server->findOriginalServiceProvider($this->_request, $this->logger)->entityId;
+        $mfaEntity = $this->_identityProvider->getCoins()->mfaEntities()->findByEntityId($originalSP);
         // SP's configured to pass auth context transparently are not checked for an expected (configured) class ref.
         if (!$mfaEntity || $mfaEntity instanceof TransparentMfaEntity) {
             return;
@@ -47,7 +58,7 @@ class EngineBlock_Corto_Filter_Command_ValidateMfaAuthnContextClassRef extends E
                 sprintf(
                     'Assertion from MFA IdP "%s" for SP "%s" does not contain the requested AuthnContextClassRef "%s"',
                     $this->_identityProvider->entityId,
-                    $this->_serviceProvider->entityId,
+                    $originalSP,
                     $mfaEntity->level()
                 )
             );
