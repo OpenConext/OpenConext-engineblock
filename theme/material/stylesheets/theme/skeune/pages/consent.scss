@@ -1,0 +1,48 @@
+@import '../helpers';
+
+.consent {
+    box-shadow: 0 3px 0 2px $boxShadowblue;
+    @include border-bottom-radius(8px);
+
+    > .consent__content {
+        background-color: $skeuneGray;
+        padding: 0 calculateRem(32px);
+
+        > .consent__attributes {
+            background-color: $white;
+            border: 1px solid $hardBorderGray;
+            border-radius: 6px;
+            box-shadow: 0 1px 0 2px $hardBorderGray;
+
+            > li {
+                border-bottom: 1px solid $softBorderGray;
+                line-height: calculateRem(50px);
+
+                > * {
+                    color: $black;
+                    display: inline-block;
+                    line-height: 1.63;
+                    text-align: left;
+                }
+
+                > .attribute__name {
+                    text-align: right;
+                    width: 33%;
+                }
+
+                > .attribute__value {
+                    font-weight: bolder;
+                    width: 57%;
+                }
+
+                > .attribute__tooltip {
+                    width: 8%;
+                }
+            }
+        }
+    }
+
+    > :last-child {
+        @include border-bottom-radius(8px);
+    }
+}
