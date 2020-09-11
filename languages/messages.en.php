@@ -115,9 +115,11 @@ HTML
     'send_confirm_desc'     => '<p>Your request has been forwarded to your %organisationNoun%. Further settlement and decisions on the availability of this service will be taken by the ICT staff of your %organisationNoun%.</p>',
 
     // Consent page
+     'consent_h1_text' => 'Do you give consent to share your information?',
     'consent_header_title'                    => '%arg1% needs your information before logging in',
     'consent_header_text'                     => 'The service needs the following information to function properly. These data will be sent securely from your %organisationNoun% towards %arg1% via <a class="help" href="#" data-slidein="about"><span>%suiteName%</span></a>.',
     'consent_privacy_title'                   => 'The following information will be shared with %arg1%:',
+    'consent_privacy_header' => '%target% will receive',
     'consent_privacy_link'                    => 'Read the privacy policy of this service',
     'consent_attributes_correction_link'      => 'Are the details below incorrect?',
     'consent_attributes_correction_text'      => 'Something incorrect?',
@@ -125,6 +127,7 @@ HTML
     'consent_attributes_show_less'            => 'Show less information',
     'consent_no_attributes_text'              => 'This service requires no information from your %organisationNoun%.',
     'consent_buttons_title'                   => 'Do you agree with sharing this data?',
+     'consent_ok'   =>  'Yes proceed',
     'consent_buttons_ok'                      => 'Yes, proceed to %arg1%',
     'consent_buttons_ok_minimal'              => 'Proceed to %arg1%',
     'consent_buttons_nok'                     => 'No, I do not agree',

@@ -1,0 +1,7 @@
+{% include '@theme/Authentication/View/Proxy/consent-slidein-reject.html.twig' %}
+
+{% for attributeSource in attributesBySource|keys %}
+    {% include '@theme/Authentication/View/Proxy/consent-slidein-correction.html.twig' %}
+{% endfor %}
+
+{% include '@theme/Authentication/View/Proxy/consent-slidein-about.html.twig' %}
