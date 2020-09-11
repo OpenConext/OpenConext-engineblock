@@ -417,7 +417,7 @@ class EngineBlock_Corto_ProxyServer
         }
 
         // Add authncontextclassref if configured
-        $service = $identityProvider->getCoins()->mfaEntities()->findByEntityId($serviceProvider->getEntityId()->getEntityId());
+        $service = $identityProvider->getCoins()->mfaEntities()->findByEntityId($this->findOriginalServiceProvider($spRequest, $this->_logger)->entityId);
         if ($service instanceof MfaEntity) {
             $sspMessage->setRequestedAuthnContext([
                 'AuthnContextClassRef' => [
