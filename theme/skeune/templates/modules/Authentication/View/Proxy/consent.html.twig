@@ -43,12 +43,7 @@
         <button>{{ 'consent_buttons_nok'|trans }}</button>
     </div>
 
-    <footer>
-
-        <a class="small"
-           href="{{ sp.coins.termsOfServiceUrl }}"
-           target="_blank"><span>{{ 'consent_privacy_link'|trans }}</span></a>
-    </footer>
+    {% include '@theme/Default/Partials/footer.html.twig' %}
 </main>
 
 {% include '@theme/Authentication/View/Proxy/consent-slidein-reject.html.twig' %}
