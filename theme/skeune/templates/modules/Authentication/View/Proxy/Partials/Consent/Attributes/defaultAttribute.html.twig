@@ -1,0 +1,23 @@
+<li>
+    {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/name.html.twig' with { attributeName: attributeShortName(attributeIdentifier, locale()) } %}
+    {# Single attribute value #}
+    {% if attributeValues|length == 1 %}
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/value.html.twig' with { attributeValue: attributeValues|first } %}
+        {% if attributeMotivations[attributeIdentifier] is defined %}
+            {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/tooltip.html.twig' with { tooltipValue: attributeMotivations[attributeIdentifier] } %}
+        {% endif %}
+    {# Multiple attribute values #}
+    {% else %}
+        <ul class="attribute__value--list">
+        {% for value in attributeValues %}
+            <li>
+                {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/value.html.twig' with { attributeValue: value } %}
+                {% if attributeMotivations[attributeIdentifier] is defined %}
+                    {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/tooltip.html.twig' with { tooltipValue: attributeMotivations[attributeIdentifier] } %}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</li>
+
