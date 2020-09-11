@@ -1,4 +1,5 @@
 <?php
+/** @noinspection HtmlUnknownTarget */
 
 $overrides = [];
 $overridesFile = __DIR__ . '/overrides.en.php';
@@ -119,6 +120,7 @@ HTML
     'consent_privacy_title'                   => 'The following information will be shared with %arg1%:',
     'consent_privacy_link'                    => 'Read the privacy policy of this service',
     'consent_attributes_correction_link'      => 'Are the details below incorrect?',
+    'consent_attributes_correction_text'      => 'Something incorrect?',
     'consent_attributes_show_more'            => 'Show more information',
     'consent_attributes_show_less'            => 'Show less information',
     'consent_no_attributes_text'              => 'This service requires no information from your %organisationNoun%.',
@@ -138,6 +140,7 @@ HTML
     'consent_slidein_details_phone'           => 'Phone',
     'consent_slidein_text_contact'            => 'If you have any questions about this page, please contact the help desk of your %organisationNoun%. %suiteName% has the following contact information:',
     'consent_slidein_text_no_support'         => 'No contact data available.',
+     'consent_provided_by'  => 'Provided by %organisationName%',
 
     // Consent slidein: Is the data shown incorrect?
     'consent_slidein_correction_title' => 'Is the data shown incorrect?',

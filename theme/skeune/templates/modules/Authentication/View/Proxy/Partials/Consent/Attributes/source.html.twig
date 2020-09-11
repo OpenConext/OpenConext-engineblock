@@ -1,26 +1,28 @@
-{# todo refactor this #}
-{# todo put this in! #}
 <li>
     {% if attributeSource == 'engineblock' %}
-        <img class="logo-small" src="{{ defaultLogo }}"
-             alt=""/>
-        <h2>{{ 'suite_name'|trans }}</h2>
+        {% set organisationName = 'suite_name'|trans %}
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/idpRow.html.twig' with {
+            logoUrl: defaultLogo,
+            organisationName: organisationName,
+            text: 'consent_provided_by'|trans({'%organisationName%': organisationName }),
+        } %}
     {% elseif attributeSource != 'idp' %}
-        <img class="logo-small" src="{{ attributeSourceLogoUrl(attributeSource)|escape('html_attr') }}"
-             alt=""/>
-        <h2>{{ attributeSourceDisplayName(attributeSource) }}</h2>
+        {% set organisationName = attributeSourceDisplayName(attributeSource) %}
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/idpRow.html.twig' with {
+            logoUrl: attributeSourceLogoUrl(attributeSource)|escape('html_attr'),
+            organisationName: organisationName,
+            text: 'consent_provided_by'|trans({'%organisationName%': organisationName }),
+        } %}
     {% else %}
         {% if idp.logo is not null %}
-            <img class="logo-small" src="{{ idp.logo.url }}" alt=""/>
+            {% set logoUrl = idp.logo.url %}
         {% else %}
-            <img class="logo-small" src="/images/placeholder.png" alt=""/>
+            {% set logoUrl = '/images/placeholder.png' %}
         {% endif %}
-        <h2>{{ idpName }}</h2>
-    {% endif %}
-    {% if attributeSource == 'engineblock' %}
-        <a class="small" href="{{ 'name_id_support_url'|trans }}" target="_blank">{{ 'consent_name_id_support_link'|trans }}</a>
-    {% else %}
-        <a class="small" href="#"
-           data-slidein="correction-{{ attributeSource }}">{{ 'consent_attributes_correction_link'|trans }}</a>
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/idpRow.html.twig' with {
+            logoUrl: logoUrl,
+            organisationName: idpName,
+            text: 'consent_provided_by'|trans({'%organisationName%': idpName }),
+        } %}
     {% endif %}
 </li>
