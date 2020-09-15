@@ -27,7 +27,7 @@
     "build:css:sass:theme": "node-sass ${EB_THEME:=openconext}/stylesheets --error-bell -o ../web/stylesheets",
     "build:css:postcss": "BROWSERSLIST_CONFIG=.browserslistrc postcss ../web/stylesheets/*.css --verbose --use autoprefixer --use cssnano --no-map --dir ../web/stylesheets",
     "build:copy": "mkdir -p ../web/images && copyfiles --verbose --up 2 material/images/* ../web/images/",
-    "build:copy:custom": "mkdir -p ../web/images && copyfiles --verbose --up 2 skeune/images/* ../web/images/",
+    "build:copy:custom": "mkdir -p ../web/images && copyfiles --verbose --up 2 ${EB_THEME:=openconext}/images/* ../web/images/ && copyfiles --verbose --up 2 ${EB_THEME:=openconext}/stylesheets/fonts/* ../web/",
     "watch:js": "watchify material/javascripts/application.js material/javascripts/theme/${EB_THEME:=openconext}/application.js --poll=100 --debug -t [ babelify ] material/javascripts/application.js material/javascripts/theme/${EB_THEME:=openconext}/application.js -o ../web/javascripts/application.min.js -v",
     "watch:css": "node-sass -r material/stylesheets/ --include-path=material/stylesheets/theme/${EB_THEME:=openconext} -w -o ../web/stylesheets",
     "watch:css:custom": "node-sass -r ${EB_THEME:=openconext}/stylesheets -w -o ../web/stylesheets",
