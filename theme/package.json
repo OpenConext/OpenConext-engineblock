@@ -17,15 +17,20 @@
     "lint:css": "stylelint 'material/stylesheets/**/*.sass' --syntax sass",
     "clean": "rimraf ../web/images/* ../web/javascripts/* ../web/stylesheets/*",
     "build": "npm run build:clean && npm run build:js && npm run build:css && npm run build:copy",
+    "build:custom": "npm run build:clean && npm run build:js && npm run build:css:theme && npm run build:copy:custom",
     "build:clean": "rimraf ../web/javascripts/* ../web/stylesheets/*",
     "build:js": "mkdir -p ../web/javascripts && npm run build:js:babelify",
     "build:js:babelify": "browserify material/javascripts/application.js material/javascripts/theme/${EB_THEME:=openconext}/application.js --plugin [ tinyify ] -t [ babelify ] -o ../web/javascripts/application.min.js",
     "build:css": "mkdir -p ../web/stylesheets && npm run build:css:sass && npm run build:css:postcss",
+    "build:css:theme": "mkdir -p ../web/stylesheets && npm run build:css:sass:theme & npm run build:css:postcss",
     "build:css:sass": "node-sass material/stylesheets/ --include-path=material/stylesheets/theme/${EB_THEME:=openconext} --error-bell -o ../web/stylesheets/",
+    "build:css:sass:theme": "node-sass ${EB_THEME:=openconext}/stylesheets --error-bell -o ../web/stylesheets",
     "build:css:postcss": "BROWSERSLIST_CONFIG=.browserslistrc postcss ../web/stylesheets/*.css --verbose --use autoprefixer --use cssnano --no-map --dir ../web/stylesheets",
     "build:copy": "mkdir -p ../web/images && copyfiles --verbose --up 2 material/images/* ../web/images/",
+    "build:copy:custom": "mkdir -p ../web/images && copyfiles --verbose --up 2 skeune/images/* ../web/images/",
     "watch:js": "watchify material/javascripts/application.js material/javascripts/theme/${EB_THEME:=openconext}/application.js --poll=100 --debug -t [ babelify ] material/javascripts/application.js material/javascripts/theme/${EB_THEME:=openconext}/application.js -o ../web/javascripts/application.min.js -v",
     "watch:css": "node-sass -r material/stylesheets/ --include-path=material/stylesheets/theme/${EB_THEME:=openconext} -w -o ../web/stylesheets",
+    "watch:css:custom": "node-sass -r ${EB_THEME:=openconext}/stylesheets -w -o ../web/stylesheets",
     "release": "npm run build"
   },
   "author": "",
@@ -51,6 +56,7 @@
     "watchify": "^3.11.1"
   },
   "dependencies": {
+    "@csstools/normalize.css": "github:csstools/normalize.css",
     "font-awesome-sass": "^4.7.0",
     "js-cookie": "^2.2.1",
     "tippy.js": "^6.2.6"
