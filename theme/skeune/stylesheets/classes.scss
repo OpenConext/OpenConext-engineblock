@@ -1,0 +1,24 @@
+.visually-hidden {
+    clip: rect(1px, 1px, 1px, 1px);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+.container {
+    max-width: 50rem;
+    min-width: 38rem;
+}
+
+.slidein {
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 100%;
+    top: 0;
+    -webkit-transition: right .5s ease-in-out;
+    transition: right .5s ease-in-out;
+    overflow: hidden;
+}
