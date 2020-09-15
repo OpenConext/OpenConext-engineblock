@@ -16,15 +16,16 @@
  * limitations under the License.
  */
 
-use OpenConext\EngineBlock\Metadata\Loa;
-use OpenConext\EngineBlock\Metadata\MfaEntity;
-use OpenConext\EngineBlock\Metadata\TransparentMfaEntity;
-use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Loa;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\EntityNotFoundException;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Metadata\MfaEntity;
 use OpenConext\EngineBlock\Metadata\Service;
+use OpenConext\EngineBlock\Metadata\TransparentMfaEntity;
+use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
@@ -415,8 +416,15 @@ class EngineBlock_Corto_ProxyServer
             throw new EngineBlock_Corto_ProxyServer_Exception(sprintf('Unknown message type: "%s"', get_class($sspMessage)));
         }
 
+        try {
+            $originalSpEnitytId = $this->findOriginalServiceProvider($spRequest, $this->_logger)->entityId;
+        } catch (EntityNotFoundException $e) {
+            // On debug requests, the entity ID can not be found in the database as this is the EngineBlock internal
+            // entity which does not reside in the database.
+            $originalSpEnitytId = $spEntityId;
+        }
         // Add authncontextclassref if configured
-        $service = $identityProvider->getCoins()->mfaEntities()->findByEntityId($this->findOriginalServiceProvider($spRequest, $this->_logger)->entityId);
+        $service = $identityProvider->getCoins()->mfaEntities()->findByEntityId($originalSpEnitytId);
         if ($service instanceof MfaEntity) {
             $sspMessage->setRequestedAuthnContext([
                 'AuthnContextClassRef' => [
