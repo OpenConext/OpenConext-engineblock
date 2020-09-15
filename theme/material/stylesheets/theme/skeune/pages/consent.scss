@@ -14,7 +14,8 @@
             border: 1px solid $hardBorderGray;
             border-radius: 6px;
             box-shadow: 0 1px 0 2px $hardBorderGray;
-            margin-bottom: calculateRem(32px);
+            margin: 0 0 2rem;
+            padding: 0;
 
             > li {
                 @include display-grid;
@@ -99,6 +100,7 @@
                 > .attribute__value {
                     @include grid-position(1, 2, 3, 4);
                     font-weight: bolder;
+                    overflow-wrap: break-word;
                 }
 
                 > label,
@@ -157,6 +159,7 @@
                 > h3 {
                     @include grid-position(1, 2, 3, 4);
                     font-weight: $normal;
+                    margin: 0;
 
                     > strong {
                         font-weight: $bolder;
