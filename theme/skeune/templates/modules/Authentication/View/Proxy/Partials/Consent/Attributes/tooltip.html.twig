@@ -1,11 +1,5 @@
 {% if tooltipValue %}
-    <div class="attribute__tooltip">
-        <button
-            class="help tooltip"
-            title="{{ tooltipValue }}"
-        >
-            {# todo adjust image #}
-            <img src="" alt="" />
-        </button>
-    </div>
+    <input type="checkbox" id="tooltip{{loop.index}}" />
+    <label for="tooltip{{loop.index}}"><span  class="visually-hidden">{{ 'consent_tooltip_screenreader'|trans }}</span></label>
+    <div class="tooltip__value">{{ tooltipValue }}</div>
 {% endif %}

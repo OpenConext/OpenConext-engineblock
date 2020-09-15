@@ -1,38 +1,49 @@
 @import 'helpers.scss';
 
-// todo: add fonts
-// todo: default font sourcesanspro
-
 html {
     scroll-behavior: smooth;
 }
 
 body {
+    align-items: center;
     background: $skeuneBlue;
+    display: flex;
+    font-family: 'SourceSansPro', sans-serif;
     font-size: 100%;
+    justify-content: center;
 
-    .l-container {
+    a,
+    button {
+        &:hover,
+        &:focus {
+            outline: 2px dotted $white;
+        }
+    }
 
+
+    > .container {
         > p.loginBar {
-            // todo: font ProximaNovasoft
             background-color: $skeuneBlue;
             color: $skeuneLightBlue;
+            font-family: 'ProximaNovaSoft', sans-serif;
             font-size: $f-xl;
             line-height: 5rem;
-            padding: 0 calculateRem(32px);
+            padding: 0 2rem;
         }
 
         > main {
             background-color: $skeuneGray;
+
             > header {
-                // todo: font ProximaNovasoft
+                font-family: 'ProximaNovaSoft', sans-serif;
+
                 h1 {
                     background-color: $skeuneYellow;
                     color: $black;
                     font-size: $f-xl;
                     font-weight: $bolder;
                     line-height: calculateRem(26px);
-                    padding: calculateRem(26px) calculateRem(32px);
+                    padding: calculateRem(26px) 2rem;
                 }
 
                 h2 {
@@ -41,7 +52,7 @@ body {
                     font-size: $f-h2;
                     font-weight: $bolder;
                     line-height: 1.15;
-                    padding: calculateRem(24px) calculateRem(32px) calculateRem(34px);
+                    padding: calculateRem(24px) 2rem calculateRem(34px);
                 }
             }
         }
@@ -49,7 +60,7 @@ body {
         footer.footer__general {
             background-color: $skeuneBlue;
             color: $skeuneLightBlue;
-            margin: calculateRem(16px) 0 calculateRem(11px);
+            margin: 1rem 0 calculateRem(11px);
 
             > .footer__menu {
                 display: flex;
@@ -70,7 +81,6 @@ body {
                     &:hover,
                     &:focus {
                         line-height: 1.75;
-                        outline: 2px dotted $white;
                     }
                 }
 

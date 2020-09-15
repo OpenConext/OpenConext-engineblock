@@ -1,9 +1,14 @@
 <ul class="consent__attributes">
     {% for attributeIdentifier, attributeValues in attributes %}
-        {% if attributeSource == 'engineblock' %}
-            {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/engineBlockAttribute.html.twig' %}
-        {% else %}
-            {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/defaultAttribute.html.twig' %}
+        {% if loop.index == 6 %}
+            <li class="openToggle">
+                {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/toggle.html.twig' %}
+                <ul class="consent__attributes--nested">
+        {% endif %}
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/includeAttribute.html.twig' %}
+        {% if loop.last and loop.index >= 6 %}
+                </ul>
+            </li>
         {% endif %}
     {% endfor %}
     {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/source.html.twig' %}
