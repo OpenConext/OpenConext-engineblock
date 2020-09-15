@@ -1,6 +1,6 @@
 <img class="logo-small" src="{{ logoUrl }}"
      alt="{{ organisationName }} logo" />
-<h3>{{ text }}</h3> {# todo: test how this works for screen readers as this may be counterintuïtive #}
+<h3>{{ text|raw }}</h3> {# todo: test how this works for screen readers as this may be counterintuïtive #}
 {% if attributeSource == 'engineblock' %} {# TODO: moet dit behouden blijven? #}
     <a class="small" href="{{ 'name_id_support_url'|trans }}" target="_blank">{{ 'consent_name_id_support_link'|trans }}</a>
 {% else %}

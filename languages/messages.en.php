@@ -143,7 +143,8 @@ HTML
     'consent_slidein_details_phone'           => 'Phone',
     'consent_slidein_text_contact'            => 'If you have any questions about this page, please contact the help desk of your %organisationNoun%. %suiteName% has the following contact information:',
     'consent_slidein_text_no_support'         => 'No contact data available.',
-     'consent_provided_by'  => 'Provided by %organisationName%',
+     'consent_provided_by'  => 'Provided by <strong>%organisationName%</strong>',
+     'consent_tooltip_screenreader' => 'Why do we need this info?',
 
     // Consent slidein: Is the data shown incorrect?
     'consent_slidein_correction_title' => 'Is the data shown incorrect?',
