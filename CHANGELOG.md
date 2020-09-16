@@ -8,7 +8,7 @@ More information about our release strategy can be found in the [Development Gui
 ## 6.3.4
 
 **Bugfix**
- - Whether MFA AuthnContext must be added should be based on original SP #893
+ - Whether MFA AuthnContext must be added should be based on original SP #893 #894
 
 ## 6.3.3
 **Bugfixes:**
