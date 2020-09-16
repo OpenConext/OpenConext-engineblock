@@ -9,10 +9,21 @@ Feature:
     And no registered Idps
     And an Identity Provider named "SSO-IdP"
     And a Service Provider named "SSO-SP"
+    And a Service Provider named "Trusted SP"
 
   Scenario: The configured authn method should be set as AuthnContextClassRef if configured with the IdP configuration mapping
     Given the IdP "SSO-IdP" is configured for MFA authn method "http://schemas.microsoft.com/claims/multipleauthn" for SP "SSO-SP"
     When I log in at "SSO-SP"
+    And I pass through EngineBlock
+    Then the url should match "functional-testing/SSO-IdP/sso"
+    And the AuthnRequest to submit should match xpath '/samlp:AuthnRequest/samlp:RequestedAuthnContext/saml:AuthnContextClassRef[text()="http://schemas.microsoft.com/claims/multipleauthn"]'
+
+  Scenario: The configured authn method should be set as AuthnContextClassRef if configured with the IdP configuration mapping for Trusted Proxy
+    Given the IdP "SSO-IdP" is configured for MFA authn method "http://schemas.microsoft.com/claims/multipleauthn" for SP "SSO-SP"
+    And SP "Trusted SP" is a trusted proxy
+    And SP "Trusted SP" signs its requests
+    And  SP "Trusted SP" is authenticating for SP "SSO-SP"
+    When I log in at "Trusted SP"
     And I pass through EngineBlock
     Then the url should match "functional-testing/SSO-IdP/sso"
     And the AuthnRequest to submit should match xpath '/samlp:AuthnRequest/samlp:RequestedAuthnContext/saml:AuthnContextClassRef[text()="http://schemas.microsoft.com/claims/multipleauthn"]'
