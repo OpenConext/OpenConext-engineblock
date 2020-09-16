@@ -13,6 +13,8 @@ that where started in 6.2.1 (and rolled back in 6.2.2).
 * Do not apply ValidateMfaAuthnContextClassRef filter for transparent use case #876
 
 ## 6.2.4
+This release is the finalization of the AuthnContextClassRef changes
+that where started in 6.2.1 (and rolled back in 6.2.2).
 
 **Features**
  * Add AuthnContextClassRef config option for transparent RequestedAuthnContext #873
