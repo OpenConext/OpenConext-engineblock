@@ -5,6 +5,11 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.3.4
+
+**Bugfix**
+ - Whether MFA AuthnContext must be added should be based on original SP #893 #894
+
 ## 6.3.3
 **Bugfixes:**
  - Move NoPassive response processing up in the ACS proces #890
