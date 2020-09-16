@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
@@ -26,7 +27,8 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MfaEntityCollection;
 use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
-use SAML2\Response;
+use SAML2\AuthnRequest;
+use SAML2\Response as SAMLResponse;
 
 class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest extends TestCase
 {
@@ -42,22 +44,42 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest 
      */
     private $logger;
 
+    /**
+     * @var EngineBlock_Saml2_AuthnRequestAnnotationDecorator
+     */
+    private $request;
+    private $server;
+
     public function setUp()
     {
         $this->handler = new TestHandler();
         $this->logger  = new Logger('Test', array($this->handler));
+        $assertion = new Assertion();
+
+        $request = new AuthnRequest();
+        $response = new SAMLResponse();
+        $response->setAssertions(array($assertion));
+
+        $this->request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($request);
+
+        $this->sp = new ServiceProvider('Test SP');
+        $this->server = m::mock(EngineBlock_Corto_ProxyServer::class);
+        $this->server
+            ->shouldReceive('findOriginalServiceProvider')
+            ->andReturn($this->sp)
+        ;
     }
 
     public function testNoConfiguredMfaCombinationShouldPass()
     {
-        $this->expectNotToPerformAssertions();
-
         $response = $this->createTestResponse('urn:oasis:names:tc:SAML:2.0:ac:classes:Password');
 
         $verifier = new EngineBlock_Corto_Filter_Command_ValidateMfaAuthnContextClassRef($this->logger);
         $verifier->setResponse($response);
         $verifier->setIdentityProvider(new IdentityProvider('MFA IdP'));
-        $verifier->setServiceProvider(new ServiceProvider('Test SP'));
+        $verifier->setServiceProvider($this->sp);
+        $verifier->setRequest($this->request);
+        $verifier->setProxyServer($this->server);
 
         $verifier->execute();
     }
@@ -71,7 +93,9 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest 
         $verifier = new EngineBlock_Corto_Filter_Command_ValidateMfaAuthnContextClassRef($this->logger);
         $verifier->setResponse($response);
         $verifier->setIdentityProvider($identityProvider);
-        $verifier->setServiceProvider(new ServiceProvider('Test SP'));
+        $verifier->setServiceProvider($this->sp);
+        $verifier->setRequest($this->request);
+        $verifier->setProxyServer($this->server);
 
         $verifier->execute();
 
@@ -87,7 +111,9 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest 
         $verifier = new EngineBlock_Corto_Filter_Command_ValidateMfaAuthnContextClassRef($this->logger);
         $verifier->setResponse($response);
         $verifier->setIdentityProvider($identityProvider);
-        $verifier->setServiceProvider(new ServiceProvider('Test SP'));
+        $verifier->setServiceProvider($this->sp);
+        $verifier->setRequest($this->request);
+        $verifier->setProxyServer($this->server);
 
         $verifier->execute();
 
@@ -107,7 +133,9 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest 
         $verifier = new EngineBlock_Corto_Filter_Command_ValidateMfaAuthnContextClassRef($this->logger);
         $verifier->setResponse($response);
         $verifier->setIdentityProvider($identityProvider);
-        $verifier->setServiceProvider(new ServiceProvider('Test SP'));
+        $verifier->setServiceProvider($this->sp);
+        $verifier->setRequest($this->request);
+        $verifier->setProxyServer($this->server);
 
         $verifier->execute();
 
@@ -127,7 +155,9 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest 
         $verifier = new EngineBlock_Corto_Filter_Command_ValidateMfaAuthnContextClassRef($this->logger);
         $verifier->setResponse($response);
         $verifier->setIdentityProvider($identityProvider);
-        $verifier->setServiceProvider(new ServiceProvider('Test SP'));
+        $verifier->setServiceProvider($this->sp);
+        $verifier->setRequest($this->request);
+        $verifier->setProxyServer($this->server);
 
         $verifier->execute();
 
@@ -151,7 +181,9 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest 
         $verifier = new EngineBlock_Corto_Filter_Command_ValidateMfaAuthnContextClassRef($this->logger);
         $verifier->setResponse($response);
         $verifier->setIdentityProvider($identityProvider);
-        $verifier->setServiceProvider(new ServiceProvider('Test SP'));
+        $verifier->setServiceProvider($this->sp);
+        $verifier->setRequest($this->request);
+        $verifier->setProxyServer($this->server);
 
         $verifier->execute();
     }
@@ -171,7 +203,9 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest 
         $verifier = new EngineBlock_Corto_Filter_Command_ValidateMfaAuthnContextClassRef($this->logger);
         $verifier->setResponse($response);
         $verifier->setIdentityProvider($identityProvider);
-        $verifier->setServiceProvider(new ServiceProvider('Test SP'));
+        $verifier->setServiceProvider($this->sp);
+        $verifier->setRequest($this->request);
+        $verifier->setProxyServer($this->server);
 
         $verifier->execute();
 
@@ -187,7 +221,9 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest 
         $verifier = new EngineBlock_Corto_Filter_Command_ValidateMfaAuthnContextClassRef($this->logger);
         $verifier->setResponse($response);
         $verifier->setIdentityProvider($identityProvider);
-        $verifier->setServiceProvider(new ServiceProvider('Test SP'));
+        $verifier->setServiceProvider($this->sp);
+        $verifier->setRequest($this->request);
+        $verifier->setProxyServer($this->server);
 
         $verifier->execute();
 
@@ -227,7 +263,7 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest 
             ]);
         }
 
-        $response = new Response();
+        $response = new SAMLResponse();
         $response->setAssertions(array($assertion));
 
         return new EngineBlock_Saml2_ResponseAnnotationDecorator($response);
