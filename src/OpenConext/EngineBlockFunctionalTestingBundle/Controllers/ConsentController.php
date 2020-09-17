@@ -47,12 +47,16 @@ class ConsentController
     public function consentAction(Request $request)
     {
         $idpName = null;
+        $spName = null;
         if ($request->query->has('idp-name')) {
             $idpName = $request->query->get('idp-name');
         }
+        if ($request->query->has('sp-name')) {
+            $spName = $request->query->get('sp-name');
+        }
         $processConsentUrl = '#';
         $fakeResponseId = '918723649';
-        $fakeSp = TestEntitySeeder::buildSp();
+        $fakeSp = TestEntitySeeder::buildSp($spName);
         $fakeIdP = TestEntitySeeder::buildIdP($idpName);
         $supportContact = 'Helpdesk';
         $nameId = new NameID();
