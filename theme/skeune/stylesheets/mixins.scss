@@ -1,3 +1,7 @@
+/*******************************************************************
+    Generic sass-mixins
+ ******************************************************************/
+
 @mixin appearance($value: none) {
     -moz-appearance: $value;
     -webkit-appearance: $value;
