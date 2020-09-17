@@ -122,3 +122,129 @@
     border-bottom-right-radius: $value;
     border-bottom-left-radius: $value;
 }
+
+
+@mixin font-style-large {
+    font-size: $f-large;
+    font-weight: $bolder;
+}
+
+@mixin font-style-xl {
+    font-size: $f-xl;
+    font-weight: $bolder;
+}
+
+@mixin button-shared ($background-color) {
+    @if $background-color {
+        @include button-reset($background-color);
+    }
+
+    @include font-style-large;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    text-decoration: none;
+}
+
+@mixin button-secondary-border {
+    border: 3px solid $lightBlue;
+    padding: 0;
+
+    > span.secondaryBorder {
+        border: 1px solid $buttonBlue;
+        border-radius: 6px;
+        display: inline-block;
+        height: 100%;
+        padding: 1rem;
+        width: calc(100% - 2rem - 1.5px);
+    }
+}
+
+@mixin button-primary($background-color) {
+    @include button-shared($background-color);
+    @if $background-color {
+        background: $background-color;
+    } @else {
+        background-color: $buttonBlue;
+    }
+    color: $white;
+
+    &:hover {
+        background-color: $darkishBlue;
+        color: $lightBlue;
+    }
+
+    &:focus {
+        border: 3px solid $lightBlue;
+    }
+
+    &:active {
+        background-color: $darkishBlueTwo;
+    }
+
+    &:disabled {
+        background-color: $lightPink;
+        color: $brownGray;
+    }
+}
+
+@mixin button-secondary ($background-color) {
+    @include button-shared($background-color);
+    border: 1px solid $buttonBlue;
+    @if $background-color {
+        background: $background-color;
+    } @else {
+        background-color: $white;
+    }
+    color: $buttonBlue;
+
+    &:hover {
+        background-color: $hoverBlue;
+        border: 1px solid $darkishBlue;
+        color: $darkishBlue;
+    }
+
+    &:focus {
+        @include button-secondary-border;
+    }
+
+    &:active {
+        background-color: $loginBlue;
+        border: 1px solid $darkishBlue;
+        color: $darkishBlue;
+    }
+
+    &:disabled {
+        background-color: $white;
+        border: 1px solid $secondaryDisabledGray;
+        color: $brownGray;
+    }
+}
+
+@mixin button-tertiary ($background-color) {
+    @include button-shared($background-color);
+    @if $background-color {
+        background: $background-color;
+    } @else {
+        background-color: $white;
+    }
+    color: $buttonBlue;
+
+    &:hover {
+        background-color: $hoverBlue;
+        color: $darkishBlueTwo;
+    }
+
+    &:focus {
+        @include button-secondary-border;
+    }
+
+    &:active {
+        background-color: $white;
+        color: $darkishBlueTwo;
+    }
+
+    &:disabled {
+        color: $brownGray;
+    }
+}
