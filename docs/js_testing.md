@@ -70,6 +70,7 @@ The consent screen is available on: `/functional-testing/consent`
 | **Query parameter** | **Default value** | **Explanation** |
 |---|----|----|
 | idp-name | (string) 'DisplayName' | Type: string. The name displayed for the IdP that released the attributes |
+| sp-name | (string) 'DisplayName' | Type: string. The name displayed for the authenticating service provider |
 
 ## Acceptance tests
 The WAYF acceptance tests utilize the `/functional-testing/wayf` endpoint in order to test the correct inner working of
