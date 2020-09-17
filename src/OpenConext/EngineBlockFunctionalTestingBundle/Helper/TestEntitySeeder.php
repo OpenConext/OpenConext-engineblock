@@ -122,15 +122,18 @@ class TestEntitySeeder
      * Build a very rudimentary SP entity
      * @return ServiceProvider
      */
-    public static function buildSp()
+    public static function buildSp(?string $spName = null)
     {
+        if (!$spName) {
+            $spName = 'DisplayName';
+        }
         $serviceProvider = new ServiceProvider('https://acme-sp.example.com');
-        $serviceProvider->nameNl = 'DisplayName NL';
-        $serviceProvider->nameEn = 'DisplayName EN';
-        $serviceProvider->namePt = 'DisplayName PT';
-        $serviceProvider->displayNameNl = 'DisplayName';
-        $serviceProvider->displayNameEn = 'DisplayName';
-        $serviceProvider->displayNamePt = 'DisplayName';
+        $serviceProvider->nameNl = $spName . ' NL';
+        $serviceProvider->nameEn = $spName . ' EN';
+        $serviceProvider->namePt = $spName . ' PT';
+        $serviceProvider->displayNameNl = $spName . '';
+        $serviceProvider->displayNameEn = $spName . '';
+        $serviceProvider->displayNamePt = $spName . '';
         $serviceProvider->logo = new Logo('/images/logo.png');
         return $serviceProvider;
     }
