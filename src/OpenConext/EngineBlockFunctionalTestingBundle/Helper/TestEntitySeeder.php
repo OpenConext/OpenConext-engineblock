@@ -139,15 +139,18 @@ class TestEntitySeeder
      * Build a very rudimentary IdP entity
      * @return IdentityProvider
      */
-    public static function buildIdP()
+    public static function buildIdP(?string $idpName)
     {
+        if (!$idpName) {
+            $idpName = 'DisplayName';
+        }
         $identityProvider = new IdentityProvider('https://acme-idp.example.com');
-        $identityProvider->nameNl = 'DisplayName NL';
-        $identityProvider->nameEn = 'DisplayName EN';
-        $identityProvider->namePt = 'DisplayName PT';
-        $identityProvider->displayNameNl = 'DisplayName NL';
-        $identityProvider->displayNameEn = 'DisplayName EN';
-        $identityProvider->displayNamePt = 'DisplayName PT';
+        $identityProvider->nameNl = $idpName . ' NL';
+        $identityProvider->nameEn = $idpName . ' EN';
+        $identityProvider->namePt = $idpName . ' PT';
+        $identityProvider->displayNameNl = $idpName . ' NL';
+        $identityProvider->displayNameEn = $idpName . ' EN';
+        $identityProvider->displayNamePt = $idpName . ' PT';
         $identityProvider->logo = new Logo('/images/logo.png');
         return $identityProvider;
     }
