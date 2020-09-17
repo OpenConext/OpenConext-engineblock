@@ -2,7 +2,7 @@
 
 .consent {
     @include border-bottom-radius(8px);
-    box-shadow: 0 3px 0 2px $boxShadowblue;
+    box-shadow: 0 3px 0 2px $darkishBlueTwo;
 
     > .consent__content {
         background-color: $skeuneGray;
@@ -178,28 +178,21 @@
         }
 
         > .ctas {
-            font-size: $f-large;
-            font-weight: $bolder;
             line-height: 0.89;
             margin: 2rem 0 0;
 
             a {
-                @include button-reset($buttonBlue);
-                border-radius: 8px;
-                color: $white;
+                @include button-primary($buttonBlue);
                 margin-bottom: 1.5rem;
             }
 
             button {
-                @include button-reset(inherit);
-                color: $buttonBlue;
+                @include button-tertiary($skeuneGray);
                 width: 100%;
             }
 
             a, button {
                 display: block;
-                padding: 1rem;
-                text-align: center;
             }
         }
     }

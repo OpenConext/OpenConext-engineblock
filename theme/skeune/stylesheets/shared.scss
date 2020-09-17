@@ -12,21 +12,12 @@ body {
     font-size: 100%;
     justify-content: center;
 
-    a,
-    button {
-        &:hover,
-        &:focus {
-            outline: 2px dotted $white;
-        }
-    }
-
-
     > .container {
         > p.loginBar {
+            @include font-style-xl;
             background-color: $skeuneBlue;
             color: $loginBlue;
             font-family: 'ProximaNovaSoft', sans-serif;
-            font-size: $f-xl;
             line-height: 5rem;
             margin: 0;
             padding: 0 2rem;
@@ -39,10 +30,9 @@ body {
                 font-family: 'ProximaNovaSoft', sans-serif;
 
                 h1 {
+                    @include font-style-xl;
                     background-color: $skeuneYellow;
                     color: $black;
-                    font-size: $f-xl;
-                    font-weight: $bolder;
                     line-height: calculateRem(26px);
                     margin: 0;
                     padding: calculateRem(26px) 2rem;
