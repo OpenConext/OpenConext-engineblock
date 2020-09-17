@@ -18,6 +18,7 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Controllers;
 
 use OpenConext\EngineBlockFunctionalTestingBundle\Helper\TestEntitySeeder;
+use SAML2\Constants;
 use SAML2\XML\saml\NameID;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,8 +61,7 @@ class ConsentController
         $fakeSp = TestEntitySeeder::buildSp($spName);
         $fakeIdP = TestEntitySeeder::buildIdP($idpName);
         $supportContact = 'Helpdesk';
-        $nameId = new NameID();
-        $nameId->setValue('user@openconext');
+
         $profileUrl = 'profile.openconext.org';
         $attributes = [
             'urn:mace:dir:attribute-def:displayName' => ['John Doe'],
@@ -90,8 +90,8 @@ class ConsentController
             'attributeMotivations' => $attributeMotivations,
             'minimalConsent' => $fakeIdP->getConsentSettings()->isMinimal($fakeSp->entityId),
             'consentCount' => 5,
-            'nameId' => $nameId,
-            'nameIdIsPersistent' => true,
+            'nameId' => $this->getNameId($request),
+            'nameIdIsPersistent' => $this->isPersistentNameId($request),
             'profileUrl' => $profileUrl,
             'showConsentExplanation' => $fakeIdP->getConsentSettings()->hasConsentExplanation($fakeSp->entityId),
             'consentSettings' => $fakeIdP->getConsentSettings(),
@@ -109,5 +109,21 @@ class ConsentController
     private function hideFooter(Request $request): bool
     {
         return (bool) $request->query->get('hide-footer', true);
+    }
+
+    private function getNameId(Request $request): NameID
+    {
+        $nameIdValue = $request->query->get('name-id', 'user@openconext');
+        $nameId = new NameID();
+        if ($nameIdValue !== 'user@openconext') {
+            $nameId->setFormat(Constants::NAMEID_UNSPECIFIED);
+        }
+        $nameId->setValue($nameIdValue);
+        return $nameId;
+    }
+
+    private function isPersistentNameId(Request $request): bool
+    {
+        return (bool) $request->query->get('persistent-name-id', true);
     }
 }

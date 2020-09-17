@@ -69,10 +69,12 @@ The consent screen is available on: `/functional-testing/consent`
 
 | **Query parameter** | **Default value** | **Explanation** |
 |---|----|----|
+| name-id | (string) 'user@openconext' | Type: string. The name id of the authenticating user |
 | idp-name | (string) 'DisplayName' | Type: string. The name displayed for the IdP that released the attributes |
 | sp-name | (string) 'DisplayName' | Type: string. The name displayed for the authenticating service provider |
 | hide-header | (bool) true | Type: boolean |
 | hide-footer | (bool) true | Type: boolean |
+| persistent-name-id | (bool) true | Type: boolean. Is the name id configured to be persistent? This affects the rendering of the attributes |
 
 ## Acceptance tests
 The WAYF acceptance tests utilize the `/functional-testing/wayf` endpoint in order to test the correct inner working of
