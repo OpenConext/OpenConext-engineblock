@@ -54,6 +54,7 @@ class ConsentController
         if ($request->query->has('sp-name')) {
             $spName = $request->query->get('sp-name');
         }
+
         $processConsentUrl = '#';
         $fakeResponseId = '918723649';
         $fakeSp = TestEntitySeeder::buildSp($spName);
@@ -95,8 +96,18 @@ class ConsentController
             'showConsentExplanation' => $fakeIdP->getConsentSettings()->hasConsentExplanation($fakeSp->entityId),
             'consentSettings' => $fakeIdP->getConsentSettings(),
             'spEntityId' => $fakeSp->entityId,
-            'hideHeader' => true,
-            'hideFooter' => true,
+            'hideHeader' => $this->hideHeader($request),
+            'hideFooter' => $this->hideFooter($request),
         ]), 200);
+    }
+
+    private function hideHeader(Request $request): bool
+    {
+        return (bool) $request->query->get('hide-header', true);
+    }
+
+    private function hideFooter(Request $request): bool
+    {
+        return (bool) $request->query->get('hide-footer', true);
     }
 }
