@@ -122,3 +122,110 @@
     border-bottom-right-radius: $value;
     border-bottom-left-radius: $value;
 }
+
+@mixin font-style-large {
+    font-size: $f-large;
+    font-weight: $bolder;
+}
+
+@mixin font-style-xl {
+    font-size: $f-xl;
+    font-weight: $bolder;
+}
+
+@mixin button-shared ($background-color) {
+    @if $background-color {
+        @include button-reset($background-color);
+    }
+
+    @include font-style-large;
+    border-radius: 8px;
+    height: 3rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+@mixin button-primary($background-color) {
+    @include button-shared($background-color);
+    background-color: $buttonBlue;
+    color: $white;
+
+    &:hover {
+        background-color: $darkishBlue;
+        color: $lightBlue;
+    }
+
+    &:focus {
+        border: 3px solid $lightBlue;
+    }
+
+    &:active {
+        background-color: $darkishBlueTwo;
+    }
+
+    &:disabled {
+        background-color: $lightPink;
+        color: $brownGray;
+    }
+}
+
+@mixin button-secondary ($background-color) {
+    @include button-shared($background-color);
+    border: 1px solid $buttonBlue;
+    background-color: $white;
+    color: $buttonBlue;
+
+    &:hover {
+        background-color: $hoverBlue;
+        border: 1px solid $darkishBlue;
+        color: $darkishBlue;
+    }
+
+    &:focus {
+        border: 3px solid $lightBlue;
+
+        > div.secondaryBorder {
+            border: 1px solid $buttonBlue;
+        }
+    }
+
+    &:active {
+        background-color: $loginBlue;
+        border: 1px solid $darkishBlue;
+        color: $darkishBlue;
+    }
+
+    &:disabled {
+        background-color: $white;
+        border: 1px solid $secondaryDisabledGray;
+        color: $brownGray;
+    }
+}
+
+@mixin button-tertiary ($background-color) {
+    @include button-shared($background-color);
+    background-color: $white;
+    color: $buttonBlue;
+
+    &:hover {
+        background-color: $hoverBlue;
+        color: $darkishBlueTwo;
+    }
+
+    &:focus {
+        border: 3px solid $lightBlue;
+
+        > div.secondaryBorder {
+            border: 1px solid $buttonBlue;
+        }
+    }
+
+    &:active {
+        background-color: $white;
+        color: $darkishBlueTwo;
+    }
+
+    &:disabled {
+        color: $brownGray;
+    }
+}
