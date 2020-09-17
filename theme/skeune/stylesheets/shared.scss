@@ -15,7 +15,14 @@ body {
     font-size: 100%;
     justify-content: center;
 
-    > .container {
+    *,
+    *:before,
+    *:after {
+        box-sizing: border-box
+    }
+
+
+> .container {
         > p.loginBar {
             @include font-style-xl;
             background-color: $skeuneBlue;
@@ -111,9 +118,12 @@ body {
     input[type="checkbox"]:checked.tooltip + label + .tooltip__value {
         background-color: $skeuneGray;
         display: block;
+        text-align: left;
+    }
+
+    input[type="checkbox"]:checked.tooltip + label + .tooltip__value {
         margin: 1rem;
         padding: 1rem;
-        text-align: left;
     }
 
     label.tooltip {

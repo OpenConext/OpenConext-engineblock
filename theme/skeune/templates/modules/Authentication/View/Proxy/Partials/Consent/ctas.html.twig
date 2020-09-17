@@ -6,5 +6,11 @@
           text: 'consent_ok'|trans
         }
     %}
-    {% include '@theme/Default/Partials/button.html.twig' with { text: 'consent_buttons_nok'|trans } %}
+    <input type="checkbox" id="cta_consent_nok" class="modal">
+    <label class="modal" for="cta_consent_nok">
+        <span class="secondaryBorder">
+            {{ 'consent_buttons_nok'|trans }}
+        </span>
+    </label>
+    {% include '@theme/Authentication/View/Proxy/consent-slidein-reject.html.twig' %}
 </div>

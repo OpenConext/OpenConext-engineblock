@@ -161,16 +161,8 @@
                 > .modal__value {
                     @include grid-position(2, 3, 1, 7);
                     margin: 9px 1rem;
-                    width: 38rem;
-
-                    > .modal__content {
-                        background-color: $white;
-                        font-weight: $normal;
-
-                        > h3 {
-                            margin-top: 0;
-                        }
-                    }
+                    padding: 1rem;
+                    width: 32rem;
                 }
             }
         }
@@ -179,18 +171,24 @@
             line-height: 0.89;
             margin: 2rem 0 0;
 
-            a {
+            > a {
                 @include button-primary($buttonBlue);
                 margin-bottom: 1.5rem;
             }
 
-            button {
+            > label {
                 @include button-tertiary($skeuneGray);
                 width: 100%;
             }
 
-            a, button {
+            > a,
+            > label {
                 display: block;
+            }
+
+            > section.modal__value {
+                margin-top: 1rem;
+                width: 34rem;
             }
         }
     }
