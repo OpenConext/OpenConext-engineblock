@@ -150,10 +150,36 @@ HTML
     'consent_slidein_correction_title' => 'Is the data shown incorrect?',
     'consent_slidein_correction_text_idp'  => '%suiteName% receives the information directly from your %organisationNoun% and does not store the information itself. If your information is incorrect, please contact the help desk of your %organisationNoun% to change it.',
     'consent_slidein_correction_text_aa'  => '%suiteName% receives the information directly from the attribute provider and does not store the information itself. If your information is incorrect, please contact the attribute provider directly to correct it. You can ask the help desk of your %organisationNoun% for assistance with this.',
+     'consent_disclaimer_privacy_nolink' => '<span><strong>%org%</strong> needs this information to function properly.</span>'
+     ,
+     'consent_disclaimer_privacy' => <<<'TXT'
+</span><strong>%org%</strong> needs this information to function properly (read their <a href="%privacy_url%" target="_blank">privacy policy</a>).</span>
+TXT
+     ,
+     'consent_disclaimer_secure' => <<<'TXT'
+These data will be sent securely from your institution via <input type="checkbox" class="modal" id="consent_disclaimer_about"><label class="modal" for="consent_disclaimer_about">%suite_name%</label> %modal_about% using <input type="checkbox" class="modal" id="consent_disclaimer_number"><label class="modal" for="consent_disclaimer_number">a number that uniquely identifies you for this service.</label>
+TXT
+     ,
+     'consent_modal_about' => <<<'TXT'
+<section class="modal__value">
+    <div class="modal__content">
+        %about_text%
+        <a href="%read_more_url%" target="_blank" class="link__readmore">%read_more_text%</a>
+    </div>
+</section>
+TXT
+    ,
 
     // Consent slidein: About %suiteName%
     'consent_slidein_about_text'  => <<<'TXT'
 <h1>Logging in through %suiteName%</h1>
+<p>%suiteName% allows people to easily and securely log in into various cloud services using their own %accountNoun%. %suiteName% offers extra privacy protection by sending a minimum set of personal data to these cloud services.</p>
+TXT
+    ,
+
+    // Consent slidein: About %suiteName%
+    'consent_slidein_about_text_new'  => <<<'TXT'
+<h3>Logging in through %suiteName%</h3>
 <p>%suiteName% allows people to easily and securely log in into various cloud services using their own %accountNoun%. %suiteName% offers extra privacy protection by sending a minimum set of personal data to these cloud services.</p>
 TXT
     ,
