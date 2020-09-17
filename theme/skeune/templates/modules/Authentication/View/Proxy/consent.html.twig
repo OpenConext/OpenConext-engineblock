@@ -13,7 +13,7 @@
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
 
 {% block content %}
-    {% include '@theme/Default/Partials/LoginBar.html.twig' with { loginName: surfConext } %}
+    {% include '@theme/Default/Partials/LoginBar.html.twig' with { loginName: 'suite_name'|trans } %}
     <main class="consent">
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/header.html.twig' %}
 
@@ -35,9 +35,9 @@
                         </section>
                         {% endif %}
 
+                {% include '@theme/Authentication/View/Proxy/Partials/Consent/disclaimerList.html.twig' %}
                 {% include '@theme/Authentication/View/Proxy/Partials/Consent/ctas.html.twig' %}
             </div>
         {% endblock %}
     </main>
-    {% include '@theme/Authentication/View/Proxy/consent-slidein-about.html.twig' %}
 {% endblock %}
