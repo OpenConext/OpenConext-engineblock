@@ -46,10 +46,14 @@ class ConsentController
      */
     public function consentAction(Request $request)
     {
+        $idpName = null;
+        if ($request->query->has('idp-name')) {
+            $idpName = $request->query->get('idp-name');
+        }
         $processConsentUrl = '#';
         $fakeResponseId = '918723649';
         $fakeSp = TestEntitySeeder::buildSp();
-        $fakeIdP = TestEntitySeeder::buildIdP();
+        $fakeIdP = TestEntitySeeder::buildIdP($idpName);
         $supportContact = 'Helpdesk';
         $nameId = new NameID();
         $nameId->setValue('user@openconext');
