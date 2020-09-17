@@ -17,6 +17,19 @@
     min-width: 38rem;
 }
 
+.tooltip__value,
+.modal__value {
+    display: none;
+}
+
+.modal__value {
+    margin: 1rem;
+
+    .modal__content {
+        padding: 1rem;
+    }
+}
+
 .slidein {
     bottom: 0;
     left: 0;

@@ -4,7 +4,9 @@
 {% if attributeSource == 'engineblock' %} {# TODO: moet dit behouden blijven? #}
     <a class="small" href="{{ 'name_id_support_url'|trans }}" target="_blank">{{ 'consent_name_id_support_link'|trans }}</a>
 {% else %}
-    <button data-slidein="correction-{{ attributeSource }}">
+    <input type="checkbox" class="modal" id="incorrect_{{ attributeSource }}" />
+    <label class="modal" for="incorrect_{{ attributeSource }}">
         {{ 'consent_attributes_correction_text'|trans }}
-    </button>
+    </label>
+    {% include '@theme/Authentication/View/Proxy/consent-slidein-correction.html.twig' %}
 {% endif %}

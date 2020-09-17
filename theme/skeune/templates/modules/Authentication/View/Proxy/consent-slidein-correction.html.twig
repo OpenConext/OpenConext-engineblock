@@ -1,15 +1,11 @@
-<div class="slidein correction-{{ attributeSource }}">
-    <div class="mod-filler"></div>
-    <div class="mod-content">
-        <a class="close" href="#">{{ 'slidein_close'|trans }}</a>
-        <section>
-            <h1>{{ 'consent_slidein_correction_title'|trans }}</h1>
-            {% if attributeSource == 'idp' %}
-                <p>{{ 'consent_slidein_correction_text_idp'|trans }}</p>
-                {% include '@theme/Authentication/View/Proxy/consent-slidein-contact-details.html.twig' %}
-            {% else %}
-                <p>{{ 'consent_slidein_correction_text_aa'|trans }}</p>
-            {% endif %}
-        </section>
+<section class="modal__value">
+    <div class="modal__content">
+        <h3>{{ 'consent_slidein_correction_title'|trans }}</h3>
+        {% if attributeSource == 'idp' %}
+            <p>{{ 'consent_slidein_correction_text_idp'|trans }}</p>
+            {% include '@theme/Authentication/View/Proxy/consent-slidein-contact-details.html.twig' %}
+        {% else %}
+            <p>{{ 'consent_slidein_correction_text_aa'|trans }}</p>
+        {% endif %}
     </div>
-</div>
+</section>
