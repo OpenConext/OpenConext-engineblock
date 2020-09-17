@@ -165,6 +165,13 @@ TXT
 TXT
     ,
 
+    // Consent slidein: Reject_skeune
+    'consent_slidein_reject_text_skeune'  => <<<'TXT'
+<h3>You don't want to share your data with the service</h3>
+<p>The service you're logging into requires your data to function properly. If you prefer not to share your data, you cannot use this service. By closing your browser or just this tab you prevent your information from being shared with the service. If you change your mind later, please login to the service again and this screen will reappear.</p>
+TXT
+    ,
+
     // Generic slide-in
     'slidein_close' => 'Close',
     'slidein_read_more' => 'Read more',

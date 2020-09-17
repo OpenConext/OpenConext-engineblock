@@ -2,6 +2,7 @@
     Generic reusable classes.
     Page-specific classes do not belong here.
  ******************************************************************/
+@import 'vars.overrides.css.sass';
 
 .visually-hidden {
     clip: rect(1px, 1px, 1px, 1px);
@@ -23,10 +24,14 @@
 }
 
 .modal__value {
-    margin: 1rem;
-
     .modal__content {
+        background-color: $white;
+        font-weight: $normal;
         padding: 1rem;
+
+        > h3 {
+            margin-top: 0;
+        }
     }
 }
 
