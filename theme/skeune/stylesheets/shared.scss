@@ -101,5 +101,34 @@ body {
             }
         }
     }
+
+    input[type="checkbox"].modal,
+    input[type="checkbox"].tooltip {
+        display: none;
+    }
+
+    input[type="checkbox"]:checked.modal + label + .modal__value,
+    input[type="checkbox"]:checked.tooltip + label + .tooltip__value {
+        background-color: $skeuneGray;
+        display: block;
+        margin: 1rem;
+        padding: 1rem;
+        text-align: left;
+    }
+
+    label.tooltip {
+        @include tooltip;
+    }
+
+    // todo add animations
+    input[type="checkbox"]:checked.tooltip + label.tooltip {
+        @include tooltip-checked;
+    }
+
+    input[type="checkbox"]:checked.tooltip + label.tooltip + .tooltip__value {
+        > p {
+            text-align: left;
+        }
+    }
 }
 
