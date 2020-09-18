@@ -4,10 +4,10 @@
     <ul class="footer__menu">
         <li>
             {% if helpLink is defined %}
-                <a href="{{ helpLink }}" target="_blank">{{ 'help_header'|trans|capitalize }}</a>
+                <a href="{{ helpLink }}" target="_blank" rel="noreferrer">{{ 'help_header'|trans|capitalize }}</a>
             {% else %}
                 {# todo remove after testing #}
-                <a href="#" target="_blank">Help</a>
+                <a href="#" target="_blank" rel="noreferrer">Help</a>
             {% endif %}
         </li>
         <li>

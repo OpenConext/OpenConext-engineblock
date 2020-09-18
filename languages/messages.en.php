@@ -158,15 +158,15 @@ HTML
 TXT
      ,
      'consent_disclaimer_secure' => <<<'TXT'
-These data will be sent securely from your institution via <input type="checkbox" class="modal" id="consent_disclaimer_about"><label class="modal" for="consent_disclaimer_about">%suite_name%</label> %modal_about% using <input type="checkbox" class="modal" id="consent_disclaimer_number"><label class="modal" for="consent_disclaimer_number">a number that uniquely identifies you for this service.</label>
+These data will be sent securely from your institution via <input type="checkbox" class="modal" id="consent_disclaimer_about" name="consent_disclaimer_about"><label class="modal" tabindex="0" role="button" for="consent_disclaimer_about">%suite_name%</label> %modal_about% using <input type="checkbox" class="modal" id="consent_disclaimer_number" name="consent_disclaimer_number"><label class="modal" tabindex="0" role="button" for="consent_disclaimer_number">a number that uniquely identifies you for this service.</label>
 TXT
      ,
      'consent_disclaimer_secure_onemodal' => <<<'TXT'
-These data will be sent securely from your institution via <input type="checkbox" class="modal" id="consent_disclaimer_about"><label class="modal" for="consent_disclaimer_about">%suite_name%</label> %modal_about% using a number that uniquely identifies you for this service.
+These data will be sent securely from your institution via <input type="checkbox" class="modal" id="consent_disclaimer_about" name="consent_disclaimer_about"><label class="modal" tabindex="0" role="button" for="consent_disclaimer_about">%suite_name%</label> %modal_about% using a number that uniquely identifies you for this service.
 TXT
      ,
      'consent_modal_about' => <<<'TXT'
-<section class="modal__value">
+<section class="modal__value" role="alert">
     <div class="modal__content">
         %about_text%
         <a href="%read_more_url%" target="_blank" class="link__readmore">%read_more_text%</a>
