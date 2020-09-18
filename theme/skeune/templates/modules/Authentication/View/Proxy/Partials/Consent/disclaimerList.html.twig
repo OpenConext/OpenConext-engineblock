@@ -17,8 +17,12 @@
         <div>
             {% include '@theme/Authentication/View/Proxy/Partials/Consent/SVG/shield_key.svg' %}
             <div>
-                {{ 'consent_disclaimer_secure'|trans({'%suite_name%': 'suite_name'|trans, '%modal_about%': modalAbout, '%read_more_text%': readMoreText })|raw }}
-                {# todo: include modal for number #}
+                {% if nameIdIsPersistent %}
+                    {{ 'consent_disclaimer_secure'|trans({'%suite_name%': 'suite_name'|trans, '%modal_about%': modalAbout})|raw }}
+                    {% include '@theme/Authentication/View/Proxy/Partials/Consent/Modals/uniqueNumberExplanation.html.twig' %}
+                {% else %}
+                    {{ 'consent_disclaimer_secure_onemodal'|trans({'%suite_name%': 'suite_name'|trans, '%modal_about%': modalAbout})|raw }}
+                {% endif %}
             </div>
         </div>
     </li>

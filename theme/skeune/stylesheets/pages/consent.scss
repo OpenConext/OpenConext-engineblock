@@ -129,7 +129,7 @@
                 border-bottom-right-radius: 4px;
                 font-size: $f-small;
                 font-weight: $bolder;
-                padding: calculateRem(14px) 0;
+                padding: calculateRem(10px) 0;
                 text-align: left;
 
                 > img {
@@ -138,8 +138,9 @@
                     margin-left: 9px;
                 }
 
-                > h3 {
+                > p {
                     @include grid-position(1, 2, 3, 4);
+                    font-size: $f-small;
                     font-weight: $normal;
                     margin: 0;
 
@@ -201,7 +202,7 @@
 
                         .modal__value {
                             margin: 1rem 0;
-                            max-width: 28rem;
+                            max-width: 29rem;
 
                             .link__readmore {
                                 display: block;
