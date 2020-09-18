@@ -220,6 +220,10 @@
             > a {
                 @include button-primary($buttonBlue);
                 margin-bottom: 1.5rem;
+
+                &:hover {
+                    text-decoration: underline;
+                }
             }
 
             > label {
