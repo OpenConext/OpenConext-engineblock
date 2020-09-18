@@ -21,8 +21,37 @@ body {
         box-sizing: border-box
     }
 
+    h3 {
+        color: $brownishGray;
+        font-family: 'ProximaNovaSoft', sans-serif;
+        font-size: $f-h3;
+        font-weight: $bolder;
+        line-height: 1.5;
+    }
 
-> .container {
+    h4 {
+        color: $black;
+        font-family: 'ProximaNovaSoft', sans-serif;
+        font-size: $f-xl;
+        font-weight: $bolder;
+        line-height: 1.5;
+    }
+
+    h5 {
+        color: $brownishGray;
+        font-size: $f-h5;
+        font-weight: $normal;
+        line-height: 1.5;
+    }
+
+    h6 {
+        color: $black;
+        font-size: $f-large;
+        font-weight: $bolder;
+        line-height: 1.5;
+    }
+
+    > .container {
         > p.loginBar {
             @include font-style-xl;
             background-color: $skeuneBlue;
