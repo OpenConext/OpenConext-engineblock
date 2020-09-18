@@ -225,6 +225,13 @@
             > label {
                 @include button-tertiary($skeuneGray);
                 width: 100%;
+
+                &:focus {
+                    > span.secondaryBorder {
+                        display: block;
+                        width: 100%;
+                    }
+                }
             }
 
             > a,
