@@ -1,5 +1,5 @@
 {% if tooltipValue %}
     <input type="checkbox" class="tooltip" id="tooltip{{loop.index}}" />
-    <label for="tooltip{{loop.index}}" class="tooltip"><span  class="visually-hidden">{{ 'consent_tooltip_screenreader'|trans }}</span></label>
+    <label tabindex="0" for="tooltip{{loop.index}}" class="tooltip"><span  class="visually-hidden">{{ 'consent_tooltip_screenreader'|trans }}</span></label>
     <div class="tooltip__value">{{ tooltipValue }}</div>
 {% endif %}
