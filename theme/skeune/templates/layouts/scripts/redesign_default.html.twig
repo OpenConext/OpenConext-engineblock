@@ -21,6 +21,35 @@
             }
         }
     </style>
+
+    <script>
+        // todo add this to the js once we reshaped the custom theme architecture
+        // todo once it's added to the normal js, rewrite as es6 (with typescript?)
+        window.addEventListener('load', function(){
+            document.querySelector('body').addEventListener('keydown', function(e) {
+                if (e.keyCode === 13) {
+                    var label = e.target;
+                    if (label.tagName === 'LABEL' && label.tabIndex === 0) {
+                        var clickEvent = new MouseEvent('click');
+                        label.dispatchEvent(clickEvent);
+                    }
+                }
+            });
+
+            var labels = document.querySelectorAll('label[aria-pressed]');
+            for (var i = 0; i < labels.length; i++) {
+                labels[i].addEventListener('click', function(e) {
+                    var label = e.target;
+                    var ariaPressed = label.getAttribute('aria-pressed');
+                    var newValue = {
+                        false: true,
+                        true: false,
+                    };
+                    label.setAttribute('aria-pressed', newValue[ariaPressed]);
+                });
+            }
+        })
+    </script>
 </head>
 <body>
 {% block background %}{% endblock %}
