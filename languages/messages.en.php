@@ -169,6 +169,10 @@ TXT
 These data will be sent securely from your institution via <input type="checkbox" class="modal" id="consent_disclaimer_about"><label class="modal" for="consent_disclaimer_about">%suite_name%</label> %modal_about% using a number that uniquely identifies you for this service.
 TXT
      ,
+     'consent_disclaimer_secure_onemodal' => <<<'TXT'
+These data will be sent securely from your institution via <input type="checkbox" class="modal" id="consent_disclaimer_about"><label class="modal" for="consent_disclaimer_about">%suite_name%</label> %modal_about% using a number that uniquely identifies you for this service.
+TXT
+     ,
      'consent_modal_about' => <<<'TXT'
 <section class="modal__value" role="alert">
     <div class="modal__content">
