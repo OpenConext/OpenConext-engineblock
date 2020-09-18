@@ -2,10 +2,10 @@
      alt="{{ organisationName }} logo" />
 <p>{{ text|raw }}</p>
 {% if attributeSource == 'engineblock' %}
-    <a class="small" href="{{ 'name_id_support_url'|trans }}" target="_blank">{{ 'consent_name_id_support_link'|trans }}</a>
+    <a class="small" href="{{ 'name_id_support_url'|trans }}" target="_blank" rel="noreferrer">{{ 'consent_name_id_support_link'|trans }}</a>
 {% else %}
-    <input type="checkbox" class="modal" id="incorrect_{{ attributeSource }}" />
-    <label class="modal" tabindex="0" for="incorrect_{{ attributeSource }}">
+    <input type="checkbox" class="modal" id="incorrect_{{ attributeSource }}" name="incorrect_{{ attributeSource }}" />
+    <label class="modal" tabindex="0" role="button" aria-pressed="false" for="incorrect_{{ attributeSource }}">
         {{ 'consent_attributes_correction_text'|trans }}
     </label>
     {% include '@theme/Authentication/View/Proxy/Partials/Consent/Modals/correction.html.twig' %}
