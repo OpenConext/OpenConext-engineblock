@@ -1,5 +1,10 @@
 {% if tooltipValue %}
-    <input type="checkbox" class="tooltip" id="tooltip{{loop.index}}" />
-    <label tabindex="0" role="button" aria-pressed="false" for="tooltip{{loop.index}}" class="tooltip"><span  class="visually-hidden">{{ 'consent_tooltip_screenreader'|trans }}</span></label>
+    {% include '@theme/Default/Partials/LoginBar.html.twig' with
+        {
+            class: 'tooltip',
+            id: 'tooltip{{loop.index}}',
+            text: {{ 'consent_tooltip_screenreader'|trans }}
+        }
+    %}
     <div class="tooltip__value" role="alert">{{ tooltipValue }}</div>
 {% endif %}
