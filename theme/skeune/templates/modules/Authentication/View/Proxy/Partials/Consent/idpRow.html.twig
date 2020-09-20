@@ -4,10 +4,12 @@
 {% if attributeSource == 'engineblock' %}
     <a class="small" href="{{ 'name_id_support_url'|trans }}" target="_blank" rel="noreferrer">{{ 'consent_name_id_support_link'|trans }}</a>
 {% else %}
-    {% set id = "incorrect_{{ attributeSource }}" %}
+    {% set id %}
+        incorrect_{{ attributeSource }}
+    {% endset %}
     {% include '@theme/Default/Partials/toggleCheckbox.html.twig' with {
             class: 'modal',
-            id: id,
+            id: id|trim,
             hideText: false,
             text: 'consent_attributes_correction_text'|trans
         }

@@ -5,7 +5,7 @@
     {% include '@theme/Default/Partials/toggleCheckbox.html.twig' with
         {
             class: 'tooltip',
-            id: id,
+            id: id|trim,
             hideText: true,
             text: 'consent_tooltip_screenreader'|trans
         }
