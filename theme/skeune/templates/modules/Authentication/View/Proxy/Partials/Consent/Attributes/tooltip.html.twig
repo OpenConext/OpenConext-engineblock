@@ -1,5 +1,7 @@
 {% if tooltipValue %}
-    {% set id = "tooltip{{ loop.index }}" %}
+    {% set id %}
+        tooltip{{ loop.index }}
+    {% endset %}
     {% include '@theme/Default/Partials/toggleCheckbox.html.twig' with
         {
             class: 'tooltip',

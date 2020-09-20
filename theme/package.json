@@ -31,7 +31,8 @@
     "watch:js": "watchify material/javascripts/application.js material/javascripts/theme/${EB_THEME:=openconext}/application.js --poll=100 --debug -t [ babelify ] material/javascripts/application.js material/javascripts/theme/${EB_THEME:=openconext}/application.js -o ../web/javascripts/application.min.js -v",
     "watch:css": "node-sass -r material/stylesheets/ --include-path=material/stylesheets/theme/${EB_THEME:=openconext} -w -o ../web/stylesheets",
     "watch:css:custom": "node-sass -r ${EB_THEME:=openconext}/stylesheets -o ../web/stylesheets",
-    "release": "npm run build"
+    "release": "npm run build",
+    "cypress:open": "npm run ./node_modules/.bin/cypress open"
   },
   "author": "",
   "devDependencies": {
@@ -39,13 +40,17 @@
     "@babel/polyfill": "^7.11.5",
     "@babel/preset-env": "^7.11.5",
     "autoprefixer": "^9.8.6",
+    "axe-core": "^4.0.2",
     "babelify": "^10.0.0",
     "browserify": "^16.5.2",
     "copyfiles": "^2.3.0",
     "core-js": "^3.6.5",
     "cssnano": "^4.1.10",
     "cypress": "^5.1.0",
+    "cypress-axe": "^0.8.1",
+    "cypress-html-validate": "^1.2.2",
     "cypress-plugin-snapshots": "^1.4.4",
+    "html-validate": "^3.3.0",
     "jshint": "^2.12.0",
     "node-sass": "^4.14.1",
     "postcss-cli": "^7.1.2",
