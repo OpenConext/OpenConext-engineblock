@@ -1,9 +1,11 @@
 {% if tooltipValue %}
-    {% include '@theme/Default/Partials/LoginBar.html.twig' with
+    {% set id = "tooltip{{ loop.index }}" %}
+    {% include '@theme/Default/Partials/toggleCheckbox.html.twig' with
         {
             class: 'tooltip',
-            id: 'tooltip{{loop.index}}',
-            text: {{ 'consent_tooltip_screenreader'|trans }}
+            id: id,
+            hideText: true,
+            text: 'consent_tooltip_screenreader'|trans
         }
     %}
     <div class="tooltip__value" role="alert">{{ tooltipValue }}</div>

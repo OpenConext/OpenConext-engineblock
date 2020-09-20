@@ -1,2 +1,8 @@
-<input type="checkbox" tabindex="-1" role="button" aria-pressed="false" class="{{ type }} visually-hidden" id="{{ loop.id }}" name="{{ id }}" />
-<label tabindex="0" for="{{ id }}" class="{{ class }}"><span  class="visually-hidden">{{ text }}</span></label>
+<input type="checkbox" tabindex="-1" role="button" aria-pressed="false" class="{{ class }} visually-hidden" id="{{ id }}" name="{{ id }}" />
+<label tabindex="0" for="{{ id }}" class="{{ class }}">
+    {% if hideText %}
+        <span class="visually-hidden">{{ text }}</span>
+    {% else %}
+        <span>{{ text }}</span>
+    {% endif %}
+</label>
