@@ -12,5 +12,6 @@ context('Consent', () => {
 
   it('contains no html errors', () => {
     cy.htmlvalidate();
+    // todo: figure out how to configure SRI for scripts/link(css)/link(ico) elements
   });
 });
