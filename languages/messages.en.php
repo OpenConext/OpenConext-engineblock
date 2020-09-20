@@ -158,11 +158,11 @@ HTML
 TXT
      ,
      'consent_disclaimer_secure' => <<<'TXT'
-These data will be sent securely from your institution via <input type="checkbox" class="modal" id="consent_disclaimer_about" name="consent_disclaimer_about"><label class="modal" tabindex="0" role="button" for="consent_disclaimer_about">%suite_name%</label> %modal_about% using <input type="checkbox" class="modal" id="consent_disclaimer_number" name="consent_disclaimer_number"><label class="modal" tabindex="0" role="button" for="consent_disclaimer_number">a number that uniquely identifies you for this service.</label>
+These data will be sent securely from your institution via <input type="checkbox" tabindex="-1" role="button" aria-pressed="false" class="modal visually-hidden" id="consent_disclaimer_about" name="consent_disclaimer_about"><label class="modal" tabindex="0" for="consent_disclaimer_about">%suite_name%</label> %modal_about% using <input type="checkbox" tabindex="-1" role="button" aria-pressed="false" class="modal visually-hidden" id="consent_disclaimer_number" name="consent_disclaimer_number"><label class="modal" tabindex="0" for="consent_disclaimer_number">a number that uniquely identifies you for this service.</label>
 TXT
      ,
      'consent_disclaimer_secure_onemodal' => <<<'TXT'
-These data will be sent securely from your institution via <input type="checkbox" class="modal" id="consent_disclaimer_about" name="consent_disclaimer_about"><label class="modal" tabindex="0" role="button" for="consent_disclaimer_about">%suite_name%</label> %modal_about% using a number that uniquely identifies you for this service.
+These data will be sent securely from your institution via <input type="checkbox" tabindex="-1" role="button" aria-pressed="false" class="modal visually-hidden" id="consent_disclaimer_about" name="consent_disclaimer_about"><label class="modal" tabindex="0" for="consent_disclaimer_about">%suite_name%</label> %modal_about% using a number that uniquely identifies you for this service.
 TXT
      ,
      'consent_modal_about' => <<<'TXT'
