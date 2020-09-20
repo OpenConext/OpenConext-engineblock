@@ -6,11 +6,12 @@
           text: 'consent_ok'|trans
         }
     %}
-    <input type="checkbox" id="cta_consent_nok" name="cta_consent_nok" class="modal">
-    <label class="modal" tabindex="0" role="button" aria-pressed="false" for="cta_consent_nok">
-        <span class="secondaryBorder">
-            {{ 'consent_buttons_nok'|trans }}
-        </span>
-    </label>
+    {% include '@theme/Default/Partials/LoginBar.html.twig' with
+        {
+            class: 'modal',
+            id: 'cta_consent_nok',
+            text: {{ 'consent_buttons_nok'|trans }}
+        }
+    %}
     {% include '@theme/Authentication/View/Proxy/Partials/Consent/Modals/reject.html.twig' %}
 </div>
