@@ -32,7 +32,7 @@
     "watch:css": "node-sass -r material/stylesheets/ --include-path=material/stylesheets/theme/${EB_THEME:=openconext} -w -o ../web/stylesheets",
     "watch:css:custom": "node-sass -r ${EB_THEME:=openconext}/stylesheets -o ../web/stylesheets",
     "release": "npm run build",
-    "cypress:open": "npm run ./node_modules/.bin/cypress open"
+    "cypress:open": "npx cypress open"
   },
   "author": "",
   "devDependencies": {
