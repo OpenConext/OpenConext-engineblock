@@ -10,6 +10,12 @@
 {# Load the sorted/ordered and normalized attributes #}
 {% set attributesBySource = sortByDisplayOrder(attributes, attributeSources, nameId) %}
 
+{% block nojs %}
+    <noscript>
+        <p>{{ 'consent_nojs_skeune'|trans }}</p>
+    </noscript>
+{% endblock %}
+
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
 
 {% block content %}
