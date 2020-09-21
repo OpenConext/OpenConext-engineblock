@@ -1,6 +1,17 @@
-<span
+<div
     class="attribute__name"
     data-identifier="{{ attributeIdentifier }}"
 >
     {{ attributeName }}
-</span>
+
+    {% if id is defined %}
+        {% include '@theme/Default/Partials/label.html.twig' with
+            {
+                class: 'tooltip',
+                id: id|trim,
+                hideText: true,
+                text: 'consent_tooltip_screenreader'|trans
+            }
+        %}
+    {% endif %}
+</div>

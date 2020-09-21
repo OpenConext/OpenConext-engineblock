@@ -7,7 +7,8 @@
     {% set id %}
         incorrect_{{ attributeSource }}
     {% endset %}
-    {% include '@theme/Default/Partials/toggleCheckbox.html.twig' with {
+    <input type="checkbox" tabindex="-1" role="button" aria-pressed="false" class="modal visually-hidden" id="{{ id|trim }}" name="{{ id|trim }}" />
+    {% include '@theme/Default/Partials/label.html.twig' with {
             class: 'modal',
             id: id|trim,
             hideText: false,

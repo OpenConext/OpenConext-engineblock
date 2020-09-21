@@ -12,8 +12,9 @@
  ******************************************************************/
 
 @import '~@csstools/normalize.css';
-@import 'base/stylesheets/classes';
 @import 'base/stylesheets/a11y-tests';
+@import 'base/stylesheets/breakpoints';
+@import 'base/stylesheets/classes';
 @import 'base/stylesheets/fonts';
 @import 'base/stylesheets/functions';
 @import 'base/stylesheets/mixins';
