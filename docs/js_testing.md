@@ -75,6 +75,7 @@ The consent screen is available on: `/functional-testing/consent`
 | hide-header | (bool) true | Type: boolean |
 | hide-footer | (bool) true | Type: boolean |
 | persistent-name-id | (bool) true | Type: boolean. Is the name id configured to be persistent? This affects the rendering of the attributes |
+| aa-enabled | (bool) true | Type: boolean. Is attribute aggregation enabled, if flagged, two dummy AA sources are configured. And two attributes from those sources are included in the attribute list (EckID & OrcID ID).  |
 
 ## Acceptance tests
 The WAYF acceptance tests utilize the `/functional-testing/wayf` endpoint in order to test the correct inner working of
