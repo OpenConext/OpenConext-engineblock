@@ -63,6 +63,20 @@ parameters can be used to manipulate the behaviour of the wayf that is rendered.
 
 For a list of realistic reproductions of the available error pages, see this JavasScript test: `theme/cypress/integration/visual-regression/error-page/ErrorPage.spec.js`
 
+### Consent
+The consent screen is available on: `/functional-testing/consent`
+
+
+| **Query parameter** | **Default value** | **Explanation** |
+|---|----|----|
+| name-id | (string) 'user@openconext' | Type: string. The name id of the authenticating user |
+| idp-name | (string) 'DisplayName' | Type: string. The name displayed for the IdP that released the attributes |
+| sp-name | (string) 'DisplayName' | Type: string. The name displayed for the authenticating service provider |
+| hide-header | (bool) true | Type: boolean |
+| hide-footer | (bool) true | Type: boolean |
+| persistent-name-id | (bool) true | Type: boolean. Is the name id configured to be persistent? This affects the rendering of the attributes |
+| aa-enabled | (bool) true | Type: boolean. Is attribute aggregation enabled, if flagged, two dummy AA sources are configured. And two attributes from those sources are included in the attribute list (EckID & OrcID ID).  |
+
 ## Acceptance tests
 The WAYF acceptance tests utilize the `/functional-testing/wayf` endpoint in order to test the correct inner working of
 the WAYF.
