@@ -126,7 +126,7 @@
 
     <target name="doc-header" description="Check if the copyright header is valid">
         <exec executable="vendor/bin/docheader" failonerror="true">
-            <arg line="check src/ tests/ library/ --exclude-dir resources" />
+            <arg line="check src/ tests/ library/  --exclude-dir resources --exclude-dir languages" />
         </exec>
     </target>
 
