@@ -2,7 +2,7 @@
     Generic reusable classes.
     Page-specific classes do not belong here.
  ******************************************************************/
-@import 'vars.overrides.css.sass';
+@import 'vars.overrides';
 
 .visually-hidden {
     clip: rect(1px, 1px, 1px, 1px);
