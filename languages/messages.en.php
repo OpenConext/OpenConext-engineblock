@@ -1,5 +1,4 @@
 <?php
-/** @noinspection HtmlUnknownTarget */
 
 $overrides = [];
 $overridesFile = __DIR__ . '/overrides.en.php';
