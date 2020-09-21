@@ -7,7 +7,10 @@ module.exports = (on, config) => {
             "prefer-button": "off",
             "prefer-native-element": [ "error", {
                 "exclude": [ "button" ],
-            }]
+            }],
+            "require-sri": [ "error", {
+                "target": "crossorigin",
+            }],
         },
     });
     initPlugin(on, config);
