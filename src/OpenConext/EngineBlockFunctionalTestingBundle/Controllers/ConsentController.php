@@ -22,6 +22,7 @@ use SAML2\Constants;
 use SAML2\XML\saml\NameID;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\TranslatorInterface;
 use Twig_Environment;
 
 class ConsentController
@@ -56,6 +57,9 @@ class ConsentController
             $spName = $request->query->get('sp-name');
         }
 
+        $attributeAggregationEnabled = (bool) $request->query->get('aa-enabled', false);
+        $attributeSources = [];
+
         $processConsentUrl = '#';
         $fakeResponseId = '918723649';
         $fakeSp = TestEntitySeeder::buildSp($spName);
@@ -79,6 +83,16 @@ class ConsentController
             'urn:mace:dir:attribute-def:givenName' => 'Test tooltip',
         ];
 
+        if ($attributeAggregationEnabled) {
+            $attributes['urn:mace:surf.nl:attribute-def:eckid'] = ['joe-f12-eck-id'];
+            $attributes['urn:mace:dir:attribute-def:eduPersonOrcid'] = ['https://orcid.org/0000-0002-9079-593X'];
+
+            $attributeSources = [
+                'urn:mace:dir:attribute-def:eduPersonOrcid' => 'orcid',
+                'urn:mace:surf.nl:attribute-def:eckid' => 'sab',
+            ];
+        }
+
         return new Response($this->twig->render('@theme/Authentication/View/Proxy/consent.html.twig', [
             'action' => $processConsentUrl,
             'responseId' => $fakeResponseId,
@@ -86,7 +100,7 @@ class ConsentController
             'idp' => $fakeIdP,
             'idpSupport' => $supportContact,
             'attributes' => $attributes,
-            'attributeSources' => [],
+            'attributeSources' => $attributeSources,
             'attributeMotivations' => $attributeMotivations,
             'minimalConsent' => $fakeIdP->getConsentSettings()->isMinimal($fakeSp->entityId),
             'consentCount' => 5,

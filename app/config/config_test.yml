@@ -10,6 +10,10 @@ services:
 
 framework:
     test: ~
+    translator:
+        paths:
+            - '%kernel.root_dir%/../languages'
+            - '%kernel.root_dir%/../src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/languages'
     session:
         storage_id: session.storage.mock_file
         name: MOCKSESSION
