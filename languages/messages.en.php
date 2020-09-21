@@ -146,6 +146,7 @@ HTML
     'consent_slidein_text_no_support'         => 'No contact data available.',
      'consent_provided_by'  => 'Provided by <strong>%organisationName%</strong>',
      'consent_tooltip_screenreader' => 'Why do we need this info?',
+     'consent_nojs_skeune' => 'Tooltips / modals on this page need JS to work with the keyboard.  If you use a keyboard, please enable JS if you wish to use this functionality.',
 
     // Consent slidein: Is the data shown incorrect?
     'consent_slidein_correction_title' => 'Is the data shown incorrect?',
