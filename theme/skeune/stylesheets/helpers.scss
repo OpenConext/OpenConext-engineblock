@@ -1,0 +1,20 @@
+/*******************************************************************
+    Put all generic helper css here.
+    Those are things like:
+    - resets
+    - generic classes
+    - generic fonts
+    - generic sass-functions
+    - generic sass-mixins
+    - generic variables
+    These must be loaded first and so come first in application.scss.
+    You also need to import these at the start of each file that uses a variable/mixin/general class.
+ ******************************************************************/
+
+@import '~@csstools/normalize.css';
+@import 'classes';
+@import 'a11y-tests';
+@import 'fonts';
+@import 'functions';
+@import 'mixins';
+@import 'vars.overrides';

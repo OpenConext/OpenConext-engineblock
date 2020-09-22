@@ -1,0 +1,7 @@
+{% for attributeSource, attributes in attributesBySource %}
+    {% if attributes|length == 0 %}
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/noAttributes.html.twig' %}
+    {% else %}
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/list.html.twig' %}
+    {% endif %}
+{% endfor %}
