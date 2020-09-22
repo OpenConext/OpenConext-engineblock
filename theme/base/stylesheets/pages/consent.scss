@@ -35,7 +35,7 @@
                 @include screen('mobile') {
                     padding: 10px;
                     @include grid-template-columns(100%);
-                    @include grid-template-rows(50% 50%);
+                    @include grid-template-rows(min-content min-content);
                 }
 
                 > *:not(input[type="checkbox"]):not(.attribute__name) {
@@ -212,13 +212,20 @@
                 > .modal__value {
                     @include grid-position(2, 3, 1, 7);
                     margin: 9px 1rem;
-                    width: 32rem;
+                    max-width: 30rem;
 
                     @include screen('mobile') {
                         margin: 9px .5rem;
-                        width: calc(100% - 1rem);
+                        max-width: calc(100% - 1rem);
                     }
                 }
+
+                > input:checked + label.modal + .modal__value {
+                    display: flex;
+                    justify-content: center;
+                    margin: 9px auto 1rem;
+                }
+
             }
         }
 
@@ -313,6 +320,10 @@
             > section.modal__value {
                 margin: 1rem auto 0;
                 width: 34rem;
+
+                @include screen('mobile') {
+                    width: 100%;
+                }
             }
         }
     }
