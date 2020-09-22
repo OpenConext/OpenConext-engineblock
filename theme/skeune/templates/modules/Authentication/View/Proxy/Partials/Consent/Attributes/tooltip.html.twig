@@ -1,0 +1,14 @@
+{% if tooltipValue %}
+    {% set id %}
+        tooltip{{ loop.index }}
+    {% endset %}
+    {% include '@theme/Default/Partials/toggleCheckbox.html.twig' with
+        {
+            class: 'tooltip',
+            id: id|trim,
+            hideText: true,
+            text: 'consent_tooltip_screenreader'|trans
+        }
+    %}
+    <div class="tooltip__value" role="alert">{{ tooltipValue }}</div>
+{% endif %}

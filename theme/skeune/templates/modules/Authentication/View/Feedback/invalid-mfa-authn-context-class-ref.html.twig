@@ -1,0 +1,8 @@
+{% extends '@theme/Default/View/Error/error.html.twig' %}
+
+{% set pageTitle = 'error_invalid_mfa_authn_context_class_ref'|trans %}
+{% block pageTitle %}{{ pageTitle }}{% endblock %}
+{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
+{% block pageHeading %}{{ pageTitle }}{% endblock %}
+
+{% block errorMessage %}{{ 'error_invalid_mfa_authn_context_class_ref_desc'|trans|raw }}{% endblock %}

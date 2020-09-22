@@ -1,0 +1,18 @@
+<div class="ctas">
+    {# todo: link to where? #}
+    {% include '@theme/Default/Partials/buttonLink.html.twig' with
+        {
+          buttonUrl: '#',
+          text: 'consent_ok'|trans
+        }
+    %}
+    {% include '@theme/Default/Partials/toggleCheckbox.html.twig' with
+        {
+            class: 'modal',
+            id: 'cta_consent_nok',
+            hideText: false,
+            text: 'consent_buttons_nok'|trans
+        }
+    %}
+    {% include '@theme/Authentication/View/Proxy/Partials/Consent/Modals/reject.html.twig' %}
+</div>
