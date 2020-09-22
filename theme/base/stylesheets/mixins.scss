@@ -238,6 +238,7 @@
     &:hover {
         background-color: $hoverBlue;
         color: $darkishBlueTwo;
+        text-decoration: underline;
     }
 
     &:focus {

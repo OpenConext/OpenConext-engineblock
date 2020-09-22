@@ -22,8 +22,16 @@ body {
         box-sizing: border-box
     }
 
-    a:hover {
-        text-decoration: underline;
+    a {
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    *:focus {
+        outline: 3px dotted $darkishBlue;
+        padding-left: 5px;
+        padding-right: 5px;
     }
 
     h3 {
@@ -176,8 +184,9 @@ body {
     }
 
     label.tooltip,
-    label.modal {
-        cursor: pointer
+    label.modal,
+    label[for="showMoreCheckbox"] {
+        cursor: pointer;
     }
 
     label.modal > span {

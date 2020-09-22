@@ -168,7 +168,7 @@
             }
 
             > li.idpRow {
-                @include grid-template-columns(14% 1% 54% 1% 29% 1%);
+                @include grid-template-columns(14% 1% 52% 1% 31% 1%);
                 align-items: center;
                 background-color: $providerGray;
                 border-bottom-left-radius: 4px;
@@ -274,6 +274,10 @@
 
                         a {
                             text-decoration: none;
+
+                            &:hover {
+                                text-decoration: underline;
+                            }
                         }
 
                         .modal__value {
