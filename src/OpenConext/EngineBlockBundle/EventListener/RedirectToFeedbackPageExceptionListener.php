@@ -160,7 +160,6 @@ class RedirectToFeedbackPageExceptionListener
 
             $redirectParams  = [
                 'entity-id'   => $exception->getEntityId(),
-                'destination' => $exception->getDestination()
             ];
         } elseif ($exception instanceof EngineBlock_Exception_UnknownIdentityProvider) {
             $message         = 'Unknown Identity Provider';

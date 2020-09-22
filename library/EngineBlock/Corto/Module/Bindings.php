@@ -184,8 +184,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // Verify that we know this SP and have metadata for it.
         $serviceProvider = $this->_verifyKnownSP(
-            $spEntityId->getValue(),
-            $ebRequest->getDestination()
+            $spEntityId->getValue()
         );
 
         if (!$serviceProvider instanceof ServiceProvider) {
@@ -513,11 +512,10 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      * Verify if a message has an issuer that is known as an SP to us. If not, it
      * throws a Corto_Module_Bindings_VerificationException.
      * @param string $messageIssuer
-     * @param string $destination
      * @return AbstractRole Remote Entity that issued the message
      * @throws EngineBlock_Exception_UnknownServiceProvider
      */
-    protected function _verifyKnownSP(string $messageIssuer, string $destination = '')
+    protected function _verifyKnownSP(string $messageIssuer)
     {
         $remoteEntity = $this->_server->getRepository()->findServiceProviderByEntityId($messageIssuer);
 
@@ -534,8 +532,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         throw new EngineBlock_Exception_UnknownServiceProvider(
             sprintf('Issuer "%s" is not a known remote entity? (please add SP to Remote Entities)', $messageIssuer),
-            $messageIssuer,
-            $destination
+            $messageIssuer
         );
     }
 

@@ -19,22 +19,15 @@
 class EngineBlock_Exception_UnknownServiceProvider extends Exception
 {
     private $_entityId;
-    private $_destination;
 
-    function __construct($message, $entityId, $destination)
+    function __construct($message, $entityId)
     {
         parent::__construct($message);
         $this->_entityId = $entityId;
-        $this->_destination = $destination;
     }
 
     public function getEntityId()
     {
         return $this->_entityId;
-    }
-
-    public function getDestination()
-    {
-        return $this->_destination;
     }
 }
