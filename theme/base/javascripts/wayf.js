@@ -1,5 +1,3 @@
-import {replaceMetadataCertificateLinkTexts} from "./modules/EngineBlockMainPage";
-import {initConsentPage} from "./modules/ConsentPage";
 import {IdpList} from "./modules/IdpList";
 import {IdpPicker} from "./modules/IdpPicker";
 import {UnconnectedIdpPicker} from "./modules/UnconnectedIdpPicker";
@@ -11,19 +9,9 @@ import {IdpListElementFactory} from "./modules/IdpListElementFactory";
 import {RequestAccessModalHelper} from "./modules/RequestAccessModalHelper";
 import {RememberChoiceStorage} from "./modules/RememberChoiceStorage";
 
-function initialize() {
+export function initializeWayf() {
+
     document.body.className = document.body.className.replace('no-js', '');
-
-    if (document.querySelector('.mod-content.consent') !== null) {
-        initConsentPage();
-        return;
-    }
-
-    if (document.getElementById('engine-main-page') !== null) {
-        replaceMetadataCertificateLinkTexts();
-        return;
-    }
-
     if (document.getElementById('wayf-configuration') === null) {
         return;
     }
@@ -140,5 +128,3 @@ function showElement(element) {
 
     element.className = element.className.replace(pattern, '');
 }
-
-initialize();
