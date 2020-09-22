@@ -38,9 +38,8 @@
                     @include grid-template-rows(50% 50%);
                 }
 
-                > *:not(input[type="checkbox"]) {
+                > *:not(input[type="checkbox"]):not(.attribute__name) {
                     color: $black;
-                    display: inline-block;
                     line-height: 1.63;
                     text-align: left;
                 }
@@ -312,7 +311,7 @@
             }
 
             > section.modal__value {
-                margin-top: 1rem;
+                margin: 1rem auto 0;
                 width: 34rem;
             }
         }
