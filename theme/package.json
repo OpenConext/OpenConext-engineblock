@@ -22,7 +22,7 @@
     "build:js": "mkdir -p ../web/javascripts && npm run build:js:babelify",
     "build:js:babelify": "browserify material/javascripts/application.js material/javascripts/theme/${EB_THEME:=openconext}/application.js --plugin [ tinyify ] -t [ babelify ] -o ../web/javascripts/application.min.js",
     "build:css": "mkdir -p ../web/stylesheets && npm run build:css:sass && npm run build:css:postcss",
-    "build:css:theme": "mkdir -p ../web/stylesheets && npm run build:css:sass:theme & npm run build:css:postcss",
+    "build:css:theme": "mkdir -p ../web/stylesheets && npm run build:css:sass:theme && npm run build:css:postcss",
     "build:css:sass": "node-sass material/stylesheets/ --include-path=material/stylesheets/theme/${EB_THEME:=openconext} --error-bell -o ../web/stylesheets/",
     "build:css:sass:theme": "node-sass ${EB_THEME:=openconext}/stylesheets --error-bell -o ../web/stylesheets",
     "build:css:postcss": "BROWSERSLIST_CONFIG=.browserslistrc postcss ../web/stylesheets/*.css --verbose --use autoprefixer --use cssnano --no-map --dir ../web/stylesheets",
