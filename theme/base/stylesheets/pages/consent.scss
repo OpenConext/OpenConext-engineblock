@@ -196,11 +196,11 @@
                 }
 
                 > input[type="checkbox"],
-                > label {
+                > .ie11__label {
                     @include grid-position(1, 2, 5, 6);
                 }
 
-                > label.modal {
+                > .ie11__label > label.modal {
                     color: $oceanBlue;
                     padding: 10px 0;
 
@@ -220,12 +220,16 @@
                     }
                 }
 
-                > input:checked + label.modal + .modal__value {
+                > input:checked + .ie11__label + .modal__value {
                     display: flex;
                     justify-content: center;
                     margin: 9px auto 1rem;
                 }
 
+            }
+
+            _:-ms-fullscreen, > li.idpRow {
+                @include grid-template-columns(85.68px 6.12px 336.6px 6.12px 171.36px 6.12px);
             }
         }
 
@@ -236,7 +240,10 @@
             margin: 1.5rem 0 2rem;
 
             li {
-                > p,
+                &.disclaimer__privacy {
+                    margin-bottom: 1rem;
+                }
+
                 > div {
                     @include display-grid;
                     @include grid-template-columns(67px calc(100% - 67px));
@@ -246,7 +253,6 @@
                         margin-left: 14px;
                     }
 
-                    > span,
                     > div {
                         @include grid-position(1, 2, 2, 3);
                         max-width: 30rem;
@@ -283,6 +289,11 @@
                             }
                         }
                     }
+                }
+
+                _:-ms-fullscreen,
+                > div {
+                    @include grid-template-columns(67px 545px);
                 }
             }
         }

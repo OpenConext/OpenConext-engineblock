@@ -151,10 +151,10 @@ HTML
     'consent_slidein_correction_title' => 'Is the data shown incorrect?',
     'consent_slidein_correction_text_idp'  => '%suiteName% receives the information directly from your %organisationNoun% and does not store the information itself. If your information is incorrect, please contact the help desk of your %organisationNoun% to change it.',
     'consent_slidein_correction_text_aa'  => '%suiteName% receives the information directly from the attribute provider and does not store the information itself. If your information is incorrect, please contact the attribute provider directly to correct it. You can ask the help desk of your %organisationNoun% for assistance with this.',
-     'consent_disclaimer_privacy_nolink' => '<span><strong>%org%</strong> needs this information to function properly.</span>'
+     'consent_disclaimer_privacy_nolink' => '<div><strong>%org%</strong> needs this information to function properly.</div>'
      ,
      'consent_disclaimer_privacy' => <<<'TXT'
-</span><strong>%org%</strong> needs this information to function properly (read their <a href="%privacy_url%" target="_blank">privacy policy</a>).</span>
+<div><strong>%org%</strong> needs this information to function properly (read their <a href="%privacy_url%" target="_blank">privacy policy</a>).</div>
 TXT
      ,
      'consent_disclaimer_secure' => <<<'TXT'
