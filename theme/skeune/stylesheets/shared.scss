@@ -1,0 +1,183 @@
+/*******************************************************************
+    CSS shared across all pages with the default layout
+ ******************************************************************/
+@import 'helpers.scss';
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    align-items: center;
+    background: $skeuneBlue;
+    display: flex;
+    font-family: 'SourceSansPro', sans-serif;
+    font-size: 100%;
+    justify-content: center;
+
+    *,
+    *:before,
+    *:after {
+        box-sizing: border-box
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    h3 {
+        color: $brownishGray;
+        font-family: 'ProximaNovaSoft', sans-serif;
+        font-size: $f-h3;
+        font-weight: $bolder;
+        line-height: 1.5;
+    }
+
+    h4 {
+        color: $black;
+        font-family: 'ProximaNovaSoft', sans-serif;
+        font-size: $f-xl;
+        font-weight: $bolder;
+        line-height: 1.5;
+    }
+
+    h5 {
+        color: $brownishGray;
+        font-size: $f-h5;
+        font-weight: $normal;
+        line-height: 1.5;
+    }
+
+    h6 {
+        color: $black;
+        font-size: $f-large;
+        font-weight: $bolder;
+        line-height: 1.5;
+    }
+
+    > .container {
+        > header {
+            > p.loginBar {
+                @include font-style-xl;
+                background-color: $skeuneBlue;
+                color: $loginBlue;
+                font-family: 'ProximaNovaSoft', sans-serif;
+                line-height: 5rem;
+                margin: 0;
+                padding: 0 2rem;
+            }
+        }
+
+        > main {
+            background-color: $skeuneGray;
+
+            > header {
+                font-family: 'ProximaNovaSoft', sans-serif;
+
+                h1 {
+                    @include font-style-xl;
+                    background-color: $skeuneYellow;
+                    color: $black;
+                    line-height: calculateRem(26px);
+                    margin: 0;
+                    padding: calculateRem(26px) 2rem;
+                }
+
+                h2 {
+                    background-color: $skeuneGray;
+                    color: $skeuneGreen;
+                    font-size: $f-h2;
+                    font-weight: $bolder;
+                    line-height: 1.15;
+                    margin: 0;
+                    padding: calculateRem(24px) 2rem calculateRem(34px);
+                }
+            }
+        }
+
+        footer.footer__general {
+            background-color: $skeuneBlue;
+            color: $loginBlue;
+            margin: 1rem 0 calculateRem(11px);
+
+            > .footer__menu {
+                display: flex;
+                font-size: $f-normal;
+                font-weight: $bolder;
+                justify-content: space-between;
+                line-height: 1.5;
+
+                a {
+                    color: $skeuneLightBlue;
+
+                    &.selected,
+                    &:hover,
+                    &:focus{
+                        color: $white;
+                    }
+
+                    &:hover,
+                    &:focus {
+                        line-height: 1.75;
+                    }
+                }
+
+                ul.comp-language {
+                    display: inline-block;
+                    line-height: inherit;
+                    margin: 0;
+                    position: unset;
+
+                    > li {
+                        display: inline-block;
+
+                        > a {
+                            background-color: inherit;
+                        }
+
+                        &:nth-of-type(even) {
+                            border-left: 1px solid $white;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    input[type="checkbox"]:checked.modal + label + .modal__value,
+    input[type="checkbox"]:checked.tooltip + label + .tooltip__value {
+        background-color: $skeuneGray;
+        display: block;
+        text-align: left;
+    }
+
+    input[type="checkbox"]:checked.tooltip + label + .tooltip__value {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    label.tooltip {
+        @include tooltip;
+    }
+
+    label.modal > span {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='25' height='24' viewBox='0 0 25 24'%3E%3Cdefs%3E%3Cpath id='t5vbpi1wma' d='M4.92 10.75c-.183 0-.367-.05-.528-.153-.416-.268-.517-.794-.225-1.176L8.319 4 4.18-1.422c-.292-.382-.19-.908.226-1.175.417-.268.99-.175 1.282.207l4.508 5.906c.221.291.221.678 0 .969L5.673 10.39c-.18.234-.464.359-.754.359'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(5.5 8)'%3E%3Cmask id='jsuhne1qsb' fill='%23fff'%3E%3Cuse xlink:href='%23t5vbpi1wma'/%3E%3C/mask%3E%3Cuse fill='%230077C8' transform='rotate(90 7.181 4)' xlink:href='%23t5vbpi1wma'/%3E%3C/g%3E%3C/svg%3E%0A") no-repeat right center;
+        padding-right: 25px;
+    }
+
+    input[type="checkbox"]:checked.modal + label > span {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24' height='24' viewBox='0 0 24 24'%3E%3Cdefs%3E%3Cpath id='wusxz70bxa' d='M4.92 10.75c-.183 0-.367-.05-.528-.153-.416-.268-.517-.794-.225-1.176L8.319 4 4.18-1.422c-.292-.382-.19-.908.226-1.175.417-.268.99-.175 1.282.207l4.508 5.906c.221.291.221.678 0 .969L5.673 10.39c-.18.234-.464.359-.754.359'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(5 8)'%3E%3Cmask id='etvz1reijb' fill='%23fff'%3E%3Cuse xlink:href='%23wusxz70bxa'/%3E%3C/mask%3E%3Cuse fill='%230077C8' transform='scale(1 -1) rotate(90 11.181 0)' xlink:href='%23wusxz70bxa'/%3E%3C/g%3E%3C/svg%3E%0A") no-repeat right center;
+    }
+
+    // todo add animations
+    input[type="checkbox"]:checked.tooltip + label.tooltip {
+        @include tooltip-checked;
+    }
+
+    input[type="checkbox"]:checked.tooltip + label.tooltip + .tooltip__value {
+        > p {
+            text-align: left;
+        }
+    }
+}
+

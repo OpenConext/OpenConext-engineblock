@@ -1,0 +1,68 @@
+{% extends '@themeLayouts/scripts/default.html.twig' %}
+
+{% block stylesheets %}{% spaceless %}
+    <link href="/stylesheets/error-page.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
+{% endspaceless %}{% endblock %}
+
+{% set feedbackInfoMap = feedbackInfo().data %}
+{% set hideHeader = true %}
+{% set hideFooter = true %}
+
+{% block languageSwitcher %}
+    {{ languageSwitcher.form(locale(), postData()) }}
+{% endblock %}
+
+{% block background %}
+<div class="background">
+    <div class="background__front"></div>
+    <div class="background__back"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+    {{ flushLog('Showing feedback page with message: ' ~ pageTitle) }}
+
+    <div class="error-container">
+
+        <div class="error-container__content">
+            <div class="error-title">
+                <h1 class="error-title__heading">{% block pageTitle %}{% endblock %}</h1>
+                <div class="error-title__error-message">{% block errorMessage %}{% endblock %}</div>
+            </div>
+
+            {# Some error pages omit the feedback info entirily. To ensure we do not show the intro text, check if the block is empty #}
+            {% set _feedbackInfoBlock = block('feedbackInfo') %}
+            {% if feedbackInfoMap is not empty and _feedbackInfoBlock is not empty %}
+
+            <div class="horizontal-rule">
+                <hr class="horizontal-rule__line">
+            </div>
+
+            <div class="error-details">
+                <p class="error-details__intro-text">
+                    {{ 'error_feedback_info_intro'|trans|raw }}
+                </p>
+                <div class="error-details__feedback-list">
+                    {% block feedbackInfo %}
+
+                            {% for feedbackInfo in feedbackInfoMap %}
+                            <div class="feedback-info feedback-info--{{ feedbackInfo.attrSafeKey }}">
+                                <span class="feedback-info__label">{{ feedbackInfo.key|trans }}:</span>
+                                <span class="feedback-info__value" title="{{ feedbackInfo|escape('html_attr') }}">{{ feedbackInfo }}</span>
+                            </div>
+                            {% endfor %}
+
+                    {% endblock %}
+                </div>
+            </div>
+
+            {% endif %}
+
+            <p>{{ 'error_help_desc'|trans|raw }}</p>
+
+        </div>
+        {% spaceless %}{% include "@theme/Default/View/Error/partial/footer.html.twig" %}{% endspaceless %}
+    </div>
+
+{% endblock %}

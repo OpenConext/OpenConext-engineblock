@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.1 (12005) - http://www.bohemiancoding.com/sketch -->
+    <title>Magnifying_Glass_1_x2C__Zoom_1</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="magnifying-glass-1" sketch:type="MSLayerGroup" fill="#A8A8A8">
+            <path d="M15.707,14.293 L12.595,11.201 C12.593,11.199 12.591,11.199 12.589,11.197 C13.471,10.025 14,8.575 14,7 C14,3.141 10.859,0 7,0 C3.141,0 0,3.141 0,7 C0,10.859 3.141,14 7,14 C8.575,14 10.025,13.471 11.196,12.59 C11.198,12.592 11.198,12.594 11.2,12.596 L14.293,15.707 C14.488,15.902 14.744,16 15,16 C15.256,16 15.512,15.902 15.707,15.707 C16.098,15.316 16.098,14.684 15.707,14.293 L15.707,14.293 Z M11.375,6.906 C10.479,7.131 10.255,5.789 9.187,4.75 C8,3.594 6.637,3.35 6.812,2.562 C6.941,1.986 8.738,1.73 10.468,3.343 C12.198,4.958 12,6.75 11.375,6.906 L11.375,6.906 Z" id="Magnifying_Glass_1_x2C__Zoom_1" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

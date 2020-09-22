@@ -1,0 +1,45 @@
+/*******************************************************************
+    Generic sass-variables
+ ******************************************************************/
+
+@import 'functions';
+
+// Colors
+$black: #212121;
+$hoverBlue: #ddf2fd;
+$loginBlue: #b3e5ff;
+$lightBlue: #94d6ff;
+$skeuneLightBlue: #7cc8e1;
+$buttonBlue: #0077c8;
+$oceanBlue: #0062b0;
+$darkishBlue: #004c97;
+$darkishBlueTwo: #003980;
+$skeuneBlue: #004c97;
+$skeuneGreen: #008738;
+$skeuneYellow: #fedb00;
+$lightPink: #efefef;
+$secondaryDisabledGray: #cfd2d1;
+$providerGray: #dfe3e8;
+$softBorderGray: #c8c8c8;
+$brownGray: #ababab;
+$hardBorderGray: #919ba4;
+$brownishGray: #5b5b5b;
+$skeuneGray: #f4f6f8;
+$white: #fff;
+
+// Font sizes
+$f-small: calculateRem(14px);
+$f-normal: calculateRem(16px);
+$f-large: calculateRem(19px);
+$f-h5: calculateRem(20px);
+$f-xl: calculateRem(22px);
+$f-h3: calculateRem(24px);
+$f-h2: calculateRem(26px);
+$f-xxl: calculateRem(36px);
+
+// Font weights
+$light: 300;
+$normal: 400;
+$bold: 500;
+$bolder: 600;
+$boldest: 700;
