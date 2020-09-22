@@ -98,8 +98,9 @@
                     }
 
                     > .consent__attributes--nested {
-                        border: unset;
-                        box-shadow: unset;
+                        border: 0;
+                        border-radius: 0;
+                        box-shadow: none;
                         display: none;
                         margin: 0;
                         width: 100%;
