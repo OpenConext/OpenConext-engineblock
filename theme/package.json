@@ -15,7 +15,7 @@
     "audit": "npm audit",
     "lint": "npm run lint:js && npm run lint:css",
     "lint:js": "jshint base/javascripts/",
-    "lint:css": "stylelint 'base/stylesheets/**/*.sass' --syntax sass",
+    "lint:css": "stylelint '${EB_THEME:=openconext}/stylesheets/**/*.sass' --syntax sass",
     "clean": "rimraf ../web/images/* ../web/javascripts/* ../web/stylesheets/*",
     "build": "npm run build:clean && npm run build:js && npm run build:css && npm run build:copy",
     "build:clean": "rimraf ../web/javascripts/* ../web/stylesheets/*",
