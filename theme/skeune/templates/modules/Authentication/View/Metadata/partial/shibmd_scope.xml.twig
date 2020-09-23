@@ -1,5 +1,0 @@
-{% if metadata.shibMdScopes is not empty %}
-    {% for scope in metadata.shibMdScopes %}
-        <shibmd:Scope regexp="{{ scope.regexp == 1 ? 'true' : 'false' }}" xmlns:shibmd="urn:mace:shibboleth:metadata:1.0">{{ scope.allowed }}</shibmd:Scope>
-    {% endfor %}
-{% endif %}
