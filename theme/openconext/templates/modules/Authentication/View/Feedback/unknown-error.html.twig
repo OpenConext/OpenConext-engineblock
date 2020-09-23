@@ -1,0 +1,9 @@
+{% extends '@theme/Default/View/Error/error.html.twig' %}
+
+{# Prepare the page title #}
+{% set pageTitle = 'error_generic'|trans %}
+{% block pageTitle %}{{ pageTitle }}{% endblock %}
+{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
+{% block pageHeading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
+
+{% block errorMessage %}{{ 'error_generic_desc'|trans|raw }}{% endblock %}
