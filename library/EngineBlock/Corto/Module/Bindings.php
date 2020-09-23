@@ -183,9 +183,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $_SESSION['currentServiceProvider'] = $ebRequest->getIssuer()->getValue();
 
         // Verify that we know this SP and have metadata for it.
-        $serviceProvider = $this->_verifyKnownSP(
-            $spEntityId->getValue()
-        );
+        $serviceProvider = $this->_verifyKnownSP($spEntityId->getValue());
 
         if (!$serviceProvider instanceof ServiceProvider) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
