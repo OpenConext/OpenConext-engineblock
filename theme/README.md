@@ -74,7 +74,7 @@ For your convenience, you can simply use the following command to create a scaff
 
 `npm run create-theme <theme-name>`
 
-For example: to create a scaffold for a new theme called "surfconnext" use the command `npm run create-theme surfconnext`
+For example: to create a scaffold for a new theme called "surfconext" use the command `npm run create-theme surfconext`
 
 #### Custom CSS
 
