@@ -41,7 +41,7 @@ jobs:
                 docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                     SYMFONY_ENV=ci composer install --prefer-dist -n -o && \
                     ./app/console cache:clear --env=ci && \
-                    cd theme && CYPRESS_INSTALL_BINARY=0 npm ci && npm run build
+                    cd theme && CYPRESS_INSTALL_BINARY=0 npm ci && EB_THEME=openconext npm run build
                 '
             - name: Run code quality tests
               if: always()
