@@ -41,7 +41,7 @@ jobs:
                 docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                     SYMFONY_ENV=ci composer install --prefer-dist -n -o && \
                     ./app/console cache:clear --env=ci && \
-                    cd theme && CYPRESS_INSTALL_BINARY=0 npm ci && EB_THEME=openconext npm run build
+                    cd theme && CYPRESS_INSTALL_BINARY=0 npm ci && EB_THEME=skeune npm run build
                 '
             - name: Run code quality tests
               if: always()
@@ -103,11 +103,7 @@ jobs:
             - name: Run Cypress integration tests
               if: always()
               run: |
-                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
-                    sed -i -e "s,theme.name: openconext,theme.name: skeune,g" ./app/config/parameters.yml && \
-                    cd theme && npm run build
-                  ' && \
-                  docker-compose exec -T cypress bash -c '
+                  cd docker && docker-compose exec -T cypress bash -c '
                       cypress run --browser=firefox --headless
                   '
               env:
