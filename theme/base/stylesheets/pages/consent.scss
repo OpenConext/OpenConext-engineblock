@@ -342,6 +342,11 @@
                 }
             }
         }
+
+        > .notification__warning {
+            @include warning;
+            max-width: 34rem;
+        }
     }
 
     > :last-child {
