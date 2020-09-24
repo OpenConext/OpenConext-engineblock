@@ -71,7 +71,7 @@ class MetadataRendererTest extends TestCase
             ->willReturn('EB_metadata');
 
         $twigLoader = new \Twig_Loader_Filesystem();
-        $twigLoader->addPath($basePath . '/theme/base/templates/modules', 'theme');
+        $twigLoader->addPath($basePath . '/theme/openconext/templates/modules', 'theme');
         $environment = new Environment($twigLoader);
 
         $translator = m::mock(TranslatorInterface::class);
