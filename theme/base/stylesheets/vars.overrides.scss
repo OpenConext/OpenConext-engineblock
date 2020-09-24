@@ -5,41 +5,41 @@
 @import 'functions';
 
 // Colors
-$black: #212121;
-$hoverBlue: #ddf2fd;
-$loginBlue: #b3e5ff;
-$lightBlue: #94d6ff;
-$skeuneLightBlue: #7cc8e1;
-$buttonBlue: #0077c8;
-$oceanBlue: #0062b0;
-$darkishBlue: #004c97;
-$darkishBlueTwo: #003980;
-$skeuneBlue: #004c97;
-$skeuneGreen: #008738;
-$skeuneYellow: #fedb00;
-$lightPink: #efefef;
-$secondaryDisabledGray: #cfd2d1;
-$providerGray: #dfe3e8;
-$softBorderGray: #c8c8c8;
-$brownGray: #ababab;
-$hardBorderGray: #919ba4;
-$brownishGray: #5b5b5b;
-$skeuneGray: #f4f6f8;
-$white: #fff;
+$black: #212121 !default;
+$hoverBlue: #ddf2fd !default;
+$loginBlue: #b3e5ff !default;
+$lightBlue: #94d6ff !default;
+$skeuneLightBlue: #7cc8e1 !default;
+$buttonBlue: #0077c8 !default;
+$oceanBlue: #0062b0 !default;
+$darkishBlue: #004c97 !default;
+$darkishBlueTwo: #003980 !default;
+$skeuneBlue: #004c97 !default;
+$skeuneGreen: #008738 !default;
+$skeuneYellow: #fedb00 !default;
+$lightPink: #efefef !default;
+$secondaryDisabledGray: #cfd2d1 !default;
+$providerGray: #dfe3e8 !default;
+$softBorderGray: #c8c8c8 !default;
+$brownGray: #ababab !default;
+$hardBorderGray: #919ba4 !default;
+$brownishGray: #5b5b5b !default;
+$skeuneGray: #f4f6f8 !default;
+$white: #fff !default;
 
 // Font sizes
-$f-small: calculateRem(14px);
-$f-normal: calculateRem(16px);
-$f-large: calculateRem(19px);
-$f-h5: calculateRem(20px);
-$f-xl: calculateRem(22px);
-$f-h3: calculateRem(24px);
-$f-h2: calculateRem(26px);
-$f-xxl: calculateRem(36px);
+$f-small: calculateRem(14px) !default;
+$f-normal: calculateRem(16px) !default;
+$f-large: calculateRem(19px) !default;
+$f-h5: calculateRem(20px) !default;
+$f-xl: calculateRem(22px) !default;
+$f-h3: calculateRem(24px) !default;
+$f-h2: calculateRem(26px) !default;
+$f-xxl: calculateRem(36px) !default;
 
 // Font weights
-$light: 300;
-$normal: 400;
-$bold: 500;
-$bolder: 600;
-$boldest: 700;
+$light: 300 !default;
+$normal: 400 !default;
+$bold: 500 !default;
+$bolder: 600 !default;
+$boldest: 700 !default;
