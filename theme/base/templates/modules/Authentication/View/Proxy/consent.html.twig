@@ -26,22 +26,15 @@
         {% block consent_content %}
             <div class="consent__content">
                 {% include '@theme/Authentication/View/Proxy/Partials/Consent/attributes.html.twig' %}
+                {% include '@theme/Authentication/View/Proxy/Partials/Consent/disclaimerList.html.twig' %}
 
-                {# todo check what this is and if it needs to stay #}
                 {% if showConsentExplanation and consentSettings.consentExplanationIn(app.request.locale, spEntityId) %}
-                    <section class="idp-consent-explanation">
-                        {% if idp.logo is not null %}
-                            <div class="idp-logo">
-                                <img class="idp-logo logo-small" src="{{ idp.logo.url }}" alt=""/>
-                            </div>
-                        {% endif %}
-                        <p class="title">{{ 'consent_explanation_title'|trans }}</p>
-                        <p class="text">{{ consentSettings.consentExplanationIn(app.request.locale, spEntityId) }}</p>
-
-                    </section>
+                    {% include '@theme/Authentication/View/Proxy/Partials/Consent/extraNotification.html.twig' with {
+                        notificationTitle: 'consent_explanation_title'|trans,
+                        text: consentSettings.consentExplanationIn(app.request.locale, spEntityId)
+                    } %}
                 {% endif %}
 
-                {% include '@theme/Authentication/View/Proxy/Partials/Consent/disclaimerList.html.twig' %}
                 {% include '@theme/Authentication/View/Proxy/Partials/Consent/ctas.html.twig' %}
             </div>
         {% endblock %}
