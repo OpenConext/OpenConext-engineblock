@@ -9,7 +9,7 @@
     box-shadow: 0 3px 0 2px $darkishBlueTwo;
 
     > .consent__content {
-        background-color: $skeuneGray;
+        background-color: $gray;
         padding: 0 2rem calculateRem(40px);
 
         > .consent__attributes,
@@ -235,7 +235,7 @@
             }
 
             > label {
-                @include button-tertiary($skeuneGray);
+                @include button-tertiary($gray);
                 width: 100%;
 
                 &:focus {
