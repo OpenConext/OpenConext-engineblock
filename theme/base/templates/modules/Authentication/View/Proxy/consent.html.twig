@@ -21,7 +21,7 @@
 {% block content %}
     {% include '@theme/Default/Partials/LoginBar.html.twig' with { loginName: 'suite_name'|trans } %}
     <main class="consent">
-        {% include '@theme/Authentication/View/Proxy/Partials/Consent/header.html.twig' %}
+        {% include '@theme/Authentication/View/Proxy/Partials/Shared/header.html.twig' %}
 
         {% block consent_content %}
             <div class="consent__content">

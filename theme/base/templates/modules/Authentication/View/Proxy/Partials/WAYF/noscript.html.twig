@@ -1,0 +1,18 @@
+<noscript>
+    <div class="list show-buttons">
+        {% for key, idp in connectedIdps.mergedIdpList %}
+            <a class="result active access" href="#" tabindex="-1">
+                <div class="logo">
+                    <img class="logo" loading="lazy" src="{{ idp['logo'] }}" alt="">
+                </div>
+                <h3>{{ idp['displayTitle'] }}</h3>
+                <form class="mod-search login" method="post" action="{{ action }}">
+                    <input type="hidden" name="ID" value="{{ requestId }}"/>
+                    <input type="hidden" name="idp" value="{{ idp['entityId'] }}"/>
+                    <input type="submit" data-entityid="{{ idp['entityId'] }}" class="c-button white"
+                           value="Login"/>
+                </form>
+            </a>
+        {% endfor %}
+    </div>
+</noscript>

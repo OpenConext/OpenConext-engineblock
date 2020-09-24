@@ -1,0 +1,9 @@
+<form class="mod-search hidden" method="post" action="{{ action }}">
+    <input type="hidden" name="ID" value="{{ requestId }}"/>
+    <input type="hidden" id="form-idp" name="idp" value=""/>
+
+    <h2 class="search-institutions">{{ 'search'|trans }}</h2>
+    <input placeholder="{{ 'search'|trans }}" type="search" tabindex="0" class="mod-search-input active">
+
+    <button class="search">Search</button>
+</form>
