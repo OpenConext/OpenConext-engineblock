@@ -103,7 +103,11 @@ jobs:
             - name: Run Cypress integration tests
               if: always()
               run: |
-                  cd docker && docker-compose exec -T cypress bash -c '
+                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                    sed -i -e "s,theme.name: openconext,theme.name: skeune,g" ./app/config/parameters.yml && \
+                    cd theme && npm run build
+                  ' && \
+                  docker-compose exec -T cypress bash -c '
                       cypress run --browser=firefox --headless
                   '
               env:
