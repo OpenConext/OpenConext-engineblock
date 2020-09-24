@@ -17,7 +17,8 @@ try {
     console.log('Reading contents of parameters.yml.\n');
     const fileContents = fs.readFileSync(config, 'utf8');
     const parameters = yaml.safeLoadAll(fileContents);
-    let theme = process.env.EB_THEME || parameters[0].parameters['theme.name'] || 'base';
+
+    let theme = process.env.EB_THEME || parameters[0].parameters['theme.name'] || 'openconext';
 
     if (process.env.EB_THEME) {
         theme = process.env.EB_THEME;

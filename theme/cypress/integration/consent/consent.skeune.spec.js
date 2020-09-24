@@ -1,6 +1,5 @@
-/// <reference types="cypress" />
+context('Consent on Skeune theme', () => {
 
-context('Consent', () => {
   beforeEach(() => {
     cy.visit('https://engine.vm.openconext.org/functional-testing/consent');
   });
