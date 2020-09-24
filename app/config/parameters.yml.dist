@@ -235,4 +235,7 @@ parameters:
 ##########################################################################################
     ## THEME SETTINGS
     ##########################################################################################
-    theme.name: 'openconext'
+    # When changing the default theme name, be aware that the CI build will no longer be able to select our default
+    # test suite for js e2e tests. This because a SED command is in place to rewrite the parameters.yml.
+    # See the SED command in Gitlab Actions runner: 'Run Cypress integration tests'
+    theme.name: openconext
