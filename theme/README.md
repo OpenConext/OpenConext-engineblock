@@ -46,10 +46,10 @@ The entire login flow needs to conform to [WCAG][wcag] 2.1 AA-levels.
 
 ### Switching themes
 
-You can switch a theme by simply changing the `theme.name` parameter in `parameters.yml`.  Use the folder name of the theme you want.  Eg. if you want the base theme the entry would read as follows:
+You can switch a theme by simply changing the `theme.name` parameter in `parameters.yml`.  Use the folder name of the theme you want.  Eg. if you want the skeune theme the entry would read as follows:
 
 ```yaml
-    theme.name: 'base'
+    theme.name: 'skeune'
 ```
 
 if however you prefer to use the openconext theme, it'd read like this:
