@@ -1,6 +1,5 @@
 <?php
 
-//use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 
 $loader = require __DIR__.'/../app/autoload.php';
