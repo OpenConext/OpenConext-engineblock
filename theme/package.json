@@ -26,6 +26,7 @@
     "build:css:sass": "node-sass ${EB_THEME:=openconext}/stylesheets --error-bell -o ../web/stylesheets/",
     "build:css:postcss": "BROWSERSLIST_CONFIG=.browserslistrc postcss ../web/stylesheets/*.css --verbose --use autoprefixer --use cssnano --no-map --dir ../web/stylesheets",
     "build:copy": "mkdir -p ../web/images && copyfiles --verbose --up 2 base/images/* ../web/images/",
+    "create-theme": "node scripts/create-theme.js",
     "watch:js": "watchify ${EB_THEME:=base}/javascripts/application.js --poll=100 --debug -t [ babelify ] ${EB_THEME:=base}/javascripts/application.js -o ../web/javascripts/application.min.js -v",
     "watch:css": "node-sass -r ${EB_THEME:=openconext}/stylesheets -w -o ../web/stylesheets",
     "release": "npm run build"
