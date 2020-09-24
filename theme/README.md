@@ -67,7 +67,7 @@ If you want to make your own theme it should be as a subfolder of the theme fold
 Your theme **must** have the following structure:
 - images
 - javascripts: this needs to contain an `application.js` file, which is the entrypoint for all js loaded by your theme.
-- stylesheets: this needs to contain an `application.scss` file, which is the entrypoint for all css loaded by your theme.  If you want to have custom fonts, put them in a `fonts` subfolder here (and import them in your css).
+- stylesheets: this needs to contain an `application.scss` file, which is the entrypoint for all css loaded by your theme.
 - templates: you only need to put templates here you want to override.
 
 For your convenience, you can simply use the following command to create a scaffold for your new theme:
@@ -78,17 +78,47 @@ For example: to create a scaffold for a new theme called "surfconnext" use the c
 
 #### Custom CSS
 
+Your theme needs to have `application.scss` (or .sass or .css) as an entry point for all css.  This file must be directly in the stylesheets folder (not in a subfolder).
+
+This has two consequences:
+1. you are completely free to use the styles you prefer.
+2. if you wish to use any of the css from the base theme, you'll need to import it.
+
+We highly recommend importing the helpers.scss file from the base theme.  It contains many usefull classes, functions and mixins.
+All variables in the base theme have been configured to be overridable with the !default option for sass.  This means they will only be used when you have not overwritten them in your own scss files.
+
+Last, but not least, the base theme contains an a11y-tests file.  This is meant for development only, to test a couple of common accessibility scenarios.
+
+#### Custom Fonts
+
+If you want to have custom fonts, put them in a fonts subfolder of stylesheets.  They will automatically be copied to the web/fonts folder when building your theme.
+
+#### Custom Images
+
+If you want to have custom images, put them in a images subfolder of your theme.  They will automatically be copied to the web/images folder when building your theme.
+
 #### Custom JS
+
+Your theme needs to have `application.js` as an entry point for all css.  This file must be directly in the javascripts folder (not in a subfolder).
+
+This has two consequences:
+1. you are completely free to use the javascript you prefer.
+2. if you wish to use any of the js from the base theme, you'll need to import it.  When in doubt, you can use the application.js file in the base theme to see which files to import.
 
 #### Custom Twig templates
 
+To override a twig file create one with the same name in the same location.  This means the folderstructure of your templates needs to be the same for the templates you want to override.  Any template that isn't overriding a template from the base theme, can be in any place you want in the templates folder of your theme.
 
+Below you'll find a list of the "entry points" for each page with corresponding testing urls to ease development.  If you want to override the entire page, you will need to have those in your theme.
+- consent page: `templates > modules > authentication > view > proxy > consent.html.twig`.  You can use `https://engine.vm.openconext.org/functional-testing/consent` to develop the page.
+- wayf: `templates > modules > authentication > view > proxy > wayf.html.twig `.  You can use `https://engine.vm.openconext.org/functional-testing/wayf` to develop the page.
+- error: `templates > modules > default > view > error > error.html.twig`.  You can use `https://engine.vm.openconext.org/feedback/unknown-error` to develop the page.
 
-[nodejs]: https://nodejs.org/en/
-[sass]: https://sass-lang.com/
-[postcss]: https://postcss.org/
-[twig]: https://twig.symfony.com/
-[cypress]: https://www.cypress.io/
-[vanilla.js]: https://learnvanillajs.com/
 [babel]: https://babeljs.io/
+[cypress]: https://www.cypress.io/
+[nodejs]: https://nodejs.org/en/
+[postcss]: https://postcss.org/
+[sass]: https://sass-lang.com/
+[twig]: https://twig.symfony.com/
+[vanilla.js]: https://learnvanillajs.com/
 [wcag]: https://www.w3.org/WAI/standards-guidelines/wcag/
