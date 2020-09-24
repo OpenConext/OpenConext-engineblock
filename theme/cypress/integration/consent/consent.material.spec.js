@@ -1,11 +1,10 @@
-/// <reference types="cypress" />
+context('Consent on Material theme', () => {
 
-context('Consent', () => {
   beforeEach(() => {
     cy.visit('https://engine.vm.openconext.org/functional-testing/consent');
   });
 
-  it('gives openconext information', () => {
+  it.skip('gives openconext information', () => {
     cy.get('a.help[data-slidein="about"]')
       .click()
       .get('section h1')
@@ -16,7 +15,7 @@ context('Consent', () => {
       .click();
   });
 
-  it('shows information on how to report incorrect data', () => {
+  it.skip('shows information on how to report incorrect data', () => {
     cy.get('a.small')
       .click()
       .get('section h1')
@@ -27,7 +26,7 @@ context('Consent', () => {
       .click();
   });
 
-  it('can show additional attributes', () => {
+  it.skip('can show additional attributes', () => {
     cy.get('span.show-more')
       .click()
       .get('td[data-identifier="urn:mace:dir:attribute-def:isMemberOf"]')
@@ -35,7 +34,7 @@ context('Consent', () => {
       .and('contain.text', 'Member of organization');
   });
 
-  it('can decline consent', () => {
+  it.skip('can decline consent', () => {
     cy.get('div.slidein.reject')
       .should('be.hidden');
 
