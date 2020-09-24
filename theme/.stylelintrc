@@ -5,8 +5,14 @@
       true,
       {
         "ignoreAtRules": [
+          "each",
+          "else",
+          "for",
+          "function",
+          "if",
+          "include",
           "mixin",
-          "include"
+          "return"
         ]
       }
     ],
