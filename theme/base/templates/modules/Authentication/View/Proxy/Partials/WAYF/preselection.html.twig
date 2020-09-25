@@ -1,7 +1,16 @@
-<div class="preselection mod-results hidden">
-    <header>
-        <h2>{{ 'our_suggestion'|trans }}<a class="edit" href="#" data-toggle="view" data-toggle-text="{{ 'done'|trans }}">{{ 'edit'|trans }}</a></h2>
-    </header>
-    <div class="idp-list">
-    </div>
-</div>
+<section class="wayf__previousSelection">
+    <h2 class="previousSelection__title">{{ 'wayf_your_accounts'|trans }}
+        <button type="button" class="previousSelection__toggle">
+            <span class="previousSelection__edit">
+                {{ 'edit'|trans }}
+            </span>
+            <span class="previousSelection__done">
+                {{ 'done'|trans }}
+            </span>
+        </button>
+    </h2>
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idpList.html.twig' with { idpList: connectedIdps.formattedPreviousSelectionList } %}
+    <button type="button">
+        {{ 'wayf_add_account'|trans }}
+    </button>
+</section>

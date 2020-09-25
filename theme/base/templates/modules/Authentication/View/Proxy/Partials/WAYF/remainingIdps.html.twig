@@ -1,0 +1,17 @@
+<section class="wayf__remainingIdps">
+    <h2 class="remainingIdps__title visually-hidden">
+        {% if connectedIdps.formattedPreviousSelectionList %}{# todo test this with an empty array #}
+            {{ 'wayf_remaining_idps_title'|trans }}
+        {% else %}
+            {{ 'wayf_select_account'|trans }}
+        {% endif %}
+    </h2>
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/search.html.twig' %}
+    {# todo make this hide behind a feature flag #}
+    {# todo get right link for eduId #}
+    {% include '@theme/Default/Partials/informational.html.twig' with {
+        class: 'remainingIdps__eduId',
+        text: 'wayf_eduId'|trans({ '%eduIdLink%': 'https://something.com/eduId'})|raw
+    } %}
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idpList.html.twig' with { idpList: connectedIdps.formattedIdpList } %}
+</section>
