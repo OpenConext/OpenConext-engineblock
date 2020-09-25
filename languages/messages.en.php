@@ -57,6 +57,8 @@ return $overrides + [
     'attributeValue'        => 'Attribute Value',
 
     // WAYF
+    'wayf_nothing_found'        => 'Nothing found',
+    'wayf_apu'                  => 'Please try again with some different keywords',
     'search'                    => 'Search for an %organisationNoun%...',
     'our_suggestion'            => 'Previously chosen:',
     'edit'                      => 'edit',
