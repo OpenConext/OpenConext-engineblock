@@ -59,6 +59,7 @@ return $overrides + [
     // WAYF
     'wayf_nothing_found'        => 'Nothing found',
     'wayf_apu'                  => 'Please try again with some different keywords',
+    'wayf_noscript_warning'  => '<p>For this page to function optimally you need JavaScript turned on.</p><p>Without JavaScript you will not be able to remember previously used accounts.  If you want to use that functionality, please enable JavaScript.</p><p><strong>You can, off course, still log in.<strong></strong></p>',
     'search'                    => 'Search for an %organisationNoun%...',
     'our_suggestion'            => 'Previously chosen:',
     'edit'                      => 'edit',
