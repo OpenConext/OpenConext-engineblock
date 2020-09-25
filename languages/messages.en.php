@@ -42,6 +42,7 @@ return $overrides + [
     'go_back'               => '&lt;&lt; Go back',
     'note'                  => 'Note',
     'note_no_script'        => 'Since your browser does not support JavaScript, you must press the button below to proceed.',
+    'logo'        => 'logo',
 
     // Feedback
     'requestId'             => 'UR ID',
@@ -59,7 +60,19 @@ return $overrides + [
     // WAYF
     'wayf_nothing_found'        => 'Nothing found',
     'wayf_apu'                  => 'Please try again with some different keywords',
-    'wayf_noscript_warning'  => '<p>For this page to function optimally you need JavaScript turned on.</p><p>Without JavaScript you will not be able to remember previously used accounts.  If you want to use that functionality, please enable JavaScript.</p><p><strong>You can, off course, still log in.<strong></strong></p>',
+    'wayf_noscript_warning'     => '<p>For this page to function optimally you need JavaScript turned on.</p><p>Without JavaScript you will not be able to remember previously used accounts.  If you want to use that functionality, please enable JavaScript.</p><p><strong>You can, off course, still log in.<strong></strong></p>',
+    'wayf_no_access_account'    => 'No access with this account',
+    'wayf_delete_account'       => 'Delete from your accounts',
+    'wayf_remaining_idps_title' => 'Add an account from the list below',
+    'wayf_select_account'       => 'Select an account from the list below',
+    'wayf_search_placeholder'   => 'Search...',
+    'wayf_your_accounts'        => 'Your accounts',
+    'wayf_add_account'          => 'Add another account',
+    'wayf_no_access_helpdesk'   => 'If you want, you can request access to this service. We will send the request to the ICT-helpdesk of your institution.',
+    'wayf_noaccess_name'        => 'Your name',
+    'wayf_noaccess_email'       => 'Your emailaddress',
+    'wayf_noaccess_motivation'  => 'Motivation',
+    'wayf_eduId'                => 'If your organisation is not listed, <a href="%eduIdLink%" class="wayf__eduIdLink">eduID is available as an alternative.</a>',
     'search'                    => 'Search for an %organisationNoun%...',
     'our_suggestion'            => 'Previously chosen:',
     'edit'                      => 'edit',
