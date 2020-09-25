@@ -8,30 +8,7 @@
 
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
 
+
 {% block content %}
-    {% include '@theme/Default/Partials/LoginBar.html.twig' with { loginName: 'suite_name'|trans } %}
-    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/search.html.twig' %}
-    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/scriptConfig.html.twig' %}
-    <main class="wayf">
-        {% include '@theme/Authentication/View/Proxy/Partials/Shared/header.html.twig' with { h2: 'test' } %}
-
-        {% block wayf_content %}
-            <div class="wayf__content" id="idp-picker">
-                {% include '@theme/Authentication/View/Proxy/Partials/WAYF/preselection.html.twig' %}
-
-                <div class="selection mod-results">
-                    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/content__header.html.twig' with {
-                        showForm: rememberChoiceFeature
-                    } %}
-                    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/loadingSpinner.html.twig' %}
-                    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idpList.html.twig' %}
-                    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noscript.html.twig' %}
-                    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noresults.html.twig' with { text: 'no_idp_results'|trans } %}
-                </div>
-                {% if showRequestAccess %}
-                    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/showRequestAccess.html.twig' %}
-                {% endif %}
-            </div>
-        {% endblock %}
-    </main>
+    {% include '@theme/Authentication/View/Proxy/wayf_content.html.twig' %}
 {% endblock %}
