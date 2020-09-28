@@ -68,7 +68,7 @@ return $overrides + [
     'wayf_search_placeholder'   => 'Search...',
     'wayf_your_accounts'        => 'Your accounts',
     'wayf_add_account'          => 'Add another account',
-    'wayf_no_access_helpdesk'   => 'If you want, you can request access to this service. We will send the request to the ICT-helpdesk of your institution.',
+    'wayf_no_access_helpdesk'   => 'If you want, you can request access to this service. We will send the request to the helpdesk of your institution.',
     'wayf_noaccess_name'        => 'Your name',
     'wayf_noaccess_email'       => 'Your emailaddress',
     'wayf_noaccess_motivation'  => 'Motivation',
