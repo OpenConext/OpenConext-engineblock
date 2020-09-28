@@ -279,7 +279,12 @@
     border-radius: 8px;
     box-shadow: 0 1px 0 2px $orange;
     font-size: $f-large;
-    padding: 1.125rem calculateRem(53px);
+    padding: 1.125rem 1.125rem 1.125rem calculateRem(53px);
+
+    @include screen('mobile') {
+        background-position: .625rem 1rem;
+        padding: 1rem 1rem 1rem calculateRem(47px);
+    }
 
     > h3 {
         color: $black;

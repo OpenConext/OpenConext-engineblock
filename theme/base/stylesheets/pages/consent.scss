@@ -169,7 +169,7 @@
             }
 
             > li.idpRow {
-                @include grid-template-columns(14% 1% 52% 1% 31% 1%);
+                @include grid-template-columns(10% 1% 54% 1% 33% 1%);
                 align-items: center;
                 background-color: $providerGray;
                 border-bottom-left-radius: 4px;
@@ -190,6 +190,11 @@
                     font-size: $f-small;
                     font-weight: $normal;
                     margin: 0;
+                    text-align: left;
+
+                    @include screen('mobile') {
+                        margin: 0 0 0 10px;
+                    }
 
                     > strong {
                         font-weight: $bolder;
@@ -201,12 +206,21 @@
                     @include grid-position(1, 2, 5, 6);
                 }
 
-                > .ie11__label > label.modal {
+                > .ie11__label {
+                    text-align: right;
+
+                    > label.modal {
                     color: $oceanBlue;
                     padding: 10px 0;
 
                     @include screen('mobile') {
                         display: block;
+
+                        > span {
+                        padding-right: 40px;
+                        }
+                        background-position: right 18px center;
+                        }
                     }
                 }
 
