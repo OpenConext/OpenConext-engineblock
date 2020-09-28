@@ -31,6 +31,14 @@ We currently support the following browsers:
 
 The entire login flow needs to conform to [WCAG][wcag] 2.1 AA-levels.
 
+For your convenience we've added a11y-tests.scss to the base theme.  You can use it to test for the following problems:
+- grayscale
+- blur
+- large text
+- no animations
+- no mouse
+For instructions on how to use it: see the file itself.
+
 ### Folder structure:
 
 - theme:

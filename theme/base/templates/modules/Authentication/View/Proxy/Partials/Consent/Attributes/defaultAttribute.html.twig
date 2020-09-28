@@ -1,5 +1,14 @@
 <li>
-    {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/name.html.twig' with { attributeName: attributeShortName(attributeIdentifier, locale()) } %}
+    {# in case a tooltip needs to be shown set the id #}
+    {% if attributeMotivations[attributeIdentifier] is defined %}
+        {% set id %}
+            tooltip{{ loop.index }}
+        {% endset %}
+        <input type="checkbox" tabindex="-1" role="button" aria-pressed="false" class="tooltip visually-hidden" id="{{ id|trim }}" name="{{ id|trim }}" />
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/name.html.twig' with { attributeName: attributeShortName(attributeIdentifier, locale()), id: id|trim } %}
+    {% else %}
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/name.html.twig' with { attributeName: attributeShortName(attributeIdentifier, locale()) } %}
+    {% endif %}
     {# Single attribute value #}
     {% if attributeValues|length == 1 %}
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/value.html.twig' with { attributeValue: attributeValues|first } %}
