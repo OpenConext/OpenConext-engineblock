@@ -3,19 +3,21 @@
     Page-specific classes do not belong here.
  ******************************************************************/
 @import 'variables';
+@import 'breakpoints';
+@import 'mixins';
 
 .visually-hidden {
-    clip: rect(1px, 1px, 1px, 1px);
-    height: 1px;
-    overflow: hidden;
-    position: absolute;
-    white-space: nowrap;
-    width: 1px;
+    @include visually-hidden;
 }
 
 .container {
     max-width: 50rem;
     min-width: 38rem;
+
+    @include screen('mobile') {
+        max-width: unset;
+        min-width: unset;
+    }
 }
 
 .tooltip__value,

@@ -1,0 +1,64 @@
+$desktop: '(min-width: 1340px)';
+$ultrabook: '(min-width: 1200px) and (max-width: 1339px)';
+$laptop: '(min-width: 1024px) and (max-width: 1339px)';
+$tablet: '(min-width: 768px) and (max-width: 1023px)';
+$mobile: '(max-width: 767px)';
+$smallMobile: '(max-width: 374px)';
+
+$laptopAndBigger: '(min-width: 1024px)';
+$tabletAndBigger: '(min-width: 768px)';
+$laptopAndTablet: '(min-width: 768px) and (max-width: 1339px)';
+$tabletAndSmaller: '(max-width: 1023px)';
+$laptopAndSmaller: '(max-width: 1339px)';
+
+@mixin screen($size) {
+    @if $size == desktop {
+        @media only screen and #{$desktop} {
+            @content;
+        }
+    } @else if $size == laptop {
+        @media only screen and #{$laptop} {
+            @content;
+        }
+    } @else if $size == ultrabook {
+        @media only screen and #{$ultrabook} {
+            @content;
+        }
+    } @else if $size == tablet {
+        @media only screen and #{$tablet} {
+            @content;
+        }
+    } @else if $size == mobile {
+        @media only screen and #{$mobile} {
+            @content;
+        }
+    } @else if $size == laptopAndBigger {
+        @media only screen and #{$laptopAndBigger} {
+            @content;
+        }
+    } @else if $size == tabletAndBigger {
+        @media only screen and #{$tabletAndBigger} {
+            @content;
+        }
+    } @else if $size == laptopAndTablet {
+        @media only screen and #{$laptopAndTablet} {
+            @content;
+        }
+    } @else if $size == tabletAndSmaller {
+        @media only screen and #{$tabletAndSmaller} {
+            @content;
+        }
+    } @else if $size == laptopAndSmaller {
+        @media only screen and #{$laptopAndSmaller} {
+            @content;
+        }
+    } @else if $size == smallMobile {
+        @media only screen and #{$smallMobile} {
+            @content;
+        }
+    } @else {
+        @media only screen and #{$size} {
+            @content;
+        }
+    }
+}

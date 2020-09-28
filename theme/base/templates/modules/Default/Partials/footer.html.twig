@@ -5,9 +5,6 @@
         <li>
             {% if helpLink is defined %}
                 <a href="{{ helpLink }}" target="_blank" rel="noreferrer">{{ 'help_header'|trans|capitalize }}</a>
-            {% else %}
-                {# todo remove after testing #}
-                <a href="#" target="_blank" rel="noreferrer">Help</a>
             {% endif %}
         </li>
         <li>
