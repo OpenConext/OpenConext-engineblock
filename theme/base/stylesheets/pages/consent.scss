@@ -209,17 +209,25 @@
                 > .ie11__label {
                     text-align: right;
 
+                    &:focus-within {
+                        outline: 3px dotted $darkishBlue;
+                    }
+
                     > label.modal {
-                    color: $oceanBlue;
-                    padding: 10px 0;
+                        color: $oceanBlue;
+                        padding: 10px 0;
 
-                    @include screen('mobile') {
-                        display: block;
-
-                        > span {
-                        padding-right: 40px;
+                        &:focus {
+                            outline: none;
                         }
-                        background-position: right 18px center;
+
+                        @include screen('mobile') {
+                            display: block;
+
+                            > span {
+                                padding-right: 40px;
+                            }
+                            background-position: right 18px center;
                         }
                     }
                 }
