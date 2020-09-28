@@ -1,0 +1,16 @@
+{# todo waarom is showRequestAccess een globale var voor deze pagina?  Zou dat niet per idp moeten zijn? #}
+{% include '@theme/Authentication/View/Proxy/Partials/WAYF/noscript.html.twig' %}
+{% include '@theme/Default/Partials/LoginBar.html.twig' with { loginName: 'suite_name'|trans } %}
+<main class="wayf">
+    {% include '@theme/Authentication/View/Proxy/Partials/Shared/header.html.twig' with { h2: false } %}
+    {% block wayf_content %}
+        <div class="wayf__content" id="idp-picker">
+            {% include '@theme/Authentication/View/Proxy/Partials/WAYF/rememberChoice.html.twig' } %}
+            {% include '@theme/Authentication/View/Proxy/Partials/WAYF/preselection.html.twig' %}
+            {% include '@theme/Authentication/View/Proxy/Partials/WAYF/remainingIdps.html.twig' %}
+            {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noAccess/noAccess.html.twig' %}
+            {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noresults.html.twig' %}
+        </div>
+    {% endblock %}
+</main>
+{% include '@theme/Default/Partials/footer.html.twig' %}

@@ -1,0 +1,11 @@
+<form class="wayf__search" method="post" action="{{ action }}">
+    <input type="hidden" name="ID" value="{{ requestId }}"/>{# needed for the ContinueToIdp module #}
+    <input type="hidden" id="form-idp" name="idp" value=""/>{# needed for the ContinueToIdp module #}
+    <label for="wayf_search" class="visually-hidden">{{ 'search'|trans }}</label>
+    <input
+        id="wayf_search"
+        name="wayf_search"
+        placeholder="{{ 'wayf_search_placeholder'|trans }}"
+        type="search"
+    />
+</form>

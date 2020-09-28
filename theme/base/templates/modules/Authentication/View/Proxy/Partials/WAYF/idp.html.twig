@@ -1,0 +1,27 @@
+<article class="wayf__idp" data-keywords="{{ idp['keywords'] }}">
+    <a href="">  {# {{ idp['link'] }} todo ensure this link is in the connectedIdps array #}
+        <picture class="idp__logo">
+            <source srcset="" media="(min-width: 800px)"/>
+            {# todo get different images in different formats #}
+            {# todo update breakpoint #}
+            {# todo get all institutions to describe their logo for the alt #}
+            {# todo get the idp name as an attribute instead of "displaytitle" #}
+            <img src="{{ idp['logo'] }}" alt="{{ idp['displayTitle'] }} {{ 'logo'|trans }}">
+        </picture>
+        <div class="idp__content">
+            <h3>{{ idp['displayTitle'] }}</h3>
+            <button data-connected="{{ idp['connected'] }}">
+            <span class="idp__disabled">
+                <span class="visually-hidden">
+                    {{ 'wayf_no_access_account'|trans }}
+                </span>
+            </span>
+                <span class="idp__delete">
+                <span class="visually-hidden">
+                    {{ 'wayf_delete_account'|trans }}
+                </span>
+            </span>
+            </button>
+        </div>
+    </a>
+</article>

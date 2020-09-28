@@ -1,0 +1,14 @@
+{% extends '@themeLayouts/scripts/default.html.twig' %}
+
+{# Prepare the page title #}
+{% set pageTitle = 'log_in_to'|trans %}
+
+{# Data object containing the formatted IdP's #}
+{% set connectedIdps = connectedIdps(idpList, locale()) %}
+
+{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
+
+
+{% block content %}
+    {% include '@theme/Authentication/View/Proxy/wayf_content.html.twig' %}
+{% endblock %}
