@@ -1,4 +1,4 @@
-<article class="wayf__idp" data-keywords="{{ idp['keywords'] }}">
+<article class="wayf__idp {% if idp['noAccess'] is defined and idp['noAccess'] %} wayf__idp--noAccess{% endif %}" data-keywords="{{ idp['keywords'] }}">
     <a href="">  {# {{ idp['link'] }} todo ensure this link is in the connectedIdps array #}
         <picture class="idp__logo">
             <source srcset="" media="(min-width: 800px)"/>
@@ -10,18 +10,25 @@
         </picture>
         <div class="idp__content">
             <h3>{{ idp['displayTitle'] }}</h3>
-            <button data-connected="{{ idp['connected'] }}">
-            <span class="idp__disabled">
-                <span class="visually-hidden">
-                    {{ 'wayf_no_access_account'|trans }}
-                </span>
-            </span>
-                <span class="idp__delete">
-                <span class="visually-hidden">
-                    {{ 'wayf_delete_account'|trans }}
-                </span>
-            </span>
-            </button>
+
+            {% if idp['noAccess'] is defined and idp['noAccess'] or delete %}
+                <button data-connected="{{ idp['connected'] }}">
+                    {% if idp['noAccess'] is defined and idp['noAccess'] %}
+                        <span class="idp__disabled">
+                            <span class="visually-hidden">
+                                {{ 'wayf_no_access_account'|trans }}
+                            </span>
+                        </span>
+                    {% endif %}
+                    {% if delete %}
+                        <span class="idp__delete">
+                            <span class="visually-hidden">
+                                {{ 'wayf_delete_account'|trans }}
+                            </span>
+                        </span>
+                    {% endif %}
+                </button>
+            {% endif %}
         </div>
     </a>
 </article>

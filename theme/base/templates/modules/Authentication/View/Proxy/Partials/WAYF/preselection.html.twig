@@ -9,8 +9,8 @@
             </span>
         </button>
     </h2>
-    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idpList.html.twig' with { idpList: connectedIdps.formattedPreviousSelectionList } %}
-    <button type="button">
-        {{ 'wayf_add_account'|trans }}
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idpList.html.twig' with { idpList: connectedIdps.formattedPreviousSelectionList, delete: true } %}
+    <button type="button" class="previousSelection__addAccount">
+        <span>{{ 'wayf_add_account'|trans }}</span>
     </button>
 </section>
