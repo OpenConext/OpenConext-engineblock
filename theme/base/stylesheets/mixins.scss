@@ -127,7 +127,6 @@
     border-bottom-left-radius: $value;
 }
 
-
 @mixin font-style-large {
     font-size: $f-large;
     font-weight: $bolder;
@@ -298,4 +297,10 @@
     > p:last-of-type {
         margin-bottom: 0;
     }
+}
+
+@mixin h2 {
+    color: $green;
+    font-size: $f-h2;
+    font-weight: $bolder;
 }

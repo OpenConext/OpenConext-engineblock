@@ -9,11 +9,21 @@
         background-color: $gray;
         padding: 0 2rem calculateRem(40px);
 
+        >.wayf__previousSelection {
+            .previousSelection__title {
+                @include h2;
+            }
+        }
+
+        > .wayf__remainingIdps {
+            .remainingIdps__title {
+                @include h2;
+            }
+        }
+
         > .wayf__noAccess {
             > .noAccess__title {
-                color: $green;
-                font-size: $f-h2;
-                font-weight: $bolder;
+                @include h2;
             }
 
             > .noAccess__ctas {
