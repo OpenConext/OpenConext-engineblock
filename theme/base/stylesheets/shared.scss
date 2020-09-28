@@ -85,7 +85,9 @@ body {
         }
 
         > main {
+            @include border-bottom-radius(8px);
             background-color: $gray;
+            box-shadow: 0 3px 0 2px $darkishBlueTwo;
 
             > header {
                 font-family: 'Nunito', sans-serif;

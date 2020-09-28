@@ -1,0 +1,12 @@
+/*******************************************************************
+    CSS specific to the wayf page
+ ******************************************************************/
+
+@import '../helpers';
+
+.wayf {
+    > .wayf__content {
+        background-color: $gray;
+        padding: 0 2rem calculateRem(40px);
+    }
+}
