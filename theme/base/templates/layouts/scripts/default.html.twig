@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="{{ locale()|escape('html_attr') }}">
+<head>
+    <title>{% block title %}{{ defaultTitle }}{% endblock %}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="robots" content="noindex, nofollow"/>
+    <meta content="IE=edge" http-equiv="x-ua-compatible">
+    <meta content="initial-scale=1.0,width=device-width" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="translucent-black" name="apple-mobile-web-app-status-bar-style">
+    <link href="/favicon.ico" rel="shortcut icon">
+    {% block stylesheets %}{% spaceless %}
+        <link href="/stylesheets/application.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
+    {% endspaceless %}{% endblock %}
+
+    <!-- Firefox CSS -->
+    <style>
+        @-moz-document url-prefix() {
+            .comp-links .help {
+                line-height: 1.7rem !important;
+            }
+        }
+    </style>
+
+    <script>
+        // todo add this to the js once we reshaped the custom theme architecture
+        // todo once it's added to the normal js, rewrite as es6 (with typescript?)
+        window.addEventListener('load', function(){
+            document.querySelector('body').addEventListener('keydown', function(e) {
+                if (e.keyCode === 13) {
+                    var label = e.target;
+                    if (label.tagName === 'LABEL' && label.tabIndex === 0) {
+                        var clickEvent = new MouseEvent('click');
+                        label.dispatchEvent(clickEvent);
+                    }
+                }
+            });
+
+            var labels = document.querySelectorAll('label[aria-pressed]');
+            for (var i = 0; i < labels.length; i++) {
+                labels[i].addEventListener('click', function(e) {
+                    var label = e.target;
+                    var ariaPressed = label.getAttribute('aria-pressed');
+                    var newValue = {
+                        false: true,
+                        true: false,
+                    };
+                    label.setAttribute('aria-pressed', newValue[ariaPressed]);
+                });
+            }
+        })
+    </script>
+</head>
+<body>
+{% block nojs %}{% endblock %}
+{% block background %}{% endblock %}
+
+{% block container %}
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+{% endblock %}
+
+{% if beforeScriptHtml is defined %}
+    {{ beforeScriptHtml|raw }}
+{% endif %}
+
+<script src="/javascripts/application.min.js?v={{ assetsVersion }}"></script>
+
+</body>
+</html>

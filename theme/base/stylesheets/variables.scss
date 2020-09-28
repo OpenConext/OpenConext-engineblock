@@ -1,0 +1,44 @@
+/*******************************************************************
+    Generic sass-variables
+ ******************************************************************/
+
+@import 'functions';
+
+// Colors
+$black: #212121 !default;
+$hoverBlue: #ddf2fd !default;
+$loginBlue: #b3e5ff !default;
+$lightBlue: #94d6ff !default;
+$greenishBlue: #7cc8e1 !default;
+$buttonBlue: #0077c8 !default;
+$oceanBlue: #0062b0 !default;
+$darkishBlue: #004c97 !default;
+$darkishBlueTwo: #003980 !default;
+$green: #008738 !default;
+$yellow: #fedb00 !default;
+$lightPink: #efefef !default;
+$secondaryDisabledGray: #cfd2d1 !default;
+$gray: #f4f6f8 !default;
+$providerGray: #dfe3e8 !default;
+$softBorderGray: #c8c8c8 !default;
+$brownGray: #ababab !default;
+$hardBorderGray: #919ba4 !default;
+$brownishGray: #5b5b5b !default;
+$white: #fff !default;
+
+// Font sizes
+$f-small: calculateRem(14px) !default;
+$f-normal: calculateRem(16px) !default;
+$f-large: calculateRem(19px) !default;
+$f-h5: calculateRem(20px) !default;
+$f-xl: calculateRem(22px) !default;
+$f-h3: calculateRem(24px) !default;
+$f-h2: calculateRem(26px) !default;
+$f-xxl: calculateRem(36px) !default;
+
+// Font weights
+$light: 300 !default;
+$normal: 400 !default;
+$bold: 500 !default;
+$bolder: 600 !default;
+$boldest: 700 !default;
