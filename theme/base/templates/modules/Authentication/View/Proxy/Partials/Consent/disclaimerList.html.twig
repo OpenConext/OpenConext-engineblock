@@ -4,14 +4,14 @@
 {% set modalAbout = 'consent_modal_about'|trans({'%about_text%': aboutText, '%read_more_url%': readMoreUrl, '%read_more_text%': readMoreText }) %}
 <ul class="consent__disclaimer">
     <li class="disclaimer__privacy">
-        <p>
+        <div>
             {% include '@theme/Authentication/View/Proxy/Partials/Consent/SVG/file_info.svg' %}
             {% if sp.coins.termsOfServiceUrl is not null %}
                 {{ 'consent_disclaimer_privacy'|trans({'%org%': spName, '%privacy_url%': sp.coins.termsOfServiceUrl})|raw }}
             {% else %}
                 {{ 'consent_disclaimer_privacy_nolink'|trans({ '%org%': spName })|raw }}
             {% endif %}
-        </p>
+        </div>
     </li>
     <li class="disclaimer__secure">
         <div>

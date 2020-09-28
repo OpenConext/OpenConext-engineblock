@@ -151,10 +151,10 @@ HTML
     'consent_slidein_correction_title' => 'Is the data shown incorrect?',
     'consent_slidein_correction_text_idp'  => '%suiteName% receives the information directly from your %organisationNoun% and does not store the information itself. If your information is incorrect, please contact the help desk of your %organisationNoun% to change it.',
     'consent_slidein_correction_text_aa'  => '%suiteName% receives the information directly from the attribute provider and does not store the information itself. If your information is incorrect, please contact the attribute provider directly to correct it. You can ask the help desk of your %organisationNoun% for assistance with this.',
-     'consent_disclaimer_privacy_nolink' => '<span><strong>%org%</strong> needs this information to function properly.</span>'
+     'consent_disclaimer_privacy_nolink' => '<div><strong>%org%</strong> needs this information to function properly.</div>'
      ,
      'consent_disclaimer_privacy' => <<<'TXT'
-</span><strong>%org%</strong> needs this information to function properly (read their <a href="%privacy_url%" target="_blank">privacy policy</a>).</span>
+<div><strong>%org%</strong> needs this information to function properly (read their <a href="%privacy_url%" target="_blank">privacy policy</a>).</div>
 TXT
      ,
      'consent_disclaimer_secure' => <<<'TXT'
@@ -163,6 +163,14 @@ TXT
      ,
      'consent_disclaimer_secure_onemodal' => <<<'TXT'
 These data will be sent securely from your institution via <input type="checkbox" tabindex="-1" role="button" aria-pressed="false" class="modal visually-hidden" id="consent_disclaimer_about" name="consent_disclaimer_about"><label class="modal" tabindex="0" for="consent_disclaimer_about">%suite_name%</label> %modal_about% using a number that uniquely identifies you for this service.
+TXT
+     ,
+     'consent_disclaimer_secure_onemodal' => <<<'TXT'
+These data will be sent securely from your institution via <input type="checkbox" class="modal" id="consent_disclaimer_about"><label class="modal" for="consent_disclaimer_about">%suite_name%</label> %modal_about% using a number that uniquely identifies you for this service.
+TXT
+     ,
+     'consent_disclaimer_secure_onemodal' => <<<'TXT'
+These data will be sent securely from your institution via <input type="checkbox" class="modal" id="consent_disclaimer_about"><label class="modal" for="consent_disclaimer_about">%suite_name%</label> %modal_about% using a number that uniquely identifies you for this service.
 TXT
      ,
      'consent_modal_about' => <<<'TXT'
