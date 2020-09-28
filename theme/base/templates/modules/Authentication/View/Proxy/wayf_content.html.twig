@@ -5,11 +5,7 @@
     {% include '@theme/Authentication/View/Proxy/Partials/Shared/header.html.twig' with { h2: false } %}
     {% block wayf_content %}
         <div class="wayf__content" id="idp-picker">
-            {# todo: do we still need this? what's it for? #}
-            {#                {% include '@theme/Authentication/View/Proxy/Partials/WAYF/contentHeader.html.twig' with {#}
-            {#                    showForm: rememberChoiceFeature#}
-            {#                } %}#}
-
+            {% include '@theme/Authentication/View/Proxy/Partials/WAYF/rememberChoice.html.twig' } %}
             {% include '@theme/Authentication/View/Proxy/Partials/WAYF/preselection.html.twig' %}
             {% include '@theme/Authentication/View/Proxy/Partials/WAYF/remainingIdps.html.twig' %}
             {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noAccess/noAccess.html.twig' %}
