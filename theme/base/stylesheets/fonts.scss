@@ -3,113 +3,205 @@
  ******************************************************************/
 
 @font-face {
-    font-family: 'ProximaNovaSoft';
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 200;
+    src: url('/fonts/nunito-extralight-webfont.woff2') format('woff2'),
+    url('/fonts/nunito-extralight-webfont.woff') format('woff'), url('/fonts/Nunito-ExtraLight.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Nunito';
+    font-style: italic;
+    font-weight: 200;
+    src: url('/fonts/nunito-extralightitalic-webfont.woff2') format('woff2'),
+    url('/fonts/nunito-extralightitalic-webfont.woff') format('woff'), url('/fonts/Nunito-ExtraLightItalic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 300;
+    src: url('/fonts/nunito-light-webfont.woff2') format('woff2'),
+    url('/fonts/nunito-light-webfont.woff') format('woff'), url('/fonts/Nunito-Light.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Nunito';
+    font-style: italic;
+    font-weight: 300;
+    src: url('/fonts/nunito-lightitalic-webfont.woff2') format('woff2'),
+    url('/fonts/nunito-lightitalic-webfont.woff') format('woff'), url('/fonts/Nunito-LightItalic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Nunito';
     font-style: normal;
     font-weight: 400;
-    src: url('../fonts/ProximaNovaSoft-Regular.otf') format('opentype');
+    src: url('/fonts/nunito-regular-webfont.woff2') format('woff2'),
+    url('/fonts/nunito-regular-webfont.woff') format('woff'), url('/fonts/Nunito-Regular.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: 'ProximaNovaSoft';
-    font-style: normal;
-    font-weight: 500;
-    src: url('../fonts/ProximaNovaSoft-Medium.otf') format('opentype');
-}
-
-@font-face {
-    font-family: 'ProximaNovaSoft';
-    font-style: normal;
-    font-weight: 600;
-    src: url('../fonts/ProximaNovaSoft-Semibold.otf') format('opentype');
-}
-
-@font-face {
-    font-family: 'ProximaNovaSoft';
-    font-style: normal;
-    font-weight: 700;
-    src: url('../fonts/ProximaNovaSoft-Bold.otf') format('opentype');
-}
-
-@font-face {
-    font-family: 'SourceSansProBlack';
+    font-family: 'Nunito';
     font-style: italic;
     font-weight: 400;
-    src: url('../fonts/SourceSansPro-BlackItalic.ttf') format('truetype');
+    src: url('/fonts/nunito-italic-webfont.woff2') format('woff2'),
+    url('/fonts/nunito-italic-webfont.woff') format('woff'), url('/fonts/Nunito-Italic.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: 'SourceSansProBlack';
+    font-family: 'Nunito';
     font-style: normal;
-    font-weight: 400;
-    src: url('../fonts/SourceSansPro-Black.ttf') format('truetype');
+    font-weight: 600;
+    src: url('/fonts/nunito-semibold.woff2') format('woff2'), url('/fonts/nunito-semibold.woff') format('woff'),url('/fonts/Nunito-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Nunito';
+    font-style: italic;
+    font-weight: 600;
+    src: url('/fonts/nunito-semibolditalic.woff2') format('woff2'), url('/fonts/nunito-semibolditalic.woff') format('woff'),url('/fonts/Nunito-SemiBoldItalic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    src: url('/fonts/nunito-bold.woff2') format('woff2'), url('/fonts/nunito-bold.woff') format('woff'),url('/fonts/Nunito-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Nunito';
+    font-style: italic;
+    font-weight: 700;
+    src: url('/fonts/nunito-bolditalic.woff2') format('woff2'), url('/fonts/nunito-bolditalic.woff') format('woff'),url('/fonts/Nunito-BoldItalic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 800;
+    src: url('/fonts/nunito-extrabold-webfont.woff2') format('woff2'),
+    url('/fonts/nunito-extrabold-webfont.woff') format('woff'), url('/fonts/Nunito-ExtraBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Nunito';
+    font-style: italic;
+    font-weight: 800;
+    src: url('/fonts/nunito-extrabolditalic-webfont.woff2') format('woff2'),
+    url('/fonts/nunito-extrabolditalic-webfont.woff') format('woff'), url('/fonts/Nunito-ExtraBoldItalic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 900;
+    src: url('/fonts/nunito-black-webfont.woff2') format('woff2'),
+    url('/fonts/nunito-black-webfont.woff') format('woff'), url('/fonts/Nunito-Black.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Nunito';
+    font-style: italic;
+    font-weight: 900;
+    src: url('/fonts/nunito-blackitalic-webfont.woff2') format('woff2'),
+    url('/fonts/nunito-blackitalic-webfont.woff') format('woff'), url('/fonts/Nunito-BlackItalic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'SourceSansProExtraLight';
+    font-style: normal;
+    font-weight: 200;
+    src: url('/fonts/sourcesanspro-extralight-webfont.woff2') format('woff2'),
+    url('/fonts/sourcesanspro-extralight-webfont.woff') format('woff'), url('/fonts/SourceSansPro-ExtraLight.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'SourceSansProExtraLight';
     font-style: italic;
-    font-weight: 400;
-    src: url('../fonts/SourceSansPro-ExtraLightItalic.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'SourceSansProExtraLight';
-    font-style: normal;
-    font-weight: 400;
-    src: url('../fonts/SourceSansPro-ExtraLight.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'SourceSansProLight';
-    font-style: italic;
-    font-weight: 400;
-    src: url('../fonts/SourceSansPro-LightItalic.ttf') format('truetype');
+    font-weight: 200;
+    src: url('/fonts/sourcesanspro-extralightitalic-webfont.woff2') format('woff2'),
+    url('/fonts/sourcesanspro-extralightitalic-webfont.woff') format('woff'), url('/fonts/SourceSansPro-ExtraLightItalic.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'SourceSansProLight';
     font-style: normal;
-    font-weight: 400;
-    src: url('../fonts/SourceSansPro-Light.ttf') format('truetype');
+    font-weight: 300;
+    src: url('/fonts/sourcesanspro-light-webfont.woff2') format('woff2'),
+    url('/fonts/sourcesanspro-light-webfont.woff') format('woff'), url('/fonts/SourceSansPro-Light.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: 'SourceSansPro';
+    font-family: 'SourceSansProLight';
     font-style: italic;
-    font-weight: 400;
-    src: url('../fonts/SourceSansPro-Italic.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'SourceSansPro';
-    font-style: italic;
-    font-weight: 600;
-    src: url('../fonts/SourceSansPro-SemiboldItalic.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'SourceSansPro';
-    font-style: italic;
-    font-weight: 700;
-    src: url('../fonts/SourceSansPro-BoldItalic.ttf') format('truetype');
+    font-weight: 300;
+    src: url('/fonts/sourcesanspro-lightitalic-webfont.woff2') format('woff2'),
+    url('/fonts/sourcesanspro-lightitalic-webfont.woff') format('woff'), url('/fonts/SourceSansPro-LightItalic.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'SourceSansPro';
     font-style: normal;
     font-weight: 400;
-    src: url('../fonts/SourceSansPro-Regular.ttf') format('truetype');
+    src: url('/fonts/sourcesanspro-regular-webfont.woff2') format('woff2'),
+    url('/fonts/sourcesanspro-regular-webfont.woff') format('woff'), url('/fonts/SourceSansPro-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'SourceSansPro';
+    font-style: italic;
+    font-weight: 400;
+    src: url('/fonts/sourcesanspro-italic-webfont.woff2') format('woff2'),
+    url('/fonts/sourcesanspro-italic-webfont.woff') format('woff'), url('/fonts/SourceSansPro-Italic.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'SourceSansPro';
     font-style: normal;
     font-weight: 600;
-    src: url('../fonts/SourceSansPro-Semibold.ttf') format('truetype');
+    src: url('/fonts/sourcesanspro-semibold-webfont.woff2') format('woff2'),
+    url('/fonts/sourcesanspro-semibold-webfont.woff') format('woff'), url('/fonts/SourceSansPro-Semibold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'SourceSansPro';
+    font-style: italic;
+    font-weight: 600;
+    src: url('/fonts/sourcesanspro-semibolditalic-webfont.woff2') format('woff2'),
+    url('/fonts/sourcesanspro-semibolditalic-webfont.woff') format('woff'), url('/fonts/SourceSansPro-SemiboldItalic.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'SourceSansPro';
     font-style: normal;
     font-weight: 700;
-    src: url('../fonts/SourceSansPro-Bold.ttf') format('truetype');
+    src: url('/fonts/sourcesanspro-bold-webfont.woff2') format('woff2'),
+    url('/fonts/sourcesanspro-bold-webfont.woff') format('woff'), url('/fonts/SourceSansPro-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'SourceSansPro';
+    font-style: italic;
+    font-weight: 700;
+    src: url('/fonts/sourcesanspro-bolditalic-webfont.woff2') format('woff2'),
+    url('/fonts/sourcesanspro-bolditalic-webfont.woff') format('woff'), url('/fonts/SourceSansPro-BoldItalic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'SourceSansProBlack';
+    font-style: normal;
+    font-weight: 900;
+    src: url('/fonts/sourcesanspro-black-webfont.woff2') format('woff2'),
+    url('/fonts/sourcesanspro-black-webfont.woff') format('woff'), url('/fonts/SourceSansPro-Black.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'SourceSansProBlack';
+    font-style: italic;
+    font-weight: 900;
+    src: url('/fonts/sourcesanspro-blackitalic-webfont.woff2') format('woff2'),
+    url('/fonts/sourcesanspro-blackitalic-webfont.woff') format('woff'), url('/fonts/SourceSansPro-BlackItalic.ttf') format('truetype');
 }
