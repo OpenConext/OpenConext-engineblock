@@ -11,11 +11,5 @@
     You also need to import these at the start of each file that uses a variable/mixin/general class.
  ******************************************************************/
 
-@import '~@csstools/normalize.css';
-@import 'base/stylesheets/a11y-tests';
-@import 'base/stylesheets/breakpoints';
-@import 'base/stylesheets/classes';
-@import 'base/stylesheets/fonts';
-@import 'base/stylesheets/functions';
-@import 'base/stylesheets/mixins';
+@import 'base/stylesheets/helpers';
 @import 'variables';
