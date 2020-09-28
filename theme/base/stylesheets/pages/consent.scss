@@ -12,6 +12,10 @@
         background-color: $gray;
         padding: 0 2rem calculateRem(40px);
 
+        @include screen('mobile') {
+            padding: 0 1rem calculateRem(20px);
+        }
+
         > .consent__attributes,
         .consent__attributes--nested {
             background-color: $white;
@@ -28,9 +32,14 @@
                 line-height: 1.63;
                 padding: 1rem 0;
 
-                > *:not(input[type="checkbox"]) {
+                @include screen('mobile') {
+                    padding: 10px;
+                    @include grid-template-columns(100%);
+                    @include grid-template-rows(min-content min-content);
+                }
+
+                > *:not(input[type="checkbox"]):not(.attribute__name) {
                     color: $black;
-                    display: inline-block;
                     line-height: 1.63;
                     text-align: left;
                 }
@@ -45,6 +54,7 @@
                     > label {
                         background-image: unset;
                         color: $buttonBlue;
+                        cursor: pointer;
                         display: flex;
                         height: unset;
                         font-weight: $bolder;
@@ -88,41 +98,78 @@
                     }
 
                     > .consent__attributes--nested {
-                        border: unset;
-                        box-shadow: unset;
+                        border: 0;
+                        border-radius: 0;
+                        box-shadow: none;
                         display: none;
                         margin: 0;
                         width: 100%;
                     }
                 }
 
+                > input[type="checkbox"]:checked.tooltip ~ .attribute__name > label.tooltip {
+                    @include tooltip-checked;
+                }
+
                 > .attribute__name {
                     @include grid-position(1, 2, 1, 2);
                     text-align: right;
+
+                    @include screen('mobile') {
+                        text-align: left;
+                        display: inline-block;
+                    }
+
+                    > label.tooltip {
+                        display: none;
+
+                        @include screen('mobile') {
+                            display: inline-block;
+                            margin: 0 0 -2px 5px;
+                        }
+                    }
                 }
 
                 > .attribute__value {
                     @include grid-position(1, 2, 3, 4);
                     font-weight: $bolder;
                     overflow-wrap: break-word;
+
+                    @include screen('mobile') {
+                        @include grid-position(2, 3, 1, 2);
+                    }
                 }
 
                 > label,
-                > input[type="checkbox"] {
+                > .attribute__name > .label.tooltip {
                     @include grid-position(1, 2, 5, 6);
+
+                    @include screen('mobile') {
+                        display: none;
+                    }
+                }
+
+                > label {
+                    @include screen('mobile') {
+                        display: none;
+                    }
                 }
 
                 > .tooltip__value {
                     @include grid-position(2, 3, 1, 6);
+
+                    @include screen('mobile') {
+                        @include grid-position(3, 4, 1, 2);
+                    }
                 }
 
-                > input:checked + label + .tooltip__value {
+                > input:checked ~ label.tooltip ~ .tooltip__value {
                     text-align: right;
                 }
             }
 
             > li.idpRow {
-                @include grid-template-columns(14% 1% 54% 1% 29% 1%);
+                @include grid-template-columns(14% 1% 52% 1% 31% 1%);
                 align-items: center;
                 background-color: $providerGray;
                 border-bottom-left-radius: 4px;
@@ -150,20 +197,40 @@
                 }
 
                 > input[type="checkbox"],
-                > label {
+                > .ie11__label {
                     @include grid-position(1, 2, 5, 6);
                 }
 
-                > label.modal {
+                > .ie11__label > label.modal {
                     color: $oceanBlue;
                     padding: 10px 0;
+
+                    @include screen('mobile') {
+                        display: block;
+                    }
                 }
 
                 > .modal__value {
                     @include grid-position(2, 3, 1, 7);
                     margin: 9px 1rem;
-                    width: 32rem;
+                    max-width: 30rem;
+
+                    @include screen('mobile') {
+                        margin: 9px .5rem;
+                        max-width: calc(100% - 1rem);
+                    }
                 }
+
+                > input:checked + .ie11__label + .modal__value {
+                    display: flex;
+                    justify-content: center;
+                    margin: 9px auto 1rem;
+                }
+
+            }
+
+            _:-ms-fullscreen, > li.idpRow {
+                @include grid-template-columns(85.68px 6.12px 336.6px 6.12px 171.36px 6.12px);
             }
         }
 
@@ -174,7 +241,10 @@
             margin: 1.5rem 0 2rem;
 
             li {
-                > p,
+                &.disclaimer__privacy {
+                    margin-bottom: 1rem;
+                }
+
                 > div {
                     @include display-grid;
                     @include grid-template-columns(67px calc(100% - 67px));
@@ -184,7 +254,6 @@
                         margin-left: 14px;
                     }
 
-                    > span,
                     > div {
                         @include grid-position(1, 2, 2, 3);
                         max-width: 30rem;
@@ -206,17 +275,30 @@
 
                         a {
                             text-decoration: none;
+
+                            &:hover {
+                                text-decoration: underline;
+                            }
                         }
 
                         .modal__value {
                             margin: 1rem 0;
                             max-width: 29rem;
 
+                            @include screen('mobile') {
+                                margin: 1rem 0 1rem -4rem;
+                            }
+
                             .link__readmore {
                                 display: block;
                             }
                         }
                     }
+                }
+
+                _:-ms-fullscreen,
+                > div {
+                    @include grid-template-columns(67px 545px);
                 }
             }
         }
@@ -252,8 +334,12 @@
             }
 
             > section.modal__value {
-                margin-top: 1rem;
+                margin: 1rem auto 0;
                 width: 34rem;
+
+                @include screen('mobile') {
+                    width: 100%;
+                }
             }
         }
     }

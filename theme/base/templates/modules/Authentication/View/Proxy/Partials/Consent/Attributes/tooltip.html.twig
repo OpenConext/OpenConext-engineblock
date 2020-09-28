@@ -2,7 +2,7 @@
     {% set id %}
         tooltip{{ loop.index }}
     {% endset %}
-    {% include '@theme/Default/Partials/toggleCheckbox.html.twig' with
+    {% include '@theme/Default/Partials/label.html.twig' with
         {
             class: 'tooltip',
             id: id|trim,
