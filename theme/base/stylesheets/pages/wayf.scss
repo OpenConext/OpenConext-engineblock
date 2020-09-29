@@ -86,18 +86,20 @@
                                 > .idp__delete,
                                 > .idp__disabled {
                                     display: inline-block;
-                                    height: 1.5rem;
-                                    width: calculateRem(22px);
                                 }
 
                                 > .idp__delete {
                                     @include trashcan;
                                     background-position: center center;
-                                    background-repeat: no-repeat;
+                                    height: 1.5rem;
+                                    width: calculateRem(22px);
                                 }
 
                                 > .idp__disabled {
-                                    // todo add right image here
+                                    @include no-talking;
+                                    background-position: center center;
+                                    height: calculateRem(30px);
+                                    width: calculateRem(29px);
                                 }
                             }
                         }
@@ -171,6 +173,10 @@
                                 .idp__delete {
                                     display: none;
                                 }
+
+                                .idp__disabled {
+                                    display: inline-block;
+                                }
                             }
                         }
                     }
@@ -194,6 +200,10 @@
                             > .idp__content {
                                 .idp__delete {
                                     display: inline-block;
+                                }
+
+                                .idp__disabled {
+                                    display: none;
                                 }
                             }
                         }
