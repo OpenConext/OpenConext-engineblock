@@ -18,3 +18,7 @@ Cypress.Commands.add('matchImageSnapshots', (viewport, pageDetails) => {
       cy.get('body').toMatchImageSnapshot(pageDetails.title + '-' + viewport.width + 'x' + viewport.height);
     });
 });
+
+Cypress.Commands.add('buildTheme', (themeName) => {
+  cy.exec(`EB_THEME=${themeName} npm run buildtheme`);
+});
