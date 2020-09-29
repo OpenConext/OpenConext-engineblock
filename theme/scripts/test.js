@@ -26,7 +26,7 @@ try {
     let theme = process.env.EB_THEME;
     parameters[0].parameters['theme.name'] = theme;
     fs.writeFileSync(config, yaml.safeDump(parameters[0]));
-    executeShellCommand(`cat ${__dirname}/../../app/config/parameters.yml && ${__dirname}/../../app/console ca:cl --env=ci && cd ${__dirname}/.. && EB_THEME=${theme} npm run buildtheme && npm run cy:run -- --spec cypress/integration/${theme}/**/*.spec.js`);
+    executeShellCommand(`cat ${__dirname}/../../app/config/parameters.yml && cd ${__dirname}/.. && EB_THEME=${theme} npm run buildtheme && npm run cy:run -- --spec cypress/integration/${theme}/**/*.spec.js`);
 } catch (e) {
     console.log(e);
 }
