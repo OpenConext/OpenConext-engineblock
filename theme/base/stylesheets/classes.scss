@@ -11,12 +11,10 @@
 }
 
 .container {
-    max-width: 50rem;
-    min-width: 38rem;
+    width: 38rem;
 
     @include screen('mobile') {
-        max-width: unset;
-        min-width: unset;
+        width: 100%;
     }
 }
 
