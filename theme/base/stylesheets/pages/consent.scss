@@ -169,7 +169,7 @@
             }
 
             > li.idpRow {
-                @include grid-template-columns(10% 1% 54% 1% 33% 1%);
+                @include grid-template-columns(10% 1% 50% 1% 37% 1%);
                 align-items: center;
                 background-color: $providerGray;
                 border-bottom-left-radius: 4px;
@@ -365,7 +365,7 @@
 
         > .notification__warning {
             @include warning;
-            }
+          }
     }
 
     > :last-child {
