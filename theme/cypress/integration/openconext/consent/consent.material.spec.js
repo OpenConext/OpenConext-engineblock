@@ -4,7 +4,7 @@ context('Consent on Material theme', () => {
     cy.visit('https://engine.vm.openconext.org/functional-testing/consent');
   });
 
-  it.skip('gives openconext information', () => {
+  it('gives openconext information', () => {
     cy.get('a.help[data-slidein="about"]')
       .click()
       .get('section h1')
@@ -15,7 +15,7 @@ context('Consent on Material theme', () => {
       .click();
   });
 
-  it.skip('shows information on how to report incorrect data', () => {
+  it('shows information on how to report incorrect data', () => {
     cy.get('a.small')
       .click()
       .get('section h1')
@@ -26,7 +26,7 @@ context('Consent on Material theme', () => {
       .click();
   });
 
-  it.skip('can show additional attributes', () => {
+  it('can show additional attributes', () => {
     cy.get('span.show-more')
       .click()
       .get('td[data-identifier="urn:mace:dir:attribute-def:isMemberOf"]')
@@ -34,7 +34,7 @@ context('Consent on Material theme', () => {
       .and('contain.text', 'Member of organization');
   });
 
-  it.skip('can decline consent', () => {
+  it('can decline consent', () => {
     cy.get('div.slidein.reject')
       .should('be.hidden');
 
