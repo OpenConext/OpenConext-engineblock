@@ -103,8 +103,18 @@ jobs:
             - name: Run Cypress integration tests
               if: always()
               run: |
-                  cd docker && docker-compose exec -T cypress bash -c '
-                      cypress run --browser=firefox --headless
+                  cd docker && \
+                  docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                    EB_THEME=skeune ./theme/scripts/prepare-test.js
+                  ' && \
+                  docker-compose exec -T cypress bash -c '
+                    cypress run --spec cypress/integration/skeune/**/*.spec.js --browser=firefox --headless
+                  ' && \
+                  docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                    EB_THEME=openconext ./theme/scripts/prepare-test.js
+                  ' && \
+                  docker-compose exec -T cypress bash -c '
+                    cypress run --spec cypress/integration/openconext/**/*.spec.js --browser=firefox --headless
                   '
               env:
                   SYMFONY_ENV: ci
