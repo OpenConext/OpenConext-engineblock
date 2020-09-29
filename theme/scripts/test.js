@@ -13,20 +13,20 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const config = `${__dirname}/../../app/config/parameters.yml`;
 
+if (process.env.EB_THEME === undefined) {
+  console.error('You must specifiy the EB_THEME env var in order to run the tests.\n');
+  process.exit(1);
+}
+
 try {
-    console.log('Reading contents of parameters.yml.\n');
+    console.log('Running Cypress tests.\n');
     const fileContents = fs.readFileSync(config, 'utf8');
     const parameters = yaml.safeLoadAll(fileContents);
 
-    let theme = process.env.EB_THEME || parameters[0].parameters['theme.name'] || 'openconext';
-
-    if (process.env.EB_THEME) {
-        theme = process.env.EB_THEME;
-    }
-
-    console.log(`Using theme ${theme} to run the build.\nOutput will be printed once the build is finished.\n`);
-    executeShellCommand(`cd ${__dirname}/.. && EB_THEME=${theme} npm run buildtheme`);
-    return process.exit(0);
+    let theme = process.env.EB_THEME;
+    parameters[0].parameters['theme.name'] = theme;
+    fs.writeFileSync(config, yaml.safeDump(parameters[0]));
+    executeShellCommand(`cat ${__dirname}/../../app/config/parameters.yml && ${__dirname}/../../app/console ca:cl --env=ci && cd ${__dirname}/.. && EB_THEME=${theme} npm run buildtheme && npm run cy:run -- --spec cypress/integration/${theme}/**/*.spec.js`);
 } catch (e) {
     console.log(e);
 }
