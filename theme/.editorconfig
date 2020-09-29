@@ -1,5 +1,5 @@
 [*.{json,sass}]
 indent_size=2
 
-[*.spec.js]
+[*.js]
 indent_size=2
