@@ -1,14 +1,17 @@
 #!/usr/bin/env node
 
-/** Simple script to build based on CLI or chosen theme in parameters.yml
- * Using library js-yaml, repo can be found at: https://github.com/nodeca/js-yaml
- * Tutorial can be found at https://stackabuse.com/reading-and-writing-yaml-to-a-file-in-node-js-javascript/
+/**
+ * Prepare the application environment to run a Cypress E2E test
+ * The prepare-test.js script is tasked with:
  *
- * Everything else used is part of node
+ * 1. Update the parameters.yml (setting the Twig template theme)
+ * 2. Clear the CI cache
+ * 3. Build the theme using the `npm run build` scripts
  *
- * Use: node build.js or  EB_THEME=skeune node build.js
- * Replace "skeune" in the above by whatever theme you want to build.
- **/
+ * Note this script is most suitable to use on CI environments.
+ * Use with caution on your development environment. As it will
+ * overwrite parameters.yml
+ */
 const fs = require('fs');
 const yaml = require('js-yaml');
 const config = `${__dirname}/../../app/config/parameters.yml`;
@@ -26,7 +29,7 @@ try {
     let theme = process.env.EB_THEME;
     parameters[0].parameters['theme.name'] = theme;
     fs.writeFileSync(config, yaml.safeDump(parameters[0]));
-    executeShellCommand(`cat ${__dirname}/../../app/config/parameters.yml && cd ${__dirname}/.. && EB_THEME=${theme} npm run buildtheme && npm run cy:run -- --spec cypress/integration/${theme}/**/*.spec.js`);
+    executeShellCommand(`${__dirname}/../../app/console ca:cl --env=ci && cd ${__dirname}/../ && EB_THEME=${theme} npm run buildtheme`);
 } catch (e) {
     console.log(e);
 }
