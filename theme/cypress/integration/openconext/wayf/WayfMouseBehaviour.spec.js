@@ -17,7 +17,7 @@ context('WayfMouseBehaviour', () => {
    * Reproduction of the behaviour, described in:
    * https://www.pivotaltracker.com/story/show/165021022
    */
-  it.skip('Connected IdP should respond to mouse click after clearing previous selections', () => {
+  it('Connected IdP should respond to mouse click after clearing previous selections', () => {
     // Open a dummy wayf with 5 connected IdPs
     cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=10&displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
     // Click the first IdP, adding it to the list of previously chosen IdPs
