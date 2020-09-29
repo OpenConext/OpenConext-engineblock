@@ -6,7 +6,6 @@
         <mask id="vop37c516b" fill="#fff">
             <use xlink:href="#4f5727nd1a"/>
         </mask>
-        <use fill="#000" fill-rule="nonzero" xlink:href="#4f5727nd1a"/>
         <g fill="#0077C8" mask="url(#vop37c516b)">
             <path d="M0 0H32V32H0z" transform="translate(-4 -4)"/>
         </g>
