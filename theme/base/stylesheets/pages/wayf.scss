@@ -251,6 +251,15 @@
                     width: 100%;
                 }
             }
+
+            .remainingIdps__eduId {
+                @include informational;
+                margin: 1.25rem 0 1.25rem;
+
+                > .wayf__eduIdLink {
+                    color: $black;
+                }
+            }
         }
 
         > .wayf__noAccess {
