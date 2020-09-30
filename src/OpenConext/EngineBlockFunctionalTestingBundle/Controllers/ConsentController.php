@@ -86,10 +86,16 @@ class ConsentController
         if ($attributeAggregationEnabled) {
             $attributes['urn:mace:surf.nl:attribute-def:eckid'] = ['joe-f12-eck-id'];
             $attributes['urn:mace:dir:attribute-def:eduPersonOrcid'] = ['https://orcid.org/0000-0002-9079-593X'];
+            $nameId = new NameID();
+            $nameId->setFormat(Constants::NAMEID_PERSISTENT);
+            $nameId->setValue('34872398723498723497293487');
+
+            $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'] = [$nameId];
 
             $attributeSources = [
                 'urn:mace:dir:attribute-def:eduPersonOrcid' => 'orcid',
                 'urn:mace:surf.nl:attribute-def:eckid' => 'sab',
+                'urn:mace:dir:attribute-def:eduPersonTargetedID' => 'engineblock',
             ];
         }
 
