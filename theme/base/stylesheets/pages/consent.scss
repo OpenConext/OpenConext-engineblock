@@ -205,7 +205,8 @@
                 }
 
                 > input[type="checkbox"],
-                > .ie11__label {
+                > .ie11__label,
+                > .ie11__link {
                     @include grid-position(1, 2, 5, 6);
 
                     @include screen('mobile') {
@@ -213,7 +214,8 @@
                     }
                 }
 
-                > .ie11__label {
+                > .ie11__label,
+                > .ie11__link {
                     text-align: right;
 
                     @include screen('mobile') {
@@ -221,17 +223,9 @@
                         text-align: inherit;
                     }
 
-                    &:focus-within {
-                        outline: 3px dotted $darkishBlue;
-                    }
-
                     > label.modal {
                         color: $oceanBlue;
                         padding: 10px 0;
-
-                        &:focus {
-                            outline: none;
-                        }
 
                         @include screen('mobile') {
                             display: block;
@@ -240,6 +234,28 @@
                                 background-position: right 18px center;
                                 padding-right: 40px;
                             }
+                        }
+                    }
+
+                    > a.idpRow__supportUrl {
+                        color: $oceanBlue;
+                        padding: 10px 25px 10px 0;
+                        text-decoration: none;
+
+                        &:hover {
+                            text-decoration: underline;
+                        }
+                    }
+                }
+
+                > .ie11__label {
+                    &:focus-within {
+                        outline: 3px dotted $darkishBlue;
+                    }
+
+                    > label.modal {
+                        &:focus {
+                            outline: none;
                         }
                     }
                 }
@@ -339,17 +355,21 @@
             line-height: 0.89;
             margin: 2rem 0 0;
 
-            > a {
-                @include button-primary($buttonBlue);
-                margin-bottom: 1.5rem;
+            > form {
+                button {
+                    @include button-primary($buttonBlue);
+                    margin-bottom: 1.5rem;
+                    width: 100%;
 
-                &:hover {
-                    text-decoration: underline;
+                    &:hover {
+                        text-decoration: underline;
+                    }
                 }
             }
 
             > label {
                 @include button-tertiary($gray);
+                display: block;
                 width: 100%;
 
                 &:focus {
@@ -358,11 +378,6 @@
                         width: 100%;
                     }
                 }
-            }
-
-            > a,
-            > label {
-                display: block;
             }
 
             > section.modal__value {

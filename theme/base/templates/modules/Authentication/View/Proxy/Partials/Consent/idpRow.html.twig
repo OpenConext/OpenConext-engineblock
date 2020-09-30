@@ -2,7 +2,10 @@
      alt="{{ organisationName }} logo" />
 <p>{{ text|raw }}</p>
 {% if attributeSource == 'engineblock' %}
-    <a class="small" href="{{ 'name_id_support_url'|trans }}" target="_blank" rel="noreferrer">{{ 'consent_name_id_support_link'|trans }}</a>
+    {# note: the div is here only for IE11, as soon as IE11 support is scrapped, this can be removed along with the CSS/JS for it  #}
+    <div class="ie11__link">
+        <a class="idpRow__supportUrl" href="{{ 'name_id_support_url'|trans }}" target="_blank" rel="noreferrer">{{ 'consent_name_id_support_link'|trans }}</a>
+    </div>
 {% else %}
     {% set id %}
         incorrect_{{ attributeSource }}
