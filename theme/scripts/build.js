@@ -26,7 +26,6 @@ try {
 
     console.log(`Using theme ${theme} to run the build.\nOutput will be printed once the build is finished.\n`);
     executeShellCommand(`cd ${__dirname}/.. && EB_THEME=${theme} npm run buildtheme`);
-    return process.exit(0);
 } catch (e) {
     console.log(e);
 }
