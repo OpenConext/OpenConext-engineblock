@@ -12,8 +12,8 @@
             <h3>{{ idp['displayTitle'] }}</h3>
 
             {% if idp['noAccess'] is defined and idp['noAccess'] or delete %}
-                <button data-connected="{{ idp['connected'] }}">
-{#                    {% if idp['noAccess'] is defined and idp['noAccess'] %}#}
+                <button data-connected="{{ idp['connected'] }}" type="button"> {# todo: add js here and also prevent the event from bubbling and so triggering the link ancestor #}
+{#                    {% if idp['noAccess'] is defined and idp['noAccess'] %}#} {# todo: turn this if back on once all js is added & tested #}
                         <span class="idp__disabled">
                             <span class="visually-hidden">
                                 {{ 'wayf_no_access_account'|trans }}
