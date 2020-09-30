@@ -47,5 +47,6 @@ function executeShellCommand(command) {
         }
 
         console.log(stdOut);
+        return process.exit(0);
     });
 }
