@@ -1,6 +1,6 @@
 context('WayfMouseBehaviour', () => {
 
-  it.skip('Should show five connected IdPs and the search field', () => {
+  it('Should show five connected IdPs and the search field', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
 
       // Load the connected IdPs by selecting their h3 titles
@@ -22,12 +22,12 @@ context('WayfMouseBehaviour', () => {
 
   });
 
-  it.skip('Should show ten connected IdPs', () => {
+  it('Should show ten connected IdPs', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=10');
       cy.countIdps(10);
   });
 
-  it.skip('Should show no connected IdPs when cutoff point is configured', () => {
+  it('Should show no connected IdPs when cutoff point is configured', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=6&cutoffPointForShowingUnfilteredIdps=5');
       cy.countIdps(0);
 
@@ -35,7 +35,7 @@ context('WayfMouseBehaviour', () => {
       cy.countIdps(6);
   });
 
-  it.skip('Should show the return to service link when configured', () => {
+  it('Should show the return to service link when configured', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5&backLink=true');
       cy.onPage('Select an organisation to login to the service');
       cy.onPage('Return to service provider');
@@ -49,7 +49,7 @@ context('WayfMouseBehaviour', () => {
       cy.get('.footer-menu .comp-links li:nth-child(2) a').should('have.text', 'Return to service provider');
   });
 
-  it.skip('Should show the remember my choice option', () => {
+  it('Should show the remember my choice option', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true');
       // Ensure some elements are on the page
       cy.onPage('Select an organisation to login to the service');

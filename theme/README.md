@@ -66,6 +66,17 @@ if however you prefer to use the openconext theme, it'd read like this:
     theme.name: 'openconext'
 ```
 
+**Switching themes on CI**
+A helper script was included in the `theme/scripts` folder to assist in building theme assets.
+
+This script changes the Twig theme and builds the chosen frontend theme assets. To use this script you simply run:
+
+```bash
+$ EB_THEME=skeune ./scripts/prepare-test.js
+```
+
+The script must be run on the php-fpm instance on your CI environment as it also clears the application cache in order to let the correct Twig templates to be included in the cache.
+
 ### Writing your own custom theme:
 
 #### Custom theme folder structure:
