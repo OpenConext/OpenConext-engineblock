@@ -2,11 +2,12 @@
 return [
     // General
     'logo'  => 'logo',
+    'search'    => 'Zoeken',
 
     // WAYF
     'wayf_nothing_found'        => 'Niets gevonden',
     'wayf_apu'                  => 'Probeert u het opnieuw met andere zoektermen',
-    'wayf_noscript_warning'     => '<p>Om deze pagina optimaal te laten functioneren moet JavaScript aan staan.</p><p>Zonder JavaScript zal u geen vorig gebruikte accounts kunnen onthouden.  Indien u deze functionaliteit toch wenst te gebruiken, vragen wij u vriendelijk om JavaScript aan te zetten.</p><p><strong>U kan, vanzelfsprekend, nog steeds inloggen.<strong></strong></p>',
+    'wayf_noscript_warning'     => '<p>Om deze pagina optimaal te laten functioneren moet JavaScript aan staan.</p><p>Zonder JavaScript zal u geen vorig gebruikte accounts kunnen onthouden.  Indien u deze functionaliteit toch wenst te gebruiken, vragen wij u vriendelijk om JavaScript aan te zetten.</p><p><strong>U kan, vanzelfsprekend, nog steeds inloggen.</strong></p>',
     'wayf_no_access_account'    => 'Geen toegang met deze account',
     'wayf_delete_account'       => 'Verwijderen uit uw accounts',
     'wayf_remaining_idps_title' => 'Voeg een account toe uit de onderstaande lijst',

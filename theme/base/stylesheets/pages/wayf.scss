@@ -140,7 +140,7 @@
                 @include grid-position(1, 2, 2, 3);
                 color: $buttonBlue;
                 cursor: pointer;
-                font-size: $f-normal;
+                font-size: $f-large;
                 font-weight: $bolder;
                 line-height: 1.5;
                 margin: auto 0 calculateRem(34px) calculateRem(5px);
@@ -244,12 +244,10 @@
             }
 
             > .wayf__search {
+                @include relative;
                 margin: 2rem 0 1.25rem;
 
                 > .search__field {
-                    @include poirot;
-                    background-position: right .5rem center;
-                    background-size: 1.5rem 1.5rem;
                     border: 1px solid $gray;
                     border-radius: 6px;
                     box-shadow: 0 1px 0 2px #5e6873;
@@ -259,6 +257,17 @@
                     line-height: 1.5;
                     padding: 1rem;
                     width: 100%;
+                }
+
+                > .search__submit {
+                    @include absolute(top 0 right 0);
+                    @include button-reset($white);
+                    @include poirot;
+                    background-position: center center;
+                    background-size: 1.5rem 1.5rem;
+                    border-radius: 6px;
+                    height: 3rem;
+                    width: 3rem;
                 }
             }
 
