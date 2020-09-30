@@ -47,6 +47,7 @@ For instructions on how to use it: see the file itself.
         - javascripts: the main entry point for any theme is application.js
         - stylesheets: the main entry point for any theme is application.scss
         - templates: twig templates.  todo give an overview of the main entry points
+        - translations: translations specific to the theme.
     - cypress: todo figure out if it'll stay in this structure or not
     - openconext: the theme formerly known as material.  This used to be the official theme, but is now second-fiddle (as it does not conform to the accessibility standards)
     - scripts: currently holds the build-script, written in node.js.
@@ -83,11 +84,12 @@ The script must be run on the php-fpm instance on your CI environment as it also
 
 If you want to make your own theme it should be as a subfolder of the theme folder.  Name it however you want.
 
-Your theme **must** have the following structure:
+Your theme **must** have the following structure (or the build will fail):
 - images
 - javascripts: this needs to contain an `application.js` file, which is the entrypoint for all js loaded by your theme.
 - stylesheets: this needs to contain an `application.scss` file, which is the entrypoint for all css loaded by your theme.
 - templates: you only need to put templates here you want to override.
+- translations: you only need to put files there if there are actual theme-specific translations.
 
 For your convenience, you can simply use the following command to create a scaffold for your new theme:
 
