@@ -1,0 +1,316 @@
+/*******************************************************************
+    CSS specific to the WAYF page
+ ******************************************************************/
+
+@import '../helpers';
+
+.wayf {
+    > .wayf__content {
+        background-color: $gray;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        padding: 0 2rem calculateRem(40px);
+
+        .wayf__idpList {
+            list-style: none;
+            padding: 0;
+
+            > li {
+                margin-bottom: calculateRem(19px);
+
+                > .wayf__idp {
+                    background-color: $white;
+                    border-radius: 8px;
+                    box-shadow: 0 1px 0 2px #5e6873;
+
+                    &:hover {
+                        background-color: $idpBlue;
+
+                        > a {
+                            > .idp__content {
+                                > button {
+                                    @include button-reset($idpBlue);
+
+                                    > .idp__delete {
+                                        @include trashcan-hover;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    > a {
+                        display: flex;
+                        text-decoration: none;
+
+                        > .idp__logo {
+                            align-self: center;
+                            justify-self: center;
+                            margin-right: calculateRem(6px);
+                            padding: .5rem;
+
+                            > img {
+                                max-height: calculateRem(61px);
+                                max-width: calculateRem(94px);
+                            }
+                        }
+
+                        > .idp__content {
+                            box-sizing: content-box;
+                            display: flex;
+                            justify-content: space-between;
+                            width: calc(100% - 6.25rem);
+
+                            > h3 {
+                                border-left: 1px solid $idpSeparatorGray;
+                                display: inline-block;
+                                color: $black;
+                                font-family: 'SourceSansPro', sans-serif;
+                                font-size: $f-large;
+                                font-weight: $normal;
+                                height: calc(100% - 1.625rem);
+                                margin: calculateRem(13px) 0;
+                                padding: 0 0 0 calculateRem(23.5px);
+                                width: calc(100% - 4rem);
+                            }
+
+                            > button {
+                                @include button-reset($white);
+                                align-items: center;
+                                border-bottom-right-radius: 8px;
+                                border-top-right-radius: 8px;
+                                display: flex;
+                                justify-content: center;
+                                width: 4rem;
+
+                                > .idp__delete,
+                                > .idp__disabled {
+                                    display: inline-block;
+                                }
+
+                                > .idp__delete {
+                                    @include trashcan;
+                                    background-position: center center;
+                                    height: 1.5rem;
+                                    width: calculateRem(22px);
+                                }
+
+                                > .idp__disabled {
+                                    @include no-talking;
+                                    background-position: center center;
+                                    height: calculateRem(30px);
+                                    width: calculateRem(29px);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                > .wayf__idp.wayf__idp--noAccess {
+                    background-color: $gray;
+
+                    > a {
+                        > .idp__content {
+                            > button {
+                                @include button-reset($gray);
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        >.wayf__previousSelection {
+            @include display-grid;
+            @include grid-template-columns(calc(100% - 3rem) 3rem);
+            @include grid-template-rows(min-content min-content min-content);
+
+            > .previousSelection__title {
+                @include h2;
+                @include grid-position(1, 2, 1, 2);
+                margin: 1.5rem 0 calculateRem(34px);
+            }
+
+            > .previousSelection__toggle {
+                @include grid-position(1, 2, 2, 3);
+            }
+
+            > label[for="previousSelectionToggle"] {
+                @include grid-position(1, 2, 2, 3);
+                color: $buttonBlue;
+                cursor: pointer;
+                font-size: $f-normal;
+                font-weight: $bolder;
+                line-height: 1.5;
+                margin: auto 0 calculateRem(34px) calculateRem(5px);
+
+                &:focus,
+                &:hover {
+                    color: $darkishBlue;
+
+                    > span {
+                        text-decoration: underline;
+                    }
+                }
+            }
+
+            > .previousSelection__toggle + label {
+                .previousSelection__edit {
+                    display: inline-block;
+                }
+
+                .previousSelection__done {
+                    display: none;
+                }
+            }
+
+            > .previousSelection__toggle ~ .wayf__idpList {
+                > li {
+                    > .wayf__idp {
+                        > a {
+                            > .idp__content {
+                                .idp__delete {
+                                    display: none;
+                                }
+
+                                .idp__disabled {
+                                    display: inline-block;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            > .previousSelection__toggle:checked + label {
+                .previousSelection__edit {
+                    display: none;
+                }
+
+                .previousSelection__done {
+                    display: inline-block;
+                }
+            }
+
+            > .previousSelection__toggle:checked ~ .wayf__idpList {
+                > li {
+                    > .wayf__idp {
+                        > a {
+                            > .idp__content {
+                                .idp__delete {
+                                    display: inline-block;
+                                }
+
+                                .idp__disabled {
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            > .wayf__idpList {
+                @include grid-position(2, 3, 1, 3);
+            }
+
+            > .previousSelection__addAccount {
+                @include button-secondary($gray);
+                @include grid-position(3, 4, 1, 3);
+                display: block;
+                font-size: $f-large;
+                line-height: 1rem;
+                width: 100%;
+
+                > span {
+                    @include add-account;
+                    background-position: left center;
+                    background-repeat: no-repeat;
+                    padding-left: calculateRem(34px);
+                }
+
+                &:hover {
+                    > span {
+                        @include add-account-hover;
+                    }
+                }
+            }
+        }
+
+        > .wayf__remainingIdps {
+            > .remainingIdps__title {
+                @include h2;
+            }
+
+            > .wayf__search {
+                margin: 2rem 0 1.25rem;
+
+                > .search__field {
+                    @include poirot;
+                    background-position: right .5rem center;
+                    background-size: 1.5rem 1.5rem;
+                    border: 1px solid $gray;
+                    border-radius: 6px;
+                    box-shadow: 0 1px 0 2px #5e6873;
+                    display: block;
+                    font-size: $f-large;
+                    height: 3rem;
+                    line-height: 1.5;
+                    padding: 1rem;
+                    width: 100%;
+                }
+            }
+
+            .remainingIdps__eduId {
+                @include informational;
+                margin: 1.25rem 0 1.25rem;
+
+                > .wayf__eduIdLink {
+                    color: $black;
+                }
+            }
+        }
+
+        > .wayf__noAccess {
+            > .noAccess__title {
+                @include h2;
+            }
+
+            > .noAccess__ctas {
+                display: flex;
+                justify-content: space-between;
+
+                > button[class^="cta"] {
+                    padding: .5rem;
+                    width: 48%;
+                }
+
+                > .cta__cancel {
+                    @include button-secondary($gray);
+                }
+
+                > .cta__request {
+                    @include button-primary($buttonBlue);
+                }
+            }
+        }
+
+        > .wayf__noresults {
+            @include poirot;
+            background-position: left top 5px;
+            margin: calculateRem(50px) 0 1rem;
+            padding-left: 48px;
+
+            > h3 {
+                margin: 0 0 .5rem;
+            }
+
+            > p {
+                &:first-of-type {
+                    margin-top: 0;
+                }
+            }
+        }
+    }
+}
