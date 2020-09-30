@@ -13,6 +13,7 @@ return [
     'wayf_remaining_idps_title' => 'Add an account from the list below',
     'wayf_select_account'       => 'Select an account from the list below',
     'wayf_search_placeholder'   => 'Search...',
+    'wayf_search_aria'          => 'Search identity providers',
     'wayf_your_accounts'        => 'Your accounts',
     'wayf_add_account'          => 'Add another account',
     'wayf_no_access_helpdesk'   => 'If you want, you can request access to this service. We will send the request to the helpdesk of your institution.',

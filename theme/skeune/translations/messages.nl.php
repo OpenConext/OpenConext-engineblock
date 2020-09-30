@@ -13,6 +13,7 @@ return [
     'wayf_remaining_idps_title' => 'Voeg een account toe uit de onderstaande lijst',
     'wayf_select_account'       => 'Selecteer een account uit de onderstaande lijst',
     'wayf_search_placeholder'   => 'Zoeken...',
+    'wayf_search_aria'          => 'Zoek een identity provider',
     'wayf_your_accounts'        => 'Uw accounts',
     'wayf_add_account'          => 'Voeg een account toe',
     'wayf_no_access_helpdesk'   => 'U kan toegang vragen tot deze dienst.  We sturen deze aanvraag door naar de helpdesk van uw instituut.',
