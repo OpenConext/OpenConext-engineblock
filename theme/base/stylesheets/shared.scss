@@ -152,6 +152,10 @@ body {
                     &:focus {
                         line-height: 1.75;
                     }
+
+                    &:focus {
+                        outline: 3px dotted $white;
+                    }
                 }
 
                 ul.comp-language {
