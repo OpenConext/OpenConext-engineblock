@@ -1,11 +1,15 @@
 <div class="ctas">
-    {# todo: link to where? #}
-    {% include '@theme/Default/Partials/buttonLink.html.twig' with
-        {
-          buttonUrl: '#',
-          text: 'consent_ok'|trans
-        }
-    %}
+    <form id="accept" method="post"
+          action="{{ action }}">
+        <input type="hidden" name="ID"
+               value="{{ responseId }}">
+        <input type="hidden" name="consent" value="yes"/>
+        {% include '@theme/Default/Partials/button.html.twig' with
+            {
+                text: 'consent_ok'|trans
+            }
+        %}
+    </form>
     <input type="checkbox" tabindex="-1" role="button" aria-pressed="false" class="modal visually-hidden" id="cta_consent_nok" name="cta_consent_nok" />
     {% include '@theme/Default/Partials/label.html.twig' with
         {
