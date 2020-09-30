@@ -5,11 +5,10 @@
 @import '../helpers';
 
 .consent {
-    @include border-bottom-radius(8px);
-    box-shadow: 0 3px 0 2px $darkishBlueTwo;
-
     > .consent__content {
         background-color: $gray;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
         padding: 0 2rem calculateRem(40px);
 
         @include screen('mobile') {

@@ -11,7 +11,7 @@
     {# todo get right link for eduId #}
     {% include '@theme/Default/Partials/informational.html.twig' with {
         class: 'remainingIdps__eduId',
-        text: 'wayf_eduId'|trans({ '%eduIdLink%': 'https://something.com/eduId'})|raw
+        text: 'wayf_eduId'|trans({ '%eduIdLink%': 'https://something.com/eduId'})
     } %}
-    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idpList.html.twig' with { idpList: connectedIdps.formattedIdpList } %}
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idpList.html.twig' with { idpList: connectedIdps.formattedIdpList, delete: false } %}
 </section>
