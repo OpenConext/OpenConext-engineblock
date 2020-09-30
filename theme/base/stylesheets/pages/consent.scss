@@ -242,6 +242,19 @@
                             }
                         }
                     }
+                    > a.idpRow__supportUrl {
+                        color: $oceanBlue;
+                        padding: 10px 25px 10px 0;
+                        text-decoration: none;
+
+                        &:focus {
+                            outline: none;
+                        }
+
+                        &:hover {
+                            text-decoration: underline;
+                        }
+                    }
                 }
 
                 > .modal__value {
