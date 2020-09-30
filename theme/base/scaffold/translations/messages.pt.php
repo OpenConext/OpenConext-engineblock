@@ -1,6 +1,6 @@
 <?php
 
-/** Put all theme-specific Polish translations here.  */
+/** Put all theme-specific Portuguese translations here.  */
 
 return [
 ];
