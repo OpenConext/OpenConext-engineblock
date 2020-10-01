@@ -272,12 +272,28 @@
                 }
             }
 
-            .remainingIdps__eduId {
+            > .remainingIdps__eduId {
                 @include informational;
                 margin: 1.25rem 0 1.25rem;
 
                 > .wayf__eduIdLink {
                     color: $black;
+                }
+            }
+
+            > .wayf__rememberChoice {
+                margin-bottom: 3rem;
+
+                > label[for="rememberChoice"] {
+                    @include font-style-large;
+                    color: $buttonBlue;
+                }
+
+                > #rememberChoice {
+                    height: 1.2rem;
+                    margin: 0 0 0 10px;
+                    vertical-align: sub;
+                    width: 1.2rem;
                 }
             }
         }
