@@ -22,3 +22,7 @@ Cypress.Commands.add('matchImageSnapshots', (viewport, pageDetails) => {
 Cypress.Commands.add('buildTheme', (themeName) => {
   cy.exec(`EB_THEME=${themeName} npm run buildtheme`);
 });
+
+Cypress.Commands.add('hideDebugBar', () => {
+  cy.get('.sf-toolbar').invoke('attr', 'style', 'display: none');
+});

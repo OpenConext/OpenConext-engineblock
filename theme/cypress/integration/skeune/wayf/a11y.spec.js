@@ -1,6 +1,6 @@
 context('Consent a11y verify', () => {
   beforeEach(() => {
-    cy.visit('https://engine.vm.openconext.org/functional-testing/consent');
+    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
   });
 
   it('contains no a11y problems on load', () => {
