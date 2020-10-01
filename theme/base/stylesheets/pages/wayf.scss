@@ -9,7 +9,15 @@
         background-color: $gray;
         border-bottom-left-radius: 8px;
         border-bottom-right-radius: 8px;
-        padding: 0 2rem calculateRem(40px);
+        padding: 0 2rem 2.5rem;
+
+        @include screen('mobile') {
+            padding: 0 1rem 1rem;
+        }
+
+        @include screen('smallMobile') {
+            padding: 0 .5rem .5rem;
+        }
 
         .wayf__idpList {
             list-style: none;
@@ -49,6 +57,11 @@
                             margin-right: calculateRem(6px);
                             padding: .5rem;
 
+                            @include screen('mobile') {
+                                margin: 0;
+                                padding: .25rem;
+                            }
+
                             > img {
                                 max-height: calculateRem(61px);
                                 max-width: calculateRem(94px);
@@ -61,6 +74,10 @@
                             justify-content: space-between;
                             width: calc(100% - 6.25rem);
 
+                            @include screen('mobile') {
+                                width: calc(100% - 4.25rem);
+                            }
+
                             > h3 {
                                 border-left: 1px solid $idpSeparatorGray;
                                 display: inline-block;
@@ -72,6 +89,13 @@
                                 margin: calculateRem(13px) 0;
                                 padding: 0 0 0 calculateRem(23.5px);
                                 width: calc(100% - 4rem);
+
+                                @include screen('mobile') {
+                                    height: calc(100% - 1rem);
+                                    margin: .5rem 0;
+                                    padding: 0 0 0 0.5rem;
+                                    width: calc(100% - 1rem);
+                                }
                             }
 
                             > button {
@@ -82,6 +106,10 @@
                                 display: flex;
                                 justify-content: center;
                                 width: 4rem;
+
+                                @include screen('mobile') {
+                                    width: 3rem;
+                                }
 
                                 > .idp__delete,
                                 > .idp__disabled {
@@ -258,6 +286,10 @@
                     line-height: 1.5;
                     padding: 1rem;
                     width: 100%;
+
+                    @include screen('mobile') {
+                        padding: .5rem;
+                    }
                 }
 
                 > .search__submit {
@@ -269,6 +301,10 @@
                     border-radius: 6px;
                     height: 3rem;
                     width: 3rem;
+
+                    @include screen('mobile') {
+                        width: 2rem;
+                    }
                 }
             }
 
@@ -310,14 +346,34 @@
                 > button[class^="cta"] {
                     padding: .5rem;
                     width: 48%;
+
+                    @include screen('mobile') {
+                        width: unset;
+                    }
                 }
 
                 > .cta__cancel {
                     @include button-secondary($gray);
+
+                    @include screen('mobile') {
+                        flex-basis: 40%;
+                    }
+
+                    @include screen('smallMobile') {
+                        flex-basis: 35%;
+                    }
                 }
 
                 > .cta__request {
                     @include button-primary($buttonBlue);
+
+                    @include screen('mobile') {
+                        flex-basis: 56%;
+                    }
+
+                    @include screen('smallMobile') {
+                        flex-basis: 61%;
+                    }
                 }
             }
         }
@@ -327,6 +383,10 @@
             background-position: left top 5px;
             margin: calculateRem(50px) 0 1rem;
             padding-left: 48px;
+
+            @include screen('mobile') {
+                margin: 2rem 0 .5rem;
+            }
 
             > h3 {
                 margin: 0 0 .5rem;
