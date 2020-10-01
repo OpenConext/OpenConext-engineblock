@@ -1,4 +1,4 @@
-<form class="wayf__search" method="post" action="{{ action }}">
+<form class="wayf__search" method="post" action="{{ action }}" role="search" aria-label="{{ 'wayf_search_aria'|trans }}">
     <input type="hidden" name="ID" value="{{ requestId }}"/>{# needed for the ContinueToIdp module #}
     <input type="hidden" id="form-idp" name="idp" value=""/>{# needed for the ContinueToIdp module #}
     <label for="wayf_search" class="visually-hidden">{{ 'search'|trans }}</label>
@@ -9,4 +9,5 @@
         placeholder="{{ 'wayf_search_placeholder'|trans }}"
         type="search"
     />
+    <button type="submit" class="search__submit"><span class="visually-hidden">{{ 'search'|trans }}</span></button>
 </form>
