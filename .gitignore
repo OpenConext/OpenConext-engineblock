@@ -7,6 +7,8 @@ bin/ignore_me.php
 /web/javascripts/*
 /web/stylesheets/*
 /web/images/*
+/web/fonts/*
+!/web/fonts/.gitkeep
 /app/cache
 /app/logs
 /app/SymfonyRequirements.php
