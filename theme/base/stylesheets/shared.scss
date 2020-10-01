@@ -23,16 +23,20 @@ body {
         box-sizing: border-box
     }
 
+    *:focus {
+        outline: 3px dotted $darkishBlue;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
     a {
         &:hover {
             text-decoration: underline;
         }
     }
 
-    *:focus {
-        outline: 3px dotted $darkishBlue;
-        padding-left: 5px;
-        padding-right: 5px;
+    button {
+        cursor: pointer;
     }
 
     h3 {
@@ -151,6 +155,10 @@ body {
                     &:hover,
                     &:focus {
                         line-height: 1.75;
+                    }
+
+                    &:focus {
+                        outline: 3px dotted $white;
                     }
                 }
 
