@@ -16,6 +16,20 @@ export function initializeWayf() {
         return;
     }
 
+  // Temporary code to get wayf to function. Only submit by clicking on a IdP functions for now
+  const form = document.querySelector('.wayf__search');
+  if (form !== null) {
+    // Set a quick and dirty click listener on every IdP
+    document.querySelectorAll('.wayf__idp').forEach((article) => {
+      article.addEventListener('click', (event) => {
+        event.preventDefault();
+        // And set the EnittyId associated with that IdP on the hidden form field. And submit the form
+        form.elements['form-idp'].value = event.target.closest('article').dataset.entityId;
+        form.submit();
+      });
+    });
+
+  } else {
     const $searchBar                  = document.querySelector('.mod-search-input');
     const $connectedIdpPickerTarget   = document.getElementById('idp-picker');
     const $connectedIdpListTarget     = $connectedIdpPickerTarget.querySelector('.selection');
@@ -109,6 +123,7 @@ export function initializeWayf() {
     if (window.innerWidth > 800) {
         $searchBar.focus();
     }
+  }
 }
 
 function throttle(action, delay) {

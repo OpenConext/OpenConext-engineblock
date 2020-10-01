@@ -1,4 +1,4 @@
-<article class="wayf__idp {% if idp['noAccess'] is defined and idp['noAccess'] %} wayf__idp--noAccess{% endif %}" data-keywords="{{ idp['keywords'] }}">
+<article data-entity-id="{{ idp['entityId'] }}" class="wayf__idp {% if idp['noAccess'] is defined and idp['noAccess'] %} wayf__idp--noAccess{% endif %}" data-keywords="{{ idp['keywords'] }}">
     <a href="">  {# {{ idp['link'] }} todo ensure this link is in the connectedIdps array #}
         <picture class="idp__logo">
             <source srcset="" media="(min-width: 800px)"/>
