@@ -29,7 +29,6 @@
     "create-theme": "node scripts/create-theme.js",
     "watch:js": "watchify ${EB_THEME:=base}/javascripts/application.js --poll=100 --debug -t [ babelify ] ${EB_THEME:=base}/javascripts/application.js -o ../web/javascripts/application.min.js -v",
     "watch:css": "node-sass -r ${EB_THEME:=openconext}/stylesheets -w -o ../web/stylesheets",
-    "watch:css:single": "node-sass -r ${EB_THEME:=openconext}/stylesheets -o ../web/stylesheets",
     "release": "npm run build"
   },
   "author": "",
