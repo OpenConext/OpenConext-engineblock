@@ -2,16 +2,18 @@
 return [
     // General
     'logo'  => 'logo',
+    'search'    => 'Zoeken',
 
     // WAYF
     'wayf_nothing_found'        => 'Niets gevonden',
     'wayf_apu'                  => 'Probeert u het opnieuw met andere zoektermen',
-    'wayf_noscript_warning'     => '<p>Om deze pagina optimaal te laten functioneren moet JavaScript aan staan.</p><p>Zonder JavaScript zal u geen vorig gebruikte accounts kunnen onthouden.  Indien u deze functionaliteit toch wenst te gebruiken, vragen wij u vriendelijk om JavaScript aan te zetten.</p><p><strong>U kan, vanzelfsprekend, nog steeds inloggen.<strong></strong></p>',
+    'wayf_noscript_warning'     => '<p>Om deze pagina optimaal te laten functioneren moet JavaScript aan staan.</p><p>Zonder JavaScript zal u geen vorig gebruikte accounts kunnen onthouden.  Indien u deze functionaliteit toch wenst te gebruiken, vragen wij u vriendelijk om JavaScript aan te zetten.</p><p><strong>U kan, vanzelfsprekend, nog steeds inloggen.</strong></p>',
     'wayf_no_access_account'    => 'Geen toegang met deze account',
     'wayf_delete_account'       => 'Verwijderen uit uw accounts',
     'wayf_remaining_idps_title' => 'Voeg een account toe uit de onderstaande lijst',
     'wayf_select_account'       => 'Selecteer een account uit de onderstaande lijst',
     'wayf_search_placeholder'   => 'Zoeken...',
+    'wayf_search_aria'          => 'Zoek een identity provider',
     'wayf_your_accounts'        => 'Uw accounts',
     'wayf_add_account'          => 'Voeg een account toe',
     'wayf_no_access_helpdesk'   => 'U kan toegang vragen tot deze dienst.  We sturen deze aanvraag door naar de helpdesk van uw instituut.',
