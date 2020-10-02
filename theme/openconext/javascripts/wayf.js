@@ -3,10 +3,10 @@ import {hideNoScript} from './hideNoScript';
 import {
   handleUnconnectedKeypicker,
   returnNewIdpPicker,
-} from '../../base/javascripts/modules/IdpPicker';
-import {RequestAccessModalHelper} from '../../base/javascripts/modules/RequestAccessModalHelper';
-import {KeyboardListener} from '../../base/javascripts/modules/KeyboardListener';
-import {MouseListener} from '../../base/javascripts/modules/MouseListener';
+} from './wayf/IdpPicker';
+import {RequestAccessModalHelper} from './wayf/RequestAccessModalHelper';
+import {KeyboardListener} from './wayf/KeyboardListener';
+import {MouseListener} from './wayf/MouseListener';
 import {toggleVisibility} from '../../base/javascripts/utility/toggleVisibility';
 import {searchBarEventListeners} from '../../base/javascripts/wayf/searchBarEventListeners';
 import {searchFormEventListeners} from '../../base/javascripts/wayf/searchFormEventListeners';
