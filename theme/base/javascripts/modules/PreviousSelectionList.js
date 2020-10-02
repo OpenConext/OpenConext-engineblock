@@ -1,4 +1,4 @@
-import {IdpFilter} from "./IdpFilter";
+import {filterIdpsByValue} from '../wayf/filterIdpsByValue';
 
 export class PreviousSelectionList {
     constructor(targetElement, previousSelectionList, idpListElementFactory) {
@@ -21,12 +21,12 @@ export class PreviousSelectionList {
     }
 
     filterBy(filterValue) {
-        this.filteredPreviousSelectionList = IdpFilter.filterIdpsByValue(this.previousSelectionList, filterValue);
+        this.filteredPreviousSelectionList = filterIdpsByValue(this.previousSelectionList, filterValue);
         this.render();
     }
 
     narrowFilterBy(filterValue) {
-        this.filteredPreviousSelectionList = IdpFilter.filterIdpsByValue(
+        this.filteredPreviousSelectionList = filterIdpsByValue(
             this.filteredPreviousSelectionList,
             filterValue
         );
