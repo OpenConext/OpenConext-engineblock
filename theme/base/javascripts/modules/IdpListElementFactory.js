@@ -14,9 +14,9 @@ export class IdpListElementFactory {
             idpElement.className = 'result active';
 
             if (idpList[i].connected) {
-                idpElement.className += ' access';
+                idpElement.classList.add('access');
             } else {
-                idpElement.className += ' noaccess';
+                idpElement.classList.add('noaccess');
             }
 
             idpElement.setAttribute('href', '#');

@@ -67,9 +67,9 @@ export class PreviousSelectionList {
 
     render() {
         if (this.filteredPreviousSelectionList.length > 0) {
-            this.targetElement.className = this.targetElement.className.replace(' hidden', '');
+            this.targetElement.classList.remove('hidden');
         } else if (this.targetElement.className.indexOf('hidden') === -1) {
-            this.targetElement.className += ' hidden';
+            this.targetElement.classList.add('hidden');
         }
 
         let idpListElement;

@@ -72,9 +72,9 @@ export class IdpPicker extends AbstractIdpPicker {
 
         const $underFocus = this.targetElement.querySelectorAll('.result.focussed');
         for (let i = 0; i < $underFocus.length; i++) {
-            $underFocus[i].className = $underFocus[i].className.replace(' focussed', '');
+            $underFocus[i].classList.remove('focussed');
         }
-        $results[index].className += ' focussed';
+        $results[index].classList.add('focussed');
 
         this.indexOfIdpUnderFocus = index;
     }
@@ -133,9 +133,9 @@ export class IdpPicker extends AbstractIdpPicker {
             const $previousSelectionList = this.targetElement.querySelector('.preselection .idp-list');
 
             if ($previousSelectionList.className.indexOf('show-buttons') > -1) {
-                $previousSelectionList.className = $previousSelectionList.className.replace('show-buttons', '');
+                $previousSelectionList.classList.remove('show-buttons');
             } else {
-                $previousSelectionList.className += ' show-buttons';
+                $previousSelectionList.classList.add('show-buttons');
             }
 
             const toggleText = event.currentTarget.getAttribute('data-toggle-text');

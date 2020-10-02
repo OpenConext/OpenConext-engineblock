@@ -37,16 +37,16 @@ export class IdpList {
     }
 
     render() {
-        const $noResultsElement = this.targetElement.querySelector('.noresults');
+        const noResultsElement = this.targetElement.querySelector('.noresults');
 
         if (this.filteredIdpList.length === 0) {
-            $noResultsElement.className = $noResultsElement.className.replace(' hidden', '');
-        } else if ($noResultsElement.className.indexOf('hidden') === -1) {
-            $noResultsElement.className += ' hidden';
+            noResultsElement.classList.remove('hidden');
+        } else if (noResultsElement.className.indexOf('hidden') === -1) {
+            noResultsElement.classList.add('hidden');
         }
 
         if (this.filterValue.trim() === '' && this.shouldHideUnfilteredIdpList) {
-            this.targetElement.className += ' hidden';
+            this.targetElement.classList.add('hidden');
 
             // In order to maintain correct state of the list, render no elements in the page
             const idpListElement = this.idpListElementFactory.createIdpListElementWithSelectionButtons([]);
@@ -55,7 +55,7 @@ export class IdpList {
             return;
         }
 
-        this.targetElement.className = this.targetElement.className.replace(' hidden', '');
+        this.targetElement.classList.remove('hidden');
 
         const idpListElement = this.idpListElementFactory.createIdpListElementWithSelectionButtons(
             this.filteredIdpList
