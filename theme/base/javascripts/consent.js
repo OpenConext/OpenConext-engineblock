@@ -1,9 +1,6 @@
-import {initConsentPage} from "./modules/ConsentPage";
+import {initializePage} from './page';
+import {addAccessibilitySupport} from './consent/addA11ySupport';
 
-export function initializeConsent() {
-    document.body.className = document.body.className.replace('no-js', '');
-    if (document.querySelector('.mod-content.consent') !== null) {
-        initConsentPage();
-        return;
-    }
-}
+export const initializeConsent = () => {
+  initializePage('main.consent', addAccessibilitySupport);
+};
