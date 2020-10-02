@@ -392,7 +392,7 @@
             }
         }
 
-        > .wayf__noresults {
+        > .wayf__noResults {
             @include poirot;
             background-position: left top .5rem;
             margin: calculateRem(50px) 0 1rem;
