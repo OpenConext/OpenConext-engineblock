@@ -1,4 +1,12 @@
 import {AbstractIdpPicker} from "./AbstractIdpPicker";
+import {IdpList} from './IdpList';
+import {PreviousSelectionList} from './PreviousSelectionList';
+import {PreviousSelectionStorage} from './PreviousSelectionStorage';
+import {RememberChoiceStorage} from './RememberChoiceStorage';
+import {IdpListElementFactory} from './IdpListElementFactory';
+import {UnconnectedIdpPicker} from './UnconnectedIdpPicker';
+import {toggleVisibility} from '../utility/toggleVisibility';
+import {searchBarEventListeners} from '../wayf/searchBarEventListeners';
 
 export class IdpPicker extends AbstractIdpPicker {
     constructor(searchForm, targetElement, previousSelectionList, idpList, previousSelectionStorage, rememberChoiceFeature, rememberChoiceStorage) {
@@ -234,3 +242,69 @@ export class IdpPicker extends AbstractIdpPicker {
         this.searchForm.submit();
     }
 }
+
+export const returnNewIdpPicker = (configuration, searchForm) => {
+  const idpListElementFactory = new IdpListElementFactory(configuration.messages);
+  const connectedIdpList = new IdpList(
+    document.querySelector('#idp-picker .selection'),
+    configuration.connectedIdps,
+    idpListElementFactory,
+    configuration.cutoffPointForShowingUnfilteredIdps
+  );
+  const previousSelectionList    = new PreviousSelectionList(
+    document.querySelector('#idp-picker .preselection'),
+    configuration.previousSelectionList,
+    idpListElementFactory
+  );
+
+  return new IdpPicker(
+    searchForm,
+    document.getElementById('idp-picker'),
+    previousSelectionList,
+    connectedIdpList,
+    new PreviousSelectionStorage(configuration.previousSelectionCookieName),
+    configuration.rememberChoiceFeature,
+    new RememberChoiceStorage(configuration.rememberChoiceCookieName)
+  );
+};
+
+const returnNewUnconnectedIdpPicker = (configuration, searchForm, unconnectedIdpPickerTarget) => {
+  const unconnectedIdpList = new IdpList(
+    document.querySelector(' #unconnected-idp-picker .selection'),
+    configuration.unconnectedIdps,
+    new IdpListElementFactory(configuration.messages),
+    configuration.cutoffPointForShowingUnfilteredIdps
+  );
+
+  return new UnconnectedIdpPicker(
+    searchForm,
+    unconnectedIdpPickerTarget,
+    unconnectedIdpList
+  );
+};
+
+const registerUnconnectedIdPickerEvents = (unconnectedIdpPickerTarget, requestAccessModalHelper, keyboardListener) => {
+  unconnectedIdpPickerTarget.addEventListener('click', requestAccessModalHelper.requestAccessClickHandler());
+
+  // Use the keyboardListener to open the modal on ENTER presses
+  unconnectedIdpPickerTarget.addEventListener('keyup', event => keyboardListener.handle(event.keyCode));
+};
+
+export const handleUnconnectedKeypicker = (requestAccessModalHelper, configuration, searchForm, searchBar, idpPicker, keyboardListener) => {
+  const unconnectedIdpPickerTarget = document.getElementById('unconnected-idp-picker');
+  if (unconnectedIdpPickerTarget) {
+    // Only show the unconnected IdP box when javascript is enabled.
+    toggleVisibility(unconnectedIdpPickerTarget);
+
+    const unconnectedIdpPicker = returnNewUnconnectedIdpPicker(configuration, searchForm, unconnectedIdpPickerTarget);
+
+    /**
+     * Call indexElements to also include the disconnected IdPs in
+     * the IdP list index, ensuring mouse and keyboard behavior
+     * matches that of the connected IdP list.
+     */
+    idpPicker.indexElements();
+    searchBarEventListeners(searchBar, unconnectedIdpPicker);
+    registerUnconnectedIdPickerEvents(unconnectedIdpPickerTarget, requestAccessModalHelper, keyboardListener);
+  }
+};
