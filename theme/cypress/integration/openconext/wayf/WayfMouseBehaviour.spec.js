@@ -41,8 +41,8 @@ context('WayfMouseBehaviour', () => {
     cy.get('.edit')
       .should('have.text', 'edit')
       .click();
-    cy.get('span.deleteable').first().click();
-    cy.get('span.deleteable').click();
+    cy.get('span.deleteable').first().click({force:true});
+    cy.get('span.deleteable').click({force:true});
     cy.get('div.preselection header h2')
       .should('not.be.visible');
   });
