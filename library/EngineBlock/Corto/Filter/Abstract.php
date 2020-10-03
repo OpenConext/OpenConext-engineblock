@@ -72,7 +72,7 @@ abstract class EngineBlock_Corto_Filter_Abstract
         else if ($response->getCollabPersonId()) {
             $collabPersonId = $response->getCollabPersonId();
         }
-        else if ($responseNameId->getValue()) {
+        else if (isset($responseNameId) && $responseNameId->getValue()) {
             $collabPersonId = $responseNameId->getValue();
         }
         else {
