@@ -42,12 +42,13 @@ class DocumentSigner
         $rootNode = $doc->childNodes[1];
 
         // Create sign object
+        $canonicalMethod = XMLSecurityDSig::EXC_C14N;
         $objDSig = new XMLSecurityDSig();
-        $objDSig->setCanonicalMethod(XMLSecurityDSig::EXC_C14N);
+        $objDSig->setCanonicalMethod($canonicalMethod);
         $objDSig->addReference(
             $rootNode,
             self::SIGN_ALGORITHM,
-            ['http://www.w3.org/2000/09/xmldsig#enveloped-signature'],
+            ['http://www.w3.org/2000/09/xmldsig#enveloped-signature', $canonicalMethod],
             ['id_name' => 'ID', 'overwrite' => false]
         );
 
