@@ -49,6 +49,7 @@ class ConsentController
             'message' => $encodedMessage,
             'xtra' => '<input type="hidden" name="RelayState" value="relaystate">',
             'name' => 'SAMLResponse',
+            'preventAutoSubmit' => true
         ]), 200);
     }
 
