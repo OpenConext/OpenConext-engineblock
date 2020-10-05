@@ -1,6 +1,6 @@
 import {initializeIndex} from ".";
-import {initializeConsent} from ".";
 import {initializeWayf} from ".";
+import {initializeConsent} from './consent';
 
 initializeIndex();
 initializeWayf();
