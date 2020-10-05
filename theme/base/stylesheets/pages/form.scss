@@ -1,0 +1,27 @@
+/*******************************************************************
+    CSS specific to the form page (auto submitted page that sends
+    SAML response to SP
+ ******************************************************************/
+
+.form {
+    > main {
+        background-color: $gray;
+        color: $black;
+        font-size: $f-normal;
+        padding: 0 2rem 2.5rem;
+        @include screen('mobile') {
+            padding: 0 1rem 1.25rem;
+        }
+
+        > header {
+            h2.form__subHeader {
+                padding: 1.5rem 2rem 2.125rem 0;
+            }
+        }
+
+        > img.form__spinner {
+            padding: 2rem 2rem 0 0;
+            width: 30%;
+        }
+    }
+}
