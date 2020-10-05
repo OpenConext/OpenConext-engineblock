@@ -11,6 +11,8 @@ import {focusSearchBar} from './wayf/focusSearchBar';
 import {initializePage} from './page';
 import {hideNoScript} from '../../openconext/javascripts/hideNoScript';
 import {hideIdpsOnLoad} from './wayf/hideIdpsOnLoad';
+import {keyboardBehaviour} from './wayf/keyboardBehaviour';
+import {mouseBehaviour} from './wayf/mouseBehaviour';
 
 export function initializeWayf() {
   // const form = document.querySelector('.wayf__search');
@@ -36,6 +38,8 @@ export function initializeWayf() {
     const configuration = JSON.parse(document.getElementById('wayf-configuration').innerHTML);
 
     hideIdpsOnLoad(selectedIdps);
+    keyboardBehaviour();
+    mouseBehaviour();
   };
 
   initializePage('main.wayf', callbacksAfterLoad);
