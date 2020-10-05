@@ -75,6 +75,7 @@ body {
 
     > .container {
         > header {
+            > h1.redirectBar,
             > p.loginBar {
                 @include font-style-xl;
                 background-color: $darkishBlue;
