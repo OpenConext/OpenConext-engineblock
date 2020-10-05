@@ -10,7 +10,7 @@ import {searchFormEventListeners} from './wayf/searchFormEventListeners';
 import {focusSearchBar} from './wayf/focusSearchBar';
 import {initializePage} from './page';
 import {hideNoScript} from '../../openconext/javascripts/hideNoScript';
-import {showIdpsOnLoad} from './wayf/showIdpsOnLoad';
+import {hideIdpsOnLoad} from './wayf/hideIdpsOnLoad';
 
 export function initializeWayf() {
   // const form = document.querySelector('.wayf__search');
@@ -29,14 +29,13 @@ export function initializeWayf() {
   const callbacksAfterLoad = () => {
     // Initialize variables
     const selectedIdps = document.querySelector('.wayf__previousSelection');
-    const remainingIdps = document.querySelector('.wayf__remainingIdps');
     const noResults = document.querySelector('.wayf__noResults');
     const noAccess = document.querySelector('.wayf__noAccess');
     const searchBar = document.querySelector('#wayf_search');
     const searchForm = document.querySelector('.wayf__search');
     const configuration = JSON.parse(document.getElementById('wayf-configuration').innerHTML);
 
-    showIdpsOnLoad(selectedIdps, remainingIdps);
+    hideIdpsOnLoad(selectedIdps);
   };
 
   initializePage('main.wayf', callbacksAfterLoad);
