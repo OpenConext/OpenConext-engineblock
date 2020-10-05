@@ -25,6 +25,8 @@ export function initializeWayf() {
     keyboardBehaviour();
     mouseBehaviour();
     hideIdpsOnLoad(selectedIdps);
+    keyboardBehaviour();
+    mouseBehaviour();
   };
 
   initializePage('main.wayf', callbacksAfterLoad);
