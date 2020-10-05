@@ -1,4 +1,8 @@
-<button data-connected="{{ idp['connected'] }}" type="button">
+<button
+    class="idp__deleteDisable"
+    data-connected="{{ idp['connected'] }}"
+    type="button"
+>
     {#                    {% if idp['noAccess'] is defined and idp['noAccess'] %}#} {# todo: turn this if back on once all js is added & tested #}
         <span class="idp__disabled">
             <span class="visually-hidden">
