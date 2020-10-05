@@ -17,7 +17,7 @@
             <link href="/stylesheets/application.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
         {% endspaceless %}{% endblock %}
     </head>
-    <body class="index" {#onload="document.forms[0].submit()"#}>
+    <body class="index" {% if preventAutoSubmit is not defined %} onload="document.forms[0].submit()" {% endif %}>
 
     <div class="container form">
 
