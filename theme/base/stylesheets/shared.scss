@@ -89,6 +89,10 @@ body {
                     line-height: 3rem;
                     padding: 0 1rem;
                 }
+
+                @include screen('smallMobile') {
+                    padding: 0 .5rem;
+                }
             }
         }
 
@@ -109,7 +113,11 @@ body {
                     padding: calculateRem(26px) 2rem;
 
                     @include screen('mobile') {
-                        padding: calculateRem(13px) 1rem;
+                        padding: .8125rem 1rem;
+                    }
+
+                    @include screen('smallMobile') {
+                        padding: .8125rem .5rem;
                     }
                 }
 
@@ -120,10 +128,14 @@ body {
                     font-weight: $bolder;
                     line-height: 1.15;
                     margin: 0;
-                    padding: calculateRem(24px) 2rem calculateRem(34px);
+                    padding: 1.5rem 2rem calculateRem(34px);
 
                     @include screen('mobile') {
-                        padding: calculateRem(12px) 1rem calculateRem(17px);
+                        padding: .75rem 1rem calculateRem(17px);
+                    }
+
+                    @include screen('smallMobile') {
+                        padding: .75rem .5rem calculateRem(17px);
                     }
                 }
             }
