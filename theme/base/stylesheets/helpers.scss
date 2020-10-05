@@ -11,7 +11,7 @@
     You also need to import these at the start of each file that uses a variable/mixin/general class.
  ******************************************************************/
 
-@import '~@csstools/normalize.css';
+@import 'normalize';
 @import 'breakpoints';
 @import 'classes';
 @import 'fonts';

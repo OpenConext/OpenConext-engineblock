@@ -38,6 +38,7 @@
                             > .idp__content {
                                 > button {
                                     @include button-reset($idpBlue);
+                                    margin: 3px 0;
 
                                     > .idp__delete {
                                         @include trashcan-hover;
@@ -105,6 +106,7 @@
                                 border-top-right-radius: 8px;
                                 display: flex;
                                 justify-content: center;
+                                margin: 3px 0;
                                 width: 4rem;
 
                                 @include screen('mobile') {
@@ -145,13 +147,12 @@
                         }
                     }
                 }
-
             }
         }
 
         >.wayf__previousSelection {
             @include display-grid;
-            @include grid-template-columns(calc(100% - 3rem) 3rem);
+            @include grid-template-columns(calc(100% - 4rem) 4rem);
             @include grid-template-rows(min-content min-content min-content);
 
             > .previousSelection__title {
@@ -164,26 +165,34 @@
                 @include grid-position(1, 2, 2, 3);
             }
 
-            > label[for="previousSelectionToggle"] {
+            > .ie11__label {
                 @include grid-position(1, 2, 2, 3);
-                color: $buttonBlue;
-                cursor: pointer;
-                font-size: $f-large;
-                font-weight: $bolder;
-                line-height: 1.5;
                 margin: auto 0 calculateRem(34px) calculateRem(5px);
 
-                &:focus,
-                &:hover {
-                    color: $darkishBlue;
+                > label[for="previousSelectionToggle"] {
+                    color: $buttonBlue;
+                    cursor: pointer;
+                    font-size: $f-large;
+                    font-weight: $bolder;
+                    line-height: 1.5;
 
-                    > span {
-                        text-decoration: underline;
+                    &:focus,
+                    &:hover {
+                        color: $darkishBlue;
+
+                        > span {
+                            text-decoration: underline;
+                        }
                     }
                 }
             }
 
-            > .previousSelection__toggle + label {
+            // todo remove as soon as ie11 support is dropped
+            _:-ms-fullscreen, > .ie11__label {
+                margin-top: 1.75rem;
+            }
+
+            > .previousSelection__toggle + .ie11__label > label {
                 .previousSelection__edit {
                     display: inline-block;
                 }
@@ -211,7 +220,7 @@
                 }
             }
 
-            > .previousSelection__toggle:checked + label {
+            > .previousSelection__toggle:checked + .ie11__label > label {
                 .previousSelection__edit {
                     display: none;
                 }
@@ -277,6 +286,7 @@
                 margin: 2rem 0 1.25rem;
 
                 > .search__field {
+                    @include webkit-input;
                     border: 1px solid $gray;
                     border-radius: 6px;
                     box-shadow: 0 1px 0 2px #5e6873;
@@ -293,13 +303,13 @@
                 }
 
                 > .search__submit {
-                    @include absolute(top 0 right 0);
+                    @include absolute(top 3px right 3px);
                     @include button-reset($white);
                     @include poirot;
                     background-position: center center;
                     background-size: 1.5rem 1.5rem;
                     border-radius: 6px;
-                    height: 3rem;
+                    height: calc(3rem - 6px);
                     width: 3rem;
 
                     @include screen('mobile') {
@@ -349,6 +359,10 @@
 
                     @include screen('mobile') {
                         width: unset;
+                        }
+
+                    &:focus {
+                        padding: .5rem;
                     }
                 }
 
@@ -380,7 +394,7 @@
 
         > .wayf__noresults {
             @include poirot;
-            background-position: left top 5px;
+            background-position: left top .5rem;
             margin: calculateRem(50px) 0 1rem;
             padding-left: 48px;
 
