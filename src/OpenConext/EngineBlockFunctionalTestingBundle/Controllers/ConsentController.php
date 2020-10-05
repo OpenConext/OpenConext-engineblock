@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2010 SURFnet B.V.
  *
@@ -22,8 +23,8 @@ use SAML2\Constants;
 use SAML2\XML\saml\NameID;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Translation\TranslatorInterface;
 use Twig_Environment;
+use function base64_encode;
 
 class ConsentController
 {
@@ -37,6 +38,18 @@ class ConsentController
         Twig_Environment $twig
     ) {
         $this->twig = $twig;
+    }
+
+    public function sendAction()
+    {
+        $action = '#';
+        $encodedMessage = base64_encode('the encoded message, no problem this is bogus on the test endpoint');
+        return new Response($this->twig->render('@theme/Authentication/View/Proxy/form.html.twig', [
+            'action' => $action,
+            'message' => $encodedMessage,
+            'xtra' => '<input type="hidden" name="RelayState" value="relaystate">',
+            'name' => 'SAMLResponse',
+        ]), 200);
     }
 
     /**
