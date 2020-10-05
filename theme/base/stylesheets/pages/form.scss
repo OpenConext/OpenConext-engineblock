@@ -23,5 +23,14 @@
             padding: 2rem 2rem 0 0;
             width: 30%;
         }
+        > form {
+            > noscript {
+                input.form__noJsSubmit {
+                    @include button-primary($buttonBlue);
+                    text-align: center;
+                    width: 100%;
+                }
+            }
+        }
     }
 }
