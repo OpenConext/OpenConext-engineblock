@@ -14,9 +14,15 @@ final class Version20201005161700 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-
-        $this->addSql('DROP INDEX idx_sso_provider_roles_publish_in_edugain ON sso_provider_roles_eb5');
-        $this->addSql('ALTER TABLE sso_provider_roles_eb5 DROP publish_in_edugain, DROP publish_in_edu_gain_date');
+        if ($schema->getTable('sso_provider_roles_eb5')->hasIndex('idx_sso_provider_roles_publish_in_edugain')) {
+            $this->addSql('DROP INDEX idx_sso_provider_roles_publish_in_edugain ON sso_provider_roles_eb5');
+        }
+        if ($schema->getTable('sso_provider_roles_eb5')->hasColumn('publish_in_edugain')) {
+            $this->addSql('ALTER TABLE sso_provider_roles_eb5 DROP publish_in_edugain');
+        }
+        if ($schema->getTable('sso_provider_roles_eb5')->hasColumn('publish_in_edu_gain_date')) {
+            $this->addSql('ALTER TABLE sso_provider_roles_eb5 DROP publish_in_edu_gain_date');
+        }
     }
 
     public function down(Schema $schema) : void
