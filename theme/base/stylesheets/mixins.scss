@@ -256,10 +256,12 @@
 
 @mixin add-account {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='32' height='32' viewBox='0 0 32 32'%3E%3Cdefs%3E%3Cpath id='4f5727nd1a' d='M17.5 9.5c3.866 0 7 3.134 7 7s-3.134 7-7 7-7-3.134-7-7 3.134-7 7-7zM6.25 0c2.21 0 4 1.79 4 4 0 1.227-.552 2.325-1.422 3.058C9.994 7.585 11 8.47 11.672 9.64c.275.48.11 1.09-.37 1.365-.478.275-1.09.11-1.364-.37-.959-1.67-2.92-2.486-4.781-1.99-1.795.477-3.063 2.061-3.152 3.9L2 12.75V14h1.25c.474 0 .877.332.977.785l.018.115.66 6.6h2.689l.234-2.332c.05-.51.477-.893.978-.9l.116.004c.51.05.893.477.9.978l-.004.116-.323 3.233c-.047.472-.417.84-.878.894L8.5 23.5H4c-.474 0-.877-.332-.977-.785l-.018-.115-.661-6.6H1c-.513 0-.936-.386-.993-.883L0 15v-2.25c.001-2.484 1.466-4.695 3.673-5.693C2.803 6.326 2.25 5.227 2.25 4c0-2.21 1.79-4 4-4zM17.5 11.5c-2.761 0-5 2.239-5 5s2.239 5 5 5 5-2.239 5-5-2.239-5-5-5zm0 1c.513 0 .936.386.993.883l.007.117v2h2c.552 0 1 .448 1 1 0 .513-.386.936-.883.993l-.117.007h-2v2c0 .552-.448 1-1 1-.513 0-.936-.386-.993-.883L16.5 19.5v-2h-2c-.552 0-1-.448-1-1 0-.513.386-.936.883-.993l.117-.007h2v-2c0-.552.448-1 1-1zM6.25 2c-1.105 0-2 .895-2 2s.895 2 2 2 2-.895 2-2-.895-2-2-2z'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(4 4)'%3E%3Cmask id='vop37c516b' fill='%23fff'%3E%3Cuse xlink:href='%234f5727nd1a'/%3E%3C/mask%3E%3Cg fill='%230077C8' mask='url(%23vop37c516b)'%3E%3Cpath d='M0 0H32V32H0z' transform='translate(-4 -4)'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");
+    background-size: 29px;
 }
 
 @mixin add-account-hover {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='32' height='32' viewBox='0 0 32 32'%3E%3Cdefs%3E%3Cpath id='4f5727nd1a' d='M17.5 9.5c3.866 0 7 3.134 7 7s-3.134 7-7 7-7-3.134-7-7 3.134-7 7-7zM6.25 0c2.21 0 4 1.79 4 4 0 1.227-.552 2.325-1.422 3.058C9.994 7.585 11 8.47 11.672 9.64c.275.48.11 1.09-.37 1.365-.478.275-1.09.11-1.364-.37-.959-1.67-2.92-2.486-4.781-1.99-1.795.477-3.063 2.061-3.152 3.9L2 12.75V14h1.25c.474 0 .877.332.977.785l.018.115.66 6.6h2.689l.234-2.332c.05-.51.477-.893.978-.9l.116.004c.51.05.893.477.9.978l-.004.116-.323 3.233c-.047.472-.417.84-.878.894L8.5 23.5H4c-.474 0-.877-.332-.977-.785l-.018-.115-.661-6.6H1c-.513 0-.936-.386-.993-.883L0 15v-2.25c.001-2.484 1.466-4.695 3.673-5.693C2.803 6.326 2.25 5.227 2.25 4c0-2.21 1.79-4 4-4zM17.5 11.5c-2.761 0-5 2.239-5 5s2.239 5 5 5 5-2.239 5-5-2.239-5-5-5zm0 1c.513 0 .936.386.993.883l.007.117v2h2c.552 0 1 .448 1 1 0 .513-.386.936-.883.993l-.117.007h-2v2c0 .552-.448 1-1 1-.513 0-.936-.386-.993-.883L16.5 19.5v-2h-2c-.552 0-1-.448-1-1 0-.513.386-.936.883-.993l.117-.007h2v-2c0-.552.448-1 1-1zM6.25 2c-1.105 0-2 .895-2 2s.895 2 2 2 2-.895 2-2-.895-2-2-2z'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(4 4)'%3E%3Cmask id='vop37c516b' fill='%23fff'%3E%3Cuse xlink:href='%234f5727nd1a'/%3E%3C/mask%3E%3Cg fill='%23004C97' mask='url(%23vop37c516b)'%3E%3Cpath d='M0 0H32V32H0z' transform='translate(-4 -4)'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");
+    background-size: 29px;
 }
 
 @mixin poirot {
@@ -330,14 +332,14 @@
 @mixin informational {
     background-color: $informationalBlue;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='32' height='32' viewBox='0 0 32 32'%3E%3Cdefs%3E%3Cpath id='a' d='M12 0c6.624.007 11.993 5.376 12 12 0 6.627-5.373 12-12 12S0 18.627 0 12 5.373 0 12 0zm-.583 8.75h-.667l-.117.007a1 1 0 0 0 .117 1.993h.667v5l.003.19c.06 1.637.89 2.81 2.5 2.81h.83l.117-.007a1 1 0 0 0-.117-1.993h-.83l-.072-.004c-.297-.033-.431-.287-.431-.996v-5l-.006-.15a2 2 0 0 0-1.994-1.85zm.833-5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(4 4)'%3E%3Cpath fill='%23FFF' fill-rule='nonzero' stroke='%23FFF' stroke-width='2' d='M12-1h.001C19.177-.992 24.992 4.823 25 12c0 7.18-5.82 13-13 13S-1 19.18-1 12 4.82-1 12-1z'/%3E%3Cmask id='b' fill='%23fff'%3E%3Cuse xlink:href='%23a'/%3E%3C/mask%3E%3Cg fill='%2300A8CA' mask='url(%23b)'%3E%3Cpath d='M-4-4h32v32H-4V-4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");
-    background-position: 1.125rem 1.125rem;
+    background-position: 1.125rem .75rem;
     background-repeat: no-repeat;
     border-radius: 8px;
     font-size: $f-normal;
     padding: 1.125rem 1.125rem 1.125rem calculateRem(53px);
 
     @include screen('mobile') {
-        background-position: .35rem 1rem;
+        background-position: left .35rem top .5rem;
         padding: .5rem .5rem .5rem 2.5rem;
     }
 
@@ -359,4 +361,8 @@
     color: $green;
     font-size: $f-h2;
     font-weight: $bolder;
+}
+
+@mixin webkit-input {
+    -webkit-appearance: none;
 }
