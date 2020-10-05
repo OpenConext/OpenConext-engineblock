@@ -58,7 +58,6 @@
     "watchify": "^3.11.1"
   },
   "dependencies": {
-    "@csstools/normalize.css": "^11.0.1",
     "font-awesome-sass": "^4.7.0",
     "js-cookie": "^2.2.1",
     "js-yaml": "^3.14.0",
