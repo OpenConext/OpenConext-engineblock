@@ -30,12 +30,13 @@
                     background-color: $white;
                     border-radius: 8px;
                     box-shadow: 0 1px 0 2px #5e6873;
+                    display: flex;
+                    text-decoration: none;
 
                     &:hover {
                         background-color: $idpBlue;
 
-                        > a {
-                            > .idp__content {
+                        > .idp__content {
                                 > button {
                                     @include button-reset($idpBlue);
                                     margin: 3px 0;
@@ -45,31 +46,27 @@
                                     }
                                 }
                             }
+                    }
+
+
+                    > .idp__logo {
+                        align-self: center;
+                        justify-self: center;
+                        margin-right: calculateRem(6px);
+                        padding: .5rem;
+
+                        @include screen('mobile') {
+                            margin: 0;
+                            padding: .25rem;
+                        }
+
+                        > img {
+                            max-height: calculateRem(61px);
+                            max-width: calculateRem(94px);
                         }
                     }
 
-                    > a {
-                        display: flex;
-                        text-decoration: none;
-
-                        > .idp__logo {
-                            align-self: center;
-                            justify-self: center;
-                            margin-right: calculateRem(6px);
-                            padding: .5rem;
-
-                            @include screen('mobile') {
-                                margin: 0;
-                                padding: .25rem;
-                            }
-
-                            > img {
-                                max-height: calculateRem(61px);
-                                max-width: calculateRem(94px);
-                            }
-                        }
-
-                        > .idp__content {
+                    > .idp__content {
                             box-sizing: content-box;
                             display: flex;
                             justify-content: space-between;
@@ -133,17 +130,14 @@
                                 }
                             }
                         }
-                    }
                 }
 
                 > .wayf__idp.wayf__idp--noAccess {
                     background-color: $gray;
 
-                    > a {
-                        > .idp__content {
-                            > button {
-                                @include button-reset($gray);
-                            }
+                    > .idp__content {
+                        > button {
+                            @include button-reset($gray);
                         }
                     }
                 }
@@ -205,15 +199,13 @@
             > .previousSelection__toggle ~ .wayf__idpList {
                 > li {
                     > .wayf__idp {
-                        > a {
-                            > .idp__content {
-                                .idp__delete {
-                                    display: none;
-                                }
+                        > .idp__content {
+                            .idp__delete {
+                                display: none;
+                            }
 
-                                .idp__disabled {
-                                    display: inline-block;
-                                }
+                            .idp__disabled {
+                                display: inline-block;
                             }
                         }
                     }
@@ -233,15 +225,13 @@
             > .previousSelection__toggle:checked ~ .wayf__idpList {
                 > li {
                     > .wayf__idp {
-                        > a {
-                            > .idp__content {
-                                .idp__delete {
-                                    display: inline-block;
-                                }
+                        > .idp__content {
+                            .idp__delete {
+                                display: inline-block;
+                            }
 
-                                .idp__disabled {
-                                    display: none;
-                                }
+                            .idp__disabled {
+                                display: none;
                             }
                         }
                     }
