@@ -360,7 +360,7 @@
             margin: 2rem 0 0;
 
             > form {
-                button {
+                .cta_consent_ok {
                     @include button-primary($buttonBlue);
                     margin-bottom: 1.5rem;
                     width: 100%;
@@ -371,7 +371,7 @@
                 }
             }
 
-            > label {
+            > label[for="cta_consent_nok"] {
                 @include button-tertiary($gray);
                 display: block;
                 width: 100%;
