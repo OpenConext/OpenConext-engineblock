@@ -2,39 +2,51 @@
 
 {% block content %}
     <!DOCTYPE html>
-    <html>
+    <html lang="{{ locale()|escape('html_attr') }}">
     <head>
+        <title>{{ defaultTitle }} - {{ 'post_data'|trans }}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="robots" content="noindex, nofollow"/>
-        <meta content="ie=edge,chrome=1" http-equiv="x-ua-compatible">
-        <meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport">
+        <meta content="IE=edge" http-equiv="x-ua-compatible">
+        <meta content="initial-scale=1.0,width=device-width" name="viewport">
+        <meta content="yes" name="apple-mobile-web-app-capable">
         <meta content="translucent-black" name="apple-mobile-web-app-status-bar-style">
         <link href="/favicon.ico" rel="shortcut icon">
-        <link href="/stylesheets/application.css" rel="stylesheet" type="text/css"/>
-        <title>{{ defaultTitle }} - {{ 'post_data'|trans }}</title>
+
+        {% block stylesheets %}{% spaceless %}
+            <link href="/stylesheets/application.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
+        {% endspaceless %}{% endblock %}
     </head>
-    <body class="index" onload="document.forms[0].submit()">
-    <div class="mod-redirect">
-        <img class="rotate-img" src="/images/spinner.svg" alt=""/>
+    <body class="index" {% if preventAutoSubmit is not defined %} onload="document.forms[0].submit()" {% endif %}>
 
-        <h1>{{ 'processing'|trans }}</h1>
+    <div class="container form">
 
-        <p>{{ 'processing_waiting'|trans }}</p>
+        <header>
+            <h1 class="redirectBar">{{ 'processing'|trans }}</h1>
+        </header>
 
-        <p>{{ 'processing_long'|trans }}</p>
-        <noscript>
-            <p>
-                <strong>{{ 'note'|trans }}:</strong>
-                {{ 'note_no_script'|trans }}
-            </p>
-        </noscript>
-        <form id="ProcessForm" method="post" action="{{ action }}">
-            <input type="hidden" name="{{ name }}" value="{{ message }}"/>
 
-            {{ xtra|raw }}
+        <main>
+            <header>
+                <h2 class="form__subHeader">{{ 'processing_waiting'|trans }}</h2>
+            </header>
 
-            <noscript><input type="submit" value="Submit" class="c-button"/></noscript>
-        </form>
+            <p>{{ 'processing_long'|trans }}</p>
+
+            <img src="/images/spinner.svg" alt="" class="form__spinner">
+
+            <form id="ProcessForm" method="post" action="{{ action }}">
+                <input type="hidden" name="{{ name }}" value="{{ message }}"/>
+                {{ xtra|raw }}
+                <noscript>
+                    <p>
+                        <strong>{{ 'note'|trans }}:</strong>
+                        {{ 'note_no_script'|trans }}
+                    </p>
+                    <input type="submit" value="Submit" class="form__noJsSubmit"/>
+                </noscript>
+            </form>
+        </main>
     </div>
 
     </body>

@@ -55,6 +55,11 @@ functional_testing_consent:
     defaults:
         _controller: engineblock.functional_test.controller.consent:consentAction
 
+functional_testing_send_form:
+    path: "/send"
+    defaults:
+        _controller: engineblock.functional_test.controller.consent:sendAction
+
 functional_testing_gateway:
     path: "/gateway/second-factor-only/single-sign-on"
     defaults:
