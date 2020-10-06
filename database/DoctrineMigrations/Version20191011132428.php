@@ -15,6 +15,11 @@ final class Version20191011132428 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
+        $this->skipIf(
+            !$schema->getTable('sso_provider_roles_eb5')->hasColumn('response_processing_service_binding'),
+            'Skipping because `response_processing_service_binding` did not exist to begin with'
+        );
+
         $this->addSql('ALTER TABLE sso_provider_roles_eb5 DROP response_processing_service_binding');
     }
 
