@@ -1,3 +1,5 @@
+import {fireClickEvent} from '../utility/fireClickEvent';
+
 export const addAccessibilitySupport = () => {
   /**
    * Ensure hitting enter on a label will trigger the same interaction as it does when clicking it with a mouse.
@@ -6,10 +8,9 @@ export const addAccessibilitySupport = () => {
    */
   document.querySelector('body').addEventListener('keydown', function(e) {
     if (e.keyCode === 13) {
-      var label = e.target;
+      const label = e.target;
       if (label.tagName === 'LABEL' && label.tabIndex === 0) {
-        var clickEvent = new MouseEvent('click');
-        label.dispatchEvent(clickEvent);
+        fireClickEvent(label);
       }
     }
   });
