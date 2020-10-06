@@ -5,6 +5,14 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.3.0.1
+This is an intermediate release between 6.3.0 and the rest of the 6.3 release tier.
+
+This release is created in order to move forward with the 6.3.0 release without adding all the other fixes and features that where later added to the 6.3 release branch.
+
+**Bugfixes**
+ - Whether MFA AuthnContext must be added should be based on original SP #893 #894
+
 ## 6.3.0
 This release is the finalization of the AuthnContextClassRef changes
 that where started in 6.2.1 (and rolled back in 6.2.2).
