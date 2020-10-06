@@ -336,11 +336,19 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
 
     private function assembleOrganization(stdClass $connection, $langCode)
     {
-        return array('organization' . ucfirst($langCode) => new Organization(
-            $connection->metadata->OrganizationName->$langCode,
-            $connection->metadata->OrganizationDisplayName->$langCode,
-            $connection->metadata->OrganizationURL->$langCode
-        ));
+        $name = null;
+        $displayName = null;
+        $url = null;
+        if (isset($connection->metadata->OrganizationName) && isset($connection->metadata->OrganizationName->$langCode)) {
+            $name = $connection->metadata->OrganizationName->$langCode;
+        }
+        if (isset($connection->metadata->OrganizationDisplayName) && isset($connection->metadata->OrganizationDisplayName->$langCode)) {
+            $displayName = $connection->metadata->OrganizationDisplayName->$langCode;
+        }
+        if (isset($connection->metadata->OrganizationURL) && isset($connection->metadata->OrganizationURL->$langCode)) {
+            $url = $connection->metadata->OrganizationURL->$langCode;
+        }
+        return array('organization' . ucfirst($langCode) => new Organization($name, $displayName, $url));
     }
 
     private function assembleCertificates(stdClass $connection)
