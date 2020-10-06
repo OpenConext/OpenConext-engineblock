@@ -30,8 +30,9 @@ const mouseHandlersHiddenIdps = () => {
   document
     .querySelector('.idp__deleteDisable')
     .addEventListener('click', handleDeleteDisable);
+  // Attach event listener to previous selection idps-list
   document
-    .querySelector('.wayf__remainingIdps .wayf__idpList')
+    .querySelector('.wayf__previousSelection .wayf__idpList')
     .addEventListener('click', (e) => {
       submitForm(e);
     });
