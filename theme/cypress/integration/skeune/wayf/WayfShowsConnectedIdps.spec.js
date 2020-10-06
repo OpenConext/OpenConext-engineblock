@@ -11,7 +11,7 @@ context('WayfMouseBehaviour', () => {
       cy.get('.wayf__idp h3')
         .should('have.length', 5)
         .eq(2)
-        .should('have.text', 'Connected IdP 3 en');
+        .should('have.text', 'Login with Connected IdP 3 en');
 
       // Check if the search field is present
       cy.get('.wayf__search').should('exist');

@@ -32,6 +32,8 @@
                 }
 
                 > .wayf__idp {
+                    // outline is put on the surrounding li to ensure outline style doesn't clash with the box-shadow
+                    @include remove-outline;
                     background-color: $white;
                     border-radius: 8px;
                     box-shadow: 0 1px 0 2px #5e6873;
@@ -145,9 +147,9 @@
                                 margin: 3px 0;
                                 width: 6rem;
 
-                                // disable outline on focus as we use focus-within for the article
-                                &:focus {
-                                    outline: none;
+                                &:hover,
+                                &focus {
+                                    border: 3px solid $white;
                                 }
                             }
                         }

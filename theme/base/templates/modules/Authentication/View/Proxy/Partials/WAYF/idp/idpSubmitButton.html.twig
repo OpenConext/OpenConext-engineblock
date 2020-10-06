@@ -1,7 +1,7 @@
 <button
     class="idp__submit{% if hidden is defined %} visually-hidden{% endif %}"
-    data-entityid="{{ idp['entityId'] }}"
     type="submit"
+    {% if hidden is defined %}tabindex="-1"{% endif %}
 >
     Login
-</button> {# todo figure out if the data-entityid is still necessary? #}
+</button>

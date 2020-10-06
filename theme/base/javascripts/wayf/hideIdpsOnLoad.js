@@ -3,6 +3,7 @@ import {toggleVisibility} from '../utility/toggleVisibility';
 import {toggleRemaining} from './toggleRemaining';
 import {showRemaining} from './showRemaining';
 import {handleDeleteDisable} from './handleDeleteDisable';
+import {submitForm} from './submitForm';
 
 /**
  * Check if user has any previous selected Idps.  If so: show those, else show the larger list.
@@ -29,4 +30,9 @@ const mouseHandlersHiddenIdps = () => {
   document
     .querySelector('.idp__deleteDisable')
     .addEventListener('click', handleDeleteDisable);
+  document
+    .querySelector('.wayf__remainingIdps .wayf__idp')
+    .addEventListener('click', (e) => {
+      submitForm(e);
+    });
 };
