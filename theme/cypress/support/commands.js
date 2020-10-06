@@ -26,3 +26,7 @@ Cypress.Commands.add('buildTheme', (themeName) => {
 Cypress.Commands.add('hideDebugBar', () => {
   cy.get('.sf-toolbar').invoke('attr', 'style', 'display: none');
 });
+
+Cypress.Commands.add('focusAndEnter', (selector) => {
+  cy.get(selector).focus().type('{enter}');
+});
