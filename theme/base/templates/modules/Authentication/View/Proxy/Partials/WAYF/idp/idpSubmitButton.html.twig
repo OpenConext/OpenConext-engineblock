@@ -1,5 +1,5 @@
 <button
-    class="idp__submit visually-hidden"
+    class="idp__submit{% if hidden is defined %} visually-hidden{% endif %}"
     data-entityid="{{ idp['entityId'] }}"
     type="submit"
 >

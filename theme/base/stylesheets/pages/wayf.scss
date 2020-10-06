@@ -26,6 +26,11 @@
             > li {
                 margin-bottom: calculateRem(19px);
 
+                &:focus-within {
+                    outline: 3px dotted $darkishBlue;
+                    padding: 3px;
+                }
+
                 > .wayf__idp {
                     background-color: $white;
                     border-radius: 8px;
@@ -35,6 +40,7 @@
 
                     &:hover {
                         background-color: $idpBlue;
+                        cursor: pointer;
 
                         > .idp__content {
                                 > button {
@@ -47,7 +53,6 @@
                                 }
                             }
                     }
-
 
                     > .idp__logo {
                         align-self: center;
@@ -67,69 +72,86 @@
                     }
 
                     > .idp__content {
-                            box-sizing: content-box;
-                            display: flex;
-                            justify-content: space-between;
-                            width: calc(100% - 6.25rem);
+                        box-sizing: content-box;
+                        display: flex;
+                        justify-content: space-between;
+                        width: calc(100% - 6.25rem);
+
+                        @include screen('mobile') {
+                            width: calc(100% - 4.25rem);
+                        }
+
+                        > h3 {
+                            border-left: 1px solid $idpSeparatorGray;
+                            display: inline-block;
+                            color: $black;
+                            font-family: 'SourceSansPro', sans-serif;
+                            font-size: $f-large;
+                            font-weight: $normal;
+                            height: calc(100% - 1.625rem);
+                            margin: calculateRem(13px) 0;
+                            padding: 0 0 0 calculateRem(23.5px);
+                            width: calc(100% - 4rem);
 
                             @include screen('mobile') {
-                                width: calc(100% - 4.25rem);
+                                height: calc(100% - 1rem);
+                                margin: .5rem 0;
+                                padding: 0 0 0 0.5rem;
+                                width: calc(100% - 1rem);
+                            }
+                        }
+
+                        > .idp__deleteDisable {
+                            @include button-reset($white);
+                            align-items: center;
+                            border-bottom-right-radius: 8px;
+                            border-top-right-radius: 8px;
+                            display: flex;
+                            justify-content: center;
+                            margin: 3px 0;
+                            width: 4rem;
+
+                            @include screen('mobile') {
+                                width: 3rem;
                             }
 
-                            > h3 {
-                                border-left: 1px solid $idpSeparatorGray;
+                            > .idp__delete,
+                            > .idp__disabled {
                                 display: inline-block;
-                                color: $black;
-                                font-family: 'SourceSansPro', sans-serif;
-                                font-size: $f-large;
-                                font-weight: $normal;
-                                height: calc(100% - 1.625rem);
-                                margin: calculateRem(13px) 0;
-                                padding: 0 0 0 calculateRem(23.5px);
-                                width: calc(100% - 4rem);
-
-                                @include screen('mobile') {
-                                    height: calc(100% - 1rem);
-                                    margin: .5rem 0;
-                                    padding: 0 0 0 0.5rem;
-                                    width: calc(100% - 1rem);
-                                }
                             }
 
-                            > button {
-                                @include button-reset($white);
+                            > .idp__delete {
+                                @include trashcan;
+                                background-position: center center;
+                                height: 1.5rem;
+                                width: calculateRem(22px);
+                            }
+
+                            > .idp__disabled {
+                                @include no-talking;
+                                background-position: center center;
+                                height: calculateRem(30px);
+                                width: calculateRem(29px);
+                            }
+                        }
+
+                        > .idp__form {
+                            .idp__submit {
+                                @include button-primary($buttonBlue);
                                 align-items: center;
                                 border-bottom-right-radius: 8px;
                                 border-top-right-radius: 8px;
-                                display: flex;
-                                justify-content: center;
+                                height: calc(100% - 6px);
                                 margin: 3px 0;
-                                width: 4rem;
+                                width: 6rem;
 
-                                @include screen('mobile') {
-                                    width: 3rem;
-                                }
-
-                                > .idp__delete,
-                                > .idp__disabled {
-                                    display: inline-block;
-                                }
-
-                                > .idp__delete {
-                                    @include trashcan;
-                                    background-position: center center;
-                                    height: 1.5rem;
-                                    width: calculateRem(22px);
-                                }
-
-                                > .idp__disabled {
-                                    @include no-talking;
-                                    background-position: center center;
-                                    height: calculateRem(30px);
-                                    width: calculateRem(29px);
+                                // disable outline on focus as we use focus-within for the article
+                                &:focus {
+                                    outline: none;
                                 }
                             }
                         }
+                    }
                 }
 
                 > .wayf__idp.wayf__idp--noAccess {
