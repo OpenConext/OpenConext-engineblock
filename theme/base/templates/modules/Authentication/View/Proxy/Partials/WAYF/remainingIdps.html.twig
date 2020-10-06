@@ -14,5 +14,5 @@
         text: 'wayf_eduId'|trans({ '%eduIdLink%': 'https://something.com/eduId'})
     } %}
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/rememberChoice.html.twig' %}
-    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idpList.html.twig' with { idpList: connectedIdps.formattedIdpList, delete: false } %}
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpList.html.twig' with { idpList: connectedIdps.formattedIdpList, delete: false } %}
 </section>
