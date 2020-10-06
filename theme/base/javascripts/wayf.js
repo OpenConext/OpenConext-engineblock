@@ -1,15 +1,5 @@
 // Temporary code to get wayf to function. Only submit by clicking on a IdP functions for now
-import {handleUnconnectedKeypicker, returnNewIdpPicker} from './modules/IdpPicker';
-import {RequestAccessModalHelper} from './modules/RequestAccessModalHelper';
-import {KeyboardListener} from './modules/KeyboardListener';
-import {toggleVisibility} from './utility/toggleVisibility';
-import {searchBarEventListeners} from './wayf/searchBarEventListeners';
-import {interactionListeners} from './wayf/interactionListeners';
-import {MouseListener} from './modules/MouseListener';
-import {searchFormEventListeners} from './wayf/searchFormEventListeners';
-import {focusSearchBar} from './wayf/focusSearchBar';
 import {initializePage} from './page';
-import {hideNoScript} from '../../openconext/javascripts/hideNoScript';
 import {hideIdpsOnLoad} from './wayf/hideIdpsOnLoad';
 import {keyboardBehaviour} from './wayf/keyboardBehaviour';
 import {mouseBehaviour} from './wayf/mouseBehaviour';
@@ -31,15 +21,10 @@ export function initializeWayf() {
   const callbacksAfterLoad = () => {
     // Initialize variables
     const selectedIdps = document.querySelector('.wayf__previousSelection');
-    const noResults = document.querySelector('.wayf__noResults');
-    const noAccess = document.querySelector('.wayf__noAccess');
-    const searchBar = document.querySelector('#wayf_search');
-    const searchForm = document.querySelector('.wayf__search');
-    const configuration = JSON.parse(document.getElementById('wayf-configuration').innerHTML);
 
-    hideIdpsOnLoad(selectedIdps);
     keyboardBehaviour();
     mouseBehaviour();
+    hideIdpsOnLoad(selectedIdps);
   };
 
   initializePage('main.wayf', callbacksAfterLoad);
