@@ -5,6 +5,41 @@
 @import '../helpers';
 
 .consent {
+    > noscript {
+        > .consent__noScript {
+            @include warning;
+            margin: 1rem 2rem;
+
+            @include screen('mobile') {
+                margin: 1rem 1rem;
+            }
+
+            @include screen('smallMobile') {
+                margin: 1rem .5rem;
+            }
+
+            p {
+                margin: 0;
+            }
+        }
+    }
+
+    > h2 {
+        color: $green;
+        font-size: $f-h2;
+        font-weight: $bolder;
+        line-height: 1.15;
+        margin: 1.5rem 2rem calculateRem(34px);
+
+        @include screen('mobile') {
+            margin: 1.5rem 1rem calculateRem(17px);
+        }
+
+        @include screen('smallMobile') {
+            margin: .75rem .5rem calculateRem(17px);
+        }
+    }
+
     > .consent__content {
         background-color: $gray;
         border-bottom-left-radius: 8px;

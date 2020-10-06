@@ -1,3 +1,6 @@
 <noscript>
-    {{ 'wayf_noscript_warning'|trans|raw }}
+    {% include '@theme/Default/Partials/warning.html.twig' with {
+        className: 'wayf__noScript',
+        text: 'wayf_noscript_warning'|trans
+    } %}
 </noscript>
