@@ -6,4 +6,5 @@ import {showElement} from '../utility/showElement';
 export const showRemaining = () => {
   const remainingIdps = document.querySelector('.wayf__remainingIdps');
   showElement(remainingIdps);
+  document.querySelector('.search__field').focus();
 };

@@ -1,5 +1,7 @@
-context('WayfMouseBehaviour', () => {
-
+/**
+ * Tests for behaviour that has nothing to do with clicking / pressing enter.
+ */
+context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
   beforeEach(() => {
     cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
   });
@@ -75,59 +77,6 @@ context('WayfMouseBehaviour', () => {
       // To be more precise, the links should be in the header and footer
       cy.get('.mod-header .comp-links li:nth-child(1) a').should('have.text', 'Return to service provider');
       cy.get('.footer-menu .comp-links li:nth-child(2) a').should('have.text', 'Return to service provider');
-  });
-
-  // todo: test once no access has been implemented
-  it.skip('Should show a fully functional no access section when a disabled account is selected', () => {
-    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-
-    // Test if the disabled account is clickable
-    cy.get('.idp__disabled')
-      .eq(1)
-      .click({ force: true });
-
-    // Test if the no access section shows up
-    cy.contains('.noAccess__title', 'Sorry, no access for this account');
-
-    // Test if the cancel button works
-    cy.get('.cta__cancel').click({ force: true });
-    cy.get('.noAccess__title')
-      .should('not.exist');
-
-    // Test if the request access button works
-    cy.get('.cta__request').click({ force: true });
-    cy.contains('.noAccess__requestForm label', 'Your name');
-  });
-
-  // todo: test once previous selection has been implemented
-  it.skip('Should show a fully functional previous selection section', () => {
-    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-
-    // Test if section exists with the right title
-    cy.contains('.previousSelection__title', 'Your accounts');
-
-    // Test if it contains the right amount of idps
-    cy.get('.wayf__previousSelection .wayf__idp h3')
-      .should('have.length', 2);
-
-    // Test if the section contains the add account button
-    cy.contains('.previousSelection__addAccount', 'Add another account');
-
-    // Test clicking the button opens up the search
-    cy.get('.previousSelection__addAccount')
-      .click({ force: true });
-    cy.get('#wayf__search').type('IdP 4');
-
-    // Test adding another account works
-    cy.get('.search__submit').click({ force: true });
-    cy.get('.wayf__previousSelection .wayf__idp h3')
-      .should('have.length', 3);
-
-    // Test if clicking the edit button allows deleting an account
-    cy.get('.previousSelection__edit').click({ force: true });
-    cy.get('.idp__delete').click({ force: true });
-    cy.get('.wayf__previousSelection .wayf__idp h3')
-      .should('have.length', 2);
   });
 
   it('Should show the remember my choice option', () => {
