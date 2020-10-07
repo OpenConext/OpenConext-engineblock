@@ -1,6 +1,8 @@
 <article
     aria-describedby="idp__title{{ listName }}{{ loop.index }}"
     class="wayf__idp{% if idp['noAccess'] is defined and idp['noAccess'] %} wayf__idp--noAccess{% endif %}"
+    data-count="{% if idp['count'] is defined %}{{ idp['count'] }}{% else %}0{% endif %}"
+    data-entityid="{{ idp['entityId'] }}"
     data-index="{{ loop.index }}"
     data-keywords="{{ idp['keywords'] }}"
     tabindex="0"

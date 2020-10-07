@@ -8,10 +8,12 @@ export function initializeWayf() {
   const callbacksAfterLoad = () => {
     // Initialize variables
     const selectedIdps = document.querySelector('.wayf__previousSelection');
+    const configuration = JSON.parse(document.getElementById('wayf-configuration').innerHTML);
+    const previouslySelectedIdps = configuration.previousSelectionList;
 
-    keyboardBehaviour();
-    mouseBehaviour();
-    hideIdpsOnLoad(selectedIdps);
+    keyboardBehaviour(previouslySelectedIdps);
+    mouseBehaviour(previouslySelectedIdps);
+    hideIdpsOnLoad(selectedIdps, previouslySelectedIdps);
   };
 
   initializePage('main.wayf', callbacksAfterLoad);

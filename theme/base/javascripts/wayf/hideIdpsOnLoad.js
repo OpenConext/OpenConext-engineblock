@@ -2,19 +2,22 @@ import {hasSelectedIdps} from './hasSelectedIdps';
 import {toggleVisibility} from '../utility/toggleVisibility';
 import {toggleRemaining} from './toggleRemaining';
 import {showRemaining} from './showRemaining';
-import {handleDeleteDisable} from './handleDeleteDisable';
 import {submitForm} from './submitForm';
+import {attachDeleteHandlers} from './deleteDisable/attachDeleteHandlers';
 
 /**
- * Check if user has any previous selected Idps.  If so: show those, else show the larger list.
+ * Check if user has any previous selected Idps.
+ * If so: show those & attach mouse handlers.
+ * Else: do nothing as the remaining idps are shown by default.
  *
- * @param selectedIdps    HTMLElement   the list of user-selected idps
+ * @param selectedIdps         HTMLElement   the list of user-selected idps
+ * @param previouslySelectedIdps    Array    the list of previously selected idps
  */
-export const hideIdpsOnLoad = (selectedIdps) => {
+export const hideIdpsOnLoad = (selectedIdps, previouslySelectedIdps) => {
   if (hasSelectedIdps()) {
     toggleRemaining();
     toggleVisibility(selectedIdps);
-    mouseHandlersHiddenIdps();
+    mouseHandlersHiddenIdps(previouslySelectedIdps);
     // put focus on the first IDP, so you can just hit enter & go
     document.querySelector('.wayf__previousSelection li:first-of-type .wayf__idp').focus();
   }
@@ -23,19 +26,19 @@ export const hideIdpsOnLoad = (selectedIdps) => {
 /**
  * Mouse handlers for the previous selection.  As it's initially hidden we should not add them on load, but on show of that section.
  */
-const mouseHandlersHiddenIdps = () => {
+const mouseHandlersHiddenIdps = (previouslySelectedIdps) => {
   // Show remaining idp section when hitting the add account button
   document
     .querySelector('.previousSelection__addAccount')
     .addEventListener('click', showRemaining);
+
   // Handle clicking the "garbage can" after hitting edit
-  document
-    .querySelector('.idp__deleteDisable')
-    .addEventListener('click', handleDeleteDisable);
+  attachDeleteHandlers(previouslySelectedIdps);
+
   // Attach event listener to previous selection idps-list
   document
     .querySelector('.wayf__previousSelection .wayf__idpList')
     .addEventListener('click', (e) => {
-      submitForm(e);
+      submitForm(e, previouslySelectedIdps);
     });
 };
