@@ -15,6 +15,8 @@ export const hideIdpsOnLoad = (selectedIdps) => {
     toggleRemaining();
     toggleVisibility(selectedIdps);
     mouseHandlersHiddenIdps();
+    // put focus on the first IDP, so you can just hit enter & go
+    document.querySelector('.wayf__previousSelection li:first-of-type .wayf__idp').focus();
   }
 };
 
