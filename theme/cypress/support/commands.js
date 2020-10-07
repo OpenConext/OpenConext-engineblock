@@ -26,3 +26,16 @@ Cypress.Commands.add('buildTheme', (themeName) => {
 Cypress.Commands.add('hideDebugBar', () => {
   cy.get('.sf-toolbar').invoke('attr', 'style', 'display: none');
 });
+
+Cypress.Commands.add('focusAndEnter', (selector) => {
+  cy.get(selector).focus().type('{enter}');
+});
+
+Cypress.Commands.add('pressArrowOnIdpList', (direction, className, index) => {
+  if (index && className) {
+    cy.focused().should('have.class', className).should('have.attr', 'data-index', index).type(`{${direction}arrow}`);
+    return;
+  }
+
+  cy.focused().should('have.class', className).type(`{${direction}arrow}`);
+});

@@ -4,7 +4,7 @@ context('Consent on Skeune theme', () => {
     cy.visit('https://engine.vm.openconext.org/functional-testing/consent');
   });
 
-  it.skip('gives openconext information', () => {
+  it('gives openconext information', () => {
     cy.get('label[for="consent_disclaimer_about"] + section h3')
       .should('be.hidden');
 
@@ -14,17 +14,17 @@ context('Consent on Skeune theme', () => {
       .contains('h3', 'Logging in through OpenConext');
   });
 
-  it.skip('shows information on how to report incorrect data', () => {
+  it('shows information on how to report incorrect data', () => {
     cy.get('label[for="cta_consent_nok"] + section h3')
       .should('be.hidden');
 
     cy.contains('label', 'Something incorrect?')
-      .click()
-      .next()
+      .click();
+    cy.get('.idpRow > section.modal__value')
       .contains('h3', 'Is the data shown incorrect?');
   });
 
-  it.skip('can show additional attributes', () => {
+  it('can show additional attributes', () => {
     cy.get('ul.consent__attributes--nested')
       .should('be.hidden');
 
@@ -36,12 +36,12 @@ context('Consent on Skeune theme', () => {
       .should('be.visible');
   });
 
-  it.skip('shows the correct amount of attributes on load', () => {
+  it('shows the correct amount of attributes on load', () => {
     cy.get('ul.consent__attributes > li')
       .should('have.length', '7');
   });
 
-  it.skip('gives explanation about the unique identifier', () => {
+  it('gives explanation about the unique identifier', () => {
     cy.get('label[for="consent_disclaimer_number"] + section a[href="https://example.org"]')
       .should('be.hidden');
 
@@ -51,7 +51,7 @@ context('Consent on Skeune theme', () => {
       .contains('a', 'Read more');
   });
 
-  it.skip('can decline consent', () => {
+  it('can decline consent', () => {
     cy.get('label[for="cta_consent_nok"] + section h3')
       .should('be.hidden');
 
