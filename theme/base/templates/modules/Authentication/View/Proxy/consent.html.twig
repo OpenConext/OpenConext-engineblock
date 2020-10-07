@@ -10,18 +10,21 @@
 {# Load the sorted/ordered and normalized attributes #}
 {% set attributesBySource = sortByDisplayOrder(attributes, attributeSources, nameId) %}
 
-{% block nojs %}
-    <noscript>
-        <p>{{ 'consent_nojs_skeune'|trans }}</p>
-    </noscript>
-{% endblock %}
-
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
 
 {% block content %}
     {% include '@theme/Default/Partials/LoginBar.html.twig' with { loginName: 'suite_name'|trans } %}
     <main class="consent">
-        {% include '@theme/Authentication/View/Proxy/Partials/Shared/header.html.twig' with { h2: 'consent_privacy_header'|trans({'%target%': spName}) } %}
+        {% include '@theme/Authentication/View/Proxy/Partials/Shared/header.html.twig' %}
+
+        <noscript>
+            {% include '@theme/Default/Partials/warning.html.twig' with {
+                className: 'consent__noScript',
+                text: 'consent_nojs'|trans
+            } %}
+        </noscript>
+
+        <h2>{{ 'consent_privacy_header'|trans({'%target%': spName}) }}</h2>
 
         {% block consent_content %}
             <div class="consent__content">
@@ -29,7 +32,8 @@
                 {% include '@theme/Authentication/View/Proxy/Partials/Consent/disclaimerList.html.twig' %}
 
                 {% if showConsentExplanation and consentSettings.consentExplanationIn(app.request.locale, spEntityId) %}
-                    {% include '@theme/Authentication/View/Proxy/Partials/Consent/extraNotification.html.twig' with {
+                    {% include '@theme/Default/Partials/warning.html.twig' with {
+                        className: 'notification__warning',
                         notificationTitle: 'consent_explanation_title'|trans,
                         text: consentSettings.consentExplanationIn(app.request.locale, spEntityId)
                     } %}
