@@ -1,5 +1,5 @@
 export const handleDeleteDisable = (e) => {
-  console.log(e);
+  e.preventDefault();
   let element = e.target;
 
   // in case of click the origin is the span, so setting the element needs to be done differently

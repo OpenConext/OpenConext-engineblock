@@ -1,22 +1,30 @@
-import {showRemaining} from './showRemaining';
-import {fireClickEvent} from '../utility/fireClickEvent';
-import {handleDeleteDisable} from './handleDeleteDisable';
+import {arrowDown} from './idpFocus/arrowDown';
+import {arrowUp} from './idpFocus/arrowUp';
+import {handleEnter} from './handleEnter';
 
+/**
+ * All handlers for the expected keyboard behaviour.
+ * Grouped by key.
+ */
 export const keyboardBehaviour = () => {
+  const ENTER      = 13;
+  const ARROW_UP   = 38;
+  const ARROW_DOWN = 40;
+
   document.querySelector('body').addEventListener('keydown', function(e) {
-    if (e.keyCode === 13) {
-      var target = e.target;
-      switch (target.className) {
-        // Show remaining idp section when hitting the add account button
-        case 'previousSelection__addAccount':
-          showRemaining(); break;
-        // handle pressing the edit/done button
-        case 'previousSelection__toggleLabel':
-          fireClickEvent(e.target); break;
-        // handle pressing the disable/delete button
-        case 'idp__deleteDisable':
-          handleDeleteDisable(e); break;
-      }
+    if (e.keyCode === ENTER) {
+      handleEnter(e);
+      return;
+    }
+
+    if (e.keyCode === ARROW_DOWN) {
+      arrowDown();
+      return;
+    }
+
+    if (e.keyCode === ARROW_UP) {
+      arrowUp();
+      return;
     }
   });
 };

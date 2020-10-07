@@ -1,17 +1,26 @@
-<article data-entity-id="{{ idp['entityId'] }}" class="wayf__idp {% if idp['noAccess'] is defined and idp['noAccess'] %} wayf__idp--noAccess{% endif %}" data-keywords="{{ idp['keywords'] }}">
-        <picture class="idp__logo">
-            <source srcset="" media="(min-width: 800px)"/>
-            {# todo get different images in different formats #}
-            {# todo update breakpoint #}
-            {# todo get all institutions to describe their logo for the alt #}
-            {# todo get the idp name as an attribute instead of "displaytitle" #}
-            <img src="{{ idp['logo'] }}" alt="{{ idp['displayTitle'] }} {{ 'logo'|trans }}">
-        </picture>
-        <div class="idp__content">
-            <h3>{{ idp['displayTitle'] }}</h3>
-            {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpForm.html.twig' %}
-            {% if idp['noAccess'] is defined and idp['noAccess'] or delete %}
-                {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpDeleteDisable.html.twig' %}
-            {% endif %}
-        </div>
+<article
+    aria-describedby="idp__title{{ listName }}{{ loop.index }}"
+    class="wayf__idp{% if idp['noAccess'] is defined and idp['noAccess'] %} wayf__idp--noAccess{% endif %}"
+    data-index="{{ loop.index }}"
+    data-keywords="{{ idp['keywords'] }}"
+    tabindex="0"
+>
+    <picture class="idp__logo">
+        <source srcset="" media="(min-width: 800px)"/>
+        {# todo get different images in different formats #}
+        {# todo update breakpoint #}
+        {# todo get all institutions to describe their logo for the alt #}
+        {# todo get the idp name as an attribute instead of "displaytitle" #}
+        <img src="{{ idp['logo'] }}" alt="{{ idp['displayTitle'] }} {{ 'logo'|trans }}">
+    </picture>
+    <div class="idp__content">
+        <h3
+            id="idp__title{{ listName }}{{ loop.index }}"
+            class="idp__title"
+        ><span class="visually-hidden">{{ 'wayf_idp_title_screenreader'|trans }}</span>{{ idp['displayTitle'] }}</h3>
+        {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpForm.html.twig' %}
+        {% if idp['noAccess'] is defined and idp['noAccess'] or delete %}
+            {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpDeleteDisable.html.twig' %}
+        {% endif %}
+    </div>
 </article>
