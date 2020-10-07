@@ -3,6 +3,12 @@ import {focusOnPreviousIdp} from './focusOnPreviousIdp';
 
 /**
  * Behaviour expected to happen after a user presses the up arrow.
+ *
+ * When pressing the arrow up in the idp list we want:
+ * - to go to the previous idp (general behaviour)
+ * - to go to the eduId notification if we are on the first idp & there is an eduId
+ * - to go to the searchbar if we are on the eduId notification
+ * - to go to the last idp if we are on the searchbar
  */
 export const arrowUp = () => {
   const searchBar = document.querySelector('.search__field');
@@ -14,7 +20,11 @@ export const arrowUp = () => {
     lastIdp.focus();
     return;
   } else if (isFocusOn(firstIdp)) {
-    eduId.focus();
+    try {
+      eduId.focus();
+    } catch (e) {
+      searchBar.focus();
+    }
     return;
   } else if (isFocusOn(eduId)) {
     searchBar.focus();
