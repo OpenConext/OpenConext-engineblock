@@ -2,11 +2,8 @@
  * Tests for behaviour of the WAYF which depends on pressing enter.
  */
 context('WAYF when using the keyboard', () => {
-  beforeEach(() => {
-    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-  });
-
   it('Should login when selecting an idp', () => {
+    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
     cy.get('.wayf__remainingIdps .wayf__idp')
       .eq(1)
       .focus()
@@ -19,29 +16,32 @@ context('WAYF when using the keyboard', () => {
 
   // todo after adding eduId feature flag this should be adjusted to take that into account
   // todo if html spec is changed, or cypress fixes bug 6207, get rid of the manual focus on search.  See https://github.com/cypress-io/cypress/issues/6207
-  it('Should be able to traverse the remaining idp section with arrow keys', () => {
-    // check if pressing down works as expected
-    cy.get('.search__field').focus();
-    cy.pressArrowOnIdpList('down', 'search__field');
-    cy.pressArrowOnIdpList('down', 'wayf__eduIdLink');
-    cy.pressArrowOnIdpList('down', 'wayf__idp', '1');
-    cy.pressArrowOnIdpList('down', 'wayf__idp', '2');
-    cy.pressArrowOnIdpList('down', 'wayf__idp', '3');
-    cy.pressArrowOnIdpList('down', 'wayf__idp', '4');
-    cy.pressArrowOnIdpList('down', 'wayf__idp', '5');
-    cy.pressArrowOnIdpList('down', 'search__field');
+  describe('Should be able to traverse the remaining idp section with arrow keys', () => {
+    it('check if pressing down works as expected', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      cy.get('.search__field').focus();
+      cy.pressArrowOnIdpList('down', 'search__field');
+      cy.pressArrowOnIdpList('down', 'wayf__eduIdLink');
+      cy.pressArrowOnIdpList('down', 'wayf__idp', '1');
+      cy.pressArrowOnIdpList('down', 'wayf__idp', '2');
+      cy.pressArrowOnIdpList('down', 'wayf__idp', '3');
+      cy.pressArrowOnIdpList('down', 'wayf__idp', '4');
+      cy.pressArrowOnIdpList('down', 'wayf__idp', '5');
+      cy.pressArrowOnIdpList('down', 'search__field');
+    });
 
-    // check if pressing up works as expected
-    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-    cy.get('.search__field').focus();
-    cy.pressArrowOnIdpList('up', 'search__field');
-    cy.pressArrowOnIdpList('up', 'wayf__idp', '5');
-    cy.pressArrowOnIdpList('up', 'wayf__idp', '4');
-    cy.pressArrowOnIdpList('up', 'wayf__idp', '3');
-    cy.pressArrowOnIdpList('up', 'wayf__idp', '2');
-    cy.pressArrowOnIdpList('up', 'wayf__idp', '1');
-    cy.pressArrowOnIdpList('up', 'wayf__eduIdLink');
-    cy.pressArrowOnIdpList('up', 'search__field');
+    it('check if pressing up works as expected', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      cy.get('.search__field').focus();
+      cy.pressArrowOnIdpList('up', 'search__field');
+      cy.pressArrowOnIdpList('up', 'wayf__idp', '5');
+      cy.pressArrowOnIdpList('up', 'wayf__idp', '4');
+      cy.pressArrowOnIdpList('up', 'wayf__idp', '3');
+      cy.pressArrowOnIdpList('up', 'wayf__idp', '2');
+      cy.pressArrowOnIdpList('up', 'wayf__idp', '1');
+      cy.pressArrowOnIdpList('up', 'wayf__eduIdLink');
+      cy.pressArrowOnIdpList('up', 'search__field');
+    });
   });
 
   // todo: test once no access has been implemented
@@ -66,42 +66,64 @@ context('WAYF when using the keyboard', () => {
     cy.contains('.noAccess__requestForm label', 'Your name');
   });
 
-  // todo: test once previous selection has been implemented
-  it.skip('Should show a fully functional previous selection section', () => {
-    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf'); // adjust so we have a previous section
-
-    // Test if section exists with the right title
-    cy.contains('.previousSelection__title', 'Your accounts');
-
-    // Test if it contains the right amount of idps
-    cy.get('.wayf__previousSelection .wayf__idp h3')
-      .should('have.length', 2);
-
-    // todo: add test for autofocus on first Idp, once bug 6207 for cypress is resolved.  See https://github.com/cypress-io/cypress/issues/6207
-
-    // Test if the section contains the add account button
-    cy.contains('.previousSelection__addAccount', 'Add another account');
-
-    // Test the addacount button opens up the search
-    cy.focusAndEnter('.previousSelection__addAccount');
-    cy.get('#wayf__search').type('IdP 4');
-    cy.focusAndEnter('.search__submit');
-
-    // Test adding another account works
-    cy.get('.wayf__remainingIdps .wayf__idp')
-      .eq(1)
-      .type('{enter}');
-    cy.location().should((loc) => {
-      expect(loc.href).to.eq('https://engine.vm.openconext.org/');
+  describe('Should show a fully functional previous selection section', () => {
+    it('Loads the WAYF', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
     });
-    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-    cy.get('.wayf__previousSelection .wayf__idp h3')
-      .should('have.length', 3);
 
-    // Test the edit button allows deleting an account
-    cy.focusAndEnter('.previousSelection__edit');
-    cy.focusAndEnter('.idp__delete');
-    cy.get('.wayf__previousSelection .wayf__idp h3')
-      .should('have.length', 2);
+    it('Should populate the previous section with an idp', () => {
+      cy.selectFirstIdpAndReturn(false);
+    });
+
+    it('Test if the previous section exists with the right title', () => {
+      cy.contains('.previousSelection__title', 'Your accounts');
+    });
+
+    it('Test if the section contains the add account button', () => {
+      cy.contains('.previousSelection__addAccount', 'Add another account');
+    });
+
+    it('Test if it contains the right amount of idps', () => {
+      cy.get('.wayf__previousSelection .wayf__idp h3')
+        .should('have.length', 1);
+    });
+
+    it('Test if selecting a previously selected idp works', () => {
+      cy.selectFirstIdp(false, '.wayf__previousSelection .wayf__idp[data-index="1"]');
+      cy.location().should((loc) => {
+        expect(loc.href).to.eq('https://engine.vm.openconext.org/');
+      });
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+    });
+
+    it('Test if the count was raised on the selected idp', () => {
+      cy.get('.wayf__previousSelection .wayf__idp[data-index="1"]').should('have.attr', 'data-count', '2');
+    });
+
+    it('Test the add account button opens up the search & puts focus on the search field, then select the focused element.', () => {
+      cy.get('.previousSelection__addAccount')
+        .type('{enter}');
+      cy.focused().should('have.class', 'search__field');
+      cy.selectFirstIdpAndReturn(false);
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+    });
+
+    it('Test the edit button allows deleting an account', () => {
+      cy.toggleEditButton(false);
+      cy.hitDeleteButton(false);
+      cy.get('.wayf__previousSelection .wayf__idp h3')
+        .should('have.length', 1);
+    });
+
+    it('Test deleting the last previously selected idp hides the section, shows the remaining idps and focuses on the searchbar', () => {
+      cy.hitDeleteButton(false);
+      cy.focused().should('have.class', 'search__field');
+      cy.get('.previousSelection__addAccount').should('not.be.visible');
+    });
+
+    it('Test the last deleted idp is at the top of the list', () => {
+      cy.get('.wayf__remainingIdps .wayf__idp[data-index="1"]').should('have.attr', 'data-entityid', 'https://example.com/entityId/2');
+    });
   });
+
 });
