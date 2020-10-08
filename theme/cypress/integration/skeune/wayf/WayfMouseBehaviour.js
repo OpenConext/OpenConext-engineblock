@@ -2,11 +2,8 @@
  * Tests for behaviour of the WAYF which depends on clicking
  */
 context('WAYF when using the mouse', () => {
-  beforeEach(() => {
-    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-  });
-
   it('Should login when selecting an idp', () => {
+    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
     cy.get('.wayf__remainingIdps .wayf__idp')
       .eq(1)
       .click({force: true});
@@ -38,40 +35,63 @@ context('WAYF when using the mouse', () => {
     cy.contains('.noAccess__requestForm label', 'Your name');
   });
 
-  // todo: test once previous selection has been implemented
-  it.skip('Should show a fully functional previous selection section', () => {
-    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+  describe('Should show a fully functional previous selection section', () => {
+      it('Loads the WAYF', () => {
+        cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      });
 
-    // Test if section exists with the right title
-    cy.contains('.previousSelection__title', 'Your accounts');
+      it('Should populate the previous section with an idp', () => {
+        cy.selectFirstIdpAndReturn();
+      });
 
-    // Test if it contains the right amount of idps
-    cy.get('.wayf__previousSelection .wayf__idp h3')
-      .should('have.length', 2);
+      it('Test if the previous section exists with the right title', () => {
+        cy.contains('.previousSelection__title', 'Your accounts');
+      });
 
-    // Test if the section contains the add account button
-    cy.contains('.previousSelection__addAccount', 'Add another account');
+      it('Test if the section contains the add account button', () => {
+        cy.contains('.previousSelection__addAccount', 'Add another account');
+      });
 
-    // Test the addacount button opens up the search
-    cy.get('.previousSelection__addAccount')
-      .click({ force: true });
-    cy.get('#wayf__search').type('IdP 4');
-    cy.get('.search__submit').click({ force: true });
+      it('Test if it contains the right amount of idps', () => {
+        cy.get('.wayf__previousSelection .wayf__idp h3')
+          .should('have.length', 1);
+      });
 
-    // Test adding another account works
-    cy.get('.wayf__remainingIdps .wayf__idp')
-      .eq(1)
-      .click({force: true});
-    cy.location().should((loc) => {
-      expect(loc.href).to.eq('https://engine.vm.openconext.org/');
-    });
-    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-    cy.get('.wayf__previousSelection .wayf__idp h3')
-      .should('have.length', 3);
+      it('Test if selecting a previously selected idp works', () => {
+        cy.selectFirstIdp(true, '.wayf__previousSelection .wayf__idp[data-index="1"]');
+        cy.location().should((loc) => {
+          expect(loc.href).to.eq('https://engine.vm.openconext.org/');
+        });
+        cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      });
 
-    // Test the edit button allows deleting an account    cy.get('.previousSelection__edit').click({ force: true });
-    cy.get('.idp__delete').click({ force: true });
-    cy.get('.wayf__previousSelection .wayf__idp h3')
-      .should('have.length', 2);
+      it('Test if the count was raised on the selected idp', () => {
+        cy.get('.wayf__previousSelection .wayf__idp[data-index="1"]').should('have.attr', 'data-count', '2');
+      });
+
+      it('Test the add account button opens up the search & puts focus on the search field, then select the focused element.', () => {
+        cy.get('.previousSelection__addAccount')
+          .click({ force: true });
+        cy.focused().should('have.class', 'search__field');
+        cy.selectFirstIdpAndReturn();
+        cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      });
+
+      it('Test the edit button allows deleting an account', () => {
+        cy.toggleEditButton();
+        cy.hitDeleteButton();
+        cy.get('.wayf__previousSelection .wayf__idp h3')
+          .should('have.length', 1);
+      });
+
+      it('Test deleting the last previously selected idp hides the section, shows the remaining idps and focuses on the searchbar', () => {
+        cy.hitDeleteButton();
+        cy.focused().should('have.class', 'search__field');
+        cy.get('.previousSelection__addAccount').should('not.be.visible');
+      });
+
+      it('Test the last deleted idp is at the top of the list', () => {
+        cy.get('.wayf__remainingIdps .wayf__idp[data-index="1"]').should('have.attr', 'data-entityid', 'https://example.com/entityId/2');
+      });
   });
 });

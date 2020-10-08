@@ -6,14 +6,14 @@ import {handleEnter} from './handleEnter';
  * All handlers for the expected keyboard behaviour.
  * Grouped by key.
  */
-export const keyboardBehaviour = () => {
+export const keyboardBehaviour = (previouslySelectedIdps) => {
   const ENTER      = 13;
   const ARROW_UP   = 38;
   const ARROW_DOWN = 40;
 
   document.querySelector('body').addEventListener('keydown', function(e) {
     if (e.keyCode === ENTER) {
-      handleEnter(e);
+      handleEnter(e, previouslySelectedIdps);
       return;
     }
 
