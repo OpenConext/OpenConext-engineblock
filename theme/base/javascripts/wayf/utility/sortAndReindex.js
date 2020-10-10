@@ -1,3 +1,9 @@
+import {sortIdpList} from './sortIdpList';
+import {convertIdpArraytoHtml} from './convertIdpArrayToHtml';
+
+const PREVIOUS = 'previous';
+const REMAINING = 'remaining';
+
 /**
  * Reset the index for all idps.  Afterwards sort the list.
  * Optionally also focuses the first list-item.
@@ -10,11 +16,6 @@
  * @parameter sortBy  string    the attribute to sort by
  * @parameter focus   boolean   whether or not to focus the first item
  */
-import {sortIdpList} from './sortIdpList';
-
-const PREVIOUS = 'previous';
-const REMAINING = 'remaining';
-
 export const sortAndReindex = (list = REMAINING, sortBy = 'title', focus = false) => {
   let idpListSelector = '.wayf__remainingIdps .wayf__idpList';
 
@@ -45,13 +46,3 @@ export const sortAndReindex = (list = REMAINING, sortBy = 'title', focus = false
     idpArray[0].focus();
   }
 };
-
-function convertIdpArraytoHtml(idpArray) {
-  let idpHtml = '';
-  idpArray.forEach((idp, index) => {
-    idp.querySelector('.wayf__idp').setAttribute('data-index', String(index + 1));
-    idpHtml += idp.outerHTML;
-  });
-
-  return idpHtml;
-}
