@@ -173,6 +173,10 @@
                             }
                         }
                     }
+
+                    &[data-weight="0"] {
+                        display: none;
+                    }
                 }
 
                 > .wayf__idp.wayf__idp--noAccess {
