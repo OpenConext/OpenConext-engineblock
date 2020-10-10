@@ -1,3 +1,9 @@
+import {sortIdpList} from './sortIdpList';
+import {convertIdpArraytoHtml} from './convertIdpArrayToHtml';
+
+const PREVIOUS = 'previous';
+const REMAINING = 'remaining';
+
 /**
  * Reset the index for all idps.  Afterwards sort the list.
  * Optionally also focuses the first list-item.
@@ -10,11 +16,6 @@
  * @parameter sortBy  string    the attribute to sort by
  * @parameter focus   boolean   whether or not to focus the first item
  */
-import {sortIdpList} from './sortIdpList';
-
-const PREVIOUS = 'previous';
-const REMAINING = 'remaining';
-
 export const sortAndReindex = (list = REMAINING, sortBy = 'title', focus = false) => {
   const idpListSelector = getListSelector(list);
   const idpList = document.querySelectorAll(`${idpListSelector} > li`);

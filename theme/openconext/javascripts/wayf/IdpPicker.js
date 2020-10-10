@@ -6,7 +6,7 @@ import {RememberChoiceStorage} from './RememberChoiceStorage';
 import {IdpListElementFactory} from './IdpListElementFactory';
 import {UnconnectedIdpPicker} from './UnconnectedIdpPicker';
 import {toggleVisibility} from '../../../base/javascripts/utility/toggleVisibility';
-import {searchBarEventListeners} from '../../../base/javascripts/wayf/searchBarEventListeners';
+import {searchBarEventListeners} from './searchBarEventListeners';
 
 export class IdpPicker extends AbstractIdpPicker {
     constructor(searchForm, targetElement, previousSelectionList, idpList, previousSelectionStorage, rememberChoiceFeature, rememberChoiceStorage) {
