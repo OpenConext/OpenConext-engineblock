@@ -1,5 +1,5 @@
 import {sortIdpList} from './sortIdpList';
-import {convertIdpArraytoHtml} from './convertIdpArrayToHtml';
+import {reinsertIdpList} from './reinsertIdpList';
 
 const PREVIOUS = 'previous';
 const REMAINING = 'remaining';
@@ -39,8 +39,7 @@ export const sortAndReindex = (list = REMAINING, sortBy = 'title', focus = false
   });
 
   // reinsert
-  const ul = document.querySelector(idpListSelector);
-  ul.innerHTML = convertIdpArraytoHtml(idpArray);
+  reinsertIdpList(idpArray, idpListSelector);
 
   if (focus) {
     idpArray[0].focus();
