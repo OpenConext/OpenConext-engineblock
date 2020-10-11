@@ -1,5 +1,5 @@
 /**
- * Set the data-weight attribute for an idp node
+ * Set the data-weight attribute for an idp node, if it's bigger than the previous weight
  *
  * @param element
  * @param weight

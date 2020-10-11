@@ -1,5 +1,5 @@
 import {sortByTitle, sortByWeight} from '../utility/sortIdpMethods';
-import {findWeight} from './findWeight';
+import {assignWeight} from './assignWeight';
 import {clearWeight} from './clearWeight';
 import {showOrHideNoResultsSection} from './showOrHideNoResultsSection';
 import {reinsertIdpList} from '../utility/reinsertIdpList';
@@ -27,7 +27,7 @@ export const searchAndSortIdps = (idpArray, searchTerm) => {
   clearWeight(idpArray);
 
   if (typeof searchTerm !== 'undefined' && searchTerm.length) {
-    findWeight(idpArray, searchTerm.toLowerCase());
+    assignWeight(idpArray, searchTerm.toLowerCase());
     idpArray.sort(sortByWeight);
   } else {
     idpArray.sort(sortByTitle);
