@@ -1,7 +1,8 @@
 import {sortByTitle, sortByWeight} from '../utility/sortIdpMethods';
 import {findWeight} from './findWeight';
-import {convertIdpArraytoHtml} from '../utility/convertIdpArrayToHtml';
 import {clearWeight} from './clearWeight';
+import {showOrHideNoResultsSection} from './showOrHideNoResultsSection';
+import {reinsertIdpList} from '../utility/reinsertIdpList';
 
 /**
  * Searches an array of idps for a given searchTerm.
@@ -32,9 +33,10 @@ export const searchAndSortIdps = (idpArray, searchTerm) => {
     idpArray.sort(sortByTitle);
   }
 
-  // todo in case of no results show no results section
+  // add the sorted items to the dom, replacing the previous ones
+  reinsertIdpList(idpArray);
 
-  const ul = document.querySelector('.wayf__remainingIdps .wayf__idpList');
-  ul.innerHTML = convertIdpArraytoHtml(idpArray);
+  // show or hide no results section as appropriate
+  showOrHideNoResultsSection(idpArray);
 };
 
