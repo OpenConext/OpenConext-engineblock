@@ -1,6 +1,4 @@
 import {hasSelectedIdps} from './hasSelectedIdps';
-import {toggleVisibility} from '../utility/toggleVisibility';
-import {toggleRemaining} from './toggleRemaining';
 import {showRemaining} from './showRemaining';
 import {submitForm} from './submitForm';
 import {attachDeleteHandlers} from './deleteDisable/attachDeleteHandlers';
@@ -13,10 +11,8 @@ import {attachDeleteHandlers} from './deleteDisable/attachDeleteHandlers';
  * @param selectedIdps         HTMLElement   the list of user-selected idps
  * @param previouslySelectedIdps    Array    the list of previously selected idps
  */
-export const hideIdpsOnLoad = (selectedIdps, previouslySelectedIdps) => {
+export const handlePreviousSelectionVisible = (selectedIdps, previouslySelectedIdps) => {
   if (hasSelectedIdps()) {
-    toggleRemaining();
-    toggleVisibility(selectedIdps);
     mouseHandlersHiddenIdps(previouslySelectedIdps);
     // put focus on the first IDP, so you can just hit enter & go
     document.querySelector('.wayf__previousSelection li:first-of-type .wayf__idp').focus();
