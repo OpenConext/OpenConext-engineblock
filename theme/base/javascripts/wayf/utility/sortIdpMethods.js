@@ -21,8 +21,8 @@ function getTitle(element) {
 }
 
 export const sortByWeight = (firstElement, secondElement) => {
-  const weightOne = getData(firstElement.children[0], 'weight');
-  const weightTwo = getData(secondElement.children[0], 'weight');
+  const weightOne = Number(getData(firstElement.children[0], 'weight'));
+  const weightTwo = Number(getData(secondElement.children[0], 'weight'));
 
   if (weightOne > weightTwo) return -1;
   if (weightOne < weightTwo) return 1;

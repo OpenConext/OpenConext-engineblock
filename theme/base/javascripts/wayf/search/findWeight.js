@@ -10,9 +10,9 @@ const EXACT_ID = 60;
 const EXACT_KEYWORD = 60;
 
 export const findWeight = (idp, searchTerm) => {
-  const title = getData(idp, 'title');
   let weight = 0;
 
+  const title = getData(idp, 'title');
   if (title === searchTerm) {
     return EXACT_TITLE;
   }
