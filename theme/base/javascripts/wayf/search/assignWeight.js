@@ -21,23 +21,18 @@ import {findWeight} from './findWeight';
 export const assignWeight = (idpArray, searchTerm) => {
   idpArray.forEach(li => {
     const idp = li.children[0];
-    const searchTerms = searchTerm.split(' ');
+    const searchTerms = searchTerm.trim().split(' ');
     let weight = 0;
-    console.log('searchTerms are: ' + searchTerms);
 
     // first search on the entire string in one go
-    weight += findWeight(idp, searchTerm);
-    console.log('weight after full search ' + weight);
+    weight += findWeight(idp, searchTerm.trim());
 
+    // second search on each space-separated substring
     if(searchTerms.length > 1) {
-      // second search on each space-separated substring
       searchTerms.forEach(searchTerm => {
         weight += findWeight(idp, searchTerm);
-        console.log('weight after partial search ' + weight);
       });
     }
-
-    console.log('weight after search ' + weight);
 
     setWeight(idp, weight);
   });

@@ -2,12 +2,17 @@ import {assignWeight} from '../../../../../base/javascripts/wayf/search/assignWe
 
 context('unit test the assignWeight function', () => {
   describe('Test multiple hits', () => {
-    // should show 100 + 30 + 25 + 18 + 17 = 187
+    // should show:
+    // full title (1234567 8 9) = 100
+    // partial title + full partial title (1234567) = (40 + 30) / 3 = 23
+    // full keyword (8) = 60
+    // partial title + entityId + full partial title (9) = (30 + 20 + 40) / 3 = 30
+    // = 213
     it('Test full match on title & keywords & partial on entityId & keyword', () => {
       const idpArray = createIdpArray();
       assignWeight(idpArray, '1234567 8 9');
 
-      expect(Number(idpArray[0].children[0].getAttribute('data-weight'))).to.equal(187);
+      expect(Number(idpArray[0].children[0].getAttribute('data-weight'))).to.equal(213);
     });
 
     // should show 60 + 60
@@ -26,12 +31,12 @@ context('unit test the assignWeight function', () => {
       expect(Number(idpArray[0].children[0].getAttribute('data-weight'))).to.equal(18);
     });
 
-    // should show 17
-    it('Test partial match on title & entityId', () => {
+    // should show 30
+    it('Test partial match on title & entityId & full partial title', () => {
       const idpArray = createIdpArray();
       assignWeight(idpArray, '9');
 
-      expect(Number(idpArray[0].children[0].getAttribute('data-weight'))).to.equal(17);
+      expect(Number(idpArray[0].children[0].getAttribute('data-weight'))).to.equal(30);
     });
   });
 });

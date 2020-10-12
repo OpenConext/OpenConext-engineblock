@@ -48,7 +48,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
     it('Should get the correct weight for an idp with a full match on the title', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=50');
       cy.get('.wayf__search').type('Connected Idp 4 en');
-      cy.get('.wayf__remainingIdps .wayf__idp[data-weight="162"]')
+      cy.get('.wayf__remainingIdps .wayf__idp[data-weight="215"]')
         .should('have.length', 1)
         .should('contain.text', 'Connected IdP 4 en');
     });
@@ -56,36 +56,43 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
     it('Should get the correct weight for an idp with a partial match on the title', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=50');
       cy.get('.wayf__search').type('Connected Idp 4');
-      cy.get('.wayf__remainingIdps .wayf__idp[data-weight="55"]')
-        .should('have.length', 11);
+      cy.get('.wayf__remainingIdps .wayf__idp[data-weight="82"]')
+        .should('have.length', 10);
     });
 
     it('Should get the correct weight for an idp with a full match on the keyword', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=50');
       cy.get('.wayf__search').type('awesome idp');
-      cy.get('.wayf__remainingIdps .wayf__idp[data-weight="86"]')
+      cy.get('.wayf__remainingIdps .wayf__idp[data-weight="100"]')
         .should('have.length', 50);
     });
 
     it('Should get the correct weight for an idp with a partial match on the keyword', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=50');
       cy.get('.wayf__search').type('awesome');
-      cy.get('.wayf__remainingIdps .wayf__idp[data-weight="16"]')
+      cy.get('.wayf__remainingIdps .wayf__idp[data-weight="8"]')
         .should('have.length', 50);
     });
 
     it('Should get the correct weight for an idp with a full match on the entityId', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=50');
       cy.get('.wayf__search').type('https://example.com/entityid/1');
-      cy.get('.wayf__remainingIdps .wayf__idp[data-weight="120"]')
+      cy.get('.wayf__remainingIdps .wayf__idp[data-weight="60"]')
         .should('have.length', 1);
     });
 
     it('Should get the correct weight for an idp with a partial match on the entityId', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=50');
       cy.get('.wayf__search').type('https://example.com/entityid/1');
-      cy.get('.wayf__remainingIdps .wayf__idp[data-weight="14"]')
+      cy.get('.wayf__remainingIdps .wayf__idp[data-weight="7"]')
         .should('have.length', 10);
+    });
+
+    it('Should not take into account the space at the end of a searchTerm', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      cy.get('.wayf__search').type('con 1');
+      cy.get('.wayf__remainingIdps .wayf__idp')
+        .should('have.length', 5);
     });
   });
 
