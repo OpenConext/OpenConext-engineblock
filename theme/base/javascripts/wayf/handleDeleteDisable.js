@@ -2,7 +2,10 @@ import {hasSelectedIdps} from './hasSelectedIdps';
 import {handleNoneLeft} from './deleteDisable/handleNoneLeft';
 import {deleteIdp} from './deleteDisable/deleteIdp';
 import {moveIdpToRemaining} from './deleteDisable/moveIdpToRemaining';
-import {reindexAndFocus} from './deleteDisable/reindexAndFocus';
+import {
+  sortAndReindexPrevious,
+  sortAndReindexRemaining,
+} from './utility/sortListMethods';
 
 /**
  * Handle what happens if a user clicks on either the delete button, or the disabled button.
@@ -28,6 +31,8 @@ export const handleDeleteDisable = (e, previouslySelectedIdps) => {
   moveIdpToRemaining(element);
   // Remove item from previous selection & html
   deleteIdp(element, previouslySelectedIdps);
+  // Reindex & SortRemaining idps by title
+  sortAndReindexRemaining();
 
   // If no items are left: do what's needed.
   if (!hasSelectedIdps()) {
@@ -35,6 +40,6 @@ export const handleDeleteDisable = (e, previouslySelectedIdps) => {
     return;
   }
 
-  // If there are items left: reindex & focus first one
-  reindexAndFocus();
+  // If there are items left: sort, reindex & focus first one
+  sortAndReindexPrevious('title', true);
 };
