@@ -116,13 +116,17 @@ context('WAYF when using the keyboard', () => {
     });
 
     it('Test deleting the last previously selected idp hides the section, shows the remaining idps and focuses on the searchbar', () => {
-      cy.hitDeleteButton(false);
+      cy.hitDeleteButton(false, '.wayf__previousSelection li:first-of-type .wayf__idp .idp__deleteDisable');
       cy.focused().should('have.class', 'search__field');
       cy.get('.previousSelection__addAccount').should('not.be.visible');
     });
 
-    it('Test the last deleted idp is at the top of the list', () => {
-      cy.get('.wayf__remainingIdps .wayf__idp[data-index="1"]').should('have.attr', 'data-entityid', 'https://example.com/entityId/2');
+    it('Test the last deleted idp is in the remaining list', () => {
+      cy.get('.wayf__remainingIdps .wayf__idp[data-entityid="https://example.com/entityId/2"]').should('exist');
+    });
+
+    it('Test the remaining list is sorted alphabetically', () => {
+      cy.get('.wayf__remainingIdps li:first-of-type .wayf__idp').should('have.attr', 'data-index', '1');
     });
   });
 
