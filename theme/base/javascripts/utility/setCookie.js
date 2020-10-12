@@ -13,5 +13,10 @@ import * as Cookies from 'js-cookie';
  * @param sameSite      whether or not it's samesite
  */
 export const setCookie = (content, cookieName, expires = 365, path = '/', secure = true, sameSite = 'strict') => {
+  if(typeof cookieName !== 'string') return;
+  if(typeof expires !== 'number') return;
+  if(typeof path !== 'string') return;
+  if(typeof secure !== 'boolean') return;
+  if(typeof sameSite !== 'string') return;
   Cookies.set(cookieName, content, { expires: expires, path: path, secure: secure, sameSite: sameSite });
 };
