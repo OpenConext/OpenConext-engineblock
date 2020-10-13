@@ -46,6 +46,8 @@ class WayfController extends Controller
         $rememberChoiceFeature = (bool) $request->get('rememberChoiceFeature', false);
         $cutoffPointForShowingUnfilteredIdps = $request->get('cutoffPointForShowingUnfilteredIdps', 100);
         $showIdPBanner = $request->get('showIdPBanner', true);
+        // Casting a string 'true' or 'false' using filter_var (bool) does not work here
+        $showIdPBanner = filter_var($showIdPBanner, FILTER_VALIDATE_BOOLEAN);
 
         $connectedIdps = (int) $request->get('connectedIdps', 5);
         $unconnectedIdps = (int) $request->get('unconnectedIdps', 0);
