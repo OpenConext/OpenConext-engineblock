@@ -1,4 +1,4 @@
-import {filterIdpsByValue} from '../wayf/filterIdpsByValue';
+import {filterIdpsByValue} from 'theme/base/javascripts/wayf/search/searchAndSortIdps';
 
 export class IdpList {
     constructor(targetElement, idpList, idpListElementFactory, cutoffPointForShowingUnfilteredIdps) {

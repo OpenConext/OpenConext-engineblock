@@ -45,7 +45,7 @@ context('Consent on Skeune theme', () => {
 
     it('Should show the nok-modal after selection', () => {
       cy.contains('label', 'Something incorrect?')
-        .click();
+        .click({force:true});
       cy.get('.idpRow > section.modal__value')
         .contains('h3', 'Is the data shown incorrect?');
     });

@@ -8,8 +8,8 @@ import {RequestAccessModalHelper} from './wayf/RequestAccessModalHelper';
 import {KeyboardListener} from './wayf/KeyboardListener';
 import {MouseListener} from './wayf/MouseListener';
 import {toggleVisibility} from '../../base/javascripts/utility/toggleVisibility';
-import {searchBarEventListeners} from '../../base/javascripts/wayf/searchBarEventListeners';
-import {searchFormEventListeners} from '../../base/javascripts/wayf/searchFormEventListeners';
+import {searchBarEventListeners} from './wayf/searchBarEventListeners';
+import {searchFormEventListeners} from './wayf/searchFormEventListeners';
 import {interactionListeners} from '../../base/javascripts/wayf/interactionListeners';
 import {focusSearchBar} from '../../base/javascripts/wayf/focusSearchBar';
 

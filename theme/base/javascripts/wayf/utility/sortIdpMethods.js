@@ -1,3 +1,5 @@
+import {getData} from '../../utility/getData';
+
 /**
  * Determine which of two idp elements alphabetically comes before the other.
  * Sorts in ascending order.
@@ -15,5 +17,16 @@ export const sortByTitle = (firstElement, secondElement) => {
 };
 
 function getTitle(element) {
-  return element.getAttribute('data-title');
+  return getData(element, 'title');
 }
+
+export const sortByWeight = (firstElement, secondElement) => {
+  const weightOne = Number(getData(firstElement.children[0], 'weight'));
+  const weightTwo = Number(getData(secondElement.children[0], 'weight'));
+
+  if (weightOne > weightTwo) return -1;
+  if (weightOne < weightTwo) return 1;
+
+  // if weights are equal sort them by title
+  return sortByTitle(firstElement , secondElement);
+};

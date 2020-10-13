@@ -2,6 +2,7 @@ import {initializePage} from './page';
 import {handlePreviousSelectionVisible} from './wayf/handlePreviousSelectionVisible';
 import {keyboardBehaviour} from './wayf/keyboardBehaviour';
 import {mouseBehaviour} from './wayf/mouseBehaviour';
+import {searchBehaviour} from './wayf/searchBehaviour';
 
 export function initializeWayf() {
   const callbacksAfterLoad = () => {
@@ -14,6 +15,7 @@ export function initializeWayf() {
     handlePreviousSelectionVisible(selectedIdps, previouslySelectedIdps);
     keyboardBehaviour(previouslySelectedIdps);
     mouseBehaviour(previouslySelectedIdps);
+    searchBehaviour();
   };
 
   initializePage('main.wayf', callbacksAfterLoad);
