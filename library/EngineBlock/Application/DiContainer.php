@@ -253,6 +253,11 @@ class EngineBlock_Application_DiContainer extends Pimple
         return $this->container->getParameter('wayf.cutoff_point_for_showing_unfiltered_idps');
     }
 
+    public function shouldDisplayDefaultIdpBannerOnWayf()
+    {
+        return $this->container->getParameter('wayf.display_default_idp_banner_on_wayf');
+    }
+
     public function getRememberChoice()
     {
         return $this->container->getParameter('wayf.remember_choice');

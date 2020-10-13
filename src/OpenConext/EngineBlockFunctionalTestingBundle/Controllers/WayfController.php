@@ -45,6 +45,9 @@ class WayfController extends Controller
         $displayUnconnectedIdpsWayf = (bool) $request->get('displayUnconnectedIdpsWayf', false);
         $rememberChoiceFeature = (bool) $request->get('rememberChoiceFeature', false);
         $cutoffPointForShowingUnfilteredIdps = $request->get('cutoffPointForShowingUnfilteredIdps', 100);
+        $showIdPBanner = $request->get('showIdPBanner', true);
+        // Casting a string 'true' or 'false' using filter_var (bool) does not work here
+        $showIdPBanner = filter_var($showIdPBanner, FILTER_VALIDATE_BOOLEAN);
 
         $connectedIdps = (int) $request->get('connectedIdps', 5);
         $unconnectedIdps = (int) $request->get('unconnectedIdps', 0);
@@ -57,6 +60,7 @@ class WayfController extends Controller
                 'helpLink' => '/authentication/idp/help-discover?lang='.$currentLocale,
                 'backLink' => $backLink,
                 'cutoffPointForShowingUnfilteredIdps' => $cutoffPointForShowingUnfilteredIdps,
+                'showIdPBanner' => $showIdPBanner,
                 'rememberChoiceFeature' => $rememberChoiceFeature,
                 'showRequestAccess' => $displayUnconnectedIdpsWayf,
                 'requestId' => 'bogus-request-id',
