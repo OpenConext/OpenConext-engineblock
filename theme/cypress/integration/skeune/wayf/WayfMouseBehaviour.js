@@ -2,15 +2,17 @@
  * Tests for behaviour of the WAYF which depends on clicking
  */
 context('WAYF when using the mouse', () => {
-  it('Should login when selecting an idp', () => {
-    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-    cy.get('.wayf__remainingIdps .wayf__idp')
-      .eq(1)
-      .click({force: true});
-    cy.location().should((loc) => {
-      expect(loc.href).to.eq('https://engine.vm.openconext.org/');
+  describe('Test logging in', () => {
+    it('Should login when selecting an idp', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      cy.get('.wayf__remainingIdps .wayf__idp')
+        .eq(1)
+        .click({force: true});
+      cy.location().should((loc) => {
+        expect(loc.href).to.eq('https://engine.vm.openconext.org/');
+      });
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
     });
-    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
   });
 
   // todo: test once no access has been implemented

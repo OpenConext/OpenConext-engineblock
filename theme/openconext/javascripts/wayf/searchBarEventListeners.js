@@ -1,4 +1,4 @@
-import {throttle} from '../utility/throttle';
+import {throttle} from '../../../base/javascripts/utility/throttle';
 
 /**
  * Keyup, click and input are registered events for cross-browser compatibility with HTML5 'search' input
