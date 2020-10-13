@@ -1,4 +1,5 @@
 import {toggleVisibility} from '../utility/toggleVisibility';
+import {attachClickHandlerToCancelButton} from './noAccess/attachClickHandlerToCancelButton';
 
 export const handleClickingDisabledIdp = (element) => {
   const noAccess = document.querySelector('.wayf__noAccess');
@@ -8,6 +9,11 @@ export const handleClickingDisabledIdp = (element) => {
 
   toggleVisibility(parentSection);
   toggleVisibility(noAccess);
+
+  // empty list-item & insert the clone
   li.innerHTML = '';
   li.insertAdjacentElement('afterbegin', cloneOfIdp);
+
+  // attach clickHandler for cancel button
+  attachClickHandlerToCancelButton(parentSection, noAccess);
 };
