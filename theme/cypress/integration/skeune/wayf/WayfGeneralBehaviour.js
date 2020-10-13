@@ -115,6 +115,11 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
     it('Check if the eduId is present', () => {
       cy.contains('.remainingIdps__eduId', 'eduID is available as an alternative');
     });
+
+    it('Ensure the CTA is not present when the feature flag is disabled', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?showIdpBanner=0');
+      cy.get('.remainingIdps__eduId').should('not.exist');;
+    });
   });
 
   describe('Should show the remember my choice option', () => {
