@@ -7,12 +7,13 @@
         {% endif %}
     </h2>
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/search.html.twig' %}
-    {# todo make this hide behind a feature flag #}
-    {# todo get right link for eduId #}
-    {% include '@theme/Default/Partials/informational.html.twig' with {
-        class: 'remainingIdps__eduId',
-        text: 'wayf_eduId'|trans({ '%eduIdLink%': 'https://something.com/eduId'})
-    } %}
+
+    {% if showIdPBanner %}
+        {% include '@theme/Default/Partials/informational.html.twig' with {
+            class: 'remainingIdps__eduId',
+            text: 'wayf_eduId'|trans({ '%eduIdLink%': 'https://something.com/eduId'})
+        } %}
+    {% endif %}
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/rememberChoice.html.twig' %}
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpList.html.twig' with { idpList: connectedIdps.formattedIdpList, delete: false, listName: 'remaining' } %}
 </section>

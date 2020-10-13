@@ -44,6 +44,7 @@ parameters can be used to manipulate the behaviour of the wayf that is rendered.
 | displayUnconnectedIdpsWayf | (bool) false | Type: boolean. Display unconnected IdPs on the WAYF. |
 | rememberChoiceFeature | (bool) false | Type: boolean. Display the remember choice feature. |
 | cutoffPointForShowingUnfilteredIdps | (int) 100 | Type: integer. The number of IdPs to display on the WAYF before cutting them off. |
+| showIdpBanner | (bool) true | Type: boolean. Show the EduId (default IdP) banner on the WAYF or not |
 | connectedIdps | (int) 5 | Type: integer. The number of IdPs to display on the WAYF. |
 | unconnectedIdps | (int) 0 | Type: integer. The number of unconnected IdPs to display on the WAYF. |
 | backLink | (bool) false | Type: boolean. Display the back link on the WAYF. |
