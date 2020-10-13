@@ -386,6 +386,44 @@
                 @include h2;
             }
 
+            > .noAccess__helpdesk {
+                font-size: $f-large;
+            }
+
+            > .noAccess__requestForm {
+                margin: 2rem 0;
+
+                input,
+                label,
+                textarea {
+                    display: block;
+                }
+
+                input,
+                textarea {
+                    border: 1px solid $inputBorderGray;
+                    border-radius: 8px;
+                    font-size: $f-large;
+                    margin-bottom: 1.5rem;
+                    max-width: 23rem;
+                    padding: 1rem;
+                    width: 60%;
+
+                    @include screen('mobile') {
+                        width: 100%;
+                    }
+                }
+
+                input {
+                    height: 3rem;
+                }
+
+                label {
+                    @include font-style-large;
+                    margin-bottom: .75rem;
+                }
+            }
+
             > .noAccess__ctas {
                 display: flex;
                 justify-content: space-between;
