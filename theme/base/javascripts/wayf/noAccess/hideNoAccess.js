@@ -1,7 +1,6 @@
 import {toggleVisibility} from '../../utility/toggleVisibility';
 
-export const handleCancelNoAccess = (parentSection, noAccessSection) => {
+export const hideNoAccess = (parentSection, noAccessSection) => {
   toggleVisibility(noAccessSection);
   toggleVisibility(parentSection);
-  // todo show banner
 };

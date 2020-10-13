@@ -1,4 +1,4 @@
-import {handleCancelNoAccess} from './handleCancelNoAccess';
+import {hideNoAccess} from './hideNoAccess';
 import {getData} from '../../utility/getData';
 
 export const attachClickHandlerToCancelButton = (parentSection, noAccess) => {
@@ -11,6 +11,6 @@ export const attachClickHandlerToCancelButton = (parentSection, noAccess) => {
   }
 
   // add clickHandler
-  cancelButton.addEventListener('click', (e) => handleCancelNoAccess(parentSection, noAccess));
+  cancelButton.addEventListener('click', () => hideNoAccess(parentSection, noAccess));
   cancelButton.setAttribute('data-clickhandled', true);
 };
