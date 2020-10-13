@@ -166,6 +166,9 @@ parameters:
     ## Allow users to save their selected IdP and then auto-select it on returning visits.
     wayf.remember_choice: false
 
+    ## Toggle the default IdP quick link banner on the WAYF.
+    wayf.display_default_idp_banner_on_wayf: true
+
     ## Settings for detecting whether the user is stuck in a authentication loop within his session
     time_frame_for_authentication_loop_in_seconds: 60
     maximum_authentication_procedures_allowed: 5

@@ -437,6 +437,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
                 'helpLink' => '/authentication/idp/help-discover?lang=' . $currentLocale,
                 'backLink' => $container->isUiOptionReturnToSpActive(),
                 'cutoffPointForShowingUnfilteredIdps' => $container->getCutoffPointForShowingUnfilteredIdps(),
+                'showIdPBanner' => (bool) $container->shouldDisplayDefaultIdpBannerOnWayf(),
                 'rememberChoiceFeature' => $rememberChoiceFeature,
                 'showRequestAccess' => $serviceProvider->getCoins()->displayUnconnectedIdpsWayf(),
                 'requestId' => $request->getId(),
