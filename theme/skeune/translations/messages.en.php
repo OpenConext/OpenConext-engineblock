@@ -21,6 +21,7 @@ return [
     'wayf_noaccess_name'        => 'Your name',
     'wayf_noaccess_email'       => 'Your emailaddress',
     'wayf_noaccess_motivation'  => 'Motivation',
+    'wayf_noaccess_success'     => 'Your request for access has been sent.',
     'wayf_eduId'                => 'If your organisation is not listed, <a href="%eduIdLink%" class="wayf__eduIdLink">eduID is available as an alternative.</a>',
     'wayf_idp_title_screenreader' => 'Login with ',
 

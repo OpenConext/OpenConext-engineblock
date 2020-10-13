@@ -21,6 +21,7 @@ return [
     'wayf_noaccess_name'        => 'Uw naam',
     'wayf_noaccess_email'       => 'Uw e-mailadres',
     'wayf_noaccess_motivation'  => 'Motivatie',
+    'wayf_noaccess_success'     => 'Je aanvraag tot toegang werd verstuurd.',
     'wayf_eduId'                => '<a href="%eduIdLink%" class="wayf__eduIdLink">EduID is beschikbaar als alternatief</a> indien uw organisatie niet in de lijst staat.',
     'wayf_idp_title_screenreader' => 'Inloggen met ',
 
