@@ -26,6 +26,19 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.get('.wayf__idp h3')
         .should('have.length', 6);
     });
+
+    it('Should show 5 disconnected IdPs', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=1&unconnectedIdps=5');
+      cy.get('.wayf__idp--noAccess')
+        .should('have.length', 5)
+        .should('be.visible');
+    });
+
+    it.only('Should show no disconnected IdPs when the flag is false', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=0&unconnectedIdps=5');
+      cy.get('.wayf__idp--noAccess')
+        .should('not.exist');
+    });
   });
 
   describe('Test if search works as it should', () => {
