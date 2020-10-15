@@ -1,8 +1,13 @@
 <?php
 return [
     // General
-    'logo'  => 'logo',
-    'search'    => 'Search',
+    'logo'      =>  'logo',
+    'search'    =>  'Search',
+    'required'  =>  'Required',
+
+    // Forms
+    'form_error_name'       =>      'Your name needs to be at least 2 characters long',
+    'form_error_email'      =>      'This is an invalid email address',
 
     // WAYF
     'wayf_nothing_found'        => 'Nothing found',

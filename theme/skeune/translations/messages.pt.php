@@ -1,8 +1,9 @@
 <?php
 return [
     // General
-    'logo'  => 'logo',
-    'search'    => 'Search',
+    'logo'      =>  'logo',
+    'search'    =>  'Search',
+    'required'  =>  'Required',
 
     // WAYF
     'wayf_nothing_found'        => 'Nothing found',
