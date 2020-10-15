@@ -264,15 +264,12 @@
 
                     > label.modal {
                         color: $oceanBlue;
-                        padding: 10px 0;
+                        padding: 10px 25px 10px 0;
 
                         @include screen('mobile') {
                             display: block;
-
-                            > span {
-                                background-position: right 18px center;
-                                padding-right: 40px;
-                            }
+                            background-position: right 18px center;
+                            padding-right: 40px;
                         }
                     }
 
@@ -406,16 +403,11 @@
                 }
             }
 
-            > label[for="cta_consent_nok"] {
-                @include button-tertiary($gray);
-                display: block;
-                width: 100%;
-
-                &:focus {
-                    > span.secondaryBorder {
-                        display: block;
-                        width: 100%;
-                    }
+            > .button--tertiary {
+                > label[for="cta_consent_nok"] {
+                    @include button-tertiary($gray);
+                    display: block;
+                    width: 100%;
                 }
             }
 
