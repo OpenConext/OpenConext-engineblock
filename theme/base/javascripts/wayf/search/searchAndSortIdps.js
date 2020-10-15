@@ -3,6 +3,8 @@ import {assignWeight} from './assignWeight';
 import {clearWeight} from './clearWeight';
 import {showOrHideNoResultsSection} from './showOrHideNoResultsSection';
 import {reinsertIdpList} from '../utility/reinsertIdpList';
+import {showFoundIdpsWhenCutoff} from './showFoundIdpsWhenCutoff';
+import {hideIdpsWhenCutoffNoSearch} from './hideIdpsWhenCutoffNoSearch';
 
 /**
  * Searches an array of idps for a given searchTerm.
@@ -23,14 +25,18 @@ import {reinsertIdpList} from '../utility/reinsertIdpList';
  * @returns   node[]
  */
 export const searchAndSortIdps = (idpArray, searchTerm) => {
+  const list = document.querySelector('.wayf__remainingIdps .wayf__idpList--cutoffMet');
+
   // reset weights by removing them
   clearWeight(idpArray);
 
   if (typeof searchTerm !== 'undefined' && searchTerm.length) {
     assignWeight(idpArray, searchTerm.toLowerCase());
     idpArray.sort(sortByWeight);
+    showFoundIdpsWhenCutoff(list);
   } else {
     idpArray.sort(sortByTitle);
+    hideIdpsWhenCutoffNoSearch(list);
   }
 
   // add the sorted items to the dom, replacing the previous ones

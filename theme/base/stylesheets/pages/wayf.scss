@@ -42,6 +42,12 @@
             list-style: none;
             padding: 0;
 
+            &.wayf__idpList--cutoffMet:not(.wayf__idpList--searching) {
+                .wayf__idp {
+                    display: none;
+                }
+            }
+
             > li {
                 margin-bottom: calculateRem(19px);
 
@@ -437,15 +443,6 @@
                     &:invalid {
                         border: 1px solid $red;
                         background-color: $errorRed;
-                    }
-
-                    &:hover {
-                        background-color: $hoverBlue;
-                    }
-
-                    &:focus {
-                        box-shadow: 0 0 0 3px $lightBlue;
-                        outline: none;
                     }
 
                     &:not(:valid) {
