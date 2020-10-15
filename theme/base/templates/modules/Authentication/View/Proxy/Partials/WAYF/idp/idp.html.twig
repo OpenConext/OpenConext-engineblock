@@ -1,6 +1,6 @@
 <article
     aria-describedby="idp__title{{ listName }}{{ loop.index }}"
-    class="wayf__idp{% if idp['noAccess'] is defined and idp['noAccess'] %} wayf__idp--noAccess{% endif %}"
+    class="wayf__idp{% if idp['connected'] is defined and not idp['connected'] %} wayf__idp--noAccess{% endif %}"
     data-count="{% if idp['count'] is defined %}{{ idp['count'] }}{% else %}0{% endif %}"
     data-entityid="{{ idp['entityId']|lower }}"
     data-index="{{ loop.index }}"
@@ -22,7 +22,7 @@
             class="idp__title"
         ><span class="visually-hidden">{{ 'wayf_idp_title_screenreader'|trans }}</span>{{ idp['displayTitle'] }}</h3>
         {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpForm.html.twig' %}
-        {% if idp['noAccess'] is defined and idp['noAccess'] or delete %}
+        {% if idp['connected'] is defined and not idp['connected'] or delete %}
             {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpDeleteDisable.html.twig' %}
         {% endif %}
     </div>

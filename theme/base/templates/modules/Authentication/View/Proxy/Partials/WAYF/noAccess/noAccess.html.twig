@@ -1,10 +1,12 @@
 <section class="wayf__noAccess hidden">
     <h2 class="noAccess__title">{{ 'wayf_no_access'|trans }}</h2>
-    {# todo figure out how to get the idp element in question here ... probably using JS #}
+    <ul class="wayf__idpList">
+        <li>
+            {# placeholder for the idp without access #}
+        </li>
+    </ul>
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noAccess/helpdesk.html.twig' %}
     {% if showRequestAccess %}
         {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noAccess/requestForm.html.twig' %}
     {% endif %}
-
-    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noAccess/ctas.html.twig' %}
 </section>

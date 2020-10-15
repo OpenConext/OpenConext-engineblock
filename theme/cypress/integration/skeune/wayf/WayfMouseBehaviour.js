@@ -15,26 +15,61 @@ context('WAYF when using the mouse', () => {
     });
   });
 
-  // todo: test once no access has been implemented
-  it.skip('Should show a fully functional no access section when a disabled account is selected', () => {
-    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+  describe('Should show a fully functional no access section when a disabled account is selected', () => {
+    it('Should show the no access section on selecting a disabled account', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
+      cy.get('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/1"]').click({force: true});
+      cy.contains('.noAccess__title', 'Sorry, no access for this account');
+    });
 
-    // Test if the disabled account can be chosen
-    cy.get('.idp__disabled')
-      .eq(1)
-      .click({ force: true });
+    it('Should not show the form elements yet', () => {
+      cy.get('.noAccess__requestForm fieldset')
+        .should('not.be.visible');
+    });
 
-    // Test if the no access section shows up
-    cy.contains('.noAccess__title', 'Sorry, no access for this account');
+    it('Should have a functioning cancel button', () => {
+      cy.get('.cta__cancel').click({force: true});
+      cy.get('.noAccess__title')
+        .should('not.be.visible');
+    });
 
-    // Test if the cancel button works
-    cy.get('.cta__cancel').click({ force: true });
-    cy.get('.noAccess__title')
-      .should('not.exist');
+    it('Should show the form fields after clicking request access', () => {
+      cy.get('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/4"]').click({force: true});
+      cy.get('.cta__showForm').click({force: true});
+      cy.get('.noAccess__requestForm fieldset')
+        .should('be.visible');
+    });
 
-    // Test if the request access button works
-    cy.get('.cta__request').click({ force: true });
-    cy.contains('.noAccess__requestForm label', 'Your name');
+    it('Should hide form fields after clicking cancel', () => {
+      cy.get('.cta__cancel').click({force: true});
+      cy.get('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/2"]').click({force: true});
+      cy.get('.noAccess__requestForm fieldset')
+        .should('not.be.visible');
+    });
+
+    it('Should be able to fill & submit the request access form', () => {
+      cy.get('.cta__showForm').click({force: true});
+      cy.get('#name').type('Joske');
+      cy.get('#email').type('joske.vermeulen@thuis.be');
+      cy.get('#motivation').focus().type('tis toapuh dattem tuis is');
+      cy.get('.cta__request').click({force: true});
+      cy.wait(250);
+      cy.get('.noAccess__title').should('not.be.visible');
+    });
+
+    it('Should show the success message', () => {
+      cy.get('.notification__success').should('be.visible');
+    });
+
+    it('Should not show the success message when selecting a new disabled account', () => {
+      cy.get('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/3').click({force: true});
+      cy.get('.notification__success').should('not.be.visible');
+    });
+
+    it('Should also not show the form fields after selecting a new disabled account', () => {
+      cy.get('.noAccess__requestForm fieldset')
+        .should('not.be.visible');
+    });
   });
 
   describe('Should show a fully functional previous selection section', () => {

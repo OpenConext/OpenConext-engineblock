@@ -1,15 +1,16 @@
 <button
     class="idp__deleteDisable"
     data-connected="{{ idp['connected'] }}"
+    {% if idp['connected'] is defined and not idp['connected'] %}tabindex="-1"{% endif %}
     type="button"
 >
-    {#                    {% if idp['noAccess'] is defined and idp['noAccess'] %}#} {# todo: turn this if back on once all js is added & tested #}
+    {% if idp['connected'] is defined and not idp['connected'] %}
         <span class="idp__disabled">
             <span class="visually-hidden">
                 {{ 'wayf_no_access_account'|trans }}
             </span>
         </span>
-    {#                    {% endif %}#}
+    {% endif %}
     {% if delete %}
         <span class="idp__delete">
             <span class="visually-hidden">
