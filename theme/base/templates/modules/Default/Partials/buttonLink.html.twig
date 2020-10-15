@@ -1,5 +1,3 @@
-<a href={{ buttonUrl }}>
-    <span class="secondaryBorder">
-        {{ text }}
-    </span>
+<a href={{ buttonUrl }}{% if className is defined %} class="{{ className }}"{% endif %} tabindex="-1">
+    {{ text }}
 </a>

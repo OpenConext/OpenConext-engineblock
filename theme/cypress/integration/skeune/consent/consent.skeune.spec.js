@@ -1,14 +1,17 @@
 context('Consent on Skeune theme', () => {
+  beforeEach(() => {
+    cy.visit('https://engine.vm.openconext.org/functional-testing/consent');
+  });
+
   describe('Handles additional attributes correctly', () => {
     it('shows the correct amount of attributes on load', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/consent');
       cy.get('ul.consent__attributes > li')
         .should('have.length', '7');
     });
 
     it('Should not show the extra attributes on load', () => {
       cy.get('ul.consent__attributes--nested')
-        .should('be.hidden');
+        .should('not.be.visible');
     });
 
     it('Should show the more info label', () => {
@@ -17,6 +20,8 @@ context('Consent on Skeune theme', () => {
     });
 
     it('Should show the extra attributes after clicking the label', () => {
+      cy.contains('label', 'Show more information')
+        .click();
       cy.contains('label', 'Show less information');
       cy.get('ul.consent__attributes--nested')
         .should('be.visible');
@@ -26,7 +31,7 @@ context('Consent on Skeune theme', () => {
   describe('gives openconext information', () => {
     it('Should not show the about-modal on load', () => {
       cy.get('label[for="consent_disclaimer_about"] + section h3')
-        .should('be.hidden');
+        .should('not.be.visible');
     });
 
     it('Should show the about-modal after selection', () => {
@@ -40,7 +45,7 @@ context('Consent on Skeune theme', () => {
   describe('shows information on how to report incorrect data', () => {
     it('Should not show the nok-modal on load', () => {
       cy.get('label[for="cta_consent_nok"] + section h3')
-        .should('be.hidden');
+        .should('not.be.visible');
     });
 
     it('Should show the nok-modal after selection', () => {
@@ -54,7 +59,7 @@ context('Consent on Skeune theme', () => {
   describe('gives explanation about the unique identifier', () => {
     it('Should not show the number modal on load', () => {
       cy.get('label[for="consent_disclaimer_number"] + section a[href="https://example.org"]')
-        .should('be.hidden');
+        .should('not.be.visible');
     });
 
     it('Should show the number modal after selection', () => {
@@ -68,14 +73,14 @@ context('Consent on Skeune theme', () => {
   describe('can decline consent', () => {
     it('Should not show the decline consent modal on load', () => {
       cy.get('label[for="cta_consent_nok"] + section h3')
-        .should('be.hidden');
+        .should('not.be.visible');
     });
 
     it('Should show the decline consent modal after selection', () => {
       cy.contains('label', 'No, I do not agree')
-        .click({force: true})
-        .next()
-        .contains('h3', 'You don\'t want to share your data with the service');
+        .click({force: true});
+      cy.get('.ctas .modal__value')
+        .should('be.visible');
     });
   });
 });
