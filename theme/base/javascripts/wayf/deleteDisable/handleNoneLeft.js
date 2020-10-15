@@ -1,5 +1,5 @@
 import {toggleVisibility} from '../../utility/toggleVisibility';
-import {showRemaining} from '../showRemaining';
+import {showRemaining} from '../utility/showRemaining';
 
 /**
  * When the last idp is deleted from the previous selection list:

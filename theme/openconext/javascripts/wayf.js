@@ -11,7 +11,7 @@ import {toggleVisibility} from '../../base/javascripts/utility/toggleVisibility'
 import {searchBarEventListeners} from './wayf/searchBarEventListeners';
 import {searchFormEventListeners} from './wayf/searchFormEventListeners';
 import {interactionListeners} from '../../base/javascripts/wayf/interactionListeners';
-import {focusSearchBar} from '../../base/javascripts/wayf/focusSearchBar';
+import {focusSearchBar} from './wayf/focusSearchBar';
 
 export function initializeWayf() {
   const callbacksAfterLoad = () => {

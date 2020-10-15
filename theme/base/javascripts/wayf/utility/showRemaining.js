@@ -1,4 +1,4 @@
-import {showElement} from '../utility/showElement';
+import {showElement} from '../../utility/showElement';
 
 /**
  * Show the remaining Idp section

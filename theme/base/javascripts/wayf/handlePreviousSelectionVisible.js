@@ -1,5 +1,5 @@
-import {hasSelectedIdps} from './hasSelectedIdps';
-import {showRemaining} from './showRemaining';
+import {hasSelectedIdps} from './utility/hasSelectedIdps';
+import {showRemaining} from './utility/showRemaining';
 import {submitForm} from './submitForm';
 import {attachDeleteHandlers} from './deleteDisable/attachDeleteHandlers';
 
