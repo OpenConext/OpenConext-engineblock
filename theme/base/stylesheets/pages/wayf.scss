@@ -449,5 +449,13 @@
                 }
             }
         }
+
+        > .buttonLink--secondary {
+            > .wayf__backLink {
+                @include button-secondary($gray);
+                display: block;
+                width: 100%;
+            }
+        }
     }
 }
