@@ -180,15 +180,20 @@
                 }
 
                 > .wayf__idp.wayf__idp--noAccess {
-                    background-color: $gray;
+                    background-color: $softBorderGray;
+                    box-shadow: 0 1px 0 2px $noAccessGray;
 
                     > .idp__content {
                         > button {
-                            @include button-reset($gray);
+                            @include button-reset($softBorderGray);
                         }
                     }
                 }
             }
+        }
+
+        > .notification__success {
+            @include success;
         }
 
         >.wayf__previousSelection {
@@ -386,44 +391,122 @@
                 @include h2;
             }
 
-            > .noAccess__ctas {
-                display: flex;
-                justify-content: space-between;
+            > .noAccess__helpdesk {
+                font-size: $f-large;
+            }
 
-                > button[class^="cta"] {
-                    padding: .5rem;
-                    width: 48%;
+            > .noAccess__requestForm {
+                margin: 2rem 0;
 
-                    @include screen('mobile') {
-                        width: unset;
-                        }
+                > .notification__critical {
+                    @include critical;
+                }
+
+                fieldset {
+                    appearance: none;
+                    border: none;
+                    margin-bottom: 1.5rem;
+                    padding: 0;
+                }
+
+                input,
+                label,
+                textarea {
+                    display: block;
+                }
+
+                input,
+                textarea {
+                    border: 1px solid $inputBorderGray;
+                    border-radius: 8px;
+                    font-size: $f-large;
+                    line-height: 1.5;
+                    padding: 1rem;
+                    width: 100%;
+
+                    &:hover {
+                        background-color: $hoverBlue;
+                    }
 
                     &:focus {
+                        background-color: $hoverBlue;
+                        box-shadow: 0 0 0 3px $lightBlue;
+                        outline: none;
+                    }
+
+                    &:invalid {
+                        border: 1px solid $red;
+                        background-color: $errorRed;
+                    }
+                }
+
+                input {
+                    height: 3rem;
+                }
+
+                label {
+                    @include font-style-large;
+                    margin-bottom: .75rem;
+
+                    > strong {
+                        color: $red;
+                        font-weight: $bolder;
+                    }
+                }
+
+                input:not(:invalid) + .form__error {
+                    display: none;
+                }
+
+                .form__error {
+                    @include triangle;
+                    background-size: $f-large $f-large;
+                    color: $red;
+                    font-size: $f-large;
+                    margin: calculateRem(10px) 0 0;
+                    padding-left: 1.5rem;
+                }
+
+                > .noAccess__ctas {
+                    display: flex;
+                    justify-content: space-between;
+
+                    > button[class^="cta"] {
                         padding: .5rem;
-                    }
-                }
+                        width: 48%;
 
-                > .cta__cancel {
-                    @include button-secondary($gray);
+                        @include screen('mobile') {
+                            width: unset;
+                        }
 
-                    @include screen('mobile') {
-                        flex-basis: 40%;
-                    }
-
-                    @include screen('smallMobile') {
-                        flex-basis: 35%;
-                    }
-                }
-
-                > .cta__request {
-                    @include button-primary($buttonBlue);
-
-                    @include screen('mobile') {
-                        flex-basis: 56%;
+                        &:focus {
+                            padding: .5rem;
+                        }
                     }
 
-                    @include screen('smallMobile') {
-                        flex-basis: 61%;
+                    > .cta__cancel {
+                        @include button-secondary($gray);
+
+                        @include screen('mobile') {
+                            flex-basis: 40%;
+                        }
+
+                        @include screen('smallMobile') {
+                            flex-basis: 35%;
+                        }
+                    }
+
+                    > .cta__request,
+                    .cta__showForm {
+                        @include button-primary($buttonBlue);
+
+                        @include screen('mobile') {
+                            flex-basis: 56%;
+                        }
+
+                        @include screen('smallMobile') {
+                            flex-basis: 61%;
+                        }
                     }
                 }
             }

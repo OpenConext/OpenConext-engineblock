@@ -1,8 +1,42 @@
-<form class="noAccess__requestForm" action="" method="post">
-    <label for="name">{{ 'wayf_noaccess_name'|trans }}</label>
-    <input type="text" name="name" id="name" />
-    <label for="email">{{ 'wayf_noaccess_email'|trans }}</label>
-    <input type="text" name="email" id="email" />
-    <label for="motivation">{{ 'wayf_noaccess_motivation'|trans }}</label>
-    <textarea name="motivation" id="motivation"></textarea>
+<form class="noAccess__requestForm" action="#" method="post">
+    {% include '@theme/Default/Partials/critical.html.twig' with {
+        className: 'hidden',
+        text: 'form_general_error'|trans,
+    } %}
+    <input type="hidden" name="spName" value="{{ serviceProvider.displayName(locale()) }}" />
+    <input type="hidden" name="spEntityId" value="{{ serviceProvider.entityId }}" />
+    <input type="hidden" name="idpEntityId" value="" />
+    <input type="hidden" name="institution" value="" />
+    <fieldset class="hidden">
+        <label for="name">
+            <span class="visually-hidden">
+                {{ 'required'|trans }}
+            </span>
+            <strong>*</strong> {{ 'wayf_noaccess_name'|trans }}
+        </label>
+        <input type="text" name="name" id="name" minlength="2" />
+        <p class="form__error">
+            {{ 'form_error_name'|trans }}
+        </p>
+    </fieldset>
+    <fieldset class="hidden">
+        <label for="email">
+            <span class="visually-hidden">
+                {{ 'required'|trans }}
+            </span>
+            <strong>*</strong> {{ 'wayf_noaccess_email'|trans }}
+        </label>
+        <input type="email" name="email" id="email" />
+        <p class="form__error">
+            {{ 'form_error_email'|trans }}
+        </p>
+    </fieldset>
+    <fieldset class="hidden">
+        <label for="motivation">
+            {{ 'wayf_noaccess_motivation'|trans }}
+        </label>
+        <textarea name="comment" id="motivation" rows="5"></textarea>
+    </fieldset>
+
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noAccess/ctas.html.twig' %}
 </form>
