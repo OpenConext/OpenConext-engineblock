@@ -2,7 +2,7 @@
  * Tests for behaviour of the WAYF which depends on pressing enter.
  */
 context('WAYF when using the keyboard', () => {
-  describe.skip('Test logging in', () => {
+  describe('Test logging in', () => {
     it('Should login when selecting an idp', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.get('.wayf__remainingIdps .wayf__idp')
@@ -18,7 +18,7 @@ context('WAYF when using the keyboard', () => {
 
   // todo after adding eduId feature flag this should be adjusted to take that into account
   // todo if html spec is changed, or cypress fixes bug 6207, get rid of the manual focus on search.  See https://github.com/cypress-io/cypress/issues/6207
-  describe.skip('Should be able to traverse the remaining idp section with arrow keys', () => {
+  describe('Should be able to traverse the remaining idp section with arrow keys', () => {
     it('check if pressing down works as expected', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.get('.search__field').focus();
@@ -46,11 +46,16 @@ context('WAYF when using the keyboard', () => {
     });
   });
 
-  describe('Should show a fully functional no access section when a disabled account is selected', () => {
+  describe.only('Should show a fully functional no access section when a disabled account is selected', () => {
     it('Should show the no access section on selecting a disabled account', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
       cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/1"]');
       cy.contains('.noAccess__title', 'Sorry, no access for this account');
+    });
+
+    it('Should not show the form elements yet', () => {
+      cy.get('.noAccess__requestForm fieldset')
+        .should('not.be.visible');
     });
 
     it('Should have a functioning cancel button', () => {
@@ -59,8 +64,22 @@ context('WAYF when using the keyboard', () => {
         .should('not.be.visible');
     });
 
-    it('Should be able to fill the request access form', () => {
+    it('Should show the form fields after hitting request access', () => {
+      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/4"]');
+      cy.focusAndEnter('.cta__showForm');
+      cy.get('.noAccess__requestForm fieldset')
+        .should('be.visible');
+    });
+
+    it('Should hide form fields after hitting cancel', () => {
+      cy.focusAndEnter('.cta__cancel');
       cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/2"]');
+      cy.get('.noAccess__requestForm fieldset')
+        .should('not.be.visible');
+    });
+
+    it('Should be able to fill the request access form', () => {
+      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/4"]');
       cy.get('#name').type('Joske');
       cy.get('#email').type('joske.vermeulen@thuis.be');
       cy.get('#motivation').focus().type('tis toapuh dattem tuis is');
@@ -77,9 +96,14 @@ context('WAYF when using the keyboard', () => {
       cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/3');
       cy.get('.notification__success').should('not.be.visible');
     });
+
+    it('Should also not show the form fields after selecting a new disabled account', () => {
+      cy.get('.noAccess__requestForm fieldset')
+        .should('not.be.visible');
+    });
   });
 
-  describe.skip('Should show a fully functional previous selection section', () => {
+  describe('Should show a fully functional previous selection section', () => {
     it('Loads the WAYF', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
     });

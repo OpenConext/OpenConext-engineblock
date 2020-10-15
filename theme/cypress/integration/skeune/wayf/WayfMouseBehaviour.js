@@ -22,14 +22,33 @@ context('WAYF when using the mouse', () => {
       cy.contains('.noAccess__title', 'Sorry, no access for this account');
     });
 
+    it('Should not show the form elements yet', () => {
+      cy.get('.noAccess__requestForm fieldset')
+        .should('not.be.visible');
+    });
+
     it('Should have a functioning cancel button', () => {
       cy.get('.cta__cancel').click({force: true});
       cy.get('.noAccess__title')
         .should('not.be.visible');
     });
 
-    it('Should be able to fill the request access form', () => {
+    it('Should show the form fields after clicking request access', () => {
+      cy.get('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/4"]').click({force: true});
+      cy.get('.cta__showForm').click({force: true});
+      cy.get('.noAccess__requestForm fieldset')
+        .should('be.visible');
+    });
+
+    it('Should hide form fields after clicking cancel', () => {
+      cy.get('.cta__cancel').click({force: true});
       cy.get('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/2"]').click({force: true});
+      cy.get('.noAccess__requestForm fieldset')
+        .should('not.be.visible');
+    });
+
+    it('Should be able to fill & submit the request access form', () => {
+      cy.get('.cta__showForm').click({force: true});
       cy.get('#name').type('Joske');
       cy.get('#email').type('joske.vermeulen@thuis.be');
       cy.get('#motivation').focus().type('tis toapuh dattem tuis is');
@@ -45,6 +64,11 @@ context('WAYF when using the mouse', () => {
     it('Should not show the success message when selecting a new disabled account', () => {
       cy.get('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/3').click({force: true});
       cy.get('.notification__success').should('not.be.visible');
+    });
+
+    it('Should also not show the form fields after selecting a new disabled account', () => {
+      cy.get('.noAccess__requestForm fieldset')
+        .should('not.be.visible');
     });
   });
 
