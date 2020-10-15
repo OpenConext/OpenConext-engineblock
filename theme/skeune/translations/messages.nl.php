@@ -1,9 +1,15 @@
 <?php
 return [
     // General
-    'logo'      =>  'logo',
-    'search'    =>  'Zoeken',
-    'required'  =>  'Verplicht',
+    'logo'          =>  'logo',
+    'search'        =>  'Zoeken',
+    'required'      =>  'Verplicht',
+    'send_request'  =>  'Verzoek sturen',
+
+    // Forms
+    'form_general_error'    =>  'Er ging iets fout tijdens het insturen van uw formulier.  Dit kan een probleem zijn met uw internetverbinding of iets anders.  Controleer uw invoer en probeer het later opnieuw.  Mocht het probleem zich blijven voordoen, neem dan contact op met uw beheerder.',
+    'form_error_name'       =>  'Your name needs to be at least 2 characters long',
+    'form_error_email'      =>  'This is an invalid email address',
 
     // WAYF
     'wayf_nothing_found'        => 'Niets gevonden',

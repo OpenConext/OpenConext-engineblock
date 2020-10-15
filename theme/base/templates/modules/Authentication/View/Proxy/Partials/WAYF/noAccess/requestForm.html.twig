@@ -1,9 +1,13 @@
 <form class="noAccess__requestForm" action="#" method="post">
+    {% include '@theme/Default/Partials/critical.html.twig' with {
+        className: 'hidden',
+        text: 'form_general_error'|trans,
+    } %}
     <input type="hidden" name="spName" value="{{ serviceProvider.displayName(locale()) }}" />
     <input type="hidden" name="spEntityId" value="{{ serviceProvider.entityId }}" />
     <input type="hidden" name="idpEntityId" value="" />
     <input type="hidden" name="institution" value="" />
-    <fieldset>
+    <fieldset class="hidden">
         <label for="name">
             <span class="visually-hidden">
                 {{ 'required'|trans }}
@@ -15,7 +19,7 @@
             {{ 'form_error_name'|trans }}
         </p>
     </fieldset>
-    <fieldset>
+    <fieldset class="hidden">
         <label for="email">
             <span class="visually-hidden">
                 {{ 'required'|trans }}
@@ -27,9 +31,11 @@
             {{ 'form_error_email'|trans }}
         </p>
     </fieldset>
-    <fieldset>
-        <label for="motivation">{{ 'wayf_noaccess_motivation'|trans }}</label>
-        <textarea name="comment" id="motivation"></textarea>
+    <fieldset class="hidden">
+        <label for="motivation">
+            {{ 'wayf_noaccess_motivation'|trans }}
+        </label>
+        <textarea name="comment" id="motivation" rows="5"></textarea>
     </fieldset>
 
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noAccess/ctas.html.twig' %}

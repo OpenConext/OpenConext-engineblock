@@ -1,4 +1,5 @@
 import {toggleVisibility} from '../../utility/toggleVisibility';
+import {isHiddenElement} from '../../utility/isHiddenElement';
 
 /**
  * Hide the success notification
@@ -6,7 +7,7 @@ import {toggleVisibility} from '../../utility/toggleVisibility';
 export const hideSuccessMessage = () => {
   const successMessage = document.querySelector('.notification__success');
 
-  if (!successMessage.classList.contains('hidden')) {
+  if (!isHiddenElement(successMessage)) {
     toggleVisibility(successMessage);
   }
 };

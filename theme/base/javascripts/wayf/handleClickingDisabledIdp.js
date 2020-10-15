@@ -1,14 +1,14 @@
 import {toggleVisibility} from '../utility/toggleVisibility';
 import {attachClickHandlerToCancelButton} from './noAccess/attachClickHandlerToCancelButton';
 import {setHiddenFieldValues} from './noAccess/setHiddenFieldValues';
-import {attachClickHandlerToForm} from './noAccess/attachClickHandlerToForm';
 import {cloneIdp} from './noAccess/cloneIdp';
 import {hideSuccessMessage} from './noAccess/hideSuccessMessage';
+import {attachClickHandlerToRequestButton} from './noAccess/attachClickHandlerToRequestButton';
 
 export const handleClickingDisabledIdp = (element) => {
   const noAccess = document.querySelector('.wayf__noAccess');
-  const form = noAccess.querySelector('.noAccess__requestForm');
   const li = noAccess.querySelector('.wayf__idpList > li');
+  const form = noAccess.querySelector('.noAccess__requestForm');
   const parentSection = element.closest('section');
   const cloneOfIdp = cloneIdp(element);
 
@@ -28,6 +28,6 @@ export const handleClickingDisabledIdp = (element) => {
   // attach clickHandler for cancel button
   attachClickHandlerToCancelButton(parentSection, noAccess);
 
-  // attach clickHandler for form
-  attachClickHandlerToForm(form, parentSection, noAccess);
+  // attach clickHandler for request access button
+  attachClickHandlerToRequestButton(parentSection, noAccess, form);
 };

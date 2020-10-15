@@ -180,12 +180,12 @@
                 }
 
                 > .wayf__idp.wayf__idp--noAccess {
-                    background-color: $gray;
+                    background-color: $softBorderGray;
                     box-shadow: 0 1px 0 2px $noAccessGray;
 
                     > .idp__content {
                         > button {
-                            @include button-reset($gray);
+                            @include button-reset($softBorderGray);
                         }
                     }
                 }
@@ -398,6 +398,10 @@
             > .noAccess__requestForm {
                 margin: 2rem 0;
 
+                > .notification__critical {
+                    @include critical;
+                }
+
                 fieldset {
                     appearance: none;
                     border: none;
@@ -416,19 +420,16 @@
                     border: 1px solid $inputBorderGray;
                     border-radius: 8px;
                     font-size: $f-large;
-                    max-width: 23rem;
+                    line-height: 1.5;
                     padding: 1rem;
-                    width: 60%;
-
-                    @include screen('mobile') {
-                        width: 100%;
-                    }
+                    width: 100%;
 
                     &:hover {
                         background-color: $hoverBlue;
                     }
 
                     &:focus {
+                        background-color: $hoverBlue;
                         box-shadow: 0 0 0 3px $lightBlue;
                         outline: none;
                     }
@@ -495,7 +496,8 @@
                         }
                     }
 
-                    > .cta__request {
+                    > .cta__request,
+                    .cta__showForm {
                         @include button-primary($buttonBlue);
 
                         @include screen('mobile') {

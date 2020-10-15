@@ -1,14 +1,27 @@
 import {showSuccessMessage} from './showSuccessMessage';
-import {getData} from '../../utility/getData';
+import {toggleErrorMessage} from './toggleErrorMessage';
+import {hideErrorMessage} from './hideErrorMessage';
+import {toggleFormFieldsAndButton} from './toggleFormFieldsAndButton';
 
+/**
+ * Ensure submitting the form is possible.
+ * On success:
+ * - hide error message if present
+ * - hide no access section
+ * - show success message
+ * - hide form fields
+ * - hide submit button
+ * - show request button
+ *
+ * On error:
+ * - show error message
+ * - log the error to the console
+ *
+ * @param form
+ * @param parentSection
+ * @param noAccess
+ */
 export const attachClickHandlerToForm = (form, parentSection, noAccess) => {
-  const hasClickHandler = getData(form, 'clickhandled');
-
-  // if clickHandler's already been attached, do not attach it again
-  if (hasClickHandler) {
-    return;
-  }
-
   form.addEventListener('submit', handleFormSubmission);
   form.setAttribute('data-clickhandled', true);
 
@@ -27,9 +40,12 @@ export const attachClickHandlerToForm = (form, parentSection, noAccess) => {
 
       return Promise.reject(response);
     }).then(function () {
+      hideErrorMessage(noAccess);
+      toggleFormFieldsAndButton();
       showSuccessMessage(parentSection, noAccess);
     }).catch(function (error) {
-      console.warn(error);
+      toggleErrorMessage();
+      console.log(error);
     });
   }
 };

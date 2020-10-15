@@ -1,6 +1,7 @@
 <button
     class="idp__deleteDisable"
     data-connected="{{ idp['connected'] }}"
+    {% if idp['connected'] is defined and not idp['connected'] %}tabindex="-1"{% endif %}
     type="button"
 >
     {% if idp['connected'] is defined and not idp['connected'] %}
