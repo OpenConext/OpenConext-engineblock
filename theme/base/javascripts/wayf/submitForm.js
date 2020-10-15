@@ -1,6 +1,9 @@
 import {addSelectedIdp} from './deleteDisable/addSelectedIdp';
 import {rememberChoice} from './rememberChoice';
 import {getData} from '../utility/getData';
+import {handleClickingDisabledIdp} from './handleClickingDisabledIdp';
+import {hasVisibleDisabledButtonAsTarget} from './utility/hasVisibleDisabledButtonAsTarget';
+import {hasVisibleDeleteButtonAsTarget} from './utility/hasVisibleDeleteButtonAsTarget';
 
 /**
  * Submit the form for the selected idp.
@@ -14,12 +17,17 @@ import {getData} from '../utility/getData';
 export const submitForm = (e, previouslySelectedIdps) => {
   let element = e.target;
 
-  if (e.target.className === 'idp__deleteDisable' || e.target.className === 'idp__delete' || e.target.className === 'idp__disabled') {
+  if (hasVisibleDeleteButtonAsTarget(e.target)) {
     return;
   }
 
   if (e.target.tagName !== 'ARTICLE') {
     element = e.target.closest('.wayf__idp');
+  }
+
+  if (hasVisibleDisabledButtonAsTarget(element)) {
+    handleClickingDisabledIdp(element);
+    return;
   }
 
   rememberChoice(getData(element, 'entityid'));

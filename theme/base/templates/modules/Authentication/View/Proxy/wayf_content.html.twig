@@ -6,6 +6,7 @@
 
     {% block wayf_content %}
         <div class="wayf__content" id="idp-picker">
+            {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noAccess/successMessage.html.twig' %}
             {% include '@theme/Authentication/View/Proxy/Partials/WAYF/preselection.html.twig' %}
             {% include '@theme/Authentication/View/Proxy/Partials/WAYF/remainingIdps.html.twig' %}
             {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noAccess/noAccess.html.twig' %}

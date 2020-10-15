@@ -1,8 +1,15 @@
 <?php
 return [
     // General
-    'logo'  => 'logo',
-    'search'    => 'Search',
+    'logo'          =>  'logo',
+    'search'        =>  'Search',
+    'required'      =>  'Required',
+    'send_request'  =>  'Send request',
+
+    // Forms
+    'form_general_error'    =>  'Something went wrong when submitting the form.  This might be a faulty internet connection, or some other problem.  Please check your input and try again in a little while.  If the problem persists please contact your administrator.',
+    'form_error_name'       =>  'Your name needs to be at least 2 characters long',
+    'form_error_email'      =>  'This is an invalid email address',
 
     // WAYF
     'wayf_nothing_found'        => 'Nothing found',
@@ -21,6 +28,7 @@ return [
     'wayf_noaccess_name'        => 'Your name',
     'wayf_noaccess_email'       => 'Your emailaddress',
     'wayf_noaccess_motivation'  => 'Motivation',
+    'wayf_noaccess_success'     => 'Your request for access has been sent.',
     'wayf_eduId'                => 'If your organisation is not listed, <a href="%eduIdLink%" class="wayf__eduIdLink">eduID is available as an alternative.</a>',
     'wayf_idp_title_screenreader' => 'Login with ',
 
