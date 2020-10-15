@@ -181,6 +181,7 @@
 
                 > .wayf__idp.wayf__idp--noAccess {
                     background-color: $gray;
+                    box-shadow: 0 1px 0 2px $noAccessGray;
 
                     > .idp__content {
                         > button {
