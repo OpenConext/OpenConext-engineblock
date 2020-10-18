@@ -2,6 +2,7 @@ import {showRemaining} from './utility/showRemaining';
 import {fireClickEvent} from '../utility/fireClickEvent';
 import {handleDeleteDisable} from './handleDeleteDisable';
 import {submitForm} from './submitForm';
+import {handleIdpBanner} from './handleIdpBanner';
 
 /**
  * Behaviour expected to happen after a user presses the enter button.
@@ -32,6 +33,8 @@ export const handleEnter = (e, previouslySelectedIdps) => {
       case 'idp__form':
       case 'idp__logo':
         submitForm(e, previouslySelectedIdps); break;
+      case 'wayf__eduIdLink':
+        handleIdpBanner(); break;
     }
   });
 };
