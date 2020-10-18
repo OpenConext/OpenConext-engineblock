@@ -82,7 +82,6 @@
                     text-align: left;
                 }
 
-                // todo add animation
                 &.openToggle {
                     align-items: center;
                     display: flex;
@@ -132,7 +131,10 @@
 
                     > input[type="checkbox"]:checked + label + .consent__attributes--nested {
                         display: block;
-                        order: -1;
+                    }
+
+                    > input[type="checkbox"]:checked + label + .consent__attributes--nested.animated {
+                        max-height: 200vh;
                     }
 
                     > .consent__attributes--nested {
@@ -141,7 +143,12 @@
                         box-shadow: none;
                         display: none;
                         margin: 0;
+                        order: -1;
                         width: 100%;
+                    }
+
+                    > .consent__attributes--nested.animated {
+                        @include start-display-animated;
                     }
                 }
 
@@ -199,10 +206,6 @@
                     @include screen('mobile') {
                         @include grid-position(3, 4, 1, 2);
                     }
-                }
-
-                > input:checked ~ label.tooltip ~ .tooltip__value {
-                    text-align: right;
                 }
             }
 
@@ -297,14 +300,13 @@
                 }
 
                 > .modal__value {
+                    @include start-display-animated;
                     @include grid-position(2, 3, 1, 7);
-                    margin: 9px 1rem;
-                    max-width: calc(100% - 4rem);
+                    //max-width: calc(100% - 4rem);
 
                     @include screen('mobile') {
                         @include grid-position(3, 4, 1, 5);
-                        margin: 9px .5rem;
-                        max-width: calc(100% - 1rem);
+                        //max-width: calc(100% - 1rem);
                     }
                 }
 
@@ -312,6 +314,14 @@
                     display: flex;
                     justify-content: center;
                     margin: 9px auto 1rem;
+
+                    @include screen('mobile') {
+                        margin: 9px .5rem;
+                    }
+                }
+
+                > input:checked + .ie11__label + .modal__value.animated {
+                    max-height: 50vh;
                 }
             }
 
@@ -376,6 +386,16 @@
                             .link__readmore {
                                 display: block;
                             }
+                        }
+
+                        #consent_disclaimer_about + label + section.animated {
+                            display: inline-block;
+                            max-width: 0;
+                        }
+
+                        #consent_disclaimer_about:checked + label + section.animated {
+                            display: block;
+                            max-width: unset;
                         }
                     }
                 }

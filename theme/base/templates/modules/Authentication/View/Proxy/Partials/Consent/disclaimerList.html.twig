@@ -18,7 +18,7 @@
             {% include '@theme/Authentication/View/Proxy/Partials/Consent/SVG/shield_key.svg' %}
             <div>
                 {% if nameIdIsPersistent %}
-                    {{ 'consent_disclaimer_secure'|trans({'%suite_name%': 'suite_name'|trans, '%modal_about%': modalAbout})|raw }}
+                    {{ 'consent_disclaimer_secure'|trans({'%buttonText%': 'button'|trans, '%suite_name%': 'suite_name'|trans, '%modal_about%': modalAbout})|raw }}
                     {% include '@theme/Authentication/View/Proxy/Partials/Consent/Modals/uniqueNumberExplanation.html.twig' %}
                 {% else %}
                     {{ 'consent_disclaimer_secure_onemodal'|trans({'%suite_name%': 'suite_name'|trans, '%modal_about%': modalAbout})|raw }}

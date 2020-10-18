@@ -384,3 +384,36 @@
 @mixin webkit-input {
     -webkit-appearance: none;
 }
+
+/**
+ * This mixin adds "offensively defensive" animations.
+ * It utilizes the prefers-reduced-motion mediaquery to do so.
+ * Practically speaking this means that:
+ * - users of browsers which don't support the mediaquery will get the animation-less experience.
+ * - users of browsers which do support the mediaquery will get the animations by default.  Only if they selected to have a reduced motion experience will they be absent.
+ * - users without JS will have no animations.
+ *
+ * The first use case is not supported if you use the classic technique of removing animations if a user selected to opt in to prefers-reduced-motion.
+ */
+@mixin motion {
+    @media (prefers-reduced-motion: no-preference) {
+        @content;
+    }
+}
+
+@mixin transition-display {
+    @include motion {
+        transition: margin .6s ease-in, max-height .6s ease-in, padding .6s ease-in;
+    }
+}
+
+@mixin start-display-animated {
+    @include motion {
+        display: block;
+        margin: 0;
+        max-height: 0;
+        overflow: hidden;
+        padding: 0;
+        transition: margin .6s ease-in, max-height .6s ease-in, padding .6s ease-in;
+    }
+}

@@ -202,14 +202,36 @@ body {
     input[type="checkbox"]:checked.modal + label + .modal__value,
     input[type="checkbox"]:checked.tooltip ~ label ~ .tooltip__value,
     input[type="checkbox"]:checked.modal + .button--tertiary + .modal__value {
-        background-color: $gray;
         display: block;
-        text-align: left;
     }
 
     input[type="checkbox"]:checked.tooltip ~ label ~ .tooltip__value {
         margin: 1rem;
         padding: 1rem;
+    }
+
+    .tooltip__value {
+        background-color: $gray;
+        display: none;
+        text-align: right;
+    }
+
+    .modal__value.animated,
+    .tooltip__value.animated {
+        @include start-display-animated;
+    }
+
+    input[type="checkbox"]:checked.modal + label + .modal__value.animated,
+    input[type="checkbox"]:checked.tooltip ~ label ~ .tooltip__value.animated {
+        @include transition-display;
+    }
+
+    input[type="checkbox"]:checked.modal + label + .modal__value.animated {
+        max-height: 60vh;
+    }
+
+    input[type="checkbox"]:checked.tooltip ~ label ~ .tooltip__value.animated {
+        max-height: 15vh;
     }
 
     label.tooltip {

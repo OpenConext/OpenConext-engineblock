@@ -206,6 +206,16 @@
             @include display-grid;
             @include grid-template-columns(calc(100% - 4rem) 4rem);
             @include grid-template-rows(min-content min-content min-content);
+            max-height: 100vh;
+
+            &.show {
+                transition: max-height .6s ease-in;
+            }
+
+            &.hide {
+                max-height: 0;
+                transition: max-height .6s ease-in;
+            }
 
             > .previousSelection__title {
                 @include h2;
@@ -450,33 +460,6 @@
                         background-color: $errorRed;
                     }
 
-                    &:hover {
-                        background-color: $hoverBlue;
-                    }
-
-                    &:focus {
-                        box-shadow: 0 0 0 3px $lightBlue;
-                        outline: none;
-                    }
-
-                    &:not(:valid) {
-                        border: 1px solid $red;
-                        background-color: $errorRed;
-                    }
-
-                    &:hover {
-                        background-color: $hoverBlue;
-                    }
-
-                    &:focus {
-                        box-shadow: 0 0 0 3px $lightBlue;
-                        outline: none;
-                    }
-
-                    &:not(:valid) {
-                        border: 1px solid $red;
-                        background-color: $errorRed;
-                    }
                 }
 
                 input {
