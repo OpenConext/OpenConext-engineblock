@@ -1,4 +1,4 @@
-<ul class="wayf__idpList">
+<ul class="wayf__idpList{% if cutoffPointForShowingUnfilteredIdps < idpList|length %} wayf__idpList--cutoffMet{% endif %}">
     {% for idp in idpList %}
         {% if showRequestAccess or (not showRequestAccess and idp['connected'] is defined and idp['connected']) %}
             <li>
