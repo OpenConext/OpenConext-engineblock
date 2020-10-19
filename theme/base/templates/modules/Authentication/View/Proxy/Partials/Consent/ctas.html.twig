@@ -13,15 +13,17 @@
     </form>
     <input type="checkbox" tabindex="-1" role="button" aria-pressed="false" class="modal visually-hidden" id="cta_consent_nok" name="cta_consent_nok" />
     <div class="button--tertiary" tabindex="0">
-        {% include '@theme/Default/Partials/label.html.twig' with
-            {
-                class: 'modal button--tertiary',
-                id: 'cta_consent_nok',
-                hideText: false,
-                noTab: true,
-                text: 'consent_buttons_nok'|trans
-            }
-        %}
+        <div>
+            {% include '@theme/Default/Partials/label.html.twig' with
+                {
+                    class: 'modal',
+                    id: 'cta_consent_nok',
+                    hideText: false,
+                    noTab: true,
+                    text: 'consent_buttons_nok'|trans
+                }
+            %}
+        </div>
     </div>
     {% include '@theme/Authentication/View/Proxy/Partials/Consent/Modals/reject.html.twig' %}
 </div>

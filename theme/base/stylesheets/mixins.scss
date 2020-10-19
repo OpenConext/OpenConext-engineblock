@@ -221,7 +221,7 @@
 @mixin button-tertiary ($background-color) {
     @include button-shared($background-color);
     @if $background-color {
-        background: $background-color;
+        background-color: $background-color;
     } @else {
         background-color: $white;
     }
