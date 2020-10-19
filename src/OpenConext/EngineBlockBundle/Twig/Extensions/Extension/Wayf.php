@@ -93,6 +93,7 @@ class Wayf extends Twig_Extension
                         'title' => strtolower($idp['Name_' . $locale]),
                         'keywords' => strtolower(join('|', $idpKeywords)),
                         'logo' => $idp['Logo'],
+                        'isDefaultIdp' => (bool) $idp['isDefaultIdp'],
                     ]
                 );
                 continue;
@@ -105,6 +106,7 @@ class Wayf extends Twig_Extension
                 'title' => strtolower($idp['Name_'.$locale]),
                 'keywords' => strtolower(join('|', $idpKeywords)),
                 'logo' => $idp['Logo'],
+                'isDefaultIdp' => (bool) $idp['isDefaultIdp'],
             ];
         }
 

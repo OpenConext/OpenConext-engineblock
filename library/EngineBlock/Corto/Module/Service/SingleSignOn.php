@@ -426,7 +426,14 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         } else {
             $serviceProvider = $this->_server->findOriginalServiceProvider($request, $application->getLogInstance());
         }
-        $idpList = $this->_transformIdpsForWAYF($candidateIdpEntityIds, $request->isDebugRequest(), $currentLocale);
+
+        $idpList = $this->_transformIdpsForWAYF(
+            $candidateIdpEntityIds,
+            $request->isDebugRequest(),
+            $currentLocale,
+            $container->getDefaultIdPEntityId()
+        );
+
         $rememberChoiceFeature = $container->getRememberChoice();
 
         $output = $this->twig->render(
@@ -450,7 +457,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         $this->_server->sendOutput($output);
     }
 
-    protected function _transformIdpsForWayf(array $idpEntityIds, $isDebugRequest, $currentLocale)
+    protected function _transformIdpsForWayf(array $idpEntityIds, $isDebugRequest, $currentLocale, $defaultIdpEntityId)
     {
         $identityProviders = $this->_server->getRepository()->findIdentityProvidersByEntityId($idpEntityIds);
 
@@ -466,6 +473,11 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
                 continue;
             }
 
+            $isDefaultIdP = false;
+            if ($defaultIdpEntityId === $identityProvider->entityId) {
+                $isDefaultIdP = true;
+            }
+
             $additionalInfo = AdditionalInfo::create()->setIdp($identityProvider->entityId);
 
             $wayfIdp = array(
@@ -477,6 +489,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
                 'Access'    => $identityProvider->enabledInWayf || $isDebugRequest ? '1' : '0',
                 'ID'        => md5($identityProvider->entityId),
                 'EntityID'  => $identityProvider->entityId,
+                'isDefaultIdp' => $isDefaultIdP
             );
             $wayfIdps[] = $wayfIdp;
         }
