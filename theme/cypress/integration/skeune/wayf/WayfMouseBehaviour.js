@@ -73,11 +73,8 @@ context('WAYF when using the mouse', () => {
   });
 
   describe('Should show a fully functional previous selection section', () => {
-      it('Loads the WAYF', () => {
+      it('Loads the WAYF and populates the previous section with an idp', () => {
         cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-      });
-
-      it('Should populate the previous section with an idp', () => {
         cy.selectFirstIdpAndReturn();
       });
 
@@ -106,15 +103,16 @@ context('WAYF when using the mouse', () => {
         cy.get('.wayf__previousSelection .wayf__idp[data-index="1"]').should('have.attr', 'data-count', '2');
       });
 
-      it('Test the add account button opens up the search & puts focus on the search field, then select the focused element.', () => {
+      it('Test the add account button opens up the search, hides the previous section & puts focus on the search field, then select the focused element.', () => {
         cy.get('.previousSelection__addAccount')
           .click({ force: true });
         cy.focused().should('have.class', 'search__field');
+        cy.get('.wayf__previousSelection').should('not.be.visible');
         cy.selectFirstIdpAndReturn();
-        cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       });
 
       it('Test the edit button allows deleting an account', () => {
+        cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
         cy.toggleEditButton();
         cy.hitDeleteButton();
         cy.get('.wayf__previousSelection .wayf__idp h3')

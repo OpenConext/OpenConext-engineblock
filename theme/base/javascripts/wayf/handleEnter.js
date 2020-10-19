@@ -1,4 +1,4 @@
-import {showRemaining} from './showRemaining';
+import {showRemaining} from './utility/showRemaining';
 import {fireClickEvent} from '../utility/fireClickEvent';
 import {handleDeleteDisable} from './handleDeleteDisable';
 import {submitForm} from './submitForm';
