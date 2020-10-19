@@ -8,7 +8,7 @@ import {sortPrevious, sortRemaining} from './utility/sortIdps';
 import {getListSelector} from './utility/getListSelector';
 
 /**
- * Handle what happens if a user clicks on either the delete button, or the disabled button.
+ * Handle what happens if a user clicks on either the delete button, or the disabled button in an Idp.
  *
  * @param e
  * @param previouslySelectedIdps
