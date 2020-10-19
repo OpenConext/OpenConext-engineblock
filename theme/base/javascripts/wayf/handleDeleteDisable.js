@@ -1,4 +1,4 @@
-import {hasSelectedIdps} from './hasSelectedIdps';
+import {hasSelectedIdps} from './utility/hasSelectedIdps';
 import {handleNoneLeft} from './deleteDisable/handleNoneLeft';
 import {deleteIdp} from './deleteDisable/deleteIdp';
 import {moveIdpToRemaining} from './deleteDisable/moveIdpToRemaining';

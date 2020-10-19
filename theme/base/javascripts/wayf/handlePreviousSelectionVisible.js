@@ -1,7 +1,7 @@
-import {hasSelectedIdps} from './hasSelectedIdps';
-import {showRemaining} from './showRemaining';
+import {hasSelectedIdps} from './utility/hasSelectedIdps';
 import {submitForm} from './submitForm';
 import {attachDeleteHandlers} from './deleteDisable/attachDeleteHandlers';
+import {switchIdpSection} from './utility/switchIdpSection';
 
 /**
  * Check if user has any previous selected Idps.
@@ -26,7 +26,7 @@ const mouseHandlersHiddenIdps = (previouslySelectedIdps) => {
   // Show remaining idp section when hitting the add account button
   document
     .querySelector('.previousSelection__addAccount')
-    .addEventListener('click', showRemaining);
+    .addEventListener('click', switchIdpSection);
 
   // Handle clicking the "garbage can" after hitting edit
   attachDeleteHandlers(previouslySelectedIdps);
