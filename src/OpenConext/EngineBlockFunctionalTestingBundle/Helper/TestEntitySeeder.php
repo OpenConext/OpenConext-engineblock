@@ -37,7 +37,7 @@ class TestEntitySeeder
      * @param string $locale
      * @return array[]
      */
-    public static function buildIdps($numberOfIdps, $numberOfUnconnectedIdps, $locale)
+    public static function buildIdps($numberOfIdps, $numberOfUnconnectedIdps, $locale, $defaultIdpEntityId)
     {
         Assert::integer($numberOfIdps);
         Assert::integer($numberOfUnconnectedIdps);
@@ -52,14 +52,22 @@ class TestEntitySeeder
         for ($i=1; $i < (int) ($numberOfIdps - $numberOfUnconnectedIdps) + 1; $i++) {
             $entityId = sprintf("https://example.com/entityId/%d", $i);
             $name = sprintf("%s IdP %d %s", 'Connected', $i, $locale);
-            $idps[$entityId] = ['name' => $name, 'enabled' => true];
+            $isDefaultIdp = false;
+            if ($defaultIdpEntityId === $entityId) {
+                $isDefaultIdp = true;
+            }
+            $idps[$entityId] = ['name' => $name, 'enabled' => true, 'isDefaultIdp' => $isDefaultIdp];
         }
 
         if ($numberOfUnconnectedIdps > 0) {
             for ($i=1; $i < (int) $numberOfUnconnectedIdps + 1; $i++) {
                 $entityId = sprintf("https://unconnected.example.com/entityId/%d", $i);
                 $name = sprintf("%s IdP %d %s", 'Disconnected', $i, $locale);
-                $idps[$entityId] = ['name' => $name, 'enabled' => false];
+                $isDefaultIdp = false;
+                if ($defaultIdpEntityId === $entityId) {
+                    $isDefaultIdp = true;
+                }
+                $idps[$entityId] = ['name' => $name, 'enabled' => false, 'isDefaultIdp' => $isDefaultIdp];
             }
         }
 
@@ -86,6 +94,7 @@ class TestEntitySeeder
                 'Access' => ($identityProvider->enabledInWayf) ? '1' : '0',
                 'ID' => md5($identityProvider->entityId),
                 'EntityID' => $identityProvider->entityId,
+                'isDefaultIdp' => $idpEntityIds[$identityProvider->entityId]['isDefaultIdp']
             );
             $wayfIdps[] = $wayfIdp;
         }
