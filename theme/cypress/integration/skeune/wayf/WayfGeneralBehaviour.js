@@ -16,15 +16,17 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
         .should('have.length', 10);
     });
 
-    // todo: test after cutoff point is configured
-    it.skip('Should show no connected IdPs when cutoff point is configured', () => {
+    it('Should show no connected IdPs when cutoff point is configured', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=6&cutoffPointForShowingUnfilteredIdps=5');
-      cy.get('.wayf__idp h3')
-        .should('have.length', 0);
+      cy.get('.wayf__remainingIdps .wayf__idp')
+        .should('not.be.visible');
+    });
 
-      cy.get('#wayf__search').type('IdP');
-      cy.get('.wayf__idp h3')
-        .should('have.length', 6);
+    it('Should show found IdPs when cutoff point is configured and user searched', () => {
+      cy.get('.search__field').type('IdP');
+      cy.get('.wayf__idp')
+        .should('have.length', 6)
+        .should('be.visible');
     });
 
     it('Should show 5 disconnected IdPs', () => {
@@ -34,7 +36,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
         .should('be.visible');
     });
 
-    it.only('Should show no disconnected IdPs when the flag is false', () => {
+    it('Should show no disconnected IdPs when the flag is false', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=0&unconnectedIdps=5');
       cy.get('.wayf__idp--noAccess')
         .should('not.exist');
@@ -131,7 +133,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
 
     it('Ensure the CTA is not present when the feature flag is disabled', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?showIdpBanner=0');
-      cy.get('.remainingIdps__eduId').should('not.exist');;
+      cy.get('.remainingIdps__eduId').should('not.exist');
     });
   });
 
