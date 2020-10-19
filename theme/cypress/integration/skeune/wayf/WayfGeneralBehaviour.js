@@ -138,17 +138,14 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
     });
   });
 
-  // todo: test after backLink is added
-  describe.skip('Should show the return to service link when configured', () => {
+  describe('Should show the return to service link when configured', () => {
       it('Load the page', () => {
         cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5&backLink=true');
       });
 
-      it('To be more precise, the links should be in the header and footer', () => {
-        cy.get('.mod-header .comp-links li:nth-child(1) a')
-          .should('have.text', 'Return to service provider');
-        cy.get('.footer-menu .comp-links li:nth-child(2) a')
-          .should('have.text', 'Return to service provider');
+      it('The link should be below the IdPs list', () => {
+        cy.get('.wayf a.wayf__backLink')
+          .should('have.text', 'Return to Service Provider');
       });
   });
 });
