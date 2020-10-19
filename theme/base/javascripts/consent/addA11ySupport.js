@@ -17,5 +17,5 @@ export const addAccessibilitySupport = () => {
   });
 
   // make animations work for tooltips/modals/toggle
-  animateInteractiveSections('.tooltip__value, .modal__value');
+  animateInteractiveSections('.tooltip__value, .modal__value, .consent__attributes--nested');
 };

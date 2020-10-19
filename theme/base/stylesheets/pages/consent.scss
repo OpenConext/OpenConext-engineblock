@@ -135,6 +135,7 @@
 
                     > input[type="checkbox"]:checked + label + .consent__attributes--nested.animated {
                         max-height: 200vh;
+                        transition: max-height .6s ease-in;
                     }
 
                     > .consent__attributes--nested {
@@ -148,7 +149,10 @@
                     }
 
                     > .consent__attributes--nested.animated {
-                        @include start-display-animated;
+                        display: block;
+                        max-height: 0;
+                        overflow: hidden;
+                        transition: max-height .6s ease-in;
                     }
                 }
 
