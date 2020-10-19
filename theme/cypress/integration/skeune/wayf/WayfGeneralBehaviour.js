@@ -148,6 +148,12 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?showIdpBanner=0');
       cy.get('.remainingIdps__eduId').should('not.exist');
     });
+
+    it('Ensure the default IdP has the correct data attribute', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?defaultIdpEntityId=https://example.com/entityId/3');
+      cy.get('article[data-entityid="https://example.com/entityid/3"]')
+        .should('have.id', 'defaultIdp');
+    });
   });
 
   describe('Should show the remember my choice option', () => {
