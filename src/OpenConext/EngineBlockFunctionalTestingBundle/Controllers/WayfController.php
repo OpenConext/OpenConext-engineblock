@@ -46,6 +46,7 @@ class WayfController extends Controller
         $rememberChoiceFeature = (bool) $request->get('rememberChoiceFeature', false);
         $cutoffPointForShowingUnfilteredIdps = $request->get('cutoffPointForShowingUnfilteredIdps', 100);
         $showIdPBanner = $request->get('showIdPBanner', true);
+        $defaultIdpEntityId = $request->get('defaultIdpEntityId', null);
         // Casting a string 'true' or 'false' using filter_var (bool) does not work here
         $showIdPBanner = filter_var($showIdPBanner, FILTER_VALIDATE_BOOLEAN);
 
@@ -65,7 +66,7 @@ class WayfController extends Controller
                 'showRequestAccess' => $displayUnconnectedIdpsWayf,
                 'requestId' => 'bogus-request-id',
                 'serviceProvider' => TestEntitySeeder::buildSp(),
-                'idpList' => TestEntitySeeder::buildIdps($connectedIdps, $unconnectedIdps, $currentLocale),
+                'idpList' => TestEntitySeeder::buildIdps($connectedIdps, $unconnectedIdps, $currentLocale, $defaultIdpEntityId),
                 'beforeScriptHtml' => '<div id="request-access-scroller"><div id="request-access-container">' .
                     '<div id="request-access"></div></div></div>',
             ]
