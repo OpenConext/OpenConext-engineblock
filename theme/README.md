@@ -143,3 +143,15 @@ Below you'll find a list of the "entry points" for each page with corresponding 
 [twig]: https://twig.symfony.com/
 [vanilla.js]: https://learnvanillajs.com/
 [wcag]: https://www.w3.org/WAI/standards-guidelines/wcag/
+
+#### Supported feature flags
+
+There are a number of feature flags which need to be supported by a theme in order to distribute it to the wider community.  These toggle certain features on or off.
+
+**The following feature flags exist (name of variable in Twig):**
+- showRequestAccess: whether or not Idps without access to the current service should be shown on the WAYF.  You can test this by going to `/functional-testing/wayf?displayUnconnectedIdpsWayf=1&unconnectedIdps=5`.
+- showIdPBanner: whether or not to show the default IdP quick link banner on the WAYF (such as the eduId in the skeune theme).  You can test this by going to `/functional-testing/wayf?showIdPBanner=1`.
+- rememberChoiceFeature: allow users to save their selected IdP and then auto-select it on returning visits.  You can test this by going to `/functional-testing/wayf?rememberChoiceFeature=1`.
+- backLink: display a link which, when clicked, allows you to go back two pages.  In essence the equivalent of clicking the back button twice.  You can test this by going to `/functional-testing/wayf?backLink=1`.
+- cutoffPointForShowingUnfilteredIdps: unlike the previous flags which were booleans, this one is an integer.  When this flag is present & the user is not searching (so no value in the search field): there should only be idps shown when there are no more than the cutoff point.  So as an example: if there are 100 idps that would be shown normally, and the cutoff point is 50: the user should see no idps at all (so only the empty search field is shown).  You can test this by going to `/functional-testing/wayf?cutoffPointForShowingUnfilteredIdps=50`.
+- showConsentExplanation: whether or not to show a special explanation on the consent page.  There is currently no testpoint for this.
