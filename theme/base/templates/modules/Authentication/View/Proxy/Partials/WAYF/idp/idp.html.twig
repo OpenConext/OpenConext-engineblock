@@ -6,6 +6,7 @@
     data-index="{{ loop.index }}"
     data-keywords="{{ idp['keywords']|lower }}"
     data-title="{{ idp['displayTitle']|lower }}"
+    data-is-default-idp="{{ idp['isDefaultIdp'] ? 'true' : 'false' }}"
     tabindex="0"
 >
     <picture class="idp__logo">
