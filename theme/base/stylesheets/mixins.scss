@@ -152,18 +152,9 @@
 }
 
 @mixin button-secondary-border {
-    border: 3px solid $lightBlue;
+    border: 1px solid $buttonBlue;
     border-radius: 6px;
     padding: 1rem;
-
-    > span.secondaryBorder {
-        border: 1px solid $buttonBlue;
-        border-radius: 6px;
-        display: inline-block;
-        height: 100%;
-        padding: 1rem;
-        width: calc(100% - 2rem - 1.5px);
-    }
 }
 
 @mixin button-primary($background-color) {
