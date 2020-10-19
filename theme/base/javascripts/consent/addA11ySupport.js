@@ -1,4 +1,5 @@
 import {fireClickEvent} from '../utility/fireClickEvent';
+import {handleAriaPressed} from '../utility/handleAriaPressed';
 
 export const addAccessibilitySupport = () => {
   /**
@@ -19,16 +20,6 @@ export const addAccessibilitySupport = () => {
    * Ensure that for people with a screenreader the aria-pressed status is updated.
    * This ensures content in a tooltip / modal is actually announced to them upon opening the tooltip / modal.
    */
-  var labels = document.querySelectorAll('label[aria-pressed]');
-  for (var i = 0; i < labels.length; i++) {
-    labels[i].addEventListener('click', function(e) {
-      var label = e.target;
-      var ariaPressed = label.getAttribute('aria-pressed');
-      var newValue = {
-        false: true,
-        true: false,
-      };
-      label.setAttribute('aria-pressed', newValue[ariaPressed]);
-    });
-  }
+  const labels = document.querySelectorAll('label[aria-pressed]');
+  handleAriaPressed(labels);
 };
