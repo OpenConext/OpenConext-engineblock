@@ -34,7 +34,7 @@ export const handleEnter = (e, previouslySelectedIdps) => {
       case 'idp__logo':
         submitForm(e, previouslySelectedIdps); break;
       case 'wayf__eduIdLink':
-        handleIdpBanner(); break;
+        handleIdpBanner(e); break;
     }
   });
 };
