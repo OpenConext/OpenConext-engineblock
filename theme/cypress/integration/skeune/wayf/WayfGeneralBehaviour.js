@@ -49,7 +49,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
         .should('be.visible');
     });
 
-    it.only('Should show no disconnected IdPs when the flag is false', () => {
+    it('Should show no disconnected IdPs when the flag is false', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=0&unconnectedIdps=5');
       cy.get('.wayf__idp--noAccess')
         .should('not.exist');
