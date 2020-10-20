@@ -83,8 +83,10 @@
 
                     > .idp__logo {
                         align-self: center;
+                        display: flex;
+                        height: 5.05rem;
+                        width: 5.67rem;
                         justify-self: center;
-                        margin-right: calculateRem(6px);
                         padding: .5rem;
 
                         @include screen('mobile') {
@@ -92,9 +94,11 @@
                             padding: .25rem;
                         }
 
-                        > img {
-                            max-height: calculateRem(61px);
-                            max-width: calculateRem(94px);
+                        > img,
+                        > svg {
+                            height: auto;
+                            margin: auto 0;
+                            width: 100%;
                         }
                     }
 

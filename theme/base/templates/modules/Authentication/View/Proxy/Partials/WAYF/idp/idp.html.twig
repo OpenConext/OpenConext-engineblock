@@ -9,14 +9,13 @@
     {% if idp['isDefaultIdp'] %}id="defaultIdp"{% endif %}
     tabindex="0"
 >
-    <picture class="idp__logo">
-        <source srcset="" media="(min-width: 800px)"/>
-        {# todo get different images in different formats #}
-        {# todo update breakpoint #}
-        {# todo get all institutions to describe their logo for the alt #}
-        {# todo get the idp name as an attribute instead of "displaytitle" #}
-        <img src="{{ idp['logo'] }}" alt="{{ idp['displayTitle'] }} {{ 'logo'|trans }}">
-    </picture>
+    <div class="idp__logo">
+        {% if 'svg' in idp['logo'] %}
+            {{ source('@' ~ idp['logo']) }}
+        {%  else %}
+            <img src="{{ idp['logo'] }}" alt="" loading="lazy">
+        {% endif %}
+    </div>
     <div class="idp__content">
         <h3
             id="idp__title{{ listName }}{{ loop.index }}"
