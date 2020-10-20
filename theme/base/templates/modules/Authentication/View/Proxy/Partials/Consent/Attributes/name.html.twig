@@ -7,6 +7,7 @@
     {% if id is defined %}
         {% include '@theme/Default/Partials/label.html.twig' with
             {
+                button: true,
                 class: 'tooltip',
                 id: id|trim,
                 hideText: true,
