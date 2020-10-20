@@ -4,6 +4,7 @@ import {handleDeleteDisable} from './handleDeleteDisable';
 import {submitForm} from './submitForm';
 import {handleIdpBanner} from './handleIdpBanner';
 import {selectFirstIdPAndSubmitForm} from "./selectFirstIdPAndSubmitForm";
+import {toggleFormFieldsAndButton} from './noAccess/toggleFormFieldsAndButton';
 
 /**
  * Behaviour expected to happen after a user presses the enter button.
@@ -38,6 +39,8 @@ export const handleEnter = (e, previouslySelectedIdps) => {
         selectFirstIdPAndSubmitForm(previouslySelectedIdps); break;
       case 'wayf__defaultIdpLink':
         handleIdpBanner(e); break;
+      case 'cta__showForm':
+        toggleFormFieldsAndButton(); break;
     }
   });
 };
