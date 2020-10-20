@@ -11,19 +11,22 @@ export const addSelectedIdp = (previouslySelectedIdps, element) => {
   const cookieName = configuration.previousSelectionCookieName;
   const entityId = element.getAttribute('data-entityid');
   const count = Number(element.getAttribute('data-count'));
+  let alreadyInCookie = false;
 
   if (previouslySelectedIdps) {
-
+    previouslySelectedIdps.forEach(idp => {
+      if (idp.entityId === entityId) {
+        idp.count += 1;
+        savePreviousSelection(previouslySelectedIdps, cookieName);
+        alreadyInCookie = true;
+        return;
+      }
+    });
   }
 
-  previouslySelectedIdps.forEach(idp => {
-    if (idp.entityId === entityId) {
-      idp.count += 1;
-      savePreviousSelection(previouslySelectedIdps, cookieName);
-      return;
-    }
-  });
+  if (!alreadyInCookie) {
+    previouslySelectedIdps = [...previouslySelectedIdps, { entityId: entityId, count: (count + 1) }];
+  }
 
-  previouslySelectedIdps = [...previouslySelectedIdps, { entityId: entityId, count: (count + 1) }];
   savePreviousSelection(previouslySelectedIdps, cookieName);
 };

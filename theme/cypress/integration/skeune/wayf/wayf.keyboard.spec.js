@@ -45,32 +45,36 @@ context('WAYF when using the keyboard', () => {
     });
   });
 
-  describe('Should show a fully functional no access section when a disabled account is selected', () => {
+  describe.only('Should show a fully functional no access section when a disabled account is selected', () => {
     it('Should show the no access section on selecting a disabled account', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
-      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/1"]');
+      cy.openUnconnectedIdp();
       cy.contains('.noAccess__title', 'Sorry, no access for this account');
     });
 
     it('Should not show the form elements yet', () => {
+      cy.openUnconnectedIdp();
       cy.get('.noAccess__requestForm fieldset')
         .should('not.be.visible');
     });
 
     it('Should have a functioning cancel button', () => {
+      cy.openUnconnectedIdp();
+      cy.focusAndEnter('.cta__showForm');
       cy.focusAndEnter('.cta__cancel');
       cy.get('.noAccess__title')
         .should('not.be.visible');
     });
 
     it('Should show the form fields after hitting request access', () => {
-      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/4"]');
+      cy.openUnconnectedIdp();
       cy.focusAndEnter('.cta__showForm');
       cy.get('.noAccess__requestForm fieldset')
         .should('be.visible');
     });
 
     it('Should hide form fields after hitting cancel', () => {
+      cy.openUnconnectedIdp();
+      cy.focusAndEnter('.cta__showForm');
       cy.focusAndEnter('.cta__cancel');
       cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/2"]');
       cy.get('.noAccess__requestForm fieldset')
@@ -78,25 +82,30 @@ context('WAYF when using the keyboard', () => {
     });
 
     it('Should be able to fill the request access form', () => {
-      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/4"]');
-      cy.get('#name').type('Joske');
-      cy.get('#email').type('joske.vermeulen@thuis.be');
-      cy.get('#motivation').focus().type('tis toapuh dattem tuis is');
-      cy.focusAndEnter('.cta__request');
-      cy.wait(250);
-      cy.get('.noAccess__title').should('not.be.visible');
+      cy.fillNoAccessForm();
     });
 
     it('Should show the success message', () => {
+      cy.fillNoAccessForm();
+      cy.focusAndEnter('.cta__request');
+      cy.wait(500);
+      cy.get('.noAccess__title').should('not.be.visible');
       cy.get('.notification__success').should('be.visible');
     });
 
     it('Should not show the success message when selecting a new disabled account', () => {
+      cy.fillNoAccessForm();
+      cy.focusAndEnter('.cta__request');
+      cy.wait(500);
       cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/3');
       cy.get('.notification__success').should('not.be.visible');
     });
 
     it('Should also not show the form fields after selecting a new disabled account', () => {
+      cy.fillNoAccessForm();
+      cy.focusAndEnter('.cta__request');
+      cy.wait(500);
+      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/3');
       cy.get('.noAccess__requestForm fieldset')
         .should('not.be.visible');
     });
@@ -119,22 +128,24 @@ context('WAYF when using the keyboard', () => {
     });
   });
 
-  describe('Should show a fully functional previous selection section', () => {
+  describe.only('Should show a fully functional previous selection section', () => {
     it('Loads the WAYF and populates the previous section with an idp', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.selectFirstIdpAndReturn(false);
     });
 
     it('Test if the previous section exists with the right title', () => {
-      cy.contains('.previousSelection__title', 'Your accounts');
+      cy.get('.previousSelection__title')
+        .should('be.visible');
     });
 
     it('Test if the section contains the add account button', () => {
-      cy.contains('.previousSelection__addAccount', 'Add another account');
+      cy.get('.previousSelection__addAccount')
+        .should('be.visible');
     });
 
     it('Test if it contains the right amount of idps', () => {
-      cy.get('.wayf__previousSelection .wayf__idp h3')
+      cy.get('.wayf__previousSelection .wayf__idp')
         .should('have.length', 1);
     });
 
