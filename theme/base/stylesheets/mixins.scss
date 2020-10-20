@@ -403,7 +403,7 @@
 
 @mixin transition-display {
     @include motion {
-        transition: margin .6s ease-in, max-height .6s ease-in, padding .6s ease-in;
+        transition: padding-bottom .4s ease-in, padding-top .4s ease-in, margin-bottom .4s ease-in, margin-top .4s ease-in, max-height .4s ease-in;
     }
 }
 
