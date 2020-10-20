@@ -1,5 +1,5 @@
 import {fireClickEvent} from '../utility/fireClickEvent';
-import {handleAriaPressed} from '../utility/handleAriaPressed';
+import {animateInteractiveSections} from '../utility/animateInteractiveSections';
 
 export const addAccessibilitySupport = () => {
   /**
@@ -16,10 +16,6 @@ export const addAccessibilitySupport = () => {
     }
   });
 
-  /**
-   * Ensure that for people with a screenreader the aria-pressed status is updated.
-   * This ensures content in a tooltip / modal is actually announced to them upon opening the tooltip / modal.
-   */
-  const labels = document.querySelectorAll('label[aria-pressed]');
-  handleAriaPressed(labels);
+  // make animations work for tooltips/modals/toggle
+  animateInteractiveSections('.tooltip__value, .modal__value, .consent__attributes--nested');
 };

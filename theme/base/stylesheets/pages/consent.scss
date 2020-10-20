@@ -82,7 +82,6 @@
                     text-align: left;
                 }
 
-                // todo add animation
                 &.openToggle {
                     align-items: center;
                     display: flex;
@@ -132,7 +131,12 @@
 
                     > input[type="checkbox"]:checked + label + .consent__attributes--nested {
                         display: block;
-                        order: -1;
+                    }
+
+                    > input[type="checkbox"]:checked + label + .consent__attributes--nested.animated {
+                        @include transition-display;
+                        max-height: 200vh;
+                        //transition: max-height .6s ease-in;
                     }
 
                     > .consent__attributes--nested {
@@ -141,7 +145,15 @@
                         box-shadow: none;
                         display: none;
                         margin: 0;
+                        order: -1;
                         width: 100%;
+                    }
+
+                    > .consent__attributes--nested.animated {
+                        display: block;
+                        max-height: 0;
+                        overflow: hidden;
+                        transition: max-height .6s ease-in;
                     }
                 }
 
@@ -199,10 +211,6 @@
                     @include screen('mobile') {
                         @include grid-position(3, 4, 1, 2);
                     }
-                }
-
-                > input:checked ~ label.tooltip ~ .tooltip__value {
-                    text-align: right;
                 }
             }
 
@@ -297,14 +305,13 @@
                 }
 
                 > .modal__value {
+                    @include start-display-animated;
                     @include grid-position(2, 3, 1, 7);
-                    margin: 9px 1rem;
-                    max-width: calc(100% - 4rem);
+                    //max-width: calc(100% - 4rem);
 
                     @include screen('mobile') {
                         @include grid-position(3, 4, 1, 5);
-                        margin: 9px .5rem;
-                        max-width: calc(100% - 1rem);
+                        //max-width: calc(100% - 1rem);
                     }
                 }
 
@@ -312,6 +319,14 @@
                     display: flex;
                     justify-content: center;
                     margin: 9px auto 1rem;
+
+                    @include screen('mobile') {
+                        margin: 9px .5rem;
+                    }
+                }
+
+                > input:checked + .ie11__label + .modal__value.animated {
+                    max-height: 50vh;
                 }
             }
 
@@ -369,6 +384,10 @@
                         .modal__value {
                             margin: 1rem 0;
 
+                            &.animated {
+                                margin: 0;
+                            }
+
                             @include screen('mobile') {
                                 margin: 1rem 0 1rem -4rem;
                             }
@@ -376,6 +395,21 @@
                             .link__readmore {
                                 display: block;
                             }
+                        }
+
+                        input:checked + label + .modal__value.animated {
+                            margin: 1rem 0;
+                        }
+
+                        #consent_disclaimer_about + label + section.animated {
+                            display: inline-block;
+                            max-width: 0;
+                        }
+
+                        #consent_disclaimer_about:checked + label + section.animated {
+                            display: block;
+                            max-height: 40vh;
+                            max-width: unset;
                         }
                     }
                 }
@@ -404,16 +438,25 @@
             }
 
             > .button--tertiary {
-                > label[for="cta_consent_nok"] {
+                > div {
                     @include button-tertiary($gray);
-                    display: block;
-                    width: 100%;
                 }
+            }
+
+            > #cta_consent_nok:checked + .button--tertiary label {
+                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24' height='24' viewBox='0 0 24 24'%3E%3Cdefs%3E%3Cpath id='wusxz70bxa' d='M4.92 10.75c-.183 0-.367-.05-.528-.153-.416-.268-.517-.794-.225-1.176L8.319 4 4.18-1.422c-.292-.382-.19-.908.226-1.175.417-.268.99-.175 1.282.207l4.508 5.906c.221.291.221.678 0 .969L5.673 10.39c-.18.234-.464.359-.754.359'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(5 8)'%3E%3Cmask id='etvz1reijb' fill='%23fff'%3E%3Cuse xlink:href='%23wusxz70bxa'/%3E%3C/mask%3E%3Cuse fill='%230062b0' transform='scale(1 -1) rotate(90 11.181 0)' xlink:href='%23wusxz70bxa'/%3E%3C/g%3E%3C/svg%3E%0A") no-repeat right center
+            }
+
+            #cta_consent_nok:checked + .button--tertiary + .modal__value.animated {
+                margin: 1rem auto 0;
             }
 
             > section.modal__value {
                 margin: 1rem auto 0;
-                width: 34rem;
+
+                &.animated {
+                    margin: 0;
+                }
 
                 @include screen('mobile') {
                     width: 100%;
