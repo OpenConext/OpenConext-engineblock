@@ -1,5 +1,5 @@
 /**
- * Tests for behaviour of the WAYF which depends on clicking
+ * Tests for behaviour of the WAYF which depends on the mouse
  */
 context('WAYF when using the mouse', () => {
   describe('Test logging in', () => {

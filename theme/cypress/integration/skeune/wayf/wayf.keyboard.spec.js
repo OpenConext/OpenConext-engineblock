@@ -1,5 +1,5 @@
 /**
- * Tests for behaviour of the WAYF which depends on pressing enter.
+ * Tests for behaviour of the WAYF which depends on the keyboard.
  */
 context('WAYF when using the keyboard', () => {
   describe('Test logging in', () => {
