@@ -1,4 +1,4 @@
-import {replaceMetadataCertificateLinkTexts} from "../../base/javascripts/modules/EngineBlockMainPage";
+import {replaceMetadataCertificateLinkTexts} from "../../base/javascripts/index/EngineBlockMainPage";
 import {initializePage} from '../../base/javascripts/page';
 import {hideNoScript} from './hideNoScript';
 
