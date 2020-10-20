@@ -15,5 +15,9 @@ export const mouseBehaviour = (previouslySelectedIdps) => {
   handleAriaPressed(labels);
 
   // handle clicking defaultIdp banner
-  document.querySelector('.wayf__defaultIdpLink').addEventListener('click', handleIdpBanner);
+  const defaultIdpLink = document.querySelector('.wayf__defaultIdpLink');
+
+  if (!! defaultIdpLink) {
+    defaultIdpLink.addEventListener('click', handleIdpBanner);
+  }
 };
