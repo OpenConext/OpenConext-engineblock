@@ -71,3 +71,27 @@ Cypress.Commands.add('hitDeleteButton', (click = true, deleteSelector = '.wayf__
 
   cy.get(deleteSelector).focus().type('{enter}');
 });
+
+Cypress.Commands.add('openUnconnectedIdp', (keyboard = true, url = 'https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=true&unconnectedIdps=5', idpSelector = '.wayf__idp[data-entityid="https://unconnected.example.com/entityid/4"]') => {
+  cy.visit(url);
+
+  if (keyboard) {
+    cy.focusAndEnter(idpSelector);
+  } else {
+    cy.get(idpSelector).click({force: true});
+  }
+});
+
+Cypress.Commands.add('fillNoAccessForm', (keyboard = true, showFormSelector = '.cta__showForm') => {
+  cy.openUnconnectedIdp(keyboard);
+
+  if (keyboard) {
+    cy.focusAndEnter(showFormSelector);
+  } else {
+    cy.get(showFormSelector).click({force:true});
+  }
+
+  cy.get('#name').type('Joske');
+  cy.get('#email').type('joske.vermeulen@thuis.be');
+  cy.get('#motivation').focus().type('tis toapuh dattem tuis is');
+});

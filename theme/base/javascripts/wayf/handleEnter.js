@@ -3,6 +3,7 @@ import {fireClickEvent} from '../utility/fireClickEvent';
 import {handleDeleteDisable} from './handleDeleteDisable';
 import {submitForm} from './submitForm';
 import {handleIdpBanner} from './handleIdpBanner';
+import {toggleFormFieldsAndButton} from './noAccess/toggleFormFieldsAndButton';
 
 /**
  * Behaviour expected to happen after a user presses the enter button.
@@ -35,6 +36,8 @@ export const handleEnter = (e, previouslySelectedIdps) => {
         submitForm(e, previouslySelectedIdps); break;
       case 'wayf__eduIdLink':
         handleIdpBanner(e); break;
+      case 'cta__showForm':
+        toggleFormFieldsAndButton(); break;
     }
   });
 };

@@ -145,7 +145,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
     });
 
     it('Ensure the CTA is not present when the feature flag is disabled', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?showIdpBanner=0');
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?showIdPBanner=0');
       cy.get('.remainingIdps__eduId').should('not.exist');
     });
 
@@ -173,13 +173,10 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
   });
 
   describe('Should show the return to service link when configured', () => {
-      it('Load the page', () => {
+      it('Load the page & check if the page is there', () => {
         cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5&backLink=true');
-      });
-
-      it('The link should be below the IdPs list', () => {
-        cy.get('.wayf a.wayf__backLink')
-          .should('have.text', 'Return to Service Provider');
+        cy.get('.wayf__backLink')
+          .should('be.visible');
       });
   });
 });

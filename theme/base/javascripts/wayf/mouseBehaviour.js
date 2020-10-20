@@ -1,7 +1,4 @@
 import {submitForm} from './submitForm';
-import {handleAriaPressed} from '../utility/handleAriaPressed';
-import {handleIdpBanner} from './handleIdpBanner';
-
 export const mouseBehaviour = (previouslySelectedIdps) => {
   // allow chosing an idp to login
   const idpLists = document
@@ -15,5 +12,12 @@ export const mouseBehaviour = (previouslySelectedIdps) => {
   handleAriaPressed(labels);
 
   // handle clicking eduId banner
-  document.querySelector('.wayf__eduIdLink').addEventListener('click', handleIdpBanner);
+  const eduId = document.querySelector('.wayf__eduIdLink');
+
+  if (!!eduId) {
+    eduId.addEventListener('click', handleIdpBanner);
+  }
 };
+import {handleAriaPressed} from '../utility/handleAriaPressed';
+
+import {handleIdpBanner} from './handleIdpBanner';

@@ -12,7 +12,7 @@ import * as Cookies from 'js-cookie';
  * @param secure        whether or not it's a secure cookie
  * @param sameSite      whether or not it's samesite
  */
-export const setCookie = (content, cookieName, expires = 365, path = '/', secure = true, sameSite = 'strict') => {
+export const setCookie = (content, cookieName, expires = 365, path = '/', secure = false, sameSite = 'None') => {
   if(typeof cookieName !== 'string') return;
   if(typeof expires !== 'number') return;
   if(typeof path !== 'string') return;
