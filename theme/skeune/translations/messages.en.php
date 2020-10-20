@@ -1,9 +1,10 @@
 <?php
 return [
     // General
+    'button'        =>  'Button: ',
     'logo'          =>  'logo',
-    'search'        =>  'Search',
     'required'      =>  'Required',
+    'search'        =>  'Search',
     'send_request'  =>  'Send request',
 
     // Forms
@@ -48,11 +49,12 @@ return [
 TXT
     ,
     'consent_disclaimer_secure' => <<<'TXT'
-These data will be sent securely from your institution via <input type="checkbox" tabindex="-1" role="button" aria-pressed="false" class="modal visually-hidden" id="consent_disclaimer_about" name="consent_disclaimer_about"><label class="modal" tabindex="0" for="consent_disclaimer_about">%suite_name%</label> %modal_about% using <input type="checkbox" tabindex="-1" role="button" aria-pressed="false" class="modal visually-hidden" id="consent_disclaimer_number" name="consent_disclaimer_number"><label class="modal" tabindex="0" for="consent_disclaimer_number">a number that uniquely identifies you for this service.</label>
+These data will be sent securely from your institution via <input type="checkbox" tabindex="-1" role="button" aria-hidden="true" class="modal visually-hidden" id="consent_disclaimer_about" name="consent_disclaimer_about"><label class="modal" tabindex="0" for="consent_disclaimer_about"><span class="visually-hidden">%buttonText%</span>
+%suite_name%</label> %modal_about% using <input type="checkbox" tabindex="-1" role="button" aria-hidden="true" class="modal visually-hidden" id="consent_disclaimer_number" name="consent_disclaimer_number"><label class="modal" tabindex="0" for="consent_disclaimer_number"><span class="visually-hidden">%buttonText%</span>a number that uniquely identifies you for this service.</label>
 TXT
     ,
     'consent_disclaimer_secure_onemodal'    => <<<'TXT'
-These data will be sent securely from your institution via <input type="checkbox" tabindex="-1" role="button" aria-pressed="false" class="modal visually-hidden" id="consent_disclaimer_about" name="consent_disclaimer_about"><label class="modal" tabindex="0" for="consent_disclaimer_about">%suite_name%</label> %modal_about% using a number that uniquely identifies you for this service.
+These data will be sent securely from your institution via <input type="checkbox" tabindex="-1" role="button" aria-hidden="true" class="modal visually-hidden" id="consent_disclaimer_about" name="consent_disclaimer_about"><label class="modal" tabindex="0" for="consent_disclaimer_about"><span class="visually-hidden">%buttonText%</span>%suite_name%</label> %modal_about% using a number that uniquely identifies you for this service.
 TXT
     ,
     'consent_modal_about'   => <<<'TXT'
