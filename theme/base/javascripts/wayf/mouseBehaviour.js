@@ -1,5 +1,6 @@
 import {submitForm} from './submitForm';
 import {handleAriaPressed} from '../utility/handleAriaPressed';
+import {handleIdpBanner} from './handleIdpBanner';
 
 export const mouseBehaviour = (previouslySelectedIdps) => {
   // allow chosing an idp to login
@@ -12,4 +13,7 @@ export const mouseBehaviour = (previouslySelectedIdps) => {
   // add a11y support for all labels with an aria-pressed attribute.
   const labels = document.querySelectorAll('label[aria-pressed]');
   handleAriaPressed(labels);
+
+  // handle clicking eduId banner
+  document.querySelector('.wayf__eduIdLink').addEventListener('click', handleIdpBanner);
 };

@@ -72,6 +72,24 @@ context('WAYF when using the mouse', () => {
     });
   });
 
+  describe('Should have a working default Idp Banner', () => {
+    it('Should have a default Idp banner visible', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?showIdpBanner=1');
+      cy.get('.wayf__eduIdLink').should('be.visible');
+    });
+
+    it('Should scroll to the default Idp when clicking the banner link', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=10&defaultIdpEntityId=https://example.com/entityId/9&showIdpBanner=1');
+
+      // click the banner link & check if it did what it should have
+      cy.get('.wayf__eduIdLink').click();
+      cy.get('#defaultIdp')
+        .should('be.visible')
+        .should('have.focus');
+    });
+  });
+
+
   describe('Should show a fully functional previous selection section', () => {
       it('Loads the WAYF and populates the previous section with an idp', () => {
         cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
