@@ -4,10 +4,19 @@
         <input type="hidden" name="ID"
                value="{{ responseId }}">
         <input type="hidden" name="consent" value="yes"/>
+
+        {% if minimalConsent %}
+            {% set text_ok = 'consent_buttons_ok_minimal'|trans({'%arg1%': spName}) %}
+            {% set text_nok = 'consent_buttons_nok_minimal'|trans %}
+        {% else %}
+            {% set text_ok = 'consent_ok'|trans %}
+            {% set text_nok = 'consent_buttons_nok'|trans %}
+        {% endif %}
+
         {% include '@theme/Default/Partials/button.html.twig' with
             {
                 buttonClass: 'cta_consent_ok',
-                text: 'consent_ok'|trans
+                text: text_ok
             }
         %}
     </form>
@@ -20,7 +29,7 @@
                     id: 'cta_consent_nok',
                     hideText: false,
                     noTab: true,
-                    text: 'consent_buttons_nok'|trans
+                    text: text_nok
                 }
             %}
         </div>

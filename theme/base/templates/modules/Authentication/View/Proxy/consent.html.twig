@@ -5,7 +5,11 @@
 {% set idpName = idp.displayName(locale()) %}
 
 {# Prepare the page title #}
-{% set pageTitle = 'consent_h1_text'|trans({'%arg1%': spName}) %}
+{% if minimalConsent %}
+    {% set pageTitle = 'consent_h1_text_minimal'|trans({'%arg1%': spName}) %}
+{% else %}
+    {% set pageTitle = 'consent_h1_text'|trans %}
+{% endif %}
 
 {# Load the sorted/ordered and normalized attributes #}
 {% set attributesBySource = sortByDisplayOrder(attributes, attributeSources, nameId) %}
