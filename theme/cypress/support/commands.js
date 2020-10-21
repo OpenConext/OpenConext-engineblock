@@ -1,5 +1,5 @@
-Cypress.Commands.add('countIdps', (expectedCount) => {
-  cy.get('#idp-picker h3')
+Cypress.Commands.add('countIdps', (expectedCount, idpSelector = '#idp-picker h3') => {
+  cy.get(idpSelector)
   .should('have.length', expectedCount);
 });
 
