@@ -1,3 +1,40 @@
+.mod-header
+  +clearfix
+  padding: 1rem 1rem
+  background: #fff
+  box-shadow: 1px 1px $br rgba(black,.2)
+  border-bottom: 2px solid $blue
+  line-height: 30px
+  display: flex
+  align-items: center
+
+  +min-width($medium)
+    padding: 1rem 2rem
+    margin-bottom: 3rem
+
+  +max-width($medium)
+    padding: 0.7rem 1rem
+    .title
+      line-height: 1.3rem
+      strong
+        display: block
+
+  .meta
+    display: flex
+    align-items: center
+    margin-left: auto
+
+  .comp-language,
+  .comp-links
+    flex-wrap: nowrap
+
+  +max-width($medium)
+    .burger
+      display: block
+
+    .meta
+      display: none
+
 .error-container
   left: 50%
   margin: 0

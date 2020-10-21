@@ -1,8 +1,24 @@
+// On the error page we use a fixed width for breakpoints
+$small: 720px
+// And ew use some of the OpenConext colors, they are added here for containing them
+// in the error page styling.
+$blue: #4DB3CF
+$dark-blue: #017499
+$dark-grey: #2b3f44
+$light-blue: #DFF6FB
+$light-grey: lighten(black,95)
+$medium-blue: #CAECF4
+
+$font: Helvetica, sans-serif
+$br: 4px
+$medium: 800px
+
 html
   height: 100%
 body
   height: 100%
   background: $medium-blue
+  font-family: $font
   +max-width($small)
     background: $light-grey
 

@@ -417,3 +417,77 @@
         transition: margin .6s ease-in, max-height .6s ease-in, padding .6s ease-in;
     }
 }
+
+@mixin gradient($direction, $list) {
+    background: -webkit-linear-gradient($direction, $list);
+    background: -moz-linear-gradient($direction, $list);
+    background: -o-linear-gradient($direction, $list);
+    background: linear-gradient($direction, $list);
+}
+
+@mixin clearfix {
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+@mixin scrollbar($size, $foreground-color, $br-thumb: "0", $background-color: "none", $br-track: "0") {
+    &::-webkit-scrollbar {
+        width: $size;
+        height: $size;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $foreground-color;
+        border-radius: $br-thumb;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: $background-color;
+        border-radius: $br-track;
+    }
+}
+
+@mixin max-width($width) {
+    @media (max-width: $width) {
+        @content;
+    }
+}
+
+@mixin min-width($width) {
+    @media (min-width: $width) {
+        @content;
+    }
+}
+
+@mixin min-height($height) {
+    @media (min-height: $height) {
+        @content;
+    }
+}
+
+@mixin hocus {
+    &:active,
+    &:hover,
+    &:focus {
+        @content;
+    }
+}
+
+@mixin input {
+    input[type=text],
+    input[type=email],
+    input[type=number],
+    input[type=date],
+    input[type=time],
+    textarea,
+    select {
+        @content;
+    }
+}
+
+@mixin margin-bottom {
+    margin-bottom: 30px;
+}
