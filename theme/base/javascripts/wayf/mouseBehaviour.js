@@ -14,6 +14,6 @@ export const mouseBehaviour = (previouslySelectedIdps) => {
   const labels = document.querySelectorAll('label[aria-pressed]');
   handleAriaPressed(labels);
 
-  // handle clicking eduId banner
-  document.querySelector('.wayf__eduIdLink').addEventListener('click', handleIdpBanner);
+  // handle clicking defaultIdp banner
+  document.querySelector('.wayf__defaultIdpLink').addEventListener('click', handleIdpBanner);
 };

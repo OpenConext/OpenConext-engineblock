@@ -18,8 +18,8 @@
         {% endset %}
         {% set organisationNoun = 'organisation_noun'|trans %}
         {% include '@theme/Default/Partials/informational.html.twig' with {
-            class: 'remainingIdps__eduId',
-            text: 'wayf_eduId'|trans({ '%eduIdLink%': requestUri, '%organisation_noun%': organisationNoun })
+            class: 'remainingIdps__defaultIdp',
+            text: 'wayf_defaultIdp'|trans({ '%defaultIdpLink%': requestUri, '%organisation_noun%': organisationNoun })
         } %}
     {% endif %}
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/rememberChoice.html.twig' %}

@@ -416,11 +416,11 @@
                 }
             }
 
-            > .remainingIdps__eduId {
+            > .remainingIdps__defaultIdp {
                 @include informational;
                 margin: 1.25rem 0 1.25rem;
 
-                > .wayf__eduIdLink {
+                > .wayf__defaultIdpLink {
                     color: $black;
                 }
             }
