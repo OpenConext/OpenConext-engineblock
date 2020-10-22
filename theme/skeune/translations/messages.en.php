@@ -30,11 +30,13 @@ return [
     'wayf_noaccess_email'       => 'Your emailaddress',
     'wayf_noaccess_motivation'  => 'Motivation',
     'wayf_noaccess_success'     => 'Your request for access has been sent.',
-    'wayf_eduId'                => 'If your organisation is not listed, <a href="%eduIdLink%" class="wayf__eduIdLink">eduID is available as an alternative.</a>',
+    'wayf_defaultIdp'                => 'If your %organisation_noun% is not listed, <a href="%defaultIdpLink%" class="wayf__defaultIdpLink">eduID is available as an alternative.</a>',
     'wayf_idp_title_screenreader' => 'Login with ',
+    'log_in_to'                 => 'Select an %organisationNoun% to login to %arg1%',
 
     // Consent
     'consent_h1_text'   => 'Do you give consent to share your information?',
+    'consent_h1_text_minimal'   => 'This information will be shared with %arg1%',
     'consent_privacy_header'    => '%target% will receive',
     'consent_attributes_correction_text'    => 'Something incorrect?',
     'consent_ok'    =>  'Yes proceed',
