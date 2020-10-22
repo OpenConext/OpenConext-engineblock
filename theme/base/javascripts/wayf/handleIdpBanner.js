@@ -1,7 +1,7 @@
 export const handleIdpBanner = (event) => {
   event.preventDefault();
 
-  const eduIdIdp = document.getElementById('defaultIdp');
-  eduIdIdp.scrollIntoView(true);
-  eduIdIdp.focus();
+  const defaultIdp = document.getElementById('defaultIdp');
+  defaultIdp.scrollIntoView(true);
+  defaultIdp.focus();
 };

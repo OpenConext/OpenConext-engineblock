@@ -124,7 +124,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
     });
   });
 
-  describe('Should show five connected IdPs, the search field and the eduId CTA', () => {
+  describe('Should show five connected IdPs, the search field and the defaultIdp CTA', () => {
     it('Load the page', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
     });
@@ -140,13 +140,13 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.get('.wayf__search').should('exist');
     });
 
-    it('Check if the eduId is present', () => {
-      cy.contains('.remainingIdps__eduId', 'eduID is available as an alternative');
+    it('Check if the defaultIdp is present', () => {
+      cy.contains('.remainingIdps__defaultIdp', 'is available as an alternative');
     });
 
     it('Ensure the CTA is not present when the feature flag is disabled', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?showIdpBanner=0');
-      cy.get('.remainingIdps__eduId').should('not.exist');
+      cy.get('.remainingIdps__defaultIdp').should('not.exist');
     });
 
     it('Ensure the default IdP has the correct data attribute', () => {

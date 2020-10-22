@@ -6,13 +6,13 @@ import {focusOnPreviousIdp} from './focusOnPreviousIdp';
  *
  * When pressing the arrow up in the idp list we want:
  * - to go to the previous idp (general behaviour)
- * - to go to the eduId notification if we are on the first idp & there is an eduId
- * - to go to the searchbar if we are on the eduId notification
+ * - to go to the defaultIdp notification if we are on the first idp & there is a defaultIdp
+ * - to go to the searchbar if we are on the defaultIdp notification
  * - to go to the last idp if we are on the searchbar
  */
 export const arrowUp = () => {
   const searchBar = document.querySelector('.search__field');
-  const eduId = document.querySelector('.wayf__eduIdLink');
+  const defaultIdp = document.querySelector('.wayf__defaultIdpLink');
   const firstIdp = document.querySelector('.wayf__remainingIdps li:first-of-type > .wayf__idp');
   const lastIdp = document.querySelector('.wayf__remainingIdps li:last-of-type > .wayf__idp');
 
@@ -21,12 +21,12 @@ export const arrowUp = () => {
     return;
   } else if (isFocusOn(firstIdp)) {
     try {
-      eduId.focus();
+      defaultIdp.focus();
     } catch (e) {
       searchBar.focus();
     }
     return;
-  } else if (isFocusOn(eduId)) {
+  } else if (isFocusOn(defaultIdp)) {
     searchBar.focus();
     return;
   }
