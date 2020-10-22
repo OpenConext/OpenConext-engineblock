@@ -6,6 +6,8 @@ import {reindexIdpArray} from './utility/reindexIdpArray';
 import {reinsertIdpList} from './utility/reinsertIdpList';
 import {sortPrevious, sortRemaining} from './utility/sortIdps';
 import {getListSelector} from './utility/getListSelector';
+import {hasVisibleDisabledButtonAsTarget} from './utility/hasVisibleDisabledButtonAsTarget';
+import {handleClickingDisabledIdp} from './handleClickingDisabledIdp';
 
 /**
  * Handle what happens if a user clicks on either the delete button, or the disabled button in an Idp.
@@ -15,6 +17,7 @@ import {getListSelector} from './utility/getListSelector';
  */
 export const handleDeleteDisable = (e, previouslySelectedIdps) => {
   e.preventDefault();
+  e.stopPropagation();
   let element = e.target;
 
   // in case the origin is the span setting the element needs to be done differently
@@ -23,8 +26,9 @@ export const handleDeleteDisable = (e, previouslySelectedIdps) => {
   }
 
   // handle clicking disabled button
-  if (element.querySelector('.idp__delete').style.display === 'none') {
-    return; // todo work this out
+  if (hasVisibleDisabledButtonAsTarget(element)) {
+    handleClickingDisabledIdp(element.closest('.wayf__idp'));
+    return;
   }
 
   // Move it to the remaining idp list

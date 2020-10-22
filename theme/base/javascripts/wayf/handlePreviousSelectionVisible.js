@@ -2,6 +2,7 @@ import {hasSelectedIdps} from './utility/hasSelectedIdps';
 import {submitForm} from './submitForm';
 import {attachDeleteHandlers} from './deleteDisable/attachDeleteHandlers';
 import {switchIdpSection} from './utility/switchIdpSection';
+import {getData} from '../utility/getData';
 
 /**
  * Check if user has any previous selected Idps.
@@ -32,9 +33,15 @@ const mouseHandlersHiddenIdps = (previouslySelectedIdps) => {
   attachDeleteHandlers(previouslySelectedIdps);
 
   // Attach event listener to previous selection idps-list
-  document
-    .querySelector('.wayf__previousSelection .wayf__idpList')
-    .addEventListener('click', (e) => {
-      submitForm(e, previouslySelectedIdps);
-    });
+  const list = document
+    .querySelector('.wayf__previousSelection .wayf__idpList');
+  const hasClickHandler = getData(list, 'clickhandled');
+
+  if (!hasClickHandler) {
+    list.addEventListener('click', (e) => {
+        submitForm(e, previouslySelectedIdps);
+      });
+  }
+
+  list.setAttribute('data-clickhandled', true);
 };
