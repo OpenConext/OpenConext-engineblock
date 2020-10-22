@@ -50,8 +50,9 @@ Cypress.Commands.add('selectFirstIdp', (click = true, firstElementSelector = '.w
 });
 
 Cypress.Commands.add('selectFirstIdpAndReturn', (click = true, url = 'https://engine.vm.openconext.org/functional-testing/wayf') => {
-  cy.selectFirstIdp(click);
-  cy.visit(url);
+  cy.selectFirstIdp(click).then(() => {
+    cy.visit(url);
+  });
 });
 
 Cypress.Commands.add('toggleEditButton', (click = true, buttonSelector = '.previousSelection__edit') => {
@@ -94,4 +95,24 @@ Cypress.Commands.add('fillNoAccessForm', (keyboard = true, showFormSelector = '.
   cy.get('#name').type('Joske');
   cy.get('#email').type('joske.vermeulen@thuis.be');
   cy.get('#motivation').focus().type('tis toapuh dattem tuis is');
+});
+
+Cypress.Commands.add('loadWayf', (url = 'https://engine.vm.openconext.org/functional-testing/wayf') => {
+  cy.visit(url);
+});
+
+Cypress.Commands.add('addOnePreviouslySelectedIdp', (keyboard = true, url = 'https://engine.vm.openconext.org/functional-testing/wayf') => {
+  cy.loadWayf(url).then(() => {
+    cy.selectFirstIdpAndReturn(!keyboard, url);
+  });
+});
+
+Cypress.Commands.add('selectAccountButton', (keyboard = true, selector = '.previousSelection__addAccount') => {
+  if (keyboard) {
+    cy.get(selector)
+      .type('{enter}');
+    return;
+  }
+
+  cy.get(selector).click({force: true});
 });
