@@ -98,65 +98,69 @@ context('WAYF when using the mouse', () => {
     });
   });
 
-  describe('Should show a fully functional previous selection section', () => {
-      it('Loads the WAYF and populates the previous section with an idp', () => {
-        cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-        cy.selectFirstIdpAndReturn();
-      });
+  describe.only('Should show a fully functional previous selection section', () => {
+    it.only('Test if the previous section exists with the right title', () => {
+      cy.addOnePreviouslySelectedIdp(false);
+      cy.get('.previousSelection__title')
+        .should('be.visible');
+    });
 
-      it('Test if the previous section exists with the right title', () => {
-        cy.contains('.previousSelection__title', 'Your accounts');
-      });
+    it('Test if the section contains the add account button', () => {
+      cy.addOnePreviouslySelectedIdp(false);
+      cy.get('.previousSelection__addAccount')
+        .should('be.visible');
+    });
 
-      it('Test if the section contains the add account button', () => {
-        cy.contains('.previousSelection__addAccount', 'Add another account');
-      });
+    it('Test if it contains the right amount of idps', () => {
+      cy.addOnePreviouslySelectedIdp(false);
+      cy.get('.wayf__previousSelection .wayf__idp')
+        .should('have.length', 1);
+    });
 
-      it('Test if it contains the right amount of idps', () => {
-        cy.get('.wayf__previousSelection .wayf__idp h3')
-          .should('have.length', 1);
+    it('Test if selecting a previously selected idp works', () => {
+      cy.addOnePreviouslySelectedIdp(false);
+      cy.selectFirstIdp(true, '.wayf__previousSelection .wayf__idp[data-index="1"]');
+      cy.location().should((loc) => {
+        expect(loc.href).to.eq('https://engine.vm.openconext.org/');
       });
+    });
 
-      it('Test if selecting a previously selected idp works', () => {
-        cy.selectFirstIdp(true, '.wayf__previousSelection .wayf__idp[data-index="1"]');
-        cy.location().should((loc) => {
-          expect(loc.href).to.eq('https://engine.vm.openconext.org/');
-        });
-        cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-      });
+    it('Test if the count was raised on the selected idp', () => {
+      cy.addOnePreviouslySelectedIdp(false);
+      cy.selectFirstIdp(true, '.wayf__previousSelection .wayf__idp[data-index="1"]');
+      cy.loadWayf();
+      cy.get('.wayf__previousSelection .wayf__idp[data-index="1"]').should('have.attr', 'data-count', '2');
+    });
 
-      it('Test if the count was raised on the selected idp', () => {
-        cy.get('.wayf__previousSelection .wayf__idp[data-index="1"]').should('have.attr', 'data-count', '2');
-      });
+    it('Test the add account button opens up the search & puts focus on the search field, then select the focused element.', () => {
+      cy.addOnePreviouslySelectedIdp(false);
+      cy.selectAccountButton(false);
+      cy.focused().should('have.class', 'search__field');
+      cy.get('.wayf__previousSelection').should('not.be.visible');
+    });
 
-      it('Test the add account button opens up the search, hides the previous section & puts focus on the search field, then select the focused element.', () => {
-        cy.get('.previousSelection__addAccount')
-          .click({ force: true });
-        cy.focused().should('have.class', 'search__field');
-        cy.get('.wayf__previousSelection').should('not.be.visible');
-        cy.selectFirstIdpAndReturn();
-      });
+    it('Test the edit button allows deleting an account', () => {
+      cy.addOnePreviouslySelectedIdp(false);
+      cy.selectAccountButton(false);
+      cy.selectFirstIdpAndReturn(false);
+      cy.toggleEditButton(false);
+      cy.hitDeleteButton(false);
+      cy.get('.wayf__previousSelection .wayf__idp h3')
+        .should('have.length', 1);
+    });
 
-      it('Test the edit button allows deleting an account', () => {
-        cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-        cy.toggleEditButton();
-        cy.hitDeleteButton();
-        cy.get('.wayf__previousSelection .wayf__idp h3')
-          .should('have.length', 1);
-      });
+    it('Test deleting the last previously selected idp hides the section, shows the remaining idps, focuses on the searchbar & adds the deleted idp to the list', () => {
+      cy.addOnePreviouslySelectedIdp(false);
+      cy.hitDeleteButton(true, '.wayf__previousSelection li:first-of-type .wayf__idp .idp__deleteDisable');
+      cy.focused().should('have.class', 'search__field');
+      cy.get('.previousSelection__addAccount').should('not.be.visible');
+    });
 
-      it('Test deleting the last previously selected idp hides the section, shows the remaining idps and focuses on the searchbar', () => {
-        cy.hitDeleteButton(true, '.wayf__previousSelection li:first-of-type .wayf__idp .idp__deleteDisable');
-        cy.focused().should('have.class', 'search__field');
-        cy.get('.previousSelection__addAccount').should('not.be.visible');
-      });
-
-      it('Test the last deleted idp is in the remaining list', () => {
-        cy.get('.wayf__remainingIdps .wayf__idp[data-entityid="https://example.com/entityId/2"]').should('exist');
-      });
-
-      it('Test the remaining list is sorted alphabetically', () => {
-        cy.get('.wayf__remainingIdps li:first-of-type .wayf__idp').should('have.attr', 'data-index', '1');
-      });
+    it('Test the remaining list contains the deleted idp & is sorted alphabetically', () => {
+      cy.addOnePreviouslySelectedIdp(false);
+      cy.hitDeleteButton(true, '.wayf__previousSelection li:first-of-type .wayf__idp .idp__deleteDisable');
+      cy.get('.wayf__remainingIdps .wayf__idp[data-entityid="https://example.com/entityId/1"]').should('exist');
+      cy.get('.wayf__remainingIdps li:first-of-type .wayf__idp').should('have.attr', 'data-index', '1');
+    });
   });
 });
