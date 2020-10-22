@@ -9,7 +9,7 @@
 {% set hideFooter = true %}
 
 {% block languageSwitcher %}
-    {{ languageSwitcher.form(locale(), postData()) }}
+    {{ languageSwitcher.form(locale(), postData(), 'error') }}
 {% endblock %}
 
 {% block background %}
