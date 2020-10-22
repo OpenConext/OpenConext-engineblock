@@ -1,5 +1,5 @@
-import {switchIdpSection} from '../utility/switchIdpSection';
 import * as Cookies from 'js-cookie';
+import {switchIdpSection} from '../utility/switchIdpSection';
 
 /**
  * When the last idp is deleted from the previous selection list:
