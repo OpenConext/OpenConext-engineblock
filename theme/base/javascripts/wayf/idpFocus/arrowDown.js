@@ -5,26 +5,26 @@ import {isFocusOn} from '../../utility/isFocusOn';
  *
  * When pressing the arrow down in the idp list we want:
  * - to go to the next idp (general behaviour)
- * - to go to the eduId notification if we are on the searchbar & there is an eduId
- * - to go to the first idp if we are on the eduId
+ * - to go to the defaultIdp notification if we are on the searchbar & there is an defaultIdp
+ * - to go to the first idp if we are on the defaultIdp
  * - to go to the searchbar if we are on the last Idp
  */
 import {focusOnNextIdp} from './focusOnNextIdp';
 
 export const arrowDown = () => {
   const searchBar = document.querySelector('.search__field');
-  const eduId = document.querySelector('.wayf__eduIdLink');
+  const defaultIdp = document.querySelector('.wayf__defaultIdpLink');
   const firstIdp = document.querySelector('.wayf__remainingIdps li:first-of-type > .wayf__idp');
   const lastIdp = document.querySelector('.wayf__remainingIdps li:last-of-type > .wayf__idp');
 
   if (isFocusOn(searchBar)) {
     try {
-      eduId.focus();
+      defaultIdp.focus();
     } catch (e) {
       firstIdp.focus();
     }
     return;
-  } else if (isFocusOn(eduId)) {
+  } else if (isFocusOn(defaultIdp)) {
     firstIdp.focus();
     return;
   } else if (isFocusOn(lastIdp)) {

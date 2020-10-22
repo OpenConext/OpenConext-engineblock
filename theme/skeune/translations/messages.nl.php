@@ -30,11 +30,13 @@ return [
     'wayf_noaccess_email'       => 'Uw e-mailadres',
     'wayf_noaccess_motivation'  => 'Motivatie',
     'wayf_noaccess_success'     => 'Je aanvraag tot toegang werd verstuurd.',
-    'wayf_eduId'                => '<a href="%eduIdLink%" class="wayf__eduIdLink">EduID is beschikbaar als alternatief</a> indien uw organisatie niet in de lijst staat.',
+    'wayf_defaultIdp'                => '<a href="%defaultIdpLink%" class="wayf__defaultIdpLink">eduID is beschikbaar als alternatief</a> indien uw %organisation_noun% niet in de lijst staat.',
     'wayf_idp_title_screenreader' => 'Inloggen met ',
+    'log_in_to'                 => 'Select an %organisationNoun% to login to %arg1%',
 
     // Consent
     'consent_h1_text'   => 'Geeft u toestemming om uw informatie te delen?',
+    'consent_h1_text_minimal'   => 'Deze informatie wordt gedeeld met %arg1%',
     'consent_privacy_header'    => '%target% ontvangt',
     'consent_attributes_correction_text'    => 'Foutieve informatie?',
     'consent_ok'    =>  'Doorgaan',

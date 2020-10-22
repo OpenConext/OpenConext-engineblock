@@ -22,7 +22,7 @@ context('WAYF when using the keyboard', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?showIdpBanner=1');
       cy.get('.search__field').focus();
       cy.pressArrowOnIdpList('down', 'search__field');
-      cy.pressArrowOnIdpList('down', 'wayf__eduIdLink');
+      cy.pressArrowOnIdpList('down', 'wayf__defaultIdpLink');
       cy.pressArrowOnIdpList('down', 'wayf__idp', '1');
       cy.pressArrowOnIdpList('down', 'wayf__idp', '2');
       cy.pressArrowOnIdpList('down', 'wayf__idp', '3');
@@ -40,7 +40,7 @@ context('WAYF when using the keyboard', () => {
       cy.pressArrowOnIdpList('up', 'wayf__idp', '3');
       cy.pressArrowOnIdpList('up', 'wayf__idp', '2');
       cy.pressArrowOnIdpList('up', 'wayf__idp', '1');
-      cy.pressArrowOnIdpList('up', 'wayf__eduIdLink');
+      cy.pressArrowOnIdpList('up', 'wayf__defaultIdpLink');
       cy.pressArrowOnIdpList('up', 'search__field');
     });
   });
@@ -105,14 +105,14 @@ context('WAYF when using the keyboard', () => {
   describe('Should have a working default Idp Banner', () => {
     it('Should have a default Idp banner visible', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?showIdpBanner=1');
-      cy.get('.wayf__eduIdLink').should('be.visible');
+      cy.get('.wayf__defaultIdpLink').should('be.visible');
     });
 
     it('Should scroll to the default Idp when clicking the banner link', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=10&defaultIdpEntityId=https://example.com/entityId/9&showIdpBanner=1');
 
       // click the banner link & check if it did what it should have
-      cy.focusAndEnter('.wayf__eduIdLink');
+      cy.focusAndEnter('.wayf__defaultIdpLink');
       cy.get('#defaultIdp')
         .should('be.visible')
         .should('have.focus');

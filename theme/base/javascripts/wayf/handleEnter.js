@@ -33,7 +33,7 @@ export const handleEnter = (e, previouslySelectedIdps) => {
       case 'idp__form':
       case 'idp__logo':
         submitForm(e, previouslySelectedIdps); break;
-      case 'wayf__eduIdLink':
+      case 'wayf__defaultIdpLink':
         handleIdpBanner(e); break;
     }
   });
