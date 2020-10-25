@@ -168,13 +168,8 @@ body {
                         color: $white;
                     }
 
-                    &:hover,
                     &:focus {
-                        line-height: 1.75;
-                    }
-
-                    &:focus {
-                        outline: 3px dotted $white;
+                        box-shadow: 0 0 0 3px $white;
                     }
                 }
 
