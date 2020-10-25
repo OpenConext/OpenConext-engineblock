@@ -371,9 +371,19 @@
 
                     @include form-focus;
 
+                    &:hover {
+                        background-color: $hoverBlue;
+                        border: solid 1px $inputBorderGray;
+                    }
+
                     @include screen('mobile') {
                         padding: .5rem;
                     }
+                }
+
+                .search__field:hover + .search__submit,
+                .search__field:focus + .search__submit {
+                    @include button-reset($hoverBlue);
                 }
 
                 > .search__submit {
@@ -385,6 +395,11 @@
                     border-radius: 6px;
                     height: calc(3rem - 6px);
                     width: 3rem;
+
+                    &:hover,
+                    &:focus {
+                        @include button-reset($hoverBlue);
+                    }
 
                     @include screen('mobile') {
                         width: 2rem;
