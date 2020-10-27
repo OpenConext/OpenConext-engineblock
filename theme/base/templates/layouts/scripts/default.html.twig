@@ -24,13 +24,14 @@
 </head>
 <body>
 {% block nojs %}{% endblock %}
-{% block background %}{% endblock %}
 {% block header %}{% endblock %}
+{% block background %}{% endblock %}
 {% block container %}
-    <div class="container">
+    <div class="container {% block containerClasses %}{% endblock %}">
         {% block content %}{% endblock %}
     </div>
 {% endblock %}
+{% block footer %}{% endblock %}
 
 <script src="/javascripts/application.min.js?v={{ assetsVersion }}"></script>
 

@@ -1,12 +1,40 @@
 {% extends '@themeLayouts/scripts/default.html.twig' %}
 
+{% import "@themeLayouts/scripts/language-switcher.html.twig" as languageSwitcher %}
+
 {% block title %}{{ parent() }} - Metadata & Certificates{% endblock %}
-{% block pageHeading %}{{ subHeader }}{% endblock %}
+{#{% block pageHeading %}{{ subHeader }}{% endblock %}#}
 
 {% block stylesheets %}{% spaceless %}
     <link href="/stylesheets/front-page.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
 {% endspaceless %}{% endblock %}
 
+{% block header %}
+    <div class="mod-header">
+        <h1 class="title">
+            {% block pageHeading %}{{ subHeader }}{% endblock %}
+        </h1>
+
+        <div class="meta">
+
+            {% if displayLanguageSwitcher is not defined or displayLanguageSwitcher == true %}
+                {{ languageSwitcher.form(locale(), postData()) }}
+            {% endif %}
+
+{#            <ul class="comp-links">#}
+{#                {% if helpLink is defined %}#}
+{#                    <li>#}
+{#                        <a href="{{ helpLink }}" target="_blank">{{ 'help_header'|trans }}<span class="help">?</span></a>#}
+{#                    </li>#}
+{#                {% endif %}#}
+{#            </ul>#}
+
+        </div>
+        <a class="burger" href="#footer"><img src="/images/burger.svg" alt="&#9776;"></a>
+    </div>
+{% endblock %}
+
+{% block containerClasses %}l-container wide{% endblock %}
 {% block content %}
     <div id="engine-main-page" class="box">
         <div class="mod-content">
@@ -134,5 +162,47 @@
 
             </div>
         </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <div id="footer" class="l-footer">
+        <nav class="mod-footer">
+            <ul class="footer-menu">
+
+                <li class="nav-row left">
+                    {{ 'service_by'|trans }} {{ 'serviceprovider_link'|trans|raw }}
+                </li>
+
+                <li class="nav-row">
+                    {% if displayLanguageSwitcher is not defined or displayLanguageSwitcher == true %}
+                        {{ languageSwitcher.form(locale(), postData()) }}
+                    {% endif %}
+                </li>
+
+                <li class="nav-row right">
+                    <ul class="comp-links">
+
+                        {% if helpLink is defined %}
+                            <li>
+                                <a href="{{ helpLink }}" target="_blank">{{ 'help'|trans|capitalize }}</a>
+                            </li>
+                        {% endif %}
+
+                        {% if backLink is defined and backLink == true %}
+                            <li>
+                                <a href="javascript:window.history.back(-2)">{{ 'return_to_sp'|trans|capitalize }}</a>
+                            </li>
+                        {% endif %}
+
+                        <li>
+                            {{ 'terms_of_service_link'|trans|raw }}
+                        </li>
+
+                    </ul>
+                </li>
+
+            </ul>
+        </nav>
     </div>
 {% endblock %}
