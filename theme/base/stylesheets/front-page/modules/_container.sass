@@ -1,30 +1,34 @@
-body
-  background: $light-grey
+.l-container
+  max-width: $container-width
+  z-index: 0
+  padding: 1rem
 
-*, *:before, *:after
-  box-sizing: border-box
+  +min-width($medium)
+    margin: 0 auto 3rem
+    padding: 0 2rem
+
+  &.wide
+    max-width: $container-width*1.5
+    width: auto
 
 .mod-content
   padding: 2rem
-
-  h1, h2, h3
-    margin-bottom: .5rem
-
-  h1
-    @extend %h1
-
-  h2
-    @extend %h2
-
-  h3
-    @extend %h3
 
   ul, p
     margin-bottom: 1rem
 
   ul
     list-style: square
-    margin-left: 1.5rem
+    margin-bottom: 1.5rem
+    padding-left: 0
+
+  dl dd li
+    margin: 0
+    padding: 0
+    border: 0
+
+  dd
+    margin-left: calculateRem(24px)
 
   header
     display: flex
@@ -46,3 +50,11 @@ body
       max-height: 4rem
       width: auto
       margin-right: 1rem
+
+.strong
+  font-weight: bold
+
+.box
+  background: #fff
+  border-radius: $br
+  box-shadow: 0 1px $br rgba(black,.2)
