@@ -46,7 +46,7 @@ class ConsentSettingsTest extends TestCase
     {
         $settings = new ConsentSettings([]);
 
-        $this->assertFalse($settings->isMinimal('test'));
+        $this->assertTrue($settings->isMinimal('test'));
     }
 
     public function testCanReadAllServiceProviderEntityIds()

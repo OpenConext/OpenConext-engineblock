@@ -95,7 +95,7 @@ class ConsentSettings implements JsonSerializable
             return $settings->type === self::CONSENT_MINIMAL;
         }
 
-        return false;
+        return true;
     }
 
     public function hasConsentExplanation($entityId)
