@@ -51,14 +51,8 @@
             > li {
                 margin-bottom: calculateRem(19px);
 
-                &:focus-within {
-                    outline: 3px dotted $darkishBlue;
-                    padding: 3px;
-                }
-
                 > .wayf__idp {
-                    // outline is put on the surrounding li to ensure outline style doesn't clash with the box-shadow
-                    @include remove-outline;
+                    @include focus;
                     background-color: $white;
                     border-radius: 8px;
                     box-shadow: 0 1px 0 2px #5e6873;
@@ -241,6 +235,7 @@
                     font-size: $f-large;
                     font-weight: $bolder;
                     line-height: 1.5;
+                    padding: 5px;
 
                     &:focus,
                     &:hover {
@@ -335,11 +330,6 @@
                         @include add-account-hover;
                     }
                 }
-
-                &:focus {
-                    margin: 4px;
-                    width: calc(100% - 8px);
-                }
             }
         }
 
@@ -367,18 +357,6 @@
                 @include relative;
                 margin: 2rem 0 1.25rem;
 
-                &:focus-within {
-                    outline: 3px dotted $darkishBlue;
-                    padding: 3px;
-
-                    > .search__submit {
-                        &:focus {
-                            right: 6px;
-                            top: 6px;
-                        }
-                    }
-                }
-
                 > .search__field {
                     @include webkit-input;
                     border: 1px solid $gray;
@@ -391,13 +369,21 @@
                     padding: 1rem;
                     width: 100%;
 
-                    &:focus {
-                        outline: 0;
+                    @include form-focus;
+
+                    &:hover {
+                        background-color: $hoverBlue;
+                        border: solid 1px $inputBorderGray;
                     }
 
                     @include screen('mobile') {
                         padding: .5rem;
                     }
+                }
+
+                .search__field:hover + .search__submit,
+                .search__field:focus + .search__submit {
+                    @include button-reset($hoverBlue);
                 }
 
                 > .search__submit {
@@ -409,6 +395,11 @@
                     border-radius: 6px;
                     height: calc(3rem - 6px);
                     width: 3rem;
+
+                    &:hover,
+                    &:focus {
+                        @include button-reset($hoverBlue);
+                    }
 
                     @include screen('mobile') {
                         width: 2rem;
@@ -422,6 +413,10 @@
 
                 > .wayf__defaultIdpLink {
                     color: $black;
+
+                    &:focus {
+                        box-shadow: 0 0 0 3px $white;
+                    }
                 }
             }
 
@@ -473,6 +468,7 @@
 
                 input,
                 textarea {
+                    @include form-focus;
                     border: 1px solid $inputBorderGray;
                     border-radius: 8px;
                     font-size: $f-large;
@@ -482,12 +478,6 @@
 
                     &:hover {
                         background-color: $hoverBlue;
-                    }
-
-                    &:focus {
-                        background-color: $hoverBlue;
-                        box-shadow: 0 0 0 3px $lightBlue;
-                        outline: none;
                     }
 
                     &:invalid {
@@ -540,14 +530,14 @@
                         @include screen('mobile') {
                             width: unset;
                         }
-
-                        &:focus {
-                            padding: .5rem;
-                        }
                     }
 
                     > .cta__cancel {
                         @include button-secondary($gray);
+
+                        &:focus {
+                            padding: .5rem;
+                        }
 
                         @include screen('mobile') {
                             flex-basis: 40%;

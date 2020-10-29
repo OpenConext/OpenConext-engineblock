@@ -68,12 +68,20 @@
                 @include grid-template-columns(33% 1% 57% 1% 8%);
                 border-bottom: 1px solid $softBorderGray;
                 line-height: 1.63;
-                padding: 1rem 0;
+
+                > * {
+                    padding: 1rem 0;
+
+                }
 
                 @include screen('mobile') {
                     padding: 10px;
                     @include grid-template-columns(100%);
                     @include grid-template-rows(min-content min-content);
+
+                    > * {
+                        padding: 0;
+                    }
                 }
 
                 > *:not(input[type="checkbox"]):not(.attribute__name) {
@@ -96,7 +104,6 @@
                         height: unset;
                         font-weight: $bolder;
                         justify-content: center;
-                        margin: 1rem 0;
                         width: unset;
 
                         > .showLess,
@@ -146,6 +153,7 @@
                         display: none;
                         margin: 0;
                         order: -1;
+                        padding: 0;
                         width: 100%;
                     }
 
@@ -159,6 +167,7 @@
 
                 > input[type="checkbox"]:checked.tooltip ~ .attribute__name > label.tooltip {
                     @include tooltip-checked;
+                    background-position: left 8px bottom;
                 }
 
                 > .attribute__name {
@@ -174,8 +183,10 @@
                         display: none;
 
                         @include screen('mobile') {
+                            background-position: left 8px bottom;
                             display: inline-block;
                             margin: 0 0 -2px 5px;
+                            padding: 1rem 20px;
                         }
                     }
                 }
@@ -200,6 +211,9 @@
                 }
 
                 > label {
+                    margin: auto 0;
+                    padding: 1rem 20px;
+
                     @include screen('mobile') {
                         display: none;
                     }
@@ -207,6 +221,7 @@
 
                 > .tooltip__value {
                     @include grid-position(2, 3, 1, 6);
+                    padding: 0;
 
                     @include screen('mobile') {
                         @include grid-position(3, 4, 1, 2);
@@ -222,7 +237,6 @@
                 border-bottom-right-radius: 4px;
                 font-size: $f-small;
                 font-weight: $bolder;
-                padding: calculateRem(10px) 0;
                 text-align: left;
 
                 @include screen('mobile') {
@@ -272,7 +286,7 @@
 
                     > label.modal {
                         color: $oceanBlue;
-                        padding: 10px 25px 10px 0;
+                        padding: 10px 25px 10px 5px;
 
                         @include screen('mobile') {
                             display: block;
@@ -288,18 +302,6 @@
 
                         &:hover {
                             text-decoration: underline;
-                        }
-                    }
-                }
-
-                > .ie11__label {
-                    &:focus-within {
-                        outline: 3px dotted $darkishBlue;
-                    }
-
-                    > label.modal {
-                        &:focus {
-                            outline: none;
                         }
                     }
                 }
@@ -358,12 +360,24 @@
                     > div {
                         @include grid-position(1, 2, 2, 3);
 
-                        label {
-                            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='25' height='24' viewBox='0 0 25 24'%3E%3Cdefs%3E%3Cpath id='t5vbpi1wma' d='M4.92 10.75c-.183 0-.367-.05-.528-.153-.416-.268-.517-.794-.225-1.176L8.319 4 4.18-1.422c-.292-.382-.19-.908.226-1.175.417-.268.99-.175 1.282.207l4.508 5.906c.221.291.221.678 0 .969L5.673 10.39c-.18.234-.464.359-.754.359'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(5.5 8)'%3E%3Cmask id='jsuhne1qsb' fill='%23fff'%3E%3Cuse xlink:href='%23t5vbpi1wma'/%3E%3C/mask%3E%3Cuse fill='%230062b0' transform='rotate(90 7.181 4)' xlink:href='%23t5vbpi1wma'/%3E%3C/g%3E%3C/svg%3E%0A") no-repeat right center;
-                            padding-right: 25px;
+                        > br {
+                            @include screen('mobile') {
+                                display: none;
+                            }
                         }
 
-                        input[type="checkbox"]:checked.modal + label {
+                        > label {
+                            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='25' height='24' viewBox='0 0 25 24'%3E%3Cdefs%3E%3Cpath id='t5vbpi1wma' d='M4.92 10.75c-.183 0-.367-.05-.528-.153-.416-.268-.517-.794-.225-1.176L8.319 4 4.18-1.422c-.292-.382-.19-.908.226-1.175.417-.268.99-.175 1.282.207l4.508 5.906c.221.291.221.678 0 .969L5.673 10.39c-.18.234-.464.359-.754.359'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(5.5 8)'%3E%3Cmask id='jsuhne1qsb' fill='%23fff'%3E%3Cuse xlink:href='%23t5vbpi1wma'/%3E%3C/mask%3E%3Cuse fill='%230062b0' transform='rotate(90 7.181 4)' xlink:href='%23t5vbpi1wma'/%3E%3C/g%3E%3C/svg%3E%0A") no-repeat right center;
+                            padding-right: 25px;
+
+                            &:focus {
+                                box-shadow: none;
+                                outline: 3px solid $lightBlue;
+                            }
+                        }
+
+                        > input[type="checkbox"]:checked.modal + label,
+                        > input[type="checkbox"]:checked.modal + br + label {
                             background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24' height='24' viewBox='0 0 24 24'%3E%3Cdefs%3E%3Cpath id='wusxz70bxa' d='M4.92 10.75c-.183 0-.367-.05-.528-.153-.416-.268-.517-.794-.225-1.176L8.319 4 4.18-1.422c-.292-.382-.19-.908.226-1.175.417-.268.99-.175 1.282.207l4.508 5.906c.221.291.221.678 0 .969L5.673 10.39c-.18.234-.464.359-.754.359'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(5 8)'%3E%3Cmask id='etvz1reijb' fill='%23fff'%3E%3Cuse xlink:href='%23wusxz70bxa'/%3E%3C/mask%3E%3Cuse fill='%230062b0' transform='scale(1 -1) rotate(90 11.181 0)' xlink:href='%23wusxz70bxa'/%3E%3C/g%3E%3C/svg%3E%0A") no-repeat right center;
                         }
 
@@ -381,7 +395,7 @@
                             }
                         }
 
-                        .modal__value {
+                        > .modal__value {
                             margin: 1rem 0;
 
                             &.animated {
@@ -393,20 +407,24 @@
                             }
 
                             .link__readmore {
-                                display: block;
+                                display: inline-block;
+                                padding: 5px;
                             }
                         }
 
-                        input:checked + label + .modal__value.animated {
+                        > input:checked + label + .modal__value.animated,
+                        > input:checked + br + label + .modal__value.animated {
                             margin: 1rem 0;
                         }
 
-                        #consent_disclaimer_about + label + section.animated {
+                        > #consent_disclaimer_about + br + label + section.animated,
+                        > #consent_disclaimer_about + label + section.animated {
                             display: inline-block;
                             max-width: 0;
                         }
 
-                        #consent_disclaimer_about:checked + label + section.animated {
+                        > #consent_disclaimer_about:checked + label + section.animated,
+                        > #consent_disclaimer_about:checked + br + label + section.animated {
                             display: block;
                             max-height: 40vh;
                             max-width: unset;
