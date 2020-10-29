@@ -17,7 +17,7 @@ export const findWeight = (idp, searchTerm) => {
   weight += checkFullTitleMatch(searchTerm, title);
   if (weight > 0) return weight;
 
-  const entityId = getData(idp, 'entityid');
+  const entityId = getData(idp, 'entityid').toLowerCase();
   weight += checkFullEntityIdMatch(searchTerm, entityId);
   if (weight > 0) return weight;
 
