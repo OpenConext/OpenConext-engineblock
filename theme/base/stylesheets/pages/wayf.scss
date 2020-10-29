@@ -535,6 +535,10 @@
                     > .cta__cancel {
                         @include button-secondary($gray);
 
+                        &:focus {
+                            padding: .5rem;
+                        }
+
                         @include screen('mobile') {
                             flex-basis: 40%;
                         }
