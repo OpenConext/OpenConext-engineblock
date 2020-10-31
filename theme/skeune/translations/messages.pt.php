@@ -23,7 +23,7 @@ return [
     'wayf_search_placeholder'   => 'Search...',
     'wayf_search_aria'          => 'Search identity providers',
     'wayf_your_accounts'        => 'Your accounts',
-    'wayf_add_account'          => 'Add another account',
+    'wayf_add_account'          => 'Use another account',
     'wayf_no_access_helpdesk'   => 'If you want, you can request access to this service. We will send the request to the helpdesk of your institution.',
     'wayf_no_access'            => 'Sorry, no access for this account',
     'wayf_noaccess_name'        => 'Your name',
