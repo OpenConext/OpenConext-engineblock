@@ -100,8 +100,8 @@ context('WAYF when using the mouse', () => {
         cy.contains('.previousSelection__title', 'Your accounts');
       });
 
-      it('Test if the section contains the add account button', () => {
-        cy.contains('.previousSelection__addAccount', 'Add another account');
+      it('Test if the section contains the use account button', () => {
+        cy.contains('.previousSelection__addAccount', 'Use another account');
       });
 
       it('Test if it contains the right amount of idps', () => {
