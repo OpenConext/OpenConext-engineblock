@@ -1,4 +1,4 @@
-context('Consent a11y verify', () => {
+context('Wayf verify a11y', () => {
   beforeEach(() => {
     cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
   });
