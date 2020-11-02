@@ -97,6 +97,7 @@
                     }
 
                     > .idp__content {
+                        align-items: center;
                         box-sizing: content-box;
                         display: flex;
                         justify-content: space-between;
@@ -106,14 +107,17 @@
                             width: calc(100% - 4.25rem);
                         }
 
-                        > h3 {
+                        > .idp__border {
                             border-left: 1px solid $idpSeparatorGray;
+                            height: calc(100% - 1.625rem);
+                        }
+
+                        > h3 {
                             display: inline-block;
                             color: $black;
                             font-family: 'SourceSansPro', sans-serif;
                             font-size: $f-large;
                             font-weight: $normal;
-                            height: calc(100% - 1.625rem);
                             margin: calculateRem(13px) 0;
                             padding: 0 0 0 calculateRem(23.5px);
                             width: calc(100% - 4rem);
@@ -188,6 +192,10 @@
                     box-shadow: 0 1px 0 2px $noAccessGray;
 
                     > .idp__content {
+                        > .idp__border {
+                            border-left: 1px solid $white;
+                        }
+
                         > button {
                             @include button-reset($softBorderGray);
                         }
