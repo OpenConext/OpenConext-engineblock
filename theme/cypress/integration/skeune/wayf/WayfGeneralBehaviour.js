@@ -182,4 +182,18 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
           .should('have.text', 'Return to Service Provider');
       });
   });
+
+  describe('Test hides and shows IdP list', () => {
+    it('Should hide the IdP link when search term is provided', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      cy.get('.search__field').type('search-term');
+      cy.notOnPage('If your organisation is not listed').should('not.exist');
+    });
+
+    it('Should show the IdP link when search term is provided', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      cy.get('.search__field').type('');
+      cy.onPage('If your organisation is not listed');
+    });
+  });
 });
