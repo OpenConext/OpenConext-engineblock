@@ -77,7 +77,7 @@ context('Consent on Skeune theme', () => {
     });
 
     it('Should show the decline consent modal after selection', () => {
-      cy.contains('label', 'No, I do not agree')
+      cy.contains('label', 'Cancel')
         .click({force: true});
       cy.get('.ctas .modal__value')
         .should('be.visible');
