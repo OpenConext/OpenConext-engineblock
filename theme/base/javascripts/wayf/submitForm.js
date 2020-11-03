@@ -24,7 +24,18 @@ export const submitForm = (e, previouslySelectedIdps) => {
   if (e.target.tagName !== 'ARTICLE') {
     element = e.target.closest('.wayf__idp');
   }
+  selectAndSubmit(element, previouslySelectedIdps);
+};
 
+/**
+ * Performs the actual remember and sumbit logic. Where the submitForm
+ * method both verifies and submits the form. This method only does
+ * the latter.
+ *
+ * @param element
+ * @param previouslySelectedIdps
+ */
+export const selectAndSubmit = (element, previouslySelectedIdps) => {
   if (hasVisibleDisabledButtonAsTarget(element)) {
     handleClickingDisabledIdp(element);
     return;

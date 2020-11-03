@@ -3,6 +3,7 @@ import {fireClickEvent} from '../utility/fireClickEvent';
 import {handleDeleteDisable} from './handleDeleteDisable';
 import {submitForm} from './submitForm';
 import {handleIdpBanner} from './handleIdpBanner';
+import {selectFirstIdPAndSubmitForm} from "./selectFirstIdPAndSubmitForm";
 
 /**
  * Behaviour expected to happen after a user presses the enter button.
@@ -33,6 +34,8 @@ export const handleEnter = (e, previouslySelectedIdps) => {
       case 'idp__form':
       case 'idp__logo':
         submitForm(e, previouslySelectedIdps); break;
+      case 'search__field':
+        selectFirstIdPAndSubmitForm(previouslySelectedIdps); break;
       case 'wayf__defaultIdpLink':
         handleIdpBanner(e); break;
     }
