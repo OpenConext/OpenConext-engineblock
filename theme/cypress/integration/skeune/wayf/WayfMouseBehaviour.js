@@ -9,7 +9,7 @@ context('WAYF when using the mouse', () => {
         .eq(1)
         .click({force: true});
       cy.location().should((loc) => {
-        expect(loc.href).to.eq('https://engine.vm.openconext.org/');
+        expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/2');
       });
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
     });
@@ -112,7 +112,7 @@ context('WAYF when using the mouse', () => {
       it('Test if selecting a previously selected idp works', () => {
         cy.selectFirstIdp(true, '.wayf__previousSelection .wayf__idp[data-index="1"]');
         cy.location().should((loc) => {
-          expect(loc.href).to.eq('https://engine.vm.openconext.org/');
+          expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/2');
         });
         cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       });

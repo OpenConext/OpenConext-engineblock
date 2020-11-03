@@ -10,10 +10,31 @@ context('WAYF when using the keyboard', () => {
         .focus()
         .type('{enter}');
       cy.location().should((loc) => {
-        expect(loc.href).to.eq('https://engine.vm.openconext.org/');
+        expect(loc.href).to.eq('https://engine.vm.openconext.org?idp=https://example.com/entityId/2/');
       });
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
     });
+
+    it('Should login to first IdP when hitting enter', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      cy.get('#wayf_search')
+        .type('{enter}');
+      cy.location().should((loc) => {
+        expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/1');
+      });
+    });
+
+    it('Should login to topmost  IdP when hitting enter', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      cy.get('#wayf_search')
+        .type('2')
+        .type('{enter}');
+      cy.location().should((loc) => {
+        expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/2');
+      });
+    });
+
+
   });
 
   // todo if html spec is changed, or cypress fixes bug 6207, get rid of the manual focus on search.  See https://github.com/cypress-io/cypress/issues/6207
@@ -141,7 +162,7 @@ context('WAYF when using the keyboard', () => {
     it('Test if selecting a previously selected idp works', () => {
       cy.selectFirstIdp(false, '.wayf__previousSelection .wayf__idp[data-index="1"]');
       cy.location().should((loc) => {
-        expect(loc.href).to.eq('https://engine.vm.openconext.org/');
+        expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/1');
       });
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
     });

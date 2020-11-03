@@ -21,18 +21,18 @@ context('WayfMouseBehaviour', () => {
     // Open a dummy wayf with 5 connected IdPs
     cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=10&displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
     // Click the first IdP, adding it to the list of previously chosen IdPs
-    cy.get('a.result.active.access:nth-child(1)').click();
+    cy.get('a.result.active.access:nth-child(1)').click({force:true});
     // We visit the fake IdP, verify the right redirect is performed
     cy.location().should((loc) => {
-      expect(loc.href).to.eq('https://engine.vm.openconext.org/');
+      expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/1');
     });
     // Go back to the WAYF
     cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=10&displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
     // Click the second IdP, adding it to the list of previously chosen IdPs
-    cy.get('a.result.active.access:nth-child(2)').click();
+    cy.get('a.result.active.access:nth-child(2)').click({force:true});
     // We visit the fake IdP, verify the right redirect is performed
     cy.location().should((loc) => {
-      expect(loc.href).to.eq('https://engine.vm.openconext.org/');
+      expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/3');
     });
     // Go back to the WAYF
     cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=10&displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
