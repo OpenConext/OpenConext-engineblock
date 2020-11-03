@@ -394,11 +394,13 @@
                 }
 
                 .search__field:hover + .search__submit,
-                .search__field:focus + .search__submit {
+                .search__field:focus + .search__submit,
+                .search__field:hover + .search__reset,
+                .search__field:focus + .search__reset {
                     @include button-reset($hoverBlue);
                 }
 
-                > .search__submit {
+                > .search__submit, .search__reset {
                     @include absolute(top 3px right 3px);
                     @include button-reset($white);
                     @include poirot;
@@ -416,6 +418,14 @@
                     @include screen('mobile') {
                         width: 2rem;
                     }
+                }
+
+                > .search__reset {
+                    @include tooltip-checked;
+                    background-size: 1rem 1rem;
+                    background-position: left 5px top 5px;
+                    right: 1rem;
+                    top: 0.8rem;
                 }
             }
 
