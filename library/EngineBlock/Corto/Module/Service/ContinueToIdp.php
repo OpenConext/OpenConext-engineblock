@@ -64,15 +64,19 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
      */
     public function serve($serviceName, Request $httpRequest)
     {
-        $selectedIdp = urldecode($_REQUEST['idp']);
-        if (!$selectedIdp) {
+        $selectedIdp = null;
+        if (array_key_exists('idp', $_REQUEST)) {
+            $selectedIdp = urldecode($_REQUEST['idp']);
+        }
+
+        if ($selectedIdp !== null) {
             throw new EngineBlock_Corto_Module_Services_Exception(
                 'No IdP selected after WAYF'
             );
         }
 
         // Retrieve the request from the session.
-        $id      = $_POST['ID'];
+        $id = $_POST['ID'];
         if (!$id) {
             throw new EngineBlock_Exception(
                 'Missing ID for AuthnRequest after WAYF',
