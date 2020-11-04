@@ -61,11 +61,17 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.get('.wayf__search').type('OllekebollekeKnol');
       cy.get('.wayf__noResults').should('be.visible');
+      // The search bar should show the loupe when no input is typed in the search box
+      cy.get('.search__submit').should('be.visible');
+      cy.get('.search__reset').should('not.be.visible');
     });
 
     it('Should be able to search for an idp', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.get('.wayf__search').type('4');
+      // When the user starts typing, the reset (x) button should appear, replacing the search icon
+      cy.get('.search__submit').should('not.be.visible');
+      cy.get('.search__reset').should('be.visible');
 
       // After filtering the search results, verify one result is visible
       cy.get('.wayf__remainingIdps .wayf__idp:not([data-weight="0"])')
@@ -121,6 +127,14 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.get('.wayf__search').type('con 1');
       cy.get('.wayf__remainingIdps .wayf__idp')
         .should('have.length', 5);
+    });
+
+    it('Should reset the search text when clicking the reset button', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      cy.get('.wayf__search').type('con 1');
+      cy.get('.search__reset').click({force:true});
+      cy.get('.search__submit').should('be.visible');
+      cy.get('.search__reset').should('not.be.visible');
     });
   });
 
