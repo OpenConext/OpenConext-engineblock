@@ -394,11 +394,14 @@
                 }
 
                 .search__field:hover + .search__submit,
-                .search__field:focus + .search__submit {
+                .search__field:focus + .search__submit,
+                .search__field:hover ~ .search__reset,
+                .search__field:focus ~ .search__reset {
                     @include button-reset($hoverBlue);
                 }
 
-                > .search__submit {
+                > .search__submit,
+                > .search__reset {
                     @include absolute(top 3px right 3px);
                     @include button-reset($white);
                     @include poirot;
@@ -416,6 +419,10 @@
                     @include screen('mobile') {
                         width: 2rem;
                     }
+                }
+
+                > .search__reset {
+                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3Cstyle%3E.a%7Bfill:none;stroke:%23ff0000;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5px;%7D%3C/style%3E%3C/defs%3E%3Ccircle class='a' cx='11.998' cy='12' r='11.25'/%3E%3Cline class='a' x1='7.498' y1='16.5' x2='16.497' y2='7.5'/%3E%3Cline class='a' x1='16.498' y1='16.5' x2='7.497' y2='7.5'/%3E%3C/svg%3E");
                 }
             }
 
