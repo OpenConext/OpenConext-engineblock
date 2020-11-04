@@ -2,7 +2,7 @@
     aria-describedby="idp__title{{ listName }}{{ loop.index }}"
     class="wayf__idp{% if idp['connected'] is defined and not idp['connected'] %} wayf__idp--noAccess{% endif %}"
     data-count="{% if idp['count'] is defined %}{{ idp['count'] }}{% else %}0{% endif %}"
-    data-entityid="{{ idp['entityId']|lower }}"
+    data-entityid="{{ idp['entityId'] }}"
     data-index="{{ loop.index }}"
     data-keywords="{{ idp['keywords']|lower }}"
     data-title="{{ idp['displayTitle']|lower }}"
