@@ -22,6 +22,7 @@ use OpenConext\EngineBlockFunctionalTestingBundle\Helper\TestEntitySeeder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Twig_Environment;
 
 /**
@@ -56,7 +57,7 @@ class WayfController extends Controller
         return new Response($this->twig->render(
             '@theme/Authentication/View/Proxy/wayf.html.twig',
             [
-                'action' => 'https://engine.vm.openconext.org/',
+                'action' => $this->generateUrl('functional_testing_handle_wayf'),
                 'greenHeader' => $currentLocale,
                 'helpLink' => '/authentication/idp/help-discover?lang='.$currentLocale,
                 'backLink' => $backLink,
@@ -71,5 +72,18 @@ class WayfController extends Controller
                     '<div id="request-access"></div></div></div>',
             ]
         ));
+    }
+
+    public function handleWayfAction(Request $request)
+    {
+        if ($request->request->has('idp')) {
+            return $this->redirectToRoute(
+                'open_conext_engine_block_authentication_homepage',
+                [
+                    'idp' => $request->request->get('idp')
+                ]
+            );
+        }
+        throw new AccessDeniedException('No IdP parameter found');
     }
 }
