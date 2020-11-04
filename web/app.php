@@ -8,7 +8,6 @@ require_once __DIR__.'/../app/AppKernel.php';
 $symfonyEnvironment = getenv('SYMFONY_ENV') ?: 'prod';
 
 $request = Request::createFromGlobals();
-
 $kernel = new AppKernel($symfonyEnvironment, false);
 $kernel->boot();
 
