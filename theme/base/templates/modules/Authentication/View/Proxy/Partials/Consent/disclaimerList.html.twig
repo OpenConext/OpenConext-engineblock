@@ -6,11 +6,13 @@
     <li class="disclaimer__privacy">
         <div>
             {% include '@theme/Authentication/View/Proxy/Partials/Consent/SVG/file_info.svg' %}
-            {% if sp.coins.termsOfServiceUrl is not null %}
-                {{ 'consent_disclaimer_privacy'|trans({'%org%': spName, '%privacy_url%': sp.coins.termsOfServiceUrl})|raw }}
-            {% else %}
-                {{ 'consent_disclaimer_privacy_nolink'|trans({ '%org%': spName })|raw }}
-            {% endif %}
+            <div>
+                {% if sp.coins.termsOfServiceUrl is not null %}
+                    {{ 'consent_disclaimer_privacy'|trans({'%org%': spName, '%privacy_url%': sp.coins.termsOfServiceUrl})|raw }}
+                {% else %}
+                    {{ 'consent_disclaimer_privacy_nolink'|trans({ '%org%': spName })|raw }}
+                {% endif %}
+            </div>
         </div>
     </li>
     <li class="disclaimer__secure">

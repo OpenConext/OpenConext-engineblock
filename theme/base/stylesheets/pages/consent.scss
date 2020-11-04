@@ -350,6 +350,14 @@
                     margin-bottom: 1rem;
                 }
 
+                &.disclaimer__secure,
+                &.disclaimer__privacy {
+                    svg {
+                        margin-left: -0.5rem;
+                    }
+
+                }
+
                 > div {
                     @include display-grid;
                     @include grid-template-columns(67px calc(100% - 67px));
