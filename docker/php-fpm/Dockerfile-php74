@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-enable xdebug
 
 # Composer
-RUN curl -sL https://getcomposer.org/installer | php -- --install-dir /usr/bin --filename composer
+COPY --from=composer:1 /usr/bin/composer /usr/local/bin/composer
 
 # Fix npm
 RUN mkdir /.npm && chown -R "${NPM_UID}:${NPM_GID}" "/.npm"
