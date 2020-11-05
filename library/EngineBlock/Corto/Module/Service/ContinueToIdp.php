@@ -69,7 +69,7 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
             $selectedIdp = urldecode($_REQUEST['idp']);
         }
 
-        if ($selectedIdp !== null) {
+        if ($selectedIdp === null) {
             throw new EngineBlock_Corto_Module_Services_Exception(
                 'No IdP selected after WAYF'
             );
