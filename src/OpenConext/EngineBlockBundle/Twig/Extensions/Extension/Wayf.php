@@ -96,7 +96,6 @@ class Wayf extends Twig_Extension
                         'isDefaultIdp' => (bool) $idp['isDefaultIdp'],
                     ]
                 );
-                continue;
             }
 
             $formattedIdpList[] = [
