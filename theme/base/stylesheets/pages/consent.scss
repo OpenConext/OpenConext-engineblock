@@ -172,11 +172,13 @@
 
                 > .attribute__name {
                     @include grid-position(1, 2, 1, 2);
+                    margin-right: 0.5rem;
                     text-align: right;
 
                     @include screen('mobile') {
-                        text-align: left;
                         display: inline-block;
+                        text-align: left;
+                        margin-right: 0;
                     }
 
                     > label.tooltip {
