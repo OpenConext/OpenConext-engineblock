@@ -19,10 +19,14 @@
             }
         }
 
-        > img.form__spinner {
-            padding: 2rem 2rem 0 0;
-            width: 30%;
+        > div.logo {
+            > img.rotate-img {
+                width: 20%;
+                margin: 2em auto 0 auto;
+                display:block;
+            }
         }
+
         > form {
             > noscript {
                 input.form__noJsSubmit {

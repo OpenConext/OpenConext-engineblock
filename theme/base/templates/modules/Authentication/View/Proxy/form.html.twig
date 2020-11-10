@@ -33,7 +33,7 @@
 
             <p>{{ 'processing_long'|trans }}</p>
 
-            <img src="/images/spinner.svg" alt="" class="form__spinner">
+            {% include '@theme/Authentication/View/Proxy/Partials/Shared/spinner.html.twig' %}
 
             <form id="ProcessForm" method="post" action="{{ action }}">
                 <input type="hidden" name="{{ name }}" value="{{ message }}"/>
