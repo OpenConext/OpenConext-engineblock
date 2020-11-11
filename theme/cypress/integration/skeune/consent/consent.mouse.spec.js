@@ -18,11 +18,11 @@ context('Consent when using the mouse', () => {
     it('Should hide the extra attributes after clicking the label again', () => {
       // first click the show more label to show the attributes
       cy.contains('label', 'Show more information')
-        .click();
+        .click({force: true});
 
       // try to hide them again
       cy.contains('label', 'Show less information')
-        .click();
+        .click({force: true});
 
       // test assertions
       cy.contains('label', 'Show more information');
@@ -76,7 +76,7 @@ context('Consent when using the mouse', () => {
     });
 
     it('Should show the decline consent modal', () => {
-      cy.contains('label', 'No, I do not agree')
+      cy.contains('label', 'Cancel')
         .click({force: true});
       cy.contains('You don\'t want to share your data with the service')
         .should('be.visible');

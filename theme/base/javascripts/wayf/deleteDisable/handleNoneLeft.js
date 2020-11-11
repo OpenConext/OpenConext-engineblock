@@ -1,5 +1,6 @@
 import * as Cookies from 'js-cookie';
 import {switchIdpSection} from '../utility/switchIdpSection';
+import {focusOn} from "../../utility/focusOn";
 
 /**
  * When the last idp is deleted from the previous selection list:

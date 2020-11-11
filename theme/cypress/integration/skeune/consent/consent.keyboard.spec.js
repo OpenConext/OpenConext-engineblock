@@ -73,7 +73,7 @@ context('Consent when using the keyboard', () => {
     });
 
     it('Should show the decline consent modal', () => {
-      cy.contains('label', 'No, I do not agree');
+      cy.contains('label', 'Cancel');
       cy.get('#cta_consent_nok')
         .next()
         .focus().type('{enter}');

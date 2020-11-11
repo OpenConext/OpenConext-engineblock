@@ -3,6 +3,7 @@ import {submitForm} from './submitForm';
 import {attachDeleteHandlers} from './deleteDisable/attachDeleteHandlers';
 import {switchIdpSection} from './utility/switchIdpSection';
 import {getData} from '../utility/getData';
+import {focusOn} from "../utility/focusOn";
 
 /**
  * Check if user has any previous selected Idps.
@@ -16,7 +17,7 @@ export const handlePreviousSelectionVisible = (selectedIdps, previouslySelectedI
   if (hasSelectedIdps()) {
     mouseHandlersHiddenIdps(previouslySelectedIdps);
     // put focus on the first IDP, so you can just hit enter & go
-    document.querySelector('.wayf__previousSelection li:first-of-type .wayf__idp').focus();
+    focusOn('.wayf__previousSelection li:first-of-type .wayf__idp');
   }
 };
 

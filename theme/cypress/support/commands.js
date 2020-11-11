@@ -28,7 +28,7 @@ Cypress.Commands.add('hideDebugBar', () => {
 });
 
 Cypress.Commands.add('focusAndEnter', (selector) => {
-  cy.get(selector).focus().type('{enter}');
+  cy.get(selector).focus().type('{enter}', {force: true});
 });
 
 Cypress.Commands.add('pressArrowOnIdpList', (direction, className, index) => {
@@ -46,7 +46,7 @@ Cypress.Commands.add('selectFirstIdp', (click = true, firstElementSelector = '.w
     return;
   }
 
-  cy.get(firstElementSelector).type('{enter}');
+  cy.get(firstElementSelector).type('{enter}', {force: true});
 });
 
 Cypress.Commands.add('selectFirstIdpAndReturn', (click = true, url = 'https://engine.vm.openconext.org/functional-testing/wayf') => {
@@ -57,11 +57,11 @@ Cypress.Commands.add('selectFirstIdpAndReturn', (click = true, url = 'https://en
 
 Cypress.Commands.add('toggleEditButton', (click = true, buttonSelector = '.previousSelection__edit') => {
   if (click) {
-    cy.get(buttonSelector).click({ force: true });
+    cy.get(buttonSelector).click({force: true });
     return;
   }
 
-  cy.get(buttonSelector).type('{enter}');
+  cy.get(buttonSelector).type('{enter}', {force: true});
 });
 
 Cypress.Commands.add('hitDeleteButton', (click = true, deleteSelector = '.wayf__previousSelection .wayf__idp[data-index="1"] .idp__deleteDisable') => {
@@ -70,10 +70,10 @@ Cypress.Commands.add('hitDeleteButton', (click = true, deleteSelector = '.wayf__
     return;
   }
 
-  cy.get(deleteSelector).focus().type('{enter}');
+  cy.get(deleteSelector).focus().type('{enter}', {force: true});
 });
 
-Cypress.Commands.add('openUnconnectedIdp', (keyboard = true, url = 'https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=true&unconnectedIdps=5', idpSelector = '.wayf__idp[data-entityid="https://unconnected.example.com/entityid/4"]') => {
+Cypress.Commands.add('openUnconnectedIdp', (keyboard = true, url = 'https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=true&unconnectedIdps=5', idpSelector = '.wayf__idp[data-entityid="https://unconnected.example.com/entityId/4"]') => {
   cy.visit(url);
 
   if (keyboard) {
@@ -92,9 +92,9 @@ Cypress.Commands.add('fillNoAccessForm', (keyboard = true, showFormSelector = '.
     cy.get(showFormSelector).click({force:true});
   }
 
-  cy.get('#name').type('Joske');
-  cy.get('#email').type('joske.vermeulen@thuis.be');
-  cy.get('#motivation').focus().type('tis toapuh dattem tuis is');
+  cy.get('#name').focus().type('Joske', {force: true});
+  cy.get('#email').focus().type('joske.vermeulen@thuis.be', {force: true});
+  cy.get('#motivation').focus().type('tis toapuh dattem tuis is', {force: true});
 });
 
 Cypress.Commands.add('loadWayf', (url = 'https://engine.vm.openconext.org/functional-testing/wayf') => {
@@ -110,7 +110,8 @@ Cypress.Commands.add('addOnePreviouslySelectedIdp', (keyboard = true, url = 'htt
 Cypress.Commands.add('selectAccountButton', (keyboard = true, selector = '.previousSelection__addAccount') => {
   if (keyboard) {
     cy.get(selector)
-      .type('{enter}');
+      .focus()
+      .type('{enter}', {force: true});
     return;
   }
 

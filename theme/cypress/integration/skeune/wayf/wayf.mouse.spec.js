@@ -46,28 +46,27 @@ context('WAYF when using the mouse', () => {
       cy.openUnconnectedIdp(false);
       cy.get('.cta__showForm').click({force: true});
       cy.get('.cta__cancel').click({force: true});
-      cy.get('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/2"]').click({force: true});
+      cy.get('.wayf__idp[data-entityid="https://unconnected.example.com/entityId/2"]').click({force: true});
       cy.get('.noAccess__requestForm fieldset')
         .should('not.be.visible');
+    });
+
+    it.skip('Should show the success message', () => {
+      cy.fillNoAccessForm(false);
+      cy.get('.cta__request').click({force: true});
+      cy.get('.noAccess__title').should('not.be.visible');
+      cy.get('.notification__success').should('be.visible');
     });
 
     it('Should be able to fill the request access form', () => {
       cy.fillNoAccessForm(false);
     });
 
-    it('Should show the success message', () => {
-      cy.fillNoAccessForm(false);
-      cy.get('.cta__request').click({force: true});
-      cy.wait(500);
-      cy.get('.noAccess__title').should('not.be.visible');
-      cy.get('.notification__success').should('be.visible');
-    });
-
     it('Should not show the success message when selecting a new disabled account', () => {
       cy.fillNoAccessForm(false);
       cy.get('.cta__request').click({force: true});
       cy.wait(500);
-      cy.get('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/3').click({force: true});
+      cy.get('.wayf__idp[data-entityid="https://unconnected.example.com/entityId/3').click({force: true});
       cy.get('.notification__success').should('not.be.visible');
     });
 
@@ -75,7 +74,7 @@ context('WAYF when using the mouse', () => {
       cy.fillNoAccessForm(false);
       cy.get('.cta__request').click({force: true});
       cy.wait(500);
-      cy.get('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/3').click({force: true});
+      cy.get('.wayf__idp[data-entityid="https://unconnected.example.com/entityId/3').click({force: true});
       cy.get('.noAccess__requestForm fieldset')
         .should('not.be.visible');
     });
@@ -98,8 +97,8 @@ context('WAYF when using the mouse', () => {
     });
   });
 
-  describe.only('Should show a fully functional previous selection section', () => {
-    it.only('Test if the previous section exists with the right title', () => {
+  describe('Should show a fully functional previous selection section', () => {
+    it('Test if the previous section exists with the right title', () => {
       cy.addOnePreviouslySelectedIdp(false);
       cy.get('.previousSelection__title')
         .should('be.visible');
@@ -121,7 +120,7 @@ context('WAYF when using the mouse', () => {
       cy.addOnePreviouslySelectedIdp(false);
       cy.selectFirstIdp(true, '.wayf__previousSelection .wayf__idp[data-index="1"]');
       cy.location().should((loc) => {
-        expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/2');
+        expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/1');
       });
     });
 
@@ -145,8 +144,9 @@ context('WAYF when using the mouse', () => {
       cy.selectFirstIdpAndReturn(false);
       cy.toggleEditButton(false);
       cy.hitDeleteButton(false);
+      // The previous selection is now closed and empty
       cy.get('.wayf__previousSelection .wayf__idp h3')
-        .should('have.length', 1);
+        .should('have.length', 0);
     });
 
     it('Test deleting the last previously selected idp hides the section, shows the remaining idps, focuses on the searchbar & adds the deleted idp to the list', () => {

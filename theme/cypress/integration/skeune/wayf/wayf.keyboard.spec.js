@@ -10,7 +10,7 @@ context('WAYF when using the keyboard', () => {
         .focus()
         .type('{enter}');
       cy.location().should((loc) => {
-        expect(loc.href).to.eq('https://engine.vm.openconext.org?idp=https://example.com/entityId/2/');
+        expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/2');
       });
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
     });
@@ -97,16 +97,18 @@ context('WAYF when using the keyboard', () => {
       cy.openUnconnectedIdp();
       cy.focusAndEnter('.cta__showForm');
       cy.focusAndEnter('.cta__cancel');
-      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/2"]');
+      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityId/2"]');
       cy.get('.noAccess__requestForm fieldset')
         .should('not.be.visible');
     });
 
     it('Should be able to fill the request access form', () => {
+      cy.openUnconnectedIdp();
       cy.fillNoAccessForm();
     });
 
     it('Should show the success message', () => {
+      cy.openUnconnectedIdp();
       cy.fillNoAccessForm();
       cy.focusAndEnter('.cta__request');
       cy.wait(500);
@@ -115,18 +117,20 @@ context('WAYF when using the keyboard', () => {
     });
 
     it('Should not show the success message when selecting a new disabled account', () => {
+      cy.openUnconnectedIdp();
       cy.fillNoAccessForm();
       cy.focusAndEnter('.cta__request');
       cy.wait(500);
-      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/3');
+      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityId/3');
       cy.get('.notification__success').should('not.be.visible');
     });
 
     it('Should also not show the form fields after selecting a new disabled account', () => {
+      cy.openUnconnectedIdp();
       cy.fillNoAccessForm();
       cy.focusAndEnter('.cta__request');
       cy.wait(500);
-      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/3');
+      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityId/3');
       cy.get('.noAccess__requestForm fieldset')
         .should('not.be.visible');
     });
@@ -149,7 +153,7 @@ context('WAYF when using the keyboard', () => {
     });
   });
 
-  describe.only('Should show a fully functional previous selection section', () => {
+  describe('Should show a fully functional previous selection section', () => {
     it('Test if the previous section exists with the right title', () => {
       cy.addOnePreviouslySelectedIdp();
       cy.get('.previousSelection__title')
@@ -183,21 +187,20 @@ context('WAYF when using the keyboard', () => {
       cy.get('.wayf__previousSelection .wayf__idp[data-index="1"]').should('have.attr', 'data-count', '2');
     });
 
-    it('Test the add account button opens up the search & puts focus on the search field, then select the focused element.', () => {
-      cy.addOnePreviouslySelectedIdp();
-      cy.selectAccountButton();
-      cy.focused().should('have.class', 'search__field');
-      cy.get('.wayf__previousSelection').should('not.be.visible');
-    });
-
     it('Test the edit button allows deleting an account', () => {
       cy.addOnePreviouslySelectedIdp();
       cy.selectAccountButton();
       cy.selectFirstIdpAndReturn(false);
       cy.toggleEditButton(false);
       cy.hitDeleteButton(false);
-      cy.get('.wayf__previousSelection .wayf__idp h3')
-        .should('have.length', 1);
+      cy.get('.wayf__previousSelection').should('not.be.visible');
+    });
+
+    it('Test the add account button opens up the search & puts focus on the search field, then select the focused element.', () => {
+      cy.addOnePreviouslySelectedIdp();
+      cy.selectAccountButton();
+      cy.focused().should('have.class', 'search__field');
+      cy.get('.wayf__previousSelection').should('not.be.visible');
     });
 
     it('Test deleting the last previously selected idp hides the section, shows the remaining idps, focuses on the searchbar & adds the deleted idp to the list', () => {
