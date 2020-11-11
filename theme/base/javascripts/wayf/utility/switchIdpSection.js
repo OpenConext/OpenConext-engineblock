@@ -1,4 +1,5 @@
 import {toggleVisibility} from '../../utility/toggleVisibility';
+import {focusOn} from "../../utility/focusOn";
 
 export const switchIdpSection = () => {
   const remainingIdps = document.querySelector('.wayf__remainingIdps');
@@ -15,4 +16,6 @@ export const switchIdpSection = () => {
 
   previousIdps.removeAttribute('aria-hidden');
   remainingIdps.setAttribute('aria-hidden', 'true');
+
+  focusOn('.search__field');
 };

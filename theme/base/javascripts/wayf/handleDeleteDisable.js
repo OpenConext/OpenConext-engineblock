@@ -1,7 +1,6 @@
 import {hasSelectedIdps} from './utility/hasSelectedIdps';
 import {handleNoneLeft} from './deleteDisable/handleNoneLeft';
 import {deleteIdp} from './deleteDisable/deleteIdp';
-import {moveIdpToRemaining} from './deleteDisable/moveIdpToRemaining';
 import {reindexIdpArray} from './utility/reindexIdpArray';
 import {reinsertIdpList} from './utility/reinsertIdpList';
 import {sortPrevious, sortRemaining} from './utility/sortIdps';
@@ -31,12 +30,10 @@ export const handleDeleteDisable = (e, previouslySelectedIdps) => {
     return;
   }
 
-  // Move it to the remaining idp list
-  moveIdpToRemaining(element);
   // Remove item from previous selection & html
   deleteIdp(element, previouslySelectedIdps);
-  // Reindex & SortRemaining idps by title
 
+  // Reindex & SortRemaining idps by title
   const idpArray = sortRemaining();
   if (idpArray) {
     reindexIdpArray(idpArray);

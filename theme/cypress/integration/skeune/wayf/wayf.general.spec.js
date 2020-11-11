@@ -61,9 +61,8 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.get('.wayf__search').type('OllekebollekeKnol');
       cy.get('.wayf__noResults').should('be.visible');
-      // The search bar should show the loupe when no input is typed in the search box
-      cy.get('.search__submit').should('be.visible');
-      cy.get('.search__reset').should('not.be.visible');
+      cy.get('.search__submit').should('not.be.visible');
+      cy.get('.search__reset').should('be.visible');
     });
 
     it('Should be able to search for an idp', () => {
@@ -110,16 +109,16 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
 
     it('Should get the correct weight for an idp with a full match on the entityId', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=50');
-      cy.get('.wayf__search').type('https://example.com/entityid/1');
+      cy.get('.wayf__search').type('https://example.com/entityId/1');
       cy.get('.wayf__remainingIdps .wayf__idp[data-weight="60"]')
         .should('have.length', 1);
     });
 
     it('Should get the correct weight for an idp with a partial match on the entityId', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=50');
-      cy.get('.wayf__search').type('https://example.com/entityid/1');
+      cy.get('.wayf__search').type('/1');
       cy.get('.wayf__remainingIdps .wayf__idp[data-weight="7"]')
-        .should('have.length', 10);
+        .should('have.length', 11);
     });
 
     it('Should not take into account the space at the end of a searchTerm', () => {
@@ -165,22 +164,20 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
 
     it('Ensure the default IdP has the correct data attribute', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?defaultIdpEntityId=https://example.com/entityId/3');
-      cy.get('article[data-entityid="https://example.com/entityid/3"]')
+      cy.get('article[data-entityid="https://example.com/entityId/3"]')
         .should('have.id', 'defaultIdp');
     });
   });
 
   describe('Should show the remember my choice option', () => {
-    it('Load the page with rememberChoiceFeature', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true');
-    });
-
     it('Ensure some elements are on the page', () => {
-      cy.onPage('Select an organisation to login to the service');
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true');
+      cy.onPage('Select an organisation to login');
       cy.onPage('Remember my choice');
     });
 
     it('Ensure some elements are NOT on the page', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true');
       cy.notOnPage('Identity providers without access');
       cy.notOnPage('Return to service provideraccess');
     });
@@ -198,12 +195,12 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
     it('Should hide the IdP link when search term is provided', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.get('.search__field').type('search-term');
-      cy.notOnPage('If your organisation is not listed').should('not.exist');
+      cy.get('.remainingIdps__defaultIdp').should('not.be.visible');
     });
 
     it('Should show the IdP link when search term is provided', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-      cy.get('.search__field').type('');
+      cy.get('.search__field').clear();
       cy.onPage('If your organisation is not listed');
     });
   });

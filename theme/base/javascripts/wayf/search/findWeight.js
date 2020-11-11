@@ -18,7 +18,7 @@ export const findWeight = (idp, searchTerm) => {
   if (weight > 0) return weight;
 
   const entityId = getData(idp, 'entityid');
-  weight += checkFullEntityIdMatch(searchTerm, entityId);
+  weight += checkFullEntityIdMatch(searchTerm.toLowerCase(), entityId.toLowerCase());
   if (weight > 0) return weight;
 
   const keywords = getData(idp, 'keywords');
@@ -27,7 +27,7 @@ export const findWeight = (idp, searchTerm) => {
 
   weight += checkFullPartOfTitleMatch(searchTerm, title);
   weight += checkPartialMatchTitle(searchTerm, title);
-  weight += checkPartialMatchId(searchTerm, entityId);
+  weight += checkPartialMatchId(searchTerm.toLowerCase(), entityId);
   weight += checkPartialMatchKeywords(searchTerm, keywords);
 
   return Math.round(weight / 3);

@@ -1,10 +1,8 @@
-import {showElement} from '../../utility/showElement';
+import {switchIdpSection} from "./switchIdpSection";
 
 /**
  * Show the remaining Idp section
  */
 export const showRemaining = () => {
-  const remainingIdps = document.querySelector('.wayf__remainingIdps');
-  showElement(remainingIdps);
-  document.querySelector('.search__field').focus();
+  switchIdpSection();
 };
