@@ -32,7 +32,7 @@ context('WayfMouseBehaviour', () => {
     cy.get('a.result.active.access:nth-child(2)').click({force:true});
     // We visit the fake IdP, verify the right redirect is performed
     cy.location().should((loc) => {
-      expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/3');
+      expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/2');
     });
     // Go back to the WAYF
     cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=10&displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
