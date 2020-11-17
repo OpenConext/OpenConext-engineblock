@@ -28,6 +28,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
+    const IS_DEFAULT_IDP_KEY = 'isDefaultIdp';
+
     /** @var \EngineBlock_Corto_ProxyServer */
     protected $_server;
 
@@ -434,6 +436,9 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             $container->getDefaultIdPEntityId()
         );
 
+        $defaultIdPInIdPList = $this->isDefaultIdPPresent($idpList);
+        $showDefaultIdpBanner = (bool) $container->shouldDisplayDefaultIdpBannerOnWayf() && $defaultIdPInIdPList;
+
         $rememberChoiceFeature = $container->getRememberChoice();
 
         $output = $this->twig->render(
@@ -444,7 +449,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
                 'helpLink' => '/authentication/idp/help-discover?lang=' . $currentLocale,
                 'backLink' => $container->isUiOptionReturnToSpActive(),
                 'cutoffPointForShowingUnfilteredIdps' => $container->getCutoffPointForShowingUnfilteredIdps(),
-                'showIdPBanner' => (bool) $container->shouldDisplayDefaultIdpBannerOnWayf(),
+                'showIdPBanner' => $showDefaultIdpBanner,
                 'rememberChoiceFeature' => $rememberChoiceFeature,
                 'showRequestAccess' => $serviceProvider->getCoins()->displayUnconnectedIdpsWayf(),
                 'requestId' => $request->getId(),
@@ -489,7 +494,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
                 'Access'    => $identityProvider->enabledInWayf || $isDebugRequest ? '1' : '0',
                 'ID'        => md5($identityProvider->entityId),
                 'EntityID'  => $identityProvider->entityId,
-                'isDefaultIdp' => $isDefaultIdP
+                self::IS_DEFAULT_IDP_KEY => $isDefaultIdP
             );
             $wayfIdps[] = $wayfIdp;
         }
@@ -684,5 +689,15 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
 
         $serviceProvider = $this->_serviceProviderFactory->createEngineBlockEntityFrom($keyId);
         return ServiceProvider::fromServiceProviderEntity($serviceProvider);
+    }
+
+    private function isDefaultIdPPresent(array $idpList): bool
+    {
+        foreach ($idpList as $idp) {
+            if ($idp[self::IS_DEFAULT_IDP_KEY] === true) {
+                return true;
+            }
+        }
+        return false;
     }
 }

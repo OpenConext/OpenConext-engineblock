@@ -260,7 +260,7 @@ class EngineBlock_Application_DiContainer extends Pimple
 
     public function getDefaultIdPEntityId()
     {
-        if ($this->container->has('wayf.default_idp_entity_id')) {
+        if ($this->container->hasParameter('wayf.default_idp_entity_id')) {
             return $this->container->getParameter('wayf.default_idp_entity_id');
         }
         return null;
