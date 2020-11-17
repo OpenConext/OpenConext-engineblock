@@ -186,6 +186,9 @@ body {
                         > a {
                             background-color: inherit;
                         }
+                        &:first-child {
+                            padding-right: 5px;
+                        }
 
                         &:not(:first-of-type) {
                             border-left: 1px solid $white;
