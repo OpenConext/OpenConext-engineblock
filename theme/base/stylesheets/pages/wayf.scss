@@ -100,7 +100,6 @@
                         align-items: center;
                         box-sizing: content-box;
                         display: flex;
-                        justify-content: space-between;
                         width: calc(100% - 6.25rem);
 
                         @include screen('mobile') {
