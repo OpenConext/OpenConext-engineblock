@@ -405,6 +405,7 @@
                     @include absolute(top 3px right 3px);
                     @include button-reset($white);
                     @include poirot;
+                    background-color: transparent;
                     background-position: center center;
                     background-size: 1.5rem 1.5rem;
                     border-radius: 6px;
