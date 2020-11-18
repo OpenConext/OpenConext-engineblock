@@ -107,7 +107,7 @@ context('WAYF when using the keyboard', () => {
       cy.fillNoAccessForm();
     });
 
-    it.only('Should be able to partially fill the request access form and get validation message', () => {
+    it('Should be able to partially fill the request access form and get validation message', () => {
       cy.openUnconnectedIdp();
       cy.fillNoAccessForm();
       cy.get('#name').clear();
