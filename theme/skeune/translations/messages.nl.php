@@ -32,7 +32,7 @@ return [
     'wayf_noaccess_success'     => 'Je aanvraag tot toegang werd verstuurd.',
     'wayf_defaultIdp'                => '<a href="%defaultIdpLink%" class="wayf__defaultIdpLink">eduID is beschikbaar als alternatief</a> indien uw %organisation_noun% niet in de lijst staat.',
     'wayf_idp_title_screenreader' => 'Inloggen met ',
-    'log_in_to'                 => 'Select an %organisationNoun% to login to %arg1%',
+    'log_in_to'                 => 'Selecteer een %organisationNoun% en login bij %arg1%',
 
     // Consent
     'consent_h1_text'   => 'Geeft u toestemming om uw informatie te delen?',
