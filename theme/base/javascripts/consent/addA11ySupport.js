@@ -12,7 +12,6 @@ export const addAccessibilitySupport = () => {
   document.querySelector('body').addEventListener('keydown', function(e) {
     if (e.keyCode === ENTER) {
       const target = e.target;
-      console.log(e.target);
       if (target.tagName === 'LABEL' && target.tabIndex === 0) {
         fireClickEvent(target);
       }
