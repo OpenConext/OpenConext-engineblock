@@ -64,15 +64,15 @@
                         cursor: pointer;
 
                         > .idp__content {
-                                > button {
-                                    @include button-reset($idpBlue);
-                                    margin: 3px 0;
+                            > button {
+                                @include button-reset($idpBlue);
+                                margin: 3px 0;
 
-                                    > .idp__delete {
-                                        @include trashcan-hover;
-                                    }
+                                > .idp__delete {
+                                    @include trashcan-hover;
                                 }
                             }
+                        }
                     }
 
                     > .idp__logo {
@@ -188,6 +188,7 @@
                 }
 
                 > .wayf__idp.wayf__idp--noAccess {
+                    @include focus;
                     background-color: $softBorderGray;
                     box-shadow: 0 1px 0 2px $noAccessGray;
 
@@ -595,12 +596,13 @@
             }
 
             > h3 {
-                margin: 0 0 .5rem;
+                margin: 0 0 .5rem .5rem;
             }
 
             > p {
                 &:first-of-type {
                     margin-top: 0;
+                    margin-left: .5rem;
                 }
             }
         }
