@@ -1,7 +1,8 @@
+import {hideErrorMessage} from './hideErrorMessage';
 import {showSuccessMessage} from './showSuccessMessage';
 import {toggleErrorMessage} from './toggleErrorMessage';
-import {hideErrorMessage} from './hideErrorMessage';
 import {toggleFormFieldsAndButton} from './toggleFormFieldsAndButton';
+import {valid} from "./validation";
 
 /**
  * Ensure submitting the form is possible.
@@ -30,6 +31,10 @@ export const attachClickHandlerToForm = (form, parentSection, noAccess) => {
     const form = event.target;
     const formData = new FormData(form);
 
+    if (!valid(formData)) {
+      return false;
+    }
+
     fetch('/authentication/idp/performRequestAccess', {
       method: 'POST',
       body: formData,
@@ -43,6 +48,7 @@ export const attachClickHandlerToForm = (form, parentSection, noAccess) => {
       hideErrorMessage(noAccess);
       toggleFormFieldsAndButton();
       showSuccessMessage(parentSection, noAccess);
+      form.reset();
     }).catch(function (error) {
       toggleErrorMessage();
       console.log(error);

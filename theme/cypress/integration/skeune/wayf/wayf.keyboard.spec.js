@@ -107,6 +107,24 @@ context('WAYF when using the keyboard', () => {
       cy.fillNoAccessForm();
     });
 
+    it.only('Should be able to partially fill the request access form and get validation message', () => {
+      cy.openUnconnectedIdp();
+      cy.fillNoAccessForm();
+      cy.get('#name').clear();
+      cy.focusAndEnter('.cta__request');
+      cy.onPage('Your name needs to be at least 2 characters long');
+      cy.notOnPage('This is an invalid email address');
+    });
+
+    it('Email validation should be triggered', () => {
+      cy.openUnconnectedIdp();
+      cy.fillNoAccessForm();
+      cy.get('#email').clear();
+      cy.focusAndEnter('.cta__request');
+      cy.notOnPage('Your name needs to be at least 2 characters long');
+      cy.onPage('This is an invalid email address');
+    });
+
     it('Should show the success message', () => {
       cy.openUnconnectedIdp();
       cy.fillNoAccessForm();

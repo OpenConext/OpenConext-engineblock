@@ -16,7 +16,7 @@
             <strong>*</strong> {{ 'wayf_noaccess_name'|trans }}
         </label>
         <input type="text" name="name" id="name" minlength="2" />
-        <p class="form__error">
+        <p class="form__error hidden" data-labelfor="name">
             {{ 'form_error_name'|trans }}
         </p>
     </fieldset>
@@ -29,7 +29,7 @@
             <strong>*</strong> {{ 'wayf_noaccess_email'|trans }}
         </label>
         <input type="email" name="email" id="email" />
-        <p class="form__error">
+        <p class="form__error hidden" data-labelfor="email">
             {{ 'form_error_email'|trans }}
         </p>
     </fieldset>
