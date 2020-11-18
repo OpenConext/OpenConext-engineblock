@@ -82,7 +82,7 @@ services:
             interval: 15s
 
     cypress:
-        image: "cypress/included:5.0.0"
+        image: "cypress/included:5.6.0"
         depends_on:
             - engine.vm.openconext.org
         environment:

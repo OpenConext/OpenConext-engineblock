@@ -1,5 +1,6 @@
-import {toggleVisibility} from '../../utility/toggleVisibility';
-import {showRemaining} from '../utility/showRemaining';
+import * as Cookies from 'js-cookie';
+import {switchIdpSection} from '../utility/switchIdpSection';
+import {focusOn} from "../../utility/focusOn";
 
 /**
  * When the last idp is deleted from the previous selection list:
@@ -7,6 +8,9 @@ import {showRemaining} from '../utility/showRemaining';
  * - show the remaining idp list section
  */
 export const handleNoneLeft = () => {
-  toggleVisibility(document.querySelector('.wayf__previousSelection'));
-  showRemaining();
+  const configuration = JSON.parse(document.getElementById('wayf-configuration').innerHTML);
+  const cookieName = configuration.previousSelectionCookieName;
+
+  Cookies.remove(cookieName);
+  switchIdpSection();
 };

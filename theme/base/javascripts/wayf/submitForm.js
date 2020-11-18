@@ -15,14 +15,15 @@ import {hasVisibleDeleteButtonAsTarget} from './utility/hasVisibleDeleteButtonAs
  * @param previouslySelectedIdps
  */
 export const submitForm = (e, previouslySelectedIdps) => {
+  e.preventDefault();
   let element = e.target;
 
-  if (hasVisibleDeleteButtonAsTarget(e.target)) {
+  if (hasVisibleDeleteButtonAsTarget(element)) {
     return;
   }
 
-  if (e.target.tagName !== 'ARTICLE') {
-    element = e.target.closest('.wayf__idp');
+  if (element.tagName !== 'ARTICLE') {
+    element = element.closest('.wayf__idp');
   }
   selectAndSubmit(element, previouslySelectedIdps);
 };

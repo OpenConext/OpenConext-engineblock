@@ -16,7 +16,6 @@ import {toggleFormFieldsAndButton} from './toggleFormFieldsAndButton';
 export const attachClickHandlerToRequestButton = (parentSection, noAccess, form) => {
   const requestButton = document.querySelector('.cta__showForm');
   const hasClickHandler = getData(requestButton, 'clickhandled');
-  console.log(form);
 
   // if clickHandler's already been attached, do not attach it again
   if (hasClickHandler) {

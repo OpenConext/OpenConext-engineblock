@@ -1,5 +1,5 @@
 /**
- * Tests for behaviour of the WAYF which depends on pressing enter.
+ * Tests for behaviour of the WAYF which depends on the keyboard.
  */
 context('WAYF when using the keyboard', () => {
   describe('Test logging in', () => {
@@ -10,7 +10,7 @@ context('WAYF when using the keyboard', () => {
         .focus()
         .type('{enter}');
       cy.location().should((loc) => {
-        expect(loc.href).to.eq('https://engine.vm.openconext.org?idp=https://example.com/entityId/2/');
+        expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/2');
       });
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
     });
@@ -68,56 +68,69 @@ context('WAYF when using the keyboard', () => {
 
   describe('Should show a fully functional no access section when a disabled account is selected', () => {
     it('Should show the no access section on selecting a disabled account', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
-      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/1"]');
+      cy.openUnconnectedIdp();
       cy.contains('.noAccess__title', 'Sorry, no access for this account');
     });
 
     it('Should not show the form elements yet', () => {
+      cy.openUnconnectedIdp();
       cy.get('.noAccess__requestForm fieldset')
         .should('not.be.visible');
     });
 
     it('Should have a functioning cancel button', () => {
+      cy.openUnconnectedIdp();
+      cy.focusAndEnter('.cta__showForm');
       cy.focusAndEnter('.cta__cancel');
       cy.get('.noAccess__title')
         .should('not.be.visible');
     });
 
     it('Should show the form fields after hitting request access', () => {
-      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/4"]');
+      cy.openUnconnectedIdp();
       cy.focusAndEnter('.cta__showForm');
       cy.get('.noAccess__requestForm fieldset')
         .should('be.visible');
     });
 
     it('Should hide form fields after hitting cancel', () => {
+      cy.openUnconnectedIdp();
+      cy.focusAndEnter('.cta__showForm');
       cy.focusAndEnter('.cta__cancel');
-      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/2"]');
+      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityId/2"]');
       cy.get('.noAccess__requestForm fieldset')
         .should('not.be.visible');
     });
 
     it('Should be able to fill the request access form', () => {
-      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/4"]');
-      cy.get('#name').type('Joske');
-      cy.get('#email').type('joske.vermeulen@thuis.be');
-      cy.get('#motivation').focus().type('tis toapuh dattem tuis is');
-      cy.focusAndEnter('.cta__request');
-      cy.wait(250);
-      cy.get('.noAccess__title').should('not.be.visible');
+      cy.openUnconnectedIdp();
+      cy.fillNoAccessForm();
     });
 
     it('Should show the success message', () => {
+      cy.openUnconnectedIdp();
+      cy.fillNoAccessForm();
+      cy.focusAndEnter('.cta__request');
+      cy.wait(500);
+      cy.get('.noAccess__title').should('not.be.visible');
       cy.get('.notification__success').should('be.visible');
     });
 
     it('Should not show the success message when selecting a new disabled account', () => {
-      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityid/3');
+      cy.openUnconnectedIdp();
+      cy.fillNoAccessForm();
+      cy.focusAndEnter('.cta__request');
+      cy.wait(500);
+      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityId/3');
       cy.get('.notification__success').should('not.be.visible');
     });
 
     it('Should also not show the form fields after selecting a new disabled account', () => {
+      cy.openUnconnectedIdp();
+      cy.fillNoAccessForm();
+      cy.focusAndEnter('.cta__request');
+      cy.wait(500);
+      cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityId/3');
       cy.get('.noAccess__requestForm fieldset')
         .should('not.be.visible');
     });
@@ -141,63 +154,66 @@ context('WAYF when using the keyboard', () => {
   });
 
   describe('Should show a fully functional previous selection section', () => {
-    it('Loads the WAYF and populates the previous section with an idp', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-      cy.selectFirstIdpAndReturn(false);
-    });
-
     it('Test if the previous section exists with the right title', () => {
-      cy.contains('.previousSelection__title', 'Your accounts');
+      cy.addOnePreviouslySelectedIdp();
+      cy.get('.previousSelection__title')
+        .should('be.visible');
     });
 
     it('Test if the section contains the use account button', () => {
-      cy.contains('.previousSelection__addAccount', 'Use another account');
+      cy.addOnePreviouslySelectedIdp();
+      cy.get('.previousSelection__addAccount')
+        .should('be.visible');
     });
 
     it('Test if it contains the right amount of idps', () => {
-      cy.get('.wayf__previousSelection .wayf__idp h3')
+      cy.addOnePreviouslySelectedIdp();
+      cy.get('.wayf__previousSelection .wayf__idp')
         .should('have.length', 1);
     });
 
     it('Test if selecting a previously selected idp works', () => {
+      cy.addOnePreviouslySelectedIdp();
       cy.selectFirstIdp(false, '.wayf__previousSelection .wayf__idp[data-index="1"]');
       cy.location().should((loc) => {
         expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/1');
       });
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
     });
 
     it('Test if the count was raised on the selected idp', () => {
+      cy.addOnePreviouslySelectedIdp();
+      cy.selectFirstIdp(false, '.wayf__previousSelection .wayf__idp[data-index="1"]');
+      cy.loadWayf();
       cy.get('.wayf__previousSelection .wayf__idp[data-index="1"]').should('have.attr', 'data-count', '2');
     });
 
-    it('Test the add account button opens up the search & puts focus on the search field, then select the focused element.', () => {
-      cy.get('.previousSelection__addAccount')
-        .type('{enter}');
-      cy.focused().should('have.class', 'search__field');
-      cy.get('.wayf__previousSelection').should('not.be.visible');
-      cy.selectFirstIdpAndReturn(false);
-    });
-
     it('Test the edit button allows deleting an account', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      cy.addOnePreviouslySelectedIdp();
+      cy.selectAccountButton();
+      cy.selectFirstIdpAndReturn(false);
       cy.toggleEditButton(false);
       cy.hitDeleteButton(false);
-      cy.get('.wayf__previousSelection .wayf__idp h3')
-        .should('have.length', 1);
+      cy.get('.wayf__previousSelection').should('not.be.visible');
     });
 
-    it('Test deleting the last previously selected idp hides the section, shows the remaining idps and focuses on the searchbar', () => {
+    it('Test the add account button opens up the search & puts focus on the search field, then select the focused element.', () => {
+      cy.addOnePreviouslySelectedIdp();
+      cy.selectAccountButton();
+      cy.focused().should('have.class', 'search__field');
+      cy.get('.wayf__previousSelection').should('not.be.visible');
+    });
+
+    it('Test deleting the last previously selected idp hides the section, shows the remaining idps, focuses on the searchbar & adds the deleted idp to the list', () => {
+      cy.addOnePreviouslySelectedIdp();
       cy.hitDeleteButton(false, '.wayf__previousSelection li:first-of-type .wayf__idp .idp__deleteDisable');
       cy.focused().should('have.class', 'search__field');
       cy.get('.previousSelection__addAccount').should('not.be.visible');
     });
 
-    it('Test the last deleted idp is in the remaining list', () => {
-      cy.get('.wayf__remainingIdps .wayf__idp[data-entityid="https://example.com/entityId/2"]').should('exist');
-    });
-
-    it('Test the remaining list is sorted alphabetically', () => {
+    it('Test the remaining list contains the deleted idp & is sorted alphabetically', () => {
+      cy.addOnePreviouslySelectedIdp();
+      cy.hitDeleteButton(false, '.wayf__previousSelection li:first-of-type .wayf__idp .idp__deleteDisable');
+      cy.get('.wayf__remainingIdps .wayf__idp[data-entityid="https://example.com/entityId/1"]').should('exist');
       cy.get('.wayf__remainingIdps li:first-of-type .wayf__idp').should('have.attr', 'data-index', '1');
     });
   });

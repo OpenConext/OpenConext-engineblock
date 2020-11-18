@@ -9,7 +9,7 @@ import {getListSelector} from './getListSelector';
  * @parameter listSelector    string    the css selector for the list
  * @parameter list            string    the list to be sorted
  */
-export const sortIdps = (listSelector, list = REMAINING, ) => {
+export const sortIdps = (listSelector, list = 'remaining', ) => {
   const idpListSelector = getListSelector(list);
   const idpList = document.querySelectorAll(`${idpListSelector} > li`);
 
