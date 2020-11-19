@@ -13,11 +13,11 @@ export const searchBehaviour = () => {
   // attach handler to search field
   searchBar.addEventListener('keyup', throttle(event => searchAndSortIdps(idpArray, event.target.value), 250));
   searchBar.addEventListener('keyup', event => toggleDefaultIdPLinkVisibility(event.target.value));
-  searchBar.addEventListener('keyup',  event => toggleSearchAndResetButton(event.target.value));
+  searchBar.addEventListener('keyup',  event => toggleSearchAndResetButton(idpArray, event.target.value));
   searchBar.addEventListener('click', event => searchAndSortIdps(idpArray, event.target.value));
   searchBar.addEventListener('input', event => searchAndSortIdps(idpArray, event.target.value));
 
-  resetButton.addEventListener('click', event => toggleSearchAndResetButton(''));
+  resetButton.addEventListener('click', event => toggleSearchAndResetButton(idpArray, ''));
   // attach handler to search form
   document.querySelector('.wayf__search').addEventListener('submit', event => {
     event.preventDefault();

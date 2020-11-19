@@ -134,6 +134,8 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.get('.search__reset').click({force:true});
       cy.get('.search__submit').should('be.visible');
       cy.get('.search__reset').should('not.be.visible');
+      cy.get('.wayf__remainingIdps .wayf__idp')
+        .should('have.length', 5);
     });
   });
 
