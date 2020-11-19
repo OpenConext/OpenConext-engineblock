@@ -211,7 +211,7 @@
 
         >.wayf__previousSelection {
             @include display-grid;
-            @include grid-template-columns(calc(100% - 4rem) 4rem);
+            @include grid-template-columns(calc(100% - 7rem) 7rem);
             @include grid-template-rows(min-content min-content min-content);
             @include motion {
                 max-height: fit-content;
@@ -241,6 +241,7 @@
             > .ie11__label {
                 @include grid-position(1, 2, 2, 3);
                 margin: auto 0 calculateRem(34px) calculateRem(5px);
+                text-align: right;
 
                 > label[for="previousSelectionToggle"] {
                     color: $buttonBlue;
