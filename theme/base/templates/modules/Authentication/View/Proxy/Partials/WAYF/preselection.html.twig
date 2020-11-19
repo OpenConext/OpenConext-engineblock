@@ -3,16 +3,14 @@
         {{ 'wayf_your_accounts'|trans }}
     </h2>
     <input type="checkbox" name="previousSelectionToggle" id="previousSelectionToggle" class="visually-hidden previousSelection__toggle" tabindex="-1" role="button" aria-pressed="false" />
+    {% spaceless %}
     <div class="ie11__label">
         <label for="previousSelectionToggle" tabindex="0" class="previousSelection__toggleLabel" aria-pressed="false">
-            <span class="previousSelection__edit" tabindex="0">
-                {{ 'edit'|trans }}
-            </span>
-                <span class="previousSelection__done" tabindex="0">
-                {{ 'done'|trans }}
-            </span>
+            <span class="previousSelection__edit" tabindex="0">{{ 'edit'|trans }}</span>
+            <span class="previousSelection__done" tabindex="0">{{ 'done'|trans }}</span>
         </label>
     </div>
+    {% endspaceless %}
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpList.html.twig' with { idpList: connectedIdps.formattedPreviousSelectionList, delete: true, listName: 'preselection' } %}
     <button type="button" class="previousSelection__addAccount">
         <span>{{ 'wayf_add_account'|trans }}</span>
