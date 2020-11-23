@@ -188,6 +188,7 @@
                 }
 
                 > .wayf__idp.wayf__idp--noAccess {
+                    @include focus;
                     background-color: $softBorderGray;
                     box-shadow: 0 1px 0 2px $noAccessGray;
 
