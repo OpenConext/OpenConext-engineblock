@@ -67,4 +67,14 @@ class ConnectedIdps
     {
         return $this->formattedPreviousSelectionList;
     }
+
+    public function getDefaultIdPTitle()
+    {
+        foreach ($this->formattedIdpList as $idp) {
+            if ($idp['isDefaultIdp']) {
+                return $idp['displayTitle'];
+            }
+        }
+        return '';
+    }
 }
