@@ -527,10 +527,6 @@
                     }
                 }
 
-                input:not(:invalid) + .form__error {
-                    display: none;
-                }
-
                 .form__error {
                     @include triangle;
                     background-size: $f-large $f-large;

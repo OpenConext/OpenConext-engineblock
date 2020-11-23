@@ -74,32 +74,28 @@ context('WAYF when using the keyboard', () => {
 
     it('Should not show the form elements yet', () => {
       cy.openUnconnectedIdp();
-      cy.get('.noAccess__requestForm fieldset')
-        .should('not.be.visible');
+      cy.notBeVisible('.noAccess__requestForm fieldset');
     });
 
     it('Should have a functioning cancel button', () => {
       cy.openUnconnectedIdp();
       cy.focusAndEnter('.cta__showForm');
-      cy.focusAndEnter('.cta__cancel');
-      cy.get('.noAccess__title')
-        .should('not.be.visible');
+      cy.getAndEnter('.cta__cancel');
+      cy.notBeVisible('.noAccess__title');
     });
 
     it('Should show the form fields after hitting request access', () => {
       cy.openUnconnectedIdp();
-      cy.focusAndEnter('.cta__showForm');
-      cy.get('.noAccess__requestForm fieldset')
-        .should('be.visible');
+      cy.getAndEnter('.cta__showForm');
+      cy.beVisible('.noAccess__requestForm fieldset');
     });
 
     it('Should hide form fields after hitting cancel', () => {
       cy.openUnconnectedIdp();
-      cy.focusAndEnter('.cta__showForm');
-      cy.focusAndEnter('.cta__cancel');
+      cy.getAndEnter('.cta__showForm');
+      cy.getAndEnter('.cta__cancel');
       cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityId/2"]');
-      cy.get('.noAccess__requestForm fieldset')
-        .should('not.be.visible');
+      cy.notBeVisible('.noAccess__requestForm fieldset');
     });
 
     it('Should be able to fill the request access form', () => {
@@ -107,13 +103,32 @@ context('WAYF when using the keyboard', () => {
       cy.fillNoAccessForm();
     });
 
-    it('Should show the success message', () => {
+    it('Should be able to partially fill the request access form and get validation message', () => {
       cy.openUnconnectedIdp();
       cy.fillNoAccessForm();
-      cy.focusAndEnter('.cta__request');
+      cy.get('#name').clear();
+      cy.getAndEnter('.cta__request');
+      cy.get('#name + form_error')
+        .should('not.have.class', 'hidden');
+      cy.notBeVisible('This is an invalid email address');
+    });
+
+    it('Email validation should be triggered', () => {
+      cy.openUnconnectedIdp();
+      cy.fillNoAccessForm();
+      cy.get('#email').clear();
+      cy.getAndEnter('.cta__request');
+      cy.notBeVisible('Your name needs to be at least 2 characters long');
+      cy.doesNotHaveClass('#email + .form__error', 'hidden');
+    });
+
+    it.skip('Should show the success message', () => {
+      cy.openUnconnectedIdp();
+      cy.fillNoAccessForm();
+      cy.getAndEnter('.cta__request');
       cy.wait(500);
-      cy.get('.noAccess__title').should('not.be.visible');
-      cy.get('.notification__success').should('be.visible');
+      cy.notBeVisible('.noAccess__title');
+      cy.beVisible('.notification__success');
     });
 
     it('Should not show the success message when selecting a new disabled account', () => {
@@ -122,7 +137,7 @@ context('WAYF when using the keyboard', () => {
       cy.focusAndEnter('.cta__request');
       cy.wait(500);
       cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityId/3');
-      cy.get('.notification__success').should('not.be.visible');
+      cy.notBeVisible('.notification__success');
     });
 
     it('Should also not show the form fields after selecting a new disabled account', () => {
@@ -131,15 +146,14 @@ context('WAYF when using the keyboard', () => {
       cy.focusAndEnter('.cta__request');
       cy.wait(500);
       cy.focusAndEnter('.wayf__idp[data-entityid="https://unconnected.example.com/entityId/3');
-      cy.get('.noAccess__requestForm fieldset')
-        .should('not.be.visible');
+      cy.notBeVisible('.noAccess__requestForm fieldset');
     });
   });
 
   describe('Should have a working default Idp Banner', () => {
     it('Should have a default Idp banner visible', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?showIdpBanner=1');
-      cy.get('.wayf__defaultIdpLink').should('be.visible');
+      cy.beVisible('.wayf__defaultIdpLink');
     });
 
     it('Should scroll to the default Idp when clicking the banner link', () => {
@@ -156,14 +170,12 @@ context('WAYF when using the keyboard', () => {
   describe('Should show a fully functional previous selection section', () => {
     it('Test if the previous section exists with the right title', () => {
       cy.addOnePreviouslySelectedIdp();
-      cy.get('.previousSelection__title')
-        .should('be.visible');
+      cy.beVisible('.previousSelection__title');
     });
 
     it('Test if the section contains the use account button', () => {
       cy.addOnePreviouslySelectedIdp();
-      cy.get('.previousSelection__addAccount')
-        .should('be.visible');
+      cy.beVisible('.previousSelection__addAccount');
     });
 
     it('Test if it contains the right amount of idps', () => {
@@ -193,21 +205,21 @@ context('WAYF when using the keyboard', () => {
       cy.selectFirstIdpAndReturn(false);
       cy.toggleEditButton(false);
       cy.hitDeleteButton(false);
-      cy.get('.wayf__previousSelection').should('not.be.visible');
+      cy.notBeVisible('.wayf__previousSelection');
     });
 
     it('Test the add account button opens up the search & puts focus on the search field, then select the focused element.', () => {
       cy.addOnePreviouslySelectedIdp();
       cy.selectAccountButton();
       cy.focused().should('have.class', 'search__field');
-      cy.get('.wayf__previousSelection').should('not.be.visible');
+      cy.notBeVisible('.wayf__previousSelection');
     });
 
     it('Test deleting the last previously selected idp hides the section, shows the remaining idps, focuses on the searchbar & adds the deleted idp to the list', () => {
       cy.addOnePreviouslySelectedIdp();
       cy.hitDeleteButton(false, '.wayf__previousSelection li:first-of-type .wayf__idp .idp__deleteDisable');
       cy.focused().should('have.class', 'search__field');
-      cy.get('.previousSelection__addAccount').should('not.be.visible');
+      cy.notBeVisible('.previousSelection__addAccount');
     });
 
     it('Test the remaining list contains the deleted idp & is sorted alphabetically', () => {
