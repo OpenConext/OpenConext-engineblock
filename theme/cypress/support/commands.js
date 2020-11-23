@@ -3,6 +3,22 @@ Cypress.Commands.add('countIdps', (expectedCount, idpSelector = '#idp-picker h3'
   .should('have.length', expectedCount);
 });
 
+Cypress.Commands.add('hasClass', (selector, klasse) => {
+  cy.get(selector).should('have.class', klasse);
+});
+
+Cypress.Commands.add('doesNotHaveClass', (selector, klasse) => {
+  cy.get(selector).should('not.have.class', klasse);
+});
+
+Cypress.Commands.add('beVisible', (selector) => {
+  cy.get(selector).should('be.visible');
+});
+
+Cypress.Commands.add('notBeVisible', (selector) => {
+  cy.get(selector).should('not.be.visible');
+});
+
 Cypress.Commands.add('onPage', (expectedText) => {
   cy.get('body').contains(expectedText);
 });
@@ -29,6 +45,10 @@ Cypress.Commands.add('hideDebugBar', () => {
 
 Cypress.Commands.add('focusAndEnter', (selector) => {
   cy.get(selector).focus().type('{enter}', {force: true});
+});
+
+Cypress.Commands.add('getAndEnter', (selector) => {
+  cy.get(selector).type('{enter}', {force: true});
 });
 
 Cypress.Commands.add('pressArrowOnIdpList', (direction, className, index) => {
@@ -87,7 +107,7 @@ Cypress.Commands.add('fillNoAccessForm', (keyboard = true, showFormSelector = '.
   cy.openUnconnectedIdp(keyboard);
 
   if (keyboard) {
-    cy.focusAndEnter(showFormSelector);
+    cy.getAndEnter(showFormSelector);
   } else {
     cy.get(showFormSelector).click({force:true});
   }
