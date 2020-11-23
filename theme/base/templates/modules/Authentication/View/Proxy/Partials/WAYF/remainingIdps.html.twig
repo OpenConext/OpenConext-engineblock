@@ -19,7 +19,7 @@
         {% set organisationNoun = 'organisation_noun'|trans %}
         {% include '@theme/Default/Partials/informational.html.twig' with {
             class: 'remainingIdps__defaultIdp',
-            text: 'wayf_defaultIdp'|trans({ '%defaultIdpLink%': requestUri, '%organisation_noun%': organisationNoun })
+            text: 'wayf_defaultIdp'|trans({ '%defaultIdpLink%': requestUri, '%organisation_noun%': organisationNoun, '%defaultIdpName%': connectedIdps.defaultIdPTitle })
         } %}
     {% endif %}
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/rememberChoice.html.twig' %}

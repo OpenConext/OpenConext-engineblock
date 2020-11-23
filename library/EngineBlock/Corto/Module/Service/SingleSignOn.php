@@ -478,12 +478,20 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
                 continue;
             }
 
+            $isAccessible = $identityProvider->enabledInWayf || $isDebugRequest;
             $isDefaultIdP = false;
             if ($defaultIdpEntityId === $identityProvider->entityId) {
                 $isDefaultIdP = true;
             }
 
+            // Do not show the default IdP in the disconnected IdPs section.
+            if (!$isAccessible && $isDefaultIdP) {
+                continue;
+            }
+
             $additionalInfo = AdditionalInfo::create()->setIdp($identityProvider->entityId);
+
+            $isAccessible = $identityProvider->enabledInWayf || $isDebugRequest;
 
             $wayfIdp = array(
                 'Name_nl'   => $this->getNameNl($identityProvider, $additionalInfo),
@@ -491,7 +499,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
                 'Name_pt'   => $this->getNamePt($identityProvider, $additionalInfo),
                 'Logo'      => $identityProvider->logo ? $identityProvider->logo->url : '/images/placeholder.png',
                 'Keywords'  => $this->getKeywords($identityProvider),
-                'Access'    => $identityProvider->enabledInWayf || $isDebugRequest ? '1' : '0',
+                'Access'    => $isAccessible ? '1' : '0',
                 'ID'        => md5($identityProvider->entityId),
                 'EntityID'  => $identityProvider->entityId,
                 self::IS_DEFAULT_IDP_KEY => $isDefaultIdP
