@@ -459,6 +459,16 @@
         }
 
         > .wayf__noAccess {
+            > .wayf__idp.wayf__idp--noAccess {
+                > .idp__content {
+                    > .idp__deleteDisable {
+                        > .idp__delete {
+                            display: none;
+                        }
+                    }
+                }
+            }
+
             > .noAccess__title {
                 @include h2;
             }
