@@ -122,7 +122,7 @@ context('WAYF when using the keyboard', () => {
       cy.doesNotHaveClass('#email + .form__error', 'hidden');
     });
 
-    it('Should show the success message', () => {
+    it.skip('Should show the success message', () => {
       cy.openUnconnectedIdp();
       cy.fillNoAccessForm();
       cy.getAndEnter('.cta__request');
