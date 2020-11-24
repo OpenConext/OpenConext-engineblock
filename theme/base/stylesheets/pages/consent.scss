@@ -24,7 +24,7 @@
         }
     }
 
-    > h2 {
+    > * > h2 {
         color: $green;
         font-size: $f-h2;
         font-weight: $bolder;
@@ -41,266 +41,424 @@
     }
 
     > .consent__content {
-        background-color: $gray;
-        border-bottom-left-radius: 8px;
-        border-bottom-right-radius: 8px;
-        padding: 0 2rem 2.5rem;
+        .consent__content-body {
+            background-color: $gray;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            padding: 0 2rem 2.5rem;
 
-        @include screen('mobile') {
-            padding: 0 1rem 1.25rem;
-        }
+            @include screen('mobile') {
+                padding: 0 1rem 1.25rem;
+            }
 
-        @include screen('smallMobile') {
-            padding: 0 .5rem 1.25rem;
-        }
+            @include screen('smallMobile') {
+                padding: 0 .5rem 1.25rem;
+            }
 
-        > .consent__attributes,
-        .consent__attributes--nested {
-            background-color: $white;
-            border: 1px solid $hardBorderGray;
-            border-radius: 6px;
-            box-shadow: 0 1px 0 2px $hardBorderGray;
-            margin: 0 0 2rem;
-            padding: 0;
+            > .consent__attributes,
+            .consent__attributes--nested {
+                background-color: $white;
+                border: 1px solid $hardBorderGray;
+                border-radius: 6px;
+                box-shadow: 0 1px 0 2px $hardBorderGray;
+                margin: 0 0 2rem;
+                padding: 0;
 
-            > li {
-                @include display-grid;
-                @include grid-template-columns(33% 1% 57% 1% 8%);
-                border-bottom: 1px solid $softBorderGray;
-                line-height: 1.63;
-
-                > * {
-                    padding: 1rem 0;
-
-                }
-
-                @include screen('mobile') {
-                    padding: 10px;
-                    @include grid-template-columns(100%);
-                    @include grid-template-rows(min-content min-content);
+                > li {
+                    @include display-grid;
+                    @include grid-template-columns(33% 1% 57% 1% 8%);
+                    border-bottom: 1px solid $softBorderGray;
+                    line-height: 1.63;
 
                     > * {
-                        padding: 0;
+                        padding: 1rem 0;
+
                     }
-                }
-
-                > *:not(input[type="checkbox"]):not(.attribute__name) {
-                    color: $black;
-                    line-height: 1.63;
-                    text-align: left;
-                }
-
-                &.openToggle {
-                    align-items: center;
-                    display: flex;
-                    flex-direction: column;
-                    padding: 0;
-
-                    > label {
-                        background-image: unset;
-                        color: $buttonBlue;
-                        cursor: pointer;
-                        display: flex;
-                        height: unset;
-                        font-weight: $bolder;
-                        justify-content: center;
-                        width: unset;
-
-                        > .showLess,
-                        > .showMore {
-                            padding-right: 30px;
-                        }
-
-                        > .showLess {
-                            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24' height='24' viewBox='0 0 24 24'%3E%3Cdefs%3E%3Cpath id='wusxz70bxa' d='M4.92 10.75c-.183 0-.367-.05-.528-.153-.416-.268-.517-.794-.225-1.176L8.319 4 4.18-1.422c-.292-.382-.19-.908.226-1.175.417-.268.99-.175 1.282.207l4.508 5.906c.221.291.221.678 0 .969L5.673 10.39c-.18.234-.464.359-.754.359'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(5 8)'%3E%3Cmask id='etvz1reijb' fill='%23fff'%3E%3Cuse xlink:href='%23wusxz70bxa'/%3E%3C/mask%3E%3Cuse fill='%230077C8' transform='scale(1 -1) rotate(90 11.181 0)' xlink:href='%23wusxz70bxa'/%3E%3C/g%3E%3C/svg%3E%0A") no-repeat right center;
-                            display: none;
-                        }
-
-                        > .showMore {
-                            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='25' height='24' viewBox='0 0 25 24'%3E%3Cdefs%3E%3Cpath id='t5vbpi1wma' d='M4.92 10.75c-.183 0-.367-.05-.528-.153-.416-.268-.517-.794-.225-1.176L8.319 4 4.18-1.422c-.292-.382-.19-.908.226-1.175.417-.268.99-.175 1.282.207l4.508 5.906c.221.291.221.678 0 .969L5.673 10.39c-.18.234-.464.359-.754.359'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(5.5 8)'%3E%3Cmask id='jsuhne1qsb' fill='%23fff'%3E%3Cuse xlink:href='%23t5vbpi1wma'/%3E%3C/mask%3E%3Cuse fill='%230077C8' transform='rotate(90 7.181 4)' xlink:href='%23t5vbpi1wma'/%3E%3C/g%3E%3C/svg%3E%0A") no-repeat right center;
-                            display: block;
-                        }
-                    }
-
-                    > input[type="checkbox"] {
-                        display: none;
-                    }
-
-                    > input[type="checkbox"]:checked + label {
-                        > .showLess {
-                            display: block;
-                        }
-
-                        > .showMore {
-                            display: none;
-                        }
-                    }
-
-                    > input[type="checkbox"]:checked + label + .consent__attributes--nested {
-                        display: block;
-                    }
-
-                    > input[type="checkbox"]:checked + label + .consent__attributes--nested.animated {
-                        @include transition-display;
-                        max-height: 200vh;
-                        //transition: max-height .6s ease-in;
-                    }
-
-                    > .consent__attributes--nested {
-                        border: 0;
-                        border-radius: 0;
-                        box-shadow: none;
-                        display: none;
-                        margin: 0;
-                        order: -1;
-                        padding: 0;
-                        width: 100%;
-                    }
-
-                    > .consent__attributes--nested.animated {
-                        display: block;
-                        max-height: 0;
-                        overflow: hidden;
-                        transition: max-height .6s ease-in;
-                    }
-                }
-
-                > input[type="checkbox"]:checked.tooltip ~ .attribute__name > label.tooltip {
-                    @include tooltip-checked;
-                    background-position: left 8px bottom;
-                }
-
-                > .attribute__name {
-                    @include grid-position(1, 2, 1, 2);
-                    margin-right: 0.5rem;
-                    text-align: right;
 
                     @include screen('mobile') {
-                        display: inline-block;
-                        text-align: left;
-                        margin-right: 0;
+                        padding: 10px;
+                        @include grid-template-columns(100%);
+                        @include grid-template-rows(min-content min-content);
+
+                        > * {
+                            padding: 0;
+                        }
                     }
 
-                    > label.tooltip {
-                        display: none;
+                    > *:not(input[type="checkbox"]):not(.attribute__name) {
+                        color: $black;
+                        line-height: 1.63;
+                        text-align: left;
+                    }
+
+                    &.openToggle {
+                        align-items: center;
+                        display: flex;
+                        flex-direction: column;
+                        padding: 0;
+
+                        > label {
+                            background-image: unset;
+                            color: $buttonBlue;
+                            cursor: pointer;
+                            display: flex;
+                            height: unset;
+                            font-weight: $bolder;
+                            justify-content: center;
+                            width: unset;
+
+                            > .showLess,
+                            > .showMore {
+                                padding-right: 30px;
+                            }
+
+                            > .showLess {
+                                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24' height='24' viewBox='0 0 24 24'%3E%3Cdefs%3E%3Cpath id='wusxz70bxa' d='M4.92 10.75c-.183 0-.367-.05-.528-.153-.416-.268-.517-.794-.225-1.176L8.319 4 4.18-1.422c-.292-.382-.19-.908.226-1.175.417-.268.99-.175 1.282.207l4.508 5.906c.221.291.221.678 0 .969L5.673 10.39c-.18.234-.464.359-.754.359'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(5 8)'%3E%3Cmask id='etvz1reijb' fill='%23fff'%3E%3Cuse xlink:href='%23wusxz70bxa'/%3E%3C/mask%3E%3Cuse fill='%230077C8' transform='scale(1 -1) rotate(90 11.181 0)' xlink:href='%23wusxz70bxa'/%3E%3C/g%3E%3C/svg%3E%0A") no-repeat right center;
+                                display: none;
+                            }
+
+                            > .showMore {
+                                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='25' height='24' viewBox='0 0 25 24'%3E%3Cdefs%3E%3Cpath id='t5vbpi1wma' d='M4.92 10.75c-.183 0-.367-.05-.528-.153-.416-.268-.517-.794-.225-1.176L8.319 4 4.18-1.422c-.292-.382-.19-.908.226-1.175.417-.268.99-.175 1.282.207l4.508 5.906c.221.291.221.678 0 .969L5.673 10.39c-.18.234-.464.359-.754.359'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(5.5 8)'%3E%3Cmask id='jsuhne1qsb' fill='%23fff'%3E%3Cuse xlink:href='%23t5vbpi1wma'/%3E%3C/mask%3E%3Cuse fill='%230077C8' transform='rotate(90 7.181 4)' xlink:href='%23t5vbpi1wma'/%3E%3C/g%3E%3C/svg%3E%0A") no-repeat right center;
+                                display: block;
+                            }
+                        }
+
+                        > input[type="checkbox"] {
+                            display: none;
+                        }
+
+                        > input[type="checkbox"]:checked + label {
+                            > .showLess {
+                                display: block;
+                            }
+
+                            > .showMore {
+                                display: none;
+                            }
+                        }
+
+                        > input[type="checkbox"]:checked + label + .consent__attributes--nested {
+                            display: block;
+                        }
+
+                        > input[type="checkbox"]:checked + label + .consent__attributes--nested.animated {
+                            @include transition-display;
+                            max-height: 200vh;
+                            //transition: max-height .6s ease-in;
+                        }
+
+                        > .consent__attributes--nested {
+                            border: 0;
+                            border-radius: 0;
+                            box-shadow: none;
+                            display: none;
+                            margin: 0;
+                            order: -1;
+                            padding: 0;
+                            width: 100%;
+                        }
+
+                        > .consent__attributes--nested.animated {
+                            display: block;
+                            max-height: 0;
+                            overflow: hidden;
+                            transition: max-height .6s ease-in;
+                        }
+                    }
+
+                    > input[type="checkbox"]:checked.tooltip ~ .attribute__name > label.tooltip {
+                        @include tooltip-checked;
+                        background-position: left 8px bottom;
+                    }
+
+                    > .attribute__name {
+                        @include grid-position(1, 2, 1, 2);
+                        margin-right: 0.5rem;
+                        text-align: right;
 
                         @include screen('mobile') {
-                            background-position: left 8px bottom;
                             display: inline-block;
-                            margin: 0 0 -2px 5px;
-                            padding: 1rem 20px;
+                            text-align: left;
+                            margin-right: 0;
+                        }
+
+                        > label.tooltip {
+                            display: none;
+
+                            @include screen('mobile') {
+                                background-position: left 8px bottom;
+                                display: inline-block;
+                                margin: 0 0 -2px 5px;
+                                padding: 1rem 20px;
+                            }
+                        }
+                    }
+
+                    > .attribute__value {
+                        @include grid-position(1, 2, 3, 4);
+                        font-weight: $bolder;
+                        overflow-wrap: break-word;
+
+                        @include screen('mobile') {
+                            @include grid-position(2, 3, 1, 2);
+                        }
+                    }
+
+                    > label,
+                    > .attribute__name > .label.tooltip {
+                        @include grid-position(1, 2, 5, 6);
+
+                        @include screen('mobile') {
+                            display: none;
+                        }
+                    }
+
+                    > label {
+                        margin: auto 0;
+                        padding: 1rem 20px;
+
+                        @include screen('mobile') {
+                            display: none;
+                        }
+                    }
+
+                    > .tooltip__value {
+                        @include grid-position(2, 3, 1, 6);
+                        padding: 0;
+
+                        @include screen('mobile') {
+                            @include grid-position(3, 4, 1, 2);
                         }
                     }
                 }
 
-                > .attribute__value {
-                    @include grid-position(1, 2, 3, 4);
+                > li.idpRow {
+                    @include grid-template-columns(10% 1% 50% 1% 37% 1%);
+                    align-items: center;
+                    background-color: $providerGray;
+                    border-bottom-left-radius: 4px;
+                    border-bottom-right-radius: 4px;
+                    font-size: $f-small;
                     font-weight: $bolder;
-                    overflow-wrap: break-word;
+                    text-align: left;
 
                     @include screen('mobile') {
-                        @include grid-position(2, 3, 1, 2);
+                        @include grid-template-columns(10% 6% 83% 1%);
+                    }
+
+                    > img {
+                        @include grid-position(1, 2, 1, 2);
+                        max-height: calculateRem(30px);
+                        margin-left: 9px;
+                    }
+
+                    > p {
+                        @include grid-position(1, 2, 3, 4);
+                        font-size: $f-small;
+                        font-weight: $normal;
+                        margin: 0;
+                        text-align: left;
+
+                        @include screen('mobile') {
+                            margin: 0 0 0 10px;
+                        }
+
+                        > strong {
+                            font-weight: $bolder;
+                        }
+                    }
+
+                    > input[type="checkbox"],
+                    > .ie11__label,
+                    > .ie11__link {
+                        @include grid-position(1, 2, 5, 6);
+
+                        @include screen('mobile') {
+                            @include grid-position(2, 3, 3, 5);
+                        }
+                    }
+
+                    > .ie11__label,
+                    > .ie11__link {
+                        text-align: right;
+
+                        @include screen('mobile') {
+                            margin: 0 0 0 10px;
+                            text-align: inherit;
+                        }
+
+                        > label.modal {
+                            color: $oceanBlue;
+                            padding: 10px 25px 10px 5px;
+
+                            @include screen('mobile') {
+                                display: block;
+                                background-position: right 18px center;
+                                padding-right: 40px;
+                            }
+                        }
+
+                        > a.idpRow__supportUrl {
+                            color: $oceanBlue;
+                            padding: 10px 25px 10px 0;
+                            text-decoration: none;
+
+                            &:hover {
+                                text-decoration: underline;
+                            }
+                        }
+                    }
+
+                    > .modal__value {
+                        @include start-display-animated;
+                        @include grid-position(2, 3, 1, 7);
+                        //max-width: calc(100% - 4rem);
+
+                        @include screen('mobile') {
+                            @include grid-position(3, 4, 1, 5);
+                            //max-width: calc(100% - 1rem);
+                        }
+                    }
+
+                    > input:checked + .ie11__label + .modal__value {
+                        display: flex;
+                        justify-content: center;
+                        margin: 9px auto 1rem;
+
+                        @include screen('mobile') {
+                            margin: 9px .5rem;
+                        }
+                    }
+
+                    > input:checked + .ie11__label + .modal__value.animated {
+                        max-height: 50vh;
                     }
                 }
 
-                > label,
-                > .attribute__name > .label.tooltip {
-                    @include grid-position(1, 2, 5, 6);
-
-                    @include screen('mobile') {
-                        display: none;
-                    }
+                _:-ms-fullscreen, > li.idpRow {
+                    @include grid-template-columns(85.68px 6.12px 336.6px 6.12px 171.36px 6.12px);
                 }
+            }
 
-                > label {
-                    margin: auto 0;
-                    padding: 1rem 20px;
+            > .consent__disclaimer {
+                line-height: 1.5;
+                list-style: none;
+                padding: 0;
+                margin: 1.5rem 0 2rem;
 
-                    @include screen('mobile') {
-                        display: none;
+                li {
+                    &.disclaimer__privacy {
+                        margin-bottom: 1rem;
                     }
-                }
 
-                > .tooltip__value {
-                    @include grid-position(2, 3, 1, 6);
-                    padding: 0;
+                    &.disclaimer__secure,
+                    &.disclaimer__privacy {
+                        svg {
+                            margin-left: -0.5rem;
+                        }
 
-                    @include screen('mobile') {
-                        @include grid-position(3, 4, 1, 2);
+                    }
+
+                    > div {
+                        @include display-grid;
+                        @include grid-template-columns(67px calc(100% - 67px));
+
+                        > svg {
+                            @include grid-position(1, 2, 1, 2);
+                            margin-left: 14px;
+                        }
+
+                        > div {
+                            @include grid-position(1, 2, 2, 3);
+
+                            > br {
+                                @include screen('mobile') {
+                                    display: none;
+                                }
+                            }
+
+                            > label {
+                                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='25' height='24' viewBox='0 0 25 24'%3E%3Cdefs%3E%3Cpath id='t5vbpi1wma' d='M4.92 10.75c-.183 0-.367-.05-.528-.153-.416-.268-.517-.794-.225-1.176L8.319 4 4.18-1.422c-.292-.382-.19-.908.226-1.175.417-.268.99-.175 1.282.207l4.508 5.906c.221.291.221.678 0 .969L5.673 10.39c-.18.234-.464.359-.754.359'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(5.5 8)'%3E%3Cmask id='jsuhne1qsb' fill='%23fff'%3E%3Cuse xlink:href='%23t5vbpi1wma'/%3E%3C/mask%3E%3Cuse fill='%230062b0' transform='rotate(90 7.181 4)' xlink:href='%23t5vbpi1wma'/%3E%3C/g%3E%3C/svg%3E%0A") no-repeat right center;
+                                padding-right: 25px;
+
+                                &:focus {
+                                    box-shadow: none;
+                                    outline: 3px solid $lightBlue;
+                                }
+                            }
+
+                            > input[type="checkbox"]:checked.modal + label,
+                            > input[type="checkbox"]:checked.modal + br + label {
+                                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24' height='24' viewBox='0 0 24 24'%3E%3Cdefs%3E%3Cpath id='wusxz70bxa' d='M4.92 10.75c-.183 0-.367-.05-.528-.153-.416-.268-.517-.794-.225-1.176L8.319 4 4.18-1.422c-.292-.382-.19-.908.226-1.175.417-.268.99-.175 1.282.207l4.508 5.906c.221.291.221.678 0 .969L5.673 10.39c-.18.234-.464.359-.754.359'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(5 8)'%3E%3Cmask id='etvz1reijb' fill='%23fff'%3E%3Cuse xlink:href='%23wusxz70bxa'/%3E%3C/mask%3E%3Cuse fill='%230062b0' transform='scale(1 -1) rotate(90 11.181 0)' xlink:href='%23wusxz70bxa'/%3E%3C/g%3E%3C/svg%3E%0A") no-repeat right center;
+                            }
+
+                            label,
+                            a {
+                                color: $oceanBlue;
+                                font-weight: $bolder;
+                            }
+
+                            a {
+                                text-decoration: none;
+
+                                &:hover {
+                                    text-decoration: underline;
+                                }
+                            }
+
+                            > .modal__value {
+                                margin: 1rem 0;
+
+                                &.animated {
+                                    margin: 0;
+                                }
+
+                                @include screen('mobile') {
+                                    margin: 1rem 0 1rem -4rem;
+                                }
+
+                                .link__readmore {
+                                    display: inline-block;
+                                    padding: 5px;
+                                }
+                            }
+
+                            > input:checked + label + .modal__value.animated,
+                            > input:checked + br + label + .modal__value.animated {
+                                margin: 1rem 0;
+                            }
+
+                            > #consent_disclaimer_about + br + label + section.animated,
+                            > #consent_disclaimer_about + label + section.animated {
+                                display: inline-block;
+                                max-width: 0;
+                            }
+
+                            > #consent_disclaimer_about:checked + label + section.animated,
+                            > #consent_disclaimer_about:checked + br + label + section.animated {
+                                display: block;
+                                max-height: 40vh;
+                                max-width: unset;
+                            }
+                        }
+                    }
+
+                    _:-ms-fullscreen,
+                    > div {
+                        @include grid-template-columns(67px 545px);
                     }
                 }
             }
 
-            > li.idpRow {
-                @include grid-template-columns(10% 1% 50% 1% 37% 1%);
-                align-items: center;
-                background-color: $providerGray;
-                border-bottom-left-radius: 4px;
-                border-bottom-right-radius: 4px;
-                font-size: $f-small;
-                font-weight: $bolder;
-                text-align: left;
+            > .ctas {
+                line-height: 0.89;
+                margin: 2rem 0 0;
 
-                @include screen('mobile') {
-                    @include grid-template-columns(10% 6% 83% 1%);
-                }
-
-                > img {
-                    @include grid-position(1, 2, 1, 2);
-                    max-height: calculateRem(30px);
-                    margin-left: 9px;
-                }
-
-                > p {
-                    @include grid-position(1, 2, 3, 4);
-                    font-size: $f-small;
-                    font-weight: $normal;
-                    margin: 0;
-                    text-align: left;
-
-                    @include screen('mobile') {
-                        margin: 0 0 0 10px;
-                    }
-
-                    > strong {
-                        font-weight: $bolder;
-                    }
-                }
-
-                > input[type="checkbox"],
-                > .ie11__label,
-                > .ie11__link {
-                    @include grid-position(1, 2, 5, 6);
-
-                    @include screen('mobile') {
-                        @include grid-position(2, 3, 3, 5);
-                    }
-                }
-
-                > .ie11__label,
-                > .ie11__link {
-                    text-align: right;
-
-                    @include screen('mobile') {
-                        margin: 0 0 0 10px;
-                        text-align: inherit;
-                    }
-
-                    > label.modal {
-                        color: $oceanBlue;
-                        padding: 10px 25px 10px 5px;
-
-                        @include screen('mobile') {
-                            display: block;
-                            background-position: right 18px center;
-                            padding-right: 40px;
-                        }
-                    }
-
-                    > a.idpRow__supportUrl {
-                        color: $oceanBlue;
-                        padding: 10px 25px 10px 0;
-                        text-decoration: none;
+                > form {
+                    .cta_consent_ok {
+                        @include button-primary($buttonBlue);
+                        margin-bottom: 1.5rem;
+                        width: 100%;
 
                         &:hover {
                             text-decoration: underline;
@@ -308,193 +466,37 @@
                     }
                 }
 
-                > .modal__value {
-                    @include start-display-animated;
-                    @include grid-position(2, 3, 1, 7);
-                    //max-width: calc(100% - 4rem);
-
-                    @include screen('mobile') {
-                        @include grid-position(3, 4, 1, 5);
-                        //max-width: calc(100% - 1rem);
-                    }
-                }
-
-                > input:checked + .ie11__label + .modal__value {
-                    display: flex;
-                    justify-content: center;
-                    margin: 9px auto 1rem;
-
-                    @include screen('mobile') {
-                        margin: 9px .5rem;
-                    }
-                }
-
-                > input:checked + .ie11__label + .modal__value.animated {
-                    max-height: 50vh;
-                }
-            }
-
-            _:-ms-fullscreen, > li.idpRow {
-                @include grid-template-columns(85.68px 6.12px 336.6px 6.12px 171.36px 6.12px);
-            }
-        }
-
-        > .consent__disclaimer {
-            line-height: 1.5;
-            list-style: none;
-            padding: 0;
-            margin: 1.5rem 0 2rem;
-
-            li {
-                &.disclaimer__privacy {
-                    margin-bottom: 1rem;
-                }
-
-                &.disclaimer__secure,
-                &.disclaimer__privacy {
-                    svg {
-                        margin-left: -0.5rem;
-                    }
-
-                }
-
-                > div {
-                    @include display-grid;
-                    @include grid-template-columns(67px calc(100% - 67px));
-
-                    > svg {
-                        @include grid-position(1, 2, 1, 2);
-                        margin-left: 14px;
-                    }
-
+                > .button--tertiary {
                     > div {
-                        @include grid-position(1, 2, 2, 3);
-
-                        > br {
-                            @include screen('mobile') {
-                                display: none;
-                            }
-                        }
-
-                        > label {
-                            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='25' height='24' viewBox='0 0 25 24'%3E%3Cdefs%3E%3Cpath id='t5vbpi1wma' d='M4.92 10.75c-.183 0-.367-.05-.528-.153-.416-.268-.517-.794-.225-1.176L8.319 4 4.18-1.422c-.292-.382-.19-.908.226-1.175.417-.268.99-.175 1.282.207l4.508 5.906c.221.291.221.678 0 .969L5.673 10.39c-.18.234-.464.359-.754.359'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(5.5 8)'%3E%3Cmask id='jsuhne1qsb' fill='%23fff'%3E%3Cuse xlink:href='%23t5vbpi1wma'/%3E%3C/mask%3E%3Cuse fill='%230062b0' transform='rotate(90 7.181 4)' xlink:href='%23t5vbpi1wma'/%3E%3C/g%3E%3C/svg%3E%0A") no-repeat right center;
-                            padding-right: 25px;
-
-                            &:focus {
-                                box-shadow: none;
-                                outline: 3px solid $lightBlue;
-                            }
-                        }
-
-                        > input[type="checkbox"]:checked.modal + label,
-                        > input[type="checkbox"]:checked.modal + br + label {
-                            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24' height='24' viewBox='0 0 24 24'%3E%3Cdefs%3E%3Cpath id='wusxz70bxa' d='M4.92 10.75c-.183 0-.367-.05-.528-.153-.416-.268-.517-.794-.225-1.176L8.319 4 4.18-1.422c-.292-.382-.19-.908.226-1.175.417-.268.99-.175 1.282.207l4.508 5.906c.221.291.221.678 0 .969L5.673 10.39c-.18.234-.464.359-.754.359'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(5 8)'%3E%3Cmask id='etvz1reijb' fill='%23fff'%3E%3Cuse xlink:href='%23wusxz70bxa'/%3E%3C/mask%3E%3Cuse fill='%230062b0' transform='scale(1 -1) rotate(90 11.181 0)' xlink:href='%23wusxz70bxa'/%3E%3C/g%3E%3C/svg%3E%0A") no-repeat right center;
-                        }
-
-                        label,
-                        a {
-                            color: $oceanBlue;
-                            font-weight: $bolder;
-                        }
-
-                        a {
-                            text-decoration: none;
-
-                            &:hover {
-                                text-decoration: underline;
-                            }
-                        }
-
-                        > .modal__value {
-                            margin: 1rem 0;
-
-                            &.animated {
-                                margin: 0;
-                            }
-
-                            @include screen('mobile') {
-                                margin: 1rem 0 1rem -4rem;
-                            }
-
-                            .link__readmore {
-                                display: inline-block;
-                                padding: 5px;
-                            }
-                        }
-
-                        > input:checked + label + .modal__value.animated,
-                        > input:checked + br + label + .modal__value.animated {
-                            margin: 1rem 0;
-                        }
-
-                        > #consent_disclaimer_about + br + label + section.animated,
-                        > #consent_disclaimer_about + label + section.animated {
-                            display: inline-block;
-                            max-width: 0;
-                        }
-
-                        > #consent_disclaimer_about:checked + label + section.animated,
-                        > #consent_disclaimer_about:checked + br + label + section.animated {
-                            display: block;
-                            max-height: 40vh;
-                            max-width: unset;
-                        }
+                        @include button-tertiary($gray);
                     }
                 }
 
-                _:-ms-fullscreen,
-                > div {
-                    @include grid-template-columns(67px 545px);
+                > #cta_consent_nok:checked + .button--tertiary label {
+                    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24' height='24' viewBox='0 0 24 24'%3E%3Cdefs%3E%3Cpath id='wusxz70bxa' d='M4.92 10.75c-.183 0-.367-.05-.528-.153-.416-.268-.517-.794-.225-1.176L8.319 4 4.18-1.422c-.292-.382-.19-.908.226-1.175.417-.268.99-.175 1.282.207l4.508 5.906c.221.291.221.678 0 .969L5.673 10.39c-.18.234-.464.359-.754.359'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(5 8)'%3E%3Cmask id='etvz1reijb' fill='%23fff'%3E%3Cuse xlink:href='%23wusxz70bxa'/%3E%3C/mask%3E%3Cuse fill='%230062b0' transform='scale(1 -1) rotate(90 11.181 0)' xlink:href='%23wusxz70bxa'/%3E%3C/g%3E%3C/svg%3E%0A") no-repeat right center
                 }
-            }
-        }
 
-        > .ctas {
-            line-height: 0.89;
-            margin: 2rem 0 0;
+                #cta_consent_nok:checked + .button--tertiary + .modal__value.animated {
+                    margin: 1rem auto 0;
+                }
 
-            > form {
-                .cta_consent_ok {
-                    @include button-primary($buttonBlue);
-                    margin-bottom: 1.5rem;
-                    width: 100%;
+                > section.modal__value {
+                    margin: 1rem auto 0;
 
-                    &:hover {
-                        text-decoration: underline;
+                    &.animated {
+                        margin: 0;
+                    }
+
+                    @include screen('mobile') {
+                        width: 100%;
                     }
                 }
             }
 
-            > .button--tertiary {
-                > div {
-                    @include button-tertiary($gray);
-                }
-            }
-
-            > #cta_consent_nok:checked + .button--tertiary label {
-                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24' height='24' viewBox='0 0 24 24'%3E%3Cdefs%3E%3Cpath id='wusxz70bxa' d='M4.92 10.75c-.183 0-.367-.05-.528-.153-.416-.268-.517-.794-.225-1.176L8.319 4 4.18-1.422c-.292-.382-.19-.908.226-1.175.417-.268.99-.175 1.282.207l4.508 5.906c.221.291.221.678 0 .969L5.673 10.39c-.18.234-.464.359-.754.359'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(5 8)'%3E%3Cmask id='etvz1reijb' fill='%23fff'%3E%3Cuse xlink:href='%23wusxz70bxa'/%3E%3C/mask%3E%3Cuse fill='%230062b0' transform='scale(1 -1) rotate(90 11.181 0)' xlink:href='%23wusxz70bxa'/%3E%3C/g%3E%3C/svg%3E%0A") no-repeat right center
-            }
-
-            #cta_consent_nok:checked + .button--tertiary + .modal__value.animated {
-                margin: 1rem auto 0;
-            }
-
-            > section.modal__value {
-                margin: 1rem auto 0;
-
-                &.animated {
-                    margin: 0;
-                }
-
-                @include screen('mobile') {
-                    width: 100%;
-                }
+            > .notification__warning {
+                @include warning;
             }
         }
-
-        > .notification__warning {
-            @include warning;
-          }
     }
 
     > :last-child {
