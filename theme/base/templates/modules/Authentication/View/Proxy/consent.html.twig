@@ -28,22 +28,24 @@
             } %}
         </noscript>
 
-        <h2>{{ 'consent_privacy_header'|trans({'%target%': spName}) }}</h2>
-
         {% block consent_content %}
             <div class="consent__content">
-                {% include '@theme/Authentication/View/Proxy/Partials/Consent/attributes.html.twig' %}
-                {% include '@theme/Authentication/View/Proxy/Partials/Consent/disclaimerList.html.twig' %}
+                <h2>{{ 'consent_privacy_header'|trans({'%target%': spName}) }}</h2>
 
-                {% if showConsentExplanation and consentSettings.consentExplanationIn(app.request.locale, spEntityId) %}
-                    {% include '@theme/Default/Partials/warning.html.twig' with {
-                        className: 'notification__warning',
-                        notificationTitle: 'consent_explanation_title'|trans,
-                        text: consentSettings.consentExplanationIn(app.request.locale, spEntityId)
-                    } %}
-                {% endif %}
+                <div class="consent__content-body">
+                    {% include '@theme/Authentication/View/Proxy/Partials/Consent/attributes.html.twig' %}
+                    {% include '@theme/Authentication/View/Proxy/Partials/Consent/disclaimerList.html.twig' %}
 
-                {% include '@theme/Authentication/View/Proxy/Partials/Consent/ctas.html.twig' %}
+                    {% if showConsentExplanation and consentSettings.consentExplanationIn(app.request.locale, spEntityId) %}
+                        {% include '@theme/Default/Partials/warning.html.twig' with {
+                            className: 'notification__warning',
+                            notificationTitle: 'consent_explanation_title'|trans,
+                            text: consentSettings.consentExplanationIn(app.request.locale, spEntityId)
+                        } %}
+                    {% endif %}
+
+                    {% include '@theme/Authentication/View/Proxy/Partials/Consent/ctas.html.twig' %}
+                </div>
             </div>
         {% endblock %}
     </main>
