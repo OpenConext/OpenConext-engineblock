@@ -6,6 +6,7 @@ return [
     'required'      =>  'Verplicht',
     'search'        =>  'Zoeken',
     'send_request'  =>  'Verzoek sturen',
+    'back'          =>  'Terug',
 
     // Forms
     'form_general_error'    =>  'Er ging iets fout tijdens het insturen van uw formulier.  Dit kan een probleem zijn met uw internetverbinding of iets anders.  Controleer uw invoer en probeer het later opnieuw.  Mocht het probleem zich blijven voordoen, neem dan contact op met uw beheerder.',
@@ -80,4 +81,6 @@ TXT
 <p>De dienst waar u bij wil inloggen heeft deze gegevens nodig om te kunnen functioneren.  Indien u verkiest om uw data niet te delen, kan u de dienst niet gebruiken.  Door uw browser of door deze tab te sluiten verhinderd u dat uw informatie gedeeld wordt.  Mocht u later van gedacht veranderen, kan u opnieuw inloggen bij deze dienst en krijgt u dit scherm opnieuw te zien.</p>
 TXT
     ,
+    'consent_nok_title'     => "U wil geen gegevens delen met deze dienst",
+    'consent_nok_text'      => "De dienst waar u bij wil inloggen heeft deze gegevens nodig om te kunnen functioneren.  Indien u verkiest om uw data niet te delen, kan u de dienst niet gebruiken.  Door uw browser of door deze tab te sluiten verhinderd u dat uw informatie gedeeld wordt.  Mocht u later van gedacht veranderen, kan u opnieuw inloggen bij deze dienst en krijgt u dit scherm opnieuw te zien.",
 ];
