@@ -19,7 +19,7 @@ context('Consent on Skeune theme', () => {
     });
   });
 
-  describe('Hides the modals & tooltips on load', () => {
+  describe('Hides the correct content on load', () => {
     it('Hides the tooltip on load', () => {
       cy.get('label.tooltip[for="tooltip3"]:not(:first-child)')
         .next()
@@ -27,23 +27,23 @@ context('Consent on Skeune theme', () => {
     });
 
     it('Should not show the about-modal on load', () => {
-      cy.get('label[for="consent_disclaimer_about"] + section h3')
-        .should('not.be.visible');
+      cy.notBeVisible('label[for="consent_disclaimer_about"] + section h3');
     });
 
     it('Should not show the nok-modal on load', () => {
-      cy.get('label[for="cta_consent_nok"] + section h3')
-        .should('not.be.visible');
+      cy.notBeVisible('label[for="cta_consent_nok"] + section h3');
     });
 
     it('Should not show the number modal on load', () => {
-      cy.get('label[for="consent_disclaimer_number"] + section a[href="https://example.org"]')
-        .should('not.be.visible');
+      cy.notBeVisible('label[for="consent_disclaimer_number"] + section a[href="https://example.org"]');
     });
 
     it('Should not show the decline consent modal on load', () => {
-      cy.get('label[for="cta_consent_nok"] + section h3')
-        .should('not.be.visible');
+      cy.notBeVisible('label[for="cta_consent_nok"] + section h3');
+    });
+
+    it('Should not show the nok-section on load', () => {
+      cy.notBeVisible('.consent__nok');
     });
   });
 });
