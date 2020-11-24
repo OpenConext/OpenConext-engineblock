@@ -1,3 +1,9 @@
-<section class="consent__nok">
-    <h2></h2>
+<section class="consent__nok hidden">
+    <h2>{{ 'consent_nok_title'|trans }}</h2>
+    <div class="consent__nok-body">
+        <p>{{ 'consent_nok_text'|trans }}</p>
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/Modals/contact-details.html.twig' %}
+
+        <button class="consent__nok-back" type="button">{{ 'back'|trans }}</button>
+    </div>
 </section>
