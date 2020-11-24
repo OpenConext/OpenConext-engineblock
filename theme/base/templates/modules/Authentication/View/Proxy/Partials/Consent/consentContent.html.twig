@@ -1,0 +1,18 @@
+<section class="consent__content">
+    <h2>{{ 'consent_privacy_header'|trans({'%target%': spName}) }}</h2>
+
+    <div class="consent__content-body">
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/attributes.html.twig' %}
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/disclaimerList.html.twig' %}
+
+        {% if showConsentExplanation and consentSettings.consentExplanationIn(app.request.locale, spEntityId) %}
+            {% include '@theme/Default/Partials/warning.html.twig' with {
+                className: 'notification__warning',
+                notificationTitle: 'consent_explanation_title'|trans,
+                text: consentSettings.consentExplanationIn(app.request.locale, spEntityId)
+            } %}
+        {% endif %}
+
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/ctas.html.twig' %}
+    </div>
+</section>
