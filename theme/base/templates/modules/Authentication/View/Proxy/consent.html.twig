@@ -2,6 +2,7 @@
 
 {# SP and IdP name are stored in a local variable for convenience #}
 {% set spName = sp.displayName(locale()) %}
+{% set organizationName = sp.organizationName(locale())|default('unknown_organization_name'|trans) %}
 {% set idpName = idp.displayName(locale()) %}
 
 {# Prepare the page title #}

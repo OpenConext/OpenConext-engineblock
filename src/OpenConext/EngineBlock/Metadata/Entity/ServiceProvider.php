@@ -364,6 +364,32 @@ class ServiceProvider extends AbstractRole
         return $spName;
     }
 
+    public function getOrganizationName(string $preferredLocale = ''): string
+    {
+        $orgName = '';
+        if ($preferredLocale === 'nl') {
+            $orgName = $this->organizationNl->displayName;
+            if (empty($orgName)) {
+                $orgName = $this->organizationNl->name;
+            }
+        } elseif ($preferredLocale === 'en') {
+            $orgName = $this->organizationEn->displayName;
+            if (empty($orgName)) {
+                $orgName = $this->organizationEn->name;
+            }
+        } elseif ($preferredLocale === 'pt') {
+            $orgName = $this->organizationPt->displayName;
+            if (empty($orgName)) {
+                $orgName = $this->organizationPt->name;
+            }
+        }
+
+        if (empty($orgName)) {
+            $orgName = '';
+        }
+        return $orgName;
+    }
+
     /**
      * @return bool
      */
