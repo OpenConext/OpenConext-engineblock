@@ -42,6 +42,7 @@ return $overrides + [
     'go_back'               => '&lt;&lt; Ga terug',
     'note'                  => 'Mededeling',
     'note_no_script'        => 'Jouw browser ondersteunt geen JavaScript. Je moet op de onderstaande knop drukken om door te gaan.',
+    'unknown_organization_name' => 'Onbekend',
 
      // Feedback
     'requestId'             => 'UR ID',
