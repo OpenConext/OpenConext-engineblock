@@ -219,6 +219,7 @@ abstract class AbstractEntityTest extends TestCase
         $skipMethods = [
             'accept',
             'getDisplayName',
+            'getOrganizationName',
             'toggleWorkflowState',
         ];
 

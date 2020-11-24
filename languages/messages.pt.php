@@ -42,6 +42,7 @@ return $overrides + [
     'go_back'               => '&lt;&lt; Volte atrás',
     'note'                  => 'Nota',
     'note_no_script'        => 'Visto que o seu browser não suporta JavaScript, deve pressionar no botão em baixo para prosseguir.',
+    'unknown_organization_name' => 'Unknown',
 
     // Feedback
     'requestId'             => 'UR ID',

@@ -8,9 +8,9 @@
             {% include '@theme/Authentication/View/Proxy/Partials/Consent/SVG/file_info.svg' %}
             <div>
                 {% if sp.coins.termsOfServiceUrl is not null %}
-                    {{ 'consent_disclaimer_privacy'|trans({'%org%': spName, '%privacy_url%': sp.coins.termsOfServiceUrl})|raw }}
+                    {{ 'consent_disclaimer_privacy'|trans({'%org%': organizationName, '%privacy_url%': sp.coins.termsOfServiceUrl})|raw }}
                 {% else %}
-                    {{ 'consent_disclaimer_privacy_nolink'|trans({ '%org%': spName })|raw }}
+                    {{ 'consent_disclaimer_privacy_nolink'|trans({ '%org%': organizationName })|raw }}
                 {% endif %}
             </div>
         </div>

@@ -72,6 +72,7 @@ class ServiceProviderEntityTest extends AbstractEntityTest
             'attributeAggregationRequired' => $ormEntity->isAttributeAggregationRequired(),
             'allowed' => $ormEntity->isAllowed('entity-id'),
             'displayName' => $ormEntity->getDisplayName('EN'),
+            'organization' => $ormEntity->getOrganizationName('EN'),
         ];
 
         $this->runServiceProviderAssertions($adapter, $adapter, $assertions);
