@@ -23,5 +23,5 @@ export const addAccessibilitySupport = () => {
   });
 
   // make animations work for tooltips/modals/toggle
-  animateInteractiveSections('.tooltip__value, .modal__value, .consent__attributes--nested');
+  animateInteractiveSections('.tooltip__value, .modal__value, .consent__attributes, .attribute__valueWrapper > .attribute__value--list');
 };
