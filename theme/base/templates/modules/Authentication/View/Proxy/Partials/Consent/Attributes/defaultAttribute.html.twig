@@ -17,16 +17,32 @@
         {% endif %}
     {# Multiple attribute values #}
     {% else %}
-        <ul class="attribute__value--list">
-        {% for value in attributeValues %}
-            <li>
-                {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/value.html.twig' with { attributeValue: value } %}
-                {% if attributeMotivations[attributeIdentifier] is defined %}
-                    {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/tooltip.html.twig' with { tooltipValue: attributeMotivations[attributeIdentifier] } %}
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
+        {% if attributeValues|length > 5 %}
+            <div class="attribute__valueWrapper">
+                <input type="checkbox" id="showMoreCheckbox2" name="showMoreCheckbox2" role="button" aria-hidden="true" class="groupMembership__checkbox"/>
+        {% endif %}
+        <ul class="attribute__value attribute__value--list">
+            {% for value in attributeValues %}
+                <li>
+                    {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/value.html.twig' with { attributeValue: value } %}
+                    {% if attributeMotivations[attributeIdentifier] is defined %}
+                        {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/tooltip.html.twig' with { tooltipValue: attributeMotivations[attributeIdentifier] } %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+        {% if attributeValues|length > 5 %}
+                <label tabindex="0" for="showMoreCheckbox2" class="groupMembership__label">
+                    <span class="visually-hidden">{{ 'button'|trans }}</span>
+                    <span class="showMore">
+                        {{ 'consent_attributes_show_more'|trans }}
+                    </span>
+                    <span class="showLess">
+                        {{ 'consent_attributes_show_less'|trans }}
+                    </span>
+                </label>
+            </div>
+        {% endif %}
     {% endif %}
 </li>
 
