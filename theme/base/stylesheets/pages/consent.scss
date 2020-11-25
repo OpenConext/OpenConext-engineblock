@@ -511,6 +511,10 @@
         > .consent__nok-body {
             padding: 0 2rem 2.5rem;
 
+            @include screen('mobile') {
+                padding: 0 .5rem 2.5rem;
+            }
+
             > .consent__nok-back {
                 @include button-secondary($gray);
                 margin-top: 4rem;
