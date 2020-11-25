@@ -168,7 +168,7 @@
 
                     > input[type="checkbox"]:checked.tooltip ~ .attribute__name > label.tooltip {
                         @include tooltip-checked;
-                        background-position: left 8px bottom;
+                        background-position: left 11px bottom 10px;
                     }
 
                     > .attribute__name {
@@ -186,13 +186,15 @@
                             display: none;
 
                             @include screen('mobile') {
-                                background-position: left 8px bottom;
+                                background-position: left 8px bottom 5px;
                                 display: inline-block;
-                                margin: 0 0 -2px 5px;
-                                padding: 1rem 20px;
+                                margin: 0 0 -11px 0;
+                                padding: 1rem 25px;
                             }
                         }
                     }
+
+
 
                     > .attribute__value {
                         @include grid-position(1, 2, 3, 4);
@@ -215,7 +217,11 @@
 
                     > label {
                         margin: auto 0;
-                        padding: 1rem 20px;
+                        padding: 1.2rem 35px;
+
+                        &.tooltip {
+                            margin-left: -20px;
+                        }
 
                         @include screen('mobile') {
                             display: none;
