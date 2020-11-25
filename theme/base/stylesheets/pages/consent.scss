@@ -55,8 +55,32 @@
                 padding: 0 .5rem 1.25rem;
             }
 
-            > .consent__attributes,
-            .consent__attributes--nested {
+            > .openToggle__checkBox {
+                display: none;
+            }
+
+            > .openToggle__checkBox:checked ~ .consent__attributes {
+                max-height: 400vh;
+                transition: max-height .6s ease-in;
+
+                > li:nth-of-type(n+6):not(.openToggle):not(.idpRow) {
+                    display: grid;
+                }
+
+                > .openToggle {
+                    > .openToggle__label {
+                        > .showLess {
+                            display: block;
+                        }
+
+                        > .showMore {
+                            display: none;
+                        }
+                    }
+                }
+            }
+
+            > .consent__attributes {
                 background-color: $white;
                 border: 1px solid $hardBorderGray;
                 border-radius: 6px;
@@ -69,6 +93,10 @@
                     @include grid-template-columns(33% 1% 57% 1% 8%);
                     border-bottom: 1px solid $softBorderGray;
                     line-height: 1.63;
+
+                    &:nth-child(n+6):not(.openToggle):not(.idpRow) {
+                        display: none;
+                    }
 
                     @include screen('mobile') {
                         padding: 10px;
@@ -98,20 +126,20 @@
                     }
 
                     &.openToggle {
-                        align-items: center;
-                        display: flex;
-                        flex-direction: column;
-                        padding: 0;
-
                         > label {
+                            @include grid-position(1, 2, 3, 4);
                             background-image: unset;
                             color: $buttonBlue;
                             cursor: pointer;
                             display: flex;
                             height: unset;
                             font-weight: $bolder;
-                            justify-content: center;
+                            justify-content: left;
                             width: unset;
+
+                            @include screen('mobile') {
+                                @include grid-position(2, 3, 1, 2);
+                            }
 
                             > .showLess,
                             > .showMore {
@@ -127,48 +155,6 @@
                                 @include closeToggle;
                                 display: block;
                             }
-                        }
-
-                        > input[type="checkbox"] {
-                            display: none;
-                        }
-
-                        > input[type="checkbox"]:checked + label {
-                            > .showLess {
-                                display: block;
-                            }
-
-                            > .showMore {
-                                display: none;
-                            }
-                        }
-
-                        > input[type="checkbox"]:checked + label + .consent__attributes--nested {
-                            display: block;
-                        }
-
-                        > input[type="checkbox"]:checked + label + .consent__attributes--nested.animated {
-                            @include transition-display;
-                            max-height: 200vh;
-                            //transition: max-height .6s ease-in;
-                        }
-
-                        > .consent__attributes--nested {
-                            border: 0;
-                            border-radius: 0;
-                            box-shadow: none;
-                            display: none;
-                            margin: 0;
-                            order: -1;
-                            padding: 0;
-                            width: 100%;
-                        }
-
-                        > .consent__attributes--nested.animated {
-                            display: block;
-                            max-height: 0;
-                            overflow: hidden;
-                            transition: max-height .6s ease-in;
                         }
                     }
 
