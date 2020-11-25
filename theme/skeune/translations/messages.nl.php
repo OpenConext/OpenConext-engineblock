@@ -6,7 +6,6 @@ return [
     'required'      =>  'Verplicht',
     'search'        =>  'Zoeken',
     'send_request'  =>  'Verzoek sturen',
-    'back'          =>  'Terug',
 
     // Forms
     'form_general_error'    =>  'Er ging iets fout tijdens het insturen van uw formulier.  Dit kan een probleem zijn met uw internetverbinding of iets anders.  Controleer uw invoer en probeer het later opnieuw.  Mocht het probleem zich blijven voordoen, neem dan contact op met uw beheerder.',
@@ -51,13 +50,36 @@ return [
 <div><strong>%org%</strong> heeft deze informatie nodig om te kunnen werken (lees hun <a href="%privacy_url%" target="_blank">privacy beleid</a>).</div>
 TXT
     ,
-    'consent_disclaimer_secure' => 'wordt gebruikt door uw organisatie om informatie op een veilige manier te versturen naar uw instituut (leer meer over',
+    'consent_disclaimer_secure' => <<<'TXT'
+Deze data zal veilig verstuurd worden van uw instituut via <input type="checkbox" tabindex="-1" role="button" aria-hidden="true" class="modal visually-hidden" id="consent_disclaimer_about" name="consent_disclaimer_about"><br /><label class="modal" tabindex="0" for="consent_disclaimer_about"><span class="visually-hidden">%buttonText%</span>%suite_name%</label> %modal_about% met behulp van <input type="checkbox" tabindex="-1" role="button" aria-hidden="true" class="modal visually-hidden" id="consent_disclaimer_number" name="consent_disclaimer_number"><label class="modal" tabindex="0" for="consent_disclaimer_number"><span class="visually-hidden">%buttonText%</span>een unieke id voor deze dienst.</label>
+TXT
+    ,
+    'consent_disclaimer_secure_onemodal'    => <<<'TXT'
+Deze data zal veilig verstuurd worden van uw instituut via <input type="checkbox" tabindex="-1" role="button" aria-hidden="true" class="modal visually-hidden" id="consent_disclaimer_about" name="consent_disclaimer_about"><label class="modal" tabindex="0" for="consent_disclaimer_about"><span class="visually-hidden">%buttonText%</span>%suite_name%</label> %modal_about% met behulp van een unieke id voor deze dienst.
+TXT
+    ,
+    'consent_modal_about'   => <<<'TXT'
+<section class="modal__value" role="alert">
+    <div class="modal__content">
+        %about_text%
+        <a href="%read_more_url%" target="_blank" class="link__readmore">%read_more_text%</a>
+    </div>
+</section>
+TXT
+    ,
+    // Consent slidein: About %suiteName%
+    'consent_slidein_about_text_new'    => <<<'TXT'
+<h3>Inloggen met %suiteName%</h3>
+<p>%suiteName% laat mensen toe om eenvoudig en veilig in te loggen bij verschillende cloud-diensten met hun eigen %accountNoun%. %suiteName% zorgt daarbij voor uw privacy door zo weinig mogelijk persoonlijke gegevens naar deze diensten te sturen.</p>
+TXT
+    ,
+
     // Consent slidein: Reject_skeune
     'consent_slidein_reject_text_skeune'    => <<<'TXT'
 <h3>u wil geen gegevens delen met deze dienst</h3>
 <p>De dienst waar u bij wil inloggen heeft deze gegevens nodig om te kunnen functioneren.  Indien u verkiest om uw data niet te delen, kan u de dienst niet gebruiken.  Door uw browser of door deze tab te sluiten verhinderd u dat uw informatie gedeeld wordt.  Mocht u later van gedacht veranderen, kan u opnieuw inloggen bij deze dienst en krijgt u dit scherm opnieuw te zien.</p>
 TXT
     ,
-    'consent_nok_title'     => "U wil geen gegevens delen met deze dienst",
-    'consent_nok_text'      => "De dienst waar u bij wil inloggen heeft deze gegevens nodig om te kunnen functioneren.  Indien u verkiest om uw data niet te delen, kan u de dienst niet gebruiken.  Door uw browser of door deze tab te sluiten verhinderd u dat uw informatie gedeeld wordt.  Mocht u later van gedacht veranderen, kan u opnieuw inloggen bij deze dienst en krijgt u dit scherm opnieuw te zien.",
+    'consent_groupmembership_show_more'     => 'Toon meer',
+    'consent_groupmembership_show_less'     => 'Toon minder',
 ];

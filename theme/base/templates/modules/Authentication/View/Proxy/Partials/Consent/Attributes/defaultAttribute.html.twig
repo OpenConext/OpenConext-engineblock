@@ -19,7 +19,11 @@
     {% else %}
         {% if attributeValues|length > 5 %}
             <div class="attribute__valueWrapper">
-                <input type="checkbox" id="showMoreCheckbox2" name="showMoreCheckbox2" role="button" aria-hidden="true" class="groupMembership__checkbox"/>
+                {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/toggleCheckbox.html.twig' with {
+                    className: 'groupMembership__checkbox',
+                    id: 'attribute' ~ loop.index,
+                  }
+                %}
         {% endif %}
         <ul class="attribute__value attribute__value--list">
             {% for value in attributeValues %}
@@ -32,15 +36,13 @@
             {% endfor %}
         </ul>
         {% if attributeValues|length > 5 %}
-                <label tabindex="0" for="showMoreCheckbox2" class="groupMembership__label">
-                    <span class="visually-hidden">{{ 'button'|trans }}</span>
-                    <span class="showMore">
-                        {{ 'consent_attributes_show_more'|trans }}
-                    </span>
-                    <span class="showLess">
-                        {{ 'consent_attributes_show_less'|trans }}
-                    </span>
-                </label>
+            {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/toggleLabel.html.twig' with {
+                className: 'groupMembership__label',
+                for: 'attribute' ~ loop.index,
+                showMore: 'consent_groupmembership_show_more',
+                showLess: 'consent_groupmembership_show_less',
+              }
+            %}
             </div>
         {% endif %}
     {% endif %}
