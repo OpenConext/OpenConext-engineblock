@@ -86,7 +86,10 @@
                 border-radius: 6px;
                 box-shadow: 0 1px 0 2px $hardBorderGray;
                 margin: 0 0 2rem;
+                max-height: 100vh;
+                overflow: hidden;
                 padding: 0;
+                transition: max-height .6s ease-in;
 
                 > li {
                     @include display-grid;
@@ -129,6 +132,7 @@
                             height: unset;
                             font-weight: $bolder;
                             justify-content: left;
+                            padding-left: 0;
                             width: unset;
 
                             @include screen('mobile') {
@@ -150,19 +154,6 @@
                                 display: block;
                             }
                         }
-
-                        //> input[type="checkbox"]:checked + label + .consent__attributes--nested.animated {
-                        //    @include transition-display;
-                        //    max-height: 200vh;
-                        //    //transition: max-height .6s ease-in;
-                        //}
-
-                        //> .consent__attributes--nested.animated {
-                        //    display: block;
-                        //    max-height: 0;
-                        //    overflow: hidden;
-                        //    transition: max-height .6s ease-in;
-                        //}
                     }
 
                     > input[type="checkbox"]:checked.tooltip ~ .attribute__name > label.tooltip {
@@ -219,6 +210,12 @@
                     > .attribute__valueWrapper {
                         > .attribute__value.attribute__value--list {
                             padding: 0;
+
+                            &.animated {
+                                max-height: 60vh;
+                                overflow: hidden;
+                                transition: max-height .6s ease-in;
+                            }
                         }
 
                         > .groupMembership__label {
@@ -250,6 +247,11 @@
                     }
 
                     .groupMembership__checkbox:checked ~ .attribute__value--list {
+                        &.animated {
+                            max-height: 140vh;
+                            transition: max-height .6s ease-in;
+                        }
+
                         li:nth-child(n+6) {
                             display: list-item;
                         }
