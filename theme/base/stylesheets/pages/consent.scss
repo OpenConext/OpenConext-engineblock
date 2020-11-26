@@ -376,8 +376,10 @@
                             margin-left: 14px;
                         }
 
+                        > p,
                         > div {
                             @include grid-position(1, 2, 2, 3);
+                            margin: 0;
 
                             > br {
                                 @include screen('mobile') {

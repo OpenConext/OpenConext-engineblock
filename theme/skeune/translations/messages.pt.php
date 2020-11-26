@@ -52,30 +52,7 @@ return [
 <div><strong>%org%</strong> needs this information to function properly (read their <a href="%privacy_url%" target="_blank">privacy policy</a>).</div>
 TXT
     ,
-    'consent_disclaimer_secure' => <<<'TXT'
-These data will be sent securely from your institution via <input type="checkbox" tabindex="-1" role="button" aria-hidden="true" class="modal visually-hidden" id="consent_disclaimer_about" name="consent_disclaimer_about"><br /><label class="modal" tabindex="0" for="consent_disclaimer_about"><span class="visually-hidden">%buttonText%</span>%suite_name%</label> %modal_about% using <input type="checkbox" tabindex="-1" role="button" aria-hidden="true" class="modal visually-hidden" id="consent_disclaimer_number" name="consent_disclaimer_number"><label class="modal" tabindex="0" for="consent_disclaimer_number"><span class="visually-hidden">%buttonText%</span>a number that uniquely identifies you for this service.</label>
-TXT
-    ,
-    'consent_disclaimer_secure_onemodal'    => <<<'TXT'
-These data will be sent securely from your institution via <input type="checkbox" tabindex="-1" role="button" aria-hidden="true" class="modal visually-hidden" id="consent_disclaimer_about" name="consent_disclaimer_about"><label class="modal" tabindex="0" for="consent_disclaimer_about"><span class="visually-hidden">%buttonText%</span>%suite_name%</label> %modal_about% using a number that uniquely identifies you for this service.
-TXT
-    ,
-    'consent_modal_about'   => <<<'TXT'
-<section class="modal__value" role="alert">
-    <div class="modal__content">
-        %about_text%
-        <a href="%read_more_url%" target="_blank" class="link__readmore">%read_more_text%</a>
-    </div>
-</section>
-TXT
-    ,
-    // Consent slidein: About %suiteName%
-    'consent_slidein_about_text_new'    => <<<'TXT'
-<h3>Logging in through %suiteName%</h3>
-<p>%suiteName% allows people to easily and securely log in into various cloud services using their own %accountNoun%. %suiteName% offers extra privacy protection by sending a minimum set of personal data to these cloud services.</p>
-TXT
-    ,
-
+    'consent_disclaimer_secure' => 'is being used by your organisation to securely send your information from your institution to this service (learn more about',
     // Consent slidein: Reject_skeune
     'consent_slidein_reject_text_skeune'    => <<<'TXT'
 <h3>You don't want to share your data with the service</h3>
