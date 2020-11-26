@@ -6,7 +6,8 @@ context('Consent on Skeune theme', () => {
   describe('Handles additional attributes correctly', () => {
     it('shows the correct amount of attributes on load', () => {
       cy.get('ul.consent__attributes > li')
-        .should('have.length', '7');
+        .should('have.length', '11');
+      cy.notBeVisible('ul.consent__attributes li:nth-of-type(6)');
     });
 
     it('Should not show the extra attributes on load', () => {
