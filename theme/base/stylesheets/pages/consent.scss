@@ -296,8 +296,10 @@
                         }
 
                         > label.modal {
-                            color: $oceanBlue;
+                            color: $brownishGray;
                             padding: 10px 25px 10px 5px;
+                            text-decoration: underline;
+                            background-image: unset;
 
                             @include screen('mobile') {
                                 display: block;
