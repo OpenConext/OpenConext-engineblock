@@ -47,12 +47,9 @@ return [
     'consent_provided_by'   => 'aangeboden door',
     'consent_tooltip_screenreader'  => 'Waarom hebben we deze informatie nodig?',
     'consent_nojs_skeune'   => 'Tooltips / modals op deze pagina hebben om te werken met het toetsenbord JavaScript nodig.  Indien u enkel een toetsenbord gebruikt, gelieve dan JavaScript in te schakelen voor deze functionaliteit.',
-    'consent_disclaimer_privacy_nolink' => '<div><strong>%org%</strong> heeft deze informatie nodig om te kunnen werken.</div>'
-    ,
-    'consent_disclaimer_privacy'    => <<<'TXT'
-<div><strong>%org%</strong> heeft deze informatie nodig om te kunnen werken (lees hun <a href="%privacy_url%" target="_blank">privacy beleid</a>).</div>
-TXT
-    ,
+    'consent_disclaimer_privacy_statement' => 'heeft deze informatie nodig om te kunnen werken',
+    'consent_disclaimer_privacy_read'    => 'lees hun',
+    'consent_disclaimer_privacy_policy'  => 'privacy beleid',
     'consent_disclaimer_secure' => <<<'TXT'
 Deze data zal veilig verstuurd worden van uw instituut via <input type="checkbox" tabindex="-1" role="button" aria-hidden="true" class="modal visually-hidden" id="consent_disclaimer_about" name="consent_disclaimer_about"><br /><label class="modal" tabindex="0" for="consent_disclaimer_about"><span class="visually-hidden">%buttonText%</span>%suite_name%</label> %modal_about% met behulp van <input type="checkbox" tabindex="-1" role="button" aria-hidden="true" class="modal visually-hidden" id="consent_disclaimer_number" name="consent_disclaimer_number"><label class="modal" tabindex="0" for="consent_disclaimer_number"><span class="visually-hidden">%buttonText%</span>een unieke id voor deze dienst.</label>
 TXT

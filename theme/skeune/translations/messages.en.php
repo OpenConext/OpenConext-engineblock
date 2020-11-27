@@ -47,12 +47,9 @@ return [
     'consent_provided_by'   => 'provided by',
     'consent_tooltip_screenreader'  => 'Why do we need this info?',
     'consent_nojs_skeune'   => 'Tooltips / modals on this page need JS to work with the keyboard.  If you use a keyboard, please enable JS if you wish to use this functionality.',
-    'consent_disclaimer_privacy_nolink' => '<div><strong>%org%</strong> needs this information to function properly.</div>'
-    ,
-    'consent_disclaimer_privacy'    => <<<'TXT'
-<div><strong>%org%</strong> needs this information to function properly (read their <a href="%privacy_url%" target="_blank">privacy policy</a>).</div>
-TXT
-    ,
+    'consent_disclaimer_privacy_statement' => 'needs this information to function properly',
+    'consent_disclaimer_privacy_read'    => 'read their',
+    'consent_disclaimer_privacy_policy'  => 'privacy policy',
     'consent_disclaimer_secure' => <<<'TXT'
 These data will be sent securely from your institution via <input type="checkbox" tabindex="-1" role="button" aria-hidden="true" class="modal visually-hidden" id="consent_disclaimer_about" name="consent_disclaimer_about"><br /><label class="modal" tabindex="0" for="consent_disclaimer_about"><span class="visually-hidden">%buttonText%</span>
 %suite_name%</label> %modal_about% using <input type="checkbox" tabindex="-1" role="button" aria-hidden="true" class="modal visually-hidden" id="consent_disclaimer_number" name="consent_disclaimer_number"><label class="modal" tabindex="0" for="consent_disclaimer_number"><span class="visually-hidden">%buttonText%</span>a number that uniquely identifies you for this service.</label>
