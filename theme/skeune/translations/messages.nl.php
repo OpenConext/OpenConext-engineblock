@@ -48,12 +48,9 @@ return [
     'consent_provided_by'   => 'aangeboden door',
     'consent_tooltip_screenreader'  => 'Waarom hebben we deze informatie nodig?',
     'consent_nojs_skeune'   => 'Tooltips / modals op deze pagina hebben om te werken met het toetsenbord JavaScript nodig.  Indien u enkel een toetsenbord gebruikt, gelieve dan JavaScript in te schakelen voor deze functionaliteit.',
-    'consent_disclaimer_privacy_nolink' => '<div><strong>%org%</strong> heeft deze informatie nodig om te kunnen werken.</div>'
-    ,
-    'consent_disclaimer_privacy'    => <<<'TXT'
-<div><strong>%org%</strong> heeft deze informatie nodig om te kunnen werken (lees hun <a href="%privacy_url%" target="_blank">privacy beleid</a>).</div>
-TXT
-    ,
+    'consent_disclaimer_privacy_statement' => 'heeft deze informatie nodig om te kunnen werken',
+    'consent_disclaimer_privacy_read'    => 'lees hun',
+    'consent_disclaimer_privacy_policy'  => 'privacy beleid',
     'consent_disclaimer_secure' => 'wordt gebruikt door uw organisatie om informatie op een veilige manier te versturen naar uw instituut (leer meer over',
     // Consent slidein: Reject_skeune
     'consent_slidein_reject_text_skeune'    => <<<'TXT'

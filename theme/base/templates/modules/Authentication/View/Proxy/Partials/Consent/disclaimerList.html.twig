@@ -3,11 +3,13 @@
         <div>
             {% include '@theme/Authentication/View/Proxy/Partials/Consent/SVG/file_info.svg' %}
             <div>
-                {% if sp.coins.termsOfServiceUrl is not null %}
-                    {{ 'consent_disclaimer_privacy'|trans({'%org%': organizationName, '%privacy_url%': sp.coins.termsOfServiceUrl})|raw }}
-                {% else %}
-                    {{ 'consent_disclaimer_privacy_nolink'|trans({ '%org%': organizationName })|raw }}
-                {% endif %}
+                <div>
+                    <strong>{{ organizationName }}</strong> {{ 'consent_disclaimer_privacy_statement'|trans }}
+                    {% if sp.coins.termsOfServiceUrl is not null %}
+                        ({{ 'consent_disclaimer_privacy_read'|trans }} <a href="{{ sp.coins.termsOfServiceUrl }}" target="_blank">{{ 'consent_disclaimer_privacy_policy'|trans }}</a>)
+                    {% endif %}
+                    .
+                </div>
             </div>
         </div>
     </li>

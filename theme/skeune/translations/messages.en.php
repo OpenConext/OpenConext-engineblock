@@ -48,12 +48,9 @@ return [
     'consent_provided_by'   => 'provided by',
     'consent_tooltip_screenreader'  => 'Why do we need this info?',
     'consent_nojs_skeune'   => 'Tooltips / modals on this page need JS to work with the keyboard.  If you use a keyboard, please enable JS if you wish to use this functionality.',
-    'consent_disclaimer_privacy_nolink' => '<div><strong>%org%</strong> needs this information to function properly.</div>'
-    ,
-    'consent_disclaimer_privacy'    => <<<'TXT'
-<div><strong>%org%</strong> needs this information to function properly (read their <a href="%privacy_url%" target="_blank">privacy policy</a>).</div>
-TXT
-    ,
+    'consent_disclaimer_privacy_statement' => 'needs this information to function properly',
+    'consent_disclaimer_privacy_read'    => 'read their',
+    'consent_disclaimer_privacy_policy'  => 'privacy policy',
     'consent_disclaimer_secure' => 'is being used by your organisation to securely send your information from your institution to this service (learn more about',
     // Consent slidein: Reject_skeune
     'consent_slidein_reject_text_skeune'    => <<<'TXT'
