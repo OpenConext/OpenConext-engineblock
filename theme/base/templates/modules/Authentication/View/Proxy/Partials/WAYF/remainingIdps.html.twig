@@ -1,6 +1,6 @@
 <section class="wayf__remainingIdps {% if connectedIdps.formattedPreviousSelectionList is not empty %}hidden{% endif %}">
     <h2 class="remainingIdps__title visually-hidden">
-        {% if connectedIdps.formattedPreviousSelectionList %}{# todo test this with an empty array #}
+        {% if connectedIdps.formattedPreviousSelectionList %}
             {{ 'wayf_remaining_idps_title'|trans }}
         {% else %}
             {{ 'wayf_select_account'|trans }}
