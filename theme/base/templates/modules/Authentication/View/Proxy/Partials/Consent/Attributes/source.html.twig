@@ -1,17 +1,23 @@
 <li class="idpRow">
     {% if attributeSource == 'engineblock' %}
         {% set organisationName = 'suite_name'|trans %}
+        {% set consentProvidedByOrg %}
+            {{ 'consent_provided_by'|trans }}  <strong>{{ organisationName }}</strong>
+        {% endset %}
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/idpRow.html.twig' with {
             logoUrl: defaultLogo,
             organisationName: organisationName,
-            text: 'consent_provided_by'|trans({'%organisationName%': organisationName }),
+            text: consentProvidedByOrg,
         } %}
     {% elseif attributeSource != 'idp' %}
         {% set organisationName = attributeSourceDisplayName(attributeSource) %}
+        {% set consentProvidedByOrg %}
+            {{ 'consent_provided_by'|trans }}  <strong>{{ organisationName }}</strong>
+        {% endset %}
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/idpRow.html.twig' with {
             logoUrl: attributeSourceLogoUrl(attributeSource)|escape('html_attr'),
             organisationName: organisationName,
-            text: 'consent_provided_by'|trans({'%organisationName%': organisationName }),
+            text: consentProvidedByOrg,
         } %}
     {% else %}
         {% if idp.logo is not null %}
@@ -19,10 +25,13 @@
         {% else %}
             {% set logoUrl = '/images/placeholder.png' %}
         {% endif %}
+        {% set consentProvidedByIdp %}
+            {{ 'consent_provided_by'|trans }}  <strong>{{ idpName }}</strong>
+        {% endset %}
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/idpRow.html.twig' with {
             logoUrl: logoUrl,
             organisationName: idpName,
-            text: 'consent_provided_by'|trans({'%organisationName%': idpName }),
+            text: consentProvidedByIdp,
         } %}
     {% endif %}
 </li>
