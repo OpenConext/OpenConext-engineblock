@@ -32,7 +32,8 @@ return [
     'wayf_noaccess_email'       => 'Your emailaddress',
     'wayf_noaccess_motivation'  => 'Motivation',
     'wayf_noaccess_success'     => 'Your request for access has been sent.',
-    'wayf_defaultIdp'                => 'If your %organisation_noun% is not listed, <a href="%defaultIdpLink%" class="wayf__defaultIdpLink">%defaultIdpName% is available as an alternative.</a>',
+    'wayf_defaultIdp_start'     => 'If your %organisation_noun% is not listed,',
+    'wayf_defaultIdp_linkText'  => '%defaultIdpName% is available as an alternative.',
     'wayf_idp_title_screenreader' => 'Login with ',
     'log_in_to'                 => 'Select an %organisationNoun% to login to %arg1%',
 

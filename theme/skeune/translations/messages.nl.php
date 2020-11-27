@@ -32,7 +32,8 @@ return [
     'wayf_noaccess_email'       => 'Uw e-mailadres',
     'wayf_noaccess_motivation'  => 'Motivatie',
     'wayf_noaccess_success'     => 'Je aanvraag tot toegang werd verstuurd.',
-    'wayf_defaultIdp'                => '<a href="%defaultIdpLink%" class="wayf__defaultIdpLink">%defaultIdpName% is beschikbaar als alternatief</a> indien uw %organisation_noun% niet in de lijst staat.',
+    'wayf_defaultIdp_start'     => 'Indien uw %organisation_noun% niet opgelijst staat,',
+    'wayf_defaultIdp_linkText'  => 'is %defaultIdpName% beschikbaar als alternatief.',
     'wayf_idp_title_screenreader' => 'Inloggen met ',
     'log_in_to'                 => 'Selecteer een %organisationNoun% en login bij %arg1%',
 
