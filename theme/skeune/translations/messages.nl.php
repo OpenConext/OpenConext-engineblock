@@ -44,7 +44,7 @@ return [
     'consent_attributes_correction_text'    => 'Foutieve informatie?',
     'consent_ok'    =>  'Doorgaan',
     'consent_identifier_explanation'    => 'De id voor deze dienst wordt gegenereerd door %suite_name% en is verschillend voor elke dienst waarvan u gebruikt maakt via %suite_name%. De dienst kan u daarom herkennen als dezelfde gebruiker wanneer u terugkeert.  Diensten kunnen u echter niet herkennen als dezelfde gebruiker wanneer zij gegevens uitwisselen.',
-    'consent_provided_by'   => 'aangeboden door <strong>%organisationName%</strong>',
+    'consent_provided_by'   => 'aangeboden door',
     'consent_tooltip_screenreader'  => 'Waarom hebben we deze informatie nodig?',
     'consent_nojs_skeune'   => 'Tooltips / modals op deze pagina hebben om te werken met het toetsenbord JavaScript nodig.  Indien u enkel een toetsenbord gebruikt, gelieve dan JavaScript in te schakelen voor deze functionaliteit.',
     'consent_disclaimer_privacy_nolink' => '<div><strong>%org%</strong> heeft deze informatie nodig om te kunnen werken.</div>'
