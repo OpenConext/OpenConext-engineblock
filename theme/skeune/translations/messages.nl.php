@@ -6,6 +6,7 @@ return [
     'required'      =>  'Verplicht',
     'search'        =>  'Zoeken',
     'send_request'  =>  'Verzoek sturen',
+    'noscript'      => 'Om deze pagina optimaal te laten functioneren moet JavaScript aan staan.',
 
     // Forms
     'form_general_error'    =>  'Er ging iets fout tijdens het insturen van uw formulier.  Dit kan een probleem zijn met uw internetverbinding of iets anders.  Controleer uw invoer en probeer het later opnieuw.  Mocht het probleem zich blijven voordoen, neem dan contact op met uw beheerder.',
@@ -15,7 +16,8 @@ return [
     // WAYF
     'wayf_nothing_found'        => 'Niets gevonden',
     'wayf_apu'                  => 'Probeert u het opnieuw met andere zoektermen',
-    'wayf_noscript_warning'     => '<p>Om deze pagina optimaal te laten functioneren moet JavaScript aan staan.</p><p>Zonder JavaScript zal u geen vorig gebruikte accounts kunnen onthouden.  Indien u deze functionaliteit toch wenst te gebruiken, vragen wij u vriendelijk om JavaScript aan te zetten.</p><p><strong>U kan, vanzelfsprekend, nog steeds inloggen.</strong></p>',
+    'wayf_noscript_warning_intro'     => 'Zonder JavaScript zal u geen vorig gebruikte accounts kunnen onthouden.  Indien u deze functionaliteit toch wenst te gebruiken, vragen wij u vriendelijk om JavaScript aan te zetten.',
+    'wayf_noscript_warning_end'     => 'U kan, vanzelfsprekend, nog steeds inloggen.',
     'wayf_no_access_account'    => 'Geen toegang met deze account',
     'wayf_delete_account'       => 'Verwijderen uit uw accounts',
     'wayf_remaining_idps_title' => 'Voeg een account toe uit de onderstaande lijst',

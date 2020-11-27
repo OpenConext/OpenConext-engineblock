@@ -6,6 +6,7 @@ return [
     'required'      =>  'Required',
     'search'        =>  'Search',
     'send_request'  =>  'Send request',
+    'noscript'      =>  'For this page to function optimally you need JavaScript turned on.',
 
     // Forms
     'form_general_error'    =>  'Something went wrong when submitting the form.  This might be a faulty internet connection, or some other problem.  Please check your input and try again in a little while.  If the problem persists please contact your administrator.',
@@ -15,7 +16,8 @@ return [
     // WAYF
     'wayf_nothing_found'        => 'Nothing found',
     'wayf_apu'                  => 'Please try again with some different keywords',
-    'wayf_noscript_warning'     => '<p>For this page to function optimally you need JavaScript turned on.</p><p>Without JavaScript you will not be able to remember previously used accounts.  If you want to use that functionality, please enable JavaScript.</p><p><strong>You can, off course, still log in.</strong></p>',
+    'wayf_noscript_warning_intro'     => 'Without JavaScript you will not be able to remember previously used accounts.  If you want to use that functionality, please enable JavaScript.',
+    'wayf_noscript_warning_end'     => 'You can, off course, still log in.',
     'wayf_no_access_account'    => 'No access with this account',
     'wayf_delete_account'       => 'Delete from your accounts',
     'wayf_remaining_idps_title' => 'Add an account from the list below',
