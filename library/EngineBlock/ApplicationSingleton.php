@@ -219,7 +219,9 @@ class EngineBlock_ApplicationSingleton
         $log->log($severity, $message, $logContext);
 
         // Store some valuable debug info in session so it can be displayed on feedback pages
-        session_start();
+        if (!headers_sent()) {
+            session_start();
+        }
         $this->getSession()->set('feedbackInfo', $this->collectFeedbackInfo($exception));
 
         // flush all messages in queue, something went wrong!
