@@ -79,7 +79,7 @@ jobs:
             - name: Run acceptance tests
               if: always()
               run: |
-                  COMPOSER_MEMORY_LIMIT=-1 cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                       echo -e "\nInstalling database fixtures...\n" && \
                       ./app/console doctrine:schema:drop --force --env=ci && \
                       ./app/console doctrine:schema:create --env=ci && \
