@@ -10,6 +10,7 @@
     "test": "@cy:run",
     "test:visual-regression": "CYPRESS_integrationFolder=cypress/visual-regression npm run cy:run",
     "cy:run": "cypress run --browser firefox --headless",
+    "cy:run:theme": "cypress run --browser firefox --headless --spec 'cypress/integration/skeune/**/*.spec.js,cypress/integration/shared/*.spec.js'",
     "cy:open": "cypress open",
     "cypress:open": "npx cypress open",
     "audit": "npm audit",
