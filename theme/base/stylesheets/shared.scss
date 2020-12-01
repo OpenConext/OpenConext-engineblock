@@ -279,7 +279,7 @@ body {
 
     // set cross for tooltips when opened
     input[type="checkbox"]:checked.tooltip ~ label.tooltip {
-        @include tooltip-checked;
+        @include closeTooltip;
     }
 
     input[type="checkbox"]:checked.tooltip ~ label.tooltip ~ .tooltip__value {

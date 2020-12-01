@@ -166,7 +166,7 @@
                     }
 
                     > input[type="checkbox"]:checked.tooltip ~ .attribute__name > label.tooltip {
-                        @include tooltip-checked;
+                        @include closeTooltip;
                         background-position: left 11px bottom 10px;
                     }
 
@@ -348,15 +348,21 @@
                             margin: 0 0 0 10px;
                         }
 
-                        > strong {
-                            font-weight: $bolder;
+                        > label.modal {
+                            background-image: unset;
+                        }
+
+                        > .idpRow__providedBy-content {
+                            > strong {
+                                font-weight: $bolder;
+                            }
                         }
                     }
 
                     > input[type="checkbox"],
                     > .ie11__label,
                     > .ie11__link {
-                        @include grid-position(1, 2, 5, 6);
+                        @include grid-position(1, 2, 5, 7);
 
                         @include screen('mobile') {
                             @include grid-position(2, 3, 3, 5);
@@ -406,10 +412,53 @@
                         }
                     }
 
-                    > input:checked + .ie11__label + .modal__value {
+                    > input:checked ~ .ie11__label {
+                        > label.modal {
+                            @include closeIdpRowLabel;
+                            background-position: right 23px top .5rem;
+                            display: inline-block;
+                            height: 25px;
+                            width: 100%;
+
+                            > .label-text {
+                                display: none;
+                            }
+
+                            @include screen('mobile') {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    > input:checked + p {
+                        > label.modal {
+                            display: none;
+                        }
+
+                        @include screen('mobile') {
+                            display: flex;
+                            justify-content: space-between;
+
+                            > .idpRow__providedBy-content {
+                                display: inline-block;
+                                width: 86%;
+                            }
+
+                            > label.modal {
+                                @include closeIdpRowLabel;
+                                background-position: right 5px top .2rem;
+                                display: inline-block;
+                                height: 25px;
+                                width: 25px;
+                            }
+                        }
+                    }
+
+                    > input:checked ~ .ie11__label + .modal__value {
                         display: flex;
                         justify-content: center;
                         margin: 9px auto 1rem;
+                        max-height: 100vh;
 
                         > .modal__content {
                             padding-left: 0;
@@ -422,10 +471,6 @@
                                 padding-left: 1rem;
                             }
                         }
-                    }
-
-                    > input:checked + .ie11__label + .modal__value.animated {
-                        max-height: 100vh;
                     }
                 }
 
