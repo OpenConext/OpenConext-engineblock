@@ -86,7 +86,7 @@
                 border-radius: 6px;
                 box-shadow: 0 1px 0 2px $hardBorderGray;
                 margin: 0 0 2rem;
-                max-height: 100vh;
+                max-height: 200vh;
                 overflow: hidden;
                 padding: 0;
                 transition: max-height .6s ease-in;
@@ -104,6 +104,9 @@
                     > * {
                         padding: 1rem 0;
 
+                        @include screen('mobile') {
+                            padding: 0;
+                        }
                     }
 
                     @include screen('mobile') {
@@ -181,6 +184,7 @@
                             display: inline-block;
                             text-align: left;
                             margin-right: 0;
+                            padding: 0;
                         }
 
                         > label.tooltip {
@@ -205,6 +209,7 @@
 
                         @include screen('mobile') {
                             @include grid-position(2, 3, 1, 2);
+                            padding: 0;
                         }
                     }
 
@@ -369,6 +374,7 @@
 
                         @include screen('mobile') {
                             margin: 0 0 0 10px;
+                            padding: 0;
                             text-align: inherit;
                         }
 
@@ -381,7 +387,7 @@
                             @include screen('mobile') {
                                 display: block;
                                 background-position: right 18px center;
-                                padding-right: 40px;
+                                padding: 0 40px 0 0;
                             }
                         }
 
@@ -398,12 +404,10 @@
 
                     > .modal__value {
                         @include start-display-animated;
-                        @include grid-position(2, 3, 1, 7);
-                        //max-width: calc(100% - 4rem);
+                        @include grid-position(2, 3, 3, 7);
 
                         @include screen('mobile') {
                             @include grid-position(3, 4, 1, 5);
-                            //max-width: calc(100% - 1rem);
                         }
                     }
 
@@ -412,13 +416,21 @@
                         justify-content: center;
                         margin: 9px auto 1rem;
 
+                        > .modal__content {
+                            padding-left: 0;
+                        }
+
                         @include screen('mobile') {
-                            margin: 9px .5rem;
+                            margin: 0;
+
+                            > .modal__content {
+                                padding-left: 1rem;
+                            }
                         }
                     }
 
                     > input:checked + .ie11__label + .modal__value.animated {
-                        max-height: 50vh;
+                        max-height: 100vh;
                     }
                 }
 
@@ -442,6 +454,10 @@
                     &.disclaimer__privacy {
                         svg {
                             margin-left: -0.5rem;
+
+                            @include screen('mobile') {
+                                margin-left: -0.05rem;
+                            }
                         }
 
                     }
