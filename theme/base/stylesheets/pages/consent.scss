@@ -544,11 +544,15 @@
                 > .button--tertiary {
                     > div {
                         @include button-tertiary($gray);
+
+                        > label.modal {
+                            background-image: unset;
+                        }
                     }
                 }
 
                 > #cta_consent_nok:checked + .button--tertiary label {
-                    @include closeModal;
+                    background-image: unset;
                 }
 
                 #cta_consent_nok:checked + .button--tertiary + .modal__value.animated {
