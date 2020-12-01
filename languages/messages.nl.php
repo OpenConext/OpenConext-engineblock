@@ -194,7 +194,7 @@ TXT
     'error_unknown_preselected_idp' => 'Fout - Dienst niet toegankelijk via %organisationNoun%',
     'error_unknown_preselected_idp_desc' => 'De %organisationNoun% waarmee je wilt inloggen heeft toegang tot deze dienst niet geactiveerd. Dat betekent dat jij geen gebruik kunt maken van deze dienst via %suiteName%. Neem contact op met de helpdesk van jouw %organisationNoun% als je toegang wilt krijgen tot deze dienst. Geef daarbij aan om welke dienst het gaat (de &lsquo;SP&rsquo;) en waarom je toegang wilt.',
     'error_unknown_service_provider'              => 'Error - Onbekende dienst',
-    'error_unknown_service_provider_desc'     => 'Er kon geen Service Provider worden gevonden met het EntityID \'%arg1%\'.',
+    'error_unknown_service_provider_desc'     => 'De verzochte Service Provider is onbekend bij %suiteName%. Wellicht heeft je %organisationNoun% toegang tot deze dienst niet geactiveerd. Wil je gebruik maken van deze dienst, wend je dan tot de helpdesk van je %organisationNoun%.',
 
 
         'error_unsupported_acs_location_scheme' => 'Fout - URI scheme van de ACS locatie wordt niet ondersteund',
