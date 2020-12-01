@@ -1,4 +1,4 @@
-FROM php:7.2-fpm
+FROM php:7.2.33-fpm
 
 ARG NPM_UID=1000
 ARG NPM_GID=1000
@@ -20,8 +20,7 @@ RUN apt-get update && apt-get install -y \
     && pecl install apcu \
     && pecl install apcu_bc-1.0.3 \
     && docker-php-ext-enable apcu --ini-name 10-docker-php-ext-apcu.ini \
-    && docker-php-ext-enable apc --ini-name 20-docker-php-ext-apc.ini \
-    && docker-php-ext-enable xdebug
+    && docker-php-ext-enable apc --ini-name 20-docker-php-ext-apc.ini
 
 # Composer
 COPY --from=composer:1 /usr/bin/composer /usr/local/bin/composer
