@@ -61,7 +61,7 @@ parameters:
     ## /etc, but EngineBlock supports runtime modification of PHP
     ## settings.
     php_settings:
-        memory_limit: 128M
+        memory_limit: 256M
         display_errors: '1'
         error_reporting: '6135'
         date.timezone: Europe/Amsterdam
