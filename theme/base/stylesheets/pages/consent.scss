@@ -125,11 +125,6 @@
                         }
                     }
 
-                    > * {
-                        padding: 1rem 0;
-
-                    }
-
                     > *:not(input[type="checkbox"]):not(.attribute__name) {
                         color: $black;
                         line-height: 1.63;
