@@ -70,11 +70,6 @@
                     border-bottom: 1px solid $softBorderGray;
                     line-height: 1.63;
 
-                    > * {
-                        padding: 1rem 0;
-
-                    }
-
                     @include screen('mobile') {
                         padding: 10px;
                         @include grid-template-columns(100%);
@@ -83,6 +78,17 @@
                         > * {
                             padding: 0;
                         }
+                    }
+
+                    &:nth-child(-n + 4) {
+                        > .attribute__value {
+                            margin-top: 1px;
+                        }
+                    }
+
+                    > * {
+                        padding: 1rem 0;
+
                     }
 
                     > *:not(input[type="checkbox"]):not(.attribute__name) {
