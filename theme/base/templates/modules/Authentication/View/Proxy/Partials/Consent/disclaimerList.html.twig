@@ -1,7 +1,3 @@
-{% set readMoreUrl = 'openconext_support_url'|trans %}
-{% set readMoreText = 'slidein_read_more'|trans %}
-{% set aboutText = 'consent_slidein_about_text_new'|trans({'%profileUrl%': profileUrl}) %}
-{% set modalAbout = 'consent_modal_about'|trans({'%about_text%': aboutText, '%read_more_url%': readMoreUrl, '%read_more_text%': readMoreText }) %}
 <ul class="consent__disclaimer">
     <li class="disclaimer__privacy">
         <div>
@@ -18,14 +14,9 @@
     <li class="disclaimer__secure">
         <div>
             {% include '@theme/Authentication/View/Proxy/Partials/Consent/SVG/shield_key.svg' %}
-            <div>
-                {% if nameIdIsPersistent %}
-                    {{ 'consent_disclaimer_secure'|trans({'%buttonText%': 'button'|trans, '%suite_name%': 'suite_name'|trans, '%modal_about%': modalAbout})|raw }}
-                    {% include '@theme/Authentication/View/Proxy/Partials/Consent/Modals/uniqueNumberExplanation.html.twig' %}
-                {% else %}
-                    {{ 'consent_disclaimer_secure_onemodal'|trans({'%suite_name%': 'suite_name'|trans, '%modal_about%': modalAbout})|raw }}
-                {% endif %}
-            </div>
+            <p>
+                <strong>{{ 'suite_name'|trans }}</strong> {{ 'consent_disclaimer_secure'|trans }} <a href="{{ 'openconext_support_url'|trans }}" target="_blank" class="link__readmore">{{ 'suite_name'|trans }}</a>).
+            </p>
         </div>
     </li>
 </ul>

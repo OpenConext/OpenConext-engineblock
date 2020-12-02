@@ -26,16 +26,8 @@ context('Consent on Skeune theme', () => {
         .should('not.be.visible');
     });
 
-    it('Should not show the about-modal on load', () => {
-      cy.notBeVisible('label[for="consent_disclaimer_about"] + section h3');
-    });
-
     it('Should not show the nok-modal on load', () => {
       cy.notBeVisible('label[for="cta_consent_nok"] + section h3');
-    });
-
-    it('Should not show the number modal on load', () => {
-      cy.notBeVisible('label[for="consent_disclaimer_number"] + section a[href="https://example.org"]');
     });
 
     it('Should not show the decline consent modal on load', () => {
