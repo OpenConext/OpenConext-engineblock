@@ -31,7 +31,7 @@ context('Consent when using the keyboard', () => {
     });
   });
 
-  describe('Shows / hides the tooltips on click', () => {
+  describe('Shows / hides the tooltips on enter', () => {
     it('Shows the tooltip', () => {
       cy.focusAndEnter('label.tooltip[for="tooltip3"]:not(:first-child)')
         .next()
@@ -50,21 +50,26 @@ context('Consent when using the keyboard', () => {
     });
   });
 
-  describe('Shows the modals on click', () => {
+  describe('Shows the modals on enter', () => {
     it('Should show the nok-modal', () => {
       cy.contains('label', 'Something incorrect?')
         .focus().type('{enter}');
       cy.contains('Is the data shown incorrect?')
         .should('be.visible');
     });
+  });
 
-    it('Should show the decline consent modal', () => {
-      cy.contains('label', 'Cancel');
-      cy.get('#cta_consent_nok')
-        .next()
-        .focus().type('{enter}');
-      cy.contains('You don\'t want to share your data with the service')
-        .should('be.visible');
+  describe('Shows / hides the nok-section on enter', () => {
+    it('Shows the nok-section when hitting the nok button', () => {
+      cy.getAndEnter('.ctas > .button--tertiary');
+      cy.beVisible('.consent__nok');
+      cy.notBeVisible('.consent__content');
+    });
+
+    it('Hides the nok-section when hitting the back button', () => {
+      cy.getAndEnter('.consent__nok-back');
+      cy.notBeVisible('.consent__nok');
+      cy.beVisible('.consent__content');
     });
   });
 });

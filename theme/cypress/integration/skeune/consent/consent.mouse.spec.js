@@ -60,12 +60,19 @@ context('Consent when using the mouse', () => {
       cy.contains('Is the data shown incorrect?')
         .should('be.visible');
     });
+  });
 
-    it('Should show the decline consent modal', () => {
-      cy.contains('label', 'Cancel')
-        .click({force: true});
-      cy.contains('You don\'t want to share your data with the service')
-        .should('be.visible');
+  describe('Shows / hides the nok-section on click', () => {
+    it('Shows the nok-section when clicking the nok button', () => {
+      cy.get('label[for="cta_consent_nok"]').click({force: true});
+      cy.beVisible('.consent__nok');
+      cy.notBeVisible('.consent__content');
+    });
+
+    it('Hides the nok-section when clicking the back button', () => {
+      cy.get('.consent__nok-back').click({force: true});
+      cy.notBeVisible('.consent__nok');
+      cy.beVisible('.consent__content');
     });
   });
 });
