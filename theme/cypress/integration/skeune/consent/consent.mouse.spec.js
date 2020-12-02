@@ -11,8 +11,7 @@ context('Consent when using the mouse', () => {
       cy.contains('label', 'Show more information')
         .click();
       cy.contains('label', 'Show less information');
-      cy.get('ul.consent__attributes--nested')
-        .should('be.visible');
+      cy.beVisible('ul.consent__attributes li:nth-of-type(6)');
     });
 
     it('Should hide the extra attributes after clicking the label again', () => {
@@ -26,8 +25,7 @@ context('Consent when using the mouse', () => {
 
       // test assertions
       cy.contains('label', 'Show more information');
-      cy.get('ul.consent__attributes--nested')
-        .should('not.be.visible');
+      cy.notBeVisible('ul.consent__attributes li:nth-of-type(6)');
     });
   });
 
@@ -54,7 +52,7 @@ context('Consent when using the mouse', () => {
   });
 
   describe('Shows the modals on click', () => {
-    it('Should show the nok-modal', () => {
+    it('Should show the incorrect modal', () => {
       cy.contains('label', 'Something incorrect?')
         .click({force: true});
       cy.contains('Is the data shown incorrect?')

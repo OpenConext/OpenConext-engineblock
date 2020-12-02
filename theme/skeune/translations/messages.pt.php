@@ -61,4 +61,6 @@ TXT
     ,
     'consent_nok_title'     => "You don't want to share your data with the service",
     'consent_nok_text'      => "The service you're logging into requires your data to function properly. If you prefer not to share your data, you cannot use this service. By closing your browser or just this tab you prevent your information from being shared with the service. If you change your mind later, please login to the service again and this screen will reappear.",
+    'consent_groupmembership_show_more'     => 'Show more',
+    'consent_groupmembership_show_less'     => 'Show less',
 ];
