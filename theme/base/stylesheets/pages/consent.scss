@@ -101,6 +101,14 @@
                         display: none;
                     }
 
+                    > * {
+                        padding: 1rem 0;
+
+                        @include screen('mobile') {
+                            padding: 0;
+                        }
+                    }
+
                     @include screen('mobile') {
                         padding: 10px;
                         @include grid-template-columns(100%);
@@ -399,6 +407,7 @@
                     > .modal__value {
                         @include start-display-animated;
                         @include grid-position(2, 3, 3, 7);
+                        transition: max-height .6s ease-in;
 
                         > .modal__content {
                             padding-left: 0;
