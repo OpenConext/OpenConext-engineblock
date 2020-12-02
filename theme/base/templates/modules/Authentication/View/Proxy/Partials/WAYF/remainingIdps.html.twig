@@ -17,9 +17,12 @@
             {% endif %}
         {% endset %}
         {% set organisationNoun = 'organisation_noun'|trans %}
+        {% set defaultIdpText %}
+            {{ 'wayf_defaultIdp_start'|trans({ '%organisation_noun%': organisationNoun }) }} <a href="{{ requestUri }}" class="wayf__defaultIdpLink">{{ 'wayf_defaultIdp_linkText'|trans({ '%defaultIdpName%': connectedIdps.defaultIdPTitle }) }}</a>
+        {% endset %}
         {% include '@theme/Default/Partials/informational.html.twig' with {
             class: 'remainingIdps__defaultIdp',
-            text: 'wayf_defaultIdp'|trans({ '%defaultIdpLink%': requestUri, '%organisation_noun%': organisationNoun, '%defaultIdpName%': connectedIdps.defaultIdPTitle })
+            text: defaultIdpText,
         } %}
     {% endif %}
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/rememberChoice.html.twig' %}
