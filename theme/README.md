@@ -2,6 +2,8 @@
 
 The layout and styling of EngineBlock are taken care of in a theme. There is a base theme, which can be overriden to suit your needs.  Below is all information you'll need to develop a theme of your own.
 
+Take note that the development of a theme happens in the engineblock context.  Meaning you'll need a working copy of engineblock to start developing a theme.
+
 
 ### Tools for theme-development
 
@@ -15,8 +17,8 @@ All other tools are installed through Node.JS with the following command:
 We use the following tools:
 - [SASS][sass] as a CSS extension language.  We use the .scss extension, because if you don't know sass it's just like writing regular css (it's also become industry standard).  After compilation, we use [PostCSS][postcss] to ensure vendor prefixes are added for all suported browsers.
 - [Twig][twig] as the templating system.  It's well documented, easy to learn and very powerfull.  If you don't know it yet you can start writing plain html and ease into it.
-- [Vanilla JS][vanilla.js] as our JS solution of choice.  It's lightning fast, easily blowing any rival framework out of the water.  We compile it using [Babel][babel] to ensure we can use the latest&greatest features of choice.
-- [Cypress][cypress] for integration, end-to-end testing, visual-regression testing & even for accessibility-testing and html-validation (through plugins).
+- [Vanilla JS][vanilla.js] as our JS solution of choice.  It's lightning fast, easily blowing any rival framework out of the water.  It also allows anyone to jump in.  We compile it using [Babel][babel] to ensure we can use the latest&greatest features of choice.
+- [Cypress][cypress] for integration, end-to-end testing, visual-regression testing, accessibility-testing and html-validation.  We use plugins for the last two.
 
 ### Cross-browser support:
 
@@ -46,12 +48,17 @@ For instructions on how to use it: see the file itself.
         - images
         - javascripts: the main entry point for any theme is application.js
         - stylesheets: the main entry point for any theme is application.scss
-        - templates: twig templates.  todo give an overview of the main entry points
+        - templates: twig templates.  The main entry points are:
+            - consent.html.twig: modules > Authentication > View > Proxy
+            - wayf.html.twig: same folder as above
+            - redirect.html.twig: same folder again
+            - index.html.twig: modules > Authentication > View > Index
+            - error.html.twig: modules > Default > View > Error
         - translations: translations specific to the theme.
-    - cypress: todo figure out if it'll stay in this structure or not
-    - openconext: the theme formerly known as material.  This used to be the official theme, but is now second-fiddle (as it does not conform to the accessibility standards)
-    - scripts: currently holds the build-script, written in node.js.
-    - skeune: todo delete this
+    - cypress: all tests.  The main thing to know here is that the tests reside in the **integration** subfolder.  Each theme has one subfolder with it's own tests.  Aside from that, there is a "shared" folder with the tests which each theme should run.
+    - openconext: the theme formerly known as material.  This used to be the official theme
+    - scripts: node.js scripts to make our life easier.  These are called via the yarn commands.
+    - skeune: the skeune theme
 
 ### Switching themes
 
@@ -70,7 +77,7 @@ if however you prefer to use the openconext theme, it'd read like this:
 **Switching themes on CI**
 A helper script was included in the `theme/scripts` folder to assist in building theme assets.
 
-This script changes the Twig theme and builds the chosen frontend theme assets. To use this script you simply run:
+This script changes the Twig theme and builds the chosen frontend theme assets. To use this script you simply run (replace the skeune theme by your own theme name):
 
 ```bash
 $ EB_THEME=skeune ./scripts/prepare-test.js
@@ -105,8 +112,8 @@ This has two consequences:
 1. you are completely free to use the styles you prefer.
 2. if you wish to use any of the css from the base theme, you'll need to import it.
 
-We highly recommend importing the helpers.scss file from the base theme.  It contains many usefull classes, functions and mixins.
-All variables in the base theme have been configured to be overridable with the !default option for sass.  This means they will only be used when you have not overwritten them in your own scss files.
+We highly recommend importing the helpers.scss file from the base theme.  It contains many useful classes, functions and mixins.
+All variables in the base theme are configured to be overridable with the !default option for sass.  This means they will only be used when you have not overwritten them in your own scss files.
 
 Last, but not least, the base theme contains an a11y-tests file.  This is meant for development only, to test a couple of common accessibility scenarios.
 
@@ -126,23 +133,34 @@ This has two consequences:
 1. you are completely free to use the javascript you prefer.
 2. if you wish to use any of the js from the base theme, you'll need to import it.  When in doubt, you can use the application.js file in the base theme to see which files to import.
 
-#### Custom Twig templates
+#### Custom Twig templates & some tips on testing
 
 To override a twig file create one with the same name in the same location.  This means the folderstructure of your templates needs to be the same for the templates you want to override.  Any template that isn't overriding a template from the base theme, can be in any place you want in the templates folder of your theme.
 
 Below you'll find a list of the "entry points" for each page with corresponding testing urls to ease development.  If you want to override the entire page, you will need to have those in your theme.
-- consent page: `templates > modules > authentication > view > proxy > consent.html.twig`.  You can use `https://engine.vm.openconext.org/functional-testing/consent` to develop the page.
+- consent page:
+    - `templates > modules > authentication > view > proxy > consent.html.twig`.
+    - You can use `https://engine.vm.openconext.org/functional-testing/consent` to develop the page.
+    - To test group memberships, you will need to make the following change to \src\OpenConext\EngineBlockFunctionalTestingBundle\Controllers\ConsentController.php:
+        - find the attribute `'urn:mace:dir:attribute-def:isMemberOf'` (at the time of writing on line 93)
+        - add some values to the array.  Eg:
+        ```
+      'urn:mace:dir:attribute-def:isMemberOf' => [
+                      'urn:collab:org:vm.openconext.org',
+                      'urn:collab:org:vm.openconext.org',
+                      'urn:collab:org:vm.openconext.org',
+                      'urn:collab:org:vm.openconext.org',
+                      'urn:collaboration:organisation:vm.openconext.org',
+                      'urn:collab:org:vm.openconext.org',
+                      'urn:collab:org:vm.openconext.org',
+                      'urn:collab:org:vm.openconext.org',
+                  ],
+      ```
+
 - wayf: `templates > modules > authentication > view > proxy > wayf.html.twig `.  You can use `https://engine.vm.openconext.org/functional-testing/wayf` to develop the page.
 - error: `templates > modules > default > view > error > error.html.twig`.  You can use `https://engine.vm.openconext.org/feedback/unknown-error` to develop the page.
-
-[babel]: https://babeljs.io/
-[cypress]: https://www.cypress.io/
-[nodejs]: https://nodejs.org/en/
-[postcss]: https://postcss.org/
-[sass]: https://sass-lang.com/
-[twig]: https://twig.symfony.com/
-[vanilla.js]: https://learnvanillajs.com/
-[wcag]: https://www.w3.org/WAI/standards-guidelines/wcag/
+- redirect page: `templates > modules > authentication > view > proxy > redirect.html.twig`.
+- index.html.twig: `templates > modules > authentication > view > index > index.html.twig`.
 
 #### Supported feature flags
 
@@ -155,3 +173,12 @@ There are a number of feature flags which need to be supported by a theme in ord
 - backLink: display a link which, when clicked, allows you to go back two pages.  In essence the equivalent of clicking the back button twice.  You can test this by going to `/functional-testing/wayf?backLink=1`.
 - cutoffPointForShowingUnfilteredIdps: unlike the previous flags which were booleans, this one is an integer.  When this flag is present & the user is not searching (so no value in the search field): there should only be idps shown when there are no more than the cutoff point.  So as an example: if there are 100 idps that would be shown normally, and the cutoff point is 50: the user should see no idps at all (so only the empty search field is shown).  You can test this by going to `/functional-testing/wayf?cutoffPointForShowingUnfilteredIdps=50`.
 - showConsentExplanation: whether or not to show a special explanation on the consent page.  There is currently no testpoint for this.
+
+[babel]: https://babeljs.io/
+[cypress]: https://www.cypress.io/
+[nodejs]: https://nodejs.org/en/
+[postcss]: https://postcss.org/
+[sass]: https://sass-lang.com/
+[twig]: https://twig.symfony.com/
+[vanilla.js]: https://learnvanillajs.com/
+[wcag]: https://www.w3.org/WAI/standards-guidelines/wcag/
