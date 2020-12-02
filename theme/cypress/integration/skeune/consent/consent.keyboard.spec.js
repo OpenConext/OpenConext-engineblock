@@ -7,15 +7,14 @@ context('Consent when using the keyboard', () => {
   });
 
   describe('Test showing / hiding the extra attributes', () => {
-    it('Should show the extra attributes after clicking the label', () => {
+    it('Should show the extra attributes after hitting the label', () => {
       cy.contains('label', 'Show more information')
         .focus().type('{enter}');
       cy.contains('label', 'Show less information');
-      cy.get('ul.consent__attributes--nested')
-        .should('be.visible');
+      cy.beVisible('ul.consent__attributes li:nth-of-type(6)');
     });
 
-    it('Should hide the extra attributes after clicking the label again', () => {
+    it('Should hide the extra attributes after hitting the label again', () => {
       // first click the show more label to show the attributes
       cy.contains('label', 'Show more information')
         .focus().type('{enter}');
@@ -26,8 +25,7 @@ context('Consent when using the keyboard', () => {
 
       // test assertions
       cy.contains('label', 'Show more information');
-      cy.get('ul.consent__attributes--nested')
-        .should('not.be.visible');
+      cy.notBeVisible('ul.consent__attributes li:nth-of-type(6)');
     });
   });
 
@@ -51,7 +49,7 @@ context('Consent when using the keyboard', () => {
   });
 
   describe('Shows the modals on enter', () => {
-    it('Should show the nok-modal', () => {
+    it('Should show the incorrect modal', () => {
       cy.contains('label', 'Something incorrect?')
         .focus().type('{enter}');
       cy.contains('Is the data shown incorrect?')

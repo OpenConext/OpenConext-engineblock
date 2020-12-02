@@ -60,4 +60,6 @@ TXT
     ,
     'consent_nok_title'     => "U wil geen gegevens delen met deze dienst",
     'consent_nok_text'      => "De dienst waar u bij wil inloggen heeft deze gegevens nodig om te kunnen functioneren.  Indien u verkiest om uw data niet te delen, kan u de dienst niet gebruiken.  Door uw browser of door deze tab te sluiten verhinderd u dat uw informatie gedeeld wordt.  Mocht u later van gedacht veranderen, kan u opnieuw inloggen bij deze dienst en krijgt u dit scherm opnieuw te zien.",
+    'consent_groupmembership_show_more'     => 'Toon meer',
+    'consent_groupmembership_show_less'     => 'Toon minder',
 ];
