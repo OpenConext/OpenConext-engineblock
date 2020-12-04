@@ -1,0 +1,107 @@
+.wayf__remainingIdps {
+    @include motion {
+        max-height: fit-content;
+        overflow: unset;
+        transition: max-height 2s linear;
+    }
+
+    &.hidden {
+        @include motion {
+            display: block !important;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 2s linear;
+        }
+    }
+
+    > .wayf__search {
+        @include relative;
+        margin: 2rem 0 1.25rem;
+
+        > .search__field {
+            @include webkit-input;
+            border: 1px solid $gray;
+            border-radius: 6px;
+            box-shadow: 0 1px 0 2px #5e6873;
+            display: block;
+            font-size: $f-large;
+            height: 3rem;
+            line-height: 1.5;
+            padding: 1rem;
+            width: 100%;
+
+            @include form-focus;
+
+            &:hover {
+                background-color: $hoverBlue;
+                border: solid 1px $inputBorderGray;
+            }
+
+            @include screen('mobile') {
+                padding: .5rem;
+            }
+        }
+
+        .search__field:hover + .search__submit,
+        .search__field:focus + .search__submit,
+        .search__field:hover ~ .search__reset,
+        .search__field:focus ~ .search__reset {
+            @include button-reset($hoverBlue);
+        }
+
+        > .search__submit,
+        > .search__reset {
+            @include absolute(top 3px right 3px);
+            @include button-reset($white);
+            @include poirot;
+            background-color: transparent;
+            background-position: center center;
+            background-size: 1.5rem 1.5rem;
+            border-radius: 6px;
+            height: calc(3rem - 6px);
+            width: 3rem;
+
+            &:hover,
+            &:focus {
+                @include button-reset($hoverBlue);
+            }
+
+            @include screen('mobile') {
+                width: 2rem;
+            }
+        }
+
+        > .search__reset {
+            @include img-reset;
+        }
+    }
+
+    > .remainingIdps__defaultIdp {
+        @include informational;
+        margin: 1.25rem 0 1.25rem;
+
+        > .wayf__defaultIdpLink {
+            color: $black;
+
+            &:focus {
+                box-shadow: 0 0 0 3px $white;
+            }
+        }
+    }
+
+    > .wayf__rememberChoice {
+        margin-bottom: 3rem;
+
+        > label[for="rememberChoice"] {
+            @include font-style-large;
+            color: $buttonBlue;
+        }
+
+        > #rememberChoice {
+            height: 1.2rem;
+            margin: 0 0 0 10px;
+            vertical-align: sub;
+            width: 1.2rem;
+        }
+    }
+}
