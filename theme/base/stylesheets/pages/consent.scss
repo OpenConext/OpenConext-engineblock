@@ -6,11 +6,7 @@
 @import './consent/noscript';
 
 .consent {
-    > * > h2 {
-        color: $green;
-        font-size: $f-h2;
-        font-weight: $bolder;
-        line-height: 1.15;
+    h2 {
         margin: 1.5rem 2rem calculateRem(34px);
 
         @include screen('mobile') {

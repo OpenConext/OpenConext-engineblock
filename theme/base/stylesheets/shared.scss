@@ -43,7 +43,11 @@ body {
     }
 
     h2 {
+        color: $green;
         font-family: 'Nunito', sans-serif;
+        font-size: $f-h2;
+        font-weight: $bolder;
+        line-height: 1.15;
     }
 
     h3 {

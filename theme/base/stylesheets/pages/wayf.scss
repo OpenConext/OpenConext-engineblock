@@ -233,7 +233,6 @@
             }
 
             > .previousSelection__title {
-                @include h2;
                 @include grid-position(1, 2, 1, 2);
                 margin: 1.5rem 0 calculateRem(34px);
             }
@@ -367,10 +366,6 @@
                 }
             }
 
-            > .remainingIdps__title {
-                @include h2;
-            }
-
             > .wayf__search {
                 @include relative;
                 margin: 2rem 0 1.25rem;
@@ -472,10 +467,6 @@
                         }
                     }
                 }
-            }
-
-            > .noAccess__title {
-                @include h2;
             }
 
             > .noAccess__helpdesk {
