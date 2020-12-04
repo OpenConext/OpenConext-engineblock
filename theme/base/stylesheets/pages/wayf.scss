@@ -3,6 +3,7 @@
  ******************************************************************/
 
 @import '../helpers';
+@import './wayf/backLink';
 @import './wayf/noAccess';
 @import './wayf/noResults';
 
@@ -430,14 +431,6 @@
                     vertical-align: sub;
                     width: 1.2rem;
                 }
-            }
-        }
-
-        > .buttonLink--secondary {
-            > .wayf__backLink {
-                @include button-secondary($gray);
-                display: block;
-                width: 100%;
             }
         }
     }

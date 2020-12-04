@@ -1,0 +1,6 @@
+.wayf__backLink {
+    @include button-secondary($gray);
+    display: block;
+    margin-top: 1rem;
+    width: 100%;
+}
