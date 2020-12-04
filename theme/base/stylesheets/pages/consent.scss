@@ -3,27 +3,9 @@
  ******************************************************************/
 
 @import '../helpers';
+@import './consent/noscript';
 
 .consent {
-    > noscript {
-        > .consent__noScript {
-            @include warning;
-            margin: 1rem 2rem;
-
-            @include screen('mobile') {
-                margin: 1rem 1rem;
-            }
-
-            @include screen('smallMobile') {
-                margin: 1rem .5rem;
-            }
-
-            p {
-                margin: 0;
-            }
-        }
-    }
-
     > * > h2 {
         color: $green;
         font-size: $f-h2;

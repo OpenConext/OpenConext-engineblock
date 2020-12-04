@@ -22,10 +22,13 @@
     <main class="consent">
         {% include '@theme/Authentication/View/Proxy/Partials/Shared/header.html.twig' %}
 
+        {% set textNoJs %}
+            <p>{{ 'consent_nojs'|trans }}</p>
+        {% endset %}
         <noscript>
             {% include '@theme/Default/Partials/warning.html.twig' with {
                 className: 'consent__noScript',
-                text: 'consent_nojs'|trans
+                text: textNoJs
             } %}
         </noscript>
 
