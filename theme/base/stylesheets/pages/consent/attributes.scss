@@ -15,7 +15,7 @@
         border-bottom: 1px solid $softBorderGray;
         line-height: 1.63;
 
-        &:nth-child(n+6):not(.idpRow) {
+        &:nth-child(n+6) {
             display: none;
         }
 
