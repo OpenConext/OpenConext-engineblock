@@ -186,10 +186,6 @@
             }
         }
 
-        > .notification__success {
-            @include success;
-        }
-
         >.wayf__previousSelection {
             @include display-grid;
             @include grid-template-columns(calc(100% - 7rem) 7rem);
