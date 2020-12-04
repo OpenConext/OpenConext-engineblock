@@ -194,8 +194,4 @@
             }
         }
     }
-
-    _:-ms-fullscreen, > li.idpRow {
-        @include grid-template-columns(85.68px 6.12px 336.6px 6.12px 171.36px 6.12px);
-    }
 }
