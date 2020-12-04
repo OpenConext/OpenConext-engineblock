@@ -1,6 +1,6 @@
 ## Theme Development
 
-The layout and styling of EngineBlock are taken care of in a theme. There is a base theme, which can be overriden to suit your needs.  Below is all information you'll need to develop a theme of your own.
+The layout and styling of EngineBlock are taken care of in a theme. There is a base theme, which can be overridden to suit your needs.  Below is all information you'll need to develop a theme of your own.
 
 Take note that the development of a theme happens in the engineblock context.  Meaning you'll need a working copy of engineblock to start developing a theme.
 
@@ -16,7 +16,7 @@ All other tools are installed through Node.JS with the following command:
 
 We use the following tools:
 - [SASS][sass] as a CSS extension language.  We use the .scss extension, because if you don't know sass it's just like writing regular css (it's also become industry standard).  After compilation, we use [PostCSS][postcss] to ensure vendor prefixes are added for all suported browsers.
-- [Twig][twig] as the templating system.  It's well documented, easy to learn and very powerfull.  If you don't know it yet you can start writing plain html and ease into it.
+- [Twig][twig] as the templating system.  It's well documented, easy to learn and very powerful.  If you don't know it yet you can start writing plain html and ease into it.
 - [Vanilla JS][vanilla.js] as our JS solution of choice.  It's lightning fast, easily blowing any rival framework out of the water.  It also allows anyone to jump in.  We compile it using [Babel][babel] to ensure we can use the latest&greatest features of choice.
 - [Cypress][cypress] for integration, end-to-end testing, visual-regression testing, accessibility-testing and html-validation.  We use plugins for the last two.
 
@@ -44,7 +44,7 @@ For instructions on how to use it: see the file itself.
 ### Folder structure:
 
 - theme:
-    - base: the base theme.  This is **always** the fallback theme in case a route is not found in a custom theme.  Any theme chooses which parts to override, and which parts to simply keep.  A theme should keep the same folder structure as this theme:
+    - base: the base theme.  This is **always** the fallback theme in case a route isn't found in a custom theme.  Any theme chooses which parts to override, and which parts to simply keep.  A theme should keep the same folder structure as this theme:
         - images
         - javascripts: the main entry point for any theme is application.js
         - stylesheets: the main entry point for any theme is application.scss
@@ -55,8 +55,8 @@ For instructions on how to use it: see the file itself.
             - index.html.twig: modules > Authentication > View > Index
             - error.html.twig: modules > Default > View > Error
         - translations: translations specific to the theme.
-    - cypress: all tests.  The main thing to know here is that the tests reside in the **integration** subfolder.  Each theme has one subfolder with it's own tests.  Aside from that, there is a "shared" folder with the tests which each theme should run.
-    - openconext: the theme formerly known as material.  This used to be the official theme
+    - cypress: all tests.  The main thing to know here is that the tests reside in the **integration** subfolder.  Each theme has one subfolder with its own tests.  Aside from that, there is a "shared" folder with the tests which each theme should run.
+    - openconext: the theme formerly known as material.  This used to be the official theme.
     - scripts: node.js scripts to make our life easier.  These are called via the yarn commands.
     - skeune: the skeune theme
 
@@ -123,7 +123,7 @@ If you want to have custom fonts, put them in a fonts subfolder of stylesheets. 
 
 #### Custom Images
 
-If you want to have custom images, put them in a images subfolder of your theme.  They will automatically be copied to the web/images folder when building your theme.
+If you want to have custom images, put them in an images subfolder of your theme.  They will automatically be copied to the web/images folder when building your theme.
 
 #### Custom JS
 
@@ -135,7 +135,7 @@ This has two consequences:
 
 #### Custom Twig templates & some tips on testing
 
-To override a twig file create one with the same name in the same location.  This means the folderstructure of your templates needs to be the same for the templates you want to override.  Any template that isn't overriding a template from the base theme, can be in any place you want in the templates folder of your theme.
+To override a twig file create one with the same name in the same location.  This means the folder structure of your templates needs to be the same for the templates you want to override.  Any template that isn't overriding a template from the base theme, can be in any place you want in the templates folder of your theme.
 
 Below you'll find a list of the "entry points" for each page with corresponding testing urls to ease development.  If you want to override the entire page, you will need to have those in your theme.
 - consent page:
@@ -168,11 +168,11 @@ There are a number of feature flags which need to be supported by a theme in ord
 
 **The following feature flags exist (name of variable in Twig):**
 - showRequestAccess: whether or not Idps without access to the current service should be shown on the WAYF.  You can test this by going to `/functional-testing/wayf?displayUnconnectedIdpsWayf=1&unconnectedIdps=5`.
-- showIdPBanner: whether or not to show the default IdP quick link banner on the WAYF (such as the eduId in the skeune theme).  You can test this by going to `/functional-testing/wayf?showIdPBanner=1`.
+- showIdPBanner: whether to show the default IdP quick link banner on the WAYF (such as the eduId in the skeune theme).  You can test this by going to `/functional-testing/wayf?showIdPBanner=1`.
 - rememberChoiceFeature: allow users to save their selected IdP and then auto-select it on returning visits.  You can test this by going to `/functional-testing/wayf?rememberChoiceFeature=1`.
 - backLink: display a link which, when clicked, allows you to go back two pages.  In essence the equivalent of clicking the back button twice.  You can test this by going to `/functional-testing/wayf?backLink=1`.
 - cutoffPointForShowingUnfilteredIdps: unlike the previous flags which were booleans, this one is an integer.  When this flag is present & the user is not searching (so no value in the search field): there should only be idps shown when there are no more than the cutoff point.  So as an example: if there are 100 idps that would be shown normally, and the cutoff point is 50: the user should see no idps at all (so only the empty search field is shown).  You can test this by going to `/functional-testing/wayf?cutoffPointForShowingUnfilteredIdps=50`.
-- showConsentExplanation: whether or not to show a special explanation on the consent page.  There is currently no testpoint for this.
+- showConsentExplanation: whether to show a special explanation on the consent page.  There is currently no test endpoint for this.
 
 [babel]: https://babeljs.io/
 [cypress]: https://www.cypress.io/
