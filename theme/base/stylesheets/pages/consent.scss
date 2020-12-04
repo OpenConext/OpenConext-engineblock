@@ -86,7 +86,7 @@
                 border-radius: 6px;
                 box-shadow: 0 1px 0 2px $hardBorderGray;
                 margin: 0 0 2rem;
-                max-height: 100vh;
+                max-height: 200vh;
                 overflow: hidden;
                 padding: 0;
                 transition: max-height .6s ease-in;
@@ -99,6 +99,14 @@
 
                     &:nth-child(n+6):not(.openToggle):not(.idpRow) {
                         display: none;
+                    }
+
+                    > * {
+                        padding: 1rem 0;
+
+                        @include screen('mobile') {
+                            padding: 0;
+                        }
                     }
 
                     @include screen('mobile') {
@@ -115,11 +123,6 @@
                         > .attribute__value {
                             margin-top: 1px;
                         }
-                    }
-
-                    > * {
-                        padding: 1rem 0;
-
                     }
 
                     > *:not(input[type="checkbox"]):not(.attribute__name) {
@@ -163,8 +166,8 @@
                     }
 
                     > input[type="checkbox"]:checked.tooltip ~ .attribute__name > label.tooltip {
-                        @include tooltip-checked;
-                        background-position: left 11px bottom 10px;
+                        @include closeTooltip;
+                        background-position: left 17px bottom 11px;
                     }
 
                     > .attribute__name {
@@ -173,16 +176,18 @@
                         text-align: right;
 
                         @include screen('mobile') {
-                            display: inline-block;
-                            text-align: left;
+                            display: flex;
+                            justify-content: space-between;
                             margin-right: 0;
+                            padding: 0;
+                            text-align: left;
                         }
 
                         > label.tooltip {
                             display: none;
 
                             @include screen('mobile') {
-                                background-position: left 8px bottom 5px;
+                                background-position: left 12px bottom 8px;
                                 display: inline-block;
                                 margin: 0 0 -11px 0;
                                 padding: 1rem 25px;
@@ -200,6 +205,7 @@
 
                         @include screen('mobile') {
                             @include grid-position(2, 3, 1, 2);
+                            padding: 0;
                         }
                     }
 
@@ -327,6 +333,7 @@
 
                     > img {
                         @include grid-position(1, 2, 1, 2);
+                        box-sizing: content-box;
                         max-height: calculateRem(30px);
                         margin-left: 9px;
                     }
@@ -342,15 +349,21 @@
                             margin: 0 0 0 10px;
                         }
 
-                        > strong {
-                            font-weight: $bolder;
+                        > label.modal {
+                            background-image: unset;
+                        }
+
+                        > .idpRow__providedBy-content {
+                            > strong {
+                                font-weight: $bolder;
+                            }
                         }
                     }
 
                     > input[type="checkbox"],
                     > .ie11__label,
                     > .ie11__link {
-                        @include grid-position(1, 2, 5, 6);
+                        @include grid-position(1, 2, 5, 7);
 
                         @include screen('mobile') {
                             @include grid-position(2, 3, 3, 5);
@@ -363,6 +376,7 @@
 
                         @include screen('mobile') {
                             margin: 0 0 0 10px;
+                            padding: 0;
                             text-align: inherit;
                         }
 
@@ -375,7 +389,7 @@
                             @include screen('mobile') {
                                 display: block;
                                 background-position: right 18px center;
-                                padding-right: 40px;
+                                padding: 0 40px 0 0;
                             }
                         }
 
@@ -392,27 +406,77 @@
 
                     > .modal__value {
                         @include start-display-animated;
-                        @include grid-position(2, 3, 1, 7);
-                        //max-width: calc(100% - 4rem);
+                        @include grid-position(2, 3, 3, 7);
+                        transition: max-height .6s ease-in;
+
+                        > .modal__content {
+                            padding-left: 0;
+                        }
 
                         @include screen('mobile') {
                             @include grid-position(3, 4, 1, 5);
-                            //max-width: calc(100% - 1rem);
                         }
                     }
 
-                    > input:checked + .ie11__label + .modal__value {
+                    > input:checked ~ .ie11__label {
+                        > label.modal {
+                            @include closeIdpRowLabel;
+                            background-position: right 23px top .5rem;
+                            display: inline-block;
+                            height: 25px;
+                            width: 100%;
+
+                            > .label-text {
+                                display: none;
+                            }
+
+                            @include screen('mobile') {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    > input:checked + p {
+                        > label.modal {
+                            display: none;
+                        }
+
+                        @include screen('mobile') {
+                            display: flex;
+                            justify-content: space-between;
+
+                            > .idpRow__providedBy-content {
+                                display: inline-block;
+                                width: 86%;
+                            }
+
+                            > label.modal {
+                                @include closeIdpRowLabel;
+                                background-position: right 5px top .2rem;
+                                display: inline-block;
+                                height: 25px;
+                                width: 25px;
+                            }
+                        }
+                    }
+
+                    > input:checked ~ .ie11__label + .modal__value {
                         display: flex;
                         justify-content: center;
                         margin: 9px auto 1rem;
+                        max-height: 100vh;
+
+                        > .modal__content {
+                            padding-left: 0;
+                        }
 
                         @include screen('mobile') {
-                            margin: 9px .5rem;
-                        }
-                    }
+                            margin: 0;
 
-                    > input:checked + .ie11__label + .modal__value.animated {
-                        max-height: 50vh;
+                            > .modal__content {
+                                padding-left: 1rem;
+                            }
+                        }
                     }
                 }
 
@@ -436,6 +500,10 @@
                     &.disclaimer__privacy {
                         svg {
                             margin-left: -0.5rem;
+
+                            @include screen('mobile') {
+                                margin-left: -0.05rem;
+                            }
                         }
 
                     }
@@ -544,11 +612,15 @@
                 > .button--tertiary {
                     > div {
                         @include button-tertiary($gray);
+
+                        > label.modal {
+                            background-image: unset;
+                        }
                     }
                 }
 
                 > #cta_consent_nok:checked + .button--tertiary label {
-                    @include closeModal;
+                    background-image: unset;
                 }
 
                 #cta_consent_nok:checked + .button--tertiary + .modal__value.animated {

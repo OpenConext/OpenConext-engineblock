@@ -42,6 +42,10 @@ body {
         cursor: pointer;
     }
 
+    h2 {
+        font-family: 'Nunito', sans-serif;
+    }
+
     h3 {
         color: $brownishGray;
         font-family: 'Nunito', sans-serif;
@@ -275,7 +279,7 @@ body {
 
     // set cross for tooltips when opened
     input[type="checkbox"]:checked.tooltip ~ label.tooltip {
-        @include tooltip-checked;
+        @include closeTooltip;
     }
 
     input[type="checkbox"]:checked.tooltip ~ label.tooltip ~ .tooltip__value {

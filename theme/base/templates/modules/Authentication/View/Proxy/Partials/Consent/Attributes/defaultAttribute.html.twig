@@ -4,7 +4,7 @@
         {% set id %}
             tooltip{{ loop.index }}
         {% endset %}
-        <input type="checkbox" tabindex="-1" role="button" aria-hidden="true" class="tooltip visually-hidden" id="{{ id|trim }}" name="{{ id|trim }}" />
+        <input type="checkbox" tabindex="-1" aria-hidden="true" class="tooltip visually-hidden" id="{{ id|trim }}" name="{{ id|trim }}" />
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/name.html.twig' with { attributeName: attributeShortName(attributeIdentifier, locale()), id: id|trim } %}
     {% else %}
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/name.html.twig' with { attributeName: attributeShortName(attributeIdentifier, locale()) } %}

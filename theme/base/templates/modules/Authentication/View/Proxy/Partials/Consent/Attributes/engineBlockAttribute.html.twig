@@ -3,7 +3,7 @@
         {% set id %}
             tooltip{{ loop.index }}
         {% endset %}
-        <input type="checkbox" tabindex="-1" role="button" aria-pressed="false" class="tooltip visually-hidden" id="{{ id|trim }}" name="{{ id|trim }}" />
+        <input type="checkbox" tabindex="-1" class="tooltip visually-hidden" aria-hidden="true" id="{{ id|trim }}" name="{{ id|trim }}" />
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/name.html.twig' with { attributeName: 'consent_name_id_label'|trans, id: id|trim } %}
     {% else %}
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/name.html.twig' with { attributeName: 'consent_name_id_label'|trans } %}
