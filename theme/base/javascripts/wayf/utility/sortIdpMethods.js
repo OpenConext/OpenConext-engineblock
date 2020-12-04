@@ -12,8 +12,9 @@ import {getData} from '../../utility/getData';
 export const sortByTitle = (firstElement, secondElement) => {
   const titleOne = getTitle(firstElement.children[0]);
   const titleTwo = getTitle(secondElement.children[0]);
+  const lang = document.querySelector('html').getAttribute('lang') || 'nl';
 
-  return titleOne.localeCompare(titleTwo);
+  return titleOne.localeCompare(titleTwo, lang);
 };
 
 function getTitle(element) {
