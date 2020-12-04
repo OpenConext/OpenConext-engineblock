@@ -4,6 +4,7 @@
 
 @import '../helpers';
 @import './consent/attributes';
+@import './consent/body';
 @import './consent/ctas';
 @import './consent/disclaimer';
 @import './consent/idpRow';
@@ -20,27 +21,6 @@
 
         @include screen('smallMobile') {
             margin: .75rem .5rem calculateRem(17px);
-        }
-    }
-
-    > .consent__content {
-        .consent__content-body {
-            background-color: $gray;
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
-            padding: 0 2rem 2.5rem;
-
-            @include screen('mobile') {
-                padding: 0 1rem 1.25rem;
-            }
-
-            @include screen('smallMobile') {
-                padding: 0 .5rem 1.25rem;
-            }
-
-            > .notification__warning {
-                @include warning;
-            }
         }
     }
 
