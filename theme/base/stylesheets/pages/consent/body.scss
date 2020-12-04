@@ -11,8 +11,4 @@
     @include screen('smallMobile') {
         padding: 0 .5rem 1.25rem;
     }
-
-    > .notification__warning {
-        @include warning;
-    }
 }
