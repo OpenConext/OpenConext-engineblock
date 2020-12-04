@@ -1,5 +1,5 @@
 noscript {
-    > .consent__noScript {
+    > .noScript {
         @include warning;
         margin: 1rem 2rem;
 
@@ -13,6 +13,10 @@ noscript {
 
         p {
             margin: 0;
+        }
+
+        p.noScript__middle {
+            margin: 1rem 0;
         }
     }
 }
