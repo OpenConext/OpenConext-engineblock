@@ -3,6 +3,7 @@
  ******************************************************************/
 
 @import '../helpers';
+@import './consent/ctas';
 @import './consent/nok';
 @import './consent/openToggle';
 
@@ -516,53 +517,6 @@
                     _:-ms-fullscreen,
                     > div {
                         @include grid-template-columns(67px 545px);
-                    }
-                }
-            }
-
-            > .ctas {
-                line-height: 0.89;
-                margin: 2rem 0 0;
-
-                > form {
-                    .cta_consent_ok {
-                        @include button-primary($buttonBlue);
-                        margin-bottom: 1.5rem;
-                        width: 100%;
-
-                        &:hover {
-                            text-decoration: underline;
-                        }
-                    }
-                }
-
-                > .button--tertiary {
-                    > div {
-                        @include button-tertiary($gray);
-
-                        > label.modal {
-                            background-image: unset;
-                        }
-                    }
-                }
-
-                > #cta_consent_nok:checked + .button--tertiary label {
-                    background-image: unset;
-                }
-
-                #cta_consent_nok:checked + .button--tertiary + .modal__value.animated {
-                    margin: 1rem auto 0;
-                }
-
-                > section.modal__value {
-                    margin: 1rem auto 0;
-
-                    &.animated {
-                        margin: 0;
-                    }
-
-                    @include screen('mobile') {
-                        width: 100%;
                     }
                 }
             }
