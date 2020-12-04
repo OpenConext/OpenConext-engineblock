@@ -1,0 +1,175 @@
+.idpRow {
+    @include display-grid;
+    @include grid-template-columns(10% 1% 50% 1% 37% 1%);
+    align-items: center;
+    background-color: $providerGray;
+    border-bottom: 1px solid $softBorderGray;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    font-size: $f-small;
+    font-weight: $bolder;
+    line-height: 1.63;
+    text-align: left;
+
+    > * {
+        padding: 1rem 0;
+
+        @include screen('mobile') {
+            padding: 0;
+        }
+    }
+
+    @include screen('mobile') {
+        @include grid-template-columns(10% 6% 83% 1%);
+        @include grid-template-rows(min-content min-content);
+        padding: 10px;
+    }
+
+    > img {
+        @include grid-position(1, 2, 1, 2);
+        box-sizing: content-box;
+        max-height: calculateRem(30px);
+        margin-left: 9px;
+    }
+
+    > p {
+        @include grid-position(1, 2, 3, 4);
+        font-size: $f-small;
+        font-weight: $normal;
+        margin: 0;
+        text-align: left;
+
+        @include screen('mobile') {
+            margin: 0 0 0 10px;
+        }
+
+        > label.modal {
+            background-image: unset;
+        }
+
+        > .idpRow__providedBy-content {
+            > strong {
+                font-weight: $bolder;
+            }
+        }
+    }
+
+    > input[type="checkbox"],
+    > .ie11__label,
+    > .ie11__link {
+        @include grid-position(1, 2, 5, 7);
+
+        @include screen('mobile') {
+            @include grid-position(2, 3, 3, 5);
+        }
+    }
+
+    > .ie11__label,
+    > .ie11__link {
+        text-align: right;
+
+        @include screen('mobile') {
+            margin: 0 0 0 10px;
+            padding: 0;
+            text-align: inherit;
+        }
+
+        > label.modal {
+            color: $brownishGray;
+            padding: 10px 25px 10px 5px;
+            text-decoration: underline;
+            background-image: unset;
+
+            @include screen('mobile') {
+                display: block;
+                background-position: right 18px center;
+                padding: 0 40px 0 0;
+            }
+        }
+
+        > a.idpRow__supportUrl {
+            color: $oceanBlue;
+            padding: 10px 25px 10px 0;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    > .modal__value {
+        @include start-display-animated;
+        @include grid-position(2, 3, 3, 7);
+        transition: max-height .6s ease-in;
+
+        > .modal__content {
+            padding-left: 0;
+        }
+
+        @include screen('mobile') {
+            @include grid-position(3, 4, 1, 5);
+        }
+    }
+
+    > input:checked ~ .ie11__label {
+        > label.modal {
+            @include closeIdpRowLabel;
+            background-position: right 23px top .5rem;
+            display: inline-block;
+            height: 25px;
+            width: 100%;
+
+            > .label-text {
+                display: none;
+            }
+
+            @include screen('mobile') {
+                display: none;
+            }
+        }
+    }
+
+    > input:checked + p {
+        > label.modal {
+            display: none;
+        }
+
+        @include screen('mobile') {
+            display: flex;
+            justify-content: space-between;
+
+            > .idpRow__providedBy-content {
+                display: inline-block;
+                width: 86%;
+            }
+
+            > label.modal {
+                @include closeIdpRowLabel;
+                background-position: right 5px top .2rem;
+                display: inline-block;
+                height: 25px;
+                width: 25px;
+            }
+        }
+    }
+
+    > input:checked ~ .ie11__label + .modal__value {
+        display: flex;
+        justify-content: center;
+        margin: 9px auto 1rem;
+        max-height: 100vh;
+
+        > .modal__content {
+            padding-left: 0;
+        }
+
+        @include screen('mobile') {
+            margin: 0;
+
+            > .modal__content {
+                padding-left: 1rem;
+            }
+        }
+    }
+}
