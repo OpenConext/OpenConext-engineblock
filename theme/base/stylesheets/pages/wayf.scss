@@ -3,6 +3,7 @@
  ******************************************************************/
 
 @import '../helpers';
+@import './wayf/noAccess';
 
 .wayf {
     > .wayf__content {
@@ -427,135 +428,6 @@
                     margin: 0 0 0 10px;
                     vertical-align: sub;
                     width: 1.2rem;
-                }
-            }
-        }
-
-        > .wayf__noAccess {
-            > .wayf__idp.wayf__idp--noAccess {
-                > .idp__content {
-                    > .idp__deleteDisable {
-                        > .idp__delete {
-                            display: none;
-                        }
-                    }
-                }
-            }
-
-            > .noAccess__helpdesk {
-                font-size: $f-large;
-            }
-
-            > .noAccess__requestForm {
-                margin: 2rem 0;
-
-                > .notification__critical {
-                    @include critical;
-                }
-
-                fieldset {
-                    appearance: none;
-                    border: none;
-                    margin-bottom: 1.5rem;
-                    padding: 0;
-                }
-
-                input,
-                label,
-                textarea {
-                    display: block;
-                }
-
-                input,
-                textarea {
-                    @include form-focus;
-                    border: 1px solid $inputBorderGray;
-                    border-radius: 8px;
-                    font-size: $f-large;
-                    line-height: 1.5;
-                    padding: 1rem;
-                    width: 100%;
-
-                    &:hover {
-                        background-color: $hoverBlue;
-                    }
-
-                    &:invalid {
-                        border: 1px solid $red;
-                        background-color: $errorRed;
-                    }
-
-                    &:not(:valid) {
-                        border: 1px solid $red;
-                        background-color: $errorRed;
-                    }
-
-                }
-
-                input {
-                    height: 3rem;
-                }
-
-                label {
-                    @include font-style-large;
-                    margin-bottom: .75rem;
-
-                    > strong {
-                        color: $red;
-                        font-weight: $bolder;
-                    }
-                }
-
-                .form__error {
-                    @include triangle;
-                    background-size: $f-large $f-large;
-                    color: $red;
-                    font-size: $f-large;
-                    margin: calculateRem(10px) 0 0;
-                    padding-left: 1.5rem;
-                }
-
-                > .noAccess__ctas {
-                    display: flex;
-                    justify-content: space-between;
-
-                    > button[class^="cta"] {
-                        padding: .5rem;
-                        width: 48%;
-
-                        @include screen('mobile') {
-                            width: unset;
-                        }
-                    }
-
-                    > .cta__cancel {
-                        @include button-secondary($gray);
-
-                        &:focus {
-                            padding: .5rem;
-                        }
-
-                        @include screen('mobile') {
-                            flex-basis: 40%;
-                        }
-
-                        @include screen('smallMobile') {
-                            flex-basis: 35%;
-                        }
-                    }
-
-                    > .cta__request,
-                    .cta__showForm {
-                        @include button-primary($buttonBlue);
-
-                        @include screen('mobile') {
-                            flex-basis: 56%;
-                        }
-
-                        @include screen('smallMobile') {
-                            flex-basis: 61%;
-                        }
-                    }
                 }
             }
         }
