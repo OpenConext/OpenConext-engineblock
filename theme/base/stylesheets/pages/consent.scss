@@ -38,12 +38,6 @@
                 padding: 0 .5rem 1.25rem;
             }
 
-            > .openToggle__checkBox:checked ~ .consent__attributes {
-                > li:nth-of-type(n+6):not(.idpRow) {
-                    display: grid;
-                }
-            }
-
             > .notification__warning {
                 @include warning;
             }
