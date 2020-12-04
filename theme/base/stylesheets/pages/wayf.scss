@@ -4,6 +4,7 @@
 
 @import '../helpers';
 @import './wayf/noAccess';
+@import './wayf/noResults';
 
 .wayf {
     > .wayf__content {
@@ -428,28 +429,6 @@
                     margin: 0 0 0 10px;
                     vertical-align: sub;
                     width: 1.2rem;
-                }
-            }
-        }
-
-        > .wayf__noResults {
-            @include poirot;
-            background-position: left top .5rem;
-            margin: calculateRem(50px) 0 1rem;
-            padding-left: 48px;
-
-            @include screen('mobile') {
-                margin: 2rem 0 .5rem;
-            }
-
-            > h3 {
-                margin: 0 0 .5rem .5rem;
-            }
-
-            > p {
-                &:first-of-type {
-                    margin-top: 0;
-                    margin-left: .5rem;
                 }
             }
         }
