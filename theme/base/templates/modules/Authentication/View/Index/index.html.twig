@@ -10,33 +10,24 @@
 {% endspaceless %}{% endblock %}
 
 {% block header %}
-    <div class="mod-header">
+    <header class="mod-header">
         <h1 class="title">
             {% block pageHeading %}{{ subHeader }}{% endblock %}
         </h1>
 
-        <div class="meta">
+        <nav class="meta" aria-label="{{ 'language_switcher'|trans }}">
 
             {% if displayLanguageSwitcher is not defined or displayLanguageSwitcher == true %}
                 {{ languageSwitcher.form(locale(), postData()) }}
             {% endif %}
-
-{#            <ul class="comp-links">#}
-{#                {% if helpLink is defined %}#}
-{#                    <li>#}
-{#                        <a href="{{ helpLink }}" target="_blank">{{ 'help_header'|trans }}<span class="help">?</span></a>#}
-{#                    </li>#}
-{#                {% endif %}#}
-{#            </ul>#}
-
-        </div>
+        </nav>
         <a class="burger" href="#footer"><img src="/images/burger.svg" alt="&#9776;"></a>
-    </div>
+    </header>
 {% endblock %}
 
 {% block containerClasses %}l-container wide{% endblock %}
 {% block content %}
-    <div id="engine-main-page" class="box">
+    <main id="engine-main-page" class="box">
         <div class="mod-content">
             <header>
                 <img class="logo" src="{{ defaultLogo }}" alt=""/>
@@ -162,7 +153,7 @@
 
             </div>
         </div>
-    </div>
+    </main>
 {% endblock %}
 
 {% block footer %}
