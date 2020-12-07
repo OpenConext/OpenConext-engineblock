@@ -19,7 +19,9 @@
 
 {% block header %}
     {% if displayLanguageSwitcher is not defined or displayLanguageSwitcher == true %}
-        {{ languageSwitcher.form(locale(), postData(), 'error') }}
+        <nav aria-label="{{ 'language_switcher'|trans }}">
+            {{ languageSwitcher.form(locale(), postData(), 'error') }}
+        </nav>
     {% endif %}
 {% endblock %}
 
@@ -29,7 +31,7 @@
 
     <div class="error-container">
 
-        <div class="error-container__content">
+        <main class="error-container__content">
             <div class="error-title">
                 <h1 class="error-title__heading">{% block pageTitle %}{% endblock %}</h1>
                 <div class="error-title__error-message">{% block errorMessage %}{% endblock %}</div>
@@ -65,7 +67,7 @@
 
             <p>{{ 'error_help_desc'|trans|raw }}</p>
 
-        </div>
+        </main>
         {% spaceless %}{% include "@theme/Default/View/Error/partial/footer.html.twig" %}{% endspaceless %}
     </div>
 

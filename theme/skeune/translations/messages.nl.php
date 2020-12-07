@@ -7,6 +7,7 @@ return [
     'send_request'  =>  'Verzoek sturen',
     'back'          =>  'Terug',
     'noscript'      => 'Om deze pagina optimaal te laten functioneren moet JavaScript aan staan.',
+    'language_switcher'     => 'Wissel van taal',
 
     // FOOTER
     'log_in_to'     => 'Select an %organisationNoun% to login to %arg1%',
