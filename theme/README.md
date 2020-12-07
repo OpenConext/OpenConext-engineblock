@@ -160,7 +160,7 @@ Below you'll find a list of the "entry points" for each page with corresponding 
 - wayf: `templates > modules > authentication > view > proxy > wayf.html.twig `.  You can use `https://engine.vm.openconext.org/functional-testing/wayf` to develop the page.
 - error: `templates > modules > default > view > error > error.html.twig`.  You can use `https://engine.vm.openconext.org/feedback/unknown-error` to develop the page.
 - redirect page: `templates > modules > authentication > view > proxy > redirect.html.twig`.
-- index.html.twig: `templates > modules > authentication > view > index > index.html.twig`.
+- index.html.twig: `templates > modules > authentication > view > index > index.html.twig`.  You can use `https://engine.vm.openconext.org/` to develop the page.
 
 #### Supported feature flags
 
