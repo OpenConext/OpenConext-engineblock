@@ -250,12 +250,20 @@ body {
     input[type="checkbox"]:checked.modal + label + .modal__value.animated,
     input[type="checkbox"]:checked.modal + br + label + .modal__value.animated,
     input[type="checkbox"]:checked.modal + .button--tertiary + .modal__value.animated {
+        max-height: initial;
+    }
+
+    @include ie11Only('input[type="checkbox"]:checked.modal + label + .modal__value.animated, input[type="checkbox"]:checked.modal + br + label + .modal__value.animated, input[type="checkbox"]:checked.modal + .button--tertiary + .modal__value.animated') {
         max-height: 60vh;
     }
 
-    // set max-height for tooltips
+        // set max-height for tooltips
     input[type="checkbox"]:checked.tooltip ~ label ~ .tooltip__value.animated {
-        max-height: 15vh;
+        max-height: initial;
+    }
+
+    @include ie11Only('input[type="checkbox"]:checked.tooltip ~ label ~ .tooltip__value.animated') {
+        max-height: 40vh;
     }
 
     label.tooltip {

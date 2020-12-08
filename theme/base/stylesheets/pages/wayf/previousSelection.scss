@@ -50,8 +50,7 @@
         }
     }
 
-    // todo remove as soon as ie11 support is dropped
-    _:-ms-fullscreen, > .ie11__label {
+    @include ie11Only('> .ie11__label') {
         margin-top: 1.75rem;
     }
 
