@@ -1,5 +1,6 @@
 import {sortByTitle} from './sortIdpMethods';
 import {nodeListToArray} from '../../utility/nodeListToArray';
+import {sortArrayList} from './sortArrayList';
 
 /**
  * Sort an idpList.  By default it's by displayTitle.
@@ -12,7 +13,6 @@ import {nodeListToArray} from '../../utility/nodeListToArray';
 export const sortIdpList = (idpList) => {
   // so we can sort it easily
   const idpArray = nodeListToArray(idpList);
-  idpArray.sort(sortByTitle);
 
-  return idpArray;
+  return sortArrayList(idpArray, sortByTitle);
 };
