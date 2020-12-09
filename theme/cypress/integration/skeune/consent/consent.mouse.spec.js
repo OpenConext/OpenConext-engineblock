@@ -31,7 +31,7 @@ context('Consent when using the mouse', () => {
 
   describe('Shows / hides the tooltips on click', () => {
     it('Shows the tooltip', () => {
-      cy.get('label.tooltip[for="tooltip3"]:not(:first-child)')
+      cy.get('label.tooltip[for="tooltip3consent_attribute_source_idp"]:not(:first-child)')
         .click({force: true})
         .next()
         .should('be.visible');
@@ -39,12 +39,12 @@ context('Consent when using the mouse', () => {
 
     it('Hides the tooltip', () => {
       // Make it visible
-      cy.get('label.tooltip[for="tooltip3"]:not(:first-child)')
+      cy.get('label.tooltip[for="tooltip3consent_attribute_source_idp"]:not(:first-child)')
         .click({force: true})
         .next();
 
       // Hide and check if it worked
-      cy.get('label.tooltip[for="tooltip3"]:not(:first-child)')
+      cy.get('label.tooltip[for="tooltip3consent_attribute_source_idp"]:not(:first-child)')
         .click({force: true})
         .next()
         .should('not.be.visible');

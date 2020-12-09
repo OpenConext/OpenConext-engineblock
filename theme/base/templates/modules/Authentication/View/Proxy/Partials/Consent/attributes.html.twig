@@ -1,4 +1,5 @@
 {% for attributeSource, attributes in attributesBySource %}
+    {% set orgId = attributeSourceDisplayName(attributeSource)|trim|split(' ')|join %}
     {% if attributes|length == 0 %}
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/noAttributes.html.twig' %}
     {% else %}

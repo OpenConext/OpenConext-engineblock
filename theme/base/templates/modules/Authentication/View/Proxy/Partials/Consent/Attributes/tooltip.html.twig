@@ -1,6 +1,6 @@
 {% if tooltipValue %}
     {% set id %}
-        tooltip{{ loop.index }}
+        tooltip{{ loop.index }}{{ orgId }}
     {% endset %}
     {% include '@theme/Default/Partials/label.html.twig' with
         {
