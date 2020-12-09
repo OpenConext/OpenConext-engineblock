@@ -138,6 +138,11 @@
                         &focus {
                             border: 3px solid $white;
                         }
+
+                        // if this is absent, Safari uses the height despite it being visually hidden
+                        &.visually-hidden {
+                            height: 0;
+                        }
                     }
                 }
             }
