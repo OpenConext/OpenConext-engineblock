@@ -31,7 +31,7 @@ return [
     'wayf_add_account'          => 'Gebruik een andere account',
     'wayf_no_access'            => 'Sorry, geen toegang voor deze account',
     'wayf_no_access_account'    => 'Geen toegang met deze account',
-    'wayf_no_access_helpdesk'   => 'U kan toegang vragen tot deze dienst.  We sturen deze aanvraag door naar de helpdesk van uw instituut.',
+    'wayf_no_access_helpdesk'   => 'U kan toegang vragen tot deze dienst.  We sturen deze aanvraag door naar de helpdesk van uw %orgNoun%.',
     'wayf_noaccess_name'        => 'Uw naam',
     'wayf_noaccess_email'       => 'Uw e-mailadres',
     'wayf_noaccess_motivation'  => 'Motivatie',
