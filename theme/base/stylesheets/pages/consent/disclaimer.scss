@@ -89,14 +89,17 @@
                 > #consent_disclaimer_about:checked + label + section.animated,
                 > #consent_disclaimer_about:checked + br + label + section.animated {
                     display: block;
-                    max-height: 40vh;
+                    max-height: initial;
                     max-width: unset;
+                }
+
+                @include ie11Only('> #consent_disclaimer_about:checked + label + section.animated, > #consent_disclaimer_about:checked + br + label + section.animated') {
+                    max-height: 40vh;
                 }
             }
         }
 
-        _:-ms-fullscreen,
-        > div {
+        @include ie11Only('> div') {
             @include grid-template-columns(67px 545px);
         }
     }
