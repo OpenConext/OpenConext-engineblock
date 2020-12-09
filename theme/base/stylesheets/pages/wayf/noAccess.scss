@@ -86,7 +86,8 @@
             display: flex;
             justify-content: space-between;
 
-            > button[class^="cta"] {
+            > [class^="cta"] {
+                display: block;
                 padding: .5rem;
                 width: 48%;
 
