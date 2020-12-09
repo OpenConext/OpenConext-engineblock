@@ -1,0 +1,75 @@
+footer.footer__general {
+    background-color: $darkishBlue;
+    color: $loginBlue;
+    margin: 1rem 1rem calculateRem(11px) 1rem;
+
+    > .footer__menu {
+        @include display-grid;
+        @include grid-template-columns(33% 1% 32% 1% 33%);
+        font-size: $f-normal;
+        font-weight: $bolder;
+        line-height: 1.5;
+        list-style: none;
+        padding: 0;
+
+        @include screen('mobile') {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        > .footer__item {
+            &:first-of-type {
+                @include grid-position(1, 2, 1, 2);
+            }
+
+            &:nth-of-type(2) {
+                @include grid-position(1, 2, 3, 4);
+                text-align: center;
+            }
+
+            &:last-of-type {
+                @include grid-position(1, 2, 5, 6);
+                text-align: right;
+            }
+        }
+
+        a {
+            color: $greenishBlue;
+
+            &.selected,
+            &:hover,
+            &:focus{
+                color: $white;
+            }
+
+            &:focus {
+                box-shadow: 0 0 0 3px $white;
+            }
+        }
+
+        ul.comp-language {
+            display: inline-block;
+            line-height: inherit;
+            margin: 0;
+            padding: 0;
+            position: unset;
+
+            > li {
+                display: inline-block;
+
+                > a {
+                    background-color: inherit;
+                }
+
+                &:first-child {
+                    padding-right: 5px;
+                }
+
+                &:not(:first-of-type) {
+                    border-left: 1px solid $white;
+                    padding-left: 5px;
+                }
+            }
+        }
+    }
+}
