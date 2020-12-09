@@ -5,6 +5,7 @@ import {showOrHideNoResultsSection} from './showOrHideNoResultsSection';
 import {reinsertIdpList} from '../utility/reinsertIdpList';
 import {showFoundIdpsWhenCutoff} from './showFoundIdpsWhenCutoff';
 import {hideIdpsWhenCutoffNoSearch} from './hideIdpsWhenCutoffNoSearch';
+import {sortArrayList} from '../utility/sortArrayList';
 
 /**
  * Searches an array of idps for a given searchTerm.
@@ -32,10 +33,10 @@ export const searchAndSortIdps = (idpArray, searchTerm) => {
 
   if (typeof searchTerm !== 'undefined' && searchTerm.length) {
     assignWeight(idpArray, searchTerm.toLowerCase());
-    idpArray.sort(sortByWeight);
+    idpArray = sortArrayList(idpArray, sortByWeight);
     showFoundIdpsWhenCutoff(list);
   } else {
-    idpArray.sort(sortByTitle);
+    idpArray = sortArrayList(idpArray, sortByTitle);
     hideIdpsWhenCutoffNoSearch(list);
   }
 
