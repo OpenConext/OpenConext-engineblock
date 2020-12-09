@@ -23,6 +23,8 @@
     {% endif %}
 {% endblock %}
 
+{% block containerClasses %}errorPage{% endblock %}
+
 {% block content %}
 
     {{ flushLog('Showing feedback page with message: ' ~ pageTitle) }}
