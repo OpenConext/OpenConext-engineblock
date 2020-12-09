@@ -59,7 +59,7 @@ context('Consent when using the keyboard', () => {
 
   describe('Shows / hides the nok-section on enter', () => {
     it('Shows the nok-section when hitting the nok button', () => {
-      cy.getAndEnter('.ctas > .button--tertiary');
+      cy.getAndEnter('.consent__ctas > .button--tertiary');
       cy.beVisible('.consent__nok');
       cy.notBeVisible('.consent__content');
     });
