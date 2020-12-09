@@ -254,3 +254,12 @@
         @content;
     }
 }
+
+// Content which is only intended for ie11.
+// todo refactor as soon as ie11 support is dropped
+@mixin ie11Only($selector) {
+    _:-ms-fullscreen,
+    #{$selector} {
+        @content;
+    }
+}

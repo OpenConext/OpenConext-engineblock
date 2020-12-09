@@ -158,7 +158,7 @@
         display: flex;
         justify-content: center;
         margin: 9px auto 1rem;
-        max-height: 100vh;
+        max-height: initial;
 
         > .modal__content {
             padding-left: 0;
@@ -172,8 +172,12 @@
             }
         }
     }
+
+    @include ie11Only('> input:checked ~ .ie11__label + .modal__value') {
+        max-height: 100vh;
+    }
 }
 
-_:-ms-fullscreen, .idpRow {
+@include ie11Only('.idpRow') {
     @include grid-template-columns(85.68px 6.12px 336.6px 6.12px 171.36px 6.12px);
 }
