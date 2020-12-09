@@ -7,7 +7,10 @@ return [
     'send_request'  =>  'Verzoek sturen',
     'back'          =>  'Terug',
     'noscript'      => 'Om deze pagina optimaal te laten functioneren moet JavaScript aan staan.',
-    'log_in_to'                 => 'Selecteer een %organisationNoun% en login bij %arg1%',
+
+    // FOOTER
+    'log_in_to'     => 'Select an %organisationNoun% to login to %arg1%',
+    'helpLink'       => 'https://wiki.surfnet.nl/display/conextsupport/De+WAYF-pagina',
 
     // Forms
     'form_general_error'    =>  'Er ging iets fout tijdens het insturen van uw formulier.  Dit kan een probleem zijn met uw internetverbinding of iets anders.  Controleer uw invoer en probeer het later opnieuw.  Mocht het probleem zich blijven voordoen, neem dan contact op met uw beheerder.',
