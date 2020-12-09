@@ -1,0 +1,22 @@
+noscript {
+    > .noScript {
+        @include warning;
+        margin: 1rem 2rem;
+
+        @include screen('mobile') {
+            margin: 1rem 1rem;
+        }
+
+        @include screen('smallMobile') {
+            margin: 1rem .5rem;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        p.noScript__middle {
+            margin: 1rem 0;
+        }
+    }
+}

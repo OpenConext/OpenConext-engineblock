@@ -1,0 +1,14 @@
+.wayf__content {
+    background-color: $gray;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding: 0 2rem 2.5rem;
+
+    @include screen('mobile') {
+        padding: 0 1rem 1rem;
+    }
+
+    @include screen('smallMobile') {
+        padding: 0 .5rem .5rem;
+    }
+}
