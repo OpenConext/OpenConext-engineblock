@@ -31,9 +31,11 @@
                 <h2 class="form__subHeader">{{ 'processing_waiting'|trans }}</h2>
             </header>
 
-            <p>{{ 'processing_long'|trans }}</p>
+            <div class="hideNoJS">
+                <p>{{ 'processing_long'|trans }}</p>
 
-            {% include '@theme/Authentication/View/Proxy/Partials/Shared/spinner.html.twig' %}
+                {% include '@theme/Authentication/View/Proxy/Partials/Shared/spinner.html.twig' %}
+            </div>
 
             <form id="ProcessForm" method="post" action="{{ action }}">
                 <input type="hidden" name="{{ name }}" value="{{ message }}"/>
@@ -49,6 +51,11 @@
         </main>
     </div>
 
+    <script>
+        window.addEventListener('load', () => {
+            document.querySelector('.hideNoJS').classList.remove('hideNoJS');
+        });
+    </script>
     </body>
     </html>
 {% endblock %}
