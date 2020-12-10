@@ -32,6 +32,7 @@ return [
     'wayf_no_access'            => 'Sorry, no access for this account',
     'wayf_no_access_account'    => 'No access with this account',
     'wayf_no_access_helpdesk'   => 'If you want, you can request access to this service. We will send the request to the helpdesk of your %orgNoun%.',
+    'wayf_no_access_helpdesk_not_connected'     =>  "Go back to the previous page and click '%buttonText%'.",
     'wayf_noaccess_name'        => 'Your name',
     'wayf_noaccess_email'       => 'Your emailaddress',
     'wayf_noaccess_motivation'  => 'Motivation',
