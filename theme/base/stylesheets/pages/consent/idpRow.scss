@@ -11,6 +11,12 @@
     line-height: 1.63;
     text-align: left;
 
+    @include screen('mobile') {
+        @include grid-template-columns(10% 6% 83% 1%);
+        @include grid-template-rows(min-content min-content);
+        padding: 10px;
+    }
+
     > * {
         padding: 1rem 0;
 
@@ -19,17 +25,19 @@
         }
     }
 
-    @include screen('mobile') {
-        @include grid-template-columns(10% 6% 83% 1%);
-        @include grid-template-rows(min-content min-content);
-        padding: 10px;
-    }
-
     > img {
         @include grid-position(1, 2, 1, 2);
         box-sizing: content-box;
         max-height: calculateRem(30px);
         margin-left: 9px;
+    }
+
+    label.modal {
+        color: $brownishGray;
+        padding: 10px 25px 10px 5px;
+        text-align: right;
+        text-decoration: underline;
+        background-image: unset;
     }
 
     > p {
@@ -44,8 +52,6 @@
         }
 
         > label.modal {
-            background-image: unset;
-
             @include screen('tabletAndBigger') {
                 display: none;
             }
@@ -79,11 +85,6 @@
         }
 
         > label.modal {
-            color: $brownishGray;
-            padding: 10px 25px 10px 5px;
-            text-decoration: underline;
-            background-image: unset;
-
             @include screen('mobile') {
                 display: block;
                 background-position: right 18px center;
