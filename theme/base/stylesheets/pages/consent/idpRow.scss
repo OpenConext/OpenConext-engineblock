@@ -45,6 +45,10 @@
 
         > label.modal {
             background-image: unset;
+
+            @include screen('tabletAndBigger') {
+                display: none;
+            }
         }
 
         > .idpRow__providedBy-content {
