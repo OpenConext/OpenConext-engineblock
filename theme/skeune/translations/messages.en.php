@@ -53,7 +53,7 @@ return [
     'consent_disclaimer_privacy_statement' => 'needs this information to function properly',
     'consent_disclaimer_privacy_read'    => 'read their',
     'consent_disclaimer_privacy_policy'  => 'privacy policy',
-    'consent_disclaimer_secure' => 'is being used by your organisation to securely send your information from your institution to this service (learn more about',
+    'consent_disclaimer_secure' => 'is being used by your %orgNoun% to securely send your information %spName% (read more about',
     'consent_reject_text_skeune_header'    => "You don't want to share your data with the service",
     'consent_reject_text_skeune_body'    => "The service you're logging into requires your data to function properly. If you prefer not to share your data, you cannot use this service. By closing your browser or just this tab you prevent your information from being shared with the service. If you change your mind later, please login to the service again and this screen will reappear.",
     'consent_nok_title'     => "You don't want to share your data with the service",
