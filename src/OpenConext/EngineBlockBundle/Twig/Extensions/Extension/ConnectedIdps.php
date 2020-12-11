@@ -30,7 +30,7 @@ class ConnectedIdps
 
     public function __construct(array $formattedPreviousSelectionList, array $formattedIdpList)
     {
-        $this->formattedPreviousSelectionList = $formattedPreviousSelectionList;
+        $this->formattedPreviousSelectionList = $this->sortPreviousSelection($formattedPreviousSelectionList);
         $this->formattedIdpList = $formattedIdpList;
     }
 
@@ -76,5 +76,14 @@ class ConnectedIdps
             }
         }
         return '';
+    }
+
+    private function sortPreviousSelection($formattedPreviousSelectionList)
+    {
+        usort($formattedPreviousSelectionList, function ($first, $second) {
+            return $first['count'] <=> $second['count'];
+        });
+
+        return array_reverse($formattedPreviousSelectionList);
     }
 }

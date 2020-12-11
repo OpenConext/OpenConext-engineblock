@@ -1,4 +1,5 @@
-<section class="wayf__previousSelection {% if connectedIdps.formattedPreviousSelectionList is empty %}hidden{% endif %}">
+{% set previousSelectionList = connectedIdps.formattedPreviousSelectionList %}
+<section class="wayf__previousSelection {% if previousSelectionList is empty %}hidden{% endif %}">
     <h2 class="previousSelection__title">
         {{ 'wayf_your_accounts'|trans }}
     </h2>
@@ -11,7 +12,7 @@
         </label>
     </div>
     {% endspaceless %}
-    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpList.html.twig' with { idpList: connectedIdps.formattedPreviousSelectionList, delete: true, listName: 'preselection' } %}
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpList.html.twig' with { idpList: previousSelectionList, delete: true, listName: 'preselection' } %}
     <button type="button" class="previousSelection__addAccount">
         <span>{{ 'wayf_add_account'|trans }}</span>
     </button>
