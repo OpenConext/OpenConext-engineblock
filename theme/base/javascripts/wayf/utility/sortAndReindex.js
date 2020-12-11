@@ -31,7 +31,7 @@ export const sortAndReindex = (list = REMAINING, sortBy = 'title', focus = false
   }
 
   // sort
-  const idpArray = sortIdpList(idpList);
+  const idpArray = sortIdpList(idpList, list);
 
   // reindex
   idpArray.forEach((idp, index) => {
