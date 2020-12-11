@@ -36,9 +36,8 @@ Feature:
       And I pass through the IdP
      Then the response should not contain "Do you agree with sharing this data?"
       And the response should not contain "Yes, proceed to Dummy-SP"
-      And the response should contain "Proceed to Dummy-SP"
-      And the response should not contain "No, I do not agree"
-      And the response should contain "Cancel"
+      And the response should contain "Yes proceed"
+      And the response should contain "No, I do not agree"
       And the response should contain "support@openconext.org"
       And the response should contain "+31612345678"
      When I give my consent
@@ -59,9 +58,8 @@ Feature:
     And I pass through the IdP
     Then the response should not contain "Do you agree with sharing this data?"
     Then the response should not contain "Yes, proceed to Dummy-SP"
-    Then the response should contain "Proceed to Dummy-SP"
-    Then the response should not contain "No, I do not agree"
-    Then the response should contain "Cancel"
+    Then the response should contain "Yes proceed"
+    Then the response should contain "No, I do not agree"
 
   Scenario: The user is asked for default consent
     Given I log in at "Dummy-SP"
@@ -93,9 +91,8 @@ Feature:
     Given I log in at "Dummy-SP"
      And I pass through EngineBlock
      And I pass through the IdP
-    Then the response should contain "Proceed to Dummy-SP"
+    Then the response should contain "Yes proceed"
     When I reload the page
-    Then the response should contain "Proceed to Dummy-SP"
 
   Scenario: The user sees the identifier section when nameid is persistent
     Given SP "Dummy-SP" uses the Persistent NameID format

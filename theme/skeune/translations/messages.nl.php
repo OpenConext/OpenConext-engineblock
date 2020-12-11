@@ -42,7 +42,7 @@ return [
 
     // Consent
     'consent_h1_text'   => 'Geeft u toestemming om uw informatie te delen?',
-    'consent_h1_text_minimal'   => 'Deze informatie wordt gedeeld met %arg1%',
+    'consent_h1_text_minimal'   => 'Geeft u toestemming om uw informatie te delen',
     'consent_privacy_header'    => '%target% ontvangt',
     'consent_attributes_correction_text'    => 'Foutieve informatie?',
     'consent_ok'    =>  'Doorgaan',
