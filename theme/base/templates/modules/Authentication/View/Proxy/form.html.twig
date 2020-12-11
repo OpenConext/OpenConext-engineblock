@@ -31,7 +31,7 @@
                 <h2 class="form__subHeader">{{ 'processing_waiting'|trans }}</h2>
             </header>
 
-            <div class="hide-noJS">
+            <div class="hideNoJS">
                 <p>{{ 'processing_long'|trans }}</p>
 
                 {% include '@theme/Authentication/View/Proxy/Partials/Shared/spinner.html.twig' %}
@@ -51,6 +51,11 @@
         </main>
     </div>
 
+    <script>
+        window.addEventListener('load', () => {
+            document.querySelector('.hideNoJS').classList.remove('hideNoJS');
+        });
+    </script>
     </body>
     </html>
 {% endblock %}

@@ -17,7 +17,8 @@
         <div>
             {% include '@theme/Authentication/View/Proxy/Partials/Consent/SVG/shield_key.svg' %}
             <p>
-                <strong>{{ 'suite_name'|trans }}</strong> {{ 'consent_disclaimer_secure'|trans }} <a href="{{ 'openconext_support_url'|trans }}" target="_blank" class="link__readmore">{{ 'suite_name'|trans }}</a>).
+                {% set organisationNoun = 'organisation_noun'|trans %}
+                <strong>{{ 'suite_name'|trans }}</strong> {{ 'consent_disclaimer_secure'|trans({ '%orgNoun%': organisationNoun, '%spName%': spName }) }} <a href="{{ 'openconext_support_url'|trans }}" target="_blank" class="link__readmore">{{ 'suite_name'|trans }}</a>).
             </p>
         </div>
     </li>

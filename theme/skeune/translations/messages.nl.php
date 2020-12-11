@@ -20,7 +20,7 @@ return [
     // WAYF
     'wayf_nothing_found'        => 'Niets gevonden',
     'wayf_apu'                  => 'Probeert u het opnieuw met andere zoektermen',
-    'wayf_noscript_warning_intro'     => 'Zonder JavaScript zal u geen vorig gebruikte accounts kunnen onthouden.  Indien u deze functionaliteit toch wenst te gebruiken, vragen wij u vriendelijk om JavaScript aan te zetten.',
+    'wayf_noscript_warning_intro'     => 'Zonder JavaScript zal u geen vorig gebruikte accounts kunnen onthouden en niet kunnen zoeken.  Indien u deze functionaliteit toch wenst te gebruiken, vragen wij u vriendelijk om JavaScript aan te zetten.',
     'wayf_noscript_warning_end'     => 'U kan, vanzelfsprekend, nog steeds inloggen.',
     'wayf_delete_account'       => 'Verwijderen uit uw accounts',
     'wayf_remaining_idps_title' => 'Voeg een account toe uit de onderstaande lijst',
@@ -42,7 +42,7 @@ return [
 
     // Consent
     'consent_h1_text'   => 'Geeft u toestemming om uw informatie te delen?',
-    'consent_h1_text_minimal'   => 'Deze informatie wordt gedeeld met %arg1%',
+    'consent_h1_text_minimal'   => 'Geeft u toestemming om uw informatie te delen',
     'consent_privacy_header'    => '%target% ontvangt',
     'consent_attributes_correction_text'    => 'Foutieve informatie?',
     'consent_ok'    =>  'Doorgaan',
@@ -53,7 +53,7 @@ return [
     'consent_disclaimer_privacy_statement' => 'heeft deze informatie nodig om te kunnen werken',
     'consent_disclaimer_privacy_read'    => 'lees hun',
     'consent_disclaimer_privacy_policy'  => 'privacy beleid',
-    'consent_disclaimer_secure' => 'wordt gebruikt door uw organisatie om informatie op een veilige manier te versturen naar uw instituut (leer meer over',
+    'consent_disclaimer_secure' => 'wordt gebruikt door je %orgNoun% om informatie op een veilige manier te versturen naar %spName% (lees meer over',
     'consent_reject_text_skeune_header'    => 'U wil geen gegevens delen met deze dienst',
     'consent_reject_text_skeune_body'    => 'De dienst waar u bij wil inloggen heeft deze gegevens nodig om te kunnen functioneren.  Indien u verkiest om uw data niet te delen, kan u de dienst niet gebruiken.  Door uw browser of door deze tab te sluiten verhinderd u dat uw informatie gedeeld wordt.  Mocht u later van gedacht veranderen, kan u opnieuw inloggen bij deze dienst en krijgt u dit scherm opnieuw te zien.',
     'consent_nok_title'     => "U wil geen gegevens delen met deze dienst",

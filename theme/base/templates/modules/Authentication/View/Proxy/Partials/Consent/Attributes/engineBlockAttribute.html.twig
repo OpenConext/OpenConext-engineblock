@@ -1,7 +1,7 @@
 <li class="consent__attribute">
     {% if nameIdIsPersistent %}
         {% set id %}
-            tooltip{{ loop.index }}
+            tooltip{{ loop.index }}{{ orgId }}
         {% endset %}
         <input type="checkbox" tabindex="-1" class="tooltip visually-hidden" aria-hidden="true" id="{{ id|trim }}" name="{{ id|trim }}" />
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/name.html.twig' with { attributeName: 'consent_name_id_label'|trans, id: id|trim } %}
