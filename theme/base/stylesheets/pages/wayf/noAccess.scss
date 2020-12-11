@@ -1,4 +1,17 @@
 .wayf__noAccess {
+    &.wayf__noAccess--connectable {
+        .noAccess__unconnectable {
+            display: none;
+        }
+    }
+
+    &.wayf__noAccess--unconnectable {
+        .noAccess__connectable,
+        .noAccess__ctas > .cta__showForm.noAccess__connectable {
+            display: none;
+        }
+    }
+
     > .wayf__idp.wayf__idp--noAccess {
         > .idp__content {
             > .idp__deleteDisable {

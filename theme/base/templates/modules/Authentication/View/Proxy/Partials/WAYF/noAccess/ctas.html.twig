@@ -1,6 +1,9 @@
 <div class="noAccess__ctas">
-    <button type="button" class="cta__cancel">{{ 'cancel'|trans }}</button>
-    <button type="button" class="cta__showForm">{{ 'request_access'|trans }}</button>
+    <button type="button" class="cta__cancel">
+        <span class="noAccess__connectable">{{ 'cancel'|trans }}</span>
+        <span class="noAccess__unconnectable">{{ 'back'|trans }}</span>
+    </button>
+    <button type="button" class="cta__showForm noAccess__connectable">{{ 'request_access'|trans }}</button>
     <a href="#top" class="cta__request hidden">{{ 'send_request'|trans }}</a>
     <button type="submit" class="hidden">{{ 'send_request'|trans }}</button>
 </div>
