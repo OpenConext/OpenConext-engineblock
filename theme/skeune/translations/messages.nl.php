@@ -20,7 +20,7 @@ return [
     // WAYF
     'wayf_nothing_found'        => 'Niets gevonden',
     'wayf_apu'                  => 'Probeert u het opnieuw met andere zoektermen',
-    'wayf_noscript_warning_intro'     => 'Zonder JavaScript zal u geen vorig gebruikte accounts kunnen onthouden.  Indien u deze functionaliteit toch wenst te gebruiken, vragen wij u vriendelijk om JavaScript aan te zetten.',
+    'wayf_noscript_warning_intro'     => 'Zonder JavaScript zal u geen vorig gebruikte accounts kunnen onthouden en niet kunnen zoeken.  Indien u deze functionaliteit toch wenst te gebruiken, vragen wij u vriendelijk om JavaScript aan te zetten.',
     'wayf_noscript_warning_end'     => 'U kan, vanzelfsprekend, nog steeds inloggen.',
     'wayf_delete_account'       => 'Verwijderen uit uw accounts',
     'wayf_remaining_idps_title' => 'Voeg een account toe uit de onderstaande lijst',

@@ -20,7 +20,7 @@ return [
     // WAYF
     'wayf_nothing_found'        => 'Nothing found',
     'wayf_apu'                  => 'Please try again with some different keywords',
-    'wayf_noscript_warning_intro'     => 'Without JavaScript you will not be able to remember previously used accounts.  If you want to use that functionality, please enable JavaScript.',
+    'wayf_noscript_warning_intro'     => 'Without JavaScript you will not be able to remember previously used accounts, nor be able to search.  If you want to use that functionality, please enable JavaScript.',
     'wayf_noscript_warning_end'     => 'You can, off course, still log in.',
     'wayf_delete_account'       => 'Delete from your accounts',
     'wayf_remaining_idps_title' => 'Add an account from the list below',
