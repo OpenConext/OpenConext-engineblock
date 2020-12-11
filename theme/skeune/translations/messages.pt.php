@@ -42,7 +42,7 @@ return [
 
     // Consent
     'consent_h1_text'   => 'Do you give consent to share your information?',
-    'consent_h1_text_minimal'   => 'This information will be shared with %arg1%',
+    'consent_h1_text_minimal'   => 'Do you give consent to share your information?',
     'consent_privacy_header'    => '%target% will receive',
     'consent_attributes_correction_text'    => 'Something incorrect?',
     'consent_ok'    =>  'Yes proceed',
