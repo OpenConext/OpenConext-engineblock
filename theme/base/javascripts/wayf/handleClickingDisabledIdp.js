@@ -4,6 +4,8 @@ import {setHiddenFieldValues} from './noAccess/setHiddenFieldValues';
 import {cloneIdp} from './noAccess/cloneIdp';
 import {hideSuccessMessage} from './noAccess/hideSuccessMessage';
 import {attachClickHandlerToRequestButton} from './noAccess/attachClickHandlerToRequestButton';
+import {setConnectability} from './deleteDisable/setConnectability';
+import {getData} from '../utility/getData';
 
 export const handleClickingDisabledIdp = (element) => {
   const noAccess = document.querySelector('.wayf__noAccess');
@@ -11,7 +13,9 @@ export const handleClickingDisabledIdp = (element) => {
   const form = noAccess.querySelector('.noAccess__requestForm');
   const parentSection = element.closest('section');
   const cloneOfIdp = cloneIdp(element);
+  const connectable = getData(element, 'connectable') === 'true';
 
+  setConnectability(noAccess, connectable);
   toggleVisibility(parentSection);
   toggleVisibility(noAccess);
 
