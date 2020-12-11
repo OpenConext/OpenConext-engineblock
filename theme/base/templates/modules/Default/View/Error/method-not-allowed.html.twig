@@ -9,12 +9,12 @@
 {% block content %}
 <div class="error-container">
 
-  <div class="error-container__content">
+  <main class="error-container__content">
     <div class="error-title">
       <h1 class="error-title__heading">{{ pageTitle }}</h1>
       <span class="error-title__error-message">{{ 'error_405_desc'|trans({'%requestMethod%': requestMethod, '%uri%': uri,'%allowedMethods%': allowedMethods}) }}</span>
     </div>
-  </div>
+  </main>
     {% spaceless %}{% include "@theme/Default/View/Error/partial/footer.html.twig" %}{% endspaceless %}
 </div>
 
