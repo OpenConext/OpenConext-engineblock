@@ -7,6 +7,7 @@ return [
     'send_request'  =>  'Send request',
     'back'          =>  'Back',
     'noscript'      =>  'For this page to function optimally you need JavaScript turned on.',
+    'language_switcher'     => 'Language switcher',
 
     // FOOTER
     'log_in_to'     => 'Select an %organisationNoun% to login to %arg1%',

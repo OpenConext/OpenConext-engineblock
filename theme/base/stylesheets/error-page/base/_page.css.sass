@@ -3,11 +3,13 @@ $small: 720px
 // And ew use some of the OpenConext colors, they are added here for containing them
 // in the error page styling.
 $blue: #4DB3CF
-$dark-blue: #017499
-$dark-grey: #2b3f44
-$light-blue: #DFF6FB
-$light-grey: lighten(black,95)
-$medium-blue: #CAECF4
+$darkBlue: #017499
+$darkGrey: #2b3f44
+$lightBlue: #DFF6FB
+$lightGrey: lighten(black,95)
+$mediumBlue: #CAECF4
+$contrastBlue: #00829a
+$darkContrastBlue: #005d7b
 
 $font: Helvetica, sans-serif
 $br: 4px
@@ -18,10 +20,10 @@ html
   height: 100%
 body
   height: 100%
-  background: $medium-blue
+  background: $mediumBlue
   font-family: $font
   +max-width($small)
-    background: $light-grey
+    background: $lightGrey
 
 .l-container
   position: relative
