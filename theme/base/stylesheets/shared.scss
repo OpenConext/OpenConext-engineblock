@@ -156,19 +156,23 @@ body {
 
     // show the tooltip / modal when the input is checked
     input[type="checkbox"]:checked.modal + label + .modal__value,
-    input[type="checkbox"]:checked.tooltip ~ label ~ .tooltip__value,
+    input[type="checkbox"]:checked.tooltip ~ .tooltip__value,
     input[type="checkbox"]:checked.modal + br + label + .modal__value,
     input[type="checkbox"]:checked.modal + br + label + .modal__value.animated,
     input[type="checkbox"]:checked.modal + .button--tertiary + .modal__value {
         display: block;
     }
 
-    input[type="checkbox"]:checked.tooltip ~ label ~ .tooltip__value {
-        margin: 0 1rem 1rem;
-        padding: 1rem;
+    input[type="checkbox"]:checked.tooltip ~ .tooltip__value {
+        padding: 0 1rem 1rem 0;
 
         @include screen('mobile') {
             margin: 0;
+            text-align: left;
+            padding: 1rem 1rem 1rem 0;
+        }
+
+        > p {
             text-align: left;
         }
     }
@@ -185,7 +189,7 @@ body {
 
     // if user agrees to animations, animate the display showing / hiding
     input[type="checkbox"]:checked.modal + label + .modal__value.animated,
-    input[type="checkbox"]:checked.tooltip ~ label ~ .tooltip__value.animated,
+    input[type="checkbox"]:checked.tooltip ~ .tooltip__value.animated,
     input[type="checkbox"]:checked.modal + br + label + .modal__value.animated,
     input[type="checkbox"]:checked.modal + .button--tertiary + .modal__value.animated {
         @include transition-display;
@@ -203,15 +207,16 @@ body {
     }
 
         // set max-height for tooltips
-    input[type="checkbox"]:checked.tooltip ~ label ~ .tooltip__value.animated {
+    input[type="checkbox"]:checked.tooltip ~ .tooltip__value.animated {
         max-height: initial;
     }
 
-    @include ie11Only('input[type="checkbox"]:checked.tooltip ~ label ~ .tooltip__value.animated') {
+    @include ie11Only('input[type="checkbox"]:checked.tooltip ~ .tooltip__value.animated') {
         max-height: 40vh;
     }
 
-    label.tooltip {
+    label.tooltip,
+    .ie11__label > label.tooltip {
         @include tooltip;
     }
 
@@ -235,14 +240,9 @@ body {
     }
 
     // set cross for tooltips when opened
-    input[type="checkbox"]:checked.tooltip ~ label.tooltip {
+    input[type="checkbox"]:checked.tooltip ~ label.tooltip,
+    input[type="checkbox"]:checked.tooltip ~ .ie11__label > label.tooltip {
         @include closeTooltip;
-    }
-
-    input[type="checkbox"]:checked.tooltip ~ label.tooltip ~ .tooltip__value {
-        > p {
-            text-align: left;
-        }
     }
 
     .button--secondary,
