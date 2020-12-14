@@ -45,4 +45,9 @@
             width: 100%;
         }
     }
+
+}
+
+@include ie11Only('.consent__ctas > .button--tertiary > div > label.modal') {
+    background: none;
 }
