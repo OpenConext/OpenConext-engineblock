@@ -139,9 +139,11 @@
                             border: 3px solid $white;
                         }
 
-                        // if this is absent, Safari uses the height despite it being visually hidden
                         &.visually-hidden {
+                            // if this is absent, Safari uses the height despite it being visually hidden
                             height: 0;
+                            // if this is absent, Safari adds a bar next to the body after a repaint
+                            width: 0;
                         }
                     }
                 }
