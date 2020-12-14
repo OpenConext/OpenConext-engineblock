@@ -22,7 +22,7 @@ context('Consent on Skeune theme', () => {
 
   describe('Hides the correct content on load', () => {
     it('Hides the tooltip on load', () => {
-      cy.get('label.tooltip[for="tooltip3consent_attribute_source_idp"]:not(:first-child)')
+      cy.get('label.tooltip[for="tooltip3consent_attribute_source_idp"]')
         .next()
         .should('not.be.visible');
     });
