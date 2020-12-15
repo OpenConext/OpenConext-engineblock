@@ -6,7 +6,7 @@
                 <div>
                     <strong>{{ organizationName }}</strong> {{ 'consent_disclaimer_privacy_statement'|trans }}
                     {% if sp.coins.termsOfServiceUrl is not null %}
-                        ({{ 'consent_disclaimer_privacy_read'|trans }} <a href="{{ sp.coins.termsOfServiceUrl }}" target="_blank">{{ 'consent_disclaimer_privacy_policy'|trans }}</a>)
+                        ({{ 'consent_disclaimer_privacy_read'|trans }} <a href="{{ sp.coins.termsOfServiceUrl }}" target="_blank" rel="noreferrer noopener">{{ 'consent_disclaimer_privacy_policy'|trans }}</a>)
                     {% endif %}
                     .
                 </div>
@@ -18,7 +18,7 @@
             {% include '@theme/Authentication/View/Proxy/Partials/Consent/SVG/shield_key.svg' %}
             <p>
                 {% set organisationNoun = 'organisation_noun'|trans %}
-                <strong>{{ 'suite_name'|trans }}</strong> {{ 'consent_disclaimer_secure'|trans({ '%orgNoun%': organisationNoun, '%spName%': spName }) }} <a href="{{ 'openconext_support_url'|trans }}" target="_blank" class="link__readmore">{{ 'suite_name'|trans }}</a>).
+                <strong>{{ 'suite_name'|trans }}</strong> {{ 'consent_disclaimer_secure'|trans({ '%orgNoun%': organisationNoun, '%spName%': spName }) }} <a href="{{ 'openconext_support_url'|trans }}" target="_blank" class="link__readmore" rel="noreferrer noopener">{{ 'suite_name'|trans }}</a>).
             </p>
         </div>
     </li>
