@@ -75,7 +75,7 @@ Cypress.Commands.add('selectFirstIdpAndReturn', (click = true, url = 'https://en
   });
 });
 
-Cypress.Commands.add('toggleEditButton', (click = true, buttonSelector = '.previousSelection__edit') => {
+Cypress.Commands.add('toggleEditButton', (click = true, buttonSelector = '.previousSelection__toggleLabel') => {
   if (click) {
     cy.get(buttonSelector).click({force: true });
     return;
