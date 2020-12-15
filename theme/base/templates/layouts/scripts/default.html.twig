@@ -10,6 +10,10 @@
     <meta content="translucent-black" name="apple-mobile-web-app-status-bar-style">
     <link href="/favicon.ico" rel="shortcut icon">
     {% block stylesheets %}{% spaceless %}
+        <link rel="preload" href="/fonts/sourcesanspro-semibold-webfont.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/fonts/sourcesanspro-bold-webfont.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/fonts/nunito-semibold.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/fonts/sourcesanspro-regular-webfont.woff2" as="font" type="font/woff2" crossorigin>
         <link href="/stylesheets/application.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
     {% endspaceless %}{% endblock %}
 
