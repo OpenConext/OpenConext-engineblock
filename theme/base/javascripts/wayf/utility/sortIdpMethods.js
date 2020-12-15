@@ -17,17 +17,61 @@ export const sortByTitle = (firstElement, secondElement) => {
   return titleOne.localeCompare(titleTwo, lang);
 };
 
+/**
+ * Helper function for sortByTitle
+ * @param element
+ * @returns {number|string}
+ */
 function getTitle(element) {
   return getData(element, 'title');
 }
 
-export const sortByWeight = (firstElement, secondElement) => {
-  const weightOne = Number(getData(firstElement.children[0], 'weight'));
-  const weightTwo = Number(getData(secondElement.children[0], 'weight'));
+/**
+ * Determine which of two li elements has a number attribute that is greater than the other.
+ * Sorts in descending order
+ * Numbers are taken from data-attributes
+ * @param firstElement
+ * @param secondElement
+ * @param attributeName
+ * @returns {number}
+ */
+export const sortByNumber = (firstElement, secondElement, attributeName) => {
+  const numberOne = getNumberAttribute(firstElement.children[0], attributeName);
+  const numberTwo = getNumberAttribute(secondElement.children[0], attributeName);
 
-  if (weightOne > weightTwo) return -1;
-  if (weightOne < weightTwo) return 1;
+  if (numberOne > numberTwo) return -1;
+  if (numberOne < numberTwo) return 1;
 
   // if weights are equal sort them by title
   return sortByTitle(firstElement , secondElement);
+};
+
+/**
+ * Helper function for sortByNumber
+ * @param element
+ * @param attributeName
+ * @returns {number}
+ */
+function getNumberAttribute(element, attributeName) {
+  return Number(getData(element, attributeName));
+}
+
+/**
+ * Sort li elements by how well the idps in it match the current search query.
+ * @param firstElement
+ * @param secondElement
+ * @returns {number}
+ */
+export const sortByWeight = (firstElement, secondElement) => {
+  return sortByNumber(firstElement, secondElement, 'weight');
+};
+
+/**
+ * Sort li elements by the amount of times the idps in them have been clicked.
+ * @param firstElement
+ * @param secondElement
+ * @returns {number}
+ */
+export const sortByCount = (firstElement, secondElement) => {
+  return sortByNumber(firstElement, secondElement, 'count');
 };
