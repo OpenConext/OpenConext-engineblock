@@ -12,6 +12,12 @@
 @import './consent/openToggle';
 
 .consent {
+    margin-bottom: 5rem;
+
+    @include screen('mobile') {
+        margin-bottom: 3rem;
+    }
+
     h2 {
         margin: 1.5rem 2rem calculateRem(34px);
 
