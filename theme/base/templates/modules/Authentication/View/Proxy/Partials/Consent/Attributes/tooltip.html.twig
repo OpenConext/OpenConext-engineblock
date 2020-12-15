@@ -2,12 +2,14 @@
     {% set id %}
         tooltip{{ loop.index }}{{ orgId }}
     {% endset %}
-    {% include '@theme/Default/Partials/label.html.twig' with
-        {
-            class: 'tooltip',
-            hideText: true,
-            id: id|trim,
-        }
-    %}
+    <div class="ie11__label">
+        {% include '@theme/Default/Partials/label.html.twig' with
+            {
+                class: 'tooltip',
+                hideText: true,
+                id: id|trim,
+            }
+        %}
+    </div>
     <div class="tooltip__value" role="alert">{{ tooltipValue }}</div>
 {% endif %}

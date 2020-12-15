@@ -31,21 +31,24 @@ context('Consent when using the mouse', () => {
 
   describe('Shows / hides the tooltips on click', () => {
     it('Shows the tooltip', () => {
-      cy.get('label.tooltip[for="tooltip3consent_attribute_source_idp"]:not(:first-child)')
+      cy.get('.ie11__label > label.tooltip[for="tooltip3consent_attribute_source_idp"]')
         .click({force: true})
+        .parent()
         .next()
         .should('be.visible');
     });
 
     it('Hides the tooltip', () => {
       // Make it visible
-      cy.get('label.tooltip[for="tooltip3consent_attribute_source_idp"]:not(:first-child)')
+      cy.get('.ie11__label > label.tooltip[for="tooltip3consent_attribute_source_idp"]')
         .click({force: true})
+        .parent()
         .next();
 
       // Hide and check if it worked
-      cy.get('label.tooltip[for="tooltip3consent_attribute_source_idp"]:not(:first-child)')
+      cy.get('.ie11__label > label.tooltip[for="tooltip3consent_attribute_source_idp"]')
         .click({force: true})
+        .parent()
         .next()
         .should('not.be.visible');
     });

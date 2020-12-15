@@ -5,12 +5,15 @@
  * @param callbackAfterLoad     function   function to be executed after the page has fully loaded
  * @param callbackAllways       function   function to be executed before the page is fully loaded.
  */
+import {addPolyfills} from './addPolyfills';
+
 export const initializePage = (querySelector, callbackAfterLoad, callbackAllways) => {
   if (callbackAllways) {
     callbackAllways();
   }
 
   if (document.querySelector(querySelector) !== null && callbackAfterLoad) {
+    addPolyfills();
     window.addEventListener('load', () => {
       callbackAfterLoad();
     });

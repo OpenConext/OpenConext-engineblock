@@ -183,6 +183,10 @@
     }
 }
 
-@include ie11Only('.idpRow') {
-    @include grid-template-columns(85.68px 6.12px 336.6px 6.12px 171.36px 6.12px);
+@include ie11Only('li.idpRow') {
+    -ms-grid-columns: 85.68px 6.12px 246.6px 6.12px 160.36px 6.12px;
+}
+
+@include ie11Only('li.idpRow label.modal') {
+    background: none;
 }

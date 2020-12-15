@@ -7,7 +7,7 @@
     transition: max-height .6s ease-in;
 
     > .consent__attribute:nth-of-type(n+6) {
-        display: grid;
+        @include display-grid;
     }
 
     > .openToggle {

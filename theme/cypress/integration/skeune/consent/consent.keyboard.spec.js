@@ -31,18 +31,21 @@ context('Consent when using the keyboard', () => {
 
   describe('Shows / hides the tooltips on enter', () => {
     it('Shows the tooltip', () => {
-      cy.focusAndEnter('label.tooltip[for="tooltip3consent_attribute_source_idp"]:not(:first-child)')
+      cy.focusAndEnter('.ie11__label > label.tooltip[for="tooltip3consent_attribute_source_idp"]')
+        .parent()
         .next()
         .should('be.visible');
     });
 
     it('Hides the tooltip', () => {
       // Make it visible
-      cy.focusAndEnter('label.tooltip[for="tooltip3consent_attribute_source_idp"]:not(:first-child)')
+      cy.focusAndEnter('.ie11__label > label.tooltip[for="tooltip3consent_attribute_source_idp"]')
+        .parent()
         .next();
 
       // Hide and check if it worked
-      cy.focusAndEnter('label.tooltip[for="tooltip3consent_attribute_source_idp"]:not(:first-child)')
+      cy.focusAndEnter('.ie11__label > label.tooltip[for="tooltip3consent_attribute_source_idp"]')
+        .parent()
         .next()
         .should('not.be.visible');
     });

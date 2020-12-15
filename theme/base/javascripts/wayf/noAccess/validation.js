@@ -18,7 +18,8 @@ export const valid = (formData) => {
 };
 
 function notAnEmptyField(formData, elementName) {
-  if (!formData.has(elementName) || formData.get(elementName).trim() === '') {
+  const value = document.getElementById(elementName).value.trim();
+  if (!value) {
     showValidationMessage(elementName);
     return false;
   }
