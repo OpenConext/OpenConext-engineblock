@@ -95,6 +95,16 @@
         }
     }
 
+    > .previousSelection__toggle:not(:checked) ~ .wayf__idpList {
+        > li {
+            > .wayf__idp:not(.wayf__idp--noAccess) {
+                .idp__deleteDisable {
+                    display: none;
+                }
+            }
+        }
+    }
+
     > .previousSelection__toggle:checked ~ .wayf__idpList {
         > li {
             > .wayf__idp {
