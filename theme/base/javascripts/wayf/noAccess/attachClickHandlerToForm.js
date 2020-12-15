@@ -3,6 +3,7 @@ import {showSuccessMessage} from './showSuccessMessage';
 import {toggleErrorMessage} from './toggleErrorMessage';
 import {toggleFormFieldsAndButton} from './toggleFormFieldsAndButton';
 import {valid} from "./validation";
+import {scrollToTop} from './scrollToTop';
 
 /**
  * Ensure submitting the form is possible.
@@ -49,6 +50,7 @@ export const attachClickHandlerToForm = (form, parentSection, noAccess) => {
       toggleFormFieldsAndButton();
       showSuccessMessage(parentSection, noAccess);
       form.reset();
+      scrollToTop();
     }).catch(function (error) {
       toggleErrorMessage();
       console.log(error);
