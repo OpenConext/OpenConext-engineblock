@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ locale()|escape('html_attr') }}">
 <head>
-    <title>{% block title %}{{ defaultTitle }}{% endblock %}</title>
     <meta charset="utf-8">
     <meta name="robots" content="noindex, nofollow"/>
     <meta content="IE=edge" http-equiv="x-ua-compatible">
     <meta content="initial-scale=1.0,width=device-width" name="viewport">
     <meta content="yes" name="apple-mobile-web-app-capable">
     <meta content="translucent-black" name="apple-mobile-web-app-status-bar-style">
+    <title>{% block title %}{{ defaultTitle }}{% endblock %}</title>
     <link href="/favicon.ico" rel="shortcut icon">
     {% block stylesheets %}{% spaceless %}
         <link rel="preload" href="/fonts/sourcesanspro-semibold-webfont.woff2" as="font" type="font/woff2" crossorigin>
