@@ -7,6 +7,14 @@
     border-bottom: 1px solid $softBorderGray;
     line-height: 1.63;
 
+    &.consent__attribute--noTooltip {
+        @include grid-template-columns(33% 1% 65% 1%);
+
+        @include screen('mobile') {
+            @include grid-template-columns(100%);
+        }
+    }
+
     &:nth-child(n+6) {
         display: none;
     }
@@ -22,7 +30,7 @@
     @include screen('mobile') {
         @include grid-template-columns(100%);
         @include grid-template-rows(min-content min-content);
-        padding: 10px;
+        padding: 10px 6px;
     }
 
     &:nth-child(-n + 4) {
