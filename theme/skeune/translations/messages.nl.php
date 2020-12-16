@@ -52,7 +52,7 @@ return [
     'consent_provided_by'   => 'aangeboden door',
     'consent_tooltip_screenreader'  => 'Waarom hebben we deze informatie nodig?',
     'consent_nojs'   => 'Tooltips / modals op deze pagina hebben om te werken met het toetsenbord JavaScript nodig.  Indien u enkel een toetsenbord gebruikt, gelieve dan JavaScript in te schakelen voor deze functionaliteit.',
-    'consent_disclaimer_privacy_statement' => 'heeft deze informatie nodig om te kunnen werken',
+    'consent_disclaimer_privacy_statement' => '(aangeboden door %org%) heeft deze informatie nodig om te kunnen werken',
     'consent_disclaimer_privacy_read'    => 'lees hun',
     'consent_disclaimer_privacy_policy'  => 'privacy beleid',
     'consent_disclaimer_secure' => 'wordt gebruikt door je %orgNoun% om informatie op een veilige manier te versturen naar %spName% (lees meer over',

@@ -52,7 +52,7 @@ return [
     'consent_provided_by'   => 'provided by',
     'consent_tooltip_screenreader'  => 'Why do we need this info?',
     'consent_nojs'   => 'Tooltips / modals on this page need JS to work with the keyboard.  If you use a keyboard, please enable JS if you wish to use this functionality.',
-    'consent_disclaimer_privacy_statement' => 'needs this information to function properly',
+    'consent_disclaimer_privacy_statement' => '(offered by %org%) needs this information to function properly',
     'consent_disclaimer_privacy_read'    => 'read their',
     'consent_disclaimer_privacy_policy'  => 'privacy policy',
     'consent_disclaimer_secure' => 'is being used by your %orgNoun% to securely send your information to %spName% (read more about',
