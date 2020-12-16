@@ -10,7 +10,7 @@ return [
     'language_switcher'     => 'Wissel van taal',
 
     // FOOTER
-    'log_in_to'     => 'Select an %organisationNoun% to login to %arg1%',
+    'log_in_to'     => 'Selecteer een %organisationNoun% om in te loggen bij %arg1%',
     'helpLink'       => 'https://wiki.surfnet.nl/display/conextsupport/De+WAYF-pagina',
 
     // Forms
