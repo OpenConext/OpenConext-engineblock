@@ -56,12 +56,12 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
     });
   });
 
-  describe('Test if search works as it should', () => {
+  describe.only('Test if search works as it should', () => {
     it('Should show no results when no IdPs are found', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.get('.wayf__search').type('OllekebollekeKnol');
       cy.get('.wayf__noResults').should('be.visible');
-      cy.get('.search__submit').should('not.be.visible');
+      cy.get('.search__submit').should('have.class', 'visually-hidden');
       cy.get('.search__reset').should('be.visible');
     });
 
@@ -69,7 +69,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.get('.wayf__search').type('4');
       // When the user starts typing, the reset (x) button should appear, replacing the search icon
-      cy.get('.search__submit').should('not.be.visible');
+      cy.get('.search__submit').should('have.class', 'visually-hidden');
       cy.get('.search__reset').should('be.visible');
 
       // After filtering the search results, verify one result is visible
@@ -133,7 +133,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.get('.wayf__search').type('con 1');
       cy.get('.search__reset').click({force:true});
       cy.get('.search__submit').should('be.visible');
-      cy.get('.search__reset').should('not.be.visible');
+      cy.get('.search__reset').should('have.class', 'visually-hidden');
       cy.get('.wayf__remainingIdps .wayf__idp')
         .should('have.length', 5);
     });
