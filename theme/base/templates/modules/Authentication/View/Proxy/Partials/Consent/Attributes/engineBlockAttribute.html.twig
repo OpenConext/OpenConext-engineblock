@@ -1,5 +1,6 @@
-<li class="consent__attribute">
-    {% if nameIdIsPersistent %}
+{% set addTooltip = nameIdIsPersistent %}
+<li class="consent__attribute{% if not addTooltip %} consent__attribute--noTooltip{% endif %}">
+    {% if addTooltip %}
         {% set id %}
             tooltip{{ loop.index }}{{ orgId }}
         {% endset %}
@@ -9,7 +10,7 @@
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/name.html.twig' with { attributeName: 'consent_name_id_label'|trans } %}
     {% endif %}
     {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/value.html.twig' with { attributeValue: attributeValues } %}
-    {% if nameIdIsPersistent %}
+    {% if addTooltip %}
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/tooltip.html.twig' with {
             tooltipValue: 'consent_name_id_value_tooltip'|trans({'%arg1%': 'suite_name'|trans })
         } %}
