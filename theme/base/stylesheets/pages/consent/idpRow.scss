@@ -38,6 +38,10 @@
         text-align: right;
         text-decoration: underline;
         background-image: unset;
+
+        @include screen('mobile') {
+            text-align: left;
+        }
     }
 
     > p {
