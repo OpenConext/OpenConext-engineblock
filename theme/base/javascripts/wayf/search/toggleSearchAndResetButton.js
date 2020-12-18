@@ -6,16 +6,16 @@ export const toggleSearchAndResetButton = (idpArray, searchTerm) => {
   const searchButton = document.querySelector('.search__submit');
   const resetButton = document.querySelector('.search__reset');
   if (resetButton.classList.contains('visually-hidden')) {
-    resetButton.classList.remove('visually-hidden');
+    showElement(resetButton, true);
   }
 
   if (searchTerm !== '') {
-    hideElement(searchButton);
-    showElement(resetButton);
+    hideElement(searchButton, true);
+    showElement(resetButton, true);
   } else {
     // Reset the list/search results
     searchAndSortIdps(idpArray, searchTerm);
-    showElement(searchButton);
-    hideElement(resetButton);
+    showElement(searchButton, true);
+    hideElement(resetButton, true);
   }
 };

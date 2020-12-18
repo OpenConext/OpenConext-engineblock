@@ -75,6 +75,74 @@ class TestEntitySeeder
     }
 
     /**
+     * Build a random collection of (unconnected) IdPs
+     *
+     * This is not an array of IdentityProvider value objects, but a derivative that can be used for showing IdPs on
+     * the WAYF.
+     *
+     * @param int $numberOfIdps
+     * @param int $numberOfUnconnectedIdps
+     * @param string $locale
+     * @return array[]
+     */
+    public static function buildRandomIdps($numberOfIdps, $locale, $defaultIdpEntityId)
+    {
+        Assert::integer($numberOfIdps);
+        Assert::stringNotEmpty($locale);
+        $idpNames = [
+            'Academisch Medisch Centrum (AMC)',
+            'AMOLF',
+            'Amphia Hospital',
+            'Breda University of Applied Sciences',
+            'Centraal Planbureau',
+            'Centrum Wiskunde & Informatica',
+            'Cito',
+            'Delft University of Technology',
+            'Drenthe College',
+            'eduID (NL)',
+            'Erasmus MC',
+            'Fontys University of Applied Sciences',
+            'Friesland College',
+            'Graafschap College',
+            'GÉANT Staff Identity Provider',
+            'HAN University of Applied Sciences',
+            'Hotelschool The Hague',
+            'IHE Delft Institute for Water Education',
+            'KNMI',
+            'Koninklijke Nederlandse Akademie van Wetenschappen (KNAW)',
+            'Leids Universitair Medisch Centrum',
+            'Maastricht University',
+            'Netherlands eScience Center',
+            'SURF bv',
+            'Thomas More Hogeschool',
+            'VSNU',
+        ];
+        $randomIdpNames = $numberOfIdps < count($idpNames) ? array_rand($idpNames, $numberOfIdps) : array_keys($idpNames);
+
+        $idps = [];
+
+        for ($i=1; $i < (int) $numberOfIdps + 1; $i++) {
+            $connected = rand(0, 1) === 1;
+            $entityId = $connected ? sprintf("https://example.com/entityId/%d", $i) : sprintf("https://unconnected.example.com/entityId/%d", $i);
+
+            if ($i < 25) {
+                $name = sprintf("%s %d %s", $idpNames[$randomIdpNames[$i - 1]], $i, $locale);
+            } else {
+                $variableString = $connected ? 'Connected' : 'Disconnected';
+                $name = sprintf("%s IdP %d %s", $variableString, $i, $locale);
+            }
+
+            $isDefaultIdp = false;
+            if ($defaultIdpEntityId === $entityId) {
+                $isDefaultIdp = true;
+            }
+            $idps[$entityId] = ['name' => $name, 'enabled' => $connected, 'isDefaultIdp' => $isDefaultIdp];
+        }
+
+        return self::transformIdpsForWayf($idps, $locale);
+    }
+
+    /**
      * @param array $idpEntityIds
      * @param string $currentLocale
      * @return array[]
