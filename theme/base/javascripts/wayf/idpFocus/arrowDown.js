@@ -11,13 +11,8 @@ import {isFocusOn} from '../../utility/isFocusOn';
  */
 import {focusOnNextIdp} from './focusOnNextIdp';
 
-export const arrowDown = () => {
-  const searchBar = document.querySelector('.search__field');
-  const defaultIdp = document.querySelector('.wayf__defaultIdpLink');
-  const firstIdp = document.querySelector('.wayf__remainingIdps li:first-of-type > .wayf__idp');
-  const lastIdp = document.querySelector('.wayf__remainingIdps li:last-of-type > .wayf__idp');
-
-  if (isFocusOn(searchBar)) {
+export const arrowDown = (searchBar, resetButton, defaultIdp, firstIdp, lastIdp) => {
+  if (isFocusOn(searchBar) || isFocusOn(resetButton)) {
     try {
       defaultIdp.focus();
     } catch (e) {

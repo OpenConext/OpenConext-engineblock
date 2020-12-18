@@ -162,7 +162,7 @@ Below you'll find a list of the "entry points" for each page with corresponding 
 - redirect page: `templates > modules > authentication > view > proxy > redirect.html.twig`.
 - index.html.twig: `templates > modules > authentication > view > index > index.html.twig`.  You can use `https://engine.vm.openconext.org/` to develop the page.
 
-#### Supported feature flags
+#### Supported feature / testing flags
 
 There are a number of feature flags which need to be supported by a theme in order to distribute it to the wider community.  These toggle certain features on or off.
 
@@ -173,6 +173,14 @@ There are a number of feature flags which need to be supported by a theme in ord
 - backLink: display a link which, when clicked, allows you to go back two pages.  In essence the equivalent of clicking the back button twice.  You can test this by going to `/functional-testing/wayf?backLink=1`.
 - cutoffPointForShowingUnfilteredIdps: unlike the previous flags which were booleans, this one is an integer.  When this flag is present & the user is not searching (so no value in the search field): there should only be idps shown when there are no more than the cutoff point.  So as an example: if there are 100 idps that would be shown normally, and the cutoff point is 50: the user should see no idps at all (so only the empty search field is shown).  You can test this by going to `/functional-testing/wayf?cutoffPointForShowingUnfilteredIdps=50`.
 - showConsentExplanation: whether to show a special explanation on the consent page.  There is currently no test endpoint for this.
+
+There is currently one flag which allows for testing a more realistic scenario.  The number of such flags might be expanded in the future.
+
+**The following test flag exist (name of query param):**
+- randomIdps: whether to use random Idp names (taken from a selection of real IDP names) with random connected status.  Example usage:
+`https://engine.vm.openconext.org/functional-testing/wayf?randomIdps=20&displayUnconnectedIdpsWayf=true`
+There are only 25 random names to choose from.  If you enter a number larger than 25, number 26 & greater will receive names as normal for the FT idps.
+**Note:** these idps are randomly assigned connected / unconnected status.
 
 [babel]: https://babeljs.io/
 [cypress]: https://www.cypress.io/

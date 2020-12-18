@@ -1,9 +1,7 @@
 export const focusOnPreviousIdp = () => {
-  const element = document.activeElement;
-  const index = Number(element.getAttribute('data-index'));
+  const previousSibling = document.activeElement.parentElement.previousElementSibling;
 
-  try {
-    element.closest('.wayf__idpList').querySelector(`.wayf__idp[data-index="${index - 1}"]`).focus();
-  } catch(e) {
+  if (!!previousSibling) {
+    previousSibling.firstElementChild.focus();
   }
 };

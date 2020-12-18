@@ -53,6 +53,11 @@ class WayfController extends Controller
 
         $connectedIdps = (int) $request->get('connectedIdps', 5);
         $unconnectedIdps = (int) $request->get('unconnectedIdps', 0);
+        $randomIdps = (int) $request->get('randomIdps', 0);
+
+        $idpList = $randomIdps === 0
+            ? TestEntitySeeder::buildIdps($connectedIdps, $unconnectedIdps, $currentLocale, $defaultIdpEntityId)
+            : TestEntitySeeder::buildRandomIdps($randomIdps, $currentLocale, $defaultIdpEntityId);
 
         return new Response($this->twig->render(
             '@theme/Authentication/View/Proxy/wayf.html.twig',
@@ -67,7 +72,7 @@ class WayfController extends Controller
                 'showRequestAccess' => $displayUnconnectedIdpsWayf,
                 'requestId' => 'bogus-request-id',
                 'serviceProvider' => TestEntitySeeder::buildSp(),
-                'idpList' => TestEntitySeeder::buildIdps($connectedIdps, $unconnectedIdps, $currentLocale, $defaultIdpEntityId),
+                'idpList' => $idpList,
                 'beforeScriptHtml' => '<div id="request-access-scroller"><div id="request-access-container">' .
                     '<div id="request-access"></div></div></div>',
             ]

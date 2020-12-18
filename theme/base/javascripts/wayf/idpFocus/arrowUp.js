@@ -10,13 +10,8 @@ import {focusOnPreviousIdp} from './focusOnPreviousIdp';
  * - to go to the searchbar if we are on the defaultIdp notification
  * - to go to the last idp if we are on the searchbar
  */
-export const arrowUp = () => {
-  const searchBar = document.querySelector('.search__field');
-  const defaultIdp = document.querySelector('.wayf__defaultIdpLink');
-  const firstIdp = document.querySelector('.wayf__remainingIdps li:first-of-type > .wayf__idp');
-  const lastIdp = document.querySelector('.wayf__remainingIdps li:last-of-type > .wayf__idp');
-
-  if (isFocusOn(searchBar)) {
+export const arrowUp = (searchBar, resetButton, defaultIdp, firstIdp, lastIdp) => {
+  if (isFocusOn(searchBar) || isFocusOn(resetButton)) {
     lastIdp.focus();
     return;
   } else if (isFocusOn(firstIdp)) {
