@@ -56,9 +56,7 @@
         }
 
         > label.modal {
-            @include screen('tabletAndBigger') {
-                display: none;
-            }
+            display: none;
         }
 
         > .idpRow__providedBy-content {
