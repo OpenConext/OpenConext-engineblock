@@ -10,7 +10,7 @@ return [
     'language_switcher'     => 'Wissel van taal',
 
     // FOOTER
-    'log_in_to'     => 'Select an %organisationNoun% to login to %arg1%',
+    'log_in_to'     => 'Selecteer een %organisationNoun% om in te loggen bij %arg1%',
     'helpLink'       => 'https://wiki.surfnet.nl/display/conextsupport/De+WAYF-pagina',
 
     // Forms
@@ -43,16 +43,16 @@ return [
     'wayf_idp_title_screenreader' => 'Inloggen met ',
 
     // Consent
-    'consent_h1_text'   => 'Geeft u toestemming om uw informatie te delen?',
-    'consent_h1_text_minimal'   => 'Geeft u toestemming om uw informatie te delen',
+    'consent_h1_text'   => 'Ga je akkoord met het delen van je informatie?',
+    'consent_h1_text_minimal'   => 'Bekijk je informatie die zal worden gedeeld.',
     'consent_privacy_header'    => '%target% ontvangt',
     'consent_attributes_correction_text'    => 'Foutieve informatie?',
-    'consent_ok'    =>  'Doorgaan',
+    'consent_ok'    =>  'Ja, ik geef toestemming',
     'consent_identifier_explanation'    => 'De id voor deze dienst wordt gegenereerd door %suite_name% en is verschillend voor elke dienst waarvan u gebruikt maakt via %suite_name%. De dienst kan u daarom herkennen als dezelfde gebruiker wanneer u terugkeert.  Diensten kunnen u echter niet herkennen als dezelfde gebruiker wanneer zij gegevens uitwisselen.',
     'consent_provided_by'   => 'aangeboden door',
     'consent_tooltip_screenreader'  => 'Waarom hebben we deze informatie nodig?',
     'consent_nojs'   => 'Tooltips / modals op deze pagina hebben om te werken met het toetsenbord JavaScript nodig.  Indien u enkel een toetsenbord gebruikt, gelieve dan JavaScript in te schakelen voor deze functionaliteit.',
-    'consent_disclaimer_privacy_statement' => 'heeft deze informatie nodig om te kunnen werken',
+    'consent_disclaimer_privacy_statement' => '(aangeboden door %org%) heeft deze informatie nodig om te kunnen werken',
     'consent_disclaimer_privacy_read'    => 'lees hun',
     'consent_disclaimer_privacy_policy'  => 'privacy beleid',
     'consent_disclaimer_secure' => 'wordt gebruikt door je %orgNoun% om informatie op een veilige manier te versturen naar %spName% (lees meer over',
