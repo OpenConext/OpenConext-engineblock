@@ -2,5 +2,5 @@
     {% if notificationTitle is defined %}
         <h3>{{ notificationTitle }}</h3>
     {% endif %}
-    {{ text }}
+    {{ text|striptags('consent_warning_allowed_html'|trans)|replace({'<a ': '<a target="_blank" rel="noopener noreferrer" '})|raw }}
 </section>
