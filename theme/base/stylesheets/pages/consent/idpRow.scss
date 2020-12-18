@@ -114,6 +114,7 @@
 
         > .modal__content {
             padding-left: 0;
+            padding-top: 0;
         }
 
         @include screen('mobile') {
@@ -166,7 +167,7 @@
     > input:checked ~ .ie11__label + .modal__value {
         display: flex;
         justify-content: center;
-        margin: 9px auto 1rem;
+        margin: 0 auto 1rem;
         max-height: initial;
 
         > .modal__content {
