@@ -3,7 +3,6 @@
  * TODO: ensure that the imports get altered in the scaffolding function for new themes
  */
 
-
 /***
  * CONSENT SELECTORS
  * ***/
@@ -16,3 +15,6 @@
 export const consentAnimatedElementSelectors = '.tooltip__value, .modal__value, .consent__attributes, .attribute__valueWrapper > .attribute__value--list';
 
 export const nokButtonSelector = 'label[for="cta_consent_nok"]';
+export const nokSectionSelector = '.consent__nok';
+export const contentSectionSelector = '.consent__content';
+export const backButtonSelector = '.consent__nok-back';

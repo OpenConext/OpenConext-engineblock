@@ -3,9 +3,8 @@ import {keyboardBehaviour} from './consent/keyboardBehaviour';
 import {animateInteractiveSections} from './utility/animateInteractiveSections';
 import {addAccessibilitySupport} from './consent/addA11ySupport';
 import {switchConsentSection} from './consent/switchConsentSection';
-import {addBackListener} from './consent/addBackListener';
 import {addClickHandlerOnce} from './utility/addClickHandlerOnce';
-import {nokButtonSelector} from './selectors';
+import {backButtonSelector, nokButtonSelector} from './selectors';
 
 /**
  * TODO: ensure that this gets copied in the scaffolding function for new themes
@@ -22,5 +21,5 @@ export const consentKeyboardBehaviourHandler = keyboardBehaviour;
 export const consentAnimateInteractiveElements = (selector) => animateInteractiveSections(selector);
 export const consentNokHandler = (e) => {
   switchConsentSection(e);
-  addBackListener();
+  addClickHandlerOnce(backButtonSelector, switchConsentSection);
 };
