@@ -1,5 +1,6 @@
 import {fireClickEvent} from '../utility/fireClickEvent';
 import {animateInteractiveSections} from '../utility/animateInteractiveSections';
+import {consentAnimatedElementSelectors} from '../selectors';
 
 export const addAccessibilitySupport = () => {
   const ENTER      = 13;
@@ -23,5 +24,5 @@ export const addAccessibilitySupport = () => {
   });
 
   // make animations work for tooltips/modals/toggle
-  animateInteractiveSections('.tooltip__value, .modal__value, .consent__attributes, .attribute__valueWrapper > .attribute__value--list');
+  animateInteractiveSections(consentAnimatedElementSelectors);
 };
