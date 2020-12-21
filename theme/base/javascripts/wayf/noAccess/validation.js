@@ -1,5 +1,7 @@
 import {nodeListToArray} from "../../utility/nodeListToArray";
 import {formErrorClass, noAccessFieldsToValidy} from '../../selectors';
+import {hideElement} from '../../utility/hideElement';
+import {showElement} from '../../utility/showElement';
 
 /**
  * Verify the name and email fields are not empty. Due to the way the validation was set up we can
@@ -38,11 +40,11 @@ function isAnEmptyField(formData, elementName) {
 function hideValidationMessages(){
   const errorMessages = nodeListToArray(document.getElementsByClassName(formErrorClass));
   errorMessages.forEach(errorMessage => {
-    errorMessage.classList.add('hidden');
+    hideElement(errorMessage);
   });
 }
 
 function showValidationMessage(elementName){
   const errorMessage = document.querySelector(`p[data-labelfor="${elementName}"]`);
-  errorMessage.classList.remove('hidden');
+  showElement(errorMessage);
 }
