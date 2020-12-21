@@ -8,6 +8,7 @@ import {backButtonSelector, configurationId, nokButtonSelector, selectedIdpsSele
 import {handlePreviousSelectionVisible} from './wayf/handlePreviousSelectionVisible';
 import {mouseBehaviour} from './wayf/mouseBehaviour';
 import {searchBehaviour} from './wayf/searchBehaviour';
+import {submitForm} from './wayf/submitForm';
 
 /**
  * TODO: ensure that this gets copied in the scaffolding function for new themes
@@ -44,4 +45,7 @@ export const wayfCallbackAfterLoad = () => {
   keyboardBehaviour(previouslySelectedIdps);
   mouseBehaviour(previouslySelectedIdps);
   searchBehaviour();
+};
+export const previousSelectionSubmitHandler = (e, previouslySelectedIdps) => {
+  submitForm(e, previouslySelectedIdps);
 };

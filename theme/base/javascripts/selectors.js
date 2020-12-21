@@ -25,5 +25,8 @@ export const backButtonSelector = '.consent__nok-back';
  * WAYF SELECTORS
  * ***/
 export const wayfPageSelector = 'main.wayf';
-export const selectedIdpsSelector = '.wayf__previousSelection';
 export const configurationId = 'wayf-configuration';
+export const selectedIdpsSelector = '.wayf__previousSelection';
+export const selectedIdpsListSelector = '.wayf__previousSelection .wayf__idpList';
+export const previousSelectionFirstIdp = '.wayf__previousSelection li:first-of-type .wayf__idp';
+export const addAccountButtonSelector = '.previousSelection__addAccount';
