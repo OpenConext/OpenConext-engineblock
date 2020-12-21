@@ -7,6 +7,7 @@ import {sortPrevious, sortRemaining} from './utility/sortIdps';
 import {getListSelector} from './utility/getListSelector';
 import {hasVisibleDisabledButtonAsTarget} from './utility/hasVisibleDisabledButtonAsTarget';
 import {handleClickingDisabledIdp} from './handleClickingDisabledIdp';
+import {idpDeleteDisabledSelector, idpSelector} from '../selectors';
 
 /**
  * Handle what happens if a user clicks on either the delete button, or the disabled button in an Idp.
@@ -21,12 +22,12 @@ export const handleDeleteDisable = (e, previouslySelectedIdps) => {
 
   // in case the origin is the span setting the element needs to be done differently
   if (e.target.tagName === 'SPAN') {
-    element = e.target.closest('.idp__deleteDisable');
+    element = e.target.closest(idpDeleteDisabledSelector);
   }
 
   // handle clicking disabled button
   if (hasVisibleDisabledButtonAsTarget(element)) {
-    handleClickingDisabledIdp(element.closest('.wayf__idp'));
+    handleClickingDisabledIdp(element.closest(idpSelector));
     return;
   }
 

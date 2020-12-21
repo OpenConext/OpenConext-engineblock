@@ -1,5 +1,6 @@
 import {toggleErrorMessage} from './toggleErrorMessage';
 import {isHiddenElement} from '../../utility/isHiddenElement';
+import {errorMessageSelector} from '../../selectors';
 
 /**
  * Hide the error message if it's currently shown
@@ -7,7 +8,7 @@ import {isHiddenElement} from '../../utility/isHiddenElement';
  *  @param noAccess
  */
 export const hideErrorMessage = (noAccess) => {
-  if (!isHiddenElement(noAccess.querySelector('.notification__critical'))) {
+  if (!isHiddenElement(noAccess.querySelector(errorMessageSelector))) {
     toggleErrorMessage();
   }
 };

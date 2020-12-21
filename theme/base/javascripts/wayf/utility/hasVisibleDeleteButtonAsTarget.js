@@ -1,4 +1,5 @@
 import {isVisibleElement} from '../../utility/isVisibleElement';
+import {idpDeleteClass, idpDeleteDisabledClass, idpDeleteSelector} from '../../selectors';
 
 /**
  * Check if an element has a visible delete button.
@@ -8,8 +9,8 @@ import {isVisibleElement} from '../../utility/isVisibleElement';
  * @returns {boolean}
  */
 export const hasVisibleDeleteButtonAsTarget = (element) => {
-  if (element.className === 'idp__deleteDisabled') {
-    const idpDelete = element.querySelector('.idp__delete');
+  if (element.className === idpDeleteDisabledClass) {
+    const idpDelete = element.querySelector(idpDeleteSelector);
     if (!Boolean(idpDelete)) {
       return false;
     }
@@ -17,7 +18,7 @@ export const hasVisibleDeleteButtonAsTarget = (element) => {
     return isVisibleElement(idpDelete);
   }
 
-  if (element.className === 'idp__delete') {
+  if (element.className === idpDeleteClass) {
     return isVisibleElement(element);
   }
 

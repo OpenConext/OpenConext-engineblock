@@ -4,11 +4,17 @@ import {animateInteractiveSections} from './utility/animateInteractiveSections';
 import {addAccessibilitySupport} from './consent/addA11ySupport';
 import {switchConsentSection} from './consent/switchConsentSection';
 import {addClickHandlerOnce} from './utility/addClickHandlerOnce';
-import {backButtonSelector, configurationId, nokButtonSelector, selectedIdpsSelector} from './selectors';
+import {
+  backButtonSelector,
+  configurationId,
+  nokButtonSelector,
+  selectedIdpsSelector,
+} from './selectors';
 import {handlePreviousSelectionVisible} from './wayf/handlePreviousSelectionVisible';
 import {mouseBehaviour} from './wayf/mouseBehaviour';
 import {searchBehaviour} from './wayf/searchBehaviour';
 import {submitForm} from './wayf/submitForm';
+import {cancelButtonClickHandlerCreator} from './wayf/noAccess/cancelButtonClickHandler';
 
 /**
  * TODO: ensure that this gets copied in the scaffolding function for new themes
@@ -46,6 +52,7 @@ export const wayfCallbackAfterLoad = () => {
   mouseBehaviour(previouslySelectedIdps);
   searchBehaviour();
 };
-export const previousSelectionSubmitHandler = (e, previouslySelectedIdps) => {
-  submitForm(e, previouslySelectedIdps);
+export const previousSelectionSubmitHandler = (e) => {
+  submitForm(e, true);
 };
+export const cancelButtonClickHandler = (parentSection, noAccess) => cancelButtonClickHandlerCreator(parentSection, noAccess);

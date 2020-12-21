@@ -33,6 +33,5 @@ const mouseHandlersHiddenIdps = (previouslySelectedIdps) => {
   attachDeleteHandlers(previouslySelectedIdps);
 
   // Attach event listener to previous selection idps-list
-  addClickHandlerOnce(selectedIdpsListSelector, (e, previouslySelectedIdps) => { previousSelectionSubmitHandler(e, previouslySelectedIdps);
-  });
+  addClickHandlerOnce(selectedIdpsListSelector, previousSelectionSubmitHandler);
 };
