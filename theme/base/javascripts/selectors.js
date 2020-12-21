@@ -9,6 +9,12 @@
 export const idpElement = 'ARTICLE';
 
 /***
+ * INDEX SELECTORS
+ * ***/
+export const metadataCertificateLinkSelector = 'dl.metadata-certificates-list a';
+export const indexPageSelector = '#engine-main-page';
+
+/***
  * CONSENT SELECTORS
  * ***/
 /**
@@ -22,8 +28,6 @@ export const nokButtonSelector = 'label[for="cta_consent_nok"]';
 export const nokSectionSelector = '.consent__nok';
 export const contentSectionSelector = '.consent__content';
 export const backButtonSelector = '.consent__nok-back';
-
-
 
 /***
  * WAYF SELECTORS
