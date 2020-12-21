@@ -1,19 +1,20 @@
 import {getData} from '../utility/getData';
-import {submitForm} from './submitForm';
 import {handleAriaPressed} from '../utility/handleAriaPressed';
 import {handleIdpBanner} from './handleIdpBanner';
+import {defaultIdpSelector, idpListSelector} from '../selectors';
+import {idpSubmitHandler} from '../handlers';
 
-export const mouseBehaviour = (previouslySelectedIdps) => {
+export const mouseBehaviour = () => {
   // allow chosing an idp to login
   const idpLists = document
-    .querySelectorAll('.wayf__idpList');
+    .querySelectorAll(idpListSelector);
   idpLists.forEach(list => {
     const hasClickHandler = getData(list, 'clickhandled');
 
     if (!hasClickHandler) {
       list.addEventListener('click', (e) => {
         e.preventDefault();
-        submitForm(e, previouslySelectedIdps);
+        idpSubmitHandler(e);
       });
       list.setAttribute('data-clickhandled', 'true');
     }
@@ -24,7 +25,7 @@ export const mouseBehaviour = (previouslySelectedIdps) => {
   handleAriaPressed(labels);
 
   // handle clicking defaultIdp banner
-  const defaultIdpLink = document.querySelector('.wayf__defaultIdpLink');
+  const defaultIdpLink = document.querySelector(defaultIdpSelector);
 
   if (!! defaultIdpLink) {
     defaultIdpLink.addEventListener('click', handleIdpBanner);

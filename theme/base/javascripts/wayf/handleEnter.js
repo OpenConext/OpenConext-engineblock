@@ -1,7 +1,6 @@
 import {showRemaining} from './utility/showRemaining';
 import {fireClickEvent} from '../utility/fireClickEvent';
 import {handleDeleteDisable} from './handleDeleteDisable';
-import {submitForm} from './submitForm';
 import {handleIdpBanner} from './handleIdpBanner';
 import {selectFirstIdPAndSubmitForm} from "./selectFirstIdPAndSubmitForm";
 import {
@@ -11,6 +10,7 @@ import {
   idpDisabledClass, idpFormClass, idpLogoClass, idpSubmitClass, idpTitleClass, searchFieldClass,
   toggleButtonClass
 } from '../selectors';
+import {idpSubmitHandler} from '../handlers';
 
 /**
  * Behaviour expected to happen after a user presses the enter button.
@@ -41,7 +41,7 @@ export const handleEnter = (e, previouslySelectedIdps) => {
       case idpSubmitClass:
       case idpFormClass:
       case idpLogoClass:
-        submitForm(e, previouslySelectedIdps); break;
+        idpSubmitHandler(e); break;
       case searchFieldClass:
         selectFirstIdPAndSubmitForm(previouslySelectedIdps); break;
       case defaultIdpClass:

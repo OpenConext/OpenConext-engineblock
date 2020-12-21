@@ -4,7 +4,7 @@ import {switchIdpSection} from './utility/switchIdpSection';
 import {focusOn} from "../utility/focusOn";
 import {addAccountButtonSelector, previousSelectionFirstIdp, selectedIdpsListSelector} from '../selectors';
 import {addClickHandlerOnce} from '../utility/addClickHandlerOnce';
-import {previousSelectionSubmitHandler} from '../handlers';
+import {idpSubmitHandler} from '../handlers';
 
 /**
  * Check if user has any previous selected Idps.
@@ -33,5 +33,5 @@ const mouseHandlersHiddenIdps = (previouslySelectedIdps) => {
   attachDeleteHandlers(previouslySelectedIdps);
 
   // Attach event listener to previous selection idps-list
-  addClickHandlerOnce(selectedIdpsListSelector, previousSelectionSubmitHandler);
+  addClickHandlerOnce(selectedIdpsListSelector, idpSubmitHandler);
 };

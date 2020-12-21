@@ -50,10 +50,10 @@ export const wayfCallbackAfterLoad = () => {
   // Initialize behaviour
   handlePreviousSelectionVisible(selectedIdps, previouslySelectedIdps);
   wayfKeyboardBehaviour(previouslySelectedIdps);
-  mouseBehaviour(previouslySelectedIdps);
+  mouseBehaviour();
   searchBehaviour();
 };
-export const previousSelectionSubmitHandler = (e) => {
+export const idpSubmitHandler = (e) => {
   submitForm(e, true);
 };
 export const cancelButtonClickHandler = (parentSection, noAccess) => cancelButtonClickHandlerCreator(parentSection, noAccess);
