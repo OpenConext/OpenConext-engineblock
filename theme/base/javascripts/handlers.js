@@ -4,14 +4,19 @@ import {animateInteractiveSections} from './utility/animateInteractiveSections';
 import {addAccessibilitySupport} from './consent/addA11ySupport';
 import {switchConsentSection} from './consent/switchConsentSection';
 import {addClickHandlerOnce} from './utility/addClickHandlerOnce';
-import {backButtonSelector, nokButtonSelector} from './selectors';
+import {backButtonSelector, configurationId, nokButtonSelector, selectedIdpsSelector} from './selectors';
+import {handlePreviousSelectionVisible} from './wayf/handlePreviousSelectionVisible';
+import {mouseBehaviour} from './wayf/mouseBehaviour';
+import {searchBehaviour} from './wayf/searchBehaviour';
 
 /**
  * TODO: ensure that this gets copied in the scaffolding function for new themes
  * TODO: ensure that the imports get altered in the scaffolding function for new themes
  */
 
-/** Consent Handlers **/
+/***
+ * CONSENT HANDLERS
+ * ***/
 export const consentCallbackAfterLoad = () => {
   addAccessibilitySupport();
   addClickHandlerOnce(nokButtonSelector, consentNokHandler);
@@ -22,4 +27,21 @@ export const consentAnimateInteractiveElements = (selector) => animateInteractiv
 export const consentNokHandler = (e) => {
   switchConsentSection(e);
   addClickHandlerOnce(backButtonSelector, switchConsentSection);
+};
+
+
+/***
+ * WAYF HANDLERS
+ * ***/
+export const wayfCallbackAfterLoad = () => {
+  // Initialize variables
+  const selectedIdps = document.querySelector(selectedIdpsSelector);
+  const configuration = JSON.parse(document.getElementById(configurationId).innerHTML);
+  const previouslySelectedIdps = configuration.previousSelectionList;
+
+  // Initialize behaviour
+  handlePreviousSelectionVisible(selectedIdps, previouslySelectedIdps);
+  keyboardBehaviour(previouslySelectedIdps);
+  mouseBehaviour(previouslySelectedIdps);
+  searchBehaviour();
 };
