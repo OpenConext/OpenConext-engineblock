@@ -1,3 +1,5 @@
+import {topId} from '../../selectors';
+
 export const scrollToTop = () => {
-  document.getElementById('top').scrollIntoView();
+  document.getElementById(topId).scrollIntoView();
 };
