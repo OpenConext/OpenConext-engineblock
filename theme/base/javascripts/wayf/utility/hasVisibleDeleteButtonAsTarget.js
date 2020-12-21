@@ -9,7 +9,7 @@ import {idpDeleteClass, idpDeleteDisabledClass, idpDeleteSelector} from '../../s
  * @returns {boolean}
  */
 export const hasVisibleDeleteButtonAsTarget = (element) => {
-  if (element.className === idpDeleteDisabledClass) {
+  if (element.classList.contains(idpDeleteDisabledClass)) {
     const idpDelete = element.querySelector(idpDeleteSelector);
     if (!Boolean(idpDelete)) {
       return false;
@@ -18,7 +18,7 @@ export const hasVisibleDeleteButtonAsTarget = (element) => {
     return isVisibleElement(idpDelete);
   }
 
-  if (element.className === idpDeleteClass) {
+  if (element.classList.contains(idpDeleteClass)) {
     return isVisibleElement(element);
   }
 

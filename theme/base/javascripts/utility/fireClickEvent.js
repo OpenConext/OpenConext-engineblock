@@ -4,6 +4,6 @@
  *  @param element
  */
 export const fireClickEvent = (element) => {
-  var clickEvent = new MouseEvent('click');
+  const clickEvent = new MouseEvent('click');
   element.dispatchEvent(clickEvent);
 };

@@ -1,5 +1,6 @@
 import {enterHandler} from './consent/enterHandler';
 import {keyboardBehaviour} from './consent/keyboardBehaviour';
+import {keyboardBehaviour as wayfKeyboardBehaviour} from './wayf/keyboardBehaviour';
 import {animateInteractiveSections} from './utility/animateInteractiveSections';
 import {addAccessibilitySupport} from './consent/addA11ySupport';
 import {switchConsentSection} from './consent/switchConsentSection';
@@ -48,7 +49,7 @@ export const wayfCallbackAfterLoad = () => {
 
   // Initialize behaviour
   handlePreviousSelectionVisible(selectedIdps, previouslySelectedIdps);
-  keyboardBehaviour(previouslySelectedIdps);
+  wayfKeyboardBehaviour(previouslySelectedIdps);
   mouseBehaviour(previouslySelectedIdps);
   searchBehaviour();
 };

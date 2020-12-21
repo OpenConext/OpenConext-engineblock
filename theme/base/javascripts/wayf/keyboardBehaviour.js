@@ -1,6 +1,12 @@
 import {arrowDown} from './idpFocus/arrowDown';
 import {arrowUp} from './idpFocus/arrowUp';
 import {handleEnter} from './handleEnter';
+import {
+  defaultIdpSelector,
+  firstRemainingIdpSelector, lastRemainingIdpSelector,
+  searchFieldSelector,
+  searchResetSelector
+} from '../selectors';
 
 /**
  * All handlers for the expected keyboard behaviour.
@@ -10,11 +16,11 @@ export const keyboardBehaviour = (previouslySelectedIdps) => {
   const ENTER      = 13;
   const ARROW_UP   = 38;
   const ARROW_DOWN = 40;
-  const searchBar = document.querySelector('.search__field');
-  const resetButton = document.querySelector('.search__reset');
-  const defaultIdp = document.querySelector('.wayf__defaultIdpLink');
-  const firstIdp = document.querySelector('.wayf__remainingIdps li:first-of-type > .wayf__idp');
-  const lastIdp = document.querySelector('.wayf__remainingIdps li:last-of-type > .wayf__idp');
+  const searchBar = document.querySelector(searchFieldSelector);
+  const resetButton = document.querySelector(searchResetSelector);
+  const defaultIdp = document.querySelector(defaultIdpSelector);
+  const firstIdp = document.querySelector(firstRemainingIdpSelector);
+  const lastIdp = document.querySelector(lastRemainingIdpSelector);
 
 
   document.querySelector('body').addEventListener('keydown', function(e) {
