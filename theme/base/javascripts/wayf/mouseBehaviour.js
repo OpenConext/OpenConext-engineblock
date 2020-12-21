@@ -1,7 +1,7 @@
 import {getData} from '../utility/getData';
 import {handleAriaPressed} from '../utility/handleAriaPressed';
 import {handleIdpBanner} from './handleIdpBanner';
-import {defaultIdpSelector, idpListSelector} from '../selectors';
+import {ariaPressedLabelSelector, defaultIdpSelector, idpListSelector} from '../selectors';
 import {idpSubmitHandler} from '../handlers';
 
 export const mouseBehaviour = () => {
@@ -21,7 +21,7 @@ export const mouseBehaviour = () => {
   });
 
   // add a11y support for all labels with an aria-pressed attribute.
-  const labels = document.querySelectorAll('label[aria-pressed]');
+  const labels = document.querySelectorAll(ariaPressedLabelSelector);
   handleAriaPressed(labels);
 
   // handle clicking defaultIdp banner

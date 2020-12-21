@@ -92,3 +92,4 @@ export const doneButtonClass = 'previousSelection__done';
 export const searchingClass = 'wayf__idpList--searching';
 export const noResultSectionSelector = '.wayf__noResults';
 export const idpListSelector = '.wayf__idpList';
+export const ariaPressedLabelSelector = 'label[aria-pressed]';
