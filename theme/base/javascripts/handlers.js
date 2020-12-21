@@ -16,6 +16,7 @@ import {mouseBehaviour} from './wayf/mouseBehaviour';
 import {searchBehaviour} from './wayf/searchBehaviour';
 import {submitForm} from './wayf/submitForm';
 import {cancelButtonClickHandlerCreator} from './wayf/noAccess/cancelButtonClickHandler';
+import {toggleFormFieldsAndButton} from './wayf/noAccess/toggleFormFieldsAndButton';
 
 /**
  * TODO: ensure that this gets copied in the scaffolding function for new themes
@@ -57,3 +58,4 @@ export const idpSubmitHandler = (e) => {
   submitForm(e, true);
 };
 export const cancelButtonClickHandler = (parentSection, noAccess) => cancelButtonClickHandlerCreator(parentSection, noAccess);
+export const requestButtonHandler = () => { toggleFormFieldsAndButton(); };
