@@ -18,11 +18,6 @@ import {submitForm} from './wayf/submitForm';
 import {cancelButtonClickHandlerCreator} from './wayf/noAccess/cancelButtonClickHandler';
 import {toggleFormFieldsAndButton} from './wayf/noAccess/toggleFormFieldsAndButton';
 
-/**
- * TODO: ensure that this gets copied in the scaffolding function for new themes
- * TODO: ensure that the imports get altered in the scaffolding function for new themes
- */
-
 /***
  * CONSENT HANDLERS
  * ***/
