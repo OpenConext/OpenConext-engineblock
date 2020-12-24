@@ -17,12 +17,7 @@ try {
     console.log('Reading contents of parameters.yml.\n');
     const fileContents = fs.readFileSync(config, 'utf8');
     const parameters = yaml.safeLoadAll(fileContents);
-
-    let theme = process.env.EB_THEME || parameters[0].parameters['theme.name'] || 'skeune';
-
-    if (process.env.EB_THEME) {
-        theme = process.env.EB_THEME;
-    }
+    const theme = process.env.EB_THEME || parameters[0].parameters['theme.name'] || 'skeune';
 
     console.log(`Using theme ${theme} to run the build.\nOutput will be printed once the build is finished.\n`);
     executeShellCommand(`cd ${__dirname}/.. && EB_THEME=${theme} npm run buildtheme`);

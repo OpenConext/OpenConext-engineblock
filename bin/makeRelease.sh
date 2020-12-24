@@ -79,7 +79,7 @@ fi
 # can be removed when we stop doing that
 echo "Build assets"
 cd ${PROJECT_DIR}/theme &&
-npm ci --unsafe-perm &&
+npm ci --unsafe-perm && npm install &&
 npm run release
 
 if [ $? -eq 0 ]; then
