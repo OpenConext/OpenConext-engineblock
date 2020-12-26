@@ -1,23 +1,26 @@
 import {nodeListToArray} from '../utility/nodeListToArray';
 
-/** TODO figure out if this is still needed **/
-export const addInteractiveAriaHandlers = (elementType) => {
-  const elements = nodeListToArray(document.querySelectorAll(`.${elementType}__value`));
+/**
+ * Change aria-hidden value as the element is clicked.
+ * This ensures that tooltips and modals are not read on load, but only read when clicked open.
+ *
+ * @param elementSelectors
+ */
+export const addInteractiveAriaHandlers = (elementSelectors
+) => {
+  const elements = nodeListToArray(document.querySelectorAll(elementSelectors));
 
   elements.forEach(element => {
-    const input = element.parentElement.querySelector(`input.${elementType}`);
+    const forValue = element.getAttribute('for');
+    const alert = document.querySelector(`[data-for="${forValue}"]`);
 
-    // set aria-hidden as the element is hidden on startup
-    element.setAttribute('aria-hidden', 'true');
-
-    // change aria-hidden value each time the input is clicked
-    input.addEventListener('change', () => {
-      if (element.getAttribute('aria-hidden')) {
-        element.removeAttribute('aria-hidden');
+    element.addEventListener('click', () => {
+      if(alert.getAttribute('aria-hidden')) {
+        alert.removeAttribute('aria-hidden');
         return;
       }
 
-      element.setAttribute('aria-hidden', 'true');
+      alert.setAttribute('aria-hidden', 'true');
     });
   });
 };
