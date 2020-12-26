@@ -1,4 +1,5 @@
 import {nodeListToArray} from '../utility/nodeListToArray';
+import {changeAriaHiddenValue} from '../utility/changeAriaHiddenValue';
 
 /**
  * Change aria-hidden value as the element is clicked.
@@ -6,7 +7,7 @@ import {nodeListToArray} from '../utility/nodeListToArray';
  *
  * @param elementSelectors
  */
-export const addInteractiveAriaHandlers = (elementSelectors
+export const addTooltipAndModalAriaHandlers = (elementSelectors
 ) => {
   const elements = nodeListToArray(document.querySelectorAll(elementSelectors));
 
@@ -14,13 +15,10 @@ export const addInteractiveAriaHandlers = (elementSelectors
     const forValue = element.getAttribute('for');
     const alert = document.querySelector(`[data-for="${forValue}"]`);
 
-    element.addEventListener('click', () => {
-      if(alert.getAttribute('aria-hidden')) {
-        alert.removeAttribute('aria-hidden');
-        return;
-      }
-
-      alert.setAttribute('aria-hidden', 'true');
-    });
+    if (!!alert) {
+      element.addEventListener('click', () => {
+        changeAriaHiddenValue(alert);
+      });
+    }
   });
 };
