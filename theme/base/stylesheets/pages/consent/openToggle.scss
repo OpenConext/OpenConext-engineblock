@@ -8,6 +8,7 @@
 
     > .consent__attribute:nth-of-type(n+6) {
         @include display-grid;
+        @include visually-shown;
     }
 
     > .openToggle {

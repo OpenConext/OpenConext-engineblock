@@ -11,7 +11,9 @@ context('Consent when using the mouse', () => {
       cy.contains('label', 'Show more information')
         .click();
       cy.contains('label', 'Show less information');
-      cy.beVisible('ul.consent__attributes li:nth-of-type(6)');
+      cy.get('ul.consent__attributes li:nth-of-type(6)')
+        .should('not.have.css', 'height', '1px')
+        .should('not.have.css', 'width', '1px');
     });
 
     it('Should hide the extra attributes after clicking the label again', () => {
@@ -25,7 +27,9 @@ context('Consent when using the mouse', () => {
 
       // test assertions
       cy.contains('label', 'Show more information');
-      cy.notBeVisible('ul.consent__attributes li:nth-of-type(6)');
+      cy.get('ul.consent__attributes li:nth-of-type(6)')
+        .should('have.css', 'height', '1px')
+        .should('have.css', 'width', '1px');
     });
   });
 
