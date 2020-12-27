@@ -1,5 +1,5 @@
 <section class="wayf__remainingIdps {% if connectedIdps.formattedPreviousSelectionList is not empty %}hidden{% endif %}">
-    <h2 class="remainingIdps__title visually-hidden">
+    <h2 id="remainingIdps__title" class="remainingIdps__title visually-hidden">
         {% if connectedIdps.formattedPreviousSelectionList %}
             {{ 'wayf_remaining_idps_title'|trans }}
         {% else %}
@@ -26,5 +26,5 @@
         } %}
     {% endif %}
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/rememberChoice.html.twig' %}
-    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpList.html.twig' with { idpList: connectedIdps.formattedIdpList, delete: false, listName: 'remaining' } %}
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpList.html.twig' with { idpList: connectedIdps.formattedIdpList, delete: false, listName: 'remaining', id: 'remainingIdps__title' } %}
 </section>
