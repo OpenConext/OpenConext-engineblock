@@ -3,6 +3,9 @@
         <span class="noAccess__connectable">{{ 'cancel'|trans }}</span>
         <span class="noAccess__unconnectable">{{ 'back'|trans }}</span>
     </button>
-    <button type="button" class="cta__showForm noAccess__connectable">{{ 'request_access'|trans }}</button>
+    <button type="button" class="cta__showForm noAccess__connectable">
+        <span aria-hidden="true">{{ 'request_access'|trans }}</span>
+        <span class="visually-hidden">{{ 'wayf_noaccess_request_access_screenreader'|trans }}</span>
+    </button>
     <button type="submit" class="cta__request hidden">{{ 'send_request'|trans }}</button>
 </div>
