@@ -38,6 +38,7 @@ use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RuntimeException;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use function sprintf;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Both set up and tasks can be a lot...
@@ -205,39 +206,47 @@ class EngineBlockContext extends AbstractSubContext
     public function iSeeTheAttributesFromSourceOnConsentPage($source, TableNode $attributes)
     {
         $mink = $this->getMinkContext();
-        $tableSelector = 'tbody[data-attr-source="' . strtolower($source) . '"]';
-        $tableTemplate = <<<HTML
-<table>
-    <thead>
-        <tr>
-            <td>Name</td>
-            <td>Value</td>
-        </tr>
-    </thead>
-    <tbody>%s</tbody>
-</table>
-HTML;
+        $page = $mink->getSession()->getPage();
+        $listItemsSelector = 'ul#attribute-source-' . strtolower($source) . ' li.consent__attribute';
 
-        $actualTable = HTMLTable::fromHTMLString(
-            sprintf(
-                $tableTemplate,
-                $mink->assertSession()->elementExists('css', $tableSelector)->getHtml()
-            )
-        );
+        $listItems = $page->findAll('css', $listItemsSelector);
+        // Count the number of expected attributes for a given source, the minus one is to subtract the name/value row
+        // specified in the scenario (added for readability of the table)
+        $expectedNumberOfAttributes = count($attributes->getRows()) - 1;
 
-        $rows = $actualTable->getRows();
+        if ($expectedNumberOfAttributes === 0) {
+            throw new RuntimeException(sprintf('Unable to find any attributes from source "%s"', $source));
+        }
 
-        // Remove the first row (IDP name, is this correct?)
-        unset($rows[1]);
+        // Ugly algo to test if the expected attributes (incl value) are found on the consent page
+        $matchedNumberOfAttributes = 0;
+        foreach ($listItems as $attributeRow) {
+            $divs = $attributeRow->findAll('css', 'div');
+            $name = $divs[0]->getText();
+            $value = $divs[1]->getText();
 
-        // Remove the last row (Show more and separator)
-        array_pop($rows);
-        array_pop($rows);
+            foreach ($attributes->getRows() as $expectedAttribute) {
+                $expectedName = $expectedAttribute[0];
+                $expectedValue = $expectedAttribute[1];
 
-        $actualTable = new TableNode($rows);
-
-        $assert = new AssertTable;
-        $assert->isComparable($attributes, $actualTable, []);
+                if ($name === $expectedName && $value === $expectedValue) {
+                    $matchedNumberOfAttributes++;
+                }
+            }
+        }
+        // In the end, the number of expected attributes should have been found on the page, if the count does
+        // not match, that indicates some items where missing
+        if ($matchedNumberOfAttributes !== $expectedNumberOfAttributes) {
+            throw new RuntimeException(
+                sprintf(
+                    'The expected attribute values where not (all) found in the specified source list ("%s")'
+                    . ' generated on the consent page. Expected %d, found %d',
+                    $source,
+                    $expectedNumberOfAttributes,
+                    $matchedNumberOfAttributes
+                )
+            );
+        }
     }
 
     /**
@@ -336,7 +345,7 @@ HTML;
             );
         }
 
-        $selector = 'input[type="submit"][data-entityid="' . $mockIdp->entityId() . '"]';
+        $selector = 'article[data-entityid="' . $mockIdp->entityId() . '"] button.idp__submit';
 
         $mink = $this->getMinkContext()->getSession()->getPage();
         $button = $mink->find('css', $selector);
@@ -381,7 +390,7 @@ HTML;
      */
     public function iSeeTheRequestAccessButton()
     {
-        $selector = 'a.noaccess';
+        $selector = 'article.wayf__idp--noAccess';
 
         $mink = $this->getMinkContext()->getSession()->getPage();
         $button = $mink->find('css', $selector);

@@ -5,7 +5,7 @@
     }
     %}
 {% endif %}
-<ul class="consent__attributes">
+<ul id="attribute-source-{{ attributeSource }}" class="consent__attributes">
     {% for attributeIdentifier, attributeValues in attributes %}
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/includeAttribute.html.twig' %}
         {% if loop.last and loop.index >= 6 %}
