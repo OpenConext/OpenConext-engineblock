@@ -36,6 +36,7 @@ Feature:
       And I pass through the IdP
      Then the response should not contain "Do you agree with sharing this data?"
       And the response should not contain "Yes, proceed to Dummy-SP"
+      And the response should contain "Dummy-SP will receive"
       And the response should contain "Proceed to Dummy-SP"
       And the response should contain "Cancel"
       And the response should contain "support@openconext.org"
@@ -57,7 +58,7 @@ Feature:
     And I pass through EngineBlock
     And I pass through the IdP
     Then the response should not contain "Do you agree with sharing this data?"
-    Then the response should not contain "Yes, proceed to Dummy-SP"
+    And the response should not contain "Yes, proceed to Dummy-SP"
     And the response should contain "Proceed to Dummy-SP"
     And the response should contain "Cancel"
 
@@ -66,14 +67,13 @@ Feature:
     And the IdP "Dummy-IdP" requires default consent for SP "Dummy-SP"
     And I pass through EngineBlock
     And I pass through the IdP
-    Then the response should contain "Review your information that will be shared."
-    And the response should contain "Proceed to Dummy-SP"
+    Then the response should contain "Dummy-SP will receive"
 
   Scenario: The user is can read why the service providers requires an attribute
     Given I log in at "Dummy-SP"
     And I pass through EngineBlock
     And I pass through the IdP
-    Then the response should contain "Review your information that will be shared."
+    Then the response should contain "Dummy-SP will receive"
      And the response should contain "Motivation for cn"
      And the response should contain "Motivation for dn"
      And the response should contain "Motivation for affiliation"
