@@ -72,7 +72,7 @@ Feature:
       And I select "AlwaysAuth" on the WAYF
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "needs your information"
+     Then I should see "needs this information to function properly"
       And I should see "Step Up"
       And I should not see "Loa SP"
 
@@ -81,11 +81,11 @@ Feature:
       And SP "Step Up" is a trusted proxy
       And SP "Step Up" signs its requests
      When I log in at "Step Up"
-     Then I should see "Select an organisation to login to the service Loa SP"
+     Then I should see "Select an organisation to login to Loa SP"
       And I select "AlwaysAuth" on the WAYF
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "needs your information"
+     Then I should see "needs this information to function properly"
       And I should see "Loa SP"
       And I should not see "Step Up"
 
@@ -97,7 +97,7 @@ Feature:
      When I log in at "Step Up"
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "needs your information"
+     Then I should see "needs this information to function properly"
       And I should not see "Far SP"
       And I should not see "Step Up"
       And I should see "Loa SP"
@@ -111,7 +111,7 @@ Feature:
       And I select "AlwaysAuth" on the WAYF
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should not see "needs your information"
+     Then I should not see "needs this information to function properly"
 
   Scenario: User logs in via trusted proxy and sees no consent as the destination has it disabled
     Given SP "Step Up" is authenticating for SP "Loa SP"
@@ -122,7 +122,7 @@ Feature:
       And I select "AlwaysAuth" on the WAYF
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should not see "needs your information"
+     Then I should not see "needs this information to function properly"
 
   Scenario: User logs in via trusted proxy and attribute release policy for destination is executed
     Given SP "Step Up" is authenticating for SP "Loa SP"
@@ -236,7 +236,7 @@ Feature:
          # Bug report: https://www.pivotaltracker.com/story/show/164069793
     Then I should not see "Error - No organisations found"
          # The WAYF should be visible
-     And I should see "Select an organisation to login to the service"
+     And I should see "Select an organisation to login to"
 
   Scenario: Trusted proxy not signing requests results in an error
     Given SP "Step Up" is authenticating for SP "Loa SP"

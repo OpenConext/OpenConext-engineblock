@@ -11,8 +11,11 @@ services:
 framework:
     test: ~
     translator:
+        fallbacks: ["%locale%"]
         paths:
             - '%kernel.root_dir%/../languages'
+            - '%kernel.root_dir%/../theme/base/translations'
+            - '%kernel.root_dir%/../theme/%theme.name%/translations'
             - '%kernel.root_dir%/../src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/languages'
     session:
         storage_id: session.storage.mock_file

@@ -1,4 +1,8 @@
-<button type="{{ buttonType|default('submit') }}" {% if buttonClass is defined %} class="{{ buttonClass }}"{% endif %}>
+<button
+    type="{{ buttonType|default('submit') }}"
+    {% if buttonClass is defined %} class="{{ buttonClass }}"{% endif %}
+    {% if name is defined %} name="{{ name }}"{% endif %}
+>
     <span class="secondaryBorder">
         {{ text }}
     </span>

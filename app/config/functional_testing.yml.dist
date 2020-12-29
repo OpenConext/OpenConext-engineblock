@@ -5,3 +5,5 @@ parameters:
     # Where must we store the writable state of the Mock IdP and Mock SP?
     idp_fixture_file:   "%kernel.root_dir%/../tmp/fixtures/db/idp.states.php.serialized"
     sp_fixture_file:    "%kernel.root_dir%/../tmp/fixtures/db/sp.states.php.serialized"
+
+    theme.name: "skeune"
