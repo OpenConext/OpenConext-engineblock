@@ -5,7 +5,7 @@ export const switchConsentSection = (e) => {
   const nokSection = document.querySelector(nokSectionSelector);
   const contentSection = document.querySelector(contentSectionSelector);
 
-  if (e) {
+  if (!!e) {
     e.preventDefault();
   }
 

@@ -148,6 +148,15 @@
     width: 1px;
 }
 
+@mixin visually-shown {
+    clip: unset;
+    height: initial;
+    overflow: inherit;
+    position: static;
+    white-space: inherit;
+    width: initial;
+}
+
 @mixin webkit-input {
     -webkit-appearance: none;
 }
