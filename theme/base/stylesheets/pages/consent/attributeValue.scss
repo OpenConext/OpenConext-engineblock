@@ -16,7 +16,7 @@
     margin-left: 1rem;
 
     li:nth-child(n+6) {
-        display: none;
+        @include visually-hidden;
     }
 }
 
@@ -76,6 +76,7 @@
 
 
     li:nth-child(n+6) {
+        @include visually-shown;
         display: list-item;
     }
 }

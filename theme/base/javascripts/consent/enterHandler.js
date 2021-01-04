@@ -1,4 +1,5 @@
 import {fireClickEvent} from '../utility/fireClickEvent';
+import {modalLabels} from '../selectors';
 
 /**
  * How to handle an enter press for the consent screen.
@@ -10,6 +11,6 @@ export const enterHandler = (target) => {
 
   switch(target.tagName) {
     case 'LABEL': fireClickEvent(target); break;
-    case 'DIV': fireClickEvent(target.querySelector('label.modal')); break;
+    case 'DIV': fireClickEvent(target.querySelector(modalLabels)); break;
   }
 };
