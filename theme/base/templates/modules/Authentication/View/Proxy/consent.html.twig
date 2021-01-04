@@ -6,8 +6,8 @@
 {% set idpName = idp.displayName(locale()) %}
 
 {# Prepare the page title #}
-{% if minimalConsent %}
-    {% set pageTitle = 'consent_h1_text_minimal'|trans({'%sp%': spName}) %}
+{% if informationalConsent %}
+    {% set pageTitle = 'consent_h1_text_informational'|trans({'%sp%': spName}) %}
 {% else %}
     {% set pageTitle = 'consent_h1_text'|trans %}
 {% endif %}

@@ -52,9 +52,9 @@ Feature:
     And I pass through EngineBlock
     Then the url should match "functional-testing/Dummy-SP/acs"
 
-  Scenario: The user is asked for minimal consent
+  Scenario: The user is asked for informational consent
     Given I log in at "Dummy-SP"
-    And the IdP "Dummy-IdP" requires minimal consent for SP "Dummy-SP"
+    And the IdP "Dummy-IdP" requires informational consent for SP "Dummy-SP"
     And I pass through EngineBlock
     And I pass through the IdP
     Then the response should not contain "Do you agree with sharing this data?"

@@ -215,7 +215,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'attributes' => $attributes,
                 'attributeSources' => $this->getAttributeSources($request->getId()),
                 'attributeMotivations' => $this->getAttributeMotivations($serviceProviderMetadata, $attributes),
-                'minimalConsent' => $identityProvider->getConsentSettings()->isMinimal($serviceProviderMetadata->entityId),
+                'informationalConsent' => $identityProvider->getConsentSettings()->isInformational($serviceProviderMetadata->entityId),
                 'consentCount' => $this->_consentService->countAllFor($response->getNameIdValue()),
                 'nameId' => $nameId,
                 'nameIdIsPersistent' => $isPersistent,
