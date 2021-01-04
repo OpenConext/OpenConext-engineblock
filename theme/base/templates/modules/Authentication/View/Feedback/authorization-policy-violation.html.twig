@@ -10,7 +10,7 @@
     <h2>{{ 'error_authorization_policy_violation_info'|trans|raw }}</h2>
 
     {% if logo is not null %}
-        <img src="{{ logo.url }}"
+        <img src="{{ logo.url }}?v={{ assetsVersion }}"
              class="pull-right"
              width="{{ logo.width }}"
              height="{{ logo.height }}"
