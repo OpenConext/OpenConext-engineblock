@@ -1,30 +1,31 @@
 import {getData} from '../utility/getData';
-import {submitForm} from './submitForm';
 import {handleAriaPressed} from '../utility/handleAriaPressed';
 import {handleIdpBanner} from './handleIdpBanner';
+import {ariaPressedLabelSelector, defaultIdpSelector, idpListSelector} from '../selectors';
+import {idpSubmitHandler} from '../handlers';
 
-export const mouseBehaviour = (previouslySelectedIdps) => {
+export const mouseBehaviour = () => {
   // allow chosing an idp to login
   const idpLists = document
-    .querySelectorAll('.wayf__idpList');
+    .querySelectorAll(idpListSelector);
   idpLists.forEach(list => {
     const hasClickHandler = getData(list, 'clickhandled');
 
     if (!hasClickHandler) {
       list.addEventListener('click', (e) => {
         e.preventDefault();
-        submitForm(e, previouslySelectedIdps);
+        idpSubmitHandler(e);
       });
       list.setAttribute('data-clickhandled', 'true');
     }
   });
 
   // add a11y support for all labels with an aria-pressed attribute.
-  const labels = document.querySelectorAll('label[aria-pressed]');
+  const labels = document.querySelectorAll(ariaPressedLabelSelector);
   handleAriaPressed(labels);
 
   // handle clicking defaultIdp banner
-  const defaultIdpLink = document.querySelector('.wayf__defaultIdpLink');
+  const defaultIdpLink = document.querySelector(defaultIdpSelector);
 
   if (!! defaultIdpLink) {
     defaultIdpLink.addEventListener('click', handleIdpBanner);

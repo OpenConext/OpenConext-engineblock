@@ -6,6 +6,7 @@ import {reinsertIdpList} from '../utility/reinsertIdpList';
 import {showFoundIdpsWhenCutoff} from './showFoundIdpsWhenCutoff';
 import {hideIdpsWhenCutoffNoSearch} from './hideIdpsWhenCutoffNoSearch';
 import {sortArrayList} from '../utility/sortArrayList';
+import {remainingIdpCutoffMetSelector} from '../../selectors';
 
 /**
  * Searches an array of idps for a given searchTerm.
@@ -26,7 +27,7 @@ import {sortArrayList} from '../utility/sortArrayList';
  * @returns   node[]
  */
 export const searchAndSortIdps = (idpArray, searchTerm) => {
-  const list = document.querySelector('.wayf__remainingIdps .wayf__idpList--cutoffMet');
+  const list = document.querySelector(remainingIdpCutoffMetSelector);
 
   // reset weights by removing them
   clearWeight(idpArray);

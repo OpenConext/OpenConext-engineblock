@@ -1,5 +1,6 @@
 import {sortIdpList} from './sortIdpList';
 import {reinsertIdpList} from './reinsertIdpList';
+import {idpSelector, remainingIdpListSelector, selectedIdpsListSelector} from '../../selectors';
 
 const PREVIOUS = 'previous';
 const REMAINING = 'remaining';
@@ -17,10 +18,10 @@ const REMAINING = 'remaining';
  * @parameter focus   boolean   whether or not to focus the first item
  */
 export const sortAndReindex = (list = REMAINING, sortBy = 'title', focus = false) => {
-  let idpListSelector = '.wayf__remainingIdps .wayf__idpList';
+  let idpListSelector = remainingIdpListSelector;
 
   if (list === PREVIOUS) {
-    idpListSelector = '.wayf__previousSelection .wayf__idpList';
+    idpListSelector = selectedIdpsListSelector;
   }
 
   let idpList = document.querySelectorAll(`${idpListSelector} > li`);
@@ -35,7 +36,7 @@ export const sortAndReindex = (list = REMAINING, sortBy = 'title', focus = false
 
   // reindex
   idpArray.forEach((idp, index) => {
-    idp.querySelector('.wayf__idp').setAttribute('data-index', String(index + 1));
+    idp.querySelector(idpSelector).setAttribute('data-index', String(index + 1));
   });
 
   // reinsert

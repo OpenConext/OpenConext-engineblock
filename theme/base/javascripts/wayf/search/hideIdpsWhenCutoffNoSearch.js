@@ -1,3 +1,5 @@
+import {searchingClass} from '../../selectors';
+
 /**
  * When the feature flag "cuttoffPointForShowingUnfilteredIdps" is set: hide idps when not searching.
  *
@@ -5,6 +7,6 @@
  */
 export const hideIdpsWhenCutoffNoSearch = (list) => {
   if (!!list) {
-    list.classList.remove('wayf__idpList--searching');
+    list.classList.remove(searchingClass);
   }
 };

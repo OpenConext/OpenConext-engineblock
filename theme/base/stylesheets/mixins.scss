@@ -155,12 +155,19 @@
 /**
  * This mixin adds "offensively defensive" animations.
  * It utilizes the prefers-reduced-motion mediaquery to do so.
+
  * Practically speaking this means that:
  * - users of browsers which don't support the mediaquery will get the animation-less experience.
  * - users of browsers which do support the mediaquery will get the animations by default.  Only if they selected to have a reduced motion experience will they be absent.
  * - users without JS will have no animations.
  *
  * The first use case is not supported if you use the classic technique of removing animations if a user selected to opt in to prefers-reduced-motion.
+ *
+ * Why => this is an accessibility consideration, allowing us to conform to WCAG 2.3.3: https://www.w3.org/TR/WCAG21/#animation-from-interactions.
+ *
+ * For more info see:
+ * - https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion
+ * - https://alistapart.com/article/accessibility-for-vestibular/
  */
 @mixin motion {
     @media (prefers-reduced-motion: no-preference) {

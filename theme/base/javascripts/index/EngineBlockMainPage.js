@@ -1,5 +1,7 @@
+import {metadataCertificateLinkSelector} from '../selectors';
+
 export function replaceMetadataCertificateLinkTexts() {
-    const $metadataCertificateLinks = document.querySelectorAll('dl.metadata-certificates-list a');
+    const $metadataCertificateLinks = document.querySelectorAll(metadataCertificateLinkSelector);
 
     for (let i = 0; i < $metadataCertificateLinks.length; i++) {
         const link = $metadataCertificateLinks[i];

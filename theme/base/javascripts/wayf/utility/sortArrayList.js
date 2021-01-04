@@ -1,7 +1,9 @@
-export const sortArrayList = (idpArray, sortFunction) => {
-  const withAccess = idpArray.filter(node => !node.querySelector('article').classList.contains('wayf__idp--noAccess'));
+import {idpTag, unconnectedIdpClass} from '../../selectors';
 
-  const noAccess = idpArray.filter(node => node.querySelector('article').classList.contains('wayf__idp--noAccess'));
+export const sortArrayList = (idpArray, sortFunction) => {
+  const withAccess = idpArray.filter(node => !node.querySelector(idpTag).classList.contains(unconnectedIdpClass));
+
+  const noAccess = idpArray.filter(node => node.querySelector(idpTag).classList.contains(unconnectedIdpClass));
   withAccess.sort(sortFunction);
   noAccess.sort(sortFunction);
 

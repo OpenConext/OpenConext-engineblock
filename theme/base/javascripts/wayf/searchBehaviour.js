@@ -3,11 +3,12 @@ import {nodeListToArray} from '../utility/nodeListToArray';
 import {searchAndSortIdps} from './search/searchAndSortIdps';
 import {toggleDefaultIdPLinkVisibility} from "./search/toggleDefaultIdPLinkVisibility";
 import {toggleSearchAndResetButton} from "./search/toggleSearchAndResetButton";
+import {remainingIdpLiSelector, searchFieldSelector, searchResetSelector} from '../selectors';
 
 export const searchBehaviour = () => {
-  const idpList = document.querySelectorAll('.wayf__remainingIdps .wayf__idpList > li');
-  const searchBar = document.querySelector('.search__field');
-  const resetButton = document.querySelector('.search__reset');
+  const idpList = document.querySelectorAll(remainingIdpLiSelector);
+  const searchBar = document.querySelector(searchFieldSelector);
+  const resetButton = document.querySelector(searchResetSelector);
   const idpArray = nodeListToArray(idpList);
 
   // attach handler to search field

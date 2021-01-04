@@ -4,6 +4,7 @@ import {getData} from '../utility/getData';
 import {handleClickingDisabledIdp} from './handleClickingDisabledIdp';
 import {hasVisibleDisabledButtonAsTarget} from './utility/hasVisibleDisabledButtonAsTarget';
 import {hasVisibleDeleteButtonAsTarget} from './utility/hasVisibleDeleteButtonAsTarget';
+import {idpElement, idpFormSelector, idpSelector} from '../selectors';
 
 /**
  * Submit the form for the selected idp.
@@ -22,9 +23,10 @@ export const submitForm = (e, previouslySelectedIdps) => {
     return;
   }
 
-  if (element.tagName !== 'ARTICLE') {
-    element = element.closest('.wayf__idp');
+  if (element.tagName !== idpElement) {
+    element = element.closest(idpSelector);
   }
+
   selectAndSubmit(element, previouslySelectedIdps);
 };
 
@@ -45,5 +47,5 @@ export const selectAndSubmit = (element, previouslySelectedIdps) => {
   rememberChoice(getData(element, 'entityid'));
 
   addSelectedIdp(previouslySelectedIdps, element);
-  element.querySelector('.idp__form').submit();
+  element.querySelector(idpFormSelector).submit();
 };

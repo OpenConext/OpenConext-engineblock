@@ -1,4 +1,4 @@
-import {focusAcceptButton} from '../../base/javascripts/consent/focusAcceptButton';
+import {focusAcceptButton} from './consent/focusAcceptButton';
 import {initTooltips} from './consent/initTooltips';
 import {initAttributesToggle} from './consent/initAttributesToggle';
 import {initSlideIns} from './consent/initSlideIns';
