@@ -44,7 +44,7 @@ return [
 
     // Consent
     'consent_h1_text'   => 'Do you consent to sharing your information?',
-    'consent_h1_text_minimal'   => 'Review your information that will be shared.',
+    'consent_h1_text_informational'   => 'Review your information that will be shared.',
     'consent_privacy_header'    => '%target% will receive',
     'consent_attributes_correction_text'    => 'Something incorrect?',
     'consent_ok'    =>  'Yes, I agree',

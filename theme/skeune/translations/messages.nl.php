@@ -44,7 +44,7 @@ return [
 
     // Consent
     'consent_h1_text'   => 'Ga je akkoord met het delen van je informatie?',
-    'consent_h1_text_minimal'   => 'Bekijk je informatie die zal worden gedeeld.',
+    'consent_h1_text_informational'   => 'Bekijk je informatie die zal worden gedeeld.',
     'consent_privacy_header'    => '%target% ontvangt',
     'consent_attributes_correction_text'    => 'Foutieve informatie?',
     'consent_ok'    =>  'Ja, ik geef toestemming',

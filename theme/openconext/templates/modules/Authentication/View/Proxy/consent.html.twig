@@ -165,7 +165,7 @@
             {% endif %}
 
             <section class="buttons">
-                {% if not minimalConsent %}
+                {% if not informationalConsent %}
                     <h2>{{ 'consent_buttons_title'|trans }}</h2>
                 {% endif %}
                 <!-- YES -->
@@ -177,8 +177,8 @@
                     <input id="accept_terms_button"
                            class="submit c-button"
                            type="submit"
-                            {%  if minimalConsent %}
-                                value="{{ 'consent_buttons_ok_minimal'|trans({'%arg1%': spName}) }}"
+                            {%  if informationalConsent %}
+                                value="{{ 'consent_buttons_ok_informational'|trans({'%arg1%': spName}) }}"
                             {% else %}
                                 value="{{ 'consent_buttons_ok'|trans({'%arg1%': spName}) }}"
                             {% endif %}
@@ -187,8 +187,8 @@
 
                 <!-- NO -->
                 <a id="decline-terms" class="reject c-button c-button-link" href="#" data-slidein="reject">
-                    {%  if minimalConsent %}
-                        {{ 'consent_buttons_nok_minimal'|trans }}
+                    {%  if informationalConsent %}
+                        {{ 'consent_buttons_nok_informational'|trans }}
                     {% else %}
                         {{ 'consent_buttons_nok'|trans }}
                     {% endif %}

@@ -5,9 +5,9 @@
                value="{{ responseId }}">
         <input type="hidden" name="consent" value="yes"/>
 
-        {% if minimalConsent %}
-            {% set text_ok = 'consent_buttons_ok_minimal'|trans({'%sp%': spName}) %}
-            {% set text_nok = 'consent_buttons_nok_minimal'|trans %}
+        {% if informationalConsent %}
+            {% set text_ok = 'consent_buttons_ok_informational'|trans({'%sp%': spName}) %}
+            {% set text_nok = 'consent_buttons_nok_informational'|trans %}
         {% else %}
             {% set text_ok = 'consent_ok'|trans %}
             {% set text_nok = 'consent_buttons_nok'|trans %}

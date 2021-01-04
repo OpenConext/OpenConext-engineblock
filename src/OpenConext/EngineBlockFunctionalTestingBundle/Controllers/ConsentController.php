@@ -122,7 +122,7 @@ class ConsentController
             'attributes' => $attributes,
             'attributeSources' => $attributeSources,
             'attributeMotivations' => $attributeMotivations,
-            'minimalConsent' => $fakeIdP->getConsentSettings()->isMinimal($fakeSp->entityId),
+            'informationalConsent' => $fakeIdP->getConsentSettings()->isInformational($fakeSp->entityId),
             'consentCount' => 5,
             'nameId' => $this->getNameId($request),
             'nameIdIsPersistent' => $this->isPersistentNameId($request),
