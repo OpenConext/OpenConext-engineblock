@@ -1,7 +1,7 @@
 import {getData} from '../utility/getData';
 import {handleAriaPressed} from '../utility/handleAriaPressed';
 import {handleIdpBanner} from './handleIdpBanner';
-import {ariaPressedLabelSelector, defaultIdpSelector, idpListSelector} from '../selectors';
+import {ariaPressedCheckboxSelector, defaultIdpSelector, idpListSelector} from '../selectors';
 import {idpSubmitHandler} from '../handlers';
 
 export const mouseBehaviour = () => {
@@ -20,9 +20,9 @@ export const mouseBehaviour = () => {
     }
   });
 
-  // add a11y support for all labels with an aria-pressed attribute.
-  const labels = document.querySelectorAll(ariaPressedLabelSelector);
-  handleAriaPressed(labels);
+  // add a11y support for all checkboxes with an aria-pressed attribute.
+  const checkBoxes = document.querySelectorAll(ariaPressedCheckboxSelector);
+  handleAriaPressed(checkBoxes);
 
   // handle clicking defaultIdp banner
   const defaultIdpLink = document.querySelector(defaultIdpSelector);

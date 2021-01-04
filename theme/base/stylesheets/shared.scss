@@ -7,6 +7,10 @@ html {
     scroll-behavior: smooth;
 }
 
+[hidden] {
+    display: none;
+}
+
 body {
     align-items: center;
     background: $darkishBlue;
