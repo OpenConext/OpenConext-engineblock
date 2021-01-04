@@ -1,8 +1,9 @@
-<form class="noAccess__requestForm" action="#" method="post">
+<form class="noAccess__requestForm" action="#" method="post" aria-labelledby="noAccess__requestFormTitle">
     {% include '@theme/Default/Partials/critical.html.twig' with {
         className: 'hidden',
         text: 'form_general_error'|trans,
     } %}
+    <h3 id="noAccess__requestFormTitle" class="visually-hidden">{{ 'wayf_noaccess_title_screenreader'|trans }}</h3>
     <input type="hidden" name="spName" value="{{ serviceProvider.displayName(locale()) }}" />
     <input type="hidden" name="spEntityId" value="{{ serviceProvider.entityId }}" />
     <input type="hidden" name="idpEntityId" value="" />
@@ -11,7 +12,7 @@
         <legend class="hidden">Name</legend>
         <label for="name">
             <span class="visually-hidden">
-                {{ 'required'|trans }}
+                {{ 'required_screenreader'|trans }}
             </span>
             <strong>*</strong> {{ 'wayf_noaccess_name'|trans }}
         </label>

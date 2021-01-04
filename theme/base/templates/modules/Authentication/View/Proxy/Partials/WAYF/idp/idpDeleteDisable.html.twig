@@ -7,14 +7,14 @@
     {% if idp['connected'] is defined and not idp['connected'] %}
         <span class="idp__disabled">
             <span class="visually-hidden">
-                {{ 'wayf_no_access_account'|trans }}
+                {{ 'wayf_no_access_account_screenreader'|trans }}
             </span>
         </span>
     {% endif %}
     {% if delete %}
         <span class="idp__delete">
             <span class="visually-hidden">
-                {{ 'wayf_delete_account'|trans }}
+                {{ 'wayf_delete_account_screenreader'|trans }}
             </span>
         </span>
     {% endif %}
