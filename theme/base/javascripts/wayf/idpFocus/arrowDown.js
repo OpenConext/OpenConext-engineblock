@@ -1,3 +1,11 @@
+import {focusOnNextIdp} from './focusOnNextIdp';
+import {
+  defaultIdpSelector,
+  firstRemainingIdpSelector,
+  lastRemainingIdpSelector,
+  searchFieldSelector,
+  searchResetSelector
+} from '../../selectors';
 import {isFocusOn} from '../../utility/isFocusOn';
 
 /**
@@ -9,9 +17,16 @@ import {isFocusOn} from '../../utility/isFocusOn';
  * - to go to the first idp if we are on the defaultIdp
  * - to go to the searchbar if we are on the last Idp
  */
-import {focusOnNextIdp} from './focusOnNextIdp';
+export const arrowDown = () => {
+  // This can fail when you manually place the focus in the search field and try to navigate with arrows.
+  // The failure only happens when we pass the elements as parameters.
+  // If you can explain it, please notify koen@ibuildings.nl
+  const searchBar = document.querySelector(searchFieldSelector);
+  const resetButton = document.querySelector(searchResetSelector);
+  const defaultIdp = document.querySelector(defaultIdpSelector);
+  const firstIdp = document.querySelector(firstRemainingIdpSelector);
+  const lastIdp = document.querySelector(lastRemainingIdpSelector);
 
-export const arrowDown = (searchBar, resetButton, defaultIdp, firstIdp, lastIdp) => {
   if (isFocusOn(searchBar) || isFocusOn(resetButton)) {
     try {
       defaultIdp.focus();

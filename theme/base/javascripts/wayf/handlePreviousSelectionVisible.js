@@ -1,9 +1,10 @@
 import {hasSelectedIdps} from './utility/hasSelectedIdps';
-import {submitForm} from './submitForm';
 import {attachDeleteHandlers} from './deleteDisable/attachDeleteHandlers';
 import {switchIdpSection} from './utility/switchIdpSection';
-import {getData} from '../utility/getData';
 import {focusOn} from "../utility/focusOn";
+import {addAccountButtonSelector, previousSelectionFirstIdp, selectedIdpsListSelector} from '../selectors';
+import {addClickHandlerOnce} from '../utility/addClickHandlerOnce';
+import {idpSubmitHandler} from '../handlers';
 
 /**
  * Check if user has any previous selected Idps.
@@ -17,7 +18,7 @@ export const handlePreviousSelectionVisible = (selectedIdps, previouslySelectedI
   if (hasSelectedIdps()) {
     mouseHandlersHiddenIdps(previouslySelectedIdps);
     // put focus on the first IDP, so you can just hit enter & go
-    focusOn('.wayf__previousSelection li:first-of-type .wayf__idp');
+    focusOn(previousSelectionFirstIdp);
   }
 };
 
@@ -26,23 +27,11 @@ export const handlePreviousSelectionVisible = (selectedIdps, previouslySelectedI
  */
 const mouseHandlersHiddenIdps = (previouslySelectedIdps) => {
   // Show remaining idp section when hitting the add account button
-  document
-    .querySelector('.previousSelection__addAccount')
-    .addEventListener('click', switchIdpSection);
+  addClickHandlerOnce(addAccountButtonSelector, switchIdpSection);
 
   // Handle clicking the "garbage can" after hitting edit
   attachDeleteHandlers(previouslySelectedIdps);
 
   // Attach event listener to previous selection idps-list
-  const list = document
-    .querySelector('.wayf__previousSelection .wayf__idpList');
-  const hasClickHandler = getData(list, 'clickhandled');
-
-  if (!hasClickHandler) {
-    list.addEventListener('click', (e) => {
-        submitForm(e, previouslySelectedIdps);
-      });
-  }
-
-  list.setAttribute('data-clickhandled', true);
+  addClickHandlerOnce(selectedIdpsListSelector, idpSubmitHandler);
 };

@@ -1,39 +1,50 @@
 import {nodeListToArray} from "../../utility/nodeListToArray";
+import {formErrorClass, noAccessFieldsToValidy} from '../../selectors';
+import {hideElement} from '../../utility/hideElement';
+import {showElement} from '../../utility/showElement';
 
 /**
  * Verify the name and email fields are not empty. Due to the way the validation was set up we can
  * not utilize the 'required' attribute on the form input fields. So a JS validation is required
  * to prevent empty form submits.
  *
+ * Starts by hiding previous validation messages, they will reappear if the error persists.
+ *
  * @param formData
- * @returns {boolean}
+ * @returns {boolean}   true if all is valid, false otherwise
  */
 export const valid = (formData) => {
-  // Start with hiding previous validation messages, they will reappear if the error persists.
+  let isValid = true;
+
   hideValidationMessages();
-  const nameValid = notAnEmptyField(formData, 'name');
-  const emailValid = notAnEmptyField(formData, 'email');
-  // Next, test the name and email fields for validity, set error message if invalid.
-  return nameValid && emailValid;
+  noAccessFieldsToValidy.forEach(fieldName => {
+    if (isAnEmptyField(formData, fieldName)) {
+      isValid = false;
+    }
+  });
+
+  return isValid;
 };
 
-function notAnEmptyField(formData, elementName) {
+function isAnEmptyField(formData, elementName) {
   const value = document.getElementById(elementName).value.trim();
+
   if (!value) {
     showValidationMessage(elementName);
-    return false;
+    return true;
   }
-  return true;
+
+  return false;
 }
 
 function hideValidationMessages(){
-  const errorMessages = nodeListToArray(document.getElementsByClassName('form__error'));
+  const errorMessages = nodeListToArray(document.getElementsByClassName(formErrorClass));
   errorMessages.forEach(errorMessage => {
-    errorMessage.classList.add('hidden');
+    hideElement(errorMessage);
   });
 }
 
 function showValidationMessage(elementName){
   const errorMessage = document.querySelector(`p[data-labelfor="${elementName}"]`);
-  errorMessage.classList.remove('hidden');
+  showElement(errorMessage);
 }

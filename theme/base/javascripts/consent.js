@@ -1,11 +1,6 @@
 import {initializePage} from './page';
-import {addAccessibilitySupport} from './consent/addA11ySupport';
-import {addNokListener} from './consent/addNokListener';
+import {consentCallbackAfterLoad} from './handlers';
 
 export const initializeConsent = () => {
-  const callbacksAfterLoad = () => {
-    addAccessibilitySupport();
-    addNokListener();
-  };
-  initializePage('main.consent', callbacksAfterLoad);
+  initializePage('main.consent', consentCallbackAfterLoad);
 };

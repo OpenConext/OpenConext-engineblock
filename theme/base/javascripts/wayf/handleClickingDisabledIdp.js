@@ -6,11 +6,12 @@ import {hideSuccessMessage} from './noAccess/hideSuccessMessage';
 import {attachClickHandlerToRequestButton} from './noAccess/attachClickHandlerToRequestButton';
 import {setConnectability} from './deleteDisable/setConnectability';
 import {getData} from '../utility/getData';
+import {noAccessFormSelector, noAccessLi, noAccessSectionSelector} from '../selectors';
 
 export const handleClickingDisabledIdp = (element) => {
-  const noAccess = document.querySelector('.wayf__noAccess');
-  const li = noAccess.querySelector('.wayf__idpList > li');
-  const form = noAccess.querySelector('.noAccess__requestForm');
+  const noAccess = document.querySelector(noAccessSectionSelector);
+  const li = noAccess.querySelector(noAccessLi);
+  const form = noAccess.querySelector(noAccessFormSelector);
   const parentSection = element.closest('section');
   const cloneOfIdp = cloneIdp(element);
   const connectable = getData(element, 'connectable') === 'true';

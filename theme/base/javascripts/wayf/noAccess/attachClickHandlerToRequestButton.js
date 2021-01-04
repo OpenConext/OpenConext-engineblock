@@ -1,6 +1,7 @@
 import {attachClickHandlerToForm} from './attachClickHandlerToForm';
-import {getData} from '../../utility/getData';
-import {toggleFormFieldsAndButton} from './toggleFormFieldsAndButton';
+import {showFormSelector} from '../../selectors';
+import {addClickHandlerOnce} from '../../utility/addClickHandlerOnce';
+import {requestButtonHandler} from '../../handlers';
 
 /**
  * Ensure clicking the request button shows the right behaviour:
@@ -14,21 +15,10 @@ import {toggleFormFieldsAndButton} from './toggleFormFieldsAndButton';
  * @param form
  */
 export const attachClickHandlerToRequestButton = (parentSection, noAccess, form) => {
-  const requestButton = document.querySelector('.cta__showForm');
+  const requestButton = document.querySelector(showFormSelector);
 
   if (!!requestButton) {
-    const hasClickHandler = getData(requestButton, 'clickhandled');
-
-    // if clickHandler's already been attached, do not attach it again
-    if (hasClickHandler) {
-      return;
-    }
-
-    // attach clickHandler to request button
-    requestButton.addEventListener('click', () => {
-      toggleFormFieldsAndButton();
-    });
-    requestButton.setAttribute('data-clickhandled', true);
+    addClickHandlerOnce(showFormSelector, requestButtonHandler);
 
     // attach clickHandler for form
     attachClickHandlerToForm(form, parentSection, noAccess);

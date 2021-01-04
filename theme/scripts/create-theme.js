@@ -5,7 +5,7 @@
  * But why go through all that trouble if we've done the lifting for you? ;-)
  * Use: node create-theme <themename> (replace <themename> by the name of the custom theme you're creating)
  **/
-const theme = `${__dirname}/../../theme`;
+const theme = `${__dirname}/..`;
 
 try {
     let themeName = process.argv[2];
@@ -35,6 +35,11 @@ function requestThemeName() {
 function createScaffold(themeName) {
     console.log(`Creating scaffold for new theme ${themeName}.\n`);
     executeShellCommand(`cp -R ${theme}/base/scaffold ${theme}/${themeName}`);
+
+    console.log('Copying JS to new theme so they can easily be overridden.\n');
+    console.log(`${theme}/base/javascripts/`);
+    console.log(`${theme}/${themeName}/javascripts/`);
+    executeShellCommand(`cp -R ${theme}/base/javascripts/ ${theme}/${themeName}/javascripts/`);
 
     console.log(`Scaffold created.\nYou now have a directory ${themeName} as a subdirectory of the theme folder, with a few files & folder to get you started.\n`);
 }

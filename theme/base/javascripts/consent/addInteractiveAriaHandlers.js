@@ -1,5 +1,6 @@
 import {nodeListToArray} from '../utility/nodeListToArray';
 
+/** TODO figure out if this is still needed **/
 export const addInteractiveAriaHandlers = (elementType) => {
   const elements = nodeListToArray(document.querySelectorAll(`.${elementType}__value`));
 

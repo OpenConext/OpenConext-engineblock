@@ -1,9 +1,16 @@
 import {showRemaining} from './utility/showRemaining';
 import {fireClickEvent} from '../utility/fireClickEvent';
 import {handleDeleteDisable} from './handleDeleteDisable';
-import {submitForm} from './submitForm';
 import {handleIdpBanner} from './handleIdpBanner';
 import {selectFirstIdPAndSubmitForm} from "./selectFirstIdPAndSubmitForm";
+import {
+  addAccountButtonClass, defaultIdpClass, doneButtonClass, editButtonClass, idpClass, idpContentClass,
+  idpDeleteClass,
+  idpDeleteDisabledClass,
+  idpDisabledClass, idpFormClass, idpLogoClass, idpSubmitClass, idpTitleClass, searchFieldClass,
+  toggleButtonClass
+} from '../selectors';
+import {idpSubmitHandler} from '../handlers';
 
 /**
  * Behaviour expected to happen after a user presses the enter button.
@@ -14,29 +21,30 @@ export const handleEnter = (e, previouslySelectedIdps) => {
   classList.forEach(className => {
     switch (className) {
       // Show remaining idp section when hitting the add account button
-      case 'previousSelection__addAccount':
+      case addAccountButtonClass:
         showRemaining(); break;
       // toggle edit/done button
-      case 'previousSelection__toggleLabel':
-      case 'previousSelection__edit':
-      case 'previousSelection__done':
+      case toggleButtonClass:
+      case editButtonClass:
+      case doneButtonClass:
         fireClickEvent(e.target); break;
       // handle pressing the disable/delete button
-      case 'idp__deleteDisable':
-      case 'idp__delete':
-      case 'idp__disabled':
-        handleDeleteDisable(e, previouslySelectedIdps); break;
+      case idpDeleteDisabledClass:
+      case idpDeleteClass:
+      case idpDisabledClass:
+        handleDeleteDisable(e, previouslySelectedIdps);
+        break;
       // select an idp
-      case 'wayf__idp':
-      case 'idp__content':
-      case 'idp__title':
-      case 'idp__submit':
-      case 'idp__form':
-      case 'idp__logo':
-        submitForm(e, previouslySelectedIdps); break;
-      case 'search__field':
+      case idpClass:
+      case idpContentClass:
+      case idpTitleClass:
+      case idpSubmitClass:
+      case idpFormClass:
+      case idpLogoClass:
+        idpSubmitHandler(e); break;
+      case searchFieldClass:
         selectFirstIdPAndSubmitForm(previouslySelectedIdps); break;
-      case 'wayf__defaultIdpLink':
+      case defaultIdpClass:
         handleIdpBanner(e); break;
     }
   });

@@ -1,3 +1,5 @@
+import {remainingIdpListSelector, selectedIdpsListSelector} from '../../selectors';
+
 const PREVIOUS = 'previous';
 const REMAINING = 'remaining';
 
@@ -9,8 +11,8 @@ const REMAINING = 'remaining';
  */
 export const getListSelector = (list = REMAINING) => {
   if (list === PREVIOUS) {
-    return '.wayf__previousSelection .wayf__idpList';
+    return selectedIdpsListSelector;
   }
 
-  return '.wayf__remainingIdps .wayf__idpList';
+  return remainingIdpListSelector;
 };

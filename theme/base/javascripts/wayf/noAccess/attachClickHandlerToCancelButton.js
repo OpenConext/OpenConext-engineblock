@@ -1,8 +1,7 @@
-import {hideNoAccess} from './hideNoAccess';
-import {getData} from '../../utility/getData';
 import {hideErrorMessage} from './hideErrorMessage';
-import {toggleFormFieldsAndButton} from './toggleFormFieldsAndButton';
-import {isHiddenElement} from '../../utility/isHiddenElement';
+import {cancelButtonSelector} from '../../selectors';
+import {addClickHandlerOnce} from '../../utility/addClickHandlerOnce';
+import {cancelButtonClickHandler} from '../../handlers';
 
 /**
  * Ensure clicking the Cancel button shows the right behaviour:
@@ -14,23 +13,6 @@ import {isHiddenElement} from '../../utility/isHiddenElement';
  * @param noAccess
  */
 export const attachClickHandlerToCancelButton = (parentSection, noAccess) => {
-  const cancelButton = document.querySelector('.cta__cancel');
-  const hasClickHandler = getData(cancelButton, 'clickhandled');
-
-  // if clickHandler's already been attached, do not attach it again
-  if (hasClickHandler) {
-    return;
-  }
-
-  // add clickHandler
-  cancelButton.addEventListener('click', () => {
-    hideNoAccess(parentSection, noAccess);
-    if (isHiddenElement(noAccess.querySelector('.cta__showForm'))) {
-      toggleFormFieldsAndButton();
-    }
-  });
-  cancelButton.setAttribute('data-clickhandled', true);
-
-  // hide errorMessage if shown
+  addClickHandlerOnce(cancelButtonSelector, cancelButtonClickHandler(parentSection, noAccess));
   hideErrorMessage(noAccess);
 };
