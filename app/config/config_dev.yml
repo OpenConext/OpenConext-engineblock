@@ -8,6 +8,13 @@ parameters:
     asset_version: "dev"
 
 framework:
+    translator:
+        enabled: true
+        fallbacks: [ "%locale%" ]
+        paths:
+            - '%kernel.root_dir%/../languages'
+            - '%kernel.root_dir%/../theme/base/translations'
+            - '%kernel.root_dir%/../theme/%theme.name%/translations'
     router:
         resource: "%kernel.root_dir%/config/routing_dev.yml"
         strict_requirements: true
@@ -19,3 +26,13 @@ web_profiler:
 
 twig:
     cache: false
+    auto_reload: true
+    debug: true
+    strict_variables: false
+    paths:
+        "%kernel.root_dir%/../theme/%theme.name%/templates/modules": theme
+        "%kernel.root_dir%/../theme/%theme.name%/templates/layouts": themeLayouts
+        "%kernel.root_dir%/../theme/%theme.name%/images": images
+        "%kernel.root_dir%/../theme/base/templates/modules": theme
+        "%kernel.root_dir%/../theme/base/templates/layouts": themeLayouts
+        "%kernel.root_dir%/../theme/base/images": images

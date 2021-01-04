@@ -21,8 +21,25 @@ See the [UPGRADING.md][upgrading] file
 
 Please see the [wiki][eb-wiki-theme-development] for information on how to get started with developing themes for OpenConext EngineBlock
 In short, themes require front-end resource compilation which can be done by running the following commands:
+
+First set the desired theme name in the parameters.yml. This will load the correct Twig templates as they are a part of the Symfony config.
+
+```
+parameters:
+    # Other parameters have been left out for brevity
+    theme.name: skeune
+```
+
+Next build the front-end assets for the selected theme.
+
 ```
     (cd theme && npm ci && npm run build)
+```
+
+Finally, when not in an environment with the debug flag enabled, you need to clear the cache. This will ensure the translations and templates are swapped out for the ones found in the new theme.
+
+```
+$ php72 ./app/console cache:clear --env=prod
 ```
 
 To setup the required tooling on the VM, the following steps might be useful:
