@@ -1,5 +1,5 @@
-import {fireClickEvent} from '../utility/fireClickEvent';
-import {animateInteractiveSections} from '../utility/animateInteractiveSections';
+import {consentAnimateInteractiveElements, consentKeyboardBehaviourHandler} from '../handlers';
+import {consentAnimatedElementSelectors} from '../selectors';
 
 export const addAccessibilitySupport = () => {
   consentKeyboardBehaviourHandler();

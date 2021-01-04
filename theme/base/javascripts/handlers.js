@@ -9,7 +9,9 @@ import {
   backButtonSelector,
   configurationId,
   nokButtonSelector,
+  nokSectionSelector,
   selectedIdpsSelector,
+  tooltipsAndModalLabels,
 } from './selectors';
 import {handlePreviousSelectionVisible} from './wayf/handlePreviousSelectionVisible';
 import {mouseBehaviour} from './wayf/mouseBehaviour';
@@ -17,6 +19,8 @@ import {searchBehaviour} from './wayf/searchBehaviour';
 import {submitForm} from './wayf/submitForm';
 import {cancelButtonClickHandlerCreator} from './wayf/noAccess/cancelButtonClickHandler';
 import {toggleFormFieldsAndButton} from './wayf/noAccess/toggleFormFieldsAndButton';
+import {changeAriaHiddenValue} from './utility/changeAriaHiddenValue';
+import {addTooltipAndModalAriaHandlers} from './consent/addTooltipAndModalAriaHandlers';
 
 /***
  * CONSENT HANDLERS
@@ -27,10 +31,21 @@ export const consentCallbackAfterLoad = () => {
 };
 export const consentEnterHandler = (target) => enterHandler(target);
 export const consentKeyboardBehaviourHandler = keyboardBehaviour;
-export const consentAnimateInteractiveElements = (selector) => animateInteractiveSections(selector);
+export const consentAnimateInteractiveElements = (selector) => {
+  animateInteractiveSections(selector);
+  addTooltipAndModalAriaHandlers(tooltipsAndModalLabels);
+};
 export const consentNokHandler = (e) => {
+  const nokSection = document.querySelector(nokSectionSelector);
   switchConsentSection(e);
-  addClickHandlerOnce(backButtonSelector, switchConsentSection);
+  addClickHandlerOnce(backButtonSelector, backButtonHandler(nokSection));
+  changeAriaHiddenValue(nokSection);
+};
+export const backButtonHandler = (nokSection) => {
+  return (e) => {
+    switchConsentSection(e);
+    changeAriaHiddenValue(nokSection);
+  };
 };
 
 
