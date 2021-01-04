@@ -23,6 +23,8 @@ export const nokButtonSelector = 'label[for="cta_consent_nok"]';
 export const nokSectionSelector = '.consent__nok';
 export const contentSectionSelector = '.consent__content';
 export const backButtonSelector = '.consent__nok-back';
+export const tooltipsAndModalLabels = 'label.tooltip, label.modal';
+export const modalLabels = 'label.modal';
 
 /***
  * WAYF SELECTORS
