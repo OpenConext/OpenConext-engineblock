@@ -9,7 +9,7 @@
     {% for attributeIdentifier, attributeValues in attributes %}
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/includeAttribute.html.twig' %}
         {% if loop.last and loop.index >= 6 %}
-            <li class="openToggle" aria-hidden="true">
+            <li class="openToggle">
                 {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/toggleLabel.html.twig' with {
                     className: 'openToggle__label',
                     for: 'showMoreCheckbox',
