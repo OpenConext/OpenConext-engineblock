@@ -46,7 +46,7 @@ class ConsentSettingsTest extends TestCase
     {
         $settings = new ConsentSettings([]);
 
-        $this->assertTrue($settings->isMinimal('test'));
+        $this->assertTrue($settings->isInformational('test'));
     }
 
     public function testCanReadAllServiceProviderEntityIds()
@@ -76,26 +76,40 @@ class ConsentSettingsTest extends TestCase
         $settings = new ConsentSettings([
             [
                 'name' => 'https://example.org/test1',
-                'type' => 'default_consent',
+                'type' => 'consent_userconsent',
             ],
             [
                 'name' => 'https://example.org/test2',
-                'type' => 'minimal_consent',
+                'type' => 'default_consent',
             ],
             [
                 'name' => 'https://example.org/test3',
+                'type' => 'consent_informational',
+            ],
+            [
+                'name' => 'https://example.org/test4',
+                'type' => 'minimal_consent',
+            ],
+            [
+                'name' => 'https://example.org/test5',
                 'type' => 'no_consent',
             ]
         ]);
 
-        $this->assertFalse($settings->isMinimal('https://example.org/test1'));
+        $this->assertFalse($settings->isInformational('https://example.org/test1'));
         $this->assertTrue($settings->isEnabled('https://example.org/test1'));
 
-        $this->assertTrue($settings->isMinimal('https://example.org/test2'));
+        $this->assertFalse($settings->isInformational('https://example.org/test2'));
         $this->assertTrue($settings->isEnabled('https://example.org/test2'));
 
-        $this->assertFalse($settings->isMinimal('https://example.org/test3'));
-        $this->assertFalse($settings->isEnabled('https://example.org/test3'));
+        $this->assertTrue($settings->isInformational('https://example.org/test3'));
+        $this->assertTrue($settings->isEnabled('https://example.org/test3'));
+
+        $this->assertTrue($settings->isInformational('https://example.org/test4'));
+        $this->assertTrue($settings->isEnabled('https://example.org/test4'));
+
+        $this->assertFalse($settings->isInformational('https://example.org/test5'));
+        $this->assertFalse($settings->isEnabled('https://example.org/test5'));
     }
 
     public function testInterpretsNullConsentTypeAsDefault()
@@ -107,7 +121,7 @@ class ConsentSettingsTest extends TestCase
             ]
         ]);
 
-        $this->assertFalse($settings->isMinimal('https://example.org/test1'));
+        $this->assertFalse($settings->isInformational('https://example.org/test1'));
         $this->assertTrue($settings->isEnabled('https://example.org/test1'));
     }
 

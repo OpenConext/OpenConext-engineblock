@@ -321,16 +321,16 @@ class MockIdpContext extends AbstractSubContext
 
 
     /**
-     * @Given /^the IdP "([^"]*)" requires minimal consent for SP "([^"]*)"$/
+     * @Given /^the IdP "([^"]*)" requires informational consent for SP "([^"]*)"$/
      * @param string $idpName
      * @param string $spName
      */
-    public function theIdpRequiresMinimalConsentForSp($idpName, $spName)
+    public function theIdpRequiresInformationalConsentForSp($idpName, $spName)
     {
         $idp = $this->mockIdpRegistry->get($idpName);
         $sp = $this->mockSpRegistry->get($spName);
 
-        $this->serviceRegistryFixture->setConsentSettings($idp->entityId(), $sp->entityId(), ConsentSettings::CONSENT_MINIMAL);
+        $this->serviceRegistryFixture->setConsentSettings($idp->entityId(), $sp->entityId(), ConsentSettings::CONSENT_INFORMATIONAL);
         $this->serviceRegistryFixture->save();
     }
 
@@ -345,7 +345,7 @@ class MockIdpContext extends AbstractSubContext
         $idp = $this->mockIdpRegistry->get($idpName);
         $sp = $this->mockSpRegistry->get($spName);
 
-        $this->serviceRegistryFixture->setConsentSettings($idp->entityId(), $sp->entityId(), ConsentSettings::CONSENT_DEFAULT, $message);
+        $this->serviceRegistryFixture->setConsentSettings($idp->entityId(), $sp->entityId(), ConsentSettings::CONSENT_USERCONSENT, $message);
         $this->serviceRegistryFixture->save();
     }
 
@@ -359,7 +359,7 @@ class MockIdpContext extends AbstractSubContext
         $idp = $this->mockIdpRegistry->get($idpName);
         $sp = $this->mockSpRegistry->get($spName);
 
-        $this->serviceRegistryFixture->setConsentSettings($idp->entityId(), $sp->entityId(), ConsentSettings::CONSENT_DEFAULT);
+        $this->serviceRegistryFixture->setConsentSettings($idp->entityId(), $sp->entityId(), ConsentSettings::CONSENT_USERCONSENT);
         $this->serviceRegistryFixture->save();
     }
 
