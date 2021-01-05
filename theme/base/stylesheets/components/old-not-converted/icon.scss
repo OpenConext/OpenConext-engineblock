@@ -1,0 +1,42 @@
+/* stylelint-disable font-family-no-missing-generic-family-keyword */
+.c-icon {
+    font-family: FontAwesome;
+    font-style: inherit;
+    height: auto;
+    line-height: inherit;
+    margin-right: 0.5rem;
+    max-width: 0.75rem;
+    position: relative;
+    top: -1px;
+    vertical-align: middle;
+
+    &.c-icon-warning,
+    &.c-icon-error {
+        border-radius: 3px;
+        color: white;
+        display: inline-block;
+        height: 19px;
+        max-width: 19px;
+        padding: 0 7px;
+        width: 19px;
+    }
+
+    &.c-icon-warning {
+        background: $yellow;
+    }
+
+    &.c-icon-error {
+        background: $red;
+    }
+
+    &.c-icon-checkmark {
+        color: $green;
+        height: 9px;
+        width: 12px;
+    }
+
+    &.c-icon-triangle {
+        height: 11px;
+        width: 7px;
+    }
+}

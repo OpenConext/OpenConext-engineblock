@@ -1,0 +1,20 @@
+.l-container {
+  max-width: $containerWidth;
+  z-index: 0;
+  padding: 1rem;
+
+  @include screen('tabletAndBigger') {
+      margin: 0 auto 3rem;
+      padding: 0 2rem;
+  }
+
+  &.wide {
+    max-width: $containerWidth*1.5;
+  }
+}
+
+.l-overflow {
+  overflow-x: auto;
+  @include scrollbar(8px, rgba(black,.4), 4px, rgba(black,.1), 4px);
+}
+
