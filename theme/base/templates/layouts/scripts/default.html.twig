@@ -28,8 +28,11 @@
 </head>
 <body>
 {% block nojs %}{% endblock %}
-{% block header %}{% endblock %}
 {% block background %}{% endblock %}
+
+{% block header %}
+{% endblock %}
+
 {% block container %}
     <div class="container {% block containerClasses %}{% endblock %}">
         {% block content %}{% endblock %}
