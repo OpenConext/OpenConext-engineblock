@@ -38,17 +38,6 @@
         margin-left: auto;
     }
 
-    .burger {
-        align-items: center;
-        display: none;
-        margin-left: auto;
-
-        img {
-            max-width: 0.8rem;
-        }
-    }
-
-    .burger,
     .comp-language,
     .comp-links {
         flex-wrap: nowrap;
@@ -68,14 +57,6 @@
 
             strong {
                 display: block;
-            }
-        }
-
-        .burger {
-            display: block;
-
-            .meta {
-                display: none;
             }
         }
     }
