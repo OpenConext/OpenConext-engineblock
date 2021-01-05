@@ -5,6 +5,22 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.4.0 (RC 1)
+This release consists of the UI redesign of the WAYF, Consent and other user facing screens.
+The complete list of changes is excessive. Details can be found on GitHub under the `ui-redesign` tag. Some highlights
+include:
+
+**Features**
+- Complete redesign of the WAYF
+    - The WAYF now includes an optional default IdP banner, making advertising a default IdP possible (eduId)
+    - The WAYF is optimized for keyboard navigation
+- Redesigned the consent screen
+    - The previously optional minimal consent screen is now the default
+    - Tooltips are now pure HTML/CSS, no eternal JS libraries are used
+    - Keyboard navigation was improved greatly
+- Both the WAYF and the consent screen are optimized for the optically or visually impaired. The interface is not yet
+  auditted, but a WCAG 2.1 AA is to be expected.
+
 ## 6.3.6
 After some testing, @tvdijen opened issue #920, identifying several issues with the 3.6.x releases. Those issues
 have been addressed in this release.
