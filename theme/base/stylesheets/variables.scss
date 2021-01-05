@@ -12,7 +12,10 @@ $loginBlue: #b3e5ff !default;
 $lightBlue: #94d6ff !default;
 $informationalBlue: #99dcea !default;
 $greenishBlue: #7cc8e1 !default;
+$blue: #4db3cf !default;
+$darkBlue: #017499 !default;
 $buttonBlue: #0077c8 !default;
+$contrastBlue: #0072bf !default;
 $oceanBlue: #0062b0 !default;
 $darkishBlue: #004c97 !default;
 $darkishBlueTwo: #003980 !default;
@@ -32,9 +35,13 @@ $providerGray: #dfe3e8 !default;
 $softBorderGray: #c8c8c8 !default;
 $brownGray: #ababab !default;
 $idpSeparatorGray: #c4cdd5 !default;
+$mediumGrey: #a2a2a2 !default;
 $inputBorderGray: #676767 !default;
 $hardBorderGray: #919ba4 !default;
 $brownishGray: #5b5b5b !default;
+$darkGrey: #2b3f44 !default;
+$lightGrey: lighten(black,95) !default;
+$borderDark: rgba(black, .1) !default;
 $white: #fff !default;
 
 // Font sizes
@@ -53,3 +60,10 @@ $normal: 400 !default;
 $bold: 500 !default;
 $bolder: 600 !default;
 $boldest: 700 !default;
+
+// Other variables
+$borderRadius: 4px !default;
+$containerWidth: 50rem !default;
+$font: Helvetica, sans-serif !default;
+$small: 720px !default;
+
