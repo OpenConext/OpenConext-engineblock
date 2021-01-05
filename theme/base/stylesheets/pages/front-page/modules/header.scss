@@ -1,0 +1,63 @@
+.mod-header {
+    @include clearfix;
+    background: #fff;
+    border-bottom: 2px solid $blue;
+    box-shadow: 1px 1px $borderRadius rgba(black, .2);
+    line-height: 30px;
+    padding: 0 1rem;
+
+    @include screen('tabletAndBigger') {
+        padding: 0 2rem;
+        margin-bottom: 3rem;
+    }
+
+    h1 {
+        margin-top: 0;
+    }
+
+    .l-container {
+        max-width: 75rem;
+        margin-bottom: 0;
+    }
+    // Main app title
+    .title {
+        color: $brownishGray;
+        overflow: hidden;
+        padding-right: 1rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        strong {
+            color: $blue;
+        }
+    }
+
+    .meta {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+    }
+
+    .comp-language,
+    .comp-links {
+        flex-wrap: nowrap;
+    }
+
+    @include screen('mobile') {
+        padding: 0.7rem 1rem;
+
+        .l-container {
+            align-items: center;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .title {
+            line-height: 1.3rem;
+
+            strong {
+                display: block;
+            }
+        }
+    }
+}
