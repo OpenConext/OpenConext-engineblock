@@ -19,6 +19,16 @@
         max-width: 75rem;
         margin-bottom: 0;
     }
+
+    .l-container.wide {
+        align-items: center;
+        display: flex;
+
+        @include screen('mobile') {
+            padding: 0;
+        }
+    }
+
     // Main app title
     .title {
         color: $brownishGray;
@@ -41,6 +51,7 @@
     .comp-language,
     .comp-links {
         flex-wrap: nowrap;
+        margin: 0;
     }
 
     @include screen('mobile') {

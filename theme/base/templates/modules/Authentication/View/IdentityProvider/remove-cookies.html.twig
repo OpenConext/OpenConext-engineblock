@@ -1,17 +1,27 @@
 {% extends '@themeLayouts/scripts/default.html.twig' %}
+{% import "@themeLayouts/scripts/language-switcher.html.twig" as languageSwitcher %}
 
 {# Prepare the page title #}
 {% set pageTitle = 'cookie_removal_header'|trans %}
 
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
 {% block pageHeading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
+{% block containerClasses %}l-container wide{% endblock %}
+
+{% block stylesheets %}{% spaceless %}
+    <link href="/stylesheets/material.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
+{% endspaceless %}{% endblock %}
+
+{% block header %}
+    {% include '@theme/Default/Partials/notConverted/header.html.twig' %}
+{% endblock %}
 
 {% block content %}
 <div class="box">
     <div class="mod-content">
         <h1>{{ 'cookie_removal_header'|trans }}</h1>
         {{ 'cookie_removal_description'|trans|raw }}
-        <form id="remove_cookie_form" method="post" class="apply clearfix">
+        <form id="remove_cookie_form" method="post" class="apply clearfix l-overflow">
             <table class="remove-cookies">
                 {% for cookie in cookies %}
                     {% if cookiesSet[cookie] is defined %}
@@ -66,4 +76,8 @@
         </form>
     </div>
 </div>
+{% endblock %}
+
+{% block footer %}
+    {% include '@theme/Default/Partials/notConverted/footer.html.twig' %}
 {% endblock %}
