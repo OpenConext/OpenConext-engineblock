@@ -1,0 +1,17 @@
+{% extends '@themeLayouts/scripts/default.html.twig' %}
+{% import "@themeLayouts/scripts/language-switcher.html.twig" as languageSwitcher %}
+
+{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
+{% block containerClasses %}l-container wide{% endblock %}
+
+{% block stylesheets %}{% spaceless %}
+    <link href="/stylesheets/material.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
+{% endspaceless %}{% endblock %}
+
+{% block header %}
+    {% include '@theme/Default/Partials/notConverted/header.html.twig' %}
+{% endblock %}
+
+{% block footer %}
+    {% include '@theme/Default/Partials/notConverted/footer.html.twig' %}
+{% endblock %}

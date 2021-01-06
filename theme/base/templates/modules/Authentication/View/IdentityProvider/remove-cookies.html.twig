@@ -1,17 +1,14 @@
-{% extends '@themeLayouts/scripts/default.html.twig' %}
+{% extends '@themeLayouts/scripts/notConverted.twig' %}
 
 {# Prepare the page title #}
 {% set pageTitle = 'cookie_removal_header'|trans %}
-
-{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
-{% block pageHeading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
 
 {% block content %}
 <div class="box">
     <div class="mod-content">
         <h1>{{ 'cookie_removal_header'|trans }}</h1>
         {{ 'cookie_removal_description'|trans|raw }}
-        <form id="remove_cookie_form" method="post" class="apply clearfix">
+        <form id="remove_cookie_form" method="post" class="apply clearfix l-overflow">
             <table class="remove-cookies">
                 {% for cookie in cookies %}
                     {% if cookiesSet[cookie] is defined %}

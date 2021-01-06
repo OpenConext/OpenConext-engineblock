@@ -46,4 +46,9 @@
     @include screen('tabletAndBigger') {
         margin: 1rem 0;
     }
+
+    @include screen('mobile') {
+        margin: 1rem 0 0;
+        padding: 0;
+    }
 }
