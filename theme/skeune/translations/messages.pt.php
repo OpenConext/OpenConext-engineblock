@@ -12,6 +12,7 @@ return [
     // FOOTER
     'log_in_to'     => 'Select an %organisationNoun% to login to %arg1%',
     'helpLink'       => 'https://wiki.surfnet.nl/display/conextsupport/The+WAYF-page',
+    'footer_navigation_screenreader'    => 'Footer navigation',
 
     // Forms
     'form_general_error'    =>  'Something went wrong when submitting the form.  This might be a faulty internet connection, or some other problem.  Please check your input and try again in a little while.  If the problem persists please contact your administrator.',

@@ -12,6 +12,7 @@ return [
     // FOOTER
     'log_in_to'     => 'Selecteer een %organisationNoun% om in te loggen bij %arg1%',
     'helpLink'       => 'https://wiki.surfnet.nl/display/conextsupport/De+WAYF-pagina',
+    'footer_navigation_screenreader'    => 'Footer navigatie',
 
     // Forms
     'form_general_error'    =>  'Er ging iets fout tijdens het insturen van uw formulier.  Dit kan een probleem zijn met uw internetverbinding of iets anders.  Controleer uw invoer en probeer het later opnieuw.  Mocht het probleem zich blijven voordoen, neem dan contact op met uw beheerder.',
