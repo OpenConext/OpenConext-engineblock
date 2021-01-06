@@ -14,5 +14,5 @@ export const savePreviousSelection = (previousSelection, cookieName) => {
     };
   });
 
-  setCookie(simplifiedPreviousSelection, cookieName);
+  setCookie(simplifiedPreviousSelection, cookieName, 365, '/', true);
 };
