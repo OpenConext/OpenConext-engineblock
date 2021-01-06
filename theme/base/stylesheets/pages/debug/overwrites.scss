@@ -6,3 +6,19 @@ body {
     font-size: $f-normal;
     line-height: 20px;
 }
+
+.mod-header {
+    .l-container.wide {
+        align-items: center;
+        display: flex;
+
+        @include screen('mobile') {
+            padding: 0;
+        }
+    }
+
+    .comp-language,
+    .comp-links {
+        margin: 0;
+    }
+}
