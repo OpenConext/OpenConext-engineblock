@@ -1,0 +1,22 @@
+@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/variables';
+@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/mixins';
+@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/core';
+@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/larger';
+@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/fixed-width';
+@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/list';
+@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/bordered-pulled';
+@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/animated';
+@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/rotated-flipped';
+@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/stacked';
+@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/icons';
+@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/screen-reader';
+
+@font-face {
+    font-display: swap;
+    font-family: 'FontAwesome';
+    font-style: normal;
+    font-weight: 900;
+    src: url('../../fonts/fontawesome-webfont.woff2') format('woff2'),
+    url('../../fonts/fontawesome-webfont.woff') format('woff'),
+    url('../../fonts/fontawesome-webfont.ttf') format('truetype');
+}

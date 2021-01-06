@@ -1,0 +1,27 @@
+.comp-links {
+    flex-wrap: nowrap;
+    justify-content: center;
+
+    .help {
+        background: $blue;
+        border-radius: 50%;
+        box-sizing: border-box;
+        color: #FFFFFF;
+        display: inline-block;
+        font-weight: bold;
+        height: 1.5rem;
+        line-height: 1.5rem;
+        margin-left: 0.5rem;
+        text-align: center;
+        width: 1.5rem;
+    }
+
+    li {
+        display: inline;
+        margin-left: 1.5rem;
+
+        &:first-child {
+            margin-left: 0
+        }
+    }
+}

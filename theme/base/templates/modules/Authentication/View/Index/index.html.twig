@@ -1,5 +1,4 @@
 {% extends '@themeLayouts/scripts/default.html.twig' %}
-
 {% import "@themeLayouts/scripts/language-switcher.html.twig" as languageSwitcher %}
 
 {% block title %}{{ parent() }} - Metadata & Certificates{% endblock %}
@@ -17,7 +16,6 @@
             </h1>
 
             <nav class="meta" aria-label="{{ 'language_switcher'|trans }}">
-
                 {% if displayLanguageSwitcher is not defined or displayLanguageSwitcher == true %}
                     {{ languageSwitcher.form(locale(), postData()) }}
                 {% endif %}
