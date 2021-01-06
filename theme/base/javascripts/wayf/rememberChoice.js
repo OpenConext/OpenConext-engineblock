@@ -7,5 +7,5 @@ export const rememberChoice = (entityId) => {
   if (!checkbox.checked) return;
 
   const cookieName = JSON.parse(document.getElementById(configurationId).innerHTML).rememberChoiceCookieName;
-  setCookie(entityId, cookieName);
+  setCookie(entityId, cookieName, 365, '/', true);
 };
