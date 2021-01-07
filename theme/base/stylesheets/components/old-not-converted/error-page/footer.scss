@@ -1,0 +1,79 @@
+/* stylelint-disable font-family-no-missing-generic-family-keyword */
+.error-page-footer-buttons {
+    &__container {
+        background: $contrastBlue2;
+        border-radius: 0 0 5px 5px;
+        overflow: hidden;
+        text-align: center;
+        width: 100%;
+    }
+
+    &__row {
+        margin: 0 auto;
+        text-align: center;
+        width: 101%;
+    }
+}
+
+.footer-button {
+    border-right: 1px solid white;
+    display: inline-block;
+    text-align: center;
+    width: 33.33%;
+
+    &:first-child {
+        margin-left: -2px;
+        border-left: 1px solid white;
+    }
+
+    &:hover {
+        background: $darkContrastBlue;
+    }
+
+    &__link {
+        color: white;
+        display: inline-block;
+        padding: 1.5rem 2rem 0.2rem;
+        text-decoration: none;
+        width: 100%;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+
+    &__text {
+        margin-top: 0.5em;
+
+        @include screen('mobile') {
+            display: none;
+            font-weight: bold;
+        }
+
+        &--small {
+            display: none;
+
+            @include screen('mobile') {
+                display: block;
+            }
+        }
+    }
+
+    &__icon {
+        font-family: FontAwesome;
+        text-align: center;
+        font-size: $f-large;
+        font-weight: bold;
+
+        &.fa-wikipedia-w {
+            background: white;
+            border-radius: 19px;
+            color: $blue;
+            display: inline-block;
+            height: 19px;
+            font-size: 12px;
+            line-height: 18px;
+            width: 19px;
+        }
+    }
+}

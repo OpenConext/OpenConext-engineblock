@@ -1,6 +1,4 @@
-{% import "@themeLayouts/scripts/language-switcher.html.twig" as languageSwitcher %}
-
-{% extends '@themeLayouts/scripts/default.html.twig' %}
+{% extends '@themeLayouts/scripts/notConverted.twig' %}
 
 {% block stylesheets %}{% spaceless %}
     <link href="/stylesheets/error-page.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
@@ -74,3 +72,5 @@
     </div>
 
 {% endblock %}
+
+{% block footer %}{% endblock %}
