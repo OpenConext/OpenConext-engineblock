@@ -47,7 +47,9 @@ For instructions on how to use it: see the file itself.
     - base: the base theme.  This is **always** the fallback theme in case a route isn't found in a custom theme.  Any theme chooses which parts to override, and which parts to simply keep.  A theme should keep the same folder structure as this theme:
         - images
         - javascripts: the main entry point for any theme is application.js
-        - stylesheets: the main entry point for any theme is application.scss
+        - stylesheets: the main entry point for any theme is application.scss.  There are two secondary entry points:
+            - material.scss for all templates not yet converted to the new base theme
+            - error-page.scss for all error pages.
         - templates: twig templates.  The main entry points are:
             - consent.html.twig: modules > Authentication > View > Proxy
             - wayf.html.twig: same folder as above
@@ -107,6 +109,7 @@ For example: to create a scaffold for a new theme called "surfconext" use the co
 #### Custom CSS
 
 Your theme needs to have `application.scss` (or .sass or .css) as an entry point for all css.  This file must be directly in the stylesheets folder (not in a subfolder).
+Depending on what you do, you also may need an `error-page.scss` and `material.scss`;
 
 This has two consequences:
 1. you are completely free to use the styles you prefer.
@@ -161,6 +164,9 @@ Below you'll find a list of the "entry points" for each page with corresponding 
 - error: `templates > modules > default > view > error > error.html.twig`.  You can use `https://engine.vm.openconext.org/feedback/unknown-error` to develop the page.
 - redirect page: `templates > modules > authentication > view > proxy > redirect.html.twig`.
 - index.html.twig: `templates > modules > authentication > view > index > index.html.twig`.  You can use `https://engine.vm.openconext.org/` to develop the page.
+- cookie removal page: `templates > modules > authentication > view > identityprovider > remove-cookies.html.twig`.  You can use `https://engine.vm.openconext.org/authentication/idp/remove-cookies` to develop the page.
+- debug page: `templates > modules > authentication > view > proxy > debug-idp-response.html.twig`.  You can use `https://engine.vm.openconext.org/authentication/sp/debug` to develop the page.
+
 
 #### Supported feature / testing flags
 
