@@ -22,7 +22,7 @@
         {% else %}
             {% set logoUrl = '/images/placeholder.png' %}
         {% endif %}
-        <img src="{{ logoUrl }}" alt="" loading="lazy">
+        <img src="{{ logoUrl }}?v={{ assetsVersion }}" alt="" loading="lazy">
     </div>
     <div class="idp__content">
         <div class="idp__border"></div>

@@ -58,7 +58,7 @@
 
                 <div class="loading spinner hidden">
                     <div class="logo">
-                        <img class="rotate-img" src="/images/spinner.svg" alt=""/>
+                        <img class="rotate-img" src="/images/spinner.svg?v={{ assetsVersion }}" alt=""/>
                     </div>
                     {{ 'loading_idps'|trans }}
                 </div>
@@ -71,7 +71,7 @@
                         {% for key, idp in connectedIdps.mergedIdpList %}
                             <a class="result active access" href="#" tabindex="-1">
                                 <div class="logo">
-                                    <img class="logo" loading="lazy" src="{{ idp['logo'] }}">
+                                    <img class="logo" loading="lazy" src="{{ idp['logo'] }}?v={{ assetsVersion }}">
                                 </div>
                                 <h3>{{ idp['displayTitle'] }}</h3>
                                 <form class="mod-search login" method="post" action="{{ action }}">
