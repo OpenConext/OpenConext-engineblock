@@ -164,7 +164,7 @@ class MinkContext extends BaseMinkContext
      */
     public function iShouldSeeLinksOnTheFrontPage($expectedNumberOfLinks)
     {
-        $anchors = $this->getSession()->getPage()->findAll('css', '.mod-content a');
+        $anchors = $this->getSession()->getPage()->findAll('css', '#engine-main-page a');
         if (count($anchors) != $expectedNumberOfLinks) {
             throw new ExpectationException(
                 sprintf(
