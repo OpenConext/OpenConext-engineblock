@@ -1,7 +1,7 @@
 {% extends '@themeLayouts/scripts/default.html.twig' %}
 {% import "@themeLayouts/scripts/language-switcher.html.twig" as languageSwitcher %}
 
-{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
+{% block title %}{{ parent() }}{% if pageTitle is defined %} - {{ pageTitle }} {% endif %}{% endblock %}
 {% block containerClasses %}l-container wide{% endblock %}
 
 {% block stylesheets %}{% spaceless %}
