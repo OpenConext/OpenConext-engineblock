@@ -26,6 +26,7 @@ use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RuntimeException;
 use SAML2\XML\mdui\Common;
 use SAML2\XML\shibmd\Scope;
+use function count;
 
 /**
  * Mink-enabled context.
@@ -168,8 +169,9 @@ class MinkContext extends BaseMinkContext
         if (count($anchors) != $expectedNumberOfLinks) {
             throw new ExpectationException(
                 sprintf(
-                    'The expected amount (%d) of metadata links could not be found on the page',
-                    $expectedNumberOfLinks
+                    'The expected amount (%d) of metadata links could not be found on the page, actually found "%d"',
+                    $expectedNumberOfLinks,
+                    count($anchors)
                 ),
                 $this->getSession()
             );
