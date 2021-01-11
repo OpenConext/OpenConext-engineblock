@@ -3,6 +3,10 @@
 {% block title %}{{ parent() }} - Metadata & Certificates{% endblock %}
 {% set pageHeadingTitle = subHeader %}
 
+{% block stylesheets %}{% spaceless %}
+    <link href="/stylesheets/front-page.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
+{% endspaceless %}{% endblock %}
+
 {% block content %}
     <main id="engine-main-page" class="box">
         <div class="mod-content">

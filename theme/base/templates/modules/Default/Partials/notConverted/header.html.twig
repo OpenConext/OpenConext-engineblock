@@ -1,7 +1,13 @@
 <header class="mod-header">
     <div class="l-container wide">
         <h1 class="title">
-            {% block pageHeading %}{{ defaultHeader }}{% endblock %}
+            {% block pageHeading %}
+                {% if pageHeadingTitle is defined %}
+                    {{ pageHeadingTitle }}
+                {% else %}
+                    {{ defaultHeader }}
+                {% endif %}
+            {% endblock %}
         </h1>
 
         <div class="meta">

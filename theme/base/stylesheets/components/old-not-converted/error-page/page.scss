@@ -1,0 +1,35 @@
+html {
+    height: 100%
+}
+
+body {
+    background: $mediumBlue;
+    height: 100%;
+    font-family: $font;
+
+    @include screen('mobile') {
+        background: $lightGrey;
+    }
+}
+
+.l-container {
+    height: 100%;
+    position: relative;
+
+    @include screen('mobile') {
+        padding: 1em;
+    }
+}
+
+.container.errorPage {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}

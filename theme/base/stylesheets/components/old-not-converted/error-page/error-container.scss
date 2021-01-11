@@ -1,0 +1,61 @@
+.mod-header {
+    @include clearfix;
+    align-items: center;
+    background: #fff;
+    border-bottom: 2px solid $blue;
+    box-shadow: 1px 1px $borderRadius rgba(black, .2);
+    display: flex;
+    line-height: 30px;
+    padding: 1rem 1rem;
+
+    @include screen('tabletAndBigger') {
+        margin-bottom: 3rem;
+        padding: 1rem 2rem;
+    }
+
+    @include screen('tabletAndSmaller') {
+        padding: 0.7rem 1rem;
+        .title {
+            line-height: 1.3rem;
+
+            strong {
+                display: block;
+            }
+        }
+    }
+
+    .meta {
+        align-items: center;
+        display: flex;
+        margin-left: auto;
+    }
+
+    .comp-language,
+    .comp-links {
+        flex-wrap: nowrap;
+    }
+
+    @include screen('tabletAndSmaller') {
+        .burger {
+            display: block;
+        }
+
+        .meta {
+            display: none;
+        }
+    }
+}
+.error-container {
+    margin: 0 0 2rem 0;
+    width: 720px;
+    @include screen('mobile') {
+        margin: 0 auto 3em auto;
+        width: 100%;
+    }
+
+    &__content {
+        background: white;
+        border-radius: 5px 5px 0 0;
+        padding: 2em;
+    }
+}

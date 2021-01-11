@@ -1,0 +1,36 @@
+.background {
+    $list: $blue, $lightBlue2;
+    @include gradient(to bottom, $list);
+    background: $mediumBlue;
+    bottom: 0;
+    height: 100%;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    z-index: -1;
+
+    @include screen('mobile') {
+        display: none;
+    }
+
+    &__front {
+        background: url(/images/background-front.svg) no-repeat left bottom;
+        background-size: contain;
+        bottom: 0;
+        height: 40%;
+        left: 2%;
+        position: absolute;
+        width: 20%;
+        z-index: 1;
+    }
+
+    &__back {
+        background: url(/images/background-back.svg) left bottom repeat-x;
+        bottom: 0;
+        height: 200px;
+        left: 0;
+        position: absolute;
+        width: 100%;
+        z-index: 0;
+    }
+}
