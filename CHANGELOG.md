@@ -5,6 +5,12 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.4.1
+**Features and fixes**
+ - The index, debug and cookie pages have been styled to prevent the mixed new and old style that happened. They now all look like the previous OpenConext theme used to look.
+ - Security and compatibility improvements have been applied.
+ - The new theme is now the default theme
+
 ## 6.4.0 (RC 1)
 This release consists of the UI redesign of the WAYF, Consent and other user facing screens.
 The complete list of changes is excessive. Details can be found on GitHub under the `ui-redesign` tag. Some highlights
