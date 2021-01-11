@@ -1,0 +1,60 @@
+{% extends '@themeLayouts/scripts/empty.html.twig' %}
+
+{% block content %}
+    <!DOCTYPE html>
+    <html lang="{{ locale()|escape('html_attr') }}">
+    <head>
+        <title>{{ defaultTitle }} - {{ 'post_data'|trans }}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="robots" content="noindex, nofollow"/>
+        <meta content="IE=edge" http-equiv="x-ua-compatible">
+        <meta content="initial-scale=1.0,width=device-width" name="viewport">
+        <meta content="yes" name="apple-mobile-web-app-capable">
+        <meta content="translucent-black" name="apple-mobile-web-app-status-bar-style">
+        <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+        {% block stylesheets %}{% spaceless %}
+            <link href="/stylesheets/application.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
+        {% endspaceless %}{% endblock %}
+    </head>
+    <body class="index" {% if preventAutoSubmit is not defined %} onload="document.forms[0].submit()" {% endif %}>
+
+    <div class="container form mod-redirect">
+        <div class="hideNoJS">
+            {% include '@theme/Authentication/View/Proxy/Partials/Shared/spinner.html.twig' %}
+        </div>
+
+        <header>
+            <h1 class="redirectBar">{{ 'processing'|trans }}</h1>
+        </header>
+
+        <main>
+            <header>
+                <h2 class="form__subHeader">{{ 'processing_waiting'|trans }}</h2>
+            </header>
+
+            <p class="hideNoJS">{{ 'processing_long'|trans }}</p>
+
+            <form id="ProcessForm" method="post" action="{{ action }}">
+                <input type="hidden" name="{{ name }}" value="{{ message }}"/>
+                {{ xtra|raw }}
+                <noscript>
+                    <p>
+                        <strong>{{ 'note'|trans }}:</strong>
+                        {{ 'note_no_script'|trans }}
+                    </p>
+                    <input type="submit" value="Submit" class="form__noJsSubmit"/>
+                </noscript>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            document.querySelector('p.hideNoJS').classList.remove('hideNoJS');
+            document.querySelector('div.hideNoJS').classList.remove('hideNoJS');
+        });
+    </script>
+    </body>
+    </html>
+{% endblock %}

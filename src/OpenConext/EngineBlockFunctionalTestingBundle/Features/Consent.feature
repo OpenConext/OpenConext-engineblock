@@ -34,12 +34,13 @@ Feature:
     Given I log in at "Dummy-SP"
       And I pass through EngineBlock
       And I pass through the IdP
-     Then the response should contain "Do you agree with sharing this data?"
-     Then the response should contain "Yes, proceed to Dummy-SP"
-     Then the response should contain "No, I do not agree"
-     Then the response should contain "Dummy-SP needs your information before logging in"
-     Then the response should contain "support@openconext.org"
-     Then the response should contain "+31612345678"
+     Then the response should not contain "Do you agree with sharing this data?"
+      And the response should not contain "Yes, proceed to Dummy-SP"
+      And the response should contain "Dummy-SP will receive"
+      And the response should contain "Proceed to Dummy-SP"
+      And the response should contain "Cancel"
+      And the response should contain "support@openconext.org"
+      And the response should contain "+31612345678"
      When I give my consent
      Then I pass through EngineBlock
 
@@ -51,35 +52,32 @@ Feature:
     And I pass through EngineBlock
     Then the url should match "functional-testing/Dummy-SP/acs"
 
-  Scenario: The user is asked for minimal consent
+  Scenario: The user is asked for informational consent
     Given I log in at "Dummy-SP"
-    And the IdP "Dummy-IdP" requires minimal consent for SP "Dummy-SP"
+    And the IdP "Dummy-IdP" requires informational consent for SP "Dummy-SP"
     And I pass through EngineBlock
     And I pass through the IdP
     Then the response should not contain "Do you agree with sharing this data?"
-    Then the response should not contain "Yes, proceed to Dummy-SP"
-    Then the response should contain "Proceed to Dummy-SP"
-    Then the response should not contain "No, I do not agree"
-    Then the response should contain "Cancel"
+    And the response should not contain "Yes, proceed to Dummy-SP"
+    And the response should contain "Proceed to Dummy-SP"
+    And the response should contain "Cancel"
 
   Scenario: The user is asked for default consent
     Given I log in at "Dummy-SP"
     And the IdP "Dummy-IdP" requires default consent for SP "Dummy-SP"
     And I pass through EngineBlock
     And I pass through the IdP
-    Then the response should contain "Do you agree with sharing this data?"
-    Then the response should contain "Yes, proceed to Dummy-SP"
-    Then the response should contain "No, I do not agree"
-    Then the response should not contain "Cancel"
+    Then the response should contain "Dummy-SP will receive"
 
   Scenario: The user is can read why the service providers requires an attribute
     Given I log in at "Dummy-SP"
     And I pass through EngineBlock
     And I pass through the IdP
-    Then the response should contain "Motivation for cn"
-    Then the response should contain "Motivation for dn"
-    Then the response should contain "Motivation for affiliation"
-    Then the response should contain "Motivation for orcid"
+    Then the response should contain "Dummy-SP will receive"
+     And the response should contain "Motivation for cn"
+     And the response should contain "Motivation for dn"
+     And the response should contain "Motivation for affiliation"
+     And the response should contain "Motivation for orcid"
 
   Scenario: The user presented with an institution provided consent text
     Given I log in at "Dummy-SP"
@@ -92,9 +90,9 @@ Feature:
     Given I log in at "Dummy-SP"
      And I pass through EngineBlock
      And I pass through the IdP
-    Then the response should contain "Do you agree with sharing this data?"
+    Then the response should contain "Proceed to Dummy-SP"
     When I reload the page
-    Then the response should contain "Do you agree with sharing this data?"
+    Then the response should contain "Proceed to Dummy-SP"
 
   Scenario: The user sees the identifier section when nameid is persistent
     Given SP "Dummy-SP" uses the Persistent NameID format

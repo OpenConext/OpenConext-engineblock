@@ -1,0 +1,24 @@
+.attribute__name {
+    @include grid-position(1, 2, 1, 2);
+    margin-right: 0.5rem;
+    text-align: right;
+
+    @include screen('mobile') {
+        display: flex;
+        justify-content: space-between;
+        margin-right: 0;
+        padding: 0;
+        text-align: left;
+    }
+
+    > label.tooltip {
+        display: none;
+
+        @include screen('mobile') {
+            background-position: left 12px bottom 8px;
+            display: inline-block;
+            margin: 0 0 -11px 0;
+            padding: 1rem 25px;
+        }
+    }
+}

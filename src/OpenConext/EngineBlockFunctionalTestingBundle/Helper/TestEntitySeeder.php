@@ -37,7 +37,7 @@ class TestEntitySeeder
      * @param string $locale
      * @return array[]
      */
-    public static function buildIdps($numberOfIdps, $numberOfUnconnectedIdps, $locale)
+    public static function buildIdps($numberOfIdps, $numberOfUnconnectedIdps, $locale, $defaultIdpEntityId)
     {
         Assert::integer($numberOfIdps);
         Assert::integer($numberOfUnconnectedIdps);
@@ -52,15 +52,91 @@ class TestEntitySeeder
         for ($i=1; $i < (int) ($numberOfIdps - $numberOfUnconnectedIdps) + 1; $i++) {
             $entityId = sprintf("https://example.com/entityId/%d", $i);
             $name = sprintf("%s IdP %d %s", 'Connected', $i, $locale);
-            $idps[$entityId] = ['name' => $name, 'enabled' => true];
+            $isDefaultIdp = false;
+            if ($defaultIdpEntityId === $entityId) {
+                $isDefaultIdp = true;
+            }
+            $idps[$entityId] = ['name' => $name, 'enabled' => true, 'isDefaultIdp' => $isDefaultIdp];
         }
 
         if ($numberOfUnconnectedIdps > 0) {
             for ($i=1; $i < (int) $numberOfUnconnectedIdps + 1; $i++) {
                 $entityId = sprintf("https://unconnected.example.com/entityId/%d", $i);
                 $name = sprintf("%s IdP %d %s", 'Disconnected', $i, $locale);
-                $idps[$entityId] = ['name' => $name, 'enabled' => false];
+                $isDefaultIdp = false;
+                if ($defaultIdpEntityId === $entityId) {
+                    $isDefaultIdp = true;
+                }
+                $idps[$entityId] = ['name' => $name, 'enabled' => false, 'isDefaultIdp' => $isDefaultIdp];
             }
+        }
+
+        return self::transformIdpsForWayf($idps, $locale);
+    }
+
+    /**
+     * Build a random collection of (unconnected) IdPs
+     *
+     * This is not an array of IdentityProvider value objects, but a derivative that can be used for showing IdPs on
+     * the WAYF.
+     *
+     * @param int $numberOfIdps
+     * @param int $numberOfUnconnectedIdps
+     * @param string $locale
+     * @return array[]
+     */
+    public static function buildRandomIdps($numberOfIdps, $locale, $defaultIdpEntityId)
+    {
+        Assert::integer($numberOfIdps);
+        Assert::stringNotEmpty($locale);
+        $idpNames = [
+            'Academisch Medisch Centrum (AMC)',
+            'AMOLF',
+            'Amphia Hospital',
+            'Breda University of Applied Sciences',
+            'Centraal Planbureau',
+            'Centrum Wiskunde & Informatica',
+            'Cito',
+            'Delft University of Technology',
+            'Drenthe College',
+            'eduID (NL)',
+            'Erasmus MC',
+            'Fontys University of Applied Sciences',
+            'Friesland College',
+            'Graafschap College',
+            'GÉANT Staff Identity Provider',
+            'HAN University of Applied Sciences',
+            'Hotelschool The Hague',
+            'IHE Delft Institute for Water Education',
+            'KNMI',
+            'Koninklijke Nederlandse Akademie van Wetenschappen (KNAW)',
+            'Leids Universitair Medisch Centrum',
+            'Maastricht University',
+            'Netherlands eScience Center',
+            'SURF bv',
+            'Thomas More Hogeschool',
+            'VSNU',
+        ];
+        $randomIdpNames = $numberOfIdps < count($idpNames) ? array_rand($idpNames, $numberOfIdps) : array_keys($idpNames);
+
+        $idps = [];
+
+        for ($i=1; $i < (int) $numberOfIdps + 1; $i++) {
+            $connected = rand(0, 1) === 1;
+            $entityId = $connected ? sprintf("https://example.com/entityId/%d", $i) : sprintf("https://unconnected.example.com/entityId/%d", $i);
+
+            if ($i < 25) {
+                $name = sprintf("%s %d %s", $idpNames[$randomIdpNames[$i - 1]], $i, $locale);
+            } else {
+                $variableString = $connected ? 'Connected' : 'Disconnected';
+                $name = sprintf("%s IdP %d %s", $variableString, $i, $locale);
+            }
+
+            $isDefaultIdp = false;
+            if ($defaultIdpEntityId === $entityId) {
+                $isDefaultIdp = true;
+            }
+            $idps[$entityId] = ['name' => $name, 'enabled' => $connected, 'isDefaultIdp' => $isDefaultIdp];
         }
 
         return self::transformIdpsForWayf($idps, $locale);
@@ -86,6 +162,7 @@ class TestEntitySeeder
                 'Access' => ($identityProvider->enabledInWayf) ? '1' : '0',
                 'ID' => md5($identityProvider->entityId),
                 'EntityID' => $identityProvider->entityId,
+                'isDefaultIdp' => $idpEntityIds[$identityProvider->entityId]['isDefaultIdp']
             );
             $wayfIdps[] = $wayfIdp;
         }
@@ -122,15 +199,18 @@ class TestEntitySeeder
      * Build a very rudimentary SP entity
      * @return ServiceProvider
      */
-    public static function buildSp()
+    public static function buildSp(?string $spName = null)
     {
+        if (!$spName) {
+            $spName = 'DisplayName';
+        }
         $serviceProvider = new ServiceProvider('https://acme-sp.example.com');
-        $serviceProvider->nameNl = 'DisplayName NL';
-        $serviceProvider->nameEn = 'DisplayName EN';
-        $serviceProvider->namePt = 'DisplayName PT';
-        $serviceProvider->displayNameNl = 'DisplayName';
-        $serviceProvider->displayNameEn = 'DisplayName';
-        $serviceProvider->displayNamePt = 'DisplayName';
+        $serviceProvider->nameNl = $spName . ' NL';
+        $serviceProvider->nameEn = $spName . ' EN';
+        $serviceProvider->namePt = $spName . ' PT';
+        $serviceProvider->displayNameNl = $spName . '';
+        $serviceProvider->displayNameEn = $spName . '';
+        $serviceProvider->displayNamePt = $spName . '';
         $serviceProvider->logo = new Logo('/images/logo.png');
         return $serviceProvider;
     }
@@ -139,15 +219,18 @@ class TestEntitySeeder
      * Build a very rudimentary IdP entity
      * @return IdentityProvider
      */
-    public static function buildIdP()
+    public static function buildIdP(?string $idpName)
     {
+        if (!$idpName) {
+            $idpName = 'DisplayName';
+        }
         $identityProvider = new IdentityProvider('https://acme-idp.example.com');
-        $identityProvider->nameNl = 'DisplayName NL';
-        $identityProvider->nameEn = 'DisplayName EN';
-        $identityProvider->namePt = 'DisplayName PT';
-        $identityProvider->displayNameNl = 'DisplayName NL';
-        $identityProvider->displayNameEn = 'DisplayName EN';
-        $identityProvider->displayNamePt = 'DisplayName PT';
+        $identityProvider->nameNl = $idpName . ' NL';
+        $identityProvider->nameEn = $idpName . ' EN';
+        $identityProvider->namePt = $idpName . ' PT';
+        $identityProvider->displayNameNl = $idpName . ' NL';
+        $identityProvider->displayNameEn = $idpName . ' EN';
+        $identityProvider->displayNamePt = $idpName . ' PT';
         $identityProvider->logo = new Logo('/images/logo.png');
         return $identityProvider;
     }

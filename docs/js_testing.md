@@ -44,6 +44,8 @@ parameters can be used to manipulate the behaviour of the wayf that is rendered.
 | displayUnconnectedIdpsWayf | (bool) false | Type: boolean. Display unconnected IdPs on the WAYF. |
 | rememberChoiceFeature | (bool) false | Type: boolean. Display the remember choice feature. |
 | cutoffPointForShowingUnfilteredIdps | (int) 100 | Type: integer. The number of IdPs to display on the WAYF before cutting them off. |
+| showIdpBanner | (bool) true | Type: boolean. Show the EduId (default IdP) banner on the WAYF or not |
+| defaultIdpEntityId | (string) null | Type: string. The entityId of the default IdP (EduId) |
 | connectedIdps | (int) 5 | Type: integer. The number of IdPs to display on the WAYF. |
 | unconnectedIdps | (int) 0 | Type: integer. The number of unconnected IdPs to display on the WAYF. |
 | backLink | (bool) false | Type: boolean. Display the back link on the WAYF. |
@@ -62,6 +64,20 @@ parameters can be used to manipulate the behaviour of the wayf that is rendered.
 |parameters|Format: `JSON`<br>Value:`{}`|Some templates might require additional twig parameters, this parameter allows you to pass these additional parameters in JSON format.|
 
 For a list of realistic reproductions of the available error pages, see this JavasScript test: `theme/cypress/integration/visual-regression/error-page/ErrorPage.spec.js`
+
+### Consent
+The consent screen is available on: `/functional-testing/consent`
+
+
+| **Query parameter** | **Default value** | **Explanation** |
+|---|----|----|
+| name-id | (string) 'user@openconext' | Type: string. The name id of the authenticating user |
+| idp-name | (string) 'DisplayName' | Type: string. The name displayed for the IdP that released the attributes |
+| sp-name | (string) 'DisplayName' | Type: string. The name displayed for the authenticating service provider |
+| hide-header | (bool) true | Type: boolean |
+| hide-footer | (bool) true | Type: boolean |
+| persistent-name-id | (bool) true | Type: boolean. Is the name id configured to be persistent? This affects the rendering of the attributes |
+| aa-enabled | (bool) true | Type: boolean. Is attribute aggregation enabled, if flagged, two dummy AA sources are configured. And two attributes from those sources are included in the attribute list (EckID & OrcID ID).  |
 
 ## Acceptance tests
 The WAYF acceptance tests utilize the `/functional-testing/wayf` endpoint in order to test the correct inner working of

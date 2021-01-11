@@ -1,0 +1,30 @@
+<section class="wayf__remainingIdps {% if connectedIdps.formattedPreviousSelectionList is not empty %}hidden{% endif %}">
+    <h2 id="remainingIdps__title" class="remainingIdps__title visually-hidden">
+        {% if connectedIdps.formattedPreviousSelectionList %}
+            {{ 'wayf_remaining_idps_title_screenreader'|trans }}
+        {% else %}
+            {{ 'wayf_select_account_screenreader'|trans }}
+        {% endif %}
+    </h2>
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/search.html.twig' %}
+
+    {% if showIdPBanner %}
+        {% set requestUri %}
+            {% if '?' in app.request.requestUri %}
+                {{ app.request.requestUri|replace({'?': '#defaultIdp?'}) }}
+            {% else %}
+                {{ app.request.requestUri ~ '#defaultIdp' }}
+            {% endif %}
+        {% endset %}
+        {% set organisationNoun = 'organisation_noun'|trans %}
+        {% set defaultIdpText %}
+            {{ 'wayf_defaultIdp_start'|trans({ '%organisation_noun%': organisationNoun }) }} <a href="{{ requestUri }}" class="wayf__defaultIdpLink">{{ 'wayf_defaultIdp_linkText'|trans({ '%defaultIdpName%': connectedIdps.defaultIdPTitle }) }}</a>
+        {% endset %}
+        {% include '@theme/Default/Partials/informational.html.twig' with {
+            class: 'remainingIdps__defaultIdp',
+            text: defaultIdpText,
+        } %}
+    {% endif %}
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/rememberChoice.html.twig' %}
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpList.html.twig' with { idpList: connectedIdps.formattedIdpList, delete: false, listName: 'remaining', id: 'remainingIdps__title' } %}
+</section>

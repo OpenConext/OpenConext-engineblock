@@ -1,0 +1,25 @@
+<img class="logo-small" src="{{ logoUrl }}?v={{ assetsVersion }}"
+     alt="" />
+{% if attributeSource == 'engineblock' %}
+    {# note: the div is here only for IE11, as soon as IE11 support is scrapped, this can be removed along with the CSS/JS for it  #}
+    <p>{{ text|raw }}</p>
+    <div class="ie11__link">
+        <a class="idpRow__supportUrl" href="{{ 'name_id_support_url'|trans }}" target="_blank" rel="noreferrer noopener">{{ 'consent_name_id_support_link'|trans }}</a>
+    </div>
+{% else %}
+    {% set id %}
+        incorrect_{{ attributeSource }}
+    {% endset %}
+    <input type="checkbox" tabindex="-1" aria-hidden="true" class="modal visually-hidden" id="{{ id|trim }}" name="{{ id|trim }}" />
+    {# note: the empty label is for display on mobile #}
+    <p>{{ text|raw }}<label tabindex="0" for="{{ id|trim }}" class="modal"></label>
+    </p>
+    {# note: the div is here only for IE11, as soon as IE11 support is scrapped, this can be removed along with the CSS/JS for it  #}
+    <div class="ie11__label">
+        <span class="visually-hidden">{{ 'button_screenreader'|trans }}</span>
+        <label tabindex="0" for="{{ id|trim }}" class="modal">
+            <span class="label-text">{{ 'consent_attributes_correction_text'|trans }}</span>
+        </label>
+    </div>
+    {% include '@theme/Authentication/View/Proxy/Partials/Consent/Modals/correction.html.twig' %}
+{% endif %}

@@ -1,0 +1,9 @@
+<label {% if noTab is defined %}{% else %}tabindex="0"{% endif%} for="{{ id }}" class="{{ class }}">
+    {% if text is defined %}
+        {% if hideText %}
+            <span class="visually-hidden">{{ text }}</span>
+        {% else %}
+            {{ text }}
+        {% endif %}
+    {% endif %}
+</label>

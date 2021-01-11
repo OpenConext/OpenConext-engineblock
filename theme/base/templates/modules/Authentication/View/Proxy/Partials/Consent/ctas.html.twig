@@ -1,0 +1,39 @@
+<div class="consent__ctas">
+    <form id="accept" method="post"
+          action="{{ action }}">
+        <input type="hidden" name="ID"
+               value="{{ responseId }}">
+        <input type="hidden" name="consent" value="yes"/>
+
+        {% if informationalConsent %}
+            {% set text_ok = 'consent_buttons_ok_informational'|trans({'%sp%': spName}) %}
+            {% set text_nok = 'consent_buttons_nok_informational'|trans %}
+        {% else %}
+            {% set text_ok = 'consent_ok'|trans %}
+            {% set text_nok = 'consent_buttons_nok'|trans %}
+        {% endif %}
+
+        {% include '@theme/Default/Partials/button.html.twig' with
+            {
+                buttonClass: 'cta_consent_ok',
+                name: 'accept_terms_button',
+                text: text_ok
+            }
+        %}
+    </form>
+    <input type="checkbox" tabindex="-1" role="button" aria-pressed="false" class="modal visually-hidden" id="cta_consent_nok" name="cta_consent_nok" />
+    <div class="button--tertiary" tabindex="0">
+        <div>
+            {% include '@theme/Default/Partials/label.html.twig' with
+                {
+                    class: 'modal',
+                    id: 'cta_consent_nok',
+                    hideText: false,
+                    noTab: true,
+                    text: text_nok
+                }
+            %}
+        </div>
+    </div>
+    {% include '@theme/Authentication/View/Proxy/Partials/Consent/Modals/reject.html.twig' %}
+</div>

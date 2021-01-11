@@ -1,0 +1,87 @@
+.l-container {
+    margin: 0 auto;
+    max-width: $containerWidth;
+    padding: .5rem;
+    z-index: 0;
+
+  @include screen('tabletAndBigger') {
+    margin: 0 auto 3rem;
+    padding: 0 2rem;
+  }
+
+  &.wide {
+      max-width: $containerWidth*1.5;
+      width: auto;
+  }
+}
+
+.mod-content{
+    background-color: $white;
+    line-height: 1.5;
+    padding: 2rem;
+
+    @include screen('mobile') {
+        padding: .5rem;
+    }
+
+    ul,
+    p {
+        margin-bottom: 1rem;
+    }
+
+    ul {
+        list-style: square;
+        margin-bottom: 1.5rem;
+        padding-left: 0;
+    }
+
+    dl dd li {
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+
+    dd {
+        margin-left: calculateRem(24px);
+    }
+
+    header {
+        align-items: center;
+        border-bottom: 1px solid $lightGrey;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        margin-bottom: 0.5rem;
+        padding-bottom: 1.5rem;
+
+        h1 {
+            font-size: 200%;
+            font-weight: $boldest;
+        }
+    }
+
+    h1 {
+        flex-basis: 100%;
+        flex-grow: 2;
+        font-size: 200%;
+        font-weight: $normal;
+        line-height: calculateRem(40px);
+        margin: 0;
+    }
+
+    img {
+        margin-right: 1rem;
+        max-height: 4rem;
+        width: auto;
+    }
+
+    .strong {
+        font-weight: bold;
+    }
+}
+
+.box {
+    background: #fff;
+    border-radius: $borderRadius;
+    box-shadow: 0 1px $borderRadius rgba(black,.2);
+}

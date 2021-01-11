@@ -60,6 +60,8 @@ class WayfController
     }
 
     /**
+     * This method is not used in the skeune theme
+     *
      * @return Response
      * @throws \EngineBlock_Exception
      */

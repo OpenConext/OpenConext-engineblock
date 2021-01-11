@@ -1,0 +1,11 @@
+<section class="modal__value" role="alert" aria-hidden="true" data-for="{{ id|trim }}">
+    <div class="modal__content">
+        <h3>{{ 'consent_slidein_correction_title'|trans }}</h3>
+        {% if attributeSource == 'idp' %}
+            <p>{{ 'consent_slidein_correction_text_idp'|trans }}</p>
+            {% include '@theme/Authentication/View/Proxy/Partials/Consent/Modals/contact-details.html.twig' %}
+        {% else %}
+            <p>{{ 'consent_slidein_correction_text_aa'|trans }}</p>
+        {% endif %}
+    </div>
+</section>

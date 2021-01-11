@@ -1,0 +1,11 @@
+<noscript>
+    {% set noScript_text %}
+        <p>{{ 'noscript'|trans }}</p>
+        <p class="noScript__middle">{{ 'wayf_noscript_warning_intro'|trans }}</p>
+        <p><strong>{{ 'wayf_noscript_warning_end'|trans }}</strong></p>
+    {% endset %}
+    {% include '@theme/Default/Partials/warning.html.twig' with {
+        className: 'wayf__noScript noScript',
+        text: noScript_text
+    } %}
+</noscript>

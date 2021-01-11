@@ -1,0 +1,66 @@
+/*******************************************************************
+    File to help you test for some common accessibility errors.
+    You can test your page by:
+     - first adding this file as an import to helpers.scss (or application.scss).
+     - adding a class or multiple classes to the <html> element.
+
+   All credit to wonderful Manuel Matuzovic for creating it: https://github.com/matuzo/a11y-tests.css
+
+   MIT License
+
+  Copyright (c) 2019 Manuel Matuzovic
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+ ******************************************************************/
+
+// adds a couple of variables to the root element so they are available for the classes
+:root {
+    --blur: 2px;
+    --font-size: 20px;
+}
+
+/* Check if the page works without colors */
+.a11y-tests-grayscale {
+    filter: grayscale(100%) !important;
+}
+
+/* Simulate blurred vision. */
+.a11y-tests-blur {
+    filter: blur(2px) !important;
+    filter: blur(var(--blur)) !important;
+}
+
+/* Force yourself to test without a mouse */
+.a11y-tests-no-mouse,
+.a11y-tests-no-mouse *,
+.a11y-tests-no-mouse *:focus {
+    cursor: none !important;
+}
+
+/* Large text */
+.a11y-tests-large-text {
+    font-size: 20px !important;
+    font-size: var(--font-size) !important;
+}
+
+/* Remove animations */
+.a11y-tests-no-animation * {
+    transition: none !important;
+    animation: none !important;
+}

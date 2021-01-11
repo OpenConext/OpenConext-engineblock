@@ -61,7 +61,7 @@ parameters:
     ## /etc, but EngineBlock supports runtime modification of PHP
     ## settings.
     php_settings:
-        memory_limit: 128M
+        memory_limit: 256M
         display_errors: '1'
         error_reporting: '6135'
         date.timezone: Europe/Amsterdam
@@ -166,6 +166,10 @@ parameters:
     ## Allow users to save their selected IdP and then auto-select it on returning visits.
     wayf.remember_choice: false
 
+    ## Toggle the default IdP quick link banner on the WAYF.
+    wayf.display_default_idp_banner_on_wayf: true
+    wayf.default_idp_entity_id: https://default-idp.vm.openconext.org
+
     ## Settings for detecting whether the user is stuck in a authentication loop within his session
     time_frame_for_authentication_loop_in_seconds: 60
     maximum_authentication_procedures_allowed: 5
@@ -231,3 +235,11 @@ parameters:
     stepup.gateway.sfo.sso_location: 'https://gateway.stepup.vm.openconext.org/second-factor-only/single-sign-on'
     ## The public key from the Stepup Gateway IdP
     stepup.gateway.sfo.key_file: /etc/openconext/engineblock.crt
+
+##########################################################################################
+    ## THEME SETTINGS
+    ##########################################################################################
+    # When changing the default theme name, be aware that the CI build will no longer be able to select our default
+    # test suite for js e2e tests. This because a SED command is in place to rewrite the parameters.yml.
+    # See the SED command in Gitlab Actions runner: 'Run Cypress integration tests'
+    theme.name: skeune

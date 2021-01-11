@@ -1,0 +1,51 @@
+{% set addTooltip = attributeMotivations[attributeIdentifier] is defined %}
+{% set id = 'tooltip%index%%orgId%'|replace({ '%index%': loop.index, '%orgId%': orgId })|trim %}
+{% set attributeName = attributeShortName(attributeIdentifier, locale()) %}
+
+<li class="consent__attribute{% if not addTooltip %} consent__attribute--noTooltip{% endif %}">
+    {% if addTooltip %}
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/name.html.twig' with { attributeName: attributeName, inputId: id } %}
+    {% else %}
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/name.html.twig' with { attributeName: attributeName } %}
+    {% endif %}
+    {# Single attribute value #}
+    {% if attributeValues|length == 1 %}
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/value.html.twig' with { attributeValue: attributeValues|first } %}
+        {% if addTooltip %}
+            <input type="checkbox" tabindex="-1" aria-hidden="true" class="tooltip visually-hidden" id="{{ id }}" name="{{ id }}" />
+            {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/tooltip.html.twig' with { tooltipValue: attributeMotivations[attributeIdentifier] } %}
+        {% endif %}
+    {# Multiple attribute values #}
+    {% else %}
+        {% if attributeValues|length > 5 %}
+            <div class="attribute__valueWrapper">
+                {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/toggleCheckbox.html.twig' with {
+                    className: 'groupMembership__checkbox',
+                    id: 'attribute' ~ loop.index,
+                  }
+                %}
+        {% endif %}
+        <ul class="attribute__value attribute__value--list">
+            {% for value in attributeValues %}
+                <li>
+                    {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/value.html.twig' with { attributeValue: value } %}
+                    {% if addTooltip %}
+                        <input type="checkbox" tabindex="-1" aria-hidden="true" class="tooltip visually-hidden" id="{{ id }}" name="{{ id }}" />
+                        {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/tooltip.html.twig' with { tooltipValue: attributeMotivations[attributeIdentifier] } %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+        {% if attributeValues|length > 5 %}
+            {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/toggleLabel.html.twig' with {
+                className: 'groupMembership__label',
+                for: 'attribute' ~ loop.index,
+                showMore: 'consent_groupmembership_show_more',
+                showLess: 'consent_groupmembership_show_less',
+              }
+            %}
+            </div>
+        {% endif %}
+    {% endif %}
+</li>
+

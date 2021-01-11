@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlock\Metadata\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
@@ -31,7 +32,6 @@ use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @package OpenConext\EngineBlock\Metadata\Entity
@@ -335,33 +335,57 @@ class ServiceProvider extends AbstractRole
     }
 
     /**
-     * @param string $preferredLocale
-     * @return string
+     * Algorithm for display name is:
+     * 1. Display name in preferred locale
+     * 2. Name in preferred locale
+     * 3. Display name in English
+     * 4. Name in English
+     * 5. EntityID (should never happen)
      */
-    public function getDisplayName($preferredLocale = '')
+    public function getDisplayName(string $preferredLocale = 'en'): string
     {
-        $spName = '';
-        if ($preferredLocale === 'nl') {
-            $spName = $this->displayNameNl;
-            if (empty($spName)) {
-                $spName = $this->nameNl;
-            }
-        } elseif ($preferredLocale === 'en') {
-            $spName = $this->displayNameEn;
-            if (empty($spName)) {
-                $spName = $this->nameEn;
-            }
-        } elseif ($preferredLocale === 'pt') {
-            $spName = $this->displayNamePt;
-            if (empty($spName)) {
-                $spName = $this->namePt;
-            }
+        $preferredName = 'displayName' . ucfirst($preferredLocale);
+        $fallback = 'name' . ucfirst($preferredLocale);
+        $spName = !empty($this->$preferredName) ? $this->$preferredName : $this->$fallback;
+
+        if ($preferredLocale !== 'en' & empty($spName)) {
+            $spName = !empty($this->displayNameEn) ? $this->displayNameEn : $this->nameEn;
         }
 
         if (empty($spName)) {
             $spName = $this->entityId;
         }
+
         return $spName;
+    }
+
+    /**
+     * Algorithm for organization name is
+     * 1. Organization display name in preferred locale
+     * 2. Organization name in preferred locale
+     * 3. English organization display name
+     * 4. English organization name
+     * 5. Empty string (will be set to the locale-specific variant of 'unknown' in the template)
+     */
+    public function getOrganizationName(string $preferredLocale = 'en'): string
+    {
+        $orgLocale = 'organization' . ucfirst($preferredLocale);
+        // Load the preferred locale org. display name, falling back on org. name
+        $orgName = !empty($this->$orgLocale->displayName)
+            ? $this->$orgLocale->displayName
+            : $this->$orgLocale->name;
+
+        // Fallback to EN naming preferences when the preferred locale was not set or yielded no value
+        if (($preferredLocale !== 'en' && empty($orgName)) || empty($orgName)) {
+            $orgName = !empty($this->organizationEn->displayName) ? $this->organizationEn->displayName : $this->organizationEn->name;
+        }
+
+        // Show empty string when no translation was found (virtually impossible)
+        if (empty($orgName)) {
+            $orgName = '';
+        }
+
+        return $orgName;
     }
 
     /**

@@ -1,0 +1,77 @@
+/*******************************************************************
+    Generic sass-variables
+ ******************************************************************/
+
+@import 'functions';
+
+// Colors
+$black: #212121 !default;
+$hoverBlue: #ddf2fd !default;
+$mediumBlue: #caecf4 !default;
+$idpBlue: #c2eaff !default;
+$loginBlue: #b3e5ff !default;
+$lightBlue: #94d6ff !default;
+$lightBlue2: #dff6fb !default;
+$informationalBlue: #99dcea !default;
+$greenishBlue: #7cc8e1 !default;
+$blue: #4db3cf !default;
+$darkBlue: #017499 !default;
+$darkContrastBlue: #005d7b !default;
+$buttonBlue: #0077c8 !default;
+$contrastBlue: #0072bf !default;
+$contrastBlue2: #00829a !default;
+$oceanBlue: #0062b0 !default;
+$darkishBlue: #004c97 !default;
+$darkishBlueTwo: #003980 !default;
+$successGreen: #8ce28a !default;
+$green: #008738 !default;
+$brownOrange: #ffd89d !default;
+$yellow: #fedb00 !default;
+$orange: #ff9d0b !default;
+$errorRed: #fff5f3 !default;
+$criticalRed: #ffc5c1 !default;
+$red: #ff0000 !default;
+$lightPink: #efefef !default;
+$secondaryDisabledGray: #cfd2d1 !default;
+$gray: #f4f6f8 !default;
+$noAccessGray: #abb4bd !default;
+$providerGray: #dfe3e8 !default;
+$softBorderGray: #c8c8c8 !default;
+$brownGray: #ababab !default;
+$idpSeparatorGray: #c4cdd5 !default;
+$lighterDarkGrey: #a9a9a9 !default;
+$mediumGrey: #a2a2a2 !default;
+$inputBorderGray: #676767 !default;
+$hardBorderGray: #919ba4 !default;
+$brownishGray: #5b5b5b !default;
+$darkGrey: #2b3f44 !default;
+$lightGrey: lighten(black,95) !default;
+$borderDark: rgba(black, .1) !default;
+$white: #fff !default;
+
+// Font sizes
+$f-small: calculateRem(14px) !default;
+$f-normal: calculateRem(16px) !default;
+$f-large: calculateRem(19px) !default;
+$f-h5: calculateRem(20px) !default;
+$f-xl: calculateRem(22px) !default;
+$f-h3: calculateRem(24px) !default;
+$f-h2: calculateRem(26px) !default;
+$f-xxl: calculateRem(36px) !default;
+
+// Font weights
+$light: 300 !default;
+$normal: 400 !default;
+$bold: 500 !default;
+$bolder: 600 !default;
+$boldest: 700 !default;
+
+// Borders
+$border: lighten(black,90) !default;
+$borderRadius: 4px !default;
+
+// Other variables
+$containerWidth: 50rem !default;
+$font: Helvetica, sans-serif !default;
+$small: 720px !default;
+

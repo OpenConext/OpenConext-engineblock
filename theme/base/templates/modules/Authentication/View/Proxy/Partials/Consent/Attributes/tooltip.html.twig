@@ -1,0 +1,23 @@
+{% if tooltipValue %}
+    {% set id = 'tooltip%index%%orgId%'|replace({ '%index%': loop.index, '%orgId%': orgId })|trim %}
+    <div class="ie11__label">
+        {% include '@theme/Default/Partials/label.html.twig' with
+            {
+                class: 'tooltip',
+                hideText: true,
+                id: id,
+                text: 'consent_tooltip_screenreader'|trans({ '%attr_name%': attributeName|lower }),
+            }
+        %}
+    </div>
+    {% spaceless %}
+    <div
+        aria-hidden="true"
+        class="tooltip__value"
+        data-for="{{ id }}"
+        role="alert"
+    >
+        {{ tooltipValue }}
+    </div>
+    {% endspaceless %}
+{% endif %}

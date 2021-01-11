@@ -1,0 +1,5 @@
+{% if attributeSource == 'engineblock' %}
+    {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/engineBlockAttribute.html.twig' %}
+{% else %}
+    {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/defaultAttribute.html.twig' %}
+{% endif %}

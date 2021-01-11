@@ -1,0 +1,19 @@
+{% set previousSelectionList = connectedIdps.formattedPreviousSelectionList %}
+<section class="wayf__previousSelection {% if previousSelectionList is empty %}hidden{% endif %}">
+    <h2 id="previousSelection__title" class="previousSelection__title">
+        {{ 'wayf_your_accounts'|trans }}
+    </h2>
+    <input type="checkbox" name="previousSelectionToggle" id="previousSelectionToggle" class="visually-hidden previousSelection__toggle" tabindex="-1" role="button" aria-pressed="false" />
+    {% spaceless %}
+    <div class="ie11__label">
+        <label for="previousSelectionToggle" tabindex="0" class="previousSelection__toggleLabel">
+            <span class="previousSelection__edit">{{ 'edit'|trans }}</span>
+            <span class="previousSelection__done">{{ 'done'|trans }}</span>
+        </label>
+    </div>
+    {% endspaceless %}
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpList.html.twig' with { idpList: previousSelectionList, delete: true, listName: 'preselection', id: 'previousSelection__title' } %}
+    <button type="button" class="previousSelection__addAccount">
+        <span>{{ 'wayf_add_account'|trans }}</span>
+    </button>
+</section>

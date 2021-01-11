@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="19px" viewBox="0 0 22 19" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <path d="M24.0836323,6.61192489 L12.7984216,21.9707441 C12.7887634,21.9835442 12.7625433,21.9978674 12.7345392,21.9998561 C12.7067418,22.0018302 12.6791888,21.9915116 12.6587389,21.971002 L7.56207785,16.8606892 C6.97707541,16.2741199 6.0273288,16.2728496 5.4407594,16.857852 C4.85419001,17.4428544 4.85291974,18.3926011 5.43792217,18.9791705 L10.5344555,24.0893551 C11.169602,24.7263565 12.0499123,25.0560308 12.9470515,24.9923197 C13.843984,24.9286233 14.6688194,24.4780427 15.2079701,23.7578913 L26.5011891,8.38827484 C26.9917146,7.72068497 26.8481756,6.78184697 26.1805857,6.29132147 C25.5129958,5.80079597 24.5741578,5.94433501 24.0836323,6.61192489 Z" id="path-1"></path>
+    </defs>
+    <g id="Styleboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="EDUbadges_styleboard" transform="translate(-630.000000, -7052.000000)">
+            <g id="notifications" transform="translate(460.000000, 6372.000000)">
+                <g id="info-components-/-notification-/-03-success" transform="translate(152.000000, 667.000000)">
+                    <g id="basis-/-check-3px" transform="translate(13.000000, 7.000000)">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <g id="Group" mask="url(#mask-2)">
+                            <g id="*Colors-/-primary-/-blue-500" transform="translate(16.000000, 16.000000) rotate(90.000000) translate(-16.000000, -16.000000) ">
+                                <rect id="Rectangle" fill="#FFFFFF" x="0" y="0" width="32" height="32"></rect>
+                                <g id="Colors/Gray-700-Copy" fill="#00BB07">
+                                    <path d="M0,0 L32,0 L32,32 L0,32 L0,0 Z" id="Colors/Your_color_2"></path>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,134 @@
+{% extends '@themeLayouts/scripts/notConverted.twig' %}
+
+{% block title %}{{ parent() }} - Metadata & Certificates{% endblock %}
+{% set pageHeadingTitle = subHeader %}
+
+{% block content %}
+    <main id="engine-main-page" class="box">
+        <div class="mod-content">
+            <header>
+                <img class="logo" src="{{ defaultLogo }}?v={{ assetsVersion }}" alt=""/>
+                <h1>{{ 'suite_name'|trans }} EngineBlock</h1>
+            </header>
+
+            <div class="main">
+
+                <h1>{{ subHeader }}</h1>
+                <dl class="metadata-certificates-list">
+                    <dt>
+                        The Public SAML Signing certificate of the {{ 'suite_name'|trans }} IdP
+                    </dt>
+                    <dd>
+                        <ul>
+                            <li><a href="/authentication/idp/certificate">Open link</a></li>
+                            {% for keyId in keyPairIds %}
+                                <li><a href="/authentication/idp/certificate/key:{{ keyId }}">Open link</a></li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                    <dt>
+                        The Public SAML metadata (the entity descriptor) of the {{ 'suite_name'|trans }} IdP Proxy
+                    </dt>
+                    <dd>
+                        <ul>
+                            <li><a href="/authentication/idp/metadata">Open link</a></li>
+                            {% for keyId in keyPairIds %}
+                                <li><a href="/authentication/idp/metadata/key:{{ keyId }}">Open link</a></li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                    <dt>
+                        The Public SAML metadata (the entities descriptor) for all the {{ 'suite_name'|trans }} IdPs
+                    </dt>
+                    <dd>
+                        <ul>
+                            <li><a href="/authentication/proxy/idps-metadata">Open link</a></li>
+                            {% for keyId in keyPairIds %}
+                                <li><a href="/authentication/proxy/idps-metadata/key:{{ keyId }}">Open link</a></li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                    <dt>
+                        <p class="strong">Metadata below is only relevant for key rollover or in
+                            case you want a custom WAYF for your SP</p>
+                    </dt>
+                    <dt>
+                        The Public SAML metadata (the entities descriptor) of the {{ 'suite_name'|trans }} IdPs which
+                        allow
+                        access to SP with entityID "urn:example.org". Please replace "urn:example.org" with
+                        the entityID of your own SP before testing. The resulting metadata will include all
+                        {{ 'suite_name'|trans }} IdPs that allow access to the service. Please note this information is
+                        generated dynamically, so the number of available IdPs may change over time.
+                    </dt>
+                    <dd>
+                        <ul>
+                            <li><a href="/authentication/proxy/idps-metadata?sp-entity-id=urn:example.org">Open link</a>
+                            </li>
+                            {% for keyId in keyPairIds %}
+                                <li>
+                                    <a href="/authentication/proxy/idps-metadata/key:{{ keyId }}?sp-entity-id=urn:example.org">Open
+                                        link</a></li>
+                            {% endfor %}
+                        </ul>
+
+                    </dd>
+                </dl>
+            </div>
+
+            <div class="main">
+                <h1>SP Certificate and Metadata</h1>
+                <dl class="metadata-certificates-list">
+                    <dt>
+                        Test authentication with an identity provider.
+                    </dt>
+                    <dd>
+                        <ul>
+                            <li><a href="/authentication/sp/debug">Open link</a></li>
+                        </ul>
+                    </dd>
+                    <dt>
+                        The Public SAML Signing certificate of the {{ 'suite_name'|trans }} SP
+                    </dt>
+                    <dd>
+                        <ul>
+                            <li><a href="/authentication/sp/certificate">Open link</a></li>
+                            {% for keyId in keyPairIds %}
+                                <li><a href="/authentication/sp/certificate/key:{{ keyId }}">Open link</a></li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                    <dt>
+                        The Public SAML metadata (the entity descriptor) of the {{ 'suite_name'|trans }} SP Proxy
+                    </dt>
+                    <dd>
+                        <ul>
+                            <li><a href="/authentication/sp/metadata">Open link</a></li>
+                            {% for keyId in keyPairIds %}
+                                <li><a href="/authentication/sp/metadata/key:{{ keyId }}">Open link</a></li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                </dl>
+            </div>
+
+            <div class="main">
+                <h2>Step-up authentication Certificate and Metadata</h2>
+                <dl class="metadata-certificates-list">
+                    <dt>
+                        The Public SAML metadata (the entity descriptor) of the {{ 'suite_name'|trans }} step-up
+                        authentication Proxy
+                    </dt>
+                    <dd>
+                        <ul>
+                            <li><a href="/authentication/stepup/metadata">Open link</a></li>
+                            {% for keyId in keyPairIds %}
+                                <li><a href="/authentication/stepup/metadata/key:{{ keyId }}">Open link</a></li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                </dl>
+
+            </div>
+        </div>
+    </main>
+{% endblock %}

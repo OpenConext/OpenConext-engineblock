@@ -1,0 +1,23 @@
+{% extends '@theme/Default/View/Error/error.html.twig' %}
+
+{# Prepare the page title #}
+{% set pageTitle = 'error_404'|trans %}
+
+{% block languageSwitcher %}
+{% endblock %}
+
+{% block content %}
+
+    <div class="container errorPage">
+        <div class="error-container">
+        <div class="error-container__content">
+          <div class="error-title">
+            <h1 class="error-title__heading">{{ pageTitle }}</h1>
+            <span class="error-title__error-message">{{ 'error_404_desc'|trans }}</span>
+          </div>
+        </div>
+        {% spaceless %}{% include "@theme/Default/View/Error/partial/footer.html.twig" %}{% endspaceless %}
+      </div>
+    </div>
+
+{% endblock %}

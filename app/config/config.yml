@@ -33,6 +33,8 @@ framework:
         fallbacks: ["%locale%"]
         paths:
           - '%kernel.root_dir%/../languages'
+          - '%kernel.root_dir%/../theme/base/translations'
+          - '%kernel.root_dir%/../theme/%theme.name%/translations'
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -56,8 +58,12 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     paths:
-        "%kernel.root_dir%/../theme/material/templates/modules": theme
-        "%kernel.root_dir%/../theme/material/templates/layouts": themeLayouts
+        "%kernel.root_dir%/../theme/%theme.name%/templates/modules": theme
+        "%kernel.root_dir%/../theme/%theme.name%/templates/layouts": themeLayouts
+        "%kernel.root_dir%/../theme/%theme.name%/images": images
+        "%kernel.root_dir%/../theme/base/templates/modules": theme
+        "%kernel.root_dir%/../theme/base/templates/layouts": themeLayouts
+        "%kernel.root_dir%/../theme/base/images": images
     globals:
         assetsVersion: "%asset_version%"
         defaultTitle: "%view_default_title%"

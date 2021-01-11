@@ -1,0 +1,86 @@
+@import './attributeName';
+@import './attributeValue';
+
+.consent__attribute {
+    @include display-grid;
+    @include grid-template-columns(33% 1% 57% 1% 8%);
+    border-bottom: 1px solid $softBorderGray;
+    line-height: 1.63;
+
+    &.consent__attribute--noTooltip {
+        @include grid-template-columns(33% 1% 65% 1%);
+
+        @include screen('mobile') {
+            @include grid-template-columns(100%);
+        }
+    }
+
+    &:nth-child(n+6) {
+        @include visually-hidden;
+    }
+
+    > * {
+        padding: 1rem 0;
+
+        @include screen('mobile') {
+            padding: 0;
+        }
+    }
+
+    @include screen('mobile') {
+        @include grid-template-columns(100%);
+        @include grid-template-rows(min-content min-content);
+        padding: 10px 6px;
+    }
+
+    &:nth-child(-n + 4) {
+        > .attribute__value {
+            margin-top: 1px;
+        }
+    }
+
+    > *:not(input[type="checkbox"]):not(.attribute__name) {
+        color: $black;
+        line-height: 1.63;
+        text-align: left;
+    }
+
+    > input[type="checkbox"]:checked.tooltip ~ .attribute__name > label.tooltip {
+        @include closeTooltip;
+        background-position: left 17px bottom 11px;
+    }
+
+    > .ie11__label,
+    > .attribute__name > .label.tooltip {
+        @include grid-position(1, 2, 5, 6);
+
+        @include screen('mobile') {
+            display: none;
+        }
+    }
+
+    > label,
+    .ie11__label > label {
+        margin: auto 0;
+        padding: 1.2rem 35px;
+
+        &.tooltip {
+            margin-left: -20px;
+        }
+
+        @include screen('mobile') {
+            display: none;
+        }
+    }
+
+    > .tooltip__value {
+        @include grid-position(2, 3, 3, 6);
+        margin-left: 0;
+        padding: 0;
+        text-align: left;
+
+        @include screen('mobile') {
+            @include grid-position(3, 4, 1, 2);
+        }
+    }
+}

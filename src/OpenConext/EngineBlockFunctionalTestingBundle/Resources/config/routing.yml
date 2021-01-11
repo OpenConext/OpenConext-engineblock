@@ -45,6 +45,11 @@ functional_testing_wayf:
     defaults:
         _controller: engineblock.functional_test.controller.wayf:wayfAction
 
+functional_testing_handle_wayf:
+    path: "/handle-wayf"
+    defaults:
+        _controller: engineblock.functional_test.controller.wayf:handleWayfAction
+
 functional_testing_feedback:
     path: "/feedback"
     defaults:
@@ -54,6 +59,11 @@ functional_testing_consent:
     path: "/consent"
     defaults:
         _controller: engineblock.functional_test.controller.consent:consentAction
+
+functional_testing_send_form:
+    path: "/send"
+    defaults:
+        _controller: engineblock.functional_test.controller.consent:sendAction
 
 functional_testing_gateway:
     path: "/gateway/second-factor-only/single-sign-on"

@@ -1,0 +1,38 @@
+{% if idp['connected'] is defined %}
+    {% set connectable = 'true' %}
+{% else %}
+    {% set connectable = 'false' %}
+{% endif %}
+
+<article
+    aria-describedby="idp__title{{ listName }}{{ loop.index }}"
+    class="wayf__idp{% if idp['connected'] is defined and not idp['connected'] %} wayf__idp--noAccess{% endif %}"
+    data-connectable="{{ connectable }}"
+    data-count="{% if idp['count'] is defined %}{{ idp['count'] }}{% else %}0{% endif %}"
+    data-entityid="{{ idp['entityId'] }}"
+    data-index="{{ loop.index }}"
+    data-keywords="{{ idp['keywords']|lower }}"
+    data-title="{{ idp['displayTitle']|lower }}"
+    {% if idp['isDefaultIdp'] %}id="defaultIdp"{% endif %}
+    tabindex="0"
+>
+    <div class="idp__logo">
+        {% if idp.logo is not null %}
+            {% set logoUrl = idp.logo %}
+        {% else %}
+            {% set logoUrl = '/images/placeholder.png' %}
+        {% endif %}
+        <img src="{{ logoUrl }}?v={{ assetsVersion }}" alt="" loading="lazy">
+    </div>
+    <div class="idp__content">
+        <div class="idp__border"></div>
+        <h3
+            id="idp__title{{ listName }}{{ loop.index }}"
+            class="idp__title"
+        ><span class="visually-hidden">{{ 'wayf_idp_title_screenreader'|trans }}</span>{{ idp['displayTitle'] }}</h3>
+        {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpForm.html.twig' %}
+        {% if idp['connected'] is defined and not idp['connected'] or delete %}
+            {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpDeleteDisable.html.twig' %}
+        {% endif %}
+    </div>
+</article>

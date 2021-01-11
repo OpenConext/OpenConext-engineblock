@@ -41,8 +41,23 @@ jobs:
                 docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                     SYMFONY_ENV=ci composer install --prefer-dist -n -o && \
                     ./app/console cache:clear --env=ci && \
-                    cd theme && CYPRESS_INSTALL_BINARY=0 npm ci && npm run build
+                    cd theme && CYPRESS_INSTALL_BINARY=0 npm ci && EB_THEME=skeune npm run build
                 '
+            - name: Run code quality tests
+              if: always()
+              run: |
+                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                      echo -e "\nPHP Mess Detector\n" && \
+                      ./vendor/bin/phpmd src text ci/qa-config/phpmd.xml --exclude */Tests/* && \
+                      echo -e "\nPHP CodeSniffer\n" && \
+                      ./vendor/bin/phpcs --report=full --standard=ci/qa-config/phpcs.xml --warning-severity=0 --extensions=php src  && \
+                      echo -e "\nPHP CodeSniffer (legacy code)\n" && \
+                      ./vendor/bin/phpcs --standard=ci/qa-config/phpcs-legacy.xml --warning-severity=0 --extensions=php -s library  && \
+                      echo -e "\nDoc header check\n" && \
+                      ./vendor/bin/docheader check src/ tests/ library/ --exclude-dir resources --exclude-dir languages
+                  '
+              env:
+                  SYMFONY_ENV: ci
             - name: Run unit tests
               if: always()
               run: |
@@ -68,7 +83,9 @@ jobs:
                       echo -e "\nInstalling database fixtures...\n" && \
                       ./app/console doctrine:schema:drop --force --env=ci && \
                       ./app/console doctrine:schema:create --env=ci && \
-                      echo -e "\nBehat tests\n" && \
+                      echo -e "\nPreparing frontend assets\n" && \
+                      EB_THEME=skeune ./theme/scripts/prepare-test.js > /dev/null && \
+                      echo -e "\nRun the Behat tests\n" && \
                       ./vendor/bin/behat -c ./tests/behat-ci.yml --suite default -vv --format progress --strict && \
                       echo -e "\nBehat tests (with selenium and headless Chrome)\n" && \
                       ./vendor/bin/behat -c ./tests/behat-ci.yml --suite selenium -vv --format progress --strict
@@ -88,23 +105,18 @@ jobs:
             - name: Run Cypress integration tests
               if: always()
               run: |
-                  cd docker && docker-compose exec -T cypress bash -c '
-                      cypress run --browser=firefox --headless
-                  '
-              env:
-                  SYMFONY_ENV: ci
-            - name: Run code quality tests
-              if: always()
-              run: |
-                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
-                      echo -e "\nPHP Mess Detector\n" && \
-                      ./vendor/bin/phpmd src text ci/qa-config/phpmd.xml --exclude */Tests/* && \
-                      echo -e "\nPHP CodeSniffer\n" && \
-                      ./vendor/bin/phpcs --report=full --standard=ci/qa-config/phpcs.xml --warning-severity=0 --extensions=php src  && \
-                      echo -e "\nPHP CodeSniffer (legacy code)\n" && \
-                      ./vendor/bin/phpcs --standard=ci/qa-config/phpcs-legacy.xml --warning-severity=0 --extensions=php -s library  && \
-                      echo -e "\nDoc header check\n" && \
-                      ./vendor/bin/docheader check src/ tests/ library/ --exclude-dir resources
+                  cd docker && \
+                  docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                    EB_THEME=skeune ./theme/scripts/prepare-test.js
+                  ' && \
+                  docker-compose exec -T cypress bash -c '
+                    cypress run --spec cypress/integration/skeune/**/*.spec.js,cypress/integration/shared/*.spec.js --browser=electron --headless
+                  ' && \
+                  docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                    EB_THEME=openconext ./theme/scripts/prepare-test.js
+                  ' && \
+                  docker-compose exec -T cypress bash -c '
+                    cypress run --spec cypress/integration/openconext/**/*.spec.js --browser=electron --headless
                   '
               env:
                   SYMFONY_ENV: ci

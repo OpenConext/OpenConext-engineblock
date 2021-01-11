@@ -1,0 +1,16 @@
+{% extends '@themeLayouts/scripts/default.html.twig' %}
+
+{% set spName = serviceProvider.displayName(locale()) %}
+
+{# Prepare the page title #}
+{% set organisationNoun = 'organisation_noun'|trans %}
+{% set pageTitle = 'log_in_to'|trans({'%arg1%': spName, '%organisationNoun%': organisationNoun}) %}
+
+{# Data object containing the formatted IdP's #}
+{% set connectedIdps = connectedIdps(idpList, locale()) %}
+
+{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
+
+{% block content %}
+    {% include '@theme/Authentication/View/Proxy/wayf_content.html.twig' %}
+{% endblock %}

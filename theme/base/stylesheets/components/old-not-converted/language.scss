@@ -1,0 +1,54 @@
+.comp-language {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    line-height: 1.75rem;
+    margin-right: 1rem;
+    position: relative;
+    z-index: 10000;
+
+    li {
+        list-style: none;
+
+        &:first-child {
+            a, button {
+                border-radius: $borderRadius 0 0 $borderRadius;
+            }
+        }
+
+        &:last-child {
+            a, button {
+                border-radius: 0 $borderRadius $borderRadius 0
+            }
+        }
+    }
+
+    a,
+    button {
+        background: rgba($blue,.1);
+        border: 0;
+        color: $blue;
+        cursor: pointer;
+        display: block;
+        font-size: 0.8rem;
+        line-height: 1.75rem;
+        margin-right: 1px;
+        padding: 0 0.5rem;
+        text-decoration: none;
+
+        &:hover,
+        &.selected {
+            background: $blue;
+            color: $white;
+        }
+    }
+
+    @include screen('tabletAndBigger') {
+        margin: 1rem 0;
+    }
+
+    @include screen('mobile') {
+        margin: 1rem 0 0;
+        padding: 0;
+    }
+}

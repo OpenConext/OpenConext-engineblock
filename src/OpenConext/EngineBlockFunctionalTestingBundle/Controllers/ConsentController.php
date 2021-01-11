@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2010 SURFnet B.V.
  *
@@ -18,10 +19,12 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Controllers;
 
 use OpenConext\EngineBlockFunctionalTestingBundle\Helper\TestEntitySeeder;
+use SAML2\Constants;
 use SAML2\XML\saml\NameID;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;
+use function base64_encode;
 
 class ConsentController
 {
@@ -37,6 +40,19 @@ class ConsentController
         $this->twig = $twig;
     }
 
+    public function sendAction()
+    {
+        $action = '#';
+        $encodedMessage = base64_encode('the encoded message, no problem this is bogus on the test endpoint');
+        return new Response($this->twig->render('@theme/Authentication/View/Proxy/form.html.twig', [
+            'action' => $action,
+            'message' => $encodedMessage,
+            'xtra' => '<input type="hidden" name="RelayState" value="relaystate">',
+            'name' => 'SAMLResponse',
+            'preventAutoSubmit' => true
+        ]), 200);
+    }
+
     /**
      * @param Request $request
      * @return Response
@@ -46,13 +62,24 @@ class ConsentController
      */
     public function consentAction(Request $request)
     {
+        $idpName = null;
+        $spName = null;
+        if ($request->query->has('idp-name')) {
+            $idpName = $request->query->get('idp-name');
+        }
+        if ($request->query->has('sp-name')) {
+            $spName = $request->query->get('sp-name');
+        }
+
+        $attributeAggregationEnabled = (bool) $request->query->get('aa-enabled', false);
+        $attributeSources = [];
+
         $processConsentUrl = '#';
         $fakeResponseId = '918723649';
-        $fakeSp = TestEntitySeeder::buildSp();
-        $fakeIdP = TestEntitySeeder::buildIdP();
+        $fakeSp = TestEntitySeeder::buildSp($spName);
+        $fakeIdP = TestEntitySeeder::buildIdP($idpName);
         $supportContact = 'Helpdesk';
-        $nameId = new NameID();
-        $nameId->setValue('user@openconext');
+
         $profileUrl = 'profile.openconext.org';
         $attributes = [
             'urn:mace:dir:attribute-def:displayName' => ['John Doe'],
@@ -70,6 +97,22 @@ class ConsentController
             'urn:mace:dir:attribute-def:givenName' => 'Test tooltip',
         ];
 
+        if ($attributeAggregationEnabled) {
+            $attributes['urn:mace:surf.nl:attribute-def:eckid'] = ['joe-f12-eck-id'];
+            $attributes['urn:mace:dir:attribute-def:eduPersonOrcid'] = ['https://orcid.org/0000-0002-9079-593X'];
+            $nameId = new NameID();
+            $nameId->setFormat(Constants::NAMEID_PERSISTENT);
+            $nameId->setValue('34872398723498723497293487');
+
+            $attributes['urn:mace:dir:attribute-def:eduPersonTargetedID'] = [$nameId];
+
+            $attributeSources = [
+                'urn:mace:dir:attribute-def:eduPersonOrcid' => 'orcid',
+                'urn:mace:surf.nl:attribute-def:eckid' => 'sab',
+                'urn:mace:dir:attribute-def:eduPersonTargetedID' => 'engineblock',
+            ];
+        }
+
         return new Response($this->twig->render('@theme/Authentication/View/Proxy/consent.html.twig', [
             'action' => $processConsentUrl,
             'responseId' => $fakeResponseId,
@@ -77,18 +120,44 @@ class ConsentController
             'idp' => $fakeIdP,
             'idpSupport' => $supportContact,
             'attributes' => $attributes,
-            'attributeSources' => [],
+            'attributeSources' => $attributeSources,
             'attributeMotivations' => $attributeMotivations,
-            'minimalConsent' => $fakeIdP->getConsentSettings()->isMinimal($fakeSp->entityId),
+            'informationalConsent' => $fakeIdP->getConsentSettings()->isInformational($fakeSp->entityId),
             'consentCount' => 5,
-            'nameId' => $nameId,
-            'nameIdIsPersistent' => true,
+            'nameId' => $this->getNameId($request),
+            'nameIdIsPersistent' => $this->isPersistentNameId($request),
             'profileUrl' => $profileUrl,
             'showConsentExplanation' => $fakeIdP->getConsentSettings()->hasConsentExplanation($fakeSp->entityId),
             'consentSettings' => $fakeIdP->getConsentSettings(),
             'spEntityId' => $fakeSp->entityId,
-            'hideHeader' => true,
-            'hideFooter' => true,
+            'hideHeader' => $this->hideHeader($request),
+            'hideFooter' => $this->hideFooter($request),
         ]), 200);
+    }
+
+    private function hideHeader(Request $request): bool
+    {
+        return (bool) $request->query->get('hide-header', true);
+    }
+
+    private function hideFooter(Request $request): bool
+    {
+        return (bool) $request->query->get('hide-footer', true);
+    }
+
+    private function getNameId(Request $request): NameID
+    {
+        $nameIdValue = $request->query->get('name-id', 'user@openconext');
+        $nameId = new NameID();
+        if ($nameIdValue !== 'user@openconext') {
+            $nameId->setFormat(Constants::NAMEID_UNSPECIFIED);
+        }
+        $nameId->setValue($nameIdValue);
+        return $nameId;
+    }
+
+    private function isPersistentNameId(Request $request): bool
+    {
+        return (bool) $request->query->get('persistent-name-id', true);
     }
 }

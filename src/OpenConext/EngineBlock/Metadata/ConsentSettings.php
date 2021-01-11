@@ -29,7 +29,9 @@ class ConsentSettings implements JsonSerializable
 {
     const CONSENT_DISABLED = 'no_consent';
     const CONSENT_MINIMAL = 'minimal_consent';
+    const CONSENT_INFORMATIONAL = 'consent_informational';
     const CONSENT_DEFAULT = 'default_consent';
+    const CONSENT_USERCONSENT = 'consent_userconsent';
 
     /**
      * @var array
@@ -88,14 +90,14 @@ class ConsentSettings implements JsonSerializable
      * @param string $entityId
      * @return bool
      */
-    public function isMinimal($entityId)
+    public function isInformational($entityId)
     {
         $settings = $this->findSettingsFor($entityId);
         if ($settings !== null) {
-            return $settings->type === self::CONSENT_MINIMAL;
+            return $settings->type === self::CONSENT_INFORMATIONAL || $settings->type === self::CONSENT_MINIMAL;
         }
 
-        return false;
+        return true;
     }
 
     public function hasConsentExplanation($entityId)

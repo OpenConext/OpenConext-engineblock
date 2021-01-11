@@ -1,0 +1,27 @@
+{% set cutoffMet = cutoffPointForShowingUnfilteredIdps < idpList|length %}
+{% spaceless %}
+<ul
+    class="wayf__idpList
+          {% if cutoffMet %} wayf__idpList--cutoffMet{% endif %}"
+    aria-labelledby="{{ id }}"
+>
+{% endspaceless %}
+    {# First show all connected Idps #}
+    {% for idp in idpList %}
+        {% if idp['connected'] is defined and idp['connected'] %}
+            <li>
+                {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idp.html.twig' with { idp: idp }
+                %}
+            </li>
+        {% endif %}
+    {% endfor %}
+    {# Next show all unconnnected Idps #}
+    {% for idp in idpList %}
+        {% if showRequestAccess and idp['connected'] is defined and not idp['connected'] %}
+            <li>
+                {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idp.html.twig' with { idp: idp }
+                %}
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>

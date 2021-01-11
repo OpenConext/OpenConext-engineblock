@@ -1,0 +1,19 @@
+.comp-language {
+    float: right;
+    margin: 2em;
+
+    @include screen('mobile') {
+        margin: 1em;
+    }
+
+    a, button {
+        background: white;
+        color: $darkBlue;
+
+        &:hover,
+        &.selected {
+            background: $darkBlue;
+            color: $white;
+        }
+    }
+}

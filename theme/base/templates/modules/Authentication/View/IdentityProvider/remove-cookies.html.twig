@@ -1,0 +1,66 @@
+{% extends '@themeLayouts/scripts/notConverted.twig' %}
+
+{# Prepare the page title #}
+{% set pageTitle = 'cookie_removal_header'|trans %}
+
+{% block content %}
+<div class="box">
+    <div class="mod-content">
+        <h1>{{ 'cookie_removal_header'|trans }}</h1>
+        {{ 'cookie_removal_description'|trans|raw }}
+        <form id="remove_cookie_form" method="post" class="apply clearfix l-overflow">
+            <table class="remove-cookies">
+                {% for cookie in cookies %}
+                    {% if cookiesSet[cookie] is defined %}
+                        <tr>
+                            <td class="small-column">
+                                <button name="remove_{{ cookie }}" id="remove_{{ cookie }}"
+                                        class="c-button"> {{ 'cookie_remove_button'|trans }} </button>
+                            </td>
+                            <td class="small-column"><label for="{{ cookie }}">{{ cookie }}</label></td>
+                            <td>{{ cookiesSet[cookie]|escape }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td>
+                                <button disabled="disabled" name="remove_{{ cookie }}" id="remove_{{ cookie }}"
+                                        class="c-button grey">{{ 'cookie_remove_button'|trans }}</button>
+                            </td>
+                            <td><label for="{{ cookie }}">{{ cookie }}</label></td>
+                            <td>Not set</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+
+                <tr>
+                    <td colspan='3'>&nbsp;</td>
+                </tr>
+
+                {% if removal %}
+                    <tr>
+                        <td>
+                            <button name="remove_all" id="remove_all"
+                                    class="c-button">{{ 'cookie_remove_all_button'|trans }}</button>
+                        </td>
+                        <td colspan="2">
+                            {% if all %}
+                                {{ 'cookies_removal_confirm'|trans }}
+                            {% else %}
+                                {{ 'cookie_removal_confirm'|trans }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan='3'>
+                            <button name='remove_all' id='remove_all' class='c-button'>
+                                {{ 'cookie_remove_all_button'|trans }}
+                            </button>
+                        </td>
+                    </tr>
+                {% endif %}
+            </table>
+        </form>
+    </div>
+</div>
+{% endblock %}

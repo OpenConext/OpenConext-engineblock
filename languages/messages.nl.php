@@ -42,6 +42,7 @@ return $overrides + [
     'go_back'               => '&lt;&lt; Ga terug',
     'note'                  => 'Mededeling',
     'note_no_script'        => 'Jouw browser ondersteunt geen JavaScript. Je moet op de onderstaande knop drukken om door te gaan.',
+    'unknown_organization_name' => 'Onbekend',
 
      // Feedback
     'requestId'             => 'UR ID',
@@ -57,13 +58,11 @@ return $overrides + [
     'attributeValue'        => 'Attribuutwaarde',
 
     // WAYF
-    'search'                    => 'Zoek een %organisationNoun%...',
     'our_suggestion'            => 'Eerder gekozen:',
     'edit'                      => 'bewerken',
     'done'                      => 'klaar',
     'idps_with_access'          => '%organisationNounPlural% met toegang:',
     'idps_without_access'       => '%organisationNounPlural% zonder toegang:',
-    'log_in_to'                 => 'Selecteer een %organisationNoun% en login bij',
     'loading_idps'              => '%organisationNounPlural% worden geladen...',
     'request_access'            => 'Toegang aanvragen',
     'no_idp_results'            => 'Je zoekterm heeft geen resultaten opgeleverd.',
@@ -112,23 +111,13 @@ HTML
     'send_confirm_desc'     => '<p>Je verzoek is doorgestuurd naar de juiste persoon binnen jouw %organisationNoun%. Het is aan deze persoon om actie te ondernemen op basis van jouw verzoek. Het kan zijn dat er nog afspraken gemaakt moeten worden tussen jouw %organisationNoun% en de dienstaanbieder.</p>',
 
     // Consent page
-    'consent_header_title'                    => 'Om in te loggen heeft %arg1% jouw gegevens nodig',
-    'consent_header_text'                     => 'De dienst heeft deze gegevens nodig om goed te kunnen functioneren. De gegevens worden vanuit jouw %organisationNoun% veilig verstuurd naar %arg1% via <a class="help" data-slidein="about"><span>%suiteName%</span></a>.',
-    'consent_privacy_title'                   => 'De volgende gegevens worden doorgestuurd naar %arg1%:',
-    'consent_privacy_link'                    => 'Lees het privacybeleid van deze dienst',
-    'consent_attributes_correction_link'      => 'Kloppen de onderstaande gegevens niet?',
     'consent_attributes_show_more'            => 'Toon alle gegevens',
     'consent_attributes_show_less'            => 'Toon minder gegevens',
     'consent_no_attributes_text'              => 'Voor deze dienst zijn geen gegevens van jouw %organisationNoun% nodig.',
-    'consent_buttons_title'                   => 'Ga je akkoord met het doorsturen van deze gegevens?',
-    'consent_buttons_ok'                      => 'Ja, ga door naar %arg1%',
-    'consent_buttons_ok_minimal'              => 'Ga door naar %arg1%',
+    'consent_buttons_ok_informational'        => 'Doorgaan naar %sp%',
     'consent_buttons_nok'                     => 'Nee, ik ga niet akkoord',
-    'consent_buttons_nok_minimal'             => 'Annuleren',
+    'consent_buttons_nok_informational'       => 'Annuleren',
     'consent_explanation_title'               => 'Let op bij het gebruik van deze dienst',
-    'consent_footer_text_singular'            => 'Je gebruikt al één andere dienst via %suiteName%. <a href="%arg1%" target="_blank"><span>Bekijk hier het overzicht en je profielinformatie.</span></a>',
-    'consent_footer_text_plural'              => 'Je gebruikt al %arg1% diensten via %suiteName%. <a href="%arg2%" target="_blank"><span>Bekijk hier het overzicht en je profielinformatie.</span></a>',
-    'consent_footer_text_first_consent'       => 'Je gebruikt nog geen diensten via %suiteName%. <a href="%arg1%" target="_blank"><span>Bekijk hier je profielinformatie.</span></a>',
     'consent_name_id_label'                   => 'Identifier',
     'consent_name_id_support_link'            => 'Uitleg',
     'consent_name_id_value_tooltip'           => 'De identifier voor deze dienst wordt door %arg1% zelf gegenereerd en verschilt per dienst je via %arg1% gebruikt. De dienst kan jou dus wel herkennen als dezelfde gebruiker als je opnieuw inlogt, maar diensten kunnen onderling niet zien dat het om dezelfde gebruiker gaat.',
@@ -143,22 +132,8 @@ HTML
     'consent_slidein_correction_text_aa'  => '%suiteName% ontvangt de gegevens rechtstreeks van de attribuutbron en slaat deze zelf niet op. Neem contact op met de getoonde attribuutbron als je gegevens niet kloppen. Als je daarbij hulp nodig hebt, kun je contact opnemen met de helpdesk van je eigen %organisationNoun%.',
     'consent_slidein_correction_details_title' => 'Contactgegevens %arg1%:',
 
-    // Consent slidein: About OpenConext
-    'consent_slidein_about_text'  => <<<'TXT'
-<h1>Inloggen met %suiteName%</h1>
-<p>Via %suiteName% loggen personen met hun eigen %accountNoun% veilig en gemakkelijk in bij clouddiensten van verschillende aanbieders. %suiteName% biedt extra privacy-bescherming doordat een minimaal aantal persoonlijke gegevens wordt doorgegeven aan deze clouddiensten.</p>
-TXT
-    ,
-
-    // Consent slidein: Reject
-    'consent_slidein_reject_text'  => <<<'TXT'
-<h1>Je wilt geen gegevens delen met de dienst</h1>
-<p>De dienst waar je probeert in te loggen heeft jouw gegevens nodig om te kunnen functioneren. Als je deze gegevens niet wilt delen dan kun je geen gebruik maken van deze dienst. Door je browser of dit tabblad af te sluiten voorkom je het doorsturen van je gegevens. Als je je hierna bedenkt, log dan opnieuw in bij de dienst; je krijgt dit scherm dan opnieuw te zien.</p>
-TXT
-    ,
 
     // Generic slide-in
-    'slidein_close' => 'Sluiten',
     'slidein_read_more' => 'Lees meer',
 
     // Error screens

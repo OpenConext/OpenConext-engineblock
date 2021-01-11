@@ -1,0 +1,18 @@
+{% set addTooltip = nameIdIsPersistent %}
+{% set id = 'tooltip%index%%orgId%'|replace({ '%index%': loop.index, '%orgId%': orgId })|trim %}
+{% set attributeName = attributeShortName(attributeIdentifier, locale()) %}
+
+<li class="consent__attribute{% if not addTooltip %} consent__attribute--noTooltip{% endif %}">
+    {% if addTooltip %}
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/name.html.twig' with { attributeName: 'consent_name_id_label'|trans, inputId: id } %}
+    {% else %}
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/name.html.twig' with { attributeName: 'consent_name_id_label'|trans } %}
+    {% endif %}
+    {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/value.html.twig' with { attributeValue: attributeValues } %}
+    {% if addTooltip %}
+        <input type="checkbox" tabindex="-1" aria-hidden="true" class="tooltip visually-hidden" id="{{ id }}" name="{{ id }}" />
+        {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/tooltip.html.twig' with {
+            tooltipValue: 'consent_name_id_value_tooltip'|trans({'%arg1%': 'suite_name'|trans })
+        } %}
+    {% endif %}
+</li>

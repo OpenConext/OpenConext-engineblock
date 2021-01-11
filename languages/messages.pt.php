@@ -42,6 +42,7 @@ return $overrides + [
     'go_back'               => '&lt;&lt; Volte atrás',
     'note'                  => 'Nota',
     'note_no_script'        => 'Visto que o seu browser não suporta JavaScript, deve pressionar no botão em baixo para prosseguir.',
+    'unknown_organization_name' => 'Unknown',
 
     // Feedback
     'requestId'             => 'UR ID',
@@ -57,13 +58,11 @@ return $overrides + [
     'attributeValue'        => 'Valor do Atributo',
 
     // WAYF
-    'search'                    => 'Procure por uma %organisationNoun%...',
     'our_suggestion'            => 'Escolha anterior:',
     'edit'                      => 'editar',
     'done'                      => 'feito',
     'idps_with_access'          => 'Fornecedores de Identidade com acesso',
     'idps_without_access'       => 'Fornecedores de Identidade sem acesso',
-    'log_in_to'                 => 'Seleccione uma %organisationNoun% para se autenticar no serviço:',
     'loading_idps'              => 'A carregar Fornecedores de Identidade...',
     'request_access'            => 'Requisitar acesso',
     'no_idp_results'            => 'A sua pesquisa não devolveu qualquer resultado.',
@@ -114,23 +113,13 @@ HTML
     'send_confirm_desc'     => '<p>A sua solicitação foi encaminha para a sua %organisationNoun%. As decisões para a disponibilidade deste serviço serão tomadas pela equipa de IT da sua %organisationNoun%.</p>',
 
     // Consent page
-    'consent_header_title'                    => '%arg1% necessita da sua informação antes de efetuar login',
-    'consent_header_text'                     => 'Este serviço necessita da seguinte informação para funcionar devidamente. Estes dados serão enviados de forma segura para a sua %organisationNoun% relativamente a %arg1% por <a class="help" href="#" data-slidein="about"><span>%suiteName%</span></a>.',
-    'consent_privacy_title'                   => 'A informação seguinte será partilhada com %arg1%:',
-    'consent_privacy_link'                    => 'Leia a política de privacidade para este serviço',
-    'consent_attributes_correction_link'      => 'Os seus detalhes estão incorrectos?',
     'consent_attributes_show_more'            => 'Mostrar mais informação',
     'consent_attributes_show_less'            => 'Mostrar menos informação',
     'consent_no_attributes_text'              => 'Este serviço não requer informações da sua instituição',
-    'consent_buttons_title'                   => 'Concorda com a partilha desta informação?',
-    'consent_buttons_ok'                      => 'Sim, prossiga para %arg1%',
-    'consent_buttons_ok_minimal'              => 'Prossiga para %arg1%',
+    'consent_buttons_ok_informational'        => 'Proceed to %sp%',
     'consent_buttons_nok'                     => 'Não, eu não concordo',
-    'consent_buttons_nok_minimal'             => 'Cancelar',
+    'consent_buttons_nok_informational'       => 'Cancel',
     'consent_explanation_title'               => 'Preste atenção quando utiliza este serviço',
-    'consent_footer_text_singular'            => 'Você está a utilizar um outro serviço através do %suiteName%. <a href="%arg1%" target="_blank"><span>Veja a lista de serviços e as informações do seu perfil.</span></a>',
-    'consent_footer_text_plural'              => 'Você está a utilizar %arg1% serviços através do %suiteName%. <a href="%arg2%" target="_blank"><span>Veja a lista de serviços e as informações do seu perfil.</span></a>',
-    'consent_footer_text_first_consent'       => 'Você não está a usar nenhum serviço através do %suiteName%. <a href="%arg1%" target="_blank"><span>Veja a informação do seu perfil.</span></a>',
     'consent_name_id_label'                   => 'Identificador',
     'consent_name_id_support_link'            => 'Explicação',
     'consent_name_id_value_tooltip'           => 'O identificador para este serviço é gerado por %arg1% e difere entre cada serviço que você usa através da %arg1%. O serviço pode reconhecê-lo com o mesmo utilizador ao regressar ao serviço, contudo, os serviços não o podem reconhecer entre si pelo mesmo utilizador.',
@@ -144,22 +133,7 @@ HTML
     'consent_slidein_correction_text_idp'  => '%suiteName% recebe a informação directamente da sua %organisationNoun% e não armazena a informação para si. Se a sua informação está incorrecta, entre em contacto com o suporte da sua %organisationNoun% para a alterar.',
     'consent_slidein_correction_text_aa'  => '%suiteName% recebe a informação directamente do fornecedor de atributos e não armazena a informação para si. Se a sua informação está incorrecta, entre em contacto com o fornecedor dos atributos directamente para que sejam corrigidas. Pode pedir ao suporte da sua %organisationNoun% que lhe dê assistência para esta situação.',
 
-    // Consent slidein: About %suiteName%
-    'consent_slidein_about_text'  => <<<'TXT'
-<h1>A efectuar login através da %suiteName%</h1>
-<p>%suiteName% permite que as pessoas de forma fácil e segura acedam a vários serviços de cloud usando as sua própria %accountNoun%. %suiteName% oferece protecção extra na sua privacidade, enviando apenas um conjunto mínimo de dados pessoais para estes servioes em cloud.</p>
-TXT
-    ,
-
-    // Consent slidein: Reject
-    'consent_slidein_reject_text'  => <<<'TXT'
-<h1>Você recusou partilhar os seus dados</h1>
-<p>O serviço ao qual se autenticou necessita dos seus dados para funcionar. Se não concorda com a partilha da sua informação, não poderá utilizar este serviço. Fechando o browser ou esta janela, está a recusar a partilha da informação necessária. Se mudar de ideias após esta decisão, volte a entrar no serviço e serão efectuadas as mesmas questões de partilha da informação de novo.</p>
-TXT
-    ,
-
     // Generic slide-in
-    'slidein_close' => 'Fechar',
     'slidein_read_more' => 'Leia mais',
 
     // Error screens

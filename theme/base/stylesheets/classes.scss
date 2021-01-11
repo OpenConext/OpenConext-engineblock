@@ -1,0 +1,43 @@
+/*******************************************************************
+    Generic reusable classes.
+    Page-specific classes do not belong here.
+ ******************************************************************/
+@import 'variables';
+@import 'breakpoints';
+@import 'mixins';
+
+.visually-hidden {
+    @include visually-hidden;
+}
+
+.container {
+    width: 38rem;
+
+    @include screen('mobile') {
+        width: 100%;
+    }
+}
+
+.tooltip__value,
+.modal__value {
+    display: none;
+}
+
+.modal__value {
+    line-height: 1.5;
+
+    .modal__content {
+        background-color: inherit;
+        font-weight: $normal;
+        padding: 1rem;
+
+        > h3 {
+            margin-top: 0;
+        }
+    }
+}
+
+.hidden,
+.hideNoJS {
+    display: none !important;
+}

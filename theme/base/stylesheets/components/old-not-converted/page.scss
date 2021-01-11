@@ -1,0 +1,48 @@
+body {
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: none;
+  font-size: $f-normal;
+  background: $lightGrey;
+  color: $darkGrey;
+  font-family: $font;
+  line-height: 20px;
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+h1, h2, h3 {
+  margin-bottom: .5rem;
+}
+
+h1 {
+  font-weight: $normal;
+  font-size: calculateRem(24px);
+}
+
+h1.title{
+  font-size: calculateRem(15px);
+    font-weight: normal;
+    line-height: calculateRem(40px);
+}
+
+h2 {
+  font-size: calculateRem(18px);
+  font-weight: normal;
+  line-height: calculateRem(30px);
+}
+
+blockquote {
+  margin-bottom: 2rem;
+}
+
+a {
+  color: $contrastBlue;
+
+  &:hover{
+    text-decoration: underline;
+  }
+}

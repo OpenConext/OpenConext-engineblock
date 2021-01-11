@@ -1,0 +1,281 @@
+/*******************************************************************
+    Generic sass-mixins
+ ******************************************************************/
+
+@mixin appearance($value: none) {
+    -moz-appearance: $value;
+    -webkit-appearance: $value;
+    appearance: $value;
+}
+
+@mixin remove-outline {
+    outline: none;
+    padding: 0;
+
+    &:focus {
+        outline: none;
+        padding: 0;
+    }
+}
+
+// Clear user-agent styles for button.
+// If no background-color is set on the body element, use with a background-color.
+// Else you'll see a grey background still in safari and IE.
+@mixin button-reset($background-color: inherit) {
+    @include appearance;
+    background-color: $background-color;
+    border: 0;
+    font-family: inherit;
+    font-size: 100%;
+    padding: 0;
+}
+
+// Controls whether the user can select text
+@mixin select($value: none) {
+    -moz-user-select: $value;
+    -ms-user-select: $value;
+    -webkit-user-select: $value;
+    user-select: $value;
+}
+
+// Do not use, use the helpers below
+// Example usage: .sub-menu {
+//  @include absolute(top 100% left 0 right 12px);
+//}
+@mixin position($position, $args) {
+    @each $o in top right bottom left {
+        $i: index($args, $o);
+        @if $i and $i + 1 <= length($args) and type-of(nth($args, $i + 1)) == number {
+            #{$o}: nth($args, $i + 1);
+        }
+    }
+    position: $position;
+}
+
+// Positioning helpers
+@mixin absolute($args: '') {
+    @include position(absolute, $args);
+}
+
+@mixin fixed($args: '') {
+    @include position(fixed, $args);
+}
+
+@mixin relative($args: '') {
+    @include position(relative, $args);
+}
+
+// A whole lot of grid mixins below
+// Ensure CSS grid works with IE 11 spec.
+// sass-lint:disable no-vendor-prefixes, no-duplicate-properties
+@mixin display-grid {
+    display: -ms-grid;
+    display: grid;
+}
+
+// $rows values should be delimited by a space
+@mixin grid-template-rows($rows...) {
+    -ms-grid-rows: $rows;
+    grid-template-rows: $rows;
+}
+
+// $columns values should be delimited by a space
+@mixin grid-template-columns($columns...) {
+    -ms-grid-columns: $columns;
+    grid-template-columns: $columns;
+}
+
+// Can be used in combination with above grid-template-X mixins.
+// These result in the same output:
+// @include grid-template-columns(10px grid-repeat(4, 20px) 30px);
+// @include grid-template-columns(10px 20px 20px 20px 20px 30px);
+@function grid-repeat($repeat, $stuff: 1fr) {
+    $list: ();
+    @for $i from 1 through $repeat {
+        $list: append($list, $stuff, space);
+    }
+    @return $list;
+}
+
+@mixin grid-position($row-start, $row-end, $col-start, $col-end) {
+    @include grid-column($col-start, $col-end);
+    @include grid-row($row-start, $row-end);
+}
+
+@mixin grid-row($row-start, $row-end) {
+    -ms-grid-row: $row-start;
+    -ms-grid-row-span: $row-end - $row-start;
+    grid-row: #{$row-start} / #{$row-end};
+}
+
+@mixin grid-column($col-start, $col-end) {
+    -ms-grid-column: $col-start;
+    -ms-grid-column-span: $col-end - $col-start;
+    grid-column: #{$col-start} / #{$col-end};
+}
+
+@mixin grid-align-self($value) {
+    -ms-grid-row-align: $value;
+    align-self: $value;
+}
+
+@mixin grid-justify-self($value) {
+    -ms-grid-column-align: $value;
+    justify-self: $value;
+}
+
+@mixin border-bottom-radius($value) {
+    border-bottom-right-radius: $value;
+    border-bottom-left-radius: $value;
+}
+
+@mixin font-style-large {
+    font-size: $f-large;
+    font-weight: $bolder;
+}
+
+@mixin font-style-xl {
+    font-size: $f-xl;
+    font-weight: $bolder;
+}
+
+@mixin visually-hidden {
+    clip: rect(1px, 1px, 1px, 1px);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+@mixin visually-shown {
+    clip: unset;
+    height: initial;
+    overflow: inherit;
+    position: static;
+    white-space: inherit;
+    width: initial;
+}
+
+@mixin webkit-input {
+    -webkit-appearance: none;
+}
+
+/**
+ * This mixin adds "offensively defensive" animations.
+ * It utilizes the prefers-reduced-motion mediaquery to do so.
+
+ * Practically speaking this means that:
+ * - users of browsers which don't support the mediaquery will get the animation-less experience.
+ * - users of browsers which do support the mediaquery will get the animations by default.  Only if they selected to have a reduced motion experience will they be absent.
+ * - users without JS will have no animations.
+ *
+ * The first use case is not supported if you use the classic technique of removing animations if a user selected to opt in to prefers-reduced-motion.
+ *
+ * Why => this is an accessibility consideration, allowing us to conform to WCAG 2.3.3: https://www.w3.org/TR/WCAG21/#animation-from-interactions.
+ *
+ * For more info see:
+ * - https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion
+ * - https://alistapart.com/article/accessibility-for-vestibular/
+ */
+@mixin motion {
+    @media (prefers-reduced-motion: no-preference) {
+        @content;
+    }
+}
+
+@mixin transition-display {
+    @include motion {
+        transition: padding-bottom .4s ease-in, padding-top .4s ease-in, margin-bottom .4s ease-in, margin-top .4s ease-in, max-height .4s ease-in;
+    }
+}
+
+@mixin start-display-animated {
+    @include motion {
+        display: block;
+        margin: 0;
+        max-height: 0;
+        overflow: hidden;
+        padding: 0;
+        transition: margin .6s ease-in, max-height .6s ease-in, padding .6s ease-in;
+    }
+}
+
+@mixin gradient($direction, $list) {
+    background: -webkit-linear-gradient($direction, $list);
+    background: -moz-linear-gradient($direction, $list);
+    background: -o-linear-gradient($direction, $list);
+    background: linear-gradient($direction, $list);
+}
+
+@mixin clearfix {
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+@mixin scrollbar($size, $foreground-color, $br-thumb: "0", $background-color: "none", $br-track: "0") {
+    &::-webkit-scrollbar {
+        width: $size;
+        height: $size;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $foreground-color;
+        border-radius: $br-thumb;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: $background-color;
+        border-radius: $br-track;
+    }
+}
+
+@mixin max-width($width) {
+    @media (max-width: $width) {
+        @content;
+    }
+}
+
+@mixin min-width($width) {
+    @media (min-width: $width) {
+        @content;
+    }
+}
+
+@mixin min-height($height) {
+    @media (min-height: $height) {
+        @content;
+    }
+}
+
+@mixin hocus {
+    &:active,
+    &:hover,
+    &:focus {
+        @content;
+    }
+}
+
+@mixin input {
+    input[type=text],
+    input[type=email],
+    input[type=number],
+    input[type=date],
+    input[type=time],
+    textarea,
+    select {
+        @content;
+    }
+}
+
+// Content which is only intended for ie11.
+// todo refactor as soon as ie11 support is dropped
+@mixin ie11Only($selector) {
+    _:-ms-fullscreen,
+    #{$selector} {
+        @content;
+    }
+}

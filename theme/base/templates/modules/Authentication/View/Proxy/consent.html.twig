@@ -1,0 +1,40 @@
+{% extends '@themeLayouts/scripts/default.html.twig' %}
+
+{# SP and IdP name are stored in a local variable for convenience #}
+{% set spName = sp.displayName(locale()) %}
+{% set organizationName = sp.organizationName(locale())|default('unknown_organization_name'|trans) %}
+{% set idpName = idp.displayName(locale()) %}
+
+{# Prepare the page title #}
+{% if informationalConsent %}
+    {% set pageTitle = 'consent_h1_text_informational'|trans({'%sp%': spName}) %}
+{% else %}
+    {% set pageTitle = 'consent_h1_text'|trans %}
+{% endif %}
+
+{# Load the sorted/ordered and normalized attributes #}
+{% set attributesBySource = sortByDisplayOrder(attributes, attributeSources, nameId) %}
+
+{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
+
+{% block content %}
+    {% include '@theme/Default/Partials/LoginBar.html.twig' with { loginName: 'suite_name'|trans } %}
+    <main class="consent">
+        {% include '@theme/Authentication/View/Proxy/Partials/Shared/header.html.twig' %}
+
+        {% set textNoJs %}
+            <p>{{ 'consent_nojs'|trans }}</p>
+        {% endset %}
+        <noscript>
+            {% include '@theme/Default/Partials/warning.html.twig' with {
+                className: 'consent__noScript noScript',
+                text: textNoJs
+            } %}
+        </noscript>
+
+        {% block consent_content %}
+            {% include '@theme/Authentication/View/Proxy/Partials/Consent/consentContent.html.twig' %}
+            {% include '@theme/Authentication/View/Proxy/Partials/Consent/nokSection.html.twig' %}
+        {% endblock %}
+    </main>
+{% endblock %}

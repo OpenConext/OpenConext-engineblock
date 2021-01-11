@@ -1,0 +1,33 @@
+{% extends '@theme/Default/View/Error/error.html.twig' %}
+
+{% set pageTitle = 'error_authorization_policy_violation'|trans %}
+{% block pageTitle %}{{ pageTitle }}{% endblock %}
+{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
+{% block pageHeading %}{{ pageTitle }}{% endblock %}
+
+{% block errorMessage %}
+
+    <h2>{{ 'error_authorization_policy_violation_info'|trans|raw }}</h2>
+
+    {% if logo is not null %}
+        <img src="{{ logo.url }}?v={{ assetsVersion }}"
+             class="pull-right"
+             width="{{ logo.width }}"
+             height="{{ logo.height }}"
+        >
+    {% endif %}
+
+    {% if policyDecisionMessage is not null %}
+        <p class="error-title__error-message--institution">{{ policyDecisionMessage }}</p>
+
+        <div class="horizontal-rule">
+            <hr class="horizontal-rule__line">
+        </div>
+
+    {% endif %}
+    {{ 'error_authorization_policy_violation_desc'|trans|raw }}
+
+{% endblock %}
+
+{# The PDP error page should not show the table with the feedback information and back button. #}
+{% block feedbackInfo %}{% endblock %}

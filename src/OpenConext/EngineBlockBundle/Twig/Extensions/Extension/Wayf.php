@@ -93,9 +93,9 @@ class Wayf extends Twig_Extension
                         'title' => strtolower($idp['Name_' . $locale]),
                         'keywords' => strtolower(join('|', $idpKeywords)),
                         'logo' => $idp['Logo'],
+                        'isDefaultIdp' => (bool) $idp['isDefaultIdp'],
                     ]
                 );
-                continue;
             }
 
             $formattedIdpList[] = [
@@ -105,6 +105,7 @@ class Wayf extends Twig_Extension
                 'title' => strtolower($idp['Name_'.$locale]),
                 'keywords' => strtolower(join('|', $idpKeywords)),
                 'logo' => $idp['Logo'],
+                'isDefaultIdp' => (bool) $idp['isDefaultIdp'],
             ];
         }
 
@@ -172,13 +173,19 @@ class Wayf extends Twig_Extension
     {
         $request = $requestStack->getCurrentRequest();
         $previousSelection = null;
+        $previousSelectionIndexed = [];
         if ($request) {
             $previousSelection = json_decode(
                 $request->cookies->get(self::PREVIOUS_SELECTION_COOKIE_NAME, null),
                 true
             );
+            if ($previousSelection) {
+                // And index the previous selection on IdP entity ID
+                foreach ($previousSelection as $item) {
+                    $previousSelectionIndexed[$item['idp']] = $item;
+                }
+            }
         }
-
-        return $previousSelection;
+        return $previousSelectionIndexed;
     }
 }

@@ -28,6 +28,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
+    const IS_DEFAULT_IDP_KEY = 'isDefaultIdp';
+
     /** @var \EngineBlock_Corto_ProxyServer */
     protected $_server;
 
@@ -426,7 +428,17 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         } else {
             $serviceProvider = $this->_server->findOriginalServiceProvider($request, $application->getLogInstance());
         }
-        $idpList = $this->_transformIdpsForWAYF($candidateIdpEntityIds, $request->isDebugRequest(), $currentLocale);
+
+        $idpList = $this->_transformIdpsForWAYF(
+            $candidateIdpEntityIds,
+            $request->isDebugRequest(),
+            $currentLocale,
+            $container->getDefaultIdPEntityId()
+        );
+
+        $defaultIdPInIdPList = $this->isDefaultIdPPresent($idpList);
+        $showDefaultIdpBanner = (bool) $container->shouldDisplayDefaultIdpBannerOnWayf() && $defaultIdPInIdPList;
+
         $rememberChoiceFeature = $container->getRememberChoice();
 
         $output = $this->twig->render(
@@ -437,6 +449,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
                 'helpLink' => '/authentication/idp/help-discover?lang=' . $currentLocale,
                 'backLink' => $container->isUiOptionReturnToSpActive(),
                 'cutoffPointForShowingUnfilteredIdps' => $container->getCutoffPointForShowingUnfilteredIdps(),
+                'showIdPBanner' => $showDefaultIdpBanner,
                 'rememberChoiceFeature' => $rememberChoiceFeature,
                 'showRequestAccess' => $serviceProvider->getCoins()->displayUnconnectedIdpsWayf(),
                 'requestId' => $request->getId(),
@@ -449,7 +462,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         $this->_server->sendOutput($output);
     }
 
-    protected function _transformIdpsForWayf(array $idpEntityIds, $isDebugRequest, $currentLocale)
+    protected function _transformIdpsForWayf(array $idpEntityIds, $isDebugRequest, $currentLocale, $defaultIdpEntityId)
     {
         $identityProviders = $this->_server->getRepository()->findIdentityProvidersByEntityId($idpEntityIds);
 
@@ -465,7 +478,20 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
                 continue;
             }
 
+            $isAccessible = $identityProvider->enabledInWayf || $isDebugRequest;
+            $isDefaultIdP = false;
+            if ($defaultIdpEntityId === $identityProvider->entityId) {
+                $isDefaultIdP = true;
+            }
+
+            // Do not show the default IdP in the disconnected IdPs section.
+            if (!$isAccessible && $isDefaultIdP) {
+                continue;
+            }
+
             $additionalInfo = AdditionalInfo::create()->setIdp($identityProvider->entityId);
+
+            $isAccessible = $identityProvider->enabledInWayf || $isDebugRequest;
 
             $wayfIdp = array(
                 'Name_nl'   => $this->getNameNl($identityProvider, $additionalInfo),
@@ -473,9 +499,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
                 'Name_pt'   => $this->getNamePt($identityProvider, $additionalInfo),
                 'Logo'      => $identityProvider->logo ? $identityProvider->logo->url : '/images/placeholder.png',
                 'Keywords'  => $this->getKeywords($identityProvider),
-                'Access'    => $identityProvider->enabledInWayf || $isDebugRequest ? '1' : '0',
+                'Access'    => $isAccessible ? '1' : '0',
                 'ID'        => md5($identityProvider->entityId),
                 'EntityID'  => $identityProvider->entityId,
+                self::IS_DEFAULT_IDP_KEY => $isDefaultIdP
             );
             $wayfIdps[] = $wayfIdp;
         }
@@ -670,5 +697,15 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
 
         $serviceProvider = $this->_serviceProviderFactory->createEngineBlockEntityFrom($keyId);
         return ServiceProvider::fromServiceProviderEntity($serviceProvider);
+    }
+
+    private function isDefaultIdPPresent(array $idpList): bool
+    {
+        foreach ($idpList as $idp) {
+            if ($idp[self::IS_DEFAULT_IDP_KEY] === true) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -22,6 +22,7 @@ use OpenConext\EngineBlockFunctionalTestingBundle\Helper\TestEntitySeeder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Twig_Environment;
 
 /**
@@ -45,26 +46,49 @@ class WayfController extends Controller
         $displayUnconnectedIdpsWayf = (bool) $request->get('displayUnconnectedIdpsWayf', false);
         $rememberChoiceFeature = (bool) $request->get('rememberChoiceFeature', false);
         $cutoffPointForShowingUnfilteredIdps = $request->get('cutoffPointForShowingUnfilteredIdps', 100);
+        $showIdPBanner = $request->get('showIdPBanner', true);
+        $defaultIdpEntityId = $request->get('defaultIdpEntityId', null);
+        // Casting a string 'true' or 'false' using filter_var (bool) does not work here
+        $showIdPBanner = filter_var($showIdPBanner, FILTER_VALIDATE_BOOLEAN);
 
         $connectedIdps = (int) $request->get('connectedIdps', 5);
         $unconnectedIdps = (int) $request->get('unconnectedIdps', 0);
+        $randomIdps = (int) $request->get('randomIdps', 0);
+
+        $idpList = $randomIdps === 0
+            ? TestEntitySeeder::buildIdps($connectedIdps, $unconnectedIdps, $currentLocale, $defaultIdpEntityId)
+            : TestEntitySeeder::buildRandomIdps($randomIdps, $currentLocale, $defaultIdpEntityId);
 
         return new Response($this->twig->render(
             '@theme/Authentication/View/Proxy/wayf.html.twig',
             [
-                'action' => 'https://engine.vm.openconext.org/',
+                'action' => $this->generateUrl('functional_testing_handle_wayf'),
                 'greenHeader' => $currentLocale,
                 'helpLink' => '/authentication/idp/help-discover?lang='.$currentLocale,
                 'backLink' => $backLink,
                 'cutoffPointForShowingUnfilteredIdps' => $cutoffPointForShowingUnfilteredIdps,
+                'showIdPBanner' => $showIdPBanner,
                 'rememberChoiceFeature' => $rememberChoiceFeature,
                 'showRequestAccess' => $displayUnconnectedIdpsWayf,
                 'requestId' => 'bogus-request-id',
                 'serviceProvider' => TestEntitySeeder::buildSp(),
-                'idpList' => TestEntitySeeder::buildIdps($connectedIdps, $unconnectedIdps, $currentLocale),
+                'idpList' => $idpList,
                 'beforeScriptHtml' => '<div id="request-access-scroller"><div id="request-access-container">' .
                     '<div id="request-access"></div></div></div>',
             ]
         ));
+    }
+
+    public function handleWayfAction(Request $request)
+    {
+        if ($request->request->has('idp')) {
+            return $this->redirectToRoute(
+                'open_conext_engine_block_authentication_homepage',
+                [
+                    'idp' => $request->request->get('idp')
+                ]
+            );
+        }
+        throw new AccessDeniedException('No IdP parameter found');
     }
 }

@@ -1,0 +1,267 @@
+/*******************************************************************
+    CSS shared across all pages with the default layout
+ ******************************************************************/
+@import 'helpers.scss';
+
+html {
+    scroll-behavior: smooth;
+}
+
+[hidden] {
+    display: none;
+}
+
+body {
+    align-items: center;
+    background: $darkishBlue;
+    display: flex;
+    font-family: 'SourceSansPro', sans-serif;
+    font-size: 100%;
+    justify-content: center;
+    line-height: 1.5;
+    margin: 0;
+    overflow-wrap: break-word;
+
+    *,
+    *:before,
+    *:after {
+        box-sizing: border-box
+    }
+
+    * {
+        @include focus;
+    }
+
+    *:focus:not(:focus-visible) {
+        outline: none;
+        box-shadow: none;
+    }
+
+    a {
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    button {
+        cursor: pointer;
+    }
+
+    h2 {
+        color: $green;
+        font-family: 'Nunito', sans-serif;
+        font-size: $f-h2;
+        font-weight: $bolder;
+        line-height: 1.15;
+    }
+
+    h3 {
+        color: $brownishGray;
+        font-family: 'Nunito', sans-serif;
+        font-size: $f-h3;
+        font-weight: $bolder;
+        line-height: 1.5;
+    }
+
+    h4 {
+        color: $black;
+        font-family: 'Nunito', sans-serif;
+        font-size: $f-xl;
+        font-weight: $bolder;
+        line-height: 1.5;
+    }
+
+    h5 {
+        color: $brownishGray;
+        font-size: $f-h5;
+        font-weight: $normal;
+        line-height: 1.5;
+    }
+
+    h6 {
+        color: $black;
+        font-size: $f-large;
+        font-weight: $bolder;
+        line-height: 1.5;
+    }
+
+    img {
+        overflow: hidden;
+    }
+
+    > .container {
+        > header {
+            > h1.redirectBar,
+            > p.loginBar {
+                @include font-style-xl;
+                background-color: $darkishBlue;
+                color: $loginBlue;
+                font-family: 'Nunito', sans-serif;
+                line-height: 5rem;
+                margin: 0;
+                padding: 0 2rem;
+
+                @include screen('mobile') {
+                    @include font-style-large;
+                    line-height: 3rem;
+                    padding: 0 1rem;
+                }
+
+                @include screen('smallMobile') {
+                    padding: 0 .5rem;
+                }
+            }
+        }
+
+        > main {
+            @include border-bottom-radius(8px);
+            background-color: $gray;
+            box-shadow: 0 3px 0 2px $darkishBlueTwo;
+
+            > header {
+                font-family: 'Nunito', sans-serif;
+
+                h1 {
+                    @include font-style-xl;
+                    background-color: $yellow;
+                    color: $black;
+                    line-height: calculateRem(26px);
+                    margin: 0;
+                    padding: calculateRem(26px) 2rem;
+
+                    @include screen('mobile') {
+                        padding: .8125rem 1rem;
+                    }
+
+                    @include screen('smallMobile') {
+                        padding: .8125rem .5rem;
+                    }
+                }
+
+                h2 {
+                    background-color: $gray;
+                    color: $green;
+                    font-size: $f-h2;
+                    font-weight: $bolder;
+                    line-height: 1.15;
+                    margin: 0;
+                    padding: 1.5rem 2rem calculateRem(34px);
+
+                    @include screen('mobile') {
+                        padding: .75rem 1rem calculateRem(17px);
+                    }
+
+                    @include screen('smallMobile') {
+                        padding: .75rem .5rem calculateRem(17px);
+                    }
+                }
+            }
+        }
+    }
+
+    // show the tooltip / modal when the input is checked
+    input[type="checkbox"]:checked.modal + label + .modal__value,
+    input[type="checkbox"]:checked.tooltip ~ .tooltip__value,
+    input[type="checkbox"]:checked.modal + br + label + .modal__value,
+    input[type="checkbox"]:checked.modal + br + label + .modal__value.animated,
+    input[type="checkbox"]:checked.modal + .button--tertiary + .modal__value {
+        display: block;
+    }
+
+    input[type="checkbox"]:checked.tooltip ~ .tooltip__value {
+        padding: 0 1rem 1rem 0;
+
+        @include screen('mobile') {
+            margin: 0;
+            text-align: left;
+            padding: 1rem 1rem 1rem 0;
+        }
+
+        > p {
+            text-align: left;
+        }
+    }
+
+    .tooltip__value {
+        display: none;
+        text-align: right;
+    }
+
+    .modal__value.animated,
+    .tooltip__value.animated {
+        @include start-display-animated;
+    }
+
+    // if user agrees to animations, animate the display showing / hiding
+    input[type="checkbox"]:checked.modal + label + .modal__value.animated,
+    input[type="checkbox"]:checked.tooltip ~ .tooltip__value.animated,
+    input[type="checkbox"]:checked.modal + br + label + .modal__value.animated,
+    input[type="checkbox"]:checked.modal + .button--tertiary + .modal__value.animated {
+        @include transition-display;
+    }
+
+    // set max-height for modals
+    input[type="checkbox"]:checked.modal + label + .modal__value.animated,
+    input[type="checkbox"]:checked.modal + br + label + .modal__value.animated,
+    input[type="checkbox"]:checked.modal + .button--tertiary + .modal__value.animated {
+        max-height: initial;
+    }
+
+    @include ie11Only('input[type="checkbox"]:checked.modal + label + .modal__value.animated, input[type="checkbox"]:checked.modal + br + label + .modal__value.animated, input[type="checkbox"]:checked.modal + .button--tertiary + .modal__value.animated') {
+        max-height: 60vh;
+    }
+
+        // set max-height for tooltips
+    input[type="checkbox"]:checked.tooltip ~ .tooltip__value.animated {
+        max-height: initial;
+    }
+
+    @include ie11Only('input[type="checkbox"]:checked.tooltip ~ .tooltip__value.animated') {
+        max-height: 40vh;
+    }
+
+    label.tooltip,
+    .ie11__label > label.tooltip {
+        @include tooltip;
+    }
+
+    label.tooltip,
+    label.modal,
+    label[for="showMoreCheckbox"] {
+        cursor: pointer;
+    }
+
+    // set arrow down for modals when closed
+    label.modal {
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='25' height='24' viewBox='0 0 25 24'%3E%3Cdefs%3E%3Cpath id='t5vbpi1wma' d='M4.92 10.75c-.183 0-.367-.05-.528-.153-.416-.268-.517-.794-.225-1.176L8.319 4 4.18-1.422c-.292-.382-.19-.908.226-1.175.417-.268.99-.175 1.282.207l4.508 5.906c.221.291.221.678 0 .969L5.673 10.39c-.18.234-.464.359-.754.359'/%3E%3C/defs%3E%3Cg fill='none' fill-rule='evenodd' transform='translate(5.5 8)'%3E%3Cmask id='jsuhne1qsb' fill='%23fff'%3E%3Cuse xlink:href='%23t5vbpi1wma'/%3E%3C/mask%3E%3Cuse fill='%230077C8' transform='rotate(90 7.181 4)' xlink:href='%23t5vbpi1wma'/%3E%3C/g%3E%3C/svg%3E%0A") no-repeat right center;
+        padding-right: 25px;
+    }
+
+    // set arrow up for modals when open
+    input[type="checkbox"]:checked.modal + label,
+    input[type="checkbox"]:checked.modal + br + label,
+    input[type="checkbox"]:checked.modal + .ie11__label > label {
+        @include closeModal;
+    }
+
+    // set cross for tooltips when opened
+    input[type="checkbox"]:checked.tooltip ~ label.tooltip,
+    input[type="checkbox"]:checked.tooltip ~ .ie11__label > label.tooltip {
+        @include closeTooltip;
+    }
+
+    .button--secondary,
+    .button--tertiary,
+    .buttonLink--secondary,
+    .buttonLink--tertiary {
+        &:focus {
+            box-shadow: none;
+            outline: none;
+
+            > * {
+                box-shadow: 0 0 0 3px $lightBlue;
+            }
+        }
+    }
+}
+
