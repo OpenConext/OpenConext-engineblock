@@ -23,12 +23,20 @@ class EngineBlock_Corto_Filter_Command_ValidateAllowedConnection extends EngineB
 {
     public function execute()
     {
-        if (!$this->_serviceProvider->isAllowed($this->_identityProvider->entityId)) {
+        $sp = $this->_serviceProvider;
+        // When dealing with an SP that acts as a trusted proxy, we should perform the validatoin on the proxying SP
+        // and not the proxy itself.
+        if ($sp->getCoins()->isTrustedProxy()) {
+            // Overwrite the trusted proxy SP instance with that of the SP that uses the trusted proxy.
+            $sp = $this->_server->findOriginalServiceProvider($this->_request, $this->_server->getLogger());
+        }
+
+        if (!$sp->isAllowed($this->_identityProvider->entityId)) {
             throw new EngineBlock_Corto_Exception_InvalidConnection(
                 sprintf(
                     'Disallowed response by SP configuration. Response from IdP "%s" to SP "%s"',
                     $this->_identityProvider->entityId,
-                    $this->_serviceProvider->entityId
+                    $sp->entityId
                 )
             );
         }
