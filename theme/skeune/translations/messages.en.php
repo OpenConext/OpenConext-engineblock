@@ -38,7 +38,7 @@ return [
     'wayf_no_access_helpdesk_not_connected'     =>  "Go back to the previous page and click '%buttonText%'.",
     'wayf_noaccess_title_screenreader'       => 'Request access for this account',
     'wayf_noaccess_name'        => 'Your name',
-    'wayf_noaccess_email'       => 'Your emailaddress',
+    'wayf_noaccess_email'       => 'Your email address',
     'wayf_noaccess_motivation'  => 'Motivation',
     'wayf_noaccess_success'     => 'Your request for access has been sent.',
     'wayf_noaccess_request_access_screenreader'  => 'Open the request access form',
