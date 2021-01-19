@@ -5,6 +5,11 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.3.7
+
+**Security update**
+ - Allowed connections where checked against the incorrect SP when using Trusted Proxy
+
 ## 6.3.6
 After some testing, @tvdijen opened issue #920, identifying several issues with the 3.6.x releases. Those issues
 have been addressed in this release.
