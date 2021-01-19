@@ -5,6 +5,13 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.4.2
+**Security update**
+ - Allowed connections where not checked against the correct SP when trusted proxy was used
+
+**Other**
+ - Updated translations for new theme
+
 ## 6.4.1
 **Features and fixes**
  - The index, debug and cookie pages have been styled to prevent the mixed new and old style that happened. They now all look like the previous OpenConext theme used to look.
