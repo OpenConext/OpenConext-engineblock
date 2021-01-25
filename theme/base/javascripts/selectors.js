@@ -81,6 +81,7 @@ export const defaultIdpSelector = `.${defaultIdpClass}`;
 export const defaultIdpInformational = '.remainingIdps__defaultIdp';
 export const remainingIdpCutoffMetSelector = '.wayf__remainingIdps .wayf__idpList--cutoffMet';
 export const remainingIdpLiSelector = '.wayf__remainingIdps .wayf__idpList > li';
+export const remainingIdpArticleSelector = `${remainingIdpListSelector} > li > .wayf__idp`;
 export const firstRemainingIdpSelector = '.wayf__remainingIdps li:first-of-type > .wayf__idp';
 export const firstRemainingIdpAfterSearchSelector = '.wayf__remainingIdps .wayf__idpList > li:first-child > .wayf__idp:not([data-weight="0"])';
 export const lastRemainingIdpSelector = '.wayf__remainingIdps li:last-of-type > .wayf__idp';
