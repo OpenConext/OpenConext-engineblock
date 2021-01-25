@@ -1,7 +1,14 @@
+import {focusAndSmoothScroll} from '../../utility/focusAndSmoothScroll';
+import {getData} from '../../utility/getData';
+
 export const focusOnNextIdp = () => {
-  const nextSibling = document.activeElement.parentElement.nextElementSibling;
+  let nextSibling = document.activeElement.parentElement.nextElementSibling;
+
+  while (nextSibling && getData(nextSibling, 'weight') === '0') {
+    nextSibling = nextSibling.nextElementSibling;
+  }
 
   if (!!nextSibling) {
-    nextSibling.firstElementChild.focus();
+    focusAndSmoothScroll(nextSibling.firstElementChild);
   }
 };

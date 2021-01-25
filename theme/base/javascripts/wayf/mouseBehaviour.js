@@ -1,8 +1,14 @@
 import {getData} from '../utility/getData';
 import {handleAriaPressed} from '../utility/handleAriaPressed';
 import {handleIdpBanner} from './handleIdpBanner';
-import {ariaPressedCheckboxSelector, defaultIdpSelector, idpListSelector} from '../selectors';
+import {
+  ariaPressedCheckboxSelector,
+  defaultIdpSelector,
+  idpListSelector,
+  remainingIdpSectionSelector,
+} from '../selectors';
 import {idpSubmitHandler} from '../handlers';
+import {checkHover} from './idpFocus/checkHover';
 
 export const mouseBehaviour = () => {
   // allow chosing an idp to login
@@ -30,4 +36,8 @@ export const mouseBehaviour = () => {
   if (!! defaultIdpLink) {
     defaultIdpLink.addEventListener('click', handleIdpBanner);
   }
+
+  // handle hover above idp / default idp informational / searchbar
+  const remainingIdpSection = document.querySelector(remainingIdpSectionSelector);
+  remainingIdpSection.addEventListener('mousemove', checkHover);
 };
