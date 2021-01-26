@@ -19,6 +19,9 @@ return [
     'form_error_name'       =>  'Your name needs to be at least 2 characters long',
     'form_error_email'      =>  'This is an invalid email address',
 
+    // REDIRECT
+    'processing_waiting'    =>  'Waiting for a response',
+
     // WAYF
     'wayf_nothing_found'        => 'Nothing found',
     'wayf_apu'                  => 'Please try again with some different keywords',

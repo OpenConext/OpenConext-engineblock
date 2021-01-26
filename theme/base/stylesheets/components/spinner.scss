@@ -1,0 +1,25 @@
+/**
+ * Spinner created by buzinas & modified for this project
+ * Repo @ https://github.com/buzinas/tiny-spinner.
+ */
+.spinner {
+    @include motion {
+        animation: spin 1s linear infinite;
+    }
+
+    border: 0.25rem solid $white;
+    border-bottom: 0.25rem solid $yellow;
+    border-radius: 50%;
+    height: 3rem;
+    width: 3rem;
+}
+
+.spinner--hidden {
+    display: none;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

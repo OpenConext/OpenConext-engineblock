@@ -19,6 +19,9 @@ return [
     'form_error_name'       =>  'Je naam moet minstens twee tekens lang zijn',
     'form_error_email'      =>  'Dit is geen geldig e-mailadres',
 
+    // REDIRECT
+    'processing_waiting'    =>  'Wachten op een reactie',
+
     // WAYF
     'wayf_nothing_found'        => 'Niets gevonden',
     'wayf_apu'                  => 'Probeer het opnieuw met andere zoektermen',

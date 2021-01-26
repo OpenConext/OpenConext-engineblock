@@ -2,39 +2,43 @@
     CSS specific to the form page (auto submitted page that sends
     SAML response to SP
  ******************************************************************/
+.redirect {
+    height: 100%;
+    width: 100%;
+}
 
 .form {
-    > main {
-        background-color: $gray;
-        color: $black;
-        font-size: $f-normal;
-        padding: 0 2rem 2.5rem;
-        @include screen('mobile') {
-            padding: 0 1rem 1.25rem;
-        }
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+}
 
-        > header {
-            h2.form__subHeader {
-                padding: 1.5rem 2rem 2.125rem 0;
-            }
-        }
+.redirect__content {
+    color: $white;
+    margin: auto auto;
+    padding: 0 2rem 2.5rem;
+    text-align: center;
 
-        > div.logo {
-            > img.rotate-img {
-                width: 20%;
-                margin: 2em auto 0 auto;
-                display:block;
-            }
-        }
+    @include screen('mobile') {
+        padding: 0 1rem 1.25rem;
+    }
+}
 
-        > form {
-            > noscript {
-                input.form__noJsSubmit {
-                    @include button-primary($buttonBlue);
-                    text-align: center;
-                    width: 100%;
-                }
-            }
-        }
+.redirect__title {
+    font-size: $f-h5;
+}
+
+.redirect__spinner {
+    margin: 1.5rem auto;
+}
+
+.redirect__noJsSubmit {
+    @include button-primary($buttonBlue);
+    padding: 1rem;
+    width: 100%;
+
+    &:hover {
+        box-shadow: 0 0 0 3px $lightBlue;
+        text-decoration: underline;
     }
 }
