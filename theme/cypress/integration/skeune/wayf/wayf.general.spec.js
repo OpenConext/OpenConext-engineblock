@@ -41,22 +41,9 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.get('.wayf__idp--noAccess')
         .should('not.exist');
     });
-
-    it('Should show 5 disconnected IdPs', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=1&unconnectedIdps=5');
-      cy.get('.wayf__idp--noAccess')
-        .should('have.length', 5)
-        .should('be.visible');
-    });
-
-    it('Should show no disconnected IdPs when the flag is false', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=0&unconnectedIdps=5');
-      cy.get('.wayf__idp--noAccess')
-        .should('not.exist');
-    });
   });
 
-  describe.only('Test if search works as it should', () => {
+  describe('Test if search works as it should', () => {
     it('Should show no results when no IdPs are found', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.get('.wayf__search').type('OllekebollekeKnol');
@@ -128,12 +115,13 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
         .should('have.length', 5);
     });
 
-    it('Should reset the search text when clicking the reset button', () => {
+    it.only('Should reset the search text when clicking the reset button', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.get('.wayf__search').type('con 1');
       cy.get('.search__reset').click({force:true});
       cy.get('.search__submit').should('be.visible');
       cy.get('.search__reset').should('have.class', 'visually-hidden');
+      cy.get('.remainingIdps__defaultIdp').should('be.visible');
       cy.get('.wayf__remainingIdps .wayf__idp')
         .should('have.length', 5);
     });
