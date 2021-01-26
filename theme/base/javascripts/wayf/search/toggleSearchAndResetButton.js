@@ -15,10 +15,10 @@ export const toggleSearchAndResetButton = (idpArray, searchTerm) => {
     hideElement(searchButton, true);
     showElement(resetButton, true);
   } else {
-    // Reset the list/search results
-    searchAndSortIdps(idpArray, searchTerm);
     toggleDefaultIdPLinkVisibility('');
     showElement(searchButton, true);
     hideElement(resetButton, true);
+    // Reset the list/search results
+    searchAndSortIdps(idpArray, searchTerm);
   }
 };

@@ -10,7 +10,7 @@ import {
   configurationId,
   nokButtonSelector,
   nokSectionSelector,
-  selectedIdpsSelector,
+  selectedIdpsSectionSelector,
   tooltipsAndModalLabels,
 } from './selectors';
 import {handlePreviousSelectionVisible} from './wayf/handlePreviousSelectionVisible';
@@ -54,7 +54,7 @@ export const backButtonHandler = (nokSection) => {
  * ***/
 export const wayfCallbackAfterLoad = () => {
   // Initialize variables
-  const selectedIdps = document.querySelector(selectedIdpsSelector);
+  const selectedIdps = document.querySelector(selectedIdpsSectionSelector);
   const configuration = JSON.parse(document.getElementById(configurationId).innerHTML);
   const previouslySelectedIdps = configuration.previousSelectionList;
 
