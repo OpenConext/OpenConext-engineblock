@@ -1,3 +1,6 @@
+import {idpTitle, unconnectedIdpSelector, weight100Selector, weight215Selector, weight60Selector, weight7Selector, weight8Selector, weight82Selector} from '../testSelectors';
+import {defaultIdpInformational, idpSelector, matchSelector, noResultSectionSelector, remainingIdpSelector, searchFieldSelector, searchResetSelector, searchSubmitSelector} from '../../../../base/javascripts/selectors';
+
 /**
  * Tests for behaviour that has nothing to do with clicking / pressing enter.
  */
@@ -12,33 +15,33 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
 
     it('Should show ten connected IdPs', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=10');
-      cy.get('.wayf__idp h3')
+      cy.get(idpTitle)
         .should('have.length', 10);
     });
 
     it('Should show no connected IdPs when cutoff point is configured', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=6&cutoffPointForShowingUnfilteredIdps=5');
-      cy.get('.wayf__remainingIdps .wayf__idp')
+      cy.get(remainingIdpSelector)
         .should('not.be.visible');
     });
 
     it('Should show found IdPs when cutoff point is configured and user searched', () => {
-      cy.get('.search__field').type('IdP');
-      cy.get('.wayf__idp')
+      cy.get(searchFieldSelector).type('IdP');
+      cy.get(idpSelector)
         .should('have.length', 6)
         .should('be.visible');
     });
 
     it('Should show 5 disconnected IdPs', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=1&unconnectedIdps=5');
-      cy.get('.wayf__idp--noAccess')
+      cy.get(unconnectedIdpSelector)
         .should('have.length', 5)
         .should('be.visible');
     });
 
     it('Should show no disconnected IdPs when the flag is false', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=0&unconnectedIdps=5');
-      cy.get('.wayf__idp--noAccess')
+      cy.get(unconnectedIdpSelector)
         .should('not.exist');
     });
   });
@@ -46,83 +49,83 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
   describe('Test if search works as it should', () => {
     it('Should show no results when no IdPs are found', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-      cy.get('.wayf__search').type('OllekebollekeKnol');
-      cy.get('.wayf__noResults').should('be.visible');
-      cy.get('.search__submit').should('have.class', 'visually-hidden');
-      cy.get('.search__reset').should('be.visible');
+      cy.get(searchFieldSelector).type('OllekebollekeKnol');
+      cy.get(noResultSectionSelector).should('be.visible');
+      cy.get(searchSubmitSelector).should('have.class', 'visually-hidden');
+      cy.get(searchResetSelector).should('be.visible');
     });
 
     it('Should be able to search for an idp', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-      cy.get('.wayf__search').type('4');
+      cy.get(searchFieldSelector).type('4');
       // When the user starts typing, the reset (x) button should appear, replacing the search icon
-      cy.get('.search__submit').should('have.class', 'visually-hidden');
-      cy.get('.search__reset').should('be.visible');
+      cy.get(searchSubmitSelector).should('have.class', 'visually-hidden');
+      cy.get(searchResetSelector).should('be.visible');
 
       // After filtering the search results, verify one result is visible
-      cy.get('.wayf__remainingIdps .wayf__idp:not([data-weight="0"])')
+      cy.get(matchSelector)
         .should('have.length', 1)
         .should('contain.text', 'Connected IdP 4 en');
     });
 
     it('Should get the correct weight for an idp with a full match on the title', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=50');
-      cy.get('.wayf__search').type('Connected Idp 4 en');
-      cy.get('.wayf__remainingIdps .wayf__idp[data-weight="215"]')
+      cy.get(searchFieldSelector).type('Connected Idp 4 en');
+      cy.get(weight215Selector)
         .should('have.length', 1)
         .should('contain.text', 'Connected IdP 4 en');
     });
 
     it('Should get the correct weight for an idp with a partial match on the title', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=50');
-      cy.get('.wayf__search').type('Connected Idp 4');
-      cy.get('.wayf__remainingIdps .wayf__idp[data-weight="82"]')
+      cy.get(searchFieldSelector).type('Connected Idp 4');
+      cy.get(weight82Selector)
         .should('have.length', 10);
     });
 
     it('Should get the correct weight for an idp with a full match on the keyword', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=50');
-      cy.get('.wayf__search').type('awesome idp');
-      cy.get('.wayf__remainingIdps .wayf__idp[data-weight="100"]')
+      cy.get(searchFieldSelector).type('awesome idp');
+      cy.get(weight100Selector)
         .should('have.length', 50);
     });
 
     it('Should get the correct weight for an idp with a partial match on the keyword', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=50');
-      cy.get('.wayf__search').type('awesome');
-      cy.get('.wayf__remainingIdps .wayf__idp[data-weight="8"]')
+      cy.get(searchFieldSelector).type('awesome');
+      cy.get(weight8Selector)
         .should('have.length', 50);
     });
 
     it('Should get the correct weight for an idp with a full match on the entityId', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=50');
-      cy.get('.wayf__search').type('https://example.com/entityId/1');
-      cy.get('.wayf__remainingIdps .wayf__idp[data-weight="60"]')
+      cy.get(searchFieldSelector).type('https://example.com/entityId/1');
+      cy.get(weight60Selector)
         .should('have.length', 1);
     });
 
     it('Should get the correct weight for an idp with a partial match on the entityId', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=50');
-      cy.get('.wayf__search').type('/1');
-      cy.get('.wayf__remainingIdps .wayf__idp[data-weight="7"]')
+      cy.get(searchFieldSelector).type('/1');
+      cy.get(weight7Selector)
         .should('have.length', 11);
     });
 
     it('Should not take into account the space at the end of a searchTerm', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-      cy.get('.wayf__search').type('con 1');
-      cy.get('.wayf__remainingIdps .wayf__idp')
+      cy.get(searchFieldSelector).type('con 1');
+      cy.get(remainingIdpSelector)
         .should('have.length', 5);
     });
 
-    it.only('Should reset the search text when clicking the reset button', () => {
+    it('Should reset the search text when clicking the reset button', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-      cy.get('.wayf__search').type('con 1');
-      cy.get('.search__reset').click({force:true});
-      cy.get('.search__submit').should('be.visible');
-      cy.get('.search__reset').should('have.class', 'visually-hidden');
-      cy.get('.remainingIdps__defaultIdp').should('be.visible');
-      cy.get('.wayf__remainingIdps .wayf__idp')
+      cy.get(searchFieldSelector).type('con 1');
+      cy.get(searchResetSelector).click({force:true});
+      cy.get(searchSubmitSelector).should('be.visible');
+      cy.get(searchResetSelector).should('have.class', 'visually-hidden');
+      cy.get(defaultIdpInformational).should('be.visible');
+      cy.get(remainingIdpSelector)
         .should('have.length', 5);
     });
   });
@@ -133,28 +136,28 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
     });
 
     it('Get the connected IdPs & check if it\'s correct', () => {
-      cy.get('.wayf__idp h3')
+      cy.get(idpTitle)
         .should('have.length', 5)
         .eq(2)
         .should('have.text', 'Login with Connected IdP 3 en');
     });
 
     it('Check if the search field is present', () => {
-      cy.get('.wayf__search').should('exist');
+      cy.get(searchFieldSelector).should('exist');
     });
 
     it('Check if the defaultIdp is present', () => {
-      cy.contains('.remainingIdps__defaultIdp', 'is available as an alternative');
+      cy.contains(defaultIdpInformational, 'is available as an alternative');
     });
 
     it('Ensure the CTA is not present when the feature flag is disabled', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?showIdPBanner=0');
-      cy.get('.remainingIdps__defaultIdp').should('not.exist');
+      cy.get(defaultIdpInformational).should('not.exist');
     });
 
     it('Ensure the default IdP has the correct data attribute', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?defaultIdpEntityId=https://example.com/entityId/3');
-      cy.get('article[data-entityid="https://example.com/entityId/3"]')
+      cy.get('[data-entityid="https://example.com/entityId/3"]')
         .should('have.id', 'defaultIdp');
     });
   });
@@ -185,7 +188,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
     it('Should hide the IdP link when search term is provided', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.get('.search__field').type('search-term');
-      cy.get('.remainingIdps__defaultIdp').should('not.be.visible');
+      cy.get(defaultIdpInformational).should('not.be.visible');
     });
 
     it('Should show the IdP link when search term is provided', () => {
