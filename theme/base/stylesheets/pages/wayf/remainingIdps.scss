@@ -1,23 +1,5 @@
 .wayf__remainingIdps {
-    @include motion {
-        max-height: fit-content;
-        overflow: unset;
-        transition: max-height 2s linear;
-    }
-
-    &.hidden {
-        // if this is absent, Safari uses the height despite it being visually hidden
-        > * {
-            display: none;
-        }
-
-        @include motion {
-            display: block !important;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 2s linear;
-        }
-    }
+    display: block;
 
     > .wayf__search {
         @include relative;
