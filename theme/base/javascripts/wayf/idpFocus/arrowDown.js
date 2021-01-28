@@ -1,12 +1,14 @@
 import {focusOnNextIdp} from './focusOnNextIdp';
 import {
   defaultIdpSelector,
-  firstRemainingIdpSelector,
-  lastRemainingIdpSelector,
+  firstRemainingIdpAfterSearchSelector,
+  lastRemainingIdpAfterSearchSelector,
   searchFieldSelector,
   searchResetSelector
 } from '../../selectors';
 import {isFocusOn} from '../../utility/isFocusOn';
+import {focusAndSmoothScroll} from '../../utility/focusAndSmoothScroll';
+import {isVisibleElement} from '../../utility/isVisibleElement';
 
 /**
  * Behaviour expected to happen after a user presses the down arrow.
@@ -24,21 +26,21 @@ export const arrowDown = () => {
   const searchBar = document.querySelector(searchFieldSelector);
   const resetButton = document.querySelector(searchResetSelector);
   const defaultIdp = document.querySelector(defaultIdpSelector);
-  const firstIdp = document.querySelector(firstRemainingIdpSelector);
-  const lastIdp = document.querySelector(lastRemainingIdpSelector);
+  const firstIdp = document.querySelector(firstRemainingIdpAfterSearchSelector);
+  const lastIdp = document.querySelector(lastRemainingIdpAfterSearchSelector);
 
   if (isFocusOn(searchBar) || isFocusOn(resetButton)) {
-    try {
-      defaultIdp.focus();
-    } catch (e) {
-      firstIdp.focus();
+    if(!!defaultIdp && isVisibleElement(defaultIdp)) {
+      focusAndSmoothScroll(defaultIdp);
+    } else {
+      focusAndSmoothScroll(firstIdp);
     }
     return;
   } else if (isFocusOn(defaultIdp)) {
-    firstIdp.focus();
+    focusAndSmoothScroll(firstIdp);
     return;
   } else if (isFocusOn(lastIdp)) {
-    searchBar.focus();
+    focusAndSmoothScroll(searchBar);
     return;
   }
 

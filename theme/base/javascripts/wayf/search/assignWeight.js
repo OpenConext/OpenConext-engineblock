@@ -34,6 +34,7 @@ export const assignWeight = (idpArray, searchTerm) => {
       });
     }
 
+    setWeight(li, weight);
     setWeight(idp, weight);
   });
 };
