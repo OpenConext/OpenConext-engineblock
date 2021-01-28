@@ -1,6 +1,6 @@
 import {
   defaultIdpId,
-  remainingIdpArticleSelector,
+  remainingIdpSelector,
   searchFieldSelector,
   searchResetSelector,
   searchSubmitSelector
@@ -15,7 +15,7 @@ export const handleIdpBanner = async (event) => {
   const searchField = document.querySelector(searchFieldSelector);
   const defaultIdp = document.getElementById(defaultIdpId);
   const defaultIdpTitle = getData(defaultIdp, 'title');
-  const remainingIdps = document.querySelectorAll(remainingIdpArticleSelector);
+  const remainingIdps = document.querySelectorAll(remainingIdpSelector);
   const searchButton = document.querySelector(searchSubmitSelector);
   const resetButton = document.querySelector(searchResetSelector);
 

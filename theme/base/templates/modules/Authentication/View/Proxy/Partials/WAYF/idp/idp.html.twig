@@ -4,7 +4,7 @@
     {% set connectable = 'false' %}
 {% endif %}
 
-<article
+<div
     aria-describedby="idp__title{{ listName }}{{ loop.index }}"
     class="wayf__idp{% if idp['connected'] is defined and not idp['connected'] %} wayf__idp--noAccess{% endif %}"
     data-connectable="{{ connectable }}"
@@ -35,4 +35,4 @@
             {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpDeleteDisable.html.twig' %}
         {% endif %}
     </div>
-</article>
+</div>

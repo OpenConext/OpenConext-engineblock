@@ -345,7 +345,7 @@ class EngineBlockContext extends AbstractSubContext
             );
         }
 
-        $selector = 'article[data-entityid="' . $mockIdp->entityId() . '"] button.idp__submit';
+        $selector = '[data-entityid="' . $mockIdp->entityId() . '"] button.idp__submit';
 
         $mink = $this->getMinkContext()->getSession()->getPage();
         $button = $mink->find('css', $selector);
@@ -390,7 +390,7 @@ class EngineBlockContext extends AbstractSubContext
      */
     public function iSeeTheRequestAccessButton()
     {
-        $selector = 'article.wayf__idp--noAccess';
+        $selector = '.wayf__idp--noAccess';
 
         $mink = $this->getMinkContext()->getSession()->getPage();
         $button = $mink->find('css', $selector);
