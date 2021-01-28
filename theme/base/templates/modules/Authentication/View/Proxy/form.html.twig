@@ -1,61 +1,49 @@
 {% extends '@themeLayouts/scripts/empty.html.twig' %}
 
 {% block content %}
-    <!DOCTYPE html>
-    <html lang="{{ locale()|escape('html_attr') }}">
-    <head>
-        <title>{{ defaultTitle }} - {{ 'post_data'|trans }}</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <meta name="robots" content="noindex, nofollow"/>
-        <meta content="IE=edge" http-equiv="x-ua-compatible">
-        <meta content="initial-scale=1.0,width=device-width" name="viewport">
-        <meta content="yes" name="apple-mobile-web-app-capable">
-        <meta content="translucent-black" name="apple-mobile-web-app-status-bar-style">
-        <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<!DOCTYPE html>
+<html lang="{{ locale()|escape('html_attr') }}" class="redirect">
+<head>
+    <title>{{ defaultTitle }} - {{ 'post_data'|trans }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="robots" content="noindex, nofollow"/>
+    <meta content="IE=edge" http-equiv="x-ua-compatible">
+    <meta content="initial-scale=1.0,width=device-width" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="translucent-black" name="apple-mobile-web-app-status-bar-style">
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
 
-        {% block stylesheets %}{% spaceless %}
-            <link href="/stylesheets/application.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
-        {% endspaceless %}{% endblock %}
-    </head>
-    <body class="index" {% if preventAutoSubmit is not defined %} onload="document.forms[0].submit()" {% endif %}>
-
-    <div class="container form">
-
-        <header>
-            <h1 class="redirectBar">{{ 'processing'|trans }}</h1>
-        </header>
-
-
-        <main>
-            <header>
-                <h2 class="form__subHeader">{{ 'processing_waiting'|trans }}</h2>
-            </header>
-
-            <div class="hideNoJS">
-                <p>{{ 'processing_long'|trans }}</p>
-
-                {% include '@theme/Authentication/View/Proxy/Partials/Shared/spinner.html.twig' %}
-            </div>
-
-            <form id="ProcessForm" method="post" action="{{ action }}">
-                <input type="hidden" name="{{ name }}" value="{{ message }}"/>
-                {{ xtra|raw }}
-                <noscript>
-                    <p>
-                        <strong>{{ 'note'|trans }}:</strong>
-                        {{ 'note_no_script'|trans }}
-                    </p>
-                    <input type="submit" value="Submit" class="form__noJsSubmit"/>
-                </noscript>
-            </form>
-        </main>
-    </div>
+    {% block stylesheets %}{% spaceless %}
+        <link href="/stylesheets/application.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
+    {% endspaceless %}{% endblock %}
+</head>
+<body class="index form" {% if preventAutoSubmit is not defined %} onload="document.forms[0].submit()" {% endif %}>
+    <main class="redirect__content">
+        <h1 class="redirect__title">{{ 'processing'|trans }}</h1>
+        <div class="spinner redirect__spinner"></div>
+        <p class="redirect_message hideNoJS">
+            {{ 'processing_waiting'|trans }}
+            <br />
+            {{ 'processing_long'|trans }}
+        </p>
+        <form id="ProcessForm" method="post" action="{{ action }}">
+            <input type="hidden" name="{{ name }}" value="{{ message }}"/>
+            {{ xtra|raw }}
+            <noscript>
+                <p>
+                    <strong>{{ 'note'|trans }}:</strong>
+                    {{ 'note_no_script'|trans }}
+                </p>
+                <input type="submit" value="Submit" class="redirect__noJsSubmit"/>
+            </noscript>
+        </form>
+    </main>
 
     <script>
         window.addEventListener('load', () => {
             document.querySelector('.hideNoJS').classList.remove('hideNoJS');
         });
     </script>
-    </body>
-    </html>
+</body>
+</html>
 {% endblock %}
