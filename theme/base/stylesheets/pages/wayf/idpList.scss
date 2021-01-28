@@ -160,6 +160,26 @@
             background-color: $softBorderGray;
             box-shadow: 0 1px 0 2px $noAccessGray;
 
+            &:hover {
+                background-color: $lightPink;
+
+                > .idp__content {
+                    > button {
+                        @include button-reset($lightPink);
+                    }
+
+                    > .idp__deleteDisable {
+                        > .idp__delete {
+                            @include trashcan-hover-disabled;
+                        }
+
+                        > .idp__disabled {
+                            @include no-talking-hover-disabled;
+                        }
+                    }
+                }
+            }
+
             > .idp__content {
                 > .idp__border {
                     border-left: 1px solid $white;
