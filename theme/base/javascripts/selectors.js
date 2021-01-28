@@ -10,6 +10,13 @@ export const metadataCertificateLinkSelector = 'dl.metadata-certificates-list a'
 export const indexPageSelector = '#engine-main-page';
 
 /***
+ * ERROR PAGE SELECTORS
+ * ***/
+export const errorTitleHeadingSelector = '.error-title__heading';
+export const errorTitleMessageSelector = '.error-title__error-message';
+export const languageErrorSelector = '.comp-language.error';
+
+/***
  * CONSENT SELECTORS
  * ***/
 /**
@@ -18,13 +25,16 @@ export const indexPageSelector = '#engine-main-page';
  * See the @motion mixin explanation for a longer explanation as to why.
  */
 export const consentAnimatedElementSelectors = '.tooltip__value, .modal__value, .consent__attributes, .attribute__valueWrapper > .attribute__value--list';
-
 export const nokButtonSelector = 'label[for="cta_consent_nok"]';
+export const nokButtonSelectorForKeyboard = '.consent__ctas > .button--tertiary';
 export const nokSectionSelector = '.consent__nok';
 export const contentSectionSelector = '.consent__content';
 export const backButtonSelector = '.consent__nok-back';
 export const tooltipsAndModalLabels = 'label.tooltip, label.modal';
 export const modalLabels = 'label.modal';
+export const attributesSelector = 'ul.consent__attributes li';
+export const tooltipLabelSelector = 'label.tooltip';
+export const primaryTooltipLabelSelector = `.ie11__label > ${tooltipLabelSelector}`;
 
 /***
  * WAYF SELECTORS
