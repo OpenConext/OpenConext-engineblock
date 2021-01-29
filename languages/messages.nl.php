@@ -157,7 +157,7 @@ HTML
     'error_session_not_started'                => 'Fout - Geen sessie gevonden',
     'error_session_not_started_desc'           => 'Om verder te gaan naar de dienst heb je een actieve sessie nodig, maar we kunnen deze niet vinden. Je browser moet cookies ondersteunen. Ook kan de link die je hebt gebruikt om bij de dienst te komen, verkeerd zijn. Ga terug naar de dienst en probeer het opnieuw. Als dat niet werkt, probeer een andere browser.',
     'error_authorization_policy_violation'            => 'Fout - Geen toegang',
-    'error_authorization_policy_violation_desc'       => 'Je kunt geen gebruik maken van deze dienst omdat je geen toegang hebt. Voor deze dienst (de &lsquo;Service Provider&rsquo;) heeft jouw %organisationNoun% met <i>autorisatieregels</i> ingesteld dat alleen bepaalde gebruikers toegang krijgen. Neem contact op met de (IT-)servicedesk van je %organisationNoun% als je vindt dat je wel toegang moet hebben.',
+    'error_authorization_policy_violation_desc'       => 'Neem contact op met de servicedesk van je eigen %organizationNoun% als je toegang tot deze dienst wilt. Vermeld daarbij op welke dienst je probeerde in te loggen en dat je werd tegengehouden door een autorisatieregel van %suiteName%, geconfigureerd door jouw eigen %organizationNoun%.',
     'error_authorization_policy_violation_info'       => 'Bericht van je %organisationNoun%: ',
     'error_no_message'                  => 'Fout - Geen bericht ontvangen',
     'error_no_message_desc'             => 'We verwachtten een SAML bericht, maar we hebben er geen ontvangen. Er is iets fout gegaan. Probeer het alstublieft opnieuw.',
