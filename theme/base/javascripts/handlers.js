@@ -7,10 +7,8 @@ import {switchConsentSection} from './consent/switchConsentSection';
 import {addClickHandlerOnce} from './utility/addClickHandlerOnce';
 import {
   backButtonSelector,
-  configurationId,
   nokButtonSelector,
   nokSectionSelector,
-  selectedIdpsSectionSelector,
   tooltipsAndModalLabels,
 } from './selectors';
 import {handlePreviousSelectionVisible} from './wayf/handlePreviousSelectionVisible';
@@ -53,19 +51,14 @@ export const backButtonHandler = (nokSection) => {
  * WAYF HANDLERS
  * ***/
 export const wayfCallbackAfterLoad = () => {
-  // Initialize variables
-  const selectedIdps = document.querySelector(selectedIdpsSectionSelector);
-  const configuration = JSON.parse(document.getElementById(configurationId).innerHTML);
-  const previouslySelectedIdps = configuration.previousSelectionList;
-
   // Initialize behaviour
-  handlePreviousSelectionVisible(selectedIdps, previouslySelectedIdps);
-  wayfKeyboardBehaviour(previouslySelectedIdps);
+  handlePreviousSelectionVisible();
+  wayfKeyboardBehaviour();
   mouseBehaviour();
   searchBehaviour();
 };
 export const idpSubmitHandler = (e) => {
-  submitForm(e, true);
+  submitForm(e);
 };
 export const cancelButtonClickHandler = (parentSection, noAccess) => cancelButtonClickHandlerCreator(parentSection, noAccess);
 export const requestButtonHandler = () => { toggleFormFieldsAndButton(); };

@@ -15,7 +15,7 @@ import {idpSubmitHandler} from '../handlers';
 /**
  * Behaviour expected to happen after a user presses the enter button.
  */
-export const handleEnter = (e, previouslySelectedIdps) => {
+export const handleEnter = (e) => {
   const classList = e.target.classList;
 
   classList.forEach(className => {
@@ -32,7 +32,7 @@ export const handleEnter = (e, previouslySelectedIdps) => {
       case idpDeleteDisabledClass:
       case idpDeleteClass:
       case idpDisabledClass:
-        handleDeleteDisable(e, previouslySelectedIdps);
+        handleDeleteDisable(e);
         break;
       // select an idp
       case idpClass:
@@ -43,7 +43,7 @@ export const handleEnter = (e, previouslySelectedIdps) => {
       case idpLogoClass:
         idpSubmitHandler(e); break;
       case searchFieldClass:
-        selectFirstIdPAndSubmitForm(previouslySelectedIdps); break;
+        selectFirstIdPAndSubmitForm(); break;
       case defaultIdpClass:
         handleIdpBanner(e); break;
     }

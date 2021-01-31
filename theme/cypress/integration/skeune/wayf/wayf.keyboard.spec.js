@@ -197,7 +197,7 @@ context('WAYF when using the keyboard', () => {
       cy.addOnePreviouslySelectedIdp();
       cy.selectFirstIdp(false, selectedIdpDataIndex1);
       cy.loadWayf();
-      cy.get(selectedIdpDataIndex1).should('have.attr', 'data-count', '2');
+      cy.get(selectedIdpDataIndex1).should('have.attr', 'data-count', '3');
     });
 
     it('Test the edit button allows deleting an account', () => {

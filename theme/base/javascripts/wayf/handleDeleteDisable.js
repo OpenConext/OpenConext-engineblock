@@ -1,4 +1,4 @@
-import {hasSelectedIdps} from './utility/hasSelectedIdps';
+import {hasSelectedIdpsInList} from './utility/hasSelectedIdpsInList';
 import {handleNoneLeft} from './deleteDisable/handleNoneLeft';
 import {deleteIdp} from './deleteDisable/deleteIdp';
 import {reindexIdpArray} from './utility/reindexIdpArray';
@@ -13,9 +13,8 @@ import {idpDeleteDisabledSelector, idpSelector} from '../selectors';
  * Handle what happens if a user clicks on either the delete button, or the disabled button in an Idp.
  *
  * @param e
- * @param previouslySelectedIdps
  */
-export const handleDeleteDisable = (e, previouslySelectedIdps) => {
+export const handleDeleteDisable = (e) => {
   e.preventDefault();
   e.stopPropagation();
   let element = e.target;
@@ -32,7 +31,7 @@ export const handleDeleteDisable = (e, previouslySelectedIdps) => {
   }
 
   // Remove item from previous selection & html
-  deleteIdp(element, previouslySelectedIdps);
+  deleteIdp(element);
 
   // Reindex & SortRemaining idps by title
   const idpArray = sortRemaining();
@@ -42,7 +41,7 @@ export const handleDeleteDisable = (e, previouslySelectedIdps) => {
   }
 
   // If no items are left: do what's needed.
-  if (!hasSelectedIdps()) {
+  if (!hasSelectedIdpsInList()) {
     handleNoneLeft();
     return;
   }

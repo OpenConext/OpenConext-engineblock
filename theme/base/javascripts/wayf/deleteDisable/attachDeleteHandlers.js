@@ -3,11 +3,9 @@ import {idpDeleteDisabledSelector} from '../../selectors';
 
 /**
  * Ensure all delete buttons can actually delete.
- *
- * @param previouslySelectedIdps
  */
-export const attachDeleteHandlers = (previouslySelectedIdps) => {
+export const attachDeleteHandlers = () => {
   const buttons = document.querySelectorAll(idpDeleteDisabledSelector);
 
-  buttons.forEach(button => button.addEventListener('click', (e) => handleDeleteDisable(e, previouslySelectedIdps)));
+  buttons.forEach(button => button.addEventListener('click', (e) => handleDeleteDisable(e)));
 };
