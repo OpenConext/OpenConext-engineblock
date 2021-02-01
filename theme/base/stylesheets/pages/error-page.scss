@@ -31,3 +31,11 @@ body {
         }
     }
 }
+
+.error-message--no-bold {
+    font-weight: normal;
+
+    .error-title__error-message--institution {
+        font-weight: $boldest;
+    }
+}

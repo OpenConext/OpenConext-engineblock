@@ -34,7 +34,7 @@
         <main class="error-container__content">
             <div class="error-title">
                 <h1 class="error-title__heading">{% block pageTitle %}{% endblock %}</h1>
-                <div class="error-title__error-message">{% block errorMessage %}{% endblock %}</div>
+                <div class="error-title__error-message {% block errorMessageClass %}{% endblock %}">{% block errorMessage %}{% endblock %}</div>
             </div>
 
             {# Some error pages omit the feedback info entirily. To ensure we do not show the intro text, check if the block is empty #}
