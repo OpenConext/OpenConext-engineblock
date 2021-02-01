@@ -1,6 +1,4 @@
 import {addSelectedIdp} from './deleteDisable/addSelectedIdp';
-import {rememberChoice} from './rememberChoice';
-import {getData} from '../utility/getData';
 import {handleClickingDisabledIdp} from './handleClickingDisabledIdp';
 import {hasVisibleDisabledButtonAsTarget} from './utility/hasVisibleDisabledButtonAsTarget';
 import {hasVisibleDeleteButtonAsTarget} from './utility/hasVisibleDeleteButtonAsTarget';
@@ -13,9 +11,8 @@ import {idpElement, idpFormSelector, idpSelector} from '../selectors';
  * Also checks for the remember choice feature and handles it accordingly.
  *
  * @param e
- * @param previouslySelectedIdps
  */
-export const submitForm = (e, previouslySelectedIdps) => {
+export const submitForm = (e) => {
   e.preventDefault();
   let element = e.target;
 
@@ -27,7 +24,7 @@ export const submitForm = (e, previouslySelectedIdps) => {
     element = element.closest(idpSelector);
   }
 
-  selectAndSubmit(element, previouslySelectedIdps);
+  selectAndSubmit(element);
 };
 
 /**
@@ -36,16 +33,13 @@ export const submitForm = (e, previouslySelectedIdps) => {
  * the latter.
  *
  * @param element
- * @param previouslySelectedIdps
  */
-export const selectAndSubmit = (element, previouslySelectedIdps) => {
+export const selectAndSubmit = (element) => {
   if (hasVisibleDisabledButtonAsTarget(element)) {
     handleClickingDisabledIdp(element);
     return;
   }
 
-  rememberChoice(getData(element, 'entityid'));
-
-  addSelectedIdp(previouslySelectedIdps, element);
+  addSelectedIdp(element);
   element.querySelector(idpFormSelector).submit();
 };

@@ -7,12 +7,10 @@ import {setCookie} from '../../utility/setCookie';
  * @param cookieName          string
  */
 export const savePreviousSelection = (previousSelection, cookieName) => {
-  const simplifiedPreviousSelection = previousSelection.map((idp) => {
-    return {
-      'idp': idp.entityId,
-      'count': idp.count
-    };
-  });
+  if (previousSelection.length === 0) {
+    setCookie(previousSelection, cookieName, -1, '/', true);
+    return;
+  }
 
-  setCookie(simplifiedPreviousSelection, cookieName, 365, '/', true);
+  setCookie(previousSelection, cookieName, 365, '/', true);
 };

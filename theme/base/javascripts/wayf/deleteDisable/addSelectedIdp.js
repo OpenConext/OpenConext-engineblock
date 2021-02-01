@@ -1,25 +1,24 @@
 import {savePreviousSelection} from './savePreviousSelection';
 import {configurationId} from '../../selectors';
+import * as Cookies from 'js-cookie';
 
 /**
  * Add the selected idp to the list of previouslyselected idps and save it to the cookie.
  *
- * @param isPreviouslySelectedList
  * @param element
  */
-export const addSelectedIdp = (isPreviouslySelectedList, element) => {
-  const configuration = JSON.parse(document.getElementById(configurationId).innerHTML);
-  const cookieName = configuration.previousSelectionCookieName;
-  let previouslySelectedIdps = configuration.previousSelectionList;
+export const addSelectedIdp = (element) => {
+  const cookieName = JSON.parse(document.getElementById(configurationId).innerHTML).previousSelectionCookieName;
   const entityId = element.getAttribute('data-entityid');
-  const count = Number(element.getAttribute('data-count'));
   let alreadyInCookie = false;
+  let cookie = Cookies.get(cookieName) || [];
 
-  if (isPreviouslySelectedList) {
-    previouslySelectedIdps.forEach(idp => {
-      if (idp.entityId === entityId) {
+  if (cookie.length) {
+    cookie = JSON.parse(cookie);
+    cookie.forEach(idp => {
+      if (idp.idp === entityId) {
         idp.count += 1;
-        savePreviousSelection(previouslySelectedIdps, cookieName);
+        savePreviousSelection(cookie, cookieName);
         alreadyInCookie = true;
         return;
       }
@@ -27,8 +26,7 @@ export const addSelectedIdp = (isPreviouslySelectedList, element) => {
   }
 
   if (!alreadyInCookie) {
-    previouslySelectedIdps = [...previouslySelectedIdps, { entityId: entityId, count: (count + 1) }];
+    cookie = [...cookie, { idp: entityId, count: 1 }];
+    savePreviousSelection(cookie, cookieName);
   }
-
-  savePreviousSelection(previouslySelectedIdps, cookieName);
 };
