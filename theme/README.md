@@ -162,6 +162,8 @@ Below you'll find a list of the "entry points" for each page with corresponding 
 
 - wayf: `templates > modules > authentication > view > proxy > wayf.html.twig `.  You can use `https://engine.vm.openconext.org/functional-testing/wayf` to develop the page.
 - error: `templates > modules > default > view > error > error.html.twig`.  You can use `https://engine.vm.openconext.org/feedback/unknown-error` to develop the page.
+There are a lot of error pages.  To test all different kinds, you can use the urls on this page: `https://github.com/OpenConext/OpenConext-engineblock/blob/master/theme/cypress/visual-regression/ErrorPage.spec.js#L72`
+
 - redirect page: `templates > modules > authentication > view > proxy > redirect.html.twig`.
 - spinner page: `templates > modules > authentication > view > proxy > form.html.twig`.  To test it disable the onload handler on the body-tag and go to your profile (or load the page without JS).
 - index.html.twig: `templates > modules > authentication > view > index > index.html.twig`.  You can use `https://engine.vm.openconext.org/` to develop the page.

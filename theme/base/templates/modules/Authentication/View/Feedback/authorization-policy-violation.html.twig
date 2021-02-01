@@ -6,7 +6,6 @@
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
 {% block errorMessage %}
-
     <h2>{{ 'error_authorization_policy_violation_info'|trans|raw }}</h2>
 
     {% if logo is not null %}
@@ -14,6 +13,7 @@
              class="pull-right"
              width="{{ logo.width }}"
              height="{{ logo.height }}"
+             alt=""
         >
     {% endif %}
 
@@ -28,6 +28,8 @@
     {{ 'error_authorization_policy_violation_desc'|trans|raw }}
 
 {% endblock %}
+
+{% block errorMessageClass %}error-message--no-bold{% endblock %}
 
 {# The PDP error page should not show the table with the feedback information and back button. #}
 {% block feedbackInfo %}{% endblock %}
