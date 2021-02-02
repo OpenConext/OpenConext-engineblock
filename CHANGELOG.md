@@ -5,6 +5,28 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.4.4
+**Features and fixes**
+ - Fixed overflow issue in IE11 for disclaimerlist.
+ - Updated the text for the PEP page.
+
+## 6.4.3
+**Security update**
+ - Bumped socket.io version.
+
+**Features and fixes**
+ - Ensured hitting the reset button on the WAYF shows the default IDP
+ - Ensured that if you click the default idp, it prefills it in the search field, hides all other idps and focuses it.
+ - Remove weird transition in safari.
+ - Ensured search works in IE11.
+ - Amended faulty arrow behaviour.
+ - Ensured selected idp cookie behaviour works as expected.
+ - Redesigned the spinner page (form page).
+ - Added a hover style for disabled accounts.
+ - Added arrow behaviour on hover as in the old WAYF.
+ - Coupled cypress tests to the same selectors as the JS.
+ - Adjusted styling & wording of the PEP page.
+
 ## 6.4.2
 **Security update**
  - Allowed connections where not checked against the correct SP when trusted proxy was used
