@@ -21,6 +21,8 @@ body {
     line-height: 1.5;
     margin: 0;
     overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
 
     *,
     *:before,

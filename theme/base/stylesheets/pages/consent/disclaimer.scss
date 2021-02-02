@@ -26,6 +26,10 @@
                 margin-left: 14px;
             }
 
+            @include ie11Only('> p, > div') {
+                width: 87%;
+            }
+
             > p,
             > div {
                 @include grid-position(1, 2, 2, 3);
