@@ -159,7 +159,6 @@ HTML
     'error_session_not_started'            => 'Error - No session found',
     'error_session_not_started_desc'       => 'To continue to the service an active session is required. However, no session was found. Your browser must accept cookies. Alternatively, the link you used to get to the service might be wrong. Please go back to the service and try again. If that doesn\'t work, try a different browser.',
     'error_authorization_policy_violation'            => 'Error - Access denied',
-    'error_authorization_policy_violation_desc'       => 'You cannot use this service because your %organisationNoun% limits access to this service (the &lsquo;Service Provider&rsquo;) with an <i>authorization policy</i>. Please contact the helpdesk of your %organisationNoun% if you think you should be allowed access to this service.',
     'error_authorization_policy_violation_desc'       => 'Please contact the service desk of your own  %organizationNoun% if you require access to this service. Be sure to mention which service you tried to access and that you were blocked by an authorization policy in %suiteName%, configured by your own %organizationNoun%',
     'error_authorization_policy_violation_info'       => 'Message from your %organisationNoun%: ',
     'error_no_message'              => 'Error - No message received',
