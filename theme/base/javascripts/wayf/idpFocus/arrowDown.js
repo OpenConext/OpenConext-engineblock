@@ -1,8 +1,7 @@
 import {focusOnNextIdp} from './focusOnNextIdp';
 import {
   defaultIdpSelector,
-  firstRemainingIdpAfterSearchSelector,
-  lastRemainingIdpAfterSearchSelector,
+  remainingIdpAfterSearchSelector,
   searchFieldSelector,
   searchResetSelector
 } from '../../selectors';
@@ -26,8 +25,9 @@ export const arrowDown = () => {
   const searchBar = document.querySelector(searchFieldSelector);
   const resetButton = document.querySelector(searchResetSelector);
   const defaultIdp = document.querySelector(defaultIdpSelector);
-  const firstIdp = document.querySelector(firstRemainingIdpAfterSearchSelector);
-  const lastIdp = document.querySelector(lastRemainingIdpAfterSearchSelector);
+  const remainingIdps = document.querySelectorAll(remainingIdpAfterSearchSelector);
+  const firstIdp = remainingIdps[0];
+  const lastIdp = remainingIdps[remainingIdps.length - 1];
 
   if (isFocusOn(searchBar) || isFocusOn(resetButton)) {
     if(!!defaultIdp && isVisibleElement(defaultIdp)) {

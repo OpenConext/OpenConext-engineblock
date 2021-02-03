@@ -15,8 +15,9 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
 
     it('Should show ten connected IdPs', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=10');
+      // 11 because of the template div
       cy.get(idpTitle)
-        .should('have.length', 10);
+        .should('have.length', 11);
     });
 
     it('Should show no connected IdPs when cutoff point is configured', () => {
@@ -27,22 +28,25 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
 
     it('Should show found IdPs when cutoff point is configured and user searched', () => {
       cy.get(searchFieldSelector).type('IdP');
+      // 7 because of template div
       cy.get(idpSelector)
-        .should('have.length', 6)
+        .should('have.length', 7)
         .should('be.visible');
     });
 
     it('Should show 5 disconnected IdPs', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=1&unconnectedIdps=5');
+      //
       cy.get(unconnectedIdpSelector)
-        .should('have.length', 5)
+        .should('have.length', 6)
         .should('be.visible');
     });
 
     it('Should show no disconnected IdPs when the flag is false', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=0&unconnectedIdps=5');
       cy.get(unconnectedIdpSelector)
-        .should('not.exist');
+        .should('not.be.visible')
+        .should('have.length', 1);
     });
   });
 
@@ -62,9 +66,9 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.get(searchSubmitSelector).should('have.class', 'visually-hidden');
       cy.get(searchResetSelector).should('be.visible');
 
-      // After filtering the search results, verify one result is visible
+      // After filtering the search results, verify one result is visible (checking for two as the template div is not visible)
       cy.get(matchSelector)
-        .should('have.length', 1)
+        .should('have.length', 2)
         .should('contain.text', 'Connected IdP 4 en');
     });
 
@@ -131,22 +135,21 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
   });
 
   describe('Should show five connected IdPs, the search field and the defaultIdp CTA', () => {
-    it('Load the page', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
-    });
-
     it('Get the connected IdPs & check if it\'s correct', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.get(idpTitle)
-        .should('have.length', 5)
+        .should('have.length', 6)
         .eq(2)
         .should('have.text', 'Login with Connected IdP 3 en');
     });
 
     it('Check if the search field is present', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.get(searchFieldSelector).should('exist');
     });
 
     it('Check if the defaultIdp is present', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.contains(defaultIdpInformational, 'is available as an alternative');
     });
 
@@ -157,7 +160,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
 
     it('Ensure the default IdP has the correct data attribute', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?defaultIdpEntityId=https://example.com/entityId/3');
-      cy.get('[data-entityid="https://example.com/entityId/3"]')
+      cy.get('div[data-entityid="https://example.com/entityId/3"]')
         .should('have.id', 'defaultIdp');
     });
   });

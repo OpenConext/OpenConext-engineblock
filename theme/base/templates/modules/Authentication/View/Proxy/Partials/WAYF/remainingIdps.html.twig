@@ -27,4 +27,8 @@
     {% endif %}
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/rememberChoice.html.twig' %}
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpList.html.twig' with { idpList: connectedIdps.formattedIdpList, delete: false, listName: 'remaining', id: 'remainingIdps__title' } %}
+
+    <div id="idpTemplate" class="hidden">
+        {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idp.html.twig' with { idp: connectedIdps.formattedIdpList.0, delete: false, listName: 'template', loop: {index: 1} } %}
+    </div>
 </section>

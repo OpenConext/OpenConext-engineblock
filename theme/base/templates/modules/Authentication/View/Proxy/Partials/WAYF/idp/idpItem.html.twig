@@ -1,0 +1,19 @@
+{% if idp['connected'] is defined %}
+    {% set connectable = 'true' %}
+{% else %}
+    {% set connectable = 'false' %}
+{% endif %}
+
+<li
+    class="{% if idp['connected'] is defined and not idp['connected'] %}idpItem--noAccess{% endif %}"
+    data-count="{% if idp['count'] is defined %}{{ idp['count'] }}{% else %}0{% endif %}"
+    data-entityid="{{ idp['entityId'] }}"
+    data-index="{{ loop.index }}"
+    data-keywords="{{ idp['keywords']|lower }}"
+    data-title="{{ idp['displayTitle']|lower }}"
+    {% if idp['isDefaultIdp'] %}data-defaultidp="defaultIdp"{% endif %}
+    data-describedby="idp__title{{ listName }}{{ loop.index }}"
+    data-connectable="{{ connectable }}"
+>
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idp.html.twig' with { idp: idp } %}
+</li>

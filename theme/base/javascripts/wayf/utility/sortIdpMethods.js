@@ -10,8 +10,8 @@ import {getData} from '../../utility/getData';
  * @returns {number}
  */
 export const sortByTitle = (firstElement, secondElement) => {
-  const titleOne = getTitle(firstElement.children[0]);
-  const titleTwo = getTitle(secondElement.children[0]);
+  const titleOne = getTitle(firstElement);
+  const titleTwo = getTitle(secondElement);
   const lang = document.querySelector('html').getAttribute('lang') || 'nl';
 
   return titleOne.localeCompare(titleTwo, lang);
@@ -36,8 +36,8 @@ function getTitle(element) {
  * @returns {number}
  */
 export const sortByNumber = (firstElement, secondElement, attributeName) => {
-  const numberOne = getNumberAttribute(firstElement.children[0], attributeName);
-  const numberTwo = getNumberAttribute(secondElement.children[0], attributeName);
+  const numberOne = getNumberAttribute(firstElement, attributeName);
+  const numberTwo = getNumberAttribute(secondElement, attributeName);
 
   if (numberOne > numberTwo) return -1;
   if (numberOne < numberTwo) return 1;

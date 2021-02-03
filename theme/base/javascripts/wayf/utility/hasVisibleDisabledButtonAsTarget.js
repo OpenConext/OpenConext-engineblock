@@ -1,5 +1,5 @@
 import {isVisibleElement} from '../../utility/isVisibleElement';
-import {idpDisabledSelector} from '../../selectors';
+import {idpDisabledClass, idpDisabledSelector} from '../../selectors';
 
 /**
  * Checks if an element has a visible disable button.
@@ -9,6 +9,10 @@ import {idpDisabledSelector} from '../../selectors';
  * @returns {boolean}
  */
 export const hasVisibleDisabledButtonAsTarget = (element) => {
+  if (element.classList.contains(idpDisabledClass)) {
+    return isVisibleElement(element);
+  }
+
   const idpDisabled = element.querySelector(idpDisabledSelector);
   if (!Boolean(idpDisabled)) {
     return false;

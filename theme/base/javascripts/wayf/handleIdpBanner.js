@@ -14,13 +14,13 @@ export const handleIdpBanner = async (event) => {
 
   const searchField = document.querySelector(searchFieldSelector);
   const defaultIdp = document.getElementById(defaultIdpId);
-  const defaultIdpTitle = getData(defaultIdp, 'title');
+  const defaultIdpTitle = getData(defaultIdp.parentNode, 'title');
   const remainingIdps = document.querySelectorAll(remainingIdpSelector);
   const searchButton = document.querySelector(searchSubmitSelector);
   const resetButton = document.querySelector(searchResetSelector);
 
   for (const idp of remainingIdps) {
-    if(getData(idp, 'title').localeCompare(defaultIdpTitle) !== 0) {
+    if(getData(idp.parentNode, 'title').localeCompare(defaultIdpTitle) !== 0) {
       idp.setAttribute('data-weight', '0');
     }
   }

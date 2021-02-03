@@ -6,15 +6,19 @@ import {hideSuccessMessage} from './noAccess/hideSuccessMessage';
 import {attachClickHandlerToRequestButton} from './noAccess/attachClickHandlerToRequestButton';
 import {setConnectability} from './deleteDisable/setConnectability';
 import {getData} from '../utility/getData';
-import {noAccessFormSelector, noAccessLi, noAccessSectionSelector} from '../selectors';
+import {idpClass, idpSelector, noAccessFormSelector, noAccessLi, noAccessSectionSelector} from '../selectors';
 
 export const handleClickingDisabledIdp = (element) => {
+  let target = element;
   const noAccess = document.querySelector(noAccessSectionSelector);
   const li = noAccess.querySelector(noAccessLi);
   const form = noAccess.querySelector(noAccessFormSelector);
   const parentSection = element.closest('section');
-  const cloneOfIdp = cloneIdp(element);
-  const connectable = getData(element, 'connectable') === 'true';
+  if (!element.classList.contains(idpClass)) {
+    target = element.closest(idpSelector);
+  }
+  const cloneOfIdp = cloneIdp(target);
+  const connectable = getData(target, 'connectable') === 'true';
 
   setConnectability(noAccess, connectable);
   toggleVisibility(parentSection);
@@ -28,7 +32,7 @@ export const handleClickingDisabledIdp = (element) => {
   hideSuccessMessage();
 
   // add idp entityId
-  setHiddenFieldValues(element, form);
+  setHiddenFieldValues(target, form);
 
   // attach clickHandler for cancel button
   attachClickHandlerToCancelButton(parentSection, noAccess);

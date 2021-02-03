@@ -24,11 +24,10 @@ export const matchPreviouslySelectedWithCookie = () => {
     }
 
     cookie = JSON.parse(cookie);
-
     // check if each idp in the cookie is in the list, if not add it
     cookie.forEach(idp => {
       const id = `[data-entityid="${idp.idp}"]`;
-      const inPreviouslySelected = document.querySelector(`${selectedIdpsSelector}${id}`);
+      const inPreviouslySelected = document.querySelector(`${selectedIdpsSelector}${id}:first-of-type`);
 
       if (!inPreviouslySelected) {
         const deleteButtonTemplate = document.getElementById(deleteButtonTemplateId);

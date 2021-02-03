@@ -1,9 +1,4 @@
 /***
- * TAGS
- * ***/
-export const idpElement = 'ARTICLE';
-
-/***
  * INDEX SELECTORS
  * ***/
 export const metadataCertificateLinkSelector = 'dl.metadata-certificates-list a';
@@ -50,7 +45,9 @@ export const addAccountButtonClass = 'previousSelection__addAccount';
 export const addAccountButtonSelector = `.${addAccountButtonClass}`;
 export const idpClass = 'wayf__idp';
 export const idpSelector = `.${idpClass}`;
+export const idpTemplateSelector = 'idpTemplate';
 export const selectedIdpsSelector = `${selectedIdpsSectionSelector} ${idpSelector}`;
+export const unconnectedLiClass = 'idpItem--noAccess';
 export const unconnectedIdpClass = 'wayf__idp--noAccess';
 export const idpContentClass = 'idp__content';
 export const idpTitleClass = 'idp__title';
@@ -101,6 +98,7 @@ export const defaultIdpItemSelector = '#defaultIdp';
 export const defaultIdpInformational = '.remainingIdps__defaultIdp';
 export const remainingIdpCutoffMetSelector = '.wayf__remainingIdps .wayf__idpList--cutoffMet';
 export const remainingIdpLiSelector = '.wayf__remainingIdps .wayf__idpList > li';
+export const remainingIdpAfterSearchSelector = '.wayf__remainingIdps .wayf__idpList > li:not([data-weight="0"]) .wayf__idp';
 export const firstRemainingIdpAfterSearchSelector = '.wayf__remainingIdps .wayf__idpList > li:not([data-weight="0"]):first-of-type .wayf__idp';
 export const lastRemainingIdpAfterSearchSelector = '.wayf__remainingIdps .wayf__idpList > li:not([data-weight="0"]):last-of-type .wayf__idp';
 export const noMatchSelector = '.wayf__remainingIdps .wayf__idp[data-weight="0"]';

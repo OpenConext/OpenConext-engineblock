@@ -53,14 +53,21 @@ Cypress.Commands.add('getAndEnter', (selector) => {
 
 Cypress.Commands.add('pressArrowOnIdpList', (direction, className, index) => {
   if (index && className) {
-    cy.focused().should('have.class', className).should('have.attr', 'data-index', index).type(`{${direction}arrow}`);
+    cy.focused().should('have.class', className);
+
+    if (index) {
+      cy.focused().parent().should('have.attr', 'data-index', index).children().first().type(`{${direction}arrow}`);
+      return;
+    }
+
+    cy.focused().type(`{${direction}arrow}`);
     return;
   }
 
   cy.focused().should('have.class', className).type(`{${direction}arrow}`);
 });
 
-Cypress.Commands.add('selectFirstIdp', (click = true, firstElementSelector = '.wayf__remainingIdps .wayf__idp[data-index="1"]') => {
+Cypress.Commands.add('selectFirstIdp', (click = true, firstElementSelector = '.wayf__remainingIdps li[data-index="1"] > div') => {
   if (click) {
     cy.get(firstElementSelector).click({force: true});
     return;

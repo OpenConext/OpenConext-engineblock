@@ -2,8 +2,7 @@ import {isFocusOn} from '../../utility/isFocusOn';
 import {focusOnPreviousIdp} from './focusOnPreviousIdp';
 import {
   defaultIdpSelector,
-  firstRemainingIdpAfterSearchSelector,
-  lastRemainingIdpAfterSearchSelector,
+  remainingIdpAfterSearchSelector,
   searchFieldSelector,
   searchResetSelector
 } from '../../selectors';
@@ -26,10 +25,12 @@ export const arrowUp = () => {
   const searchBar = document.querySelector(searchFieldSelector);
   const resetButton = document.querySelector(searchResetSelector);
   const defaultIdp = document.querySelector(defaultIdpSelector);
-  const firstIdp = document.querySelector(firstRemainingIdpAfterSearchSelector);
-  const lastIdp = document.querySelector(lastRemainingIdpAfterSearchSelector);
+  const remainingIdps = document.querySelectorAll(remainingIdpAfterSearchSelector);
+  const firstIdp = remainingIdps[0];
+  const lastIdp = remainingIdps[remainingIdps.length - 1];
 
   if (isFocusOn(searchBar) || isFocusOn(resetButton)) {
+    console.log({lastIdp});
     focusAndSmoothScroll(lastIdp);
     return;
   } else if (isFocusOn(firstIdp)) {

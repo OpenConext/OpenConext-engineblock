@@ -12,7 +12,7 @@ context('unit test the assignWeight function', () => {
       const idpArray = createIdpArray();
       assignWeight(idpArray, '1234567 8 9');
 
-      expect(Number(idpArray[0].children[0].getAttribute('data-weight'))).to.equal(213);
+      expect(Number(idpArray[0].getAttribute('data-weight'))).to.equal(213);
     });
 
     // should show 60 + 60
@@ -20,7 +20,7 @@ context('unit test the assignWeight function', () => {
       const idpArray = createIdpArray();
       assignWeight(idpArray, '8');
 
-      expect(Number(idpArray[0].children[0].getAttribute('data-weight'))).to.equal(60);
+      expect(Number(idpArray[0].getAttribute('data-weight'))).to.equal(60);
     });
 
     // should show 18
@@ -28,7 +28,7 @@ context('unit test the assignWeight function', () => {
       const idpArray = createIdpArray();
       assignWeight(idpArray, '6');
 
-      expect(Number(idpArray[0].children[0].getAttribute('data-weight'))).to.equal(18);
+      expect(Number(idpArray[0].getAttribute('data-weight'))).to.equal(18);
     });
 
     // should show 30
@@ -36,20 +36,17 @@ context('unit test the assignWeight function', () => {
       const idpArray = createIdpArray();
       assignWeight(idpArray, '9');
 
-      expect(Number(idpArray[0].children[0].getAttribute('data-weight'))).to.equal(30);
+      expect(Number(idpArray[0].getAttribute('data-weight'))).to.equal(30);
     });
   });
 });
 
 function createIdpArray() {
   const li = document.createElement('li');
-  const idp = document.createElement('article');
 
-  idp.setAttribute('data-title', '1234567 8 9');
-  idp.setAttribute('data-entityId', 'id12349');
-  idp.setAttribute('data-keywords', 'bogus|zever|nie echt|wel tof|3456|d12|8');
-
-  li.innerHTML = idp.outerHTML;
+  li.setAttribute('data-title', '1234567 8 9');
+  li.setAttribute('data-entityId', 'id12349');
+  li.setAttribute('data-keywords', 'bogus|zever|nie echt|wel tof|3456|d12|8');
 
   return [li];
 }
