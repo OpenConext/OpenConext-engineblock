@@ -30,7 +30,6 @@ export const arrowUp = () => {
   const lastIdp = remainingIdps[remainingIdps.length - 1];
 
   if (isFocusOn(searchBar) || isFocusOn(resetButton)) {
-    console.log({lastIdp});
     focusAndSmoothScroll(lastIdp);
     return;
   } else if (isFocusOn(firstIdp)) {
