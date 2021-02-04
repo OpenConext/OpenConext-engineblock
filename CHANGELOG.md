@@ -5,6 +5,12 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.4.6
+**Features and fixes**
+ - Fixed disabled button being shown in the remaining section for non-disabled accounts on IE11
+ - Added a check to see if there is a focused element before the check to see if the focus is on an arrow item.
+ - Cleaned up forgotton debug code.
+
 ## 6.4.5
 **Features and fixes**
  - Repaired search in IE
