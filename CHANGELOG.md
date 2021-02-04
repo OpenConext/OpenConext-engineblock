@@ -5,6 +5,11 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.4.5
+**Features and fixes**
+ - Repaired search in IE
+ - Fixed a visual regression with the previously selected section where the edit button was on it's own line.
+
 ## 6.4.4
 **Features and fixes**
  - Fixed overflow issue in IE11 for disclaimerlist.
