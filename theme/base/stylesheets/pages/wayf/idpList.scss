@@ -190,5 +190,25 @@
                 }
             }
         }
+
+        &.remaining {
+            > .wayf__idp {
+                > .idp__content {
+                    > .idp__deleteDisable {
+                        display: none;
+                    }
+                }
+            }
+
+            &.idpItem--noAccess {
+                > .wayf__idp {
+                    > .idp__content {
+                        > .idp__deleteDisable {
+                            display: flex;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

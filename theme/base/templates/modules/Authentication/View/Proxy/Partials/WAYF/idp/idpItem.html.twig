@@ -5,7 +5,7 @@
 {% endif %}
 
 <li
-    class="{% if idp['connected'] is defined and not idp['connected'] %}idpItem--noAccess{% endif %}"
+    class="{{ listName }}{% if idp['connected'] is defined and not idp['connected'] %} idpItem--noAccess{% endif %}"
     data-count="{% if idp['count'] is defined %}{{ idp['count'] }}{% else %}0{% endif %}"
     data-entityid="{{ idp['entityId'] }}"
     data-index="{{ loop.index }}"
