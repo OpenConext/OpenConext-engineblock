@@ -2,7 +2,7 @@ import {addSelectedIdp} from './deleteDisable/addSelectedIdp';
 import {handleClickingDisabledIdp} from './handleClickingDisabledIdp';
 import {hasVisibleDisabledButtonAsTarget} from './utility/hasVisibleDisabledButtonAsTarget';
 import {hasVisibleDeleteButtonAsTarget} from './utility/hasVisibleDeleteButtonAsTarget';
-import {idpElement, idpFormSelector, idpSelector} from '../selectors';
+import {idpFormSelector, idpSelector} from '../selectors';
 
 /**
  * Submit the form for the selected idp.
@@ -15,12 +15,16 @@ import {idpElement, idpFormSelector, idpSelector} from '../selectors';
 export const submitForm = (e) => {
   e.preventDefault();
   let element = e.target;
-
   if (hasVisibleDeleteButtonAsTarget(element)) {
     return;
   }
 
-  if (element.tagName !== idpElement) {
+  if (hasVisibleDisabledButtonAsTarget(element)) {
+    handleClickingDisabledIdp(element);
+    return;
+  }
+
+  if (!element.classList.contains(idpSelector)) {
     element = element.closest(idpSelector);
   }
 

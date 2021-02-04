@@ -4,6 +4,7 @@ import {searchAndSortIdps} from './search/searchAndSortIdps';
 import {toggleDefaultIdPLinkVisibility} from "./search/toggleDefaultIdPLinkVisibility";
 import {toggleSearchAndResetButton} from "./search/toggleSearchAndResetButton";
 import {remainingIdpLiSelector, searchFieldSelector, searchResetSelector} from '../selectors';
+import {focusAndSmoothScroll} from '../utility/focusAndSmoothScroll';
 
 export const searchBehaviour = () => {
   const idpList = document.querySelectorAll(remainingIdpLiSelector);
@@ -18,7 +19,10 @@ export const searchBehaviour = () => {
   searchBar.addEventListener('click', event => searchAndSortIdps(idpArray, event.target.value));
   searchBar.addEventListener('input', event => searchAndSortIdps(idpArray, event.target.value));
 
-  resetButton.addEventListener('click', event => toggleSearchAndResetButton(idpArray, ''));
+  resetButton.addEventListener('click', () => {
+    toggleSearchAndResetButton(idpArray, '');
+    focusAndSmoothScroll(searchBar);
+  });
   // attach handler to search form
   document.querySelector('.wayf__search').addEventListener('submit', event => {
     event.preventDefault();

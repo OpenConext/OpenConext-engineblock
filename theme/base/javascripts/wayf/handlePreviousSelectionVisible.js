@@ -2,7 +2,12 @@ import {hasSelectedIdpsInList} from './utility/hasSelectedIdpsInList';
 import {attachDeleteHandlers} from './deleteDisable/attachDeleteHandlers';
 import {switchIdpSection} from './utility/switchIdpSection';
 import {focusOn} from "../utility/focusOn";
-import {addAccountButtonSelector, previousSelectionFirstIdp, selectedIdpsListSelector} from '../selectors';
+import {
+  addAccountButtonSelector,
+  previousSelectionFirstIdp,
+  searchFieldSelector,
+  selectedIdpsListSelector
+} from '../selectors';
 import {addClickHandlerOnce} from '../utility/addClickHandlerOnce';
 import {idpSubmitHandler} from '../handlers';
 import {matchPreviouslySelectedWithCookie} from './matchPreviouslySelectedWithCookie';
@@ -19,7 +24,11 @@ export const handlePreviousSelectionVisible = () => {
     mouseHandlersHiddenIdps();
     // put focus on the first IDP, so you can just hit enter & go
     focusOn(previousSelectionFirstIdp);
+    return;
   }
+
+  // if no selected accounts exist, focus on the searchfield
+  focusOn(searchFieldSelector);
 };
 
 /**

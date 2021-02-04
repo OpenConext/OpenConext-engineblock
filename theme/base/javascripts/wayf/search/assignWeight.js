@@ -19,8 +19,7 @@ import {findWeight} from './findWeight';
  * @param     searchTerm     string
  */
 export const assignWeight = (idpArray, searchTerm) => {
-  idpArray.forEach(li => {
-    const idp = li.children[0];
+  idpArray.forEach(idp => {
     const searchTerms = searchTerm.trim().split(' ');
     let weight = 0;
 
@@ -34,7 +33,11 @@ export const assignWeight = (idpArray, searchTerm) => {
       });
     }
 
-    setWeight(li, weight);
     setWeight(idp, weight);
+    try{
+      setWeight(idp.firstElementChild, weight);
+    } catch (e) {
+      console.log(e);
+    }
   });
 };
