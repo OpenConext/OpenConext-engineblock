@@ -17,6 +17,7 @@
  */
 
 use OpenConext\EngineBlock\Assert\Assertion;
+use OpenConext\EngineBlock\Logger\Message\AdditionalInfo;
 use OpenConext\EngineBlock\Metadata\TransparentMfaEntity;
 use Psr\Log\LoggerInterface;
 
@@ -45,9 +46,16 @@ class EngineBlock_Corto_Filter_Command_ValidateMfaAuthnContextClassRef extends E
     public function execute()
     {
         $originalSP = $this->_server->findOriginalServiceProvider($this->_request, $this->logger)->entityId;
+        $idp = $this->_identityProvider->entityId;
         $mfaEntity = $this->_identityProvider->getCoins()->mfaEntities()->findByEntityId($originalSP);
+
+        $additionalInfo = AdditionalInfo::create()->setIdp($idp)->setSp($originalSP);
+
         // SP's configured to pass auth context transparently are not checked for an expected (configured) class ref.
         if (!$mfaEntity || $mfaEntity instanceof TransparentMfaEntity) {
+            $message = 'SP is not configured for MFA for IdP, or for transparant AuthnContext, skipping validation of AuthnContextClassRef';
+            $this->logger->info($message, ['additional_info' => $additionalInfo->toArray()]);
+
             return;
         }
 
@@ -57,12 +65,18 @@ class EngineBlock_Corto_Filter_Command_ValidateMfaAuthnContextClassRef extends E
             throw new EngineBlock_Corto_Exception_InvalidMfaAuthnContextClassRef(
                 sprintf(
                     'Assertion from MFA IdP "%s" for SP "%s" does not contain the requested AuthnContextClassRef "%s"',
-                    $this->_identityProvider->entityId,
+                    $idp,
                     $originalSP,
                     $mfaEntity->level()
                 )
             );
         }
+
+        $message = sprintf(
+            'Validated presence of AuthnContextClassRef "%s" in assertion',
+            $mfaEntity->level()
+        );
+        $this->logger->notice($message, ['additional_info' => $additionalInfo->toArray()]);
     }
 
     private function getAuthnMethods(EngineBlock_Saml2_ResponseAnnotationDecorator $response)
