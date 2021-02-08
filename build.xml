@@ -131,9 +131,7 @@
     </target>
 
     <target name="security-checker" description="Check for vulnerable dependencies with SensioLabs Security Checker">
-        <exec dir="${basedir}" executable="vendor/bin/security-checker" failonerror="true">
-            <arg value="security:check" />
-        </exec>
+        <exec dir="${basedir}" executable="bin/securityChecker.sh" failonerror="true"></exec>
     </target>
 
     <target name="npm-lint" description="Performs the linting of css and js">

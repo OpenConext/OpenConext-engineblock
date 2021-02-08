@@ -125,7 +125,7 @@ jobs:
               run: |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                       echo -e "\nSensioLabs Security Check\n" && \
-                      ./vendor/bin/security-checker security:check && \
+                      ./bin/securityChecker.sh && \
                       cd theme && \
                       echo -e "\nNPM Audit\n" && \
                       npm run audit
