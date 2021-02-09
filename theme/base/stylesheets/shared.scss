@@ -186,7 +186,7 @@ body {
 
     .tooltip__value {
         display: none;
-        text-align: right;
+        text-align: left;
     }
 
     .modal__value.animated,
@@ -215,6 +215,7 @@ body {
 
         // set max-height for tooltips
     input[type="checkbox"]:checked.tooltip ~ .tooltip__value.animated {
+        font-weight: $normal;
         max-height: initial;
     }
 
