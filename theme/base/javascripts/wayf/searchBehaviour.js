@@ -11,21 +11,33 @@ export const searchBehaviour = () => {
   const searchBar = document.querySelector(searchFieldSelector);
   const resetButton = document.querySelector(searchResetSelector);
   const idpArray = nodeListToArray(idpList);
+  let previousSearchTerm = '';
 
   // attach handler to search field
-  searchBar.addEventListener('keyup', throttle(event => searchAndSortIdps(idpArray, event.target.value), 250));
+  searchBar.addEventListener('keyup', throttle(event => searchHandler(idpArray, event.target.value), 250));
   searchBar.addEventListener('keyup', event => toggleDefaultIdPLinkVisibility(event.target.value));
   searchBar.addEventListener('keyup',  event => toggleSearchAndResetButton(idpArray, event.target.value));
-  searchBar.addEventListener('click', event => searchAndSortIdps(idpArray, event.target.value));
-  searchBar.addEventListener('input', event => searchAndSortIdps(idpArray, event.target.value));
+  searchBar.addEventListener('click', event => searchHandler(idpArray, event.target.value));
+  searchBar.addEventListener('input', event => searchHandler(idpArray, event.target.value));
 
   resetButton.addEventListener('click', () => {
     toggleSearchAndResetButton(idpArray, '');
     focusAndSmoothScroll(searchBar);
+    previousSearchTerm = '';
   });
   // attach handler to search form
   document.querySelector('.wayf__search').addEventListener('submit', event => {
     event.preventDefault();
     searchAndSortIdps(idpArray, event.target.value);
   });
+
+  function searchHandler(idpArray, searchTerm) {
+    if (searchTerm === previousSearchTerm) {
+      return;
+    }
+
+    searchAndSortIdps(idpArray, event.target.value);
+    previousSearchTerm = searchTerm;
+  }
 };
+
