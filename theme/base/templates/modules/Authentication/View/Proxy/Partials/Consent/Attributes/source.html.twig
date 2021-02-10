@@ -15,7 +15,7 @@
             <span class="idpRow__providedBy-content">{{ 'consent_provided_by'|trans }}  <strong>{{ organisationName }}</strong></span>
         {% endset %}
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/idpRow.html.twig' with {
-            logoUrl: attributeSourceLogoUrl(attributeSource)|escape('html_attr'),
+            logoUrl: attributeSourceLogoUrl(attributeSource),
             organisationName: organisationName,
             text: consentProvidedByOrg,
         } %}
