@@ -9,7 +9,7 @@ context('Consent on Skeune theme', () => {
   describe('Handles additional attributes correctly', () => {
     it('shows the correct amount of attributes on load', () => {
       cy.get(attributesSelector)
-        .should('have.length', '11');
+        .should('have.length', '13');
       cy.get(attribute6)
         .should('have.css', 'height', '1px')
         .should('have.css', 'width', '1px');

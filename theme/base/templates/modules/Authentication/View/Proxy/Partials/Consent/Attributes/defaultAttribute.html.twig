@@ -17,8 +17,8 @@
         {% endif %}
     {# Multiple attribute values #}
     {% else %}
+        <div class="attribute__valueWrapper">
         {% if attributeValues|length > 5 %}
-            <div class="attribute__valueWrapper">
                 {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/toggleCheckbox.html.twig' with {
                     className: 'groupMembership__checkbox',
                     id: 'attribute' ~ loop.index,
@@ -27,11 +27,11 @@
         {% endif %}
         <ul class="attribute__value attribute__value--list">
             {% for value in attributeValues %}
-                <li>
+                <li {% if not addTooltip %}class="consent__attributeNested--noTooltip"{% endif %}>
                     {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/value.html.twig' with { attributeValue: value } %}
-                    {% if addTooltip %}
+                    {% if addTooltip and loop.first %}
                         <input type="checkbox" tabindex="-1" aria-hidden="true" class="tooltip visually-hidden" id="{{ id }}" name="{{ id }}" />
-                        {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/tooltip.html.twig' with { tooltipValue: attributeMotivations[attributeIdentifier] } %}
+                        {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/tooltip.html.twig' with { tooltipValue: attributeMotivations[attributeIdentifier], id: id } %}
                     {% endif %}
                 </li>
             {% endfor %}
@@ -44,8 +44,8 @@
                 showLess: 'consent_groupmembership_show_less',
               }
             %}
-            </div>
         {% endif %}
+        </div>
     {% endif %}
 </li>
 

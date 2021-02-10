@@ -45,13 +45,13 @@
         text-align: left;
     }
 
-    > input[type="checkbox"]:checked.tooltip ~ .attribute__name > label.tooltip {
+    input[type="checkbox"]:checked.tooltip ~ .attribute__name > label.tooltip {
         @include closeTooltip;
         background-position: left 17px bottom 11px;
     }
 
-    > .ie11__label,
-    > .attribute__name > .label.tooltip {
+    .ie11__label,
+    .attribute__name > .label.tooltip {
         @include grid-position(1, 2, 5, 6);
 
         @include screen('mobile') {
