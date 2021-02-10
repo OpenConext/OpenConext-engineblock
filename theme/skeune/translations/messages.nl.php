@@ -56,7 +56,7 @@ return [
     'consent_attributes_correction_text'    => 'Foutieve informatie?',
     'consent_ok'    =>  'Ja, ik geef toestemming',
     'consent_identifier_explanation'    => 'De identifier voor deze dienst wordt gegenereerd door %suite_name% en is verschillend voor elke dienst waar je gebruik van maakt via %suite_name%. De dienst kan je aan de hand van deze identifier herkennen als dezelfde gebruiker zodra je later terugkeert bij de dienst. Diensten onderling kunnen jou echter niet herkennen als dezelfde gebruiker wanneer zij gegevens uitwisselen.',
-    'consent_provided_by'   => 'aangeboden door',
+    'consent_provided_by'   => 'geleverd door',
     'consent_tooltip_screenreader'  => 'Waarom hebben we jouw %attr_name% nodig?',
     'consent_nojs'   => 'Sommige functionaliteiten op deze pagina vereisen JavaScript, zoals bedienen met je toetsenbord. Schakel JavaScript in in je browser indien je deze functionaliteiten wenst te gebruiken.',
     'consent_disclaimer_privacy_statement' => '(aangeboden door %org%) heeft deze informatie nodig om te kunnen werken',
