@@ -35,6 +35,7 @@ function getIdpContent(idp) {
   const id = getData(idp, 'entityid');
   const connectable = getData(idp, 'connectable');
   const defaultIdp = getData(idp, 'defaultidp');
+  const logoUrl = getData(idp, 'url');
   const className = idp.classList.contains(unconnectedLiClass) ? `${idpClass} ${unconnectedIdpClass}` : idpClass;
   const clone = template.cloneNode(true);
 
@@ -49,6 +50,7 @@ function getIdpContent(idp) {
   }
   clone.querySelector(`.${idpTitleClass}`).innerText = title;
   clone.querySelector('[name="idp"]').value = id;
+  clone.querySelector('img').setAttribute('src', logoUrl);
 
   return clone;
 }
