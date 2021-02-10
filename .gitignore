@@ -18,6 +18,7 @@ bin/ignore_me.php
 /app/config/parameters.yml
 /app/config/config_local.yml
 .idea
+local-php-security-checker
 /languages/overrides.*.php
 /theme/node_modules
 /theme/.sass-cache
