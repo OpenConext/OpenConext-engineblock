@@ -5,6 +5,22 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.4.7
+**Features and fixes**
+- Replaced the SURFnet favicon by the openconext one
+- Keep the WAYF operable when syncing cookies.
+- Add logging to ValidateMfaAuthnContextClassRef command.
+- Tweak NL language.
+- Correct display of tooltip for group attributes.
+- Avoid double encoding logo url for attribute source.
+- Ensure images after search are ok in IE11.
+- Prevent logo flicker in FF whenever possible.
+- Ensure Idps after sync are deletable.
+- Prevent Idp-row logo from overlapping with text.
+
+**Security**
+- Replaced the composer dependency for the security checker (no longer working) with a local one.
+
 ## 6.4.6
 **Features and fixes**
  - Fixed disabled button being shown in the remaining section for non-disabled accounts on IE11
