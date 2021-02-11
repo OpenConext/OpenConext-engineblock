@@ -43,6 +43,7 @@ export const matchPreviouslySelectedWithCookie = () => {
           }
 
           if (!!clone) {
+            clone.classList.remove('remaining');
             // disabled idps
             if (hasDeleteDisabledButton) {
               clone.querySelector(idpDeleteDisabledSelector).appendChild(deleteButtonTemplate.querySelector(idpDeleteSelector).cloneNode(true));
