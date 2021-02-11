@@ -1,6 +1,6 @@
 .idpRow {
     @include display-grid;
-    @include grid-template-columns(10% 1% 50% 1% 37% 1%);
+    @include grid-template-columns(10% 3% 48% 1% 37% 1%);
     align-items: center;
     background-color: $providerGray;
     border-bottom: 1px solid $softBorderGray;
@@ -12,7 +12,7 @@
     text-align: left;
 
     @include screen('mobile') {
-        @include grid-template-columns(10% 6% 83% 1%);
+        @include grid-template-columns(15% 6% 78% 1%);
         @include grid-template-rows(min-content min-content);
         padding: 10px;
     }
@@ -28,8 +28,10 @@
     > img {
         @include grid-position(1, 2, 1, 2);
         box-sizing: content-box;
-        max-height: calculateRem(30px);
         margin-left: 9px;
+        max-height: calculateRem(30px);
+        max-width: 100%;
+        overflow: hidden;
     }
 
     label.modal {
