@@ -11,6 +11,10 @@
         {
           "AttributeId": "urn:mace:dir:attribute-def:eduPersonAffiliation",
           "Value": "student"
+        },
+        {
+          "AttributeId": "urn:mace:surfnet.nl:collab:xacml-attribute:ip-address",
+          "Value": "10.0.1.2"
         }
       ]
     },
