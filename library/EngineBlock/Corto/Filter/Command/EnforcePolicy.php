@@ -38,6 +38,8 @@ class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_F
             return;
         }
 
+        $remoteIp = EngineBlock_ApplicationSingleton::getInstance()->getClientIpAddress();
+
         $log = EngineBlock_ApplicationSingleton::getLog();
         $log->debug("Policy Enforcement Point: consulting Policy Decision Point");
 
@@ -46,7 +48,8 @@ class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_F
             $this->_collabPersonId,
             $this->_identityProvider->entityId,
             $serviceProvider->entityId,
-            $this->_responseAttributes
+            $this->_responseAttributes,
+            $remoteIp
         );
 
         $log->debug("Policy Enforcement Point: Requesting decision from PDP");

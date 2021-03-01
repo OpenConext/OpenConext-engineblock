@@ -40,7 +40,7 @@ class PdpClientTest extends TestCase
      */
     public function a_pdp_client_gives_policy_decisions_based_on_pdp_responses_to_pdp_requests($responseName)
     {
-        $pdpRequest = Request::from('clientid', 'subject', 'idp', 'sp', []);
+        $pdpRequest = Request::from('clientid', 'subject', 'idp', 'sp', [], '10.11.12.13');
         $denyResponseJson = file_get_contents(__DIR__ . '/fixture/response_' . $responseName . '.json');
 
         $mockHandler = new MockHandler([

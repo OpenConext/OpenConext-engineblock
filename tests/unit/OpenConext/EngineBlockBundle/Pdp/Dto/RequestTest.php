@@ -38,13 +38,14 @@ class RequestTest extends TestCase
 
     public function setUp()
     {
-        $this->validClientId   = 'clientid';
+        $this->validClientId    = 'clientid';
         $this->validSubjectId   = 'subject-id';
         $this->validIdpEntityId = 'https://my-idp.example';
         $this->validSpEntityId  = 'https://my-sp.example';
         $this->validResponseAttributes = [
             ['urn:mace:dir:attribute-def:eduPersonAffiliation' => ['student', 'alumni']]
         ];
+        $this->validRemoteIp    = '2001:610:0:8010::213';
     }
 
     /**
@@ -63,7 +64,8 @@ class RequestTest extends TestCase
             $this->validSubjectId,
             $this->validIdpEntityId,
             $this->validSpEntityId,
-            $this->validResponseAttributes
+            $this->validResponseAttributes,
+            $this->validRemoteIp
         );
     }
 
@@ -84,7 +86,8 @@ class RequestTest extends TestCase
             $invalidSubjectId,
             $this->validIdpEntityId,
             $this->validSpEntityId,
-            $this->validResponseAttributes
+            $this->validResponseAttributes,
+            $this->validRemoteIp
         );
     }
 
@@ -105,7 +108,8 @@ class RequestTest extends TestCase
             $this->validSubjectId,
             $invalidIdpEntityId,
             $this->validSpEntityId,
-            $this->validResponseAttributes
+            $this->validResponseAttributes,
+            $this->validRemoteIp
         );
     }
 
@@ -126,7 +130,8 @@ class RequestTest extends TestCase
             $this->validSubjectId,
             $this->validIdpEntityId,
             $invalidSpEntityId,
-            $this->validResponseAttributes
+            $this->validResponseAttributes,
+            $this->validRemoteIp
         );
     }
 
@@ -149,7 +154,8 @@ class RequestTest extends TestCase
             $this->validSubjectId,
             $this->validIdpEntityId,
             $this->validSpEntityId,
-            $responseAttributesWithNonStringKeys
+            $responseAttributesWithNonStringKeys,
+            $this->validRemoteIp
         );
     }
 
@@ -173,7 +179,8 @@ class RequestTest extends TestCase
             $this->validSubjectId,
             $this->validIdpEntityId,
             $this->validSpEntityId,
-            $responseAttributesWithNonArrayValues
+            $responseAttributesWithNonArrayValues,
+            $this->validRemoteIp
         );
     }
 
@@ -191,6 +198,7 @@ class RequestTest extends TestCase
         $accessSubjectAttributeValues = [
             NameIdFormat::UNSPECIFIED => 'an-unspecified-name-id',
             'urn:mace:dir:attribute-def:eduPersonAffiliation' => 'student',
+            'urn:mace:surfnet.nl:collab:xacml-attribute:ip-address' => '2001:610:0:8010::213',
         ];
 
         $expectedRequest = $this->buildPdpRequest($resourceAttributeValues, $accessSubjectAttributeValues);
@@ -200,7 +208,8 @@ class RequestTest extends TestCase
             $accessSubjectAttributeValues[NameIdFormat::UNSPECIFIED],
             $resourceAttributeValues['IDPentityID'],
             $resourceAttributeValues['SPentityID'],
-            ['urn:mace:dir:attribute-def:eduPersonAffiliation' => ['student']]
+            ['urn:mace:dir:attribute-def:eduPersonAffiliation' => ['student']],
+            $this->validRemoteIp
         );
 
         $this->assertEquals($expectedRequest, $actualRequest);
@@ -228,6 +237,7 @@ class RequestTest extends TestCase
         $accessSubjectAttributeValues = [
             NameIdFormat::UNSPECIFIED => 'an-unspecified-name-id',
             'urn:mace:dir:attribute-def:eduPersonAffiliation' => 'student',
+            'urn:mace:surfnet.nl:collab:xacml-attribute:ip-address' => '10.0.1.2',
         ];
 
         $request = $this->buildPdpRequest($resourceAttributeValues, $accessSubjectAttributeValues);

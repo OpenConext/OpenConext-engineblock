@@ -53,10 +53,17 @@ final class Request implements JsonSerializable
      * @param string $idpEntityId
      * @param string $spEntityId
      * @param array $responseAttributes
+     * @param string $remoteIp
      * @return Request $request
      */
-    public static function from($clientId, $subjectId, $idpEntityId, $spEntityId, array $responseAttributes)
-    {
+    public static function from(
+        $clientId,
+        $subjectId,
+        $idpEntityId,
+        $spEntityId,
+        array $responseAttributes,
+        string $remoteIp
+    ) {
         Assertion::string($clientId, 'The client ID must be a string, received "%s" (%s)');
         Assertion::string($subjectId, 'The SubjectId must be a string, received "%s" (%s)');
         Assertion::string($idpEntityId, 'The IDPentityID must be a string, received "%s" (%s)');
@@ -100,6 +107,11 @@ final class Request implements JsonSerializable
                 $request->accessSubject->attributes[] = $attribute;
             }
         }
+
+        $attribute = new Attribute;
+        $attribute->attributeId = 'urn:mace:surfnet.nl:collab:xacml-attribute:ip-address';
+        $attribute->value = $remoteIp;
+        $request->accessSubject->attributes[] = $attribute;
 
         return $request;
     }
