@@ -90,14 +90,6 @@ class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_F
     }
 
     /**
-     * @return EngineBlock_PolicyDecisionPoint_PepValidator
-     */
-    protected function _getValidator()
-    {
-        return new EngineBlock_PolicyDecisionPoint_PepValidator();
-    }
-
-    /**
      * @return OpenConext\EngineBlockBundle\Pdp\PdpClient
      */
     private function getPdpClient()
