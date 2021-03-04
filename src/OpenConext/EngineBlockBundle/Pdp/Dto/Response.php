@@ -22,6 +22,7 @@ use OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response\AssociatedAdvice;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response\AttributeAssignment;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response\Category;
+use OpenConext\EngineBlockBundle\Pdp\Dto\Response\Obligation;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response\PolicyIdentifier;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response\PolicyIdReference;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response\PolicySetIdReference;
@@ -44,6 +45,11 @@ final class Response
      * @var AssociatedAdvice[]
      */
     public $associatedAdvices;
+
+    /**
+     * @var Obligation[]
+     */
+    public $obligations;
 
     /**
      * @var PolicyIdentifier
@@ -143,6 +149,26 @@ final class Response
                 }
 
                 $response->associatedAdvices[] = $associatedAdvice;
+            }
+        }
+
+        if (isset($responseData['Obligations'])) {
+            foreach ($responseData['Obligations'] as $obligationData) {
+                $obligation = new Obligation;
+                $obligation->id = $obligationData['Id'];
+
+                foreach ($obligationData['AttributeAssignment'] as $attributeAssignmentData) {
+                    $attributeAssignment = new AttributeAssignment;
+                    $attributeAssignment->category    = $attributeAssignmentData['Category'];
+                    $attributeAssignment->attributeId = $attributeAssignmentData['AttributeId'];
+                    $attributeAssignment->value       = $attributeAssignmentData['Value'];
+                    if (isset($attributeAssignmentData['DataType'])) {
+                        $attributeAssignment->dataType = $attributeAssignmentData['DataType'];
+                    }
+                    $obligation->attributeAssignments[] = $attributeAssignment;
+                }
+
+                $response->obligations[] = $obligation;
             }
         }
 
