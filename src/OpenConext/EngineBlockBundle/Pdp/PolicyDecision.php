@@ -46,6 +46,11 @@ final class PolicyDecision
     private $statusMessage;
 
     /**
+     * @var string|null
+     */
+    private $stepupObligation;
+
+    /**
      * @var bool
      */
     private $isIdpSpecific = false;
@@ -68,6 +73,8 @@ final class PolicyDecision
             $policyDecision->statusMessage = $response->status->statusMessage;
         }
 
+        $policyDecision->stepupObligation = self::findStepupObligation($response->obligations);
+
         if ($policyDecision->permitsAccess()) {
             return $policyDecision;
         }
@@ -89,6 +96,23 @@ final class PolicyDecision
         }
 
         return $policyDecision;
+    }
+
+    /**
+     * Checks obgligations for any stepup LoA requirements, returns first one found.
+     *
+     * @param array|null $obligations
+     * @return string|null
+     */
+    private static function findStepupObligation($obligations)
+    {
+        if ($obligations !== null) {
+            foreach ($obligations as $obligation) {
+                if ($obligation->id === 'urn:openconext:ssa:loa') {
+                    return $obligation->attributeAssignments[0]->value;
+                }
+            }
+        }
     }
 
     /**
@@ -196,6 +220,14 @@ final class PolicyDecision
             return $this->idpLogo;
         }
         return null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getStepupObligation()
+    {
+        return $this->stepupObligation;
     }
 
     /**

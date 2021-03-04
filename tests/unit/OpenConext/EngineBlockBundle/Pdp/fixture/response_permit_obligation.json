@@ -1,0 +1,39 @@
+{
+   "Response": [
+      {
+         "Status": {
+            "StatusCode": {
+               "Value": "urn:oasis:names:tc:xacml:1.0:status:ok"
+            }
+         },
+         "Obligations": [
+            {
+               "AttributeAssignment": [
+                  {
+                     "Category": "urn:oasis:names:tc:xacml:1.0:subject-category:access-subject",
+                     "AttributeId": "urn:loa:level",
+                     "Value": "http://test2.openconext.org/assurance/loa2",
+                     "DataType": "http://www.w3.org/2001/XMLSchema#string"
+                  }
+               ],
+               "Id": "urn:openconext:ssa:loa"
+            }
+         ],
+         "PolicyIdentifier": {
+            "PolicySetIdReference": [
+               {
+                  "Version": "1.0",
+                  "Id": "urn:openconext:pdp:root:policyset"
+               }
+            ],
+            "PolicyIdReference": [
+               {
+                  "Version": "1",
+                  "Id": "urn:surfconext:xacml:policy:id:pdp_example"
+               }
+            ]
+         },
+         "Decision": "Permit"
+      }
+   ]
+}

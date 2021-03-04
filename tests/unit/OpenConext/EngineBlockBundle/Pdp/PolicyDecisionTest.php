@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockBundle\Tests;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response;
+use OpenConext\EngineBlockBundle\Pdp\Dto\Response\AttributeAssignment;
 use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
 use PHPUnit\Framework\TestCase;
 
@@ -192,6 +193,62 @@ class PolicyDecisionTest extends TestCase
         $decision->getLocalizedDenyMessage('en');
     }
 
+    /**
+     * @test
+     * @group Pdp
+     */
+    public function a_response_without_obligations_has_no_obligations()
+    {
+        $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_permit.json'), true);
+        $response = Response::fromData($responseJson);
+
+        $this->assertNull($response->obligations);
+    }
+
+    /**
+     * @test
+     * @group Pdp
+     */
+    public function a_response_with_obligation_has_obligations()
+    {
+        $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_permit_obligation.json'), true);
+        $response = Response::fromData($responseJson);
+
+        $expected_id = 'urn:openconext:ssa:loa';
+
+        $this->assertCount(1, $response->obligations);
+        $this->assertEquals($expected_id, $response->obligations[0]->id);
+
+        $expected_attributeAssignment = new AttributeAssignment;
+        $expected_attributeAssignment->category    = 'urn:oasis:names:tc:xacml:1.0:subject-category:access-subject';
+        $expected_attributeAssignment->attributeId = 'urn:loa:level';
+        $expected_attributeAssignment->value       = 'http://test2.openconext.org/assurance/loa2';
+        $expected_attributeAssignment->dataType    = 'http://www.w3.org/2001/XMLSchema#string';
+
+        $this->assertCount(1, $response->obligations[0]->attributeAssignments);
+        $this->assertEquals($expected_attributeAssignment, $response->obligations[0]->attributeAssignments[0]);
+    }
+
+    /**
+     * @test
+     * @group Pdp
+     *
+     * @dataProvider pdpResponseAndExpectedLoaProvider
+     * @param $responseName
+     * @param $expectedLoa
+     */
+    public function the_correct_loa_obligation_should_be_given_based_on_a_pdp_response(
+        $responseName,
+        $expectedPermission
+    ) {
+        $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_' . $responseName . '.json'), true);
+        $response = Response::fromData($responseJson);
+
+        $decision = PolicyDecision::fromResponse($response);
+
+        $this->assertEquals($expectedPermission, $decision->getStepupObligation());
+    }
+
     public function pdpResponseAndExpectedPermissionProvider()
     {
         return [
@@ -199,6 +256,16 @@ class PolicyDecisionTest extends TestCase
             'Indeterminate response does not permit access' => ['indeterminate', false],
             'Not applicable response permits access' => ['not_applicable', true],
             'Permit response permits access' => ['permit', true],
+            'Permit response with obligation permits access' => ['permit_obligation', true],
+        ];
+    }
+
+    public function pdpResponseAndExpectedLoaProvider()
+    {
+        return [
+            'Not applicable response without obgligation yields null' => ['not_applicable', null],
+            'Permit response without obligation yields null' => ['permit', null],
+            'Permit response with obligation yields loa2' => ['permit_obligation', 'http://test2.openconext.org/assurance/loa2'],
         ];
     }
 }
