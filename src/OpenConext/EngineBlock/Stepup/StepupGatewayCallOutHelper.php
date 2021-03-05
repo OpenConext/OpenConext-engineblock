@@ -51,9 +51,12 @@ final class StepupGatewayCallOutHelper
      * @param ServiceProvider $serviceProvider
      * @return bool
      */
-    public function shouldUseStepup(IdentityProvider $identityProvider, ServiceProvider $serviceProvider)
-    {
-        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider, $this->loaRepository);
+    public function shouldUseStepup(
+        IdentityProvider $identityProvider,
+        ServiceProvider $serviceProvider,
+        string $pdpLoa = null
+    ) {
+        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider, $pdpLoa, $this->loaRepository);
         return $stepupDecision->shouldUseStepup();
     }
 
@@ -62,9 +65,12 @@ final class StepupGatewayCallOutHelper
      * @param ServiceProvider $serviceProvider
      * @return string|null
      */
-    public function getStepupLoa(IdentityProvider $identityProvider, ServiceProvider $serviceProvider)
-    {
-        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider, $this->loaRepository);
+    public function getStepupLoa(
+        IdentityProvider $identityProvider,
+        ServiceProvider $serviceProvider,
+        string $pdpLoa = null
+    ) {
+        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider, $pdpLoa, $this->loaRepository);
         return $this->gatewayLoaMapping->transformToGatewayLoa($stepupDecision->getStepupLoa());
     }
 
@@ -97,7 +103,7 @@ final class StepupGatewayCallOutHelper
      */
     public function allowNoToken(IdentityProvider $identityProvider, ServiceProvider $serviceProvider)
     {
-        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider, $this->loaRepository);
+        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider, null, $this->loaRepository);
         return $stepupDecision->allowNoToken();
     }
 }

@@ -214,7 +214,7 @@ class PolicyDecisionTest extends TestCase
         $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_permit_obligation.json'), true);
         $response = Response::fromData($responseJson);
 
-        $expected_id = 'urn:openconext:ssa:loa';
+        $expected_id = 'urn:openconext:stepup:loa';
 
         $this->assertCount(1, $response->obligations);
         $this->assertEquals($expected_id, $response->obligations[0]->id);

@@ -108,7 +108,8 @@ final class PolicyDecision
     {
         if ($obligations !== null) {
             foreach ($obligations as $obligation) {
-                if ($obligation->id === 'urn:openconext:ssa:loa') {
+                // First alternative is for compatibility with PDP snapshot release. Can be removed after PDP final release is done.
+                if ($obligation->id === 'urn:openconext:ssa:loa' || $obligation->id === 'urn:openconext:stepup:loa') {
                     return $obligation->attributeAssignments[0]->value;
                 }
             }

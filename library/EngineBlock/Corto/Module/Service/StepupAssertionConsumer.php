@@ -254,14 +254,17 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
         // First get the original issuer (SP)
         $sp = $this->getSp($receivedRequest, $log);
         // Then retrieve the IdP to be able to determine the required SP/IdP LoA requirement
+        $originalResponse = $this->_processingStateHelper->getStepByRequestId(
+            $receivedRequest->getId(),
+            ProcessingStateHelperInterface::STEP_STEPUP
+        )->getResponse();
         $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId(
-            $this->_processingStateHelper->getStepByRequestId(
-                $receivedRequest->getId(),
-                ProcessingStateHelperInterface::STEP_STEPUP
-            )->getResponse()->getIssuer()->getValue()
+            $originalResponse->getIssuer()->getValue()
         );
 
-        $stepupDecision = new StepupDecision($idp, $sp, $this->_loaRepository);
+        $pdpLoa = $originalResponse->getPdpRequestedLoa();
+
+        $stepupDecision = new StepupDecision($idp, $sp, $pdpLoa, $this->_loaRepository);
         $requiredLoa = $stepupDecision->getStepupLoa();
         $receivedLoa = $this->_stepupGatewayCallOutHelper->getEbLoa(
             $receivedResponse->getAssertion()->getAuthnContextClassRef()

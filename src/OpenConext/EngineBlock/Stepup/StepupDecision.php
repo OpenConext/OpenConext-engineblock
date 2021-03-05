@@ -34,6 +34,10 @@ class StepupDecision
      */
     private $spLoa = null;
     /**
+     * @var string|null
+     */
+    private $pdpLoa = null;
+    /**
      * @var bool
      */
     private $spNoToken;
@@ -41,11 +45,16 @@ class StepupDecision
     /**
      * @param IdentityProvider $idp
      * @param ServiceProvider $sp
+     * @param string $pdpLoa
      * @param LoaRepository $loaRepository
      * @throws InvalidStepupConfigurationException
      */
-    public function __construct(IdentityProvider $idp, ServiceProvider $sp, LoaRepository $loaRepository)
-    {
+    public function __construct(
+        IdentityProvider $idp,
+        ServiceProvider $sp,
+        string $pdpLoa = null,
+        LoaRepository $loaRepository
+    ) {
         $idpLoa = $idp->getCoins()->stepupConnections()->getLoa($sp->entityId);
         // Only load the IdP LoA if configured in the stepup connection coin data
         if ($idpLoa) {
@@ -67,6 +76,10 @@ class StepupDecision
                 $sp->entityId
             ));
         }
+
+        if ($pdpLoa) {
+            $this->pdpLoa = $loaRepository->getByIdentifier($pdpLoa);
+        }
     }
 
     /**
@@ -74,7 +87,7 @@ class StepupDecision
      */
     public function shouldUseStepup()
     {
-        return ($this->spLoa || $this->idpLoa);
+        return ($this->spLoa || $this->idpLoa || $this->pdpLoa);
     }
 
     /**
@@ -82,6 +95,9 @@ class StepupDecision
      */
     public function getStepupLoa()
     {
+        if ($this->pdpLoa) {
+            return $this->pdpLoa;
+        }
         if ($this->spLoa) {
             return $this->spLoa;
         }
@@ -98,7 +114,7 @@ class StepupDecision
      */
     public function allowNoToken()
     {
-        if ($this->spLoa || $this->idpLoa) {
+        if ($this->spLoa || $this->idpLoa || $this->pdpLoa) {
             return $this->spNoToken;
         }
 

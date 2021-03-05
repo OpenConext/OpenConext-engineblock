@@ -76,6 +76,11 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     protected $intendedNameId;
 
     /**
+     * @var string
+     */
+    protected $pdpRequestedLoa;
+
+    /**
      * @param Response $response
      */
     function __construct(Response $response)
@@ -213,6 +218,17 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     public function getIntendedNameId()
     {
         return $this->intendedNameId;
+    }
+
+    public function setPdpRequestedLoa(string $pdpLoa = null): EngineBlock_Saml2_ResponseAnnotationDecorator
+    {
+        $this->pdpRequestedLoa = $pdpLoa;
+        return $this;
+    }
+
+    public function getPdpRequestedLoa(): ?string
+    {
+        return $this->pdpRequestedLoa;
     }
 
     /**
