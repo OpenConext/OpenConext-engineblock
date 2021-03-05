@@ -16,7 +16,7 @@
                      "DataType": "http://www.w3.org/2001/XMLSchema#string"
                   }
                ],
-               "Id": "urn:openconext:ssa:loa"
+               "Id": "urn:openconext:stepup:loa"
             }
          ],
          "PolicyIdentifier": {
