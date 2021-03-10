@@ -16,8 +16,8 @@ export const terminalLog = (violations) => {
       impact,
       description,
       nodes: nodes.length,
-      nodeTarget: nodes.length > 0 && nodes[0].any[0] ? nodes[0].any[0].relatedNodes[0].target[0] : '',
-      nodeHTML: nodes.length > 0 && nodes[0].any[0] ? nodes[0].any[0].relatedNodes[0].html : '',
+      nodeTarget: nodes.length > 0 && nodes[0].any[0] && nodes[0].any[0].relatedNodes[0] ? nodes[0].any[0].relatedNodes[0].target[0] : '',
+      nodeHTML: nodes.length > 0 && nodes[0].any[0] && nodes[0].any[0].relatedNodes[0] ? nodes[0].any[0].relatedNodes[0].html : '',
     })
   );
 

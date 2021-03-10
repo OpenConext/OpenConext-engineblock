@@ -20,8 +20,9 @@
     }
 }
 
-.attribute__valueWrapper {
+.attribute__valueWrapper:not(.joske) {
     @include grid-position(1, 2, 3, 6);
+    padding: 0;
 
     @include screen('mobile') {
         @include grid-position(2, 3, 1, 2);
@@ -29,7 +30,7 @@
 
     > .attribute__value.attribute__value--list {
         margin: 0;
-        padding: 0;
+        padding: 1rem 0;
 
         &.animated {
             max-height: initial;
@@ -43,6 +44,8 @@
 
         li:not(.consent__attributeNested--noTooltip) {
             &:first-of-type {
+                margin-top: -4px;
+
                 .attribute__value {
                     display: inline-block;
                     padding-right: 0;
@@ -51,12 +54,19 @@
 
                 .ie11__label {
                     display: inline-block;
+                    margin-top: -4px;
+                    padding-top: 12px;
                     width: 12%;
+
+                    label {
+                        background-position: left 24px top 1.1rem
+                    }
                 }
             }
 
             .attribute__value {
                 padding-right: 1rem;
+                vertical-align: text-bottom;
             }
         }
     }

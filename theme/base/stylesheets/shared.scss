@@ -34,11 +34,6 @@ body {
         @include focus;
     }
 
-    *:focus:not(:focus-visible) {
-        outline: none;
-        box-shadow: none;
-    }
-
     a {
         &:hover {
             text-decoration: underline;
@@ -226,6 +221,14 @@ body {
     label.tooltip,
     .ie11__label > label.tooltip {
         @include tooltip;
+
+        .expandable {
+            display: inline;
+        }
+
+        .expanded {
+            display: none;
+        }
     }
 
     label.tooltip,
@@ -251,6 +254,14 @@ body {
     input[type="checkbox"]:checked.tooltip ~ label.tooltip,
     input[type="checkbox"]:checked.tooltip ~ .ie11__label > label.tooltip {
         @include closeTooltip;
+
+        .expandable {
+            display: none;
+        }
+
+        .expanded {
+            display: inline;
+        }
     }
 
     .button--secondary,

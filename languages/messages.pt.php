@@ -113,6 +113,7 @@ HTML
     'send_confirm_desc'     => '<p>A sua solicitação foi encaminha para a sua %organisationNoun%. As decisões para a disponibilidade deste serviço serão tomadas pela equipa de IT da sua %organisationNoun%.</p>',
 
     // Consent page
+    'consent_attributes_screenreader'         => 'about %orgName%',
     'consent_attributes_show_more'            => 'Mostrar mais informação',
     'consent_attributes_show_less'            => 'Mostrar menos informação',
     'consent_no_attributes_text'              => 'Este serviço não requer informações da sua instituição',

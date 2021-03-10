@@ -9,6 +9,11 @@
     > .consent__attribute:nth-of-type(n+6) {
         @include display-grid;
         @include visually-shown;
+        padding: 3px 0;
+    }
+
+    > .consent__attribute:nth-of-type(6) {
+        @include focus;
     }
 
     > .openToggle {
@@ -53,8 +58,8 @@
         height: unset;
         font-weight: $bolder;
         justify-content: left;
-        padding: 1.2rem 35px 1.2rem 0;
-        width: unset;
+        padding: 1.2rem 0;
+        width: max-content;
 
         @include screen('mobile') {
             @include grid-position(2, 3, 1, 2);

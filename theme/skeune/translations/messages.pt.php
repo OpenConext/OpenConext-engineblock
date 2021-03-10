@@ -1,7 +1,9 @@
 <?php
 return [
     // General
-    'button_screenreader'        =>  'Button: ',
+    'button_screenreader'        =>  ', button',
+    'button_expandable_screenreader' => ', button, expandable',
+    'button_expanded_screenreader' => ', button, expanded',
     'required_screenreader'      =>  'Required',
     'search_screenreader'        =>  'Search',
     'send_request'  =>  'Send request',

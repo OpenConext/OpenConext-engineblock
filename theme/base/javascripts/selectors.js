@@ -30,6 +30,10 @@ export const modalLabels = 'label.modal';
 export const attributesSelector = 'ul.consent__attributes li';
 export const tooltipLabelSelector = 'label.tooltip';
 export const primaryTooltipLabelSelector = `.ie11__label > ${tooltipLabelSelector}`;
+export const invisibleTooltipLabelsSelector = '.consent__attribute:nth-of-type(n+6) label.tooltip';
+export const openToggleLabelSelector = '.openToggle__label';
+export const firstInvisibleAttributeSelector = `${attributesSelector}:nth-of-type(6)`;
+export const showMoreCheckboxId = 'showMoreCheckbox';
 
 /***
  * WAYF SELECTORS
