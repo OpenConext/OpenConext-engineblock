@@ -1,0 +1,54 @@
+{
+   "Response": [
+      {
+         "Status": {
+            "StatusCode": {
+               "Value": "urn:oasis:names:tc:xacml:1.0:status:ok"
+            }
+         },
+         "Obligations": [
+            {
+               "AttributeAssignment": [
+                  {
+                     "Category": "urn:oasis:names:tc:xacml:1.0:subject-category:access-subject",
+                     "AttributeId": "urn:loa:level",
+                     "Value": "http://test2.openconext.org/assurance/loa3",
+                     "DataType": "http://www.w3.org/2001/XMLSchema#string"
+                  }
+               ],
+               "Id": "urn:openconext:stepup:loa"
+            },
+            {
+               "AttributeAssignment": [
+                  {
+                     "Category": "urn:oasis:names:tc:xacml:1.0:subject-category:access-subject",
+                     "AttributeId": "urn:loa:level",
+                     "Value": "http://test2.openconext.org/assurance/loa2",
+                     "DataType": "http://www.w3.org/2001/XMLSchema#string"
+                  }
+               ],
+               "Id": "urn:openconext:stepup:loa"
+            }
+         ],
+         "PolicyIdentifier": {
+            "PolicySetIdReference": [
+               {
+                  "Version": "1.0",
+                  "Id": "urn:openconext:pdp:root:policyset"
+               }
+            ],
+            "PolicyIdReference": [
+               {
+                  "Version": "1",
+                  "Id": "urn:openconext:xacml:policy:id:policy_test17"
+               },
+               {
+                  "Version": "1",
+                  "Id": "urn:openconext:xacml:policy:id:policy_test18"
+               }
+            ]
+         },
+         "Decision": "Permit"
+      }
+   ]
+}

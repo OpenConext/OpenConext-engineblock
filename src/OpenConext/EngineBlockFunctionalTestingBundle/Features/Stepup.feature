@@ -24,7 +24,7 @@ Feature:
       And I pass through EngineBlock
     Then the url should match "/functional-testing/SSO-SP/acs"
 
-    Scenario: Stepup authentication should be supported if set trough IdP configuration mapping
+    Scenario: Stepup authentication should be supported if set through IdP configuration mapping
       Given the IdP "SSO-IdP" requires Stepup LoA "http://vm.openconext.org/assurance/loa2" for SP "SSO-SP"
       When I log in at "SSO-SP"
         And I select "SSO-IdP" on the WAYF
@@ -35,17 +35,19 @@ Feature:
         And I pass through EngineBlock
       Then the url should match "/functional-testing/SSO-SP/acs"
 
-    Scenario: Stepup authentication should throw exception if set trough both IdP and SP
+    Scenario: Stepup authentication should be supported if set through both IdP and SP
       Given the IdP "SSO-IdP" requires Stepup LoA "http://vm.openconext.org/assurance/loa2" for SP "SSO-SP"
         And the SP "SSO-SP" requires Stepup LoA "http://vm.openconext.org/assurance/loa3"
       When I log in at "SSO-SP"
         And I select "SSO-IdP" on the WAYF
         And I pass through EngineBlock
         And I pass through the IdP
-      Then I should see "Error - An error occurred"
-        And the url should match "/feedback/unknown-error"
+        And Stepup will successfully verify a user
+        And I give my consent
+        And I pass through EngineBlock
+      Then the url should match "/functional-testing/SSO-SP/acs"
 
-    Scenario: If stepup is not used we should still go trough consent
+    Scenario: If stepup is not used we should still go through consent
       When I log in at "Dummy-SP"
         And I select "Dummy-IdP" on the WAYF
         And I pass through EngineBlock

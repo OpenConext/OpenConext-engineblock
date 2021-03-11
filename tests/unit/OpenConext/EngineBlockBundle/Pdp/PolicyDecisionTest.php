@@ -232,21 +232,46 @@ class PolicyDecisionTest extends TestCase
     /**
      * @test
      * @group Pdp
+     */
+    public function a_response_with_multiple_obligations_has_obligations()
+    {
+        $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_permit_obligations.json'), true);
+        $response = Response::fromData($responseJson);
+
+        $expected_id = 'urn:openconext:stepup:loa';
+
+        $this->assertCount(2, $response->obligations);
+        $this->assertEquals($expected_id, $response->obligations[0]->id);
+        $this->assertEquals($expected_id, $response->obligations[1]->id);
+
+        $expected_attributeAssignment = new AttributeAssignment;
+        $expected_attributeAssignment->category    = 'urn:oasis:names:tc:xacml:1.0:subject-category:access-subject';
+        $expected_attributeAssignment->attributeId = 'urn:loa:level';
+        $expected_attributeAssignment->value       = 'http://test2.openconext.org/assurance/loa2';
+        $expected_attributeAssignment->dataType    = 'http://www.w3.org/2001/XMLSchema#string';
+
+        $this->assertCount(1, $response->obligations[1]->attributeAssignments);
+        $this->assertEquals($expected_attributeAssignment, $response->obligations[1]->attributeAssignments[0]);
+    }
+
+    /**
+     * @test
+     * @group Pdp
      *
      * @dataProvider pdpResponseAndExpectedLoaProvider
      * @param $responseName
      * @param $expectedLoa
      */
-    public function the_correct_loa_obligation_should_be_given_based_on_a_pdp_response(
+    public function the_correct_loa_obligations_should_be_given_based_on_a_pdp_response(
         $responseName,
-        $expectedPermission
+        $expectedLoa
     ) {
         $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_' . $responseName . '.json'), true);
         $response = Response::fromData($responseJson);
 
         $decision = PolicyDecision::fromResponse($response);
 
-        $this->assertEquals($expectedPermission, $decision->getStepupObligation());
+        $this->assertEquals($expectedLoa, $decision->getStepupObligations());
     }
 
     public function pdpResponseAndExpectedPermissionProvider()
@@ -257,15 +282,17 @@ class PolicyDecisionTest extends TestCase
             'Not applicable response permits access' => ['not_applicable', true],
             'Permit response permits access' => ['permit', true],
             'Permit response with obligation permits access' => ['permit_obligation', true],
+            'Permit response with obligations permits access' => ['permit_obligations', true],
         ];
     }
 
     public function pdpResponseAndExpectedLoaProvider()
     {
         return [
-            'Not applicable response without obgligation yields null' => ['not_applicable', null],
-            'Permit response without obligation yields null' => ['permit', null],
-            'Permit response with obligation yields loa2' => ['permit_obligation', 'http://test2.openconext.org/assurance/loa2'],
+            'Not applicable response without obgligation yields empty list' => ['not_applicable', []],
+            'Permit response without obligation yields empty list' => ['permit', []],
+            'Permit response with obligation yields loa2' => ['permit_obligation', ['http://test2.openconext.org/assurance/loa2']],
+            'Permit response with multiple obligations yields loa3' => ['permit_obligations', ['http://test2.openconext.org/assurance/loa3','http://test2.openconext.org/assurance/loa2']],
         ];
     }
 }

@@ -34,9 +34,9 @@ class StepupDecision
      */
     private $spLoa = null;
     /**
-     * @var string|null
+     * @var array
      */
-    private $pdpLoa = null;
+    private $pdpLoas = [];
     /**
      * @var bool
      */
@@ -45,14 +45,14 @@ class StepupDecision
     /**
      * @param IdentityProvider $idp
      * @param ServiceProvider $sp
-     * @param string $pdpLoa
+     * @param array $pdpLoas
      * @param LoaRepository $loaRepository
      * @throws InvalidStepupConfigurationException
      */
     public function __construct(
         IdentityProvider $idp,
         ServiceProvider $sp,
-        string $pdpLoa = null,
+        array $pdpLoas,
         LoaRepository $loaRepository
     ) {
         $idpLoa = $idp->getCoins()->stepupConnections()->getLoa($sp->entityId);
@@ -69,16 +69,8 @@ class StepupDecision
 
         $this->spNoToken = $sp->getCoins()->stepupAllowNoToken();
 
-        if ($this->spLoa && $this->idpLoa) {
-            throw new InvalidStepupConfigurationException(sprintf(
-                'Both IdP "%s" and SP "%s" where configured to use stepup authentication. This is not allowed',
-                $idp->entityId,
-                $sp->entityId
-            ));
-        }
-
-        if ($pdpLoa) {
-            $this->pdpLoa = $loaRepository->getByIdentifier($pdpLoa);
+        foreach ($pdpLoas as $loaId) {
+            $this->pdpLoas[] = $loaRepository->getByIdentifier($loaId);
         }
     }
 
@@ -87,26 +79,35 @@ class StepupDecision
      */
     public function shouldUseStepup()
     {
-        return ($this->spLoa || $this->idpLoa || $this->pdpLoa);
+        return ($this->spLoa || $this->idpLoa || count($this->pdpLoas) > 0);
     }
 
     /**
+     * Find the highest level among all ways to configure a LoA.
      * @return Loa|null
      */
     public function getStepupLoa()
     {
-        if ($this->pdpLoa) {
-            return $this->pdpLoa;
-        }
+        $desiredLevels = $this->pdpLoas;
         if ($this->spLoa) {
-            return $this->spLoa;
+            $desiredLevels[] = $this->spLoa;
         }
-
         if ($this->idpLoa) {
-            return $this->idpLoa;
+            $desiredLevels[] = $this->idpLoa;
         }
 
-        return null;
+        if (count($desiredLevels) == 0) {
+            return null;
+        }
+
+        $highestLevel = reset($desiredLevels);
+        foreach ($desiredLevels as $level) {
+            if ($level->levelIsHigherOrEqualTo($highestLevel)) {
+                $highestLevel = $level;
+            }
+        }
+
+        return $highestLevel;
     }
 
     /**
@@ -114,7 +115,7 @@ class StepupDecision
      */
     public function allowNoToken()
     {
-        if ($this->spLoa || $this->idpLoa || $this->pdpLoa) {
+        if ($this->spLoa || $this->idpLoa || count($this->pdpLoas) > 0) {
             return $this->spNoToken;
         }
 
