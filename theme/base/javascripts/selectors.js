@@ -20,9 +20,11 @@ export const languageErrorSelector = '.comp-language.error';
  * See the @motion mixin explanation for a longer explanation as to why.
  */
 export const consentAnimatedElementSelectors = '.tooltip__value, .modal__value, .consent__attributes, .attribute__valueWrapper > .attribute__value--list';
-export const nokButtonSelector = 'label[for="cta_consent_nok"]';
+export const nokCheckboxId = 'cta_consent_nok';
+export const nokButtonSelector = `label[for="${nokCheckboxId}"]`;
 export const nokButtonSelectorForKeyboard = '.consent__ctas > .button--tertiary';
 export const nokSectionSelector = '.consent__nok';
+export const nokTitleSelector = '.consent__nok-title';
 export const contentSectionSelector = '.consent__content';
 export const backButtonSelector = '.consent__nok-back';
 export const tooltipsAndModalLabels = 'label.tooltip, label.modal';

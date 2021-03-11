@@ -21,13 +21,14 @@
             }
         %}
     </form>
-    <input type="checkbox" tabindex="-1" role="button" aria-pressed="false" class="modal visually-hidden" id="cta_consent_nok" name="cta_consent_nok" />
+    <input type="checkbox" tabindex="-1" role="button" aria-expanded="false" aria-pressed="false" class="modal visually-hidden" id="cta_consent_nok" name="cta_consent_nok" />
     <div class="button--tertiary" tabindex="0">
         <div>
             {% include '@theme/Default/Partials/label.html.twig' with
                 {
                     class: 'modal',
                     id: 'cta_consent_nok',
+                    ariaExpandable: true,
                     hideText: false,
                     noTab: true,
                     text: text_nok

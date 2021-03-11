@@ -22,16 +22,38 @@
                 background-image: unset;
                 font-weight: 700;
                 padding-right: 0;
+
+                .expanded {
+                    display: none;
+                }
+
+                .expandable {
+                    display: inline;
+                }
             }
         }
     }
 
-    > #cta_consent_nok:checked + .button--tertiary label {
+    #cta_consent_nok:checked + .button--tertiary label.modal,
+    #cta_consent_nok[aria-expanded="true"] + .button--tertiary label.modal {
         background-image: unset;
+
+        .expanded {
+            display: inline;
+        }
+
+        .expandable {
+            display: none;
+        }
     }
 
     #cta_consent_nok:checked + .button--tertiary + .modal__value.animated {
         margin: 1rem auto 0;
+    }
+
+    // only works if JS is active
+    #cta_consent_nok.js[aria-expanded="false"] ~ section.modal__value {
+        display: none;
     }
 
     > section.modal__value {
@@ -45,7 +67,6 @@
             width: 100%;
         }
     }
-
 }
 
 @include ie11Only('.consent__ctas > .button--tertiary > div > label.modal') {
