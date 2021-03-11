@@ -64,9 +64,10 @@ class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_F
 
         $log->debug("Policy Enforcement Point: PDP decision received.");
 
-        if ($pdpLoa = $policyDecision->getStepupObligation()) {
-            $log->notice("Policy Enforcement Point: stepup LoA obligation received: " . $pdpLoa);
-            $this->_response->setPdpRequestedLoa($pdpLoa);
+        $pdpLoas = $policyDecision->getStepupObligations();
+        if (count($pdpLoas) > 0) {
+            $log->notice("Policy Enforcement Point: stepup LoA obligations received: " . implode(',', $pdpLoas));
+            $this->_response->setPdpRequestedLoas($pdpLoas);
         }
 
         if ($policyDecision->permitsAccess()) {

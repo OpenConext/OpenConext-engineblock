@@ -7,7 +7,7 @@ Currently the following configrations are supported:
 * On a idp-sp basis: configure the required loa in Manage for an IdP + a specific SP. All users from this IdP will for logging into this SP require a token with this LoA.
 * Based on PDP rules. The policy enforcement point in Engineblock can interpret decisions from the PDP that specify a minimum LoA.
 
-Engineblock disallows configuration at both the SP and the IdP-SP combination at the same time. A PDP decision for a LoA currently trumps any SP or IdP-SP setting.
+Engineblock picks the highest of any LoA configured in these places to enforce.
 
 ## Engineblock metadata configuration
 ### SP
@@ -40,7 +40,7 @@ An entry per SP which requires the SFO capabilities.
 
 The OpenConext policy decision point (PDP, minimal version 3.0.0) allows to specify Stepup rules which will be evaluated by the PDP. The PDP is only invoked for an SP that has `coin:policy_enforcement_decision_required` set to true. Inputs for this decision provided by EB to the PDP are the IdP, the SP, user's attributes and their client IP address.
 
-The PDP will return a minimally required LoA if its ruleset matches. These rules can be combined with the PDP allow/deny rules.
+The PDP will return a minimally required LoA for each matching ruleset. These rules can be combined with the PDP allow/deny rules.
 
 ## Engineblock global configuration
 The EngineBlock installation also needs additional configuration in order to facilitate the SFO second factor authentications. For details on these configuration settings, please review the SFO section in the [app/config/parameters.yml.dist](app/config/parameters.yml.dist) file.

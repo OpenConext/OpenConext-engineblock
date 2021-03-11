@@ -77,9 +77,9 @@ class StepupDecisionTest extends TestCase
         }
         $allowNoToken = $stepupDecision->allowNoToken();
 
-        $this->assertEquals($useStepup, $expectedResult[0]);
-        $this->assertEquals($stepupLoa, $expectedResult[1]);
-        $this->assertEquals($allowNoToken, $expectedResult[2]);
+        $this->assertEquals($expectedResult[0], $useStepup);
+        $this->assertEquals($expectedResult[1], $stepupLoa);
+        $this->assertEquals($expectedResult[2], $allowNoToken);
     }
 
     private function buildMockRepository($input)
@@ -91,7 +91,7 @@ class StepupDecisionTest extends TestCase
             $repo
                 ->shouldReceive('getByIdentifier')
                 ->with($input[1])
-                ->andReturn(Loa::create(2, $input[1]))
+                ->andReturn(Loa::create((int)substr($input[1],-1), $input[1]))
             ;
         }
 
@@ -100,81 +100,46 @@ class StepupDecisionTest extends TestCase
             $repo
                 ->shouldReceive('getByIdentifier')
                 ->with($input[0])
-                ->andReturn(Loa::create(2, $input[0]))
+                ->andReturn(Loa::create((int)substr($input[0],-1), $input[0]))
             ;
         }
 
-        if (is_string($input[2]) && !empty($input[2])) {
-            $repo
-                ->shouldReceive('getByIdentifier')
-                ->with($input[2])
-                ->andReturn(Loa::create(2, $input[2]))
-            ;
+        if (is_array($input[2]) && !empty($input[2])) {
+            foreach($input[2] as $loa) {
+                $repo
+                    ->shouldReceive('getByIdentifier')
+                    ->with($loa)
+                    ->andReturn(Loa::create((int)substr($loa,-1), $loa))
+                 ;
+            }
         }
         return $repo;
     }
 
-    /**
-     * @test
-     * @group Stepup
-     * @dataProvider stepupCoinsExceptionProvider
-     *
-     * @param array $input
-     */
-    public function invalid_input_for_stepup_decision_should_throw_exception(
-        $input
-    ) {
-
-        $this->expectException(InvalidStepupConfigurationException::class);
-        $this->expectExceptionMessage('Both IdP "idp" and SP "sp" where configured to use stepup authentication. This is not allowed');
-
-        $repo = $this->buildMockRepository($input);
-
-        $sp = Utils::instantiate(
-            ServiceProvider::class,
-            [
-                'entityId' => 'sp',
-                'stepupRequireLoa' => $input[0],
-                'stepupAllowNoToken' => $input[3],
-            ]
-        );
-        $idp = Utils::instantiate(
-            IdentityProvider::class,
-            [
-                'entityId' => 'idp',
-                'stepupConnections' => new StepupConnections([
-                    'sp' => $input[1],
-                ]),
-            ]
-        );
-
-        $stepupDecision = new StepupDecision($idp, $sp, $input[2], $repo);
-    }
-
-
     public function stepupCoinsAndExpectedResultProvider()
     {
         return [
-            'Use no stepup if no coins set for IdP and SP (do not allow no stepup)' => [[null, null, null, false], [false, '', false]],
-            'Use no stepup if coins empty for IdP and SP (do not allow no stepup)' => [['', '', null, false], [false, '', false]],
-            'Use SP LoA if only SP LoA set (do not allow no stepup)' => [['loa2', '', null, false], [true, 'loa2', false]],
-            'Use IdP LoA if only IdP LoA set (do not allow no stepup)' => [['', 'loa3', null, false], [true, 'loa3', false]],
+            'Use no stepup if no coins set for IdP and SP (do not allow no stepup)' => [[null, null, [], false], [false, '', false]],
+            'Use no stepup if coins empty for IdP and SP (do not allow no stepup)' => [['', '', [], false], [false, '', false]],
+            'Use SP LoA if only SP LoA set (do not allow no stepup)' => [['loa2', '', [], false], [true, 'loa2', false]],
+            'Use IdP LoA if only IdP LoA set (do not allow no stepup)' => [['', 'loa3', [], false], [true, 'loa3', false]],
 
-            'Use no stepup if no coins set for IdP and SP (allow no stepup)' => [[null, null, null, true], [false, '', false]],
-            'Use no stepup if coins empty for IdP and SP (allow no stepup)' => [['', '', null, true], [false, '', false]],
-            'Use SP LoA if only SP LoA set (allow no stepup)' => [['loa2', '', null, true], [true, 'loa2', true]],
-            'Use IdP LoA if only IdP LoA set (allow no stepup)' => [['', 'loa3', null, true], [true, 'loa3', true]],
+            'Use no stepup if no coins set for IdP and SP (allow no stepup)' => [[null, null, [], true], [false, '', false]],
+            'Use no stepup if coins empty for IdP and SP (allow no stepup)' => [['', '', [], true], [false, '', false]],
+            'Use SP LoA if only SP LoA set (allow no stepup)' => [['loa2', '', [], true], [true, 'loa2', true]],
+            'Use IdP LoA if only IdP LoA set (allow no stepup)' => [['', 'loa3', [], true], [true, 'loa3', true]],
+ 
+            'Use SP LoA if SP LoA is higest (allow no stepup)' => [['loa3', 'loa2', [], true], [true, 'loa3', true]],
+            'Use IdP LoA if IdP LoA is highest (allow no stepup)' => [['loa2', 'loa3', [], true], [true, 'loa3', true]],
 
-            'Use PdP LoA if SP LoA and PdP LoA set (allow no stepup)' => [['loa2', '', 'loa3', true], [true, 'loa3', true]],
-            'Use PdP LoA if IdP LoA and PdP LoA set (allow no stepup)' => [['', 'loa3', 'loa2', true], [true, 'loa2', true]],
-            'Use PdP LoA if PdP LoA set (allow no stepup)' => [['', '', 'loa3', true], [true, 'loa3', true]],
-        ];
-    }
+            'Use PdP LoA if SP LoA and PdP LoA set and PDP LoA is highest (allow no stepup)' => [['loa2', '', ['loa3'], true], [true, 'loa3', true]],
+            'Use IdP LoA if IdP LoA is highest and PdP LoA set (allow no stepup)' => [['', 'loa3', ['loa2'], true], [true, 'loa3', true]],
+            'Use PdP LoA if PdP LoA set (allow no stepup)' => [['', '', ['loa3'], true], [true, 'loa3', true]],
+            'Use highest PdP LoA if multiple PdP LoA set (allow no stepup)' => [['', '', ['loa3','loa2'], true], [true, 'loa3', true]],
+            'Use highest PdP LoA if multiple PdP LoA set in different order (allow no stepup)' => [['', '', ['loa2','loa3'], true], [true, 'loa3', true]],
 
-    public function stepupCoinsExceptionProvider()
-    {
-        return [
-            'Throw exception if both SP and IdP LoA set (unable to make decision)' => [['loa2', 'loa3', null, false]],
-        ];
+            'Use highest LoA from many options (allow no stepup)' => [['loa2', 'loa3', ['loa2','loa2','loa3'], true], [true, 'loa3', true]],
+            'Use highest LoA from many different options (allow no stepup)' => [['loa3', 'loa2', ['loa2','loa2','loa2'], true], [true, 'loa3', true]],
+       ];
     }
 }

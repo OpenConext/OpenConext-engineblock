@@ -76,9 +76,9 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     protected $intendedNameId;
 
     /**
-     * @var string
+     * @var array
      */
-    protected $pdpRequestedLoa;
+    protected $pdpRequestedLoas = [];
 
     /**
      * @param Response $response
@@ -220,15 +220,15 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
         return $this->intendedNameId;
     }
 
-    public function setPdpRequestedLoa(string $pdpLoa = null): EngineBlock_Saml2_ResponseAnnotationDecorator
+    public function setPdpRequestedLoas(array $pdpLoas): EngineBlock_Saml2_ResponseAnnotationDecorator
     {
-        $this->pdpRequestedLoa = $pdpLoa;
+        $this->pdpRequestedLoas = $pdpLoas;
         return $this;
     }
 
-    public function getPdpRequestedLoa(): ?string
+    public function getPdpRequestedLoas(): array
     {
-        return $this->pdpRequestedLoa;
+        return $this->pdpRequestedLoas;
     }
 
     /**

@@ -46,9 +46,9 @@ final class PolicyDecision
     private $statusMessage;
 
     /**
-     * @var string|null
+     * @var array
      */
-    private $stepupObligation;
+    private $stepupObligations;
 
     /**
      * @var bool
@@ -73,7 +73,7 @@ final class PolicyDecision
             $policyDecision->statusMessage = $response->status->statusMessage;
         }
 
-        $policyDecision->stepupObligation = self::findStepupObligation($response->obligations);
+        $policyDecision->stepupObligations = self::findStepupObligations($response->obligations);
 
         if ($policyDecision->permitsAccess()) {
             return $policyDecision;
@@ -99,21 +99,22 @@ final class PolicyDecision
     }
 
     /**
-     * Checks obgligations for any stepup LoA requirements, returns first one found.
+     * Checks obgligations for any stepup LoA requirements, returns all found.
      *
      * @param array|null $obligations
-     * @return string|null
+     * @return array
      */
-    private static function findStepupObligation($obligations)
+    private static function findStepupObligations($obligations)
     {
+        $stepupObligations = [];
         if ($obligations !== null) {
             foreach ($obligations as $obligation) {
-                // First alternative is for compatibility with PDP snapshot release. Can be removed after PDP final release is done.
-                if ($obligation->id === 'urn:openconext:ssa:loa' || $obligation->id === 'urn:openconext:stepup:loa') {
-                    return $obligation->attributeAssignments[0]->value;
+                if ($obligation->id === 'urn:openconext:stepup:loa') {
+                    $stepupObligations[] = $obligation->attributeAssignments[0]->value;
                 }
             }
         }
+        return $stepupObligations;
     }
 
     /**
@@ -224,11 +225,11 @@ final class PolicyDecision
     }
 
     /**
-     * @return string|null
+     * @return array
      */
-    public function getStepupObligation()
+    public function getStepupObligations()
     {
-        return $this->stepupObligation;
+        return $this->stepupObligations;
     }
 
     /**
