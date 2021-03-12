@@ -482,6 +482,15 @@ class EngineBlockContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^pdp gives a stepup obligation response for "([^"]*)"/
+     */
+    public function pdpGivesStepupObligationResponse($loaId)
+    {
+        $this->usingPdp = true;
+        $this->pdpClient->receiveObligationResponse($loaId);
+    }
+
+    /**
      * @Given /^pdp gives an indeterminate response$/
      */
     public function pdpGivesAnIndeterminateResponse()
