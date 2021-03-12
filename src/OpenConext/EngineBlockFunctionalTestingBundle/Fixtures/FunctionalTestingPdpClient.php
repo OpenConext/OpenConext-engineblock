@@ -22,6 +22,7 @@ use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response\AssociatedAdvice;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response\AttributeAssignment;
+use OpenConext\EngineBlockBundle\Pdp\Dto\Response\Obligation;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response\Status;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response\StatusCode;
 use OpenConext\EngineBlockBundle\Pdp\PdpClientInterface;
@@ -48,6 +49,7 @@ final class FunctionalTestingPdpClient implements PdpClientInterface
     }
 
     /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @param Request $request
      * @return PolicyDecision $policyDecision
      */
@@ -57,10 +59,12 @@ final class FunctionalTestingPdpClient implements PdpClientInterface
 
         $isSpecificDenyResponse = is_array($this->policyDecisionFixture)
             && $this->policyDecisionFixture[0] === PolicyDecision::DECISION_DENY;
+        $isObligationResponse = is_array($this->policyDecisionFixture)
+            && $this->policyDecisionFixture[0] === PolicyDecision::DECISION_PERMIT;
 
         $decision = $this->policyDecisionFixture;
         $additionalData = [];
-        if ($isSpecificDenyResponse) {
+        if ($isSpecificDenyResponse || $isObligationResponse) {
             $decision = $this->policyDecisionFixture[0];
             $additionalData = $this->policyDecisionFixture;
         }
@@ -104,6 +108,19 @@ XML;
                 break;
             case PolicyDecision::DECISION_PERMIT:
                 $pdpResponse->decision = PolicyDecision::DECISION_PERMIT;
+
+                $loaId = $this->getLoaIdFromAdditionalData($additionalData);
+                if ($loaId) {
+                    $obligation = new Obligation;
+                    $obligation->id = 'urn:openconext:stepup:loa';
+                    $attributeAssignment = new AttributeAssignment;
+                    $attributeAssignment->category    = 'urn:oasis:names:tc:xacml:1.0:subject-category:access-subject';
+                    $attributeAssignment->attributeId = 'urn:loa:level';
+                    $attributeAssignment->value       = $loaId;
+                    $attributeAssignment->dataType    = 'http://www.w3.org/2001/XMLSchema#string';
+                    $obligation->attributeAssignments[] = $attributeAssignment;
+                    $pdpResponse->obligations[] = $obligation;
+                }
                 break;
             default:
                 $invalidData = $this->policyDecisionFixture;
@@ -160,6 +177,15 @@ XML;
         $this->dataStore->save(PolicyDecision::DECISION_PERMIT);
     }
 
+    public function receiveObligationResponse(string $loaId)
+    {
+        $data = [
+            PolicyDecision::DECISION_PERMIT,
+            'loaId' => $loaId,
+        ];
+        $this->dataStore->save($data);
+    }
+
     public function receiveNotApplicableResponse()
     {
         $this->dataStore->save(PolicyDecision::DECISION_NOT_APPLICABLE);
@@ -182,5 +208,19 @@ XML;
         }
 
         return $idp;
+    }
+
+    /**
+     * @param array $additionalData
+     * @return string
+     */
+    private function getLoaIdFromAdditionalData(array $additionalData)
+    {
+        $loaId = '';
+        if (array_key_exists('loaId', $additionalData)) {
+            $loaId = $additionalData['loaId'];
+        }
+
+        return $loaId;
     }
 }

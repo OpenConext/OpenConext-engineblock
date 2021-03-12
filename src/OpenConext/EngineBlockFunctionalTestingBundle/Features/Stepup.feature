@@ -47,6 +47,18 @@ Feature:
         And I pass through EngineBlock
       Then the url should match "/functional-testing/SSO-SP/acs"
 
+    Scenario: Stepup authentication should be supported if set through PDP
+      Given SP "SSO-SP" requires a policy enforcement decision
+        And pdp gives a stepup obligation response for "http://vm.openconext.org/assurance/loa3"
+      When I log in at "SSO-SP"
+        And I select "SSO-IdP" on the WAYF
+        And I pass through EngineBlock
+        And I pass through the IdP
+        And Stepup will successfully verify a user
+        And I give my consent
+        And I pass through EngineBlock
+      Then the url should match "/functional-testing/SSO-SP/acs"
+
     Scenario: If stepup is not used we should still go through consent
       When I log in at "Dummy-SP"
         And I select "Dummy-IdP" on the WAYF
@@ -116,7 +128,7 @@ Feature:
         And I pass through EngineBlock
       Then the url should match "/functional-testing/Proxy-SP/acs"
 
-    Scenario: Stepup authentication should succeed for the proxied SP when using a trusted prroxy setup, if LoA level is not met but when no token is allowed is configured in the proxied SP
+    Scenario: Stepup authentication should succeed for the proxied SP when using a trusted proxy setup, if LoA level is not met but when no token is allowed is configured in the proxied SP
       Given the SP "SSO-SP" requires Stepup LoA "http://vm.openconext.org/assurance/loa2"
         And the SP "SSO-SP" allows no Stepup token
         And SP "Proxy-SP" is authenticating for SP "SSO-SP"
