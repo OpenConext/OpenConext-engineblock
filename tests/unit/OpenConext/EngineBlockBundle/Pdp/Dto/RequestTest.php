@@ -43,96 +43,9 @@ class RequestTest extends TestCase
         $this->validIdpEntityId = 'https://my-idp.example';
         $this->validSpEntityId  = 'https://my-sp.example';
         $this->validResponseAttributes = [
-            ['urn:mace:dir:attribute-def:eduPersonAffiliation' => ['student', 'alumni']]
+            ['urn:mace:dir:attribute-def:eduPersonAffiliation' => ['student', 'alum']]
         ];
         $this->validRemoteIp    = '2001:610:0:8010::213';
-    }
-
-    /**
-     * @test
-     * @group Pdp
-     *
-     * @dataProvider \OpenConext\TestDataProvider::notString()
-     */
-    public function a_pdp_requests_client_id_must_be_a_string()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The client ID must be a string');
-
-        Request::from(
-            123,
-            $this->validSubjectId,
-            $this->validIdpEntityId,
-            $this->validSpEntityId,
-            $this->validResponseAttributes,
-            $this->validRemoteIp
-        );
-    }
-
-    /**
-     * @test
-     * @group Pdp
-     *
-     * @dataProvider \OpenConext\TestDataProvider::notString()
-     * @param string $invalidSubjectId
-     */
-    public function a_pdp_requests_subject_id_must_be_a_string($invalidSubjectId)
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('SubjectId must be a string');
-
-        Request::from(
-            $this->validClientId,
-            $invalidSubjectId,
-            $this->validIdpEntityId,
-            $this->validSpEntityId,
-            $this->validResponseAttributes,
-            $this->validRemoteIp
-        );
-    }
-
-    /**
-     * @test
-     * @group Pdp
-     *
-     * @dataProvider \OpenConext\TestDataProvider::notString()
-     * @param string $invalidIdpEntityId
-     */
-    public function a_pdp_requests_idp_entity_id_must_be_a_string($invalidIdpEntityId)
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('IDPentityID must be a string');
-
-        Request::from(
-            $this->validClientId,
-            $this->validSubjectId,
-            $invalidIdpEntityId,
-            $this->validSpEntityId,
-            $this->validResponseAttributes,
-            $this->validRemoteIp
-        );
-    }
-
-    /**
-     * @test
-     * @group Pdp
-     *
-     * @dataProvider \OpenConext\TestDataProvider::notString()
-     * @param $invalidSpEntityId
-     */
-    public function a_pdp_requests_sp_entity_id_must_be_a_string($invalidSpEntityId)
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('SPentityID must be a string');
-
-        Request::from(
-            $this->validClientId,
-            $this->validSubjectId,
-            $this->validIdpEntityId,
-            $invalidSpEntityId,
-            $this->validResponseAttributes,
-            $this->validRemoteIp
-        );
     }
 
     /**

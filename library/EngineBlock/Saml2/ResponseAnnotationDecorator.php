@@ -76,7 +76,7 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     protected $intendedNameId;
 
     /**
-     * @var array
+     * @var Loa[]
      */
     protected $pdpRequestedLoas = [];
 
@@ -220,12 +220,18 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
         return $this->intendedNameId;
     }
 
+    /**
+     * @param Loa[] $pdpLoas
+     */
     public function setPdpRequestedLoas(array $pdpLoas): EngineBlock_Saml2_ResponseAnnotationDecorator
     {
         $this->pdpRequestedLoas = $pdpLoas;
         return $this;
     }
 
+    /**
+     * @return Loa[]
+     */
     public function getPdpRequestedLoas(): array
     {
         return $this->pdpRequestedLoas;

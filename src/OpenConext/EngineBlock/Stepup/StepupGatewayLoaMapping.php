@@ -29,12 +29,9 @@ class StepupGatewayLoaMapping
     private $gatewayLoa1 = '';
 
     /**
-     * @param array $loaMapping
-     * @param string $gatewayLoa1
-     * @param LoaRepository $loaRepository
      * @throws \Assert\AssertionFailedException
      */
-    public function __construct(array $loaMapping, $gatewayLoa1, LoaRepository $loaRepository)
+    public function __construct(array $loaMapping, string $gatewayLoa1, LoaRepository $loaRepository)
     {
         Assertion::string($gatewayLoa1, 'The stepup.loa.loa1 configuration must be a string');
         $this->gatewayLoa1 = $loaRepository->getByIdentifier($gatewayLoa1);
@@ -66,11 +63,7 @@ class StepupGatewayLoaMapping
         }
     }
 
-    /**
-     * @param Loa $engineBlockLoa
-     * @return Loa
-     */
-    public function transformToGatewayLoa(Loa $engineBlockLoa)
+    public function transformToGatewayLoa(Loa $engineBlockLoa) : Loa
     {
         if (!array_key_exists($engineBlockLoa->getIdentifier(), $this->engineToGateway)) {
             throw new RuntimeException('Unable to find the EngineBlock LoA in the configured stepup LoA mapping');
@@ -78,11 +71,7 @@ class StepupGatewayLoaMapping
         return $this->engineToGateway[$engineBlockLoa->getIdentifier()];
     }
 
-    /**
-     * @param $input
-     * @return Loa
-     */
-    public function transformToEbLoa(Loa $gatewayLoa)
+    public function transformToEbLoa(Loa $gatewayLoa) : Loa
     {
         if (!array_key_exists($gatewayLoa->getIdentifier(), $this->gatewayToEngine)) {
             throw new RuntimeException('Unable to find the received stepup LoA in the configured EngineBlock LoA mapping');
@@ -90,10 +79,7 @@ class StepupGatewayLoaMapping
         return $this->gatewayToEngine[$gatewayLoa->getIdentifier()];
     }
 
-    /**
-     * @return Loa
-     */
-    public function getGatewayLoa1()
+    public function getGatewayLoa1() : Loa
     {
         return $this->gatewayLoa1;
     }

@@ -37,19 +37,13 @@ final class PdpClient implements PdpClientInterface
 
     public function __construct(
         HttpClient $httpClient,
-        $policyDecisionPointPath
+        string $policyDecisionPointPath
     ) {
-        Assertion::string($policyDecisionPointPath, 'Path to PolicyDecisionPoint must be a string');
-
         $this->httpClient              = $httpClient;
         $this->policyDecisionPointPath = $policyDecisionPointPath;
     }
 
-    /**
-     * @param Request $request
-     * @return PolicyDecision $policyDecision
-     */
-    public function requestDecisionFor(Request $request)
+    public function requestDecisionFor(Request $request) : PolicyDecision
     {
         $jsonData = $this->httpClient->post(
             json_encode($request),

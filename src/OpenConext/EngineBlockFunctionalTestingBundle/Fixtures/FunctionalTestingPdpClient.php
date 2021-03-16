@@ -50,10 +50,8 @@ final class FunctionalTestingPdpClient implements PdpClientInterface
 
     /**
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @param Request $request
-     * @return PolicyDecision $policyDecision
      */
-    public function requestDecisionFor(Request $request)
+    public function requestDecisionFor(Request $request) : PolicyDecision
     {
         $pdpResponse = new Response();
 
@@ -155,10 +153,8 @@ XML;
 
     /**
      * Stores a deny message with additional information about the idp
-     *
-     * @param $idpName
      */
-    public function receiveSpecificDenyResponse($idpName)
+    public function receiveSpecificDenyResponse(string $idpName)
     {
         $data = [
             PolicyDecision::DECISION_DENY,
@@ -196,11 +192,7 @@ XML;
         $this->dataStore->save(null);
     }
 
-    /**
-     * @param array $additionalData
-     * @return string
-     */
-    private function getIdpFromAdditionalData(array $additionalData)
+    private function getIdpFromAdditionalData(array $additionalData) : string
     {
         $idp = '';
         if (array_key_exists('idpName', $additionalData)) {
@@ -210,11 +202,7 @@ XML;
         return $idp;
     }
 
-    /**
-     * @param array $additionalData
-     * @return string
-     */
-    private function getLoaIdFromAdditionalData(array $additionalData)
+    private function getLoaIdFromAdditionalData(array $additionalData) : string
     {
         $loaId = '';
         if (array_key_exists('loaId', $additionalData)) {

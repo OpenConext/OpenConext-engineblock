@@ -29,12 +29,9 @@ class StepupEntityFactory
 {
 
     /**
-     * @param StepupEndpoint $stepupEndpoint
-     * @param string $acsLocation
-     * @return IdentityProvider
      * @throws \EngineBlock_Exception
      */
-    public static function idpFrom(StepupEndpoint $stepupEndpoint, $acsLocation)
+    public static function idpFrom(StepupEndpoint $stepupEndpoint, ?string $acsLocation) : IdentityProvider
     {
         $publicKeyFactory = new EngineBlock_X509_CertificateFactory();
         $certificates[] = $publicKeyFactory->fromFile($stepupEndpoint->getKeyFile());
@@ -87,12 +84,9 @@ class StepupEntityFactory
 
 
     /**
-     * @param StepupEndpoint $stepupEndpoint
-     * @param string $acsLocation
-     * @return ServiceProvider
      * @throws \EngineBlock_Exception
      */
-    public static function spFrom(StepupEndpoint $stepupEndpoint, $acsLocation)
+    public static function spFrom(StepupEndpoint $stepupEndpoint, ?string $acsLocation) : ServiceProvider
     {
         $publicKeyFactory = new EngineBlock_X509_CertificateFactory();
         $certificates[] = $publicKeyFactory->fromFile($stepupEndpoint->getKeyFile());

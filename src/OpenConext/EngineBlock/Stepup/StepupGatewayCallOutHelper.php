@@ -46,49 +46,30 @@ final class StepupGatewayCallOutHelper
         $this->loaRepository = $loaRepository;
     }
 
-    /**
-     * @param IdentityProvider $identityProvider
-     * @param ServiceProvider $serviceProvider
-     * @param array $pdpLoas
-     * @return bool
-     */
     public function shouldUseStepup(
         IdentityProvider $identityProvider,
         ServiceProvider $serviceProvider,
         array $pdpLoas
-    ) {
+    ) : bool {
         $stepupDecision = new StepupDecision($identityProvider, $serviceProvider, $pdpLoas, $this->loaRepository);
         return $stepupDecision->shouldUseStepup();
     }
 
-    /**
-     * @param IdentityProvider $identityProvider
-     * @param ServiceProvider $serviceProvider
-     * @param array $pdpLoas
-     * @return string|null
-     */
     public function getStepupLoa(
         IdentityProvider $identityProvider,
         ServiceProvider $serviceProvider,
         array $pdpLoas
-    ) {
+    ) : ?Loa {
         $stepupDecision = new StepupDecision($identityProvider, $serviceProvider, $pdpLoas, $this->loaRepository);
         return $this->gatewayLoaMapping->transformToGatewayLoa($stepupDecision->getStepupLoa());
     }
 
-    /**
-     * @return Loa
-     */
-    public function getStepupLoa1()
+    public function getStepupLoa1() : Loa
     {
         return $this->gatewayLoaMapping->getGatewayLoa1();
     }
 
-    /**
-     * @param string $gatewayLoa
-     * @return Loa
-     */
-    public function getEbLoa($gatewayLoa)
+    public function getEbLoa(string $gatewayLoa) : Loa
     {
         Assertion::nonEmptyString(
             $gatewayLoa,
@@ -98,12 +79,7 @@ final class StepupGatewayCallOutHelper
         return $this->gatewayLoaMapping->transformToEbLoa($loa);
     }
 
-    /**
-     * @param IdentityProvider $identityProvider
-     * @param ServiceProvider $serviceProvider
-     * @return bool
-     */
-    public function allowNoToken(IdentityProvider $identityProvider, ServiceProvider $serviceProvider)
+    public function allowNoToken(IdentityProvider $identityProvider, ServiceProvider $serviceProvider) : bool
     {
         $stepupDecision = new StepupDecision($identityProvider, $serviceProvider, [], $this->loaRepository);
         return $stepupDecision->allowNoToken();

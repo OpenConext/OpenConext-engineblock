@@ -24,17 +24,17 @@ use Assert\AssertionFailedException;
 class StepupEndpoint
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $entityId;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $ssoLocation;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $keyFile;
 
@@ -43,7 +43,7 @@ class StepupEndpoint
      */
     private $isValidated;
 
-    public function __construct($entityId, $ssoLocation, $keyFile)
+    public function __construct(?string $entityId, ?string $ssoLocation, ?string $keyFile)
     {
         $this->entityId = $entityId;
         $this->ssoLocation = $ssoLocation;
@@ -52,30 +52,27 @@ class StepupEndpoint
     }
 
     /**
-     * @return string
      * @throws InvalidStepupConfigurationException
      */
-    public function getEntityId()
+    public function getEntityId() : string
     {
         $this->validate();
         return $this->entityId;
     }
 
     /**
-     * @return string
      * @throws InvalidStepupConfigurationException
      */
-    public function getSsoLocation()
+    public function getSsoLocation() : string
     {
         $this->validate();
         return $this->ssoLocation;
     }
 
     /**
-     * @return string
      * @throws InvalidStepupConfigurationException
      */
-    public function getKeyFile()
+    public function getKeyFile() : string
     {
         $this->validate();
         return $this->keyFile;
@@ -84,7 +81,7 @@ class StepupEndpoint
     /**
      * @throws InvalidStepupConfigurationException
      */
-    private function validate()
+    private function validate() : void
     {
         if ($this->isValidated) {
             return;

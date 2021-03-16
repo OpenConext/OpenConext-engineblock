@@ -37,7 +37,7 @@ final class Attribute implements JsonSerializable
      */
     public $dataType;
 
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         $attribute = [
             'AttributeId' => $this->attributeId,
