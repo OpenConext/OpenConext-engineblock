@@ -28,7 +28,7 @@ final class Resource implements JsonSerializable
      */
     public $attributes;
 
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return [
             'Attribute' => $this->attributes,

@@ -89,26 +89,6 @@ class StepupGatewayLoaMappingTest extends TestCase
      * @test
      * @group Stepup
      */
-    public function the_stepup_loa_mapping_loa1_should_be_a_string_or_throw_an_exception()
-    {
-        $loaRepository = m::mock(LoaRepository::class);
-
-        $mapping = [
-            2 => [
-                'engineblock' => 'ebLoa2',
-                'gateway' => 'gatewayLoa2',
-            ],
-        ];
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The stepup.loa.loa1 configuration must be a string');
-        new StepupGatewayLoaMapping($mapping, 5, $loaRepository);
-    }
-
-    /**
-     * @test
-     * @group Stepup
-     */
     public function the_stepup_loa_mapping_object_should_successful_map_back()
     {
         $mapping = [

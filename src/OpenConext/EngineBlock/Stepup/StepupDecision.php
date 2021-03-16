@@ -34,7 +34,7 @@ class StepupDecision
      */
     private $spLoa = null;
     /**
-     * @var array
+     * @var Loa[]
      */
     private $pdpLoas = [];
     /**
@@ -45,7 +45,7 @@ class StepupDecision
     /**
      * @param IdentityProvider $idp
      * @param ServiceProvider $sp
-     * @param array $pdpLoas
+     * @param Loa[] $pdpLoas
      * @param LoaRepository $loaRepository
      * @throws InvalidStepupConfigurationException
      */
@@ -74,19 +74,15 @@ class StepupDecision
         }
     }
 
-    /**
-     * @return  bool
-     */
-    public function shouldUseStepup()
+    public function shouldUseStepup() : bool
     {
         return ($this->spLoa || $this->idpLoa || count($this->pdpLoas) > 0);
     }
 
     /**
      * Find the highest level among all ways to configure a LoA.
-     * @return Loa|null
      */
-    public function getStepupLoa()
+    public function getStepupLoa() : ?Loa
     {
         $desiredLevels = $this->pdpLoas;
         if ($this->spLoa) {
@@ -110,10 +106,7 @@ class StepupDecision
         return $highestLevel;
     }
 
-    /**
-     * @return bool
-     */
-    public function allowNoToken()
+    public function allowNoToken() : bool
     {
         if ($this->spLoa || $this->idpLoa || count($this->pdpLoas) > 0) {
             return $this->spNoToken;

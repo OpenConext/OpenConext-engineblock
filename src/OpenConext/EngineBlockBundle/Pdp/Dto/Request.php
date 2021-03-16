@@ -46,28 +46,14 @@ final class Request implements JsonSerializable
      */
     public $resource;
 
-    /**
-     * @var string $clientId
-     * @var string $subjectId
-     * @param string $subjectId
-     * @param string $idpEntityId
-     * @param string $spEntityId
-     * @param array $responseAttributes
-     * @param string $remoteIp
-     * @return Request $request
-     */
     public static function from(
-        $clientId,
-        $subjectId,
-        $idpEntityId,
-        $spEntityId,
+        string $clientId,
+        string $subjectId,
+        string $idpEntityId,
+        string $spEntityId,
         array $responseAttributes,
         string $remoteIp
-    ) {
-        Assertion::string($clientId, 'The client ID must be a string, received "%s" (%s)');
-        Assertion::string($subjectId, 'The SubjectId must be a string, received "%s" (%s)');
-        Assertion::string($idpEntityId, 'The IDPentityID must be a string, received "%s" (%s)');
-        Assertion::string($spEntityId, 'The SPentityID must be a string, received "%s" (%s)');
+    ) : Request {
         Assertion::allString(
             array_keys($responseAttributes),
             'The keys of the Response attributes must be strings'
@@ -116,7 +102,7 @@ final class Request implements JsonSerializable
         return $request;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return [
             'Request' => [

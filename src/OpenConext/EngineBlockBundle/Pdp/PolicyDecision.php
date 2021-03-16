@@ -46,7 +46,7 @@ final class PolicyDecision
     private $statusMessage;
 
     /**
-     * @var array
+     * @var Obligation[]
      */
     private $stepupObligations;
 
@@ -60,11 +60,7 @@ final class PolicyDecision
      */
     private $idpLogo;
 
-    /**
-     * @param Response $response
-     * @return PolicyDecision
-     */
-    public static function fromResponse(Response $response)
+    public static function fromResponse(Response $response) : PolicyDecision
     {
         $policyDecision = new self;
         $policyDecision->decision = $response->decision;
@@ -100,11 +96,9 @@ final class PolicyDecision
 
     /**
      * Checks obgligations for any stepup LoA requirements, returns all found.
-     *
-     * @param array|null $obligations
-     * @return array
+     * @return Obligation[]
      */
-    private static function findStepupObligations($obligations)
+    private static function findStepupObligations(?array $obligations) : array
     {
         $stepupObligations = [];
         if ($obligations !== null) {
@@ -120,14 +114,11 @@ final class PolicyDecision
     /**
      * Checks attributeAssignment for clues if this assignment is IdP specific. And sets the idpOnly field
      * accordingly.
-     *
-     * @param AttributeAssignment $attributeAssignment
-     * @param PolicyDecision $policyDecision
      */
     private static function setAttributeAssignmentSource(
         AttributeAssignment $attributeAssignment,
         PolicyDecision $policyDecision
-    ) {
+    ) : void {
 
         if ($attributeAssignment->attributeId !== 'IdPOnly') {
             return;
@@ -136,22 +127,16 @@ final class PolicyDecision
         if (isset($attributeAssignment->value) && $attributeAssignment->value === true) {
             $policyDecision->isIdpSpecific = true;
         }
+
+        return;
     }
 
-    /**
-     * @return bool
-     */
-    public function permitsAccess()
+    public function permitsAccess() : bool
     {
         return $this->decision === self::DECISION_PERMIT || $this->decision === self::DECISION_NOT_APPLICABLE;
     }
 
-    /**
-     * @param string $locale
-     * @param string $defaultLocale
-     * @return string
-     */
-    public function getLocalizedDenyMessage($locale, $defaultLocale = 'en')
+    public function getLocalizedDenyMessage(string $locale, string $defaultLocale = 'en') : string
     {
         if (!$this->hasLocalizedDenyMessage()) {
             throw new RuntimeException(sprintf(
@@ -175,10 +160,7 @@ final class PolicyDecision
         return $this->localizedDenyMessages[$defaultLocale];
     }
 
-    /**
-     * @return null|string
-     */
-    public function getStatusMessage()
+    public function getStatusMessage() : ?string
     {
         if (!$this->hasStatusMessage()) {
             throw new RuntimeException('No status message found');
@@ -187,26 +169,17 @@ final class PolicyDecision
         return $this->statusMessage;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasLocalizedDenyMessage()
+    public function hasLocalizedDenyMessage() : bool
     {
         return !empty($this->localizedDenyMessages);
     }
 
-    /**
-     * @return bool
-     */
-    public function hasStatusMessage()
+    public function hasStatusMessage() : bool
     {
         return isset($this->statusMessage);
     }
 
-    /**
-     * @param Logo|null $logoUri
-     */
-    public function setIdpLogo(Logo $logoUri = null)
+    public function setIdpLogo(?Logo $logoUri)
     {
         $this->idpLogo = $logoUri;
     }
@@ -215,7 +188,7 @@ final class PolicyDecision
      * If the logo is not set, this method returns null
      * @return Logo|null
      */
-    public function getIdpLogo()
+    public function getIdpLogo() : ?Logo
     {
         if ($this->isIdpSpecificMessage() && $this->hasIdpLogo()) {
             /** @var Logo $logo */
@@ -225,25 +198,19 @@ final class PolicyDecision
     }
 
     /**
-     * @return array
+     * @return Obligation[]
      */
-    public function getStepupObligations()
+    public function getStepupObligations() : array
     {
         return $this->stepupObligations;
     }
 
-    /**
-     * @return bool
-     */
-    private function hasIdpLogo()
+    private function hasIdpLogo() : bool
     {
         return !is_null($this->idpLogo);
     }
 
-    /**
-     * @return bool
-     */
-    private function isIdpSpecificMessage()
+    private function isIdpSpecificMessage() : bool
     {
         return $this->isIdpSpecific;
     }

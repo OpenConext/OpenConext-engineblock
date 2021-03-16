@@ -22,9 +22,5 @@ use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
 
 interface PdpClientInterface
 {
-    /**
-     * @param Request $request
-     * @return PolicyDecision $policyDecision
-     */
-    public function requestDecisionFor(Request $request);
+    public function requestDecisionFor(Request $request) : PolicyDecision;
 }

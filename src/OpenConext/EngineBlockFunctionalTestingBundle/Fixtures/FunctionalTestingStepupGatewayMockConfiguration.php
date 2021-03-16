@@ -70,39 +70,27 @@ final class FunctionalTestingStepupGatewayMockConfiguration
         $this->mockServiceProvider = $mockSp;
     }
 
-    /**
-     * @return string
-     */
-    public function getIdentityProviderEntityId()
+    public function getIdentityProviderEntityId() : string
     {
         return $this->mockIdentityProvider->entityId();
     }
 
-    /**
-     * @return string
-     */
-    public function getIdentityProviderPublicKeyCertData()
+    public function getIdentityProviderPublicKeyCertData() : string
     {
         return $this->addPublicKeyEnvelope($this->mockIdentityProvider->publicKeyCertData());
     }
 
-    /**
-     * @return string
-     */
-    public function getIdentityProviderGetPrivateKeyPem()
+    public function getIdentityProviderGetPrivateKeyPem() : string
     {
         return $this->mockIdentityProvider->getPrivateKeyPem();
     }
 
-    /**
-     * @return string
-     */
-    public function getServiceProviderEntityId()
+    public function getServiceProviderEntityId() : string
     {
         return $this->mockServiceProvider->entityId();
     }
 
-    private function addPublicKeyEnvelope($key)
+    private function addPublicKeyEnvelope(string $key) : string
     {
         return "-----BEGIN CERTIFICATE-----\n" . wordwrap($key, 64, "\n", true) . "\n-----END CERTIFICATE-----";
     }

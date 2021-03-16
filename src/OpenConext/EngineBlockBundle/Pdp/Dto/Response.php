@@ -62,14 +62,11 @@ final class Response
     public $decision;
 
     /**
-     * @param array $jsonData
-     * @return Response
-     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)  Deserializing a response to named DTOs
      * @SuppressWarnings(PHPMD.NPathComplexity)       A response has a lot of constraints
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength) Private methods would merely be code relocation
      */
-    public static function fromData(array $jsonData)
+    public static function fromData(array $jsonData) : Response
     {
         if (!isset($jsonData['Response'])) {
             throw new InvalidPdpResponseException('Key: Response was not found in the PDP response');
