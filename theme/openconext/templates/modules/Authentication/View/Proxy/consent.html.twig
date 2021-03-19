@@ -49,12 +49,12 @@
                                          alt=""/>
                                     <h2>{{ 'suite_name'|trans }}</h2>
                                 {% elseif attributeSource != 'idp' %}
-                                    <img class="logo-small" src="{{ attributeSourceLogoUrl(attributeSource)|escape('html_attr') }}?v={{ assetsVersion }}"
+                                    <img class="logo-small" src="{{ attributeSourceLogoUrl(attributeSource)|escape('html_attr') }}"
                                          alt=""/>
                                     <h2>{{ attributeSourceDisplayName(attributeSource) }}</h2>
                                 {% else %}
                                     {% if idp.logo is not null %}
-                                        <img class="logo-small" src="{{ idp.logo.url }}?v={{ assetsVersion }}" alt=""/>
+                                        <img class="logo-small" src="{{ idp.logo.url }}" alt=""/>
                                     {% else %}
                                         <img class="logo-small" src="/images/placeholder.png?v={{ assetsVersion }}" alt=""/>
                                     {% endif %}
