@@ -40,17 +40,19 @@ export const showMoreCheckboxId = 'showMoreCheckbox';
 /***
  * WAYF SELECTORS
  * ***/
+export const idpClass = 'wayf__idp';
+export const idpSelector = `.${idpClass}`;
+export const deletedAnnouncementId = 'deletedAnnouncement';
 export const wayfPageSelector = 'main.wayf';
 export const configurationId = 'wayf-configuration';
 export const selectedIdpsSectionSelector = '.wayf__previousSelection';
 export const selectedIdpsListSelector = '.wayf__previousSelection .wayf__idpList';
 export const selectedIdpsLiSelector = `${selectedIdpsListSelector} > li`;
+export const selectedIdpsFirstIdp = `${selectedIdpsSectionSelector} ${idpSelector}:first-of-type`;
 export const previousSelectionFirstIdp = '.wayf__previousSelection li:first-of-type .wayf__idp';
 export const deleteButtonTemplateId = 'deleteButton';
 export const addAccountButtonClass = 'previousSelection__addAccount';
 export const addAccountButtonSelector = `.${addAccountButtonClass}`;
-export const idpClass = 'wayf__idp';
-export const idpSelector = `.${idpClass}`;
 export const idpTemplateSelector = 'idpTemplate';
 export const selectedIdpsSelector = `${selectedIdpsSectionSelector} ${idpSelector}`;
 export const unconnectedLiClass = 'idpItem--noAccess';
@@ -111,6 +113,7 @@ export const lastRemainingIdpAfterSearchSelector = '.wayf__remainingIdps .wayf__
 export const noMatchSelector = '.wayf__remainingIdps .wayf__idp[data-weight="0"]';
 export const matchSelector = '.wayf__remainingIdps .wayf__idp:not([data-weight="0"])';
 export const toggleButtonClass = 'previousSelection__toggleLabel';
+export const toggleButtonSelector = `.${toggleButtonClass}`;
 export const editButtonClass = 'previousSelection__edit';
 export const doneButtonClass = 'previousSelection__done';
 export const previousSelectionTitleSelector = '.previousSelection__title';

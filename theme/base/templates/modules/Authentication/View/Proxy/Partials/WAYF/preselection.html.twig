@@ -15,6 +15,7 @@
     <template id="deleteButton">
         {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpDeleteDisable.html.twig' with { delete: true, idp: { connected: true} }%}
     </template>
+    <div class="visually-hidden" id="deletedAnnouncement" aria-live="polite" data-announcement="{{ 'wayf_deleted_account_screenreader'|trans }}"></div>
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpList.html.twig' with { idpList: previousSelectionList, delete: true, listName: 'preselection', id: 'previousSelection__title' } %}
     <button type="button" class="previousSelection__addAccount">
         <span>{{ 'wayf_add_account'|trans }}</span>

@@ -37,6 +37,7 @@ return $overrides + [
     'wayf_noscript_warning_intro'     => 'Without JavaScript you will not be able to remember previously used accounts, nor be able to search.  If you want to use that functionality, please enable JavaScript.',
     'wayf_noscript_warning_end'     => 'You can, off course, still log in.',
     'wayf_delete_account_screenreader'       => 'Delete from your accounts',
+    'wayf_deleted_account_screenreader'      => ' was deleted from your accounts',
     'wayf_remaining_idps_title_screenreader' => 'Add an account from the list below',
     'wayf_select_account_screenreader'       => 'Select an account from the list below',
     'wayf_search_placeholder'   => 'Search...',

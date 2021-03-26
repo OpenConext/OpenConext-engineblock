@@ -30,7 +30,7 @@ export const handleDeleteDisable = (e) => {
     return;
   }
 
-  // Remove item from previous selection & html
+  // Remove item from previous selection & html + announce
   deleteIdp(element);
 
   // Reindex & SortRemaining idps by title
