@@ -12,6 +12,7 @@ export const showOrHideNoResultsSection = (idpArray) => {
   const noMatches = document.querySelectorAll(noMatchSelector);
   if (noMatches.length === idpArray.length) {
     showElement(noResultsSection);
+    noResultsSection.innerHTML = noResultsSection.innerHTML;
   } else {
     hideElement(noResultsSection);
   }
