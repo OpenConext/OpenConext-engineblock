@@ -42,6 +42,7 @@ return $overrides + [
     'wayf_search_placeholder'   => 'Search...',
     'wayf_search_screenreader'          => 'Search for an %organisationNoun%',
     'wayf_search_reset_screenreader'    => 'Clear the search field',
+    'wayf_search_results_screenreader' => '%orgNoun% found',
     'wayf_your_accounts'        => 'Your accounts',
     'wayf_add_account'          => 'Use another account',
     'wayf_no_access'            => 'Sorry, no access for this account',

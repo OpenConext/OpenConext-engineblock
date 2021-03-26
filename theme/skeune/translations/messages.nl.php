@@ -41,6 +41,7 @@ return $overrides + [
     'wayf_search_placeholder'   => 'Zoeken...',
     'wayf_search_screenreader'          => 'Zoek naar een %organisationNoun%',
     'wayf_search_reset_screenreader'    => 'Wis de tekst in het zoekveld',
+    'wayf_search_results_screenreader' => '%orgNoun% gevonden',
     'wayf_your_accounts'        => 'Je accounts',
     'wayf_add_account'          => 'Gebruik een ander account',
     'wayf_no_access'            => 'Sorry, geen toegang met dit account',

@@ -76,6 +76,7 @@ export const searchResetClass = 'search__reset';
 export const searchResetSelector = `.${searchResetClass}`;
 export const searchSubmitClass = 'search__submit';
 export const searchSubmitSelector = `.${searchSubmitClass}`;
+export const searchAnnouncementId = 'searchResultAnnouncement';
 export const noAccessFieldsToValidy = ['name', 'email'];
 export const noAccessSectionSelector = '.wayf__noAccess';
 export const noAccessLi = '.wayf__idpList > li';

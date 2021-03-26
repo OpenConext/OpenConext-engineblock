@@ -1,5 +1,5 @@
 import {searchAndSortIdps} from "./searchAndSortIdps";
-import {searchResetSelector, searchSubmitSelector} from '../../selectors';
+import {searchAnnouncementId, searchResetSelector, searchSubmitSelector} from '../../selectors';
 import {toggleDefaultIdPLinkVisibility} from './toggleDefaultIdPLinkVisibility';
 import {hideElementNoTab} from '../../utility/hideElementNoTab';
 import {showElementAlsoTab} from '../../utility/showElementAlsoTab';
@@ -7,6 +7,8 @@ import {showElementAlsoTab} from '../../utility/showElementAlsoTab';
 export const toggleSearchAndResetButton = (idpArray, searchTerm) => {
   const searchButton = document.querySelector(searchSubmitSelector);
   const resetButton = document.querySelector(searchResetSelector);
+  const searchAnnouncementDiv = document.getElementById(searchAnnouncementId);
+
   if (resetButton.classList.contains('visually-hidden')) {
     showElementAlsoTab(resetButton, true);
   }
@@ -20,5 +22,6 @@ export const toggleSearchAndResetButton = (idpArray, searchTerm) => {
     hideElementNoTab(resetButton, true);
     // Reset the list/search results
     searchAndSortIdps(idpArray, searchTerm);
+    searchAnnouncementDiv.innerHTML = '';
   }
 };

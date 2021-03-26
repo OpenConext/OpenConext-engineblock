@@ -12,4 +12,5 @@
     />
     <button type="reset" class="search__reset visually-hidden" tabindex="-1"><span class="visually-hidden">{{ 'wayf_search_reset_screenreader'|trans }}</span></button>
     <button type="submit" class="search__submit"><span class="visually-hidden">{{ 'search_screenreader'|trans }}</span></button>
+    <div class="visually-hidden" aria-live="polite" id="searchResultAnnouncement" data-announcementOne=" {{ 'wayf_search_results_screenreader'|trans({'%orgNoun%': 'organisation_noun'|trans }) }}" data-announcementMultiple=" {{ 'wayf_search_results_screenreader'|trans({'%orgNoun%': 'organisation_noun_plural'|trans}) }}"></div>
 </form>
