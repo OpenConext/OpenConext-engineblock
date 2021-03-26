@@ -39,7 +39,7 @@ return $overrides + [
     'wayf_remaining_idps_title_screenreader' => 'Voeg een account toe uit de onderstaande lijst',
     'wayf_select_account_screenreader'       => 'Selecteer een account uit de onderstaande lijst',
     'wayf_search_placeholder'   => 'Zoeken...',
-    'wayf_search_screenreader'          => 'Zoek een %organisationNoun%',
+    'wayf_search_screenreader'          => 'Zoek naar een %organisationNoun%',
     'wayf_search_reset_screenreader'    => 'Wis de tekst in het zoekveld',
     'wayf_your_accounts'        => 'Je accounts',
     'wayf_add_account'          => 'Gebruik een ander account',

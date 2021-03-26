@@ -40,7 +40,7 @@ return $overrides + [
     'wayf_remaining_idps_title_screenreader' => 'Add an account from the list below',
     'wayf_select_account_screenreader'       => 'Select an account from the list below',
     'wayf_search_placeholder'   => 'Search...',
-    'wayf_search_screenreader'          => 'Search an %organisationNoun%',
+    'wayf_search_screenreader'          => 'Search for an %organisationNoun%',
     'wayf_search_reset_screenreader'    => 'Clear the search field',
     'wayf_your_accounts'        => 'Your accounts',
     'wayf_add_account'          => 'Use another account',
