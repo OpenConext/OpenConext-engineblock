@@ -11,12 +11,9 @@
     <fieldset class="hidden">
         <legend class="hidden">Name</legend>
         <label for="name">
-            <span class="visually-hidden">
-                {{ 'required_screenreader'|trans }}
-            </span>
             <strong>*</strong> {{ 'wayf_noaccess_name'|trans }}
         </label>
-        <input type="text" name="name" id="name" minlength="2" />
+        <input type="text" autofocus="autofocus" name="name" id="name" minlength="2" aria-required="true" />
         <p class="form__error hidden" data-labelfor="name">
             {{ 'form_error_name'|trans }}
         </p>
@@ -24,12 +21,9 @@
     <fieldset class="hidden">
         <legend class="hidden">Email</legend>
         <label for="email">
-            <span class="visually-hidden">
-                {{ 'required'|trans }}
-            </span>
             <strong>*</strong> {{ 'wayf_noaccess_email'|trans }}
         </label>
-        <input type="email" name="email" id="email" />
+        <input type="email" name="email" id="email"  aria-required="true" />
         <p class="form__error hidden" data-labelfor="email">
             {{ 'form_error_email'|trans }}
         </p>

@@ -122,3 +122,6 @@ export const noResultSectionSelector = '.wayf__noResults';
 export const idpListSelector = '.wayf__idpList';
 export const ariaPressedCheckboxSelector = 'input[aria-pressed]';
 export const topId = 'top';
+export const firstRequestFieldId = 'name';
+export const requestAccessButtonClass = 'noAccess__connectable';
+export const requestAccessButtonSelector = `.${requestAccessButtonClass}`;

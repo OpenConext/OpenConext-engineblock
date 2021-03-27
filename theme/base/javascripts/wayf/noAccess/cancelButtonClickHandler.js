@@ -1,6 +1,6 @@
 import {hideNoAccess} from '../../wayf/noAccess/hideNoAccess';
 import {isHiddenElement} from '../../utility/isHiddenElement';
-import {showFormSelector} from '../../selectors';
+import {searchFieldSelector, showFormSelector} from '../../selectors';
 import {toggleFormFieldsAndButton} from '../../wayf/noAccess/toggleFormFieldsAndButton';
 
 /**
@@ -16,5 +16,6 @@ export const cancelButtonClickHandlerCreator = (parentSection, noAccess) => {
     if (isHiddenElement(noAccess.querySelector(showFormSelector))) {
       toggleFormFieldsAndButton();
     }
+    document.querySelector(searchFieldSelector).focus();
   };
 };
