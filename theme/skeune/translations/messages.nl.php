@@ -55,6 +55,7 @@ return $overrides + [
     'wayf_noaccess_motivation'  => 'Motivatie',
     'wayf_noaccess_success'     => 'Je aanvraag voor toegang is verstuurd.',
     'wayf_noaccess_request_access_screenreader'  => 'Open het formulier om toegang aan te vragen',
+    'wayf_noaccess_form_announcement_screenreader' => 'Er zijn verplichte velden niet, of niet goed ingevuld.',
     'wayf_defaultIdp_start'     => 'Als je %organisation_noun% niet in de lijst staat,',
     'wayf_defaultIdp_linkText'  => 'is %defaultIdpName% beschikbaar als alternatief.',
     'wayf_idp_title_screenreader' => 'Inloggen met ',

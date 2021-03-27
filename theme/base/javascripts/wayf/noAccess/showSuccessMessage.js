@@ -15,4 +15,6 @@ export const showSuccessMessage = (parentSection, noAccess) => {
   if (isHiddenElement(successMessage)) {
     toggleVisibility(successMessage);
   }
+
+  successMessage.focus();
 };

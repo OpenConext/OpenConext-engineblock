@@ -56,6 +56,7 @@ return $overrides + [
     'wayf_noaccess_motivation'  => 'Motivation',
     'wayf_noaccess_success'     => 'Your request for access has been sent.',
     'wayf_noaccess_request_access_screenreader'  => 'Open the request access form',
+    'wayf_noaccess_form_announcement_screenreader' => 'Some required fields are not filled in, or not correctly filled in.',
     'wayf_defaultIdp_start'     => 'If your %organisation_noun% is not listed,',
     'wayf_defaultIdp_linkText'  => '%defaultIdpName% is available as an alternative.',
     'wayf_idp_title_screenreader' => 'Login with ',

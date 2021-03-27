@@ -83,6 +83,7 @@ export const noAccessFieldsToValidy = ['name', 'email'];
 export const noAccessSectionSelector = '.wayf__noAccess';
 export const noAccessLi = '.wayf__idpList > li';
 export const noAccessFormSelector = '.noAccess__requestForm';
+export const requestFormAnnouncementId = 'requestFormAnnouncement';
 export const noAccessFieldsetsSelector = '.noAccess__requestForm fieldset';
 export const noAccessTitle = '.noAccess__title';
 export const noAccessUnconnectableClass = 'wayf__noAccess--unconnectable';

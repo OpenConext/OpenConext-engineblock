@@ -1,3 +1,4 @@
 .notification__success {
+    @include focus;
     @include success;
 }
