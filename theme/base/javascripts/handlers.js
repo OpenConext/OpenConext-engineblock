@@ -8,7 +8,6 @@ import {addClickHandlerOnce} from './utility/addClickHandlerOnce';
 import {
   backButtonSelector,
   nokButtonSelector,
-  nokSectionSelector,
   tooltipsAndModalLabels,
 } from './selectors';
 import {handlePreviousSelectionVisible} from './wayf/handlePreviousSelectionVisible';
@@ -17,20 +16,21 @@ import {searchBehaviour} from './wayf/searchBehaviour';
 import {submitForm} from './wayf/submitForm';
 import {cancelButtonClickHandlerCreator} from './wayf/noAccess/cancelButtonClickHandler';
 import {toggleFormFieldsAndButton} from './wayf/noAccess/toggleFormFieldsAndButton';
-import {changeAriaHiddenValue} from './utility/changeAriaHiddenValue';
 import {addTooltipAndModalAriaHandlers} from './consent/addTooltipAndModalAriaHandlers';
 import {hideInvisibleTooltips} from './consent/hideInvisibleTooltips';
 import {showInvisibleTooltips} from './consent/showInvisibleTooltips';
 import {handleInvisibleTooltips} from './consent/handleInvisibleTooltips';
 import {toggleTooltipPressedStates} from './consent/toggleTooltipPressedStates';
+import {handleNokFocus} from './consent/handleNokFocus';
 
 /***
  * CONSENT HANDLERS
  * ***/
 export const consentCallbackAfterLoad = () => {
-  addAccessibilitySupport();
   addClickHandlerOnce(nokButtonSelector, consentNokHandler);
+  addAccessibilitySupport();
 };
+export const consentHandleNokFocus = handleNokFocus;
 export const consentEnterHandler = (target) => enterHandler(target);
 export const consentKeyboardBehaviourHandler = keyboardBehaviour;
 export const consentAnimateInteractiveElements = (selector) => {
@@ -42,15 +42,14 @@ export const consentShowInvisibleTooltips = showInvisibleTooltips;
 export const consentHandleInvisibleTooltips = handleInvisibleTooltips;
 export const consentToggleTooltipPressedState = toggleTooltipPressedStates;
 export const consentNokHandler = (e) => {
-  const nokSection = document.querySelector(nokSectionSelector);
   switchConsentSection(e);
-  addClickHandlerOnce(backButtonSelector, backButtonHandler(nokSection));
-  changeAriaHiddenValue(nokSection);
+  consentHandleNokFocus();
+  addClickHandlerOnce(backButtonSelector, backButtonHandler());
 };
-export const backButtonHandler = (nokSection) => {
+export const backButtonHandler = () => {
   return (e) => {
     switchConsentSection(e);
-    changeAriaHiddenValue(nokSection);
+    consentHandleNokFocus();
   };
 };
 

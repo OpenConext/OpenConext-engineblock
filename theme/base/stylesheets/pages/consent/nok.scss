@@ -1,4 +1,8 @@
 .consent__nok {
+    > .consent__nok-title {
+        @include focus;
+    }
+
     > .consent__nok-body {
         padding: 0 2rem 2.5rem;
 

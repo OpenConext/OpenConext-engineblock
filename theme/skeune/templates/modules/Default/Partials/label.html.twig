@@ -8,7 +8,6 @@
         {% else %}
             {{ text }}
             {% if ariaExpandable is defined and ariaExpandable %}
-                including
                 {% include '@theme/Default/Partials/a11yButtonExpandable.html.twig' %}
             {% endif %}
         {% endif %}
