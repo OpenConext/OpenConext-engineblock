@@ -109,7 +109,7 @@ HTML
     'cancel'                => 'Cancel',
     'send'                  => 'Send',
     'close'                 => 'Close',
-
+    'required'              => 'Required',
     'send_confirm'          => 'Your request has been sent',
     'send_confirm_desc'     => '<p>Your request has been forwarded to your %organisationNoun%. Further settlement and decisions on the availability of this service will be taken by the ICT staff of your %organisationNoun%.</p>',
 

@@ -108,6 +108,7 @@ HTML
     'cancel'                => 'Cancelar',
     'send'                  => 'Enviar',
     'close'                 => 'Fechar',
+    'required'              => 'Obrigatório',
 
     'send_confirm'          => 'O seu pedido foi enviado',
     'send_confirm_desc'     => '<p>A sua solicitação foi encaminha para a sua %organisationNoun%. As decisões para a disponibilidade deste serviço serão tomadas pela equipa de IT da sua %organisationNoun%.</p>',
