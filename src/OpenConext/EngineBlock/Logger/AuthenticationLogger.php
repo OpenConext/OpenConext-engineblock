@@ -42,24 +42,16 @@ class AuthenticationLogger
     /**
      * KeyId is nullable in order to be able to differentiate between asking no specific key,
      * the default key KeyId('default') and a specific key.
-     *
-     * @param Entity $serviceProvider
-     * @param Entity $identityProvider
-     * @param CollabPersonId $collabPersonId
-     * @param array $proxiedServiceProviders
-     * @param string $workflowState
-     * @param string $originalNameId
-     * @param string|null $authnContextClassRef
-     * @param KeyId|null $keyId
      */
     public function logGrantedLogin(
         Entity $serviceProvider,
         Entity $identityProvider,
         CollabPersonId $collabPersonId,
         array $proxiedServiceProviders,
-        $workflowState,
-        $originalNameId,
-        $authnContextClassRef,
+        string $workflowState,
+        string $originalNameId,
+        ?string $authnContextClassRef,
+        ?string $engineSsoEndpointUsed,
         KeyId $keyId = null
     ) {
         $proxiedServiceProviderEntityIds = array_map(
@@ -74,15 +66,16 @@ class AuthenticationLogger
         $this->logger->info(
             'login granted',
             [
-                'login_stamp'           => $timestamp,
-                'user_id'               => $collabPersonId->getCollabPersonId(),
-                'sp_entity_id'          => $serviceProvider->getEntityId()->getEntityId(),
-                'idp_entity_id'         => $identityProvider->getEntityId()->getEntityId(),
-                'key_id'                => $keyId ? $keyId->getKeyId() : null,
+                'login_stamp' => $timestamp,
+                'user_id' => $collabPersonId->getCollabPersonId(),
+                'sp_entity_id' => $serviceProvider->getEntityId()->getEntityId(),
+                'idp_entity_id' => $identityProvider->getEntityId()->getEntityId(),
+                'key_id' => $keyId ? $keyId->getKeyId() : null,
                 'proxied_sp_entity_ids' => $proxiedServiceProviderEntityIds,
-                'workflow_state'        => $workflowState,
-                'original_name_id'      => $originalNameId,
-                'authncontextclassref'  => $authnContextClassRef,
+                'workflow_state' => $workflowState,
+                'original_name_id' => $originalNameId,
+                'authncontextclassref' => $authnContextClassRef,
+                'engine_sso_endpoint_used' => $engineSsoEndpointUsed,
             ]
         );
     }

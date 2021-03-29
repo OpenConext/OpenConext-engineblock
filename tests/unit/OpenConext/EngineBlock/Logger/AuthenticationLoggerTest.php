@@ -55,6 +55,7 @@ class AuthenticationLoggerTest extends TestCase
         $spProxy2EntityId         = 'SpProxy2EntityId';
         $originalNameId           = 'urn:collab:person:original:some-person';
         $authnContextClassRef     = 'urn:oasis:names:tc:SAML:2.0:ac:classes:Password';
+        $ssoEndpointUsed = '/authentication/idp/single-sign-on';
 
         $serviceProvider       = new Entity(new EntityId($serviceProviderEntityId), EntityType::SP());
         $identityProvider      = new Entity(new EntityId($identityProviderEntityId), EntityType::IdP());
@@ -73,6 +74,7 @@ class AuthenticationLoggerTest extends TestCase
             'workflow_state' => AbstractRole::WORKFLOW_STATE_PROD,
             'original_name_id' => $originalNameId,
             'authncontextclassref' => $authnContextClassRef,
+            'engine_sso_endpoint_used' => $ssoEndpointUsed
         ];
 
         $mockLogger = m::mock('\Psr\Log\LoggerInterface');
@@ -113,6 +115,7 @@ class AuthenticationLoggerTest extends TestCase
             AbstractRole::WORKFLOW_STATE_PROD,
             $originalNameId,
             $authnContextClassRef,
+            $ssoEndpointUsed,
             $keyId
         );
     }

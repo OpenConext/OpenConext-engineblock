@@ -39,23 +39,15 @@ class AuthenticationLoggerAdapter
         $this->authenticationLogger = $authenticationLogger;
     }
 
-    /**
-     * @param ServiceProvider $serviceProvider
-     * @param IdentityProvider $identityProvider
-     * @param                   $collabPersonId
-     * @param                   $keyId
-     * @param ServiceProvider[] $proxiedServiceProviders
-     * @param string $originalNameId
-     * @param string|null $authnContextClassRef
-     */
     public function logLogin(
         ServiceProvider $serviceProvider,
         IdentityProvider $identityProvider,
-        $collabPersonId,
-        $keyId,
+        string $collabPersonId,
+        ?string $keyId,
         array $proxiedServiceProviders,
-        $originalNameId,
-        $authnContextClassRef
+        string $originalNameId,
+        ?string $authnContextClassRef,
+        ?string $engineSsoEndpointUsed
     ) {
         $keyId = $keyId ? new KeyId($keyId) : null;
 
@@ -74,6 +66,7 @@ class AuthenticationLoggerAdapter
             $serviceProvider->workflowState,
             $originalNameId,
             $authnContextClassRef,
+            $engineSsoEndpointUsed,
             $keyId
         );
     }
