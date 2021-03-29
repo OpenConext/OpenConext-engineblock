@@ -21,6 +21,7 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
+use OpenConext\EngineBlockBundle\Exception\InvalidArgumentException as EngineBlockBundleInvalidArgumentException;
 use SAML2\AuthnRequest;
 use SAML2\Response;
 use SAML2\XML\saml\Issuer;
@@ -493,10 +494,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
 
             $isAccessible = $identityProvider->enabledInWayf || $isDebugRequest;
 
+            $name = $this->getName($currentLocale, $identityProvider, $additionalInfo);
+
             $wayfIdp = array(
-                'Name_nl'   => $this->getNameNl($identityProvider, $additionalInfo),
-                'Name_en'   => $this->getNameEn($identityProvider, $additionalInfo),
-                'Name_pt'   => $this->getNamePt($identityProvider, $additionalInfo),
+                'Name'   => $name,
                 'Logo'      => $identityProvider->logo ? $identityProvider->logo->url : '/images/placeholder.png',
                 'Keywords'  => $this->getKeywords($identityProvider),
                 'Access'    => $isAccessible ? '1' : '0',
@@ -553,6 +554,22 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             ->setBody($output, 'text/plain');
 
         $diContainer->getMailer()->send($message);
+    }
+
+    private function getName(string $locale, IdentityProvider $identityProvider, AdditionalInfo $additionalInfo)
+    {
+        switch ($locale) {
+            case "nl":
+                return $this->getNameNl($identityProvider, $additionalInfo);
+            case "en":
+                return $this->getNameEn($identityProvider, $additionalInfo);
+            case "pt":
+                return $this->getNamePt($identityProvider, $additionalInfo);
+            default:
+                throw new EngineBlockBundleInvalidArgumentException(
+                    sprintf('Trying to get the IdP name for an unsupported language (%s)', $locale)
+                );
+        }
     }
 
     private function getNameNl(
