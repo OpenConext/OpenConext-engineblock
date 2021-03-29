@@ -1,0 +1,18 @@
+/*******************************************************************
+    CSS specific to the logout page
+ ******************************************************************/
+.logout {
+    .page__header {
+        margin: 3rem auto 0 ;
+
+        @include screen('mobile') {
+            margin: 0;
+        }
+    }
+
+    .page__title {
+        @include screen('mobile') {
+            padding-top: 3rem;
+        }
+    }
+}
