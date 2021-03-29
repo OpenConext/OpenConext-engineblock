@@ -1,5 +1,12 @@
 <?php
-return [
+
+$overrides = [];
+$overridesFile = __DIR__ . '/overrides.nl.php';
+if (file_exists($overridesFile)) {
+    $overrides = require $overridesFile;
+}
+
+return $overrides + [
     // General
     'search'                    => 'Zoek een %organisationNoun%...',
     'log_in_to'                 => 'Selecteer een %organisationNoun% en login bij',

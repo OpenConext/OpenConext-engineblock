@@ -1,5 +1,11 @@
 <?php
-return [
+$overrides = [];
+$overridesFile = __DIR__ . '/overrides.nl.php';
+if (file_exists($overridesFile)) {
+    $overrides = require $overridesFile;
+}
+
+return $overrides + [
     // General
     'button_screenreader'        =>  ', knop',
     'button_expandable_screenreader' => ' ,knop, uitklapbaar',

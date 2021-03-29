@@ -1,5 +1,12 @@
 <?php
-return [
+
+$overrides = [];
+$overridesFile = __DIR__ . '/overrides.en.php';
+if (file_exists($overridesFile)) {
+    $overrides = require $overridesFile;
+}
+
+return $overrides + [
     // General
     'button_screenreader'        =>  ', button',
     'button_expandable_screenreader' => ', button, expandable',
