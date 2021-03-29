@@ -2,8 +2,15 @@
     {% if text is defined %}
         {% if hideText %}
             <span class="visually-hidden">{{ text }}</span>
+            {% if ariaExpandable is defined and ariaExpandable %}
+                {% include '@theme/Default/Partials/a11yButtonExpandable.html.twig' %}
+            {% endif %}
         {% else %}
             {{ text }}
+            {% if ariaExpandable is defined and ariaExpandable %}
+                including
+                {% include '@theme/Default/Partials/a11yButtonExpandable.html.twig' %}
+            {% endif %}
         {% endif %}
     {% endif %}
 </label>

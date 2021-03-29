@@ -1,1 +1,1 @@
-<input type="checkbox" id="{{ id }}" name="{{ id }}" aria-hidden="true" {% if className is defined %}class="{{ className }}"{% endif %}/>
+<input type="checkbox" id="{{ id }}" name="{{ id }}" aria-expanded="false" role="button" aria-pressed="false" class="visually-hidden{% if className is defined %} {{ className }}{% endif %}" tabindex="-1" />

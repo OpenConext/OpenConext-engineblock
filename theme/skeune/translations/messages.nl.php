@@ -1,7 +1,9 @@
 <?php
 return [
     // General
-    'button_screenreader'        =>  'Knop: ',
+    'button_screenreader'        =>  ', knop',
+    'button_expandable_screenreader' => ' ,knop, uitklapbaar',
+    'button_expanded_screenreader' => ' ,knop, uitgeklapt',
     'required_screenreader'      =>  'Verplicht',
     'search_screenreader'        =>  'Zoeken',
     'send_request'  =>  'Verzoek sturen',

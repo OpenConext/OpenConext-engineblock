@@ -1,4 +1,6 @@
 import {consentEnterHandler} from '../handlers';
+import {fireClickEvent} from '../utility/fireClickEvent';
+import {getData} from '../utility/getData';
 
 /**
  * Make all behaviour that's possible with a mouse also keyboard accessible.
@@ -13,10 +15,36 @@ import {consentEnterHandler} from '../handlers';
  */
 export const keyboardBehaviour = () => {
   const ENTER      = 13;
+  const SPACE      = 32;
+  const TAB        = 9;
 
   document.querySelector('body').addEventListener('keydown', function(e) {
-    if (e.keyCode === ENTER) {
-      consentEnterHandler(e.target);
+    const classList = e.target.classList;
+    switch (e.keyCode) {
+      case ENTER:
+        consentEnterHandler(e.target);
+        break;
+      case SPACE:
+        classList.forEach(className => {
+          switch (className) {
+            case 'openToggle__label':
+            case 'showLess':
+            case 'showMore':
+              fireClickEvent(e.target);
+              break;
+          }
+        });
+        break;
+      case TAB:
+        classList.forEach(className => {
+          switch (className) {
+            case 'tooltip__value':
+              const dataFor = getData(e.target, 'for');
+              document.querySelector(`[for=${dataFor}]`).focus();
+              break;
+          }
+        });
+        break;
     }
   });
 };

@@ -114,6 +114,7 @@ HTML
     'send_confirm_desc'     => '<p>Your request has been forwarded to your %organisationNoun%. Further settlement and decisions on the availability of this service will be taken by the ICT staff of your %organisationNoun%.</p>',
 
     // Consent
+    'consent_attributes_screenreader'         => 'about %orgName%',
     'consent_attributes_show_more'            => 'Show more information',
     'consent_attributes_show_less'            => 'Show less information',
     'consent_no_attributes_text'              => 'This service requires no information from your %organisationNoun%.',

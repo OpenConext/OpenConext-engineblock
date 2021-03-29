@@ -19,6 +19,10 @@ import {cancelButtonClickHandlerCreator} from './wayf/noAccess/cancelButtonClick
 import {toggleFormFieldsAndButton} from './wayf/noAccess/toggleFormFieldsAndButton';
 import {changeAriaHiddenValue} from './utility/changeAriaHiddenValue';
 import {addTooltipAndModalAriaHandlers} from './consent/addTooltipAndModalAriaHandlers';
+import {hideInvisibleTooltips} from './consent/hideInvisibleTooltips';
+import {showInvisibleTooltips} from './consent/showInvisibleTooltips';
+import {handleInvisibleTooltips} from './consent/handleInvisibleTooltips';
+import {toggleTooltipPressedStates} from './consent/toggleTooltipPressedStates';
 
 /***
  * CONSENT HANDLERS
@@ -33,6 +37,10 @@ export const consentAnimateInteractiveElements = (selector) => {
   animateInteractiveSections(selector);
   addTooltipAndModalAriaHandlers(tooltipsAndModalLabels);
 };
+export const consentHideInvisibleTooltips = hideInvisibleTooltips;
+export const consentShowInvisibleTooltips = showInvisibleTooltips;
+export const consentHandleInvisibleTooltips = handleInvisibleTooltips;
+export const consentToggleTooltipPressedState = toggleTooltipPressedStates;
 export const consentNokHandler = (e) => {
   const nokSection = document.querySelector(nokSectionSelector);
   switchConsentSection(e);

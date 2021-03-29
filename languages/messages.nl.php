@@ -111,6 +111,7 @@ HTML
     'send_confirm_desc'     => '<p>Je verzoek is doorgestuurd naar de juiste persoon binnen jouw %organisationNoun%. Het is aan deze persoon om actie te ondernemen op basis van jouw verzoek. Het kan zijn dat er nog afspraken gemaakt moeten worden tussen jouw %organisationNoun% en de dienstaanbieder.</p>',
 
     // Consent page
+    'consent_attributes_screenreader'         => 'over %orgName%',
     'consent_attributes_show_more'            => 'Toon alle gegevens',
     'consent_attributes_show_less'            => 'Toon minder gegevens',
     'consent_no_attributes_text'              => 'Voor deze dienst zijn geen gegevens van jouw %organisationNoun% nodig.',

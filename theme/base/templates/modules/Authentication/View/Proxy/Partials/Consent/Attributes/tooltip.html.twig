@@ -7,6 +7,7 @@
             {
                 class: 'tooltip',
                 hideText: true,
+                ariaExpandable: true,
                 id: id,
                 text: 'consent_tooltip_screenreader'|trans({ '%attr_name%': attributeName|lower }),
             }
@@ -17,7 +18,7 @@
         aria-hidden="true"
         class="tooltip__value"
         data-for="{{ id }}"
-        role="alert"
+        tabindex="-1"
     >
         {{ tooltipValue }}
     </div>
