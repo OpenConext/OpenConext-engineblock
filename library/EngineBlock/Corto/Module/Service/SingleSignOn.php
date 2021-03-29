@@ -567,7 +567,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             return $identityProvider->nameNl;
         }
 
-        EngineBlock_ApplicationSingleton::getLog()->warning(
+        EngineBlock_ApplicationSingleton::getLog()->notice(
             'No NL displayName and name found for idp: ' . $identityProvider->entityId,
             array('additional_info' => $additionalLogInfo->toArray())
         );
@@ -587,7 +587,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             return $identityProvider->nameEn;
         }
 
-        EngineBlock_ApplicationSingleton::getLog()->warning(
+        EngineBlock_ApplicationSingleton::getLog()->notice(
             'No EN displayName and name found for idp: ' . $identityProvider->entityId,
             array('additional_info' => $additionalInfo->toArray())
         );
@@ -607,7 +607,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             return $identityProvider->namePt;
         }
 
-        EngineBlock_ApplicationSingleton::getLog()->warning(
+        EngineBlock_ApplicationSingleton::getLog()->notice(
             'No PT displayName and name found for idp: ' . $identityProvider->entityId,
             array('additional_info' => $additionalInfo->toArray())
         );
