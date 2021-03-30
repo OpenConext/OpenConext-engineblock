@@ -3,6 +3,7 @@ import {showSuccessMessage} from './showSuccessMessage';
 import {toggleErrorMessage} from './toggleErrorMessage';
 import {toggleFormFieldsAndButton} from './toggleFormFieldsAndButton';
 import {valid} from "./validation";
+import {requestFormAnnouncementId} from '../../selectors';
 
 /**
  * Ensure submitting the form is possible.
@@ -34,6 +35,8 @@ export const attachClickHandlerToForm = (form, parentSection, noAccess) => {
     if (!valid(formData)) {
       return false;
     }
+
+    document.getElementById(requestFormAnnouncementId).innerHTML = '';
 
     fetch('/authentication/idp/performRequestAccess', {
       method: 'POST',
