@@ -59,6 +59,7 @@ return $overrides + [
     'wayf_defaultIdp_start'     => 'Als je %organisation_noun% niet in de lijst staat,',
     'wayf_defaultIdp_linkText'  => 'is %defaultIdpName% beschikbaar als alternatief.',
     'wayf_idp_title_screenreader' => 'Inloggen met ',
+    'wayf_idp_title_noaccess_screenreader'  => 'Geen toegang met',
 
     // Consent
     'consent_h1_text'   => 'Ga je akkoord met het delen van je informatie?',

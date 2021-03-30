@@ -60,6 +60,7 @@ return $overrides + [
     'wayf_defaultIdp_start'     => 'If your %organisation_noun% is not listed,',
     'wayf_defaultIdp_linkText'  => '%defaultIdpName% is available as an alternative.',
     'wayf_idp_title_screenreader' => 'Login with ',
+    'wayf_idp_title_noaccess_screenreader'  => 'No access with',
 
     // Consent
     'consent_h1_text'   => 'Do you consent to sharing your information?',

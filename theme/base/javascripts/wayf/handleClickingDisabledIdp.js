@@ -6,7 +6,7 @@ import {hideSuccessMessage} from './noAccess/hideSuccessMessage';
 import {attachClickHandlerToRequestButton} from './noAccess/attachClickHandlerToRequestButton';
 import {setConnectability} from './deleteDisable/setConnectability';
 import {getData} from '../utility/getData';
-import {idpClass, idpSelector, noAccessFormSelector, noAccessLi, noAccessSectionSelector, noAccessTitle} from '../selectors';
+import {idpClass, idpFormSelector, idpSelector, noAccessFormSelector, noAccessIdpTitleId, noAccessLi, noAccessSectionSelector, noAccessTitle} from '../selectors';
 
 export const handleClickingDisabledIdp = (element) => {
   let target = element;
@@ -20,6 +20,10 @@ export const handleClickingDisabledIdp = (element) => {
   const cloneOfIdp = cloneIdp(target);
   // ensure clone is not tabbable as there's no action to be taken there
   cloneOfIdp.setAttribute('tabindex', '-1');
+  // change titleText of clone to represent state of clone
+  cloneOfIdp.querySelector(`#${noAccessIdpTitleId}`).firstElementChild.innerHTML = getData(li, 'titlestart');
+  // remove form so the login button is not there
+  cloneOfIdp.querySelector(idpFormSelector).remove();
   const connectable = getData(target, 'connectable') === 'true';
 
   setConnectability(noAccess, connectable);

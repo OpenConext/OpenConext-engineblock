@@ -88,6 +88,7 @@ export const noAccessFieldsetsSelector = '.noAccess__requestForm fieldset';
 export const noAccessTitle = '.noAccess__title';
 export const noAccessUnconnectableClass = 'wayf__noAccess--unconnectable';
 export const noAccessConnectableClass = 'wayf__noAccess--connectable';
+export const noAccessIdpTitleId = 'temp_clone';
 export const formErrorClass = 'form__error';
 export const succesMessageSelector = '.notification__success';
 export const entityIdInputSelector = 'input[name="idpEntityId"]';
