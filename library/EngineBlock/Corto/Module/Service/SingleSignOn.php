@@ -313,6 +313,12 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         $acsLocation = !empty($_GET['acs-location']) ? $_GET['acs-location']: null;
         $acsIndex    = !empty($_GET['acs-index'])    ? $_GET['acs-index']   : null;
         $binding     = !empty($_GET['acs-binding'])  ? $_GET['acs-binding'] : null;
+        $destination = null;
+        if (array_key_exists('SCRIPT_URL', $_SERVER)){
+            $destination = $_SERVER['SCRIPT_URL'];
+        } else if (array_key_exists('REDIRECT_URL', $_SERVER)){
+            $destination = $_SERVER['REDIRECT_URL'];
+        }
 
         // Requested relay state
         $relayState  = !empty($_GET['RelayState'])   ? $_GET['RelayState']  : null;
@@ -336,6 +342,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         $request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
         if ($keyid = $this->_server->getKeyId()) {
             $request->setKeyId($keyid);
+        }
+        if ($destination) {
+            // Set for logging purposes (LogLogin Command) note that only the REQUEST_URI (no hostname + protocol)
+            $sspRequest->setDestination($destination);
         }
 
         $request->setUnsolicited();
