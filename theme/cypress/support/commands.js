@@ -144,3 +144,21 @@ Cypress.Commands.add('selectAccountButton', (keyboard = true, selector = '.previ
 
   cy.get(selector).click({force: true});
 });
+
+Cypress.Commands.add('visitAndRemoveDebugToolbar', (selector = 'https://engine.vm.openconext.org/functional-testing/wayf', failOnStatusCode = true) => {
+  if (failOnStatusCode) {
+    cy.visit(selector).then(() => {
+      cy.get('.sf-toolbar').then(($toolbar) => {
+        $toolbar.remove();
+      });
+    });
+    return;
+  }
+
+  cy.visit(selector, {failOnStatusCode: false
+  }).then(() => {
+    cy.get('.sf-toolbar').then(($toolbar) => {
+      $toolbar.remove();
+    });
+  });
+});
