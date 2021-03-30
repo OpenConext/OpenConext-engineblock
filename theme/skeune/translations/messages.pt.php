@@ -38,7 +38,7 @@ return $overrides + [
     'wayf_noscript_warning_end'     => 'You can, off course, still log in.',
     'wayf_delete_account_screenreader'       => 'Delete %idpTitle% from your accounts',
     'wayf_deleted_account_screenreader'      => ' was deleted from your accounts',
-    'wayf_remaining_idps_title_screenreader' => 'Add an account from the list below',
+    'wayf_remaining_idps_title_screenreader' => 'Login with an account from the list below',
     'wayf_select_account_screenreader'       => 'Select an account from the list below',
     'wayf_search_placeholder'   => 'Search...',
     'wayf_search_screenreader'          => 'Search for an %organisationNoun%',
