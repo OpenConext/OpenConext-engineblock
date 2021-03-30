@@ -12,9 +12,17 @@
         </span>
     {% endif %}
     {% if delete %}
+        {% if idp['displayTitle'] is defined %}
+            {% set idpTitle = idp['displayTitle'] %}
+        {% elseif idp['title'] is defined %}
+            {% set idpTitle = idp['title'] %}
+        {% else %}
+            {% set idpTitle = '' %}
+        {% endif %}
+        {{ idpTitle }}
         <span class="idp__delete">
             <span class="visually-hidden">
-                {{ 'wayf_delete_account_screenreader'|trans }}
+                {{ 'wayf_delete_account_screenreader'|trans({'%idpTitle%': idpTitle}) }}
             </span>
         </span>
     {% endif %}

@@ -35,7 +35,7 @@ return $overrides + [
     'wayf_apu'                  => 'Probeer het opnieuw met andere zoektermen',
     'wayf_noscript_warning_intro'     => 'Je kunt geen gebruikte accounts onthouden en niet zoeken zonder JavaScript. Zet JavaScript aan in je browser als je deze functionaliteiten toch wenst te gebruiken.',
     'wayf_noscript_warning_end'     => 'Vanzelfsprekend kun je wel gewoon inloggen.',
-    'wayf_delete_account_screenreader'       => 'Verwijderen uit je accounts',
+    'wayf_delete_account_screenreader'       => 'Verwijder %idpTitle% uit je accounts',
     'wayf_deleted_account_screenreader'      => ' werd verwijderd uit uw accounts',
     'wayf_remaining_idps_title_screenreader' => 'Voeg een account toe uit de onderstaande lijst',
     'wayf_select_account_screenreader'       => 'Selecteer een account uit de onderstaande lijst',
