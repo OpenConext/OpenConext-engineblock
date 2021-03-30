@@ -1,5 +1,12 @@
 <?php
-return [
+
+$overrides = [];
+$overridesFile = __DIR__ . '/overrides.pt.php';
+if (file_exists($overridesFile)) {
+    $overrides = require $overridesFile;
+}
+
+return $overrides + [
     // General
     'search'                    => 'Procure por uma %organisationNoun%...',
     'log_in_to'                 => 'Seleccione uma %organisationNoun% para se autenticar no serviço:',
