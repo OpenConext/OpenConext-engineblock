@@ -89,8 +89,8 @@ class Wayf extends Twig_Extension
                     [
                         'entityId' => $idp['EntityID'],
                         'connected' => $idp['Access'] === '1',
-                        'displayTitle' => $idp['Name_' . $locale],
-                        'title' => strtolower($idp['Name_' . $locale]),
+                        'displayTitle' => $idp['Name'],
+                        'title' => strtolower($idp['Name']),
                         'keywords' => strtolower(join('|', $idpKeywords)),
                         'logo' => $idp['Logo'],
                         'isDefaultIdp' => (bool) $idp['isDefaultIdp'],
@@ -101,8 +101,8 @@ class Wayf extends Twig_Extension
             $formattedIdpList[] = [
                 'entityId' => $idp['EntityID'],
                 'connected' => $idp['Access'] === '1',
-                'displayTitle' => $idp['Name_'.$locale],
-                'title' => strtolower($idp['Name_'.$locale]),
+                'displayTitle' => $idp['Name'],
+                'title' => strtolower($idp['Name']),
                 'keywords' => strtolower(join('|', $idpKeywords)),
                 'logo' => $idp['Logo'],
                 'isDefaultIdp' => (bool) $idp['isDefaultIdp'],

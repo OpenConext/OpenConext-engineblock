@@ -106,7 +106,7 @@ HTML
     'cancel'                => 'Annuleren',
     'send'                  => 'Verstuur',
     'close'                 => 'Sluiten',
-
+    'required'              => 'Verplicht',
     'send_confirm'          => 'Je verzoek is verzonden',
     'send_confirm_desc'     => '<p>Je verzoek is doorgestuurd naar de juiste persoon binnen jouw %organisationNoun%. Het is aan deze persoon om actie te ondernemen op basis van jouw verzoek. Het kan zijn dat er nog afspraken gemaakt moeten worden tussen jouw %organisationNoun% en de dienstaanbieder.</p>',
 
