@@ -55,7 +55,8 @@ class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter
             $this->_request->getKeyId(),
             $requesterChain,
             $this->_response->getNameIdValue(),
-            $this->_response->getAssertion()->getAuthnContextClassRef()
+            $this->_response->getAssertion()->getAuthnContextClassRef(),
+            $this->_request->getDestination()
         );
     }
 }
