@@ -8,7 +8,7 @@
     </h2>
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/search.html.twig' %}
 
-    {% if showIdPBanner %}
+    {% if showIdPBanner is defined and showIdPBanner %}
         {% set requestUri %}
             {% if '?' in app.request.requestUri %}
                 {{ app.request.requestUri|replace({'?': '#defaultIdp?'}) }}
@@ -27,7 +27,11 @@
         } %}
     {% endif %}
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/rememberChoice.html.twig' %}
-    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpList.html.twig' with { idpList: connectedIdps.formattedIdpList, delete: false, listName: 'remaining', id: 'remainingIdps__title', showIdpBanner: showIdpBanner } %}
+    {% if showIdPBanner is defined and showIdPBanner %}
+        {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpList.html.twig' with { idpList: connectedIdps.formattedIdpList, delete: false, listName: 'remaining', id: 'remainingIdps__title', showIdPBanner: showIdPBanner } %}
+    {% else %}
+        {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpList.html.twig' with { idpList: connectedIdps.formattedIdpList, delete: false, listName: 'remaining', id: 'remainingIdps__title', showIdPBanner: false } %}
+    {% endif %}
 
     <div id="idpTemplate" class="hidden">
         {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idp.html.twig' with { idp: connectedIdps.formattedIdpList.0, delete: false, listName: 'template', loop: {index: 1} } %}
