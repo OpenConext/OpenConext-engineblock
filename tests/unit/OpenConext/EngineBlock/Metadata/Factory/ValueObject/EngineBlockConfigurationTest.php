@@ -44,16 +44,16 @@ class EngineBlockConfigurationTest extends TestCase
             ->andReturn($suitName);
         $translator
             ->shouldReceive('trans')
-            ->with('metadata_organization_name')->once()
-            ->andReturn($orgName);
+            ->with('metadata_organization_url')->once()
+            ->andReturn($orgUrl);
         $translator
             ->shouldReceive('trans')
             ->with('metadata_organization_displayname')->once()
             ->andReturn($orgDisplayName);
         $translator
             ->shouldReceive('trans')
-            ->with('metadata_organization_url')->once()
-            ->andReturn($orgUrl);
+            ->with('metadata_organization_name')->once()
+            ->andReturn($orgName);
 
         $mail = 'mail@example.org';
         $description = 'The EngineBlock';
