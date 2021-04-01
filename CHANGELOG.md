@@ -5,6 +5,16 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.5.0
+A bit of everything release. Most notable changes are:
+
+**Features and bugfixes**
+- The logout page was styled #1097
+- The IdP SSO endpoint URI used for EngineBlock authentications is now logged #1095
+- Translation log-spam issues where resolved #1096
+- Translation override issues where addressed #1098
+- Accessability improvements have been applied to the WAYF #1099
+
 ## 6.4.7
 **Features and fixes**
 - Replaced the SURFnet favicon by the openconext one
