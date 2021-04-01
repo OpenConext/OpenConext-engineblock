@@ -2,7 +2,7 @@ import {terminalLog} from '../../functions/terminalLog';
 
 context('Consent verify a11y', () => {
   beforeEach(() => {
-    cy.visitAndRemoveDebugToolbar('https://engine.vm.openconext.org/functional-testing/consent');
+    cy.visit('https://engine.vm.openconext.org/functional-testing/consent');
   });
 
   it('contains no a11y problems on load', () => {

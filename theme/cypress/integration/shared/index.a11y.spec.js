@@ -2,7 +2,7 @@ import {terminalLog} from '../../functions/terminalLog';
 
 context('Index verify a11y', () => {
   beforeEach(() => {
-    cy.visitAndRemoveDebugToolbar('https://engine.vm.openconext.org/');
+    cy.visit('https://engine.vm.openconext.org/');
   });
 
 
