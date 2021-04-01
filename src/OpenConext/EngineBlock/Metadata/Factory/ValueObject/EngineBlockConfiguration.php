@@ -41,14 +41,24 @@ class EngineBlockConfiguration
     private $engineHostName;
 
     /**
-     * @var Logo
+     * @var string
      */
-    private $logo;
+    private $organizationName;
 
     /**
      * @var string
      */
-    private $supportUrl;
+    private $organizationDisplayName;
+
+    /**
+     * @var string
+     */
+    private $organizationUrl;
+
+    /**
+     * @var Logo
+     */
+    private $logo;
 
     /**
      * @var string
@@ -76,7 +86,9 @@ class EngineBlockConfiguration
     ) {
         $this->suiteName = $translator->trans('suite_name');
         $this->engineHostName = $engineHostName;
-        $this->supportUrl = $translator->trans('openconext_support_url');
+        $this->organizationName = $translator->trans('metadata_organization_name');
+        $this->organizationDisplayName = $translator->trans('metadata_organization_displayname');
+        $this->organizationUrl = $translator->trans('metadata_organization_url');
         $this->supportMail = $supportMail;
         $this->description = $description;
 
@@ -89,9 +101,9 @@ class EngineBlockConfiguration
         $this->logo->height = $logoHeight;
 
         // Create the contact person data for the EB SP entity
-        $support = ContactPerson::from('support', $this->suiteName, 'Support', $this->supportMail);
-        $technical = ContactPerson::from('technical', $this->suiteName, 'Support', $this->supportMail);
-        $administrative = ContactPerson::from('administrative', $this->suiteName, 'Support', $this->supportMail);
+        $support = ContactPerson::from('support', $this->organizationName, 'Support', $this->supportMail);
+        $technical = ContactPerson::from('technical', $this->organizationName, 'Support', $this->supportMail);
+        $administrative = ContactPerson::from('administrative', $this->organizationName, 'Support', $this->supportMail);
 
         $this->contactPersons = [$support, $technical, $administrative];
     }
@@ -108,7 +120,7 @@ class EngineBlockConfiguration
 
     public function getOrganization() : Organization
     {
-        return new Organization($this->suiteName, $this->suiteName, $this->supportUrl);
+        return new Organization($this->organizationName, $this->organizationDisplayName, $this->organizationUrl);
     }
 
     public function getLogo(): Logo

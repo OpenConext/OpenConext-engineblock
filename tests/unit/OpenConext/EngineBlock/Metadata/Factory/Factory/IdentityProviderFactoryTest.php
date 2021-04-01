@@ -95,8 +95,18 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
 
         $this->translator->expects($this->at(1))
             ->method('trans')
-            ->with('openconext_support_url')
-            ->willReturn('configuredSupportUrl');
+            ->with('metadata_organization_name')
+            ->willReturn('configuredOrganizationName');
+
+        $this->translator->expects($this->at(2))
+            ->method('trans')
+            ->with('metadata_organization_displayname')
+            ->willReturn('configuredOrganizationDisplayName');
+
+        $this->translator->expects($this->at(3))
+            ->method('trans')
+            ->with('metadata_organization_url')
+            ->willReturn('configuredOrganizationUrl');
 
         $this->configuration = new EngineBlockConfiguration(
             $this->translator,
@@ -121,13 +131,13 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
         $logo->height = 1009;
 
         // Organization we would expect
-        $organization = new Organization('test-suite', 'test-suite', 'configuredSupportUrl');
+        $organization = new Organization('configuredOrganizationName', 'configuredOrganizationDisplayName', 'configuredOrganizationUrl');
 
         // contacts we would expect
         $contactPersons = [
-            ContactPerson::from('support', 'test-suite', 'Support', 'configuredSupportMail'),
-            ContactPerson::from('technical', 'test-suite', 'Support', 'configuredSupportMail'),
-            ContactPerson::from('administrative', 'test-suite', 'Support', 'configuredSupportMail'),
+            ContactPerson::from('support', 'configuredOrganizationName', 'Support', 'configuredSupportMail'),
+            ContactPerson::from('technical', 'configuredOrganizationName', 'Support', 'configuredSupportMail'),
+            ContactPerson::from('administrative', 'configuredOrganizationName', 'Support', 'configuredSupportMail'),
         ];
 
         $this->urlProvider->expects($this->exactly(1))
