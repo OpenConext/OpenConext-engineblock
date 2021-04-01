@@ -33,6 +33,10 @@ class EngineBlockConfigurationTest extends TestCase
     public function test_configuration_creation()
     {
         $suitName = 'OpenestConext';
+        $orgUrl = 'https://www.example.org';
+        $orgName = 'OpenestConext Company';
+        $orgDisplayName = 'OpenestConext Company Inc.';
+
         $translator = m::mock(TranslatorInterface::class);
         $translator
             ->shouldReceive('trans')
@@ -40,10 +44,17 @@ class EngineBlockConfigurationTest extends TestCase
             ->andReturn($suitName);
         $translator
             ->shouldReceive('trans')
-            ->with('openconext_support_url')->once()
-            ->andReturn('https://www.example.org');
+            ->with('metadata_organization_name')->once()
+            ->andReturn($orgName);
+        $translator
+            ->shouldReceive('trans')
+            ->with('metadata_organization_displayname')->once()
+            ->andReturn($orgDisplayName);
+        $translator
+            ->shouldReceive('trans')
+            ->with('metadata_organization_url')->once()
+            ->andReturn($orgUrl);
 
-        $url = 'https://www.example.org';
         $mail = 'mail@example.org';
         $description = 'The EngineBlock';
         $logo = '/images/logo.png';
