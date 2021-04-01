@@ -98,8 +98,8 @@ class EngineBlockConfigurationTest extends TestCase
         $this->assertEquals($height, $configuration->getLogo()->height);
 
         $this->assertInstanceOf(Organization::class, $configuration->getOrganization());
-        $this->assertEquals($url, $configuration->getOrganization()->url);
-        $this->assertEquals($suitName, $configuration->getOrganization()->name);
-        $this->assertEquals($suitName, $configuration->getOrganization()->displayName);
+        $this->assertEquals($orgUrl, $configuration->getOrganization()->url);
+        $this->assertEquals($orgName, $configuration->getOrganization()->name);
+        $this->assertEquals($orgDisplayName, $configuration->getOrganization()->displayName);
     }
 }
