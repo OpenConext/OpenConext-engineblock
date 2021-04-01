@@ -169,7 +169,7 @@ There are a lot of error pages.  To test all different kinds, you can use the ur
 - index.html.twig: `templates > modules > authentication > view > index > index.html.twig`.  You can use `https://engine.vm.openconext.org/` to develop the page.
 - cookie removal page: `templates > modules > authentication > view > identityprovider > remove-cookies.html.twig`.  You can use `https://engine.vm.openconext.org/authentication/idp/remove-cookies` to develop the page.
 - debug page: `templates > modules > authentication > view > proxy > debug-idp-response.html.twig`.  You can use `https://engine.vm.openconext.org/authentication/sp/debug` to develop the page.
-
+- logout page: `templates > modules > logout > view > index > index.html.twig`.  You can use `https://engine.vm.openconext.org/logout` to develop the page.
 
 #### Supported feature / testing flags
 

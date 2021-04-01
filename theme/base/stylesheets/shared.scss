@@ -86,6 +86,42 @@ body {
         overflow: hidden;
     }
 
+    .page__header {
+        font-family: 'Nunito', sans-serif;
+    }
+
+    .page__title {
+        @include font-style-xl;
+        background-color: $yellow;
+        color: $black;
+        line-height: calculateRem(26px);
+        margin: 0;
+        padding: calculateRem(26px) 2rem;
+
+        @include screen('mobile') {
+            padding: .8125rem 1rem;
+        }
+
+        @include screen('smallMobile') {
+            padding: .8125rem .5rem;
+        }
+    }
+
+    .page__content {
+        @include border-bottom-radius(8px);
+        background-color: $gray;
+        box-shadow: 0 3px 0 2px $darkishBlueTwo;
+        padding: 2rem 2rem 2.5rem;
+
+        @include screen('mobile') {
+            padding: 2rem 1rem 1rem;
+        }
+
+        @include screen('smallMobile') {
+            padding: 1.5rem .5rem .5rem;
+        }
+    }
+
     > .container {
         > header {
             > h1.redirectBar,
@@ -116,25 +152,6 @@ body {
             box-shadow: 0 3px 0 2px $darkishBlueTwo;
 
             > header {
-                font-family: 'Nunito', sans-serif;
-
-                h1 {
-                    @include font-style-xl;
-                    background-color: $yellow;
-                    color: $black;
-                    line-height: calculateRem(26px);
-                    margin: 0;
-                    padding: calculateRem(26px) 2rem;
-
-                    @include screen('mobile') {
-                        padding: .8125rem 1rem;
-                    }
-
-                    @include screen('smallMobile') {
-                        padding: .8125rem .5rem;
-                    }
-                }
-
                 h2 {
                     background-color: $gray;
                     color: $green;
