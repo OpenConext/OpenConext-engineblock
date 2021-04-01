@@ -33,6 +33,10 @@ class EngineBlockConfigurationTest extends TestCase
     public function test_configuration_creation()
     {
         $suitName = 'OpenestConext';
+        $orgUrl = 'https://www.example.org';
+        $orgName = 'OpenestConext Company';
+        $orgDisplayName = 'OpenestConext Company Inc.';
+
         $translator = m::mock(TranslatorInterface::class);
         $translator
             ->shouldReceive('trans')
@@ -40,10 +44,17 @@ class EngineBlockConfigurationTest extends TestCase
             ->andReturn($suitName);
         $translator
             ->shouldReceive('trans')
-            ->with('openconext_support_url')->once()
-            ->andReturn('https://www.example.org');
+            ->with('metadata_organization_name')->once()
+            ->andReturn($orgName);
+        $translator
+            ->shouldReceive('trans')
+            ->with('metadata_organization_displayname')->once()
+            ->andReturn($orgDisplayName);
+        $translator
+            ->shouldReceive('trans')
+            ->with('metadata_organization_url')->once()
+            ->andReturn($orgUrl);
 
-        $url = 'https://www.example.org';
         $mail = 'mail@example.org';
         $description = 'The EngineBlock';
         $logo = '/images/logo.png';
@@ -69,17 +80,17 @@ class EngineBlockConfigurationTest extends TestCase
         $this->assertCount(3, $contactPersons);
         $this->assertEquals($mail, $contactPersons[0]->emailAddress);
         $this->assertEquals('Support', $contactPersons[0]->surName);
-        $this->assertEquals($suitName, $contactPersons[0]->givenName);
+        $this->assertEquals($orgName, $contactPersons[0]->givenName);
         $this->assertEquals('support', $contactPersons[0]->contactType);
 
         $this->assertEquals($mail, $contactPersons[1]->emailAddress);
         $this->assertEquals('Support', $contactPersons[1]->surName);
-        $this->assertEquals($suitName, $contactPersons[1]->givenName);
+        $this->assertEquals($orgName, $contactPersons[1]->givenName);
         $this->assertEquals('technical', $contactPersons[1]->contactType);
 
         $this->assertEquals($mail, $contactPersons[2]->emailAddress);
         $this->assertEquals('Support', $contactPersons[2]->surName);
-        $this->assertEquals($suitName, $contactPersons[2]->givenName);
+        $this->assertEquals($orgName, $contactPersons[2]->givenName);
         $this->assertEquals('administrative', $contactPersons[2]->contactType);
 
         $this->assertInstanceOf(Logo::class, $configuration->getLogo());
@@ -88,8 +99,8 @@ class EngineBlockConfigurationTest extends TestCase
         $this->assertEquals($height, $configuration->getLogo()->height);
 
         $this->assertInstanceOf(Organization::class, $configuration->getOrganization());
-        $this->assertEquals($url, $configuration->getOrganization()->url);
-        $this->assertEquals($suitName, $configuration->getOrganization()->name);
-        $this->assertEquals($suitName, $configuration->getOrganization()->displayName);
+        $this->assertEquals($orgUrl, $configuration->getOrganization()->url);
+        $this->assertEquals($orgName, $configuration->getOrganization()->name);
+        $this->assertEquals($orgDisplayName, $configuration->getOrganization()->displayName);
     }
 }

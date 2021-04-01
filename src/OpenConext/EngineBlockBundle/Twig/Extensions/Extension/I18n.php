@@ -79,6 +79,7 @@ class I18n extends Twig_Extensions_Extension_I18n
     private function prepareDefaultPlaceholders(array $args)
     {
         $args[1]['%suiteName%'] = $this->translator->trans('suite_name');
+        $args[1]['%supportUrl%'] = $this->translator->trans('openconext_support_url');
         $args[1]['%organisationNoun%'] = $this->translator->trans('organisation_noun');
         $args[1]['%organisationNounPlural%'] = $this->translator->trans('organisation_noun_plural');
         $args[1]['%accountNoun%'] = $this->translator->trans('account_noun');

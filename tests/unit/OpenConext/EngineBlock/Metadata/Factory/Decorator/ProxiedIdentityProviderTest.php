@@ -84,9 +84,9 @@ class ProxiedIdentityProviderTest extends AbstractEntityTest
 
         // Expected contact persons
         $contactPersons = [
-            ContactPerson::from('support', 'test-suite', 'Support', 'configuredSupportMail'),
-            ContactPerson::from('technical', 'test-suite', 'Support', 'configuredSupportMail'),
-            ContactPerson::from('administrative', 'test-suite', 'Support', 'configuredSupportMail'),
+            ContactPerson::from('support', 'configuredOrganizationName', 'Support', 'configuredSupportMail'),
+            ContactPerson::from('technical', 'configuredOrganizationName', 'Support', 'configuredSupportMail'),
+            ContactPerson::from('administrative', 'configuredOrganizationName', 'Support', 'configuredSupportMail'),
         ];
 
         $overrides['certificates'] = [$this->certificateMock];
@@ -108,8 +108,18 @@ class ProxiedIdentityProviderTest extends AbstractEntityTest
 
         $translator->expects($this->at(1))
             ->method('trans')
-            ->with('openconext_support_url')
-            ->willReturn('configuredSupportUrl');
+            ->with('metadata_organization_name')
+            ->willReturn('configuredOrganizationName');
+
+        $translator->expects($this->at(2))
+            ->method('trans')
+            ->with('metadata_organization_displayname')
+            ->willReturn('configuredOrganizationDisplayName');
+
+        $translator->expects($this->at(3))
+            ->method('trans')
+            ->with('metadata_organization_url')
+            ->willReturn('configuredOrganizationUrl');
 
         $configuration = new EngineBlockConfiguration(
             $translator,

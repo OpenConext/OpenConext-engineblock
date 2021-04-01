@@ -29,6 +29,7 @@ return $overrides + [
     'account_noun' => 'organisation account',
 
     // Email
+    // %supportUrl% can be used as a placeholder for other translations
     'openconext_support_url' => 'https://example.org',
     'openconext_terms_of_use_url' => 'https://example.org',
     'name_id_support_url' => 'https://example.org',
@@ -371,4 +372,9 @@ Your %organisationNoun% has denied you access to this service. You will have to 
     'error_feedback_idp_contact_label_small_authentication_feedback_stepup_callout_unmet_loa' => '',
     'error_feedback_idp_contact_label_small_authentication_feedback_stepup_callout_unknown' => '',
     'error_feedback_idp_contact_label_small_authentication_feedback_metadata_entity_not_found' => '',
+
+    // Metadata
+    'metadata_organization_name' => '%suiteName%',
+    'metadata_organization_displayname' => '%suiteName%',
+    'metadata_organization_url' => '%supportUrl%',
 ];
