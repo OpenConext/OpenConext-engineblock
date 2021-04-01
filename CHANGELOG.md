@@ -9,6 +9,7 @@ More information about our release strategy can be found in the [Development Gui
 A bit of everything release. Most notable changes are:
 
 **Features and bugfixes**
+- Support for Stepup LoA based on PDP decision #1088
 - The logout page was styled #1097
 - The IdP SSO endpoint URI used for EngineBlock authentications is now logged #1095
 - Translation log-spam issues where resolved #1096
