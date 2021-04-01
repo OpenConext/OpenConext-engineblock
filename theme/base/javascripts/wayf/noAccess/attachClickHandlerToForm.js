@@ -3,14 +3,14 @@ import {showSuccessMessage} from './showSuccessMessage';
 import {toggleErrorMessage} from './toggleErrorMessage';
 import {toggleFormFieldsAndButton} from './toggleFormFieldsAndButton';
 import {valid} from "./validation";
-import {scrollToTop} from './scrollToTop';
+import {requestFormAnnouncementId} from '../../selectors';
 
 /**
  * Ensure submitting the form is possible.
  * On success:
  * - hide error message if present
  * - hide no access section
- * - show success message
+ * - show success message & focus on it
  * - hide form fields
  * - hide submit button
  * - show request button
@@ -36,6 +36,8 @@ export const attachClickHandlerToForm = (form, parentSection, noAccess) => {
       return false;
     }
 
+    document.getElementById(requestFormAnnouncementId).innerHTML = '';
+
     fetch('/authentication/idp/performRequestAccess', {
       method: 'POST',
       body: formData,
@@ -50,7 +52,6 @@ export const attachClickHandlerToForm = (form, parentSection, noAccess) => {
       toggleFormFieldsAndButton();
       showSuccessMessage(parentSection, noAccess);
       form.reset();
-      scrollToTop();
     }).catch(function (error) {
       toggleErrorMessage();
       console.log(error);

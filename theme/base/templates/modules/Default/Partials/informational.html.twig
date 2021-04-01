@@ -1,3 +1,3 @@
-<div class="{{ class }}">
+<div class="{{ class }}"{% if id is defined %} id={{ id }}{% endif %}>
     {{ text|raw }}
 </div>

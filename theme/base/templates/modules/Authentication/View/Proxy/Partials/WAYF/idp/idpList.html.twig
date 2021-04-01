@@ -4,6 +4,7 @@
     class="wayf__idpList
           {% if cutoffMet %} wayf__idpList--cutoffMet{% endif %}"
     aria-labelledby="{{ id }}"
+    {% if showIdPBanner and listName == 'remaining' %} aria-describedby="defaultIdpDescription"{% endif %}
 >
 {% endspaceless %}
     {# First show all connected Idps #}

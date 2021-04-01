@@ -1,5 +1,12 @@
 import {savePreviousSelection} from './savePreviousSelection';
-import {configurationId, idpSelector} from '../../selectors';
+import {
+  configurationId,
+  deletedAnnouncementId,
+  idpDeleteDisabledSelector,
+  idpSelector,
+  selectedIdpsLiSelector,
+  toggleButtonSelector,
+} from '../../selectors';
 import * as Cookies from 'js-cookie';
 import {getData} from '../../utility/getData';
 
@@ -12,6 +19,9 @@ export const deleteIdp = (element) => {
   const cookieName = JSON.parse(document.getElementById(configurationId).innerHTML).previousSelectionCookieName;
   const idp = element.closest(idpSelector);
   const id = getData(idp, 'entityid');
+  const parent = idp.parentElement;
+  const title = getData(parent, 'title');
+  const parentIndex = parseInt(getData(parent, 'index'));
   const cookie = JSON.parse(Cookies.get(cookieName));
 
   cookie.forEach((idp, index) => {
@@ -23,5 +33,26 @@ export const deleteIdp = (element) => {
   savePreviousSelection(cookie, cookieName);
 
   // Remove deleted item from html
-  idp.closest('li').remove();
+  parent.remove();
+
+  // Announce delete to screenreaders
+  announceDeletedIdp(title);
+  moveFocus(parentIndex);
 };
+
+function announceDeletedIdp(title) {
+  const deletedAnnouncement = document.getElementById(deletedAnnouncementId);
+  const announcement = getData(deletedAnnouncement, 'announcement');
+  deletedAnnouncement.innerHTML = `${title}${announcement}`;
+}
+
+function moveFocus(index) {
+  const nextAccount = document.querySelector(`${selectedIdpsLiSelector}[data-index="${(index + 1)}"] ${idpDeleteDisabledSelector}`);
+
+  if (!!nextAccount) {
+    nextAccount.focus();
+    return;
+  }
+
+  document.querySelector(toggleButtonSelector).focus();
+}

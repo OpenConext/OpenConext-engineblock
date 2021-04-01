@@ -7,6 +7,7 @@ import {switchConsentSection} from './consent/switchConsentSection';
 import {addClickHandlerOnce} from './utility/addClickHandlerOnce';
 import {
   backButtonSelector,
+  firstRequestFieldId,
   nokButtonSelector,
   tooltipsAndModalLabels,
 } from './selectors';
@@ -68,4 +69,7 @@ export const idpSubmitHandler = (e) => {
   submitForm(e);
 };
 export const cancelButtonClickHandler = (parentSection, noAccess) => cancelButtonClickHandlerCreator(parentSection, noAccess);
-export const requestButtonHandler = () => { toggleFormFieldsAndButton(); };
+export const requestButtonHandler = () => {
+  toggleFormFieldsAndButton();
+  document.getElementById(firstRequestFieldId).focus();
+};

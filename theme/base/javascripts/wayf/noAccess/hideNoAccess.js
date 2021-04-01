@@ -1,4 +1,5 @@
-import {toggleVisibility} from '../../utility/toggleVisibility';
+import {hideElement} from '../../utility/hideElement';
+import {showElement} from '../../utility/showElement';
 
 /**
  * Hide the noAccess section & show the Idp list
@@ -7,6 +8,6 @@ import {toggleVisibility} from '../../utility/toggleVisibility';
  * @param noAccessSection
  */
 export const hideNoAccess = (parentSection, noAccessSection) => {
-  toggleVisibility(noAccessSection);
-  toggleVisibility(parentSection);
+  hideElement(noAccessSection);
+  showElement(parentSection);
 };

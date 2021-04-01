@@ -4,6 +4,12 @@
         text: 'form_general_error'|trans,
     } %}
     <h3 id="noAccess__requestFormTitle" class="visually-hidden">{{ 'wayf_noaccess_title_screenreader'|trans }}</h3>
+    <div
+        aria-live="polite"
+        class="visually-hidden"
+        data-announcement="{{ 'wayf_noaccess_form_announcement_screenreader'|trans }}"
+        id="requestFormAnnouncement"
+    ></div>
     <input type="hidden" name="spName" value="{{ serviceProvider.displayName(locale()) }}" />
     <input type="hidden" name="spEntityId" value="{{ serviceProvider.entityId }}" />
     <input type="hidden" name="idpEntityId" value="" />
@@ -11,26 +17,34 @@
     <fieldset class="hidden">
         <legend class="hidden">Name</legend>
         <label for="name">
-            <span class="visually-hidden">
-                {{ 'required_screenreader'|trans }}
-            </span>
-            <strong>*</strong> {{ 'wayf_noaccess_name'|trans }}
+            <strong aria-hidden="true">*</strong> {{ 'wayf_noaccess_name'|trans }}
         </label>
-        <input type="text" name="name" id="name" minlength="2" />
-        <p class="form__error hidden" data-labelfor="name">
+        <input
+            aria-required="true"
+            autocomplete="name"
+            autofocus="autofocus"
+            name="name"
+            id="name"
+            minlength="2"
+            type="text"
+        />
+        <p class="form__error hidden" data-labelfor="name" id="nameerror">
             {{ 'form_error_name'|trans }}
         </p>
     </fieldset>
     <fieldset class="hidden">
         <legend class="hidden">Email</legend>
         <label for="email">
-            <span class="visually-hidden">
-                {{ 'required'|trans }}
-            </span>
-            <strong>*</strong> {{ 'wayf_noaccess_email'|trans }}
+            <strong aria-hidden="true">*</strong> {{ 'wayf_noaccess_email'|trans }}
         </label>
-        <input type="email" name="email" id="email" />
-        <p class="form__error hidden" data-labelfor="email">
+        <input
+            aria-required="true"
+            autocomplete="email"
+            id="email"
+            name="email"
+            type="email"
+        />
+        <p class="form__error hidden" id="emailerror" data-labelfor="email">
             {{ 'form_error_email'|trans }}
         </p>
     </fieldset>
