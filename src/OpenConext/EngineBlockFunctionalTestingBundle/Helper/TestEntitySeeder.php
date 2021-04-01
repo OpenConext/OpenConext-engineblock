@@ -153,10 +153,9 @@ class TestEntitySeeder
 
         $wayfIdps = array();
         foreach ($identityProviders as $identityProvider) {
+            $name = 'name' . ucfirst($currentLocale);
             $wayfIdp = array(
-                'Name_nl' => $identityProvider->nameNl,
-                'Name_en' => $identityProvider->nameEn,
-                'Name_pt' => $identityProvider->namePt,
+                'Name' => $identityProvider->$name,
                 'Logo' => $identityProvider->logo ? $identityProvider->logo->url : '/images/placeholder.png',
                 'Keywords' => $identityProvider->keywordsEn,
                 'Access' => ($identityProvider->enabledInWayf) ? '1' : '0',
@@ -167,8 +166,8 @@ class TestEntitySeeder
             $wayfIdps[] = $wayfIdp;
         }
 
-        $nameSort = function ($a, $b) use ($currentLocale) {
-            return strtolower($a['Name_'.$currentLocale]) > strtolower($b['Name_'.$currentLocale]);
+        $nameSort = function ($a, $b) {
+            return strtolower($a['Name']) > strtolower($b['Name']);
         };
 
         // Sort the IdP entries by name
