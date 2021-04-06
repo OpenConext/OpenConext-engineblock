@@ -1,8 +1,8 @@
 {% extends '@theme/Default/View/Error/error.html.twig' %}
 
-{% set pageTitle = 'error_unknown_preselected_idp'|trans %}
-{% block pageTitle %}{{ pageTitle }}{% endblock %}
+{% set pageTitle = 'error_unknown_preselected_idp'|trans({'%spName%': feedbackInfoMap['serviceProviderName']}) %}
+{% block pageTitle %}{{ 'error_unknown_preselected_idp'|trans({'%spName%': feedbackInfoMap['serviceProviderName']}) }}{% endblock %}
 {% block title %}{{ parent() }}{% endblock %}
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
-{% block errorMessage %}{{ 'error_unknown_preselected_idp_desc'|trans|raw }}{% endblock %}
+{% block errorMessage %}{{ 'error_unknown_preselected_idp_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName']})|raw }}{% endblock %}

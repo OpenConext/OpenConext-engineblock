@@ -5,4 +5,4 @@
 {% block title %}{{ parent() }}{% endblock %}
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
-{% block errorMessage %}{{ 'error_invalid_attribute_value_desc'|trans({'%attributeName%': attributeName,'%attributeValue%': attributeValue})|raw }}{% endblock %}
+{% block errorMessage %}{{ 'error_invalid_attribute_value_desc'|trans({'%attributeName%': attributeName,'%attributeValue%': attributeValue, '%idpName%': feedbackInfoMap['identityProviderName']})|raw }}{% endblock %}

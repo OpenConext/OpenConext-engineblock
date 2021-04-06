@@ -154,14 +154,14 @@ HTML
     'error_405_desc'                    => 'De HTTP-methode "%requestMethod%" is niet toegestaan ​​voor locatie "%uri%". Ondersteunde methodes zijn: %allowedMethods%.',
     'error_help_desc'                   => '<p></p>',
     'error_no_idps'                     => 'Error - Geen %organisationNounPlural% gevonden',
-    'error_no_idps_desc'                => 'Inloggen op de dienst via %suiteName% is onmogelijk. De dienst is niet gekoppeld met een %organisationNoun%.',
+    'error_no_idps_desc'                => 'Inloggen op %spName% via %suiteName% is onmogelijk. %spName% is niet gekoppeld met een %organisationNoun%.',
     'error_session_lost'                => 'Fout - Sessie is verloren gegaan',
     'error_session_lost_desc'           => 'Om verder te gaan naar de dienst heb je een actieve sessie nodig, maar deze is verlopen. Heb je misschien te lang gewacht met inloggen? Ga terug naar de dienst en probeer het nog een keer. Als dat niet werkt, sluit je browser af en probeer nogmaals opnieuw in te loggen.',
     'error_session_not_started'                => 'Fout - Geen sessie gevonden',
     'error_session_not_started_desc'           => 'Om verder te gaan naar de dienst heb je een actieve sessie nodig, maar we kunnen deze niet vinden. Je browser moet cookies ondersteunen. Ook kan de link die je hebt gebruikt om bij de dienst te komen, verkeerd zijn. Ga terug naar de dienst en probeer het opnieuw. Als dat niet werkt, probeer een andere browser.',
     'error_authorization_policy_violation'            => 'Fout - Geen toegang',
-    'error_authorization_policy_violation_desc'       => 'Neem contact op met de servicedesk van je eigen %organisationNoun% als je toegang tot deze dienst wilt. Vermeld daarbij op welke dienst je probeerde in te loggen en dat je werd tegengehouden door een autorisatieregel van %suiteName%, geconfigureerd door jouw eigen %organisationNoun%.',
-    'error_authorization_policy_violation_info'       => 'Bericht van je %organisationNoun%: ',
+    'error_authorization_policy_violation_desc'       => 'Neem contact op met de helpdesk van %idpName% als je toegang tot %spName% wilt. Vermeld daarbij dat je probeerde in te loggen op %spName% en dat je werd tegengehouden door een autorisatieregel van %suiteName%, geconfigureerd door %idpName%.',
+    'error_authorization_policy_violation_info'       => 'Bericht van %idpName%: ',
     'error_no_message'                  => 'Fout - Geen bericht ontvangen',
     'error_no_message_desc'             => 'We verwachtten een SAML bericht, maar we hebben er geen ontvangen. Er is iets fout gegaan. Probeer het alstublieft opnieuw.',
     'error_invalid_acs_location'        => 'De opgegeven "Assertion Consumer Service" is onjuist of bestaat niet.',
@@ -169,47 +169,51 @@ HTML
     'error_invalid_acs_binding_desc'        => 'Het opgegeven of geconfigureerde "Assertion Consumer Service" Binding Type is onjuist of bestaat niet.',
     'error_unsupported_signature_method' => 'Fout - Ondertekeningsmethode wordt niet ondersteund',
     'error_unsupported_signature_method_desc' => 'De ondertekeningsmethode %arg1% wordt niet ondersteund, upgrade naar RSA-SHA256 (http://www.w3.org/2001/04/xmldsig-more#rsa-sha256).',
-    'error_unknown_preselected_idp' => 'Fout - Dienst niet toegankelijk via %organisationNoun%',
-    'error_unknown_preselected_idp_desc' => 'De %organisationNoun% waarmee je wilt inloggen heeft toegang tot deze dienst niet geactiveerd. Dat betekent dat jij geen gebruik kunt maken van deze dienst via %suiteName%. Neem contact op met de helpdesk van jouw %organisationNoun% als je toegang wilt krijgen tot deze dienst. Geef daarbij aan om welke dienst het gaat (de &lsquo;SP&rsquo;) en waarom je toegang wilt.',
-    'error_unknown_service_provider'              => 'Error - Onbekende dienst',
-    'error_unknown_service_provider_desc'     => 'De verzochte Service Provider is onbekend bij %suiteName%. Wellicht heeft je %organisationNoun% toegang tot deze dienst niet geactiveerd. Wil je gebruik maken van deze dienst, wend je dan tot de helpdesk van je %organisationNoun%.',
-
-
-        'error_unsupported_acs_location_scheme' => 'Fout - URI scheme van de ACS locatie wordt niet ondersteund',
-
-    'error_unknown_identity_provider'              => 'Error - Onbekende %organisationNoun%',
-    'error_unknown_identity_provider_desc'     => 'De %organisationNoun% waarmee je probeert in te loggen is onbekend bij %suiteName%.',
+    'error_unknown_preselected_idp' => 'Fout - %spName% niet toegankelijk via %organisationNoun%',
+    'error_unknown_preselected_idp_desc' => 'De %organisationNoun% waarmee je wilt inloggen heeft toegang tot %spName% niet geactiveerd. Dat betekent dat jij geen gebruik kunt maken van deze dienst via %suiteName%. Neem contact op met de helpdesk van jouw %organisationNoun% als je toegang wilt krijgen tot %spName%. Geef daarbij aan dat het om %spName% gaat en waarom je toegang wilt.',
+    'error_unknown_service_provider'                => 'Error - %spName% onbekend',
+    'error_unknown_service_provider_no_sp_name'     => 'Error - Onbekende dienst',
+    'error_unknown_service_provider_desc'     => '%spName% is onbekend bij %suiteName%. Wellicht heeft je %organisationNoun% toegang tot deze dienst niet geactiveerd. Wil je gebruik maken van %spName%, wend je dan tot de helpdesk van je %organisationNoun%.',
+    'error_unknown_service_provider_desc_no_sp_name' => 'De verzochte Service Provider is onbekend bij %suiteName%. Wellicht heeft je %organisationNoun% toegang tot deze dienst niet geactiveerd. Wil je gebruik maken van deze dienst, wend je dan tot de helpdesk van je %organisationNoun%.',
+    'error_unsupported_acs_location_scheme' => 'Fout - URI scheme van de ACS locatie wordt niet ondersteund',
+    'error_unknown_identity_provider'              => 'Error - %idpName% onbekend',
+    'error_unknown_identity_provider_no_idp_name'   => 'Error - Onbekende %organisationNoun%',
+    'error_unknown_identity_provider_desc'     => '%idpName%, waarmee je probeert in te loggen, is onbekend bij %suiteName%.',
+    'error_unknown_identity_provider_desc_no_idp_name'     => 'De %organisationNoun% waarmee je probeert in te loggen is onbekend bij %suiteName%.',
     'error_generic'                     => 'Fout - Generieke foutmelding',
-    'error_generic_desc'                => 'Inloggen is niet gelukt en we weten niet precies waarom. Probeer het eerst eens opnieuw door terug te gaan naar de dienst en opnieuw in te loggen. Lukt dit niet, neem dan contact op met de helpdesk van je %organisationNoun%.',
+    'error_generic_desc'                => 'Inloggen is niet gelukt en we weten niet precies waarom. Probeer het eerst eens opnieuw door terug te gaan naar %spName% en opnieuw in te loggen. Lukt dit niet, neem dan contact op met de helpdesk van %idpName%.',
+    'error_generic_desc_no_sp_name' => 'Inloggen is niet gelukt en we weten niet precies waarom. Probeer het eerst eens opnieuw door terug te gaan naar de dienst en opnieuw in te loggen. Lukt dit niet, neem dan contact op met de helpdesk van %idpName%.',
+    'error_generic_desc_no_idp_name' => 'Inloggen is niet gelukt en we weten niet precies waarom. Probeer het eerst eens opnieuw door terug te gaan naar %spName% en opnieuw in te loggen. Lukt dit niet, neem dan contact op met de helpdesk van je %organisationNoun%.',
+    'error_generic_desc_no_names' => 'Inloggen is niet gelukt en we weten niet precies waarom. Probeer het eerst eens opnieuw door terug te gaan naar de dienst en opnieuw in te loggen. Lukt dit niet, neem dan contact op met de helpdesk van je %organisationNoun%.',
     'error_missing_required_fields'     => 'Error - Verplichte velden ontbreken',
     'error_missing_required_fields_desc'=> '<p>
-        Jouw %organisationNoun% geeft niet de benodigde informatie vrij. Daarom kun je deze applicatie niet gebruiken.
+        %idpName% geeft niet de benodigde informatie vrij. Daarom kun je %spName% niet gebruiken.
     </p>
     <p>
-        Neem alstublieft contact op met jouw %organisationNoun%. Geef hierbij de onderstaande informatie door.
+        Neem alstublieft contact op met de helpdesk van %idpName%. Geef hierbij de onderstaande informatie door.
     </p>
     <p>
-        Omdat je %organisationNoun% niet de juiste attributen aan %suiteName% doorgeeft is het inloggen mislukt. De volgende attributen zijn vereist om succesvol in te loggen op het %suiteName% platform:
+        Omdat %idpName% niet de juiste attributen aan %suiteName% doorgeeft is het inloggen mislukt. De volgende attributen zijn vereist om succesvol in te loggen op het %suiteName% platform:
         <ul>
             <li>UID</li>
             <li>schacHomeOrganization</li>
         </ul>
     </p>',
     'error_invalid_attribute_value' => 'Fout - Attribuutwaarde niet toegestaan',
-    'error_invalid_attribute_value_desc' => 'Je %organisationNoun% geeft een waarde door in het attribuut %attributeName% ("%attributeValue%") die niet is toegestaan voor deze %organisationNoun%. Inloggen is daarom niet mogelijk. Alleen jouw %organisationNoun% kan dit oplossen. Neem dus contact op met de helpdesk van je eigen %organisationNoun%.',
+    'error_invalid_attribute_value_desc' => '%idpName% geeft een waarde door in het attribuut %attributeName% ("%attributeValue%") die niet is toegestaan voor deze %organisationNoun%. Inloggen is daarom niet mogelijk. Alleen %idpName% kan dit oplossen. Neem dus contact op met de helpdesk van %idpName%.',
     'error_received_error_status_code'     => 'Error - Fout bij Identity Provider',
     'error_received_error_status_code_desc'=> '<p>
-Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus contact moeten opnemen met de (IT-)servicedesk van je eigen %organisationNoun% om te kijken of dit verholpen kan worden.
+Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus contact moeten opnemen met de (IT-)helpdesk van je eigen %organisationNoun% om te kijken of dit verholpen kan worden.
     </p>',
-    'error_received_invalid_response'        => 'Fout - Ongeldig SAML-bericht van %organisationNoun%',
-    'error_received_invalid_signed_response' => 'Fout - Ongeldige handtekening op antwoord %organisationNoun%',
+    'error_received_invalid_response'        => 'Fout - Ongeldig SAML-bericht van %idpName%',
+    'error_received_invalid_signed_response' => 'Fout - Ongeldige handtekening op antwoord van %idpName%',
     'error_stuck_in_authentication_loop' => 'Fout - Je zit vast in een zwart gat',
-    'error_stuck_in_authentication_loop_desc' => 'Je bent succesvol ingelogd bij je %organisationNoun% maar de dienst waar je naartoe wilt stuurt je weer terug naar %suiteName%. Omdat je succesvol bent ingelogd, stuurt %suiteName% je weer naar de dienst, wat resulteert in een oneindig zwart gat. Dit komt waarschijnlijk door een foutje aan de kant van de dienst.',
+    'error_stuck_in_authentication_loop_desc' => 'Je bent succesvol ingelogd bij %idpName% maar %spName% stuurt je weer terug naar %suiteName%. Omdat je succesvol bent ingelogd, stuurt %suiteName% je weer naar %spName%, wat resulteert in een oneindig zwart gat. Dit komt waarschijnlijk door een foutje aan de kant van %spName%.',
     'error_no_authentication_request_received' => 'Fout - Geen authenticatie-aanvraag ontvangen.',
     'error_authn_context_class_ref_blacklisted' => 'Fout - Waarde van AuthnContextClassRef is niet toegestaan',
-    'error_authn_context_class_ref_blacklisted_desc' => '<p>Je kunt niet inloggen omdat je %organisationNoun% een waarde stuurde voor AuthnContextClassRef die niet is toegestaan. Neem contact op met de servicedesk van je %organisationNoun% om dit op te lossen</p>',
+    'error_authn_context_class_ref_blacklisted_desc' => '<p>Je kunt niet inloggen omdat %idpName% een waarde stuurde voor AuthnContextClassRef die niet is toegestaan. Neem contact op met de helpdesk van %idpName% om dit op te lossen</p>',
     'error_invalid_mfa_authn_context_class_ref' => 'Fout - Multi-factor authenticatie mislukt',
-    'error_invalid_mfa_authn_context_class_ref_desc' => '<p>Jouw %organisationNoun% vereist multi-factor authenticatie voor deze dienst. Je tweede factor kon echter niet gevalideerd worden. Neem contact op met de servicedesk van je %organisationNoun% om dit op te lossen.</p>',
+    'error_invalid_mfa_authn_context_class_ref_desc' => '<p>%idpName% vereist multi-factor authenticatie voor deze dienst. Je tweede factor kon echter niet gevalideerd worden. Neem contact op met de helpdesk van %idpName% om dit op te lossen.</p>',
 
     /**
      * %1 AttributeName
@@ -234,7 +238,7 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
     'error_unknown_requesterid_in_authnrequest'         => 'Error - Deze dienst is niet geregistreerd bij %suiteName%.',
     'error_unknown_requesterid_in_authnrequest_desc'    => '<p>Deze dienst is niet bekend.</p>',
     'error_clock_issue_title' => 'Fout - De Assertion is nog niet geldig of is verlopen',
-    'error_clock_issue_desc' => 'Dit komt waarschijnlijk doordat de tijd tussen de %organisationNoun% en %suiteName% te ver uiteen loopt. Controleer de tijd op de IdP.',
+    'error_clock_issue_desc' => 'Dit komt waarschijnlijk doordat de tijd tussen %idpName% en %suiteName% te ver uiteen loopt. Controleer de tijd op de %organisationNoun%.',
     'error_stepup_callout_unknown_title' => 'Fout - Onbekend sterke authenticatie probleem',
     'error_stepup_callout_unknown_desc' => 'Inloggen met sterke authenticatie is niet gelukt en we weten niet precies waarom. Probeer het eerst eens opnieuw door terug te gaan naar de dienst en opnieuw in te loggen. Lukt dit niet, neem dan contact op met de helpdesk van je %organisationNoun%.',
     'error_stepup_callout_unmet_loa_title' => 'Fout - Geen geschikt token gevonden',
