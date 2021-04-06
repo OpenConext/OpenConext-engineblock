@@ -82,15 +82,15 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     }
 
     /**
-     * @return Loa[]|null
+     * @return Loa[]
      * @param Loa[]
      */
     public function getStepupObligations(array $stepUpLoas)
     {
         $requestedAuthncontext = $this->sspMessage->getRequestedAuthnContext();
-        $obligations = null;
-        if ($requestedAuthncontext) {
-            foreach ($requestedAuthncontext as $rac) {
+        $obligations = [];
+        if ($requestedAuthncontext && $requestedAuthncontext['AuthnContextClassRef']) {
+            foreach ($requestedAuthncontext['AuthnContextClassRef'] as $rac) {
                 foreach($stepUpLoas as $loa) {
                     if ($loa->getIdentifier() === $rac){
                         $obligations[] = $loa;

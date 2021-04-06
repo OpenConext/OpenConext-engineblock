@@ -79,8 +79,8 @@ class StepupDecision
         foreach ($pdpLoas as $loaId) {
             $this->pdpLoas[] = $loaRepository->getByIdentifier($loaId);
         }
-        foreach ($authnRequestLoas as $loaId) {
-            $this->authnRequestLoas[] = $loaRepository->getByIdentifier($loaId);
+        foreach ($authnRequestLoas as $loa) {
+            $this->authnRequestLoas[] = $loa;
         }
     }
 

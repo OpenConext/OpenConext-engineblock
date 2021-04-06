@@ -47,7 +47,7 @@ class EngineBlock_Test_Saml2_AuthnRequestAnnotationDecoratorTest extends TestCas
         $request->setIssueInstant(0);
 
         $annotatedRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($request);
-        $this->assertNull($annotatedRequest->getStepupObligations([]));
+        $this->assertEmpty($annotatedRequest->getStepupObligations([]));
     }
 
     public function test_retrieve_loa_obligations_one_match()
@@ -55,7 +55,7 @@ class EngineBlock_Test_Saml2_AuthnRequestAnnotationDecoratorTest extends TestCas
         $request = new AuthnRequest();
         $request->setId('TEST123');
         $request->setIssueInstant(0);
-        $request->setRequestedAuthnContext(['eb_loa']);
+        $request->setRequestedAuthnContext(['AuthnContextClassRef' => ['eb_loa']]);
         $loa = Mockery::mock(Loa::class);
         $loa->shouldReceive('getIdentifier')->andReturn('eb_loa')->once();
 
@@ -71,7 +71,7 @@ class EngineBlock_Test_Saml2_AuthnRequestAnnotationDecoratorTest extends TestCas
         $request = new AuthnRequest();
         $request->setId('TEST123');
         $request->setIssueInstant(0);
-        $request->setRequestedAuthnContext(['eb_loa_2', 'eb_loa_3']);
+        $request->setRequestedAuthnContext(['AuthnContextClassRef' => ['eb_loa_2', 'eb_loa_3']]);
         $loa2 = Mockery::mock(Loa::class);
         $loa2->shouldReceive('getIdentifier')->andReturn('eb_loa_2')->twice();
         $loa3 = Mockery::mock(Loa::class);

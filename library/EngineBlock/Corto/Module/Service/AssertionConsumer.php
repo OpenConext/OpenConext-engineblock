@@ -166,9 +166,10 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         }
 
         $pdpLoas = $receivedResponse->getPdpRequestedLoas();
-
+        $loaRepository = $application->getDiContainer()->getLoaRepository();
+        $authnRequestLoas = $receivedRequest->getStepupObligations($loaRepository->getStepUpLoas());
         // Goto consent if no Stepup authentication is needed
-        if (!$this->_stepupGatewayCallOutHelper->shouldUseStepup($idp, $sp, $pdpLoas)) {
+        if (!$this->_stepupGatewayCallOutHelper->shouldUseStepup($idp, $sp, $authnRequestLoas, $pdpLoas)) {
             $this->_server->sendConsentAuthenticationRequest($receivedResponse, $receivedRequest, $currentProcessStep->getRole(), $this->getAuthenticationState());
             return;
         }
@@ -185,7 +186,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
 
         // Get mapped AuthnClassRef and get NameId
         $nameId = clone $receivedResponse->getNameId();
-        $authnClassRef = $this->_stepupGatewayCallOutHelper->getStepupLoa($idp, $sp, $pdpLoas);
+        $authnClassRef = $this->_stepupGatewayCallOutHelper->getStepupLoa($idp, $sp, $authnRequestLoas, $pdpLoas);
 
         $this->_server->sendStepupAuthenticationRequest($receivedRequest, $currentProcessStep->getRole(), $authnClassRef, $nameId);
     }

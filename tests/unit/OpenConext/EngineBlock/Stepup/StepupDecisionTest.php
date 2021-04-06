@@ -29,6 +29,7 @@ use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlock\Metadata\Utils;
 use OpenConext\EngineBlock\Stepup\StepupDecision;
 use PHPUnit\Framework\TestCase;
+use function reset;
 
 class StepupDecisionTest extends TestCase
 {
@@ -46,7 +47,6 @@ class StepupDecisionTest extends TestCase
         $input,
         $expectedResult
     ) {
-
         $sp = Utils::instantiate(
             ServiceProvider::class,
             [
@@ -104,15 +104,6 @@ class StepupDecisionTest extends TestCase
             ;
         }
 
-        if (is_array($input[2]) && !empty($input[2])) {
-            foreach($input[2] as $loa) {
-                $repo
-                    ->shouldReceive('getByIdentifier')
-                    ->with($loa)
-                    ->andReturn(Loa::create((int)substr($loa,-1), $loa))
-                 ;
-            }
-        }
         if (is_array($input[3]) && !empty($input[3])) {
             foreach($input[3] as $loa) {
                 $repo
@@ -144,18 +135,26 @@ class StepupDecisionTest extends TestCase
             'Use PdP LoA if SP LoA and PdP LoA set and PDP LoA is highest (allow no stepup)' => [['loa2', '', [], ['loa3'], true], [true, 'loa3', true]],
             'Use IdP LoA if IdP LoA is highest and PdP LoA set (allow no stepup)' => [['', 'loa3', [], ['loa2'], true], [true, 'loa3', true]],
             'Use PdP LoA if PdP LoA set (allow no stepup)' => [['', '', [], ['loa3'], true], [true, 'loa3', true]],
-            'Use highest PdP LoA if multiple PdP LoA set (allow no stepup)' => [['', '', [], ['loa3','loa2'], true], [true, 'loa3', true]],
-            'Use highest PdP LoA if multiple PdP LoA set in different order (allow no stepup)' => [['', '', [], ['loa2','loa3'], true], [true, 'loa3', true]],
+            'Use highest PdP LoA if multiple PdP LoA set (allow no stepup)' => [['', '', [], ['loa3', 'loa2'], true], [true, 'loa3', true]],
+            'Use highest PdP LoA if multiple PdP LoA set in different order (allow no stepup)' => [['', '', [], ['loa3', 'loa2'], true], [true, 'loa3', true]],
 
-            'Use AuthnRequest (SP) LoA if SP LoA and PdP LoA set and PDP LoA is highest (allow no stepup)' => [['loa2', '', ['loa3'], [], true], [true, 'loa3', true]],
-            'Use IdP LoA if IdP LoA is highest and AuthnRequest (SP) LoA set (allow no stepup)' => [['', 'loa3', ['loa2'], [], true], [true, 'loa3', true]],
-            'Use PdP LoA if  AuthnRequest (SP) LoA set (allow no stepup)' => [['', '', ['loa3'], [], true], [true, 'loa3', true]],
-            'Use highest AuthnRequest (SP) LoA if multiple LoA set (allow no stepup)' => [['', '', ['loa3','loa2'], [], true], [true, 'loa3', true]],
-            'Use highest AuthnRequest (SP) LoA if multiple LoA set in different order (allow no stepup)' => [['', '', ['loa2','loa3'], [], true], [true, 'loa3', true]],
-            'Use highest AuthnRequest (SP) LoA if multiple LoA set (authn + pdp) in different order (allow no stepup)' => [['', '', ['loa2','loa3'], ['loa2'], true], [true, 'loa3', true]],
+            'Use AuthnRequest (SP) LoA if SP LoA is lower' => [['loa2', '', [$this->buildLoa('loa3')], [], true], [true, 'loa3', true]],
+            'Use IdP LoA if IdP LoA is highest and AuthnRequest (SP) LoA set (allow no stepup)' => [['', 'loa3', [$this->buildLoa('loa2')], [], true], [true, 'loa3', true]],
+            'Use PdP LoA if  AuthnRequest (SP) LoA set (allow no stepup)' => [['', '', [$this->buildLoa('loa3')], [], true], [true, 'loa3', true]],
+            'Use highest AuthnRequest (SP) LoA if multiple LoA set (allow no stepup)' => [['', '', [$this->buildLoa('loa3'), $this->buildLoa('loa2')], [], true], [true, 'loa3', true]],
+            'Use highest AuthnRequest (SP) LoA if multiple LoA set (authn + pdp) in different order (allow no stepup)' => [['', '', [$this->buildLoa('loa2'), $this->buildLoa('loa3')], ['loa2'], true], [true, 'loa3', true]],
 
-            'Use highest LoA from many options (allow no stepup)' => [['loa2', 'loa3', [], ['loa2','loa2','loa3'], true], [true, 'loa3', true]],
-            'Use highest LoA from many different options (allow no stepup)' => [['loa3', 'loa2', [], ['loa2','loa2','loa2'], true], [true, 'loa3', true]],
+            'Use highest LoA from many options (allow no stepup)' => [['loa2', 'loa3', [], ['loa2', 'loa2', 'loa3'], true], [true, 'loa3', true]],
+            'Use highest LoA from many different options (allow no stepup)' => [['loa3', 'loa2', [$this->buildLoa('loa2'), $this->buildLoa('loa2'), $this->buildLoa('loa3')], [], true], [true, 'loa3', true]],
        ];
+    }
+
+    private function buildLoa(string $loaLevel): Loa
+    {
+        $matches = [];
+        preg_match_all('/\d+/', $loaLevel, $matches);
+        $level = (int) reset($matches[0]);
+        $loa = Loa::create($level, $loaLevel);
+        return $loa;
     }
 }
