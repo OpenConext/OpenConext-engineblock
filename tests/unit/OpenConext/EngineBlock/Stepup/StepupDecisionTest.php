@@ -52,7 +52,7 @@ class StepupDecisionTest extends TestCase
             [
                 'entityId' => 'sp',
                 'stepupRequireLoa' => $input[0],
-                'stepupAllowNoToken' => $input[3],
+                'stepupAllowNoToken' => $input[4],
             ]
         );
         $idp = Utils::instantiate(
@@ -67,7 +67,7 @@ class StepupDecisionTest extends TestCase
 
         $repo = $this->buildMockRepository($input);
 
-        $stepupDecision = new StepupDecision($idp, $sp, $input[2], $repo);
+        $stepupDecision = new StepupDecision($idp, $sp, $input[2], $input[3], $repo);
 
         $useStepup = $stepupDecision->shouldUseStepup();
         $stepupLoa = $stepupDecision->getStepupLoa();
@@ -113,33 +113,49 @@ class StepupDecisionTest extends TestCase
                  ;
             }
         }
+        if (is_array($input[3]) && !empty($input[3])) {
+            foreach($input[3] as $loa) {
+                $repo
+                    ->shouldReceive('getByIdentifier')
+                    ->with($loa)
+                    ->andReturn(Loa::create((int)substr($loa,-1), $loa))
+                 ;
+            }
+        }
         return $repo;
     }
 
     public function stepupCoinsAndExpectedResultProvider()
     {
         return [
-            'Use no stepup if no coins set for IdP and SP (do not allow no stepup)' => [[null, null, [], false], [false, '', false]],
-            'Use no stepup if coins empty for IdP and SP (do not allow no stepup)' => [['', '', [], false], [false, '', false]],
-            'Use SP LoA if only SP LoA set (do not allow no stepup)' => [['loa2', '', [], false], [true, 'loa2', false]],
-            'Use IdP LoA if only IdP LoA set (do not allow no stepup)' => [['', 'loa3', [], false], [true, 'loa3', false]],
+            'Use no stepup if no coins set for IdP and SP (do not allow no stepup)' => [[null, null, [], [], false], [false, '', false]],
+            'Use no stepup if coins empty for IdP and SP (do not allow no stepup)' => [['', '', [], [], false], [false, '', false]],
+            'Use SP LoA if only SP LoA set (do not allow no stepup)' => [['loa2', '', [], [], false], [true, 'loa2', false]],
+            'Use IdP LoA if only IdP LoA set (do not allow no stepup)' => [['', 'loa3', [], [], false], [true, 'loa3', false]],
 
-            'Use no stepup if no coins set for IdP and SP (allow no stepup)' => [[null, null, [], true], [false, '', false]],
-            'Use no stepup if coins empty for IdP and SP (allow no stepup)' => [['', '', [], true], [false, '', false]],
-            'Use SP LoA if only SP LoA set (allow no stepup)' => [['loa2', '', [], true], [true, 'loa2', true]],
-            'Use IdP LoA if only IdP LoA set (allow no stepup)' => [['', 'loa3', [], true], [true, 'loa3', true]],
- 
-            'Use SP LoA if SP LoA is higest (allow no stepup)' => [['loa3', 'loa2', [], true], [true, 'loa3', true]],
-            'Use IdP LoA if IdP LoA is highest (allow no stepup)' => [['loa2', 'loa3', [], true], [true, 'loa3', true]],
+            'Use no stepup if no coins set for IdP and SP (allow no stepup)' => [[null, null, [], [], true], [false, '', false]],
+            'Use no stepup if coins empty for IdP and SP (allow no stepup)' => [['', '', [], [], true], [false, '', false]],
+            'Use SP LoA if only SP LoA set (allow no stepup)' => [['loa2', '', [], [], true], [true, 'loa2', true]],
+            'Use IdP LoA if only IdP LoA set (allow no stepup)' => [['', 'loa3', [], [], true], [true, 'loa3', true]],
 
-            'Use PdP LoA if SP LoA and PdP LoA set and PDP LoA is highest (allow no stepup)' => [['loa2', '', ['loa3'], true], [true, 'loa3', true]],
-            'Use IdP LoA if IdP LoA is highest and PdP LoA set (allow no stepup)' => [['', 'loa3', ['loa2'], true], [true, 'loa3', true]],
-            'Use PdP LoA if PdP LoA set (allow no stepup)' => [['', '', ['loa3'], true], [true, 'loa3', true]],
-            'Use highest PdP LoA if multiple PdP LoA set (allow no stepup)' => [['', '', ['loa3','loa2'], true], [true, 'loa3', true]],
-            'Use highest PdP LoA if multiple PdP LoA set in different order (allow no stepup)' => [['', '', ['loa2','loa3'], true], [true, 'loa3', true]],
+            'Use SP LoA if SP LoA is higest (allow no stepup)' => [['loa3', 'loa2', [], [], true], [true, 'loa3', true]],
+            'Use IdP LoA if IdP LoA is highest (allow no stepup)' => [['loa2', 'loa3', [], [], true], [true, 'loa3', true]],
 
-            'Use highest LoA from many options (allow no stepup)' => [['loa2', 'loa3', ['loa2','loa2','loa3'], true], [true, 'loa3', true]],
-            'Use highest LoA from many different options (allow no stepup)' => [['loa3', 'loa2', ['loa2','loa2','loa2'], true], [true, 'loa3', true]],
+            'Use PdP LoA if SP LoA and PdP LoA set and PDP LoA is highest (allow no stepup)' => [['loa2', '', [], ['loa3'], true], [true, 'loa3', true]],
+            'Use IdP LoA if IdP LoA is highest and PdP LoA set (allow no stepup)' => [['', 'loa3', [], ['loa2'], true], [true, 'loa3', true]],
+            'Use PdP LoA if PdP LoA set (allow no stepup)' => [['', '', [], ['loa3'], true], [true, 'loa3', true]],
+            'Use highest PdP LoA if multiple PdP LoA set (allow no stepup)' => [['', '', [], ['loa3','loa2'], true], [true, 'loa3', true]],
+            'Use highest PdP LoA if multiple PdP LoA set in different order (allow no stepup)' => [['', '', [], ['loa2','loa3'], true], [true, 'loa3', true]],
+
+            'Use AuthnRequest (SP) LoA if SP LoA and PdP LoA set and PDP LoA is highest (allow no stepup)' => [['loa2', '', ['loa3'], [], true], [true, 'loa3', true]],
+            'Use IdP LoA if IdP LoA is highest and AuthnRequest (SP) LoA set (allow no stepup)' => [['', 'loa3', ['loa2'], [], true], [true, 'loa3', true]],
+            'Use PdP LoA if  AuthnRequest (SP) LoA set (allow no stepup)' => [['', '', ['loa3'], [], true], [true, 'loa3', true]],
+            'Use highest AuthnRequest (SP) LoA if multiple LoA set (allow no stepup)' => [['', '', ['loa3','loa2'], [], true], [true, 'loa3', true]],
+            'Use highest AuthnRequest (SP) LoA if multiple LoA set in different order (allow no stepup)' => [['', '', ['loa2','loa3'], [], true], [true, 'loa3', true]],
+            'Use highest AuthnRequest (SP) LoA if multiple LoA set (authn + pdp) in different order (allow no stepup)' => [['', '', ['loa2','loa3'], ['loa2'], true], [true, 'loa3', true]],
+
+            'Use highest LoA from many options (allow no stepup)' => [['loa2', 'loa3', [], ['loa2','loa2','loa3'], true], [true, 'loa3', true]],
+            'Use highest LoA from many different options (allow no stepup)' => [['loa3', 'loa2', [], ['loa2','loa2','loa2'], true], [true, 'loa3', true]],
        ];
     }
 }

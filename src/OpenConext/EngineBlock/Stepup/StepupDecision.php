@@ -22,6 +22,7 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Loa;
 use OpenConext\EngineBlock\Metadata\LoaRepository;
+use function count;
 
 class StepupDecision
 {
@@ -36,6 +37,10 @@ class StepupDecision
     /**
      * @var Loa[]
      */
+    private $authnRequestLoas = [];
+    /**
+     * @var Loa[]
+     */
     private $pdpLoas = [];
     /**
      * @var bool
@@ -45,6 +50,7 @@ class StepupDecision
     /**
      * @param IdentityProvider $idp
      * @param ServiceProvider $sp
+     * @param Loa[] $authnRequestLoas
      * @param Loa[] $pdpLoas
      * @param LoaRepository $loaRepository
      * @throws InvalidStepupConfigurationException
@@ -52,6 +58,7 @@ class StepupDecision
     public function __construct(
         IdentityProvider $idp,
         ServiceProvider $sp,
+        array $authnRequestLoas,
         array $pdpLoas,
         LoaRepository $loaRepository
     ) {
@@ -72,11 +79,14 @@ class StepupDecision
         foreach ($pdpLoas as $loaId) {
             $this->pdpLoas[] = $loaRepository->getByIdentifier($loaId);
         }
+        foreach ($authnRequestLoas as $loaId) {
+            $this->authnRequestLoas[] = $loaRepository->getByIdentifier($loaId);
+        }
     }
 
     public function shouldUseStepup() : bool
     {
-        return ($this->spLoa || $this->idpLoa || count($this->pdpLoas) > 0);
+        return ($this->spLoa || $this->idpLoa || count($this->authnRequestLoas) > 0 || count($this->pdpLoas) > 0);
     }
 
     /**
@@ -85,6 +95,7 @@ class StepupDecision
     public function getStepupLoa() : ?Loa
     {
         $desiredLevels = $this->pdpLoas;
+        $desiredLevels += $this->authnRequestLoas;
         if ($this->spLoa) {
             $desiredLevels[] = $this->spLoa;
         }
@@ -108,7 +119,7 @@ class StepupDecision
 
     public function allowNoToken() : bool
     {
-        if ($this->spLoa || $this->idpLoa || count($this->pdpLoas) > 0) {
+        if ($this->spLoa || $this->idpLoa || count($this->authnRequestLoas) > 0 || count($this->pdpLoas) > 0) {
             return $this->spNoToken;
         }
 
