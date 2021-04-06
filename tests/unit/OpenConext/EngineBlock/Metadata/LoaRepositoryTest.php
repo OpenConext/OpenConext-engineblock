@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlock\Metadata;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use OpenConext\EngineBlock\Exception\LoaNotFoundException;
 use PHPUnit\Framework\TestCase;
+use function substr;
 
 class LoaRepositoryTest extends TestCase
 {
@@ -57,6 +58,15 @@ class LoaRepositoryTest extends TestCase
         $this->expectExceptionMessage('Unable to find LoA with identifier "foobar"');
         $repository->getByIdentifier($nonExistingLoa);
 
+    }
+
+    public function test_the_getter_only_returns_eb_loas()
+    {
+        $repository = new LoaRepository($this->getValidConfigAsArray());
+        $loas = $repository->getStepUpLoas();
+        foreach ($loas as $loa) {
+            $this->assertFalse(strpos($loa->getIdentifier(), 'gateway'));
+        }
     }
 
     /**

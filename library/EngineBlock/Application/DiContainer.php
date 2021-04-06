@@ -18,6 +18,7 @@
 
 use Doctrine\ORM\EntityManager;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactor;
+use OpenConext\EngineBlock\Metadata\LoaRepository;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlock\Service\TimeProvider\TimeProviderInterface;
 use OpenConext\EngineBlock\Stepup\StepupEntityFactory;
@@ -376,7 +377,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return StepupGatewayCallOutHelper
+     * @return LoaRepository
      */
     public function getLoaRepository()
     {
