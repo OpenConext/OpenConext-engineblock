@@ -1,8 +1,26 @@
 {% extends '@theme/Default/View/Error/error.html.twig' %}
 
-{% set pageTitle = 'error_unknown_preselected_idp'|trans({'%spName%': feedbackInfoMap['serviceProviderName']}) %}
-{% block pageTitle %}{{ 'error_unknown_preselected_idp'|trans({'%spName%': feedbackInfoMap['serviceProviderName']}) }}{% endblock %}
+{% if withIdpName %}
+    {% set pageTitle = 'error_unknown_preselected_idp'|trans({'%spName%': feedbackInfoMap['serviceProviderName'], '%idpName%': feedbackInfoMap['identityProviderName']}) %}
+{% else %}
+    {% set pageTitle = 'error_unknown_preselected_idp_no_idp_name'|trans({'%spName%': feedbackInfoMap['serviceProviderName']}) %}
+{% endif %}
+
+{% block pageTitle %}
+    {% if withIdpName %}
+        {% set pageTitle = 'error_unknown_preselected_idp'|trans({'%spName%': feedbackInfoMap['serviceProviderName'], '%idpName%': feedbackInfoMap['identityProviderName']}) %}
+    {% else %}
+        {% set pageTitle = 'error_unknown_preselected_idp_no_idp_name'|trans({'%spName%': feedbackInfoMap['serviceProviderName']}) %}
+    {% endif %}
+{% endblock %}
 {% block title %}{{ parent() }}{% endblock %}
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
-{% block errorMessage %}{{ 'error_unknown_preselected_idp_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName']})|raw }}{% endblock %}
+{% block errorMessage %}
+    {% if withIdpName %}
+        {{ 'error_unknown_preselected_idp_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName'], '%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+    {% else %}
+        {{ 'error_unknown_preselected_idp_desc_no_idp_name'|trans({'%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
+    {% endif %}
+{% endblock %}
+

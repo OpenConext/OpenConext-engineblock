@@ -1,6 +1,6 @@
 {% extends '@theme/Default/View/Error/error.html.twig' %}
 
-{% if feedbackInfoMap['serviceProviderName'] is defined and feedbackInfoMap['serviceProviderName'] %}
+{% if withSpName %}
     {% set pageTitle = 'error_unknown_service_provider'|trans({'%spName%': feedbackInfoMap['serviceProviderName']}) %}
 {% else %}
     {% set pageTitle = 'error_unknown_service_provider_no_sp_name'|trans %}
@@ -17,9 +17,13 @@
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
 {% block errorMessage %}
-    {% if withSpName %}
-        {{ 'error_unknown_service_provider_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
+    {% if withSpName and withIdpName %}
+        {{ 'error_unknown_service_provider_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName'], '%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+    {% elseif withSpName %}
+        {{ 'error_unknown_service_provider_desc_no_idp_name'|trans({'%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
+    {% elseif withIdpName %}
+        {{ 'error_unknown_service_provider_desc_no_sp_name'|trans({'%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
     {% else %}
-        {{ 'error_unknown_service_provider_desc_no_sp_name'|trans|raw }}
+        {{ 'error_unknown_service_provider_desc_no_names'|trans|raw }}
     {% endif %}
 {% endblock %}
