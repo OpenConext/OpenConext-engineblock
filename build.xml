@@ -60,6 +60,12 @@
         <echo message="OK"/>
     </target>
 
+    <target name="php-twig-lint" description="Perform syntax check of Twig templates">
+        <exec executable="app/console" failonerror="true">
+            <arg line="lint:twig theme/" />
+        </exec>
+    </target>
+
     <target name="phpmd"
             description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
         <exec executable="vendor/bin/phpmd" failonerror="true">

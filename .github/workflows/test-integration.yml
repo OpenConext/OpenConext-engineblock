@@ -92,10 +92,12 @@ jobs:
                   '
               env:
                   SYMFONY_ENV: ci
-            - name: Run frontend linting tests
+            - name: Run linting tests
               if: always()
               run: |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
+                      echo -e "\nTwig lint\n"  && \
+                      php72 app/console lint:twig theme/ && \
                       cd theme && \
                       echo -e "\nNPM lint\n" && \
                       npm run lint

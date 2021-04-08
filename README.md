@@ -49,6 +49,17 @@ To setup the required tooling on the VM, the following steps might be useful:
     sudo yum install nodejs
     (npm ci && npm run build)
 
+In addition to the npm scripts that are available to run (unit/e2e) tests and quality assurance, you can also use the
+Twig linting tool built into Symfony. To run this linter:
+
+```
+If you are able to run Ant build targets use:
+$ ant php-twig-lint
+
+But you can also run the linter directly from the Symfony console. From the webroot:
+$ php72 ./app/console lint:twig theme/
+```
+
 ## System Requirements
 
 * Linux
