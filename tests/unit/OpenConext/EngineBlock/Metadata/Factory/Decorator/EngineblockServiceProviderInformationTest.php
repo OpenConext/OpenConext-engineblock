@@ -70,13 +70,13 @@ class EngineblockServiceProviderInformationTest extends AbstractEntityTest
         $logo->height = 1009;
 
         // Organization we would expect
-        $organization = new Organization('test-suite', 'test-suite', 'configuredSupportUrl');
+        $organization = new Organization('configuredOrganizationName', 'configuredOrganizationDisplayName', 'configuredOrganizationUrl');
 
         // contacts we would expect
         $contactPersons = [
-            ContactPerson::from('support', 'test-suite', 'Support', 'configuredSupportMail'),
-            ContactPerson::from('technical', 'test-suite', 'Support', 'configuredSupportMail'),
-            ContactPerson::from('administrative', 'test-suite', 'Support', 'configuredSupportMail'),
+            ContactPerson::from('support', 'configuredOrganizationName', 'Support', 'configuredSupportMail'),
+            ContactPerson::from('technical', 'configuredOrganizationName', 'Support', 'configuredSupportMail'),
+            ContactPerson::from('administrative', 'configuredOrganizationName', 'Support', 'configuredSupportMail'),
         ];
 
         // the actual assertions
