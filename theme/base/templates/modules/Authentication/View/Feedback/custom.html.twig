@@ -2,7 +2,7 @@
 
 {% set pageTitle = title %}
 {% block pageTitle %}{{ pageTitle }}{% endblock %}
-{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
+{% block title %}{{ parent() }}{% endblock %}
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
 {% block errorMessage %}{{ description|raw }}{% endblock %}
