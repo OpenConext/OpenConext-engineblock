@@ -2,7 +2,7 @@
 
 {% set pageTitle = 'error_unknown_requesterid_in_authnrequest'|trans %}
 {% block pageTitle %}{{ pageTitle }}{% endblock %}
-{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
+{% block title %}{{ parent() }}{% endblock %}
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
-{% block errorMessage %}{{ 'error_unknown_requesterid_in_authnrequest'|trans|raw }}{% endblock %}
+{% block errorMessage %}{{ 'error_unknown_requesterid_in_authnrequest_desc'|trans|raw }}{% endblock %}
