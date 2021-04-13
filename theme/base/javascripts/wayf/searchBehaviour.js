@@ -28,7 +28,6 @@ export const searchBehaviour = () => {
   // attach handler to search form
   document.querySelector('.wayf__search').addEventListener('submit', event => {
     event.preventDefault();
-    searchAndSortIdps(idpArray, event.target.value);
   });
 
   function searchHandler(idpArray, searchTerm) {
