@@ -84,14 +84,16 @@ The WAYF acceptance tests utilize the `/functional-testing/wayf` endpoint in ord
 the WAYF.
 
 ## Visual regression tests
-While building the new error page styling, visual regression testing was utilized to take control over visual regressions. The `jest-image-snapshot` <sup>1</sup> package is used to perform these tests.
+While building the new error page styling, visual regression testing was utilized to take control over visual regressions. The `cypress-plugin-snapshots` <sup>1</sup> package is used to perform these tests.
 
 Running them is as simple as:
+`EB_THEME=theme_name ant js-visual-regression-tests`
+or if you prefer the cypress CLI
+`$ EB_THEME=theme_name npm run test:visual-regression`
+Do note that you need to set the EB_THEME env variable before running the tests!
 
-`$ ant js-visual-regression-tests`
-
-Snapshots are stored in `__image_snapshots__` directories in a subfolder of the `theme/cypress/integration/visual-regression/` directory, here you will also find diffs if ever your snapshot diverges from the previous snapshot.
+Snapshots are stored in `__image_snapshots__` directories in a subfolder of the `theme/cypress/integration/visual-regression/theme_name` directory, here you will also find diffs if ever your snapshot diverges from the previous snapshot.
 
 :warning: These tests are considered risky tests and are not run on every QA build.
 
-[1] https://github.com/americanexpress/jest-image-snapshot
+[1] https://github.com/meinaart/cypress-plugin-snapshots

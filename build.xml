@@ -187,16 +187,11 @@
         </exec>
     </target>
 
+    <property environment="env" />
     <target name="js-visual-regression-tests">
-        <exec dir="${basedir}/theme" executable="node_modules/.bin/jest" failonerror="true">
-            <arg line="material/javascripts/tests/visual-regression" />
-        </exec>
-    </target>
-
-    <target name="js-visual-regression-tests-update-snapshots">
-        <exec dir="${basedir}/theme" executable="node_modules/.bin/jest" failonerror="true">
-            <arg line="-u" />
-            <arg line="material/javascripts/tests/visual-regression" />
+        <exec dir="${basedir}/theme" executable="node_modules/.bin/cypress" failonerror="true">
+            <env key="CYPRESS_integrationFolder" value="cypress/visual-regression/${env.EB_THEME}" />
+            <arg line="run --browser=chrome --headless" />
         </exec>
     </target>
 

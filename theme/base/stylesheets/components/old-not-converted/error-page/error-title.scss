@@ -15,7 +15,7 @@
         font-size: $f-large;
         font-weight: bold;
         line-height: 1.5em;
-        text-align: justify;
+        text-align: left;
     }
 
     &--institution {
@@ -26,6 +26,10 @@
 
     h2 {
         line-height: 3em;
+
+        @include screen('mobile') {
+            line-height: 1.5em;
+        }
     }
 
     i {
