@@ -48,11 +48,6 @@ class StepupDecision
     private $spNoToken;
 
     /**
-     * @param IdentityProvider $idp
-     * @param ServiceProvider $sp
-     * @param Loa[] $authnRequestLoas
-     * @param Loa[] $pdpLoas
-     * @param LoaRepository $loaRepository
      * @throws InvalidStepupConfigurationException
      */
     public function __construct(
@@ -84,7 +79,17 @@ class StepupDecision
         }
     }
 
-    public function shouldUseStepup() : bool
+    public function shouldUseStepup(): bool
+    {
+        // If the highest level is 1, no step up callout is required.
+        $isLoaAsked = $this->getStepupLoa();
+        if ($isLoaAsked && $isLoaAsked->getLevel() === 1) {
+            return false;
+        }
+        return $isLoaAsked instanceof Loa;
+    }
+
+    private function isLoaRequirementSet(): bool
     {
         return ($this->spLoa || $this->idpLoa || count($this->authnRequestLoas) > 0 || count($this->pdpLoas) > 0);
     }
@@ -92,7 +97,7 @@ class StepupDecision
     /**
      * Find the highest level among all ways to configure a LoA.
      */
-    public function getStepupLoa() : ?Loa
+    public function getStepupLoa(): ?Loa
     {
         $desiredLevels = $this->pdpLoas;
         $desiredLevels += $this->authnRequestLoas;
@@ -117,9 +122,9 @@ class StepupDecision
         return $highestLevel;
     }
 
-    public function allowNoToken() : bool
+    public function allowNoToken(): bool
     {
-        if ($this->spLoa || $this->idpLoa || count($this->authnRequestLoas) > 0 || count($this->pdpLoas) > 0) {
+        if ($this->isLoaRequirementSet()) {
             return $this->spNoToken;
         }
 
