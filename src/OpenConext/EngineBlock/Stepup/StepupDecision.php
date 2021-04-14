@@ -91,6 +91,10 @@ class StepupDecision
 
     private function isLoaRequirementSet(): bool
     {
+        // If the highest level is 1, no step up callout is requred.
+        if ($this->getStepupLoa() && $this->getStepupLoa()->getLevel() === 1) {
+            return false;
+        }
         return ($this->spLoa || $this->idpLoa || count($this->authnRequestLoas) > 0 || count($this->pdpLoas) > 0);
     }
 
