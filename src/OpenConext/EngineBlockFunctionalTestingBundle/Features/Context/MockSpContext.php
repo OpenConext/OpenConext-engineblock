@@ -30,7 +30,6 @@ use SAML2\AuthnRequest;
 use SAML2\XML\saml\Issuer;
 
 /**
- * Class MockSpContext
  * @package OpenConext\EngineBlockFunctionalTestingBundle\Features\Context
  * @SuppressWarnings("PMD")
  */
@@ -61,13 +60,6 @@ class MockSpContext extends AbstractSubContext
      */
     protected $engineBlock;
 
-    /**
-     * @param ServiceRegistryFixture $serviceRegistryFixture
-     * @param EngineBlock $engineBlock
-     * @param MockServiceProviderFactory $mockSpFactory
-     * @param EntityRegistry $mockSpRegistry
-     * @param EntityRegistry $mockIdpRegistry
-     */
     public function __construct(
         ServiceRegistryFixture $serviceRegistryFixture,
         EngineBlock $engineBlock,
@@ -196,6 +188,25 @@ class MockSpContext extends AbstractSubContext
         $issuer->setValue($sp->entityId());
         $request->setIssuer($issuer);
         $request->setAssertionConsumerServiceURL($acsLocation);
+        $sp->setAuthnRequest($request);
+
+        $this->mockSpRegistry->save();
+    }
+    /**
+     * @Given /^SP "([^"]*)" requests LoA "([^"]*)"$/
+     */
+    public function spRequestsLoa($spName, $loa)
+    {
+        /** @var MockServiceProvider $sp */
+        $sp = $this->mockSpRegistry->get($spName);
+
+        $request = new AuthnRequest();
+        $issuer = new Issuer();
+        $issuer->setValue($sp->entityId());
+        $request->setRelayState('RelayState jonguh');
+        $request->setIssuer($issuer);
+        $request->setAssertionConsumerServiceURL($sp->assertionConsumerServiceLocation());
+        $request->setRequestedAuthnContext(['AuthnContextClassRef' => [$loa]]);
         $sp->setAuthnRequest($request);
 
         $this->mockSpRegistry->save();
