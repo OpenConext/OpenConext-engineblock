@@ -18,7 +18,7 @@ return $overrides + [
     'language_switcher'     => 'Wissel van taal',
 
     // FOOTER
-    'log_in_to'     => 'Selecteer een %organisationNoun% om in te loggen bij %arg1%',
+    'log_in_to'     => 'Selecteer een account om in te loggen bij %arg1%',
     'helpLink'       => 'https://wiki.surfnet.nl/display/conextsupport/De+WAYF-pagina',
     'footer_navigation_screenreader'    => 'Footer navigatie',
 
