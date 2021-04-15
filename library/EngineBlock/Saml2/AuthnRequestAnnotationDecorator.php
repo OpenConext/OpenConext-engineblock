@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlock\Metadata\Loa;
 use SAML2\AuthnRequest;
 
 /**
@@ -78,6 +79,26 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     public function getRequestedAuthnContext()
     {
         return $this->sspMessage->getRequestedAuthnContext();
+    }
+
+    /**
+     * @return Loa[]
+     * @param Loa[]
+     */
+    public function getStepupObligations(array $stepUpLoas)
+    {
+        $requestedAuthncontext = $this->sspMessage->getRequestedAuthnContext();
+        $obligations = [];
+        if ($requestedAuthncontext && $requestedAuthncontext['AuthnContextClassRef']) {
+            foreach ($requestedAuthncontext['AuthnContextClassRef'] as $rac) {
+                foreach($stepUpLoas as $loa) {
+                    if ($loa->getIdentifier() === $rac){
+                        $obligations[] = $loa;
+                    }
+                }
+            }
+        }
+        return $obligations;
     }
 
     public function setDebugRequest()

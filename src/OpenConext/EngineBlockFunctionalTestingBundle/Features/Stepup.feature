@@ -59,6 +59,28 @@ Feature:
         And I pass through EngineBlock
       Then the url should match "/functional-testing/SSO-SP/acs"
 
+    Scenario: Stepup authentication should be supported if set through SP AuthnRequest
+      Given SP "SSO-SP" requests LoA "http://vm.openconext.org/assurance/loa3"
+      When I log in at "SSO-SP"
+        And I select "SSO-IdP" on the WAYF
+        And I pass through EngineBlock
+        And I pass through the IdP
+        And Stepup will successfully verify a user
+        And I give my consent
+        And I pass through EngineBlock
+      Then the url should match "/functional-testing/SSO-SP/acs"
+
+    @WIP
+    Scenario: LoA 1 is allowed, but refrains from doing a step up callout
+      Given SP "SSO-SP" requests LoA "http://vm.openconext.org/assurance/loa1"
+      When I log in at "SSO-SP"
+        And I select "SSO-IdP" on the WAYF
+        And I pass through EngineBlock
+        And I pass through the IdP
+        And I give my consent
+        And I pass through EngineBlock
+      Then the url should match "/functional-testing/SSO-SP/acs"
+
     Scenario: If stepup is not used we should still go through consent
       When I log in at "Dummy-SP"
         And I select "Dummy-IdP" on the WAYF
@@ -163,3 +185,13 @@ Feature:
         And Stepup will successfully verify a user with a LoA 2 token
       Then I should see "Error - An error occurred"
         And the url should match "/feedback/unknown-error"
+
+  Scenario: Stepup authentication should be fail when insufficient LoA is provided when LoA set through SP AuthnRequest
+     Given SP "SSO-SP" requests LoA "http://vm.openconext.org/assurance/loa3"
+      When I log in at "SSO-SP"
+       And I select "SSO-IdP" on the WAYF
+       And I pass through EngineBlock
+       And I pass through the IdP
+       And Stepup will successfully verify a user with a LoA 2 token
+      Then I should see "Error - An error occurred"
+       And the url should match "/feedback/unknown-error"

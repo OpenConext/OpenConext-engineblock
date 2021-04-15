@@ -20,12 +20,15 @@ namespace OpenConext\EngineBlock\Metadata;
 
 use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlock\Exception\LoaNotFoundException;
+use function array_key_exists;
 
 /**
  * Retrieve LoA value objects from the configured LoA mapping
  */
 class LoaRepository
 {
+    private const EB = 'eb';
+    private const GW = 'gw';
     /**
      * @var array
      */
@@ -50,8 +53,8 @@ class LoaRepository
             Assertion::string($mapping['engineblock'], 'The EngineBlock LoA must be a string value');
             Assertion::string($mapping['gateway'], 'The Gateway LoA must be a string value');
 
-            $this->store[$mapping['engineblock']] = Loa::create($level, $mapping['engineblock']);
-            $this->store[$mapping['gateway']] = Loa::create($level, $mapping['gateway']);
+            $this->store[self::EB][$mapping['engineblock']] = Loa::create($level, $mapping['engineblock']);
+            $this->store[self::GW][$mapping['gateway']] = Loa::create($level, $mapping['gateway']);
         }
     }
 
@@ -62,9 +65,22 @@ class LoaRepository
      */
     public function getByIdentifier($identifier)
     {
-        if (!array_key_exists($identifier, $this->store)) {
+        if (!array_key_exists($identifier, $this->store[self::EB]) &&
+            !array_key_exists($identifier, $this->store[self::GW])
+        ) {
             throw new LoaNotFoundException(sprintf('Unable to find LoA with identifier "%s"', $identifier));
         }
-        return $this->store[$identifier];
+        if (array_key_exists($identifier, $this->store[self::EB])) {
+            return $this->store[self::EB][$identifier];
+        }
+        return $this->store[self::GW][$identifier];
+    }
+
+    /**
+     * @return Loa[]
+     */
+    public function getStepUpLoas()
+    {
+        return $this->store[self::EB];
     }
 }

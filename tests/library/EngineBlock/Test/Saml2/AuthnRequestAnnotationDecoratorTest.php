@@ -17,6 +17,7 @@
  */
 
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use OpenConext\EngineBlock\Metadata\Loa;
 use PHPUnit\Framework\TestCase;
 use SAML2\AuthnRequest;
 
@@ -37,5 +38,48 @@ class EngineBlock_Test_Saml2_AuthnRequestAnnotationDecoratorTest extends TestCas
             '{"sspMessage":"<?xml version=\"1.0\"?>\n<samlp:AuthnRequest xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\" xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\" ID=\"TEST123\" Version=\"2.0\" IssueInstant=\"1970-01-01T00:00:00Z\"\/>\n","keyId":null,"wasSigned":false,"debug":true,"unsolicited":false,"transparent":false,"deliverByBinding":null}',
             $annotatedRequest->__toString()
         );
+    }
+
+    public function test_retrieve_loa_obligations_no_loa()
+    {
+        $request = new AuthnRequest();
+        $request->setId('TEST123');
+        $request->setIssueInstant(0);
+
+        $annotatedRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($request);
+        $this->assertEmpty($annotatedRequest->getStepupObligations([]));
+    }
+
+    public function test_retrieve_loa_obligations_one_match()
+    {
+        $request = new AuthnRequest();
+        $request->setId('TEST123');
+        $request->setIssueInstant(0);
+        $request->setRequestedAuthnContext(['AuthnContextClassRef' => ['eb_loa']]);
+        $loa = Mockery::mock(Loa::class);
+        $loa->shouldReceive('getIdentifier')->andReturn('eb_loa')->once();
+
+        $annotatedRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($request);
+        $obligations = $annotatedRequest->getStepupObligations([$loa]);
+        $this->assertTrue(is_array($obligations));
+        $this->assertCount(1, $obligations);
+        $this->assertEquals(reset($obligations), $loa);
+    }
+
+    public function test_retrieve_loa_obligations_multiple_matches()
+    {
+        $request = new AuthnRequest();
+        $request->setId('TEST123');
+        $request->setIssueInstant(0);
+        $request->setRequestedAuthnContext(['AuthnContextClassRef' => ['eb_loa_2', 'eb_loa_3']]);
+        $loa2 = Mockery::mock(Loa::class);
+        $loa2->shouldReceive('getIdentifier')->andReturn('eb_loa_2')->twice();
+        $loa3 = Mockery::mock(Loa::class);
+        $loa3->shouldReceive('getIdentifier')->andReturn('eb_loa_3')->twice();
+
+        $annotatedRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($request);
+        $obligations = $annotatedRequest->getStepupObligations([$loa2, $loa3]);
+        $this->assertTrue(is_array($obligations));
+        $this->assertCount(2, $obligations);
     }
 }

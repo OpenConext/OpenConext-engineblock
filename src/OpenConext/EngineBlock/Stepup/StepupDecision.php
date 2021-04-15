@@ -22,6 +22,7 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Loa;
 use OpenConext\EngineBlock\Metadata\LoaRepository;
+use function count;
 
 class StepupDecision
 {
@@ -36,6 +37,10 @@ class StepupDecision
     /**
      * @var Loa[]
      */
+    private $authnRequestLoas = [];
+    /**
+     * @var Loa[]
+     */
     private $pdpLoas = [];
     /**
      * @var bool
@@ -43,15 +48,12 @@ class StepupDecision
     private $spNoToken;
 
     /**
-     * @param IdentityProvider $idp
-     * @param ServiceProvider $sp
-     * @param Loa[] $pdpLoas
-     * @param LoaRepository $loaRepository
      * @throws InvalidStepupConfigurationException
      */
     public function __construct(
         IdentityProvider $idp,
         ServiceProvider $sp,
+        array $authnRequestLoas,
         array $pdpLoas,
         LoaRepository $loaRepository
     ) {
@@ -72,19 +74,33 @@ class StepupDecision
         foreach ($pdpLoas as $loaId) {
             $this->pdpLoas[] = $loaRepository->getByIdentifier($loaId);
         }
+        foreach ($authnRequestLoas as $loa) {
+            $this->authnRequestLoas[] = $loa;
+        }
     }
 
-    public function shouldUseStepup() : bool
+    public function shouldUseStepup(): bool
     {
-        return ($this->spLoa || $this->idpLoa || count($this->pdpLoas) > 0);
+        // If the highest level is 1, no step up callout is required.
+        $isLoaAsked = $this->getStepupLoa();
+        if ($isLoaAsked && $isLoaAsked->getLevel() === 1) {
+            return false;
+        }
+        return $isLoaAsked instanceof Loa;
+    }
+
+    private function isLoaRequirementSet(): bool
+    {
+        return ($this->spLoa || $this->idpLoa || count($this->authnRequestLoas) > 0 || count($this->pdpLoas) > 0);
     }
 
     /**
      * Find the highest level among all ways to configure a LoA.
      */
-    public function getStepupLoa() : ?Loa
+    public function getStepupLoa(): ?Loa
     {
         $desiredLevels = $this->pdpLoas;
+        $desiredLevels += $this->authnRequestLoas;
         if ($this->spLoa) {
             $desiredLevels[] = $this->spLoa;
         }
@@ -106,9 +122,9 @@ class StepupDecision
         return $highestLevel;
     }
 
-    public function allowNoToken() : bool
+    public function allowNoToken(): bool
     {
-        if ($this->spLoa || $this->idpLoa || count($this->pdpLoas) > 0) {
+        if ($this->isLoaRequirementSet()) {
             return $this->spNoToken;
         }
 
