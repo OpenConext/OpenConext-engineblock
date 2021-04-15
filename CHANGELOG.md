@@ -5,6 +5,10 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.5.1
+**Bugfix**
+* Remove forgotten debug statement #1107
+
 ## 6.5.0
 A bit of everything release. Most notable changes are:
 
