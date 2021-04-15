@@ -19,7 +19,7 @@ return $overrides + [
     'language_switcher'     => 'Language switcher',
 
     // FOOTER
-    'log_in_to'     => 'Select an %organisationNoun% to login to %arg1%',
+    'log_in_to'     => 'Select an account to login to %arg1%',
     'helpLink'       => 'https://wiki.surfnet.nl/display/conextsupport/The+WAYF-page',
     'footer_navigation_screenreader'    => 'Footer navigation',
 

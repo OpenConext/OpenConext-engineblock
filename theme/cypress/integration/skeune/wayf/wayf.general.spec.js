@@ -168,7 +168,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
   describe('Should show the remember my choice option', () => {
     it('Ensure some elements are on the page', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true');
-      cy.onPage('Select an organisation to login');
+      cy.onPage('Select an account to login');
       cy.onPage('Remember my choice');
     });
 
