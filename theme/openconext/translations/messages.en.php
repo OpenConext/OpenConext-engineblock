@@ -10,6 +10,7 @@ return $overrides + [
     // General
     'search'                    => 'Search for an %organisationNoun%...',
     'log_in_to'                 => 'Select an %organisationNoun% to login to the service',
+    'hamburger_screenreader'     => 'skip to footer',
 
     // Consent page
     'consent_header_title'                    => '%arg1% needs your information before logging in',
