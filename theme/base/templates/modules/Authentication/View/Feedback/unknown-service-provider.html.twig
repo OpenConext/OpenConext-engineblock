@@ -1,6 +1,6 @@
 {% extends '@theme/Default/View/Error/error.html.twig' %}
 
-{% if feedbackInfoMap['serviceProviderName'] is defined and feedbackInfoMap['serviceProviderName'] %}
+{% if withSpName %}
     {% set pageTitle = 'error_unknown_service_provider'|trans({'%spName%': feedbackInfoMap['serviceProviderName']}) %}
 {% else %}
     {% set pageTitle = 'error_unknown_service_provider_no_sp_name'|trans %}
