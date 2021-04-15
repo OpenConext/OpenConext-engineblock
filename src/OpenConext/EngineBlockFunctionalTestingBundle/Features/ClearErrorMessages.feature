@@ -125,7 +125,7 @@ Feature:
 
   Scenario: I want to log on but this Service Provider is not yet registered at OpenConext
     When I log in at "Unregistered SP"
-    Then I should see "Error - OpenConext Drop Supplies SP unknown"
+    Then I should see "Error - Unknown service"
      And I should see "UR ID:"
      And I should see "IP:"
      And I should see "EC:"
@@ -137,7 +137,7 @@ Feature:
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Error - OpenConext Identities Inc unknown"
+     Then I should see "Error - Unknown organisation"
       And I should see "UR ID:"
       And I should see "IP:"
       And I should see "EC:"
@@ -198,7 +198,7 @@ Feature:
   Scenario: An SP sends a AuthnRequest transparently for an IdP that doesn't exist
      When I log in at SP "Dummy SP" which attempts to preselect nonexistent IdP "DoesNotExist"
      Then the url should match "/authentication/feedback/unknown-preselected-idp"
-      And I should see "Error - OpenConext Drop Supplies SP not accessible through your organisation"
+      And I should see "Service not accessible through organisation"
       And I should see "UR ID:"
       And I should see "IP:"
       And I should see "EC:"
