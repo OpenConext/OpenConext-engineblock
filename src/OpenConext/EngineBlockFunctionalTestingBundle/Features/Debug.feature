@@ -11,7 +11,7 @@ Feature:
 
   Scenario: When a user opens the debug endpoint the wayf should be presented
     When I go to Engineblock URL "/authentication/sp/debug"
-    Then I should see "Selecteer een organisatie om in te loggen bij OpenConext EngineBlock"
+    Then I should see "Selecteer een account om in te loggen bij OpenConext EngineBlock"
 
   Scenario: A user should be able to test a login
     When I go to Engineblock URL "/authentication/sp/debug"
