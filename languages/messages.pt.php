@@ -238,6 +238,7 @@ Não pode usar esta aplicação porque a sua %organisationNoun% não está a for
 </p>',
     'error_invalid_attribute_value' => 'Valor do atributo não permitido',
     'error_invalid_attribute_value_desc' => 'A %idpName% utilizou um valor para o atributo %attributeName% ("%attributeValue%") o que não é permitido para esta %organisationNoun%. Desta forma, não pode autenticar-se. Apenas a %idpName% pode resolver esta situação. Entre em contacto com o suporte deste serviço da %idpName%.',
+    'error_invalid_attribute_value_desc_no_idp_name' => 'A sua %organisationNoun% utilizou um valor para o atributo %attributeName% ("%attributeValue%") o que não é permitido para esta %organisationNoun%. Desta forma, não pode autenticar-se. Apenas a sua %organisationNoun% pode resolver esta situação. Entre em contacto com o suporte deste serviço da sua %organisationNoun%.',
     'error_received_error_status_code'     => 'Erro - Erro no Fornecedor de Identidade',
     'error_received_error_status_code_desc'=> '<p>
 A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em contacto com o suporte (IT) para ver se é possível corrigir a situação.
