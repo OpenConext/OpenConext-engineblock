@@ -238,6 +238,7 @@ Your %organisationNoun% has denied you access to this service. You will have to 
     'error_unknown_requesterid_in_authnrequest_desc'    => '<p>Your requested service couldn\'t be found.</p>',
     'error_clock_issue_title' => 'Error - The Assertion is not yet valid or has expired',
     'error_clock_issue_desc' => 'This is likely because the difference in time between %idpName% and %suiteName% it too large. Please verify that the time on the %organisationNoun% is correct.',
+    'error_clock_issue_desc_no_idp_name' => 'This is likely because the difference in time between %organisationNoun% and %suiteName% it too large. Please verify that the time on the IdP is correct.',
     'error_stepup_callout_unknown_title' => 'Error - Unknown strong authentication failure',
     'error_stepup_callout_unknown_desc' => 'Logging in with strong authentication has failed and we don\'t know exactly why . Please try again first by going back to the service and logging in again . If this doesn\'t work, please contact the service desk of your %organisationNoun%.',
     'error_stepup_callout_unmet_loa_title' => 'Error - No suitable token found',

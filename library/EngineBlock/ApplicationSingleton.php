@@ -441,11 +441,8 @@ class EngineBlock_ApplicationSingleton
         return '';
     }
 
-    /**
-     * @param string $identityProviderId
-     * @return string
-     */
-    private function getIdentityProviderName(string $identityProviderId){
+    private function getIdentityProviderName(string $identityProviderId): string
+    {
         try {
             $identityProvider = $this->getDiContainer()->getMetadataRepository()->fetchIdentityProviderByEntityId($identityProviderId);
             return $identityProvider->getDisplayName($this->getDiContainer()->getLocaleProvider()->getLocale());
