@@ -255,6 +255,7 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
     'error_no_authentication_request_received' => 'Fout - Geen authenticatie-aanvraag ontvangen.',
     'error_authn_context_class_ref_blacklisted' => 'Fout - Waarde van AuthnContextClassRef is niet toegestaan',
     'error_authn_context_class_ref_blacklisted_desc' => '<p>Je kunt niet inloggen omdat %idpName% een waarde stuurde voor AuthnContextClassRef die niet is toegestaan. Neem contact op met de helpdesk van %idpName% om dit op te lossen</p>',
+    'error_authn_context_class_ref_blacklisted_desc_no_idp_name' => '<p>Je kunt niet inloggen omdat je %organisationNoun% een waarde stuurde voor AuthnContextClassRef die niet is toegestaan. Neem contact op met de servicedesk van je %organisationNoun% om dit op te lossen</p>',
     'error_invalid_mfa_authn_context_class_ref' => 'Fout - Multi-factor authenticatie mislukt',
     'error_invalid_mfa_authn_context_class_ref_desc' => '<p>%idpName% vereist multi-factor authenticatie voor deze dienst. Je tweede factor kon echter niet gevalideerd worden. Neem contact op met de helpdesk van %idpName% om dit op te lossen.</p>',
 

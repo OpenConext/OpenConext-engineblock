@@ -252,6 +252,7 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_stuck_in_authentication_loop_desc_no_name' => 'Autenticou-se com sucesso no seu Fornecedor de Identidade, mas o serviço ao qual está a tentar aceder reencaminhou-o de volta para %suiteName%. Como já está autenticado, o %suiteName% o reencaminha de volta para o serviço, o que resulta num ciclo infinito. Muito provavelmente, isto é provocado por um erro no Fornecedor de Serviço.',
     'error_authn_context_class_ref_blacklisted'                     => 'Erro - O valor para AuthnContextClassRef não é permitido',
     'error_authn_context_class_ref_blacklisted_desc'                => '<p>Não pode autenticar-se porque a %idpName% enviou um valor para AuthnContextClassRef que não é permitido.</p>',
+    'error_authn_context_class_ref_blacklisted_desc_no_idp_name'                => '<p>Não pode autenticar-se porque a sua %organisationNoun% enviou um valor para AuthnContextClassRef que não é permitido.</p>',
     'error_invalid_mfa_authn_context_class_ref' => 'Erro - falha na autenticação segundo fator de autenticação (2FA)',
     'error_invalid_mfa_authn_context_class_ref_desc' => '<p>A %idpName% requer segurança adicional para este serviço, por meio de um segundo fator de autenticação (2FA). No entanto, o seu segundo fator de autenticação não pôde ser verificado. Entre em contato com o suporte da %idpName% para validar esta situação.</p>',
     'error_no_authentication_request_received' => 'Não foi recebida nenhuma solicitação de autenticação.',
