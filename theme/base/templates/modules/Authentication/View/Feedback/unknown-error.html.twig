@@ -6,14 +6,4 @@
 {% block title %}{{ parent() }}{% endblock %}
 {% block pageHeading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
 
-{% block errorMessage %}
-    {% if withSpName and withIdpName %}
-        {{ 'error_generic_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName'], '%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
-    {% elseif withIdpName %}
-        {{ 'error_generic_desc_no_sp_name'|trans({'%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
-    {% elseif withSpName %}
-        {{ 'error_generic_desc_no_idp_name'|trans({'%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
-    {% else %}
-        {{ 'error_generic_desc_no_names'|trans|raw }}
-    {% endif %}
-{% endblock %}
+{% block errorMessage %}{{ 'error_generic_desc'|trans|raw }}{% endblock %}

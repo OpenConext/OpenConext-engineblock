@@ -1,25 +1,8 @@
 {% extends '@theme/Default/View/Error/error.html.twig' %}
 
-{% if withSpName %}
-    {% set pageTitle = 'error_unknown_service_provider'|trans({'%spName%': feedbackInfoMap['serviceProviderName']}) %}
-{% else %}
-    {% set pageTitle = 'error_unknown_service_provider_no_sp_name'|trans %}
-{% endif %}
-
-{% block pageTitle %}
-    {% if withSpName %}
-        {{ 'error_unknown_service_provider'|trans({'%spName%': feedbackInfoMap['serviceProviderName']}) }}
-    {% else %}
-        {{ 'error_unknown_service_provider_no_sp_name'|trans }}
-    {% endif %}
-{% endblock %}
+{% set pageTitle = 'error_unknown_service_provider'|trans({'%arg1%': entityId}) %}
+{% block pageTitle %}{{ pageTitle }}{% endblock %}
 {% block title %}{{ parent() }}{% endblock %}
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
-{% block errorMessage %}
-    {% if withSpName %}
-        {{ 'error_unknown_service_provider_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
-    {% else %}
-        {{ 'error_unknown_service_provider_desc_no_sp_name'|trans|raw }}
-    {% endif %}
-{% endblock %}
+{% block errorMessage %}{{ 'error_unknown_service_provider_desc'|trans|raw }}{% endblock %}

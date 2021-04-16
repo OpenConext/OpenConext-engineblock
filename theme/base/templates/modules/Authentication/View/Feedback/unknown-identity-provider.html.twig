@@ -1,25 +1,8 @@
 {% extends '@theme/Default/View/Error/error.html.twig' %}
 
-{% if withIdpName %}
-    {% set pageTitle = 'error_unknown_identity_provider'|trans({'%idpName%': feedbackInfoMap['identityProviderName']}) %}
-{% else %}
-    {% set pageTitle = 'error_unknown_identity_provider_no_idp_name'|trans %}
-{% endif %}
-
-{% block pageTitle %}
-    {% if withIdpName %}
-        {{ 'error_unknown_identity_provider'|trans({'%idpName%': feedbackInfoMap['identityProviderName']}) }}
-    {% else %}
-        {{ 'error_unknown_identity_provider_no_idp_name'|trans }}
-    {% endif %}
-{% endblock %}
+{% set pageTitle = 'error_unknown_identity_provider'|trans %}
+{% block pageTitle %}{{ pageTitle }}{% endblock %}
 {% block title %}{{ parent() }}{% endblock %}
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
-{% block errorMessage %}
-    {% if withIdpName %}
-        {{ 'error_unknown_identity_provider_desc'|trans({'%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
-    {% else %}
-        {{ 'error_unknown_identity_provider_desc_no_idp_name'|trans|raw }}
-    {% endif %}
-{% endblock %}
+{% block errorMessage %}{{ 'error_unknown_identity_provider_desc'|trans|raw }}{% endblock %}
