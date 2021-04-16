@@ -258,6 +258,7 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
     'error_authn_context_class_ref_blacklisted_desc_no_idp_name' => '<p>Je kunt niet inloggen omdat je %organisationNoun% een waarde stuurde voor AuthnContextClassRef die niet is toegestaan. Neem contact op met de servicedesk van je %organisationNoun% om dit op te lossen</p>',
     'error_invalid_mfa_authn_context_class_ref' => 'Fout - Multi-factor authenticatie mislukt',
     'error_invalid_mfa_authn_context_class_ref_desc' => '<p>%idpName% vereist multi-factor authenticatie voor deze dienst. Je tweede factor kon echter niet gevalideerd worden. Neem contact op met de helpdesk van %idpName% om dit op te lossen.</p>',
+    'error_invalid_mfa_authn_context_class_ref_desc_no_idp_name' => '<p>Jouw %organisationNoun% vereist multi-factor authenticatie voor deze dienst. Je tweede factor kon echter niet gevalideerd worden. Neem contact op met de servicedesk van je %organisationNoun% om dit op te lossen.</p>',
 
     /**
      * %1 AttributeName

@@ -255,6 +255,7 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_authn_context_class_ref_blacklisted_desc_no_idp_name'                => '<p>Não pode autenticar-se porque a sua %organisationNoun% enviou um valor para AuthnContextClassRef que não é permitido.</p>',
     'error_invalid_mfa_authn_context_class_ref' => 'Erro - falha na autenticação segundo fator de autenticação (2FA)',
     'error_invalid_mfa_authn_context_class_ref_desc' => '<p>A %idpName% requer segurança adicional para este serviço, por meio de um segundo fator de autenticação (2FA). No entanto, o seu segundo fator de autenticação não pôde ser verificado. Entre em contato com o suporte da %idpName% para validar esta situação.</p>',
+    'error_invalid_mfa_authn_context_class_ref_desc_no_idp_name' => '<p>A sua %organisationNoun% requer segurança adicional para este serviço, por meio de um segundo fator de autenticação (2FA). No entanto, o seu segundo fator de autenticação não pôde ser verificado. Entre em contato com o suporte da sua %organisationNoun% para validar esta situação.</p>',
     'error_no_authentication_request_received' => 'Não foi recebida nenhuma solicitação de autenticação.',
     /**
      * %1 AttributeName

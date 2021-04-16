@@ -246,6 +246,7 @@ Your %organisationNoun% has denied you access to this service. You will have to 
     'error_authn_context_class_ref_blacklisted_desc_no_idp_name'                => '<p>You cannot login because your %organisationNoun% sent a value for AuthnContextClassRef that is not allowed. Please contact the service desk of your %organisationNoun% to solve this.</p>',
     'error_invalid_mfa_authn_context_class_ref' => 'Error - Multi factor authentication failed',
     'error_invalid_mfa_authn_context_class_ref_desc' => '<p>%idpName% requires multi-factor authentication for this service. However, your second factor could not be validated. Please contact the service desk of %idpName% to solve this.</p>',
+    'error_invalid_mfa_authn_context_class_ref_desc_no_idp_name' => '<p>Your %organisationNoun% requires multi-factor authentication for this service. However, your second factor could not be validated. Please contact the service desk of your %organisationNoun% to solve this.</p>',
     /**
      * %1 AttributeName
      * %2 Options
