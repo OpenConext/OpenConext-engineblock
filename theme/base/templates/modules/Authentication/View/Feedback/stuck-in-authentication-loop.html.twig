@@ -5,4 +5,14 @@
 {% block title %}{{ parent() }}{% endblock %}
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
-{% block errorMessage %}{{ 'error_stuck_in_authentication_loop_desc'|trans({'%idpName%': feedbackInfoMap['identityProviderName'], '%spName%': feedbackInfoMap['serviceProviderName']})|raw }}{% endblock %}
+{% block errorMessage %}
+    {% if withIdpName and withSpName %}
+        {{ 'error_stuck_in_authentication_loop_desc'|trans({'%idpName%': feedbackInfoMap['identityProviderName'], '%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
+    {% elseif withIdpName %}
+        {{ 'error_stuck_in_authentication_loop_desc_no_sp_name'|trans({'%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+    {% elseif withSpName %}
+        {{ 'error_stuck_in_authentication_loop_desc_no_idp_name'|trans({'%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
+    {% else %}
+        {{ 'error_stuck_in_authentication_loop_desc_no_name'|trans|raw }}
+    {% endif %}
+{% endblock %}
