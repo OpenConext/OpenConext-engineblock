@@ -199,6 +199,45 @@ HTML
             <li>schacHomeOrganization</li>
         </ul>
     </p>',
+    'error_missing_required_fields_desc_no_idp_name'=> '<p>
+        Jouw %organisationNoun% geeft niet de benodigde informatie vrij. Daarom kun je %spName% niet gebruiken.
+    </p>
+    <p>
+        Neem alstublieft contact op met de helpdesk van jouw %organisationNoun%. Geef hierbij de onderstaande informatie door.
+    </p>
+    <p>
+        Omdat je %organisationNoun% niet de juiste attributen aan %suiteName% doorgeeft is het inloggen mislukt. De volgende attributen zijn vereist om succesvol in te loggen op het %suiteName% platform:
+        <ul>
+            <li>UID</li>
+            <li>schacHomeOrganization</li>
+        </ul>
+    </p>',
+    'error_missing_required_fields_desc_no_sp_name'=> '<p>
+        %idpName% geeft niet de benodigde informatie vrij. Daarom kun je deze applicatie  niet gebruiken.
+    </p>
+    <p>
+        Neem alstublieft contact op met de helpdesk van %idpName%. Geef hierbij de onderstaande informatie door.
+    </p>
+    <p>
+        Omdat %idpName% niet de juiste attributen aan %suiteName% doorgeeft is het inloggen mislukt. De volgende attributen zijn vereist om succesvol in te loggen op het %suiteName% platform:
+        <ul>
+            <li>UID</li>
+            <li>schacHomeOrganization</li>
+        </ul>
+    </p>',
+    'error_missing_required_fields_desc_no_name'=> '<p>
+        Jouw %organisationNoun% geeft niet de benodigde informatie vrij. Daarom kun je deze applicatie niet gebruiken.
+    </p>
+    <p>
+        Neem alstublieft contact op met jouw %organisationNoun%. Geef hierbij de onderstaande informatie door.
+    </p>
+    <p>
+        Omdat je %organisationNoun% niet de juiste attributen aan %suiteName% doorgeeft is het inloggen mislukt. De volgende attributen zijn vereist om succesvol in te loggen op het %suiteName% platform:
+        <ul>
+            <li>UID</li>
+            <li>schacHomeOrganization</li>
+        </ul>
+    </p>',
     'error_invalid_attribute_value' => 'Fout - Attribuutwaarde niet toegestaan',
     'error_invalid_attribute_value_desc' => '%idpName% geeft een waarde door in het attribuut %attributeName% ("%attributeValue%") die niet is toegestaan voor deze %organisationNoun%. Inloggen is daarom niet mogelijk. Alleen %idpName% kan dit oplossen. Neem dus contact op met de helpdesk van %idpName%.',
     'error_received_error_status_code'     => 'Error - Fout bij Identity Provider',

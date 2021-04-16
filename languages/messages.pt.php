@@ -197,6 +197,45 @@ Não pode usar esta aplicação porque a %idpName% não está a fornecer a infor
             <li>schacHomeOrganization</li>
         </ul>
     </p>',
+        'error_missing_required_fields_desc_no_idp_name'=> '<p>
+Não pode usar esta aplicação porque a sua %organisationNoun% não está a fornecer a informação necessária.
+    </p>
+    <p>
+        Entre em contacto com a sua %organisationNoun% com a informação indicada em baixo.
+    </p>
+    <p>
+        A autenticação falhou porque o Fornecedor de Identidade da sua %organisationNoun% não forneceu %suiteName% com um ou mais dos seguintes atributos obrigatórios:
+        <ul>
+            <li>UID</li>
+            <li>schacHomeOrganization</li>
+        </ul>
+    </p>',
+        'error_missing_required_fields_desc_no_sp_name'=> '<p>
+Não pode usar esta aplicação porque a %idpName% não está a fornecer a informação necessária.
+    </p>
+    <p>
+        Entre em contacto com a %idpName% com a informação indicada em baixo.
+    </p>
+    <p>
+        A autenticação falhou porque o Fornecedor de Identidade da %idpName% não forneceu %suiteName% com um ou mais dos seguintes atributos obrigatórios:
+        <ul>
+            <li>UID</li>
+            <li>schacHomeOrganization</li>
+        </ul>
+    </p>',
+    'error_missing_required_fields_desc_no_name'=> '<p>
+Não pode usar esta aplicação porque a sua %organisationNoun% não está a fornecer a informação necessária.
+</p>
+<p>
+    Entre em contacto com a sua %organisationNoun% com a informação indicada em baixo.
+</p>
+<p>
+    A autenticação falhou porque o Fornecedor de Identidade da sua %organisationNoun% não forneceu %suiteName% com um ou mais dos seguintes atributos obrigatórios:
+    <ul>
+        <li>UID</li>
+        <li>schacHomeOrganization</li>
+    </ul>
+</p>',
     'error_invalid_attribute_value' => 'Valor do atributo não permitido',
     'error_invalid_attribute_value_desc' => 'A %idpName% utilizou um valor para o atributo %attributeName% ("%attributeValue%") o que não é permitido para esta %organisationNoun%. Desta forma, não pode autenticar-se. Apenas a %idpName% pode resolver esta situação. Entre em contacto com o suporte deste serviço da %idpName%.',
     'error_received_error_status_code'     => 'Erro - Erro no Fornecedor de Identidade',

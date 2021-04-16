@@ -199,6 +199,33 @@ HTML
         <li>schacHomeOrganization</li>
     </ul>
 </p>',
+    'error_missing_required_fields_desc_no_idp_name'=> '<p>
+Your %organisationNoun% does not provide the mandatory information. Therefore, you can not use %spName%. Please contact your %organisationNoun% and tell them one or more of the the following required attribute(s) are missing within %suiteName%:
+</p>
+<p>
+    <ul>
+        <li>UID</li>
+        <li>schacHomeOrganization</li>
+    </ul>
+</p>',
+    'error_missing_required_fields_desc_no_sp_name'=> '<p>
+%idpName% does not provide the mandatory information. Therefore, you can not use this service. Please contact the service desk of %idpName% and tell them one or more of the the following required attribute(s) are missing within %suiteName%:
+</p>
+<p>
+    <ul>
+        <li>UID</li>
+        <li>schacHomeOrganization</li>
+    </ul>
+</p>',
+    'error_missing_required_fields_desc_no_name'=> '<p>
+Your %organisationNoun% does not provide the mandatory information. Therefore, you can not use this service. Please contact your %organisationNoun% and tell them one or more of the the following required attribute(s) are missing within %suiteName%:
+</p>
+<p>
+    <ul>
+        <li>UID</li>
+        <li>schacHomeOrganization</li>
+    </ul>
+</p>',
     'error_invalid_attribute_value' => 'Error - Attribute value not allowed',
     'error_invalid_attribute_value_desc' => '%idpName% sends a value for attribute %attributeName% ("%attributeValue%") which is not allowed for this %organisationNoun%. Therefore you cannot log in. Only %idpName% can resolve this. Please contact the service desk of %idpName% to fix this problem.',
     'error_received_error_status_code'     => 'Error - Identity Provider error',
