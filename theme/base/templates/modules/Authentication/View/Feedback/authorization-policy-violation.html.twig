@@ -6,7 +6,13 @@
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
 {% block errorMessage %}
-    <h2>{{ 'error_authorization_policy_violation_info'|trans({'%spName%': feedbackInfoMap['serviceProviderName'], '%idpName%': feedbackInfoMap['identityProviderName']})|raw }}</h2>
+    <h2>
+        {% if withIdpName %}
+            {{ 'error_authorization_policy_violation_info'|trans({'%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+        {% else %}
+            {{ 'error_authorization_policy_violation_info_no_idp_name'|trans|raw }}
+        {% endif %}
+    </h2>
 
     {% if logo is not null %}
         <img src="{{ logo.url }}?v={{ assetsVersion }}"
@@ -25,7 +31,15 @@
         </div>
 
     {% endif %}
-    {{ 'error_authorization_policy_violation_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName'], '%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+    {% if withIdpName and withSpName %}
+        {{ 'error_authorization_policy_violation_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName'], '%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+    {% elseif withIdpName %}
+        {{ 'error_authorization_policy_violation_desc_no_sp_name'|trans({'%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+    {% elseif withSpName %}
+        {{ 'error_authorization_policy_violation_desc_no_idp_name'|trans({'%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
+    {% else %}
+        {{ 'error_authorization_policy_violation_desc_no_name'|trans|raw }}
+    {% endif %}
 
 {% endblock %}
 
