@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ExpectationException;
 use DOMDocument;
@@ -412,6 +413,16 @@ class EngineBlockContext extends AbstractSubContext
         }
 
         throw new RuntimeException('Request access button found on page');
+    }
+
+    /**
+     * @Then /^I click the return to SP button$/
+     */
+    public function iClickTheAuthnFailedButton()
+    {
+        $page = $this->minkContext->getSession()->getPage();
+        $element = $page->find('css', '.footer-button__button');
+        $element->click();
     }
 
     /**

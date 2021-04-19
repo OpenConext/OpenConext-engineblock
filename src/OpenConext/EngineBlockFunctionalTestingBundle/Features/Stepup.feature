@@ -111,7 +111,7 @@ Feature:
       Then I should see "Error - No suitable token found"
         And the url should match "/feedback/stepup-callout-unmet-loa"
         And the response status code should be 400
-    @WIP
+
     Scenario: User can click back button on error page after failing StepUp
        Given the SP "SSO-SP" requires Stepup LoA "http://vm.openconext.org/assurance/loa2"
         When I log in at "SSO-SP"
@@ -122,9 +122,10 @@ Feature:
         Then I should see "Error - No suitable token found"
          And the url should match "/feedback/stepup-callout-unmet-loa"
          And the response status code should be 400
-        Then I click the Authn Failed button
-         And the response should contain 'Responder'
-         And the response should contain 'SubCode'
+        Then I click the return to SP button
+         And the response should contain 'urn:oasis:names:tc:SAML:2.0:status:Responder'
+         And the response should contain 'urn:oasis:names:tc:SAML:2.0:status:AuthnFailed'
+         And the response should contain '(No message provided)'
 
     Scenario: Stepup authentication should show exception when user does cancel
       Given the SP "SSO-SP" requires Stepup LoA "http://vm.openconext.org/assurance/loa2"

@@ -4,11 +4,10 @@
         <div class="error-page-footer-buttons__row">
             {% if hasBackToSpLink() %}
                 <div class="footer-button">
-                    <span class="footer-button__link">
-                        <i class="footer-button__icon fa-arrow-left"></i>
-                        <p class="footer-button__text">{{ 'error_return-sp-link-text'|trans({'%spName%': getSpName()}) }}</p>
-                        {% include '@theme/Authentication/View/Feedback/partial/saml_response_form.html.twig' %}
-                    </span>
+                    <button type="submit" class="footer-button__button" form="backToSPForm">
+                        <i class="footer-button__icon fa-arrow-left"></i><br/>
+                        <span class="footer-button__text">{{ 'error_return-sp-link-text'|trans({'%spName%': getSpName()}) }}</span>
+                    </button>
                 </div>
             {%  endif %}
             {% if hasWikiLink(template) %}
@@ -41,4 +40,7 @@
             {%  endif %}
         </div>
     </div>
+    {% if hasBackToSpLink() %}
+        {% include '@theme/Authentication/View/Feedback/partial/saml_response_form.html.twig' %}
+    {% endif %}
 </footer>

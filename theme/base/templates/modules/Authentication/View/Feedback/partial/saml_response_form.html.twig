@@ -1,4 +1,4 @@
 <p class="footer-button__text footer-button__text--small">{{ 'error_return-sp-link-text-short'|trans }}</p>
-<form method="post" action="{{ getAcu() }}">
+<form method="post" action="{{ getAcu() }}" id="backToSPForm">
     <input type="hidden" name="SAMLResponse" value="{{ getSamlFailedResponse() }}"/>
 </form>

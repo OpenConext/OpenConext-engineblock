@@ -138,7 +138,7 @@ class StepupDecisionTest extends TestCase
             'Use highest PdP LoA if multiple PdP LoA set (allow no stepup)' => [['', '', [], ['loa3', 'loa2'], true], [true, 'loa3', true]],
             'Use highest PdP LoA if multiple PdP LoA set in different order (allow no stepup)' => [['', '', [], ['loa3', 'loa2'], true], [true, 'loa3', true]],
 
-            'Allow AuthnRequest (SP) LoA1, but take no action' => [['', '', [$this->buildLoa('loa1')], [], true], [false, 'loa1', true]],
+            'Allow AuthnRequest (SP) LoA1, but take no action' => [['', '', [$this->buildLoa('loa1')], [], true], [false, 'loa1', false]],
             'Use AuthnRequest (SP) LoA if SP LoA is lower' => [['loa2', '', [$this->buildLoa('loa3')], [], true], [true, 'loa3', true]],
             'Use IdP LoA if IdP LoA is highest and AuthnRequest (SP) LoA set (allow no stepup)' => [['', 'loa3', [$this->buildLoa('loa2')], [], true], [true, 'loa3', true]],
             'Use PdP LoA if  AuthnRequest (SP) LoA set (allow no stepup)' => [['', '', [$this->buildLoa('loa3')], [], true], [true, 'loa3', true]],
