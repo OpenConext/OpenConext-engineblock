@@ -250,6 +250,7 @@ HTML
 Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus contact moeten opnemen met de (IT-)helpdesk van je eigen %organisationNoun% om te kijken of dit verholpen kan worden.
     </p>',
     'error_received_invalid_response'        => 'Fout - Ongeldig SAML-bericht van %idpName%',
+    'error_received_invalid_response_no_idp_name'        => 'Fout - Ongeldig SAML-bericht van %organisationNoun%',
     'error_received_invalid_signed_response' => 'Fout - Ongeldige handtekening op antwoord van %idpName%',
     'error_stuck_in_authentication_loop' => 'Fout - Je zit vast in een zwart gat',
     'error_stuck_in_authentication_loop_desc' => 'Je bent succesvol ingelogd bij %idpName% maar %spName% stuurt je weer terug naar %suiteName%. Omdat je succesvol bent ingelogd, stuurt %suiteName% je weer naar %spName%, wat resulteert in een oneindig zwart gat. Dit komt waarschijnlijk door een foutje aan de kant van %spName%.',

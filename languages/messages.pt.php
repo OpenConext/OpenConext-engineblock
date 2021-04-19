@@ -248,6 +248,7 @@ Não pode usar esta aplicação porque a sua %organisationNoun% não está a for
 A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em contacto com o suporte (IT) para ver se é possível corrigir a situação.
     </p>',
     'error_received_invalid_response'       => 'Erro - Resposta inválida do %idpName%',
+    'error_received_invalid_response_no_idp_name'       => 'Erro - Resposta inválida do Fornecedor de Identidade',
     'error_received_invalid_signed_response'=> 'Erro - resposta de assinatura inválida do %idpName%',
     'error_stuck_in_authentication_loop' => 'Erro - Ficou preso(a) no vazio',
     'error_stuck_in_authentication_loop_desc' => 'Autenticou-se com sucesso no seu %idpName%, mas o %spName% reencaminhou-o de volta para %suiteName%. Como já está autenticado, o %suiteName% o reencaminha de volta para o %spName%, o que resulta num ciclo infinito. Muito provavelmente, isto é provocado por um erro no %spName%.',
