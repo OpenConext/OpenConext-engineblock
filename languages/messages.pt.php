@@ -175,7 +175,9 @@ HTML
     'error_unsupported_signature_method' => 'O método de assinatura não é suportado',
     'error_unsupported_signature_method_desc' => 'O método de assinatura %arg1% não é suportado, faça upgrade para RSA-SHA256 (http://www.w3.org/2001/04/xmldsig-more#rsa-sha256).',
     'error_unknown_preselected_idp' => 'Erro - Não há ligação entre %organisationNoun% e o serviço',
+    'error_unknown_preselected_idp_no_sp_name' => 'Erro - Não há ligação entre %organisationNoun% e o serviço',
     'error_unknown_preselected_idp_desc' => 'A %organisationNoun% que pretende utilizar para se autenticar e aceder ao serviço, não tem activado o acesso a este serviço. Isto significa que não pode aceder a este serviço através da %suiteName%. Entre em contacto com com o suporte da sua %organisationNoun% para solicitar o acesso a este serviço. Declare que serviço se trata (o &lsquo;Fornecedor de Serviço&rsquo;) e porque necessita do acesso.',
+    'error_unknown_preselected_idp_desc_no_sp_name' => 'A %organisationNoun% que pretende utilizar para se autenticar e aceder ao serviço, não tem activado o acesso a este serviço. Isto significa que não pode aceder a este serviço através da %suiteName%. Entre em contacto com com o suporte da sua %organisationNoun% para solicitar o acesso a este serviço. Declare que serviço se trata (o &lsquo;Fornecedor de Serviço&rsquo;) e porque necessita do acesso.',
     'error_unknown_service_provider'          => 'Erro - Serviço desconhecido',
     'error_unknown_service_provider_desc'     => 'O serviço a que pretende autenticar-se é desconhecido para a %suiteName%. Possivelmente a sua %organisationNoun% nunca permitiu o acesso a este serviço. Entre em contacto com o suporte da sua %organisationNoun% e fornecer-lhes as seguintes informações:',
 

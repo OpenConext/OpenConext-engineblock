@@ -1,6 +1,6 @@
 {% extends '@theme/Default/View/Error/error.html.twig' %}
 
-{% if withIdpName %}
+{% if feedbackInfoMap is defined and feedbackInfoMap['identityProviderName'] %}
     {% set pageTitle = 'error_unknown_identity_provider'|trans({'%idpName%': feedbackInfoMap['identityProviderName']}) %}
 {% else %}
     {% set pageTitle = 'error_unknown_identity_provider_no_idp_name'|trans %}
