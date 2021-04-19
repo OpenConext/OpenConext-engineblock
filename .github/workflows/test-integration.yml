@@ -97,7 +97,7 @@ jobs:
               run: |
                   cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
                       echo -e "\nTwig lint\n"  && \
-                      php72 app/console lint:twig theme/ && \
+                      php app/console lint:twig theme/ && \
                       cd theme && \
                       echo -e "\nNPM lint\n" && \
                       npm run lint
