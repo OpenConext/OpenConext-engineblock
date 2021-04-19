@@ -145,6 +145,8 @@ HTML
     'error_help-desk-href' => 'https://www.surf.nl/over-surf/dienstverlening-support-werkmaatschappijen',
     'error_help-desk-link-text' => 'Helpdesk',
     'error_help-desk-link-text-short' => 'Helpdesk',
+    'error_return-sp-link-text' => 'Terug naar %spName%',
+    'error_return-sp-link-text-short' => 'Terug naar dienst',
 
     'error_404'                         => '404 - Pagina niet gevonden',
     'error_404_desc'                    => 'De pagina is niet gevonden.',

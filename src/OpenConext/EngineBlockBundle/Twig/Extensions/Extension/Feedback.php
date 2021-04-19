@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 use EngineBlock_ApplicationSingleton;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlockBundle\Authentication\Service\SamlResponseHelper;
 use OpenConext\EngineBlockBundle\Configuration\ErrorFeedbackConfigurationInterface;
 use OpenConext\EngineBlockBundle\Configuration\WikiLink;
 use OpenConext\EngineBlockBundle\Value\FeedbackInformation;
@@ -46,14 +47,21 @@ class Feedback extends Twig_Extension
      */
     private $metadataRepository;
 
+    /**
+     * @var SamlResponseHelper
+     */
+    private $samlResponseHelper;
+
     public function __construct(
         EngineBlock_ApplicationSingleton $application,
         ErrorFeedbackConfigurationInterface $errorFeedbackConfiguration,
-        MetadataRepositoryInterface $metadataRepository
+        MetadataRepositoryInterface $metadataRepository,
+        SamlResponseHelper $samlResponseHelper
     ) {
         $this->application = $application;
         $this->errorFeedbackConfiguration = $errorFeedbackConfiguration;
         $this->metadataRepository = $metadataRepository;
+        $this->samlResponseHelper = $samlResponseHelper;
     }
 
     public function getFunctions()
@@ -61,11 +69,15 @@ class Feedback extends Twig_Extension
         return [
             new TwigFunction('feedbackInfo', [$this, 'getFeedbackInfo']),
             new TwigFunction('flushLog', [$this, 'flushLog']),
+            new TwigFunction('hasBackToSpLink', [$this, 'hasBackToSpLink']),
             new TwigFunction('hasWikiLink', [$this, 'hasWikiLink']),
             new TwigFunction('getWikiLink', [$this, 'getWikiLink']),
             new TwigFunction('hasIdPContactMailLink', [$this, 'hasIdPContactMailLink']),
             new TwigFunction('getIdPContactMailLink', [$this, 'getIdPContactMailLink']),
             new TwigFunction('getIdpContactShortLabel', [$this, 'getIdpContactShortLabel']),
+            new TwigFunction('getSpName', [$this, 'getSpName']),
+            new TwigFunction('getAcu', [$this, 'getAcu']),
+            new TwigFunction('getSamlFailedResponse', [$this, 'getSamlFailedResponse']),
         ];
     }
 
@@ -140,6 +152,36 @@ class Feedback extends Twig_Extension
             }
         }
         return '';
+    }
+
+    public function hasBackToSpLink()
+    {
+        $info = $this->retrieveFeedbackInfo();
+        return $info->has('serviceProvider') &&
+            $info->has('identityProvider') &&
+            $info->has('requestId');
+    }
+
+    public function getSpName(): ?string
+    {
+        return $this->getFeedbackInfo()->get('serviceProviderName') ?? $this->getFeedbackInfo()->get('serviceProvider');
+    }
+
+    public function getAcu(): string
+    {
+        $info = $this->retrieveFeedbackInfo();
+        return $this->samlResponseHelper->getAcu($info->get('serviceProvider'));
+    }
+
+    public function getSamlFailedResponse(): string
+    {
+        $info = $this->retrieveFeedbackInfo();
+        return $this->samlResponseHelper->createAuthnFailedResponse(
+            $info->get('serviceProvider'),
+            $info->get('identityProvider'),
+            $info->get('requestId'),
+            $info->get('statusMessage') ?? ''
+        );
     }
 
     /**

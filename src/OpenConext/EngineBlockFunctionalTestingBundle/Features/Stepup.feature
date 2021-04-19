@@ -70,7 +70,6 @@ Feature:
         And I pass through EngineBlock
       Then the url should match "/functional-testing/SSO-SP/acs"
 
-    @WIP
     Scenario: LoA 1 is allowed, but refrains from doing a step up callout
       Given SP "SSO-SP" requests LoA "http://vm.openconext.org/assurance/loa1"
       When I log in at "SSO-SP"
@@ -112,6 +111,20 @@ Feature:
       Then I should see "Error - No suitable token found"
         And the url should match "/feedback/stepup-callout-unmet-loa"
         And the response status code should be 400
+    @WIP
+    Scenario: User can click back button on error page after failing StepUp
+       Given the SP "SSO-SP" requires Stepup LoA "http://vm.openconext.org/assurance/loa2"
+        When I log in at "SSO-SP"
+         And I select "SSO-IdP" on the WAYF
+         And I pass through EngineBlock
+         And I pass through the IdP
+         And Stepup will fail if the LoA can not be given
+        Then I should see "Error - No suitable token found"
+         And the url should match "/feedback/stepup-callout-unmet-loa"
+         And the response status code should be 400
+        Then I click the Authn Failed button
+         And the response should contain 'Responder'
+         And the response should contain 'SubCode'
 
     Scenario: Stepup authentication should show exception when user does cancel
       Given the SP "SSO-SP" requires Stepup LoA "http://vm.openconext.org/assurance/loa2"

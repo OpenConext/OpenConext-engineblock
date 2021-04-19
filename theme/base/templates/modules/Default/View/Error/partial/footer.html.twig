@@ -2,6 +2,15 @@
 <footer class="error-page-footer-buttons">
     <div class="error-page-footer-buttons__container">
         <div class="error-page-footer-buttons__row">
+            {% if hasBackToSpLink() %}
+                <div class="footer-button">
+                    <span class="footer-button__link">
+                        <i class="footer-button__icon fa-arrow-left"></i>
+                        <p class="footer-button__text">{{ 'error_return-sp-link-text'|trans({'%spName%': getSpName()}) }}</p>
+                        {% include '@theme/Authentication/View/Feedback/partial/saml_response_form.html.twig' %}
+                    </span>
+                </div>
+            {%  endif %}
             {% if hasWikiLink(template) %}
                 <div class="footer-button">
                     {# The template var is set in the individual error Twigs, that's te place where we can determine what template is loaded. #}
