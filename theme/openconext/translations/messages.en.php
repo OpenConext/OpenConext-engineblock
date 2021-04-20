@@ -9,6 +9,7 @@ if (file_exists($overridesFile)) {
 return $overrides + [
     // General
     'search'                    => 'Search for an %organisationNoun%...',
+    'search_screenreader'       => 'Search',
     'log_in_to'                 => 'Select an %organisationNoun% to login to the service',
     'hamburger_screenreader'     => 'skip to footer',
 
