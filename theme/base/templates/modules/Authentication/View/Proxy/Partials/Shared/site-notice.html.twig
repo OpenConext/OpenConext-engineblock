@@ -1,0 +1,7 @@
+{% if showGlobalSiteNotice %}
+    {% include '@theme/Default/Partials/warning.html.twig' with {
+        allowedHtml: 'warning_allowed_html',
+        className: 'notification__warning notification__global-site-notice',
+        text: globalSiteNotice
+    } %}
+{% endif %}
