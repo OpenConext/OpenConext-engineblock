@@ -170,6 +170,10 @@ parameters:
     wayf.display_default_idp_banner_on_wayf: true
     wayf.default_idp_entity_id: https://default-idp.vm.openconext.org
 
+    ## Toggle display & content of global site notice
+    global.site_notice.show: false
+    global.site_notice.content: '<p>There is nothing wrong with your television set. <strong>Do not attempt to adjust the picture.</strong> We are controlling transmission. If we wish to make it louder, we will bring up the volume. If we wish to make it softer, we will tune it to a whisper. We will control the horizontal. We will control the vertical. We can roll the image, make it flutter. We can change the focus to a soft blur, or sharpen it to crystal clarity. <strong></p><p>For the next hour, sit quietly and we will control all that you see and hear.</strong> We repeat: There is nothing wrong with your television set. You are about to participate in a great adventure. You are about to experience the awe and mystery which reaches from the inner mind to... <a href="https://en.wikiquote.org/wiki/The_Outer_Limits_(1963_TV_series)">The Outer Limits</a>.</p>'
+
     ## Settings for detecting whether the user is stuck in a authentication loop within his session
     time_frame_for_authentication_loop_in_seconds: 60
     maximum_authentication_procedures_allowed: 5
