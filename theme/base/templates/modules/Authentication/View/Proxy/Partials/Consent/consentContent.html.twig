@@ -2,6 +2,8 @@
     <h2>{{ 'consent_privacy_header'|trans({'%target%': spName}) }}</h2>
 
     <div class="consent__content-body">
+        {% include '@theme/Authentication/View/Proxy/Partials/Shared/site-notice.html.twig' %}
+
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/attributes.html.twig' %}
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/disclaimerList.html.twig' %}
 
