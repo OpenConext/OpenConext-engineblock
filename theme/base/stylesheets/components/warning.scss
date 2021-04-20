@@ -1,3 +1,7 @@
 .notification__warning {
     @include warning;
+
+    &.notification__global-site-notice {
+        margin: 3rem 0;
+    }
 }
