@@ -259,6 +259,16 @@ class EngineBlock_Application_DiContainer extends Pimple
         return $this->container->getParameter('wayf.display_default_idp_banner_on_wayf');
     }
 
+    public function shouldDisplayGlobalSiteNotice()
+    {
+        return $this->container->getParameter('global.site_notice.show');
+    }
+
+    public function getGlobalSiteNotice()
+    {
+        return $this->container->getParameter('global.site_notice.content');
+    }
+
     public function getDefaultIdPEntityId()
     {
         if ($this->container->hasParameter('wayf.default_idp_entity_id')) {
