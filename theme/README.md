@@ -182,6 +182,8 @@ There are a number of feature flags which need to be supported by a theme in ord
 - backLink: display a link which, when clicked, allows you to go back two pages.  In essence the equivalent of clicking the back button twice.  You can test this by going to `/functional-testing/wayf?backLink=1`.
 - cutoffPointForShowingUnfilteredIdps: unlike the previous flags which were booleans, this one is an integer.  When this flag is present & the user is not searching (so no value in the search field): there should only be idps shown when there are no more than the cutoff point.  So as an example: if there are 100 idps that would be shown normally, and the cutoff point is 50: the user should see no idps at all (so only the empty search field is shown).  You can test this by going to `/functional-testing/wayf?cutoffPointForShowingUnfilteredIdps=50`.
 - showConsentExplanation: whether to show a special explanation on the consent page.  There is currently no test endpoint for this.
+- showGlobalSiteNotice: whether to show a global site notice or not.  You can test this by going to `/functional-testing/wayf?showGlobalSiteNotice=1` or `/functional-testing/consent?showGlobalSiteNotice=1`
+- globalSiteNotice: if you want to add a siteNotice you can add the text for it here.  You can test this by going to `/functional-testing/wayf?showGlobalSiteNotice=1&globalSiteNotice=<text>` or `/functional-testing/consent?showGlobalSiteNotice=1&globalSiteNotice=<text>`
 
 There is currently one flag which allows for testing a more realistic scenario.  The number of such flags might be expanded in the future.
 
