@@ -167,7 +167,7 @@ There are a lot of error pages.  To test all different kinds, you can use the ur
 - redirect page: `templates > modules > authentication > view > proxy > redirect.html.twig`.
 - spinner page: `templates > modules > authentication > view > proxy > form.html.twig`.  To test it disable the onload handler on the body-tag and go to your profile (or load the page without JS).
 - index.html.twig: `templates > modules > authentication > view > index > index.html.twig`.  You can use `https://engine.vm.openconext.org/` to develop the page.
-- cookie removal page: `templates > modules > authentication > view > identityprovider > remove-cookies.html.twig`.  You can use `https://engine.vm.openconext.org/authentication/idp/remove-cookies` to develop the page.
+- cookie removal page: `templates > modules > authentication > view > identityprovider > remove-cookies.html.twig`.  You can use `https://engine.vm.openconext.org/authentication/idp/remove-cookies` to develop the page.  The page is only accessible if you set the `wayf.remember_choice` parameter in `parameters.yml` to true.
 - debug page: `templates > modules > authentication > view > proxy > debug-idp-response.html.twig`.  You can use `https://engine.vm.openconext.org/authentication/sp/debug` to develop the page.
 - logout page: `templates > modules > logout > view > index > index.html.twig`.  You can use `https://engine.vm.openconext.org/logout` to develop the page.
 
