@@ -10,6 +10,7 @@
 {% block pageHeading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
 
 {% block content %}
+    {% include '@theme/Authentication/View/Proxy/site-notice.html.twig' with { className: 'full-width' } %}
 
     <form class="mod-search hidden" method="post" action="{{ action }}">
         <input type="hidden" name="ID" value="{{ requestId }}"/>

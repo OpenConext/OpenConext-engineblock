@@ -1,0 +1,12 @@
+{% if className is defined %}
+    {% set fullClassName = 'warning warning__global-site-notice' ~ ' ' ~ className %}
+{% else %}
+    {% set fullClassName = 'warning warning__global-site-notice' %}
+{% endif %}
+{% if showGlobalSiteNotice %}
+    {% include '@theme/Default/Partials/warning.html.twig' with {
+        allowedHtml: 'warning_allowed_html',
+        className: fullClassName,
+        text: globalSiteNotice
+    } %}
+{% endif %}
