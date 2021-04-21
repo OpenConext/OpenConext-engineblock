@@ -11,6 +11,7 @@
             <h1 class="page__title">Logout</h1>
         </header>
         <main class="page__content">
+            {% include '@theme/Authentication/View/Proxy/Partials/Shared/site-notice.html.twig' with { className: 'notification__global-site-notice--logout' } %}
             <p>{{ 'logout_description'|trans }}</p>
             <p>{{ 'logout_information_link'|trans|raw }}</p>
         </main>
