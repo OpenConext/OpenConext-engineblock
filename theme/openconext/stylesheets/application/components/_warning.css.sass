@@ -1,0 +1,46 @@
+.warning
+  background-color: $light-pink
+  padding: 0.75em
+  position: relative
+  +max-width($small)
+    margin: 2em 1em 1em
+
+  &.full-width
+    margin: 2em 0
+
+  > *:first-child::before
+    content: $fa-var-warning
+    font-family: FontAwesome, sans-serif
+    color: $red
+    display: inline-block
+    height: 1.2em
+    left: 0.75em
+    margin-right: 0.75em
+    vertical-align: middle
+    width: 1.2em
+    position: absolute
+
+  > h2
+    font-weight: bold
+    margin-left: 1.95em
+    margin-right: 3em
+
+  > *
+    margin-left: 1.95em
+    margin-right: 3em
+
+  p
+    margin: 1rem 2em
+
+  strong
+    font-weight: 700
+
+.mod-content
+  .warning.warning__global-site-notice
+    > *
+      margin-left: 1.95em
+      margin-right: 3em
+
+    p
+      margin-top: 1rem
+      margin-bottom: 1rem
