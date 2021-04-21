@@ -1,6 +1,10 @@
 .mod-content {
   padding: 2rem;
 
+  @include screen('mobile') {
+      padding: .5rem;
+  }
+
   h1,
   h2,
   h3 {

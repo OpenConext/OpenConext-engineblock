@@ -8,6 +8,10 @@
       padding: 0 2rem;
   }
 
+  @include screen('mobile') {
+      padding: .5rem;
+  }
+
   &.wide {
     max-width: $containerWidth*1.5;
   }
