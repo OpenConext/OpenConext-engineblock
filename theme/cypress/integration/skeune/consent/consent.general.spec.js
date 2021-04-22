@@ -1,4 +1,4 @@
-import {attributesSelector} from '../../../../base/javascripts/selectors';
+import {attributesSelector, siteNoticeSelector} from '../../../../base/javascripts/selectors';
 import {attribute6, labelSelector, nokSectionTitleSelector, tooltip3Selector} from '../testSelectors';
 
 context('Consent on Skeune theme', () => {
@@ -29,6 +29,13 @@ context('Consent on Skeune theme', () => {
 
     it('Should not show the nok-modal on load', () => {
       cy.notBeVisible(nokSectionTitleSelector);
+    });
+  });
+
+  describe('Shows the right content on load', () => {
+    it('Shows the global site notice', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/consent?showGlobalSiteNotice=1');
+      cy.beVisible(siteNoticeSelector);
     });
   });
 });

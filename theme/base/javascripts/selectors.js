@@ -1,4 +1,9 @@
 /***
+ * GENERAL SELECTORS
+ * ***/
+export const siteNoticeSelector = '.notification__global-site-notice';
+
+/***
  * INDEX SELECTORS
  * ***/
 export const metadataCertificateLinkSelector = 'dl.metadata-certificates-list a';

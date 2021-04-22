@@ -1,5 +1,15 @@
 import {idpTitle, unconnectedIdpSelector, weight100Selector, weight215Selector, weight60Selector, weight7Selector, weight8Selector, weight82Selector} from '../testSelectors';
-import {defaultIdpInformational, idpSelector, matchSelector, noResultSectionSelector, remainingIdpSelector, searchFieldSelector, searchResetSelector, searchSubmitSelector} from '../../../../base/javascripts/selectors';
+import {
+  defaultIdpInformational,
+  idpSelector,
+  matchSelector,
+  noResultSectionSelector,
+  remainingIdpSelector,
+  searchFieldSelector,
+  searchResetSelector,
+  searchSubmitSelector,
+  siteNoticeSelector
+} from '../../../../base/javascripts/selectors';
 
 /**
  * Tests for behaviour that has nothing to do with clicking / pressing enter.
@@ -47,6 +57,11 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.get(unconnectedIdpSelector)
         .should('not.be.visible')
         .should('have.length', 1);
+    });
+
+    it.only('Shows the global site notice', () => {
+      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?showGlobalSiteNotice=1');
+      cy.beVisible(siteNoticeSelector);
     });
   });
 
