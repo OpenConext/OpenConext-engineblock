@@ -9,7 +9,9 @@ if (file_exists($overridesFile)) {
 return $overrides + [
     // General
     'search'                    => 'Zoek een %organisationNoun%...',
+    'search_screenreader'       => 'Zoeken',
     'log_in_to'                 => 'Selecteer een %organisationNoun% en login bij',
+    'hamburger_screenreader'     => 'naar de footer',
 
     // Consent page
     'consent_header_title'                    => 'Om in te loggen heeft %arg1% jouw gegevens nodig',

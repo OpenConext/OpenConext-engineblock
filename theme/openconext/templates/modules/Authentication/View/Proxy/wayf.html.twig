@@ -18,7 +18,7 @@
         <h2 class="search-institutions">{{ 'search'|trans }}</h2>
         <input placeholder="{{ 'search'|trans }}" type="search" tabindex="0" class="mod-search-input active">
 
-        <button class="search">Search</button>
+        <button class="search"><span class="sr-only">{{ 'search_screenreader'|trans }}</span><i class="fa fa-search" aria-hidden="true"></i></button>
     </form>
     <script id="wayf-configuration" type="application/json">
       {{ wayfConfig(
