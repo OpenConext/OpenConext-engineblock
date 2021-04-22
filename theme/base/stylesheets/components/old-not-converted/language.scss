@@ -27,7 +27,7 @@
     button {
         background: rgba($blue,.1);
         border: 0;
-        color: $blue;
+        color: $darkBlue;
         cursor: pointer;
         display: block;
         font-size: 0.8rem;
@@ -38,7 +38,7 @@
 
         &:hover,
         &.selected {
-            background: $blue;
+            background: $darkBlue;
             color: $white;
         }
     }

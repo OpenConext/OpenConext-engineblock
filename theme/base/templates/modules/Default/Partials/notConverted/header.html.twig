@@ -1,6 +1,6 @@
 <header class="mod-header">
     <div class="l-container wide">
-        <h1 class="title">
+        <p class="title">
             {% block pageHeading %}
                 {% if pageHeadingTitle is defined %}
                     {{ pageHeadingTitle }}
@@ -8,7 +8,7 @@
                     {{ defaultHeader }}
                 {% endif %}
             {% endblock %}
-        </h1>
+        </p>
 
         <div class="meta">
             {% if displayLanguageSwitcher is not defined or displayLanguageSwitcher == true %}
