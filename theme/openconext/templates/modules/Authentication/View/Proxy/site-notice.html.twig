@@ -3,10 +3,10 @@
 {% else %}
     {% set fullClassName = 'warning warning__global-site-notice' %}
 {% endif %}
-{% if showGlobalSiteNotice %}
+{% if shouldDisplayGlobalSiteNotice() %}
     {% include '@theme/Default/Partials/warning.html.twig' with {
-        allowedHtml: 'warning_allowed_html',
+        allowedHtml: getAllowedHtmlForNotice(),
         className: fullClassName,
-        text: globalSiteNotice
+        text: getGlobalSiteNotice()
     } %}
 {% endif %}

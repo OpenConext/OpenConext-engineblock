@@ -204,9 +204,6 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             $nameId->setFormat($serviceProvider->nameIdFormat);
         }
 
-        $showGlobalSiteNotice = (bool) $settings->shouldDisplayGlobalSiteNotice();
-        $globalSiteNotice = $settings->getGlobalSiteNotice();
-
         $html = $this->twig->render(
             '@theme/Authentication/View/Proxy/consent.html.twig',
             [
@@ -224,8 +221,6 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'nameIdIsPersistent' => $isPersistent,
                 'profileUrl' => $profileUrl,
                 'showConsentExplanation' => $identityProvider->getConsentSettings()->hasConsentExplanation($serviceProviderMetadata->entityId),
-                'showGlobalSiteNotice' => $showGlobalSiteNotice,
-                'globalSiteNotice' => $globalSiteNotice,
                 'consentSettings' => $identityProvider->getConsentSettings(),
                 'spEntityId' => $serviceProviderMetadata->entityId,
                 'hideHeader' => true,

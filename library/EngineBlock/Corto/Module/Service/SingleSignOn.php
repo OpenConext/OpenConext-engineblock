@@ -449,8 +449,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
 
         $defaultIdPInIdPList = $this->isDefaultIdPPresent($idpList);
         $showDefaultIdpBanner = (bool) $container->shouldDisplayDefaultIdpBannerOnWayf() && $defaultIdPInIdPList;
-        $showGlobalSiteNotice = (bool) $container->shouldDisplayGlobalSiteNotice();
-        $globalSiteNotice = $container->getGlobalSiteNotice();
 
         $rememberChoiceFeature = $container->getRememberChoice();
 
@@ -465,8 +463,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
                 'showIdPBanner' => $showDefaultIdpBanner,
                 'rememberChoiceFeature' => $rememberChoiceFeature,
                 'showRequestAccess' => $serviceProvider->getCoins()->displayUnconnectedIdpsWayf(),
-                'showGlobalSiteNotice' => $showGlobalSiteNotice,
-                'globalSiteNotice' => $globalSiteNotice,
                 'requestId' => $request->getId(),
                 'serviceProvider' => $serviceProvider,
                 'idpList' => $idpList,

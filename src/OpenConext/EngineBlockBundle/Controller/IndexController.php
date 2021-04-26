@@ -18,7 +18,6 @@
 
 namespace OpenConext\EngineBlockBundle\Controller;
 
-use EngineBlock_ApplicationSingleton;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -45,10 +44,6 @@ class IndexController
      */
     public function indexAction()
     {
-        $settings = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
-        $showGlobalSiteNotice = (bool) $settings->shouldDisplayGlobalSiteNotice();
-        $globalSiteNotice = $settings->getGlobalSiteNotice();
-
         $keyPairIds = [];
         if ($this->keyPairs) {
             $keyPairIds = array_keys($this->keyPairs);
@@ -58,8 +53,6 @@ class IndexController
             $this->twig->render(
                 '@theme/Authentication/View/Index/index.html.twig',
                 [
-                    'showGlobalSiteNotice' => $showGlobalSiteNotice,
-                    'globalSiteNotice' => $globalSiteNotice,
                     'subHeader' => 'IdP Certificate and Metadata',
                     'wide' => true,
                     'displayLanguageSwitcher' => false,

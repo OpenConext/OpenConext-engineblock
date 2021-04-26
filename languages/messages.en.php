@@ -43,8 +43,6 @@ return $overrides + [
     'note'                  => 'Note',
     'note_no_script'        => 'Since your browser does not support JavaScript, you must press the button below to proceed.',
     'unknown_organization_name' => 'Unknown',
-    'warning_allowed_html'  =>  '<a><u><i><br><wbr><strong><em><blink><marquee><p><ul><ol><dl><li><dd><dt><div><span><blockquote><hr><h2><h3><h4><h5><h6>',
-
 
         // Feedback
     'requestId'             => 'UR ID',

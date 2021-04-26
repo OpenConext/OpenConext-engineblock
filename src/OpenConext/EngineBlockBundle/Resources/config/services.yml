@@ -293,6 +293,14 @@ services:
         tags:
              - { name: 'twig.extension' }
 
+    engineblock.twig.extension.globalsitenotice:
+        class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\GlobalSiteNotice
+        arguments:
+            - "@engineblock.compat.application"
+            - "@request_stack"
+        tags:
+             - { name: 'twig.extension' }
+
     engineblock.twig.extension.i18n:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\I18n
         arguments:

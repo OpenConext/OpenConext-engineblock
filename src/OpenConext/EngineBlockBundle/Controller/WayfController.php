@@ -108,8 +108,6 @@ class WayfController
                     }
                 }
             }
-            $showGlobalSiteNotice = (bool) $application->getDiContainer()->shouldDisplayGlobalSiteNotice();
-            $globalSiteNotice = $application->getDiContainer()->getGlobalSiteNotice();
 
             return $response->setContent(
                 $this->twig->render(
@@ -119,8 +117,6 @@ class WayfController
                         'all' => $all,
                         'cookies' => ['main', 'rememberchoice', 'lang', 'selectedidps'],
                         'cookiesSet' => $cookiesSet,
-                        'showGlobalSiteNotice' => $showGlobalSiteNotice,
-                        'globalSiteNotice' => $globalSiteNotice,
                     ]
                 )
             );

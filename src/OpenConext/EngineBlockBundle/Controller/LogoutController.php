@@ -18,7 +18,6 @@
 
 namespace OpenConext\EngineBlockBundle\Controller;
 
-use EngineBlock_ApplicationSingleton;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;
@@ -48,14 +47,7 @@ class LogoutController
      */
     public function logoutAction(Request $request)
     {
-        $settings = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
-        $showGlobalSiteNotice = (bool) $settings->shouldDisplayGlobalSiteNotice();
-        $globalSiteNotice = $settings->getGlobalSiteNotice();
-
-        $response = new Response($this->twig->render('@theme/Logout/View/Index/index.html.twig', [
-            'showGlobalSiteNotice' => $showGlobalSiteNotice,
-            'globalSiteNotice' => $globalSiteNotice,
-        ]));
+        $response = new Response($this->twig->render('@theme/Logout/View/Index/index.html.twig'));
 
         if (empty($request->getSession()->all())) {
             return $response;
