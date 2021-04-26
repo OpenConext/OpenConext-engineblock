@@ -25,7 +25,7 @@ open_conext_engine_block:
         eb.block_user_on_violation: "%feature_block_user_on_violation%"
 
 swiftmailer:
-    transport: sendmail
+    transport: "smtp"
 
 framework:
     #esi:             ~
