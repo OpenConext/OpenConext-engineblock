@@ -17,7 +17,7 @@ context('Error pages on skeune theme', () => {
     cy.contains('Error - An error occurred');
     cy.contains('we don\'t know exactly why');
     cy.contains('OpenConext Wiki');
-    cy.contains('Helpdesk');
+    cy.contains('Service desk');
   });
 
   it('Test if a faulty url loads the 404 page with all components', () => {
@@ -28,6 +28,6 @@ context('Error pages on skeune theme', () => {
     cy.beVisible(languageErrorSelector);
     cy.contains('404 - Page not found');
     cy.contains('This page has not been found');
-    cy.contains('Helpdesk');
+    cy.contains('Service desk');
   });
 });
