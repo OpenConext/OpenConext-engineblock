@@ -279,6 +279,11 @@ services:
     engineblock.validator.saml_response_validator:
         class: OpenConext\EngineBlock\Validator\SamlResponseValidator
 
+    OpenConext\EngineBlockBundle\Authentication\Service\SamlResponseHelper:
+        class: OpenConext\EngineBlockBundle\Authentication\Service\SamlResponseHelper
+        arguments:
+            - "@engineblock.metadata.repository.cached_doctrine"
+
     engineblock.twig.extension.debug:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Debug
         tags:
@@ -290,6 +295,7 @@ services:
             - "@engineblock.compat.application"
             - "@engineblock.error_feedback"
             - "@engineblock.compat.repository.metadata"
+            - "@OpenConext\\EngineBlockBundle\\Authentication\\Service\\SamlResponseHelper"
         tags:
              - { name: 'twig.extension' }
 

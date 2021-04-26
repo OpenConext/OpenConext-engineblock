@@ -18,6 +18,7 @@
 .footer-button {
     border-right: 1px solid white;
     display: inline-block;
+    height: 100%;
     text-align: center;
     width: 33.33%;
 
@@ -39,6 +40,20 @@
 
         &:hover {
             text-decoration: none;
+        }
+    }
+
+    &__button {
+        @include button-reset(inherit);
+        color: white;
+        cursor: pointer;
+        padding: 1.5rem 2rem 0.2rem;
+        text-decoration: none;
+        width: 100%;
+
+        .footer-button__text {
+            display: inline-block;
+            margin-bottom: 1rem;
         }
     }
 
