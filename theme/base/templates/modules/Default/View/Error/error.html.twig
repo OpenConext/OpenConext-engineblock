@@ -8,6 +8,15 @@
 {% set hideHeader = true %}
 {% set hideFooter = true %}
 
+{% set withSpName = false %}
+{% if feedbackInfoMap['serviceProviderName'] is defined and feedbackInfoMap['serviceProviderName'] %}
+    {% set withSpName = true %}
+{% endif %}
+{% set withIdpName = false %}
+{% if feedbackInfoMap['identityProviderName'] is defined and feedbackInfoMap['identityProviderName'] %}
+    {% set withIdpName = true %}
+{% endif %}
+
 {% block background %}
     <div class="background">
         <div class="background__front"></div>
@@ -26,7 +35,6 @@
 {% block containerClasses %}errorPage{% endblock %}
 
 {% block content %}
-
     {{ flushLog('Showing feedback page with message: ' ~ pageTitle) }}
 
     <div class="error-container">

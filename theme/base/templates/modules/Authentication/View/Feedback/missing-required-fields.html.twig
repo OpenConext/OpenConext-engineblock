@@ -5,4 +5,14 @@
 {% block title %}{{ parent() }}{% endblock %}
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
-{% block errorMessage %}{{ 'error_missing_required_fields_desc'|trans|raw }}{% endblock %}
+{% block errorMessage %}
+    {% if withIdpName %}
+        {{ 'error_missing_required_fields_desc'|trans({'%idpName%': feedbackInfoMap['identityProviderName'], '%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
+    {% elseif withIdpName %}
+        {{ 'error_missing_required_fields_desc'|trans({'%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+    {% elseif withSpName %}
+        {{ 'error_missing_required_fields_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
+    {% else %}
+        {{ 'error_missing_required_fields_desc'|trans|raw }}
+    {% endif %}
+{% endblock %}

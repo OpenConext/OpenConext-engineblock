@@ -17,6 +17,7 @@
  */
 
 use OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\EntityNotFoundException;
 use OpenConext\EngineBlock\Request\RequestId;
 use OpenConext\EngineBlockBundle\Exception\Art;
@@ -261,7 +262,9 @@ class EngineBlock_ApplicationSingleton
         // @todo  reset this when login is succesful
         // Find the current identity provider
         if (isset($_SESSION['currentIdentityProvider'])) {
-            $feedbackInfo['identityProvider'] = $_SESSION['currentIdentityProvider'];
+            $idpEntityId = $_SESSION['currentIdentityProvider'];
+            $feedbackInfo['identityProvider'] = $idpEntityId;
+            $feedbackInfo['identityProviderName'] = $this->getidentityProviderName($idpEntityId);
         }
 
         return $feedbackInfo;
@@ -433,6 +436,16 @@ class EngineBlock_ApplicationSingleton
         try {
             $serviceProvider = $this->getDiContainer()->getMetadataRepository()->fetchServiceProviderByEntityId($serviceProviderId);
             return $serviceProvider->getDisplayName($this->getDiContainer()->getLocaleProvider()->getLocale());
+        } catch (EntityNotFoundException $e) {}
+
+        return '';
+    }
+
+    private function getIdentityProviderName(string $identityProviderId): string
+    {
+        try {
+            $identityProvider = $this->getDiContainer()->getMetadataRepository()->fetchIdentityProviderByEntityId($identityProviderId);
+            return $identityProvider->getDisplayName($this->getDiContainer()->getLocaleProvider()->getLocale());
         } catch (EntityNotFoundException $e) {}
 
         return '';

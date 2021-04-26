@@ -155,14 +155,18 @@ HTML
     'error_405_desc'                    => 'O método HTTP "%requestMethod%" não é permitido para o endereço "%uri%". Os métodos suportados são: %allowedMethods%.',
     'error_help_desc'               => '<p></p>',
     'error_no_idps'                 => 'Erro - Não foi encontrado nenhum Fornecedor de Identidade',
-    'error_no_idps_desc'            => 'O serviço (&lsquo;Service Provider&rsquo;) a que pretende ligar-se não está acessível através da %organisationNounPlural%.',
+    'error_no_idps_desc'            => 'O %spName% a que pretende ligar-se não está acessível através da %organisationNounPlural%.',
     'error_session_lost'            => 'Erro - a sua sessão foi perdida',
     'error_session_lost_desc'       => '<p>Esta ação requer uma sessão ativa, no entanto, não conseguimos encontrar a sessão. Está a aguardar há muito tempo? Feche o browser e tente novamente, ou tente um browser diferente.</p>',
     'error_session_not_started'            => 'Erro - a sua sessão não foi encontrada',
     'error_session_not_started_desc'       => '<p>Esta ação requer uma sessão ativa, no entanto, não recebemos nenhum cookie de sessão. O browser deve aceitar cookies. Não utilize endereços do marcador ou link. Feche o browser e tente novamente, ou tente um browser diferente.</p>',
     'error_authorization_policy_violation'            => 'Erro - Sem acesso',
-    'error_authorization_policy_violation_desc'       => 'Você autenticu-se com sucesso na sua %organisationNoun%, mas infelizmente você não pode utilizar este serviço (o &lsquo;Fornecedor de Serviço&rsquo;) porque não tem acesso. A sua %organisationNoun% limita o acesso a este serviço com uma <i>política de autorização</i>. Entre em contacto com o suporte da sua %organisationNoun% se acha que deve ser-lhe concedido acesso ao serviço.',
-    'error_authorization_policy_violation_info'       => 'Mensagem da sua %organisationNoun%: ',
+    'error_authorization_policy_violation_desc'       => 'Você autenticu-se com sucesso na %idpName%, mas infelizmente você não pode utilizar %spName% (o &lsquo;Fornecedor de Serviço&rsquo;) porque não tem acesso. A %idpName% limita o acesso a %spName% com uma <i>política de autorização</i>. Entre em contacto com o suporte da %idpName% se acha que deve ser-lhe concedido acesso ao serviço.',
+    'error_authorization_policy_violation_desc_no_idp_name'       => 'Você autenticu-se com sucesso na sua %organisationNoun%, mas infelizmente você não pode utilizar %spName% (o &lsquo;Fornecedor de Serviço&rsquo;) porque não tem acesso. A sua %organisationNoun% limita o acesso a %spName% com uma <i>política de autorização</i>. Entre em contacto com o suporte da sua %organisationNoun% se acha que deve ser-lhe concedido acesso ao serviço.',
+    'error_authorization_policy_violation_desc_no_sp_name'       => 'Você autenticu-se com sucesso na %idpName%, mas infelizmente você não pode utilizar este serviço (o &lsquo;Fornecedor de Serviço&rsquo;) porque não tem acesso. A %idpName% limita o acesso a este serviço com uma <i>política de autorização</i>. Entre em contacto com o suporte da %idpName% se acha que deve ser-lhe concedido acesso ao serviço.',
+    'error_authorization_policy_violation_desc_no_name'       => 'Você autenticu-se com sucesso na sua %organisationNoun%, mas infelizmente você não pode utilizar este serviço (o &lsquo;Fornecedor de Serviço&rsquo;) porque não tem acesso. A sua %organisationNoun% limita o acesso a este serviço com uma <i>política de autorização</i>. Entre em contacto com o suporte da sua %organisationNoun% se acha que deve ser-lhe concedido acesso ao serviço.',
+    'error_authorization_policy_violation_info'       => 'Mensagem da %idpName%: ',
+    'error_authorization_policy_violation_info_no_idp_name'       => 'Mensagem da sua %organisationNoun%: ',
     'error_no_message'              => 'Erro - Não foi recebido nenhuma mensagem',
     'error_no_message_desc'         => 'Estávamos a aguardar uma mensagem, mas não chegou nenhuma? Alguma coisa correu mal. Tente de novo por favor.',
     'error_invalid_acs_location'    => 'O "Serviço de Consumidor de Asserção" fornecido é desconhecido ou inválido.',
@@ -171,18 +175,35 @@ HTML
     'error_unsupported_signature_method' => 'O método de assinatura não é suportado',
     'error_unsupported_signature_method_desc' => 'O método de assinatura %arg1% não é suportado, faça upgrade para RSA-SHA256 (http://www.w3.org/2001/04/xmldsig-more#rsa-sha256).',
     'error_unknown_preselected_idp' => 'Erro - Não há ligação entre %organisationNoun% e o serviço',
+    'error_unknown_preselected_idp_no_sp_name' => 'Erro - Não há ligação entre %organisationNoun% e o serviço',
     'error_unknown_preselected_idp_desc' => 'A %organisationNoun% que pretende utilizar para se autenticar e aceder ao serviço, não tem activado o acesso a este serviço. Isto significa que não pode aceder a este serviço através da %suiteName%. Entre em contacto com com o suporte da sua %organisationNoun% para solicitar o acesso a este serviço. Declare que serviço se trata (o &lsquo;Fornecedor de Serviço&rsquo;) e porque necessita do acesso.',
+    'error_unknown_preselected_idp_desc_no_sp_name' => 'A %organisationNoun% que pretende utilizar para se autenticar e aceder ao serviço, não tem activado o acesso a este serviço. Isto significa que não pode aceder a este serviço através da %suiteName%. Entre em contacto com com o suporte da sua %organisationNoun% para solicitar o acesso a este serviço. Declare que serviço se trata (o &lsquo;Fornecedor de Serviço&rsquo;) e porque necessita do acesso.',
     'error_unknown_service_provider'          => 'Erro - Serviço desconhecido',
     'error_unknown_service_provider_desc'     => 'O serviço a que pretende autenticar-se é desconhecido para a %suiteName%. Possivelmente a sua %organisationNoun% nunca permitiu o acesso a este serviço. Entre em contacto com o suporte da sua %organisationNoun% e fornecer-lhes as seguintes informações:',
 
     'error_unsupported_acs_location_scheme' => 'Erro - URI scheme não suportado na localização ACS',
 
     'error_unknown_identity_provider'          => 'Erro - %organisationNoun% desconhecido',
+    'error_unknown_identity_provider_no_idp_name'   => 'Erro - %organisationNoun% desconhecido',
     'error_unknown_identity_provider_desc'     => 'O %organisationNoun% a que pretende autenticar-se é desconhecido para a %suiteName%.',
+    'error_unknown_identity_provider_desc_no_idp_name'     => 'O %organisationNoun% a que pretende autenticar-se é desconhecido para a %suiteName%.',
     'error_generic'                     => 'Erro - Ocorreu um erro',
-    'error_generic_desc'                => 'A sua autenticação falhou e não sabemos exactamente porquê. Tente de novo e no caso de voltar a não funcionar, entre em contacto com o suporte da sua %organisationNoun% para pedir ajuda.',
+    'error_generic_desc'                => 'A sua autenticação falhou e não sabemos exactamente porquê. Tente de novo e no caso de voltar a não funcionar, entre em contacto com o suporte da %idpName% para pedir ajuda.',
     'error_missing_required_fields'     => 'Erro - Campo necessário em falta',
     'error_missing_required_fields_desc'=> '<p>
+Não pode usar esta aplicação porque a %idpName% não está a fornecer a informação necessária.
+    </p>
+    <p>
+        Entre em contacto com a %idpName% com a informação indicada em baixo.
+    </p>
+    <p>
+        A autenticação falhou porque o Fornecedor de Identidade da %idpName% não forneceu %suiteName% com um ou mais dos seguintes atributos obrigatórios:
+        <ul>
+            <li>UID</li>
+            <li>schacHomeOrganization</li>
+        </ul>
+    </p>',
+        'error_missing_required_fields_desc_no_idp_name'=> '<p>
 Não pode usar esta aplicação porque a sua %organisationNoun% não está a fornecer a informação necessária.
     </p>
     <p>
@@ -195,20 +216,53 @@ Não pode usar esta aplicação porque a sua %organisationNoun% não está a for
             <li>schacHomeOrganization</li>
         </ul>
     </p>',
+        'error_missing_required_fields_desc_no_sp_name'=> '<p>
+Não pode usar esta aplicação porque a %idpName% não está a fornecer a informação necessária.
+    </p>
+    <p>
+        Entre em contacto com a %idpName% com a informação indicada em baixo.
+    </p>
+    <p>
+        A autenticação falhou porque o Fornecedor de Identidade da %idpName% não forneceu %suiteName% com um ou mais dos seguintes atributos obrigatórios:
+        <ul>
+            <li>UID</li>
+            <li>schacHomeOrganization</li>
+        </ul>
+    </p>',
+    'error_missing_required_fields_desc_no_name'=> '<p>
+Não pode usar esta aplicação porque a sua %organisationNoun% não está a fornecer a informação necessária.
+</p>
+<p>
+    Entre em contacto com a sua %organisationNoun% com a informação indicada em baixo.
+</p>
+<p>
+    A autenticação falhou porque o Fornecedor de Identidade da sua %organisationNoun% não forneceu %suiteName% com um ou mais dos seguintes atributos obrigatórios:
+    <ul>
+        <li>UID</li>
+        <li>schacHomeOrganization</li>
+    </ul>
+</p>',
     'error_invalid_attribute_value' => 'Valor do atributo não permitido',
-    'error_invalid_attribute_value_desc' => 'A sua %organisationNoun% utilizou um valor para o atributo %attributeName% ("%attributeValue%") o que não é permitido para esta %organisationNoun%. Desta forma, não pode autenticar-se. Apenas a sua %organisationNoun% pode resolver esta situação. Entre em contacto com o suporte deste serviço da sua %organisationNoun%.',
+    'error_invalid_attribute_value_desc' => 'A %idpName% utilizou um valor para o atributo %attributeName% ("%attributeValue%") o que não é permitido para esta %organisationNoun%. Desta forma, não pode autenticar-se. Apenas a %idpName% pode resolver esta situação. Entre em contacto com o suporte deste serviço da %idpName%.',
+    'error_invalid_attribute_value_desc_no_idp_name' => 'A sua %organisationNoun% utilizou um valor para o atributo %attributeName% ("%attributeValue%") o que não é permitido para esta %organisationNoun%. Desta forma, não pode autenticar-se. Apenas a sua %organisationNoun% pode resolver esta situação. Entre em contacto com o suporte deste serviço da sua %organisationNoun%.',
     'error_received_error_status_code'     => 'Erro - Erro no Fornecedor de Identidade',
     'error_received_error_status_code_desc'=> '<p>
 A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em contacto com o suporte (IT) para ver se é possível corrigir a situação.
     </p>',
-    'error_received_invalid_response'       => 'Erro - Resposta inválida do Fornecedor de Identidade',
-    'error_received_invalid_signed_response'=> 'Erro - resposta de assinatura inválida do Fornecedor de Identidade',
+    'error_received_invalid_response'       => 'Erro - Resposta inválida do %idpName%',
+    'error_received_invalid_response_no_idp_name'       => 'Erro - Resposta inválida do Fornecedor de Identidade',
+    'error_received_invalid_signed_response'=> 'Erro - resposta de assinatura inválida do %idpName%',
     'error_stuck_in_authentication_loop' => 'Erro - Ficou preso(a) no vazio',
-    'error_stuck_in_authentication_loop_desc' => 'Autenticou-se com sucesso no seu Fornecedor de Identidade, mas o serviço ao qual está a tentar aceder reencaminhou-o de volta para %suiteName%. Como já está autenticado, o %suiteName% o reencaminha de volta para o serviço, o que resulta num ciclo infinito. Muito provavelmente, isto é provocado por um erro no Fornecedor de Serviço.',
+    'error_stuck_in_authentication_loop_desc' => 'Autenticou-se com sucesso no seu %idpName%, mas o %spName% reencaminhou-o de volta para %suiteName%. Como já está autenticado, o %suiteName% o reencaminha de volta para o %spName%, o que resulta num ciclo infinito. Muito provavelmente, isto é provocado por um erro no %spName%.',
+    'error_stuck_in_authentication_loop_desc_no_idp_name' => 'Autenticou-se com sucesso no seu Fornecedor de Identidade, mas o %spName% reencaminhou-o de volta para %suiteName%. Como já está autenticado, o %suiteName% o reencaminha de volta para o %spName%, o que resulta num ciclo infinito. Muito provavelmente, isto é provocado por um erro no %spName%.',
+    'error_stuck_in_authentication_loop_desc_no_sp_name' => 'Autenticou-se com sucesso no seu %idpName%, mas o serviço reencaminhou-o de volta para %suiteName%. Como já está autenticado, o %suiteName% o reencaminha de volta para o serviço, o que resulta num ciclo infinito. Muito provavelmente, isto é provocado por um erro no Fornecedor de Serviço.',
+    'error_stuck_in_authentication_loop_desc_no_name' => 'Autenticou-se com sucesso no seu Fornecedor de Identidade, mas o serviço ao qual está a tentar aceder reencaminhou-o de volta para %suiteName%. Como já está autenticado, o %suiteName% o reencaminha de volta para o serviço, o que resulta num ciclo infinito. Muito provavelmente, isto é provocado por um erro no Fornecedor de Serviço.',
     'error_authn_context_class_ref_blacklisted'                     => 'Erro - O valor para AuthnContextClassRef não é permitido',
-    'error_authn_context_class_ref_blacklisted_desc'                => '<p>Não pode autenticar-se porque a sua %organisationNoun% enviou um valor para AuthnContextClassRef que não é permitido.</p>',
+    'error_authn_context_class_ref_blacklisted_desc'                => '<p>Não pode autenticar-se porque a %idpName% enviou um valor para AuthnContextClassRef que não é permitido.</p>',
+    'error_authn_context_class_ref_blacklisted_desc_no_idp_name'                => '<p>Não pode autenticar-se porque a sua %organisationNoun% enviou um valor para AuthnContextClassRef que não é permitido.</p>',
     'error_invalid_mfa_authn_context_class_ref' => 'Erro - falha na autenticação segundo fator de autenticação (2FA)',
-    'error_invalid_mfa_authn_context_class_ref_desc' => '<p>A sua %organisationNoun% requer segurança adicional para este serviço, por meio de um segundo fator de autenticação (2FA). No entanto, o seu segundo fator de autenticação não pôde ser verificado. Entre em contato com o suporte da sua %organisationNoun% para validar esta situação.</p>',
+    'error_invalid_mfa_authn_context_class_ref_desc' => '<p>A %idpName% requer segurança adicional para este serviço, por meio de um segundo fator de autenticação (2FA). No entanto, o seu segundo fator de autenticação não pôde ser verificado. Entre em contato com o suporte da %idpName% para validar esta situação.</p>',
+    'error_invalid_mfa_authn_context_class_ref_desc_no_idp_name' => '<p>A sua %organisationNoun% requer segurança adicional para este serviço, por meio de um segundo fator de autenticação (2FA). No entanto, o seu segundo fator de autenticação não pôde ser verificado. Entre em contato com o suporte da sua %organisationNoun% para validar esta situação.</p>',
     'error_no_authentication_request_received' => 'Não foi recebida nenhuma solicitação de autenticação.',
     /**
      * %1 AttributeName
@@ -234,6 +288,7 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_unknown_requesterid_in_authnrequest_desc'    => '<p>O serviço solicitado não foi encontrado.</p>',
     'error_clock_issue_title' => 'Erro - A asserção ainda não é válida ou pode ter expirado',
     'error_clock_issue_desc' => '<p>Por favor, verifique se a hora no IdP está correta.</p>',
+    'error_clock_issue_desc_no_idp_name' => '<p>Por favor, verifique se a hora no IdP está correta.</p>',
     'error_stepup_callout_unknown_title' => 'Erro - falha por autenticação forte desconhecida',
     'error_stepup_callout_unknown_desc' => 'O login com autenticação forte falhou e não sabemos exatamente qual o motivo. Tente aceder de novo ao serviço e efetuar uma nova autenticação. Se voltar a não funcionar, entre em contato com o suporte técnico da sua %organisationNoun%.',
     'error_stepup_callout_unmet_loa_title' => 'Erro - não foi encontrado nenhum token adequado',
