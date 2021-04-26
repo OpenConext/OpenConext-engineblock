@@ -17,7 +17,7 @@ Feature:
     When I go to Engineblock URL "/feedback/unknown-error"
     Then I should see "Error - An error occurred"
      And I should see "OpenConext Wiki"
-     And I should see "Helpdesk"
+     And I should see "Service desk"
      And I should not see "support@openconext.org"
 
   Scenario: When a wiki link is not configured in a translation the wiki link should be hidden
@@ -27,7 +27,7 @@ Feature:
     When I go to Engineblock URL "/feedback/unknown-error"
     Then I should see "Error - An error occurred"
       And I should not see "OpenConext Wiki"
-      And I should see "Helpdesk"
+      And I should see "Service desk"
       And I should not see "support@openconext.org"
 
 
