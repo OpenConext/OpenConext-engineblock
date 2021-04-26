@@ -163,7 +163,7 @@ HTML
     'error_authorization_policy_violation_desc'       => 'Neem contact op met de helpdesk van %idpName% als je toegang tot %spName% wilt. Vermeld daarbij dat je probeerde in te loggen op %spName% en dat je werd tegengehouden door een autorisatieregel van %suiteName%, geconfigureerd door %idpName%.',
     'error_authorization_policy_violation_desc_no_idp_name'       => 'Neem contact op met de helpdesk van je eigen %organisationNoun% als je toegang tot %spName% wilt. Vermeld daarbij dat je probeerde in te loggen op %spName% en dat je werd tegengehouden door een autorisatieregel van %suiteName%, geconfigureerd door jouw eigen %organisationNoun%.',
     'error_authorization_policy_violation_desc_no_sp_name'       => 'Neem contact op met de helpdesk van %idpName% als je toegang tot deze dienst wilt. Vermeld daarbij op welke dienst je probeerde in te loggen en dat je werd tegengehouden door een autorisatieregel van %suiteName%, geconfigureerd door %idpName%.',
-    'error_authorization_policy_violation_desc_no_name'       => 'Neem contact op met de servicedesk van je eigen %organisationNoun% als je toegang tot deze dienst wilt. Vermeld daarbij op welke dienst je probeerde in te loggen en dat je werd tegengehouden door een autorisatieregel van %suiteName%, geconfigureerd door jouw eigen %organisationNoun%.',
+    'error_authorization_policy_violation_desc_no_name'       => 'Neem contact op met de helpdesk van je eigen %organisationNoun% als je toegang tot deze dienst wilt. Vermeld daarbij op welke dienst je probeerde in te loggen en dat je werd tegengehouden door een autorisatieregel van %suiteName%, geconfigureerd door jouw eigen %organisationNoun%.',
     'error_authorization_policy_violation_info'       => 'Bericht van %idpName%: ',
     'error_authorization_policy_violation_info_no_idp_name'       => 'Bericht van je %organisationNoun%: ',
     'error_no_message'                  => 'Fout - Geen bericht ontvangen',
@@ -262,10 +262,10 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
     'error_no_authentication_request_received' => 'Fout - Geen authenticatie-aanvraag ontvangen.',
     'error_authn_context_class_ref_blacklisted' => 'Fout - Waarde van AuthnContextClassRef is niet toegestaan',
     'error_authn_context_class_ref_blacklisted_desc' => '<p>Je kunt niet inloggen omdat %idpName% een waarde stuurde voor AuthnContextClassRef die niet is toegestaan. Neem contact op met de helpdesk van %idpName% om dit op te lossen</p>',
-    'error_authn_context_class_ref_blacklisted_desc_no_idp_name' => '<p>Je kunt niet inloggen omdat je %organisationNoun% een waarde stuurde voor AuthnContextClassRef die niet is toegestaan. Neem contact op met de servicedesk van je %organisationNoun% om dit op te lossen</p>',
+    'error_authn_context_class_ref_blacklisted_desc_no_idp_name' => '<p>Je kunt niet inloggen omdat je %organisationNoun% een waarde stuurde voor AuthnContextClassRef die niet is toegestaan. Neem contact op met de helpdesk van je %organisationNoun% om dit op te lossen</p>',
     'error_invalid_mfa_authn_context_class_ref' => 'Fout - Multi-factor authenticatie mislukt',
     'error_invalid_mfa_authn_context_class_ref_desc' => '<p>%idpName% vereist multi-factor authenticatie voor deze dienst. Je tweede factor kon echter niet gevalideerd worden. Neem contact op met de helpdesk van %idpName% om dit op te lossen.</p>',
-    'error_invalid_mfa_authn_context_class_ref_desc_no_idp_name' => '<p>Jouw %organisationNoun% vereist multi-factor authenticatie voor deze dienst. Je tweede factor kon echter niet gevalideerd worden. Neem contact op met de servicedesk van je %organisationNoun% om dit op te lossen.</p>',
+    'error_invalid_mfa_authn_context_class_ref_desc_no_idp_name' => '<p>Jouw %organisationNoun% vereist multi-factor authenticatie voor deze dienst. Je tweede factor kon echter niet gevalideerd worden. Neem contact op met de helpdesk van je %organisationNoun% om dit op te lossen.</p>',
 
     /**
      * %1 AttributeName

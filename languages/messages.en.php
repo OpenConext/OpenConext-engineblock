@@ -144,8 +144,8 @@ HTML
     'error_wiki-link-text' => '%suiteName% Wiki',
     'error_wiki-link-text-short' => 'Wiki',
     'error_help-desk-href' => 'https://www.surf.nl/over-surf/dienstverlening-support-werkmaatschappijen',
-    'error_help-desk-link-text' => 'Helpdesk',
-    'error_help-desk-link-text-short' => 'Helpdesk',
+    'error_help-desk-link-text' => 'Service desk',
+    'error_help-desk-link-text-short' => 'Service desk',
     'error_return-sp-link-text' => 'Return to %spName%',
     'error_return-sp-link-text-short' => 'Return to service',
 
@@ -192,8 +192,8 @@ HTML
     'error_generic'                     => 'Error - An error occurred',
     'error_generic_desc'                => 'Logging in has failed and we don\'t know exactly why. Please try again first by going back to %spName% and logging in again. If this doesn\'t work, please contact the service desk of %idpName%.',
     'error_generic_desc_no_sp_name' => 'Logging in has failed and we don\'t know exactly why. Please try again first by going back to the service and logging in again. If this doesn\'t work, please contact the service desk of %idpName%.',
-    'error_generic_desc_no_idp_name' => 'Logging in has failed and we don\'t know exactly why. Please try again first by going back to %spName% and logging in again. If this doesn\'t work, please contact the help desk of your %organisationNoun%.',
-    'error_generic_desc_no_names' => 'Logging in has failed and we don\'t know exactly why. Please try again first by going back to the service and logging in again. If this doesn\'t work, please contact the help desk of your %organisationNoun%.',
+    'error_generic_desc_no_idp_name' => 'Logging in has failed and we don\'t know exactly why. Please try again first by going back to %spName% and logging in again. If this doesn\'t work, please contact the service desk of your %organisationNoun%.',
+    'error_generic_desc_no_names' => 'Logging in has failed and we don\'t know exactly why. Please try again first by going back to the service and logging in again. If this doesn\'t work, please contact the service desk of your %organisationNoun%.',
     'error_missing_required_fields'     => 'Error - Missing required fields',
     'error_missing_required_fields_desc'=> '<p>
 %idpName% does not provide the mandatory information. Therefore, you can not use %spName%. Please contact the service desk of %idpName% and tell them one or more of the the following required attribute(s) are missing within %suiteName%:
@@ -233,10 +233,10 @@ Your %organisationNoun% does not provide the mandatory information. Therefore, y
 </p>',
     'error_invalid_attribute_value' => 'Error - Attribute value not allowed',
     'error_invalid_attribute_value_desc' => '%idpName% sends a value for attribute %attributeName% ("%attributeValue%") which is not allowed for this %organisationNoun%. Therefore you cannot log in. Only %idpName% can resolve this. Please contact the service desk of %idpName% to fix this problem.',
-    'error_invalid_attribute_value_desc_no_idp_name' => 'Your %organisationNoun% sends a value for attribute %attributeName% ("%attributeValue%") which is not allowed for this %organisationNoun%. Therefore you cannot log in. Only your %organisationNoun% can resolve this. Please contact the help desk of your own %organisationNoun% to fix this problem.',
+    'error_invalid_attribute_value_desc_no_idp_name' => 'Your %organisationNoun% sends a value for attribute %attributeName% ("%attributeValue%") which is not allowed for this %organisationNoun%. Therefore you cannot log in. Only your %organisationNoun% can resolve this. Please contact the service desk of your own %organisationNoun% to fix this problem.',
     'error_received_error_status_code'     => 'Error - Identity Provider error',
     'error_received_error_status_code_desc'=> '<p>
-Your %organisationNoun% has denied you access to this service. You will have to contact your own (IT-)servicedesk to see if this can be fixed.
+Your %organisationNoun% has denied you access to this service. You will have to contact your own (IT-)service desk to see if this can be fixed.
 </p>',
     'error_received_invalid_response'       => 'Error - Invalid %idpName% SAML response',
     'error_received_invalid_response_no_idp_name'       => 'Error - Invalid %organisationNoun% SAML response',
