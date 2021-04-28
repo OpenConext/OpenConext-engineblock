@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 use EngineBlock_ApplicationSingleton;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Translation\TranslatorInterface;
 use Twig\TwigFunction;
 use Twig_Extension;
 
@@ -37,17 +38,24 @@ class GlobalSiteNotice extends Twig_Extension
     private $diContainer;
 
     /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * @var null|Request
      */
     private $request;
 
     public function __construct(
         EngineBlock_ApplicationSingleton $application,
-        RequestStack $requestStack
+        RequestStack $requestStack,
+        TranslatorInterface $translator
     ) {
         $this->application = $application;
         $this->diContainer = $application->getDiContainer();
         $this->request = $requestStack->getCurrentRequest();
+        $this->translator = $translator;
     }
 
     public function getFunctions()
@@ -88,7 +96,7 @@ class GlobalSiteNotice extends Twig_Extension
 MSG;
             return (string) $this->request->get('globalSiteNotice', $message);
         }
-        return (string) $this->diContainer->getGlobalSiteNotice();
+        return $this->translator->trans('site_notice');
     }
 
     public function getAllowedHtmlForNotice(): string

@@ -298,6 +298,7 @@ services:
         arguments:
             - "@engineblock.compat.application"
             - "@request_stack"
+            - "@translator"
         tags:
              - { name: 'twig.extension' }
 
