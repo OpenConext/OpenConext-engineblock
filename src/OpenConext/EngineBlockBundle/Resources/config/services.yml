@@ -293,11 +293,11 @@ services:
         tags:
              - { name: 'twig.extension' }
 
-    engineblock.twig.extension.globalsitenotice:
+    engineblock.twig.extension.global_site_notice:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\GlobalSiteNotice
         arguments:
-            - "@engineblock.compat.application"
-            - "@request_stack"
+            - "%global.site_notice.show%"
+            - "%global.site_notice.allowed.tags%"
             - "@translator"
         tags:
              - { name: 'twig.extension' }

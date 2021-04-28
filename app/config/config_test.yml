@@ -8,6 +8,15 @@ services:
         class: OpenConext\EngineBlockBundle\Configuration\TestFeatureConfiguration
         public: true
 
+    engineblock.twig.extension.global_site_notice:
+        class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\FunctionalTestingGlobalSiteNotice
+        arguments:
+            - "@request_stack"
+            - "%global.site_notice.allowed.tags%"
+        tags:
+            - { name: 'twig.extension' }
+
+
 framework:
     test: ~
     translator:
