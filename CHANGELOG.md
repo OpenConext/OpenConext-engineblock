@@ -5,6 +5,23 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.6.0
+**Features and bugfixes**
+- Add a global site notice #1128
+- Allow AuthnRequest based stepup requests #1105
+- Add a 'back to SP' button on the 'Stepup failed' error pages #1114
+- Error messages have been improved #1112 #1130
+- Include Twig linting in CI pipeline #1108
+- Transparent SAML error Response for MFA entities #1131
+- Remove double titles on skeune error pages #1110
+- Update visual screenshots & tests for them #1109
+- Ensure search results remain after ENTER #1106
+- Replace the hamburger and search icon #1116
+
+## 6.5.1
+**Bugfix**
+- Remove forgotten debug statement #1107
+
 ## 6.5.0
 A bit of everything release. Most notable changes are:
 
