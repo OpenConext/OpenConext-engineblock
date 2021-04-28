@@ -180,8 +180,10 @@ HTML
     'error_unknown_preselected_idp_desc_no_sp_name' => 'The %organisationNoun% that you want to use to login to this service did not activate access to this service. This means you are unable to use this service through %suiteName%. Please contact the helpdesk of your %organisationNoun% to request access to this service. State what service it is about (the &lsquo;SP&rsquo;) and why you need access.',
     'error_unknown_service_provider'            => 'Error - %spName% unknown',
     'error_unknown_service_provider_no_sp_name' => 'Error - Unknown service',
-    'error_unknown_service_provider_desc'     => 'You are trying to log in to %spName%, but this is unknown to %suiteName%. Possibly your %organisationNoun% has never enabled access to %spName%. If you would like to use it, please contact the service desk of your %organisationNoun%.',
-    'error_unknown_service_provider_desc_no_sp_name' => 'The service you are trying to log in to is unknown to %suiteName%. Possibly your %organisationNoun% has never enabled access to this service. If you would like to use this service, please contact the helpdesk of your %organisationNoun%.',
+    'error_unknown_service_provider_desc'     => 'You are trying to log in to %spName%, but this is unknown to %suiteName%. Possibly %idpName% has never enabled access to %spName%. If you would like to use it, please contact the service desk of %idpName%.',
+    'error_unknown_service_provider_desc_no_sp_name' => 'The service you are trying to log in to is unknown to %suiteName%. Possibly %idpName% has never enabled access to this service. If you would like to use this service, please contact the helpdesk of %idpName%.',
+    'error_unknown_service_provider_desc_no_idp_name' => 'You are trying to log in to %spName%. Possibly your %organisationNoun% has never enabled access to %spName%. If you would like to use it, please contact the helpdesk of your %organisationNoun%.',
+    'error_unknown_service_provider_desc_no_names' => 'The service you are trying to log in to is unknown to %suiteName%. Possibly your %organisationNoun% has never enabled access to this service. If you would like to use this service, please contact the helpdesk of your %organisationNoun%.',
 
     'error_unsupported_acs_location_scheme' => 'Error - Unsupported URI scheme in ACS location',
 
