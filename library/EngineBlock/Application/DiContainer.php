@@ -20,6 +20,7 @@ use Doctrine\ORM\EntityManager;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactor;
 use OpenConext\EngineBlock\Metadata\LoaRepository;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Service\MfaHelperInterface;
 use OpenConext\EngineBlock\Service\TimeProvider\TimeProviderInterface;
 use OpenConext\EngineBlock\Stepup\StepupEntityFactory;
 use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
@@ -451,6 +452,11 @@ class EngineBlock_Application_DiContainer extends Pimple
     public function getProcessingStateHelper()
     {
         return $this->container->get('engineblock.service.processing_state_helper');
+    }
+
+    public function getMfaHelper(): MfaHelperInterface
+    {
+        return $this->container->get('engineblock.service.mfa_helper');
     }
 
     /**

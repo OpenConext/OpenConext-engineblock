@@ -538,6 +538,16 @@ class EngineBlock_Corto_ProxyServer
         return $response;
     }
 
+    public function createTransparentErrorResponse(
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
+        EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse
+    ) {
+        $response = $this->_createBaseResponse($request);
+        $this->_logger->info('Setting the status of the original (error) response on the SAML Response for the SP');
+        $response->setStatus($receivedResponse->getStatus());
+        return $response;
+    }
+
     /**
      * @param AuthnRequest|EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
      * @param Response|EngineBlock_Saml2_ResponseAnnotationDecorator $sourceResponse
@@ -868,7 +878,11 @@ class EngineBlock_Corto_ProxyServer
                 EngineBlock_Exception::CODE_NOTICE
             );
         }
+        return $this->findRequestFromRequestId($requestId);
+    }
 
+    public function findRequestFromRequestId(string $requestId): ?EngineBlock_Saml2_AuthnRequestAnnotationDecorator
+    {
         $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->getLogger());
 
         $spRequestId = $authnRequestRepository->findLinkedRequestId($requestId);

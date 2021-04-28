@@ -90,6 +90,14 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $log = $application->getLogInstance();
 
+        if ($receivedResponse->isTransparentErrorResponse()) {
+            $log->info('Response contains an error response status code, SP is configured with transparent_authn_context.');
+            $response = $this->_server->createTransparentErrorResponse($receivedRequest, $receivedResponse);
+            $log->info('Sending AuthnFailed response back to SP');
+            $this->_server->sendResponseToRequestIssuer($receivedRequest, $response);
+            return;
+        }
+
         // Test if we should return a no passive status response back to the SP
         if (in_array(Constants::STATUS_NO_PASSIVE, $receivedResponse->getStatus())) {
             $log->info('Response contains NoPassive status code: responding with NoPassive status to SP');

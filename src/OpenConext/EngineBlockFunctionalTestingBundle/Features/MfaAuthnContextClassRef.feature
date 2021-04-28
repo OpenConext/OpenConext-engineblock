@@ -88,3 +88,18 @@ Feature:
     And I pass through EngineBlock
     Then the url should match "functional-testing/SSO-IdP/sso"
     And the response should not contain "http://my-very-own-context.example.com/level9"
+
+  Scenario: While using transparent_authn_context AuthnFailed response is also passed transparently
+    Given the IdP "SSO-IdP" is configured for MFA authn method "transparent_authn_context" for SP "SSO-SP"
+    And the IdP is configured to always return Responses with StatusCode Responder/AuthnFailed
+    And the SP "SSO-SP" sends AuthnContextClassRef with value "http://sp-specific-loa.org/super-secure-second-factor-authn"
+    When I log in at "SSO-SP"
+    And I pass through EngineBlock
+    Then the url should match "functional-testing/SSO-IdP/sso"
+    And the AuthnRequest to submit should match xpath '/samlp:AuthnRequest/samlp:RequestedAuthnContext/saml:AuthnContextClassRef[text()="http://sp-specific-loa.org/super-secure-second-factor-authn"]'
+    And I pass through the IdP
+    And I give my consent
+    And I pass through EngineBlock
+   Then the url should match "/functional-testing/SSO-SP/acs"
+    And the response should contain "urn:oasis:names:tc:SAML:2.0:status:Responder"
+    And the response should contain "urn:oasis:names:tc:SAML:2.0:status:AuthnFailed"

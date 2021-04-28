@@ -415,6 +415,18 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                     )
                 );
 
+                // If this is a transparent MFA authentication, we want to forward the error response
+                $originalRequest = $this->_server->findRequestFromRequestId($sspResponse->getInResponseTo());
+                $originalSpIssuer = $originalRequest->getIssuer()->getValue();
+                $mfaHelper = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getMfaHelper();
+                $isMfaTransparentSp = $mfaHelper->isTransparent($originalSpIssuer, $idpEntityId->getValue());
+                if ($isMfaTransparentSp) {
+                    // The AuthnFailed response is passed transparently back to the issuer
+                    $response = new EngineBlock_Saml2_ResponseAnnotationDecorator($sspResponse);
+                    $response->setIsTransparentErrorResponse(true);
+                    return $response;
+                }
+
                 $statusCodeDescription = $status['Code'];
                 if (isset($status['SubCode'])) {
                     $statusCodeDescription .= '/' . $status['SubCode'];
