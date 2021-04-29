@@ -17,6 +17,7 @@ More information about our release strategy can be found in the [Development Gui
 - Update visual screenshots & tests for them #1109
 - Ensure search results remain after ENTER #1106
 - Replace the hamburger and search icon #1116
+- Change the default mail configuration to SMTP instead of sendmail #1129
 
 ## 6.5.1
 **Bugfix**
