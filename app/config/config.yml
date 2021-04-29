@@ -25,7 +25,11 @@ open_conext_engine_block:
         eb.block_user_on_violation: "%feature_block_user_on_violation%"
 
 swiftmailer:
-    transport: sendmail
+    transport: "%mailer_transport%"
+    host: "%mailer_host%"
+    port: "%mailer_port%"
+    username: "%mailer_user%"
+    password: "%mailer_password%"
 
 framework:
     #esi:             ~
