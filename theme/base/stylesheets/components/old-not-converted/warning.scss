@@ -1,0 +1,46 @@
+.notification__warning {
+    background-color: $lightPinkOld;
+    margin: 2rem 0;
+    padding: 0.75rem;
+    position: relative;
+
+    @include screen('mobile') {
+        margin: 2rem 0;
+    }
+
+    &.full-width {
+        margin: 2rem 0;
+    }
+
+    > *:first-child::before{
+        color: $red;
+        content: $fa-var-warning;
+        display: inline-block;
+        font-family: FontAwesome, sans-serif;
+        height: 1.2em;
+        left: 0.75em;
+        margin-right: 0.75em;
+        position: absolute;
+        vertical-align: middle;
+        width: 1.2em;
+    }
+
+    > h2 {
+      font-weight: bold;
+      margin-left: 1.95em;
+      margin-right: 3em;
+    }
+
+    > * {
+        margin-left: 1.95rem;
+        margin-right: 3rem;
+    }
+
+    p {
+        margin: 1rem 2rem;
+    }
+
+    strong {
+        font-weight: 700;
+    }
+}

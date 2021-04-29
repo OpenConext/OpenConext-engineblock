@@ -43,6 +43,7 @@ return $overrides + [
     'note'                  => 'Mededeling',
     'note_no_script'        => 'Jouw browser ondersteunt geen JavaScript. Je moet op de onderstaande knop drukken om door te gaan.',
     'unknown_organization_name' => 'Onbekend',
+    'site_notice'           => '<p>Hallo, mijnheer De Uil<br/>Waar breng je ons naar toe<br/>Naar Fabeltjesland</p><p>Eh, ja, naar Fabeltjesland</p><p>En lees je ons dan voor<br/>Uit de Fabeltjeskrant</p><p>Ja, ja, uit de Fabeltjeskrant<br/>Want daarin staat precies vermeld<br/>Hoe het met de dieren is gesteld</p><p>Echt waar? Echt waar<br/>Echt waar mijnheer De Uil.</p>',
 
      // Feedback
     'requestId'             => 'UR ID',

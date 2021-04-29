@@ -1,5 +1,5 @@
 .c-button {
-    background: $blue;
+    background: $darkBlue;
     border: 1px solid transparent;
     border-radius: 10rem;
     color: $white;
@@ -12,18 +12,19 @@
     white-space: nowrap;
 
   &:hover {
-      background: darken($blue, 10);
+      background: darken($darkBlue, 10);
+      text-decoration: underline;
   }
 
   &.outline {
       background: $white;
       border: 1px solid $borderDark;
-      color: $blue;
+      color: $darkBlue;
 
     &.white {
         background: $white;
-        border: 1px solid $blue;
-        color: $blue;
+        border: 1px solid $darkBlue;
+        color: $darkBlue;
     }
   }
 
@@ -62,6 +63,6 @@
 
   &.c-button-link {
       background: transparent;
-      color: darken($blue,10);
+      color: darken($darkBlue,10);
   }
 }

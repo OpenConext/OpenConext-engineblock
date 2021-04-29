@@ -9,6 +9,7 @@
 <div class="box">
   <div class="mod-content">
     <h1>Logout</h1>
+    {% include '@theme/Authentication/View/Proxy/site-notice.html.twig' with { className: 'full-width' } %}
     <p>{{ 'logout_description'|trans }}</p>
     <p>{{ 'logout_information_link'|trans|raw }}</p>
   </div>

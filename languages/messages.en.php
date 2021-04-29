@@ -43,8 +43,9 @@ return $overrides + [
     'note'                  => 'Note',
     'note_no_script'        => 'Since your browser does not support JavaScript, you must press the button below to proceed.',
     'unknown_organization_name' => 'Unknown',
+    'site_notice'           => '<p>There is nothing wrong with your television set. <strong>Do not attempt to adjust the picture.</strong> We are controlling transmission. If we wish to make it louder, we will bring up the volume. If we wish to make it softer, we will tune it to a whisper. We will control the horizontal. We will control the vertical. We can roll the image, make it flutter. We can change the focus to a soft blur, or sharpen it to crystal clarity. <strong></p><p>For the next hour, sit quietly and we will control all that you see and hear.</strong> We repeat: There is nothing wrong with your television set. You are about to participate in a great adventure. You are about to experience the awe and mystery which reaches from the inner mind to... <a href="https://en.wikiquote.org/wiki/The_Outer_Limits_(1963_TV_series)">The Outer Limits</a>.</p>',
 
-    // Feedback
+        // Feedback
     'requestId'             => 'UR ID',
     'identityProvider'      => 'IdP',
     'serviceProvider'       => 'SP',

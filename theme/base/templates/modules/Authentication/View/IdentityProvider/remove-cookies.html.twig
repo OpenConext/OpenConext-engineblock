@@ -4,9 +4,10 @@
 {% set pageTitle = 'cookie_removal_header'|trans %}
 
 {% block content %}
-<div class="box">
+<main class="box">
     <div class="mod-content">
         <h1>{{ 'cookie_removal_header'|trans }}</h1>
+        {% include '@theme/Authentication/View/Proxy/Partials/Shared/site-notice.html.twig' %}
         {{ 'cookie_removal_description'|trans|raw }}
         <form id="remove_cookie_form" method="post" class="apply clearfix l-overflow">
             <table class="remove-cookies">
@@ -15,18 +16,18 @@
                         <tr>
                             <td class="small-column">
                                 <button name="remove_{{ cookie }}" id="remove_{{ cookie }}"
-                                        class="c-button"> {{ 'cookie_remove_button'|trans }} </button>
+                                        class="c-button" type="submit"> {{ 'cookie_remove_button'|trans }} </button>
                             </td>
-                            <td class="small-column"><label for="{{ cookie }}">{{ cookie }}</label></td>
+                            <td class="small-column"><span>{{ cookie }}</span></td>
                             <td>{{ cookiesSet[cookie]|escape }}</td>
                         </tr>
                     {% else %}
                         <tr>
                             <td>
                                 <button disabled="disabled" name="remove_{{ cookie }}" id="remove_{{ cookie }}"
-                                        class="c-button grey">{{ 'cookie_remove_button'|trans }}</button>
+                                        class="c-button grey" type="submit">{{ 'cookie_remove_button'|trans }}</button>
                             </td>
-                            <td><label for="{{ cookie }}">{{ cookie }}</label></td>
+                            <td><span>{{ cookie }}</span></td>
                             <td>Not set</td>
                         </tr>
                     {% endif %}
@@ -40,7 +41,7 @@
                     <tr>
                         <td>
                             <button name="remove_all" id="remove_all"
-                                    class="c-button">{{ 'cookie_remove_all_button'|trans }}</button>
+                                    class="c-button" type="submit">{{ 'cookie_remove_all_button'|trans }}</button>
                         </td>
                         <td colspan="2">
                             {% if all %}
@@ -53,7 +54,7 @@
                 {% else %}
                     <tr>
                         <td colspan='3'>
-                            <button name='remove_all' id='remove_all' class='c-button'>
+                            <button name='remove_all' id='remove_all' class='c-button' type="submit">
                                 {{ 'cookie_remove_all_button'|trans }}
                             </button>
                         </td>
@@ -62,5 +63,5 @@
             </table>
         </form>
     </div>
-</div>
+</main>
 {% endblock %}

@@ -170,6 +170,10 @@ parameters:
     wayf.display_default_idp_banner_on_wayf: true
     wayf.default_idp_entity_id: https://default-idp.vm.openconext.org
 
+    ## Toggle display & content of global site notice
+    global.site_notice.show: false
+    global.site_notice.allowed.tags: '<a><u><i><br><wbr><strong><em><blink><marquee><p><ul><ol><dl><li><dd><dt><div><span><blockquote><hr><h2></h2><h3><h4><h5><h6>'
+
     ## Settings for detecting whether the user is stuck in a authentication loop within his session
     time_frame_for_authentication_loop_in_seconds: 60
     maximum_authentication_procedures_allowed: 5

@@ -43,6 +43,7 @@ return $overrides + [
     'note'                  => 'Nota',
     'note_no_script'        => 'Visto que o seu browser não suporta JavaScript, deve pressionar no botão em baixo para prosseguir.',
     'unknown_organization_name' => 'Unknown',
+    'site_notice'           => '<p>Frei João, frei João,<br/>Dormes-tu, dormes-tu ?<br/>Jà tocam os sinos,<br/>Jà tocam os sinos,<br/>Dling-dling dlong<br/>Dling-dling dlong.</p>',
 
     // Feedback
     'requestId'             => 'UR ID',

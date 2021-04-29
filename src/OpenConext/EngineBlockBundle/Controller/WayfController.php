@@ -116,7 +116,7 @@ class WayfController
                         'removal' => $removal,
                         'all' => $all,
                         'cookies' => ['main', 'rememberchoice', 'lang', 'selectedidps'],
-                        'cookiesSet' => $cookiesSet
+                        'cookiesSet' => $cookiesSet,
                     ]
                 )
             );
