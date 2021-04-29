@@ -92,6 +92,12 @@ services:
             - "@engineblock.compat.repository.metadata"
             - "@engineblock.compat.logger"
 
+    engineblock.service.mfa_helper:
+        class: OpenConext\EngineBlock\Service\MfaHelper
+        arguments:
+            - "@engineblock.compat.logger"
+            - "@engineblock.metadata.repository.cached_doctrine"
+
     engineblock.service.time_provider:
         class: OpenConext\EngineBlock\Service\TimeProvider\TimeProvider
 

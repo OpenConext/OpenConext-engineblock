@@ -80,6 +80,8 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
      */
     protected $pdpRequestedLoas = [];
 
+    protected $isTransparentErrorResponse = false;
+
     /**
      * @param Response $response
      */
@@ -289,5 +291,21 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     public function getOriginalResponse()
     {
         return $this->originalResponse;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTransparentErrorResponse(): bool
+    {
+        return $this->isTransparentErrorResponse;
+    }
+
+    /**
+     * @param bool $isTransparentErrorResponse
+     */
+    public function setIsTransparentErrorResponse(bool $isTransparentErrorResponse): void
+    {
+        $this->isTransparentErrorResponse = $isTransparentErrorResponse;
     }
 }
