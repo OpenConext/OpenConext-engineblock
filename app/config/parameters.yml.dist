@@ -189,6 +189,13 @@ parameters:
             name: 'OpenConext Admin'
         subject: 'IdP debug info from %%1$s'
 
+    ## Swiftmailer configuration
+    mailer_transport: 'smtp'
+    mailer_host: 'localhost'
+    mailer_port: '25'
+    mailer_user: ''
+    mailer_password: ''
+
     ##########################################################################################
     ## FEATURE SETTINGS
     ##########################################################################################
