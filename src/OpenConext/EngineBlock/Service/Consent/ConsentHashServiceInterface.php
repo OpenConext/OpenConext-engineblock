@@ -16,31 +16,17 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Authentication\Repository;
+namespace OpenConext\EngineBlock\Service\Consent;
 
-use OpenConext\EngineBlock\Authentication\Model\Consent;
-
-interface ConsentRepository
+interface ConsentHashServiceInterface
 {
-    /**
-     * @param string $userId
-     *
-     * @return Consent[]
-     */
-    public function findAllFor($userId);
-
-    /**
-     * @param string $userId
-     *
-     * @return Consent[]
-     */
-    public function deleteAllFor($userId);
-
-    public function deleteOneFor(string $userId, string $serviceProviderEntityId): bool;
-
-    public function hasConsentHash(array $parameters): bool;
+    public function retrieveConsentHash(array $parameters): bool;
 
     public function storeConsentHash(array $parameters): bool;
 
     public function countTotalConsent($consentUid): int;
+
+    public function getUnstableAttributesHash(array $attributes, bool $mustStoreValues): string;
+
+    public function getStableAttributesHash(array $attributes, bool $mustStoreValues) : string;
 }

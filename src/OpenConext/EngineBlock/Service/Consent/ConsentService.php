@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Service;
+namespace OpenConext\EngineBlock\Service\Consent;
 
 use Exception;
 use OpenConext\EngineBlock\Authentication\Dto\Consent;
@@ -25,6 +25,7 @@ use OpenConext\EngineBlock\Authentication\Model\Consent as ConsentEntity;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlock\Exception\RuntimeException;
+use OpenConext\EngineBlock\Service\MetadataServiceInterface;
 use OpenConext\Value\Saml\EntityId;
 use Psr\Log\LoggerInterface;
 use function sprintf;
@@ -37,7 +38,7 @@ final class ConsentService implements ConsentServiceInterface
     private $consentRepository;
 
     /**
-     * @var MetadataService
+     * @var MetadataServiceInterface
      */
     private $metadataService;
 

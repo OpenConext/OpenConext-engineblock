@@ -27,6 +27,8 @@ use OpenConext\EngineBlock\Authentication\Model\Consent;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 use OpenConext\EngineBlock\Exception\RuntimeException;
+use PDO;
+use PDOException;
 use Psr\Log\LoggerInterface;
 use function sha1;
 
@@ -64,7 +66,7 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
     {
         // deleted_at IS NULL matches active records whose deleted_at is '0000-00-00 00:00:00'.
         // See Consent::$deletedAt for full context.
-        $sql       = '
+        $sql = '
             SELECT
                 service_id
             ,   consent_date
@@ -138,7 +140,8 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
                 hashed_user_id = :hashed_user_id
             AND
                 service_id = :service_id
-            AND deleted_at IS NULL
+            AND
+                deleted_at IS NULL
         ';
         try {
             $result = $this->connection->executeQuery(
@@ -169,5 +172,79 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
                 $exception
             );
         }
+    }
+
+    /**
+     * @throws RuntimeException
+     */
+    public function hasConsentHash(array $parameters): bool
+    {
+        try {
+            $query = " SELECT
+                            *
+                        FROM
+                            consent
+                        WHERE
+                            hashed_user_id = ?
+                        AND
+                            service_id = ?
+                        AND
+                            attribute = ?
+                        AND
+                            consent_type = ?
+                        AND
+                            deleted_at IS NULL
+            ";
+
+            $statement = $this->connection->prepare($query);
+            $statement->execute($parameters);
+            $rows = $statement->fetchAll();
+
+            if (count($rows) < 1) {
+                // No stored consent found
+                return false;
+            }
+
+            return true;
+        } catch (PDOException $e) {
+            throw new RuntimeException(sprintf('Consent retrieval failed! Error: "%s"', $e->getMessage()));
+        }
+    }
+
+    /**
+     * @throws RuntimeException
+     */
+    public function storeConsentHash(array $parameters): bool
+    {
+        $query = "INSERT INTO consent (hashed_user_id, service_id, attribute, consent_type, consent_date, deleted_at)
+                  VALUES (?, ?, ?, ?, NOW(), '0000-00-00 00:00:00')
+                  ON DUPLICATE KEY UPDATE attribute=VALUES(attribute), consent_type=VALUES(consent_type), consent_date=NOW()";
+        $statement = $this->connection->prepare($query);
+        if (!$statement) {
+            throw new RuntimeException("Unable to create a prepared statement to insert consent?!");
+        }
+
+        if (!$statement->execute($parameters)) {
+            throw new RuntimeException(
+                sprintf('Error storing consent: "%s"', var_export($statement->errorInfo(), true))
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws RuntimeException
+     */
+    public function countTotalConsent($consentUid): int
+    {
+        $query = "SELECT COUNT(*) FROM consent where hashed_user_id = ? AND deleted_at IS NULL";
+        $parameters = array(sha1($consentUid));
+        $statement = $this->connection->prepare($query);
+        if (!$statement) {
+            throw new RuntimeException("Unable to create a prepared statement to count consent?!");
+        }
+        $statement->execute($parameters);
+        return (int)$statement->fetchColumn();
     }
 }
