@@ -27,18 +27,24 @@ class EngineBlock_Corto_Model_Consent_Factory
     /** @var EngineBlock_Database_ConnectionFactory */
     private $_databaseConnectionFactory;
 
+    /**
+     * @var ConsentHashService
+     */
+    private $_hashService;
 
-     /**
+    /**
       * @param EngineBlock_Corto_Filter_Command_Factory $filterCommandFactory
       * @param EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
       */
     public function __construct(
         EngineBlock_Corto_Filter_Command_Factory $filterCommandFactory,
-        EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
+        EngineBlock_Database_ConnectionFactory $databaseConnectionFactory,
+        ConsentHashService $hashService
     )
     {
         $this->_filterCommandFactory = $filterCommandFactory;
         $this->_databaseConnectionFactory = $databaseConnectionFactory;
+        $this->_hashService = $hashService;
     }
 
     /**
@@ -70,7 +76,8 @@ class EngineBlock_Corto_Model_Consent_Factory
             $attributes,
             $this->_databaseConnectionFactory,
             $amPriorToConsent,
-            $consentEnabled
+            $consentEnabled,
+            $this->_hashService
         );
     }
 }

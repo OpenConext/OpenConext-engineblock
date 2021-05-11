@@ -366,3 +366,7 @@ services:
             - "@translator"
         tags:
              - { name: 'twig.extension' }
+
+    engineblock.service.consent.ConsentHashService:
+        class: OpenConext\EngineBlock\Service\Consent\ConsentHashService
+        public: false
