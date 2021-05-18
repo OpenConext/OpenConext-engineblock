@@ -157,6 +157,7 @@ HTML
     'error_help_desc'               => '<p></p>',
     'error_no_idps'                 => 'Error - No %organisationNounPlural% found',
     'error_no_idps_desc'            => 'Logging into %spName% is not possible via %suiteName%. %spName% is not connected to any %organisationNounPlural%.',
+    'error_no_idps_desc_no_sp_name'            => 'Logging into this service is not possible via %suiteName%. The service is not connected to any %organisationNounPlural%.',
     'error_session_lost'            => 'Error - your session was lost',
     'error_session_lost_desc'       => 'To continue to the service an active session is required. However, your session expired. Perhaps you waited too long with logging in? Please go back to the service and try again. If that doesn\'t work, close your browser first and then try again.',
     'error_session_not_started'            => 'Error - No session found',
