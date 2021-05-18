@@ -244,6 +244,7 @@ Your %organisationNoun% has denied you access to this service. You will have to 
     'error_received_invalid_response'       => 'Error - Invalid %idpName% SAML response',
     'error_received_invalid_response_no_idp_name'       => 'Error - Invalid %organisationNoun% SAML response',
     'error_received_invalid_signed_response'=> 'Error - Invalid signature on %idpName% response',
+    'error_received_invalid_signed_response_no_idp_name'=> 'Error - Invalid signature on %organisationNoun% response',
     'error_stuck_in_authentication_loop' => 'Error - You got stuck in a black hole',
     'error_stuck_in_authentication_loop_desc' => 'You\'ve successfully authenticated at %idpName% but %spName% sends you back again to %suiteName%. Because you are already logged in, %suiteName% then sends you back to %spName%, which results in an infinite black hole. Likely, this is caused by an error at %spName%.',
     'error_stuck_in_authentication_loop_desc_no_idp_name' => 'You\'ve successfully authenticated at your %organisationNoun% but %spName% sends you back again to %suiteName%. Because you are already logged in, %suiteName% then sends you back to %spName%, which results in an infinite black hole. Likely, this is caused by an error at %spName%.',
