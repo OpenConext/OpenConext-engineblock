@@ -181,7 +181,7 @@ HTML
     'error_unknown_service_provider'                => 'Error - %spName% onbekend',
     'error_unknown_service_provider_no_sp_name'     => 'Error - Onbekende dienst',
     'error_unknown_service_provider_desc'     => '%spName% is onbekend bij %suiteName%. Wellicht heeft %idpName% toegang tot deze dienst niet geactiveerd. Wil je gebruik maken van %spName%, wend je dan tot de helpdesk van %idpName%.',
-    'error_unknown_service_provider_desc_no_sp_name' => 'De verzochte Service Provider is onbekend bij %suiteName%. Wellicht heeft %idpName% toegang tot deze dienst niet geactiveerd. Wil je gebruik maken van deze dienst, wend je dan tot de helpdesk %idpName%.',
+    'error_unknown_service_provider_desc_no_sp_name' => 'De verzochte Service Provider is onbekend bij %suiteName%. Wellicht heeft %idpName% toegang tot deze dienst niet geactiveerd. Wil je gebruik maken van deze dienst, wend je dan tot de helpdesk van %idpName%.',
     'error_unknown_service_provider_desc_no_idp_name' => '%spName% is onbekend bij %suiteName%. Wellicht heeft je %organisationNoun% toegang tot deze dienst niet geactiveerd. Wil je gebruik maken van %spName%, wend je dan tot de helpdesk van je %organisationNoun%.',
     'error_unknown_service_provider_desc_no_names' => 'De verzochte Service Provider is onbekend bij %suiteName%. Wellicht heeft je %organisationNoun% toegang tot deze dienst niet geactiveerd. Wil je gebruik maken van deze dienst, wend je dan tot de helpdesk van je %organisationNoun%.',
     'error_unsupported_acs_location_scheme' => 'Fout - URI scheme van de ACS locatie wordt niet ondersteund',
