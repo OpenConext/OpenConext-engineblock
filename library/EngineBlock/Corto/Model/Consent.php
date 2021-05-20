@@ -66,26 +66,18 @@ class EngineBlock_Corto_Model_Consent
     private $_hashService;
 
     /**
-     * @param string $tableName
-     * @param bool $mustStoreValues
-     * @param EngineBlock_Saml2_ResponseAnnotationDecorator $response
-     * @param array $responseAttributes
-     * @param EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
      * @param bool $amPriorToConsentEnabled Is the run_all_manipulations_prior_to_consent feature enabled or not
-     * @param bool $consentEnabled Is the feature_enable_consent feature enabled or not
-     * @param ConsentHashService $hashService
      */
     public function __construct(
-        $tableName,
-        $mustStoreValues,
+        string $tableName,
+        bool $mustStoreValues,
         EngineBlock_Saml2_ResponseAnnotationDecorator $response,
         array $responseAttributes,
         EngineBlock_Database_ConnectionFactory $databaseConnectionFactory,
-        $amPriorToConsentEnabled,
-        $consentEnabled,
-        $hashService
-    )
-    {
+        bool $amPriorToConsentEnabled,
+        bool $consentEnabled,
+        ConsentHashService $hashService
+    ) {
         $this->_tableName = $tableName;
         $this->_mustStoreValues = $mustStoreValues;
         $this->_response = $response;
@@ -120,24 +112,15 @@ class EngineBlock_Corto_Model_Consent
             $this->_storeConsent($serviceProvider, ConsentType::TYPE_IMPLICIT);
     }
 
-    /**
-     * @throws EngineBlock_Exception
-     */
     public function countTotalConsent(): int
     {
         $dbh = $this->_getConsentDatabaseConnection();
-        $hashedUserId = sha1($this->_getConsentUid());
-        $query = "SELECT COUNT(*) FROM consent where hashed_user_id = ?";
-        $parameters = array($hashedUserId);
-        $statement = $dbh->prepare($query);
-        if (!$statement) {
-            throw new EngineBlock_Exception(
-                "Unable to create a prepared statement to count consent?!", EngineBlock_Exception::CODE_ALERT
-            );
+        if (!$dbh) {
+            return 0;
         }
-        /** @var $statement PDOStatement */
-        $statement->execute($parameters);
-        return (int)$statement->fetchColumn();
+
+        $consentUid = $this->_getConsentUid();
+        return $this->_hashService->countTotalConsent($dbh, $consentUid);
     }
 
     /**
@@ -174,9 +157,6 @@ class EngineBlock_Corto_Model_Consent
             return false;
         }
 
-        $query = "INSERT INTO consent (hashed_user_id, service_id, attribute, consent_type, consent_date, deleted_at)
-                  VALUES (?, ?, ?, ?, NOW(), '0000-00-00 00:00:00')
-                  ON DUPLICATE KEY UPDATE attribute=VALUES(attribute), consent_type=VALUES(consent_type), consent_date=NOW()";
         $parameters = array(
             sha1($this->_getConsentUid()),
             $serviceProvider->entityId,
@@ -184,22 +164,7 @@ class EngineBlock_Corto_Model_Consent
             $consentType,
         );
 
-        $statement = $dbh->prepare($query);
-        if (!$statement) {
-            throw new EngineBlock_Exception(
-                "Unable to create a prepared statement to insert consent?!",
-                EngineBlock_Exception::CODE_CRITICAL
-            );
-        }
-
-        /** @var $statement PDOStatement */
-        if (!$statement->execute($parameters)) {
-            throw new EngineBlock_Corto_Module_Services_Exception(
-                sprintf('Error storing consent: "%s"', var_export($statement->errorInfo(), true)),
-                EngineBlock_Exception::CODE_CRITICAL
-            );
-        }
-        return true;
+        return $this->_hashService->storeConsentHashInDb($dbh, $parameters);
     }
 
     private function _hasStoredConsent(ServiceProvider $serviceProvider, $consentType): bool
@@ -209,53 +174,26 @@ class EngineBlock_Corto_Model_Consent
             return false;
         }
 
-        $unstableConsentHash = $this->_getAttributesHash($this->_responseAttributes);
-        $hasUnstableConsentHash = $this->retrieveConsentHashFromDb($dbh, $serviceProvider, $consentType, $unstableConsentHash);
+        $parameters = array(
+            sha1($this->_getConsentUid()),
+            $serviceProvider->entityId,
+            $this->_getAttributesHash($this->_responseAttributes),
+            $consentType,
+        );
+
+        $hasUnstableConsentHash = $this->_hashService->retrieveConsentHashFromDb($dbh, $parameters);
 
         if ($hasUnstableConsentHash) {
             return true;
         }
 
-        $stableConsentHash = $this->_getStableAttributesHash($this->_responseAttributes);
-        return $this->retrieveConsentHashFromDb($dbh, $serviceProvider, $consentType, $stableConsentHash);
-    }
+        $parameters[2] = array(
+            sha1($this->_getConsentUid()),
+            $serviceProvider->entityId,
+            $this->_getStableAttributesHash($this->_responseAttributes),
+            $consentType,
+        );
 
-    private function retrieveConsentHashFromDb(PDO $dbh, ServiceProvider $serviceProvider, $consentType, $attributesHash): bool
-    {
-        try {
-            $query = "
-                SELECT *
-                FROM {$this->_tableName}
-                WHERE hashed_user_id = ?
-                  AND service_id = ?
-                  AND attribute = ?
-                  AND consent_type = ?
-                  AND deleted_at IS NULL
-            ";
-            $hashedUserId = sha1($this->_getConsentUid());
-            $parameters = array(
-                $hashedUserId,
-                $serviceProvider->entityId,
-                $attributesHash,
-                $consentType,
-            );
-
-            /** @var $statement PDOStatement */
-            $statement = $dbh->prepare($query);
-            $statement->execute($parameters);
-            $rows = $statement->fetchAll();
-
-            if (count($rows) < 1) {
-                // No stored consent found
-                return false;
-            }
-
-            return true;
-        } catch (PDOException $e) {
-            throw new EngineBlock_Corto_ProxyServer_Exception(
-                sprintf('Consent retrieval failed! Error: "%s"', $e->getMessage()),
-                EngineBlock_Exception::CODE_ALERT
-            );
-        }
+        return $this->_hashService->retrieveConsentHashFromDb($dbh, $parameters);
     }
 }

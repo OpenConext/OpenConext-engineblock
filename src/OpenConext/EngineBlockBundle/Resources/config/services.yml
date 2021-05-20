@@ -367,6 +367,10 @@ services:
         tags:
              - { name: 'twig.extension' }
 
+    engineblock.service.consent.ConsentHashRepository:
+        class: OpenConext\EngineBlock\Service\Consent\ConsentHashRepository
+
     engineblock.service.consent.ConsentHashService:
         class: OpenConext\EngineBlock\Service\Consent\ConsentHashService
-        public: false
+        arguments:
+            - "engineblock.service.consent.ConsentHashRepository"
