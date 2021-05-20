@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlock\Service\Consent;
 
+use PDO;
 use function array_filter;
 use function array_keys;
 use function array_values;
@@ -34,7 +35,32 @@ use function unserialize;
 
 final class ConsentHashService
 {
-    public function getUnstableAttributesHash(array $attributes,bool $mustStoreValues): string
+    /**
+     * @var ConsentHashRepository
+     */
+    private $consentHashRepository;
+
+    public function __construct(ConsentHashRepository $consentHashRepository)
+    {
+        $this->consentHashRepository = $consentHashRepository;
+    }
+
+    public function retrieveConsentHashFromDb(PDO $dbh, array $parameters): bool
+    {
+        return $this->consentHashRepository->retrieveConsentHashFromDb($dbh, $parameters);
+    }
+
+    public function storeConsentHashInDb(PDO $dbh, array $parameters): bool
+    {
+        return $this->consentHashRepository->storeConsentHashInDb($dbh, $parameters);
+    }
+
+    public function countTotalConsent(PDO $dbh, $consentUid): int
+    {
+        return $this->consentHashRepository->countTotalConsent($dbh, $consentUid);
+    }
+
+    public function getUnstableAttributesHash(array $attributes, bool $mustStoreValues): string
     {
         $hashBase = null;
         if ($mustStoreValues) {
@@ -51,7 +77,9 @@ final class ConsentHashService
     public function getStableAttributesHash(array $attributes, bool $mustStoreValues) : string
     {
         $lowerCasedAttributes = $this->caseNormalizeStringArray($attributes);
-        $hashBase = $mustStoreValues ? $this->createHashBaseWithValues($lowerCasedAttributes) : $this->createHashBaseWithoutValues($lowerCasedAttributes);
+        $hashBase = $mustStoreValues
+            ? $this->createHashBaseWithValues($lowerCasedAttributes)
+            : $this->createHashBaseWithoutValues($lowerCasedAttributes);
 
         return sha1($hashBase);
     }
@@ -86,7 +114,7 @@ final class ConsentHashService
         $sortFunction = 'ksort';
         $copy = $this->removeEmptyAttributes($copy);
 
-        if($this->isSequentialArray($copy)){
+        if ($this->isSequentialArray($copy)) {
             $sortFunction = 'sort';
             $copy = $this->renumberIndices($copy);
         }
@@ -126,7 +154,7 @@ final class ConsentHashService
         $copy = unserialize(serialize($array));
 
         foreach ($copy as $key => $value) {
-            if ($this->is_blank($value)) {
+            if ($this->isBlank($value)) {
                 unset($copy[$key]);
             }
         }
@@ -141,7 +169,8 @@ final class ConsentHashService
      * - "0"
      * @param $value array|string|integer|float
      */
-    private function is_blank($value): bool {
+    private function isBlank($value): bool
+    {
         return empty($value) && !is_numeric($value);
     }
 }

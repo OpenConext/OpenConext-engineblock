@@ -18,10 +18,14 @@
 
 namespace OpenConext\EngineBlock\Service\Consent;
 
+use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 
 class ConsentHashServiceTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * @var ConsentHashService
      */
@@ -29,7 +33,8 @@ class ConsentHashServiceTest extends TestCase
 
     public function setUp()
     {
-        $this->chs = new ConsentHashService();
+        $mockConsentHashRepository = m::mock('OpenConext\EngineBlock\Service\Consent\ConsentHashRepository');
+        $this->chs = new ConsentHashService($mockConsentHashRepository);
     }
 
     public function test_stable_attribute_hash_switched_order_associative_array()

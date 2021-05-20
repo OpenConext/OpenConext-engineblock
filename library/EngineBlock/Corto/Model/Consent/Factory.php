@@ -16,6 +16,8 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlock\Service\Consent\ConsentHashService;
+
 /**
  * @todo write a test
  */
