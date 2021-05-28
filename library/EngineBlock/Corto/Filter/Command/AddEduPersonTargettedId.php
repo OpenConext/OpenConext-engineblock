@@ -16,6 +16,8 @@
  * limitations under the License.
  */
 
+use SAML2\Constants;
+
 class EngineBlock_Corto_Filter_Command_AddEduPersonTargettedId extends EngineBlock_Corto_Filter_Command_Abstract
     implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
 {
@@ -39,6 +41,14 @@ class EngineBlock_Corto_Filter_Command_AddEduPersonTargettedId extends EngineBlo
             $this->_server->getRepository()
         );
 
+        // Find out if the EduPersonTargetedId is in the ARP of the destination SP.
+        // If the ARP is NULL this means no ARP = let everything through including ePTI.
+        // Otherwise only add ePTI if it's acutally in the ARP.
+        $arp = $destinationMetadata->getAttributeReleasePolicy();
+        if (!is_null($arp) && !$arp->hasAttribute(Constants::EPTI_URN_MACE)) {
+            return;
+        }
+
         // Resolve what NameID we should send the destination.
         $resolver = new EngineBlock_Saml2_NameIdResolver();
         $nameId = $resolver->resolve(
@@ -48,8 +58,6 @@ class EngineBlock_Corto_Filter_Command_AddEduPersonTargettedId extends EngineBlo
             $this->_collabPersonId
         );
 
-        $this->_responseAttributes['urn:mace:dir:attribute-def:eduPersonTargetedID'] = array(
-            $nameId
-        );
+        $this->_responseAttributes[Constants::EPTI_URN_MACE] = [ $nameId ];
     }
 }
