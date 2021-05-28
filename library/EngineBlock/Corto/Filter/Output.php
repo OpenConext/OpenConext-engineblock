@@ -83,9 +83,6 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             // Add the appropriate NameID to the 'eduPeronTargetedID'.
             new EngineBlock_Corto_Filter_Command_AddEduPersonTargettedId(),
 
-            // Apply ARP to custom added attributes one last time for the eduPersonTargetedId
-            new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
-
             // Convert all attributes to their OID format (if known) and add these.
             new EngineBlock_Corto_Filter_Command_DenormalizeAttributes(),
 
