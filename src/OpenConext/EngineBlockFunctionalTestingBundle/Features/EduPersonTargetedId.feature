@@ -12,6 +12,7 @@ Feature:
     And a Service Provider named "Empty ARP"
     And a Service Provider named "ARP without ePTI"
     And a Service Provider named "ARP with ePTI"
+    And a Service Provider named "Step Up"
     And SP "ARP with ePTI" uses the Unspecified NameID format
     And SP "Empty ARP" allows no attributes
     And SP "ARP without ePTI" allows an attribute named "urn:mace:dir:attribute-def:uid"
