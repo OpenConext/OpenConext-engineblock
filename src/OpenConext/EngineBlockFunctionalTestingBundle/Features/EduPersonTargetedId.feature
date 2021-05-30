@@ -17,13 +17,14 @@ Feature:
     And SP "ARP without ePTI" allows an attribute named "urn:mace:dir:attribute-def:uid"
     And SP "ARP with ePTI" allows an attribute named "urn:mace:dir:attribute-def:uid"
     And SP "ARP with ePTI" allows an attribute named "urn:mace:dir:attribute-def:eduPersonTargetedId"
+    And feature "eb.run_all_manipulations_prior_to_consent" is disabled
 
   Scenario: As a user for an SP with an empty ARP I get no attributes (ergo no ePTI)
     When I log in at "Empty ARP"
     And I pass through EngineBlock
     And I pass through the IdP
-    Then the response should contain "urn:mace:dir:attribute-def:uid"
-    And the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    Then the response should not contain "urn:mace:dir:attribute-def:uid"
+    And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
     When I give my consent
     And I pass through EngineBlock
     Then the response should not contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
@@ -45,7 +46,7 @@ Feature:
     And I pass through EngineBlock
     And I pass through the IdP
     Then the response should contain "urn:mace:dir:attribute-def:uid"
-    And the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
     When I give my consent
     And I pass through EngineBlock
     Then the response should contain "urn:mace:dir:attribute-def:uid"
@@ -57,7 +58,7 @@ Feature:
     And I pass through EngineBlock
     And I pass through the IdP
     Then the response should contain "urn:mace:dir:attribute-def:uid"
-    And the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
     When I give my consent
     And I pass through EngineBlock
     Then the response should contain "urn:mace:dir:attribute-def:uid"
@@ -69,7 +70,7 @@ Feature:
     And I pass through EngineBlock
     And I pass through the IdP
     Then the response should contain "urn:mace:dir:attribute-def:uid"
-    And the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
     When I give my consent
     And I pass through EngineBlock
     Then the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="urn:collab:person:engine-test-stand.openconext.org:test"]'
