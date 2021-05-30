@@ -16,7 +16,7 @@ Feature:
     And SP "Empty ARP" allows no attributes
     And SP "ARP without ePTI" allows an attribute named "urn:mace:dir:attribute-def:uid"
     And SP "ARP with ePTI" allows an attribute named "urn:mace:dir:attribute-def:uid"
-    And SP "ARP with ePTI" allows an attribute named "urn:mace:dir:attribute-def:eduPersonTargetedId"
+    And SP "ARP with ePTI" allows an attribute named "urn:mace:dir:attribute-def:eduPersonTargetedID"
     And feature "eb.run_all_manipulations_prior_to_consent" is disabled
 
   Scenario: As a user for an SP with an empty ARP I get no attributes (ergo no ePTI)
@@ -39,7 +39,7 @@ Feature:
     And I pass through EngineBlock
     Then the response should contain "urn:mace:dir:attribute-def:uid"
     And the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
-    And the response should contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
+    And the response should contain "urn:mace:dir:attribute-def:eduPersonTargetedID"
 
   Scenario: As a user for an SP with an ARP which does not contain ePTI, I do not get ePTI
     When I log in at "ARP without ePTI"
@@ -51,7 +51,7 @@ Feature:
     And I pass through EngineBlock
     Then the response should contain "urn:mace:dir:attribute-def:uid"
     And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
-    And the response should not contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
+    And the response should not contain "urn:mace:dir:attribute-def:eduPersonTargetedID"
 
   Scenario: As a user for an SP with an ARP which contains ePTI, I do get ePTI
     When I log in at "ARP with ePTI"
@@ -59,12 +59,12 @@ Feature:
     And I pass through the IdP
     Then the response should contain "urn:mace:dir:attribute-def:uid"
     And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
-    And the response should not contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
+    And the response should not contain "urn:mace:dir:attribute-def:eduPersonTargetedID"
     When I give my consent
     And I pass through EngineBlock
     Then the response should contain "urn:mace:dir:attribute-def:uid"
     And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
-    And the response should contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
+    And the response should contain "urn:mace:dir:attribute-def:eduPersonTargetedID"
 
   Scenario: As a user for an SP with an ARP which contains ePTI, the EPTI is a SAML NameID
     When I log in at "ARP with ePTI"
@@ -72,7 +72,7 @@ Feature:
     And I pass through the IdP
     Then the response should contain "urn:mace:dir:attribute-def:uid"
     And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
-    And the response should not contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
+    And the response should not contain "urn:mace:dir:attribute-def:eduPersonTargetedID"
     When I give my consent
     And I pass through EngineBlock
     Then the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="urn:collab:person:engine-test-stand.openconext.org:test"]'
@@ -86,6 +86,6 @@ Feature:
     When I log in at "Step Up"
     And I pass through EngineBlock
     And I pass through the IdP
-    Then the response should not contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
+    Then the response should not contain "urn:mace:dir:attribute-def:eduPersonTargetedID"
     And I pass through EngineBlock
-    Then the response should contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
+    Then the response should contain "urn:mace:dir:attribute-def:eduPersonTargetedID"
