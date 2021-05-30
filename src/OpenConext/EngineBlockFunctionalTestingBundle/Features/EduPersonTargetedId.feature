@@ -59,7 +59,7 @@ Feature:
     And I pass through the IdP
     Then the response should contain "urn:mace:dir:attribute-def:uid"
     And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
-    And the response should contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
+    And the response should not contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
     When I give my consent
     And I pass through EngineBlock
     Then the response should contain "urn:mace:dir:attribute-def:uid"
@@ -72,7 +72,7 @@ Feature:
     And I pass through the IdP
     Then the response should contain "urn:mace:dir:attribute-def:uid"
     And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
-    And the response should contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
+    And the response should not contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
     When I give my consent
     And I pass through EngineBlock
     Then the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="urn:collab:person:engine-test-stand.openconext.org:test"]'
@@ -86,6 +86,6 @@ Feature:
     When I log in at "Step Up"
     And I pass through EngineBlock
     And I pass through the IdP
-    Then the response should contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
+    Then the response should not contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
     And I pass through EngineBlock
     Then the response should contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
