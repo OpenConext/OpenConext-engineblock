@@ -59,6 +59,7 @@ Feature:
     And I pass through the IdP
     Then the response should contain "urn:mace:dir:attribute-def:uid"
     And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    And the response should contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
     When I give my consent
     And I pass through EngineBlock
     Then the response should contain "urn:mace:dir:attribute-def:uid"
@@ -71,19 +72,20 @@ Feature:
     And I pass through the IdP
     Then the response should contain "urn:mace:dir:attribute-def:uid"
     And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    And the response should contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
     When I give my consent
     And I pass through EngineBlock
     Then the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="urn:collab:person:engine-test-stand.openconext.org:test"]'
 
   Scenario: Whether an ePTI is released is determined by the destination SP in case of trusted proxy
-    Given SP "Step Up" is authenticating for SP "End SP"
+    Given SP "Step Up" is authenticating for SP "ARP with ePTI"
     And SP "Step Up" is a trusted proxy
     And SP "Step Up" signs its requests
     And SP "Step Up" does not require consent
-    And SP "End SP" allows an attribute named "urn:mace:terena.org:attribute-def:eduPersonTargetedId"
+    And SP "Step Up" uses the Unspecified NameID format
     When I log in at "Step Up"
-    And I select "AlwaysAuth" on the WAYF
     And I pass through EngineBlock
     And I pass through the IdP
+    Then the response should contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
     And I pass through EngineBlock
     Then the response should contain "urn:mace:dir:attribute-def:eduPersonTargetedId"
