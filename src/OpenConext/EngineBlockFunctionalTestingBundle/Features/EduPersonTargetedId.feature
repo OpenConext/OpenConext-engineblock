@@ -76,7 +76,7 @@ Feature:
     And the response should not contain "urn:mace:dir:attribute-def:eduPersonTargetedID"
     When I give my consent
     And I pass through EngineBlock
-    Then the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="urn:collab:person:engine-test-stand.openconext.org:test"]'
+    Then the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID'
 
   Scenario: Whether an ePTI is released is determined by the destination SP in case of trusted proxy
     Given SP "Step Up" is authenticating for SP "ARP with ePTI"
