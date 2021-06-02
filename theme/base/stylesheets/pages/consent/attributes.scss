@@ -12,6 +12,12 @@
     transition: max-height .6s ease-in;
 }
 
+.consent__noAttributes {
+    list-style: none;
+    padding: 1rem;
+    text-align: center;
+}
+
 @include ie11Only('.consent__attributes') {
     max-height: 200vh;
 }
