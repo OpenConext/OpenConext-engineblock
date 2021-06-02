@@ -5,4 +5,10 @@
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
-{% block errorMessage %}{{ 'error_no_idps_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName'] })|raw }}{% endblock %}
+{% block errorMessage %}
+    {% if withSpName %}
+        {{ 'error_no_idps_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName'] })|raw }}
+    {% else %}
+        {{ 'error_no_idps_desc_no_sp_name'|trans|raw }}
+    {% endif %}
+{% endblock %}

@@ -6,13 +6,13 @@
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
 {% block errorMessage %}
-    {% if withIdpName %}
+    {% if withIdpName and withSpName %}
         {{ 'error_missing_required_fields_desc'|trans({'%idpName%': feedbackInfoMap['identityProviderName'], '%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
     {% elseif withIdpName %}
-        {{ 'error_missing_required_fields_desc'|trans({'%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+        {{ 'error_missing_required_fields_desc_no_sp_name'|trans({'%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
     {% elseif withSpName %}
-        {{ 'error_missing_required_fields_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
+        {{ 'error_missing_required_fields_desc_no_idp_name'|trans({'%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
     {% else %}
-        {{ 'error_missing_required_fields_desc'|trans|raw }}
+        {{ 'error_missing_required_fields_desc_no_name'|trans|raw }}
     {% endif %}
 {% endblock %}

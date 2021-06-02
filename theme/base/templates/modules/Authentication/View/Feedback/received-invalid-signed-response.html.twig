@@ -1,6 +1,17 @@
 {% extends '@theme/Default/View/Error/error.html.twig' %}
 
-{% set pageTitle = 'error_received_invalid_signed_response'|trans({'%idpName%': feedbackInfoMap['identityProviderName']}) %}
-{% block pageTitle %}{{ 'error_received_invalid_signed_response'|trans({'%idpName%': feedbackInfoMap['identityProviderName']}) }}{% endblock %}
+{% if feedbackInfoMap is defined and feedbackInfoMap['identityProviderName'] %}
+    {% set pageTitle = 'error_received_invalid_signed_response'|trans({'%idpName%': feedbackInfoMap['identityProviderName']}) %}
+{% else %}
+    {% set pageTitle = 'error_received_invalid_signed_response_no_idp_name'|trans %}
+{% endif %}
+
+{% block pageTitle %}
+    {% if withIdpName %}
+        {{ 'error_received_invalid_signed_response'|trans({'%idpName%': feedbackInfoMap['identityProviderName']}) }}
+    {% else %}
+        {{ 'error_received_invalid_signed_response_no_idp_name'|trans }}
+    {% endif %}
+{% endblock %}
 {% block title %}{{ parent() }}{% endblock %}
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
