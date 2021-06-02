@@ -130,7 +130,7 @@ jobs:
                       ./bin/securityChecker.sh && \
                       cd theme && \
                       echo -e "\nNPM Audit\n" && \
-                      npm run audit
+                      npm run audit --production
                   '
               env:
                   SYMFONY_ENV: ci
