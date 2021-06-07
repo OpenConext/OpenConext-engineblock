@@ -5,6 +5,15 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.6.1
+**Bugfixes**
+- style the no-attributes edge case #1144
+- temporarily disable back to sp link to allow time for a full fix #1143
+- ensure textual fallbacks in the error pages function correctly #1135
+
+**Security**
+- upgrade several dependencies to fix security vulnerabilities #1142, #1134, #1133, #1132
+
 ## 6.6.0
 **Features and bugfixes**
 - Add a global site notice #1128
