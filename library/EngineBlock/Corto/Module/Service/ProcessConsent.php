@@ -18,6 +18,9 @@
 
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
+use OpenConext\Value\Saml\Entity;
+use OpenConext\Value\Saml\EntityId;
+use OpenConext\Value\Saml\EntityType;
 use SAML2\Constants;
 use SAML2\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -107,8 +110,10 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         $response->setDeliverByBinding('INTERNAL');
 
         // Finally, mark the authentication procedure as being complete.
+        $identityProviderEntityId = $response->getOriginalIssuer();
+        $identityProviderSaml = new Entity(new EntityId($identityProviderEntityId), EntityType::IdP());
         $authenticationState = $this->_authenticationStateHelper->getAuthenticationState();
-        $authenticationState->completeCurrentProcedure($response->getInResponseTo());
+        $authenticationState->completeCurrentProcedure($response->getInResponseTo(), $identityProviderSaml);
 
         $this->_server->getBindingsModule()->send(
             $response,

@@ -507,10 +507,7 @@ class EngineBlock_Corto_ProxyServer
         $newResponse->setDeliverByBinding('INTERNAL');
         $newResponse->setReturn($this->_server->getUrl('processedAssertionConsumerService'));
 
-        $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($receivedResponse->getIssuer()->getValue());
-        $identityProvider = new Entity(new EntityId($idp->entityId), EntityType::IdP());
-        $authenticationState->authenticatedAt($inResponseTo, $identityProvider);
-
+        $authenticationState->validateAuthenticationRequest($inResponseTo);
         $this->_server->getBindingsModule()->send($newResponse, $serviceProvider);
     }
 

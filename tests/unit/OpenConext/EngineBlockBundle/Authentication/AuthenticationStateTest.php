@@ -46,7 +46,7 @@ class AuthenticationStateTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The requested authentication procedure with requestId "_00000000-0000-0000-0000-000000000000" couldn\'t be found in the session storage.');
 
-        $authenticationState->authenticatedAt('_00000000-0000-0000-0000-000000000000', $identityProvider);
+        $authenticationState->validateAuthenticationRequest('_00000000-0000-0000-0000-000000000000', $identityProvider);
     }
 
     /**
@@ -62,27 +62,31 @@ class AuthenticationStateTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The requested authentication procedure with requestId "_00000000-0000-0000-0000-000000000000" couldn\'t be found in the session storage in order to complete.');
 
-        $authenticationState->completeCurrentProcedure('_00000000-0000-0000-0000-000000000000');
+        $identityProviderSaml = new Entity(new EntityId("entityID"), EntityType::IdP());
+
+        $authenticationState->completeCurrentProcedure('_00000000-0000-0000-0000-000000000000', $identityProviderSaml);
     }
 
     /**
      * @test
      * @group Authentication
      */
-    public function an_authentication_procedure_cannot_be_completed_if_it_has_not_been_authenticated()
+    public function an_authentication_procedure_cannot_be_completed_if_it_has_already_been_authenticated()
     {
         $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30);
 
         $serviceProvider = new Entity(new EntityId('https://my-service-provider.example'), EntityType::SP());
 
         $requestId = '_00000000-0000-0000-0000-000000000000';
+        $identityProviderSaml = new Entity(new EntityId("entityID"), EntityType::IdP());
 
         $authenticationState = new AuthenticationState($authenticationLoopGuard);
         $authenticationState->startAuthenticationOnBehalfOf($requestId, $serviceProvider);
+        $authenticationState->completeCurrentProcedure($requestId, $identityProviderSaml);
 
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The requested authentication procedure with requestId "_00000000-0000-0000-0000-000000000000" has already been authenticated.');
 
-        $authenticationState->completeCurrentProcedure($requestId);
+        $authenticationState->completeCurrentProcedure($requestId, $identityProviderSaml);
     }
 }

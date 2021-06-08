@@ -49,7 +49,7 @@ final class AuthenticationState implements AuthenticationStateInterface
      * @return void
      * @throws AssertionFailedException
      */
-    public function startAuthenticationOnBehalfOf($requestId, Entity $serviceProvider)
+    public function startAuthenticationOnBehalfOf($requestId, Entity $serviceProvider): void
     {
         Assertion::string($requestId, 'The requestId must be a string (XML ID) value');
         $currentAuthenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
@@ -78,12 +78,14 @@ final class AuthenticationState implements AuthenticationStateInterface
     }
 
     /**
+     * Validates if an request can be found in session and if the request is not already authenticated
+     *
      * @param string $requestId
-     * @param Entity $identityProvider
      * @return void
      * @throws AssertionFailedException
+     * @throws LogicException
      */
-    public function authenticatedAt($requestId, Entity $identityProvider)
+    public function validateAuthenticationRequest($requestId): void
     {
         Assertion::string($requestId, 'The requestId must be a string (XML ID) value');
 
@@ -92,28 +94,8 @@ final class AuthenticationState implements AuthenticationStateInterface
         if ($currentRequest === null) {
             throw new LogicException(
                 sprintf(
-                    'The requested authentication procedure with requestId "%s" couldn\'t be found in the session storage.',
-                    $requestId
-                )
-            );
-        }
-
-        $currentRequest->authenticatedAt($identityProvider);
-    }
-
-    /**
-     * @param string $requestId
-     * @return void
-     * @throws AssertionFailedException
-     */
-    public function completeCurrentProcedure($requestId)
-    {
-        Assertion::string($requestId, 'The requestId must be a string (XML ID) value');
-        $currentRequest = $this->authenticationProcedures->find($requestId);
-        if ($currentRequest === null) {
-            throw new LogicException(
-                sprintf(
-                    'The requested authentication procedure with requestId "%s" couldn\'t be found in the session storage in order to complete.',
+                    'The requested authentication procedure with requestId "%s" couldn\'t be found in the ' .
+                    'session storage.',
                     $requestId
                 )
             );
@@ -127,7 +109,54 @@ final class AuthenticationState implements AuthenticationStateInterface
                 )
             );
         }
+    }
 
+    /**
+     * Completes the authentication procedure and sets the authenticated IDP and time
+     *
+     * @param string $requestId
+     * @param Entity $identityProvider
+     * @return void
+     * @throws AssertionFailedException
+     */
+    public function completeCurrentProcedure($requestId, Entity $identityProvider): void
+    {
+        Assertion::string($requestId, 'The requestId must be a string (XML ID) value');
+        $currentRequest = $this->authenticationProcedures->find($requestId);
+        if ($currentRequest === null) {
+            throw new LogicException(
+                sprintf(
+                    'The requested authentication procedure with requestId "%s" couldn\'t be found in the ' .
+                    'session storage in order to complete.',
+                    $requestId
+                )
+            );
+        }
+        if ($currentRequest->hasBeenAuthenticated()) {
+            throw new LogicException(
+                sprintf(
+                    'The requested authentication procedure with requestId "%s" has already been authenticated.',
+                    $requestId
+                )
+            );
+        }
+
+        $currentRequest->authenticatedAt($identityProvider);
         $currentRequest->completeOn(new DateTimeImmutable);
+    }
+
+    /**
+     * Validates if the current session contains a valid authentication
+     *
+     * @return bool
+     * @throws LogicException
+     */
+    public function isAuthenticated(): bool
+    {
+        if ($this->authenticationProcedures === null) {
+            throw new LogicException('The requested authentication procedure couldn\'t be found in the ' .
+                'session storage in order to complete.');
+        }
+        return $this->authenticationProcedures->hasBeenAuthenticated();
     }
 }

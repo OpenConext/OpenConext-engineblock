@@ -28,6 +28,9 @@ use OpenConext\EngineBlock\Service\Dto\ProcessingStateStep;
 use OpenConext\EngineBlock\Service\ProcessingStateHelper;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationStateInterface;
+use OpenConext\Value\Saml\Entity;
+use OpenConext\Value\Saml\EntityId;
+use OpenConext\Value\Saml\EntityType;
 use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
@@ -292,9 +295,11 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
 
     private function mockAuthStateHelper()
     {
+        $identityProviderSaml = new Entity(new EntityId("entityID"), EntityType::IdP());
+
         $authState = Phake::mock(AuthenticationStateInterface::class);
         Phake::when($authState)
-            ->completeCurrentProcedure('_00000000-0000-0000-0000-000000000000');
+            ->completeCurrentProcedure('_00000000-0000-0000-0000-000000000000', $identityProviderSaml);
 
         $mock = Phake::mock(AuthenticationStateHelperInterface::class);
         Phake::when($mock)
