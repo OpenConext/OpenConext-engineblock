@@ -40,7 +40,8 @@
     </main>
 
     <script>
-        window.addEventListener('load', () => {
+        // do not use arrow notation here, as that breaks the in-built excel browser.
+        window.addEventListener('load', function() {
             document.querySelector('.hideNoJS').classList.remove('hideNoJS');
         });
     </script>
