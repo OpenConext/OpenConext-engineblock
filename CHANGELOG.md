@@ -5,6 +5,14 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.6.2
+**Bugfixes**
+- fix the spinner page in the excel built-in browser
+
+**Security**
+- upgrade several dependencies to fix security vulnerabilities #1146, #1149, #1151
+
+
 ## 6.6.1
 **Bugfixes**
 - style the no-attributes edge case #1144
