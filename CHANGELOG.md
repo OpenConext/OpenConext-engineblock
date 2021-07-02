@@ -6,8 +6,12 @@ We will continue to post relevant release notes on the GitHub release page. More
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
 ## 6.6.2
+**Changes**
+- ARP is only applied once in the filter chain. This should only affect Attribute Manipulations (in being more permissive in what is possible).
+
 **Bugfixes**
 - fix the spinner page in the excel built-in browser
+- minor change to privacy policy link on consent screen
 
 **Security**
 - upgrade several dependencies to fix security vulnerabilities #1146, #1149, #1151
