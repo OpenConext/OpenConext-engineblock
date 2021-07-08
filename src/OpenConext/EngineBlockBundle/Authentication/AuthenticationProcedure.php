@@ -86,7 +86,7 @@ final class AuthenticationProcedure
      */
     public function hasBeenAuthenticatedAt(Entity $identityProvider): bool
     {
-        if ($this->identityProvider === null ) {
+        if ($this->identityProvider === null) {
             return false;
         }
         return $this->identityProvider->equals($identityProvider);
