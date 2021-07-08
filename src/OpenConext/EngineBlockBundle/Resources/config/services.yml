@@ -345,3 +345,11 @@ services:
             - "@translator"
         tags:
              - { name: 'twig.extension' }
+
+    engineblock.service.consent.ConsentHashRepository:
+        class: OpenConext\EngineBlock\Service\Consent\ConsentHashRepository
+
+    engineblock.service.consent.ConsentHashService:
+        class: OpenConext\EngineBlock\Service\Consent\ConsentHashService
+        arguments:
+            - "engineblock.service.consent.ConsentHashRepository"
