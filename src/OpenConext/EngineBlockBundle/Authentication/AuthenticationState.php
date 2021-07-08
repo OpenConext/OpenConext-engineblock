@@ -49,7 +49,7 @@ final class AuthenticationState implements AuthenticationStateInterface
      * @return void
      * @throws AssertionFailedException
      */
-    public function startAuthenticationOnBehalfOf($requestId, Entity $serviceProvider): void
+    public function startAuthenticationOnBehalfOf(string $requestId, Entity $serviceProvider): void
     {
         Assertion::string($requestId, 'The requestId must be a string (XML ID) value');
         $currentAuthenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
@@ -85,7 +85,7 @@ final class AuthenticationState implements AuthenticationStateInterface
      * @throws AssertionFailedException
      * @throws LogicException
      */
-    public function validateAuthenticationRequest($requestId): void
+    public function validateAuthenticationRequest(string $requestId): void
     {
         Assertion::string($requestId, 'The requestId must be a string (XML ID) value');
 
@@ -119,7 +119,7 @@ final class AuthenticationState implements AuthenticationStateInterface
      * @return void
      * @throws AssertionFailedException
      */
-    public function completeCurrentProcedure($requestId, Entity $identityProvider): void
+    public function completeCurrentProcedure(string $requestId, Entity $identityProvider): void
     {
         Assertion::string($requestId, 'The requestId must be a string (XML ID) value');
         $currentRequest = $this->authenticationProcedures->find($requestId);

@@ -46,7 +46,7 @@ class AuthenticationStateTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The requested authentication procedure with requestId "_00000000-0000-0000-0000-000000000000" couldn\'t be found in the session storage.');
 
-        $authenticationState->validateAuthenticationRequest('_00000000-0000-0000-0000-000000000000', $identityProvider);
+        $authenticationState->validateAuthenticationRequest('_00000000-0000-0000-0000-000000000000');
     }
 
     /**
