@@ -51,7 +51,7 @@ class EngineBlock_Test_Corto_Filter_Command_SsoNotificationCookieFilterTest exte
 
         $featureConfiguration = Phake::mock(FeatureConfiguration::class);
         Phake::when($featureConfiguration)
-            ->isEnabled('enable_sso_notification')
+            ->isEnabled('eb.enable_sso_notification')
             ->thenReturn(true);
         Phake::when($_diContainerMock)
             ->getFeatureConfiguration()

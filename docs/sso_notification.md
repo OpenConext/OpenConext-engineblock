@@ -5,9 +5,10 @@ user-friendliness by providing the possibility to skip the WAYF (Where Are You F
 of a cookie, which can be set for example after the user has logged in on his own environment (for example an intranet page or the 
 homepage of an Electronic Learning Environment).
 
-Setting SSO Notification cookies is performed by a separate application - the SSO Notification service. Engineblock
+Setting SSO Notification cookies is performed by a separate application - the SSO Notification service 
+(found [here](https://github.com/OpenConext/OpenConext-SSO-Notification)). Engineblock
 is able to read the cookie and retrieve the entity id of the Identity Provider which should be used to start an 
-authentication with. The contents of the SSO Notification cookie is encrypted by the SSO Notification service.
+authentication with. The contents of the SSO Notification cookie are encrypted by the SSO Notification service.
 Engineblock contains a few configuration parameters to set the encryption details.
 
 ## Configuration of SSO Notification in Engineblock

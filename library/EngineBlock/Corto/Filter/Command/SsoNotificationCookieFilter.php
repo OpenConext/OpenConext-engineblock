@@ -23,7 +23,7 @@ class EngineBlock_Corto_Filter_Command_SsoNotificationCookieFilter extends Engin
 
     public function execute(): void
     {
-        if (!$this->_diContainer->getFeatureConfiguration()->isEnabled('enable_sso_notification')) {
+        if (!$this->_diContainer->getFeatureConfiguration()->isEnabled('eb.enable_sso_notification')) {
             return;
         }
 

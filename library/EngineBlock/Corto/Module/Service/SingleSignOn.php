@@ -200,7 +200,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         }
 
         // Auto-select IdP when 'feature_enable_sso_notification' is enabled and send AuthenticationRequest on success
-        if ($application->getDiContainer()->getFeatureConfiguration()->isEnabled("enable_sso_notification")) {
+        if ($application->getDiContainer()->getFeatureConfiguration()->isEnabled("eb.enable_sso_notification")) {
             $idpEntityId = $application->getDiContainer()->getSsoNotificationService()->handleSsoNotification(
                 $application->getDiContainer()->getSymfonyRequest()->cookies, $this->_server);
 

@@ -54,13 +54,12 @@ class SsoNotificationService
      */
     public function handleSsoNotification(ParameterBag $cookies, EngineBlock_Corto_ProxyServer $server): string
     {
-        if (!is_null($ssoNotification = $this->getSsoCookie($cookies))) {
-            $parsedSsoNotification = $this->parseSsoNotification($ssoNotification);
+        if (!is_null($this->getSsoCookie($cookies))) {
+            $parsedSsoNotification = $this->parseSsoNotification($this->getSsoCookie($cookies));
 
             if (array_key_exists(self::FIELD_ENTITY_ID, $parsedSsoNotification)) {
                 $idpEntityId = $parsedSsoNotification[self::FIELD_ENTITY_ID];
-                if (!is_null($idpEntityId) && array_search($idpEntityId,
-                        $server->getRepository()->findAllIdentityProviderEntityIds()) !== false) {
+                if (!is_null($idpEntityId) && !is_null($server->getRepository()->findIdentityProviderByEntityId($idpEntityId))) {
 
                     return $idpEntityId;
                 } else {

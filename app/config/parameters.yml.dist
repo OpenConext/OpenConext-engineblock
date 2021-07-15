@@ -137,6 +137,7 @@ parameters:
     addgueststatus_guestqualifier: 'urn:collab:org:vm.openconext.org'
 
     ## Language cookie settings
+    ## The value for the domain is also used for clearing SSO Notification cookies if the feature is enabled
     cookie.path: /
     cookie.secure: true
     cookie.locale.domain: .vm.openconext.org
@@ -258,7 +259,7 @@ parameters:
     ##########################################################################################
     ## SSO NOTIFICATION SETTINGS
     ##########################################################################################
-    feature_enable_sso_notification: true
+    feature_enable_sso_notification: false
     sso_notification_encryption_algorithm: AES-256-CBC
     ## The encryption key used to decrypt the SSO notification
     sso_notification_encryption_key: <xxx>
