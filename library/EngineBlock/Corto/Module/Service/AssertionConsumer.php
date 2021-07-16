@@ -22,9 +22,6 @@ use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
-use OpenConext\Value\Saml\Entity;
-use OpenConext\Value\Saml\EntityId;
-use OpenConext\Value\Saml\EntityType;
 use SAML2\Constants;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -137,9 +134,8 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
 
             // Authentication state needs to be registered here as the debug flow differs from the regular flow,
             // yet the procedures for both are completed when consuming the assertion in the ServiceProviderController
-            $identityProvider = new Entity(new EntityId($idp->entityId), EntityType::IdP());
             $authenticationState = $this->getAuthenticationState();
-            $authenticationState->authenticatedAt($requestId, $identityProvider);
+            $authenticationState->validateAuthenticationRequest($requestId);
 
             $this->_server->redirect(
                 $this->_server->getUrl('debugSingleSignOnService'),

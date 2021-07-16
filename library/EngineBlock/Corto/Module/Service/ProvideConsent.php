@@ -21,6 +21,9 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\ConsentServiceInterface;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
+use OpenConext\Value\Saml\Entity;
+use OpenConext\Value\Saml\EntityId;
+use OpenConext\Value\Saml\EntityType;
 use SAML2\Constants;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
@@ -104,6 +107,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         );
 
         $identityProviderEntityId = $response->getOriginalIssuer();
+        $identityProviderEntitySaml = new Entity(new EntityId($identityProviderEntityId), EntityType::IdP());
         $identityProvider = $this->_server->getRepository()->fetchIdentityProviderByEntityId($identityProviderEntityId);
 
         // Flush log if SP or IdP has additional logging enabled
@@ -136,7 +140,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             $response->setDeliverByBinding('INTERNAL');
 
             // Consent is disabled, we now mark authentication_state as completed
-            $authenticationState->completeCurrentProcedure($response->getInResponseTo());
+            $authenticationState->completeCurrentProcedure($response->getInResponseTo(), $identityProviderEntitySaml);
 
             $this->_server->getBindingsModule()->send(
                 $response,
@@ -153,7 +157,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             $response->setDeliverByBinding('INTERNAL');
 
             // Prior consent is found, we now mark authentication_state as completed
-            $authenticationState->completeCurrentProcedure($response->getInResponseTo());
+            $authenticationState->completeCurrentProcedure($response->getInResponseTo(), $identityProviderEntitySaml);
 
             $this->_server->getBindingsModule()->send(
                 $response,
