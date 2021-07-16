@@ -137,6 +137,7 @@ parameters:
     addgueststatus_guestqualifier: 'urn:collab:org:vm.openconext.org'
 
     ## Language cookie settings
+    ## The value for the domain is also used for clearing SSO Notification cookies if the feature is enabled
     cookie.path: /
     cookie.secure: true
     cookie.locale.domain: .vm.openconext.org
@@ -254,3 +255,13 @@ parameters:
     # test suite for js e2e tests. This because a SED command is in place to rewrite the parameters.yml.
     # See the SED command in Gitlab Actions runner: 'Run Cypress integration tests'
     theme.name: skeune
+
+    ##########################################################################################
+    ## SSO NOTIFICATION SETTINGS
+    ##########################################################################################
+    feature_enable_sso_notification: false
+    sso_notification_encryption_algorithm: AES-256-CBC
+    ## The encryption key used to decrypt the SSO notification
+    sso_notification_encryption_key: <xxx>
+    ## The encryption key salt used to decrypt the SSO notification
+    sso_notification_encryption_key_salt: <xxx>

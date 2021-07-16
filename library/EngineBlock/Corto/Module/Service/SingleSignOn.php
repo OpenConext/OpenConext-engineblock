@@ -199,6 +199,24 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             return;
         }
 
+        // Auto-select IdP when 'feature_enable_sso_notification' is enabled and send AuthenticationRequest on success
+        if ($application->getDiContainer()->getFeatureConfiguration()->isEnabled("eb.enable_sso_notification")) {
+            $idpEntityId = $application->getDiContainer()->getSsoNotificationService()->
+                handleSsoNotification($application->getDiContainer()->getSymfonyRequest()->cookies, $this->_server);
+
+            if (!empty($idpEntityId)) {
+                try {
+                    $log->info("Auto-selecting IdP '$idpEntityId' from SSO notification: " .
+                        "omitting WAYF, sending authentication request");
+                    $this->_server->sendAuthenticationRequest($request, $idpEntityId);
+                    return;
+                } catch (EngineBlock_Corto_ProxyServer_Exception $exception) {
+                    $log->error("Failed to send authentication request for SSO notification " .
+                        "with IdP '$idpEntityId'", array('exception' => $exception));
+                }
+            }
+        }
+
         // Auto-select IdP when 'wayf.rememberChoice' feature is enabled and is allowed for the current request
         if (($application->getDiContainer()->getRememberChoice() === true) && !($request->getForceAuthn() || $request->isDebugRequest())) {
             $cookies = $application->getDiContainer()->getSymfonyRequest()->cookies->all();

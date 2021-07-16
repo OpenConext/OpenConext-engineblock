@@ -40,6 +40,12 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
         $authnContextClassRefBlacklistPattern = $diContainer->getAuthnContextClassRefBlacklistRegex();
 
         $commands = array(
+            // remove SSO Cookie
+            new EngineBlock_Corto_Filter_Command_SsoNotificationCookieFilter(
+                new EngineBlock_Corto_Filter_Command_Helpers_CookieHandler(),
+                $diContainer
+            ),
+
             // Validate if the authnContextClassRef is not blacklisted
             new EngineBlock_Corto_Filter_Command_ValidateAuthnContextClassRef($logger, $authnContextClassRefBlacklistPattern),
 

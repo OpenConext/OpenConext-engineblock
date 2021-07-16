@@ -520,4 +520,17 @@ class EngineBlock_Application_DiContainer extends Pimple
     {
         return $this->container->get('engineblock.configuration.stepup.endpoint');
     }
+
+    public function getCookieDomain()
+    {
+        return $this->container->getParameter('cookie.locale.domain');
+    }
+
+    /**
+     * @return OpenConext\EngineBlock\Service\SsoNotificationService
+     */
+    public function getSsoNotificationService()
+    {
+        return $this->container->get('engineblock.service.sso_notification');
+    }
 }

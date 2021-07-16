@@ -101,6 +101,14 @@ services:
     engineblock.service.time_provider:
         class: OpenConext\EngineBlock\Service\TimeProvider\TimeProvider
 
+    engineblock.service.sso_notification:
+        class: OpenConext\EngineBlock\Service\SsoNotificationService
+        arguments:
+            - "%sso_notification_encryption_key%"
+            - "%sso_notification_encryption_key_salt%"
+            - "%sso_notification_encryption_algorithm%"
+            - "@engineblock.compat.logger"
+
     engineblock.factory.service_provider_factory:
         class: OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory
         arguments:
