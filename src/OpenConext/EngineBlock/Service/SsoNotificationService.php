@@ -36,7 +36,10 @@ class SsoNotificationService
      */
     private $logger;
 
-    public function __construct(string $encryptionKey, string $encryptionSalt, string $encryptionAlgorithm,
+    public function __construct(
+        string $encryptionKey,
+        string $encryptionSalt,
+        string $encryptionAlgorithm,
         LoggerInterface $logger
     ) {
     
@@ -60,8 +63,8 @@ class SsoNotificationService
 
             if (array_key_exists(self::FIELD_ENTITY_ID, $parsedSsoNotification)) {
                 $idpEntityId = $parsedSsoNotification[self::FIELD_ENTITY_ID];
-                if (!is_null($idpEntityId) && !is_null($server->getRepository()->findIdentityProviderByEntityId($idpEntityId))) {
-
+                if (!is_null($idpEntityId) &&
+                    !is_null($server->getRepository()->findIdentityProviderByEntityId($idpEntityId))) {
                     return $idpEntityId;
                 } else {
                     $this->logger->warning("SSO notification found for unknown IdP: '$idpEntityId'");
@@ -83,7 +86,7 @@ class SsoNotificationService
      * @param  ParameterBag $cookies the set of cookies to retrieve the SSO notification cookie from
      * @return mixed|null the SSO notification cookie or null if not present
      */
-    public function getSsoCookie(ParameterBag $cookies) 
+    public function getSsoCookie(ParameterBag $cookies)
     {
         return $cookies->get(self::SSO_NOT_COOKIE_NAME);
     }
@@ -106,8 +109,12 @@ class SsoNotificationService
         $cipherText = substr($base64Decoded, self::IV_SIZE);
         // Construct encryption key
         $key = hash_pbkdf2(
-            'sha256', $this->encryptionKey, $this->encryptionSalt, self::ITERATION_COUNT,
-            self::KEY_SIZE, true
+            'sha256',
+            $this->encryptionKey,
+            $this->encryptionSalt,
+            self::ITERATION_COUNT,
+            self::KEY_SIZE,
+            true
         );
 
         $jsonString = $this->decryptSsoNotification($cipherText, $key, $this->encryptionAlgorithm, $iv);
@@ -132,7 +139,10 @@ class SsoNotificationService
      * @param  string $iv                  the initialization vector to decrypt with
      * @return string a JSON string or an empty string in case the data could not be decrypted
      */
-    private function decryptSsoNotification(string $ssoNotification, string $encryptionKey, string $encryptionAlgorithm,
+    private function decryptSsoNotification(
+        string $ssoNotification,
+        string $encryptionKey,
+        string $encryptionAlgorithm,
         string $iv
     ): string {
     
@@ -147,5 +157,4 @@ class SsoNotificationService
         }
         return $data;
     }
-
 }
