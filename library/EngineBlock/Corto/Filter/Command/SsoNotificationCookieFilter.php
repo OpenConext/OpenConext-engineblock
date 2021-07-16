@@ -14,9 +14,11 @@ class EngineBlock_Corto_Filter_Command_SsoNotificationCookieFilter extends Engin
      */
     private $_diContainer;
 
-    public function __construct(EngineBlock_Corto_Filter_Command_Helpers_CookieHandler $cookieHandler,
-                                EngineBlock_Application_DiContainer $diContainer)
-    {
+    public function __construct(
+        EngineBlock_Corto_Filter_Command_Helpers_CookieHandler $cookieHandler,
+        EngineBlock_Application_DiContainer $diContainer
+    ) {
+    
         $this->_cookieHandler = $cookieHandler;
         $this->_diContainer = $diContainer;
     }
@@ -28,9 +30,11 @@ class EngineBlock_Corto_Filter_Command_SsoNotificationCookieFilter extends Engin
         }
 
         if (!is_null($this->_diContainer->getSymfonyRequest()->cookies->get($this->_ssoNotificationCookieName))) {
-            $this->_cookieHandler->clearCookie($this->_ssoNotificationCookieName,
+            $this->_cookieHandler->clearCookie(
+                $this->_ssoNotificationCookieName,
                 $this->_diContainer->getCookiePath(),
-                $this->_diContainer->getCookieDomain());
+                $this->_diContainer->getCookieDomain()
+            );
         }
     }
 }
