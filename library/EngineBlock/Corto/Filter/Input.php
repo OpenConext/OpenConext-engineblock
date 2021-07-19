@@ -89,6 +89,9 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
             // Check if the Policy Decision Point needs to be consulted for this request
             new EngineBlock_Corto_Filter_Command_EnforcePolicy(),
 
+            // Remove all EngineBlock configured filter_attributes from the responseAttributes
+            new EngineBlock_Corto_Filter_Command_FilterAttributes($featureConfiguration, $diContainer->getFilterAttributes()),
+
             // Apply the Attribute Release Policy before we do consent.
             new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
         );

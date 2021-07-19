@@ -533,4 +533,12 @@ class EngineBlock_Application_DiContainer extends Pimple
     {
         return $this->container->get('engineblock.service.sso_notification');
     }
+
+    /**
+     * @return array
+     */
+    public function getFilterAttributes(): ?array
+    {
+        return $this->container->getParameter('filter_attributes');
+    }
 }
