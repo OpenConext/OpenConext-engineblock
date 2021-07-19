@@ -212,6 +212,7 @@ parameters:
     feature_api_deprovision: true
     feature_run_all_manipulations_prior_to_consent: false
     feature_block_user_on_violation: false
+    feature_filter_attributes: false
 
     ##########################################################################################
     ## PROFILE SETTINGS
@@ -265,3 +266,11 @@ parameters:
     sso_notification_encryption_key: <xxx>
     ## The encryption key salt used to decrypt the SSO notification
     sso_notification_encryption_key_salt: <xxx>
+
+    ##########################################################################################
+    ## FILTER ATTRIBUTES SETTINGS
+    ##########################################################################################
+    ## The attribute names added to this list are filtered from the list of attributes sent
+    ## by the IdP before showing the consent screen and sent to the SP
+    filter_attributes:
+        - example
