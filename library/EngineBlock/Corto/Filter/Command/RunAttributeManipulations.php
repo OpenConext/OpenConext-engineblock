@@ -93,7 +93,8 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
             $this->_responseAttributes,
             $this->_response,
             $this->_identityProvider,
-            $serviceProvider
+            $serviceProvider,
+            $this->_request
         );
 
         $this->_response->setIntendedNameId($this->_collabPersonId);

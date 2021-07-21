@@ -39,7 +39,8 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
         array &$attributes,
         EngineBlock_Saml2_ResponseAnnotationDecorator &$responseObj,
         IdentityProvider $identityProvider,
-        ServiceProvider $serviceProvider
+        ServiceProvider $serviceProvider,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $requestObj
     ) {
         $manipulationCode = $entity->getManipulation();
         if (empty($manipulationCode)) {
@@ -63,7 +64,8 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
             $response,
             $responseObj,
             $idpMetadataLegacy,
-            $spMetadataLegacy
+            $spMetadataLegacy,
+            $requestObj
         );
 
         $responseObj = $translator->fromOldFormat($response);
@@ -78,7 +80,8 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
         array &$response,
         EngineBlock_Saml2_ResponseAnnotationDecorator $responseObj,
         array $idpMetadata,
-        array $spMetadata
+        array $spMetadata,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $requestObj
     ) {
         $entityType = $this->_entityType;
 
@@ -93,7 +96,8 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
                     &$response,
                     $responseObj,
                     $idpMetadata,
-                    $spMetadata
+                    $spMetadata,
+                    $requestObj
             ) {
                 eval($manipulationCode);
             },
