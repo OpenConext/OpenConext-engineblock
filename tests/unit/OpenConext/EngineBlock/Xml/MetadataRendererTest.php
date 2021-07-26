@@ -101,7 +101,7 @@ class MetadataRendererTest extends TestCase
             $keyPairFactory,
             $documentSigner,
             new TimeProvider(),
-            'terms-of-use'
+            'all'
         );
 
         parent::setUp();
