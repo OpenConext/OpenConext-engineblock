@@ -30,6 +30,7 @@ use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
+use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\Utils;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
@@ -60,49 +61,7 @@ class MetadataRendererTest extends TestCase
 
     protected function setUp()
     {
-        $basePath = realpath(__DIR__ . '/../../../../../');
-
-        $privateKey = new X509PrivateKey($basePath . '/tests/resources/key/engineblock.pem');
-        $publicKey = new X509Certificate(openssl_x509_read(file_get_contents($basePath . '/tests/resources/key/engineblock.crt')));
-        $keyPair = new X509KeyPair($publicKey, $privateKey);
-
-        $samlIdGenerator = $this->createMock(EngineBlock_Saml2_IdGenerator::class);
-        $samlIdGenerator->method('generate')
-            ->willReturn('EB_metadata');
-
-        $twigLoader = new \Twig_Loader_Filesystem();
-        $twigLoader->addPath($basePath . '/theme/openconext/templates/modules', 'theme');
-        $environment = new Environment($twigLoader);
-
-        $translator = m::mock(TranslatorInterface::class);
-        $translator
-            ->shouldReceive('trans')
-            ->andReturnUsing(function($key) {
-                return 'trans-'.$key;
-            });
-
-        $translatorExtension = new TranslationExtension($translator);
-        $environment->addExtension($translatorExtension);
-
-        $keyPairFactory = $this->createMock(KeyPairFactory::class);
-        $keyPairFactory
-            ->method('buildFromIdentifier')
-            ->willReturn($keyPair);
-
-        $documentSigner = new DocumentSigner();
-
-        $languages = ['nl', 'en'];
-        $supportedLanguageProvider = new LanguageSupportProvider($languages, $languages);
-
-        $this->metadataRenderer = new MetadataRenderer(
-            $supportedLanguageProvider,
-            $environment,
-            $samlIdGenerator,
-            $keyPairFactory,
-            $documentSigner,
-            new TimeProvider(),
-            'all'
-        );
+        $this->metadataRenderer = $this->buildMetadataRenderer('all');
 
         parent::setUp();
     }
@@ -297,6 +256,138 @@ class MetadataRendererTest extends TestCase
         $this->assertFalse($this->validateXml($xml));
     }
 
+    /**
+     * @test
+     * @group Metadata
+     */
+    public function metadata_add_all_requested_attributes()
+    {
+        $xml = $this->metadataRenderer->fromServiceProviderEntity($this->buildSp(), 'default');
+
+        $this->assertTrue($this->validateXml($xml));
+        $this->assertStringContainsString($this->getRequestedAttributeXml('attribute1', true), $xml);
+        $this->assertStringContainsString($this->getRequestedAttributeXml('attribute2', false), $xml);
+        $this->assertStringContainsString($this->getRequestedAttributeXml('attribute3', false), $xml);
+    }
+
+    /**
+     * @test
+     * @group Metadata
+     */
+    public function metadata_add_required_requested_attributes()
+    {
+        $this->metadataRenderer = $this->buildMetadataRenderer('required');
+
+        $xml = $this->metadataRenderer->fromServiceProviderEntity($this->buildSp(), 'default');
+
+        $this->assertTrue($this->validateXml($xml));
+        $this->assertStringContainsString($this->getRequestedAttributeXml('attribute1', true), $xml);
+        $this->assertStringNotContainsString($this->getRequestedAttributeXml('attribute2', false), $xml);
+        $this->assertStringNotContainsString($this->getRequestedAttributeXml('attribute3', false), $xml);
+    }
+
+    /**
+     * @test
+     * @group Metadata
+     */
+    public function metadata_add_no_requested_attributes()
+    {
+        $this->metadataRenderer = $this->buildMetadataRenderer('none');
+
+        $xml = $this->metadataRenderer->fromServiceProviderEntity($this->buildSp(), 'default');
+
+        $this->assertTrue($this->validateXml($xml));
+        $this->assertStringNotContainsString($this->getRequestedAttributeXml('attribute1', true), $xml);
+        $this->assertStringNotContainsString($this->getRequestedAttributeXml('attribute2', false), $xml);
+        $this->assertStringNotContainsString($this->getRequestedAttributeXml('attribute3', false), $xml);
+    }
+
+    private function buildMetadataRenderer(string $addRequestedAttributes)
+    {
+        $basePath = realpath(__DIR__ . '/../../../../../');
+
+        $privateKey = new X509PrivateKey($basePath . '/tests/resources/key/engineblock.pem');
+        $publicKey = new X509Certificate(openssl_x509_read(file_get_contents($basePath . '/tests/resources/key/engineblock.crt')));
+        $keyPair = new X509KeyPair($publicKey, $privateKey);
+
+        $samlIdGenerator = $this->createMock(EngineBlock_Saml2_IdGenerator::class);
+        $samlIdGenerator->method('generate')
+            ->willReturn('EB_metadata');
+
+        $twigLoader = new \Twig_Loader_Filesystem();
+        $twigLoader->addPath($basePath . '/theme/openconext/templates/modules', 'theme');
+        $environment = new Environment($twigLoader);
+
+        $translator = m::mock(TranslatorInterface::class);
+        $translator
+            ->shouldReceive('trans')
+            ->andReturnUsing(function($key) {
+                return 'trans-'.$key;
+            });
+
+        $translatorExtension = new TranslationExtension($translator);
+        $environment->addExtension($translatorExtension);
+
+        $keyPairFactory = $this->createMock(KeyPairFactory::class);
+        $keyPairFactory
+            ->method('buildFromIdentifier')
+            ->willReturn($keyPair);
+
+        $documentSigner = new DocumentSigner();
+
+        $languages = ['nl', 'en'];
+        $supportedLanguageProvider = new LanguageSupportProvider($languages, $languages);
+
+        return new MetadataRenderer(
+            $supportedLanguageProvider,
+            $environment,
+            $samlIdGenerator,
+            $keyPairFactory,
+            $documentSigner,
+            new TimeProvider(),
+            $addRequestedAttributes
+        );
+    }
+
+    private function buildSp()
+    {
+        $assertionConsumerServices[] = new IndexedService(
+            'https://example.com/acs',
+            Constants::BINDING_HTTP_POST,
+            0
+        );
+        $contactPersons[] = ContactPerson::from(
+            'administrative',
+            'John',
+            'Doe',
+            'admin@example.org'
+        );
+        $requestedAttributes = [
+            new RequestedAttribute('attribute1', true),
+            new RequestedAttribute('attribute2', false),
+            new RequestedAttribute('attribute3', false),
+        ];
+
+        $sp = Utils::instantiate(
+            ServiceProvider::class,
+            [
+                'entityId' => 'sp',
+                'assertionConsumerServices' => $assertionConsumerServices,
+                'logo' => new Logo('https://www.example.com/images/logo.gif'),
+                'organizationEn' => new Organization('Org', 'Organization', 'https://example.org'),
+                'contactPersons' => $contactPersons,
+                'requestedAttributes' => $requestedAttributes
+            ]
+        );
+
+        return new ServiceProviderEntity($sp);
+    }
+
+    private function getRequestedAttributeXml(string $attributeName, bool $isRequired)
+    {
+        return "<md:RequestedAttribute Name=\"$attributeName\" NameFormat=\"urn:oasis:names:tc:SAML:2.0:attrname-format:uri\" " .
+            "isRequired=\"" . var_export($isRequired, true) ."\"/>";
+    }
 
     private function validateXml($xml)
     {
