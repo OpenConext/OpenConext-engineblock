@@ -21,7 +21,8 @@
  */
 class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineBlock_Corto_Filter_Command_Abstract
     implements EngineBlock_Corto_Filter_Command_ResponseModificationInterface,
-    EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
+    EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface,
+    EngineBlock_Corto_Filter_Command_ResponseAttributeValueTypesModificationInterface
 {
     const TYPE_SP  = 'sp';
     const TYPE_REQUESTER_SP = 'requester-sp';
@@ -51,6 +52,14 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
     public function getResponseAttributes()
     {
         return $this->_responseAttributes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getResponseAttributeValueTypes()
+    {
+        return $this->_responseAttributeValueTypes;
     }
 
     public function execute()
@@ -85,6 +94,8 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
             );
         }
 
+        $attributesBefore = $this->_responseAttributes;
+
         // Try entity specific file based manipulation from Service Registry
         $manipulator = new EngineBlock_Attributes_Manipulator_ServiceRegistry($this->_type);
         $manipulator->manipulate(
@@ -97,6 +108,13 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
             $this->_request
         );
 
+        // If attributes have changed, we need to reset the attribute value types
+        // since they will not correspond anymore, and we have no interface for the
+        // AM to specify the new types. Making it empty will let saml2 set the
+        // correct ones for us.
+        if($attributesBefore != $this->_responseAttributes) {
+            $this->_responseAttributeValueTypes = [];
+        }
         $this->_response->setIntendedNameId($this->_collabPersonId);
     }
 }
