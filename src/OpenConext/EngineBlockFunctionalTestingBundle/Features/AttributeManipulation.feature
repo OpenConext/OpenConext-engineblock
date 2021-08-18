@@ -192,5 +192,26 @@ Feature:
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
     And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:uid"]/saml:AttributeValue[text()="https://engine.vm.openconext.org/authentication/idp/single-sign-on"]'
 
+  Scenario: The manipulation reduces a multivalued attribute to a single value
+    Given the IdP "Dummy-IdP" sends attribute "urn:mace:dir:attribute-def:eduPersonAffiliation" with values "student,faculty,guest,member" and xsi:type is "xs:string"
+    And SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
+      """
+      $attributes['urn:mace:dir:attribute-def:eduPersonAffiliation'] = ['guest'];
+      """
+    When I log in at "SP-with-Attribute-Manipulations"
+     And I select "Dummy-IdP" on the WAYF
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the response should contain "urn:mace:dir:attribute-def:uid"
+    And the response should contain "eduPersonAffiliation"
+    And the response should contain "faculty"
+    And the response should contain "member"
+    When I give my consent
+    And I pass through EngineBlock
+    Then the response should contain "urn:mace:dir:attribute-def:uid"
+    And the response should contain "urn:mace:dir:attribute-def:eduPersonAffiliation"
+    And the response should contain "guest"
+    And the response should not contain "member"
+    And the response should not contain "faculty"
 #
 #  Scenario: Sp and IdP attribute manipulations
