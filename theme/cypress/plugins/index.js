@@ -1,6 +1,8 @@
 const htmlvalidate = require('cypress-html-validate/dist/plugin');
 
 module.exports = (on, config) => {
+  require('cypress-terminal-report/src/installLogsPrinter')(on);
+
   htmlvalidate.install(on, {
       "rules": {
           "prefer-button": "off",
