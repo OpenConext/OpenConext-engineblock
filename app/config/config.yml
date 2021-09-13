@@ -95,9 +95,19 @@ doctrine:
                 mapping_types:
                     enum: string
         types:
+            engineblock_attribute_release_policy: OpenConext\EngineBlockBundle\Doctrine\Type\AttributeReleasePolicyType
+            engineblock_certificate_array: OpenConext\EngineBlockBundle\Doctrine\Type\CertificateArrayType
             engineblock_collab_person_id: OpenConext\EngineBlockBundle\Doctrine\Type\CollabPersonIdType
             engineblock_collab_person_uuid: OpenConext\EngineBlockBundle\Doctrine\Type\CollabPersonUuidType
+            engineblock_contact_person_array: OpenConext\EngineBlockBundle\Doctrine\Type\ContactPersonArrayType
+            engineblock_indexed_service_array: OpenConext\EngineBlockBundle\Doctrine\Type\IndexedServiceArrayType
+            engineblock_logo: OpenConext\EngineBlockBundle\Doctrine\Type\LogoType
             engineblock_metadata_coins: OpenConext\EngineBlockBundle\Doctrine\Type\MetadataCoinType
+            engineblock_organization: OpenConext\EngineBlockBundle\Doctrine\Type\OrganizationType
+            engineblock_requested_attribute_array: OpenConext\EngineBlockBundle\Doctrine\Type\RequestedAttributeArrayType
+            engineblock_service: OpenConext\EngineBlockBundle\Doctrine\Type\ServiceType
+            engineblock_service_array: OpenConext\EngineBlockBundle\Doctrine\Type\ServiceArrayType
+            engineblock_shib_md_scope_array: OpenConext\EngineBlockBundle\Doctrine\Type\ShibMdScopeArrayType
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'
