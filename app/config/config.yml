@@ -17,6 +17,7 @@ open_conext_engine_block:
     features:
         api.metadata_push:   "%feature_api_metadata_push%"
         api.consent_listing: "%feature_api_consent_listing%"
+        api.consent_remove: "%feature_api_consent_remove%"
         api.metadata_api:    "%feature_api_metadata_api%"
         api.deprovision:     "%feature_api_deprovision%"
         eb.encrypted_assertions: "%feature_eb_encrypted_assertions%"
