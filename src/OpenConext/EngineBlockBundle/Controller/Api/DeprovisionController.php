@@ -20,15 +20,18 @@ namespace OpenConext\EngineBlockBundle\Controller\Api;
 
 use InvalidArgumentException;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
+use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlock\Service\DeprovisionService;
+use OpenConext\EngineBlockBundle\Http\Exception\ApiInternalServerErrorHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use function sprintf;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -111,6 +114,40 @@ final class DeprovisionController
         );
 
         return $this->createResponse('OK', $userData);
+    }
+
+
+    public function removeAction(string $userId, string $serviceProviderEntityId, Request $request): JsonResponse
+    {
+        if (!$request->isMethod(Request::METHOD_GET)) {
+            throw ApiMethodNotAllowedHttpException::methodNotAllowed($request->getMethod(), [Request::METHOD_GET]);
+        }
+
+        if (!$this->featureConfiguration->isEnabled('api.consent_remove')) {
+            throw new ApiNotFoundHttpException('Consent remove API is disabled');
+        }
+
+        if (!$this->authorizationChecker->isGranted('ROLE_API_USER_DEPROVISION')) {
+            throw new ApiAccessDeniedHttpException(
+                'Access to the consent removal API requires the role ROLE_API_USER_DEPROVISION'
+            );
+        }
+
+        try {
+            $user = $this->createCollabPersonIdValueObject($userId);
+            $removed = $this->deprovisionService->deleteOneConsentFor($user, $serviceProviderEntityId);
+        } catch (RuntimeException $e) {
+            throw new ApiInternalServerErrorHttpException(
+                sprintf(
+                    'An unknown error occurred while removing a service the user has given consent for to ' .
+                    'release attributes to ("%s")',
+                    $e->getMessage()
+                ),
+                $e
+            );
+        }
+
+        return new JsonResponse($removed, Response::HTTP_OK);
     }
 
     /**

@@ -22,6 +22,14 @@ api_consent_user:
         _controller: engineblock.controller.api.consent:userAction
         _format: json
 
+api_remove_consent_user:
+    path:    /remove-consent/{userId}/{serviceProviderEntityId}
+    requirements:
+        serviceProviderEntityId: .+
+    defaults:
+        _controller: engineblock.controller.api.deprovision:removeAction
+        _format: json
+
 api_deprovision_delete_user_data_dry_run:
     path:    /deprovision/{collabPersonId}/dry-run
     requirements:
