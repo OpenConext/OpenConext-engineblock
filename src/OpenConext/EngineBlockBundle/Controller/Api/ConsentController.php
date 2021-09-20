@@ -19,21 +19,22 @@
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
 use OpenConext\EngineBlock\Exception\RuntimeException;
+use OpenConext\EngineBlock\Service\ConsentServiceInterface;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiInternalServerErrorHttpException;
-use OpenConext\EngineBlock\Service\ConsentService;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use function sprintf;
 
 final class ConsentController
 {
     /**
-     * @var ConsentService
+     * @var ConsentServiceInterface
      */
     private $consentService;
 
@@ -50,7 +51,7 @@ final class ConsentController
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         FeatureConfigurationInterface $featureConfiguration,
-        ConsentService $consentService
+        ConsentServiceInterface $consentService
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->featureConfiguration = $featureConfiguration;
