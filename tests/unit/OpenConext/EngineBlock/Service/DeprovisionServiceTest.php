@@ -236,4 +236,24 @@ class DeprovisionServiceTest extends TestCase
             new CollabPersonId('urn:collab:person:test')
         );
     }
+
+    /**
+     * @test
+     * @group EngineBlock
+     * @group Deprovision
+     */
+    public function remove_consent_by_collab_person_id_and_sp_entity_id()
+    {
+        $this->consentRepository->shouldReceive('deleteOneFor')
+            ->with($this->user->getCollabPersonId()->getCollabPersonId(), 'https://sp1.example.org');
+
+        $service = new DeprovisionService(
+            $this->consentRepository,
+            $this->userDirectory,
+            $this->persistentIdRepository,
+            $this->serviceProviderUuidRepository
+        );
+
+        $service->deleteOneConsentFor(new CollabPersonId('urn:collab:person:test'), 'https://sp1.example.org');
+    }
 }

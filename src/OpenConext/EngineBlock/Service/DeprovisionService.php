@@ -18,12 +18,15 @@
 
 namespace OpenConext\EngineBlock\Service;
 
+use Exception;
 use OpenConext\EngineBlock\Authentication\Model\User;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use OpenConext\EngineBlock\Authentication\Repository\UserDirectory;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
+use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\EngineBlockBundle\Authentication\Repository\SamlPersistentIdRepository;
 use OpenConext\EngineBlockBundle\Authentication\Repository\ServiceProviderUuidRepository;
+use function sprintf;
 
 final class DeprovisionService implements DeprovisionServiceInterface
 {
@@ -138,6 +141,20 @@ final class DeprovisionService implements DeprovisionServiceInterface
         if ($user) {
             $this->deleteSamlPersistentId($user);
             $this->deleteUser($user);
+        }
+    }
+
+
+    public function deleteOneConsentFor(CollabPersonId $id, string $serviceProviderEntityId): bool
+    {
+        try {
+            return $this->consentRepository->deleteOneFor($id->getCollabPersonId(), $serviceProviderEntityId);
+        } catch (Exception $e) {
+            throw new RuntimeException(
+                sprintf('An exception occurred while removing consent for a service provider("%s")', $e->getMessage()),
+                0,
+                $e
+            );
         }
     }
 

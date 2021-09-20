@@ -26,6 +26,7 @@ use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 use OpenConext\EngineBlock\Exception\RuntimeException;
 use PDO;
+use function sha1;
 
 final class DbalConsentRepository implements ConsentRepository
 {
@@ -97,6 +98,33 @@ final class DbalConsentRepository implements ConsentRepository
             $this->connection->executeQuery($sql, ['hashed_user_id' => sha1($userId)]);
         } catch (DBALException $exception) {
             throw new RuntimeException('Could not delete user consents from the database', 0, $exception);
+        }
+    }
+
+    /**
+     * @param string $userId
+     *
+     * @throws RuntimeException
+     */
+    public function deleteOneFor(string $userId, string $serviceProviderEntityId): bool
+    {
+        $sql = 'DELETE FROM consent WHERE hashed_user_id = :hashed_user_id AND service_id = :service_id ';
+
+        try {
+            $result = $this->connection->executeQuery(
+                $sql,
+                [
+                    'hashed_user_id' => sha1($userId),
+                    'service_id' => $serviceProviderEntityId
+                ]
+            );
+            return $result->rowCount() > 0;
+        } catch (DBALException $exception) {
+            throw new RuntimeException(
+                'Could not delete user consent from the database for a specific SP',
+                0,
+                $exception
+            );
         }
     }
 }

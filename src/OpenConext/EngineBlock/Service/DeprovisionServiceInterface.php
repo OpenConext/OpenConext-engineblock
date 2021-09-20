@@ -32,4 +32,6 @@ interface DeprovisionServiceInterface
      * @param CollabPersonId $id
      */
     public function delete(CollabPersonId $id);
+
+    public function deleteOneConsentFor(CollabPersonId $id, string $serviceProviderEntityId): bool;
 }

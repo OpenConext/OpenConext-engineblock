@@ -35,4 +35,6 @@ interface ConsentRepository
      * @return Consent[]
      */
     public function deleteAllFor($userId);
+
+    public function deleteOneFor(string $userId, string $serviceProviderEntityId): bool;
 }
