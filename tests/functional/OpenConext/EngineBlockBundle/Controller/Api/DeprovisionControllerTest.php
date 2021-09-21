@@ -57,11 +57,11 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
 
         $unauthenticatedClient = static::createClient();;
-        $unauthenticatedClient->request('GET', 'https://engine-api.vm.openconext.org/remove-consent/' . $collabPersonId . '/https://example.com/metadata');
+        $unauthenticatedClient->request('GET', 'https://engine-api.vm.openconext.org/remove-consent');
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
 
         $unauthenticatedClient = static::createClient();;
-        $unauthenticatedClient->request('DELETE', 'https://engine-api.vm.openconext.org/remove-consent/' . $collabPersonId. '/https://example.com/metadata');
+        $unauthenticatedClient->request('DELETE', 'https://engine-api.vm.openconext.org/remove-consent');
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
     }
 
@@ -131,7 +131,11 @@ final class DeprovisionControllerTest extends WebTestCase
 
         $this->disableRemoveConsentApiFeatureFor($client);
 
-        $client->request('GET', 'https://engine-api.vm.openconext.org/remove-consent/' . $collabPersonId. '/https://example.com/metadata');
+        $client->request(
+            'POST',
+            'https://engine-api.vm.openconext.org/remove-consent',
+            ['collabPersonId' => $collabPersonId, 'serviceProviderEntityId' => 'https://example.com/metadata']
+        );
 
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $client);
         $this->assertResponseIsJson($client);
@@ -171,7 +175,11 @@ final class DeprovisionControllerTest extends WebTestCase
             'PHP_AUTH_PW' => 'no_roles',
         ]);
 
-        $client->request('GET', 'https://engine-api.vm.openconext.org/remove-consent/' . $collabPersonId. '/https://example.com/metadata');
+        $client->request(
+            'POST',
+            'https://engine-api.vm.openconext.org/remove-consent',
+            ['collabPersonId' => $collabPersonId, 'serviceProviderEntityId' => 'https://example.com/metadata']
+        );
 
         $this->assertStatusCode(Response::HTTP_FORBIDDEN, $client);
         $this->assertResponseIsJson($client);
@@ -212,6 +220,28 @@ final class DeprovisionControllerTest extends WebTestCase
      * @group Api
      * @group Deprovision
      */
+    public function no_consent_is_removed_if_request_parameters_are_missing_or_incorrect()
+    {
+        $client = static::createClient([], [
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
+        ]);
+
+        $client->request(
+            'POST',
+            'https://engine-api.vm.openconext.org/remove-consent',
+            ['userId' => 'urn:collab:person:test', 'serviceProviderId' => 'https://example.com/metadata']
+        );
+
+        $this->assertStatusCode(Response::HTTP_FOUND, $client);
+        $this->assertResponseIsJson($client);
+    }
+
+    /**
+     * @test
+     * @group Api
+     * @group Deprovision
+     */
     public function no_consent_is_removed_if_collab_person_id_is_unknown()
     {
         $client = static::createClient([], [
@@ -219,7 +249,11 @@ final class DeprovisionControllerTest extends WebTestCase
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
         ]);
 
-        $client->request('GET', 'https://engine-api.vm.openconext.org/remove-consent/urn:collab:person:test/https://example.com/metadata');
+        $client->request(
+            'POST',
+            'https://engine-api.vm.openconext.org/remove-consent',
+            ['collabPersonId' => 'urn:collab:person:test', 'serviceProviderEntityId' => 'https://example.com/metadata']
+        );
 
         $this->assertStatusCode(Response::HTTP_OK, $client);
         $this->assertResponseIsJson($client);
@@ -393,8 +427,14 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->addSamlPersistentIdFixture($userUuid, $spUuid1, $persistentId1);
         $this->addConsentFixture($userId, $spEntityId1, $attributeHash, $consentType, $consentDate);
 
-        $client->request('GET', 'https://engine-api.vm.openconext.org/remove-consent/urn:collab:person:test/https://my-first-sp.test');
-
+        $client->request(
+            'POST',
+            'https://engine-api.vm.openconext.org/remove-consent',
+            [
+                'collabPersonId' => 'urn:collab:person:test',
+                'serviceProviderEntityId' => 'https://my-first-sp.test'
+            ]
+        );
         $this->assertStatusCode(Response::HTTP_OK, $client);
         $this->assertResponseIsJson($client);
         $responseData = json_decode($client->getResponse()->getContent(), true);

@@ -22,6 +22,7 @@ use InvalidArgumentException;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
+use OpenConext\EngineBlockBundle\Exception\InvalidArgumentException as EngineBlockInvalidArgumentException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlock\Service\DeprovisionService;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiInternalServerErrorHttpException;
@@ -117,10 +118,10 @@ final class DeprovisionController
     }
 
 
-    public function removeAction(string $userId, string $serviceProviderEntityId, Request $request): JsonResponse
+    public function removeAction(Request $request): JsonResponse
     {
-        if (!$request->isMethod(Request::METHOD_GET)) {
-            throw ApiMethodNotAllowedHttpException::methodNotAllowed($request->getMethod(), [Request::METHOD_GET]);
+        if (!$request->isMethod(Request::METHOD_POST)) {
+            throw ApiMethodNotAllowedHttpException::methodNotAllowed($request->getMethod(), [Request::METHOD_POST]);
         }
 
         if (!$this->featureConfiguration->isEnabled('api.consent_remove')) {
@@ -131,6 +132,12 @@ final class DeprovisionController
             throw new ApiAccessDeniedHttpException(
                 'Access to the consent removal API requires the role ROLE_API_USER_DEPROVISION'
             );
+        }
+
+        $userId = $request->get('collabPersonId', false);
+        $serviceProviderEntityId = $request->get('serviceProviderEntityId', false);
+        if (!$userId || !$serviceProviderEntityId) {
+            throw new EngineBlockInvalidArgumentException('The required data for removing the consent is not present in the request parameters');
         }
 
         try {
