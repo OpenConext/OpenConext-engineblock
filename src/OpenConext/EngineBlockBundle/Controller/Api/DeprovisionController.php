@@ -128,9 +128,9 @@ final class DeprovisionController
             throw new ApiNotFoundHttpException('Consent remove API is disabled');
         }
 
-        if (!$this->authorizationChecker->isGranted('ROLE_API_USER_DEPROVISION')) {
+        if (!$this->authorizationChecker->isGranted('ROLE_API_USER_PROFILE')) {
             throw new ApiAccessDeniedHttpException(
-                'Access to the consent removal API requires the role ROLE_API_USER_DEPROVISION'
+                'Access to the consent removal API requires the role ROLE_API_USER_PROFILE'
             );
         }
 

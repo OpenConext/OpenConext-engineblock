@@ -223,8 +223,8 @@ final class DeprovisionControllerTest extends WebTestCase
     public function no_consent_is_removed_if_request_parameters_are_missing_or_incorrect()
     {
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
         ]);
 
         $client->request(
@@ -245,8 +245,8 @@ final class DeprovisionControllerTest extends WebTestCase
     public function no_consent_is_removed_if_collab_person_id_is_unknown()
     {
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
         ]);
 
         $client->request(
@@ -418,8 +418,8 @@ final class DeprovisionControllerTest extends WebTestCase
         $consentDate = '2017-04-18 13:37:00';
 
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
         ]);
 
         $this->addServiceProviderUuidFixture($spUuid1, $spEntityId1);
