@@ -204,7 +204,8 @@ class ServiceProvider extends AbstractRole
         $supportUrlNl = null,
         $supportUrlPt = null,
         $stepupAllowNoToken = null,
-        $stepupRequireLoa = null
+        $stepupRequireLoa = null,
+        $communityUuid = null
     ) {
         parent::__construct(
             $entityId,
@@ -257,7 +258,8 @@ class ServiceProvider extends AbstractRole
             $stepupRequireLoa,
             $disableScoping,
             $additionalLogging,
-            $signatureMethod
+            $signatureMethod,
+            $communityUuid
         );
     }
 

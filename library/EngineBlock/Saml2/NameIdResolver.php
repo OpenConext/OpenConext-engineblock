@@ -233,21 +233,31 @@ class EngineBlock_Saml2_NameIdResolver
         return $persistentId;
     }
 
-    protected function _getServiceProviderUuid($spEntityId)
+    protected function _getServiceProviderUuid(string $spEntityId): string
     {
-        $uuid = $this->_fetchServiceProviderUuid($spEntityId);
+        $communityUuid = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()
+            ->getMetadataRepository()->fetchServiceProviderByEntityId($spEntityId)
+            ->getCoins()->communityUuid();
+        $storedUuid = $this->_fetchServiceProviderUuid($spEntityId);
 
-        if ($uuid) {
-            return $uuid;
+        // A new community Uuid is set in the SP configuration: store it and use that
+        if ($communityUuid !== null && $communityUuid !== $storedUuid) {
+            $this->_storeServiceProviderUuid($spEntityId, $communityUuid, (bool)$storedUuid);
+            return $communityUuid;
+        }
+        // Use the stored Uuid if we have it
+        if ($storedUuid !== false) {
+            return $storedUuid;
         }
 
-        $uuid = (string) Uuid::uuid4();
-        $this->_storeServiceProviderUuid($spEntityId, $uuid);
+        // Generate a new Uuid to store
+        $newUuid = (string) Uuid::uuid4();
+        $this->_storeServiceProviderUuid($spEntityId, $newUuid);
 
-        return $uuid;
+        return $newUuid;
     }
 
-    protected function _fetchServiceProviderUuid($spEntityId)
+    protected function _fetchServiceProviderUuid(string $spEntityId)
     {
         $statement = $this->_getDb()->prepare(
             'SELECT uuid FROM service_provider_uuid WHERE service_provider_entity_id=?'
@@ -262,12 +272,15 @@ class EngineBlock_Saml2_NameIdResolver
         return isset($result[0]['uuid']) ? $result[0]['uuid'] : false;
     }
 
-    protected function _storeServiceProviderUuid($spEntityId, $uuid)
+    protected function _storeServiceProviderUuid(string $spEntityId, string $uuid, bool $overwrite = false): void
     {
-        $this->_getDb()->prepare(
-            'INSERT INTO service_provider_uuid (uuid, service_provider_entity_id) VALUES (?,?)'
-        )->execute(
-            array($uuid, $spEntityId)
+        if ($overwrite) {
+            $query = 'UPDATE service_provider_uuid SET uuid  = ? WHERE service_provider_entity_id = ?';
+        } else {
+            $query = 'INSERT INTO service_provider_uuid (uuid, service_provider_entity_id) VALUES (?,?)';
+        }
+        $this->_getDb()->prepare($query)->execute(
+            [$uuid, $spEntityId]
         );
     }
 

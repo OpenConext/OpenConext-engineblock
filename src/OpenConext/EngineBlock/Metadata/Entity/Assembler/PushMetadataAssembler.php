@@ -202,6 +202,13 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
             ),
             'termsOfServiceUrl'
         );
+        $properties += $this->setPathFromObjectString(
+            array(
+                $connection,
+                'metadata:coin:communityUuid'
+            ),
+            'communityUuid'
+        );
         $properties += $this->setPathFromObjectBool(
             array(
                 $connection,
