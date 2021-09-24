@@ -49,14 +49,14 @@ class EngineBlock_Test_Saml2_NameIdResolverMock extends EngineBlock_Saml2_NameId
         $this->_persistentIds[$serviceProviderUuid][$userUuid] = $persistentId;
     }
 
-    protected function _fetchServiceProviderUuid($spEntityId)
+    protected function _fetchServiceProviderUuid(string $spEntityId)
     {
         return empty($this->_serviceProviderUuids[$spEntityId]) ?
             false:
             $this->_serviceProviderUuids[$spEntityId];
     }
 
-    protected function _storeServiceProviderUuid($spEntityId, $uuid)
+    protected function _storeServiceProviderUuid(string $spEntityId, string $uuid, bool $overwrite = false): void
     {
         $this->_serviceProviderUuids[$spEntityId] = $uuid;
     }
