@@ -28,7 +28,6 @@ class ServiceProviderUuid
     /**
      * @var string
      *
-     * @ORM\Id
      * @ORM\Column(type="string", length=36, options={"fixed": true})
      */
     public $uuid;
