@@ -71,6 +71,10 @@ class MetadataRenderer
      * @var LanguageSupportProvider
      */
     private $languageSupportProvider;
+    /**
+     * @var string
+     */
+    private $addRequestedAttributes;
 
     public function __construct(
         LanguageSupportProvider $languageSupportProvider,
@@ -78,7 +82,8 @@ class MetadataRenderer
         EngineBlock_Saml2_IdGenerator $samlIdGenerator,
         KeyPairFactory $keyPairFactory,
         DocumentSigner $documentSigner,
-        TimeProvider $timeProvider
+        TimeProvider $timeProvider,
+        string $addRequestedAttributes
     ) {
         $this->languageSupportProvider = $languageSupportProvider;
         $this->twig = $twig;
@@ -86,6 +91,7 @@ class MetadataRenderer
         $this->keyPairFactory = $keyPairFactory;
         $this->documentSigner = $documentSigner;
         $this->timeProvider = $timeProvider;
+        $this->addRequestedAttributes = $addRequestedAttributes;
     }
 
     public function fromServiceProviderEntity(ServiceProviderEntityInterface $sp, string $keyId) : string
@@ -126,11 +132,26 @@ class MetadataRenderer
     {
         $metadata = new ServiceProviderMetadataHelper($sp, $this->languageSupportProvider);
 
+        switch ($this->addRequestedAttributes) {
+            case "all":
+                $requestedAttributes = $metadata->getRequestedAttributes();
+                break;
+            case "required":
+                $requestedAttributes = array_filter($metadata->getRequestedAttributes(), function ($value) {
+                    return $value->required;
+                });
+                break;
+            case "none":
+            default:
+                $requestedAttributes = [];
+        }
+
         $params = [
             'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
             'validUntil' => $this->getValidUntil(),
             'metadata' => $metadata,
             'locales' => $this->languageSupportProvider->getSupportedLanguages(),
+            'requestedAttributes' => $requestedAttributes
         ];
 
         return $this->twig->render($template, $params);

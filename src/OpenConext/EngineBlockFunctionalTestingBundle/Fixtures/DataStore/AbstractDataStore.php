@@ -18,7 +18,8 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore;
 
-use League\Flysystem\Adapter\Local;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\Local\LocalFilesystemAdapter as Local;
 use League\Flysystem\Filesystem;
 use RuntimeException;
 
@@ -35,19 +36,22 @@ abstract class AbstractDataStore
     {
         $directory = dirname($filePath);
         $this->filePath = basename($filePath);
-        $adapter = new Local($directory, LOCK_NB);
+        $adapter = new Local($directory);
         $this->fileSystem = new Filesystem($adapter);
     }
 
+    /**
+     * @throws FilesystemException
+     */
     public function load($default = [])
     {
-        if (!$this->fileSystem->has($this->filePath)) {
+        if (!$this->fileSystem->fileExists($this->filePath)) {
             return $default;
         }
 
         $fileContents = $this->fileSystem->read($this->filePath);
 
-        if ($fileContents === false) {
+        if (isset($fileContents) && $fileContents === false) {
             throw new RuntimeException(sprintf('Unable to load data from: "%s"', $this->filePath));
         }
 
@@ -62,9 +66,12 @@ abstract class AbstractDataStore
         return $data;
     }
 
+    /**
+     * @throws FilesystemException
+     */
     public function save($data)
     {
-        $this->fileSystem->put($this->filePath, $this->encode($data));
+        $this->fileSystem->write($this->filePath, $this->encode($data));
     }
 
     abstract protected function encode($data);

@@ -13,11 +13,13 @@ Feature:
     And a Service Provider named "Wildcard ARP"
     And a Service Provider named "Wrong Value ARP"
     And a Service Provider named "Right Value ARP"
+    And a Service Provider named "Specific Value ARP"
     And a Service Provider named "Two value ARP"
     And SP "Empty ARP" allows no attributes
     And SP "Wildcard ARP" allows an attribute named "urn:mace:dir:attribute-def:uid"
     And SP "Wrong Value ARP" allows an attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization" with value "example.edu"
     And SP "Right Value ARP" allows an attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization" with value "engine-test-stand.openconext.org"
+    And SP "Specific Value ARP" allows an attribute named "urn:mace:dir:attribute-def:eduPersonAffiliation" with value "faculty"
     And SP "Two value ARP" allows an attribute named "urn:mace:dir:attribute-def:uid"
     And SP "Two value ARP" allows an attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization"
     And feature "eb.run_all_manipulations_prior_to_consent" is disabled
@@ -66,7 +68,7 @@ Feature:
     Then the response should not contain "urn:mace:dir:attribute-def:uid"
     And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
 
-  Scenario: As a user for an SP with a specific value ARP I do see the attribute the right value
+  Scenario: As a user for an SP with a specific value ARP I do see the attribute if it has the right value
     When I log in at "Right Value ARP"
     And I pass through EngineBlock
     And I pass through the IdP
@@ -76,6 +78,21 @@ Feature:
     And I pass through EngineBlock
     Then the response should not contain "urn:mace:dir:attribute-def:uid"
     And the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+
+  Scenario: As a user for an SP with a specific value ARP and multiple attributes sent I do see the attribute with only the right value
+    Given the IdP "TestIdp" sends attribute "urn:mace:dir:attribute-def:eduPersonAffiliation" with values "student,faculty,guest,member" and xsi:type is "xs:string"
+    When I log in at "Specific Value ARP"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the response should not contain "urn:mace:dir:attribute-def:uid"
+    And the response should contain "urn:mace:dir:attribute-def:eduPersonAffiliation"
+    When I give my consent
+    And I pass through EngineBlock
+    Then the response should not contain "urn:mace:dir:attribute-def:uid"
+    And the response should contain "urn:mace:dir:attribute-def:eduPersonAffiliation"
+    And the response should contain "faculty"
+    And the response should not contain "member"
+    And the response should not contain "guest"
 
   Scenario: As a user for an SP with 2 attributes in the ARP I only get those attributes
     When I log in at "Two value ARP"

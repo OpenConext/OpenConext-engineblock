@@ -6,11 +6,16 @@ ARG NPM_GID=1000
 # Copy phpfpm config
 COPY docker/php-fpm/app.ini /usr/local/etc/php/conf.d/
 
+# Yank the node and npm binaries from the official Node docker container
+COPY --from=node:10 /usr/local/lib/node_modules /usr/local/lib/node_modules
+COPY --from=node:10 /usr/local/bin/node /usr/local/bin/node
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
+RUN npm install -g npx
+
 # Install dependencies
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get update && apt-get install -y \
     git \
-    nodejs \
+    python \
     zip \
     chromium \
     libpng-dev \

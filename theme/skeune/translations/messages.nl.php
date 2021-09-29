@@ -73,7 +73,7 @@ return $overrides + [
     'consent_nojs'   => 'Sommige functionaliteiten op deze pagina vereisen JavaScript, zoals bedienen met je toetsenbord. Schakel JavaScript in in je browser indien je deze functionaliteiten wenst te gebruiken.',
     'consent_disclaimer_privacy_statement' => '(aangeboden door %org%) heeft deze informatie nodig om te kunnen werken',
     'consent_disclaimer_privacy_read'    => 'lees hun',
-    'consent_disclaimer_privacy_policy'  => 'privacy beleid',
+    'consent_disclaimer_privacy_policy'  => 'privacybeleid',
     'consent_disclaimer_secure' => 'wordt gebruikt door je %orgNoun% om informatie op een veilige manier te versturen naar %spName% (lees meer over',
     'consent_reject_text_skeune_header'    => 'Je wilt geen gegevens delen met deze dienst',
     'consent_reject_text_skeune_body'    => 'De dienst waar je bij wilt inloggen heeft deze gegevens nodig om te kunnen functioneren.  Indien je verkiest om je data niet te delen, kan je de dienst niet gebruiken.  Door je browser of door deze tab te sluiten verhinder je dat je informatie gedeeld wordt.  Mocht je later van gedachten veranderen, dan kun je opnieuw inloggen bij deze dienst en krijgt je dit scherm opnieuw te zien.',
