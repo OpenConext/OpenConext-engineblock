@@ -5,6 +5,10 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.6.5
+**Feature**
+ - Upgrade the Monitor bundle, exposing opcache statistics to the info endpoint #1163
+
 ## 6.6.4
 **Features**
 - allow control over the RequestedAttribute list added to the proxy SP metadata
