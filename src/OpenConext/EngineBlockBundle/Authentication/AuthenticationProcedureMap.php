@@ -43,7 +43,7 @@ final class AuthenticationProcedureMap implements Countable
      * @param AuthenticationProcedure $authenticationProcedure
      * @return AuthenticationProcedureMap
      */
-    public function add($requestId, AuthenticationProcedure $authenticationProcedure)
+    public function add($requestId, AuthenticationProcedure $authenticationProcedure): AuthenticationProcedureMap
     {
         $newAuthenticationProcedures = $this->authenticationProcedures;
         $newAuthenticationProcedures[$requestId] = $authenticationProcedure;
@@ -56,7 +56,7 @@ final class AuthenticationProcedureMap implements Countable
      * @return AuthenticationProcedure|null
      * @throws AssertionFailedException
      */
-    public function find($requestId)
+    public function find($requestId): ?AuthenticationProcedure
     {
         Assertion::string($requestId, 'The requestId must be a string (XML ID) value');
         if (isset($this->authenticationProcedures[$requestId])) {
@@ -69,7 +69,7 @@ final class AuthenticationProcedureMap implements Countable
      * @param Entity $entity
      * @return AuthenticationProcedureMap
      */
-    public function filterOnBehalfOf(Entity $entity)
+    public function filterOnBehalfOf(Entity $entity): AuthenticationProcedureMap
     {
         $filterMethod = function (AuthenticationProcedure $authenticationProcedure) use ($entity) {
             return $authenticationProcedure->isOnBehalfOf($entity);
@@ -82,7 +82,7 @@ final class AuthenticationProcedureMap implements Countable
      * @param DateTimeInterface $startDate
      * @return AuthenticationProcedureMap
      */
-    public function filterProceduresCompletedAfter(DateTimeInterface $startDate)
+    public function filterProceduresCompletedAfter(DateTimeInterface $startDate): AuthenticationProcedureMap
     {
         $filterMethod = function (AuthenticationProcedure $authenticationProcedure) use ($startDate) {
             return $authenticationProcedure->isCompletedAfter($startDate);
@@ -95,7 +95,7 @@ final class AuthenticationProcedureMap implements Countable
      * @param AuthenticationProcedure $other
      * @return bool
      */
-    public function contains(AuthenticationProcedure $other)
+    public function contains(AuthenticationProcedure $other): bool
     {
         foreach ($this->authenticationProcedures as $authenticationProcedure) {
             if ($authenticationProcedure->equals($other)) {
@@ -109,5 +109,20 @@ final class AuthenticationProcedureMap implements Countable
     public function count()
     {
         return count($this->authenticationProcedures);
+    }
+
+    /**
+     * Validates if any of the authenticationProcedures has been authenticated and completed
+     *
+     * @return bool
+     */
+    public function hasBeenAuthenticated(): bool
+    {
+        foreach ($this->authenticationProcedures as $authenticationProcedure) {
+            if ($authenticationProcedure->hasBeenAuthenticated() && $authenticationProcedure->isCompleted()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
