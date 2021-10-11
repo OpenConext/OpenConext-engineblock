@@ -66,7 +66,8 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         ProcessingStateHelperInterface $processingStateHelper,
         StepupGatewayCallOutHelper $stepupGatewayCallOutHelper,
         ServiceProviderFactory $serviceProviderFactory
-    ) {
+    )
+    {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->_session = $session;

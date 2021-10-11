@@ -83,17 +83,18 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
      */
     private $sessionMock;
 
-    public function setup() {
-        $diContainer              = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+    public function setup()
+    {
+        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
 
         $this->sspResponseMock = $this->mockSspResponse();
-        $this->proxyServerMock    = $this->mockProxyServer();
-        $this->xmlConverterMock   = $this->mockXmlConverter($diContainer->getXmlConverter());
+        $this->proxyServerMock = $this->mockProxyServer();
+        $this->xmlConverterMock = $this->mockXmlConverter($diContainer->getXmlConverter());
         $this->consentFactoryMock = $diContainer->getConsentFactory();
-        $this->consentMock        = $this->mockConsent();
-        $this->consentService     = $this->mockConsentService();
+        $this->consentMock = $this->mockConsent();
+        $this->consentService = $this->mockConsentService();
         $this->authStateHelperMock = $this->mockAuthStateHelper();
-        $this->twig               = $this->mockTwig();
+        $this->twig = $this->mockTwig();
         $this->processingStateHelperMock = $this->mockProcessingStateHelper();
         $this->httpRequestMock = $this->mockHttpRequest();
     }

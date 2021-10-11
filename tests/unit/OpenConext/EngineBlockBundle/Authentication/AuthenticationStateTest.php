@@ -80,9 +80,53 @@ class AuthenticationStateTest extends TestCase
         $authenticationState = new AuthenticationState($authenticationLoopGuard);
         $authenticationState->startAuthenticationOnBehalfOf($requestId, $serviceProvider);
 
-        $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('The requested authentication procedure with requestId "_00000000-0000-0000-0000-000000000000" has already been authenticated.');
+        $this->expectExceptionMessage('The requested authentication procedure with requestId "_00000000-0000-0000-0000-000000000000" has not been authenticated.');
+        $authenticationState->completeCurrentProcedure($requestId);
+    }
+
+    /**
+     * @test
+     * @group Authentication
+     */
+    public function an_authentication_procedure_can_be_completed_multiple_times()
+    {
+        $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30);
+
+        $serviceProvider = new Entity(new EntityId('https://my-service-provider.example'), EntityType::SP());
+        $identityProvider = new Entity(new EntityId('https://my-service-provider.example'), EntityType::IdP());
+
+        $requestId = '_00000000-0000-0000-0000-000000000000';
+
+        $authenticationState = new AuthenticationState($authenticationLoopGuard);
+        $authenticationState->startAuthenticationOnBehalfOf($requestId, $serviceProvider);
+        $authenticationState->authenticatedAt($requestId, $identityProvider);
+        $authenticationState->completeCurrentProcedure($requestId);
+        $authenticationState->completeCurrentProcedure($requestId);
+
+        self::assertTrue($authenticationState->isAuthenticated());
+    }
+
+    /**
+     * @test
+     * @group Authentication
+     */
+    public function an_authentication_procedure_is_not_authenticated_before_consent()
+    {
+        $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30);
+
+        $serviceProvider = new Entity(new EntityId('https://my-service-provider.example'), EntityType::SP());
+        $identityProvider = new Entity(new EntityId('https://my-service-provider.example'), EntityType::IdP());
+
+        $requestId = '_00000000-0000-0000-0000-000000000000';
+
+        $authenticationState = new AuthenticationState($authenticationLoopGuard);
+        $authenticationState->startAuthenticationOnBehalfOf($requestId, $serviceProvider);
+        $authenticationState->authenticatedAt($requestId, $identityProvider);
+
+        self::assertFalse($authenticationState->isAuthenticated());
 
         $authenticationState->completeCurrentProcedure($requestId);
+
+        self::assertTrue($authenticationState->isAuthenticated());
     }
 }

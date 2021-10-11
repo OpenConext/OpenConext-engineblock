@@ -26,12 +26,12 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
     implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
     /**
-     * @var \EngineBlock_Corto_ProxyServer
+     * @var EngineBlock_Corto_ProxyServer
      */
     protected $_server;
 
     /**
-     * @var \EngineBlock_Corto_XmlToArray
+     * @var EngineBlock_Corto_XmlToArray
      */
     protected $_xmlConverter;
 
@@ -63,7 +63,8 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         EngineBlock_Corto_Model_Consent_Factory $consentFactory,
         AuthenticationStateHelperInterface $stateHelper,
         ProcessingStateHelperInterface $processingStateHelper
-    ) {
+    )
+    {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->_consentFactory = $consentFactory;
