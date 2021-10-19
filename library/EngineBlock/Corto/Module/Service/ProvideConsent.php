@@ -33,7 +33,7 @@ use Twig\Environment;
 class EngineBlock_Corto_Module_Service_ProvideConsent
     implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
-    /** @var \EngineBlock_Corto_ProxyServer */
+    /** @var EngineBlock_Corto_ProxyServer */
     private $_server;
     /**
      * @var EngineBlock_Corto_XmlToArray
@@ -41,10 +41,10 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
     private $_xmlConverter;
 
     /** @var EngineBlock_Corto_Model_Consent_Factory */
-    private  $_consentFactory;
+    private $_consentFactory;
 
     /** @var ConsentServiceInterface */
-    private  $_consentService;
+    private $_consentService;
 
     /** @var AuthenticationStateHelperInterface */
     private $_authenticationStateHelper;
@@ -67,7 +67,8 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         AuthenticationStateHelperInterface $authStateHelper,
         Environment $twig,
         ProcessingStateHelperInterface $processingStateHelper
-    ) {
+    )
+    {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->_consentFactory = $consentFactory;

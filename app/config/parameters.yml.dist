@@ -54,6 +54,10 @@ parameters:
         - http
         - https
 
+    ## Add RequestedAttributes to the AttributeConsumingService of the SP Proxy metadata of Engineblock, default is all
+    ## Options are 'all' (optional and required attributes), 'required' (only required attributes) or 'none'
+    metadata_add_requested_attributes: all
+
     ##########################################################################################
     ## PHP SETTINGS
     ##########################################################################################

@@ -27,18 +27,22 @@ interface AuthenticationStateInterface
      * @param Entity $serviceProvider
      * @return void
      */
-    public function startAuthenticationOnBehalfOf($requestId, Entity $serviceProvider);
+    public function startAuthenticationOnBehalfOf(string $requestId, Entity $serviceProvider): void;
 
     /**
      * @param string $requestId
-     * @param Entity $identityProvider
      * @return void
      */
-    public function authenticatedAt($requestId, Entity $identityProvider);
+    public function authenticatedAt(string $requestId, Entity $identityProvider): void;
 
     /**
-     * @param $requestId
+     * @param string $requestId
      * @return void
      */
-    public function completeCurrentProcedure($requestId);
+    public function completeCurrentProcedure(string $requestId): void;
+
+    /**
+     * @return bool
+     */
+    public function isAuthenticated(): bool;
 }

@@ -1,6 +1,6 @@
 # Trusted Proxy in EngineBlock
 
-In version 4.3.3 support for "trusted proxies" was added to Openconext. A "trusted proxy" is a SAML SP that uses engineblock as its IdP. The difference between a normal SP and a SP is that is a trusted proxy is that the latter is allowed to impersonate other service providers. This allows a SP proxy to be connected to engineblock while using the ACL, ARP, consent and pseudonymisation functions of enginblock.
+In version 4.3.3 support for "trusted proxies" was added to Openconext. A "trusted proxy" is a SAML SP that uses engineblock as its IdP. The difference between a normal SP and a SP is that is a trusted proxy is that the latter is allowed to impersonate other service providers. This allows a SP proxy to be connected to engineblock while using the ACL, ARP, consent and pseudonymisation functions of engineblock.
 
 
 ## Enabling

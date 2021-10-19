@@ -143,6 +143,7 @@ services:
             - "@OpenConext\\EngineBlock\\Metadata\\X509\\KeyPairFactory"
             - "@OpenConext\\EngineBlock\\Xml\\DocumentSigner"
             - "@engineblock.service.time_provider"
+            - "%metadata_add_requested_attributes%"
 
     OpenConext\EngineBlock\Xml\MetadataProvider:
         arguments:

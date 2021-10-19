@@ -47,7 +47,7 @@ final class AuthenticationProcedure
      * @param Entity $serviceProvider
      * @return AuthenticationProcedure
      */
-    public static function onBehalfOf(Entity $serviceProvider)
+    public static function onBehalfOf(Entity $serviceProvider): AuthenticationProcedure
     {
         return new self($serviceProvider);
     }
@@ -55,7 +55,7 @@ final class AuthenticationProcedure
     /**
      * @param Entity $identityProvider
      */
-    public function authenticatedAt(Entity $identityProvider)
+    public function authenticatedAt(Entity $identityProvider): void
     {
         $this->identityProvider = $identityProvider;
     }
@@ -63,25 +63,32 @@ final class AuthenticationProcedure
     /**
      * @param DateTimeInterface $dateTime
      */
-    public function completeOn(DateTimeInterface $dateTime)
+    public function completeOn(DateTimeInterface $dateTime): void
     {
         $this->dateOfCompletion = $dateTime;
     }
 
     /**
+     * Validates if the authentication has been completed with any Identity Provider
+     *
      * @return bool
      */
-    public function hasBeenAuthenticated()
+    public function hasBeenAuthenticated(): bool
     {
-        return $this->identityProvider === null;
+        return $this->identityProvider !== null;
     }
 
     /**
+     * Validates if the authentication has been completed with the passed Identity Provider
+     *
      * @param Entity $identityProvider
      * @return bool
      */
-    public function hasBeenAuthenticatedAt(Entity $identityProvider)
+    public function hasBeenAuthenticatedAt(Entity $identityProvider): bool
     {
+        if ($this->identityProvider === null) {
+            return false;
+        }
         return $this->identityProvider->equals($identityProvider);
     }
 
@@ -89,7 +96,7 @@ final class AuthenticationProcedure
      * @param Entity $serviceProvider
      * @return bool
      */
-    public function isOnBehalfOf(Entity $serviceProvider)
+    public function isOnBehalfOf(Entity $serviceProvider): bool
     {
         return $this->serviceProvider->equals($serviceProvider);
     }
@@ -98,7 +105,7 @@ final class AuthenticationProcedure
      * @param DateTimeInterface $date
      * @return bool
      */
-    public function isCompletedAfter(DateTimeInterface $date)
+    public function isCompletedAfter(DateTimeInterface $date): bool
     {
         if ($this->dateOfCompletion === null) {
             return false;
@@ -108,10 +115,20 @@ final class AuthenticationProcedure
     }
 
     /**
+     * We assume that the authentication procedure has been (successfully) finished if a dateOfCompletion is set.
+     *
+     * @return bool
+     */
+    public function isCompleted(): bool
+    {
+        return $this->dateOfCompletion !== null;
+    }
+
+    /**
      * @param AuthenticationProcedure $other
      * @return bool
      */
-    public function equals(AuthenticationProcedure $other)
+    public function equals(AuthenticationProcedure $other): bool
     {
         $isSameServiceProvider = $this->serviceProvider->equals($other->serviceProvider);
 
@@ -123,7 +140,7 @@ final class AuthenticationProcedure
             $isSameIdentityProvider = $this->identityProvider->equals($other->identityProvider);
         }
 
-        $isSameDateOfCompletion = $this->dateOfCompletion == $other->dateOfCompletion;
+        $isSameDateOfCompletion = $this->dateOfCompletion === $other->dateOfCompletion;
 
         return $isSameServiceProvider && $isSameIdentityProvider && $isSameDateOfCompletion;
     }
