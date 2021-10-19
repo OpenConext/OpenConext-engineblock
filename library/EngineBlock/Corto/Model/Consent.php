@@ -53,12 +53,20 @@ class EngineBlock_Corto_Model_Consent
     private $_amPriorToConsentEnabled;
 
     /**
+     * A reflection of the eb.feature_disable_consent feature flag
+     *
+     * @var bool
+     */
+    private $_consentDisabled;
+
+    /**
      * @param string $tableName
      * @param bool $mustStoreValues
      * @param EngineBlock_Saml2_ResponseAnnotationDecorator $response
      * @param array $responseAttributes
      * @param EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
      * @param bool $amPriorToConsentEnabled Is the run_all_manipulations_prior_to_consent feature enabled or not
+     * @param bool $consentDisabled Is the feature_disable_consent feature enabled or not
      */
     public function __construct(
         $tableName,
@@ -66,7 +74,8 @@ class EngineBlock_Corto_Model_Consent
         EngineBlock_Saml2_ResponseAnnotationDecorator $response,
         array $responseAttributes,
         EngineBlock_Database_ConnectionFactory $databaseConnectionFactory,
-        $amPriorToConsentEnabled
+        $amPriorToConsentEnabled,
+        $consentDisabled
     )
     {
         $this->_tableName = $tableName;
@@ -75,41 +84,31 @@ class EngineBlock_Corto_Model_Consent
         $this->_responseAttributes = $responseAttributes;
         $this->_databaseConnectionFactory = $databaseConnectionFactory;
         $this->_amPriorToConsentEnabled = $amPriorToConsentEnabled;
+        $this->_consentDisabled = $consentDisabled;
     }
 
-    public function explicitConsentWasGivenFor(ServiceProvider $serviceProvider) {
-        return $this->_hasStoredConsent($serviceProvider, ConsentType::TYPE_EXPLICIT);
+    public function explicitConsentWasGivenFor(ServiceProvider $serviceProvider)
+    {
+        return $this->_consentDisabled ||
+            $this->_hasStoredConsent($serviceProvider, ConsentType::TYPE_EXPLICIT);
     }
 
-    public function implicitConsentWasGivenFor(ServiceProvider $serviceProvider) {
-        return $this->_hasStoredConsent($serviceProvider, ConsentType::TYPE_IMPLICIT);
+    public function implicitConsentWasGivenFor(ServiceProvider $serviceProvider)
+    {
+        return $this->_consentDisabled ||
+            $this->_hasStoredConsent($serviceProvider, ConsentType::TYPE_IMPLICIT);
     }
 
     public function giveExplicitConsentFor(ServiceProvider $serviceProvider)
     {
-        return $this->_storeConsent($serviceProvider, ConsentType::TYPE_EXPLICIT);
+        return $this->_consentDisabled ||
+            $this->_storeConsent($serviceProvider, ConsentType::TYPE_EXPLICIT);
     }
 
     public function giveImplicitConsentFor(ServiceProvider $serviceProvider)
     {
-        return $this->_storeConsent($serviceProvider, ConsentType::TYPE_IMPLICIT);
-    }
-
-    public function countTotalConsent()
-    {
-        $dbh = $this->_getConsentDatabaseConnection();
-        $hashedUserId = sha1($this->_getConsentUid());
-        $query = "SELECT COUNT(*) FROM consent where hashed_user_id = ?";
-        $parameters = array($hashedUserId);
-        $statement = $dbh->prepare($query);
-        if (!$statement) {
-            throw new EngineBlock_Exception(
-                "Unable to create a prepared statement to count consent?!", EngineBlock_Exception::CODE_ALERT
-            );
-        }
-        /** @var $statement PDOStatement */
-        $statement->execute($parameters);
-        return (int)$statement->fetchColumn();
+        return $this->_consentDisabled ||
+            $this->_storeConsent($serviceProvider, ConsentType::TYPE_IMPLICIT);
     }
 
     /**
