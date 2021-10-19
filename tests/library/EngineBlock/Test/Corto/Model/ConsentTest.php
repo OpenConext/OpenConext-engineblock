@@ -37,7 +37,7 @@ class EngineBlock_Corto_Model_Consent_Test extends TestCase
             [],
             $this->mockedDatabaseConnection,
             false,
-            true
+            false
         );
 
         $this->consent = new EngineBlock_Corto_Model_Consent(
@@ -47,7 +47,7 @@ class EngineBlock_Corto_Model_Consent_Test extends TestCase
             [],
             $this->mockedDatabaseConnection,
             false,
-            false
+            true
         );
     }
 

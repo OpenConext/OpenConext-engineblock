@@ -61,7 +61,7 @@ class EngineBlock_Corto_Model_Consent_Factory
             ->getFeatureConfiguration();
 
         $amPriorToConsent = $featureConfiguration->isEnabled('eb.run_all_manipulations_prior_to_consent');
-        $consentDisabled = $featureConfiguration->isEnabled('eb.feature_disable_consent');
+        $consentEnabled = $featureConfiguration->isEnabled('eb.feature_enable_consent');
 
         return new EngineBlock_Corto_Model_Consent(
             $proxyServer->getConfig('ConsentDbTable', 'consent'),
@@ -70,7 +70,7 @@ class EngineBlock_Corto_Model_Consent_Factory
             $attributes,
             $this->_databaseConnectionFactory,
             $amPriorToConsent,
-            $consentDisabled
+            $consentEnabled
         );
     }
 }

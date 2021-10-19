@@ -53,11 +53,11 @@ class EngineBlock_Corto_Model_Consent
     private $_amPriorToConsentEnabled;
 
     /**
-     * A reflection of the eb.feature_disable_consent feature flag
+     * A reflection of the eb.feature_enable_consent feature flag
      *
      * @var bool
      */
-    private $_consentDisabled;
+    private $_consentEnabled;
 
     /**
      * @param string $tableName
@@ -66,7 +66,7 @@ class EngineBlock_Corto_Model_Consent
      * @param array $responseAttributes
      * @param EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
      * @param bool $amPriorToConsentEnabled Is the run_all_manipulations_prior_to_consent feature enabled or not
-     * @param bool $consentDisabled Is the feature_disable_consent feature enabled or not
+     * @param bool $consentEnabled Is the feature_enable_consent feature enabled or not
      */
     public function __construct(
         $tableName,
@@ -75,7 +75,7 @@ class EngineBlock_Corto_Model_Consent
         array $responseAttributes,
         EngineBlock_Database_ConnectionFactory $databaseConnectionFactory,
         $amPriorToConsentEnabled,
-        $consentDisabled
+        $consentEnabled
     )
     {
         $this->_tableName = $tableName;
@@ -84,30 +84,30 @@ class EngineBlock_Corto_Model_Consent
         $this->_responseAttributes = $responseAttributes;
         $this->_databaseConnectionFactory = $databaseConnectionFactory;
         $this->_amPriorToConsentEnabled = $amPriorToConsentEnabled;
-        $this->_consentDisabled = $consentDisabled;
+        $this->_consentEnabled = $consentEnabled;
     }
 
     public function explicitConsentWasGivenFor(ServiceProvider $serviceProvider)
     {
-        return $this->_consentDisabled ||
+        return !$this->_consentEnabled ||
             $this->_hasStoredConsent($serviceProvider, ConsentType::TYPE_EXPLICIT);
     }
 
     public function implicitConsentWasGivenFor(ServiceProvider $serviceProvider)
     {
-        return $this->_consentDisabled ||
+        return !$this->_consentEnabled ||
             $this->_hasStoredConsent($serviceProvider, ConsentType::TYPE_IMPLICIT);
     }
 
     public function giveExplicitConsentFor(ServiceProvider $serviceProvider)
     {
-        return $this->_consentDisabled ||
+        return !$this->_consentEnabled ||
             $this->_storeConsent($serviceProvider, ConsentType::TYPE_EXPLICIT);
     }
 
     public function giveImplicitConsentFor(ServiceProvider $serviceProvider)
     {
-        return $this->_consentDisabled ||
+        return !$this->_consentEnabled ||
             $this->_storeConsent($serviceProvider, ConsentType::TYPE_IMPLICIT);
     }
 
