@@ -30,14 +30,6 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProviderEb5;
 use RuntimeException;
 
-/**
- * This class has added to temporary extra objects to push to both sso_provider_roles_eb5
- * and sso_provider_roles_eb6
- *
- * TODO: Remove this suppression after sso_provider_roles_eb5 has been phased out
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class DoctrineMetadataPushRepository
 {
     /**
@@ -55,35 +47,7 @@ class DoctrineMetadataPushRepository
      */
     private $idpMetadata;
 
-    /**
-     * This field has been added to temporary push to both sso_provider_roles_eb5
-     * and sso_provider_roles_eb6
-     *
-     * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
-     *
-     * @var ClassMetadata
-     */
-    private $spMetadataUpdated;
-
-    /**
-     * This field has been added to temporary push to both sso_provider_roles_eb5
-     * and sso_provider_roles_eb6
-     *
-     * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
-     *
-     * @var ClassMetadata
-     */
-    private $idpMetadataUpdated;
-
     const ROLES_TABLE_NAME = 'sso_provider_roles_eb6';
-
-    /**
-     * This field has been added to temporary push to both sso_provider_roles_eb5
-     * and sso_provider_roles_eb6
-     *
-     * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
-     */
-    const ROLES_TABLE_NAME_EB5 = 'sso_provider_roles_eb5';
 
     const FIELD_VALUE = 0;
     const FIELD_TYPE = 1;
@@ -95,15 +59,6 @@ class DoctrineMetadataPushRepository
 
         $this->spMetadata = $entityManager->getClassMetadata(ServiceProvider::class);
         $this->idpMetadata = $entityManager->getClassMetadata(IdentityProvider::class);
-
-        /**
-         * This code below has been added to temporary push to both sso_provider_roles_eb5
-         * and sso_provider_roles_eb6
-         *
-         * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
-         */
-        $this->spMetadataUpdated = $entityManager->getClassMetadata(ServiceProviderEb5::class);
-        $this->idpMetadataUpdated = $entityManager->getClassMetadata(IdentityProviderEb5::class);
     }
 
     /**
@@ -179,25 +134,11 @@ class DoctrineMetadataPushRepository
 
             if ($idpsToBeRemoved) {
                 $this->deleteRolesByIds(array_keys($idpsToBeRemoved), $this->idpMetadata);
-                /**
-                 * This call {deleteRolesByEntityId} has been added to temporary push to both sso_provider_roles_eb5
-                 * and sso_provider_roles_eb6
-                 *
-                 * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
-                 */
-                $this->deleteRolesByEntityId(array_values($idpsToBeRemoved), $this->idpMetadata);
                 $result->removedIdentityProviders = array_values($idpsToBeRemoved);
             }
 
             if ($spsToBeRemoved) {
                 $this->deleteRolesByIds(array_keys($spsToBeRemoved), $this->spMetadata);
-                /**
-                 * This call {deleteRolesByEntityId} has been added to temporary push to both sso_provider_roles_eb5
-                 * and sso_provider_roles_eb6
-                 *
-                 * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
-                 */
-                $this->deleteRolesByEntityId(array_values($spsToBeRemoved), $this->spMetadata);
                 $result->removedServiceProviders = array_values($spsToBeRemoved);
             }
         });
@@ -210,21 +151,7 @@ class DoctrineMetadataPushRepository
         $query = $this->connection->createQueryBuilder()
             ->insert(self::ROLES_TABLE_NAME);
 
-        $normalized = $this->addInsertQueryParameters($role, $query, $metadata, false);
-
-        $stmt = $this->connection->prepare($query->getSQL());
-        $this->bindParameters($normalized, $stmt);
-        $stmt->execute();
-
-        /**
-         * This code below has been added to temporary push to both sso_provider_roles_eb5 and sso_provider_roles_eb6
-         *
-         * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
-         */
-        $query = $this->connection->createQueryBuilder()
-            ->insert(self::ROLES_TABLE_NAME_EB5);
-
-        $normalized = $this->addInsertQueryParameters($role, $query, $metadata, true);
+        $normalized = $this->addInsertQueryParameters($role, $query, $metadata);
 
         $stmt = $this->connection->prepare($query->getSQL());
         $this->bindParameters($normalized, $stmt);
@@ -236,21 +163,7 @@ class DoctrineMetadataPushRepository
         $query = $this->connection->createQueryBuilder()
             ->update(self::ROLES_TABLE_NAME);
 
-        $normalized = $this->addUpdateQueryParameters($role, $query, $metadata, false);
-
-        $stmt = $this->connection->prepare($query->getSQL());
-        $this->bindParameters($normalized, $stmt);
-        $stmt->execute();
-
-        /**
-         * This code below has been added to temporary push to both sso_provider_roles_eb5 and sso_provider_roles_eb6
-         *
-         * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
-         */
-        $query = $this->connection->createQueryBuilder()
-            ->update(self::ROLES_TABLE_NAME_EB5);
-
-        $normalized = $this->addUpdateQueryParameters($role, $query, $metadata, true);
+        $normalized = $this->addUpdateQueryParameters($role, $query, $metadata);
 
         $stmt = $this->connection->prepare($query->getSQL());
         $this->bindParameters($normalized, $stmt);
@@ -270,22 +183,6 @@ class DoctrineMetadataPushRepository
         return $result;
     }
 
-    /**
-     * This function has been added to temporary push to both sso_provider_roles_eb5 and sso_provider_roles_eb6
-     *
-     * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
-     */
-    private function deleteRolesByEntityId(array $entityIds, ClassMetadata $metadata)
-    {
-        $query = $this->connection->createQueryBuilder()
-            ->delete(self::ROLES_TABLE_NAME_EB5)
-            ->where('entity_id IN (:entity_ids)')
-            ->setParameter('entity_ids', $entityIds, Connection::PARAM_STR_ARRAY);
-
-        $this->addDiscriminatorQuery($query, $metadata);
-        return $query->execute();
-    }
-
     private function findAllRoleEntityIds(ClassMetadata $metadata)
     {
         $query = $this->connection->createQueryBuilder()
@@ -302,30 +199,18 @@ class DoctrineMetadataPushRepository
         return $results;
     }
 
-    /**
-     * The code {$isInsertForDuplicateTable} has been added to temporary push to both sso_provider_roles_eb5
-     * and sso_provider_roles_eb6
-     *
-     * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
-     */
-    private function addInsertQueryParameters(AbstractRole $role, QueryBuilder $query, ClassMetadata $metadata, bool $isInsertForDuplicateTable)
+    private function addInsertQueryParameters(AbstractRole $role, QueryBuilder $query, ClassMetadata $metadata)
     {
-        $normalized = $this->normalizeData($role, $metadata, $isInsertForDuplicateTable);
+        $normalized = $this->normalizeData($role, $metadata);
         foreach (array_keys($normalized) as $id) {
             $query->setValue($id, ":$id");
         }
         return $normalized;
     }
 
-    /**
-     * The code {$isUpdateForDuplicateTable} has been added to temporary push to both sso_provider_roles_eb5
-     * and sso_provider_roles_eb6
-     *
-     * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
-     */
-    private function addUpdateQueryParameters(AbstractRole $role, QueryBuilder $query, ClassMetadata $metadata, bool $isUpdateForDuplicateTable)
+    private function addUpdateQueryParameters(AbstractRole $role, QueryBuilder $query, ClassMetadata $metadata)
     {
-        $normalized = $this->normalizeData($role, $metadata, $isUpdateForDuplicateTable);
+        $normalized = $this->normalizeData($role, $metadata);
         foreach (array_keys($normalized) as $id) {
             $query->set($id, ":$id");
         }
@@ -354,40 +239,17 @@ class DoctrineMetadataPushRepository
         );
     }
 
-    private function normalizeData(AbstractRole $role, ClassMetadata $metadata, bool $isNormalizeForDuplicateTable)
+    private function normalizeData(AbstractRole $role, ClassMetadata $metadata)
     {
         $result = [];
-        /**
-         * The code {$isNormalizeForDuplicateTable} has been added to temporary push to both sso_provider_roles_eb5
-         * and sso_provider_roles_eb6
-         *
-         * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
-         */
-        if ($isNormalizeForDuplicateTable) {
-            if ($role instanceof IdentityProvider) {
-                foreach ($metadata->fieldMappings as $id => $columnInfo) {
-                    $result[$columnInfo['columnName']] = [
-                        self::FIELD_VALUE => $metadata->reflFields[$id]->getValue($role),
-                        self::FIELD_TYPE => $this->idpMetadataUpdated->fieldMappings[$id]['type'],
-                    ];
-                }
-            }
-            if ($role instanceof ServiceProvider) {
-                foreach ($metadata->fieldMappings as $id => $columnInfo) {
-                    $result[$columnInfo['columnName']] = [
-                        self::FIELD_VALUE => $metadata->reflFields[$id]->getValue($role),
-                        self::FIELD_TYPE => $this->spMetadataUpdated->fieldMappings[$id]['type'],
-                    ];
-                }
-            }
-        } else {
-            foreach ($metadata->fieldMappings as $id => $columnInfo) {
-                $result[$columnInfo['columnName']] = [
-                    self::FIELD_VALUE => $metadata->reflFields[$id]->getValue($role),
-                    self::FIELD_TYPE => $columnInfo['type'],
-                ];
-            }
+
+        foreach ($metadata->fieldMappings as $id => $columnInfo) {
+            $result[$columnInfo['columnName']] = [
+                self::FIELD_VALUE => $metadata->reflFields[$id]->getValue($role),
+                self::FIELD_TYPE => $columnInfo['type'],
+            ];
         }
+
 
         // The primary id field is autogenerated and should not be added to the SQL statement.
         unset($result["id"]);

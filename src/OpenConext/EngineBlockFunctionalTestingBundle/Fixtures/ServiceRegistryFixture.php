@@ -116,19 +116,8 @@ class ServiceRegistryFixture
         $this->entityManager->flush();
     }
 
-    /**
-     * This call duplicate database call has been added to temporary push to both sso_provider_roles_eb5
-     * and sso_provider_roles_eb6
-     *
-     * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
-     */
     public function reset()
     {
-        $queryBuilder = $this->entityManager->getConnection()->createQueryBuilder();
-        $queryBuilder
-            ->delete('sso_provider_roles_eb5')
-            ->execute();
-
         $this->entityManager->getConnection()->createQueryBuilder()
             ->delete('sso_provider_roles_eb6')
             ->execute();
@@ -136,22 +125,9 @@ class ServiceRegistryFixture
         return $this;
     }
 
-    /**
-     * This call duplicate database call has been added to temporary push to both sso_provider_roles_eb5
-     * and sso_provider_roles_eb6
-     *
-     * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
-     */
+
     public function remove($entityId, $role)
     {
-        $queryBuilder = $this->entityManager->getConnection()->createQueryBuilder();
-        $queryBuilder
-            ->delete('sso_provider_roles_eb5', 'roles')
-            ->where('roles.entity_id = :entityId')
-            ->andWhere('roles.type = :type')
-            ->setParameter('entityId', $entityId)
-            ->setParameter('type', $role)
-            ->execute();
         $this->entityManager->getConnection()->createQueryBuilder()
             ->delete('sso_provider_roles_eb6', 'roles')
             ->where('roles.entity_id = :entityId')

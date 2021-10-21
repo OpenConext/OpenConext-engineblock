@@ -394,18 +394,8 @@ class ConnectionsControllerTest extends WebTestCase
         $client->getContainer()->set('engineblock.features', $featureToggles);
     }
 
-    /**
-     * This call {->delete('sso_provider_roles_eb5')} has been added to temporary push to both sso_provider_roles_eb5
-     * and sso_provider_roles_eb6
-     *
-     * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
-     */
     private function clearMetadataFixtures()
     {
-        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
-        $queryBuilder
-            ->delete('sso_provider_roles_eb5')
-            ->execute();
         $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder()
             ->delete('sso_provider_roles_eb6')
             ->execute();
