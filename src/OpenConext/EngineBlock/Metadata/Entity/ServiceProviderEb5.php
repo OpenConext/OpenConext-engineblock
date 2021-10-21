@@ -49,26 +49,26 @@ use SAML2\Constants;
  * WARNING: Please don't use this entity directly but use the dedicated factory instead.
  * @see \OpenConext\EngineBlock\Factory\Factory\ServiceProviderFactory
  */
-class ServiceProviderEb6 extends AbstractRoleEb6
+class ServiceProviderEb5 extends AbstractRoleEb5
 {
     /**
      * @var null|AttributeReleasePolicy
      *
-     * @ORM\Column(name="attribute_release_policy", type="engineblock_attribute_release_policy", nullable=true)
+     * @ORM\Column(name="attribute_release_policy", type="array")
      */
     public $attributeReleasePolicy;
 
     /**
      * @var IndexedService[]
      *
-     * @ORM\Column(name="assertion_consumer_services", type="engineblock_indexed_service_array")
+     * @ORM\Column(name="assertion_consumer_services", type="array")
      */
     public $assertionConsumerServices;
 
     /**
-     * @var null|string[]
+     * @var string[]
      *
-     * @ORM\Column(name="allowed_idp_entity_ids", type="json", nullable=true)
+     * @ORM\Column(name="allowed_idp_entity_ids", type="array")
      */
     public $allowedIdpEntityIds;
 
@@ -82,7 +82,7 @@ class ServiceProviderEb6 extends AbstractRoleEb6
     /**
      * @var null|RequestedAttribute[]
      *
-     * @ORM\Column(name="requested_attributes", type="engineblock_requested_attribute_array", nullable=true)
+     * @ORM\Column(name="requested_attributes", type="array")
      */
     public $requestedAttributes;
 

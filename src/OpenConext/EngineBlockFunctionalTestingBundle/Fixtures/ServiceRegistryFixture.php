@@ -184,7 +184,7 @@ class ServiceRegistryFixture
         // number of SP's should always be limited.
         $idpEntityIDQuery = <<<QUERY
         SELECT `entity_id`
-        FROM `sso_provider_roles_eb5`
+        FROM `sso_provider_roles_eb6`
         WHERE `type` = 'idp'
 QUERY;
         $query = $this->entityManager->getConnection()->prepare($idpEntityIDQuery);
@@ -220,7 +220,7 @@ QUERY;
         // number of SP's should always be limited.
         $spEntityIDQuery = <<<QUERY
         SELECT `entity_id`
-        FROM `sso_provider_roles_eb5`
+        FROM `sso_provider_roles_eb6`
         WHERE `type` = 'sp'
 QUERY;
         $query = $this->entityManager->getConnection()->prepare($spEntityIDQuery);

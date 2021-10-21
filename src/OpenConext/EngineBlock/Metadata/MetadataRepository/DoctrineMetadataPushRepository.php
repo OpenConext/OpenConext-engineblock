@@ -25,9 +25,9 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
-use OpenConext\EngineBlock\Metadata\Entity\IdentityProviderEb6;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProviderEb5;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use OpenConext\EngineBlock\Metadata\Entity\ServiceProviderEb6;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProviderEb5;
 use RuntimeException;
 
 /**
@@ -75,7 +75,7 @@ class DoctrineMetadataPushRepository
      */
     private $idpMetadataUpdated;
 
-    const ROLES_TABLE_NAME = 'sso_provider_roles_eb5';
+    const ROLES_TABLE_NAME = 'sso_provider_roles_eb6';
 
     /**
      * This field has been added to temporary push to both sso_provider_roles_eb5
@@ -83,7 +83,7 @@ class DoctrineMetadataPushRepository
      *
      * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
      */
-    const ROLES_TABLE_NAME_EB6 = 'sso_provider_roles_eb6';
+    const ROLES_TABLE_NAME_EB5 = 'sso_provider_roles_eb5';
 
     const FIELD_VALUE = 0;
     const FIELD_TYPE = 1;
@@ -102,8 +102,8 @@ class DoctrineMetadataPushRepository
          *
          * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
          */
-        $this->spMetadataUpdated = $entityManager->getClassMetadata(ServiceProviderEb6::class);
-        $this->idpMetadataUpdated = $entityManager->getClassMetadata(IdentityProviderEb6::class);
+        $this->spMetadataUpdated = $entityManager->getClassMetadata(ServiceProviderEb5::class);
+        $this->idpMetadataUpdated = $entityManager->getClassMetadata(IdentityProviderEb5::class);
     }
 
     /**
@@ -222,7 +222,7 @@ class DoctrineMetadataPushRepository
          * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
          */
         $query = $this->connection->createQueryBuilder()
-            ->insert(self::ROLES_TABLE_NAME_EB6);
+            ->insert(self::ROLES_TABLE_NAME_EB5);
 
         $normalized = $this->addInsertQueryParameters($role, $query, $metadata, true);
 
@@ -248,7 +248,7 @@ class DoctrineMetadataPushRepository
          * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
          */
         $query = $this->connection->createQueryBuilder()
-            ->update(self::ROLES_TABLE_NAME_EB6);
+            ->update(self::ROLES_TABLE_NAME_EB5);
 
         $normalized = $this->addUpdateQueryParameters($role, $query, $metadata, true);
 
@@ -278,7 +278,7 @@ class DoctrineMetadataPushRepository
     private function deleteRolesByEntityId(array $entityIds, ClassMetadata $metadata)
     {
         $query = $this->connection->createQueryBuilder()
-            ->delete(self::ROLES_TABLE_NAME_EB6)
+            ->delete(self::ROLES_TABLE_NAME_EB5)
             ->where('entity_id IN (:entity_ids)')
             ->setParameter('entity_ids', $entityIds, Connection::PARAM_STR_ARRAY);
 

@@ -45,20 +45,20 @@ use SAML2\Constants;
  * @ORM\Entity
  * @ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")
  * @ORM\Table(
- *      name="sso_provider_roles_eb6",
+ *      name="sso_provider_roles_eb5",
  *      uniqueConstraints={
  *          @ORM\UniqueConstraint(
- *              name="idx_sso_provider_roles_eb6_entity_id_type",
+ *              name="idx_sso_provider_roles_entity_id_type",
  *              columns={"type", "entity_id"}
  *          )
  *      },
  *      indexes={
  *          @ORM\Index(
- *              name="idx_sso_provider_roles_eb6_type",
+ *              name="idx_sso_provider_roles_type",
  *              columns={"type"}
  *          ),
  *          @ORM\Index(
- *              name="idx_sso_provider_roles_eb6_entity_id",
+ *              name="idx_sso_provider_roles_entity_id",
  *              columns={"entity_id"}
  *          ),
  *      }
@@ -66,14 +66,14 @@ use SAML2\Constants;
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({
- *  "sp"  = "OpenConext\EngineBlock\Metadata\Entity\ServiceProviderEb6",
- *  "idp" = "OpenConext\EngineBlock\Metadata\Entity\IdentityProviderEb6"
+ *  "sp"  = "OpenConext\EngineBlock\Metadata\Entity\ServiceProviderEb5",
+ *  "idp" = "OpenConext\EngineBlock\Metadata\Entity\IdentityProviderEb5"
  * })
  *
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
-abstract class AbstractRoleEb6
+abstract class AbstractRoleEb5
 {
     const WORKFLOW_STATE_PROD = 'prodaccepted';
     const WORKFLOW_STATE_TEST = 'testaccepted';
@@ -96,120 +96,120 @@ abstract class AbstractRoleEb6
     public $entityId;
 
     /**
-     * @var null|string
-     * @ORM\Column(name="name_nl", type="string", nullable=true)
+     * @var string
+     * @ORM\Column(name="name_nl", type="string")
      */
     public $nameNl;
 
     /**
-     * @var null|string
+     * @var string
      *
-     * @ORM\Column(name="name_en", type="string", nullable=true)
+     * @ORM\Column(name="name_en", type="string")
      */
     public $nameEn;
 
     /**
-     * @var null|string
+     * @var string
      *
-     * @ORM\Column(name="name_pt", type="string", nullable=true)
+     * @ORM\Column(name="name_pt", type="string")
      */
     public $namePt;
 
     /**
-     * @var null|string
+     * @var string
      *
-     * @ORM\Column(name="description_nl", type="string", nullable=true)
+     * @ORM\Column(name="description_nl", type="string")
      */
     public $descriptionNl;
 
     /**
-     * @var null|string
+     * @var string
      *
-     * @ORM\Column(name="description_en", type="string", nullable=true)
+     * @ORM\Column(name="description_en", type="string")
      */
     public $descriptionEn;
 
     /**
-     * @var null|string
+     * @var string
      *
-     * @ORM\Column(name="description_pt", type="string", nullable=true)
+     * @ORM\Column(name="description_pt", type="string")
      */
     public $descriptionPt;
 
     /**
-     * @var null|string
+     * @var string
      *
-     * @ORM\Column(name="display_name_nl", type="string", nullable=true)
+     * @ORM\Column(name="display_name_nl", type="string")
      */
     public $displayNameNl;
 
     /**
-     * @var null|string
+     * @var string
      *
-     * @ORM\Column(name="display_name_en", type="string", nullable=true)
+     * @ORM\Column(name="display_name_en", type="string")
      */
     public $displayNameEn;
 
     /**
-     * @var null|string
+     * @var string
      *
-     * @ORM\Column(name="display_name_pt", type="string", nullable=true)
+     * @ORM\Column(name="display_name_pt", type="string")
      */
     public $displayNamePt;
 
     /**
-     * @var null|Logo
+     * @var Logo
      *
-     * @ORM\Column(name="logo", type="engineblock_logo", nullable=true)
+     * @ORM\Column(name="logo", type="object")
      */
     public $logo;
 
     /**
-     * @var null|Organization
+     * @var Organization
      *
-     * @ORM\Column(name="organization_nl_name",type="engineblock_organization", nullable=true)
+     * @ORM\Column(name="organization_nl_name",type="object", nullable=true)
      */
     public $organizationNl;
 
     /**
-     * @var null|Organization
+     * @var Organization
      *
-     * @ORM\Column(name="organization_en_name",type="engineblock_organization", nullable=true)
+     * @ORM\Column(name="organization_en_name",type="object", nullable=true)
      */
     public $organizationEn;
 
     /**
-     * @var null|Organization
+     * @var Organization
      *
-     * @ORM\Column(name="organization_pt_name",type="engineblock_organization", nullable=true)
+     * @ORM\Column(name="organization_pt_name",type="object", nullable=true)
      */
     public $organizationPt;
 
     /**
-     * @var null|string
+     * @var string
      *
-     * @ORM\Column(name="keywords_nl", type="string", nullable=true)
+     * @ORM\Column(name="keywords_nl", type="string")
      */
     public $keywordsNl;
 
     /**
-     * @var null|string
+     * @var string
      *
-     * @ORM\Column(name="keywords_en", type="string", nullable=true)
+     * @ORM\Column(name="keywords_en", type="string")
      */
     public $keywordsEn;
 
     /**
-     * @var null|string
+     * @var string
      *
-     * @ORM\Column(name="keywords_pt", type="string", nullable=true)
+     * @ORM\Column(name="keywords_pt", type="string")
      */
     public $keywordsPt;
 
     /**
      * @var X509Certificate[]
      *
-     * @ORM\Column(name="certificates", type="engineblock_certificate_array")
+     * @ORM\Column(name="certificates", type="array")
      */
     public $certificates = array();
 
@@ -223,28 +223,28 @@ abstract class AbstractRoleEb6
     /**
      * @var ContactPerson[]
      *
-     * @ORM\Column(name="contact_persons", type="engineblock_contact_person_array")
+     * @ORM\Column(name="contact_persons", type="array")
      */
     public $contactPersons;
 
     /**
-     * @var null|string
+     * @var string
      *
      * @ORM\Column(name="name_id_format", type="string", nullable=true)
      */
     public $nameIdFormat;
 
     /**
-     * @var null|string[]
+     * @var string[]
      *
-     * @ORM\Column(name="name_id_formats", type="json", nullable=true)
+     * @ORM\Column(name="name_id_formats", type="array")
      */
     public $supportedNameIdFormats;
 
     /**
-     * @var null|Service
+     * @var Service
      *
-     * @ORM\Column(name="single_logout_service", type="engineblock_service", nullable=true)
+     * @ORM\Column(name="single_logout_service", type="object", nullable=true)
      */
     public $singleLogoutService;
 
@@ -256,9 +256,9 @@ abstract class AbstractRoleEb6
     public $requestsMustBeSigned = false;
 
     /**
-     * @var null|string
+     * @var string
      *
-     * @ORM\Column(name="manipulation", type="text", nullable=true)
+     * @ORM\Column(name="manipulation", type="text")
      */
     public $manipulation;
 
