@@ -17,6 +17,7 @@
  */
 
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use OpenConext\EngineBlock\Service\CookieService;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,9 +37,9 @@ class EngineBlock_Test_Corto_Filter_Command_SsoNotificationCookieFilterTest exte
     private $_request;
 
     /**
-     * @var EngineBlock_Corto_Filter_Command_Helpers_CookieHandler
+     * @var CookieService
      */
-    private $_cookieHandlerMock;
+    private $_cookieServiceMock;
 
     /**
      * @var EngineBlock_Corto_Filter_Command_SsoNotificationCookieFilter
@@ -48,9 +49,9 @@ class EngineBlock_Test_Corto_Filter_Command_SsoNotificationCookieFilterTest exte
     public function setUp()
     {
         $_diContainerMock = Phake::mock(EngineBlock_Application_DiContainer::class);
-        $this->_cookieHandlerMock = Phake::mock(EngineBlock_Corto_Filter_Command_Helpers_CookieHandler::class);
+        $this->_cookieServiceMock = Phake::mock(CookieService::class);
         $this->_ssoNotificationCookieFilter = new EngineBlock_Corto_Filter_Command_SsoNotificationCookieFilter(
-            $this->_cookieHandlerMock,
+            $this->_cookieServiceMock,
             $_diContainerMock
         );
         $this->_request = new Request();
@@ -80,13 +81,13 @@ class EngineBlock_Test_Corto_Filter_Command_SsoNotificationCookieFilterTest exte
 
         $this->_ssoNotificationCookieFilter->execute();
 
-        Phake::verify($this->_cookieHandlerMock)->clearCookie($this->_cookieName, $this->_path, $this->_domain);
+        Phake::verify($this->_cookieServiceMock)->clearCookie($this->_cookieName, $this->_path, $this->_domain);
     }
 
     public function testCookieNotFound()
     {
         $this->_ssoNotificationCookieFilter->execute();
 
-        Phake::verifyNoInteraction($this->_cookieHandlerMock);
+        Phake::verifyNoInteraction($this->_cookieServiceMock);
     }
 }

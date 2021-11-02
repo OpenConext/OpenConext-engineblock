@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Controller;
 
+use OpenConext\EngineBlock\Service\SsoSessionService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;
@@ -32,9 +33,15 @@ class LogoutController
      */
     private $twig;
 
-    public function __construct(Twig_Environment $twig)
+    /**
+     * @var SsoSessionService
+     */
+    private $ssoSessionService;
+
+    public function __construct(Twig_Environment $twig, SsoSessionService $ssoSessionService)
     {
         $this->twig = $twig;
+        $this->ssoSessionService = $ssoSessionService;
     }
 
     /**
@@ -42,7 +49,7 @@ class LogoutController
      * manages the sessions (for now). Therefore we destroy these the same way
      * as is being done in EB4
      *
-     * @param Request $request
+     * @param  Request $request
      * @return Response
      */
     public function logoutAction(Request $request)
@@ -52,6 +59,8 @@ class LogoutController
         if (empty($request->getSession()->all())) {
             return $response;
         }
+
+        $this->ssoSessionService->clearSsoSessionCookie();
 
         // If it's desired to kill the session, also delete the session cookie.
         // Note: This will destroy the session, and not just the session data!

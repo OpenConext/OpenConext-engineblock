@@ -16,14 +16,17 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlock\Service\CookieService;
+
+
 class EngineBlock_Corto_Filter_Command_SsoNotificationCookieFilter extends EngineBlock_Corto_Filter_Command_Abstract
 {
     private $_ssoNotificationCookieName = "ssonot";
 
     /**
-     * @var EngineBlock_Corto_Filter_Command_Helpers_CookieHandler
+     * @var CookieService
      */
-    private $_cookieHandler;
+    private $_cookieService;
 
     /**
      * @var EngineBlock_Application_DiContainer
@@ -31,11 +34,10 @@ class EngineBlock_Corto_Filter_Command_SsoNotificationCookieFilter extends Engin
     private $_diContainer;
 
     public function __construct(
-        EngineBlock_Corto_Filter_Command_Helpers_CookieHandler $cookieHandler,
+        CookieService $cookieService,
         EngineBlock_Application_DiContainer $diContainer
     ) {
-    
-        $this->_cookieHandler = $cookieHandler;
+        $this->_cookieService = $cookieService;
         $this->_diContainer = $diContainer;
     }
 
@@ -46,7 +48,7 @@ class EngineBlock_Corto_Filter_Command_SsoNotificationCookieFilter extends Engin
         }
 
         if (!is_null($this->_diContainer->getSymfonyRequest()->cookies->get($this->_ssoNotificationCookieName))) {
-            $this->_cookieHandler->clearCookie(
+            $this->_cookieService->clearCookie(
                 $this->_ssoNotificationCookieName,
                 $this->_diContainer->getCookiePath(),
                 $this->_diContainer->getCookieDomain()

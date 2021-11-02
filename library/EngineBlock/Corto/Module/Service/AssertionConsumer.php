@@ -127,6 +127,16 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         $issuer = $receivedResponse->getIssuer() ? $receivedResponse->getIssuer()->getValue() : '';
         $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($issuer);
 
+        // Set SSO session cookie if 'feature_enable_sso_notification' is enabled and the response is successful
+        if ($application->getDiContainer()->getFeatureConfiguration()->isEnabled("eb.enable_sso_session_cookie")) {
+            if (in_array(Constants::STATUS_SUCCESS, $receivedResponse->getStatus())) {
+                $application->getDiContainer()->getSsoSessionService()->setSsoSessionCookie(
+                    $application->getDiContainer()->getSymfonyRequest()->cookies,
+                    $idp->entityId
+                );
+            }
+        }
+
         if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(array($sp, $idp))) {
             $application->flushLog('Activated additional logging for the SP or IdP');
             $log->info('Raw HTTP request', array('http_request' => (string)$application->getHttpRequest()));

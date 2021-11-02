@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlockBundle\Controller;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
+use OpenConext\EngineBlock\Service\SsoSessionService;
 use OpenConext\EngineBlockBridge\ResponseFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,6 +71,18 @@ class WayfController
         return new Response($this->twig->render('@theme/Authentication/View/IdentityProvider/help-discover.html.twig'));
     }
 
+    private function getCookies(): array
+    {
+        $cookies = array('main', 'rememberchoice', 'lang', 'selectedidps');
+
+        if ($this->engineBlockApplicationSingleton->getDiContainer()->getFeatureConfiguration()
+            ->hasFeature("eb.enable_sso_session_cookie")) {
+            array_push($cookies, SsoSessionService::SSO_SESSION_COOKIE_NAME);
+        }
+
+        return $cookies;
+    }
+
     /**
      * @return Response
      * @throws \EngineBlock_Exception
@@ -80,7 +93,7 @@ class WayfController
         if (($application->getDiContainer()->getRememberChoice() === true)) {
             $postData = $request->request->all();
             $cookiesSet = $request->cookies->all();
-            $cookies = array('main', 'rememberchoice', 'lang', 'selectedidps');
+            $cookies = $this->getCookies();
             $response = new Response();
             $removal = false;
             $all = false;
@@ -115,7 +128,7 @@ class WayfController
                     [
                         'removal' => $removal,
                         'all' => $all,
-                        'cookies' => ['main', 'rememberchoice', 'lang', 'selectedidps'],
+                        'cookies' => $cookies,
                         'cookiesSet' => $cookiesSet,
                     ]
                 )

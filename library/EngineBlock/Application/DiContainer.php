@@ -527,6 +527,22 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
+     * @return OpenConext\EngineBlock\Service\CookieService
+     */
+    public function getCookieService()
+    {
+        return $this->container->get('engineblock.service.cookie');
+    }
+
+    /**
+     * @return OpenConext\EngineBlock\Service\SsoSessionService
+     */
+    public function getSsoSessionService()
+    {
+        return $this->container->get('engineblock.service.sso_session');
+    }
+
+    /**
      * @return OpenConext\EngineBlock\Service\SsoNotificationService
      */
     public function getSsoNotificationService()

@@ -42,7 +42,7 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
         $commands = array(
             // remove SSO Cookie
             new EngineBlock_Corto_Filter_Command_SsoNotificationCookieFilter(
-                new EngineBlock_Corto_Filter_Command_Helpers_CookieHandler(),
+                $diContainer->getCookieService(),
                 $diContainer
             ),
 
