@@ -43,6 +43,7 @@ class TestFeatureConfiguration implements FeatureConfigurationInterface
         $this->setFeature(new Feature('eb.encrypted_assertions_require_outer_signature', true));
         $this->setFeature(new Feature('eb.enable_sso_notification', false));
         $this->setFeature(new Feature('eb.feature_enable_consent', true));
+        $this->setFeature(new Feature('eb.enable_sso_session_cookie', true));
     }
 
     public function setFeature(Feature $feature): void

@@ -109,6 +109,18 @@ services:
             - "%sso_notification_encryption_algorithm%"
             - "@engineblock.compat.logger"
 
+    engineblock.service.sso_session:
+        class: OpenConext\EngineBlock\Service\SsoSessionService
+        arguments:
+            - "%sso_session_cookie_max_age%"
+            - "%cookie.locale.domain%"
+            - "%cookie.path%"
+            - "@engineblock.service.cookie"
+            - "@engineblock.compat.logger"
+
+    engineblock.service.cookie:
+        class: OpenConext\EngineBlock\Service\CookieService
+
     engineblock.factory.service_provider_factory:
         class: OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory
         arguments:
