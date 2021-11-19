@@ -30,7 +30,7 @@ function executeShellCommand(command) {
     exec(command, (error, stdOut, stdError) => {
         if (error) {
             console.log(`exec error: ${error}`);
-            return;
+            process.exit(1);
         }
 
         if (!stdOut && stdError) {
@@ -38,6 +38,6 @@ function executeShellCommand(command) {
         }
 
         console.log(stdOut);
-        return process.exit(0);
+        process.exit(0);
     });
 }

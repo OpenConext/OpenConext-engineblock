@@ -20,6 +20,13 @@ We use the following tools:
 - [Vanilla JS][vanilla.js] as our JS solution of choice.  It's lightning fast, easily blowing any rival framework out of the water.  It also allows anyone to jump in.  We compile it using [Babel][babel] to ensure we can use the latest&greatest features of choice.
 - [Cypress][cypress] for integration, end-to-end testing, visual-regression testing, accessibility-testing and html-validation.  We use plugins for the last two.
 
+To speed up development on changes to the theme run the following command for live updates on the selected theme;
+```
+npm run watch
+```
+This will detect changes to the javascript and stylesheet in the select theme and update the build accordingly. Do note that this script only watches
+the selected theme and not the base.
+
 ### Cross-browser support:
 
 We currently support the following browsers:
