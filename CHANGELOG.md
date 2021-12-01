@@ -5,6 +5,13 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.6.6
+**Features**
+ - Check if there is a valid authentication in the AuthenticationState
+ - Add "consent disable" feature
+ - Add behat test for consent enabled feature toggle
+ - Fixed the build and added a watch script
+
 ## 6.6.5
 **Feature**
  - Upgrade the Monitor bundle, exposing opcache statistics to the info endpoint #1163
