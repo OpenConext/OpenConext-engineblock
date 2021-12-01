@@ -268,6 +268,7 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends TestCase
         $sspResponse->setAssertions(array($assertion));
 
         $sspResponse = new EngineBlock_Saml2_ResponseAnnotationDecorator($sspResponse);
+        $sspResponse->setOriginalIssuer("https://idp.example.edu");
 
         return $sspResponse;
     }

@@ -24,6 +24,7 @@ open_conext_engine_block:
         eb.run_all_manipulations_prior_to_consent: "%feature_run_all_manipulations_prior_to_consent%"
         eb.block_user_on_violation: "%feature_block_user_on_violation%"
         eb.enable_sso_notification: "%feature_enable_sso_notification%"
+        eb.feature_enable_consent: "%feature_enable_consent%"
 
 swiftmailer:
     transport: "%mailer_transport%"
