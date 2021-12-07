@@ -85,12 +85,15 @@ class IndexedServiceArrayType extends Type
 
             $indexedServices = [];
             foreach ($decoded as $indexedService) {
-                array_push($indexedServices, new IndexedService(
-                    $indexedService["location"],
-                    $indexedService["binding"],
-                    $indexedService["serviceIndex"],
-                    $indexedService["isDefault"]
-                ));
+                if (!is_array($indexedService)) {
+                    throw ConversionException::conversionFailedFormat(
+                        $indexedService,
+                        $this->getName(),
+                        "array"
+                    );
+                }
+
+                array_push($indexedServices, IndexedService::indexedServiceFromArray($indexedService));
             }
         } catch (InvalidArgumentException $e) {
             throw ConversionException::conversionFailedFormat(

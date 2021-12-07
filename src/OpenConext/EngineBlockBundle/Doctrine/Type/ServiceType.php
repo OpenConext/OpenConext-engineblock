@@ -72,7 +72,7 @@ class ServiceType extends Type
                     "array"
                 );
             }
-            $service = new Service($decoded["location"], $decoded["binding"]);
+            $service = Service::fromArray($decoded);
         } catch (InvalidArgumentException $e) {
             throw ConversionException::conversionFailedFormat(
                 $value,

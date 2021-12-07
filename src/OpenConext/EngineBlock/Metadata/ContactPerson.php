@@ -25,17 +25,30 @@ namespace OpenConext\EngineBlock\Metadata;
 class ContactPerson
 {
     public $contactType;
-    public $emailAddress = '';
-    public $telephoneNumber = '';
-    public $givenName = '';
-    public $surName = '';
+    public $emailAddress;
+    public $telephoneNumber;
+    public $givenName;
+    public $surName;
 
     /**
      * @param $contactType
+     * @param string $emailAddress
+     * @param string $telephoneNumber
+     * @param string $givenName
+     * @param string $surName
      */
-    public function __construct($contactType)
-    {
+    public function __construct(
+        $contactType,
+        string $emailAddress = '',
+        string $telephoneNumber = '',
+        string $givenName = '',
+        string $surName = ''
+    ) {
         $this->contactType = $contactType;
+        $this->emailAddress = $emailAddress;
+        $this->telephoneNumber = $telephoneNumber;
+        $this->givenName = $givenName;
+        $this->surName = $surName;
     }
 
     /**
@@ -60,5 +73,19 @@ class ContactPerson
         $contact->emailAddress = $emailAddress;
         $contact->telephoneNumber = $telephoneNumber;
         return $contact;
+    }
+
+    /**
+     * A convenience static constructor for the contact person.
+     * @param array $contactPerson
+     * @return ContactPerson
+     */
+    public static function fromArray(array $contactPerson): ContactPerson
+    {
+        return new self($contactPerson["contactType"],
+            $contactPerson["emailAddress"],
+            $contactPerson["telephoneNumber"],
+            $contactPerson["givenName"],
+            $contactPerson["surName"]);
     }
 }

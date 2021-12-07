@@ -73,9 +73,7 @@ class LogoType extends Type
                 );
             }
 
-            $logo = new Logo($decoded["url"]);
-            $logo->height = $decoded["height"];
-            $logo->width = $decoded["width"];
+            $logo = Logo::fromArray($decoded);
         } catch (InvalidArgumentException $e) {
             throw ConversionException::conversionFailedFormat(
                 $value,

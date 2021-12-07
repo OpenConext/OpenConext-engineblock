@@ -85,11 +85,15 @@ class RequestedAttributeArrayType extends Type
 
             $requestedAttributes = [];
             foreach ($decoded as $requestedAttribute) {
-                array_push($requestedAttributes, new RequestedAttribute(
-                    $requestedAttribute["name"],
-                    $requestedAttribute["required"],
-                    $requestedAttribute["nameFormat"]
-                ));
+                if (!is_array($requestedAttribute)) {
+                    throw ConversionException::conversionFailedFormat(
+                        $requestedAttribute,
+                        $this->getName(),
+                        "array"
+                    );
+                }
+
+                array_push($requestedAttributes, RequestedAttribute::fromArray($requestedAttribute));
             }
         } catch (InvalidArgumentException $e) {
             throw ConversionException::conversionFailedFormat(

@@ -61,7 +61,17 @@ class AttributeReleasePolicyType extends Type
         }
 
         try {
-            $arp = new AttributeReleasePolicy(json_decode($value, true));
+            $decoded = json_decode($value, true);
+
+            if (!is_array($decoded)) {
+                throw ConversionException::conversionFailedFormat(
+                    $decoded,
+                    $this->getName(),
+                    "array"
+                );
+            }
+
+            $arp = AttributeReleasePolicy::fromArray($decoded);
         } catch (InvalidArgumentException | TypeError $e) {
             // get nice standard message, so we can throw it keeping the exception chain
             throw ConversionException::conversionFailedFormat(

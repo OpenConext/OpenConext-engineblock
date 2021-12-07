@@ -85,10 +85,15 @@ class ShibMdScopeArrayType extends Type
 
             $shibMdScopes = [];
             foreach ($decoded as $shibMdScope) {
-                $result = new ShibMdScope();
-                $result->allowed = $shibMdScope["allowed"];
-                $result->regexp = $shibMdScope["regexp"];
-                array_push($shibMdScopes, $result);
+                if (!is_array($shibMdScope)) {
+                    throw ConversionException::conversionFailedFormat(
+                        $shibMdScope,
+                        $this->getName(),
+                        "array"
+                    );
+                }
+
+                array_push($shibMdScopes, ShibMdScope::fromArray($shibMdScope));
             }
         } catch (InvalidArgumentException $e) {
             throw ConversionException::conversionFailedFormat(

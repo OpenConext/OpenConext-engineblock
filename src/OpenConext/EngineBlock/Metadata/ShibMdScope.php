@@ -33,4 +33,25 @@ class ShibMdScope
      * @var string
      */
     public $regexp;
+
+    /**
+     * @param string|null $allowed
+     * @param string|null $regexp
+     */
+    public function __construct(string $allowed = null, string $regexp = null)
+    {
+        $this->allowed = $allowed;
+        $this->regexp = $regexp;
+    }
+
+
+    /**
+     * A convenience static constructor for the ShibMdScope.
+     * @param array $shibMdScope
+     * @return ShibMdScope
+     */
+    public static function fromArray(array $shibMdScope): ShibMdScope
+    {
+        return new self($shibMdScope["allowed"], $shibMdScope["regexp"]);
+    }
 }

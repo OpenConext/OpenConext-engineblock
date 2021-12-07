@@ -52,4 +52,14 @@ class RequestedAttribute
         $this->nameFormat = $nameFormat;
         $this->required = $isRequired;
     }
+
+    /**
+     * A convenience static constructor for the RequestedAttribute.
+     * @param array $requestedAttribute
+     * @return RequestedAttribute
+     */
+    public static function fromArray(array $requestedAttribute): RequestedAttribute
+    {
+        return new self($requestedAttribute["name"], $requestedAttribute["required"], $requestedAttribute["nameFormat"]);
+    }
 }

@@ -85,10 +85,15 @@ class ServiceArrayType extends Type
 
             $services = [];
             foreach ($decoded as $service) {
-                array_push($services, new Service(
-                    $service["location"],
-                    $service["binding"]
-                ));
+                if (!is_array($service)) {
+                    throw ConversionException::conversionFailedFormat(
+                        $service,
+                        $this->getName(),
+                        "array"
+                    );
+                }
+
+                array_push($services, Service::fromArray($service));
             }
         } catch (InvalidArgumentException $e) {
             throw ConversionException::conversionFailedFormat(

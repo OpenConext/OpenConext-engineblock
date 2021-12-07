@@ -24,15 +24,28 @@ namespace OpenConext\EngineBlock\Metadata;
  */
 class Logo
 {
-    public $height = null;
-    public $width = null;
-    public $url = null;
+    public $height;
+    public $width;
+    public $url;
 
     /**
      * @param string $url
      */
-    public function __construct($url)
+    public function __construct($url, $height = null, $width = null)
     {
         $this->url = $url;
+        $this->height = $height;
+        $this->width = $width;
+    }
+
+
+    /**
+     * A convenience static constructor for the Logo.
+     * @param array $logo
+     * @return Logo
+     */
+    public static function fromArray(array $logo): Logo
+    {
+        return new self($logo["url"], $logo["height"], $logo["width"]);
     }
 }

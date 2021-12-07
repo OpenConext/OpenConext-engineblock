@@ -73,7 +73,7 @@ class OrganizationType extends Type
                 );
             }
 
-            $organization = new Organization($decoded["name"], $decoded["displayName"], $decoded["url"]);
+            $organization = Organization::fromArray($decoded);
         } catch (InvalidArgumentException $e) {
             throw ConversionException::conversionFailedFormat(
                 $value,

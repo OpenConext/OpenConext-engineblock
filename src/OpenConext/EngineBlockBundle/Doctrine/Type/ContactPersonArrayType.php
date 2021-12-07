@@ -85,13 +85,15 @@ class ContactPersonArrayType extends Type
 
             $contactPersons = [];
             foreach ($decoded as $contactPerson) {
-                array_push($contactPersons, ContactPerson::from(
-                    $contactPerson["contactType"],
-                    $contactPerson["givenName"],
-                    $contactPerson["surName"],
-                    $contactPerson["emailAddress"],
-                    $contactPerson["telephoneNumber"]
-                ));
+                if (!is_array($contactPerson)) {
+                    throw ConversionException::conversionFailedFormat(
+                        $contactPerson,
+                        $this->getName(),
+                        "array"
+                    );
+                }
+
+                array_push($contactPersons, ContactPerson::fromArray($contactPerson));
             }
         } catch (InvalidArgumentException $e) {
             throw ConversionException::conversionFailedFormat(
