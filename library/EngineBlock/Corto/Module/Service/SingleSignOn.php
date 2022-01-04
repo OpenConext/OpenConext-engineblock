@@ -191,14 +191,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
 
         // Multiple IdPs found...
 
-        // > 1 IdPs found, but isPassive attribute given, unable to show WAYF.
-        if ($request->getIsPassive()) {
-            $log->info('Request is passive, but can be handled by more than one IdP: responding with NoPassive status');
-            $response = $this->_server->createNoPassiveResponse($request);
-            $this->_server->sendResponseToRequestIssuer($request, $response);
-            return;
-        }
-
         // Auto-select IdP when 'feature_enable_sso_notification' is enabled and send AuthenticationRequest on success
         if ($application->getDiContainer()->getFeatureConfiguration()->isEnabled("eb.enable_sso_notification")) {
             $idpEntityId = $application->getDiContainer()->getSsoNotificationService()->
@@ -228,6 +220,14 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
                     return;
                 }
             }
+        }
+
+        // > 1 IdPs found, no WAYF bypass, but isPassive attribute given, unable to show WAYF.
+        if ($request->getIsPassive()) {
+            $log->info('Request is passive, but can be handled by more than one IdP: responding with NoPassive status');
+            $response = $this->_server->createNoPassiveResponse($request);
+            $this->_server->sendResponseToRequestIssuer($request, $response);
+            return;
         }
 
         $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($log);
