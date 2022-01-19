@@ -36,7 +36,7 @@ PROJECT_DIR_NAME=${PROJECT_NAME}-${TAG//\//_} &&
 PROJECT_DIR=${RELEASE_DIR}/${PROJECT_DIR_NAME} &&
 
 # Check requirements
-command -v php72 >/dev/null 2>&1 || { echo >&2 "Missing PHP 7.2. Aborting"; exit 1; }
+command -v php >/dev/null 2>&1 || { echo >&2 "Missing PHP 7.2. Aborting"; exit 1; }
 command -v composer >/dev/null 2>&1 || { echo >&2 "Missing Composer.  Aborting."; exit 1; }
 command -v npm >/dev/null 2>&1 || { echo >&2 "Misisng NPM.  Aborting."; exit 1; }
 command -v git >/dev/null 2>&1 || { echo >&2 "Misisng Git.  Aborting."; exit 1; }
@@ -64,7 +64,7 @@ fi
 
 # Install composer dependencies
 echo "Running Composer Install" &&
-php72 $(which composer) install -n --no-dev --prefer-dist -o
+php $(which composer) install -n --no-dev --prefer-dist -o
 
 if [ $? -eq 0 ]; then
     echo "Composer install ran"
@@ -72,7 +72,6 @@ else
     echo "Unable to run compopser install"
     exit 1
 fi
-
 
 # Build NPM frontend assets
 # --unsafe-perm because we do branch install as root.
@@ -89,7 +88,6 @@ else
     exit 1
 fi
 
-
 # Tag release and remove unwanted files
 echo "Tagging the release in RELEASE file" &&
 COMMITHASH=`git rev-parse HEAD` &&
@@ -98,7 +96,6 @@ echo "Commit: ${COMMITHASH}" >> ${PROJECT_DIR}/RELEASE &&
 
 echo "Updating asset_version in config" &&
 sed -i s,#ASSET_VERSION#,${TAG},g ${PROJECT_DIR}/app/config/config.yml &&
-
 
 echo "Cleaning build of dev files" &&
 rm -rf ${PROJECT_DIR}/.idea &&
@@ -124,7 +121,6 @@ else
     exit 1
 fi
 
-
 # Create tarball
 echo "Create tarball" &&
 cd ${RELEASE_DIR} &&
@@ -136,7 +132,6 @@ else
     echo "Unable to build tarball"
     exit 1
 fi
-
 
 # Create checksum
 echo "Create checksum file" &&
@@ -153,7 +148,6 @@ else
     echo "Unable to create checksum"
     exit 1
 fi
-
 
 # Sign with GPG key
 if [ -n "$2" ]
