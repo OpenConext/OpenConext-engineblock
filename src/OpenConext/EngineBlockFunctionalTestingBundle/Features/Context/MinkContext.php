@@ -77,6 +77,58 @@ class MinkContext extends BaseMinkContext
     }
 
     /**
+     * @Then /^the internal-collabPersonId is present in the assertion$/
+     */
+    public function theCollabPersonIdIsPresent()
+    {
+        $document = new DOMDocument();
+        $document->loadXML($this->getSession()->getPage()->getContent());
+        $xpathObj = new DOMXPath($document);
+        $xpathObj->registerNamespace('ds', XMLSecurityDSig::XMLDSIGNS);
+        $xpathObj->registerNamespace('mdui', Common::NS);
+        $xpathObj->registerNamespace('shibmd', Scope::NS);
+        $nodeListAttribute = $xpathObj->query( '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:surf.nl:attribute-def:internal-collabPersonId"]');
+        $nodeListAttributeValue = $xpathObj->query( '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:surf.nl:attribute-def:internal-collabPersonId"]/saml:AttributeValue');
+        if (!$nodeListAttribute || $nodeListAttribute->length === 0) {
+            throw new ExpectationException('The internal-collabPersonId was not in the assertion', $this->getSession());
+        }
+        if (!$nodeListAttributeValue || $nodeListAttributeValue->length !== 1) {
+            throw new ExpectationException('The internal-collabPersonId should only have one value', $this->getSession());
+        }
+        $attributeValueAttributes = $nodeListAttributeValue->item(0)->attributes;
+
+        $mappedAttributes = [];
+        foreach ($attributeValueAttributes as $attribute) {
+            $mappedAttributes[$attribute->name] = $attribute->value;
+        }
+        if (!array_key_exists('type', $mappedAttributes)) {
+            throw new ExpectationException('The internal-collabPersonId does not carry the xsi:type', $this->getSession());
+        }
+        if ($mappedAttributes['type'] !== 'xs:string') {
+            throw new ExpectationException('The internal-collabPersonIds xsi:type is not of xs:string', $this->getSession());
+        }
+    }
+
+    /**
+     * @Then /^the internal-collabPersonId is not present in the assertion$/
+     */
+    public function theCollabPersonIdIsNotPresent()
+    {
+        $document = new DOMDocument();
+        $document->loadXML($this->getSession()->getPage()->getContent());
+
+        $xpathObj = new DOMXPath($document);
+        $xpathObj->registerNamespace('ds', XMLSecurityDSig::XMLDSIGNS);
+        $xpathObj->registerNamespace('mdui', Common::NS);
+        $xpathObj->registerNamespace('shibmd', Scope::NS);
+        $nodeList = $xpathObj->query( '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:surf.nl:attribute-def:internal-collabPersonId"]');
+
+        if ($nodeList->length > 0) {
+            throw new ExpectationException('The internal-collabPersonId should not be present', $this->getSession());
+        }
+    }
+
+    /**
      * @Then /^the response should not match xpath \'([^\']*)\'$/
      */
     public function theResponseShouldNotMatchXpath($xpath)
