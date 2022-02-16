@@ -22,7 +22,7 @@ use Twig_Extensions_Extension_I18n;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig_SimpleFilter;
 
-class I18n extends Twig_Extensions_Extension_I18n implements \Twig_Extension_InitRuntimeInterface
+class I18n extends Twig_Extensions_Extension_I18n
 {
 
     /**
