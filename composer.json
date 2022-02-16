@@ -38,7 +38,7 @@
         "symfony/swiftmailer-bundle": "^2.6",
         "symfony/symfony": "3.4.*",
         "twig/extensions": "^1.5",
-        "twig/twig": "^1.35"
+        "twig/twig": "^2.0"
     },
     "require-dev": {
         "behat/behat": "~3.0",
