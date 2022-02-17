@@ -78,12 +78,10 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
                 EngineBlock_Corto_Filter_Command_RunAttributeManipulations::TYPE_REQUESTER_SP
             ),
 
-            // Set the persistent Identifier for this user on this SP
-            new EngineBlock_Corto_Filter_Command_SetNameId($logger),
             new EngineBlock_Corto_Filter_Command_ApplyTrustedProxyBehavior($logger),
 
-            // Add the appropriate NameID to the 'eduPeronTargetedID'.
-            new EngineBlock_Corto_Filter_Command_AddEduPersonTargetedId($logger),
+            // Add the appropriate NameID to the 'eduPeronTargetedID' and the Assertions NameId.
+            new EngineBlock_Corto_Filter_Command_AddIdentityAttributes($logger),
 
             // Convert all attributes to their OID format (if known) and add these.
             new EngineBlock_Corto_Filter_Command_DenormalizeAttributes(),

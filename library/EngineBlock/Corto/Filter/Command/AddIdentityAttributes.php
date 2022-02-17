@@ -17,19 +17,16 @@
  */
 
 use Psr\Log\LoggerInterface;
+use SAML2\Constants;
 
-/**
- * SetNameId command, sets the proper NameID for the Response.
- *
- * Note that because SAML2 Assertion Subject NameID elements are intended for the next hop only,
- * we don't take SP proxies into account. Whatever OUR SP wants as a NameID is what it gets.
- * If THEIR SP is known to us and wants a different NameID they'll just have to use the eduPersonTargetedId.
- */
-class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filter_Command_Abstract
-    implements EngineBlock_Corto_Filter_Command_ResponseModificationInterface
+class EngineBlock_Corto_Filter_Command_AddIdentityAttributes extends EngineBlock_Corto_Filter_Command_Abstract
+    implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
 {
-    /** @var LoggerInterface */
+    /**
+     * @var LoggerInterface
+     */
     private $logger;
+
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
@@ -38,18 +35,17 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
     /**
      * {@inheritdoc}
      */
-    public function getResponse()
+    public function getResponseAttributes()
     {
-        return $this->_response;
+        return $this->_responseAttributes;
     }
 
     /**
-     * Resolve what NameID we should send to our SP and set it in the Assertion.
+     * Resolve the eduPersonTargetedId we should send.
      */
     public function execute()
     {
-        $this->logger->info('Executing the SetNameId output filter');
-        $resolver = new EngineBlock_Saml2_NameIdResolver($this->logger);
+        $this->logger->info('Executing the AddIdentityAttributes output filter');
 
         // Note that we try to service the final destination SP, if we know them and are allowed to do so.
         $destinationMetadata = EngineBlock_SamlHelper::getDestinationSpMetadata(
@@ -58,6 +54,8 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
             $this->_server->getRepository()
         );
 
+        // Resolve what NameID we should send the destination.
+        $resolver = new EngineBlock_Saml2_NameIdResolver($this->logger);
         $nameId = $resolver->resolve(
             $this->_request,
             $this->_response,
@@ -65,6 +63,19 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
             $this->_collabPersonId
         );
 
+        $this->logger->info('Setting the NameId on the Assertion');
         $this->_response->getAssertion()->setNameId($nameId);
+
+
+        // Find out if the EduPersonTargetedId is in the ARP of the destination SP.
+        // If the ARP is NULL this means no ARP = let everything through including ePTI.
+        // Otherwise only add ePTI if it's acutally in the ARP.
+        $arp = $destinationMetadata->getAttributeReleasePolicy();
+        if (!is_null($arp) && !$arp->hasAttribute(Constants::EPTI_URN_MACE)) {
+            return;
+        }
+        $this->logger->info('Adding the EduPersonTargetedId on the Assertion');
+        $this->_responseAttributes[Constants::EPTI_URN_MACE] = [ $nameId ];
+
     }
 }
