@@ -53,7 +53,7 @@ The SAML AuthnRequest below is en example of the AuthnRequest that a trusted pro
 ```
 
 Processing of the request:
-* Both the trusted proxy and the end-SP being proxied must be known to engineblock
+* Both the trusted proxy and the end-SP being proxied must be known to engineblock (= configured as SP entities in Manage)
 * Both the trusted proxy and the end-SP being proxied must have the same workflow state
 
 * The ACL of both the trusted proxy and the end-SP are verified. Only IdPs are allowed access to both SPs are allowed to login
