@@ -5,8 +5,8 @@
     <html lang="{{ locale()|escape('html_attr') }}">
     <head>
         <title>{{ defaultTitle }} - {{ 'post_data'|trans }}</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <meta name="robots" content="noindex, nofollow"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="robots" content="noindex, nofollow">
         <meta content="IE=edge" http-equiv="x-ua-compatible">
         <meta content="initial-scale=1.0,width=device-width" name="viewport">
         <meta content="yes" name="apple-mobile-web-app-capable">
@@ -14,7 +14,7 @@
         <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
 
         {% block stylesheets %}{% spaceless %}
-            <link href="/stylesheets/application.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
+            <link href="/stylesheets/application.css?v={{ assetsVersion }}" rel="stylesheet">
         {% endspaceless %}{% endblock %}
     </head>
     <body class="index" {% if preventAutoSubmit is not defined %} onload="document.forms[0].submit()" {% endif %}>
