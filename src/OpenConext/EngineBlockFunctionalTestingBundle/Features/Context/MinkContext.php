@@ -87,13 +87,25 @@ class MinkContext extends BaseMinkContext
         $xpathObj->registerNamespace('ds', XMLSecurityDSig::XMLDSIGNS);
         $xpathObj->registerNamespace('mdui', Common::NS);
         $xpathObj->registerNamespace('shibmd', Scope::NS);
-        $nodeListAttribute = $xpathObj->query( '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:surf.nl:attribute-def:internal-collabPersonId"]');
-        $nodeListAttributeValue = $xpathObj->query( '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:surf.nl:attribute-def:internal-collabPersonId"]/saml:AttributeValue');
+        $nodeListAttribute = $xpathObj->query(
+            '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute' .
+            '[@Name="urn:mace:surf.nl:attribute-def:internal-collabPersonId"]'
+        );
+        $nodeListAttributeValue = $xpathObj->query(
+            '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute' .
+            '[@Name="urn:mace:surf.nl:attribute-def:internal-collabPersonId"]/saml:AttributeValue'
+        );
         if (!$nodeListAttribute || $nodeListAttribute->length === 0) {
-            throw new ExpectationException('The internal-collabPersonId was not in the assertion', $this->getSession());
+            throw new ExpectationException(
+                'The internal-collabPersonId was not in the assertion',
+                $this->getSession()
+            );
         }
         if (!$nodeListAttributeValue || $nodeListAttributeValue->length !== 1) {
-            throw new ExpectationException('The internal-collabPersonId should only have one value', $this->getSession());
+            throw new ExpectationException(
+                'The internal-collabPersonId should only have one value',
+                $this->getSession()
+            );
         }
         $attributeValueAttributes = $nodeListAttributeValue->item(0)->attributes;
 
@@ -102,14 +114,23 @@ class MinkContext extends BaseMinkContext
             $mappedAttributes[$attribute->name] = $attribute->value;
         }
         if (!array_key_exists('type', $mappedAttributes)) {
-            throw new ExpectationException('The internal-collabPersonId does not carry the xsi:type', $this->getSession());
+            throw new ExpectationException(
+                'The internal-collabPersonId does not carry the xsi:type',
+                $this->getSession()
+            );
         }
         if ($mappedAttributes['type'] !== 'xs:string') {
-            throw new ExpectationException('The internal-collabPersonId xsi:type is not of xs:string', $this->getSession());
+            throw new ExpectationException(
+                'The internal-collabPersonId xsi:type is not of xs:string',
+                $this->getSession()
+            );
         }
         $attributeValue = $nodeListAttributeValue->item(0)->nodeValue;
         if (substr($attributeValue, 0, 18) !== 'urn:collab:person:') {
-            throw new ExpectationException('The internal-collabPersonId does not start with urn:collab:person:', $this->getSession());
+            throw new ExpectationException(
+                'The internal-collabPersonId does not start with urn:collab:person:',
+                $this->getSession()
+            );
         }
     }
 
@@ -125,10 +146,16 @@ class MinkContext extends BaseMinkContext
         $xpathObj->registerNamespace('ds', XMLSecurityDSig::XMLDSIGNS);
         $xpathObj->registerNamespace('mdui', Common::NS);
         $xpathObj->registerNamespace('shibmd', Scope::NS);
-        $nodeList = $xpathObj->query( '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:surf.nl:attribute-def:internal-collabPersonId"]');
+        $nodeList = $xpathObj->query(
+            '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute' .
+            '[@Name="urn:mace:surf.nl:attribute-def:internal-collabPersonId"]'
+        );
 
         if ($nodeList->length > 0) {
-            throw new ExpectationException('The internal-collabPersonId should not be present', $this->getSession());
+            throw new ExpectationException(
+                'The internal-collabPersonId should not be present',
+                $this->getSession()
+            );
         }
     }
 
