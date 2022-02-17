@@ -6,19 +6,19 @@ A "trusted proxy" in OpenConext is a SAML SP that uses engineblock as its IdP. T
 
 Trusted proxy is enabled per SP. To enable trusted proxy behaviour for a SP, set "coin:trusted_proxy" and "redirect.sign" to true for the configuration of the SP. The default for this setting is false. Note that after enabling "redirect.sign" all AuthnRequests must be signed.
 
-## Engineblock Trusted Proxy behaviour
+## EngineBlock Trusted Proxy behaviour
 
 From now on we will call the SP that is the trusted proxy "trusted proxy" or "TP" and the SP being proxied, the "end-SP".
 
-Engineblock will only enable trusted proxy processing for a SAML AuthnRequest that it receives from a TP when all of the following conditions are met:
-* Both "coin:trusted_proxy" and "redirect.sign" are set in the TP Entity configuration in engineblock. This TP is identified by the value of the /AuthnRequest/Issuer element in the SAML AuthnRequest.
+EngineBlock will only enable trusted proxy processing for a SAML AuthnRequest that it receives from a TP when all of the following conditions are met:
+* Both "coin:trusted_proxy" and "redirect.sign" are set in the TP Entity configuration in EngineBlock. This TP is identified by the value of the /AuthnRequest/Issuer element in the SAML AuthnRequest.
 * The AuthnRequest has a valid signature.
 * The SAML AuthnRequest contains at least one /AuthnRequest/Scoping/RequesterID element.
 
 ### Trusted proxy processing
 
-The image below shows a proxy (a trusted proxy) that is connected to engineblock :
-* The __trusted proxy SP__ is an TP that sends an AuthnRequest to engineblock.
+The image below shows a proxy (a trusted proxy) that is connected to EngineBlock:
+* The __trusted proxy SP__ is an TP that sends an AuthnRequest to EngineBlock.
 * The __SP being proxied__ is the end-SP behind the trusted proxy.
 
 ![trusted_proxy](trusted_proxy.png)
@@ -34,7 +34,7 @@ When processing a AuthnRequest from a trusted proxy engineblock performs some ac
 
 The SAML AuthnRequest below is en example of the AuthnRequest that a trusted proxy sends to engineblock. In this request:
 * The trusted proxy has an entityID of "https://trusted-proxy.example.com/metadata". This is the value of the `/AuthnRequest/Issuer` element in the SAML AuthnRequest to engineblock.
-* The end-SP has en entityID of "https://sp-being-proxied.example.net/metadata". Engineblock uses the value of the _last_ `/AuthnRequest/Scoping/RequesterID` element in the SAML AuthnRequest to engineblock. This means that a trusted proxy must ensure that its RequesterID element is the last RequesterID in the list.
+* The end-SP has en entityID of "https://sp-being-proxied.example.net/metadata". EngineBlock uses the value of the _last_ `/AuthnRequest/Scoping/RequesterID` element in the SAML AuthnRequest to engineblock. This means that a trusted proxy must ensure that its RequesterID element is the last RequesterID in the list.
 
 ```xml
 <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
