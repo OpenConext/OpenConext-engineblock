@@ -17,6 +17,7 @@
  */
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use SAML2\AuthnRequest;
 use SAML2\Constants;
@@ -54,6 +55,14 @@ class EngineBlock_Saml2_NameIdResolver
      */
     private $cache = array();
 
+    /** @var LoggerInterface */
+    private $logger;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     /**
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
      * @param EngineBlock_Saml2_ResponseAnnotationDecorator $response
@@ -76,6 +85,7 @@ class EngineBlock_Saml2_NameIdResolver
 
         $requireUnspecified = ($nameIdFormat === Constants::NAMEID_UNSPECIFIED);
         if ($requireUnspecified) {
+            $this->logger->info('Resolving an unspecified nameId');
             $nameId = new NameID();
             $nameId->setFormat($nameIdFormat);
             $nameId->setValue($response->getIntendedNameId());
@@ -84,12 +94,14 @@ class EngineBlock_Saml2_NameIdResolver
 
         $requireTransient = ($nameIdFormat === Constants::NAMEID_TRANSIENT);
         if ($requireTransient) {
+            $this->logger->info('Resolving a transient nameId');
             $nameId = new NameID();
             $nameId->setFormat($nameIdFormat);
             $nameId->setValue($this->_getTransientNameId($destinationMetadata->entityId, $response->getOriginalIssuer()));
             return $nameId;
         }
 
+        $this->logger->info('Resolving a persistent nameId');
         $nameId = new NameID();
         $nameId->setFormat($nameIdFormat);
         $nameId->setValue($this->_getPersistentNameId($collabPersonId, $destinationMetadata->entityId));

@@ -19,6 +19,7 @@
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Constants;
@@ -74,7 +75,9 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends TestCase
         $this->serviceProvider  = new ServiceProvider('http://sp.example.edu');
         $this->collabPersonId = 'urn:collab:person:example.edu:mock1';
 
-        $this->resolver = new EngineBlock_Test_Saml2_NameIdResolverMock();
+        $logger = Mockery::mock(LoggerInterface::class);
+        $logger->shouldIgnoreMissing();
+        $this->resolver = new EngineBlock_Test_Saml2_NameIdResolverMock($logger);
     }
 
     public function testCustomNameId(): void

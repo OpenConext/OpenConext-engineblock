@@ -16,11 +16,22 @@
  * limitations under the License.
  */
 
+use Psr\Log\LoggerInterface;
 use SAML2\Constants;
 
-class EngineBlock_Corto_Filter_Command_AddEduPersonTargettedId extends EngineBlock_Corto_Filter_Command_Abstract
+class EngineBlock_Corto_Filter_Command_AddEduPersonTargetedId extends EngineBlock_Corto_Filter_Command_Abstract
     implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
 {
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -34,6 +45,8 @@ class EngineBlock_Corto_Filter_Command_AddEduPersonTargettedId extends EngineBlo
      */
     public function execute()
     {
+        $this->logger->info('Executing the AddEduPersonTargetedId output filter');
+
         // Note that we try to service the final destination SP, if we know them and are allowed to do so.
         $destinationMetadata = EngineBlock_SamlHelper::getDestinationSpMetadata(
             $this->_serviceProvider,
@@ -50,7 +63,7 @@ class EngineBlock_Corto_Filter_Command_AddEduPersonTargettedId extends EngineBlo
         }
 
         // Resolve what NameID we should send the destination.
-        $resolver = new EngineBlock_Saml2_NameIdResolver();
+        $resolver = new EngineBlock_Saml2_NameIdResolver($this->logger);
         $nameId = $resolver->resolve(
             $this->_request,
             $this->_response,

@@ -105,7 +105,11 @@ class MinkContext extends BaseMinkContext
             throw new ExpectationException('The internal-collabPersonId does not carry the xsi:type', $this->getSession());
         }
         if ($mappedAttributes['type'] !== 'xs:string') {
-            throw new ExpectationException('The internal-collabPersonIds xsi:type is not of xs:string', $this->getSession());
+            throw new ExpectationException('The internal-collabPersonId xsi:type is not of xs:string', $this->getSession());
+        }
+        $attributeValue = $nodeListAttributeValue->item(0)->nodeValue;
+        if (substr($attributeValue, 0, 18) !== 'urn:collab:person:') {
+            throw new ExpectationException('The internal-collabPersonId does not start with urn:collab:person:', $this->getSession());
         }
     }
 

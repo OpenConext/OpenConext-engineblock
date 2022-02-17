@@ -16,6 +16,8 @@
  * limitations under the License.
  */
 
+use Psr\Log\LoggerInterface;
+
 /**
  * SetNameId command, sets the proper NameID for the Response.
  *
@@ -26,6 +28,13 @@
 class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filter_Command_Abstract
     implements EngineBlock_Corto_Filter_Command_ResponseModificationInterface
 {
+    /** @var LoggerInterface */
+    private $logger;
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -39,11 +48,20 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
      */
     public function execute()
     {
-        $resolver = new EngineBlock_Saml2_NameIdResolver();
+        $this->logger->info('Executing the SetNameId output filter');
+        $resolver = new EngineBlock_Saml2_NameIdResolver($this->logger);
+
+        // Note that we try to service the final destination SP, if we know them and are allowed to do so.
+        $destinationMetadata = EngineBlock_SamlHelper::getDestinationSpMetadata(
+            $this->_serviceProvider,
+            $this->_request,
+            $this->_server->getRepository()
+        );
+
         $nameId = $resolver->resolve(
             $this->_request,
             $this->_response,
-            $this->_serviceProvider,
+            $destinationMetadata,
             $this->_collabPersonId
         );
 
