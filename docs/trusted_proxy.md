@@ -61,6 +61,7 @@ Processing of the request:
 * The attribute manipulations (AMs) of both the trusted proxy and the end-SP are run. The AMs of the trusted proxy are run first.
 * Stepup-invocation is done if configured for the end-SP.
 * The PDP is called for the end-SP being proxied only.
+* The NameID (and eduPersonTargetedId if enabled in the ARP) are set to the format of and targeted for the end-SP.
 
 What the trusted proxy should do:
 * The trusted proxy is expected to verify the SPs it connects and authenticates on behalf on.
