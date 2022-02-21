@@ -402,6 +402,16 @@
             "nl": "Licentieinformatie"
         }
     },
+    "urn:mace:surf.nl:attribute-def:internal-collabPersonId": {
+        "Description": {
+            "en": "The internal user identifier sent to the trusted proxy SP",
+            "nl": "De door trusted proxy te gebruiken interne identifier van de gebruiker"
+        },
+        "Name": {
+            "en": "Trusted proxy user identifier",
+            "nl": "Trusted proxy gebruiker identifier"
+        }
+    },
     "urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1": {
         "Description": {
             "en": "Status of this account in SURFconext",
