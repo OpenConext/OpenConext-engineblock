@@ -16,11 +16,22 @@
  * limitations under the License.
  */
 
+use Psr\Log\LoggerInterface;
 use SAML2\Constants;
 
-class EngineBlock_Corto_Filter_Command_AddEduPersonTargettedId extends EngineBlock_Corto_Filter_Command_Abstract
+class EngineBlock_Corto_Filter_Command_AddIdentityAttributes extends EngineBlock_Corto_Filter_Command_Abstract
     implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
 {
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -34,12 +45,27 @@ class EngineBlock_Corto_Filter_Command_AddEduPersonTargettedId extends EngineBlo
      */
     public function execute()
     {
+        $this->logger->info('Executing the AddIdentityAttributes output filter');
+
         // Note that we try to service the final destination SP, if we know them and are allowed to do so.
         $destinationMetadata = EngineBlock_SamlHelper::getDestinationSpMetadata(
             $this->_serviceProvider,
             $this->_request,
             $this->_server->getRepository()
         );
+
+        // Resolve what NameID we should send the destination.
+        $resolver = new EngineBlock_Saml2_NameIdResolver($this->logger);
+        $nameId = $resolver->resolve(
+            $this->_request,
+            $this->_response,
+            $destinationMetadata,
+            $this->_collabPersonId
+        );
+
+        $this->logger->info('Setting the NameId on the Assertion');
+        $this->_response->getAssertion()->setNameId($nameId);
+
 
         // Find out if the EduPersonTargetedId is in the ARP of the destination SP.
         // If the ARP is NULL this means no ARP = let everything through including ePTI.
@@ -48,16 +74,8 @@ class EngineBlock_Corto_Filter_Command_AddEduPersonTargettedId extends EngineBlo
         if (!is_null($arp) && !$arp->hasAttribute(Constants::EPTI_URN_MACE)) {
             return;
         }
-
-        // Resolve what NameID we should send the destination.
-        $resolver = new EngineBlock_Saml2_NameIdResolver();
-        $nameId = $resolver->resolve(
-            $this->_request,
-            $this->_response,
-            $destinationMetadata,
-            $this->_collabPersonId
-        );
-
+        $this->logger->info('Adding the EduPersonTargetedId on the Assertion');
         $this->_responseAttributes[Constants::EPTI_URN_MACE] = [ $nameId ];
+
     }
 }

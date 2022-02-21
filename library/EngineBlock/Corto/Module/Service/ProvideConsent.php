@@ -59,6 +59,9 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
      */
     private $_processingStateHelper;
 
+    /** @var \Psr\Log\LoggerInterface */
+    private $logger;
+
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
@@ -76,6 +79,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $this->_authenticationStateHelper = $authStateHelper;
         $this->twig = $twig;
         $this->_processingStateHelper = $processingStateHelper;
+        $this->logger = EngineBlock_ApplicationSingleton::getLog();
     }
 
     /**
@@ -116,9 +120,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             $application->flushLog(
                 'Activated additional logging for one or more SPs in the SP requester chain, or the IdP'
             );
-
-            $log = $application->getLogInstance();
-            $log->info('Raw HTTP request', array('http_request' => (string) $application->getHttpRequest()));
+            $this->logger->info('Raw HTTP request', array('http_request' => (string) $application->getHttpRequest()));
         }
         $serviceProviderMetadata = $spMetadataChain[0];
 
@@ -188,7 +190,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             $collabPersonIdValue = $nameId->getValue();
             // Load the persistent name id for this combination of SP/Identifier and update the local copy of the nameId
             // to ensure the correct identifier is shown on the consent screen.
-            $resolver = new EngineBlock_Saml2_NameIdResolver();
+            $resolver = new EngineBlock_Saml2_NameIdResolver($this->logger);
             $nameId = $resolver->resolve(
                 $request,
                 $response,
