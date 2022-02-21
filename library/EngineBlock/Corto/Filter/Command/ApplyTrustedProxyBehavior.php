@@ -35,17 +35,9 @@ class EngineBlock_Corto_Filter_Command_ApplyTrustedProxyBehavior extends EngineB
     }
 
     /**
-     * When a TP is involved in an authentication, a special case is triggered:
-     *   the NameID is set to the collabPersonId ("urn:collab:person:...") and
-     *   the epTID to the remote SP's NameID as configured (persistent,
-     *   transient...).
-     *
-     * We want to move the information about the collabPersonId that the TP needs
-     * to a dedicated attribute. And then not make special cases for NameID, let
-     * this work just like any other SP.
-     *
-     * This internal attribute is named:
-     * urn:mace:surf.nl:attribute-def:internal-collabPersonId
+     * When a TP is involved in an authentication, a special case is triggered.
+     * The urn:mace:surf.nl:attribute-def:internal-collabPersonId is added to
+     * the response attributes set with the collabPersonId.
      */
     public function execute()
     {
