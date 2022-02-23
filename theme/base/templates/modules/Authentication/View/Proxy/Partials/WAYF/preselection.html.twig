@@ -1,4 +1,4 @@
-{% set previousSelectionList = connectedIdps.formattedPreviousSelectionList %}
+{% set previousSelectionList = connectedIdps.formattedPreviousSelectionList|sort((a, b) => b.count <=> a.count) %}
 <section class="wayf__previousSelection {% if previousSelectionList is empty %}hidden{% endif %}">
     <h2 id="previousSelection__title" class="previousSelection__title">
         {{ 'wayf_your_accounts'|trans }}
