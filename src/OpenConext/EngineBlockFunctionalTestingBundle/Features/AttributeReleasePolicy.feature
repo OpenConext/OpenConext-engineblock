@@ -15,6 +15,9 @@ Feature:
     And a Service Provider named "Right Value ARP"
     And a Service Provider named "Specific Value ARP"
     And a Service Provider named "Two value ARP"
+    And a Service Provider named "Trusted Proxy"
+    And a Service Provider named "Stepup Gateway"
+    And a Service Provider named "Stepup SelfService"
     And SP "Empty ARP" allows no attributes
     And SP "Wildcard ARP" allows an attribute named "urn:mace:dir:attribute-def:uid"
     And SP "Wrong Value ARP" allows an attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization" with value "example.edu"
@@ -22,6 +25,10 @@ Feature:
     And SP "Specific Value ARP" allows an attribute named "urn:mace:dir:attribute-def:eduPersonAffiliation" with value "faculty"
     And SP "Two value ARP" allows an attribute named "urn:mace:dir:attribute-def:uid"
     And SP "Two value ARP" allows an attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    And SP "Stepup Gateway" allows an attribute named "urn:mace:dir:attribute-def:uid"
+    And SP "Stepup Gateway" allows an attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    And SP "Stepup Gateway" allows an attribute named "urn:mace:terena.org:attribute-def:eduPersonAffiliation"
+    And SP "Stepup SelfService" allows an attribute named "urn:mace:dir:attribute-def:uid"
     And feature "eb.run_all_manipulations_prior_to_consent" is disabled
 
   Scenario: As a user for an Idp SP without ARPs I get all attributes
@@ -104,3 +111,89 @@ Feature:
     And I pass through EngineBlock
     Then the response should contain "urn:mace:dir:attribute-def:uid"
     And the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+
+  Scenario: As a user for an SP behind TP without ARP I get all attributes
+    Given SP "Trusted Proxy" is authenticating for SP "No ARP"
+    And SP "Trusted Proxy" is a trusted proxy
+    And SP "Trusted Proxy" signs its requests
+    When I log in at "Trusted Proxy"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the response should contain "urn:mace:dir:attribute-def:uid"
+    And the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    When I give my consent
+    And I pass through EngineBlock
+    Then the response should contain "urn:mace:dir:attribute-def:uid"
+    And the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+
+  Scenario: As a user for an SP behind TP with an empty ARP I get no attributes
+    Given SP "Trusted Proxy" is authenticating for SP "Empty ARP"
+    And SP "Trusted Proxy" is a trusted proxy
+    And SP "Trusted Proxy" signs its requests
+    When I log in at "Trusted Proxy"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the response should not contain "urn:mace:dir:attribute-def:uid"
+    And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    When I give my consent
+    And I pass through EngineBlock
+    Then the response should not contain "urn:mace:dir:attribute-def:uid"
+    And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+
+  Scenario: As a user for an SP behind TP with a wildcard ARP I get all values for that attribute
+    Given SP "Trusted Proxy" is authenticating for SP "Wildcard ARP"
+    And SP "Trusted Proxy" is a trusted proxy
+    And SP "Trusted Proxy" signs its requests
+    When I log in at "Trusted Proxy"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the response should contain "urn:mace:dir:attribute-def:uid"
+    And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    When I give my consent
+    And I pass through EngineBlock
+    Then the response should contain "urn:mace:dir:attribute-def:uid"
+    And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+
+  Scenario: As a user for an SP behind TP with a specific value ARP I do not see the attribute with a wrong value
+    Given SP "Trusted Proxy" is authenticating for SP "Wrong Value ARP"
+    And SP "Trusted Proxy" is a trusted proxy
+    And SP "Trusted Proxy" signs its requests
+    When I log in at "Trusted Proxy"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the response should not contain "urn:mace:dir:attribute-def:uid"
+    And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    When I give my consent
+    And I pass through EngineBlock
+    Then the response should not contain "urn:mace:dir:attribute-def:uid"
+    And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+
+  Scenario: As a user for an SP behind TP with a specific value ARP I do see the attribute if it has the right value
+    Given SP "Trusted Proxy" is authenticating for SP "Right Value ARP"
+    And SP "Trusted Proxy" is a trusted proxy
+    And SP "Trusted Proxy" signs its requests
+    When I log in at "Trusted Proxy"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the response should not contain "urn:mace:dir:attribute-def:uid"
+    And the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    When I give my consent
+    And I pass through EngineBlock
+    Then the response should not contain "urn:mace:dir:attribute-def:uid"
+    And the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+
+  Scenario: As a user for an SP behind TP both ARPs are applied leaving an intersection of the attributes
+    Given SP "Stepup Gateway" is authenticating for SP "Stepup SelfService"
+    And SP "Stepup Gateway" is a trusted proxy
+    And SP "Stepup Gateway" signs its requests
+    When I log in at "Stepup Gateway"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the response should contain "urn:mace:dir:attribute-def:uid"
+    And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    And the response should not contain "urn:mace:terena.org:attribute-def:eduPersonAffiliation"
+    When I give my consent
+    And I pass through EngineBlock
+    Then the response should contain "urn:mace:dir:attribute-def:uid"
+    Then the response should not contain "urn:mace:dir:attribute-def:eduPersonAffiliation"
+    And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
