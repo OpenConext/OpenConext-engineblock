@@ -8,15 +8,18 @@ More information about our release strategy can be found in the [Development Gui
 ## 6.7.0
 **Feature**
 
-In 6.7.0 a new behaviour is introduced when dealing with trusted proxies. More information about these changes can
-be found in the updated [trusted proxy documentation](./docs/trusted_proxy.md). You should be able to inform yourself
-what changes are required, when you are working with a trusted proxy.
+1. In 6.7.0 a new behaviour is introduced when dealing with trusted proxies. More information about these changes can
+   be found in the updated [trusted proxy documentation](./docs/trusted_proxy.md). You should be able to inform yourself
+   what changes are required, when you are working with a trusted proxy.
 
-The following work was done to get to this feature:
- - Cover internal-CollabPersonId behaviour in test #1172
- - Apply trusted proxy related output filtering #1175
- - Trusted proxy documentation update #1174
- - Update attribute dictionary #1177
+   The following work was done to get to this feature:
+    - Cover internal-CollabPersonId behaviour in test #1172
+    - Apply trusted proxy related output filtering #1175
+    - Trusted proxy documentation update #1174
+    - Update attribute dictionary #1177
+
+2. A long awaited tag release GitHub Actions workflow was added to this release.
+  - Test release creation in CI/CD pipeline #888 (thanks for the groundwork @pablothedude!)
 
 **Maintenance**
  - Upgrade Twig to 2.x
