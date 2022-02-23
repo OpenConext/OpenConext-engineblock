@@ -34,11 +34,21 @@ Feature:
      And I should not see "StepUpOnlyAuth"
 
   Scenario: User logs in to the proxy without a SP and wayf shows relevant Identity Providers
-     When I log in at "Step Up"
-     Then I should see "AlwaysAuth"
-      And I should see "CombinedAuth"
-      And I should see "StepUpOnlyAuth"
-      And I should not see "LoaOnlyAuth"
+    When I log in at "Step Up"
+    Then I should see "AlwaysAuth"
+    And I should see "CombinedAuth"
+    And I should see "StepUpOnlyAuth"
+    And I should not see "LoaOnlyAuth"
+
+  Scenario: User logs in to the trusted proxy, wayf shows relevant Identity Providers
+    Given SP "Step Up" is authenticating for SP "Loa SP"
+    And SP "Step Up" is a trusted proxy
+    And SP "Step Up" signs its requests
+    When I log in at "Step Up"
+    Then I should see "AlwaysAuth"
+    And I should see "CombinedAuth"
+    And I should not see "StepUpOnlyAuth"
+    And I should not see "LoaOnlyAuth"
 
   Scenario: User logs in via untrusted proxy accesses discovery for unknown SP
     Given SP "Step Up" is authenticating and uses RequesterID "https://example.edu/saml2/metadata"
