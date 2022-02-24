@@ -11,6 +11,8 @@ Feature:
     And an Identity Provider named "IdP-with-Attribute-Manipulations"
     And a Service Provider named "Dummy-SP"
     And a Service Provider named "SP-with-Attribute-Manipulations"
+    And a Service Provider named "Stepup Gateway"
+    And a Service Provider named "Stepup SelfService"
     And feature "eb.run_all_manipulations_prior_to_consent" is disabled
 
   Scenario: The Service Provider can have an attribute added
@@ -213,5 +215,33 @@ Feature:
     And the response should contain "guest"
     And the response should not contain "member"
     And the response should not contain "faculty"
-#
-#  Scenario: Sp and IdP attribute manipulations
+
+  # A similar test can be found in SpProxy.feature (Scenario: User logs in via trusted proxy and attribute manipulation
+  # for proxy and destination are executed). This one adds a specific test on the sequence on which they are applied.
+  Scenario: As a user for an SP behind TP both AMs are applied for both services, but TP is applied first
+    Given SP "Stepup Gateway" is authenticating for SP "Stepup SelfService"
+    And SP "Stepup Gateway" is a trusted proxy
+    And SP "Stepup Gateway" signs its requests
+    And the IdP "Dummy-IdP" sends attribute "urn:mace:dir:attribute-def:eduPersonAffiliation" with values "foobar,test" and xsi:type is "xs:string"
+    And SP "Stepup Gateway" has the following Attribute Manipulation:
+      """
+      $attributes['tps-are-applied-first'] = ['true'];
+      """
+    And SP "Stepup SelfService" has the following Attribute Manipulation:
+      """
+      $attributes['tp-is-applied-first'] = [array_key_exists('tps-are-applied-first', $attributes) ? 'yes': 'no'];
+      """
+    When I log in at "Stepup Gateway"
+    And I select "Dummy-IdP" on the WAYF
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the response should contain "urn:mace:dir:attribute-def:eduPersonAffiliation"
+    And the response should contain "test"
+    And the response should contain "foobar"
+    And the response should not contain "faculty"
+    And the response should not contain "member"
+    When I give my consent
+    And I pass through EngineBlock
+    Then the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="tps-are-applied-first"]'
+    And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="tp-is-applied-first"]/saml:AttributeValue[text()="yes"]'
+
