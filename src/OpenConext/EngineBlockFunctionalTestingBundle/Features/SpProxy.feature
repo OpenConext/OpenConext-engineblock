@@ -34,11 +34,21 @@ Feature:
      And I should not see "StepUpOnlyAuth"
 
   Scenario: User logs in to the proxy without a SP and wayf shows relevant Identity Providers
-     When I log in at "Step Up"
-     Then I should see "AlwaysAuth"
-      And I should see "CombinedAuth"
-      And I should see "StepUpOnlyAuth"
-      And I should not see "LoaOnlyAuth"
+    When I log in at "Step Up"
+    Then I should see "AlwaysAuth"
+    And I should see "CombinedAuth"
+    And I should see "StepUpOnlyAuth"
+    And I should not see "LoaOnlyAuth"
+
+  Scenario: User logs in to the trusted proxy, wayf shows relevant Identity Providers
+    Given SP "Step Up" is authenticating for SP "Loa SP"
+    And SP "Step Up" is a trusted proxy
+    And SP "Step Up" signs its requests
+    When I log in at "Step Up"
+    Then I should see "AlwaysAuth"
+    And I should see "CombinedAuth"
+    And I should not see "StepUpOnlyAuth"
+    And I should not see "LoaOnlyAuth"
 
   Scenario: User logs in via untrusted proxy accesses discovery for unknown SP
     Given SP "Step Up" is authenticating and uses RequesterID "https://example.edu/saml2/metadata"
@@ -187,6 +197,22 @@ Feature:
       And I pass through EngineBlock
      Then the response should not contain "urn:mace:dir:attribute-def:uid"
       And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+
+  Scenario: Stepup authentication should be supported if set through PDP when End-SP is behind TP
+    Given SP "Step Up" is authenticating for SP "Loa SP"
+    And SP "Step Up" is a trusted proxy
+    And SP "Step Up" signs its requests
+    And SP "Step Up" does not require consent
+    And SP "Loa SP" does not require consent
+    And SP "Loa SP" requires a policy enforcement decision
+    And pdp gives a stepup obligation response for "http://vm.openconext.org/assurance/loa3"
+    When I log in at "Step Up"
+    And I select "AlwaysAuth" on the WAYF
+    And I pass through EngineBlock
+    And I pass through the IdP
+    And Stepup will successfully verify a user
+    And I pass through EngineBlock
+    Then the url should match "/functional-testing/Step%20Up/acs"
 
   Scenario: User logs in at test SP and via prod trusted proxy and is denied access
     Given SP "Step Up" is authenticating for SP "Test SP"
