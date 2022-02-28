@@ -47,7 +47,7 @@ Feature:
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-      And I should not see "Error - No access"
+      And I should not see "Error - Access denied"
 
   Scenario: Access is permitted because of a Not Applicable policy
     Given SP "Dummy SP" requires a policy enforcement decision
@@ -55,7 +55,7 @@ Feature:
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-      And I should not see "Error - No access"
+      And I should not see "Error - Access denied"
 
   Scenario: Access is denied because of a Deny policy, End-SP behind Trusted Proxy
     Given SP "Stepup SelfService" requires a policy enforcement decision
@@ -90,7 +90,7 @@ Feature:
     When I log in at "Stepup Gateway"
     And I pass through EngineBlock
     And I pass through the IdP
-    And I should not see "Error - No access"
+    And I should not see "Error - Access denied"
 
   Scenario: Access is permitted because of a Not Applicable policy, End-SP behind Trusted Proxy
     Given SP "Stepup SelfService" requires a policy enforcement decision
@@ -101,4 +101,4 @@ Feature:
     When I log in at "Stepup Gateway"
     And I pass through EngineBlock
     And I pass through the IdP
-    And I should not see "Error - No access"
+    And I should not see "Error - Access denied"
