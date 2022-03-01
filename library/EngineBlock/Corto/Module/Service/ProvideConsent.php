@@ -122,6 +122,9 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             );
             $this->logger->info('Raw HTTP request', array('http_request' => (string) $application->getHttpRequest()));
         }
+        // $serviceProviderMetadata will contain the metadata of the SP we'll be presenting to
+        // the user, either the directly connected SP, or in case of trusted proxy, the SP behind
+        // that proxy.
         $serviceProviderMetadata = $spMetadataChain[0];
 
         $attributes = $response->getAssertion()->getAttributes();
@@ -179,7 +182,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $amPriorToConsent = $featureConfiguration->isEnabled('eb.run_all_manipulations_prior_to_consent');
 
         // Show the correctly formatted nameId on the consent screen
-        $isPersistent = $serviceProvider->nameIdFormat === Constants::NAMEID_PERSISTENT;
+        $isPersistent = $serviceProviderMetadata->nameIdFormat === Constants::NAMEID_PERSISTENT;
 
         // Create a local copy of the NameID that is set on the response. We do not yet want to update the actual NameID
         // in the $response yet as this will cause side effects when saving the consent entry. The 'hashed user id'
@@ -194,7 +197,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             $nameId = $resolver->resolve(
                 $request,
                 $response,
-                $serviceProvider,
+                $serviceProviderMetadata,
                 $collabPersonIdValue
             );
         }
@@ -204,7 +207,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         // name id copy that is used to render the correct identifier on the consent page. If AM was already performed,
         // use the nameIdFormat from the nameId, and do not overwrite it with the SP's preferred format.
         if (!$amPriorToConsent) {
-            $nameId->setFormat($serviceProvider->nameIdFormat);
+            $nameId->setFormat($serviceProviderMetadata->nameIdFormat);
         }
 
         $html = $this->twig->render(
