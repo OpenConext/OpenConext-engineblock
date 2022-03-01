@@ -256,23 +256,8 @@ Modifies:
 - responseAttributes
 - EngineBlock_Saml2_ResponseAnnotationDecorator
 
-### SetNameId
-Sets the NameID on the Response
-
-Depends on:
-- EngineBlock_Saml2_NameIdResolver
-
-Uses:
-- EngineBlock_Saml2_ResponseAnnotationDecorator
-- EngineBlock_Saml2_AuthnRequestAnnotationDecorator
-- OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
-- collabPersonId
-
-Modifies:
-- EngineBlock_Saml2_ResponseAnnotationDecorator
-
-### AddEduPersonTargettedId
-Sets the EduPersonTargetedId (EPTI) attribute on the responseAttributes
+### AddIdentityAttributes
+Sets the NameID and/or the eduPersonTargetedId (EPTI) on the Response
 
 Depends on:
 - EngineBlock_Saml2_NameIdResolver
@@ -285,11 +270,12 @@ Uses:
 - collabPersonId
 
 Modifies:
+- EngineBlock_Saml2_ResponseAnnotationDecorator
 - responseAttributes
 
 ### AttributeReleasePolicy
 Applies the Attribute Release Policy determining which attributes may be released. This is the same Filter Command as
-detailed in the Input Filter. This is ran again for the EPTI.
+detailed in the Input Filter.
 
 Depends on:
 - MetadataRepository
@@ -303,6 +289,19 @@ Uses:
 
 Modifies:
 - responseAttributes
+
+### ApplyTrustedProxyBehaviour
+
+Iff there's a trusted proxy involved in the authentication, add a custom attribute
+`internal-collabPersonId` for consumption by the trusted proxy.
+
+Uses:
+- collabPersonId
+- OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
+
+Modifies:
+- responseAttributes
+
 
 ### DenormalizeAttributes
 If possible, convert all attributes with an urn:mace to their OID format (if known) and add these to the response. Only
