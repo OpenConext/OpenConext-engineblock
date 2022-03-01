@@ -16,6 +16,7 @@ Feature:
       And a Service Provider named "Far SP"
       And a Service Provider named "Test SP"
       And a Service Provider named "Second SP"
+      And an unregistered Service Provider named "Unregistered SP"
       And SP "Far SP" is not connected to IdP "CombinedAuth"
       And SP "Far SP" is not connected to IdP "LoaOnlyAuth"
       And SP "Far SP" is not connected to IdP "StepUpOnlyAuth"
@@ -222,6 +223,7 @@ Feature:
       And SP "Step Up" uses the Unspecified NameID format
     When I log in at "Step Up"
     Then I should see "Error - Unknown service"
+     And I should see "Proxy SP:"
 
   Scenario: User logs in via misconfigured trusted proxy and sees error
     Given SP "Step Up" is authenticating for misconfigured SP "Far SP"
@@ -229,6 +231,17 @@ Feature:
     And SP "Step Up" signs its requests
     When I log in at "Step Up"
     Then I should see "Error - Unknown service"
+
+  Scenario: User logs in via trusted proxy which requests unknown SP and sees error
+    Given SP "Step Up" is authenticating for SP "Unregistered SP"
+    And SP "Step Up" is a trusted proxy
+    And SP "Step Up" signs its requests
+    When I log in at "Step Up"
+    Then I should see "Error - Unknown service"
+     And I should see "UR ID:"
+     And I should see "EC:"
+     And I should see "SP:"
+     And I should see "Proxy SP:"
 
   Scenario: User logs in to two SPs via trusted proxy
    Given SP "Step Up" is authenticating for SP "Loa SP"
