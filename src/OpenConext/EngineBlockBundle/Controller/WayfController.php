@@ -36,17 +36,24 @@ class WayfController
      * @var Twig_Environment
      */
     private $twig;
+    /**
+     * @var SsoSessionService
+     */
+    private $sessionService;
 
     /**
      * @param EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton
      * @param Twig_Environment $twig
+     * @param SsoSessionService $sessionService
      */
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        Twig_Environment $twig
+        Twig_Environment $twig,
+        SsoSessionService $sessionService
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->twig = $twig;
+        $this->sessionService = $sessionService;
     }
 
     /**
@@ -73,7 +80,7 @@ class WayfController
 
     private function getCookies(): array
     {
-        $cookies = array('main', 'rememberchoice', 'lang', 'selectedidps');
+        $cookies = ['main', 'rememberchoice', 'lang', 'selectedidps'];
 
         if ($this->engineBlockApplicationSingleton->getDiContainer()->getFeatureConfiguration()
             ->hasFeature("eb.enable_sso_session_cookie")) {
@@ -115,6 +122,9 @@ class WayfController
                         if (array_key_exists('remove_'.$cookie, $postData)) {
                             unset($cookiesSet[$cookie]);
                             $response->headers->clearCookie($cookie);
+                            if ($cookie === SsoSessionService::SSO_SESSION_COOKIE_NAME) {
+                                $this->sessionService->clearSsoSessionCookie();
+                            }
                             $removal = true;
                             break;
                         }

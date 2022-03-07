@@ -58,6 +58,7 @@ services:
         arguments:
             - "@engineblock.compat.application"
             - "@twig"
+            - "@engineblock.service.sso_session"
 
     engineblock.controller.authentication.proxy:
         class: OpenConext\EngineBlockBundle\Controller\ProxyController
