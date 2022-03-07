@@ -42,7 +42,7 @@ class CookieService
         string $path,
         string $domain,
         bool   $secure = true,
-        bool   $httpOnly = false
+        bool   $httpOnly = true
     ): bool {
         return setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
     }
@@ -62,7 +62,7 @@ class CookieService
         string $path,
         string $domain,
         bool   $secure = true,
-        bool   $httpOnly = false
+        bool   $httpOnly = true
     ): bool {
         return setcookie($name, '', -1, $path, $domain, $secure, $httpOnly);
     }
