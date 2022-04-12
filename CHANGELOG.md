@@ -5,6 +5,20 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.7.1
+**Feature**
+1. Introduce SSO Session Cookie support (feature flag defauls to _off_).
+   More information in [the feature documentation](./docs/sso_session_cookie.md).
+
+**Bugfixes**
+1. Fix the initial (pre-search) sorting of entities in the WAYF.
+1. In Consent, display NameID of the end-SP, not trusted proxy.
+1. Display correct information in error message for unknown proxied SP.
+
+**Maintenance**
+1. Improve test coverage for Trusted Proxy scenarios.
+1. Upgrade some npm packages.
+
 ## 6.7.0
 **Feature**
 
