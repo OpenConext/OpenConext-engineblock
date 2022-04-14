@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockBundle\Tests;
 use DateTime;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlockBundle\Configuration\Feature;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\Value\Saml\NameIdFormat;
@@ -186,6 +187,7 @@ final class ConsentControllerTest extends WebTestCase
         $serviceProvider->displayNameEn = 'My Test SP';
         $serviceProvider->displayNameNl = 'Mijn Test SP';
         $serviceProvider->displayNamePt = 'O Meu teste SP';
+        $serviceProvider->organizationEn = new Organization('Name', 'Organization Name', 'https://test.example.org');
         $serviceProvider->nameIdFormat = NameIdFormat::TRANSIENT_IDENTIFIER;
         $serviceProvider->supportUrlNl = 'https://my-test-sp.test/help-nl';
         $serviceProvider->supportUrlEn = 'https://my-test-sp.test/help-en';
@@ -227,6 +229,11 @@ final class ConsentControllerTest extends WebTestCase
                     'eula_url' => $serviceProvider->getCoins()->termsOfServiceUrl(),
                     'support_email' => $firstSupportContact->emailAddress,
                     'name_id_format' => $serviceProvider->nameIdFormat,
+                    'organization_display_name' => [
+                        'en' => $serviceProvider->organizationEn->displayName,
+                        'nl' => $serviceProvider->organizationEn->displayName,
+                        'pt' => $serviceProvider->organizationEn->displayName,
+                    ],
                 ],
                 'consent_type' => $consentType,
                 'consent_given_on' => (new DateTime($consentDate))->format(DATE_ATOM),
