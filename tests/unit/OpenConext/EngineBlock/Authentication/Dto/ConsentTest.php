@@ -25,19 +25,29 @@ use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Utils;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 
 class ConsentTest extends TestCase
 {
-    private function createServiceProvider()
+    private function createServiceProvider(array $organizations = [])
     {
         $supportContact = new ContactPerson('support');
         $supportContact->givenName = 'givenName';
         $supportContact->surName = 'surName';
         $supportContact->telephoneNumber = '+31612345678';
         $supportContact->emailAddress = 'mail@example.org';
+
+        $enOrg = new Organization('Organization name EN', 'Organization display name EN', 'https://org.example.com');
+        $nlOrg = new Organization('Organization name NL', 'Organization display name NL', 'https://org.example.nl');
+        $ptOrg = new Organization('Organization name PT', 'Organization display name PT', 'https://org.example.pt');
+        if (!empty($organizations)) {
+            $enOrg = $organizations['en'];
+            $nlOrg = $organizations['nl'];
+            $ptOrg = $organizations['pt'];
+        }
 
         $serviceProvider = Utils::instantiate(
             ServiceProvider::class,
@@ -52,6 +62,9 @@ class ConsentTest extends TestCase
                 'displayNameNl' => 'Display Name NL',
                 'termsOfServiceUrl' => 'https://example.org/eula',
                 'nameIdFormat' => Constants::NAMEID_TRANSIENT,
+                'organizationEn' => $enOrg,
+                'organizationNl' => $nlOrg,
+                'organizationPt' => $ptOrg,
             ]
         );
 
@@ -99,6 +112,37 @@ class ConsentTest extends TestCase
         $this->assertEquals($serviceProvider->getCoins()->termsOfServiceUrl(), $json['eula_url']);
         $this->assertEquals($serviceProvider->contactPersons[0]->emailAddress, $json['support_email']);
         $this->assertEquals($serviceProvider->nameIdFormat, $json['name_id_format']);
+        $this->assertEquals($serviceProvider->organizationEn->displayName, $json['organization_display_name']['en']);
+        $this->assertEquals($serviceProvider->organizationNl->displayName, $json['organization_display_name']['nl']);
+        $this->assertEquals($serviceProvider->organizationPt->displayName, $json['organization_display_name']['pt']);
+    }
+
+    /**
+     * @dataProvider provideOrganizations
+     */
+    public function test_display_name_of_organizations_works_as_intended(
+        array $organizations,
+        array $expectations,
+        string $errorMessage
+    ) {
+        $serviceProvider = $this->createServiceProvider($organizations);
+        $consentGivenOn = new DateTime('20080624 10:00:00');
+        $consentType = ConsentType::explicit();
+
+        $consent = new Consent(
+            new ConsentModel(
+                'user-id',
+                'entity-id',
+                $consentGivenOn,
+                $consentType
+            ),
+            $serviceProvider
+        );
+
+        $json = $consent->jsonSerialize()['service_provider']['organization_display_name'];
+        $this->assertEquals($expectations['en'], $json['en'], $errorMessage);
+        $this->assertEquals($expectations['nl'], $json['nl'], $errorMessage);
+        $this->assertEquals($expectations['pt'], $json['pt'], $errorMessage);
     }
 
     /**
@@ -169,6 +213,73 @@ class ConsentTest extends TestCase
 
         $this->assertEquals($serviceProvider->entityId, $json['service_provider']['display_name']['en']);
         $this->assertEquals($serviceProvider->entityId, $json['service_provider']['display_name']['nl']);
+    }
+
+    public function provideOrganizations()
+    {
+        $displayNameEn = 'Organization display name EN';
+        $nameEn = 'Organization name EN';
+        $unknownEn = 'unknown';
+        $displayNameNl = 'Organization display name NL';
+        $nameNl = 'Organization name NL';
+        $displayNamePt = 'Organization display name PT';
+        $namePt = 'Organization name PT';
+
+        $enOrg = new Organization($nameEn, $displayNameEn, 'https://org.example.com');
+        $nlOrg = new Organization($nameNl, $displayNameNl, 'https://org.example.com');
+        $ptOrg = new Organization($namePt, $displayNamePt, 'https://org.example.com');
+        $organizations = ['en' => $enOrg, 'nl' => $nlOrg, 'pt' => $ptOrg];
+        $expectation = ['en' => $displayNameEn, 'nl' => $displayNameNl, 'pt' => $displayNamePt];
+        $exceptionMessage = 'Failed asserting rule: If OrganizationDisplayName:L is set, return OrganizationDisplayName:L';
+        yield [$organizations, $expectation, $exceptionMessage];
+
+        $enOrg = new Organization($nameEn, '', 'https://org.example.com');
+        $nlOrg = new Organization($nameNl, '', 'https://org.example.com');
+        $ptOrg = new Organization($namePt, '', 'https://org.example.com');
+        $organizations = ['en' => $enOrg, 'nl' => $nlOrg, 'pt' => $ptOrg];
+        $expectation = ['en' => $nameEn, 'nl' => $nameNl, 'pt' => $namePt];
+        $exceptionMessage = 'Failed asserting rule: else if OrganizationName:L is set, returnOrganizationName:L';
+        yield [$organizations, $expectation, $exceptionMessage];
+
+        $enOrg = new Organization($nameEn, $displayNameEn, 'https://org.example.com');
+        $nlOrg = new Organization('', '', 'https://org.example.com');
+        $ptOrg = new Organization('', '', 'https://org.example.com');
+        $organizations = ['en' => $enOrg, 'nl' => $nlOrg, 'pt' => $ptOrg];
+        $expectation = ['en' => $displayNameEn, 'nl' => $displayNameEn, 'pt' => $displayNameEn];
+        $exceptionMessage = 'Failed asserting rule: else if OrganizationDisplayName:"en" is set, return OrganizationDisplayName:"en"';
+        yield [$organizations, $expectation, $exceptionMessage];
+
+        $enOrg = new Organization($nameEn, '', 'https://org.example.com');
+        $nlOrg = new Organization('', '', 'https://org.example.com');
+        $ptOrg = new Organization('', '', 'https://org.example.com');
+        $organizations = ['en' => $enOrg, 'nl' => $nlOrg, 'pt' => $ptOrg];
+        $expectation = ['en' => $nameEn, 'nl' => $nameEn, 'pt' => $nameEn];
+        $exceptionMessage = 'Failed asserting rule: else if OrganizationName:"en" is set, returnOrganizationName:"en"';
+        yield [$organizations, $expectation, $exceptionMessage];
+
+        $enOrg = new Organization('', '', 'https://org.example.com');
+        $nlOrg = new Organization('', '', 'https://org.example.com');
+        $ptOrg = new Organization('', '', 'https://org.example.com');
+        $organizations = ['en' => $enOrg, 'nl' => $nlOrg, 'pt' => $ptOrg];
+        $expectation = ['en' => $unknownEn, 'nl' => $unknownEn, 'pt' => $unknownEn];
+        $exceptionMessage = 'Failed asserting rule: else return "unknown"';
+        yield [$organizations, $expectation, $exceptionMessage];
+
+        $enOrg = new Organization($nameEn, '', 'https://org.example.com');
+        $nlOrg = new Organization('', $displayNameNl, 'https://org.example.com');
+        $ptOrg = new Organization('', '', 'https://org.example.com');
+        $organizations = ['en' => $enOrg, 'nl' => $nlOrg, 'pt' => $ptOrg];
+        $expectation = ['en' => $nameEn, 'nl' => $displayNameNl, 'pt' => $nameEn];
+        $exceptionMessage = 'Failed asserting rule: mixed';
+        yield [$organizations, $expectation, $exceptionMessage];
+
+        $enOrg = new Organization('', '', 'https://org.example.com');
+        $nlOrg = new Organization('', $displayNameNl, 'https://org.example.com');
+        $ptOrg = new Organization($namePt, '', 'https://org.example.com');
+        $organizations = ['en' => $enOrg, 'nl' => $nlOrg, 'pt' => $ptOrg];
+        $expectation = ['en' => $unknownEn, 'nl' => $displayNameNl, 'pt' => $namePt];
+        $exceptionMessage = 'Failed asserting rule: mixed EN is unknown';
+        yield [$organizations, $expectation, $exceptionMessage];
     }
 
     private function setCoin(ServiceProvider $sp, $key, $name)
