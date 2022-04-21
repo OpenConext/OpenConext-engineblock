@@ -18,21 +18,16 @@
 
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
-use InvalidArgumentException;
-use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
-use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
-use OpenConext\EngineBlockBundle\Exception\InvalidArgumentException as EngineBlockInvalidArgumentException;
+use OpenConext\EngineBlockBundle\Factory\CollabPersonIdFactory;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlock\Service\DeprovisionService;
-use OpenConext\EngineBlockBundle\Http\Exception\ApiInternalServerErrorHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use function sprintf;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -88,7 +83,7 @@ final class DeprovisionController
         $this->assertDeprovisionApiIsEnabled();
         $this->assertUserHasDeprovisionRole();
 
-        $id = $this->createCollabPersonIdValueObject($collabPersonId);
+        $id = CollabPersonIdFactory::create($collabPersonId);
 
         $userData = $this->deprovisionService->read($id);
 
@@ -111,50 +106,10 @@ final class DeprovisionController
         $this->assertUserHasDeprovisionRole();
 
         $userData = $this->deprovisionService->read(
-            $this->createCollabPersonIdValueObject($collabPersonId)
+            CollabPersonIdFactory::create($collabPersonId)
         );
 
         return $this->createResponse('OK', $userData);
-    }
-
-
-    public function removeAction(Request $request): JsonResponse
-    {
-        if (!$request->isMethod(Request::METHOD_POST)) {
-            throw ApiMethodNotAllowedHttpException::methodNotAllowed($request->getMethod(), [Request::METHOD_POST]);
-        }
-
-        if (!$this->featureConfiguration->isEnabled('api.consent_remove')) {
-            throw new ApiNotFoundHttpException('Consent remove API is disabled');
-        }
-
-        if (!$this->authorizationChecker->isGranted('ROLE_API_USER_PROFILE')) {
-            throw new ApiAccessDeniedHttpException(
-                'Access to the consent removal API requires the role ROLE_API_USER_PROFILE'
-            );
-        }
-
-        $userId = $request->get('collabPersonId', false);
-        $serviceProviderEntityId = $request->get('serviceProviderEntityId', false);
-        if (!$userId || !$serviceProviderEntityId) {
-            throw new EngineBlockInvalidArgumentException('The required data for removing the consent is not present in the request parameters');
-        }
-
-        try {
-            $user = $this->createCollabPersonIdValueObject($userId);
-            $removed = $this->deprovisionService->deleteOneConsentFor($user, $serviceProviderEntityId);
-        } catch (RuntimeException $e) {
-            throw new ApiInternalServerErrorHttpException(
-                sprintf(
-                    'An unknown error occurred while removing a service the user has given consent for to ' .
-                    'release attributes to ("%s")',
-                    $e->getMessage()
-                ),
-                $e
-            );
-        }
-
-        return new JsonResponse($removed, Response::HTTP_OK);
     }
 
     /**
@@ -213,26 +168,6 @@ final class DeprovisionController
         if (!$this->authorizationChecker->isGranted('ROLE_API_USER_DEPROVISION')) {
             throw new ApiAccessDeniedHttpException(
                 'Access to the content listing API requires the role ROLE_API_USER_DEPROVISION'
-            );
-        }
-    }
-
-    /**
-     * @param string $id
-     * @return CollabPersonId
-     *
-     * @throws ApiNotFoundHttpException
-     */
-    private function createCollabPersonIdValueObject($id)
-    {
-        try {
-            return new CollabPersonId($id);
-        } catch (InvalidArgumentException $e) {
-            throw new ApiNotFoundHttpException(
-                sprintf(
-                    'User ID is not valid: "%s"',
-                    $e->getMessage()
-                )
             );
         }
     }

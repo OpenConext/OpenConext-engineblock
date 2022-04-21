@@ -25,7 +25,7 @@ api_consent_user:
 api_remove_consent_user:
     path:    /remove-consent
     defaults:
-        _controller: engineblock.controller.api.deprovision:removeAction
+        _controller: engineblock.controller.api.consent:removeAction
         _format: json
 
 api_deprovision_delete_user_data_dry_run:
