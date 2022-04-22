@@ -5,6 +5,13 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.7.2
+**Feature**
+1. The consent API (used by Profile) now additionally returns the SP's organization name in the `organization_display_name` key.
+
+**Maintenance**
+1. Upgrade some npm packages.
+
 ## 6.7.1
 **Feature**
 1. Introduce SSO Session Cookie support (feature flag defauls to _off_).
