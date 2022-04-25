@@ -67,6 +67,8 @@ final class DbalConsentRepository implements ConsentRepository
                 consent
             WHERE
                 hashed_user_id=:hashed_user_id
+            AND
+                ISNULL(deleted_at)
         ';
 
         try {
@@ -119,9 +121,17 @@ final class DbalConsentRepository implements ConsentRepository
      */
     public function deleteOneFor(string $userId, string $serviceProviderEntityId): bool
     {
-        # Todo: change to soft delete
-        $sql = 'DELETE FROM consent WHERE hashed_user_id = :hashed_user_id AND service_id = :service_id ';
-
+        $sql = '
+            UPDATE
+                consent
+            SET
+                deleted_at = NOW()
+            WHERE
+                hashed_user_id = :hashed_user_id
+            AND
+                service_id = :service_id
+            AND ISNULL(deleted_at)
+        ';
         try {
             $result = $this->connection->executeQuery(
                 $sql,
