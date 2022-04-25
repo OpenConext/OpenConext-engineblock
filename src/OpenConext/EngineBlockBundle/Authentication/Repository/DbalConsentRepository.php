@@ -25,7 +25,6 @@ use OpenConext\EngineBlock\Authentication\Model\Consent;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 use OpenConext\EngineBlock\Exception\RuntimeException;
-use PDepend\Util\Log;
 use PDO;
 use Psr\Log\LoggerInterface;
 use function sha1;
@@ -141,7 +140,8 @@ final class DbalConsentRepository implements ConsentRepository
                 ]
             );
             $this->logger->info(
-                sprintf('Removed (soft delete) consent for hashed user id %s (%s), for service %s',
+                sprintf(
+                    'Removed (soft delete) consent for hashed user id %s (%s), for service %s',
                     sha1($userId),
                     $userId,
                     $serviceProviderEntityId
