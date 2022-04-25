@@ -144,20 +144,6 @@ final class DeprovisionService implements DeprovisionServiceInterface
         }
     }
 
-
-    public function deleteOneConsentFor(CollabPersonId $id, string $serviceProviderEntityId): bool
-    {
-        try {
-            return $this->consentRepository->deleteOneFor($id->getCollabPersonId(), $serviceProviderEntityId);
-        } catch (Exception $e) {
-            throw new RuntimeException(
-                sprintf('An exception occurred while removing consent for a service provider("%s")', $e->getMessage()),
-                0,
-                $e
-            );
-        }
-    }
-
     /**
      * @param CollabPersonId $id
      */

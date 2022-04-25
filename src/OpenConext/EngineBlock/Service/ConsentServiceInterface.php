@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlock\Service;
 
 use OpenConext\EngineBlock\Authentication\Dto\ConsentList;
+use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 
 interface ConsentServiceInterface
 {
@@ -33,4 +34,6 @@ interface ConsentServiceInterface
      * @return int
      */
     public function countAllFor($userId);
+
+    public function deleteOneConsentFor(CollabPersonId $id, string $serviceProviderEntityId): bool;
 }

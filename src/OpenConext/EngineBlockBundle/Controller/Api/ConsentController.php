@@ -116,7 +116,7 @@ final class ConsentController
 
         try {
             $user = CollabPersonIdFactory::create($userId);
-            $removed = $this->deprovisionService->deleteOneConsentFor($user, $serviceProviderEntityId);
+            $removed = $this->consentService->deleteOneConsentFor($user, $serviceProviderEntityId);
         } catch (RuntimeException $e) {
             throw new ApiInternalServerErrorHttpException(
                 sprintf(

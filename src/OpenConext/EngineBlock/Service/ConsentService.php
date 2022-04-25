@@ -23,9 +23,11 @@ use OpenConext\EngineBlock\Authentication\Dto\Consent;
 use OpenConext\EngineBlock\Authentication\Dto\ConsentList;
 use OpenConext\EngineBlock\Authentication\Model\Consent as ConsentEntity;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
+use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\Value\Saml\EntityId;
 use Psr\Log\LoggerInterface;
+use function sprintf;
 
 final class ConsentService implements ConsentServiceInterface
 {
@@ -90,6 +92,19 @@ final class ConsentService implements ConsentServiceInterface
         }
 
         return count($consents);
+    }
+
+    public function deleteOneConsentFor(CollabPersonId $id, string $serviceProviderEntityId): bool
+    {
+        try {
+            return $this->consentRepository->deleteOneFor($id->getCollabPersonId(), $serviceProviderEntityId);
+        } catch (Exception $e) {
+            throw new RuntimeException(
+                sprintf('An exception occurred while removing consent for a service provider("%s")', $e->getMessage()),
+                0,
+                $e
+            );
+        }
     }
 
     /**
