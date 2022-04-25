@@ -18,13 +18,13 @@
 
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
+use OpenConext\EngineBlock\Service\MetadataServiceInterface;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
 use OpenConext\EngineBlockBundle\Http\Response\JsonResponse;
-use OpenConext\EngineBlock\Service\MetadataService;
 use OpenConext\EngineBlockBundle\Http\Response\JsonHelper;
 use OpenConext\Value\Exception\InvalidArgumentException;
 use OpenConext\Value\Saml\EntityId;
@@ -38,7 +38,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 final class MetadataController
 {
     /**
-     * @var MetadataService
+     * @var MetadataServiceInterface
      */
     private $metadataService;
 
@@ -55,7 +55,7 @@ final class MetadataController
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         FeatureConfiguration $featureConfiguration,
-        MetadataService $metadataService
+        MetadataServiceInterface $metadataService
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->featureConfiguration = $featureConfiguration;

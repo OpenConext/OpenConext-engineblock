@@ -48,7 +48,7 @@ final class ConsentService implements ConsentServiceInterface
 
     public function __construct(
         ConsentRepository $consentRepository,
-        MetadataService $metadataService,
+        MetadataServiceInterface $metadataService,
         LoggerInterface $logger
     ) {
         $this->consentRepository = $consentRepository;
