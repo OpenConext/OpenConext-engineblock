@@ -25,10 +25,13 @@ use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlockBundle\Configuration\Feature;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\Value\Saml\NameIdFormat;
+use PDOStatement;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use function json_decode;
+use function json_encode;
 
 final class ConsentControllerTest extends WebTestCase
 {
@@ -57,9 +60,14 @@ final class ConsentControllerTest extends WebTestCase
     {
         $userId = 'my-name-id';
 
-        $unauthenticatedClient = static::createClient();;
+        $unauthenticatedClient = static::createClient();
         $unauthenticatedClient->request('GET', 'https://engine-api.vm.openconext.org/consent/' . $userId);
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
+
+        $unauthenticatedClient = static::createClient();
+        $unauthenticatedClient->request('POST', 'https://engine-api.vm.openconext.org/remove-consent');
+        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
+
     }
 
     /**
@@ -175,6 +183,7 @@ final class ConsentControllerTest extends WebTestCase
         $attributeHash = 'abe55dff15fe253d91220e945cd0f2c5f4727430';
         $consentType = 'explicit';
         $consentDate = '2017-04-18 13:37:00';
+        $deletedAt = '0000-00-00 00:00:00';
 
         $technicalContact = new ContactPerson('technical');
         $technicalContact->emailAddress = 'technical@my-test-sp.test';
@@ -198,13 +207,13 @@ final class ConsentControllerTest extends WebTestCase
             $secondSupportContact,
         ];
 
-        $client = $client = static::createClient([], [
+        $client = static::createClient([], [
             'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
         ]);
 
         $this->addServiceProviderFixture($serviceProvider);
-        $this->addConsentFixture($userId, $spEntityId, $attributeHash, $consentType, $consentDate);
+        $this->addConsentFixture($userId, $spEntityId, $attributeHash, $consentType, $consentDate, $deletedAt);
 
         $client->request('GET', 'https://engine-api.vm.openconext.org/consent/' . $userId);
 
@@ -244,6 +253,229 @@ final class ConsentControllerTest extends WebTestCase
         $this->assertEquals($expectedData, $responseData);
     }
 
+    /**
+     * @test
+     * @group Api
+     * @group Consent
+     * @group Profile
+     */
+    public function consent_is_soft_deleted_from_the_consent_api()
+    {
+        $userId = 'urn:collab:person:institution-a:my-name-id';
+        $spEntityId = 'https://my-test-sp.test';
+        $attributeHash = 'abe55dff15fe253d91220e945cd0f2c5f4727430';
+        $consentType = 'explicit';
+        $consentDate = '2022-04-26 13:37:00';
+        $deletedAt = '0000-00-00 00:00:00';
+
+        $technicalContact = new ContactPerson('technical');
+        $technicalContact->emailAddress = 'technical@my-test-sp.test';
+        $firstSupportContact = new ContactPerson('support');
+        $firstSupportContact->emailAddress = 'first-support@my-test-sp.test';
+        $secondSupportContact = new ContactPerson('support');
+        $secondSupportContact->emailAddress = 'second-support@my-test-sp.test';
+
+        $serviceProvider = new ServiceProvider($spEntityId);
+        $serviceProvider->displayNameEn = 'My Test SP';
+        $serviceProvider->displayNameNl = 'Mijn Test SP';
+        $serviceProvider->displayNamePt = 'O Meu teste SP';
+        $serviceProvider->organizationEn = new Organization('Name', 'Organization Name', 'https://test.example.org');
+        $serviceProvider->nameIdFormat = NameIdFormat::TRANSIENT_IDENTIFIER;
+        $serviceProvider->supportUrlNl = 'https://my-test-sp.test/help-nl';
+        $serviceProvider->supportUrlEn = 'https://my-test-sp.test/help-en';
+        $serviceProvider->supportUrlPt = 'https://my-test-sp.test/help-pt';
+        $serviceProvider->contactPersons = [
+            $technicalContact,
+            $firstSupportContact,
+            $secondSupportContact,
+        ];
+
+        $client = static::createClient([], [
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+        ]);
+
+        $this->addServiceProviderFixture($serviceProvider);
+        $this->addConsentFixture($userId, $spEntityId, $attributeHash, $consentType, $consentDate, $deletedAt);
+
+        $data = json_encode(['collabPersonId' => $userId, 'serviceProviderEntityId' => $spEntityId]);
+        $client->request('POST', 'https://engine-api.vm.openconext.org/remove-consent', [], [], [], $data);
+        $this->assertStatusCode(Response::HTTP_OK, $client);
+        $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
+        $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
+        $dbResults = $this->findConsentByUserIdAndSPEntityId($userId, $spEntityId);
+        // The consent row has been soft deleted, as proven by the deleted_at having a date time value
+        $this->assertCount(1, $dbResults);
+        $this->assertNotEquals('0000-00-00 00:00:00', $dbResults[0]['deleted_at']);
+        $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $dbResults[0]['deleted_at']);
+        $this->assertInstanceOf(DateTime::class, $dateTime);
+        $this->assertNotNull($dbResults[0]['deleted_at']);
+    }
+
+    /**
+     * @test
+     * @group Api
+     * @group Consent
+     * @group Profile
+     */
+    public function consent_is_soft_deleted_from_the_consent_api_multiple_soft_deletions()
+    {
+        $userId = 'urn:collab:person:institution-a:my-name-id';
+        $spEntityId = 'https://my-test-sp.test';
+        $attributeHash = 'abe55dff15fe253d91220e945cd0f2c5f4727430';
+        $consentType = 'explicit';
+        $consentDate = '2022-04-26 13:37:00';
+        $deletedAt = '0000-00-00 00:00:00';
+
+        $technicalContact = new ContactPerson('technical');
+        $technicalContact->emailAddress = 'technical@my-test-sp.test';
+        $firstSupportContact = new ContactPerson('support');
+        $firstSupportContact->emailAddress = 'first-support@my-test-sp.test';
+        $secondSupportContact = new ContactPerson('support');
+        $secondSupportContact->emailAddress = 'second-support@my-test-sp.test';
+
+        $serviceProvider = new ServiceProvider($spEntityId);
+        $serviceProvider->displayNameEn = 'My Test SP';
+        $serviceProvider->displayNameNl = 'Mijn Test SP';
+        $serviceProvider->displayNamePt = 'O Meu teste SP';
+        $serviceProvider->organizationEn = new Organization('Name', 'Organization Name', 'https://test.example.org');
+        $serviceProvider->nameIdFormat = NameIdFormat::TRANSIENT_IDENTIFIER;
+        $serviceProvider->supportUrlNl = 'https://my-test-sp.test/help-nl';
+        $serviceProvider->supportUrlEn = 'https://my-test-sp.test/help-en';
+        $serviceProvider->supportUrlPt = 'https://my-test-sp.test/help-pt';
+        $serviceProvider->contactPersons = [
+            $technicalContact,
+            $firstSupportContact,
+            $secondSupportContact,
+        ];
+
+        $client = static::createClient([], [
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+        ]);
+
+        $this->addServiceProviderFixture($serviceProvider);
+        $this->addConsentFixture($userId, $spEntityId, $attributeHash, $consentType, $consentDate, $deletedAt);
+        $this->addConsentFixture($userId, $spEntityId, $attributeHash, $consentType, '2021-09-21 13:37:00', '2021-10-21 13:37:00');
+        $this->addConsentFixture($userId, $spEntityId, $attributeHash, $consentType, '2021-09-21 13:37:00', '2020-10-21 13:37:00');
+
+        $dbResults = $this->findConsentByUserIdAndSPEntityId($userId, $spEntityId);
+        // Three consent rows are retrieved
+        $this->assertCount(3, $dbResults);
+        $count = $this->countConsentRemovals($dbResults);
+        $this->assertEquals(1, $count['active']);
+        $this->assertEquals(2, $count['removed']);
+        $data = json_encode(['collabPersonId' => $userId, 'serviceProviderEntityId' => $spEntityId]);
+        $client->request('POST', 'https://engine-api.vm.openconext.org/remove-consent', [], [], [], $data);
+        $this->assertStatusCode(Response::HTTP_OK, $client);
+        $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
+        $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
+        $dbResults = $this->findConsentByUserIdAndSPEntityId($userId, $spEntityId);
+        // Three consent rows are retrieved
+        $this->assertCount(3, $dbResults);
+        $count = $this->countConsentRemovals($dbResults);
+        $this->assertEquals(0, $count['active']);
+        $this->assertEquals(3, $count['removed']);
+    }
+
+    /**
+     * @test
+     * @group Api
+     * @group Consent
+     * @group FeatureToggle
+     */
+    public function cannot_access_the_remove_consent_api_if_the_feature_has_been_disabled()
+    {
+        $collabPersonId = 'urn:collab:person:test';
+
+        $client = static::createClient([], [
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
+        ]);
+
+        $this->disableRemoveConsentApiFeatureFor($client);
+
+        $data = json_encode(['collabPersonId' => $collabPersonId, 'serviceProviderEntityId' => 'https://example.com/metadata']);
+        $client->request('POST', 'https://engine-api.vm.openconext.org/remove-consent', [], [], [], $data);
+
+        $this->assertStatusCode(Response::HTTP_NOT_FOUND, $client);
+        $this->assertResponseIsJson($client);
+    }
+
+    /**
+     * @param Client $client
+     */
+    private function disableRemoveConsentApiFeatureFor(Client $client)
+    {
+        $featureToggles = new FeatureConfiguration([
+            'api.consent_remove' => new Feature('api.consent_remove', false)
+        ]);
+        $client->getContainer()->set('engineblock.features', $featureToggles);
+    }
+
+    /**
+     * @test
+     * @group Api
+     * @group Consent
+     */
+    public function cannot_access_the_remove_consent_api_if_user_does_not_have_profile_role()
+    {
+        $collabPersonId = 'urn:collab:person:test';
+
+        $client = static::createClient([], [
+            'PHP_AUTH_USER' => 'no_roles',
+            'PHP_AUTH_PW' => 'no_roles',
+        ]);
+
+        $data = json_encode(['collabPersonId' => $collabPersonId, 'serviceProviderEntityId' => 'https://example.com/metadata']);
+        $client->request('POST', 'https://engine-api.vm.openconext.org/remove-consent', [], [], [], $data);
+
+        $this->assertStatusCode(Response::HTTP_FORBIDDEN, $client);
+        $this->assertResponseIsJson($client);
+    }
+
+    /**
+     * @test
+     * @group Api
+     * @group Consent
+     */
+    public function no_consent_is_removed_if_request_parameters_are_missing_or_incorrect()
+    {
+        $client = static::createClient([], [
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+        ]);
+
+        $data = json_encode(['userId' => 'urn:collab:person:test', 'serviceProviderId' => 'https://example.com/metadata']);
+        $client->request('POST', 'https://engine-api.vm.openconext.org/remove-consent', [], [], [], $data);
+
+        $this->assertStatusCode(Response::HTTP_FOUND, $client);
+        $this->assertResponseIsJson($client);
+    }
+
+    /**
+     * @test
+     * @group Api
+     * @group Consent
+     */
+    public function no_consent_is_removed_if_collab_person_id_is_unknown()
+    {
+        $client = static::createClient([], [
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+        ]);
+
+        $data = json_encode(['collabPersonId' => 'urn:collab:person:test', 'serviceProviderEntityId' => 'https://example.com/metadata']);
+        $client->request('POST', 'https://engine-api.vm.openconext.org/remove-consent', [], [], [], $data);
+
+        $this->assertStatusCode(Response::HTTP_OK, $client);
+        $this->assertResponseIsJson($client);
+
+        $responseData = json_decode($client->getResponse()->getContent(), true);
+
+        $this->assertSame(false, $responseData);
+    }
+
     public function invalidHttpMethodProvider()
     {
         return [
@@ -275,7 +507,7 @@ final class ConsentControllerTest extends WebTestCase
         $container->set('engineblock.features', $featureToggles);
     }
 
-    private function addConsentFixture($userId, $serviceId, $attributeHash, $consentType, $consentDate)
+    private function addConsentFixture($userId, $serviceId, $attributeHash, $consentType, $consentDate, $deletedAt)
     {
         $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         $queryBuilder
@@ -286,6 +518,7 @@ final class ConsentControllerTest extends WebTestCase
                 'attribute'      => ':attribute',
                 'consent_type'   => ':consent_type',
                 'consent_date'   => ':consent_date',
+                'deleted_at'   => ':deleted_at',
             ])
             ->setParameters([
                 ':user_id'      => sha1($userId),
@@ -293,8 +526,28 @@ final class ConsentControllerTest extends WebTestCase
                 ':attribute'    => $attributeHash,
                 ':consent_type' => $consentType,
                 ':consent_date' => $consentDate,
+                ':deleted_at' => $deletedAt,
             ])
             ->execute();
+    }
+
+    private function findConsentByUserIdAndSPEntityId(string $collabPersonId, string $spEntityId): array
+    {
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $queryBuilder */
+        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('*')
+            ->from('consent')
+            ->where('hashed_user_id = :userId')
+            ->andWhere('service_id = :serviceId')
+            ->setParameters([
+                ':userId' => sha1($collabPersonId),
+                ':serviceId' => $spEntityId
+            ]);
+
+        /** @var PDOStatement $statement */
+        $statement = $queryBuilder->execute();
+        return (array) $statement->fetchAll();
     }
 
     private function addServiceProviderFixture(ServiceProvider $serviceProvider)
@@ -318,5 +571,28 @@ final class ConsentControllerTest extends WebTestCase
         $queryBuilder
             ->delete('consent')
             ->execute();
+    }
+
+    private function countConsentRemovals(array $dbResults): array
+    {
+        $removedCount = 0;
+        $activeCount = 0;
+        foreach ($dbResults as $consentRow) {
+            if ($consentRow['deleted_at'] === '0000-00-00 00:00:00') {
+                $activeCount++;
+            } else {
+                $removedCount++;
+            }
+        }
+        return [
+            'removed' => $removedCount,
+            'active' => $activeCount,
+        ];
+    }
+
+    private function assertResponseIsJson(Client $client)
+    {
+        $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
+        $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 }

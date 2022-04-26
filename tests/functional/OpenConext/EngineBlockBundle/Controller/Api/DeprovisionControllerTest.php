@@ -44,23 +44,19 @@ final class DeprovisionControllerTest extends WebTestCase
     {
         $collabPersonId = 'urn:collab:person:test';
 
-        $unauthenticatedClient = static::createClient();;
+        $unauthenticatedClient = static::createClient();
         $unauthenticatedClient->request('GET', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId);
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
 
-        $unauthenticatedClient = static::createClient();;
+        $unauthenticatedClient = static::createClient();
         $unauthenticatedClient->request('DELETE', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId);
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
 
-        $unauthenticatedClient = static::createClient();;
+        $unauthenticatedClient = static::createClient();
         $unauthenticatedClient->request('DELETE', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId . '/dry-run');
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
 
-        $unauthenticatedClient = static::createClient();;
-        $unauthenticatedClient->request('GET', 'https://engine-api.vm.openconext.org/remove-consent');
-        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
-
-        $unauthenticatedClient = static::createClient();;
+        $unauthenticatedClient = static::createClient();
         $unauthenticatedClient->request('DELETE', 'https://engine-api.vm.openconext.org/remove-consent');
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
     }
@@ -118,33 +114,6 @@ final class DeprovisionControllerTest extends WebTestCase
      * @test
      * @group Api
      * @group Deprovision
-     * @group FeatureToggle
-     */
-    public function cannot_access_the_remove_consent_api_if_the_feature_has_been_disabled()
-    {
-        $collabPersonId = 'urn:collab:person:test';
-
-        $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
-        ]);
-
-        $this->disableRemoveConsentApiFeatureFor($client);
-
-        $client->request(
-            'POST',
-            'https://engine-api.vm.openconext.org/remove-consent',
-            ['collabPersonId' => $collabPersonId, 'serviceProviderEntityId' => 'https://example.com/metadata']
-        );
-
-        $this->assertStatusCode(Response::HTTP_NOT_FOUND, $client);
-        $this->assertResponseIsJson($client);
-    }
-
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
      */
     public function cannot_access_the_deprovision_api_if_user_does_not_have_deprovision_role()
     {
@@ -156,30 +125,6 @@ final class DeprovisionControllerTest extends WebTestCase
         ]);
 
         $client->request('GET', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId);
-
-        $this->assertStatusCode(Response::HTTP_FORBIDDEN, $client);
-        $this->assertResponseIsJson($client);
-    }
-
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     */
-    public function cannot_access_the_remove_consent_api_if_user_does_not_have_deprovision_role()
-    {
-        $collabPersonId = 'urn:collab:person:test';
-
-        $client = static::createClient([], [
-            'PHP_AUTH_USER' => 'no_roles',
-            'PHP_AUTH_PW' => 'no_roles',
-        ]);
-
-        $client->request(
-            'POST',
-            'https://engine-api.vm.openconext.org/remove-consent',
-            ['collabPersonId' => $collabPersonId, 'serviceProviderEntityId' => 'https://example.com/metadata']
-        );
 
         $this->assertStatusCode(Response::HTTP_FORBIDDEN, $client);
         $this->assertResponseIsJson($client);
@@ -213,54 +158,6 @@ final class DeprovisionControllerTest extends WebTestCase
         $responseData = json_decode($client->getResponse()->getContent(), true);
 
         $this->assertSame($expectedData, $responseData);
-    }
-
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     */
-    public function no_consent_is_removed_if_request_parameters_are_missing_or_incorrect()
-    {
-        $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
-        ]);
-
-        $client->request(
-            'POST',
-            'https://engine-api.vm.openconext.org/remove-consent',
-            ['userId' => 'urn:collab:person:test', 'serviceProviderId' => 'https://example.com/metadata']
-        );
-
-        $this->assertStatusCode(Response::HTTP_FOUND, $client);
-        $this->assertResponseIsJson($client);
-    }
-
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     */
-    public function no_consent_is_removed_if_collab_person_id_is_unknown()
-    {
-        $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
-        ]);
-
-        $client->request(
-            'POST',
-            'https://engine-api.vm.openconext.org/remove-consent',
-            ['collabPersonId' => 'urn:collab:person:test', 'serviceProviderEntityId' => 'https://example.com/metadata']
-        );
-
-        $this->assertStatusCode(Response::HTTP_OK, $client);
-        $this->assertResponseIsJson($client);
-
-        $responseData = json_decode($client->getResponse()->getContent(), true);
-
-        $this->assertSame(false, $responseData);
     }
 
     /**
@@ -388,60 +285,6 @@ final class DeprovisionControllerTest extends WebTestCase
     }
 
     /**
-     * Test the deprovisioning API.
-     *
-     * This test calls every possible API method and programatically checks if
-     * the correct data is deleted and/or returned.
-     *
-     * Reads the information but does not delete it:
-     *
-     *  - GET /deprovision/{collab_person_id}
-     *  - DELETE /deprovision/{collab_person_id}/dry-run
-     *
-     * Reads the information AND deletes it:
-     *
-     *  - DELETE /deprovision/{collab_person_id}
-     *
-     * @test
-     * @group Api
-     * @group Deprovision
-     */
-    public function consent_can_be_removed_by_userid_and_service_provicer_entity_id()
-    {
-        $userId = 'urn:collab:person:test';
-        $userUuid = '550e8400-e29b-41d4-a716-446655440000';
-        $spEntityId1 = 'https://my-first-sp.test';
-        $spUuid1 = 'd5f4944e-d929-48d7-a781-111111111111';
-        $persistentId1 = 'persistent-id-1';
-        $attributeHash = 'abe55dff15fe253d91220e945cd0f2c5f4727430';
-        $consentType = 'explicit';
-        $consentDate = '2017-04-18 13:37:00';
-
-        $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
-        ]);
-
-        $this->addServiceProviderUuidFixture($spUuid1, $spEntityId1);
-        $this->addUserFixture($userId, $userUuid);
-        $this->addSamlPersistentIdFixture($userUuid, $spUuid1, $persistentId1);
-        $this->addConsentFixture($userId, $spEntityId1, $attributeHash, $consentType, $consentDate);
-
-        $client->request(
-            'POST',
-            'https://engine-api.vm.openconext.org/remove-consent',
-            [
-                'collabPersonId' => 'urn:collab:person:test',
-                'serviceProviderEntityId' => 'https://my-first-sp.test'
-            ]
-        );
-        $this->assertStatusCode(Response::HTTP_OK, $client);
-        $this->assertResponseIsJson($client);
-        $responseData = json_decode($client->getResponse()->getContent(), true);
-        $this->assertEquals(true, $responseData);
-    }
-
-    /**
      * @return array
      */
     public function provideDeprovisionEndpoints()
@@ -471,17 +314,6 @@ final class DeprovisionControllerTest extends WebTestCase
     {
         $featureToggles = new FeatureConfiguration([
             'api.deprovision' => new Feature('api.deprovision', false)
-        ]);
-        $client->getContainer()->set('engineblock.features', $featureToggles);
-    }
-
-    /**
-     * @param Client $client
-     */
-    private function disableRemoveConsentApiFeatureFor(Client $client)
-    {
-        $featureToggles = new FeatureConfiguration([
-            'api.consent_remove' => new Feature('api.consent_remove', false)
         ]);
         $client->getContainer()->set('engineblock.features', $featureToggles);
     }
@@ -567,6 +399,7 @@ final class DeprovisionControllerTest extends WebTestCase
                 'attribute'      => ':attribute',
                 'consent_type'   => ':consent_type',
                 'consent_date'   => ':consent_date',
+                'deleted_at'   => '"0000-00-00 00:00:00"',
             ])
             ->setParameters([
                 ':user_id'      => sha1($userId),
@@ -595,13 +428,9 @@ final class DeprovisionControllerTest extends WebTestCase
             ->execute();
     }
 
-    /**
-     * @param Client $client
-     */
     private function assertResponseIsJson(Client $client)
     {
         $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
-
 }
