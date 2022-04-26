@@ -31,6 +31,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use function array_key_exists;
 use function sprintf;
 
 /**
@@ -110,12 +111,16 @@ final class ConsentController
                 'Access to the consent removal API requires the role ROLE_API_USER_PROFILE'
             );
         }
-
-        $userId = $request->get('collabPersonId', false);
-        $serviceProviderEntityId = $request->get('serviceProviderEntityId', false);
-        if (!$userId || !$serviceProviderEntityId) {
-            throw new EngineBlockInvalidArgumentException('The required data for removing the consent is not present in the request parameters');
+        // The data is posted json encoded from EngineBlock
+        $data = json_decode($request->getContent(), true);
+        if (!$data || !array_key_exists('collabPersonId', $data) || !array_key_exists('serviceProviderEntityId', $data)) {
+            throw new EngineBlockInvalidArgumentException(
+                'The required data for removing the consent is not present in the request parameters json'
+            );
         }
+
+        $userId = $data['collabPersonId'];
+        $serviceProviderEntityId = $data['serviceProviderEntityId'];
 
         try {
             $user = CollabPersonIdFactory::create($userId);
