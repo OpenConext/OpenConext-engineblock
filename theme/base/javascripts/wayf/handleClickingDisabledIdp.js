@@ -22,8 +22,10 @@ export const handleClickingDisabledIdp = (element) => {
   cloneOfIdp.setAttribute('tabindex', '-1');
   // change titleText of clone to represent state of clone
   cloneOfIdp.querySelector(`#${noAccessIdpTitleId}`).firstElementChild.innerHTML = getData(li, 'titlestart');
-  // remove form so the login button is not there
-  cloneOfIdp.querySelector(idpFormSelector).remove();
+  // remove form so the login button is not there, but only while the form is still in the clone
+  if (cloneOfIdp.querySelector(idpFormSelector)) {
+    cloneOfIdp.querySelector(idpFormSelector).remove();
+  }
   // hide disabled idp button from screenreaders
   cloneOfIdp.querySelector(idpDeleteDisabledSelector).setAttribute('aria-hidden', 'true');
   const connectable = getData(target, 'connectable') === 'true';
