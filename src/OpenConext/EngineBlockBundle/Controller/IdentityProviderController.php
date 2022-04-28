@@ -194,7 +194,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
                 $viewData
             );
 
-            return new Response($body);
+            return new Response($body, 400);
         }
 
         $postedVariables = $request->request;
