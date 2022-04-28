@@ -13,6 +13,7 @@
     {% if idp['isDefaultIdp'] %}id="defaultIdp"{% endif %}
     tabindex="0"
     data-entityid="{{ idp['entityId'] }}"
+    data-title="{{ idp['displayTitle'] }}"
 >
     <div class="idp__logo">
         {% if idp.logo is not null %}
