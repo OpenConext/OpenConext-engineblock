@@ -507,6 +507,64 @@ final class ConsentControllerTest extends WebTestCase
         $container->set('engineblock.features', $featureToggles);
     }
 
+    private function disableEngineConsentFeatureFor(Client $client)
+    {
+        $featureToggles = new FeatureConfiguration([
+            'eb.feature_enable_consent' => new Feature('eb.feature_enable_consent', false)
+        ]);
+        $container = $client->getContainer();
+        $container->set('engineblock.features', $featureToggles);
+    }
+
+    /**
+     * @test
+     * @group Api
+     * @group Consent
+     * @group FeatureToggle
+     */
+    public function cannot_access_the_consent_post_api_if_the_engineblock_consent_feature_has_been_disabled()
+    {
+        $collabPersonId = 'urn:collab:person:test';
+
+        $client = static::createClient([], [
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
+        ]);
+
+        $this->disableEngineConsentFeatureFor($client);
+
+        $data = json_encode(['collabPersonId' => $collabPersonId, 'serviceProviderEntityId' => 'https://example.com/metadata']);
+        $client->request('POST', 'https://engine-api.vm.openconext.org/remove-consent', [], [], [], $data);
+
+        $this->assertStatusCode(Response::HTTP_NOT_FOUND, $client);
+        $this->assertResponseIsJson($client);
+    }
+
+    /**
+     * @test
+     * @group Api
+     * @group Consent
+     * @group Profile
+     * @group FeatureToggle
+     */
+    public function cannot_access_the_consent_get_api_if_the_engineblock_consent_feature_has_been_disabled()
+    {
+        $userId = 'my-name-id';
+
+        $client = $client = static::createClient([], [
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+        ]);
+
+        $this->disableEngineConsentFeatureFor($client);
+
+        $client->request('GET', 'https://engine-api.vm.openconext.org/consent/' . $userId);
+        $this->assertStatusCode(Response::HTTP_NOT_FOUND, $client);
+
+        $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
+        $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
+    }
+
     private function addConsentFixture($userId, $serviceId, $attributeHash, $consentType, $consentDate, $deletedAt)
     {
         $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
