@@ -70,6 +70,10 @@ final class ConsentController
             throw ApiMethodNotAllowedHttpException::methodNotAllowed($request->getMethod(), [Request::METHOD_GET]);
         }
 
+        if (!$this->featureConfiguration->isEnabled('eb.feature_enable_consent')) {
+            throw new ApiNotFoundHttpException('Consent feature is disabled');
+        }
+
         if (!$this->featureConfiguration->isEnabled('api.consent_listing')) {
             throw new ApiNotFoundHttpException('Consent listing API is disabled');
         }
@@ -100,6 +104,10 @@ final class ConsentController
     {
         if (!$request->isMethod(Request::METHOD_POST)) {
             throw ApiMethodNotAllowedHttpException::methodNotAllowed($request->getMethod(), [Request::METHOD_POST]);
+        }
+
+        if (!$this->featureConfiguration->isEnabled('eb.feature_enable_consent')) {
+            throw new ApiNotFoundHttpException('Consent feature is disabled');
         }
 
         if (!$this->featureConfiguration->isEnabled('api.consent_remove')) {
