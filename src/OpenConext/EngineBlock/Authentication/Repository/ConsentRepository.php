@@ -37,4 +37,10 @@ interface ConsentRepository
     public function deleteAllFor($userId);
 
     public function deleteOneFor(string $userId, string $serviceProviderEntityId): bool;
+
+    public function hasConsentHash(array $parameters): bool;
+
+    public function storeConsentHash(array $parameters): bool;
+
+    public function countTotalConsent($consentUid): int;
 }

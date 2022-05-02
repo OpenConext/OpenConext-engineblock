@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlock\Service\Consent;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use PHPUnit\Framework\TestCase;
 
 class ConsentHashServiceTest extends TestCase
@@ -33,7 +34,7 @@ class ConsentHashServiceTest extends TestCase
 
     public function setUp()
     {
-        $mockConsentHashRepository = m::mock('OpenConext\EngineBlock\Service\Consent\ConsentHashRepository');
+        $mockConsentHashRepository = m::mock(ConsentRepository::class);
         $this->chs = new ConsentHashService($mockConsentHashRepository);
     }
 
