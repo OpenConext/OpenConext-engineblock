@@ -18,7 +18,7 @@
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
-use OpenConext\EngineBlock\Service\Consent\ConsentHashService;
+use OpenConext\EngineBlock\Service\ConsentHashServiceInterface;
 
 class EngineBlock_Corto_Model_Consent
 {
@@ -42,11 +42,6 @@ class EngineBlock_Corto_Model_Consent
     private $_responseAttributes;
 
     /**
-     * @var EngineBlock_Database_ConnectionFactory
-     */
-    private $_databaseConnectionFactory;
-
-    /**
      * A reflection of the eb.run_all_manipulations_prior_to_consent feature flag
      *
      * @var bool
@@ -61,7 +56,7 @@ class EngineBlock_Corto_Model_Consent
     private $_consentEnabled;
 
     /**
-     * @var ConsentHashService
+     * @var ConsentHashServiceInterface
      */
     private $_hashService;
 
@@ -73,16 +68,14 @@ class EngineBlock_Corto_Model_Consent
         bool $mustStoreValues,
         EngineBlock_Saml2_ResponseAnnotationDecorator $response,
         array $responseAttributes,
-        EngineBlock_Database_ConnectionFactory $databaseConnectionFactory,
         bool $amPriorToConsentEnabled,
         bool $consentEnabled,
-        ConsentHashService $hashService
+        ConsentHashServiceInterface $hashService
     ) {
         $this->_tableName = $tableName;
         $this->_mustStoreValues = $mustStoreValues;
         $this->_response = $response;
         $this->_responseAttributes = $responseAttributes;
-        $this->_databaseConnectionFactory = $databaseConnectionFactory;
         $this->_amPriorToConsentEnabled = $amPriorToConsentEnabled;
         $this->_hashService = $hashService;
         $this->_consentEnabled = $consentEnabled;
@@ -114,21 +107,8 @@ class EngineBlock_Corto_Model_Consent
 
     public function countTotalConsent(): int
     {
-        $dbh = $this->_getConsentDatabaseConnection();
-        if (!$dbh) {
-            return 0;
-        }
-
         $consentUid = $this->_getConsentUid();
-        return $this->_hashService->countTotalConsent($dbh, $consentUid);
-    }
-
-    /**
-     * @return bool|PDO
-     */
-    protected function _getConsentDatabaseConnection()
-    {
-        return $this->_databaseConnectionFactory->create();
+        return $this->_hashService->countTotalConsent($consentUid);
     }
 
     protected function _getConsentUid()
@@ -152,11 +132,6 @@ class EngineBlock_Corto_Model_Consent
 
     private function _storeConsent(ServiceProvider $serviceProvider, $consentType): bool
     {
-        $dbh = $this->_getConsentDatabaseConnection();
-        if (!$dbh) {
-            return false;
-        }
-
         $parameters = array(
             sha1($this->_getConsentUid()),
             $serviceProvider->entityId,
@@ -164,16 +139,11 @@ class EngineBlock_Corto_Model_Consent
             $consentType,
         );
 
-        return $this->_hashService->storeConsentHashInDb($dbh, $parameters);
+        return $this->_hashService->storeConsentHash($parameters);
     }
 
     private function _hasStoredConsent(ServiceProvider $serviceProvider, $consentType): bool
     {
-        $dbh = $this->_getConsentDatabaseConnection();
-        if (!$dbh) {
-            return false;
-        }
-
         $parameters = array(
             sha1($this->_getConsentUid()),
             $serviceProvider->entityId,
@@ -181,7 +151,7 @@ class EngineBlock_Corto_Model_Consent
             $consentType,
         );
 
-        $hasUnstableConsentHash = $this->_hashService->retrieveConsentHashFromDb($dbh, $parameters);
+        $hasUnstableConsentHash = $this->_hashService->retrieveConsentHash($parameters);
 
         if ($hasUnstableConsentHash) {
             return true;
@@ -194,6 +164,6 @@ class EngineBlock_Corto_Model_Consent
             $consentType,
         );
 
-        return $this->_hashService->retrieveConsentHashFromDb($dbh, $parameters);
+        return $this->_hashService->retrieveConsentHash($parameters);
     }
 }

@@ -33,7 +33,7 @@ use function sort;
 use function strtolower;
 use function unserialize;
 
-final class ConsentHashService
+final class ConsentHashService implements ConsentHashServiceInterface
 {
     /**
      * @var ConsentRepository
@@ -45,12 +45,12 @@ final class ConsentHashService
         $this->consentRepository = $consentHashRepository;
     }
 
-    public function retrieveConsentHashFromDb(array $parameters): bool
+    public function retrieveConsentHash(array $parameters): bool
     {
         return $this->consentRepository->hasConsentHash($parameters);
     }
 
-    public function storeConsentHashInDb(array $parameters): bool
+    public function storeConsentHash(array $parameters): bool
     {
         return $this->consentRepository->storeConsentHash($parameters);
     }

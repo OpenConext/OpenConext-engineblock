@@ -16,28 +16,33 @@
  * limitations under the License.
  */
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Service\ConsentHashServiceInterface;
 use PHPUnit\Framework\TestCase;
 
 class EngineBlock_Corto_Model_Consent_Test extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     private $consentDisabled;
     private $consent;
-    private $mockedDatabaseConnection;
+    private $consentService;
 
     public function setup()
     {
-        $this->mockedDatabaseConnection = Phake::mock('EngineBlock_Database_ConnectionFactory');
         $mockedResponse = Phake::mock('EngineBlock_Saml2_ResponseAnnotationDecorator');
+
+        $this->consentService = Mockery::mock(ConsentHashServiceInterface::class);
 
         $this->consentDisabled = new EngineBlock_Corto_Model_Consent(
             "consent",
             true,
             $mockedResponse,
             [],
-            $this->mockedDatabaseConnection,
             false,
-            false
+            false,
+            $this->consentService
         );
 
         $this->consent = new EngineBlock_Corto_Model_Consent(
@@ -45,31 +50,37 @@ class EngineBlock_Corto_Model_Consent_Test extends TestCase
             true,
             $mockedResponse,
             [],
-            $this->mockedDatabaseConnection,
             false,
-            true
+            true,
+            $this->consentService
         );
     }
 
     public function testConsentDisabledDoesNotWriteToDatabase()
     {
         $serviceProvider = new ServiceProvider("service-provider-entity-id");
+
+        $this->consentService->shouldReceive('getUnstableAttributesHash');
+        $this->consentService->shouldNotReceive('storeConsentHash');
         $this->consentDisabled->explicitConsentWasGivenFor($serviceProvider);
         $this->consentDisabled->implicitConsentWasGivenFor($serviceProvider);
         $this->consentDisabled->giveExplicitConsentFor($serviceProvider);
         $this->consentDisabled->giveImplicitConsentFor($serviceProvider);
-
-        Phake::verify($this->mockedDatabaseConnection, Phake::times(0))->create();
     }
 
     public function testConsentWriteToDatabase()
     {
         $serviceProvider = new ServiceProvider("service-provider-entity-id");
+
+        $this->consentService->shouldReceive('getUnstableAttributesHash')->andReturn(sha1('unstable'));
+        $this->consentService->shouldReceive('retrieveConsentHash')->andReturn(sha1('unstable'));
         $this->consent->explicitConsentWasGivenFor($serviceProvider);
+
+        $this->consentService->shouldReceive('getStableAttributesHash')->andReturn(sha1('stable'));
         $this->consent->implicitConsentWasGivenFor($serviceProvider);
+
+        $this->consentService->shouldReceive('storeConsentHash')->andReturn(true);
         $this->consent->giveExplicitConsentFor($serviceProvider);
         $this->consent->giveImplicitConsentFor($serviceProvider);
-
-        Phake::verify($this->mockedDatabaseConnection, Phake::times(4))->create();
     }
 }
