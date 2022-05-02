@@ -194,7 +194,7 @@ class EngineBlock_Corto_Model_Consent
                   AND service_id = ?
                   AND attribute = ?
                   AND consent_type = ?
-                  AND ISNULL(deleted_at)
+                  AND deleted_at IS NULL
             ";
             $hashedUserId = sha1($this->_getConsentUid());
             $parameters = array(

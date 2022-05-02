@@ -67,7 +67,7 @@ final class DbalConsentRepository implements ConsentRepository
             WHERE
                 hashed_user_id=:hashed_user_id
             AND
-                ISNULL(deleted_at)
+                deleted_at IS NULL
         ';
 
         try {
@@ -129,7 +129,7 @@ final class DbalConsentRepository implements ConsentRepository
                 hashed_user_id = :hashed_user_id
             AND
                 service_id = :service_id
-            AND ISNULL(deleted_at)
+            AND deleted_at IS NULL
         ';
         try {
             $result = $this->connection->executeQuery(
