@@ -26,9 +26,6 @@ class EngineBlock_Corto_Model_Consent_Factory
     /** @var EngineBlock_Corto_Filter_Command_Factory */
     private $_filterCommandFactory;
 
-    /** @var EngineBlock_Database_ConnectionFactory */
-    private $_databaseConnectionFactory;
-
     /**
      * @var ConsentHashService
      */
@@ -36,16 +33,12 @@ class EngineBlock_Corto_Model_Consent_Factory
 
     /**
       * @param EngineBlock_Corto_Filter_Command_Factory $filterCommandFactory
-      * @param EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
       */
     public function __construct(
         EngineBlock_Corto_Filter_Command_Factory $filterCommandFactory,
-        EngineBlock_Database_ConnectionFactory $databaseConnectionFactory,
         ConsentHashService $hashService
-    )
-    {
+    ) {
         $this->_filterCommandFactory = $filterCommandFactory;
-        $this->_databaseConnectionFactory = $databaseConnectionFactory;
         $this->_hashService = $hashService;
     }
 
@@ -76,7 +69,6 @@ class EngineBlock_Corto_Model_Consent_Factory
             $proxyServer->getConfig('ConsentStoreValues', true),
             $response,
             $attributes,
-            $this->_databaseConnectionFactory,
             $amPriorToConsent,
             $consentEnabled,
             $this->_hashService
