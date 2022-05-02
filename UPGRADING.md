@@ -1,5 +1,14 @@
 # UPGRADE NOTES
 
+## 6.7 -> 6.8
+The consent removal feature was introduced in release 6.8. This means that consent that is deleted from the profile
+application will result in the soft deletion of the consent row for that person, for the service they requested the
+consent removal of.
+
+In order to work with this feature, the latest database migration must be installed on your database(s) containing the
+`consent` table. This should be as simple as running `app/console doctrine:migrations:migrate`. Or executing
+`Version20220425090852` manually.
+
 ## 6.2 > 6.3
 # Removal of incorrect schacHomeOrganization ARP alias
 
