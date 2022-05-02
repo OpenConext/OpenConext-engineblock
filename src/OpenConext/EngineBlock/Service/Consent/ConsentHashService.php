@@ -18,7 +18,7 @@
 
 namespace OpenConext\EngineBlock\Service\Consent;
 
-use PDO;
+use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use function array_filter;
 use function array_keys;
 use function array_values;
@@ -36,28 +36,28 @@ use function unserialize;
 final class ConsentHashService
 {
     /**
-     * @var ConsentHashRepository
+     * @var ConsentRepository
      */
-    private $consentHashRepository;
+    private $consentRepository;
 
-    public function __construct(ConsentHashRepository $consentHashRepository)
+    public function __construct(ConsentRepository $consentHashRepository)
     {
-        $this->consentHashRepository = $consentHashRepository;
+        $this->consentRepository = $consentHashRepository;
     }
 
-    public function retrieveConsentHashFromDb(PDO $dbh, array $parameters): bool
+    public function retrieveConsentHashFromDb(array $parameters): bool
     {
-        return $this->consentHashRepository->retrieveConsentHashFromDb($dbh, $parameters);
+        return $this->consentRepository->hasConsentHash($parameters);
     }
 
-    public function storeConsentHashInDb(PDO $dbh, array $parameters): bool
+    public function storeConsentHashInDb(array $parameters): bool
     {
-        return $this->consentHashRepository->storeConsentHashInDb($dbh, $parameters);
+        return $this->consentRepository->storeConsentHash($parameters);
     }
 
-    public function countTotalConsent(PDO $dbh, $consentUid): int
+    public function countTotalConsent($consentUid): int
     {
-        return $this->consentHashRepository->countTotalConsent($dbh, $consentUid);
+        return $this->consentRepository->countTotalConsent($consentUid);
     }
 
     public function getUnstableAttributesHash(array $attributes, bool $mustStoreValues): string
