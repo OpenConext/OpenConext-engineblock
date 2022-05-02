@@ -170,11 +170,10 @@ final class DbalConsentRepository implements ConsentRepository
     public function hasConsentHash(array $parameters): bool
     {
         try {
-            $query = "
-                        SELECT
+            $query = " SELECT
                             *
                         FROM
-                            {$this->_tableName}
+                            consent
                         WHERE
                             hashed_user_id = ?
                         AND

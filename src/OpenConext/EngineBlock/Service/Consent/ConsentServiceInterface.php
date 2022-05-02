@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Service;
+namespace OpenConext\EngineBlock\Service\Consent;
 
 use OpenConext\EngineBlock\Authentication\Dto\ConsentList;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;

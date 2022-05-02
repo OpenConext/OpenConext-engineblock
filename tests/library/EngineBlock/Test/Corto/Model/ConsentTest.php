@@ -18,7 +18,7 @@
 
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use OpenConext\EngineBlock\Service\ConsentHashServiceInterface;
+use OpenConext\EngineBlock\Service\Consent\ConsentHashServiceInterface;
 use PHPUnit\Framework\TestCase;
 
 class EngineBlock_Corto_Model_Consent_Test extends TestCase

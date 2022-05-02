@@ -24,6 +24,7 @@ use OpenConext\EngineBlock\Authentication\Model\User;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonUuid;
+use OpenConext\EngineBlock\Service\Consent\ConsentService;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
