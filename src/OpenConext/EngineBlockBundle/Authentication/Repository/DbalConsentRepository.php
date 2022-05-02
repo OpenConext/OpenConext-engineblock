@@ -176,11 +176,10 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
     public function hasConsentHash(array $parameters): bool
     {
         try {
-            $query = "
-                        SELECT
+            $query = " SELECT
                             *
                         FROM
-                            {$this->_tableName}
+                            consent
                         WHERE
                             hashed_user_id = ?
                         AND
