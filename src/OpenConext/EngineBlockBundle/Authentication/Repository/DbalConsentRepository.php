@@ -26,6 +26,8 @@ use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 use OpenConext\EngineBlock\Exception\RuntimeException;
 use PDO;
+use Psr\Log\LoggerInterface;
+use function sha1;
 
 final class DbalConsentRepository implements ConsentRepository
 {
@@ -35,11 +37,14 @@ final class DbalConsentRepository implements ConsentRepository
     private $connection;
 
     /**
-     * @param DbalConnection $connection
+     * @var LoggerInterface
      */
-    public function __construct(DbalConnection $connection)
+    private $logger;
+
+    public function __construct(DbalConnection $connection, LoggerInterface $logger)
     {
         $this->connection = $connection;
+        $this->logger = $logger;
     }
 
     /**
@@ -61,6 +66,8 @@ final class DbalConsentRepository implements ConsentRepository
                 consent
             WHERE
                 hashed_user_id=:hashed_user_id
+            AND
+                deleted_at IS NULL
         ';
 
         try {
@@ -95,8 +102,63 @@ final class DbalConsentRepository implements ConsentRepository
 
         try {
             $this->connection->executeQuery($sql, ['hashed_user_id' => sha1($userId)]);
+            $this->logger->notice(sprintf('Removed consent for hashed user id %s (%s)', sha1($userId), $userId));
         } catch (DBALException $exception) {
-            throw new RuntimeException('Could not delete user consents from the database', 0, $exception);
+            throw new RuntimeException(
+                sprintf(
+                    'Could not delete user consents from the database for user %s',
+                    $userId
+                ),
+                0,
+                $exception
+            );
+        }
+    }
+
+    /**
+     * @throws RuntimeException
+     */
+    public function deleteOneFor(string $userId, string $serviceProviderEntityId): bool
+    {
+        $sql = '
+            UPDATE
+                consent
+            SET
+                deleted_at = NOW()
+            WHERE
+                hashed_user_id = :hashed_user_id
+            AND
+                service_id = :service_id
+            AND deleted_at IS NULL
+        ';
+        try {
+            $result = $this->connection->executeQuery(
+                $sql,
+                [
+                    'hashed_user_id' => sha1($userId),
+                    'service_id' => $serviceProviderEntityId
+                ]
+            );
+            $this->logger->info(
+                sprintf(
+                    'Removed (soft delete) consent for hashed user id %s (%s), for service %s',
+                    sha1($userId),
+                    $userId,
+                    $serviceProviderEntityId
+                )
+            );
+
+            return $result->rowCount() > 0;
+        } catch (DBALException $exception) {
+            throw new RuntimeException(
+                sprintf(
+                    'Could not delete user %s consent from the database for a specific SP %s',
+                    $userId,
+                    $serviceProviderEntityId
+                ),
+                0,
+                $exception
+            );
         }
     }
 }

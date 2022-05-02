@@ -25,7 +25,7 @@ use OpenConext\EngineBlock\Metadata\MetadataRepository\EntityNotFoundException;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\Value\Saml\EntityId;
 
-final class MetadataService
+final class MetadataService implements MetadataServiceInterface
 {
     /**
      * @var MetadataRepositoryInterface
@@ -37,11 +37,7 @@ final class MetadataService
         $this->metadataRepository = $metadataRepository;
     }
 
-    /**
-     * @param EntityId $entityId
-     * @return null|IdentityProvider
-     */
-    public function findIdentityProvider(EntityId $entityId)
+    public function findIdentityProvider(EntityId $entityId): ?IdentityProvider
     {
         try {
             $identityProvider = $this->metadataRepository->fetchIdentityProviderByEntityId($entityId->getEntityId());
@@ -52,11 +48,7 @@ final class MetadataService
         return $identityProvider;
     }
 
-    /**
-     * @param EntityId $entityId
-     * @return null|ServiceProvider
-     */
-    public function findServiceProvider(EntityId $entityId)
+    public function findServiceProvider(EntityId $entityId): ?ServiceProvider
     {
         try {
             $serviceProvider = $this->metadataRepository->fetchServiceProviderByEntityId($entityId->getEntityId());
@@ -67,11 +59,7 @@ final class MetadataService
         return $serviceProvider;
     }
 
-    /**
-     * @param EntityId $entityId
-     * @return null|AttributeReleasePolicy
-     */
-    public function findArpForServiceProviderByEntityId(EntityId $entityId)
+    public function findArpForServiceProviderByEntityId(EntityId $entityId): ?AttributeReleasePolicy
     {
         $serviceProvider = $this->findServiceProvider($entityId);
 

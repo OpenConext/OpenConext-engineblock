@@ -25,6 +25,8 @@ use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use function json_decode;
+use function trim;
 
 final class DeprovisionControllerTest extends WebTestCase
 {
@@ -42,16 +44,20 @@ final class DeprovisionControllerTest extends WebTestCase
     {
         $collabPersonId = 'urn:collab:person:test';
 
-        $unauthenticatedClient = static::createClient();;
+        $unauthenticatedClient = static::createClient();
         $unauthenticatedClient->request('GET', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId);
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
 
-        $unauthenticatedClient = static::createClient();;
+        $unauthenticatedClient = static::createClient();
         $unauthenticatedClient->request('DELETE', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId);
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
 
-        $unauthenticatedClient = static::createClient();;
+        $unauthenticatedClient = static::createClient();
         $unauthenticatedClient->request('DELETE', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId . '/dry-run');
+        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
+
+        $unauthenticatedClient = static::createClient();
+        $unauthenticatedClient->request('DELETE', 'https://engine-api.vm.openconext.org/remove-consent');
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
     }
 
@@ -64,7 +70,7 @@ final class DeprovisionControllerTest extends WebTestCase
     {
         $collabPersonId = 'urn:collab:person:test';
 
-        $client = $client = static::createClient([], [
+        $client = static::createClient([], [
             'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
         ]);
@@ -91,7 +97,7 @@ final class DeprovisionControllerTest extends WebTestCase
     {
         $collabPersonId = 'urn:collab:person:test';
 
-        $client = $client = static::createClient([], [
+        $client = static::createClient([], [
             'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
         ]);
@@ -113,7 +119,7 @@ final class DeprovisionControllerTest extends WebTestCase
     {
         $collabPersonId = 'urn:collab:person:test';
 
-        $client = $client = static::createClient([], [
+        $client = static::createClient([], [
             'PHP_AUTH_USER' => 'no_roles',
             'PHP_AUTH_PW' => 'no_roles',
         ]);
@@ -133,7 +139,7 @@ final class DeprovisionControllerTest extends WebTestCase
      */
     public function no_user_data_is_returned_if_collab_person_id_is_unknown($method, $path)
     {
-        $client = $client = static::createClient([], [
+        $client = static::createClient([], [
             'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
         ]);
@@ -189,7 +195,7 @@ final class DeprovisionControllerTest extends WebTestCase
         $consentType = 'explicit';
         $consentDate = '2017-04-18 13:37:00';
 
-        $client = $client = static::createClient([], [
+        $client = static::createClient([], [
             'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
         ]);
@@ -393,6 +399,7 @@ final class DeprovisionControllerTest extends WebTestCase
                 'attribute'      => ':attribute',
                 'consent_type'   => ':consent_type',
                 'consent_date'   => ':consent_date',
+                'deleted_at'   => '"0000-00-00 00:00:00"',
             ])
             ->setParameters([
                 ':user_id'      => sha1($userId),
@@ -421,13 +428,9 @@ final class DeprovisionControllerTest extends WebTestCase
             ->execute();
     }
 
-    /**
-     * @param Client $client
-     */
     private function assertResponseIsJson(Client $client)
     {
         $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
-
 }

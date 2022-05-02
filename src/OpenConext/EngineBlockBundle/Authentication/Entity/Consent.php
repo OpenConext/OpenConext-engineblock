@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Authentication\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -29,13 +30,13 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(indexes={
  *     @ORM\Index(name="hashed_user_id", columns={"hashed_user_id"}),
  *     @ORM\Index(name="service_id", columns={"service_id"}),
+ *     @ORM\Index(name="deleted_at", columns={"deleted_at"}),
  * })
  */
 class Consent
 {
     /**
      * @var DateTime
-     *
      * @ORM\Column(name="consent_date", type="datetime", nullable=false)
      */
     public $date;
@@ -69,4 +70,11 @@ class Consent
      * @ORM\Column(name="consent_type", type="string", nullable=true, length=20, options={"default": "explicit"})
      */
     public $type;
+
+    /**
+     * @ORM\Id
+     * @var DateTime
+     * @ORM\Column(name="deleted_at", type="datetime", nullable=true, options={"default": NULL}))
+     */
+    public $deletedAt;
 }

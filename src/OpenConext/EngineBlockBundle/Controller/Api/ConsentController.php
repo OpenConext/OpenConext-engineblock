@@ -19,21 +19,28 @@
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
 use OpenConext\EngineBlock\Exception\RuntimeException;
+use OpenConext\EngineBlock\Service\ConsentServiceInterface;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
+use OpenConext\EngineBlockBundle\Exception\InvalidArgumentException as EngineBlockInvalidArgumentException;
+use OpenConext\EngineBlockBundle\Factory\CollabPersonIdFactory;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiInternalServerErrorHttpException;
-use OpenConext\EngineBlock\Service\ConsentService;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use function array_key_exists;
+use function sprintf;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 final class ConsentController
 {
     /**
-     * @var ConsentService
+     * @var ConsentServiceInterface
      */
     private $consentService;
 
@@ -50,7 +57,7 @@ final class ConsentController
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         FeatureConfigurationInterface $featureConfiguration,
-        ConsentService $consentService
+        ConsentServiceInterface $consentService
     ) {
         $this->authorizationChecker = $authorizationChecker;
         $this->featureConfiguration = $featureConfiguration;
@@ -87,5 +94,48 @@ final class ConsentController
         }
 
         return new JsonResponse($consentList, Response::HTTP_OK);
+    }
+
+    public function removeAction(Request $request): JsonResponse
+    {
+        if (!$request->isMethod(Request::METHOD_POST)) {
+            throw ApiMethodNotAllowedHttpException::methodNotAllowed($request->getMethod(), [Request::METHOD_POST]);
+        }
+
+        if (!$this->featureConfiguration->isEnabled('api.consent_remove')) {
+            throw new ApiNotFoundHttpException('Consent remove API is disabled');
+        }
+
+        if (!$this->authorizationChecker->isGranted('ROLE_API_USER_PROFILE')) {
+            throw new ApiAccessDeniedHttpException(
+                'Access to the consent removal API requires the role ROLE_API_USER_PROFILE'
+            );
+        }
+        // The data is posted json encoded from EngineBlock
+        $data = json_decode($request->getContent(), true);
+        if (!$data || !array_key_exists('collabPersonId', $data) || !array_key_exists('serviceProviderEntityId', $data)) {
+            throw new EngineBlockInvalidArgumentException(
+                'The required data for removing the consent is not present in the request parameters json'
+            );
+        }
+
+        $userId = $data['collabPersonId'];
+        $serviceProviderEntityId = $data['serviceProviderEntityId'];
+
+        try {
+            $user = CollabPersonIdFactory::create($userId);
+            $removed = $this->consentService->deleteOneConsentFor($user, $serviceProviderEntityId);
+        } catch (RuntimeException $e) {
+            throw new ApiInternalServerErrorHttpException(
+                sprintf(
+                    'An unknown error occurred while removing a service the user has given consent for to ' .
+                    'release attributes to ("%s")',
+                    $e->getMessage()
+                ),
+                $e
+            );
+        }
+
+        return new JsonResponse($removed, Response::HTTP_OK);
     }
 }

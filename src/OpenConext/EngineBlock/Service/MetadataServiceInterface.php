@@ -18,22 +18,16 @@
 
 namespace OpenConext\EngineBlock\Service;
 
-use OpenConext\EngineBlock\Authentication\Dto\ConsentList;
-use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
+use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\Value\Saml\EntityId;
 
-interface ConsentServiceInterface
+interface MetadataServiceInterface
 {
-    /**
-     * @param string $userId
-     * @return ConsentList
-     */
-    public function findAllFor($userId);
+    public function findIdentityProvider(EntityId $entityId): ?IdentityProvider;
 
-    /**
-     * @param string $userId
-     * @return int
-     */
-    public function countAllFor($userId);
+    public function findServiceProvider(EntityId $entityId): ?ServiceProvider;
 
-    public function deleteOneConsentFor(CollabPersonId $id, string $serviceProviderEntityId): bool;
+    public function findArpForServiceProviderByEntityId(EntityId $entityId): ?AttributeReleasePolicy;
 }

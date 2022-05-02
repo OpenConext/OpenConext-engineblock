@@ -59,7 +59,8 @@ class EngineBlock_User
     {
         $pdo = $this->_getDatabaseConnection();
         $query = 'SELECT service_id FROM consent
-                    WHERE hashed_user_id = ?';
+                    WHERE hashed_user_id = ?
+                    AND deleted_at IS NULL';
         $parameters = array(
             sha1($this->getUid())
         );

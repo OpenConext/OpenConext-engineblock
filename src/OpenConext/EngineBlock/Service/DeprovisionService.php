@@ -18,12 +18,15 @@
 
 namespace OpenConext\EngineBlock\Service;
 
+use Exception;
 use OpenConext\EngineBlock\Authentication\Model\User;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use OpenConext\EngineBlock\Authentication\Repository\UserDirectory;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
+use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\EngineBlockBundle\Authentication\Repository\SamlPersistentIdRepository;
 use OpenConext\EngineBlockBundle\Authentication\Repository\ServiceProviderUuidRepository;
+use function sprintf;
 
 final class DeprovisionService implements DeprovisionServiceInterface
 {

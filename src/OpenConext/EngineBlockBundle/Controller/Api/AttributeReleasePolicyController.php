@@ -19,7 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
 use EngineBlock_Arp_AttributeReleasePolicyEnforcer;
-use OpenConext\EngineBlock\Service\MetadataService;
+use OpenConext\EngineBlock\Service\MetadataServiceInterface;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
@@ -37,7 +37,7 @@ final class AttributeReleasePolicyController
     private $authorizationChecker;
 
     /**
-     * @var MetadataService
+     * @var MetadataServiceInterface
      */
     private $metadataService;
 
@@ -48,7 +48,7 @@ final class AttributeReleasePolicyController
 
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
-        MetadataService $metadataService,
+        MetadataServiceInterface $metadataService,
         EngineBlock_Arp_AttributeReleasePolicyEnforcer $arpEnforcer
     ) {
         $this->authorizationChecker = $authorizationChecker;

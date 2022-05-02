@@ -212,6 +212,7 @@ parameters:
     feature_eb_encrypted_assertions_require_outer_signature: true
     feature_api_metadata_push: true
     feature_api_consent_listing: true
+    feature_api_consent_remove: true
     feature_api_metadata_api: true
     feature_api_deprovision: true
     feature_run_all_manipulations_prior_to_consent: false

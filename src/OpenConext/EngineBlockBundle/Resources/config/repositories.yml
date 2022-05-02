@@ -4,6 +4,7 @@ services:
         class: OpenConext\EngineBlockBundle\Authentication\Repository\DbalConsentRepository
         arguments:
             - "@engineblock.compat.doctrine.dbal_connection"
+            - "@logger"
 
     engineblock.repository.user:
         public: false

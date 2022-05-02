@@ -149,8 +149,8 @@ class EngineBlock_Corto_Model_Consent
             return false;
         }
 
-        $query = "INSERT INTO consent (hashed_user_id, service_id, attribute, consent_type, consent_date)
-                  VALUES (?, ?, ?, ?, NOW())
+        $query = "INSERT INTO consent (hashed_user_id, service_id, attribute, consent_type, consent_date, deleted_at)
+                  VALUES (?, ?, ?, ?, NOW(), '0000-00-00 00:00:00')
                   ON DUPLICATE KEY UPDATE attribute=VALUES(attribute), consent_type=VALUES(consent_type), consent_date=NOW()";
         $parameters = array(
             sha1($this->_getConsentUid()),
@@ -174,7 +174,6 @@ class EngineBlock_Corto_Model_Consent
                 EngineBlock_Exception::CODE_CRITICAL
             );
         }
-
         return true;
     }
 
@@ -188,7 +187,15 @@ class EngineBlock_Corto_Model_Consent
 
             $attributesHash = $this->_getAttributesHash($this->_responseAttributes);
 
-            $query = "SELECT * FROM {$this->_tableName} WHERE hashed_user_id = ? AND service_id = ? AND attribute = ? AND consent_type = ?";
+            $query = "
+                SELECT *
+                FROM {$this->_tableName}
+                WHERE hashed_user_id = ?
+                  AND service_id = ?
+                  AND attribute = ?
+                  AND consent_type = ?
+                  AND deleted_at IS NULL
+            ";
             $hashedUserId = sha1($this->_getConsentUid());
             $parameters = array(
                 $hashedUserId,

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright 2010 SURFnet B.V.
  *
@@ -16,24 +15,29 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Service;
+namespace OpenConext\EngineBlockBundle\Factory;
 
-use OpenConext\EngineBlock\Authentication\Dto\ConsentList;
+use InvalidArgumentException;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
+use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
+use function sprintf;
 
-interface ConsentServiceInterface
+class CollabPersonIdFactory
 {
     /**
-     * @param string $userId
-     * @return ConsentList
+     * @throws ApiNotFoundHttpException
      */
-    public function findAllFor($userId);
-
-    /**
-     * @param string $userId
-     * @return int
-     */
-    public function countAllFor($userId);
-
-    public function deleteOneConsentFor(CollabPersonId $id, string $serviceProviderEntityId): bool;
+    public static function create(string $id): CollabPersonId
+    {
+        try {
+            return new CollabPersonId($id);
+        } catch (InvalidArgumentException $e) {
+            throw new ApiNotFoundHttpException(
+                sprintf(
+                    'User ID is not valid: "%s"',
+                    $e->getMessage()
+                )
+            );
+        }
+    }
 }

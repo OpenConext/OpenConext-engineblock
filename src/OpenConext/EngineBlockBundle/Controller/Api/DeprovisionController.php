@@ -18,9 +18,8 @@
 
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
-use InvalidArgumentException;
-use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
+use OpenConext\EngineBlockBundle\Factory\CollabPersonIdFactory;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlock\Service\DeprovisionService;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
@@ -84,7 +83,7 @@ final class DeprovisionController
         $this->assertDeprovisionApiIsEnabled();
         $this->assertUserHasDeprovisionRole();
 
-        $id = $this->createCollabPersonIdValueObject($collabPersonId);
+        $id = CollabPersonIdFactory::create($collabPersonId);
 
         $userData = $this->deprovisionService->read($id);
 
@@ -107,7 +106,7 @@ final class DeprovisionController
         $this->assertUserHasDeprovisionRole();
 
         $userData = $this->deprovisionService->read(
-            $this->createCollabPersonIdValueObject($collabPersonId)
+            CollabPersonIdFactory::create($collabPersonId)
         );
 
         return $this->createResponse('OK', $userData);
@@ -169,26 +168,6 @@ final class DeprovisionController
         if (!$this->authorizationChecker->isGranted('ROLE_API_USER_DEPROVISION')) {
             throw new ApiAccessDeniedHttpException(
                 'Access to the content listing API requires the role ROLE_API_USER_DEPROVISION'
-            );
-        }
-    }
-
-    /**
-     * @param string $id
-     * @return CollabPersonId
-     *
-     * @throws ApiNotFoundHttpException
-     */
-    private function createCollabPersonIdValueObject($id)
-    {
-        try {
-            return new CollabPersonId($id);
-        } catch (InvalidArgumentException $e) {
-            throw new ApiNotFoundHttpException(
-                sprintf(
-                    'User ID is not valid: "%s"',
-                    $e->getMessage()
-                )
             );
         }
     }
