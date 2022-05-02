@@ -19,7 +19,7 @@
 use Doctrine\DBAL\Statement;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
-use OpenConext\EngineBlock\Service\ConsentHashServiceInterface;
+use OpenConext\EngineBlock\Service\Consent\ConsentHashServiceInterface;
 
 class EngineBlock_Corto_Model_Consent
 {
