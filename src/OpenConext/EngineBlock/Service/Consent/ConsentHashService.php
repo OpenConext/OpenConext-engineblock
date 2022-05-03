@@ -19,6 +19,12 @@
 namespace OpenConext\EngineBlock\Service\Consent;
 
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
+use OpenConext\EngineBlock\Authentication\Value\ConsentHashQuery;
+use OpenConext\EngineBlock\Authentication\Value\ConsentStoreParameters;
+use OpenConext\EngineBlock\Authentication\Value\ConsentUpdateParameters;
+use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
+use OpenConext\UserLifecycle\Domain\ValueObject\Client\Name;
+use SAML2\XML\saml\NameID;
 use function array_filter;
 use function array_keys;
 use function array_values;
@@ -30,6 +36,7 @@ use function ksort;
 use function serialize;
 use function sha1;
 use function sort;
+use function str_replace;
 use function strtolower;
 use function unserialize;
 
@@ -45,14 +52,19 @@ final class ConsentHashService implements ConsentHashServiceInterface
         $this->consentRepository = $consentHashRepository;
     }
 
-    public function retrieveConsentHash(array $parameters): bool
+    public function retrieveConsentHash(ConsentHashQuery $query): ConsentVersion
     {
-        return $this->consentRepository->hasConsentHash($parameters);
+        return $this->consentRepository->hasConsentHash($query);
     }
 
-    public function storeConsentHash(array $parameters): bool
+    public function storeConsentHash(ConsentStoreParameters $parameters): bool
     {
         return $this->consentRepository->storeConsentHash($parameters);
+    }
+
+    public function updateConsentHash(ConsentUpdateParameters $parameters): bool
+    {
+        return $this->consentRepository->updateConsentHash($parameters);
     }
 
     public function countTotalConsent($consentUid): int
@@ -60,9 +72,13 @@ final class ConsentHashService implements ConsentHashServiceInterface
         return $this->consentRepository->countTotalConsent($consentUid);
     }
 
+    /**
+     * The old way of calculating the attribute hash, this is not stable as a change of the attribute order,
+     * change of case, stray/empty attributes, and renumbered indexes can cause the hash to change. Leaving the
+     * user to give consent once again for a service she previously gave consent for.
+     */
     public function getUnstableAttributesHash(array $attributes, bool $mustStoreValues): string
     {
-        $hashBase = null;
         if ($mustStoreValues) {
             ksort($attributes);
             $hashBase = serialize($attributes);
@@ -76,7 +92,8 @@ final class ConsentHashService implements ConsentHashServiceInterface
 
     public function getStableAttributesHash(array $attributes, bool $mustStoreValues) : string
     {
-        $lowerCasedAttributes = $this->caseNormalizeStringArray($attributes);
+        $nameIdNormalizedAttributes = $this->nameIdNormalize($attributes);
+        $lowerCasedAttributes = $this->caseNormalizeStringArray($nameIdNormalizedAttributes);
         $hashBase = $mustStoreValues
             ? $this->createHashBaseWithValues($lowerCasedAttributes)
             : $this->createHashBaseWithoutValues($lowerCasedAttributes);
@@ -98,11 +115,13 @@ final class ConsentHashService implements ConsentHashServiceInterface
 
     /**
      * Lowercases all array keys and values.
-     * Performs the lowercasing on a copy (which is returned), to avoid side-effects.
      */
     private function caseNormalizeStringArray(array $original): array
     {
-        return unserialize(strtolower(serialize($original)));
+        $serialized = serialize($original);
+        $lowerCased = strtolower($serialized);
+        $unserialized = unserialize($lowerCased);
+        return $unserialized;
     }
 
     /**
@@ -122,7 +141,6 @@ final class ConsentHashService implements ConsentHashServiceInterface
         $sortFunction($copy);
         foreach ($copy as $key => $value) {
             if (is_array($value)) {
-                $sortFunction($value);
                 $copy[$key] = $this->sortArray($value);
             }
         }
@@ -172,5 +190,20 @@ final class ConsentHashService implements ConsentHashServiceInterface
     private function isBlank($value): bool
     {
         return empty($value) && !is_numeric($value);
+    }
+
+    /**
+     * NameId objects can not be serialized/unserialized after being lower cased
+     * Thats why the object is converted to a simple array representation where only the
+     * relevant NameID aspects are stored.
+     */
+    private function nameIdNormalize(array $attributes): array
+    {
+        array_walk_recursive($attributes, function (&$value) {
+            if ($value instanceof NameID) {
+                $value = ['value' => $value->getValue(), 'Format' => $value->getFormat()];
+            }
+        });
+        return $attributes;
     }
 }

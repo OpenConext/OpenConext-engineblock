@@ -527,6 +527,7 @@ final class ConsentControllerTest extends FunctionalWebTestCase
                 'hashed_user_id' => ':user_id',
                 'service_id'     => ':service_id',
                 'attribute'      => ':attribute',
+                'attribute_stable' => ':attribute_stable',
                 'consent_type'   => ':consent_type',
                 'consent_date'   => ':consent_date',
                 'deleted_at'   => ':deleted_at',
@@ -534,7 +535,8 @@ final class ConsentControllerTest extends FunctionalWebTestCase
             ->setParameters([
                 'user_id'      => sha1($userId),
                 'service_id'   => $serviceId,
-                'attribute'    => $attributeHash,
+                'attribute'    => '',
+                'attribute_stable' => $attributeHash,
                 'consent_type' => $consentType,
                 'consent_date' => $consentDate,
                 'deleted_at' => $deletedAt,
