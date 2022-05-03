@@ -20,9 +20,19 @@ namespace OpenConext\EngineBlock\Service\Consent;
 
 interface ConsentHashServiceInterface
 {
+    /**
+     * Retrieve the old-style (deprecated) unstable consent hash
+     */
     public function retrieveConsentHash(array $parameters): bool;
 
+    /**
+     * Retrieve the stable consent hash
+     */
+    public function retrieveStableConsentHash(array $parameters): bool;
+
     public function storeConsentHash(array $parameters): bool;
+
+    public function updateConsentHash(array $parameters): bool;
 
     public function countTotalConsent($consentUid): int;
 
