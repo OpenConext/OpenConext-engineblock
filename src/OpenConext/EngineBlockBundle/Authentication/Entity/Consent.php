@@ -62,6 +62,12 @@ class Consent
     /**
      * @var string
      */
+    #[ORM\Column(name: 'attribute_stable', type: Types::STRING, length: 80, nullable: true)]
+    public ?string $attributeStable = null;
+
+    /**
+     * @var string
+     */
     #[ORM\Column(name: 'consent_type', type: Types::STRING, nullable: true, length: 20, options: ['default' => 'explicit'])]
     public ?string $type = null;
 
