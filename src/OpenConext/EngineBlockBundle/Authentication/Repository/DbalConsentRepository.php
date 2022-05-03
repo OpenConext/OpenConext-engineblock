@@ -200,15 +200,46 @@ final class DbalConsentRepository implements ConsentRepository
             throw new RuntimeException(sprintf('Consent retrieval failed! Error: "%s"', $e->getMessage()));
         }
     }
+    /**
+     * @throws RuntimeException
+     */
+    public function hasStableConsentHash(array $parameters): bool
+    {
+        try {
+            $query = " SELECT
+                            *
+                        FROM
+                            consent
+                        WHERE
+                            hashed_user_id = ?
+                        AND
+                            service_id = ?
+                        AND
+                            attribute_stable = ?
+                        AND
+                            consent_type = ?
+                        AND
+                            deleted_at IS NULL
+            ";
+
+            $statement = $this->connection->prepare($query);
+            $statement->execute($parameters);
+            $rows = $statement->fetchAll();
+
+            return count($rows) >= 1;
+        } catch (PDOException $e) {
+            throw new RuntimeException(sprintf('Consent retrieval on stable consent hash failed! Error: "%s"', $e->getMessage()));
+        }
+    }
 
     /**
      * @throws RuntimeException
      */
     public function storeConsentHash(array $parameters): bool
     {
-        $query = "INSERT INTO consent (hashed_user_id, service_id, attribute, consent_type, consent_date, deleted_at)
+        $query = "INSERT INTO consent (hashed_user_id, service_id, attribute_stable, consent_type, consent_date, deleted_at)
                   VALUES (?, ?, ?, ?, NOW(), '0000-00-00 00:00:00')
-                  ON DUPLICATE KEY UPDATE attribute=VALUES(attribute), consent_type=VALUES(consent_type), consent_date=NOW()";
+                  ON DUPLICATE KEY UPDATE attribute_stable=VALUES(attribute_stable), consent_type=VALUES(consent_type), consent_date=NOW()";
         $statement = $this->connection->prepare($query);
         if (!$statement) {
             throw new RuntimeException("Unable to create a prepared statement to insert consent?!");
@@ -217,6 +248,41 @@ final class DbalConsentRepository implements ConsentRepository
         if (!$statement->execute($parameters)) {
             throw new RuntimeException(
                 sprintf('Error storing consent: "%s"', var_export($statement->errorInfo(), true))
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws RuntimeException
+     */
+    public function updateConsentHash(array $parameters): bool
+    {
+        $query = "
+                UPDATE
+                    consent
+                SET
+                    attribute_stable = ?
+                WHERE
+                    attribute = ?
+                AND
+                    hashed_user_id = ?
+                AND
+                    service_id = ?
+                AND
+                    consent_type = ?
+                AND
+                    deleted_at IS NULL
+        ";
+        $statement = $this->connection->prepare($query);
+        if (!$statement) {
+            throw new RuntimeException("Unable to create a prepared statement to update consent?!");
+        }
+
+        if (!$statement->execute($parameters)) {
+            throw new RuntimeException(
+                sprintf('Error storing updated consent: "%s"', var_export($statement->errorInfo(), true))
             );
         }
 

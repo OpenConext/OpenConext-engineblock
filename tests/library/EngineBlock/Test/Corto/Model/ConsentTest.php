@@ -61,7 +61,10 @@ class EngineBlock_Corto_Model_Consent_Test extends TestCase
         $serviceProvider = new ServiceProvider("service-provider-entity-id");
 
         $this->consentService->shouldReceive('getUnstableAttributesHash');
-        $this->consentService->shouldNotReceive('storeConsentHash');
+        $this->consentService->shouldReceive('getStableAttributesHash');
+        $this->consentService->shouldReceive('retrieveStableConsentHash');
+        $this->consentService->shouldReceive('retrieveConsentHash');
+        $this->consentService->shouldReceive('storeConsentHash');
         $this->consentDisabled->explicitConsentWasGivenFor($serviceProvider);
         $this->consentDisabled->implicitConsentWasGivenFor($serviceProvider);
         $this->consentDisabled->giveExplicitConsentFor($serviceProvider);
@@ -71,9 +74,10 @@ class EngineBlock_Corto_Model_Consent_Test extends TestCase
     public function testConsentWriteToDatabase()
     {
         $serviceProvider = new ServiceProvider("service-provider-entity-id");
-
+        $this->consentService->shouldReceive('getStableAttributesHash');
         $this->consentService->shouldReceive('getUnstableAttributesHash')->andReturn(sha1('unstable'));
         $this->consentService->shouldReceive('retrieveConsentHash')->andReturn(sha1('unstable'));
+        $this->consentService->shouldReceive('retrieveStableConsentHash');
         $this->consent->explicitConsentWasGivenFor($serviceProvider);
 
         $this->consentService->shouldReceive('getStableAttributesHash')->andReturn(sha1('stable'));
