@@ -60,9 +60,13 @@ final class ConsentHashService implements ConsentHashServiceInterface
         return $this->consentRepository->countTotalConsent($consentUid);
     }
 
+    /**
+     * The old way of calculating the attribute hash, this is not stable as a change of the attribute order,
+     * change of case, stray/empty attributes, and renumbered indexes can cause the hash to change. Leaving the
+     * user to give consent once again for a service she previously gave consent for.
+     */
     public function getUnstableAttributesHash(array $attributes, bool $mustStoreValues): string
     {
-        $hashBase = null;
         if ($mustStoreValues) {
             ksort($attributes);
             $hashBase = serialize($attributes);
