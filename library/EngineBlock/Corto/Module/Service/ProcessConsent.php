@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use SAML2\Constants;
@@ -102,6 +103,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         if (!$consentRepository->explicitConsentWasGivenFor($serviceProvider)) {
             $consentRepository->giveExplicitConsentFor($destinationMetadata);
         }
+        $consentRepository->upgradeAttributeHashFor($destinationMetadata, ConsentType::TYPE_EXPLICIT);
 
         $response->setConsent(Constants::CONSENT_OBTAINED);
         $response->setDestination($response->getReturn());

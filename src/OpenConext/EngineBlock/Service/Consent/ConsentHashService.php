@@ -50,9 +50,19 @@ final class ConsentHashService implements ConsentHashServiceInterface
         return $this->consentRepository->hasConsentHash($parameters);
     }
 
+    public function retrieveStableConsentHash(array $parameters): bool
+    {
+        return $this->consentRepository->hasStableConsentHash($parameters);
+    }
+
     public function storeConsentHash(array $parameters): bool
     {
         return $this->consentRepository->storeConsentHash($parameters);
+    }
+
+    public function updateConsentHash(array $parameters): bool
+    {
+        return $this->consentRepository->updateConsentHash($parameters);
     }
 
     public function countTotalConsent($consentUid): int
