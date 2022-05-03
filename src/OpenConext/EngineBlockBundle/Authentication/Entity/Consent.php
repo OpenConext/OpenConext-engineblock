@@ -60,9 +60,16 @@ class Consent
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=80)
+     * @ORM\Column(type="string", length=80, nullable=true)
      */
     public $attribute;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=80)
+     */
+    public $attributeStable;
 
     /**
      * @var string
