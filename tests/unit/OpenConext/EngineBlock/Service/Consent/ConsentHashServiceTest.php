@@ -22,6 +22,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use PHPUnit\Framework\TestCase;
+use SAML2\XML\saml\NameID;
 
 class ConsentHashServiceTest extends TestCase
 {
@@ -448,5 +449,29 @@ class ConsentHashServiceTest extends TestCase
         ];
         $this->assertEquals($this->chs->getStableAttributesHash($attributes, false), $this->chs->getStableAttributesHash($attributesSingleValue, false));
         $this->assertNotEquals($this->chs->getStableAttributesHash($attributes, true), $this->chs->getStableAttributesHash($attributesSingleValue, true));
+    }
+
+    public function test_stable_attribute_hash_can_handle_nameid_objects()
+    {
+        $nameId = new NameID();
+        $nameId->setValue('83aa0a79363edcf872c966b0d6eaf3f5e26a6a77');
+        $nameId->setFormat('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent');
+
+        $attributes = [
+            'urn:mace:dir:attribute-def:displayName' => ['John Doe'],
+            'urn:mace:dir:attribute-def:uid' => ['joe-f12'],
+            'urn:mace:dir:attribute-def:cn' => ['John Doe'],
+            'urn:mace:dir:attribute-def:sn' => ['Doe'],
+            'urn:mace:dir:attribute-def:eduPersonPrincipalName' => ['j.doe@example.com'],
+            'urn:mace:dir:attribute-def:givenName' => ['John'],
+            'urn:mace:dir:attribute-def:mail' => ['j.doe@example.com'],
+            'urn:mace:terena.org:attribute-def:schacHomeOrganization' => ['example.com'],
+            'nl:surf:test:something' => [0 => 'arbitrary-value'],
+            'urn:mace:dir:attribute-def:eduPersonTargetedID' => [$nameId],
+            'urn:oid:1.3.6.1.4.1.5923.1.1.1.10' => [$nameId],
+        ];
+
+        $hash = $this->chs->getStableAttributesHash($attributes, false);
+        $this->assertTrue(is_string($hash));
     }
 }
