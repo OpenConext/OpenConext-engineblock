@@ -408,7 +408,8 @@ final class ConsentControllerTest extends WebTestCase
     private function disableRemoveConsentApiFeatureFor(Client $client)
     {
         $featureToggles = new FeatureConfiguration([
-            'api.consent_remove' => new Feature('api.consent_remove', false)
+            'api.consent_remove' => new Feature('api.consent_remove', false),
+            'eb.feature_enable_consent' => new Feature('eb.feature_enable_consent', true),
         ]);
         $client->getContainer()->set('engineblock.features', $featureToggles);
     }
@@ -501,7 +502,8 @@ final class ConsentControllerTest extends WebTestCase
     private function disableConsentApiFeatureFor(Client $client)
     {
         $featureToggles = new FeatureConfiguration([
-            'api.consent_listing' => new Feature('api.consent_listing', false)
+            'api.consent_listing' => new Feature('api.consent_listing', false),
+            'eb.feature_enable_consent' => new Feature('eb.feature_enable_consent', false),
         ]);
         $container = $client->getContainer();
         $container->set('engineblock.features', $featureToggles);
