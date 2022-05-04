@@ -19,6 +19,8 @@
 namespace OpenConext\EngineBlock\Service\Consent;
 
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
+use OpenConext\UserLifecycle\Domain\ValueObject\Client\Name;
+use SAML2\XML\saml\NameID;
 use function array_filter;
 use function array_keys;
 use function array_values;
@@ -30,6 +32,7 @@ use function ksort;
 use function serialize;
 use function sha1;
 use function sort;
+use function str_replace;
 use function strtolower;
 use function unserialize;
 
@@ -90,7 +93,8 @@ final class ConsentHashService implements ConsentHashServiceInterface
 
     public function getStableAttributesHash(array $attributes, bool $mustStoreValues) : string
     {
-        $lowerCasedAttributes = $this->caseNormalizeStringArray($attributes);
+        $nameIdNormalizedAttributes = $this->nameIdNormalize($attributes);
+        $lowerCasedAttributes = $this->caseNormalizeStringArray($nameIdNormalizedAttributes);
         $hashBase = $mustStoreValues
             ? $this->createHashBaseWithValues($lowerCasedAttributes)
             : $this->createHashBaseWithoutValues($lowerCasedAttributes);
@@ -112,11 +116,13 @@ final class ConsentHashService implements ConsentHashServiceInterface
 
     /**
      * Lowercases all array keys and values.
-     * Performs the lowercasing on a copy (which is returned), to avoid side-effects.
      */
     private function caseNormalizeStringArray(array $original): array
     {
-        return unserialize(strtolower(serialize($original)));
+        $serialized = serialize($original);
+        $lowerCased = strtolower($serialized);
+        $unserialized = unserialize($lowerCased);
+        return $unserialized;
     }
 
     /**
@@ -186,5 +192,20 @@ final class ConsentHashService implements ConsentHashServiceInterface
     private function isBlank($value): bool
     {
         return empty($value) && !is_numeric($value);
+    }
+
+    /**
+     * NameId objects can not be serialized/unserialized after being lower cased
+     * Thats why the object is converted to a simple array representation where only the
+     * relevant NameID aspects are stored.
+     */
+    private function nameIdNormalize(array $attributes): array
+    {
+        array_walk_recursive($attributes, function (&$value) {
+            if ($value instanceof NameID) {
+                $value = ['value' => $value->getValue(), 'Format' => $value->getFormat()];
+            }
+        });
+        return $attributes;
     }
 }
