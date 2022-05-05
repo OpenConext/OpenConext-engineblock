@@ -397,6 +397,7 @@ final class DeprovisionControllerTest extends WebTestCase
                 'hashed_user_id' => ':user_id',
                 'service_id'     => ':service_id',
                 'attribute'      => ':attribute',
+                'attribute_stable' => ':attribute',
                 'consent_type'   => ':consent_type',
                 'consent_date'   => ':consent_date',
                 'deleted_at'   => '"0000-00-00 00:00:00"',

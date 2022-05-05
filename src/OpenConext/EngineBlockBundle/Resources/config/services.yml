@@ -72,7 +72,7 @@ services:
             - "@engineblock.configuration.stepup.loa_repository"
 
     engineblock.service.consent:
-        class: OpenConext\EngineBlock\Service\ConsentService
+        class: OpenConext\EngineBlock\Service\Consent\ConsentService
         arguments:
             - "@engineblock.repository.consent"
             - "@engineblock.service.metadata"
@@ -366,3 +366,8 @@ services:
             - "@translator"
         tags:
              - { name: 'twig.extension' }
+
+    engineblock.service.consent.ConsentHashService:
+        class: OpenConext\EngineBlock\Service\Consent\ConsentHashService
+        arguments:
+            - "@engineblock.repository.consent"

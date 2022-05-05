@@ -16,8 +16,10 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
+use OpenConext\EngineBlock\Service\Consent\ConsentHashServiceInterface;
 
 class EngineBlock_Corto_Model_Consent
 {
@@ -36,14 +38,9 @@ class EngineBlock_Corto_Model_Consent
      */
     private $_response;
     /**
-     * @var array
+     * @var array All attributes as an associative array.
      */
     private $_responseAttributes;
-
-    /**
-     * @var EngineBlock_Database_ConnectionFactory
-     */
-    private $_databaseConnectionFactory;
 
     /**
      * A reflection of the eb.run_all_manipulations_prior_to_consent feature flag
@@ -60,63 +57,78 @@ class EngineBlock_Corto_Model_Consent
     private $_consentEnabled;
 
     /**
-     * @param string $tableName
-     * @param bool $mustStoreValues
-     * @param EngineBlock_Saml2_ResponseAnnotationDecorator $response
-     * @param array $responseAttributes
-     * @param EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
+     * @var ConsentHashServiceInterface
+     */
+    private $_hashService;
+
+    /**
      * @param bool $amPriorToConsentEnabled Is the run_all_manipulations_prior_to_consent feature enabled or not
-     * @param bool $consentEnabled Is the feature_enable_consent feature enabled or not
      */
     public function __construct(
-        $tableName,
-        $mustStoreValues,
+        string $tableName,
+        bool $mustStoreValues,
         EngineBlock_Saml2_ResponseAnnotationDecorator $response,
         array $responseAttributes,
-        EngineBlock_Database_ConnectionFactory $databaseConnectionFactory,
-        $amPriorToConsentEnabled,
-        $consentEnabled
-    )
-    {
+        bool $amPriorToConsentEnabled,
+        bool $consentEnabled,
+        ConsentHashServiceInterface $hashService
+    ) {
         $this->_tableName = $tableName;
         $this->_mustStoreValues = $mustStoreValues;
         $this->_response = $response;
         $this->_responseAttributes = $responseAttributes;
-        $this->_databaseConnectionFactory = $databaseConnectionFactory;
         $this->_amPriorToConsentEnabled = $amPriorToConsentEnabled;
+        $this->_hashService = $hashService;
         $this->_consentEnabled = $consentEnabled;
     }
 
-    public function explicitConsentWasGivenFor(ServiceProvider $serviceProvider)
+    public function explicitConsentWasGivenFor(ServiceProvider $serviceProvider): bool
     {
-        return !$this->_consentEnabled ||
-            $this->_hasStoredConsent($serviceProvider, ConsentType::TYPE_EXPLICIT);
+        if (!$this->_consentEnabled) {
+            return true;
+        }
+        $consent = $this->_hasStoredConsent($serviceProvider, ConsentType::TYPE_EXPLICIT);
+        return $consent->given();
     }
 
-    public function implicitConsentWasGivenFor(ServiceProvider $serviceProvider)
+    /**
+     * Although the user has given consent previously we want to upgrade the deprecated unstable consent
+     * to the new stable consent type.
+     * https://www.pivotaltracker.com/story/show/176513931
+     */
+    public function upgradeAttributeHashFor(ServiceProvider $serviceProvider, string $consentType): void
     {
-        return !$this->_consentEnabled ||
-            $this->_hasStoredConsent($serviceProvider, ConsentType::TYPE_IMPLICIT);
+        $consentVersion = $this->_hasStoredConsent($serviceProvider, $consentType);
+        if ($consentVersion->isUnstable()) {
+            $this->_updateConsent($serviceProvider, $consentType);
+        }
     }
 
-    public function giveExplicitConsentFor(ServiceProvider $serviceProvider)
+    public function implicitConsentWasGivenFor(ServiceProvider $serviceProvider): bool
+    {
+        if (!$this->_consentEnabled) {
+            return true;
+        }
+        $consent = $this->_hasStoredConsent($serviceProvider, ConsentType::TYPE_IMPLICIT);
+        return $consent->given();
+    }
+
+    public function giveExplicitConsentFor(ServiceProvider $serviceProvider): bool
     {
         return !$this->_consentEnabled ||
             $this->_storeConsent($serviceProvider, ConsentType::TYPE_EXPLICIT);
     }
 
-    public function giveImplicitConsentFor(ServiceProvider $serviceProvider)
+    public function giveImplicitConsentFor(ServiceProvider $serviceProvider): bool
     {
         return !$this->_consentEnabled ||
             $this->_storeConsent($serviceProvider, ConsentType::TYPE_IMPLICIT);
     }
 
-    /**
-     * @return bool|PDO
-     */
-    protected function _getConsentDatabaseConnection()
+    public function countTotalConsent(): int
     {
-        return $this->_databaseConnectionFactory->create();
+        $consentUid = $this->_getConsentUid();
+        return $this->_hashService->countTotalConsent($consentUid);
     }
 
     protected function _getConsentUid()
@@ -128,98 +140,51 @@ class EngineBlock_Corto_Model_Consent
         return $this->_response->getNameIdValue();
     }
 
-    protected function _getAttributesHash($attributes)
+    protected function _getAttributesHash($attributes): string
     {
-        $hashBase = NULL;
-        if ($this->_mustStoreValues) {
-            ksort($attributes);
-            $hashBase = serialize($attributes);
-        } else {
-            $names = array_keys($attributes);
-            sort($names);
-            $hashBase = implode('|', $names);
-        }
-        return sha1($hashBase);
+        return $this->_hashService->getUnstableAttributesHash($attributes, $this->_mustStoreValues);
     }
 
-    private function _storeConsent(ServiceProvider $serviceProvider, $consentType)
+    protected function _getStableAttributesHash($attributes): string
     {
-        $dbh = $this->_getConsentDatabaseConnection();
-        if (!$dbh) {
-            return false;
-        }
+        return $this->_hashService->getStableAttributesHash($attributes, $this->_mustStoreValues);
+    }
 
-        $query = "INSERT INTO consent (hashed_user_id, service_id, attribute, consent_type, consent_date, deleted_at)
-                  VALUES (?, ?, ?, ?, NOW(), '0000-00-00 00:00:00')
-                  ON DUPLICATE KEY UPDATE attribute=VALUES(attribute), consent_type=VALUES(consent_type), consent_date=NOW()";
+    private function _storeConsent(ServiceProvider $serviceProvider, $consentType): bool
+    {
         $parameters = array(
             sha1($this->_getConsentUid()),
             $serviceProvider->entityId,
-            $this->_getAttributesHash($this->_responseAttributes),
+            $this->_getStableAttributesHash($this->_responseAttributes),
             $consentType,
         );
 
-        $statement = $dbh->prepare($query);
-        if (!$statement) {
-            throw new EngineBlock_Exception(
-                "Unable to create a prepared statement to insert consent?!",
-                EngineBlock_Exception::CODE_CRITICAL
-            );
-        }
-
-        /** @var $statement PDOStatement */
-        if (!$statement->execute($parameters)) {
-            throw new EngineBlock_Corto_Module_Services_Exception(
-                sprintf('Error storing consent: "%s"', var_export($statement->errorInfo(), true)),
-                EngineBlock_Exception::CODE_CRITICAL
-            );
-        }
-        return true;
+        return $this->_hashService->storeConsentHash($parameters);
     }
 
-    private function _hasStoredConsent(ServiceProvider $serviceProvider, $consentType)
+    private function _updateConsent(ServiceProvider $serviceProvider, $consentType): bool
     {
-        try {
-            $dbh = $this->_getConsentDatabaseConnection();
-            if (!$dbh) {
-                return false;
-            }
+        $parameters = array(
+            $this->_getStableAttributesHash($this->_responseAttributes),
+            $this->_getAttributesHash($this->_responseAttributes),
+            sha1($this->_getConsentUid()),
+            $serviceProvider->entityId,
+            $consentType,
+        );
 
-            $attributesHash = $this->_getAttributesHash($this->_responseAttributes);
+        return $this->_hashService->updateConsentHash($parameters);
+    }
 
-            $query = "
-                SELECT *
-                FROM {$this->_tableName}
-                WHERE hashed_user_id = ?
-                  AND service_id = ?
-                  AND attribute = ?
-                  AND consent_type = ?
-                  AND deleted_at IS NULL
-            ";
-            $hashedUserId = sha1($this->_getConsentUid());
-            $parameters = array(
-                $hashedUserId,
-                $serviceProvider->entityId,
-                $attributesHash,
-                $consentType,
-            );
-
-            /** @var $statement PDOStatement */
-            $statement = $dbh->prepare($query);
-            $statement->execute($parameters);
-            $rows = $statement->fetchAll();
-
-            if (count($rows) < 1) {
-                // No stored consent found
-                return false;
-            }
-
-            return true;
-        } catch (PDOException $e) {
-            throw new EngineBlock_Corto_ProxyServer_Exception(
-                sprintf('Consent retrieval failed! Error: "%s"', $e->getMessage()),
-                EngineBlock_Exception::CODE_ALERT
-            );
-        }
+    private function _hasStoredConsent(ServiceProvider $serviceProvider, $consentType): ConsentVersion
+    {
+        $consentUuid = sha1($this->_getConsentUid());
+        $parameters = [
+            $consentUuid,
+            $serviceProvider->entityId,
+            $this->_getAttributesHash($this->_responseAttributes),
+            $this->_getStableAttributesHash($this->_responseAttributes),
+            $consentType,
+        ];
+        return $this->_hashService->retrieveConsentHash($parameters);
     }
 }
