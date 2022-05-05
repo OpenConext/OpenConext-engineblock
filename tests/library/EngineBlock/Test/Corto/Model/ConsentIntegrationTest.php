@@ -20,6 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Mockery\MockInterface;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
+use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\Consent\ConsentHashService;
 use OpenConext\EngineBlockBundle\Authentication\Repository\DbalConsentRepository;
@@ -73,11 +74,7 @@ class EngineBlock_Corto_Model_Consent_Integration_Test extends TestCase
         $this->consentRepository
             ->shouldReceive('hasConsentHash')
             ->once()
-            ->andReturn(false);
-        $this->consentRepository
-            ->shouldReceive('hasStableConsentHash')
-            ->once()
-            ->andReturn(false);
+            ->andReturn(ConsentVersion::notGiven());
         switch ($consentType) {
             case ConsentType::TYPE_EXPLICIT:
                 $this->assertFalse($this->consent->explicitConsentWasGivenFor($serviceProvider));
@@ -99,17 +96,10 @@ class EngineBlock_Corto_Model_Consent_Integration_Test extends TestCase
             ->andReturn('collab:person:id:org-a:joe-a');
         // Stable consent is not yet stored
         $this->consentRepository
-            ->shouldReceive('hasStableConsentHash')
-            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
-            ->once()
-            ->andReturn(false);
-        // Old-style (unstable) consent was given previously
-        $this->consentRepository
             ->shouldReceive('hasConsentHash')
-            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
+            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
             ->once()
-            ->andReturn(true);
-
+            ->andReturn(ConsentVersion::unstable());
 
         switch ($consentType) {
             case ConsentType::TYPE_EXPLICIT:
@@ -132,13 +122,10 @@ class EngineBlock_Corto_Model_Consent_Integration_Test extends TestCase
             ->andReturn('collab:person:id:org-a:joe-a');
         // Stable consent is not yet stored
         $this->consentRepository
-            ->shouldReceive('hasStableConsentHash')
-            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
+            ->shouldReceive('hasConsentHash')
+            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
             ->once()
-            ->andReturn(true);
-        // Old-style (unstable) consent was given previously
-        $this->consentRepository
-            ->shouldNotReceive('hasConsentHash');
+            ->andReturn(ConsentVersion::stable());
 
         switch ($consentType) {
             case ConsentType::TYPE_EXPLICIT:
@@ -211,18 +198,12 @@ class EngineBlock_Corto_Model_Consent_Integration_Test extends TestCase
         $this->response->shouldReceive('getNameIdValue')
             ->twice()
             ->andReturn('collab:person:id:org-a:joe-a');
-        // Stable consent is not yet stored
-        $this->consentRepository
-            ->shouldReceive('hasStableConsentHash')
-            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
-            ->once()
-            ->andReturn(false);
         // Old-style (unstable) consent was given previously
         $this->consentRepository
             ->shouldReceive('hasConsentHash')
-            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
+            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
             ->once()
-            ->andReturn(true);
+            ->andReturn(ConsentVersion::unstable());
         // Now assert that the new stable consent hash is going to be set
         $this->consentRepository
             ->shouldReceive('updateConsentHash')
@@ -242,12 +223,12 @@ class EngineBlock_Corto_Model_Consent_Integration_Test extends TestCase
         $this->response->shouldReceive('getNameIdValue')
             ->once()
             ->andReturn('collab:person:id:org-a:joe-a');
-        // Stable consent is not yet stored
+        // Stable consent is stored
         $this->consentRepository
-            ->shouldReceive('hasStableConsentHash')
-            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
+            ->shouldReceive('hasConsentHash')
+            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
             ->once()
-            ->andReturn(true);
+            ->andReturn(ConsentVersion::stable());
         // Now assert that the new stable consent hash is NOT going to be set
         $this->consentRepository
             ->shouldNotReceive('storeConsentHash');

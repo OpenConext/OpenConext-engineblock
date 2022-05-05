@@ -26,6 +26,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use OpenConext\EngineBlock\Authentication\Model\Consent;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
+use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 use OpenConext\EngineBlock\Exception\RuntimeException;
 use PDO;
 use PDOException;
@@ -177,7 +178,7 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
     /**
      * @throws RuntimeException
      */
-    public function hasConsentHash(array $parameters): bool
+    public function hasConsentHash(array $parameters): ConsentVersion
     {
         try {
             $query = " SELECT
@@ -189,7 +190,7 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
                         AND
                             service_id = ?
                         AND
-                            attribute = ?
+                            (attribute = ? OR attribute_stable = ?)
                         AND
                             consent_type = ?
                         AND
@@ -202,43 +203,15 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
 
             if (count($rows) < 1) {
                 // No stored consent found
-                return false;
+                return ConsentVersion::notGiven();
             }
 
-            return true;
+            if ($rows[0]['attribute_stable'] !== '') {
+                return ConsentVersion::stable();
+            }
+            return ConsentVersion::unstable();
         } catch (PDOException $e) {
             throw new RuntimeException(sprintf('Consent retrieval failed! Error: "%s"', $e->getMessage()));
-        }
-    }
-    /**
-     * @throws RuntimeException
-     */
-    public function hasStableConsentHash(array $parameters): bool
-    {
-        try {
-            $query = " SELECT
-                            *
-                        FROM
-                            consent
-                        WHERE
-                            hashed_user_id = ?
-                        AND
-                            service_id = ?
-                        AND
-                            attribute_stable = ?
-                        AND
-                            consent_type = ?
-                        AND
-                            deleted_at IS NULL
-            ";
-
-            $statement = $this->connection->prepare($query);
-            $statement->execute($parameters);
-            $rows = $statement->fetchAll();
-
-            return count($rows) >= 1;
-        } catch (PDOException $e) {
-            throw new RuntimeException(sprintf('Consent retrieval on stable consent hash failed! Error: "%s"', $e->getMessage()));
         }
     }
 
