@@ -84,8 +84,11 @@ class EngineBlock_Corto_Model_Consent
 
     public function explicitConsentWasGivenFor(ServiceProvider $serviceProvider): bool
     {
+        if (!$this->_consentEnabled) {
+            return true;
+        }
         $consent = $this->_hasStoredConsent($serviceProvider, ConsentType::TYPE_EXPLICIT);
-        return !$this->_consentEnabled || $consent->given();
+        return $consent->given();
     }
 
     /**
@@ -103,8 +106,11 @@ class EngineBlock_Corto_Model_Consent
 
     public function implicitConsentWasGivenFor(ServiceProvider $serviceProvider): bool
     {
+        if (!$this->_consentEnabled) {
+            return true;
+        }
         $consent = $this->_hasStoredConsent($serviceProvider, ConsentType::TYPE_IMPLICIT);
-        return !$this->_consentEnabled || $consent->given();
+        return $consent->given();
     }
 
     public function giveExplicitConsentFor(ServiceProvider $serviceProvider): bool
