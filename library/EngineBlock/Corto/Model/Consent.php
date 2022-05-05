@@ -181,28 +181,10 @@ class EngineBlock_Corto_Model_Consent
         $parameters = [
             $consentUuid,
             $serviceProvider->entityId,
+            $this->_getAttributesHash($this->_responseAttributes),
             $this->_getStableAttributesHash($this->_responseAttributes),
             $consentType,
         ];
-        $hasStableConsentHash = $this->_hashService->retrieveStableConsentHash($parameters);
-
-        if ($hasStableConsentHash) {
-            return ConsentVersion::stable();
-        }
-
-        $parameters = [
-            $consentUuid,
-            $serviceProvider->entityId,
-            $this->_getAttributesHash($this->_responseAttributes),
-            $consentType,
-        ];
-
-        $hasUnstableConsentHash = $this->_hashService->retrieveConsentHash($parameters);
-
-        if ($hasUnstableConsentHash) {
-            return ConsentVersion::unstable();
-        }
-
-        return ConsentVersion::notGiven();
+        return $this->_hashService->retrieveConsentHash($parameters);
     }
 }

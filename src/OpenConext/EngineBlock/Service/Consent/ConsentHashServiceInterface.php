@@ -18,17 +18,14 @@
 
 namespace OpenConext\EngineBlock\Service\Consent;
 
+use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
+
 interface ConsentHashServiceInterface
 {
     /**
-     * Retrieve the old-style (deprecated) unstable consent hash
+     * Retrieve the consent hash
      */
-    public function retrieveConsentHash(array $parameters): bool;
-
-    /**
-     * Retrieve the stable consent hash
-     */
-    public function retrieveStableConsentHash(array $parameters): bool;
+    public function retrieveConsentHash(array $parameters): ConsentVersion;
 
     public function storeConsentHash(array $parameters): bool;
 

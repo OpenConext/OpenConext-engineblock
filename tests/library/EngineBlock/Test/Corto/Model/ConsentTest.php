@@ -17,6 +17,7 @@
  */
 
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\Consent\ConsentHashServiceInterface;
 use PHPUnit\Framework\TestCase;
@@ -76,8 +77,7 @@ class EngineBlock_Corto_Model_Consent_Test extends TestCase
         $serviceProvider = new ServiceProvider("service-provider-entity-id");
         $this->consentService->shouldReceive('getStableAttributesHash');
         $this->consentService->shouldReceive('getUnstableAttributesHash')->andReturn(sha1('unstable'));
-        $this->consentService->shouldReceive('retrieveConsentHash')->andReturn(sha1('unstable'));
-        $this->consentService->shouldReceive('retrieveStableConsentHash');
+        $this->consentService->shouldReceive('retrieveConsentHash')->andReturn(ConsentVersion::stable());
         $this->consent->explicitConsentWasGivenFor($serviceProvider);
 
         $this->consentService->shouldReceive('getStableAttributesHash')->andReturn(sha1('stable'));

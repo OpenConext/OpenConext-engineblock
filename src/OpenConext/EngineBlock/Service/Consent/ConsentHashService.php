@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlock\Service\Consent;
 
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
+use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 use OpenConext\UserLifecycle\Domain\ValueObject\Client\Name;
 use SAML2\XML\saml\NameID;
 use function array_filter;
@@ -48,14 +49,9 @@ final class ConsentHashService implements ConsentHashServiceInterface
         $this->consentRepository = $consentHashRepository;
     }
 
-    public function retrieveConsentHash(array $parameters): bool
+    public function retrieveConsentHash(array $parameters): ConsentVersion
     {
         return $this->consentRepository->hasConsentHash($parameters);
-    }
-
-    public function retrieveStableConsentHash(array $parameters): bool
-    {
-        return $this->consentRepository->hasStableConsentHash($parameters);
     }
 
     public function storeConsentHash(array $parameters): bool
