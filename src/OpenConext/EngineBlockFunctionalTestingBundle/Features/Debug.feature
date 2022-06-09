@@ -25,8 +25,6 @@ Feature:
     And I should see "Second-IdP"
     And I should see "Logo"
     And the response should contain "idp2-logo.jpg"
-    And I should see "NameId"
-    And I should see "ETS-MOCK-IDP"
     And I should see "urn:mace:dir:attribute-def:uid"
     And I should see "test"
     And I should see "urn:mace:terena.org:attribute-def:schacHomeOrganization"

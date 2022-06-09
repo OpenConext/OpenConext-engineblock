@@ -567,7 +567,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
                 'response' => $response,
                 'attributes' => $attributes,
                 'validationResult' => $validationResult,
-                'nameId' => $response->getAssertion()->getNameId()
             ]
         );
 
@@ -720,7 +719,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             [
                 'wide' => true,
                 'idp' => $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getIssuer()->getValue()),
-                'nameId' => $response->getAssertion()->getNameId(),
                 'attributes' => $attributes,
                 'validationResult' => $validationResult,
                 'showMailFlashMessage' => $showMailFlashMessage,
