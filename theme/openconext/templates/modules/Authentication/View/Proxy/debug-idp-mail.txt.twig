@@ -7,10 +7,6 @@ Name               {{ idp.nameEn }}
 Entity ID          {{ idp.entityId }}
 Workflow Status:   {{ idp.workflowState }}
 
-SAML2 Subject
-=============
-NameID             {{ nameId.value }}
-
 Attributes
 ==========
 {% for error in validationResult.errorsForMissingAttributes %}
