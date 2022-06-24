@@ -68,6 +68,8 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
 
             new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($logger, $blockUsersOnViolation),
 
+            new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectId($logger, $blockUsersOnViolation),
+
             // Check whether this IdP is allowed to send a response to the destination SP
             new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection(),
 

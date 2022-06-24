@@ -263,6 +263,57 @@ Feature:
     Then I should not see "Attribute value not allowed"
       And I should not see "Your organisation sends a value for attribute eduPersonPrincipalName"
 
+  Scenario: I log in at my Identity Provider, that has the 'block_user_on_violation' feature activated, and has an invalid scope in the subject-id attribute.
+    Given feature "eb.block_user_on_violation" is enabled
+      And the IdP "Dummy Idp" sends attribute "urn:mace:terena.org:attribute-def:schacHomeOrganization" with value "test"
+      And the IdP "Dummy Idp" sends attribute "urn:oasis:names:tc:SAML:attribute:subject-id" with value "name@out-of-scope"
+      And the Idp with name "Dummy Idp" has shibd scope "test"
+    When I log in at "Dummy SP"
+      And I pass through EngineBlock
+      And I pass through the IdP
+      And I give my consent
+    Then I should see "Attribute value not allowed"
+      And I should see "Your organisation sends a value for attribute subject-id (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
+      And I should see "UR ID:"
+      And I should see "IP:"
+      And I should see "EC:"
+      And I should see "SP:"
+      And I should see "SP Name:"
+
+  Scenario: I log in at my Identity Provider, and have too many values in the subject-id attribute.
+    Given the IdP "Dummy Idp" sends attribute "urn:mace:terena.org:attribute-def:schacHomeOrganization" with value "test"
+      And the IdP "Dummy Idp" sends attribute "urn:oasis:names:tc:SAML:attribute:subject-id" with values "name@test,othername@test" and xsi:type is "xs:string"
+      And the Idp with name "Dummy Idp" has shibd scope "test"
+    When I log in at "Dummy SP"
+      And I pass through EngineBlock
+      And I pass through the IdP
+      And I give my consent
+    Then I should see "Attribute value not allowed"
+      And I should see "Your organisation sends a value for attribute subject-id (\"not exactly one value\") which is not allowed for this organisation. Therefore you cannot log in."
+
+  Scenario: I log in at my Identity Provider, and have a subject-id attribute without a scope.
+    Given the IdP "Dummy Idp" sends attribute "urn:mace:terena.org:attribute-def:schacHomeOrganization" with value "test"
+      And the IdP "Dummy Idp" sends attribute "urn:oasis:names:tc:SAML:attribute:subject-id" with value "someplainstring"
+      And the Idp with name "Dummy Idp" has shibd scope "test"
+    When I log in at "Dummy SP"
+      And I pass through EngineBlock
+      And I pass through the IdP
+      And I give my consent
+    Then I should see "Attribute value not allowed"
+      And I should see "Your organisation sends a value for attribute subject-id (\"missing @ in value\") which is not allowed for this organisation. Therefore you cannot log in."
+
+  Scenario: I log in at my Identity Provider, that has the 'block_user_on_violation' feature activated, and has a valid subject-id attribute.
+    Given feature "eb.block_user_on_violation" is enabled
+      And the IdP "Dummy Idp" sends attribute "urn:mace:terena.org:attribute-def:schacHomeOrganization" with value "test"
+      And the IdP "Dummy Idp" sends attribute "urn:oasis:names:tc:SAML:attribute:subject-id" with value "name@test"
+      And the Idp with name "Dummy Idp" has shibd scope "test"
+    When I log in at "Dummy SP"
+      And I pass through EngineBlock
+      And I pass through the IdP
+      And I give my consent
+    Then I should not see "Attribute value not allowed"
+      And I should not see "Your organisation sends a value for attribute subject-id"
+
   Scenario: The session has been lost after passing through EngineBlock
     When I log in at "Dummy SP"
      And I pass through EngineBlock
