@@ -286,6 +286,7 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_attribute_validator_not_in_definitions'  => '%arg1% não é conhecido no schema',
     'error_attribute_validator_allowed'             => '\'%arg3%\' não é um valor permitido para este atributo',
     'error_attribute_validator_availability'        => '\'%arg3%\' é um schacHomeOrganization reservado para outro Fornecedor de Identidade',
+    'allowed_scopes'                                => 'Allowed scopes',
 
     'error_unknown_requesterid_in_authnrequest'         => 'Erro - Serviço desconhecido',
     'error_unknown_requesterid_in_authnrequest_desc'    => '<p>O serviço solicitado não foi encontrado.</p>',

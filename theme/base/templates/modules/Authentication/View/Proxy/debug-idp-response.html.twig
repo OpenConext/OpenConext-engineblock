@@ -69,6 +69,17 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ 'allowed_scopes'|trans }}
+                        </th>
+                        <td>
+                            {% for scope in idp.shibMdScopes %}
+                                {{ scope.allowed }}
+                                {% if scope.regex %}(regex){% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             Workflow Status
                         </th>
                         <td {% if idp.workflowState == 'prodaccepted' %}{{ 'class="green"' }}{% endif %}>

@@ -189,7 +189,7 @@
         "DisplayOrder" : 10,
         "DisplayConsent" : true,
         "Conditions": {
-            "error": {
+            "warning": {
                 "max": "1",
                 "regex": "#^[a-z0-9][a-z0-9=-]{3,}@[a-z0-9][a-z0-9.-]+\\.[a-z]{2,}$#"
             },
