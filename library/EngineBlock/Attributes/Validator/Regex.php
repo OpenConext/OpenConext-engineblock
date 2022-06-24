@@ -18,7 +18,7 @@
 
 class EngineBlock_Attributes_Validator_Regex extends EngineBlock_Attributes_Validator_Abstract
 {
-    const ERROR_ATTRIBUTE_VALIDATOR_MAXLENGTH = 'error_attribute_validator_regex';
+    const ERROR_ATTRIBUTE_VALIDATOR_REGEX = 'error_attribute_validator_regex';
 
     public function validate(array $attributes)
     {
@@ -31,7 +31,7 @@ class EngineBlock_Attributes_Validator_Regex extends EngineBlock_Attributes_Vali
             if ($matched === false) {
                 // @todo log
                 $this->_messages[] = array(
-                    self::ERROR_ATTRIBUTE_VALIDATOR_MAXLENGTH,
+                    self::ERROR_ATTRIBUTE_VALIDATOR_REGEX,
                     $this->_attributeName,
                     $this->_options,
                     $attributeValue
@@ -40,7 +40,7 @@ class EngineBlock_Attributes_Validator_Regex extends EngineBlock_Attributes_Vali
             }
             if ($matched === 0) {
                 $this->_messages[] = array(
-                    self::ERROR_ATTRIBUTE_VALIDATOR_MAXLENGTH,
+                    self::ERROR_ATTRIBUTE_VALIDATOR_REGEX,
                     $this->_attributeName,
                     $this->_options,
                     $attributeValue

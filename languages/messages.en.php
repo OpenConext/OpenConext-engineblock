@@ -277,6 +277,7 @@ Your %organisationNoun% has denied you access to this service. You will have to 
     'error_attribute_validator_not_in_definitions'  => '%arg1% is not known in the schema',
     'error_attribute_validator_allowed'             => '\'%arg3%\' is not an allowed value for this attribute',
     'error_attribute_validator_availability'        => '\'%arg3%\' is a reserved schacHomeOrganization for another Identity Provider',
+    'allowed_scopes'                                => 'Allowed scopes',
 
     'error_unknown_requesterid_in_authnrequest'         => 'Error - Unknown service',
     'error_unknown_requesterid_in_authnrequest_desc'    => '<p>Your requested service couldn\'t be found.</p>',
