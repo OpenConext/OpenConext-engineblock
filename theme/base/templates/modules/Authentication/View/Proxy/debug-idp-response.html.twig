@@ -140,7 +140,7 @@
                                 {% if validationResult.isValid(attributeName) %}
                                     <i class="c-icon c-icon-checkmark fa-check"></i>
                                 {% else %}
-                                    {% if validationResult.errors(attributeName).length > 0 %}
+                                    {% if validationResult.errors(attributeName)|length > 0 %}
                                         <p class="error">
                                             <i class="c-icon c-icon-error fa-exclamation"></i>
                                         </p>
