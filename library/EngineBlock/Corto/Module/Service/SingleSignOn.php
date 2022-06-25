@@ -554,6 +554,8 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         $identityProvider = $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getIssuer()->getValue());
 
         $attributes = $response->getAssertion()->getAttributes();
+        $normalizer = new EngineBlock_Attributes_Normalizer($attributes);
+        $attributes = $normalizer->normalize();
 
         $validationResult = EngineBlock_ApplicationSingleton::getInstance()
             ->getDiContainer()
@@ -708,6 +710,8 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         }
 
         $attributes = $response->getAssertion()->getAttributes();
+        $normalizer = new EngineBlock_Attributes_Normalizer($attributes);
+        $attributes = $normalizer->normalize();
 
         $validationResult = EngineBlock_ApplicationSingleton::getInstance()
             ->getDiContainer()
