@@ -705,6 +705,14 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         /** @var Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
         $response = $_SESSION['debugIdpResponse'];
 
+        $log = $this->_server->getLogger();
+        $log->info(
+            'Received response to IdP debug page',
+            ['saml_response' => $response->toUnsignedXML()->ownerDocument->saveXML()]
+        );
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $application->flushLog('IdP debug page; activating all logs');
+
         if (isset($_POST['mail'])) {
             $this->_sendDebugMail($response);
         }
@@ -713,8 +721,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         $normalizer = new EngineBlock_Attributes_Normalizer($attributes);
         $attributes = $normalizer->normalize();
 
-        $validationResult = EngineBlock_ApplicationSingleton::getInstance()
-            ->getDiContainer()
+        $validationResult = $application->getDiContainer()
             ->getAttributeValidator()
             ->validate($attributes);
 
