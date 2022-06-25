@@ -203,7 +203,7 @@ HTML
         Neem alstublieft contact op met de helpdesk van %idpName%. Geef hierbij de onderstaande informatie door.
     </p>
     <p>
-        Omdat %idpName% niet de juiste attributen aan %suiteName% doorgeeft is het inloggen mislukt. De volgende attributen zijn vereist om succesvol in te loggen op het %suiteName% platform:
+        Omdat %idpName% niet de juiste attributen aan %suiteName% doorgeeft, of in het onjuiste formaat, is het inloggen mislukt. De volgende attributen zijn vereist om succesvol in te loggen op het %suiteName% platform:
         <ul>
             <li>UID</li>
             <li>schacHomeOrganization</li>

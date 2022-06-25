@@ -200,7 +200,7 @@ HTML
     'error_generic_desc_no_names' => 'Logging in has failed and we don\'t know exactly why. Please try again first by going back to the service and logging in again. If this doesn\'t work, please contact the service desk of your %organisationNoun%.',
     'error_missing_required_fields'     => 'Error - Missing required fields',
     'error_missing_required_fields_desc'=> '<p>
-%idpName% does not provide the mandatory information. Therefore, you can not use %spName%. Please contact the service desk of %idpName% and tell them one or more of the the following required attribute(s) are missing within %suiteName%:
+%idpName% does not provide the mandatory information or it has an invalid format. Therefore, you can not use %spName%. Please contact the service desk of %idpName% and tell them one or more of the the following required attributes are not being set correctly for %suiteName%:
 </p>
 <p>
     <ul>
