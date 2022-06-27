@@ -300,7 +300,6 @@ Your %organisationNoun% has denied you access to this service. You will have to 
 
     'attributes' => 'Attributes',
     'validation' => 'Validation',
-    'remarks' => 'Remarks',
     'idp_debugging_mail_explain' => 'When requested by %suiteName%,
                                     use the "Mail to %suiteName%" button below
                                     to mail the information in this screen.',
