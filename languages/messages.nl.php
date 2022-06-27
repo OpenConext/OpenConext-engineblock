@@ -314,7 +314,6 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
 
     'attributes' => 'Attributen',
     'validation' => 'Validatie',
-    'remarks' => 'Opmerkingen',
     'idp_debugging_mail_explain' => 'Indien gevraagd door %suiteName%,
                                         gebruik de "Mail naar %suiteName%" knop hieronder
                                         om de informatie op dit scherm naar %suiteName% beheer te e-mailen.',
