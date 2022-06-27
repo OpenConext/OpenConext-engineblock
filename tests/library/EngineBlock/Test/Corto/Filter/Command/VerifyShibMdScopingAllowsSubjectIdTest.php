@@ -22,17 +22,17 @@ use Monolog\Logger;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use PHPUnit\Framework\TestCase;
+use SAML2\Constants;
 use SAML2\Assertion;
 use SAML2\Response;
 
-class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalNameTest extends TestCase
+class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectIdTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    const URN_MACE    = 'urn:mace:dir:attribute-def:eduPersonPrincipalName';
-    const URN_OID     = 'urn:oid:1.3.6.1.4.1.5923.1.1.1.6';
-    const EPPN_SUFFIX = 'openconext.org';
-    const EPPN_VALUE  = 'invalid@' . self::EPPN_SUFFIX;
+    const SUB_NAME   = Constants::ATTR_SUBJECT_ID;
+    const SUB_SUFFIX = 'openconext.org';
+    const SUB_VALUE  = 'invalid@' . self::SUB_SUFFIX;
 
     /**
      * @var TestHandler
@@ -52,208 +52,227 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPr
     public function setUp()
     {
         $this->handler = new TestHandler();
-        $this->logger  = new Logger('Test', array($this->handler));
+        $this->logger  = new Logger('Test', [$this->handler]);
 
         $assertion = new Assertion();
-        $assertion->setAttributes(array(self::URN_OID => array(self::EPPN_VALUE)));
+        $assertion->setAttributes([self::SUB_NAME => [self::SUB_VALUE]]);
 
         $response = new Response();
-        $response->setAssertions(array($assertion));
+        $response->setAssertions([$assertion]);
 
         $this->response = new EngineBlock_Saml2_ResponseAnnotationDecorator($response);
     }
 
     public function testNoConfiguredScopesLeadsToNoVerification()
     {
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger, false);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectId($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider(new IdentityProvider('OpenConext'));
 
         $verifier->execute();
 
         $noScopeMessageLogged = $this->handler->hasNotice(
-            'No shibmd:scope found in the IdP metadata, not verifying eduPersonPrincipalName'
+            'No shibmd:scope found in the IdP metadata, not verifying subject-id'
         );
 
         $this->assertTrue($noScopeMessageLogged, 'Logging that no shibmd:scope is configured is required');
     }
 
-    public function testNoEduPersonPrincipalNameLeadsToNoVerification()
+    public function testNoSubjectIdLeadsToNoVerification()
     {
         $scope          = new ShibMdScope();
         $scope->regexp  = false;
-        $scope->allowed = self::EPPN_SUFFIX;
+        $scope->allowed = self::SUB_SUFFIX;
 
         $identityProvider               = new IdentityProvider('OpenConext');
-        $identityProvider->shibMdScopes = array($scope);
+        $identityProvider->shibMdScopes = [$scope];
 
         // wipe the assertion attributes
-        $this->response->getAssertion()->setAttributes(array());
+        $this->response->getAssertion()->setAttributes([]);
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger, false);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectId($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
         $verifier->execute();
 
-        $noEduPersonPrincipalNameMessageLogged = $this->handler->hasNotice(
-            'No eduPersonPrincipalName found in response, not verifying'
+        $noSubjectIdMessageLogged = $this->handler->hasNotice(
+            'No subject-id found in response, not verifying'
         );
 
         $this->assertTrue(
-            $noEduPersonPrincipalNameMessageLogged,
-            'Logging that no eduPersonPrincipalName is found is required'
+            $noSubjectIdMessageLogged,
+            'Logging that no subject-id is found is required'
         );
     }
 
-    public function testEduPersonPrincipalNameWithoutAtSignIsLoggedAsWarning()
+    public function testSubjectIdWithoutAtSignIsRejected()
     {
         $scope          = new ShibMdScope();
         $scope->regexp  = false;
-        $scope->allowed = self::EPPN_SUFFIX;
+        $scope->allowed = self::SUB_SUFFIX;
 
         $identityProvider               = new IdentityProvider('OpenConext');
-        $identityProvider->shibMdScopes = array($scope);
+        $identityProvider->shibMdScopes = [$scope];
 
         // wipe the assertion attributes
-        $this->response->getAssertion()->setAttributes(array(self::URN_OID => array('NoAtSign')));
+        $this->response->getAssertion()->setAttributes([self::SUB_NAME => ['NoAtSign']]);
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger, false);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectId($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
+        $this->expectException(EngineBlock_Corto_Exception_InvalidAttributeValue::class);
+        $this->expectExceptionMessage('Invalid subject-id, missing @');
+
         $verifier->execute();
-
-        $noAtSignMessageLogged = $this->handler->hasWarning(
-            'Value of attribute eduPersonPrincipalName does not contain "@", not verifying'
-        );
-
-        $this->assertTrue($noAtSignMessageLogged);
     }
 
-    public function testEduPersonPrincipalNameNotInScopeIsLoggedAsWarning()
+    public function testSubjectIdWithMultipleValuesRejected()
+    {
+        $scope          = new ShibMdScope();
+        $scope->regexp  = false;
+        $scope->allowed = self::SUB_SUFFIX;
+
+        $identityProvider               = new IdentityProvider('OpenConext');
+        $identityProvider->shibMdScopes = [$scope];
+
+        $attributes = [self::SUB_NAME => ['something@' . self::SUB_SUFFIX, 'other@' . self::SUB_SUFFIX]];
+        $this->response->getAssertion()->setAttributes($attributes);
+
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectId($this->logger, false);
+        $verifier->setResponse($this->response);
+        $verifier->setIdentityProvider($identityProvider);
+
+        $this->expectException(EngineBlock_Corto_Exception_InvalidAttributeValue::class);
+        $this->expectExceptionMessage('Only exactly one subject-id allowed');
+
+        $verifier->execute();
+    }
+
+    public function testSubjectIdNotInScopeIsLoggedAsWarning()
     {
         $scope          = new ShibMdScope();
         $scope->regexp  = false;
         $scope->allowed = 'You shall not pass';
 
         $identityProvider               = new IdentityProvider('OpenConext');
-        $identityProvider->shibMdScopes = array($scope);
+        $identityProvider->shibMdScopes = [$scope];
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger, false);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectId($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
         $verifier->execute();
 
         $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
-            'eduPersonPrincipalName attribute value "' . self::EPPN_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
+            'subject-id attribute value "' . self::SUB_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
         );
 
         $this->assertTrue($invalidScopeIsLogged);
     }
 
-    public function testEduPersonPrincipalNameThatMatchesLogsNoWarning()
+    public function testSubjectIdThatMatchesLogsNoWarning()
     {
         $scope          = new ShibMdScope();
         $scope->regexp  = false;
-        $scope->allowed = 'openconext.org';
+        $scope->allowed = 'openconext.org;
 
         $identityProvider               = new IdentityProvider('OpenConext');
-        $identityProvider->shibMdScopes = array($scope);
+        $identityProvider->shibMdScopes = [$scope];
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger, false);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectId($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
         $verifier->execute();
 
         $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
-            'eduPersonPrincipalName attribute value "' . self::EPPN_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
+            'subject-id attribute value "' . self::SUB_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
         );
 
         $this->assertFalse($invalidScopeIsLogged);
     }
 
-    public function testEduPersonPrincipalNameThatMatchesCaseInsensitivelyLogsNoWarning()
+    public function testSubjectIdThatMatchesCaseInsensitivelyLogsNoWarning()
     {
         $scope          = new ShibMdScope();
         $scope->regexp  = false;
         $scope->allowed = 'openconext.ORG';
 
         $identityProvider               = new IdentityProvider('OpenConext');
-        $identityProvider->shibMdScopes = array($scope);
+        $identityProvider->shibMdScopes = [$scope];
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger, false);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectId($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
         $verifier->execute();
 
         $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
-            'eduPersonPrincipalName attribute value "' . self::EPPN_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
+            'subject-id attribute value "' . self::SUB_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
         );
 
         $this->assertFalse($invalidScopeIsLogged);
     }
 
-    public function testEduPersonPrincipalNameThatMatchesRegexpLogsNoWarning()
+    public function testSubjectIdThatMatchesRegexpLogsNoWarning()
     {
         $scope          = new ShibMdScope();
         $scope->regexp  = true;
         $scope->allowed = '.*conext\.org';
 
         $identityProvider               = new IdentityProvider('OpenConext');
-        $identityProvider->shibMdScopes = array($scope);
+        $identityProvider->shibMdScopes = [$scope];
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger, false);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectId($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
         $verifier->execute();
 
         $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
-            'eduPersonPrincipalName attribute value "' . self::EPPN_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
+            'subject-id attribute value "' . self::SUB_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
         );
 
         $this->assertFalse($invalidScopeIsLogged);
     }
 
-    public function testEduPersonPrincipalNameNotInRegexpScopeIsLoggedAsWarning()
+    public function testSubjectIdNotInRegexpScopeIsLoggedAsWarning()
     {
         $scope          = new ShibMdScope();
         $scope->regexp  = true;
         $scope->allowed = '.*\.noconext\.org';
 
         $identityProvider               = new IdentityProvider('OpenConext');
-        $identityProvider->shibMdScopes = array($scope);
+        $identityProvider->shibMdScopes = [$scope];
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger, false);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectId($this->logger, false);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
         $verifier->execute();
 
         $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
-            'eduPersonPrincipalName attribute value "' . self::EPPN_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
+            'subject-id attribute value "' . self::SUB_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
         );
 
         $this->assertTrue($invalidScopeIsLogged);
     }
 
-    public function testEduPersonPrincipalNameNotInRegexpScopeThrowsException()
+    public function testSubjectIdNotInRegexpScopeThrowsException()
     {
         $this->expectException(EngineBlock_Corto_Exception_InvalidAttributeValue::class);
-        $this->expectExceptionMessage('eduPersonPrincipalName attribute value "openconext.org" is not allowed by configured ShibMdScopes for IdP "OpenConext"');
+        $this->expectExceptionMessage('subject-id attribute value "openconext.org" is not allowed by configured ShibMdScopes for IdP "OpenConext"');
 
         $scope          = new ShibMdScope();
         $scope->regexp  = true;
         $scope->allowed = '.*\.noconext\.org';
 
         $identityProvider               = new IdentityProvider('OpenConext');
-        $identityProvider->shibMdScopes = array($scope);
+        $identityProvider->shibMdScopes = [$scope];
 
-        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger, true);
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectId($this->logger, true);
         $verifier->setResponse($this->response);
         $verifier->setIdentityProvider($identityProvider);
 
