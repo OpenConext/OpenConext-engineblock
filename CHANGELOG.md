@@ -5,6 +5,15 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.8.1
+**Feature**
+* Several improvements to IdP debug page
+* Support subject-id attribute, also for scope checks
+* When consent feature flag is off, also disable the consent API
+
+**Maintenance**
+* Update various JavaScript dependencies
+
 ## 6.8.0
 **Feature**
 * Support removal (soft-delete) of consent by collabPersonID and SP entity id #1160
