@@ -151,8 +151,7 @@
         "DisplayConsent" : true,
         "Conditions": {
             "warning": {
-                "max": "1",
-                "regex": "#^https://ketenid\\.nl#"
+                "max": "1"
             }
         }
     },
@@ -442,16 +441,6 @@
         "DisplayOrder" : 14,
         "DisplayConsent" : true
     },
-    "urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2": {
-        "Description": {
-            "en": "The name of the Virtual Urganisation for which you have authenticated",
-            "nl": "De naam van de Virtuele Organisatie waarvoor je bent ingelogd."
-        },
-        "Name": {
-            "en": "Virtual Organisation Name",
-            "nl": "Naam Virtuele Organisatie"
-        }
-    },
     "urn:oid:1.3.6.1.4.1.5923.1.1.1.10": "urn:mace:dir:attribute-def:eduPersonTargetedID",
     "urn:mace:dir:attribute-def:eduPersonTargetedID": {
         "Description": {
@@ -596,8 +585,18 @@
     "urn:mace:dir:attribute-def:o": {
 
     },
+    "urn:oid:2.5.4.11": "urn:mace:dir:attribute-def:ou",
     "urn:mace:dir:attribute-def:ou": {
-
+        "Description": {
+            "en": "department or unit name",
+            "nl": "afdelings- of onderdeelnaam"
+        },
+        "Name": {
+            "en": "Organizational Unit",
+            "nl": "Organisatieonderdeel"
+        },
+        "DisplayOrder" : 8,
+        "DisplayConsent" : true
     },
     "urn:mace:dir:attribute-def:pager": {
 
