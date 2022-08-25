@@ -24,6 +24,17 @@ Feature:
       And I pass through EngineBlock
     Then the url should match "/functional-testing/SSO-SP/acs"
 
+  Scenario: LoA 1.5 (self-asserted token) should be supported
+     Given the SP "SSO-SP" requires Stepup LoA "http://vm.openconext.org/assurance/loa1_5"
+      When I log in at "SSO-SP"
+       And I select "SSO-IdP" on the WAYF
+       And I pass through EngineBlock
+       And I pass through the IdP
+       And Stepup will successfully verify a user
+       And I give my consent
+       And I pass through EngineBlock
+      Then the url should match "/functional-testing/SSO-SP/acs"
+
     Scenario: Stepup authentication should be supported if set through IdP configuration mapping
       Given the IdP "SSO-IdP" requires Stepup LoA "http://vm.openconext.org/assurance/loa2" for SP "SSO-SP"
       When I log in at "SSO-SP"

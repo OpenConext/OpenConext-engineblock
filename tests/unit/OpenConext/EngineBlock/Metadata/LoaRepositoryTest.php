@@ -83,23 +83,26 @@ class LoaRepositoryTest extends TestCase
 
     private function getValidConfigAsArray()
     {
-        $validConfig = '{"1":{"engineblock":"http:\/\/vm.openconext.org\/assurance\/loa1","gateway":"https:\/\/gateway.tld\/authentication\/loa1"},"2":{"engineblock":"http:\/\/vm.openconext.org\/assurance\/loa2","gateway":"https:\/\/gateway.tld\/authentication\/loa2"},"3":{"engineblock":"http:\/\/vm.openconext.org\/assurance\/loa3","gateway":"https:\/\/gateway.tld\/authentication\/loa3"}}';
-        return json_decode($validConfig, true);
+        return [
+            10 => ["engineblock" => "http://vm.openconext.org/assurance/loa1", "gateway" => "https://gateway.tld/authentication/loa1"],
+            15 => ["engineblock" => "http://vm.openconext.org/assurance/loa1_5", "gateway" => "https://gateway.tld/authentication/loa1_5"],
+            20 => ["engineblock" => "http://vm.openconext.org/assurance/loa2", "gateway" => "https://gateway.tld/authentication/loa2"],
+            30 => ["engineblock" => "http://vm.openconext.org/assurance/loa3", "gateway" => "https://gateway.tld/authentication/loa3"]
+        ];
     }
 
     public function provideInvalidConfig()
     {
         return [
-            [['loa1' => ['engineblock' => 'loa1', 'gateway' => 'loa1']], 'The stepup.loa.mapping should be followed by an integer value, indicating the LoA level. Example: stepup.loa.mapping.3'],
-            [[1 => ['engineBlock' => 'loa1', 'gateway' => 'loa1']], 'Both the engineblock and gateway keys must be present in every LoA mapping.'],
-            [[1 => ['gateway' => 'loa1']], 'Both the engineblock and gateway keys must be present in every LoA mapping.'],
-            [[1 => []], 'Both the engineblock and gateway keys must be present in every LoA mapping.'],
-            [[2 => ['engineblock' => null, 'gateway' => 'loa1']], 'The EngineBlock LoA must be a string value'],
-            [[2 => ['engineblock' => 3, 'gateway' => 'loa1']], 'The EngineBlock LoA must be a string value'],
-            [[2 => ['engineblock' => false, 'gateway' => 'loa1']], 'The EngineBlock LoA must be a string value'],
-            [[3 => ['engineblock' => 'loa1', 'gateway' => null]], 'The Gateway LoA must be a string value'],
-            [[3 => ['engineblock' => 'loa1', 'gateway' => 4]], 'The Gateway LoA must be a string value'],
-            [[3 => ['engineblock' => 'loa1', 'gateway' => true]], 'The Gateway LoA must be a string value'],
+            [[10 => ['engineBlock' => 'loa1', 'gateway' => 'loa1']], 'Both the engineblock and gateway keys must be present in every LoA mapping.'],
+            [[10 => ['gateway' => 'loa1']], 'Both the engineblock and gateway keys must be present in every LoA mapping.'],
+            [[10 => []], 'Both the engineblock and gateway keys must be present in every LoA mapping.'],
+            [[20 => ['engineblock' => null, 'gateway' => 'loa1']], 'The EngineBlock LoA must be a string value'],
+            [[20 => ['engineblock' => 3, 'gateway' => 'loa1']], 'The EngineBlock LoA must be a string value'],
+            [[20 => ['engineblock' => false, 'gateway' => 'loa1']], 'The EngineBlock LoA must be a string value'],
+            [[30 => ['engineblock' => 'loa1', 'gateway' => null]], 'The Gateway LoA must be a string value'],
+            [[30 => ['engineblock' => 'loa1', 'gateway' => 4]], 'The Gateway LoA must be a string value'],
+            [[30 => ['engineblock' => 'loa1', 'gateway' => true]], 'The Gateway LoA must be a string value'],
         ];
     }
 }

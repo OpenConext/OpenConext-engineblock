@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Copyright 2010 SURFnet B.V.
@@ -28,9 +28,10 @@ class Loa
     /**
      * The different levels
      */
-    const LOA_1 = 1;
-    const LOA_2 = 2;
-    const LOA_3 = 3;
+    const LOA_1 = 10;
+    const LOA_1_5 = 15;
+    const LOA_2 = 20;
+    const LOA_3 = 30;
 
     /**
      * @var int
@@ -42,15 +43,9 @@ class Loa
      */
     private $identifier;
 
-    /**
-     * @param int $level
-     * @param string $identifier
-     */
-    public static function create($level, $identifier)
+    public static function create(int $level, string $identifier)
     {
-        $possibleLevels = [self::LOA_1, self::LOA_2, self::LOA_3];
-
-        Assertion::integer($level, 'The LoA level must be an integer value');
+        $possibleLevels = [self::LOA_1, self::LOA_1_5, self::LOA_2, self::LOA_3];
         Assertion::inArray(
             $level,
             $possibleLevels,
@@ -66,28 +61,18 @@ class Loa
         return $loa;
     }
 
-    /**
-     * @param Loa $loa
-     * @return bool
-     */
-    public function levelIsHigherOrEqualTo(Loa $loa)
+    public function levelIsHigherOrEqualTo(Loa $loa): bool
     {
         $isHigherOrEqualTo = $this->level >= $loa->getLevel();
         return $isHigherOrEqualTo;
     }
 
-    /**
-     * @return int
-     */
-    public function getLevel()
+    public function getLevel(): int
     {
         return $this->level;
     }
 
-    /**
-     * @return string
-     */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }

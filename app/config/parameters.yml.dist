@@ -236,13 +236,16 @@ parameters:
     ## The integer after the mapping field indicates the LoA level (1, 2 or 3 are supported).
     ## The engineblock or gateway keys specify the LoAs identifier as will be carried in the AuthnContextClassRef of an assertion.
     stepup.loa.mapping:
-        1:
+        10:
             engineblock: 'http://vm.openconext.org/assurance/loa1'
             gateway: 'http://stepup.vm.openconext.org/assurance/loa1'
-        2:
+        15:
+            engineblock: 'http://vm.openconext.org/assurance/loa1_5'
+            gateway: 'http://stepup.vm.openconext.org/assurance/loa1_5'
+        20:
             engineblock: 'http://vm.openconext.org/assurance/loa2'
             gateway: 'http://stepup.vm.openconext.org/assurance/loa2'
-        3:
+        30:
             engineblock: 'http://vm.openconext.org/assurance/loa3'
             gateway: 'http://stepup.vm.openconext.org/assurance/loa3'
     ## The fallback LoA to return when the Stepup authentication fails but is not required
