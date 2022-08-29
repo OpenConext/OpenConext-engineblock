@@ -3,7 +3,7 @@ import {handleClickingDisabledIdp} from './handleClickingDisabledIdp';
 import {hasVisibleDisabledButtonAsTarget} from './utility/hasVisibleDisabledButtonAsTarget';
 import {hasVisibleDeleteButtonAsTarget} from './utility/hasVisibleDeleteButtonAsTarget';
 import {idpFormSelector, idpSelector} from '../selectors';
-import {rememberChoice} from './rememberChoice'
+import {rememberChoice} from './rememberChoice';
 
 /**
  * Submit the form for the selected idp.
