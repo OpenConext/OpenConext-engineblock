@@ -91,9 +91,9 @@ class LoaTest extends TestCase
     public function provideInvalidLoaParameters()
     {
         return [
-            [0, 'https://vm.openconext.nl/loa1', 'Please provide a valid level. Accpetable LoA levels are "10, 15, 20, 30"'],
-            [-1, 'https://vm.openconext.nl/loa1', 'Please provide a valid level. Accpetable LoA levels are "10, 15, 20, 30"'],
-            [4, 'https://vm.openconext.nl/loa1', 'Please provide a valid level. Accpetable LoA levels are "10, 15, 20, 30"'],
+            [0, 'https://vm.openconext.nl/loa1', 'Please provide a valid level. Acceptable LoA levels are "10, 15, 20, 30"'],
+            [-1, 'https://vm.openconext.nl/loa1', 'Please provide a valid level. Acceptable LoA levels are "10, 15, 20, 30"'],
+            [4, 'https://vm.openconext.nl/loa1', 'Please provide a valid level. Acceptable LoA levels are "10, 15, 20, 30"'],
 
             [10, '', 'The LoA identifier must be of type string, and can not be empty'],
         ];

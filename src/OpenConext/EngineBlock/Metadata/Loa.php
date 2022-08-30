@@ -49,7 +49,7 @@ class Loa
         Assertion::inArray(
             $level,
             $possibleLevels,
-            sprintf('Please provide a valid level. Accpetable LoA levels are "%s"', implode(', ', $possibleLevels))
+            sprintf('Please provide a valid level. Acceptable LoA levels are "%s"', implode(', ', $possibleLevels))
         );
         Assertion::nonEmptyString($identifier, 'The LoA identifier must be of type string, and can not be empty');
 
