@@ -3,6 +3,7 @@ import {handleClickingDisabledIdp} from './handleClickingDisabledIdp';
 import {hasVisibleDisabledButtonAsTarget} from './utility/hasVisibleDisabledButtonAsTarget';
 import {hasVisibleDeleteButtonAsTarget} from './utility/hasVisibleDeleteButtonAsTarget';
 import {idpFormSelector, idpSelector} from '../selectors';
+import {rememberChoice} from './rememberChoice';
 
 /**
  * Submit the form for the selected idp.
@@ -27,6 +28,9 @@ export const submitForm = (e) => {
   if (!element.classList.contains(idpSelector)) {
     element = element.closest(idpSelector);
   }
+  
+  const entityId = element.getAttribute('data-entityid');
+  rememberChoice(entityId);
 
   selectAndSubmit(element);
 };
