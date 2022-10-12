@@ -151,13 +151,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         // those that are not allowed.
         $candidateIDPs = $this->_server->getRepository()->findAllIdentityProviderEntityIds($scopedIdps);
 
-        $posOfOwnIdp = array_search($this->_server->getUrl('idpMetadataService'), $candidateIDPs);
-        if ($posOfOwnIdp !== false) {
-            $log->info("Removed ourselves from the candidate IdP list");
-            unset($candidateIDPs[$posOfOwnIdp]);
-            // This could be removed after the magic entities are removed completely https://www.pivotaltracker.com/story/show/168249058
-        }
-
         if (count($scopedIdps) > 0) {
             $log->info(
                 sprintf('%d candidate IdPs after scoping', count($candidateIDPs)),
@@ -497,12 +490,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
 
         $wayfIdps = array();
         foreach ($identityProviders as $identityProvider) {
-            if ($identityProvider->entityId === $this->_server->getUrl('idpMetadataService')) {
-                // Skip ourselves as a valid Idp
-                // This could be removed after the magic entities are removed completely https://www.pivotaltracker.com/story/show/168249058
-                continue;
-            }
-
             if ($identityProvider->getCoins()->hidden()) {
                 continue;
             }
