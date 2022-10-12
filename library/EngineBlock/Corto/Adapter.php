@@ -21,7 +21,6 @@ use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\RemoveDisallowedId
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\RemoveOtherWorkflowStatesFilter;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\DisableDisallowedEntitiesInWayfVisitor;
-use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\EngineBlockMetadataVisitor;
 use OpenConext\EngineBlock\Metadata\Service;
 
 class EngineBlock_Corto_Adapter
@@ -362,8 +361,6 @@ class EngineBlock_Corto_Adapter
 
         $this->configureProxyCertificates($proxyServer);
 
-        $this->enrichEngineBlockMetadata($proxyServer);
-
         $proxyServer->setRepository($this->getMetadataRepository());
         $proxyServer->setBindingsModule(new EngineBlock_Corto_Module_Bindings($proxyServer));
         $proxyServer->setServicesModule(new EngineBlock_Corto_Module_Services($proxyServer));
@@ -478,29 +475,5 @@ class EngineBlock_Corto_Adapter
         }
 
         return $proxyServer->getSigningCertificates();
-    }
-
-    /**
-     * Modify EngineBlocks own metadata entries.
-     *
-     * See EngineBlockMetadataVisitor for more information on what is modified
-     * and why.
-     *
-     * @param EngineBlock_Corto_ProxyServer $proxyServer
-     */
-    protected function enrichEngineBlockMetadata(EngineBlock_Corto_ProxyServer $proxyServer)
-    {
-        $idpEntityId = $proxyServer->getUrl('idpMetadataService');
-        $spEntityId = $proxyServer->getUrl('spMetadataService');
-        $keyPair = $proxyServer->getSigningCertificates();
-
-        $visitor = new EngineBlockMetadataVisitor(
-            $idpEntityId,
-            $spEntityId,
-            $keyPair,
-            EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAttributeMetadata()
-        );
-
-        $this->getMetadataRepository()->appendVisitor($visitor);
     }
 }
