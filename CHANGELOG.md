@@ -7,7 +7,7 @@ More information about our release strategy can be found in the [Development Gui
 
 ## 6.9.0
 **Change**
-* Add support for SURFsecureID LoA 1.5. This requires renumbering the `stepup.loa.mapping` incides in paramters.yml from 1,2,3 to 10,15,20,30.
+* Add support for OpenConext Stepup LoA 1.5. This requires renumbering the `stepup.loa.mapping` indices in parameters.yml from (1,2,3) to (10,15,20,30).
 
 **Maintenance**
 * Fix call for rememberChoice in the WAYF.
