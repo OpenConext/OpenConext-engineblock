@@ -5,6 +5,15 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.9.0
+**Change**
+* Add support for SURFsecureID LoA 1.5. This requires renumbering the `stepup.loa.mapping` incides in paramters.yml from 1,2,3 to 10,15,20,30.
+
+**Maintenance**
+* Fix call for rememberChoice in the WAYF.
+* Update Twig dependency.
+* Clean up some legacy code.
+
 ## 6.8.1
 **Feature**
 * Several improvements to IdP debug page
