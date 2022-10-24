@@ -17,7 +17,6 @@ class AppKernel extends Kernel
 
             // Sensio helpers
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new Sensio\Bundle\DistributionBundle\SensioDistributionBundle(),
             new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle(),
 
             // Doctrine integration
