@@ -257,7 +257,7 @@ parameters:
     ## The public key from the Stepup Gateway IdP
     stepup.gateway.sfo.key_file: /etc/openconext/engineblock.crt
 
-##########################################################################################
+    ##########################################################################################
     ## THEME SETTINGS
     ##########################################################################################
     # When changing the default theme name, be aware that the CI build will no longer be able to select our default
