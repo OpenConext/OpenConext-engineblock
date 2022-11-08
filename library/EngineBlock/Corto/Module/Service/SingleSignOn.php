@@ -523,13 +523,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             $wayfIdps[] = $wayfIdp;
         }
 
-        $nameSort = function ($a, $b) use ($currentLocale) {
-            return strtolower($a['Name_' . $currentLocale]) > strtolower($b['Name_' . $currentLocale]);
-        };
-
-        // Sort the IdP entries by name
-        usort($wayfIdps, $nameSort);
-
         return $wayfIdps;
     }
 
