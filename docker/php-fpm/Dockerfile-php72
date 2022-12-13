@@ -21,7 +21,6 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     && docker-php-ext-install pdo_mysql exif gd \
     ## APCu
-    && pecl install xdebug \
     && pecl install apcu \
     && pecl install apcu_bc-1.0.3 \
     && docker-php-ext-enable apcu --ini-name 10-docker-php-ext-apcu.ini \
