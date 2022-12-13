@@ -208,6 +208,9 @@ class EngineBlock_Corto_Adapter
             $serviceProvider = $repository->findServiceProviderByEntityId($requesterId);
 
             if ($serviceProvider) {
+                $this->_getLogger()->info(
+                    "SP passes RequesterID '$requesterId', using it to sub-scope the available IdPs"
+                );
                 if (!$serviceProvider->allowAll) {
                     $repository->appendFilter(
                         new RemoveDisallowedIdentityProvidersFilter(
@@ -218,8 +221,8 @@ class EngineBlock_Corto_Adapter
                 }
             }
             else {
-                $this->_getLogger()->warning(
-                    "Unable to apply RequesterID '$requesterId' to sub-scope the available IdPs as we don't know this SP!"
+                $this->_getLogger()->info(
+                    "SP passes RequesterID '$requesterId' which is unknown to us, ignoring"
                 );
             }
         }
