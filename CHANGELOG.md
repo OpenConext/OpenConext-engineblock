@@ -5,6 +5,15 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.9.1
+**Bugfix**
+* Change migration for consent table to work when running 6.9 in parallel with an earlier version (rolling upgrade).
+* Change loglevel for unknown entityID in RequesterID from warning to info.
+
+**Maintenance**
+* Remove broken and unused WAYF sorting code.
+* Add more integration tests for WAYF scoping.
+
 ## 6.9.0
 **Change**
 * Add support for OpenConext Stepup LoA 1.5. This requires renumbering the `stepup.loa.mapping` indices in parameters.yml from (1,2,3) to (10,15,20,30).
