@@ -84,7 +84,7 @@ class WayfController
 
         if ($this->engineBlockApplicationSingleton->getDiContainer()->getFeatureConfiguration()
             ->hasFeature("eb.enable_sso_session_cookie")) {
-            array_push($cookies, SsoSessionService::SSO_SESSION_COOKIE_NAME);
+            $cookies[] = SsoSessionService::SSO_SESSION_COOKIE_NAME;
         }
 
         return $cookies;
