@@ -127,7 +127,7 @@ class SsoSessionService
         }
 
         if (!in_array($issuer, $ssoSession)) {
-            array_push($ssoSession, $issuer);
+            $ssoSession[] = $issuer;
         }
 
         return json_encode($ssoSession);
