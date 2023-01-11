@@ -47,7 +47,8 @@ class AuthenticationLoggerAdapter
         array $proxiedServiceProviders,
         string $originalNameId,
         ?string $authnContextClassRef,
-        ?string $engineSsoEndpointUsed
+        ?string $engineSsoEndpointUsed,
+        ?array $requestedIdPlist
     ) {
         $keyId = $keyId ? new KeyId($keyId) : null;
 
@@ -67,6 +68,7 @@ class AuthenticationLoggerAdapter
             $originalNameId,
             $authnContextClassRef,
             $engineSsoEndpointUsed,
+            $requestedIdPlist,
             $keyId
         );
     }
