@@ -401,8 +401,9 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             return array($presetIdP);
         }
 
-        // Add scoped IdPs (allowed IDPs for reply) from request to allowed IdPs for responding
-        $log->info('Request lists scoped IdPs', array('request_idps' => $scopedIdPs));
+        if (count($scopedIdPs) > 0) {
+            $log->info('Request lists scoped IdPs', ['request_idps' => $scopedIdPs]);
+        }
 
         return $scopedIdPs;
     }
