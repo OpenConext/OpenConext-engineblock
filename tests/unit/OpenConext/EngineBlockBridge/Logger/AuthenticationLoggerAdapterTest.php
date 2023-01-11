@@ -54,7 +54,8 @@ class AuthenticationLoggerAdapterTest extends TestCase
         $spProxy2EntityId         = 'SpProxy2EntityId';
         $originalNameId           = 'urn:collab:person:original:some-person';
         $authnContextClassRef     = 'urn:oasis:names:tc:SAML:2.0:ac:classes:Password';
-        $ssoEndpointUsed = '/authentication/idp/single-sign-on';
+        $requestedIdPs            = ['aap', 'noot'];
+        $ssoEndpointUsed          = '/authentication/idp/single-sign-on';
 
         $mockAuthenticationLogger = m::mock(AuthenticationLogger::class);
         $mockAuthenticationLogger
@@ -76,6 +77,7 @@ class AuthenticationLoggerAdapterTest extends TestCase
                     $originalNameId,
                     $authnContextClassRef,
                     $ssoEndpointUsed,
+                    $requestedIdPs,
                     new ValueObjectEqualsMatcher(new KeyId($keyIdValue)),
                 ]
             )
@@ -93,7 +95,8 @@ class AuthenticationLoggerAdapterTest extends TestCase
             ],
             $originalNameId,
             $authnContextClassRef,
-            $ssoEndpointUsed
+            $ssoEndpointUsed,
+            $requestedIdPs
         );
     }
 }

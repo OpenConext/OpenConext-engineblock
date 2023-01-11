@@ -42,6 +42,8 @@ class AuthenticationLogger
     /**
      * KeyId is nullable in order to be able to differentiate between asking no specific key,
      * the default key KeyId('default') and a specific key.
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function logGrantedLogin(
         Entity $serviceProvider,
@@ -52,6 +54,7 @@ class AuthenticationLogger
         string $originalNameId,
         ?string $authnContextClassRef,
         ?string $engineSsoEndpointUsed,
+        ?array $requestedIdPlist,
         KeyId $keyId = null
     ) {
         $proxiedServiceProviderEntityIds = array_map(
@@ -75,6 +78,7 @@ class AuthenticationLogger
                 'workflow_state' => $workflowState,
                 'original_name_id' => $originalNameId,
                 'authncontextclassref' => $authnContextClassRef,
+                'requestedidps' => $requestedIdPlist,
                 'engine_sso_endpoint_used' => $engineSsoEndpointUsed,
             ]
         );
