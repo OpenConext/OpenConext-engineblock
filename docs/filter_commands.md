@@ -50,6 +50,23 @@ listed. If a section (depends, uses, modifies) misses, that means that that is n
 
 Commands executed between receiving Assertion from IdP and Consent
 
+### ValidateAuthnContextClassRef
+Block any incoming IdP assertion with a blacklisted `AuthnContextClassRef`.
+This is used to prevent an IdP to impersonate 'our' AuthnContextClassRef values.
+
+Configured with:
+ - `stepup.authn_context_class_ref_blacklist_regex`
+
+Uses:
+- EngineBlock_Saml2_ResponseAnnotationDecorator
+
+### ValidateMfaAuthnContextClassRef
+Check that an IdP response actually contains the requested AuthnContextClassRef, if Engineblock was configured to do so in the AuthnRequest to the IdP. Can also check the Microsoft ADFS specific attribute for this information. Blocks the incoming assertion if the requested AuthnConextClassRef was not reported back in the assertion.
+
+Uses:
+- EngineBlock_Saml2_ResponseAnnotationDecorator
+- responseAttributes
+
 ### NormalizeAttributes 
 Convert all OID attributes to URN and remove the OID variant
 
@@ -62,7 +79,7 @@ Uses:
 Modifies:
 - responseAttributes
 
-### FilterReserverMemberOfValues
+### FilterReservedMemberOfValues
 Removes any attributes starting with `urn:collab:org` as these may only be set by EngineBlock
 
 Uses:
@@ -256,6 +273,18 @@ Modifies:
 - responseAttributes
 - EngineBlock_Saml2_ResponseAnnotationDecorator
 
+### ApplyTrustedProxyBehaviour
+
+Iff there's a trusted proxy involved in the authentication, add a custom attribute
+`internal-collabPersonId` for consumption by the trusted proxy.
+
+Uses:
+- collabPersonId
+- OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
+
+Modifies:
+- responseAttributes
+
 ### AddIdentityAttributes
 Sets the NameID and/or the eduPersonTargetedId (EPTI) on the Response
 
@@ -272,36 +301,6 @@ Uses:
 Modifies:
 - EngineBlock_Saml2_ResponseAnnotationDecorator
 - responseAttributes
-
-### AttributeReleasePolicy
-Applies the Attribute Release Policy determining which attributes may be released. This is the same Filter Command as
-detailed in the Input Filter.
-
-Depends on:
-- MetadataRepository
-- EngineBlock_Arp_AttributeReleasePolicyEnforcer
-- EngineBlock_SamlHelper
-
-Uses:
-- responseAttributes
-- OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
-- EngineBlock_Saml2_AuthnRequestAnnotationDecorator
-
-Modifies:
-- responseAttributes
-
-### ApplyTrustedProxyBehaviour
-
-Iff there's a trusted proxy involved in the authentication, add a custom attribute
-`internal-collabPersonId` for consumption by the trusted proxy.
-
-Uses:
-- collabPersonId
-- OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
-
-Modifies:
-- responseAttributes
-
 
 ### DenormalizeAttributes
 If possible, convert all attributes with an urn:mace to their OID format (if known) and add these to the response. Only
@@ -333,18 +332,6 @@ Uses:
 - EngineBlock_Saml2_AuthnRequestAnnotationDecorator
 
 
-
-### ValidateAuthnContextClassRef
-Block any incoming IdP assertion with a blacklisted `AuthnContextClassRef`.
-This is used to prevent an IdP to impersonate 'our' AuthnContextClassRef values.
-
-
-
-Configured with:
- - `stepup.authn_context_class_ref_blacklist_regex`
-
-Uses:
-- EngineBlock_Saml2_ResponseAnnotationDecorator
 
 
 
