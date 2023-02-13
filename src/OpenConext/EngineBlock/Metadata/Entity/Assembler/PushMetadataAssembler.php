@@ -48,6 +48,11 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
      */
     private $allowedAcsLocationsValidator;
 
+    /**
+     * Maximum length that will fit in certain string type fields.
+     */
+    private const FIELDS_MAX_LENGTH = 255;
+
     public function __construct(ValidatorInterface $allowedAcsLocations)
     {
         $this->allowedAcsLocationsValidator = $allowedAcsLocations;
@@ -140,6 +145,17 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
             }
         }
         return $roles;
+    }
+
+    /**
+     * Shorten possibly lengthy fields that need to fit into a varchar(255).
+     * If they are longer than this, we likely do not use the contents for
+     * anything useful so it's OK to just chop it off. Otherwise the assembler
+     * will get errors when using MySQL with strict mode enabled.
+     */
+    private function limitValueLength(string $value): string
+    {
+        return mb_strcut($value, 0, self::FIELDS_MAX_LENGTH);
     }
 
     /**
@@ -288,16 +304,16 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:displayName:nl'), 'displayNameNl');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:displayName:en'), 'displayNameEn');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:displayName:pt'), 'displayNamePt');
-        $properties += $this->setPathFromObjectString(array($connection, 'metadata:description:nl'), 'descriptionNl');
-        $properties += $this->setPathFromObjectString(array($connection, 'metadata:description:en'), 'descriptionEn');
-        $properties += $this->setPathFromObjectString(array($connection, 'metadata:description:pt'), 'descriptionPt');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:description:nl'), 'descriptionNl', true);
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:description:en'), 'descriptionEn', true);
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:description:pt'), 'descriptionPt', true);
         $properties += $this->assembleLogo($connection);
         $properties += $this->assembleOrganization($connection, 'nl');
         $properties += $this->assembleOrganization($connection, 'en');
         $properties += $this->assembleOrganization($connection, 'pt');
-        $properties += $this->setPathFromObjectString(array($connection, 'metadata:keywords:en'), 'keywordsEn');
-        $properties += $this->setPathFromObjectString(array($connection, 'metadata:keywords:nl'), 'keywordsNl');
-        $properties += $this->setPathFromObjectString(array($connection, 'metadata:keywords:pt'), 'keywordsPt');
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:keywords:en'), 'keywordsEn', true);
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:keywords:nl'), 'keywordsNl', true);
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:keywords:pt'), 'keywordsPt', true);
 
         $properties += $this->assembleCertificates($connection);
         $properties += $this->setPathFromObjectString(array($connection, 'state'), 'workflowState');
@@ -418,11 +434,14 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         ));
     }
 
-    private function setPathFromObjectString($from, $to)
+    private function setPathFromObjectString($from, $to, $limitlength = false)
     {
         $reference = $this->getValueFromPath($from);
         if (is_null($reference)) {
             return array($to => null);
+        }
+        if ($limitlength) {
+            $reference = $this->limitValueLength($reference);
         }
         return array($to => (string)$reference);
     }
