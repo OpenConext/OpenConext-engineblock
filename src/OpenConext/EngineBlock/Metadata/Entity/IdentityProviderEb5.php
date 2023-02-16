@@ -33,6 +33,11 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 
 /**
+ * This class has been added to temporary push to both sso_provider_roles_eb5
+ * and sso_provider_roles_eb6
+ *
+ * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
+ *
  * @package OpenConext\EngineBlock\Metadata\Entity
  * @ORM\Entity
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
@@ -41,7 +46,7 @@ use SAML2\Constants;
  * WARNING: Please don't use this entity directly but use the dedicated factory instead.
  * @see \OpenConext\EngineBlock\Factory\Factory\IdentityProviderFactory
  */
-class IdentityProvider extends AbstractRole
+class IdentityProviderEb5 extends AbstractRoleEb5
 {
     const GUEST_QUALIFIER_ALL = 'All';
     const GUEST_QUALIFIER_SOME = 'Some';
@@ -68,7 +73,7 @@ class IdentityProvider extends AbstractRole
     /**
      * @var Service[]
      *
-     * @ORM\Column(name="single_sign_on_services", type="engineblock_service_array")
+     * @ORM\Column(name="single_sign_on_services", type="array")
      */
     public $singleSignOnServices = array();
 
@@ -82,7 +87,7 @@ class IdentityProvider extends AbstractRole
     /**
      * @var ShibMdScope[]
      *
-     * @ORM\Column(name="shib_md_scopes", type="engineblock_shib_md_scope_array")
+     * @ORM\Column(name="shib_md_scopes", type="array")
      */
     public $shibMdScopes = array();
 
