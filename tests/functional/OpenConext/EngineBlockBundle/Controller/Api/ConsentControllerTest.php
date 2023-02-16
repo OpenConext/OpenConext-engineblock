@@ -619,9 +619,8 @@ final class ConsentControllerTest extends WebTestCase
 
     private function clearMetadataFixtures()
     {
-        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
-        $queryBuilder
-            ->delete('sso_provider_roles_eb5')
+        $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder()
+            ->delete('sso_provider_roles_eb6')
             ->execute();
     }
 

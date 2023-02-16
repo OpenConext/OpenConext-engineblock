@@ -118,19 +118,18 @@ class ServiceRegistryFixture
 
     public function reset()
     {
-        $queryBuilder = $this->entityManager->getConnection()->createQueryBuilder();
-        $queryBuilder
-            ->delete('sso_provider_roles_eb5')
+        $this->entityManager->getConnection()->createQueryBuilder()
+            ->delete('sso_provider_roles_eb6')
             ->execute();
 
         return $this;
     }
 
+
     public function remove($entityId, $role)
     {
-        $queryBuilder = $this->entityManager->getConnection()->createQueryBuilder();
-        $queryBuilder
-            ->delete('sso_provider_roles_eb5', 'roles')
+        $this->entityManager->getConnection()->createQueryBuilder()
+            ->delete('sso_provider_roles_eb6', 'roles')
             ->where('roles.entity_id = :entityId')
             ->andWhere('roles.type = :type')
             ->setParameter('entityId', $entityId)
@@ -161,7 +160,7 @@ class ServiceRegistryFixture
         // number of SP's should always be limited.
         $idpEntityIDQuery = <<<QUERY
         SELECT `entity_id`
-        FROM `sso_provider_roles_eb5`
+        FROM `sso_provider_roles_eb6`
         WHERE `type` = 'idp'
 QUERY;
         $query = $this->entityManager->getConnection()->prepare($idpEntityIDQuery);
@@ -197,7 +196,7 @@ QUERY;
         // number of SP's should always be limited.
         $spEntityIDQuery = <<<QUERY
         SELECT `entity_id`
-        FROM `sso_provider_roles_eb5`
+        FROM `sso_provider_roles_eb6`
         WHERE `type` = 'sp'
 QUERY;
         $query = $this->entityManager->getConnection()->prepare($spEntityIDQuery);

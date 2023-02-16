@@ -49,21 +49,21 @@ class ServiceProvider extends AbstractRole
     /**
      * @var null|AttributeReleasePolicy
      *
-     * @ORM\Column(name="attribute_release_policy", type="array")
+     * @ORM\Column(name="attribute_release_policy", type="engineblock_attribute_release_policy", nullable=true)
      */
     public $attributeReleasePolicy;
 
     /**
      * @var IndexedService[]
      *
-     * @ORM\Column(name="assertion_consumer_services", type="array")
+     * @ORM\Column(name="assertion_consumer_services", type="engineblock_indexed_service_array")
      */
     public $assertionConsumerServices;
 
     /**
-     * @var string[]
+     * @var null|string[]
      *
-     * @ORM\Column(name="allowed_idp_entity_ids", type="array")
+     * @ORM\Column(name="allowed_idp_entity_ids", type="json", nullable=true)
      */
     public $allowedIdpEntityIds;
 
@@ -77,7 +77,7 @@ class ServiceProvider extends AbstractRole
     /**
      * @var null|RequestedAttribute[]
      *
-     * @ORM\Column(name="requested_attributes", type="array")
+     * @ORM\Column(name="requested_attributes", type="engineblock_requested_attribute_array", nullable=true)
      */
     public $requestedAttributes;
 

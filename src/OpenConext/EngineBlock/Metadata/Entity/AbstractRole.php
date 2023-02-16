@@ -40,20 +40,20 @@ use SAML2\Constants;
  * @ORM\Entity
  * @ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")
  * @ORM\Table(
- *      name="sso_provider_roles_eb5",
+ *      name="sso_provider_roles_eb6",
  *      uniqueConstraints={
  *          @ORM\UniqueConstraint(
- *              name="idx_sso_provider_roles_entity_id_type",
+ *              name="idx_sso_provider_roles_eb6_entity_id_type",
  *              columns={"type", "entity_id"}
  *          )
  *      },
  *      indexes={
  *          @ORM\Index(
- *              name="idx_sso_provider_roles_type",
+ *              name="idx_sso_provider_roles_eb6_type",
  *              columns={"type"}
  *          ),
  *          @ORM\Index(
- *              name="idx_sso_provider_roles_entity_id",
+ *              name="idx_sso_provider_roles_eb6_entity_id",
  *              columns={"entity_id"}
  *          ),
  *      }
@@ -91,120 +91,120 @@ abstract class AbstractRole
     public $entityId;
 
     /**
-     * @var string
-     * @ORM\Column(name="name_nl", type="string")
+     * @var null|string
+     * @ORM\Column(name="name_nl", type="string", nullable=true)
      */
     public $nameNl;
 
     /**
-     * @var string
+     * @var null|string
      *
-     * @ORM\Column(name="name_en", type="string")
+     * @ORM\Column(name="name_en", type="string", nullable=true)
      */
     public $nameEn;
 
     /**
-     * @var string
+     * @var null|string
      *
-     * @ORM\Column(name="name_pt", type="string")
+     * @ORM\Column(name="name_pt", type="string", nullable=true)
      */
     public $namePt;
 
     /**
-     * @var string
+     * @var null|string
      *
-     * @ORM\Column(name="description_nl", type="string")
+     * @ORM\Column(name="description_nl", type="string", nullable=true)
      */
     public $descriptionNl;
 
     /**
-     * @var string
+     * @var null|string
      *
-     * @ORM\Column(name="description_en", type="string")
+     * @ORM\Column(name="description_en", type="string", nullable=true)
      */
     public $descriptionEn;
 
     /**
-     * @var string
+     * @var null|string
      *
-     * @ORM\Column(name="description_pt", type="string")
+     * @ORM\Column(name="description_pt", type="string", nullable=true)
      */
     public $descriptionPt;
 
     /**
-     * @var string
+     * @var null|string
      *
-     * @ORM\Column(name="display_name_nl", type="string")
+     * @ORM\Column(name="display_name_nl", type="string", nullable=true)
      */
     public $displayNameNl;
 
     /**
-     * @var string
+     * @var null|string
      *
-     * @ORM\Column(name="display_name_en", type="string")
+     * @ORM\Column(name="display_name_en", type="string", nullable=true)
      */
     public $displayNameEn;
 
     /**
-     * @var string
+     * @var null|string
      *
-     * @ORM\Column(name="display_name_pt", type="string")
+     * @ORM\Column(name="display_name_pt", type="string", nullable=true)
      */
     public $displayNamePt;
 
     /**
-     * @var Logo
+     * @var null|Logo
      *
-     * @ORM\Column(name="logo", type="object")
+     * @ORM\Column(name="logo", type="engineblock_logo", nullable=true)
      */
     public $logo;
 
     /**
-     * @var Organization
+     * @var null|Organization
      *
-     * @ORM\Column(name="organization_nl_name",type="object", nullable=true)
+     * @ORM\Column(name="organization_nl_name",type="engineblock_organization", nullable=true)
      */
     public $organizationNl;
 
     /**
-     * @var Organization
+     * @var null|Organization
      *
-     * @ORM\Column(name="organization_en_name",type="object", nullable=true)
+     * @ORM\Column(name="organization_en_name",type="engineblock_organization", nullable=true)
      */
     public $organizationEn;
 
     /**
-     * @var Organization
+     * @var null|Organization
      *
-     * @ORM\Column(name="organization_pt_name",type="object", nullable=true)
+     * @ORM\Column(name="organization_pt_name",type="engineblock_organization", nullable=true)
      */
     public $organizationPt;
 
     /**
-     * @var string
+     * @var null|string
      *
-     * @ORM\Column(name="keywords_nl", type="string")
+     * @ORM\Column(name="keywords_nl", type="string", nullable=true)
      */
     public $keywordsNl;
 
     /**
-     * @var string
+     * @var null|string
      *
-     * @ORM\Column(name="keywords_en", type="string")
+     * @ORM\Column(name="keywords_en", type="string", nullable=true)
      */
     public $keywordsEn;
 
     /**
-     * @var string
+     * @var null|string
      *
-     * @ORM\Column(name="keywords_pt", type="string")
+     * @ORM\Column(name="keywords_pt", type="string", nullable=true)
      */
     public $keywordsPt;
 
     /**
      * @var X509Certificate[]
      *
-     * @ORM\Column(name="certificates", type="array")
+     * @ORM\Column(name="certificates", type="engineblock_certificate_array")
      */
     public $certificates = array();
 
@@ -218,28 +218,28 @@ abstract class AbstractRole
     /**
      * @var ContactPerson[]
      *
-     * @ORM\Column(name="contact_persons", type="array")
+     * @ORM\Column(name="contact_persons", type="engineblock_contact_person_array")
      */
     public $contactPersons;
 
     /**
-     * @var string
+     * @var null|string
      *
      * @ORM\Column(name="name_id_format", type="string", nullable=true)
      */
     public $nameIdFormat;
 
     /**
-     * @var string[]
+     * @var null|string[]
      *
-     * @ORM\Column(name="name_id_formats", type="array")
+     * @ORM\Column(name="name_id_formats", type="json", nullable=true)
      */
     public $supportedNameIdFormats;
 
     /**
-     * @var Service
+     * @var null|Service
      *
-     * @ORM\Column(name="single_logout_service", type="object", nullable=true)
+     * @ORM\Column(name="single_logout_service", type="engineblock_service", nullable=true)
      */
     public $singleLogoutService;
 
@@ -251,9 +251,9 @@ abstract class AbstractRole
     public $requestsMustBeSigned = false;
 
     /**
-     * @var string
+     * @var null|string
      *
-     * @ORM\Column(name="manipulation", type="text")
+     * @ORM\Column(name="manipulation", type="text", nullable=true)
      */
     public $manipulation;
 
