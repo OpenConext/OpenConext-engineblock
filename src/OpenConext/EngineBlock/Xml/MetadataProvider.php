@@ -22,6 +22,7 @@ use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProvider
 use OpenConext\EngineBlock\Metadata\Factory\Factory\IdentityProviderFactory;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\IdpsMetadataRepository;
+use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlockBundle\Exception\EntityCanNotBeFoundException;
 use OpenConext\EngineBlock\Stepup\StepupEndpoint;
 
@@ -43,6 +44,11 @@ class MetadataProvider
     private $idpFactory;
 
     /**
+     * @var KeyPairFactory
+     */
+    private $keyPairFactory;
+
+    /**
      * @var IdpsMetadataRepository
      */
     private $metadataRepository;
@@ -56,12 +62,14 @@ class MetadataProvider
         MetadataRenderer $renderer,
         ServiceProviderFactory $spFactory,
         IdentityProviderFactory $idpFactory,
+        KeyPairFactory $keyPairFactory,
         IdpsMetadataRepository $metadataRepository,
         StepupEndpoint $stepupEndpoint
     ) {
         $this->renderer = $renderer;
         $this->spFactory = $spFactory;
         $this->idpFactory = $idpFactory;
+        $this->keyPairFactory = $keyPairFactory;
         $this->metadataRepository = $metadataRepository;
         $this->stepupEndpoint = $stepupEndpoint;
     }
@@ -140,5 +148,10 @@ class MetadataProvider
         $serviceProvider = $this->spFactory->createStepupEntityFrom($keyId);
 
         return $this->renderer->fromServiceProviderEntity($serviceProvider, $keyId);
+    }
+
+    public function certificate(string $keyId): string
+    {
+        return $this->keyPairFactory->buildFromIdentifier($keyId)->getCertificate()->toPem();
     }
 }

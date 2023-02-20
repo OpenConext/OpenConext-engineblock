@@ -55,11 +55,7 @@ class MetadataController
         $this->router = $router;
     }
 
-    /**
-     * @param null|string $keyId
-     * @return RedirectResponse|Response
-     */
-    public function idpMetadataAction($keyId = null)
+    public function idpMetadataAction(string $keyId = null): Response
     {
         $metadataXml = $this->metadataService->metadataForIdp($keyId);
 
@@ -69,11 +65,7 @@ class MetadataController
         return $response;
     }
 
-    /**
-     * @param string $keyId
-     * @return Response
-     */
-    public function spMetadataAction(string $keyId)
+    public function spMetadataAction(string $keyId): Response
     {
         if (empty($keyId)) {
             $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
@@ -87,14 +79,7 @@ class MetadataController
         return $response;
     }
 
-    /**
-     * Render the IdPs metadata
-     *
-     * @param Request $request
-     * @param null|string $keyId
-     * @return RedirectResponse|Response
-     */
-    public function allIdpsMetadataAction(Request $request, $keyId = null)
+    public function allIdpsMetadataAction(Request $request, string $keyId = null): Response
     {
         $spEntityId = $request->query->get('sp-entity-id', null);
 
@@ -107,11 +92,7 @@ class MetadataController
         return $response;
     }
 
-    /**
-     * @param null|string $keyId
-     * @return Response
-     */
-    public function stepupMetadataAction($keyId = null)
+    public function stepupMetadataAction(string $keyId = null): Response
     {
         if (empty($keyId)) {
             $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
@@ -121,6 +102,19 @@ class MetadataController
 
         $response = new Response($metadataXml);
         $response->headers->set('Content-Type', 'text/xml');
+
+        return $response;
+    }
+
+    public function signingCertificateAction(string $keyId = null): Response
+    {
+        if (empty($keyId)) {
+            $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
+        }
+
+        $cert = $this->metadataService->certificate($keyId);
+        $response = new Response($cert);
+        $response->headers->set('Content-Type', 'application/x-pem-file');
 
         return $response;
     }

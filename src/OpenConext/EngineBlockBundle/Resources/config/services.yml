@@ -162,6 +162,7 @@ services:
             - '@OpenConext\EngineBlock\Xml\MetadataRenderer'
             - '@engineblock.factory.service_provider_factory'
             - '@engineblock.factory.identity_provider_factory'
+            - '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory'
             - '@engineblock.metadata.repository.idps_metadata'
             - '@engineblock.configuration.stepup.endpoint'
 
