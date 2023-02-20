@@ -36,9 +36,6 @@ class EngineBlock_Corto_Module_Services_SessionNotStartedException extends Engin
 class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstract
 {
     protected $_aliases = array(
-        'spCertificateService'          => 'Certificate',
-        'idpCertificateService'         => 'Certificate',
-        'stepupMetadataService'            => 'Metadata',
         'unsolicitedSingleSignOnService'=> 'singleSignOn',
         'debugSingleSignOnService'      => 'singleSignOn',
     );

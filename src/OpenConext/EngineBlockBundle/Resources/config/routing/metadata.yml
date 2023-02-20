@@ -63,3 +63,37 @@ metadata_stepup_key:
         _controller: engineblock.controller.authentication.metadata:stepupMetadataAction
     requirements:
         keyId: .+
+
+### Certificate: IdP
+
+certificate_idp:
+    path:       '/authentication/idp/certificate'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:signingCertificateAction
+        keyId: ~
+
+certificate_idp_key:
+    path:       '/authentication/idp/certificate/key:{keyId}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:signingCertificateAction
+    requirements:
+        keyId: .+
+
+## Certificate: Sp
+
+certificate_sp:
+    path:       '/authentication/sp/certificate'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:signingCertificateAction
+        keyId: ~
+
+certificate_sp_key:
+    path:       '/authentication/sp/certificate/key:{keyId}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:signingCertificateAction
+    requirements:
+        keyId: .+

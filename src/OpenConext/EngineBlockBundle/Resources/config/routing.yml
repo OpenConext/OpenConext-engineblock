@@ -23,9 +23,6 @@ service_provider:
 metadata:
     resource: routing/metadata.yml
 
-certificate:
-    resource: routing/certificate.yml
-
 feedback:
     resource: routing/feedback.yml
 
