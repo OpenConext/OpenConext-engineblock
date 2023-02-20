@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlock\Metadata\X509;
 
+use EngineBlock_Corto_Exception_UnknownKeyId;
 use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlock\Exception\RuntimeException;
 
@@ -54,8 +55,6 @@ class KeyPairFactory
             $publicKey = new X509Certificate(openssl_x509_read(file_get_contents($keys['publicFile'])));
             return new X509KeyPair($publicKey, $privateKey);
         }
-        throw new RuntimeException(
-            sprintf('Unable to find the encryption key pair identified by "%s"', $identifier)
-        );
+        throw new EngineBlock_Corto_Exception_UnknownKeyId($identifier);
     }
 }

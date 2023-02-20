@@ -414,6 +414,11 @@ Feature:
     Then I should see "Metadata can not be generated"
      And I should see "The following error occurred: Unable to find the SP with entity ID \"does:not:exist\"."
 
+  Scenario: I request IdPs metadata for an unknown metadata key
+    When I go to Engineblock URL "/authentication/proxy/idps-metadata/key:does-not-exist"
+    Then I should see "Unknown key id"
+     And I should see "Key ID: does-not-exist"
+
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a location
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a binding
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying an invalid index

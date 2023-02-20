@@ -425,6 +425,18 @@ class FeedbackController
         );
     }
 
+    public function unknownKeyIdAction(Request $request): Response
+    {
+        // Add feedback info from url
+        $customFeedbackInfo['Key ID'] = $request->get('keyid');
+        $this->setFeedbackInformationOnSession($request->getSession(), $customFeedbackInfo);
+
+        return new Response(
+            $this->twig->render('@theme/Authentication/View/Feedback/unknown-keyid.html.twig'),
+            400
+        );
+    }
+
     /**
      * @return Response
      */

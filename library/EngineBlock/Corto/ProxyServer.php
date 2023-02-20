@@ -310,9 +310,7 @@ class EngineBlock_Corto_ProxyServer
         }
 
         if (!isset($this->_keyPairs[$keyId])) {
-            throw new EngineBlock_Corto_ProxyServer_Exception(
-                sprintf('Unknown key id "%s"', $keyId)
-            );
+            throw new EngineBlock_Corto_Exception_UnknownKeyId($keyId);
         }
         return $this->_keyPairs[$keyId];
     }

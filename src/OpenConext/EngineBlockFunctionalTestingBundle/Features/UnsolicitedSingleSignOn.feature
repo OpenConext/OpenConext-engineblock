@@ -38,4 +38,5 @@ Feature:
   # Trying to use a non existent key results in a generic 500 error, this is known, correct behavior
   Scenario: An IdP initiates a login with an invalid signing key
     When An IdP initiated Single Sign on for SP "Dummy SP" is triggered by IdP "Dummy IdP" and specifies an invalid signing key
-    Then I should see "OpenConext - Error - An error occurred"
+    Then I should see "Error - unknown key id"
+     And I should see "Key ID: does-not-exist"

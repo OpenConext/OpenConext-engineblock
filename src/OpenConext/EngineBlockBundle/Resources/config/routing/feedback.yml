@@ -103,6 +103,11 @@ authentication_feedback_pep_violation:
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:authorizationPolicyViolationAction }
 
+authentication_feedback_unknown_keyid:
+    path:       '/authentication/feedback/unknown-keyid'
+    methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:unknownKeyIdAction }
+
 authentication_feedback_unknown_preselected_idp:
     path:       '/authentication/feedback/unknown-preselected-idp'
     methods:    [GET]
