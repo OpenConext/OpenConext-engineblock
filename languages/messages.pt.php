@@ -176,6 +176,8 @@ HTML
     'error_invalid_acs_binding_desc'     => 'O "Binding Type" do "Serviço de Consumidor de Asserção" fornecido ou configurado é desconhecido ou inválido.',
     'error_unsupported_signature_method' => 'O método de assinatura não é suportado',
     'error_unsupported_signature_method_desc' => 'O método de assinatura %arg1% não é suportado, faça upgrade para RSA-SHA256 (http://www.w3.org/2001/04/xmldsig-more#rsa-sha256).',
+    'error_unknown_keyid' => 'Error - unknown key id',
+    'error_unknown_keyid_desc' => 'The requested key-ID is not known to %suiteName%. Perhaps the service provider is using outdated metadata or has a configuration error.',
     'error_unknown_preselected_idp' => 'Erro - Não há ligação entre %organisationNoun% e o serviço',
     'error_unknown_preselected_idp_no_sp_name' => 'Erro - Não há ligação entre %organisationNoun% e o serviço',
     'error_unknown_preselected_idp_desc' => 'A %organisationNoun% que pretende utilizar para se autenticar e aceder ao serviço, não tem activado o acesso a este serviço. Isto significa que não pode aceder a este serviço através da %suiteName%. Entre em contacto com com o suporte da sua %organisationNoun% para solicitar o acesso a este serviço. Declare que serviço se trata (o &lsquo;Fornecedor de Serviço&rsquo;) e porque necessita do acesso.',

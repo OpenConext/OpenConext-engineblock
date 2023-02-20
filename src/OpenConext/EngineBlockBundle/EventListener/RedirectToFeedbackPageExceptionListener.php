@@ -28,6 +28,7 @@ use EngineBlock_Corto_Exception_InvalidStepupLoaLevel;
 use EngineBlock_Corto_Exception_MissingRequiredFields;
 use EngineBlock_Corto_Exception_PEPNoAccess;
 use EngineBlock_Corto_Exception_ReceivedErrorStatusCode;
+use EngineBlock_Corto_Exception_UnknownKeyId;
 use EngineBlock_Corto_Exception_UnknownPreselectedIdp;
 use EngineBlock_Corto_Exception_InvalidAttributeValue;
 use EngineBlock_Corto_Exception_UserCancelledStepupCallout;
@@ -175,6 +176,11 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof EngineBlock_Corto_Exception_PEPNoAccess) {
             $message         = 'PEP authorization rule violation';
             $redirectToRoute = 'authentication_feedback_pep_violation';
+        } elseif ($exception instanceof EngineBlock_Corto_Exception_UnknownKeyId) {
+            $message         = $exception->getMessage();
+            $redirectToRoute = 'authentication_feedback_unknown_keyid';
+
+            $redirectParams = ['keyid' => $exception->getRequestedKeyId()];
         } elseif ($exception instanceof EngineBlock_Corto_Exception_UnknownPreselectedIdp) {
             $message         = $exception->getMessage();
             $redirectToRoute = 'authentication_feedback_unknown_preselected_idp';

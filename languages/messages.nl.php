@@ -175,6 +175,8 @@ HTML
     'error_invalid_acs_binding_desc'        => 'Het opgegeven of geconfigureerde "Assertion Consumer Service" Binding Type is onjuist of bestaat niet.',
     'error_unsupported_signature_method' => 'Fout - Ondertekeningsmethode wordt niet ondersteund',
     'error_unsupported_signature_method_desc' => 'De ondertekeningsmethode %arg1% wordt niet ondersteund, upgrade naar RSA-SHA256 (http://www.w3.org/2001/04/xmldsig-more#rsa-sha256).',
+    'error_unknown_keyid' => 'Fout - onbekend key-ID',
+    'error_unknown_keyid_desc' => 'De gevraagde key-ID is niet bekend bij %suiteName%. Wellicht gebruikt de service provider achterhaalde metadata of is er sprake van een andere configuratiefout.',
     'error_unknown_preselected_idp' => 'Fout - %spName% niet toegankelijk via %organisationNoun%',
     'error_unknown_preselected_idp_no_sp_name' => 'Fout - Dienst niet toegankelijk via %organisationNoun%',
     'error_unknown_preselected_idp_desc' => 'De %organisationNoun% waarmee je wilt inloggen heeft toegang tot %spName% niet geactiveerd. Dat betekent dat jij geen gebruik kunt maken van deze dienst via %suiteName%. Neem contact op met de helpdesk van jouw %organisationNoun% als je toegang wilt krijgen tot %spName%. Geef daarbij aan dat het om %spName% gaat en waarom je toegang wilt.',
