@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Controller;
 
+use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -46,6 +47,8 @@ class IndexController
     {
         $keyPairIds = [];
         if ($this->keyPairs) {
+            // Do not include the default key, as this duplicates the metadata URLs without a keyslug
+            unset($this->keyPairs[KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER]);
             $keyPairIds = array_keys($this->keyPairs);
         }
 
