@@ -51,11 +51,6 @@ class EngineBlock
         return $this->singleSignOnLocation() . '/' . md5($idpEntityId);
     }
 
-    public function voSsoLocation($voId)
-    {
-        return $this->singleSignOnLocation() . '/vo:' . $voId;
-    }
-
     public function singleSignOnLocation()
     {
         return $this->baseUrl . self::SINGLE_SIGN_ON_PATH;
