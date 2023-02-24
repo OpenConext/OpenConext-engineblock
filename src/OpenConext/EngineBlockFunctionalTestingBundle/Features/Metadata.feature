@@ -199,3 +199,27 @@ Feature:
       And the response should match xpath '//md:KeyDescriptor[@use="signing"]//ds:X509Certificate[starts-with(.,"MIIDuDCCAqCgAwIBAgIJAPdqJ9JQKN6vMA0GCSqGSIb3DQEBBQUAMEYxDzANBgNVBAMT")]'
       # Verify the used signing key is EB key
       And the response should match xpath '//ds:Signature//ds:X509Certificate[starts-with(.,"MIIDuDCCAqCgAwIBAgIJAPdqJ9JQKN6vMA0GCSqGSIb3DQEBBQUAMEYxDzANBgNVBAMT")]'
+
+  Scenario: A user can request the EngineBlock SP public certificate
+    When I go to Engineblock URL "/authentication/sp/certificate"
+    Then the response should contain '-----BEGIN CERTIFICATE-----'
+      And the response should contain 'MIIDuDCCAqCgAwIBAgIJAPdqJ9JQKN6vMA0GCSqGSIb3DQEBBQUAMEYxDzANBgNV'
+      And the response should contain '-----END CERTIFICATE-----'
+
+  Scenario: A user can request the EngineBlock SP public certificate for a specific key id
+    When I go to Engineblock URL "/authentication/sp/certificate/key:default"
+    Then the response should contain '-----BEGIN CERTIFICATE-----'
+      And the response should contain 'MIIDuDCCAqCgAwIBAgIJAPdqJ9JQKN6vMA0GCSqGSIb3DQEBBQUAMEYxDzANBgNV'
+      And the response should contain '-----END CERTIFICATE-----'
+
+  Scenario: A user can request the EngineBlock IdP public certificate
+    When I go to Engineblock URL "/authentication/idp/certificate"
+    Then the response should contain '-----BEGIN CERTIFICATE-----'
+      And the response should contain 'MIIDuDCCAqCgAwIBAgIJAPdqJ9JQKN6vMA0GCSqGSIb3DQEBBQUAMEYxDzANBgNV'
+      And the response should contain '-----END CERTIFICATE-----'
+
+  Scenario: A user can request the EngineBlock IdP public certificate for a specific key id
+    When I go to Engineblock URL "/authentication/idp/certificate/key:default"
+    Then the response should contain '-----BEGIN CERTIFICATE-----'
+      And the response should contain 'MIIDuDCCAqCgAwIBAgIJAPdqJ9JQKN6vMA0GCSqGSIb3DQEBBQUAMEYxDzANBgNV'
+      And the response should contain '-----END CERTIFICATE-----'
