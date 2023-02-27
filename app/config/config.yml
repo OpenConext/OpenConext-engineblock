@@ -36,7 +36,7 @@ swiftmailer:
     password: "%mailer_password%"
 
 framework:
-    #esi:             ~
+    esi:             false
     translator:
         fallbacks: ["%locale%"]
         paths:
@@ -58,7 +58,7 @@ framework:
     session:
         # handler_id set to null will use default session handler from php.ini
         handler_id:  ~
-    fragments:       ~
+    fragments:       false
     http_method_override: true
 
 # Twig Configuration
