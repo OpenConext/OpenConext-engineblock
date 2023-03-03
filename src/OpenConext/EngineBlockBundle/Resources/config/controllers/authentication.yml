@@ -39,7 +39,6 @@ services:
     engineblock.controller.authentication.metadata:
         class: OpenConext\EngineBlockBundle\Controller\MetadataController
         arguments:
-            - "@engineblock.compat.application"
             - '@OpenConext\EngineBlock\Xml\MetadataProvider'
 
     engineblock.controller.authentication.certificate:
