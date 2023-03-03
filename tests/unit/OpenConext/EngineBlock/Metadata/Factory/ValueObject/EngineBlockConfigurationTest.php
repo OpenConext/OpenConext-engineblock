@@ -61,6 +61,7 @@ class EngineBlockConfigurationTest extends TestCase
         );
 
         $this->assertEquals('OpenestConext EngineBlock', $configuration->getName());
+        $this->assertEquals('example.org', $configuration->getHostname());
         $this->assertEquals($description, $configuration->getDescription());
 
         /** @var ContactPerson[] $contactPersons */

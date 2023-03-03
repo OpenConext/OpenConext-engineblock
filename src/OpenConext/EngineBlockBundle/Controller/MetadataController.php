@@ -24,8 +24,10 @@ use OpenConext\EngineBlock\Xml\MetadataProvider;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
+use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 
 class MetadataController
 {
@@ -34,10 +36,17 @@ class MetadataController
      */
     private $metadataService;
 
+    /**
+     * @var EngineBlockConfiguration
+     */
+    private $engineBlockConfiguration;
+
     public function __construct(
-        MetadataProvider $metadataService
+        MetadataProvider $metadataService,
+        EngineBlockConfiguration $engineBlockConfiguration
     ) {
         $this->metadataService = $metadataService;
+        $this->engineBlockConfiguration = $engineBlockConfiguration;
     }
 
     public function idpMetadataAction(string $keyId = null): Response
@@ -100,6 +109,11 @@ class MetadataController
         $cert = $this->metadataService->certificate($keyId);
         $response = new Response($cert);
         $response->headers->set('Content-Type', 'application/x-pem-file');
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            sprintf('%s.%s.pem', $this->engineBlockConfiguration->getHostname(), $keyId)
+        );
+        $response->headers->set('Content-Disposition', $disposition);
 
         return $response;
     }

@@ -36,6 +36,11 @@ class EngineBlockConfiguration
     private $suiteName;
 
     /**
+     * @var string
+     */
+    private $engineHostName;
+
+    /**
      * @var Logo
      */
     private $logo;
@@ -70,13 +75,14 @@ class EngineBlockConfiguration
         int $logoHeight
     ) {
         $this->suiteName = $translator->trans('suite_name');
+        $this->engineHostName = $engineHostName;
         $this->supportUrl = $translator->trans('openconext_support_url');
         $this->supportMail = $supportMail;
         $this->description = $description;
 
         // A logo VO is created during construction time, the schema for the url is hard coded, we assume engine is
         // configured with TLS. The host name is read from the `hostname` ini config setting.
-        $logoUrl = 'https://' . $engineHostName . $logoPath;
+        $logoUrl = 'https://' . $this->engineHostName . $logoPath;
 
         $this->logo = new Logo($logoUrl);
         $this->logo->width = $logoWidth;
@@ -93,6 +99,11 @@ class EngineBlockConfiguration
     public function getName(): string
     {
         return $this->suiteName . ' EngineBlock';
+    }
+
+    public function getHostname(): string
+    {
+        return $this->engineHostName;
     }
 
     public function getOrganization() : Organization
