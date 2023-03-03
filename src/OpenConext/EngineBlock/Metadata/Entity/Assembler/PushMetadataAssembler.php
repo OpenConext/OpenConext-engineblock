@@ -35,6 +35,7 @@ use OpenConext\EngineBlock\Metadata\Utils;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy;
 use OpenConext\EngineBlock\Validator\ValidatorInterface;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use stdClass;
 
@@ -49,13 +50,19 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
     private $allowedAcsLocationsValidator;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Maximum length that will fit in certain string type fields.
      */
     private const FIELDS_MAX_LENGTH = 255;
 
-    public function __construct(ValidatorInterface $allowedAcsLocations)
+    public function __construct(ValidatorInterface $allowedAcsLocations, LoggerInterface $logger)
     {
         $this->allowedAcsLocationsValidator = $allowedAcsLocations;
+        $this->logger = $logger;
     }
 
     public function assemble($connections)
@@ -155,6 +162,10 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
      */
     private function limitValueLength(string $value): string
     {
+        if(strlen($value) < self::FIELDS_MAX_LENGTH) {
+            return $value;
+        }
+        $this->logger->info(sprintf("Push Metadata Assembler: truncating too long value: '%s'", $value));
         return mb_strcut($value, 0, self::FIELDS_MAX_LENGTH);
     }
 
