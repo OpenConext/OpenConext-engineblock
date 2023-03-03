@@ -28,7 +28,6 @@ use EngineBlock_Corto_Exception_InvalidStepupLoaLevel;
 use EngineBlock_Corto_Exception_MissingRequiredFields;
 use EngineBlock_Corto_Exception_PEPNoAccess;
 use EngineBlock_Corto_Exception_ReceivedErrorStatusCode;
-use EngineBlock_Corto_Exception_UnknownKeyId;
 use EngineBlock_Corto_Exception_UnknownPreselectedIdp;
 use EngineBlock_Corto_Exception_InvalidAttributeValue;
 use EngineBlock_Corto_Exception_UserCancelledStepupCallout;
@@ -50,6 +49,7 @@ use OpenConext\EngineBlock\Exception\MissingParameterException;
 use OpenConext\EngineBlockBridge\ErrorReporter;
 use OpenConext\EngineBlockBundle\Exception\EntityCanNotBeFoundException;
 use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
+use OpenConext\EngineBlockBundle\Exception\UnknownKeyIdException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -176,7 +176,7 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof EngineBlock_Corto_Exception_PEPNoAccess) {
             $message         = 'PEP authorization rule violation';
             $redirectToRoute = 'authentication_feedback_pep_violation';
-        } elseif ($exception instanceof EngineBlock_Corto_Exception_UnknownKeyId) {
+        } elseif ($exception instanceof UnknownKeyIdException) {
             $message         = $exception->getMessage();
             $redirectToRoute = 'authentication_feedback_unknown_keyid';
 

@@ -26,6 +26,7 @@ use OpenConext\EngineBlock\Metadata\MfaEntity;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\TransparentMfaEntity;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
+use OpenConext\EngineBlockBundle\Exception\UnknownKeyIdException;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
@@ -301,6 +302,7 @@ class EngineBlock_Corto_ProxyServer
     /**
      * @return EngineBlock_X509_KeyPair
      * @throws EngineBlock_Corto_ProxyServer_Exception
+     * @throws UnknownKeyIdException
      */
     public function getSigningCertificates()
     {
@@ -310,7 +312,7 @@ class EngineBlock_Corto_ProxyServer
         }
 
         if (!isset($this->_keyPairs[$keyId])) {
-            throw new EngineBlock_Corto_Exception_UnknownKeyId($keyId);
+            throw new UnknownKeyIdException($keyId);
         }
         return $this->_keyPairs[$keyId];
     }

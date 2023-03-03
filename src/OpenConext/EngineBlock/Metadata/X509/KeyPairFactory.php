@@ -18,9 +18,9 @@
 
 namespace OpenConext\EngineBlock\Metadata\X509;
 
-use EngineBlock_Corto_Exception_UnknownKeyId;
 use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlock\Exception\RuntimeException;
+use OpenConext\EngineBlockBundle\Exception\UnknownKeyIdException;
 
 class KeyPairFactory
 {
@@ -55,6 +55,6 @@ class KeyPairFactory
             $publicKey = new X509Certificate(openssl_x509_read(file_get_contents($keys['publicFile'])));
             return new X509KeyPair($publicKey, $privateKey);
         }
-        throw new EngineBlock_Corto_Exception_UnknownKeyId($identifier);
+        throw new UnknownKeyIdException($identifier);
     }
 }

@@ -18,9 +18,9 @@
 
 namespace OpenConext\EngineBlock\Metadata\X509;
 
-use EngineBlock_Corto_Exception_UnknownKeyId;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use OpenConext\EngineBlock\Exception\RuntimeException;
+use OpenConext\EngineBlock\Exception\UnknownKeyIdException;
 use PHPUnit\Framework\TestCase;
 
 class KeyPairFactoryTest extends TestCase
@@ -64,7 +64,7 @@ class KeyPairFactoryTest extends TestCase
 
     public function test_it_raises_exception_when_requesting_invalid_key_pair()
     {
-        $this->expectException(EngineBlock_Corto_Exception_UnknownKeyId::class);
+        $this->expectException(UnknownKeyIdException::class);
         $this->expectExceptionMessage("Unknown key id 'ahnk-morpork'");
         $this->factory->buildFromIdentifier('ahnk-morpork');
     }
