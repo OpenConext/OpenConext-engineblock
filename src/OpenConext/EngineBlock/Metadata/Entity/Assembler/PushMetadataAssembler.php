@@ -162,7 +162,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
      */
     private function limitValueLength(string $value): string
     {
-        if(strlen($value) < self::FIELDS_MAX_LENGTH) {
+        if (strlen($value) < self::FIELDS_MAX_LENGTH) {
             return $value;
         }
         $this->logger->info(sprintf("Push Metadata Assembler: truncating too long value: '%s'", $value));

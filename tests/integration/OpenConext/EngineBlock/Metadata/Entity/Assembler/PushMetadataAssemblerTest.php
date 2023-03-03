@@ -18,6 +18,8 @@
 
 namespace OpenConext\EngineBlock\Tests;
 
+use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\Assembler\PushMetadataAssembler;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
@@ -27,14 +29,18 @@ use OpenConext\EngineBlock\Metadata\TransparentMfaEntity;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use Psr\Log\LoggerInterface;
 
 class PushMetadataAssemblerTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
+
     private $assembler;
 
     public function setUp()
     {
-        $this->assembler = new PushMetadataAssembler(new AllowedSchemeValidator(['http', 'https']));
+        $logger = m::mock(LoggerInterface::class);
+        $this->assembler = new PushMetadataAssembler(new AllowedSchemeValidator(['http', 'https']), $logger);
     }
 
     /**
