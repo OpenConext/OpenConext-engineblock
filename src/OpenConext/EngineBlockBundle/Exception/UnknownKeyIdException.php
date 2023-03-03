@@ -20,17 +20,20 @@ namespace OpenConext\EngineBlockBundle\Exception;
 
 class UnknownKeyIdException extends RuntimeException
 {
-    private $_requestedKeyId;
+    /**
+     * @var string
+     */
+    private $requestedKeyId;
 
     public function __construct($requestedKeyId)
     {
         $message = sprintf("Unknown key id '%s'", $requestedKeyId);
         parent::__construct($message);
-        $this->_requestedKeyId = $requestedKeyId;
+        $this->requestedKeyId = $requestedKeyId;
     }
 
     public function getRequestedKeyId(): string
     {
-        return $this->_requestedKeyId;
+        return $this->requestedKeyId;
     }
 }

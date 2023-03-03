@@ -20,7 +20,7 @@ namespace OpenConext\EngineBlock\Metadata\X509;
 
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use OpenConext\EngineBlock\Exception\RuntimeException;
-use OpenConext\EngineBlock\Exception\UnknownKeyIdException;
+use OpenConext\EngineBlockBundle\Exception\UnknownKeyIdException;
 use PHPUnit\Framework\TestCase;
 
 class KeyPairFactoryTest extends TestCase
