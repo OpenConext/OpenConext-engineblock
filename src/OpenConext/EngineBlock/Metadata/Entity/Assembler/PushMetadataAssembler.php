@@ -434,7 +434,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         ));
     }
 
-    private function setPathFromObjectString($from, $to, $limitlength = false)
+    private function setPathFromObjectString(array $from, string $to, bool $limitlength = false): array
     {
         $reference = $this->getValueFromPath($from);
         if (is_null($reference)) {
@@ -446,7 +446,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         return array($to => (string)$reference);
     }
 
-    private function setPathFromObjectArray($from, $to)
+    private function setPathFromObjectArray(array $from, string $to): array
     {
         $reference = $this->getValueFromPath($from);
         if (!array($reference)) {
@@ -455,7 +455,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         return array($to => $reference);
     }
 
-    private function setPathFromObjectBool($from, $to)
+    private function setPathFromObjectBool(array $from, string $to): array
     {
         $reference = $this->getValueFromPath($from);
         if (is_null($reference)) {
@@ -464,7 +464,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         return array($to => (bool)$reference);
     }
 
-    private function getValueFromPath($from)
+    private function getValueFromPath(array $from)
     {
         $pathParts = explode(':', $from[1]);
 
