@@ -16,14 +16,16 @@
  * limitations under the License.
  */
 
-class EngineBlock_Corto_Exception_UnknownKeyId extends EngineBlock_Exception
+namespace OpenConext\EngineBlockBundle\Exception;
+
+class UnknownKeyIdException extends RuntimeException
 {
     private $_requestedKeyId;
 
     public function __construct($requestedKeyId)
     {
         $message = sprintf("Unknown key id '%s'", $requestedKeyId);
-        parent::__construct($message, self::CODE_NOTICE);
+        parent::__construct($message);
         $this->_requestedKeyId = $requestedKeyId;
     }
 
