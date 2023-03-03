@@ -40,6 +40,7 @@ services:
         class: OpenConext\EngineBlockBundle\Controller\MetadataController
         arguments:
             - '@OpenConext\EngineBlock\Xml\MetadataProvider'
+            - '@OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration'
 
     engineblock.controller.authentication.certificate:
         class: OpenConext\EngineBlockBundle\Controller\CertificateController
