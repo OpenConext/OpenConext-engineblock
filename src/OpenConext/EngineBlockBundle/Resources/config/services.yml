@@ -164,7 +164,6 @@ services:
             - '@engineblock.factory.identity_provider_factory'
             - '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory'
             - '@engineblock.metadata.repository.idps_metadata'
-            - '@engineblock.configuration.stepup.endpoint'
 
     engineblock.authentication.user_directory:
         class: OpenConext\EngineBlockBundle\Authentication\Service\UserService

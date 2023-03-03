@@ -53,25 +53,18 @@ class MetadataProvider
      */
     private $metadataRepository;
 
-    /**
-     * @var StepupEndpoint
-     */
-    private $stepupEndpoint;
-
     public function __construct(
         MetadataRenderer $renderer,
         ServiceProviderFactory $spFactory,
         IdentityProviderFactory $idpFactory,
         KeyPairFactory $keyPairFactory,
-        IdpsMetadataRepository $metadataRepository,
-        StepupEndpoint $stepupEndpoint
+        IdpsMetadataRepository $metadataRepository
     ) {
         $this->renderer = $renderer;
         $this->spFactory = $spFactory;
         $this->idpFactory = $idpFactory;
         $this->keyPairFactory = $keyPairFactory;
         $this->metadataRepository = $metadataRepository;
-        $this->stepupEndpoint = $stepupEndpoint;
     }
 
     /**

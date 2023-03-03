@@ -18,7 +18,6 @@
 
 namespace OpenConext\EngineBlockBundle\Controller;
 
-use EngineBlock_ApplicationSingleton;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Xml\MetadataProvider;
@@ -31,28 +30,14 @@ use Symfony\Component\Routing\RouterInterface;
 class MetadataController
 {
     /**
-     * @var EngineBlock_ApplicationSingleton
-     */
-    private $engineBlockApplicationSingleton;
-
-    /**
      * @var MetadataProvider
      */
     private $metadataService;
 
-    /**
-     * @var RouterInterface
-     */
-    private $router;
-
     public function __construct(
-        EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        MetadataProvider $metadataService,
-        RouterInterface $router
+        MetadataProvider $metadataService
     ) {
-        $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->metadataService = $metadataService;
-        $this->router = $router;
     }
 
     public function idpMetadataAction(string $keyId = null): Response
