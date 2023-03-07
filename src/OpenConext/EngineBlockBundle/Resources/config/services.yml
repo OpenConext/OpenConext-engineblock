@@ -281,6 +281,7 @@ services:
         class: OpenConext\EngineBlock\Metadata\Entity\Assembler\PushMetadataAssembler
         arguments:
             - "@engineblock.validator.allowed_scheme_validator"
+            - "@engineblock.compat.logger"
 
     OpenConext\EngineBlock\Metadata\X509\KeyPairFactory:
         arguments:
