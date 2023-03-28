@@ -893,8 +893,8 @@ class EngineBlock_Corto_ProxyServer
         if ($spRequestId === null) {
             throw new EngineBlock_Corto_Module_Services_SessionLostException(
                 sprintf(
-                    'Trying to find a AuthnRequest (we made and sent) with id "%s" but it is not known in this session? '.
-                    'This could be an unsolicited Response (which we do not support) but more likely the user lost their session',
+                    'Trying to find an AuthnRequest (we made and sent) with id "%s" but it is not known in this session. '.
+                    'Likely the user lost their session.',
                     $requestId
                 ),
                 EngineBlock_Corto_ProxyServer_Exception::CODE_NOTICE
