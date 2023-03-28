@@ -1193,7 +1193,9 @@ class EngineBlock_Corto_ProxyServer
 
     public function startSession()
     {
-        session_start();
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
     }
 
     /**
