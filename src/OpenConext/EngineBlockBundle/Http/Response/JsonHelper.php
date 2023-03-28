@@ -51,10 +51,6 @@ final class JsonHelper
                         'url'          => $identityProvider->organizationPt->url,
                     ]
                 ],
-                'single_logout_service'   => [
-                    'binding'  => $identityProvider->singleLogoutService->binding,
-                    'location' => $identityProvider->singleLogoutService->location,
-                ],
                 'contact_persons'         => array_map(
                     function (ContactPerson $contactPerson) {
                         return [
