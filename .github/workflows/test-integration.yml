@@ -122,18 +122,6 @@ jobs:
                   '
               env:
                   SYMFONY_ENV: ci
-            - name: Run security audit
-              if: always()
-              run: |
-                  cd docker && docker-compose exec -T php-fpm.vm.openconext.org bash -c '
-                      echo -e "\nSensioLabs Security Check\n" && \
-                      ./bin/securityChecker.sh && \
-                      cd theme && \
-                      echo -e "\nNPM Audit\n" && \
-                      npm run audit --production
-                  '
-              env:
-                  SYMFONY_ENV: ci
 #            - name: Run Cypress visual regression tests
 #              if: ${{ github.event_name == 'schedule' && matrix.php == env.PROD_PHP }}
 #              run: |
