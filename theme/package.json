@@ -51,7 +51,7 @@
     "cypress": "^9.6",
     "cypress-axe": "^0",
     "cypress-html-validate": "^2",
-    "html-validate": "^3.5.0",
+    "html-validate": "^7.14.0",
     "cypress-terminal-report": "^3.3.2",
     "jshint": "^2.12.0",
     "node-sass": "^8.0.0",
