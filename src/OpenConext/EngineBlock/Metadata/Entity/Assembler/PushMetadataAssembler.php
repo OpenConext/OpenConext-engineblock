@@ -273,7 +273,13 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
             ),
             'stepupAllowNoToken'
         );
-
+        $properties += $this->setPathFromObjectBool(
+            array(
+                $connection,
+                'metadata:coin:stepup:forceauthn'
+            ),
+            'stepupForceAuthn'
+        );
         return Utils::instantiate(
             ServiceProvider::class,
             $properties

@@ -81,7 +81,24 @@ Feature:
         And I pass through EngineBlock
       Then the url should match "/functional-testing/SSO-SP/acs"
 
-    Scenario: LoA 1 is allowed, but refrains from doing a step up callout
+    Scenario: Stepup authentication is forced when coin:stepup:forceauthn is configured for the SP
+      Given SP "SSO-SP" requests LoA "http://vm.openconext.org/assurance/loa3"
+      And the SP "SSO-SP" forces stepup authentication
+      When I log in at "SSO-SP"
+      And I select "SSO-IdP" on the WAYF
+      And I pass through EngineBlock
+      And I pass through the IdP
+     Then the received AuthnRequest should match xpath '/samlp:AuthnRequest[@ForceAuthn="true"]'
+
+    Scenario: Stepup authentication is NOT forced when coin:stepup:forceauthn is not configured for the SP
+      Given SP "SSO-SP" requests LoA "http://vm.openconext.org/assurance/loa3"
+      When I log in at "SSO-SP"
+      And I select "SSO-IdP" on the WAYF
+      And I pass through EngineBlock
+      And I pass through the IdP
+     Then the received AuthnRequest should not match xpath '/samlp:AuthnRequest[@ForceAuthn="true"]'
+
+  Scenario: LoA 1 is allowed, but refrains from doing a step up callout
       Given SP "SSO-SP" requests LoA "http://vm.openconext.org/assurance/loa1"
       When I log in at "SSO-SP"
         And I select "SSO-IdP" on the WAYF
@@ -190,6 +207,29 @@ Feature:
         And I give my consent
         And I pass through EngineBlock
       Then the url should match "/functional-testing/Proxy-SP/acs"
+
+  Scenario: Step-up ForceAuthn should be requested for the proxied SP when using a trusted proxy setup and if configured in the proxied SP
+    Given the SP "SSO-SP" requires Stepup LoA "http://vm.openconext.org/assurance/loa2"
+    And the SP "SSO-SP" forces stepup authentication
+    And SP "Proxy-SP" is authenticating for SP "SSO-SP"
+    And SP "Proxy-SP" is a trusted proxy
+    And SP "Proxy-SP" signs its requests
+    When I log in at "Proxy-SP"
+    And I select "SSO-IdP" on the WAYF
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the received AuthnRequest should match xpath '/samlp:AuthnRequest[@ForceAuthn="true"]'
+
+  Scenario: Step-up ForceAuthn should not be requested for the proxied SP when using a trusted proxy setup and if configured in the proxied SP
+    Given the SP "SSO-SP" requires Stepup LoA "http://vm.openconext.org/assurance/loa2"
+    And SP "Proxy-SP" is authenticating for SP "SSO-SP"
+    And SP "Proxy-SP" is a trusted proxy
+    And SP "Proxy-SP" signs its requests
+    When I log in at "Proxy-SP"
+    And I select "SSO-IdP" on the WAYF
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the received AuthnRequest should not match xpath '/samlp:AuthnRequest[@ForceAuthn="true"]'
 
     Scenario: Stepup authentication should fail when stepup is misconfigured
       Given the SP "SSO-SP" requires Stepup LoA "http://typo-in-config.org/assurance/laos3"

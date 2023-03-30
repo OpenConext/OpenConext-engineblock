@@ -123,7 +123,9 @@ class PushMetadataAssemblerTest extends TestCase
                 "allow_all_entities": true,
                 "allowed_connections": [],
                 "metadata": {
-                    "coin": {}
+                    "coin": {
+                        "stepup": {}
+                    }
                 },
                 "name": "https:\/\/role/sp",
                 "state": "prodaccepted",
@@ -137,6 +139,9 @@ class PushMetadataAssemblerTest extends TestCase
         switch ($type) {
             case 'bool';
                 $values = $this->validCoinValuesBool();
+                break;
+            case 'bool-forceAuthn';
+                $values = $this->validCoinValuesBoolForceAuthn();
                 break;
             case 'bool-negative';
                 $values = $this->validCoinValuesBoolNegative();
@@ -155,11 +160,19 @@ class PushMetadataAssemblerTest extends TestCase
         }
 
         foreach ($values as $assertion) {
-            $input->{"2d96e27a-76cf-4ca2-ac70-ece5d4c49523"}->metadata->coin->$coinName = $assertion[0];
-
+            if ($coinName === 'forceauthn') {
+                // forceauthn is a stepup coin, situated in an additional json object named: stepup
+                $input->{"2d96e27a-76cf-4ca2-ac70-ece5d4c49523"}->metadata->coin->stepup->$coinName = $assertion[0];
+            } else {
+                $input->{"2d96e27a-76cf-4ca2-ac70-ece5d4c49523"}->metadata->coin->$coinName = $assertion[0];
+            }
             $roles = $this->assembler->assemble($input);
 
-            $this->assertSame($assertion[1], $roles[0]->getCoins()->{$parameter}(), "Invalid coin conversion for {$roleType}:{$coinName}($type) expected '{$assertion[1]}' but encountered '{$roles[0]->getCoins()->{$parameter}()}'");
+            $this->assertSame(
+                $assertion[1],
+                $roles[0]->getCoins()->{$parameter}(),
+                "Invalid coin conversion for {$roleType}:{$coinName}($type) expected '{$assertion[1]}' but encountered '{$roles[0]->getCoins()->{$parameter}()}'"
+            );
         }
     }
 
@@ -354,6 +367,7 @@ class PushMetadataAssemblerTest extends TestCase
             ['policy_enforcement_decision_required', 'saml20-sp', 'policyEnforcementDecisionRequired', 'bool'],
             ['requesterid_required', 'saml20-sp', 'requesteridRequired', 'bool'],
             ['sign_response', 'saml20-sp', 'signResponse', 'bool'],
+            ['forceauthn', 'saml20-sp', 'isStepupForceAuthn', 'bool-forceAuthn'],
 
             // IDP
             ['guest_qualifier', 'saml20-idp', 'guestQualifier', 'string-guest-qualifier'],
@@ -430,6 +444,14 @@ class PushMetadataAssemblerTest extends TestCase
             [null, "All"],
             ["", ""],
             ["string", "string"],
+        ];
+    }
+
+    private function validCoinValuesBoolForceAuthn()
+    {
+        return [
+            ["1", true],
+            ["0", false]
         ];
     }
 }

@@ -179,4 +179,9 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     {
         return $this->transparent;
     }
+
+    public function setForceAuthn(bool $isForceAuthn)
+    {
+        $this->sspMessage->setForceAuthn($isForceAuthn);
+    }
 }

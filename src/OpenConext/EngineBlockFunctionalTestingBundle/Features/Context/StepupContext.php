@@ -136,6 +136,19 @@ class StepupContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^the SP "([^"]*)" forces stepup authentication$/
+     */
+    public function spForcesAuthn($spName)
+    {
+        /** @var MockServiceProvider $mockSp */
+        $mockSp = $this->mockSpRegistry->get($spName);
+
+        $this->serviceRegistryFixture
+            ->setStepupForceAuthn($mockSp->entityId(), true)
+            ->save();
+    }
+
+    /**
      * @Given /^the SP "([^"]*)" requires Stepup LoA "([^"]*)"$/
      */
     public function setSpStepupRequireLoa($spName, $requiredLoa)

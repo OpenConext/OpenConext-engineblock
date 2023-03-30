@@ -105,54 +105,6 @@ class ServiceProvider extends AbstractRole
     /**
      * WARNING: Please don't use this entity directly but use the dedicated factory instead.
      * @see \OpenConext\EngineBlock\Factory\Factory\ServiceProviderFactory
-     *
-     * @param string $entityId
-     * @param Organization $organizationEn
-     * @param Organization $organizationNl
-     * @param Organization $organizationPt
-     * @param Service $singleLogoutService
-     * @param bool $additionalLogging
-     * @param X509Certificate[] $certificates
-     * @param ContactPerson[] $contactPersons
-     * @param string $descriptionEn
-     * @param string $descriptionNl
-     * @param string $descriptionPt
-     * @param bool $disableScoping
-     * @param string $displayNameEn
-     * @param string $displayNameNl
-     * @param string $displayNamePt
-     * @param string $keywordsEn
-     * @param string $keywordsNl
-     * @param string $keywordsPt
-     * @param Logo $logo
-     * @param string $nameEn
-     * @param string $nameNl
-     * @param string $namePt
-     * @param null $nameIdFormat
-     * @param array $supportedNameIdFormats
-     * @param bool $requestsMustBeSigned
-     * @param string $signatureMethod
-     * @param string $workflowState
-     * @param array $allowedIdpEntityIds
-     * @param bool $allowAll
-     * @param array $assertionConsumerServices
-     * @param bool $displayUnconnectedIdpsWayf
-     * @param null $termsOfServiceUrl
-     * @param bool $isConsentRequired
-     * @param bool $isTransparentIssuer
-     * @param bool $isTrustedProxy
-     * @param null $requestedAttributes
-     * @param bool $skipDenormalization
-     * @param bool $policyEnforcementDecisionRequired
-     * @param bool $requesteridRequired
-     * @param bool $signResponse
-     * @param string $manipulation
-     * @param AttributeReleasePolicy $attributeReleasePolicy
-     * @param string|null $supportUrlEn
-     * @param string|null $supportUrlNl
-     * @param string|null $supportUrlPt
-     * @param bool|null $stepupAllowNoToken
-     * @param bool|null $stepupRequireLoa
      */
     public function __construct(
         $entityId,
@@ -160,51 +112,52 @@ class ServiceProvider extends AbstractRole
         Organization $organizationNl = null,
         Organization $organizationPt = null,
         Service $singleLogoutService = null,
-        $additionalLogging = false,
+        bool $additionalLogging = false,
         array $certificates = array(),
         array $contactPersons = array(),
-        $descriptionEn = '',
-        $descriptionNl = '',
-        $descriptionPt = '',
-        $disableScoping = false,
-        $displayNameEn = '',
-        $displayNameNl = '',
-        $displayNamePt = '',
-        $keywordsEn = '',
-        $keywordsNl = '',
-        $keywordsPt = '',
-        Logo $logo = null,
-        $nameEn = '',
-        $nameNl = '',
-        $namePt = '',
-        $nameIdFormat = null,
-        $supportedNameIdFormats = array(
+        string $descriptionEn = '',
+        string $descriptionNl = '',
+        string $descriptionPt = '',
+        bool $disableScoping = false,
+        ?string $displayNameEn = '',
+        ?string $displayNameNl = '',
+        ?string $displayNamePt = '',
+        ?string $keywordsEn = '',
+        ?string $keywordsNl = '',
+        ?string $keywordsPt = '',
+        ?Logo $logo = null,
+        ?string $nameEn = '',
+        ?string $nameNl = '',
+        ?string $namePt = '',
+        ?string $nameIdFormat = null,
+        array $supportedNameIdFormats = array(
             Constants::NAMEID_TRANSIENT,
             Constants::NAMEID_PERSISTENT,
         ),
-        $requestsMustBeSigned = false,
-        $signatureMethod = XMLSecurityKey::RSA_SHA256,
-        $workflowState = self::WORKFLOW_STATE_DEFAULT,
+        bool $requestsMustBeSigned = false,
+        string $signatureMethod = XMLSecurityKey::RSA_SHA256,
+        string $workflowState = self::WORKFLOW_STATE_DEFAULT,
         array $allowedIdpEntityIds = array(),
-        $allowAll = false,
+        bool $allowAll = false,
         array $assertionConsumerServices = array(),
-        $displayUnconnectedIdpsWayf = false,
-        $termsOfServiceUrl = null,
-        $isConsentRequired = true,
-        $isTransparentIssuer = false,
-        $isTrustedProxy = false,
+        bool $displayUnconnectedIdpsWayf = false,
+        string $termsOfServiceUrl = null,
+        bool $isConsentRequired = true,
+        bool $isTransparentIssuer = false,
+        bool $isTrustedProxy = false,
         $requestedAttributes = null,
-        $skipDenormalization = false,
-        $policyEnforcementDecisionRequired = false,
-        $requesteridRequired = false,
-        $signResponse = false,
-        $manipulation = '',
+        bool $skipDenormalization = false,
+        bool $policyEnforcementDecisionRequired = false,
+        bool $requesteridRequired = false,
+        bool $signResponse = false,
+        string $manipulation = '',
         AttributeReleasePolicy $attributeReleasePolicy = null,
-        $supportUrlEn = null,
-        $supportUrlNl = null,
-        $supportUrlPt = null,
-        $stepupAllowNoToken = null,
-        $stepupRequireLoa = null
+        string $supportUrlEn = null,
+        string $supportUrlNl = null,
+        string $supportUrlPt = null,
+        bool $stepupAllowNoToken = null,
+        string $stepupRequireLoa = null,
+        bool $stepupForceAuthn = false
     ) {
         parent::__construct(
             $entityId,
@@ -257,7 +210,8 @@ class ServiceProvider extends AbstractRole
             $stepupRequireLoa,
             $disableScoping,
             $additionalLogging,
-            $signatureMethod
+            $signatureMethod,
+            $stepupForceAuthn
         );
     }
 

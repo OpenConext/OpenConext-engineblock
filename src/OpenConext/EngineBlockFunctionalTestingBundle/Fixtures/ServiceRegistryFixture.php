@@ -401,6 +401,13 @@ QUERY;
         return $this;
     }
 
+    public function setStepupForceAuthn($entityId, $isForceAuthn)
+    {
+        $this->setCoin($this->getServiceProvider($entityId), 'stepupForceAuthn', $isForceAuthn);
+
+        return $this;
+    }
+
     public function setSpStepupAllowNoToken($entityId)
     {
         $this->setCoin($this->getServiceProvider($entityId), 'stepupAllowNoToken', true);
