@@ -207,7 +207,13 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         $nameId = clone $receivedResponse->getNameId();
         $authnClassRef = $this->_stepupGatewayCallOutHelper->getStepupLoa($idp, $sp, $authnRequestLoas, $pdpLoas);
 
-        $this->_server->sendStepupAuthenticationRequest($receivedRequest, $currentProcessStep->getRole(), $authnClassRef, $nameId);
+        $this->_server->sendStepupAuthenticationRequest(
+            $receivedRequest,
+            $currentProcessStep->getRole(),
+            $authnClassRef,
+            $nameId,
+            $sp->getCoins()->isStepupForceAuthn()
+        );
     }
 
     /**

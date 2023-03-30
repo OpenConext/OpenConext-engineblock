@@ -39,6 +39,9 @@ use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RuntimeException;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use function assertStringNotMatchesFormat;
+use function assertStringStartsWith;
+use function preg_match;
 use function sprintf;
 
 /**
@@ -585,13 +588,40 @@ class EngineBlockContext extends AbstractSubContext
     }
 
     /**
+     * @Then /^the received AuthnRequest should not match xpath '([^']*)'$/
+     */
+    public function theReceivedAuthnRequestShouldNotMatchXpath($xpath)
+    {
+        $session = $this->getMinkContext()->getSession();
+        try {
+            $this->theAuthnRequestToSubmitShouldMatchXpath($xpath);
+            throw new RuntimeException('The xpath was found in the AuthnRequest, it should not');
+        } catch (ExpectationException $e) {
+            if (false === preg_match('/The xpath "(w+)" did not result in at least one match./', $e->getMessage())) {
+                throw new ExpectationException(
+                    'Unexepected match on the xpath that should NOT match the AuthnRequest xml',
+                    $session,
+                    $e
+                );
+            }
+        }
+    }
+
+    /**
+     * @Then /^the received AuthnRequest should match xpath '([^']*)'$/
+     */
+    public function theReceivedAuthnRequestShouldMatchXpath($xpath)
+    {
+        return $this->theAuthnRequestToSubmitShouldMatchXpath($xpath);
+    }
+
+    /**
      * @Then /^the AuthnRequest to submit should match xpath '([^']*)'$/
      */
     public function theAuthnRequestToSubmitShouldMatchXpath($xpath)
     {
         $session = $this->getMinkContext()->getSession();
         $mink    = $session->getPage();
-
         $authnRequestElement = $mink->find('css', 'input[name="authnRequestXml"]');
         if ($authnRequestElement === null) {
             throw new ExpectationException('Element with the name "authnRequestXml" could not be found', $session);

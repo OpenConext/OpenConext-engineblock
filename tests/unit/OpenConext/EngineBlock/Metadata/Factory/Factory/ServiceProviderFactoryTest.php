@@ -210,7 +210,8 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
             null,
             false,
             false,
-            XMLSecurityKey::RSA_SHA256
+            XMLSecurityKey::RSA_SHA256,
+            false
         );
         $overrides['attributeReleasePolicy'] = null;
         $overrides['allowedIdpEntityIds'] = [];
@@ -344,7 +345,8 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
             null,
             false,
             false,
-            XMLSecurityKey::RSA_SHA256
+            XMLSecurityKey::RSA_SHA256,
+            false
         );
         $overrides['attributeReleasePolicy'] = null;
         $overrides['allowedIdpEntityIds'] = [];

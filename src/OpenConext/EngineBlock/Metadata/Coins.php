@@ -43,7 +43,8 @@ class Coins
         $stepupRequireLoa,
         $disableScoping,
         $additionalLogging,
-        $signatureMethod
+        $signatureMethod,
+        $stepupForceAuthn
     ) {
         return new self([
             'isConsentRequired' => $isConsentRequired,
@@ -60,6 +61,7 @@ class Coins
             'signatureMethod' => $signatureMethod,
             'stepupAllowNoToken' => $stepupAllowNoToken,
             'stepupRequireLoa' => $stepupRequireLoa,
+            'stepupForceAuthn' => $stepupForceAuthn,
         ]);
     }
 
@@ -176,6 +178,15 @@ class Coins
     public function stepupRequireLoa()
     {
         return $this->getValue('stepupRequireLoa', '');
+    }
+
+    /**
+     * Should the Stepup authentication request (to the Stepup Gateway)
+     * have the ForceAuthn attribute in the AuthnRequest?
+     */
+    public function isStepupForceAuthn()
+    {
+        return $this->getValue('stepupForceAuthn', false);
     }
 
     // IDP

@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Controllers;
 use Exception;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockStepupGateway;
 use SAML2\Constants;
+use SAML2\HTTPRedirect;
 use SAML2\Response as SamlResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,10 +63,14 @@ class StepupMockController extends Controller
             // Parse available responses
             $responses = $this->getAvailableResponses($request);
 
+            $redirectBinding = new HTTPRedirect();
+            $message = $redirectBinding->receive();
+
             // Present response
             $body = $this->twig->render(
                 '@OpenConextEngineBlockFunctionalTesting/Sso/consumeAssertion.html.twig',
                 [
+                    'receivedAuthnRequest' => $message->toUnsignedXML()->ownerDocument->saveXml(),
                     'responses' => $responses,
                 ]
             );

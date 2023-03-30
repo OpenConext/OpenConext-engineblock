@@ -456,7 +456,8 @@ class EngineBlock_Corto_ProxyServer
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $spRequest,
         IdentityProvider $identityProvider,
         Loa $authnContextClassRef,
-        NameID $nameId
+        NameID $nameId,
+        bool $isForceAuthn
     ) {
         $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
             $spRequest,
@@ -465,6 +466,8 @@ class EngineBlock_Corto_ProxyServer
             'stepupMetadataService',
             'stepupAssertionConsumerService'
         );
+
+        $ebRequest->setForceAuthn($isForceAuthn);
 
         $sspMessage = $ebRequest->getSspMessage();
         if (!$sspMessage instanceof AuthnRequest) {
