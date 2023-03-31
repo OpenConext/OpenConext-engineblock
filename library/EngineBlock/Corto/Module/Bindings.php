@@ -607,7 +607,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
     public function send(
         EngineBlock_Saml2_MessageAnnotationDecorator $message,
-        AbstractRole $remoteEntity
+        AbstractRole $remoteEntity,
+        bool $useDefaultKey = false
     ) {
         $bindingUrn = $message->getDeliverByBinding();
         $sspMessage = $message->getSspMessage();
@@ -618,7 +619,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         }
 
         if ($this->shouldMessageBeSigned($sspMessage, $remoteEntity)) {
-            $keyPair = $this->_server->getSigningCertificates();
+            $keyPair = $this->_server->getSigningCertificates($useDefaultKey);
 
             $sspMessage->setCertificates(array($keyPair->getCertificate()->toPem()));
             $sspMessage->setSignatureKey(

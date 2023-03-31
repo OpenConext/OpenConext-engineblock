@@ -300,15 +300,16 @@ class EngineBlock_Corto_ProxyServer
     }
 
     /**
+     * @param bool $forceDefaultKey Always return the default keypair
      * @return EngineBlock_X509_KeyPair
      * @throws EngineBlock_Corto_ProxyServer_Exception
      * @throws UnknownKeyIdException
      */
-    public function getSigningCertificates()
+    public function getSigningCertificates(bool $forceDefaultKey = false)
     {
-        $keyId = $this->_keyId;
-        if (!$keyId) {
-            $keyId = 'default';
+        $keyId = 'default';
+        if (!$forceDefaultKey && $this->_keyId) {
+            $keyId = $this->_keyId;
         }
 
         if (!isset($this->_keyPairs[$keyId])) {
@@ -488,7 +489,7 @@ class EngineBlock_Corto_ProxyServer
         $authnRequestRepository->store($spRequest);
         $authnRequestRepository->link($ebRequest, $spRequest);
 
-        $this->getBindingsModule()->send($ebRequest, $identityProvider);
+        $this->getBindingsModule()->send($ebRequest, $identityProvider, true);
     }
 
     function sendConsentAuthenticationRequest(
