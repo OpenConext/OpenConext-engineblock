@@ -21,6 +21,7 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
 use PHPUnit\Framework\TestCase;
 use SAML2\AuthnRequest;
+use Surfnet\SamlBundle\Signing\KeyPair;
 
 /**
  * Note: this Test only tests setting of NameIDFormat, add other tests if required
@@ -99,6 +100,45 @@ class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
     }
 
     /**
+     * @dataProvider provideKeyExpectations
+     */
+    public function testGetSigningCertificates(?string $keyOverride, bool $force, string $expectedResult)
+    {
+        $keys = [
+            'default' => $this->buildKeyPair('default', 'default'),
+            'rollover' => $this->buildKeyPair('rollover', 'rollover'),
+        ];
+        $proxyServer = $this->factoryProxyServer();
+        $proxyServer->setKeyPairs($keys);
+
+        if ($keyOverride) {
+            $proxyServer->setKeyId($keyOverride);
+        }
+
+        $keyPair = $proxyServer->getSigningCertificates($force);
+        $this->assertEquals($keyPair->getPrivateKey(), $keys[$expectedResult]->getPrivateKey());
+        $this->assertEquals($keyPair->getCertificate(), $keys[$expectedResult]->getCertificate());
+    }
+
+    private function buildKeyPair(string $key, string $cert): EngineBlock_X509_KeyPair
+    {
+        return new EngineBlock_X509_KeyPair(
+            new EngineBlock_X509_Certificate(openssl_x509_read(file_get_contents(__DIR__."/fixture/{$key}.pem.crt"))),
+            new EngineBlock_X509_PrivateKey(__DIR__."/fixture/{$cert}.pem.key")
+        );
+    }
+
+    public function provideKeyExpectations()
+    {
+        return [
+            'force default signing key' => [null, true, 'default'],
+            'require specific key is overridden by forcing the default' => ['rollover', true, 'default'],
+            'require specific key' => ['rollover', false, 'rollover'],
+            'requiring nothing yield the default' => [null, false, 'default'],
+        ];
+    }
+
+    /**
      * @return array
      */
     private function factoryOriginalRequest()
@@ -107,7 +147,6 @@ class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
 
         return $originalRequest;
     }
-
 
     private function factoryProxyServer()
     {
