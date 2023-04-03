@@ -166,7 +166,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectIdTe
         $verifier->execute();
 
         $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
-            'subject-id attribute value "' . self::SUB_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
+            'subjectId attribute value scope "' . self::SUB_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
         );
 
         $this->assertTrue($invalidScopeIsLogged);
@@ -176,7 +176,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectIdTe
     {
         $scope          = new ShibMdScope();
         $scope->regexp  = false;
-        $scope->allowed = 'openconext.org;
+        $scope->allowed = 'openconext.org';
 
         $identityProvider               = new IdentityProvider('OpenConext');
         $identityProvider->shibMdScopes = [$scope];
@@ -188,7 +188,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectIdTe
         $verifier->execute();
 
         $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
-            'subject-id attribute value "' . self::SUB_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
+            'subjectId attribute value scope "' . self::SUB_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
         );
 
         $this->assertFalse($invalidScopeIsLogged);
@@ -210,7 +210,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectIdTe
         $verifier->execute();
 
         $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
-            'subject-id attribute value "' . self::SUB_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
+            'subjectId attribute value scope "' . self::SUB_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
         );
 
         $this->assertFalse($invalidScopeIsLogged);
@@ -232,7 +232,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectIdTe
         $verifier->execute();
 
         $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
-            'subject-id attribute value "' . self::SUB_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
+            'subjectId attribute value scope "' . self::SUB_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
         );
 
         $this->assertFalse($invalidScopeIsLogged);
@@ -254,7 +254,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectIdTe
         $verifier->execute();
 
         $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
-            'subject-id attribute value "' . self::SUB_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
+            'subjectId attribute value scope "' . self::SUB_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
         );
 
         $this->assertTrue($invalidScopeIsLogged);
@@ -263,7 +263,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectIdTe
     public function testSubjectIdNotInRegexpScopeThrowsException()
     {
         $this->expectException(EngineBlock_Corto_Exception_InvalidAttributeValue::class);
-        $this->expectExceptionMessage('subject-id attribute value "openconext.org" is not allowed by configured ShibMdScopes for IdP "OpenConext"');
+        $this->expectExceptionMessage('subjectId attribute value scope "openconext.org" is not allowed by configured ShibMdScopes for IdP "OpenConext"');
 
         $scope          = new ShibMdScope();
         $scope->regexp  = true;
