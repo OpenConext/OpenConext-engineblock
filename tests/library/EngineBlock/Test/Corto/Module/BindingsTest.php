@@ -42,7 +42,7 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
     public function setup()
     {
         $proxyServer = Phake::mock('EngineBlock_Corto_ProxyServer');
-        Phake::when($proxyServer)->getSigningCertificates()->thenReturn(
+        Phake::when($proxyServer)->getSigningCertificates(false)->thenReturn(
             new EngineBlock_X509_KeyPair(
                 new EngineBlock_X509_Certificate(openssl_x509_read(file_get_contents(__DIR__.'/test.pem.crt'))),
                 new EngineBlock_X509_PrivateKey(__DIR__.'/test.pem.key')
