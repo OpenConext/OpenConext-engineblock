@@ -5,6 +5,21 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.9.2
+**Change**
+* Log IDPList contents (info) only when present. Also log any IDPList contents to log_logins.
+* Do not list redundant key:default metadata URL variants on front page.
+* Give an explict error message when an SP requests an unknown key ID.
+* Support MySQL strict mode by limiting some metadata fields on push to 255 characters.
+
+**Bugfix**
+* Fix certificate used for Stepup callout changing based on SP selected key ID.
+
+**Maintenance**
+* Move certificate serving code to Symfony.
+* Clean up or disable some unused bits.
+* Update NPM json5 dependency.
+
 ## 6.9.1
 **Bugfix**
 * Change migration for consent table to work when running 6.9 in parallel with an earlier version (rolling upgrade).
