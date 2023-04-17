@@ -22,6 +22,7 @@ use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Logo;
+use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
@@ -145,4 +146,6 @@ interface IdentityProviderEntityInterface
      * @return ShibMdScope[]
      */
     public function getShibMdScopes(): array;
+
+    public function getMdui(): Mdui;
 }

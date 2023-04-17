@@ -24,6 +24,7 @@ use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
+use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\Service;
@@ -246,6 +247,11 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
     public function getCoins(): Coins
     {
         return $this->entity->getCoins();
+    }
+
+    public function getMdui(): Mdui
+    {
+        return $this->entity->getMdui();
     }
 
     /**

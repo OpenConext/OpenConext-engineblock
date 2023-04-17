@@ -23,6 +23,7 @@ use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
+use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\Service;
@@ -266,5 +267,10 @@ abstract class AbstractServiceProvider implements ServiceProviderEntityInterface
     public function isAttributeAggregationRequired(): bool
     {
         return $this->entity->isAttributeAggregationRequired();
+    }
+
+    public function getMdui(): Mdui
+    {
+        return $this->entity->getMdui();
     }
 }

@@ -18,9 +18,11 @@
 namespace OpenConext\EngineBlock\Stepup;
 
 use EngineBlock_X509_CertificateFactory;
+use OpenConext\EngineBlock\Metadata\EmptyMduiElement;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\IndexedService;
+use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\Service;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
@@ -39,6 +41,7 @@ class StepupEntityFactory
 
         $entity = new IdentityProvider(
             $stepupEndpoint->getEntityId(),
+            Mdui::emptyMdui(),
             null,
             null,
             null,

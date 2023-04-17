@@ -23,6 +23,7 @@ use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Logo;
+use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\MfaEntityCollection;
 use OpenConext\EngineBlock\Metadata\Organization;
@@ -89,89 +90,56 @@ class IdentityProvider extends AbstractRole
     /**
      * WARNING: Please don't use this entity directly but use the dedicated factory instead.
      * @see \OpenConext\EngineBlock\Factory\Factory\IdentityProviderFactory
-     *
-     * @param string $entityId
-     * @param Organization $organizationEn
-     * @param Organization $organizationNl
-     * @param Organization $organizationPt
-     * @param Service $singleLogoutService
-     * @param bool $additionalLogging
-     * @param array $certificates
-     * @param array $contactPersons
-     * @param string $descriptionEn
-     * @param string $descriptionNl
-     * @param string $descriptionPt
-     * @param bool $disableScoping
-     * @param string $displayNameEn
-     * @param string $displayNameNl
-     * @param string $displayNamePt
-     * @param string $keywordsEn
-     * @param string $keywordsNl
-     * @param string $keywordsPt
-     * @param Logo $logo
-     * @param string $nameEn
-     * @param string $nameNl
-     * @param string $namePt
-     * @param null $nameIdFormat
-     * @param array $supportedNameIdFormats
-     * @param bool $requestsMustBeSigned
-     * @param string $signatureMethod
-     * @param string $workflowState
-     * @param string $manipulation
-     * @param bool $enabledInWayf
-     * @param string $guestQualifier
-     * @param bool $hidden
-     * @param null $schacHomeOrganization
-     * @param array $shibMdScopes
-     * @param array $singleSignOnServices
-     * @param ConsentSettings $consentSettings
-     * @param StepupConnections|null $stepupConnections
-     * @param MfaEntityCollection|null $mfaEntities
      */
     public function __construct(
         $entityId,
+        ?Mdui $mdui = null,
         Organization $organizationEn = null,
         Organization $organizationNl = null,
         Organization $organizationPt = null,
         Service $singleLogoutService = null,
-        $additionalLogging = false,
+        bool $additionalLogging = false,
         array $certificates = array(),
         array $contactPersons = array(),
-        $descriptionEn = '',
-        $descriptionNl = '',
-        $descriptionPt = '',
-        $disableScoping = false,
-        $displayNameEn = '',
-        $displayNameNl = '',
-        $displayNamePt = '',
-        $keywordsEn = '',
-        $keywordsNl = '',
-        $keywordsPt = '',
+        string $descriptionEn = '',
+        string $descriptionNl = '',
+        string $descriptionPt = '',
+        bool $disableScoping = false,
+        string $displayNameEn = '',
+        string $displayNameNl = '',
+        string $displayNamePt = '',
+        string $keywordsEn = '',
+        string $keywordsNl = '',
+        string $keywordsPt = '',
         Logo $logo = null,
-        $nameEn = '',
-        $nameNl = '',
-        $namePt = '',
-        $nameIdFormat = null,
-        $supportedNameIdFormats = array(
+        string $nameEn = '',
+        string $nameNl = '',
+        string $namePt = '',
+        ?string $nameIdFormat = null,
+        array $supportedNameIdFormats = array(
             Constants::NAMEID_TRANSIENT,
             Constants::NAMEID_PERSISTENT,
         ),
-        $requestsMustBeSigned = false,
-        $signatureMethod = XMLSecurityKey::RSA_SHA256,
-        $workflowState = self::WORKFLOW_STATE_DEFAULT,
-        $manipulation = '',
-        $enabledInWayf = true,
-        $guestQualifier = self::GUEST_QUALIFIER_ALL,
-        $hidden = false,
-        $schacHomeOrganization = null,
-        $shibMdScopes = array(),
-        $singleSignOnServices = array(),
+        bool $requestsMustBeSigned = false,
+        string $signatureMethod = XMLSecurityKey::RSA_SHA256,
+        string $workflowState = self::WORKFLOW_STATE_DEFAULT,
+        string $manipulation = '',
+        bool $enabledInWayf = true,
+        string $guestQualifier = self::GUEST_QUALIFIER_ALL,
+        bool $hidden = false,
+        ?string $schacHomeOrganization = null,
+        array $shibMdScopes = array(),
+        array $singleSignOnServices = array(),
         ConsentSettings $consentSettings = null,
         StepupConnections $stepupConnections = null,
         MfaEntityCollection $mfaEntities = null
     ) {
+        if (is_null($mdui)) {
+            $mdui = Mdui::emptyMdui();
+        }
         parent::__construct(
             $entityId,
+            $mdui,
             $organizationEn,
             $organizationNl,
             $organizationPt,

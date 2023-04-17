@@ -26,6 +26,7 @@ use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProvider
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\ServiceProviderStepup;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
+use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
 
@@ -99,7 +100,7 @@ class ServiceProviderFactory
     private function buildServiceProviderOrmEntity(
         string $entityId
     ): ServiceProvider {
-        $entity = new ServiceProvider($entityId);
+        $entity = new ServiceProvider($entityId, Mdui::emptyMdui());
         return $entity;
     }
 }

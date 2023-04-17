@@ -23,6 +23,7 @@ use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\Utils;
 use PHPUnit\Framework\TestCase;
 
@@ -36,6 +37,7 @@ class CortoDisassemblerTest extends TestCase
             ServiceProvider::class,
             [
                 'entityId' => 'https://sp.example.edu',
+                'mdui' => Mdui::emptyMdui(),
                 'displayNameNl' => 'DisplayName',
                 'displayNameEn' => 'DisplayName',
                 'isTransparentIssuer' => true,

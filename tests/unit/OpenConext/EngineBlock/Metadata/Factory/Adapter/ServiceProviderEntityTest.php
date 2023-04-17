@@ -35,6 +35,7 @@ class ServiceProviderEntityTest extends AbstractEntityTest
         $assertions = [
             'id' =>  $ormEntity->id,
             'entityId' => $ormEntity->entityId,
+            'mdui' => $ormEntity->getMdui(),
             'nameNl' => $ormEntity->nameNl,
             'nameEn' => $ormEntity->nameEn,
             'namePt' => $ormEntity->namePt,
@@ -95,6 +96,7 @@ class ServiceProviderEntityTest extends AbstractEntityTest
         $assertions = [
             'id' =>  $ormEntity->id,
             'entityId' => $ormEntity->entityId,
+            'mdui' => $ormEntity->getMdui(),
             'nameNl' => $ormEntity->nameNl,
             'nameEn' => $ormEntity->nameEn,
             'namePt' => $ormEntity->namePt,

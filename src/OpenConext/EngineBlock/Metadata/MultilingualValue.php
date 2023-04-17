@@ -18,48 +18,43 @@
 
 namespace OpenConext\EngineBlock\Metadata;
 
-use Assert\Assertion;
+use JsonSerializable;
 
-class MultilingualValue
+class MultilingualValue implements JsonSerializable
 {
     private $language;
 
     private $value;
 
-    /**
-     * MultilingualValue constructor.
-     * @param string $value
-     * @param string $language
-     * @throws \Assert\AssertionFailedException
-     */
-    public function __construct($value, $language)
+    public function __construct(?string $value, string $language)
     {
-        Assertion::string(
-            $value,
-            'The \'value\' of a MultilingualValue should be a string'
-        );
-        Assertion::string(
-            $language,
-            'The \'language\' of a MultilingualValue should be a string'
-        );
-
         $this->value = $value;
         $this->language = $language;
     }
 
-    /**
-     * @return string
-     */
-    public function getValue()
+    public function getValue(): string
     {
+        if (is_null($this->value)) {
+            return '';
+        }
         return $this->value;
     }
 
-    /**
-     * @return string
-     */
-    public function getLanguage()
+    public function getLanguage(): string
     {
         return $this->language;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'value' => $this->getValue(),
+            'language' => $this->language,
+        ];
+    }
+
+    public function __toString(): string
+    {
+        return $this->getValue();
     }
 }

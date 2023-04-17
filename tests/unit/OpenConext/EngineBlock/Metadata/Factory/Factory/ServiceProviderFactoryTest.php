@@ -22,21 +22,17 @@ use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
-use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
-use OpenConext\EngineBlock\Metadata\Factory\Adapter\ServiceProviderEntity;
-use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
+use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
-use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
-use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -185,6 +181,7 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
 
         // default values
         $overrides['id'] = null;
+        $overrides['mdui'] = Mdui::emptyMdui();
         $overrides['displayNameNl'] = '';
         $overrides['displayNameEn'] = '';
         $overrides['displayNamePt'] = '';
@@ -320,6 +317,7 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
 
         // default values
         $overrides['id'] = null;
+        $overrides['mdui'] = Mdui::emptyMdui();
         $overrides['displayNameNl'] = '';
         $overrides['displayNameEn'] = '';
         $overrides['displayNamePt'] = '';
