@@ -21,15 +21,14 @@ namespace OpenConext\EngineBlock\Metadata\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Coins;
-use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Logo;
+use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Service;
-use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 
@@ -108,6 +107,7 @@ class ServiceProvider extends AbstractRole
      */
     public function __construct(
         $entityId,
+        ?Mdui $mdui = null,
         Organization $organizationEn = null,
         Organization $organizationNl = null,
         Organization $organizationPt = null,
@@ -115,9 +115,9 @@ class ServiceProvider extends AbstractRole
         bool $additionalLogging = false,
         array $certificates = array(),
         array $contactPersons = array(),
-        string $descriptionEn = '',
-        string $descriptionNl = '',
-        string $descriptionPt = '',
+        ?string $descriptionEn = '',
+        ?string $descriptionNl = '',
+        ?string $descriptionPt = '',
         bool $disableScoping = false,
         ?string $displayNameEn = '',
         ?string $displayNameNl = '',
@@ -141,26 +141,30 @@ class ServiceProvider extends AbstractRole
         bool $allowAll = false,
         array $assertionConsumerServices = array(),
         bool $displayUnconnectedIdpsWayf = false,
-        string $termsOfServiceUrl = null,
+        ?string $termsOfServiceUrl = null,
         bool $isConsentRequired = true,
         bool $isTransparentIssuer = false,
         bool $isTrustedProxy = false,
-        $requestedAttributes = null,
+        ?array $requestedAttributes = null,
         bool $skipDenormalization = false,
         bool $policyEnforcementDecisionRequired = false,
         bool $requesteridRequired = false,
         bool $signResponse = false,
         string $manipulation = '',
-        AttributeReleasePolicy $attributeReleasePolicy = null,
-        string $supportUrlEn = null,
-        string $supportUrlNl = null,
-        string $supportUrlPt = null,
-        bool $stepupAllowNoToken = null,
-        string $stepupRequireLoa = null,
+        ?AttributeReleasePolicy $attributeReleasePolicy = null,
+        ?string $supportUrlEn = null,
+        ?string $supportUrlNl = null,
+        ?string $supportUrlPt = null,
+        ?bool $stepupAllowNoToken = null,
+        ?string $stepupRequireLoa = null,
         bool $stepupForceAuthn = false
     ) {
+        if (is_null($mdui)) {
+            $mdui = Mdui::emptyMdui();
+        }
         parent::__construct(
             $entityId,
+            $mdui,
             $organizationEn,
             $organizationNl,
             $organizationPt,
@@ -223,7 +227,7 @@ class ServiceProvider extends AbstractRole
      */
     public static function fromServiceProviderEntity(ServiceProviderEntityInterface $serviceProvider): ServiceProvider
     {
-        $entity = new self($serviceProvider->getEntityId());
+        $entity = new self($serviceProvider->getEntityId(), $serviceProvider->getMdui());
         $entity->id = $serviceProvider->getId();
         $entity->entityId = $serviceProvider->getEntityId();
         $entity->nameNl = $serviceProvider->getName('nl');
@@ -298,12 +302,15 @@ class ServiceProvider extends AbstractRole
      */
     public function getDisplayName(string $preferredLocale = 'en'): string
     {
-        $preferredName = 'displayName' . ucfirst($preferredLocale);
+
+        $preferredName = $this->mdui->getDisplayName()->translate($preferredLocale)->getValue();
         $fallback = 'name' . ucfirst($preferredLocale);
-        $spName = !empty($this->$preferredName) ? $this->$preferredName : $this->$fallback;
+
+        $spName = $preferredName !== '' ? $preferredName : $this->$fallback;
 
         if ($preferredLocale !== 'en' & empty($spName)) {
-            $spName = !empty($this->displayNameEn) ? $this->displayNameEn : $this->nameEn;
+            $englishDisplayName = $this->mdui->getDisplayName()->translate('en')->getValue();
+            $spName = !empty($englishDisplayName) ? $englishDisplayName : $this->nameEn;
         }
 
         if (empty($spName)) {

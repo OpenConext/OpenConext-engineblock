@@ -34,6 +34,7 @@ class IdentityProviderEntityTest extends AbstractEntityTest
         $overrides = [
             'id' =>  $ormEntity->id,
             'entityId' => $ormEntity->entityId,
+            'mdui' => $ormEntity->getMdui(),
             'nameNl' => $ormEntity->nameNl,
             'nameEn' => $ormEntity->nameEn,
             'namePt' => $ormEntity->namePt,

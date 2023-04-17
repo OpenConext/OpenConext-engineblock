@@ -19,6 +19,11 @@
 namespace OpenConext\EngineBlock\Metadata\Entity;
 
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use OpenConext\EngineBlock\Metadata\EmptyMduiElement;
+use OpenConext\EngineBlock\Metadata\Logo;
+use OpenConext\EngineBlock\Metadata\Mdui;
+use OpenConext\EngineBlock\Metadata\MduiElement;
+use OpenConext\EngineBlock\Metadata\MultilingualValue;
 use OpenConext\EngineBlock\Metadata\Organization;
 use PHPUnit\Framework\TestCase;
 
@@ -138,8 +143,32 @@ class ServiceProviderTest extends TestCase
 
     private function createServiceProvider(string $entityId, ?Organization $orgEn = null, ?Organization $orgLocale = null, ?string $displayNameEn = null, ?string $displayNameLocale = null, ?string $nameEn = null, ?string $nameLocale = null)
     {
+        $displayNames = [
+            new MultilingualValue($displayNameEn, 'en'),
+            new MultilingualValue($displayNameLocale, 'nl'),
+        ];
+        $urls = [
+            new MultilingualValue('https://english.example.com/privacy', 'en'),
+            new MultilingualValue('https://dutch.example.com/privacy', 'nl'),
+            new MultilingualValue('', 'pt'),
+        ];
+
+        $displayName = new MduiElement('DisplayName', $displayNames);
+        $description = new MduiElement('Description', $displayNames);
+        $keywords = new EmptyMduiElement('Keywords');
+        $logo = new Logo('https://link-to-my.logo.example.org/img/logo.png');
+        $privacyStatementUrl = new MduiElement('PrivacyStatementURL', $urls);
+
+        $mdui = Mdui::fromMetadata(
+            $displayName,
+            $description,
+            $keywords,
+            $logo,
+            $privacyStatementUrl
+        );
         return new ServiceProvider(
             $entityId,
+            $mdui,
             $orgEn,
             $orgLocale,
             null,

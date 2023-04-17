@@ -23,6 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Logo;
+use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
@@ -265,61 +266,42 @@ abstract class AbstractRole
     protected $coins = array();
 
     /**
-     * @param $entityId
-     * @param Organization $organizationEn
-     * @param Organization $organizationNl
-     * @param Organization $organizationPt
-     * @param Service $singleLogoutService
-     * @param array $certificates
-     * @param array $contactPersons
-     * @param string $descriptionEn
-     * @param string $descriptionNl
-     * @param string $descriptionPt
-     * @param string $displayNameEn
-     * @param string $displayNameNl
-     * @param string $displayNamePt
-     * @param string $keywordsEn
-     * @param string $keywordsNl
-     * @param string $keywordsPt
-     * @param Logo $logo
-     * @param string $nameEn
-     * @param string $nameNl
-     * @param string $namePt
-     * @param null $nameIdFormat
-     * @param array $supportedNameIdFormats
-     * @param bool $requestsMustBeSigned
-     * @param string $workflowState
-     * @param string $manipulation
+     * @var Mdui
+     *
+     * @ORM\Column(name="mdui", type="engineblock_metadata_mdui")
      */
+    protected $mdui;
+
     public function __construct(
         $entityId,
+        Mdui $mdui,
         Organization $organizationEn = null,
         Organization $organizationNl = null,
         Organization $organizationPt = null,
         Service $singleLogoutService = null,
         array $certificates = array(),
         array $contactPersons = array(),
-        $descriptionEn = '',
-        $descriptionNl = '',
-        $descriptionPt = '',
-        $displayNameEn = '',
-        $displayNameNl = '',
-        $displayNamePt = '',
-        $keywordsEn = '',
-        $keywordsNl = '',
-        $keywordsPt = '',
-        Logo $logo = null,
-        $nameEn = '',
-        $nameNl = '',
-        $namePt = '',
-        $nameIdFormat = null,
-        $supportedNameIdFormats = array(
+        ?string $descriptionEn = '',
+        ?string $descriptionNl = '',
+        ?string $descriptionPt = '',
+        ?string $displayNameEn = '',
+        ?string $displayNameNl = '',
+        ?string $displayNamePt = '',
+        ?string $keywordsEn = '',
+        ?string $keywordsNl = '',
+        ?string $keywordsPt = '',
+        ?Logo $logo = null,
+        ?string $nameEn = '',
+        ?string $nameNl = '',
+        ?string $namePt = '',
+        ?string $nameIdFormat = null,
+        array $supportedNameIdFormats = array(
             Constants::NAMEID_TRANSIENT,
             Constants::NAMEID_PERSISTENT,
         ),
-        $requestsMustBeSigned = false,
-        $workflowState = self::WORKFLOW_STATE_DEFAULT,
-        $manipulation = ''
+        bool $requestsMustBeSigned = false,
+        string $workflowState = self::WORKFLOW_STATE_DEFAULT,
+        string $manipulation = ''
     ) {
         $this->certificates = $certificates;
         $this->contactPersons = $contactPersons;
@@ -346,6 +328,8 @@ abstract class AbstractRole
         $this->singleLogoutService = $singleLogoutService;
         $this->workflowState = $workflowState;
         $this->manipulation = $manipulation;
+
+        $this->mdui = $mdui;
     }
 
     /**
@@ -380,11 +364,13 @@ abstract class AbstractRole
         throw new RuntimeException('Unknown workflow state');
     }
 
-    /**
-     * @return Coins
-     */
-    public function getCoins()
+    public function getCoins(): Coins
     {
         return $this->coins;
+    }
+
+    public function getMdui(): Mdui
+    {
+        return $this->mdui;
     }
 }

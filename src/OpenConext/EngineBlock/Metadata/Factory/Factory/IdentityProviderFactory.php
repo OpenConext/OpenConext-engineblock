@@ -25,6 +25,7 @@ use OpenConext\EngineBlock\Metadata\Factory\Decorator\ProxiedIdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Helper\IdentityProviderNameFallbackHelper;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
+use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
 
@@ -78,7 +79,7 @@ class IdentityProviderFactory
 
     private function buildIdentityProviderOrmEntity(string $entityId): IdentityProvider
     {
-        $entity = new IdentityProvider($entityId);
+        $entity = new IdentityProvider($entityId, Mdui::emptyMdui());
         return $entity;
     }
 

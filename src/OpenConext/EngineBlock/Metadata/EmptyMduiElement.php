@@ -21,48 +21,40 @@ namespace OpenConext\EngineBlock\Metadata;
 use JsonSerializable;
 
 /**
- * A SAML2 metadata logo.
- * @package OpenConext\EngineBlock\Metadata
+ * An empty mdui UIInfo element. Manage does not require all
+ * mdui elements to be set for its entities. When an empty
+ * element is encountered, an EmptyMduiElement can be used
+ * to represent that empty value. The collection can however
+ * handle these value object in a homogenous manner.
  */
-class Logo implements MultilingualElement, JsonSerializable
+class EmptyMduiElement implements MultilingualElement, JsonSerializable
 {
-    public $height = null;
-    public $width = null;
-    public $url = null;
+    private $name;
 
-    /**
-     * @param string $url
-     */
-    public function __construct($url)
+    public function __construct(string $name)
     {
-        $this->url = $url;
+        $this->name = $name;
     }
 
     public static function fromJson(array $multiLingualElement): MultilingualElement
     {
-        $element = new self($multiLingualElement['url']);
-        $element->height = $multiLingualElement['height'];
-        $element->width = $multiLingualElement['width'];
-        return $element;
+        return new self($multiLingualElement['name']);
     }
 
     public function getName(): string
     {
-        return 'Logo';
+        return $this->name;
     }
 
     public function translate(string $language): MultilingualValue
     {
-        throw new MduiRuntimeException('We do not implement the Mdui Logo in a multilingual fashion');
+        return new MultilingualValue('', $language);
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
-            'name' => $this->getName(),
-            'url' => $this->url,
-            'width' => $this->width,
-            'height' => $this->height,
+            'name' => $this->name
         ];
     }
 }

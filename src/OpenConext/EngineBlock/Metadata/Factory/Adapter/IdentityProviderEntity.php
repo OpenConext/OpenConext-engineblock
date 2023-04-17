@@ -23,6 +23,7 @@ use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Logo;
+use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
@@ -275,5 +276,10 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
     public function getShibMdScopes(): array
     {
         return $this->entity->shibMdScopes;
+    }
+
+    public function getMdui(): Mdui
+    {
+        return $this->entity->getMdui();
     }
 }

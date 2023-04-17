@@ -22,11 +22,17 @@ use DateTime;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
+use OpenConext\EngineBlock\Metadata\EmptyMduiElement;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Factory\MduiPushAssemblerFactory;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
+use OpenConext\EngineBlock\Metadata\Mdui;
+use OpenConext\EngineBlock\Metadata\MduiElement;
 use OpenConext\EngineBlock\Metadata\MfaEntityCollection;
+use OpenConext\EngineBlock\Metadata\MultilingualElement;
+use OpenConext\EngineBlock\Metadata\MultilingualValue;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
@@ -38,6 +44,7 @@ use OpenConext\EngineBlock\Validator\ValidatorInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use stdClass;
+use function array_key_exists;
 
 /**
  * @SuppressWarnings(PMD)
@@ -347,6 +354,8 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:url:en'), 'supportUrlEn');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:url:nl'), 'supportUrlNl');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:url:pt'), 'supportUrlPt');
+
+        $properties['mdui'] = MduiPushAssemblerFactory::buildFrom($properties, $connection);
 
         return $properties;
     }
