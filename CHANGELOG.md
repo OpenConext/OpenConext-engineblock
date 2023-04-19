@@ -5,6 +5,11 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+
+## 6.10.0
+**Feature**
+* Support setting forceAuthn flag on Stepup callout when enabled in Manage for the service.
+
 ## 6.9.2
 **Change**
 * Log IDPList contents (info) only when present. Also log any IDPList contents to log_logins.
