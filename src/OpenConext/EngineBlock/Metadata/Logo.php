@@ -65,4 +65,12 @@ class Logo implements MultilingualElement, JsonSerializable
             'height' => $this->height,
         ];
     }
+
+    /**
+     * Always consider the Logo to be of the primary language
+     */
+    public function getConfiguredLanguages(): array
+    {
+        return [self::PRIMARY_LANGUAGE];
+    }
 }

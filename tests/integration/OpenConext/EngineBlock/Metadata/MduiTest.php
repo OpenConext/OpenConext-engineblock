@@ -23,6 +23,7 @@ use OpenConext\EngineBlock\Metadata\EmptyMduiElement;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\MduiElement;
+use OpenConext\EngineBlock\Metadata\MultilingualElement;
 use OpenConext\EngineBlock\Metadata\MultilingualValue;
 use PHPUnit\Framework\TestCase;
 
@@ -220,5 +221,22 @@ class MduiTest extends TestCase
         $this->expectException(MduiNotFoundException::class);
         $this->expectExceptionMessage("Unable to find the element value named: PrivacyStatementURL for language 'sp'");
         $mdui->hasPrivacyStatementURL('sp');
+    }
+
+    public function test_getting_the_configured_languages()
+    {
+        $mdui = Mdui::fromMetadata(
+            $this->displayName,
+            $this->description,
+            $this->emptyMduiElement, // Keywords are left empty intentional
+            $this->logo, // Logo only carries a 'translation' for the primary language
+            $this->privacyStatementUrl // Also carries a third languages
+        );
+
+        $this->assertEquals(['en', 'nl'], $mdui->getLanguagesByElementName('DisplayName'));
+        $this->assertEquals(['en', 'nl'], $mdui->getLanguagesByElementName('Description'));
+        $this->assertEmpty($mdui->getLanguagesByElementName('Keywords'));
+        $this->assertEquals([MultilingualElement::PRIMARY_LANGUAGE], $mdui->getLanguagesByElementName('Logo'));
+        $this->assertEquals(['en', 'nl', 'pt'], $mdui->getLanguagesByElementName('PrivacyStatementURL'));
     }
 }
