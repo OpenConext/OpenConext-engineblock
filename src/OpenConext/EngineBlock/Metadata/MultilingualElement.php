@@ -20,9 +20,16 @@ namespace OpenConext\EngineBlock\Metadata;
 
 interface MultilingualElement
 {
+    public const PRIMARY_LANGUAGE = 'en';
+
     public function getName(): string;
 
     public function translate(string $language): MultilingualValue;
 
     public static function fromJson(array $multiLingualElement): MultilingualElement;
+
+    /**
+     * @return string[]
+     */
+    public function getConfiguredLanguages(): array;
 }

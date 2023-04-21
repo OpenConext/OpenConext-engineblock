@@ -57,4 +57,12 @@ class EmptyMduiElement implements MultilingualElement, JsonSerializable
             'name' => $this->name
         ];
     }
+
+    /**
+     * Empty element, no languages can be set
+     */
+    public function getConfiguredLanguages(): array
+    {
+        return [];
+    }
 }

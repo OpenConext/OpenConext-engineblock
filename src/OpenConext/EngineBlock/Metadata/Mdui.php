@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlock\Metadata;
 
 use OpenConext\EngineBlock\Exception\MduiNotFoundException;
 use OpenConext\EngineBlock\Exception\RuntimeException;
+use function array_key_exists;
 
 /**
  * The Mdui value object represents the SP/IdP multilingual metadata elements
@@ -47,7 +48,6 @@ class Mdui
         'Logo',
         'PrivacyStatementURL',
     ];
-    const PRIMARY_LANGUAGE = 'en';
 
     private $values = [];
 
@@ -142,6 +142,18 @@ class Mdui
         return self::emptyMdui();
     }
 
+    /**
+     * @return string[] array of language abbreviations, can also be empty array if the given element is not set
+     */
+    public function getLanguagesByElementName(string $elementName): array
+    {
+        $this->assertHas($elementName);
+        /** @var MultilingualElement $element */
+        $element = $this->values[$elementName];
+        return $element->getConfiguredLanguages();
+
+    }
+
     public function getDisplayName(): MultilingualElement
     {
         return $this->values['DisplayName'];
@@ -176,7 +188,7 @@ class Mdui
         /** @var MultilingualElement $element */
         $element = $this->values['PrivacyStatementURL'];
         if (!$element instanceof EmptyMduiElement) {
-            $primaryTranslation = $element->translate(self::PRIMARY_LANGUAGE);
+            $primaryTranslation = $element->translate(MultilingualElement::PRIMARY_LANGUAGE);
             $preferredTranslation = $element->translate($language);
             // Return the requested (preferred) translation if it is available
             if (!empty($preferredTranslation->getValue())) {
@@ -206,5 +218,12 @@ class Mdui
         $requested = $element->translate($language);
 
         return !($requested == '' && $primary == '');
+    }
+
+    private function assertHas(string $elementName)
+    {
+        if (!array_key_exists($elementName, $this->values)) {
+            throw new MduiNotFoundException('Mdui element %s is not supported');
+        }
     }
 }

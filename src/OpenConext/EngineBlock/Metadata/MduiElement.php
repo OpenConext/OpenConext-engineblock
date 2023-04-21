@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlock\Metadata;
 use Assert\Assertion;
 use JsonSerializable;
 use OpenConext\EngineBlock\Exception\MduiNotFoundException;
+use function array_keys;
 
 class MduiElement implements MultilingualElement, JsonSerializable
 {
@@ -44,7 +45,10 @@ class MduiElement implements MultilingualElement, JsonSerializable
     {
         $values = [];
         foreach ($multiLingualElement['values'] as $multiLinguaValue) {
-            $values[] = new MultilingualValue($multiLinguaValue['value'], $multiLinguaValue['language']);
+            $values[$multiLinguaValue['language']] = new MultilingualValue(
+                $multiLinguaValue['value'],
+                $multiLinguaValue['language']
+            );
         }
         return new self($multiLingualElement['name'], $values);
     }
@@ -82,5 +86,13 @@ class MduiElement implements MultilingualElement, JsonSerializable
             'name' => $this->name,
             'values' => $this->values,
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getConfiguredLanguages(): array
+    {
+        return array_keys($this->values);
     }
 }
