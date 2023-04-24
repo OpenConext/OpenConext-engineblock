@@ -18,7 +18,7 @@
 
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 
-class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_Description
+class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_PrivacyStatementUrl
 {
     /**
      * @var AbstractRole
@@ -32,18 +32,17 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_Description
 
     public function mapTo(array $rootElement)
     {
-        $descriptions = [];
+        $privacyStatementUrls = [];
         $mdui = $this->_entity->getMdui();
-        $availableLanguages = $mdui->getLanguagesByElementName('Description');
+        $availableLanguages = $mdui->getLanguagesByElementName('PrivacyStatementURL');
 
         foreach ($availableLanguages as $language) {
-            $description = $mdui->getDescription()->translate($language)->getValue();
-            if ($description !== '') {
-                $descriptions[$language] = $description;
+            $url = $mdui->getPrivacyStatementURL($language);
+            if (trim($url) !== '') {
+                $privacyStatementUrls[$language] = $url;
             }
         }
-
-        if (empty($descriptions)) {
+        if (empty($privacyStatementUrls)) {
             return $rootElement;
         }
 
@@ -51,18 +50,19 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_Description
             $rootElement['md:Extensions'] = [];
         }
         if (!isset($rootElement['md:Extensions']['mdui:UIInfo'])) {
-            $rootElement['md:Extensions']['mdui:UIInfo'] = [0 => []];
+            $rootElement['md:Extensions']['mdui:UIInfo'] = [ 0=> []];
+        }
+        $uiInfo = &$rootElement['md:Extensions']['mdui:UIInfo'][0];
+        if (!isset($uiInfo['mdui:PrivacyStatementURL'])) {
+            $uiInfo['mdui:PrivacyStatementURL'] = [];
         }
 
-        foreach($descriptions as $languageCode => $value) {
-            if(empty($value)) {
-                continue;
-            }
+        foreach ($privacyStatementUrls as $langCode => $value) {
 
-            $rootElement['md:Extensions']['mdui:UIInfo'][0]['mdui:Description'][] = array(
-                EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xml:lang' => $languageCode,
-                EngineBlock_Corto_XmlToArray::VALUE_PFX => $value
-            );
+            $uiInfo['mdui:PrivacyStatementURL'][] = [
+                EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xml:lang' => $langCode,
+                EngineBlock_Corto_XmlToArray::VALUE_PFX => $value,
+            ];
         }
         return $rootElement;
     }

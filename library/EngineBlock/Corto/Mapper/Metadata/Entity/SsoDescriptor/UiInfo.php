@@ -36,6 +36,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo
         $rootElement = $this->_mapDescription($rootElement);
         $rootElement = $this->_mapLogo($rootElement);
         $rootElement = $this->_mapKeywords($rootElement);
+        $rootElement = $this->_mapPrivacyStatementUrl($rootElement);
         return $rootElement;
     }
 
@@ -60,6 +61,12 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo
     protected function _mapKeywords(array $rootElement)
     {
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_Keywords($this->_entity);
+        return $mapper->mapTo($rootElement);
+    }
+
+    protected function _mapPrivacyStatementUrl(array $rootElement)
+    {
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_PrivacyStatementUrl($this->_entity);
         return $mapper->mapTo($rootElement);
     }
 }

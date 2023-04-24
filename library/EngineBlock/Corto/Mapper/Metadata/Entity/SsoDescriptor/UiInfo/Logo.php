@@ -17,6 +17,7 @@
  */
 
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
+use OpenConext\EngineBlock\Metadata\Logo;
 
 class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_Logo
 {
@@ -32,11 +33,13 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_Logo
 
     public function mapTo(array $rootElement)
     {
-        if (!$this->_entity->logo) {
+        $mdui = $this->_entity->getMdui();
+        $logo = $mdui->getLogo();
+        if (!$logo instanceof Logo) {
             return $rootElement;
         }
 
-        if (!$this->_entity->logo->height || !$this->_entity->logo->width) {
+        if (!$logo->height|| !$logo->width) {
             // @todo warn here!
             return $rootElement;
         }
@@ -49,9 +52,9 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_Logo
         }
         $rootElement['md:Extensions']['mdui:UIInfo'][0]['mdui:Logo'] = array(
             array(
-                '_height' => $this->_entity->logo->height,
-                '_width'  => $this->_entity->logo->width,
-                '__v'     => $this->_entity->logo->url,
+                '_height' => $logo->height,
+                '_width'  => $logo->width,
+                '__v'     => $logo->url,
             ),
         );
         return $rootElement;
