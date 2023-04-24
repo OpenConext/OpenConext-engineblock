@@ -181,7 +181,7 @@ class TestEntitySeeder
         $idps = [];
         foreach ($idpEntityIds as $idpEntityId => $idpData) {
             $idp = new IdentityProvider($idpEntityId);
-            $idp->logo = new Logo('/images/logo.png');
+            $idp->getMdui()->setLogo(new Logo('/images/logo.png'));
             $idp->nameEn = $idpData['name'];
             $idp->nameNl = $idpData['name'];
             $idp->namePt = $idpData['name'];
@@ -210,7 +210,7 @@ class TestEntitySeeder
         $serviceProvider->displayNameNl = $spName . '';
         $serviceProvider->displayNameEn = $spName . '';
         $serviceProvider->displayNamePt = $spName . '';
-        $serviceProvider->logo = new Logo('/images/logo.png');
+        $serviceProvider->getMdui()->setLogo(new Logo('/images/logo.png'));
         return $serviceProvider;
     }
 
@@ -230,7 +230,7 @@ class TestEntitySeeder
         $identityProvider->displayNameNl = $idpName . ' NL';
         $identityProvider->displayNameEn = $idpName . ' EN';
         $identityProvider->displayNamePt = $idpName . ' PT';
-        $identityProvider->logo = new Logo('/images/logo.png');
+        $identityProvider->getMdui()->setLogo(new Logo('/images/logo.png'));
         return $identityProvider;
     }
 }

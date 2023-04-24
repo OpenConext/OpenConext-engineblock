@@ -41,22 +41,21 @@ class IdentityProviderNameFallbackHelperTest extends AbstractEntityTest
     public function test_name_fallback()
     {
         // If Display Name EN is not set, the decorator will fall back on the Name EN
-        $this->adapter = $this->createIdentityProviderAdapter(['displayNameEn' => '']);
+        $this->adapter = $this->createIdentityProviderAdapter(true);
         $decorator = new IdentityProviderNameFallbackHelper($this->adapter);
 
         // Falls back on the name EN when display name is not set (empty)
         $this->assertEquals($decorator->getName('en'), $decorator->getDisplayName('en'));
 
         // If Display Name NL is not set, the decorator will fall back on the Name NL
-        $this->adapter = $this->createIdentityProviderAdapter(['displayNameNl' => '']);
+        $this->adapter = $this->createIdentityProviderAdapter(false, true);
         $decorator = new IdentityProviderNameFallbackHelper($this->adapter);
 
         // Falls back on the name NL when display name is not set (empty)
         $this->assertEquals($decorator->getName('nl'), $decorator->getDisplayName('nl'));
 
         // If Display Name NL is not set, the decorator will fall back on the Name NL
-        $this->adapter = $this->createIdentityProviderAdapter([
-            'displayNameNl' => '',
+        $this->adapter = $this->createIdentityProviderAdapter(false, true, [
             'nameNl' => '',
         ]);
         $decorator = new IdentityProviderNameFallbackHelper($this->adapter);

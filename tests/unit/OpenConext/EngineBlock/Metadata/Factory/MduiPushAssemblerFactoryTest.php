@@ -32,9 +32,15 @@ class MduiPushAssemblerFactoryTest extends TestCase
     {
         $mdui = MduiPushAssemblerFactory::buildFrom([], new stdClass());
         $this->assertInstanceOf(Mdui::class, $mdui);
-        $this->assertInstanceOf(EmptyMduiElement::class, $mdui->getDisplayName());
-        $this->assertInstanceOf(EmptyMduiElement::class, $mdui->getDescription());
-        $this->assertInstanceOf(EmptyMduiElement::class, $mdui->getKeywords());
+        $this->assertFalse($mdui->hasDisplayName('en'));
+        $this->assertFalse($mdui->hasDisplayName('nl'));
+        $this->assertFalse($mdui->hasDisplayName('pt'));
+        $this->assertEmpty($mdui->getDescription('en'));
+        $this->assertEmpty($mdui->getDescription('nl'));
+        $this->assertEmpty($mdui->getDescription('pt'));
+        $this->assertFalse($mdui->hasKeywords('en'));
+        $this->assertFalse($mdui->hasKeywords('nl'));
+        $this->assertFalse($mdui->hasKeywords('pt'));
         $this->assertInstanceOf(EmptyMduiElement::class, $mdui->getLogo());
         $this->assertFalse($mdui->hasPrivacyStatementURL('en'));
     }
@@ -54,13 +60,12 @@ class MduiPushAssemblerFactoryTest extends TestCase
         ];
         $mdui = MduiPushAssemblerFactory::buildFrom($parameters, new stdClass());
         $this->assertInstanceOf(Mdui::class, $mdui);
-        $this->assertInstanceOf(MduiElement::class, $mdui->getDisplayName());
-        $this->assertEquals('English display name is set', $mdui->getDisplayName()->translate('en'));
-        $this->assertInstanceOf(MduiElement::class, $mdui->getDescription());
-        $this->assertEquals('Description is set', $mdui->getDescription()->translate('en'));
-        $this->assertInstanceOf(MduiElement::class, $mdui->getKeywords());
-        $this->assertEquals('Keywords, EN, are set', $mdui->getKeywords()->translate('en'));
-        $this->assertEquals('Keywords, NL, are set', $mdui->getKeywords()->translate('nl'));
+        $this->assertEquals('English display name is set', $mdui->getDisplayName('en'));
+        $this->assertEquals('Description is set', $mdui->getDescription('en'));
+        $this->assertTrue($mdui->hasKeywords('en'));
+        $this->assertTrue($mdui->hasKeywords('nl'));
+        $this->assertEquals('Keywords, EN, are set', $mdui->getKeywords('en'));
+        $this->assertEquals('Keywords, NL, are set', $mdui->getKeywords('nl'));
 
         $this->assertInstanceOf(EmptyMduiElement::class, $mdui->getLogo());
         $this->assertFalse($mdui->hasPrivacyStatementURL('en'));

@@ -37,7 +37,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_Description
         $availableLanguages = $mdui->getLanguagesByElementName('Description');
 
         foreach ($availableLanguages as $language) {
-            $description = $mdui->getDescription()->translate($language)->getValue();
+            $description = $mdui->getDescription($language);
             if ($description !== '') {
                 $descriptions[$language] = $description;
             }

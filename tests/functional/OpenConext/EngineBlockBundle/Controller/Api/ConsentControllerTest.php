@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockBundle\Tests;
 use DateTime;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlockBundle\Configuration\Feature;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
@@ -192,10 +193,10 @@ final class ConsentControllerTest extends WebTestCase
         $secondSupportContact = new ContactPerson('support');
         $secondSupportContact->emailAddress = 'second-support@my-test-sp.test';
 
-        $serviceProvider = new ServiceProvider($spEntityId);
-        $serviceProvider->displayNameEn = 'My Test SP';
-        $serviceProvider->displayNameNl = 'Mijn Test SP';
-        $serviceProvider->displayNamePt = 'O Meu teste SP';
+        $json = '{"DisplayName":{"name":"DisplayName","values":{"en":{"value":"DisplayName EN","language":"en"},"nl":{"value":"DisplayName NL","language":"nl"},"pt":{"value":"DisplayName PT","language":"pt"}}},"Description":{"name":"Description","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Keywords":{"name":"Keywords","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Logo":{"name":"Logo","url":"https:\/\/link-to-my.logo.example.org\/img\/logo.png","width":null,"height":null},"PrivacyStatementURL":{"name":"PrivacyStatementURL","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}}}';
+        // Create a value object from json
+        $mdui = Mdui::fromJson($json);
+        $serviceProvider = new ServiceProvider($spEntityId, $mdui);
         $serviceProvider->organizationEn = new Organization('Name', 'Organization Name', 'https://test.example.org');
         $serviceProvider->nameIdFormat = NameIdFormat::TRANSIENT_IDENTIFIER;
         $serviceProvider->supportUrlNl = 'https://my-test-sp.test/help-nl';
@@ -226,9 +227,9 @@ final class ConsentControllerTest extends WebTestCase
                 'service_provider' => [
                     'entity_id' => $spEntityId,
                     'display_name' => [
-                        'en' => $serviceProvider->displayNameEn,
-                        'nl' => $serviceProvider->displayNameNl,
-                        'pt' => $serviceProvider->displayNamePt,
+                        'en' => $serviceProvider->getMdui()->getDisplayNameOrNull('en'),
+                        'nl' => $serviceProvider->getMdui()->getDisplayNameOrNull('nl'),
+                        'pt' => $serviceProvider->getMdui()->getDisplayNameOrNull('pt'),
                     ],
                     'support_url' => [
                         'en' => $serviceProvider->supportUrlEn,

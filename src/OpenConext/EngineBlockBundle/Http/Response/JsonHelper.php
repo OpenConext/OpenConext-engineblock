@@ -62,19 +62,19 @@ final class JsonHelper
                     $identityProvider->contactPersons
                 ),
                 'description'             => [
-                    'en' => $identityProvider->descriptionEn,
-                    'nl' => $identityProvider->descriptionNl,
-                    'pt' => $identityProvider->descriptionPt,
+                    'en' => $identityProvider->getMdui()->getDescriptionOrNull('en'),
+                    'nl' => $identityProvider->getMdui()->getDescriptionOrNull('nl'),
+                    'pt' => $identityProvider->getMdui()->getDescriptionOrNull('pt'),
                 ],
                 'display_name'            => [
-                    'en' => $identityProvider->displayNameEn,
-                    'nl' => $identityProvider->displayNameNl,
-                    'pt' => $identityProvider->displayNamePt,
+                    'en' => $identityProvider->getMdui()->getDisplayNameOrNull('en'),
+                    'nl' => $identityProvider->getMdui()->getDisplayNameOrNull('nl'),
+                    'pt' => $identityProvider->getMdui()->getDisplayNameOrNull('pt'),
                 ],
                 'logo'                    => [
-                    'height' => $identityProvider->logo->height,
-                    'width'  => $identityProvider->logo->width,
-                    'url'    => $identityProvider->logo->url,
+                    'height' => $identityProvider->getMdui()->getLogo()->height,
+                    'width'  => $identityProvider->getMdui()->getLogo()->width,
+                    'url'    => $identityProvider->getMdui()->getLogo()->url,
                 ],
                 'name'                    => [
                     'en' => $identityProvider->nameEn,

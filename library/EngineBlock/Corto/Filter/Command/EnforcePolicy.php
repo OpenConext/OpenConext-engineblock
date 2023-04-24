@@ -59,7 +59,7 @@ class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_F
         // The IdP logo is set after getting the PolicyDecision as it would be inappropriate to inject this into the
         // decision request.
         $policyDecision->setIdpLogo(
-            $this->_identityProvider->logo
+            $this->_identityProvider->getMdui()->getLogo()
         );
 
         $log->debug("Policy Enforcement Point: PDP decision received.");

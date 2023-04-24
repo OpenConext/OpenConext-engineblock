@@ -42,9 +42,12 @@ abstract class AbstractEntityTest extends TestCase
     /**
      * Create an instance which could be used by decorators
      */
-    public function createIdentityProviderAdapter(array $overrides = []): IdentityProviderEntity
-    {
-        $values = $this->getIdentityProviderMockProperties();
+    public function createIdentityProviderAdapter(
+        bool $emptyDisplayNameEn = false,
+        bool $emptyDisplayNameNl = false,
+        array $overrides = array()
+    ): IdentityProviderEntity {
+        $values = $this->getIdentityProviderMockProperties($emptyDisplayNameEn, $emptyDisplayNameNl);
         $values = array_merge($values, $overrides);
         $ormEntity = $this->getOrmEntityIdentityProviderMock($values);
         return new IdentityProviderEntity($ormEntity);
@@ -371,11 +374,27 @@ abstract class AbstractEntityTest extends TestCase
     /**
      *  Get the properties to use in a mocked doctrine ORM entity
      */
-    protected function getIdentityProviderMockProperties()
-    {
+    protected function getIdentityProviderMockProperties(
+        bool $emptyDisplayNameEn = false,
+        bool $emptyDisplayNameNl = false
+    ): array {
+        $displayNameEn = ',"en":{"value":"display-name-en","language":"en"}';
+        $displayNameNl = ',"nl":{"value":"display-name-nl","language":"nl"}';
+        if ($emptyDisplayNameEn) {
+            $displayNameEn = '';
+        }
+        if ($emptyDisplayNameNl) {
+            $displayNameNl = '';
+        }
+        $mduiJson = sprintf(
+            '{"DisplayName":{"name":"DisplayName","values":{"pt":{"value":"display-name-pt","language":"pt"}%s%s}},"Description":{"name":"Description","values":{"en":{"value":"description-en","language":"en"},"nl":{"value":"description-nl","language":"nl"},"pt":{"value":"description-pt","language":"pt"}}},"Keywords":{"name":"Keywords","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Logo":{"name":"Logo","url":"https:\/\/link-to-my.logo.example.org\/img\/logo.png","width":null,"height":null},"PrivacyStatementURL":{"name":"PrivacyStatementURL","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}}}',
+            $displayNameEn,
+            $displayNameNl
+        );
+        $mdui = Mdui::fromJson($mduiJson);
         return [
             'id' => 12,
-            'mdui' => Mdui::emptyMdui(),
+            'mdui' => $mdui,
             'entityId' => 'entity-id',
             'nameNl' => 'name-nl',
             'nameEn' => 'name-en',
@@ -434,9 +453,11 @@ abstract class AbstractEntityTest extends TestCase
             ->willReturn([
                 ['src' => 'test'],
             ]);
-
+        $mduiJson = '{"DisplayName":{"name":"DisplayName"},"Description":{"name":"Description","values":{"en":{"value":"Description EN","language":"en"},"nl":{"value":"Description NL","language":"nl"}}},"Keywords":{"name":"Keywords","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Logo":{"name":"Logo","url":"https:\/\/link-to-my.logo.example.org\/img\/logo.png","width":null,"height":null},"PrivacyStatementURL":{"name":"PrivacyStatementURL","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}}}';
+        $mdui = Mdui::fromJson($mduiJson);
         return [
             'id' => 12,
+            'mdui' => $mdui,
             'entityId' => 'entity-id',
             'nameNl' => 'name-nl',
             'nameEn' => 'name-en',

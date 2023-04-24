@@ -45,12 +45,12 @@ class EngineBlockServiceProviderInformation extends AbstractServiceProvider
         return $this->engineBlockConfiguration->getName();
     }
 
-    public function getDisplayName($locale): string
+    public function getDisplayName(string $locale): string
     {
         return $this->engineBlockConfiguration->getName();
     }
 
-    public function getDescription($locale): string
+    public function getDescription(string $locale): string
     {
         return $this->engineBlockConfiguration->getDescription();
     }

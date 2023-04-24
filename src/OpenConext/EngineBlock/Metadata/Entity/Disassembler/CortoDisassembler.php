@@ -22,6 +22,7 @@ use DateTime;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Logo;
 use function count;
 
 /**
@@ -140,11 +141,13 @@ class CortoDisassembler
             $cortoEntity['AdditionalLogging'] = $entity->getCoins()->additionalLogging();
         }
         $cortoEntity = $this->translateCommonCertificates($entity, $cortoEntity);
-        if ($entity->logo) {
+        if ($entity->getMdui()->hasLogo()) {
+            /** @var Logo $logo */
+            $logo = $entity->getMdui()->getLogo();
             $cortoEntity['Logo'] = array(
-                'Height' => $entity->logo->height,
-                'Width'  => $entity->logo->width,
-                'URL'    => $entity->logo->url,
+                'Height' => $logo->height,
+                'Width'  => $logo->width,
+                'URL'    => $logo->url,
             );
         }
         if ($entity->requestsMustBeSigned) {
@@ -223,16 +226,16 @@ class CortoDisassembler
      */
     private function translateKeywords(AbstractRole $entity, array $cortoEntity)
     {
-        if ($entity->keywordsNl) {
-            $this->mapMultilang($entity->keywordsNl, $cortoEntity, 'Keywords', 'nl');
+        if ($entity->getMdui()->hasKeywords('nl')) {
+            $this->mapMultilang($entity->getMdui()->getKeywords('nl'), $cortoEntity, 'Keywords', 'nl');
         }
 
-        if ($entity->keywordsEn) {
-            $this->mapMultilang($entity->keywordsEn, $cortoEntity, 'Keywords', 'en');
+        if ($entity->getMdui()->hasKeywords('en')) {
+            $this->mapMultilang($entity->getMdui()->getKeywords('en'), $cortoEntity, 'Keywords', 'en');
         }
 
-        if ($entity->keywordsPt) {
-            $this->mapMultilang($entity->keywordsPt, $cortoEntity, 'Keywords', 'pt');
+        if ($entity->getMdui()->hasKeywords('pt')) {
+            $this->mapMultilang($entity->getMdui()->getKeywords('pt'), $cortoEntity, 'Keywords', 'pt');
         }
         return $cortoEntity;
     }
@@ -245,15 +248,15 @@ class CortoDisassembler
     private function translateName(AbstractRole $entity, array $cortoEntity)
     {
         if ($entity->nameNl) {
-            $this->mapMultilang($entity->keywordsNl, $cortoEntity, 'Name', 'nl');
+            $this->mapMultilang($entity->nameNl, $cortoEntity, 'Name', 'nl');
         }
 
         if ($entity->nameEn) {
-            $this->mapMultilang($entity->keywordsEn, $cortoEntity, 'Name', 'en');
+            $this->mapMultilang($entity->nameEn, $cortoEntity, 'Name', 'en');
         }
 
         if ($entity->namePt) {
-            $this->mapMultilang($entity->keywordsPt, $cortoEntity, 'Name', 'pt');
+            $this->mapMultilang($entity->namePt, $cortoEntity, 'Name', 'pt');
         }
         return $cortoEntity;
     }
@@ -265,16 +268,16 @@ class CortoDisassembler
      */
     private function translateDescription(AbstractRole $entity, array $cortoEntity)
     {
-        if ($entity->descriptionNl) {
-            $this->mapMultilang($entity->keywordsNl, $cortoEntity, 'Description', 'nl');
+        if ($entity->getMdui()->hasDescription('nl')) {
+            $this->mapMultilang($entity->getMdui()->getDescription('nl'), $cortoEntity, 'Description', 'nl');
         }
 
-        if ($entity->descriptionEn) {
-            $this->mapMultilang($entity->keywordsEn, $cortoEntity, 'Description', 'en');
+        if ($entity->getMdui()->hasDescription('en')) {
+            $this->mapMultilang($entity->getMdui()->getDescription('en'), $cortoEntity, 'Description', 'en');
         }
 
-        if ($entity->descriptionPt) {
-            $this->mapMultilang($entity->keywordsPt, $cortoEntity, 'Description', 'pt');
+        if ($entity->getMdui()->hasDescription('pt')) {
+            $this->mapMultilang($entity->getMdui()->getDescription('pt'), $cortoEntity, 'Description', 'pt');
         }
         return $cortoEntity;
     }
@@ -286,16 +289,16 @@ class CortoDisassembler
      */
     private function translateDisplayName(AbstractRole $entity, array $cortoEntity)
     {
-        if ($entity->displayNameNl) {
-            $this->mapMultilang($entity->displayNameNl, $cortoEntity, 'DisplayName', 'nl');
+        if ($entity->getMdui()->hasDisplayName('nl')) {
+            $this->mapMultilang($entity->getMdui()->getDisplayName('nl'), $cortoEntity, 'DisplayName', 'nl');
         }
 
-        if ($entity->displayNameEn) {
-            $this->mapMultilang($entity->displayNameEn, $cortoEntity, 'DisplayName', 'en');
+        if ($entity->getMdui()->hasDisplayName('en')) {
+            $this->mapMultilang($entity->getMdui()->getDisplayName('en'), $cortoEntity, 'DisplayName', 'en');
         }
 
-        if ($entity->displayNamePt) {
-            $this->mapMultilang($entity->displayNamePt, $cortoEntity, 'DisplayName', 'pt');
+        if ($entity->getMdui()->hasDisplayName('pt')) {
+            $this->mapMultilang($entity->getMdui()->getDisplayName('pt'), $cortoEntity, 'DisplayName', 'pt');
         }
         return $cortoEntity;
     }

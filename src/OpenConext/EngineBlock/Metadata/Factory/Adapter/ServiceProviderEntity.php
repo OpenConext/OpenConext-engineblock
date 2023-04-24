@@ -90,31 +90,17 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
      */
     public function getDescription($locale): string
     {
-        switch (true) {
-            case ($locale == 'nl'):
-                return $this->entity->descriptionNl;
-            case ($locale == 'en'):
-                return $this->entity->descriptionEn;
-            case ($locale == 'pt'):
-                return $this->entity->descriptionPt;
+        if ($this->entity->getMdui()->hasDescription($locale)) {
+            return $this->entity->getMdui()->getDescription($locale);
         }
 
         return '';
     }
 
-    /**
-     * @param $locale
-     * @return string
-     */
-    public function getDisplayName($locale): string
+    public function getDisplayName(string $locale): string
     {
-        switch (true) {
-            case ($locale == 'nl'):
-                return $this->entity->displayNameNl;
-            case ($locale == 'en'):
-                return $this->entity->displayNameEn;
-            case ($locale == 'pt'):
-                return $this->entity->displayNamePt;
+        if ($this->entity->getMdui()->hasDisplayName($locale)) {
+            return $this->entity->getMdui()->getDisplayName($locale);
         }
 
         return '';
@@ -125,7 +111,7 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
      */
     public function getLogo(): ?Logo
     {
-        return $this->entity->logo;
+        return $this->entity->getMdui()->getLogoOrNull();
     }
 
     public function hasCompleteOrganizationData(string $locale): bool
@@ -165,13 +151,8 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
      */
     public function getKeywords($locale): string
     {
-        switch (true) {
-            case ($locale == 'nl'):
-                return $this->entity->keywordsNl;
-            case ($locale == 'en'):
-                return $this->entity->keywordsEn;
-            case ($locale == 'pt'):
-                return $this->entity->keywordsPt;
+        if ($this->entity->getMdui()->hasKeywords($locale)) {
+            return $this->entity->getMdui()->getKeywords($locale);
         }
 
         return '';

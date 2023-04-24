@@ -239,7 +239,8 @@ class ServiceProvider extends AbstractRole
         $entity->displayNameNl = $serviceProvider->getDisplayName('nl');
         $entity->displayNameEn = $serviceProvider->getDisplayName('en');
         $entity->displayNamePt = $serviceProvider->getDisplayName('pt');
-        $entity->logo = $serviceProvider->getLogo();
+        $entity->getMdui()->setLogo($serviceProvider->getLogo());
+
         $entity->organizationNl = $serviceProvider->getOrganization('nl');
         $entity->organizationEn = $serviceProvider->getOrganization('en');
         $entity->organizationPt = $serviceProvider->getOrganization('pt');
@@ -303,13 +304,13 @@ class ServiceProvider extends AbstractRole
     public function getDisplayName(string $preferredLocale = 'en'): string
     {
 
-        $preferredName = $this->mdui->getDisplayName()->translate($preferredLocale)->getValue();
+        $preferredName = $this->mdui->getDisplayName($preferredLocale);
         $fallback = 'name' . ucfirst($preferredLocale);
 
         $spName = $preferredName !== '' ? $preferredName : $this->$fallback;
 
         if ($preferredLocale !== 'en' & empty($spName)) {
-            $englishDisplayName = $this->mdui->getDisplayName()->translate('en')->getValue();
+            $englishDisplayName = $this->mdui->getDisplayName('en');
             $spName = !empty($englishDisplayName) ? $englishDisplayName : $this->nameEn;
         }
 

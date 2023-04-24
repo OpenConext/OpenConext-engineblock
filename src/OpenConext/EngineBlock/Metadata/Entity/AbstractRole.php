@@ -28,7 +28,6 @@ use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use RuntimeException;
 use SAML2\Constants;
 
@@ -113,49 +112,49 @@ abstract class AbstractRole
 
     /**
      * @var string
-     *
+     * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      * @ORM\Column(name="description_nl", type="string")
      */
     public $descriptionNl;
 
     /**
      * @var string
-     *
+     * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      * @ORM\Column(name="description_en", type="string")
      */
     public $descriptionEn;
 
     /**
      * @var string
-     *
+     * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      * @ORM\Column(name="description_pt", type="string")
      */
     public $descriptionPt;
 
     /**
      * @var string
-     *
+     * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      * @ORM\Column(name="display_name_nl", type="string")
      */
     public $displayNameNl;
 
     /**
      * @var string
-     *
+     * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      * @ORM\Column(name="display_name_en", type="string")
      */
     public $displayNameEn;
 
     /**
      * @var string
-     *
+     * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      * @ORM\Column(name="display_name_pt", type="string")
      */
     public $displayNamePt;
 
     /**
      * @var Logo
-     *
+     * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      * @ORM\Column(name="logo", type="object")
      */
     public $logo;
@@ -183,21 +182,21 @@ abstract class AbstractRole
 
     /**
      * @var string
-     *
+     * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      * @ORM\Column(name="keywords_nl", type="string")
      */
     public $keywordsNl;
 
     /**
      * @var string
-     *
+     * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      * @ORM\Column(name="keywords_en", type="string")
      */
     public $keywordsEn;
 
     /**
      * @var string
-     *
+     * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      * @ORM\Column(name="keywords_pt", type="string")
      */
     public $keywordsPt;
@@ -303,6 +302,7 @@ abstract class AbstractRole
         string $workflowState = self::WORKFLOW_STATE_DEFAULT,
         string $manipulation = ''
     ) {
+        $this->mdui = $mdui;
         $this->certificates = $certificates;
         $this->contactPersons = $contactPersons;
         $this->descriptionEn = $descriptionEn;
@@ -328,8 +328,6 @@ abstract class AbstractRole
         $this->singleLogoutService = $singleLogoutService;
         $this->workflowState = $workflowState;
         $this->manipulation = $manipulation;
-
-        $this->mdui = $mdui;
     }
 
     /**

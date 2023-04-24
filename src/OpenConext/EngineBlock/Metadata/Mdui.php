@@ -151,27 +151,134 @@ class Mdui
         /** @var MultilingualElement $element */
         $element = $this->values[$elementName];
         return $element->getConfiguredLanguages();
-
     }
 
-    public function getDisplayName(): MultilingualElement
+    public function hasDisplayName(string $language): bool
     {
-        return $this->values['DisplayName'];
+        /** @var MultilingualElement $displayName */
+        $displayName = $this->values['DisplayName'];
+        if ($displayName instanceof EmptyMduiElement) {
+            return false;
+        }
+        try {
+            return $displayName->translate($language) instanceof MultilingualValue;
+        } catch (MduiNotFoundException $e) {
+            return false;
+        }
     }
 
-    public function getDescription(): MultilingualElement
+    public function getDisplayName(string $language): string
     {
-        return $this->values['Description'];
+        /** @var MultilingualElement $displayName */
+        $displayName = $this->values['DisplayName'];
+        return $displayName->translate($language)->getValue();
     }
 
-    public function getKeywords(): MultilingualElement
+
+    /**
+     * To be portable with the library/legacy Metadata. It either uses the
+     * value of falls back to null
+     */
+    public function getDisplayNameOrNull(string $language): ?string
     {
-        return $this->values['Keywords'];
+        if ($this->hasDisplayName($language)) {
+            $displayName = $this->values['DisplayName'];
+            return $displayName->translate($language)->getValue();
+        }
+
+        return null;
+    }
+
+    public function hasDescription(string $language): bool
+    {
+        /** @var MultilingualElement $description */
+        $description = $this->values['Description'];
+        if ($description instanceof EmptyMduiElement) {
+            return false;
+        }
+        try {
+            return $description->translate($language) instanceof MultilingualValue;
+        } catch (MduiNotFoundException $e) {
+            return false;
+        }
+    }
+
+    public function getDescription(string $language): string
+    {
+        /** @var MultilingualElement $description */
+        $description = $this->values['Description'];
+        return $description->translate($language)->getValue();
+    }
+
+    /**
+     * To be portable with the library/legacy Metadata. It either uses the
+     * value of falls back to null
+     */
+    public function getDescriptionOrNull(string $language): ?string
+    {
+        if ($this->hasDescription($language)) {
+            $description = $this->values['Description'];
+            return $description->translate($language)->getValue();
+        }
+
+        return null;
+    }
+
+    public function hasKeywords(string $language): bool
+    {
+        /** @var MultilingualElement $keywords */
+        $keywords = $this->values['Keywords'];
+        if ($keywords instanceof EmptyMduiElement) {
+            return false;
+        }
+        try {
+            return $keywords->translate($language) instanceof MultilingualValue;
+        } catch (MduiNotFoundException $e) {
+            return false;
+        }
+    }
+
+    public function getKeywords(string $language): string
+    {
+        /** @var MultilingualElement $keywords */
+        $keywords = $this->values['Keywords'];
+        return $keywords->translate($language)->getValue();
+    }
+
+    public function getKeywordsOrNull(string $language)
+    {
+        if ($this->hasKeywords($language)) {
+            $keywords = $this->values['Keywords'];
+            return $keywords->translate($language)->getValue();
+        }
+
+        return null;
     }
 
     public function getLogo(): MultilingualElement
     {
         return $this->values['Logo'];
+    }
+
+    public function hasLogo(): bool
+    {
+        return $this->values['Logo'] instanceof Logo;
+    }
+
+    /**
+     * Setting the Logo is used in test
+     */
+    public function setLogo(Logo $logo)
+    {
+        $this->values['Logo'] = $logo;
+    }
+
+    public function getLogoOrNull(): ?Logo
+    {
+        if ($this->hasLogo()) {
+            return $this->values['Logo'];
+        }
+        return null;
     }
 
     /**
@@ -214,7 +321,7 @@ class Mdui
         if ($element instanceof EmptyMduiElement) {
             return false;
         }
-        $primary = $element->translate(self::PRIMARY_LANGUAGE);
+        $primary = $element->translate(MultilingualElement::PRIMARY_LANGUAGE);
         $requested = $element->translate($language);
 
         return !($requested == '' && $primary == '');
