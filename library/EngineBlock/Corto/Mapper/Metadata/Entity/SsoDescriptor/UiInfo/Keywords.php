@@ -32,15 +32,15 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_Keywords
 
     public function mapTo(array $rootElement)
     {
-        $keywords = array();
-        if ($this->_entity->keywordsEn) {
-            $keywords['en'] = $this->_entity->keywordsEn;
-        }
-        if ($this->_entity->keywordsNl) {
-            $keywords['nl'] = $this->_entity->keywordsNl;
-        }
-        if ($this->_entity->keywordsPt) {
-            $keywords['pt'] = $this->_entity->keywordsPt;
+        $keywords = [];
+        $mdui = $this->_entity->getMdui();
+        $availableLanguages = $mdui->getLanguagesByElementName('Keywords');
+
+        foreach ($availableLanguages as $language) {
+            $keyword = $mdui->getKeywords()->translate($language)->getValue();
+            if (trim($keyword) !== '') {
+                $keywords[$language] = $keyword;
+            }
         }
         if (empty($keywords)) {
             return $rootElement;
@@ -58,9 +58,6 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_Keywords
         }
 
         foreach ($keywords as $langCode => $value) {
-            if (trim($value)==='') {
-                continue;
-            }
 
             $uiInfo['mdui:Keywords'][] = array(
                 array(
