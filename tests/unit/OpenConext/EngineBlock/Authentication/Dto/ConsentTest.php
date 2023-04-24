@@ -33,7 +33,7 @@ use SAML2\Constants;
 
 class ConsentTest extends TestCase
 {
-    private function createServiceProvider(array $organizations = [])
+    private function createServiceProvider(array $organizations = [], $omitDisplayName = false)
     {
         $supportContact = new ContactPerson('support');
         $supportContact->givenName = 'givenName';
@@ -50,11 +50,17 @@ class ConsentTest extends TestCase
             $ptOrg = $organizations['pt'];
         }
 
+        $mduiJson = '{"DisplayName":{"name":"DisplayName","values":{"en":{"value":"Name EN","language":"en"},"nl":{"value":"Name NL","language":"nl"}}},"Description":{"name":"Description","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Keywords":{"name":"Keywords","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Logo":{"name":"Logo","url":"https:\/\/link-to-my.logo.example.org\/img\/logo.png","width":null,"height":null},"PrivacyStatementURL":{"name":"PrivacyStatementURL","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}}}';
+        if ($omitDisplayName) {
+            $mduiJson = '{"DisplayName":{"name":"DisplayName"},"Description":{"name":"Description","values":{"en":{"value":"Description EN","language":"en"},"nl":{"value":"Description NL","language":"nl"}}},"Keywords":{"name":"Keywords","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Logo":{"name":"Logo","url":"https:\/\/link-to-my.logo.example.org\/img\/logo.png","width":null,"height":null},"PrivacyStatementURL":{"name":"PrivacyStatementURL","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}}}';
+        }
+        $mdui = Mdui::fromJson($mduiJson);
+
         $serviceProvider = Utils::instantiate(
             ServiceProvider::class,
             [
                 'entityId' => 'entity-id',
-                'mdui' => Mdui::emptyMdui(),
+                'mdui' => $mdui,
                 'contactPersons' => [
                     $supportContact
                 ],
@@ -108,8 +114,8 @@ class ConsentTest extends TestCase
         $this->assertArrayHasKey('nl', $json['support_url']);
         $this->assertEquals($serviceProvider->supportUrlEn, $json['support_url']['en']);
         $this->assertEquals($serviceProvider->supportUrlNl, $json['support_url']['nl']);
-        $this->assertEquals($serviceProvider->displayNameEn, $json['display_name']['en']);
-        $this->assertEquals($serviceProvider->displayNameNl, $json['display_name']['nl']);
+        $this->assertEquals($serviceProvider->getMdui()->getDisplayName('en'), $json['display_name']['en']);
+        $this->assertEquals($serviceProvider->getMdui()->getDisplayName('nl'), $json['display_name']['nl']);
         $this->assertEquals($serviceProvider->supportUrlNl, $json['support_url']['nl']);
         $this->assertEquals($serviceProvider->getCoins()->termsOfServiceUrl(), $json['eula_url']);
         $this->assertEquals($serviceProvider->contactPersons[0]->emailAddress, $json['support_email']);
@@ -155,9 +161,8 @@ class ConsentTest extends TestCase
      */
     public function display_name_falls_back_to_name_if_display_name_is_empty()
     {
-        $serviceProvider = $this->createServiceProvider();
-        $serviceProvider->displayNameEn = '';
-        $serviceProvider->displayNameNl = '';
+        $serviceProvider = $this->createServiceProvider([], false);
+
         $serviceProvider->nameEn = 'Name EN';
         $serviceProvider->nameNl = 'Name NL';
 
@@ -190,9 +195,7 @@ class ConsentTest extends TestCase
      */
     public function display_name_falls_back_to_entity_id_if_name_is_empty()
     {
-        $serviceProvider = $this->createServiceProvider();
-        $serviceProvider->displayNameEn = '';
-        $serviceProvider->displayNameNl = '';
+        $serviceProvider = $this->createServiceProvider([], true);
         $serviceProvider->nameEn = '';
         $serviceProvider->nameNl = '';
 

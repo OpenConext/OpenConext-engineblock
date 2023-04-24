@@ -37,9 +37,11 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_Keywords
         $availableLanguages = $mdui->getLanguagesByElementName('Keywords');
 
         foreach ($availableLanguages as $language) {
-            $keyword = $mdui->getKeywords()->translate($language)->getValue();
-            if (trim($keyword) !== '') {
-                $keywords[$language] = $keyword;
+            if ($mdui->hasKeywords($language)) {
+                $keyword = $mdui->getKeywords($language);
+                if (trim($keyword) !== '') {
+                    $keywords[$language] = $keyword;
+                }
             }
         }
         if (empty($keywords)) {

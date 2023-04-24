@@ -40,7 +40,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_DisplayName
         $availableLanguages = $mdui->getLanguagesByElementName('DisplayName');
 
         foreach ($availableLanguages as $language) {
-            $displayName = $mdui->getDisplayName()->translate($language)->getValue();
+            $displayName = $mdui->getDisplayName($language);
             if ($displayName !== '') {
                 $displayNames[$language] = $displayName;
             }

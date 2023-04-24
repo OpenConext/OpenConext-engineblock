@@ -47,17 +47,9 @@ interface ServiceProviderEntityInterface
      */
     public function getName($locale): string;
 
-    /**
-     * @param $locale
-     * @return string
-     */
-    public function getDescription($locale): string;
+    public function getDescription(string $locale): string;
 
-    /**
-     * @param $locale
-     * @return string
-     */
-    public function getDisplayName($locale): string;
+    public function getDisplayName(string $locale): string;
 
     /**
      * @return Logo|null

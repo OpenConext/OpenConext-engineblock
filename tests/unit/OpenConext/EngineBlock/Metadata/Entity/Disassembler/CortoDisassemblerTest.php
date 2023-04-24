@@ -33,11 +33,13 @@ class CortoDisassemblerTest extends TestCase
 
     public function testSpDisassemble()
     {
+        $mduiJson = '{"DisplayName":{"name":"DisplayName","values":{"en":{"value":"DisplayName","language":"en"},"nl":{"value":"DisplayName","language":"nl"}}},"Description":{"name":"Description","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Keywords":{"name":"Keywords","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Logo":{"name":"Logo","url":"https:\/\/link-to-my.logo.example.org\/img\/logo.png","width":null,"height":null},"PrivacyStatementURL":{"name":"PrivacyStatementURL","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}}}';
+        $mdui = Mdui::fromJson($mduiJson);
         $serviceProvider = Utils::instantiate(
             ServiceProvider::class,
             [
                 'entityId' => 'https://sp.example.edu',
-                'mdui' => Mdui::emptyMdui(),
+                'mdui' => $mdui,
                 'displayNameNl' => 'DisplayName',
                 'displayNameEn' => 'DisplayName',
                 'isTransparentIssuer' => true,

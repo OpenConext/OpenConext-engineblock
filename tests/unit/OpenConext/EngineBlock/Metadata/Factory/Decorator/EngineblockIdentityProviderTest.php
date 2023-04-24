@@ -108,7 +108,7 @@ class EngineblockIdentityProviderTest extends AbstractEntityTest
 
     public function test_return_null_for_slo_service_if_child_has_no_slo_service_set()
     {
-        $this->adapter = $this->createIdentityProviderAdapter([
+        $this->adapter = $this->createIdentityProviderAdapter(false, false, [
             'singleLogoutService' => null,
         ]);
 

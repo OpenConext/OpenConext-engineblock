@@ -33,14 +33,14 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor_AttributeConsumin
     public function mapTo(array $rootElement)
     {
         $descriptions = array();
-        if ($this->_entity->descriptionNl) {
-            $descriptions['nl'] = $this->_entity->descriptionNl;
+        if ($this->_entity->getMdui()->hasDescription('nl')) {
+            $descriptions['nl'] = $this->_entity->getMdui()->getDescription('nl');
         }
-        if ($this->_entity->descriptionEn) {
-            $descriptions['en'] = $this->_entity->descriptionEn;
+        if ($this->_entity->getMdui()->hasDescription('en')) {
+            $descriptions['en'] = $this->_entity->getMdui()->getDescription('en');
         }
-        if ($this->_entity->descriptionPt) {
-            $descriptions['pt'] = $this->_entity->descriptionPt;
+        if ($this->_entity->getMdui()->hasDescription('pt')) {
+            $descriptions['pt'] = $this->_entity->getMdui()->getDescription('pt');
         }
         if (empty($descriptions)) {
             return $rootElement;
