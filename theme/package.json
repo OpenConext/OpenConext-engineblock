@@ -57,7 +57,7 @@
     "node-sass": "^4.14.1",
     "postcss-cli": "^7.1.2",
     "rimraf": "^3.0.2",
-    "stylelint": "^13.12.0",
+    "stylelint": "^15.6.0",
     "stylelint-config-recommended": "^3.0.0",
     "tinyify": "^2.5.2",
     "watchify": "^4.0.0"
