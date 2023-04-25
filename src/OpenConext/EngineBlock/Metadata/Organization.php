@@ -35,4 +35,14 @@ class Organization
         $this->name = $name;
         $this->url = $url;
     }
+
+    /**
+     * A convenience static constructor for the Organization.
+     * @param array $organization
+     * @return Organization
+     */
+    public static function fromArray(array $organization): Organization
+    {
+        return new self($organization["name"], $organization["displayName"], $organization["url"]);
+    }
 }

@@ -49,4 +49,18 @@ class IndexedService extends Service
 
         parent::__construct($location, $binding);
     }
+
+    /**
+     * A convenience static constructor for the IndexedService.
+     * @param array $indexedService
+     * @return IndexedService
+     */
+    public static function indexedServiceFromArray(array $indexedService): IndexedService
+    {
+        return new self($indexedService["location"],
+            $indexedService["binding"],
+            $indexedService["serviceIndex"],
+            $indexedService["isDefault"]
+        );
+    }
 }

@@ -43,4 +43,14 @@ class Service
         $this->binding  = $binding;
         $this->location = $location;
     }
+
+    /**
+     * A convenience static constructor for the Service.
+     * @param array $service
+     * @return Service
+     */
+    public static function fromArray(array $service): Service
+    {
+        return new self($service["location"], $service["binding"]);
+    }
 }

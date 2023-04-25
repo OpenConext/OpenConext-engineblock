@@ -235,4 +235,14 @@ class AttributeReleasePolicy
     {
         return $this->attributeRules;
     }
+
+    /**
+     * A convenience static constructor for the AttributeReleasePolicy.
+     * @param array $attributeReleasePolicy
+     * @return AttributeReleasePolicy
+     */
+    public static function fromArray(array $attributeReleasePolicy): AttributeReleasePolicy
+    {
+        return new self($attributeReleasePolicy);
+    }
 }
