@@ -55,8 +55,8 @@
                                          alt=""/>
                                     <h2>{{ attributeSourceDisplayName(attributeSource) }}</h2>
                                 {% else %}
-                                    {% if idp.logo is not null %}
-                                        <img class="logo-small" src="{{ idp.logo.url }}" alt=""/>
+                                    {% if idp.mdui.hasLogo %}
+                                        <img class="logo-small" src="{{ idp.mdui.logo.url }}" alt=""/>
                                     {% else %}
                                         <img class="logo-small" src="/images/placeholder.png?v={{ assetsVersion }}" alt=""/>
                                     {% endif %}
@@ -155,9 +155,9 @@
 
             {% if showConsentExplanation and consentSettings.consentExplanationIn(app.request.locale, spEntityId) %}
             <section class="idp-consent-explanation">
-                {% if idp.logo is not null %}
+                {% if idp.mdui.hasLogo %}
                     <div class="idp-logo">
-                        <img class="idp-logo logo-small" src="{{ idp.logo.url }}?v={{ assetsVersion }}" alt=""/>
+                        <img class="idp-logo logo-small" src="{{ idp.mdui.logo.url }}?v={{ assetsVersion }}" alt=""/>
                     </div>
                 {% endif %}
                 <p class="title">{{ 'consent_explanation_title'|trans }}</p>
