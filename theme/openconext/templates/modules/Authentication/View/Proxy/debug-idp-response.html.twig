@@ -51,7 +51,7 @@
                         </th>
                         <td>
                             <img class="logo"
-                                 src="{% if idp.logo is defined %}{{ idp.logo.url }}{% else %} {{ '/images/placeholder.png' }}{% endif %}"
+                                 src="{% if idp.mdui.hasLogo %}{{ idp.mdui.logo.url }}{% else %} {{ '/images/placeholder.png' }}{% endif %}"
                                  alt="IdP logo"/>
                         </td>
                     </tr>
