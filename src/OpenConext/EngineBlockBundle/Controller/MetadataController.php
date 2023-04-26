@@ -54,7 +54,7 @@ class MetadataController
         $metadataXml = $this->metadataService->metadataForIdp($keyId);
 
         $response = new Response($metadataXml);
-        $response->headers->set('Content-Type', 'text/xml');
+        $response->headers->set('Content-Type', 'application/samlmetadata+xml');
 
         return $response;
     }
@@ -68,7 +68,7 @@ class MetadataController
         $metadataXml = $this->metadataService->metadataForSp($keyId);
 
         $response = new Response($metadataXml);
-        $response->headers->set('Content-Type', 'text/xml');
+        $response->headers->set('Content-Type', 'application/samlmetadata+xml');
 
         return $response;
     }
@@ -81,7 +81,7 @@ class MetadataController
 
         // 6. Return the signed metadata as an XML response
         $response = new Response($metadataXml);
-        $response->headers->set('Content-Type', 'text/xml');
+        $response->headers->set('Content-Type', 'application/samlmetadata+xml');
 
         return $response;
     }
@@ -95,7 +95,7 @@ class MetadataController
         $metadataXml = $this->metadataService->metadataForStepup($keyId);
 
         $response = new Response($metadataXml);
-        $response->headers->set('Content-Type', 'text/xml');
+        $response->headers->set('Content-Type', 'application/samlmetadata+xml');
 
         return $response;
     }
