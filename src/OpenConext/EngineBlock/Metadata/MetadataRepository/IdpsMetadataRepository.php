@@ -55,7 +55,7 @@ class IdpsMetadataRepository
     /**
      * @param string $entityId
      * @return ServiceProvider
-     * @throws EntityNotFoundException
+     * @throws EntityCanNotBeFoundException
      */
     public function fetchServiceProviderByEntityId(string $entityId)
     {
