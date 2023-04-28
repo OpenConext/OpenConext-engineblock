@@ -34,11 +34,6 @@ class EngineBlock_User
         return $this->_attributes['nameid'][0];
     }
 
-    public function getDisplayName()
-    {
-        return $this->_attributes['urn:mace:dir:attribute-def:displayName'][0];
-    }
-
     public function getAttributes()
     {
         return $this->_attributes;
