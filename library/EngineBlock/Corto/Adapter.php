@@ -17,6 +17,7 @@
  */
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\EntityNotFoundException;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\RemoveDisallowedIdentityProvidersFilter;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\RemoveOtherWorkflowStatesFilter;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
@@ -175,6 +176,8 @@ class EngineBlock_Corto_Adapter
      * Filter out IdPs that are not allowed to connect to the given SP.
      *
      * Determines SP based on Authn Request (required).
+     *
+     * @throws EngineBlock_Exception_UnknownServiceProvider
      */
     protected function _filterRemoteEntitiesByClaimedSp()
     {
@@ -184,7 +187,14 @@ class EngineBlock_Corto_Adapter
         }
 
         $repository = $this->getMetadataRepository();
-        $serviceProvider = $repository->fetchServiceProviderByEntityId($serviceProviderEntityId);
+        try {
+            $serviceProvider = $repository->fetchServiceProviderByEntityId($serviceProviderEntityId);
+        } catch (EntityNotFoundException $e) {
+            throw new EngineBlock_Exception_UnknownServiceProvider(
+                sprintf('Unable to find the claimed SP with entity ID "%s".', $serviceProviderEntityId),
+                $serviceProviderEntityId
+            );
+        }
 
         if (!$serviceProvider->allowAll) {
             $repository->appendFilter(
