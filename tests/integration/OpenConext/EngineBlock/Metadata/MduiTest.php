@@ -94,6 +94,26 @@ class MduiTest extends TestCase
         );
     }
 
+    /**
+     * @dataProvider invalidJsonProvider
+     */
+    public function test_creates_empty_mdui_from_json_invalid_json($invalidJson)
+    {
+        $mdui = Mdui::fromJson($invalidJson);
+        // english translation for display name should be present, but display name is misconfigured
+        $this->assertNull($mdui->getDisplayNameOrNull('en'));
+    }
+
+    public function invalidJsonProvider()
+    {
+        return [
+           'single quotes' => ['{"DisplayName":{\'name\':\'DisplayName\',"values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Description":{"name":"Description","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Keywords":{"name":"Keywords","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Logo":{"name":"Logo","url":"https:\/\/link-to-my.logo.example.org\/img\/logo.png","width":null,"height":null},"PrivacyStatementURL":{"name":"PrivacyStatementURL","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}}}'],
+           'misspelled values' => ['{"DisplayName":{"name":"DisplayName","vallues":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Description":{"name":"Description","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Keywords":{"name":"Keywords","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Logo":{"name":"Logo","url":"https:\/\/link-to-my.logo.example.org\/img\/logo.png","width":null,"height":null},"PrivacyStatementURL":{"name":"PrivacyStatementURL","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}}}'],
+           'misspelled multilingual entry' => ['{"DisplayName":{"name":"DisplayName","values":{"en":{"vaue":"bogus en value","lang":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Description":{"name":"Description","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Keywords":{"name":"Keywords","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Logo":{"name":"Logo","url":"https:\/\/link-to-my.logo.example.org\/img\/logo.png","width":null,"height":null},"PrivacyStatementURL":{"name":"PrivacyStatementURL","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}}}'],
+           'misspelled DispleyName' => ['{"DispleyName":{"name":"DisplayName","values":{"en":{"vaue":"bogus en value","lang":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Description":{"name":"Description","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Keywords":{"name":"Keywords","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Logo":{"name":"Logo","url":"https:\/\/link-to-my.logo.example.org\/img\/logo.png","width":null,"height":null},"PrivacyStatementURL":{"name":"PrivacyStatementURL","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}}}'],
+        ];
+    }
+
     public function test_mdui_data_can_be_json_serialized()
     {
         $mdui = Mdui::fromMetadata(

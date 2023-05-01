@@ -21,12 +21,13 @@ namespace OpenConext\EngineBlock\Metadata;
 use Assert\Assertion;
 use JsonSerializable;
 use OpenConext\EngineBlock\Exception\MduiNotFoundException;
-use function array_keys;
 
 class MduiElement implements MultilingualElement, JsonSerializable
 {
+    /** @var string */
     private $name;
 
+    /** @var MultilingualValue[] */
     private $values;
 
     public function __construct(string $name, array $values)
@@ -43,14 +44,22 @@ class MduiElement implements MultilingualElement, JsonSerializable
 
     public static function fromJson(array $multiLingualElement): MultilingualElement
     {
-        $values = [];
-        foreach ($multiLingualElement['values'] as $multiLinguaValue) {
-            $values[$multiLinguaValue['language']] = new MultilingualValue(
-                $multiLinguaValue['value'],
-                $multiLinguaValue['language']
-            );
+        if (!array_key_exists('name', $multiLingualElement)) {
+            throw new MduiRuntimeException('Unable to create MduiElement without a name');
         }
-        return new self($multiLingualElement['name'], $values);
+        $values = [];
+        if (array_key_exists('values', $multiLingualElement)) {
+            foreach ($multiLingualElement['values'] as $multiLinguaValue) {
+                if (array_key_exists('value', $multiLinguaValue) && array_key_exists('language', $multiLinguaValue)) {
+                    $values[$multiLinguaValue['language']] = new MultilingualValue(
+                        $multiLinguaValue['value'],
+                        $multiLinguaValue['language']
+                    );
+                }
+            }
+            return new self($multiLingualElement['name'], $values);
+        }
+        return new EmptyMduiElement($multiLingualElement);
     }
 
     public function getName(): string
