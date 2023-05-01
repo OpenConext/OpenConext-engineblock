@@ -23,6 +23,8 @@ use OpenConext\EngineBlock\Exception\RuntimeException;
 use function array_key_exists;
 
 /**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ *
  * The Mdui value object represents the SP/IdP multilingual metadata elements
  * In case of EngineBlock we support the following mdui elements defined in the
  * SAML2 specification:
@@ -49,6 +51,9 @@ class Mdui
         'PrivacyStatementURL',
     ];
 
+    /**
+     * @var array MultilingualElement[]
+     */
     private $values = [];
 
     public static function fromMetadata(
@@ -157,7 +162,7 @@ class Mdui
     {
         /** @var MultilingualElement $displayName */
         $displayName = $this->values['DisplayName'];
-        if ($displayName instanceof EmptyMduiElement) {
+        if (!$displayName || $displayName instanceof EmptyMduiElement) {
             return false;
         }
         try {
@@ -193,7 +198,7 @@ class Mdui
     {
         /** @var MultilingualElement $description */
         $description = $this->values['Description'];
-        if ($description instanceof EmptyMduiElement) {
+        if (!$description || $description instanceof EmptyMduiElement) {
             return false;
         }
         try {
@@ -228,7 +233,7 @@ class Mdui
     {
         /** @var MultilingualElement $keywords */
         $keywords = $this->values['Keywords'];
-        if ($keywords instanceof EmptyMduiElement) {
+        if (!$keywords || $keywords instanceof EmptyMduiElement) {
             return false;
         }
         try {
@@ -262,7 +267,8 @@ class Mdui
 
     public function hasLogo(): bool
     {
-        return $this->values['Logo'] instanceof Logo;
+        $logo = $this->values['Logo'];
+        return $logo && $logo instanceof Logo;
     }
 
     /**
@@ -318,7 +324,7 @@ class Mdui
         /** @var MultilingualElement $element */
         $element = $this->values['PrivacyStatementURL'];
         // No PrivacyStatement is set for any language
-        if ($element instanceof EmptyMduiElement) {
+        if (!$element || $element instanceof EmptyMduiElement) {
             return false;
         }
         $primary = $element->translate(MultilingualElement::PRIMARY_LANGUAGE);
