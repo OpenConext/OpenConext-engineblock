@@ -39,7 +39,10 @@ class FeedbackInformation
     public function __construct($key, $value)
     {
         Assertion::nonEmptyString($key, "The feedbackInfo key can't be empty and must be a string value");
-        Assertion::nonEmptyString($value, "The feedbackInfo value can't be empty and must be a string value");
+        Assertion::nonEmptyString(
+            $value,
+            sprintf("The feedbackInfo value for '%s' can't be empty and must be a string value", $key)
+        );
         $this->key = $key;
         $this->value = $value;
     }

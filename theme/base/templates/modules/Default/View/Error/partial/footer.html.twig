@@ -2,15 +2,14 @@
 <footer class="error-page-footer-buttons">
     <div class="error-page-footer-buttons__container">
         <div class="error-page-footer-buttons__row">
-{#            TODO: fix back to sp link (see https://www.pivotaltracker.com/story/show/176960606)#}
-{#            {% if hasBackToSpLink() %}#}
-{#                <div class="footer-button">#}
-{#                    <button type="submit" class="footer-button__button" form="backToSPForm">#}
-{#                        <i class="footer-button__icon fa-arrow-left"></i><br/>#}
-{#                        <span class="footer-button__text">{{ 'error_return-sp-link-text'|trans({'%spName%': getSpName()}) }}</span>#}
-{#                    </button>#}
-{#                </div>#}
-{#            {%  endif %}#}
+            {% if hasBackToSpLink() %}
+                <div class="footer-button">
+                    <button type="submit" class="footer-button__button" form="backToSPForm">
+                        <i class="footer-button__icon fa-arrow-left"></i><br/>
+                        <span class="footer-button__text">{{ 'error_return-sp-link-text'|trans({'%spName%': getSpName()}) }}</span>
+                    </button>
+                </div>
+            {%  endif %}
             {% if hasWikiLink(template) %}
                 <div class="footer-button">
                     {# The template var is set in the individual error Twigs, that's te place where we can determine what template is loaded. #}
@@ -41,7 +40,7 @@
             {%  endif %}
         </div>
     </div>
-{#    {% if hasBackToSpLink() %}#}
-{#        {% include '@theme/Authentication/View/Feedback/partial/saml_response_form.html.twig' %}#}
-{#    {% endif %}#}
+    {% if hasBackToSpLink() %}
+        {% include '@theme/Authentication/View/Feedback/partial/saml_response_form.html.twig' %}
+    {% endif %}
 </footer>

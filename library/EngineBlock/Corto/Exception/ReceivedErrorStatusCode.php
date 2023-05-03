@@ -40,6 +40,7 @@ class EngineBlock_Corto_Exception_ReceivedErrorStatusCode extends EngineBlock_Ex
 
     public function setResponse(EngineBlock_Saml2_ResponseAnnotationDecorator $response)
     {
+        $this->feedbackInfo['AuthnFailedResponse'] = $response;
         $this->response = $response;
     }
 
