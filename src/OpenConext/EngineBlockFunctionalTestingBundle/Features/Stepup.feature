@@ -140,21 +140,20 @@ Feature:
         And the url should match "/feedback/stepup-callout-unmet-loa"
         And the response status code should be 400
 
-#    TODO: fix this test after re-enabling back to sp link
-#    Scenario: User can click back button on error page after failing StepUp
-#       Given the SP "SSO-SP" requires Stepup LoA "http://vm.openconext.org/assurance/loa2"
-#        When I log in at "SSO-SP"
-#         And I select "SSO-IdP" on the WAYF
-#         And I pass through EngineBlock
-#         And I pass through the IdP
-#         And Stepup will fail if the LoA can not be given
-#        Then I should see "Error - No suitable token found"
-#         And the url should match "/feedback/stepup-callout-unmet-loa"
-#         And the response status code should be 400
-#        Then I click the return to SP button
-#         And the response should contain 'urn:oasis:names:tc:SAML:2.0:status:Responder'
-#         And the response should contain 'urn:oasis:names:tc:SAML:2.0:status:AuthnFailed'
-#         And the response should contain '(No message provided)'
+    Scenario: User can click back button on error page after failing StepUp
+       Given the SP "SSO-SP" requires Stepup LoA "http://vm.openconext.org/assurance/loa2"
+        When I log in at "SSO-SP"
+         And I select "SSO-IdP" on the WAYF
+         And I pass through EngineBlock
+         And I pass through the IdP
+         And Stepup will fail if the LoA can not be given
+        Then I should see "Error - No suitable token found"
+         And the url should match "/feedback/stepup-callout-unmet-loa"
+         And the response status code should be 400
+        Then I click the return to SP button
+         And the response should contain 'urn:oasis:names:tc:SAML:2.0:status:Responder'
+         And the response should contain 'urn:oasis:names:tc:SAML:2.0:status:NoAuthnContext'
+         And the response should contain '(No message provided)'
 
     Scenario: Stepup authentication should show exception when user does cancel
       Given the SP "SSO-SP" requires Stepup LoA "http://vm.openconext.org/assurance/loa2"

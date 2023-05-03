@@ -22,8 +22,8 @@ Note that this mode is very risky; the associated SP needs to do something with 
 #### metadata:coin:stepup:requireloa
 The LOA minimally required for any login to this SP.
 
-**Type:** boolean
-
+**Type:** string
+**Example value:** `http://vm.openconext.org/assurance/loa2`
 
 
 
@@ -45,3 +45,5 @@ The PDP will return a minimally required LoA for each matching ruleset. These ru
 ## Engineblock global configuration
 The EngineBlock installation also needs additional configuration in order to facilitate the SFO second factor authentications. For details on these configuration settings, please review the SFO section in the [app/config/parameters.yml.dist](app/config/parameters.yml.dist) file.
 
+## Development and testing
+To test this integration in EngineBlock, you can configure one of the SP's known to your installation (example `profile.vm.openconext.org`) to require step up authentication. After pushing the updated metadata back to EngineBlock, Engine should start asking for step up authentications when logging in to the SP. Note that a mock StepUp SFO endpoint is implemented in EB when in `dev` or `test` mode. That mimics the SFO callout to the StepUp Gateway. Allowing developers and testsers to modify the behaviour of the Gateway response without actually having to run a StepUp instance.
