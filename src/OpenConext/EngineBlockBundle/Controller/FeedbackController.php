@@ -168,7 +168,7 @@ class FeedbackController
         $entityId = $request->get('entity-id');
 
         // Add feedback info from url
-        $customFeedbackInfo['EntityID'] = $entityId;
+        $customFeedbackInfo = ['EntityID' => $entityId];
         $this->setFeedbackInformationOnSession($request->getSession(), $customFeedbackInfo);
 
         $body = $this->twig->render(
@@ -189,8 +189,10 @@ class FeedbackController
     public function unknownIdentityProviderAction(Request $request)
     {
         // Add feedback info from url
-        $customFeedbackInfo['EntityID'] = $request->get('entity-id');
-        $customFeedbackInfo['Destination'] = $request->get('destination');
+        $customFeedbackInfo = [
+            'EntityID' => $request->get('entity-id'),
+            'Destination' => $request->get('destination'),
+        ];
 
         $this->setFeedbackInformationOnSession($request->getSession(), $customFeedbackInfo);
 
@@ -416,7 +418,9 @@ class FeedbackController
     public function unknownPreselectedIdpAction(Request $request)
     {
         // Add feedback info from url
-        $customFeedbackInfo['Idp Hash'] = $request->get('idp-hash');
+        $customFeedbackInfo = [
+            'Idp Hash' => $request->get('idp-hash'),
+        ];
         $this->setFeedbackInformationOnSession($request->getSession(), $customFeedbackInfo);
 
         return new Response(
@@ -428,7 +432,9 @@ class FeedbackController
     public function unknownKeyIdAction(Request $request): Response
     {
         // Add feedback info from url
-        $customFeedbackInfo['Key ID'] = $request->get('keyid');
+        $customFeedbackInfo = [
+            'Key ID' => $request->get('keyid'),
+        ];
         $this->setFeedbackInformationOnSession($request->getSession(), $customFeedbackInfo);
 
         return new Response(

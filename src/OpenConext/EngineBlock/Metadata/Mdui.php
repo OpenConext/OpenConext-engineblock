@@ -63,11 +63,13 @@ class Mdui
         MultilingualElement $logo,
         MultilingualElement $privacyStatementUrl
     ): Mdui {
-        $values['DisplayName'] = $displayName;
-        $values['Description'] = $description;
-        $values['Keywords'] = $keywords;
-        $values['Logo'] = $logo;
-        $values['PrivacyStatementURL'] = $privacyStatementUrl;
+        $values = [
+            'DisplayName' => $displayName,
+            'Description' => $description,
+            'Keywords' => $keywords,
+            'Logo' => $logo,
+            'PrivacyStatementURL' => $privacyStatementUrl,
+        ];
 
         return new self($values);
     }

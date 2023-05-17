@@ -35,6 +35,7 @@ class StepupEntityFactory
      */
     public static function idpFrom(StepupEndpoint $stepupEndpoint, ?string $acsLocation) : IdentityProvider
     {
+        $certificates = $singleSignOnServices = [];
         $publicKeyFactory = new EngineBlock_X509_CertificateFactory();
         $certificates[] = $publicKeyFactory->fromFile($stepupEndpoint->getKeyFile());
         $singleSignOnServices[] = new Service($stepupEndpoint->getSsoLocation(), Constants::BINDING_HTTP_REDIRECT);
@@ -91,6 +92,7 @@ class StepupEntityFactory
      */
     public static function spFrom(StepupEndpoint $stepupEndpoint, ?string $acsLocation) : ServiceProvider
     {
+        $certificates = $assertionConsumerServices = [];
         $publicKeyFactory = new EngineBlock_X509_CertificateFactory();
         $certificates[] = $publicKeyFactory->fromFile($stepupEndpoint->getKeyFile());
         $assertionConsumerServices[] = new IndexedService(
