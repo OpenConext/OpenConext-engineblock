@@ -38,15 +38,15 @@ class DebugTest extends TestCase
     public function testPrintHumanReadable()
     {
         $output = $this->debug->printHumanReadable(['testString']);
-        $this->assertContains('[0] => testString', $output);
+        $this->assertStringContainsString('[0] => testString', $output);
     }
 
     public function testVarExport()
     {
         $output = $this->debug->varExport('testString');
-        $this->assertContains('testString', $output);
+        $this->assertStringContainsString('testString', $output);
 
         $output = $this->debug->varExport(['testString']);
-        $this->assertContains('0 => \'testString\'', $output);
+        $this->assertStringContainsString('0 => \'testString\'', $output);
     }
 }

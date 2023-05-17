@@ -79,6 +79,6 @@ class KeyIdTest extends TestCase
     {
         $keyId = new KeyId('20160403');
 
-        $this->assertInternalType('string', (string) $keyId);
+        $this->assertIsString((string) $keyId);
     }
 }

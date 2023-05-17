@@ -91,6 +91,6 @@ class CollabPersonUuidTest extends TestCase
     {
         $collabPersonUuid = new CollabPersonUuid((string) Uuid::uuid4());
 
-        $this->assertInternalType('string', (string) $collabPersonUuid);
+        $this->assertIsString((string) $collabPersonUuid);
     }
 }
