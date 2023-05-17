@@ -332,7 +332,7 @@ class EngineBlock_Corto_XmlToArray
      * @param string $elementName Specific element to convert, if empty then the top level element is used
      * @return string XML from array
      */
-    public static function array2xml(array $hash, $elementName = "", $useIndentation=false)
+    public static function array2xml(array $hash, $elementName = "", $useIndentation = false)
     {
         $writer = new XMLWriter();
         $writer->openMemory();
