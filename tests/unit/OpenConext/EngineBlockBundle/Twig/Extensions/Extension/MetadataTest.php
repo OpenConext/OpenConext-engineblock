@@ -43,7 +43,7 @@ class MetadataTest extends TestCase
      */
     private $translator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // Note that this unit tests depends on a real EngingeBlock_EngineBlock_Attributes_Metadata instance from the
         // Di container.

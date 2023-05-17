@@ -28,7 +28,7 @@ class EngineBlock_Test_Validator_UrnTest extends TestCase
      */
     private $validator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->validator = new EngineBlock_Validator_Urn();
     }

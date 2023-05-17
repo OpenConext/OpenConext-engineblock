@@ -178,7 +178,7 @@ class MetadataRepositoryTest extends TestCase
         return $repository;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         Mockery::close();
     }

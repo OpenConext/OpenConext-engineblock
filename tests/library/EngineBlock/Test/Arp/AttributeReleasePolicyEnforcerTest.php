@@ -26,7 +26,7 @@ class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcer extends TestCase
      */
     protected $_arpEnforcer;
 
-    public function setup()
+    public function setUp(): void
     {
         $this->_arpEnforcer = new EngineBlock_Arp_AttributeReleasePolicyEnforcer();
     }

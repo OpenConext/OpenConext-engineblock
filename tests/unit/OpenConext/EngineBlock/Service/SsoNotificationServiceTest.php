@@ -63,7 +63,7 @@ class SsoNotificationServiceTest extends TestCase
      */
     private $ssoNotificationService;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->loggerMock = Phake::mock(Logger::class);
         $this->proxyServerMock = Phake::mock(EngineBlock_Corto_ProxyServer::class);

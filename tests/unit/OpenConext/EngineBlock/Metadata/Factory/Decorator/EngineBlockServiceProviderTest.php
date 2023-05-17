@@ -33,7 +33,7 @@ class EngineBlockServiceProviderTest extends AbstractEntityTest
      */
     private $urlProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

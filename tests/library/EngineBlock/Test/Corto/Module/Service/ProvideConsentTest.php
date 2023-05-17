@@ -83,7 +83,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
      */
     private $sessionMock;
 
-    public function setup()
+    public function setUp(): void
     {
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
 

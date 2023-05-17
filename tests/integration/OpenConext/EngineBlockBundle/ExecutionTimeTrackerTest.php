@@ -29,13 +29,13 @@ require_once ENGINEBLOCK_FOLDER_VENDOR . '/symfony/symfony/src/Symfony/Bridge/Ph
 
 class ExecutionTimeTrackerTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         ClockMock::register(Stopwatch::class);
         ClockMock::register(ExecutionTimeTrackerTest::class);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         ClockMock::withClockMock(0);
     }

@@ -57,7 +57,7 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
      */
     private $translator;
 
-    public function setup()
+    public function setUp(): void
     {
         $this->keyPairFactory = $this->createMock(KeyPairFactory::class);
         $this->configuration = $this->createMock(EngineBlockConfiguration::class);

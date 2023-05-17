@@ -32,7 +32,7 @@ class LocaleProviderTest extends TestCase
      */
     private $languageSupportProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

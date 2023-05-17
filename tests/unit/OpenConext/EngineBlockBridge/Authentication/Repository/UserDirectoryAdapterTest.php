@@ -45,7 +45,7 @@ class UserDirectoryAdapterTest extends TestCase
      */
     private $logger;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->userDirectory        = m::mock(UserDirectory::class);
         $this->logger               = m::mock(LoggerInterface::class);

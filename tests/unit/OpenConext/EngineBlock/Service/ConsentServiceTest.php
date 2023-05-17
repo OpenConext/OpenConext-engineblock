@@ -51,7 +51,7 @@ class ConsentServiceTest extends TestCase
      */
     private $user;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->consentRepository = m::mock(ConsentRepository::class);
         $this->metadataService = m::mock(MetadataServiceInterface::class);
