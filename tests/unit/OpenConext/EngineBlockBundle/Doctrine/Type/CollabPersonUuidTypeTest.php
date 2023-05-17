@@ -39,14 +39,14 @@ class CollabPersonUuidTypeTest extends TestCase
     /**
      * Register the type, since we're forced to use the factory method.
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (!Type::hasType(CollabPersonUuidType::NAME)) {
             Type::addType(CollabPersonUuidType::NAME, CollabPersonUuidType::class);
         }
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->platform = new MySqlPlatform();
     }

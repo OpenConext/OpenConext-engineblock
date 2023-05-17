@@ -36,7 +36,7 @@ class RequestTest extends TestCase
     private $validSpEntityId;
     private $validResponseAttributes;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->validClientId    = 'clientid';
         $this->validSubjectId   = 'subject-id';

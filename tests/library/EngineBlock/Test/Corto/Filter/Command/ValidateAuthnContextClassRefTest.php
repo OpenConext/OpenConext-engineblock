@@ -43,7 +43,7 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateAuthnContextClassRefTest ext
      */
     private $response;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->handler = new TestHandler();
         $this->logger  = new Logger('Test', array($this->handler));

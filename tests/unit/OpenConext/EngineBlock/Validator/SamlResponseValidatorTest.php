@@ -30,7 +30,7 @@ class SamlResponseValidatorTest extends TestCase
      */
     private $validator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->validator = new SamlResponseValidator();
 

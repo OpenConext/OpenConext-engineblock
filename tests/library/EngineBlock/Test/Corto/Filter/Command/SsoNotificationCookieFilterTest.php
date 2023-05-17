@@ -46,7 +46,7 @@ class EngineBlock_Test_Corto_Filter_Command_SsoNotificationCookieFilterTest exte
      */
     private $_ssoNotificationCookieFilter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $_diContainerMock = Phake::mock(EngineBlock_Application_DiContainer::class);
         $this->_cookieServiceMock = Phake::mock(CookieService::class);

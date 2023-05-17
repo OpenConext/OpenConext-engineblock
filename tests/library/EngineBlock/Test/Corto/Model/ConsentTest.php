@@ -25,7 +25,7 @@ class EngineBlock_Corto_Model_Consent_Test extends TestCase
     private $consent;
     private $mockedDatabaseConnection;
 
-    public function setup()
+    public function setUp(): void
     {
         $this->mockedDatabaseConnection = Phake::mock('EngineBlock_Database_ConnectionFactory');
         $mockedResponse = Phake::mock('EngineBlock_Saml2_ResponseAnnotationDecorator');

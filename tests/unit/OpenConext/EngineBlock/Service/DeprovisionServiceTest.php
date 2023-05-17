@@ -60,7 +60,7 @@ class DeprovisionServiceTest extends TestCase
      */
     private $user;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->consentRepository = m::mock(ConsentRepository::class);
         $this->userDirectory = m::mock(UserDirectory::class);

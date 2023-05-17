@@ -36,7 +36,7 @@ class MfaHelperTest extends TestCase
 
     private $repo;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->repo = m::mock(CachedDoctrineMetadataRepository::class);
         $logger = m::mock(LoggerInterface::class);

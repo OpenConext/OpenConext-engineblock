@@ -37,7 +37,7 @@ class PushMetadataAssemblerTest extends TestCase
 
     private $assembler;
 
-    public function setUp()
+    public function setUp(): void
     {
         $logger = m::mock(LoggerInterface::class);
         $this->assembler = new PushMetadataAssembler(new AllowedSchemeValidator(['http', 'https']), $logger);

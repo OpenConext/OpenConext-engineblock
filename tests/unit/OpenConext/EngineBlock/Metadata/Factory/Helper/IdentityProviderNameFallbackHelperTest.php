@@ -27,7 +27,7 @@ class IdentityProviderNameFallbackHelperTest extends AbstractEntityTest
      */
     private $adapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

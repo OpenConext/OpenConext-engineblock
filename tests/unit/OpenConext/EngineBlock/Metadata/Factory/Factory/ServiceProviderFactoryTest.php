@@ -64,7 +64,7 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
      */
     private $translator;
 
-    public function setup()
+    public function setUp(): void
     {
         $this->attributes = $this->createMock(AttributesMetadata::class);
         $this->keyPairFactory = $this->createMock(KeyPairFactory::class);

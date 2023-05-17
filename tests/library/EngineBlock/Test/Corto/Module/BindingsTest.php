@@ -39,7 +39,7 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
      */
     private $bindings;
 
-    public function setup()
+    public function setUp(): void
     {
         $proxyServer = Phake::mock('EngineBlock_Corto_ProxyServer');
         Phake::when($proxyServer)->getSigningCertificates(false)->thenReturn(

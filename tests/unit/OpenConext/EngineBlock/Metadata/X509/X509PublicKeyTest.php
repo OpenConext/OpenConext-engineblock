@@ -27,7 +27,7 @@ class X509KeyTest extends TestCase
 
     private $filePath;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->filePath = 'file://' . __DIR__ . '/test.pem.crt';
         $this->filePath2 = 'file://' . __DIR__ . '/test2.pem.crt';

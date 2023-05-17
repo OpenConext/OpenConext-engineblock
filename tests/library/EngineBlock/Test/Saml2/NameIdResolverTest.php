@@ -60,7 +60,7 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends TestCase
      */
     private $serviceProvider;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator(new AuthnRequest());
 

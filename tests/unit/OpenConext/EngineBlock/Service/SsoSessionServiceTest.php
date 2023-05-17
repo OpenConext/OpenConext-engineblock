@@ -40,7 +40,7 @@ class SsoSessionServiceTest extends TestCase
      */
     private $cookieServiceMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->cookieServiceMock = Phake::mock(CookieService::class);
         $loggerMock = Phake::mock(Logger::class);

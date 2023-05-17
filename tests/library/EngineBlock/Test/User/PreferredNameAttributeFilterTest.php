@@ -28,7 +28,7 @@ class EngineBlock_Test_User_PreferredNameAttributeFilterTest extends TestCase
      */
     private $preferredNameAttributeFilter;
 
-    public function setup()
+    public function setUp(): void
     {
         $this->preferredNameAttributeFilter = new EngineBlock_User_PreferredNameAttributeFilter();
     }

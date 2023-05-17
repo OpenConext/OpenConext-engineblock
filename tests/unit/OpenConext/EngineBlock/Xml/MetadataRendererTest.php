@@ -59,7 +59,7 @@ class MetadataRendererTest extends TestCase
      */
     private $metadataRenderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->metadataRenderer = $this->buildMetadataRenderer('all');
 

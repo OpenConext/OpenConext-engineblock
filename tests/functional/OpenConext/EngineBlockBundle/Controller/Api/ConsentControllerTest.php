@@ -45,7 +45,7 @@ final class ConsentControllerTest extends WebTestCase
 
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->clearConsentFixtures();
         $this->clearMetadataFixtures();

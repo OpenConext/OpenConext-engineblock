@@ -30,7 +30,7 @@ use function trim;
 
 final class DeprovisionControllerTest extends WebTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $this->clearFixtures();
     }

@@ -36,7 +36,7 @@ class UrlProviderTest extends TestCase
 
     private $urlProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlGenerator = m::mock(UrlGeneratorInterface::class);
         $this->urlProvider = new UrlProvider($this->urlGenerator);

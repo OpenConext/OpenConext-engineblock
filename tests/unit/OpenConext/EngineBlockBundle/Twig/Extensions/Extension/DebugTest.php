@@ -30,7 +30,7 @@ class DebugTest extends TestCase
      */
     private $debug;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->debug = new Debug();
     }
