@@ -83,6 +83,7 @@ final class Consent
 
     private function getDisplayNameFields(): array
     {
+        $fields = [];
         if (!empty($this->serviceProvider->getMdui()->hasDisplayName('en'))) {
             $fields['display_name']['en'] = $this->serviceProvider->getMdui()->getDisplayName('en');
         } elseif (!empty($this->serviceProvider->nameEn)) {
@@ -112,6 +113,7 @@ final class Consent
 
     private function getOrganizationDisplayNameFields(): array
     {
+        $fields = [];
         if (!empty($this->serviceProvider->organizationEn->displayName)) {
             $fields['organization_display_name']['en'] = $this->serviceProvider->organizationEn->displayName;
         } elseif (!empty($this->serviceProvider->organizationEn->name)) {
