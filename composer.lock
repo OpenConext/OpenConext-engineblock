@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c5f39660a899aa0cff32f46d2da8961d",
+    "content-hash": "508ff88153b537ebedcc677fee53e217",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -5568,42 +5568,45 @@
         },
         {
             "name": "phake/phake",
-            "version": "v3.1.6",
+            "version": "v4.4.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/phake/Phake.git",
-                "reference": "3848901ed8e236534ae684dd5cf0f3bfc4c8a24c"
+                "url": "https://github.com/phake/phake.git",
+                "reference": "5c8954791645d9b7fc027bf76822a221a5a4de8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phake/Phake/zipball/3848901ed8e236534ae684dd5cf0f3bfc4c8a24c",
-                "reference": "3848901ed8e236534ae684dd5cf0f3bfc4c8a24c",
+                "url": "https://api.github.com/repos/phake/phake/zipball/5c8954791645d9b7fc027bf76822a221a5a4de8a",
+                "reference": "5c8954791645d9b7fc027bf76822a221a5a4de8a",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7",
-                "sebastian/comparator": "^1.1|^2.0|^3.0"
+                "doctrine/instantiator": "^1.4",
+                "php": "^7.1|^8.0",
+                "sebastian/comparator": "^1.1|^2.0|^3.0|^4.0|^5.0"
             },
             "require-dev": {
-                "codeclimate/php-test-reporter": "dev-master",
-                "doctrine/common": "2.3.*",
-                "ext-soap": "*",
+                "doctrine/annotations": "^1.13",
                 "hamcrest/hamcrest-php": "1.1.*",
-                "phpunit/phpunit": "^7.0"
+                "phpunit/phpunit": "^6.5|^7.0|^8.0|^9.0|^10.0",
+                "psalm/phar": "^4.18"
             },
             "suggest": {
-                "doctrine/common": "Allows mock annotations to use import statements for classes.",
+                "doctrine/annotations": "Allows mock annotations to use import statements for classes.",
                 "hamcrest/hamcrest-php": "Use Hamcrest matchers."
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0.0-dev"
+                    "dev-master": "4.4-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Phake": "src/"
+                "files": [
+                    "src/Phake.php"
+                ],
+                "psr-4": {
+                    "Phake\\": "src/Phake"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -5617,12 +5620,21 @@
                 }
             ],
             "description": "The Phake mock testing library",
-            "homepage": "https://github.com/mlively/Phake",
+            "homepage": "https://phake.github.io",
             "keywords": [
                 "mock",
+                "phake",
+                "spy",
+                "stub",
+                "test-doubles",
                 "testing"
             ],
-            "time": "2019-06-06T22:41:35+00:00"
+            "support": {
+                "docs": "https://phake.github.io/doc/",
+                "issues": "https://github.com/phake/phake/issues",
+                "source": "https://github.com/phake/phake/tree/v4.4.0"
+            },
+            "time": "2023-02-10T20:32:41+00:00"
         },
         {
             "name": "phar-io/manifest",
