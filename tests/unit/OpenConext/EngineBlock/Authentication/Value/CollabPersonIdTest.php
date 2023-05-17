@@ -160,6 +160,6 @@ class CollabPersonIdTest extends TestCase
 
         $collabPersonId = new CollabPersonId($collabPersonIdValue);
 
-        $this->assertInternalType('string', (string) $collabPersonId);
+        $this->assertIsString((string) $collabPersonId);
     }
 }

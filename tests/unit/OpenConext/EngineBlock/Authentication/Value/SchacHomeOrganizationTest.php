@@ -76,6 +76,6 @@ class SchacHomeOrganizationTest extends TestCase
     {
         $schacHomeOrganization = new SchacHomeOrganization('OpenConext.org');
 
-        $this->assertInternalType('string', (string) $schacHomeOrganization);
+        $this->assertIsString((string) $schacHomeOrganization);
     }
 }

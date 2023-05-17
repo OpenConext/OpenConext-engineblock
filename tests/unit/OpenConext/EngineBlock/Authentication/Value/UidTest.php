@@ -76,6 +76,6 @@ class UidTest extends TestCase
     {
         $uid = new Uid('some:uid');
 
-        $this->assertInternalType('string', (string) $uid);
+        $this->assertIsString((string) $uid);
     }
 }
