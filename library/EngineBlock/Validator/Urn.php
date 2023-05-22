@@ -31,11 +31,7 @@ class EngineBlock_Validator_Urn
 /\A(?i:urn:(?!urn:)(?<nid>[a-z0-9][a-z0-9-]{1,31}):(?<nss>(?:[-a-z0-9()+,.:=@;$_!*\'&~\/]|%[0-9a-f]{2})+)(?:\?\+(?<rcomponent>.*?))?(?:\?=(?<qcomponent>.*?))?(?:#(?<fcomponent>.*?))?)\z/
 REGEX;
 
-    /**
-     * @param string $string
-     * @return bool
-     */
-    public function validate($urn)
+    public function validate(string $urn): bool
     {
         return (bool) preg_match(self::REGEX, $urn);
     }
