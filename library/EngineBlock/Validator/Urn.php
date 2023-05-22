@@ -17,20 +17,18 @@
  */
 
 /**
- * Validate URNs according to RFC-3986.
+ * Validate URNs according to RFC-8141.
  *
- * See: http://www.rfc-editor.org/errata_search.php?rfc=3986
- *
- * Note that this is a VERY permissive regex
+ * See: https://www.rfc-editor.org/info/rfc8141
  */
 class EngineBlock_Validator_Urn
 {
     /**
-     * RFC2141 compliant urn regex
-     * based on: http://stackoverflow.com/questions/5492885/is-there-a-java-library-that-validates-urns
+     * RFC8141 compliant urn regex
+     * Taken from: https://stackoverflow.com/a/59048720/5494155
      */
     const REGEX = <<<'REGEX'
-/^urn:[a-z0-9][a-z0-9-]{1,31}:([a-z0-9()+,-.:=@;$_!*']|%(0[1-9a-f]|[1-9a-f][0-9a-f]))+$/i
+/\A(?i:urn:(?!urn:)(?<nid>[a-z0-9][a-z0-9-]{1,31}):(?<nss>(?:[-a-z0-9()+,.:=@;$_!*\'&~\/]|%[0-9a-f]{2})+)(?:\?\+(?<rcomponent>.*?))?(?:\?=(?<qcomponent>.*?))?(?:#(?<fcomponent>.*?))?)\z/
 REGEX;
 
     /**
