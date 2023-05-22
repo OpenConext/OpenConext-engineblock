@@ -1236,4 +1236,7 @@ return array (
   array (
     0 => 'urn:oid:2.5.4.9',
   ),
+  array (
+    0 => 'urn:test:%00',
+  ),
 );
