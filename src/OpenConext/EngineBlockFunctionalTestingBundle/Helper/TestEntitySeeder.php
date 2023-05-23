@@ -22,6 +22,7 @@ use OpenConext\EngineBlock\Exception\LogicException;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Logo;
+use OpenConext\EngineBlock\Metadata\Mdui;
 use Webmozart\Assert\Assert;
 
 class TestEntitySeeder
@@ -203,14 +204,78 @@ class TestEntitySeeder
         if (!$spName) {
             $spName = 'DisplayName';
         }
-        $serviceProvider = new ServiceProvider('https://acme-sp.example.com');
+        $json = '
+        {
+            "DisplayName": {
+                "name": "DisplayName",
+                "values": {
+                    "en": {
+                        "value": "DisplayName",
+                        "language": "en"
+                    },
+                    "nl": {
+                        "value": "DisplayName",
+                        "language": "nl"
+                    },
+                    "pt": {
+                        "value": "DisplayName",
+                        "language": "pt"
+                    }
+                }
+            },
+            "Description": {
+                "name": "Description",
+                "values": {
+                    "en": {
+                        "value": "bogus en value",
+                        "language": "en"
+                    },
+                    "nl": {
+                        "value": "bogus nl value",
+                        "language": "nl"
+                    }
+                }
+            },
+            "Keywords": {
+                "name": "Keywords",
+                "values": {
+                    "en": {
+                        "value": "bogus en value",
+                        "language": "en"
+                    },
+                    "nl": {
+                        "value": "bogus nl value",
+                        "language": "nl"
+                    }
+                }
+            },
+            "Logo": {
+                "name": "Logo",
+                "url": "/images/logo.png",
+                "width": null,
+                "height": null
+            },
+            "PrivacyStatementURL": {
+                "name": "PrivacyStatementURL",
+                "values": {
+                    "en": {
+                        "value": "https://en-privacy-statement.com",
+                        "language": "en"
+                    },
+                    "nl": {
+                        "value": "https://nl-privacy-statement.nl",
+                        "language": "nl"
+                    }
+                }
+            }
+        }';
+        $mdui = Mdui::fromJson($json);
+        $serviceProvider = new ServiceProvider('https://acme-sp.example.com', $mdui);
+
         $serviceProvider->nameNl = $spName . ' NL';
         $serviceProvider->nameEn = $spName . ' EN';
         $serviceProvider->namePt = $spName . ' PT';
-        $serviceProvider->displayNameNl = $spName . '';
-        $serviceProvider->displayNameEn = $spName . '';
-        $serviceProvider->displayNamePt = $spName . '';
-        $serviceProvider->getMdui()->setLogo(new Logo('/images/logo.png'));
+
         return $serviceProvider;
     }
 

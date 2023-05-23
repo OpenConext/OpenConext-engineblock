@@ -44,6 +44,7 @@ use SAML2\Constants;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class ServiceRegistryFixture
@@ -145,7 +146,9 @@ class ServiceRegistryFixture
 
     public function registerSp($name, $entityId, $acsLocation, $certData = '')
     {
-        $sp = new ServiceProvider($entityId);
+        $json = $this->getMduiJson($name);
+        $mdui = Mdui::fromJson($json);
+        $sp = new ServiceProvider($entityId, $mdui);
         $sp->workflowState = 'prodaccepted';
 
         $this->assembleEntityName($sp, $name);
@@ -180,6 +183,74 @@ QUERY;
         $this->entityManager->persist($sp);
 
         return $this;
+    }
+
+    private function getMduiJson(string $name)
+    {
+        return '{
+            "DisplayName": {
+                "name": "DisplayName",
+                "values": {
+                    "en": {
+                        "value": "'.$name.'",
+                        "language": "en"
+                    },
+                    "nl": {
+                        "value": "'.$name.'",
+                        "language": "nl"
+                    },
+                    "pt": {
+                        "value": "'.$name.'",
+                        "language": "pt"
+                    }
+                }
+            },
+            "Description": {
+                "name": "Description",
+                "values": {
+                    "en": {
+                        "value": "bogus en value",
+                        "language": "en"
+                    },
+                    "nl": {
+                        "value": "bogus nl value",
+                        "language": "nl"
+                    }
+                }
+            },
+            "Keywords": {
+                "name": "Keywords",
+                "values": {
+                    "en": {
+                        "value": "bogus en value",
+                        "language": "en"
+                    },
+                    "nl": {
+                        "value": "bogus nl value",
+                        "language": "nl"
+                    }
+                }
+            },
+            "Logo": {
+                "name": "Logo",
+                "url": "/images/logo.png",
+                "width": null,
+                "height": null
+            },
+            "PrivacyStatementURL": {
+                "name": "PrivacyStatementURL",
+                "values": {
+                    "en": {
+                        "value": "https://en-privacy-statement.com",
+                        "language": "en"
+                    },
+                    "nl": {
+                        "value": "https://nl-privacy-statement.nl",
+                        "language": "nl"
+                    }
+                }
+            }
+        }';
     }
 
     public function registerIdp($name, $entityId, $ssoLocation, $certData = '')

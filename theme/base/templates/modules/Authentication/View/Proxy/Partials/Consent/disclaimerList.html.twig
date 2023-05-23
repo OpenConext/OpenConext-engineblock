@@ -1,10 +1,11 @@
+{% set currentLocale = app.request.locale %}
 <ul class="consent__disclaimer">
     <li class="disclaimer__privacy disclaimer__item">
         <div>
             {% include '@theme/Authentication/View/Proxy/Partials/Consent/SVG/file_info.svg' %}
             <p>
-                <strong>{{ spName }}</strong> {{ 'consent_disclaimer_privacy_statement'|trans({ '%org%': organizationName }) }}{% if sp.coins.termsOfServiceUrl is not null %}
-                    ({{ 'consent_disclaimer_privacy_read'|trans }} <a href="{{ sp.coins.termsOfServiceUrl }}" target="_blank" rel="noreferrer noopener">{{ 'consent_disclaimer_privacy_policy'|trans }}</a>){% endif %}.
+                <strong>{{ spName }}</strong> {{ 'consent_disclaimer_privacy_statement'|trans({ '%org%': organizationName }) }}{% if sp.mdui.hasPrivacyStatementURL(currentLocale) %}
+                    ({{ 'consent_disclaimer_privacy_read'|trans }} <a href="{{ sp.mdui.getPrivacyStatementURL(currentLocale) }}" target="_blank" rel="noreferrer noopener">{{ 'consent_disclaimer_privacy_policy'|trans }}</a>){% endif %}.
             </p>
         </div>
     </li>
