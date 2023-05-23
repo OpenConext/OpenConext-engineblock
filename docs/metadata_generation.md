@@ -8,13 +8,24 @@ the IdP's that are connected to that SP. This can be usefull when creating WAYF 
 
 Finally, metadata of the EngineBlock stepup authentication endpoint is available.
 
-Each of these metadata endpionts support key rollover.
-
 Details about how to access the endpoints can be found on the EngineBlock home page <sup>[1]</sup>
 
 This documentation is twofold. It describes the reasoning behind the generation of the Metadata as it is currently
 implemented (as of EngineBlock release 6.1). But it will also go into technical details. To aid future development teams
 in updating or maintaining metadata related features.
+
+## Considerations
+
+Engineblock publishes basic Metadata about itself and its known entities as a convenience, to keep it
+a self-contained product that can be connected to remote entities. The metadata is always dynamically
+generated and signed on the fly.
+
+However, the main focus of Engineblock is processing logins at runtime. Therefore, we try to
+focus the software on this critical task and not integrate too many secondary tasks into the
+core login software. Advanced use cases and manipulation and publishing of metadata probably
+happens better outside of Engineblock. Where it can also be produced as static files, signed
+more securely and not regenerated on every request. It is thus unlikely that we will be making
+the built-in metadata much more flexible than it is now.
 
 ## Functional description
 
@@ -64,6 +75,28 @@ defaults.logo_height = 96
 
 * Contact person data is generated based on the `email.help` ini config value. For the GivenName element, the
 `suite_name` is used and for the SurName `Support` is always used.
+
+
+## Key rollover
+
+Engineblock has support for multiple signing keys in its configuration.
+
+Currently, rollover is supported in the IdP endpoint towards connected SPs. In order to control
+and measure adoption of a new key, Engineblock publishes separate sets of metadata with corresponding
+SingleSignOn-locations which contain the key ID in that metadata file. If an SP consumes the metadata,
+they will load both the new key and the SSO location with the ID. When logging in, EB received the
+desired key ID and will respond to that SP with the corresponding key. This allows for a key rollover
+to be performed gradually, where SPs that load the new metadata will immediately be only using the
+new key, and the Engineblock operator can see from the authentication log which SPs still use the
+old key.
+
+There needs to be a key named "default". This will be used towards IdPs (authnrequest signing),
+towards the Stepup IdP (if used) and for SPs that do not specify a specific key ID in the single
+sign on location.
+
+Engineblock does *not* currently have support for the classic key rollover scenario where multiple
+keys are published in its metadata and remote entities consume this, after a while the new key
+will be set active and the old key removed from metadata.
 
 ## Technical design
 The metadata endpoints are regular controller actions in the Symfony application (as they where prior to the EB 6.1
