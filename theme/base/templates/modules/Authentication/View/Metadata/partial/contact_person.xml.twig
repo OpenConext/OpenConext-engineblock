@@ -1,5 +1,5 @@
 <md:ContactPerson contactType="{{ contactPerson.contactType }}">
-    <md:GivenName>{{ contactPerson.givenName }}</md:GivenName>
-    <md:SurName>{{ contactPerson.surName }}</md:SurName>
+    <md:GivenName>{{ contactPerson.givenName|trans }}</md:GivenName>
+    <md:SurName>{{ contactPerson.surName|trans }}</md:SurName>
     <md:EmailAddress>mailto:{{ contactPerson.emailAddress }}</md:EmailAddress>
 </md:ContactPerson>
