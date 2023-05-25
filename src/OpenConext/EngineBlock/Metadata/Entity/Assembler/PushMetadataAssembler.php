@@ -158,6 +158,11 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
                 $role->allowedIdpEntityIds = $allowedIdpEntityIds;
             }
         }
+
+        if (count($roles) === 0) {
+            throw new RuntimeException('Received 0 connections, refusing to process');
+        }
+
         return $roles;
     }
 
