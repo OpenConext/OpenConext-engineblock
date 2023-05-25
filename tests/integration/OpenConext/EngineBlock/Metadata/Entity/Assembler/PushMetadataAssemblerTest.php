@@ -43,6 +43,17 @@ class PushMetadataAssemblerTest extends TestCase
         $this->assembler = new PushMetadataAssembler(new AllowedSchemeValidator(['http', 'https']), $logger);
     }
 
+    public function test_it_rejects_empty_push()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Received 0 connections, refusing to process');
+
+        $connection = '{}';
+        $input = json_decode($connection);
+
+        $this->assembler->assemble($input);
+    }
+
     /**
      * @dataProvider invalidAcsLocations
      */
