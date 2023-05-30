@@ -22,7 +22,6 @@ use OpenConext\EngineBlock\Exception\LogicException;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Logo;
-use OpenConext\EngineBlock\Metadata\Mdui;
 use Webmozart\Assert\Assert;
 
 class TestEntitySeeder
@@ -205,7 +204,6 @@ class TestEntitySeeder
             $spName = 'DisplayName';
         }
         $serviceProvider = new ServiceProvider('https://acme-sp.example.com');
-
         $serviceProvider->nameNl = $spName . ' NL';
         $serviceProvider->nameEn = $spName . ' EN';
         $serviceProvider->namePt = $spName . ' PT';
@@ -213,7 +211,6 @@ class TestEntitySeeder
         $serviceProvider->displayNameEn = $spName . '';
         $serviceProvider->displayNamePt = $spName . '';
         $serviceProvider->getMdui()->setLogo(new Logo('/images/logo.png'));
-
         return $serviceProvider;
     }
 

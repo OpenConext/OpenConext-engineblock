@@ -188,55 +188,6 @@ QUERY;
     private function getMduiJson(string $name)
     {
         return '{
-            "DisplayName": {
-                "name": "DisplayName",
-                "values": {
-                    "en": {
-                        "value": "'.$name.'",
-                        "language": "en"
-                    },
-                    "nl": {
-                        "value": "'.$name.'",
-                        "language": "nl"
-                    },
-                    "pt": {
-                        "value": "'.$name.'",
-                        "language": "pt"
-                    }
-                }
-            },
-            "Description": {
-                "name": "Description",
-                "values": {
-                    "en": {
-                        "value": "bogus en value",
-                        "language": "en"
-                    },
-                    "nl": {
-                        "value": "bogus nl value",
-                        "language": "nl"
-                    }
-                }
-            },
-            "Keywords": {
-                "name": "Keywords",
-                "values": {
-                    "en": {
-                        "value": "bogus en value",
-                        "language": "en"
-                    },
-                    "nl": {
-                        "value": "bogus nl value",
-                        "language": "nl"
-                    }
-                }
-            },
-            "Logo": {
-                "name": "Logo",
-                "url": "/images/logo.png",
-                "width": null,
-                "height": null
-            },
             "PrivacyStatementURL": {
                 "name": "PrivacyStatementURL",
                 "values": {
