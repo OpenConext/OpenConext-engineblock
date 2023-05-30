@@ -269,12 +269,17 @@ class TestEntitySeeder
                 }
             }
         }';
-        $mdui = Mdui::fromJson($json);
-        $serviceProvider = new ServiceProvider('https://acme-sp.example.com', $mdui);
+#        $mdui = Mdui::fromJson($json);
+#        $serviceProvider = new ServiceProvider('https://acme-sp.example.com', $mdui);
+        $serviceProvider = new ServiceProvider('https://acme-sp.example.com');
 
         $serviceProvider->nameNl = $spName . ' NL';
         $serviceProvider->nameEn = $spName . ' EN';
         $serviceProvider->namePt = $spName . ' PT';
+        $serviceProvider->displayNameNl = $spName . '';
+        $serviceProvider->displayNameEn = $spName . '';
+        $serviceProvider->displayNamePt = $spName . '';
+        $serviceProvider->getMdui()->setLogo(new Logo('/images/logo.png'));
 
         return $serviceProvider;
     }
