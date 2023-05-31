@@ -76,11 +76,13 @@ class Mdui
 
     private function __construct(array $values)
     {
+        foreach (self::ALLOWED_ELEMENT_NAMES as $allowedElementName) {
+            $this->values[$allowedElementName] = new EmptyMduiElement($allowedElementName);
+        }
         /**
          * @var string $key
          * @var MultilingualElement $value
          */
-        $this->values = self::emptyMdui();
         foreach ($values as $key => $value) {
             if (!in_array($value->getName(), self::ALLOWED_ELEMENT_NAMES)) {
                 throw new MduiNotFoundException(
