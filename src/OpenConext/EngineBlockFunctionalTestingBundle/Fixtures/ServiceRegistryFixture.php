@@ -161,7 +161,7 @@ class ServiceRegistryFixture
         );
 
         $this->setCoin($sp, 'termsOfServiceUrl', 'http://welcome.vm.openconext.org');
-        $sp->getMdui()->setLogo(new Logo('/images/placeholder.png'));
+#        $sp->getMdui()->setLogo(new Logo('/images/placeholder.png'));
 
 
         // The repository does not allow us to retrieve all SP's for good reason. In functional testing mode the total
