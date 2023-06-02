@@ -5,6 +5,19 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.11.0
+**Feature**
+* Allow to set EB's metadata XML Organization fields via translation (overrides).
+* Refuse to process incoming metadata push with 0 connections in it.
+* Show an Unknown SP error page also when invoking the unsolicited endpoint with an unknown entity ID.
+* Update regular expression for URN validation.
+
+**Change**
+* Migrate storage of MDUI metadata elements to new value objects.
+
+**Bugfix**
+* Avoid generating PHP notices when calling metadata API for IdP without SLO endpoints.
+* Update log message for session lost to not mention irrelevant 'unsolicited'.
 
 ## 6.10.0
 **Feature**
