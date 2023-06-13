@@ -24,11 +24,11 @@ if (process.env.EB_THEME === undefined) {
 try {
     console.log('Running Cypress tests.\n');
     const fileContents = fs.readFileSync(config, 'utf8');
-    const parameters = yaml.safeLoadAll(fileContents);
+    const parameters = yaml.loadAll(fileContents);
 
     let theme = process.env.EB_THEME;
     parameters[0].parameters['theme.name'] = theme;
-    fs.writeFileSync(config, yaml.safeDump(parameters[0]));
+    fs.writeFileSync(config, yaml.dump(parameters[0]));
     executeShellCommand(`${__dirname}/../../app/console ca:cl --env=ci && cd ${__dirname}/../ && EB_THEME=${theme} npm run buildtheme`);
 } catch (e) {
     console.log(e);
