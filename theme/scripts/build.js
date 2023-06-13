@@ -16,7 +16,7 @@ const config = `${__dirname}/../../app/config/parameters.yml`;
 try {
     console.log('Reading contents of parameters.yml.\n');
     const fileContents = fs.readFileSync(config, 'utf8');
-    const parameters = yaml.safeLoadAll(fileContents);
+    const parameters = yaml.loadAll(fileContents);
     const theme = process.env.EB_THEME || parameters[0].parameters['theme.name'] || 'skeune';
 
     console.log(`Using theme ${theme} to run the build.\nOutput will be printed once the build is finished.\n`);

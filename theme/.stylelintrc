@@ -18,5 +18,15 @@
     ],
     "no-descending-specificity": null,
     "no-empty-source": null
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.scss", "**/*.scss"],
+      "customSyntax": "postcss-scss"
+    },
+      {
+      "files": ["*.sass", "**/*.sass"],
+      "customSyntax": "postcss-sass"
+    }
+  ]
 }
