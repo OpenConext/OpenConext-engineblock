@@ -57,6 +57,7 @@
     "node-sass": "^4.14.1",
     "postcss-cli": "^7.1.2",
     "rimraf": "^3.0.2",
+    "socket.io": "^4.0.0",
     "stylelint": "^13.12.0",
     "stylelint-config-recommended": "^3.0.0",
     "tinyify": "^2.5.2",
@@ -66,7 +67,6 @@
     "font-awesome-sass": "^4.7.0",
     "js-cookie": "^2.2.1",
     "js-yaml": "^3.14.1",
-    "socket.io": "^4.0.0",
     "tippy.js": "^6.3.1"
   },
   "resolutions": {
