@@ -158,9 +158,12 @@ class Feedback extends Twig_Extension
     public function hasBackToSpLink()
     {
         $info = $this->retrieveFeedbackInfo();
+        $response = $this->getSamlFailedResponse();
+
         return $info->has('serviceProvider') &&
             $info->has('identityProvider') &&
-            $info->has('requestId');
+            $info->has('requestId') &&
+            $response !== '';
     }
 
     public function getSpName(): ?string
@@ -178,15 +181,19 @@ class Feedback extends Twig_Extension
     {
         $session = $this->application->getSession();
         $feedbackInfo = $session->get('feedbackInfo');
+        // If AuthnFailedResponse is not set, we are unable to render a createAuthnFailedResponse
         $sspResponse = $feedbackInfo['AuthnFailedResponse'];
-        // Compose the Saml error response that can be used to travel back to the SP
-        $value = $this->samlResponseHelper->createAuthnFailedResponse(
-            $feedbackInfo['serviceProvider'],
-            $feedbackInfo['identityProvider'],
-            $feedbackInfo['requestId'],
-            $feedbackInfo['statusMessage'] ?? '',
-            $sspResponse
-        );
+        $value = '';
+        if (!is_null($sspResponse)) {
+            // Compose the Saml error response that can be used to travel back to the SP
+            $value = $this->samlResponseHelper->createAuthnFailedResponse(
+                $feedbackInfo['serviceProvider'],
+                $feedbackInfo['identityProvider'],
+                $feedbackInfo['requestId'],
+                $feedbackInfo['statusMessage'] ?? '',
+                $sspResponse
+            );
+        }
         return $value;
     }
 
