@@ -19,7 +19,7 @@
         {% if idp.logo is not null %}
             {% set logoUrl = idp.logo %}
         {% else %}
-            {% set logoUrl = "/images/placeholder.png?v={{ assetsVersion }}" %}
+            {% set logoUrl = "/images/placeholder.png?v=" ~ assetsVersion %}
         {% endif %}
         <img src="{{ logoUrl }}" alt="" loading="lazy">
     </div>
