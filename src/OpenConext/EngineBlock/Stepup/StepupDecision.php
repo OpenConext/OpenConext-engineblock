@@ -22,6 +22,7 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Loa;
 use OpenConext\EngineBlock\Metadata\LoaRepository;
+use Psr\Log\LoggerInterface;
 use function count;
 
 class StepupDecision
@@ -47,6 +48,8 @@ class StepupDecision
      */
     private $spNoToken;
 
+    private $logger;
+
     /**
      * @throws InvalidStepupConfigurationException
      */
@@ -55,8 +58,13 @@ class StepupDecision
         ServiceProvider $sp,
         array $authnRequestLoas,
         array $pdpLoas,
-        LoaRepository $loaRepository
+        LoaRepository $loaRepository,
+        LoggerInterface $logger
     ) {
+
+        $this->logger = $logger;
+        $this->logger->debug('I\'ve been loggin\' on the railroad, all day long!');
+
         $idpLoa = $idp->getCoins()->stepupConnections()->getLoa($sp->entityId);
         // Only load the IdP LoA if configured in the stepup connection coin data
         if ($idpLoa) {

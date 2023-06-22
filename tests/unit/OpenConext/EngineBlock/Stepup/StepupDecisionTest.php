@@ -29,6 +29,7 @@ use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlock\Metadata\Utils;
 use OpenConext\EngineBlock\Stepup\StepupDecision;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use function reset;
 
 class StepupDecisionTest extends TestCase
@@ -66,8 +67,9 @@ class StepupDecisionTest extends TestCase
         );
 
         $repo = $this->buildMockRepository($input);
+        $logger = m::mock(LoggerInterface::class)->shouldIgnoreMissing();
 
-        $stepupDecision = new StepupDecision($idp, $sp, $input[2], $input[3], $repo);
+        $stepupDecision = new StepupDecision($idp, $sp, $input[2], $input[3], $repo, $logger);
 
         $useStepup = $stepupDecision->shouldUseStepup();
         $stepupLoa = $stepupDecision->getStepupLoa();
