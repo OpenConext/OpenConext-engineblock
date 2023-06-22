@@ -23,6 +23,7 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Loa;
 use OpenConext\EngineBlock\Metadata\LoaRepository;
+use Psr\Log\LoggerInterface;
 
 final class StepupGatewayCallOutHelper
 {
@@ -36,14 +37,18 @@ final class StepupGatewayCallOutHelper
      */
     private $stepupEndpoint;
 
+    private $logger;
+
     public function __construct(
         StepupGatewayLoaMapping $gatewayLoaMapping,
         StepupEndpoint $stepupEndpoint,
-        LoaRepository $loaRepository
+        LoaRepository $loaRepository,
+        LoggerInterface $logger
     ) {
         $this->gatewayLoaMapping = $gatewayLoaMapping;
         $this->stepupEndpoint = $stepupEndpoint;
         $this->loaRepository = $loaRepository;
+        $this->logger = $logger;
     }
 
     public function shouldUseStepup(
@@ -57,7 +62,8 @@ final class StepupGatewayCallOutHelper
             $serviceProvider,
             $authnRequestLoas,
             $pdpLoas,
-            $this->loaRepository
+            $this->loaRepository,
+            $this->logger
         );
         return $stepupDecision->shouldUseStepup();
     }
@@ -73,7 +79,8 @@ final class StepupGatewayCallOutHelper
             $serviceProvider,
             $authnRequestLoas,
             $pdpLoas,
-            $this->loaRepository
+            $this->loaRepository,
+            $this->logger
         );
         return $this->gatewayLoaMapping->transformToGatewayLoa($stepupDecision->getStepupLoa());
     }
@@ -95,7 +102,7 @@ final class StepupGatewayCallOutHelper
 
     public function allowNoToken(IdentityProvider $identityProvider, ServiceProvider $serviceProvider) : bool
     {
-        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider, [], [], $this->loaRepository);
+        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider, [], [], $this->loaRepository, $this->logger);
         return $stepupDecision->allowNoToken();
     }
 }

@@ -70,6 +70,7 @@ services:
             - "@engineblock.configuration.stepup.gateway_loa_mapping"
             - "@engineblock.configuration.stepup.endpoint"
             - "@engineblock.configuration.stepup.loa_repository"
+            - "@logger"
 
     engineblock.service.consent:
         class: OpenConext\EngineBlock\Service\ConsentService
