@@ -63,7 +63,6 @@ class StepupDecision
     ) {
 
         $this->logger = $logger;
-        $this->logger->debug('I\'ve been loggin\' on the railroad, all day long!');
 
         $idpLoa = $idp->getCoins()->stepupConnections()->getLoa($sp->entityId);
         // Only load the IdP LoA if configured in the stepup connection coin data
@@ -111,6 +110,8 @@ class StepupDecision
      */
     public function getStepupLoa(): ?Loa
     {
+        $this->logger->debug('StepupDecision: determine highest LoA');
+
         $desiredLevels = $this->pdpLoas;
         $desiredLevels += $this->authnRequestLoas;
         if ($this->spLoa) {
@@ -121,6 +122,7 @@ class StepupDecision
         }
 
         if (count($desiredLevels) == 0) {
+            $this->logger->info('StepupDecision: no level set, no Stepup required');
             return null;
         }
 
@@ -131,6 +133,17 @@ class StepupDecision
             }
         }
 
+        $logData = [
+            'pdp' => array_map(function (Loa $l):string {
+                return $l->getIdentifier();
+            }, $this->pdpLoas),
+            'authnRequest' => array_map(function (Loa $l):string {
+                return $l->getIdentifier();
+            }, $this->authnRequestLoas),
+            'metadata_sp' => $this->spLoa ? [$this->spLoa->getIdentifier()] : [],
+            'metadata_idp' => $this->idppLoa ? [$this->idpLoa->getIdentifier()] : [],
+        ];
+        $this->logger->info(sprintf('StepupDecision: requiring LoA %s', $highestLevel->getIdentifier()), $logData);
         return $highestLevel;
     }
 
