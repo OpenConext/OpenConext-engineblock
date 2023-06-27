@@ -1,39 +1,14 @@
-FROM php:7.2-fpm
+FROM ghcr.io/openconext/openconext-basecontainers/php72-apache2-node16-composer2:latest
 
-ARG NPM_UID=1000
-ARG NPM_GID=1000
-
+RUN a2enmod ssl
 # Copy phpfpm config
 COPY docker/php-fpm/app.ini /usr/local/etc/php/conf.d/
-
-# Yank the node and npm binaries from the official Node docker container
-COPY --from=node:16-slim /usr/local/bin /usr/local/bin
-COPY --from=node:16-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
-
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    python \
-    zip \
-    libpng-dev \
-    && docker-php-ext-install pdo_mysql exif gd \
-    ## APCu
-    && pecl install apcu \
-    && pecl install apcu_bc-1.0.3 \
-    && docker-php-ext-enable apcu --ini-name 10-docker-php-ext-apcu.ini \
-    && docker-php-ext-enable apc --ini-name 20-docker-php-ext-apc.ini
-
-# Composer
-COPY --from=composer:1 /usr/bin/composer /usr/local/bin/composer
-
-# Fix npm
-RUN mkdir /.npm && chown -R "${NPM_UID}:${NPM_GID}" "/.npm"
-RUN mkdir /.config && chown -R "${NPM_UID}:${NPM_GID}" "/.config"
-
-# Cleanup
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-WORKDIR /var/www
+COPY docker/php-fpm/apache2.conf /etc/apache2/sites-enabled/
+RUN chown -R www-data: /var/www/
+WORKDIR /opt/openconext/OpenConext-engineblock
 
 # Copy keys and config
 COPY ci/qa-config/files/ /etc/openconext
+EXPOSE 443
+CMD ["apache2-foreground"]
+

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-uid=$(id -u)
-gid=$(id -g)
+uid=33
+gid=33
 
-printf "UID=${uid}\nGID=${gid}\nCOMPOSE_PROJECT_NAME=eb" > .env
+printf "UID=${uid}\nGID=${gid}\nCOMPOSE_PROJECT_NAME=eb" >.env
