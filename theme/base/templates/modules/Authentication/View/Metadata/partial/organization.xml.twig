@@ -9,17 +9,17 @@
 <md:Organization>
     {% for locale in locales %}
         {% if metadata.hasCompleteOrganizationData(locale) %}
-            <md:OrganizationName xml:lang="{{ locale }}">{{ metadata.organizationName(locale) }}</md:OrganizationName>
+            <md:OrganizationName xml:lang="{{ locale }}">{{ metadata.organizationName(locale)|trans }}</md:OrganizationName>
         {% endif %}
     {% endfor %}
     {% for locale in locales %}
         {% if metadata.hasCompleteOrganizationData(locale) %}
-            <md:OrganizationDisplayName xml:lang="{{ locale }}">{{ metadata.organizationDisplayName(locale) }}</md:OrganizationDisplayName>
+            <md:OrganizationDisplayName xml:lang="{{ locale }}">{{ metadata.organizationDisplayName(locale)|trans }}</md:OrganizationDisplayName>
         {% endif %}
     {% endfor %}
     {% for locale in locales %}
         {% if metadata.hasCompleteOrganizationData(locale) %}
-            <md:OrganizationURL xml:lang="{{ locale }}">{{ metadata.organizationUrl(locale) }}</md:OrganizationURL>
+            <md:OrganizationURL xml:lang="{{ locale }}">{{ metadata.organizationUrl(locale)|trans }}</md:OrganizationURL>
         {% endif %}
     {% endfor %}
 </md:Organization>

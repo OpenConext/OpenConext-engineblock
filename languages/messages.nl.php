@@ -389,6 +389,6 @@ Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus
 
     // Metadata
     'metadata_organization_name' => '%suiteName%',
-    'metadata_organization_displayname' => '%suitename%',
+    'metadata_organization_displayname' => '%suiteName%',
     'metadata_organization_url' => '%supportUrl%',
 ];

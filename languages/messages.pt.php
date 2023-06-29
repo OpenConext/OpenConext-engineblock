@@ -384,6 +384,6 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
 
     // Metadata
     'metadata_organization_name' => '%suiteName%',
-    'metadata_organization_displayname' => '%suitename%',
+    'metadata_organization_displayname' => '%suiteName%',
     'metadata_organization_url' => '%supportUrl%',
 ];
