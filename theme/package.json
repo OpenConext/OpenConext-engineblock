@@ -6,7 +6,7 @@
   "description": "Themes for OpenConext Engineblock",
   "main": "index.js",
   "scripts": {
-    "preinstall": "npx npm-force-resolutions",
+    "preinstall": "npx npm-force-resolutions@0.0.3",
     "test": "@cy:run",
     "test:visual-regression": "CYPRESS_integrationFolder=cypress/visual-regression/${EB_THEME:=skeune} npm run cy:run",
     "cy:run": "cypress run --browser firefox --headless",
