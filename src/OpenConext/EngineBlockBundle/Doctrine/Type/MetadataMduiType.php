@@ -30,6 +30,9 @@ class MetadataMduiType extends Type
 
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
+        // We want a `TEXT` field declaration in our column, the `LONGTEXT` default causes issues when running the
+        // DBMS in strict mode.
+        $fieldDeclaration['length'] = 65535;
         return $platform->getJsonTypeDeclarationSQL($fieldDeclaration);
     }
 
