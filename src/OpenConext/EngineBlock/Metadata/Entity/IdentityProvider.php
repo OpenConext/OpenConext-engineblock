@@ -69,21 +69,21 @@ class IdentityProvider extends AbstractRole
     /**
      * @var Service[]
      *
-     * @ORM\Column(name="single_sign_on_services", type="array")
+     * @ORM\Column(name="single_sign_on_services", type="array", length=65535)
      */
     public $singleSignOnServices = array();
 
     /**
      * @var ConsentSettings
      *
-     * @ORM\Column(name="consent_settings", type="json_array")
+     * @ORM\Column(name="consent_settings", type="json_array", length=16777215)
      */
     private $consentSettings;
 
     /**
      * @var ShibMdScope[]
      *
-     * @ORM\Column(name="shib_md_scopes", type="array")
+     * @ORM\Column(name="shib_md_scopes", type="array", length=65535)
      */
     public $shibMdScopes = array();
 

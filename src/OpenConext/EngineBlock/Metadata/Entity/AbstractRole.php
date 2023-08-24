@@ -162,21 +162,21 @@ abstract class AbstractRole
     /**
      * @var Organization
      *
-     * @ORM\Column(name="organization_nl_name",type="object", nullable=true)
+     * @ORM\Column(name="organization_nl_name",type="object", nullable=true, length=65535)
      */
     public $organizationNl;
 
     /**
      * @var Organization
      *
-     * @ORM\Column(name="organization_en_name",type="object", nullable=true)
+     * @ORM\Column(name="organization_en_name",type="object", nullable=true, length=65535)
      */
     public $organizationEn;
 
     /**
      * @var Organization
      *
-     * @ORM\Column(name="organization_pt_name",type="object", nullable=true)
+     * @ORM\Column(name="organization_pt_name",type="object", nullable=true, length=65535)
      */
     public $organizationPt;
 
@@ -204,7 +204,7 @@ abstract class AbstractRole
     /**
      * @var X509Certificate[]
      *
-     * @ORM\Column(name="certificates", type="array")
+     * @ORM\Column(name="certificates", type="array", length=65535)
      */
     public $certificates = array();
 
@@ -218,7 +218,7 @@ abstract class AbstractRole
     /**
      * @var ContactPerson[]
      *
-     * @ORM\Column(name="contact_persons", type="array")
+     * @ORM\Column(name="contact_persons", type="array", length=65535)
      */
     public $contactPersons;
 
@@ -232,14 +232,14 @@ abstract class AbstractRole
     /**
      * @var string[]
      *
-     * @ORM\Column(name="name_id_formats", type="array")
+     * @ORM\Column(name="name_id_formats", type="array", length=65535)
      */
     public $supportedNameIdFormats;
 
     /**
      * @var Service
      *
-     * @ORM\Column(name="single_logout_service", type="object", nullable=true)
+     * @ORM\Column(name="single_logout_service", type="object", nullable=true, length=65535)
      */
     public $singleLogoutService;
 
@@ -253,7 +253,7 @@ abstract class AbstractRole
     /**
      * @var string
      *
-     * @ORM\Column(name="manipulation", type="text")
+     * @ORM\Column(name="manipulation", type="text", length=65535)
      */
     public $manipulation;
 
