@@ -1,15 +1,17 @@
-@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/variables';
-@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/mixins';
-@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/core';
-@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/larger';
-@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/fixed-width';
-@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/list';
-@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/bordered-pulled';
-@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/animated';
-@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/rotated-flipped';
-@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/stacked';
-@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/icons';
-@import '../../../../node_modules/font-awesome-sass/assets/stylesheets/font-awesome/screen-reader';
+@use 'sass:math';
+
+@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/functions';
+@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/variables';
+@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/mixins';
+@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/core';
+@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/fixed-width';
+@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/list';
+@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/bordered-pulled';
+@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/animated';
+@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/rotated-flipped';
+@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/stacked';
+@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/icons';
+@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/screen-reader';
 
 @font-face {
     font-display: swap;
