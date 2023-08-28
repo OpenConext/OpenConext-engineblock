@@ -1,6 +1,16 @@
 {
   "extends": "stylelint-config-recommended",
   "rules": {
+    "function-no-unknown": [
+      true,
+      {
+        "ignoreFunctions": [
+          "darken",
+          "lighten",
+          "mix"
+        ]
+      }
+    ],
     "at-rule-no-unknown": [
       true,
       {
