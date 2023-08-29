@@ -126,7 +126,7 @@ class Mdui
         if ($parsedData) {
             foreach ($parsedData as $elementName => $multiLingualElement) {
                 // The logo element differs from the other MduiElements, it is constructed in its own fashion
-                if ($elementName === 'Logo') {
+                if ($elementName === 'Logo' && array_key_exists('url', $multiLingualElement)) {
                     $output[$elementName] = Logo::fromJson($multiLingualElement);
                     continue;
                 }
