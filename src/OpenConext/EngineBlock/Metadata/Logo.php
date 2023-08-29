@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlock\Metadata;
 
 use JsonSerializable;
+use OpenConext\EngineBlock\Exception\MduiRuntimeException;
 
 /**
  * A SAML2 metadata logo.
@@ -40,9 +41,18 @@ class Logo implements MultilingualElement, JsonSerializable
 
     public static function fromJson(array $multiLingualElement): MultilingualElement
     {
+        if (!array_key_exists('url', $multiLingualElement)) {
+            throw new MduiRuntimeException(
+                'Incomplete MDUI Logo data. The URL is missing while serializing the data from JSON'
+            );
+        }
         $element = new self($multiLingualElement['url']);
-        $element->height = $multiLingualElement['height'];
-        $element->width = $multiLingualElement['width'];
+        if (array_key_exists('height', $multiLingualElement)) {
+            $element->height = $multiLingualElement['height'];
+        }
+        if (array_key_exists('width', $multiLingualElement)) {
+            $element->width = $multiLingualElement['width'];
+        }
         return $element;
     }
 
