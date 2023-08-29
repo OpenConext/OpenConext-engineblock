@@ -77,7 +77,7 @@ services:
             interval: 15s
 
     cypress:
-        image: "cypress/included:5.6.0"
+        image: "cypress/included:12.17.4"
         environment:
             - CYPRESS_baseUrl=https://engine.vm.openconext.org
         working_dir: /e2e
