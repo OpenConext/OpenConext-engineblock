@@ -7,11 +7,11 @@ Take note that the development of a theme happens in the engineblock context.  M
 
 ### Tools for theme-development
 
-For development of a theme you need to have [Node.JS][nodejs] installed.
+For development of a theme you need to have [Node.JS][nodejs] and Yarn installed.
 All other tools are installed through Node.JS with the following command:
 
 ```
-(cd theme && npm install && npm run build)
+(cd theme && yarn && yarn build)
 ```
 
 We use the following tools:
@@ -22,7 +22,7 @@ We use the following tools:
 
 To speed up development on changes to the theme run the following command for live updates on the selected theme;
 ```
-npm run watch
+yarn watch
 ```
 This will detect changes to the javascript and stylesheet in the select theme and update the build accordingly. Do note that this script only watches
 the selected theme and not the base.
@@ -109,9 +109,9 @@ Your theme **must** have the following structure (or the build will fail):
 
 For your convenience, you can simply use the following command to create a scaffold for your new theme:
 
-`npm run create-theme <theme-name>`
+`yarn create-theme <theme-name>`
 
-For example: to create a scaffold for a new theme called "surfconext" use the command `npm run create-theme surfconext`
+For example: to create a scaffold for a new theme called "surfconext" use the command `yarn create-theme surfconext`
 
 #### Custom CSS
 
