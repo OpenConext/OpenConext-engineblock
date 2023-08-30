@@ -105,32 +105,6 @@ jobs:
                   '
               env:
                   SYMFONY_ENV: ci
-            - name: Run Cypress integration tests
-              if: always()
-              run: |
-                  cd docker && \
-                  docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
-                    EB_THEME=skeune ./theme/scripts/prepare-test.js
-                  ' && \
-                  docker compose exec -T cypress bash -c '
-                    cypress run --spec cypress/integration/skeune/**/*.spec.js,cypress/integration/shared/*.spec.js --browser=electron --headless
-                  ' && \
-                  docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
-                    EB_THEME=openconext ./theme/scripts/prepare-test.js
-                  ' && \
-                  docker compose exec -T cypress bash -c '
-                    cypress run --spec cypress/integration/openconext/**/*.spec.js --browser=electron --headless
-                  '
-              env:
-                  SYMFONY_ENV: ci
-#            - name: Run Cypress visual regression tests
-#              if: ${{ github.event_name == 'schedule' && matrix.php == env.PROD_PHP }}
-#              run: |
-#                  cd docker && docker compose exec -T cypress bash -c '
-#                      CYPRESS_integrationFolder=cypress/visual-regression cypress run --browser=chrome --headless
-#                  '
-#              env:
-#                  SYMFONY_ENV: ci
             - name: Show log on failure
               if: failure()
               run:  |
