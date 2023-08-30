@@ -20,7 +20,7 @@ try {
     const theme = process.env.EB_THEME || parameters[0].parameters['theme.name'] || 'skeune';
 
     console.log(`Using theme ${theme} to run the build.\nOutput will be printed once the build is finished.\n`);
-    executeShellCommand(`cd ${__dirname}/.. && EB_THEME=${theme} npm run buildtheme`);
+    executeShellCommand(`cd ${__dirname}/.. && EB_THEME=${theme} yarn buildtheme`);
 } catch (e) {
     console.log(e);
 }

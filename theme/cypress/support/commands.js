@@ -36,7 +36,7 @@ Cypress.Commands.add('notOnPage', (notToBeExpectedText) => {
 // });
 
 Cypress.Commands.add('buildTheme', (themeName) => {
-  cy.exec(`EB_THEME=${themeName} npm run buildtheme`);
+  cy.exec(`EB_THEME=${themeName} yarn buildtheme`);
 });
 
 Cypress.Commands.add('hideDebugBar', () => {

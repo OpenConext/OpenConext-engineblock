@@ -42,7 +42,7 @@ jobs:
                 docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
                     SYMFONY_ENV=ci composer install --prefer-dist -n -o --ignore-platform-reqs && \
                     ./app/console cache:clear --env=ci && \
-                    cd theme && CYPRESS_INSTALL_BINARY=0 npm i && EB_THEME=skeune npm run build
+                    cd theme && CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile && EB_THEME=skeune yarn build
                 '
             - name: Run code quality tests
               if: always()
@@ -100,8 +100,8 @@ jobs:
                       echo -e "\nTwig lint\n"  && \
                       app/console lint:twig theme/ && \
                       cd theme && \
-                      echo -e "\nNPM lint\n" && \
-                      npm run lint
+                      echo -e "\nLint frontend assets\n" && \
+                      yarn lint
                   '
               env:
                   SYMFONY_ENV: ci
