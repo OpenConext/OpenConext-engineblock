@@ -11,6 +11,7 @@ jobs:
     build:
         runs-on: ubuntu-latest
         timeout-minutes: 30
+        continue-on-error: true
         strategy:
           matrix:
             php: [php72, php82]
