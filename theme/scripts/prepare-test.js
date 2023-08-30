@@ -6,7 +6,7 @@
  *
  * 1. Update the parameters.yml (setting the Twig template theme)
  * 2. Clear the CI cache
- * 3. Build the theme using the `npm run build` scripts
+ * 3. Build the theme using the `yarn build` scripts
  *
  * Note this script is most suitable to use on CI environments.
  * Use with caution on your development environment. As it will
@@ -29,7 +29,7 @@ try {
     let theme = process.env.EB_THEME;
     parameters[0].parameters['theme.name'] = theme;
     fs.writeFileSync(config, yaml.dump(parameters[0]));
-    executeShellCommand(`${__dirname}/../../app/console ca:cl --env=ci && cd ${__dirname}/../ && EB_THEME=${theme} npm run buildtheme`);
+    executeShellCommand(`${__dirname}/../../app/console ca:cl --env=ci && cd ${__dirname}/../ && EB_THEME=${theme} yarn buildtheme`);
 } catch (e) {
     console.log(e);
 }

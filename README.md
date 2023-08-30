@@ -33,7 +33,7 @@ parameters:
 Next build the front-end assets for the selected theme.
 
 ```
-    (cd theme && npm ci && npm run build)
+    (cd theme && yarn install --frozen-lockfile && yarn build)
 ```
 
 Finally, when not in an environment with the debug flag enabled, you need to clear the cache. This will ensure the translations and templates are swapped out for the ones found in the new theme.
@@ -47,9 +47,10 @@ To setup the required tooling on the VM, the following steps might be useful:
     cd /opt/openconext/OpenConext-engineblock/theme
     sudo curl --silent --location https://rpm.nodesource.com/setup_11.x | sudo bash -
     sudo yum install nodejs
-    (npm ci && npm run build)
+    sudo npm install --global yarn
+    (yarn install --frozen-lockfile && yarn build)
 
-In addition to the npm scripts that are available to run (unit/e2e) tests and quality assurance, you can also use the
+In addition to the npm/yarn scripts that are available to run (unit/e2e) tests and quality assurance, you can also use the
 Twig linting tool built into Symfony. To run this linter:
 
 ```
@@ -73,7 +74,7 @@ $ php72 ./app/console lint:twig theme/
     - default-collation=utf8_unicode_ci
 * [Manage][manage]
 * Composer (for php dendency management)
-* NPM (optional for theme deployment)
+* Yarn (optional for theme deployment)
 
 _**Note**:
 While care was given to make EngineBlock as compliant as possible with mainstream Linux distributions,

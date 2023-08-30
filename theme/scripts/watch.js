@@ -20,8 +20,8 @@ try {
   const theme = process.env.EB_THEME || parameters[0].parameters['theme.name'] || 'skeune';
 
   console.log(`Using theme ${theme} to run the watch.\n`);
-  executeShellCommand(`cd ${__dirname}/.. && EB_THEME=${theme} npm run watch:css`);
-  executeShellCommand(`cd ${__dirname}/.. && EB_THEME=${theme} npm run watch:js`);
+  executeShellCommand(`cd ${__dirname}/.. && EB_THEME=${theme} yarn watch:css`);
+  executeShellCommand(`cd ${__dirname}/.. && EB_THEME=${theme} yarn watch:js`);
 } catch (e) {
   console.log(e);
 }
