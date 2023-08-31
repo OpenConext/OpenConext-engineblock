@@ -63,7 +63,7 @@ parameters can be used to manipulate the behaviour of the wayf that is rendered.
 |feedbackInfo|Format: `JSON`<br>Value:`{"requestId":"5cb4bd3879b49","ipAddress":"192.168.66.98","artCode":"31914"}`|Can be filled with any parameter that can be rendered in the feedback information section of the feedback page.|
 |parameters|Format: `JSON`<br>Value:`{}`|Some templates might require additional twig parameters, this parameter allows you to pass these additional parameters in JSON format.|
 
-For a list of realistic reproductions of the available error pages, see this JavasScript test: `theme/cypress/integration/visual-regression/error-page/ErrorPage.spec.js`
+For a list of realistic reproductions of the available error pages, see this JavasScript test: `tests/e2e/cypress/integration/visual-regression/error-page/ErrorPage.spec.js`
 
 ### Consent
 The consent screen is available on: `/functional-testing/consent`
@@ -92,7 +92,7 @@ or if you prefer the cypress CLI
 `$ EB_THEME=theme_name npm run test:visual-regression`
 Do note that you need to set the EB_THEME env variable before running the tests!
 
-Snapshots are stored in `__image_snapshots__` directories in a subfolder of the `theme/cypress/integration/visual-regression/theme_name` directory, here you will also find diffs if ever your snapshot diverges from the previous snapshot.
+Snapshots are stored in `__image_snapshots__` directories in a subfolder of the `tests/e2e/cypress/integration/visual-regression/theme_name` directory, here you will also find diffs if ever your snapshot diverges from the previous snapshot.
 
 :warning: These tests are considered risky tests and are not run on every QA build.
 

@@ -1,0 +1,27 @@
+{
+  "name": "engineblock-cypress",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/OpenConext/OpenConext-engineblock.git",
+  "version": "1.0.0",
+  "description": "Cypress dependencies for OpenConext Engineblock",
+  "scripts": {
+    "test": "@cy:run",
+    "test:visual-regression": "CYPRESS_integrationFolder=cypress/visual-regression/${EB_THEME:=skeune} yarn cy:run",
+    "cy:run": "npx cypress run --browser firefox --headless",
+    "cy:run:theme": "npx cypress run --browser firefox --headless --spec 'cypress/integration/skeune/**/*.spec.js,cypress/integration/shared/*.spec.js'",
+    "cy:open": "npx cypress open",
+    "cypress:open": "npx cypress open"
+  },
+  "devDependencies": {
+    "axe-core": "^4.7",
+    "cypress": "^12.17",
+    "cypress-axe": "^1.4",
+    "cypress-html-validate": "^6.0",
+    "cypress-terminal-report": "^5.3",
+    "html-validate": "^8.3",
+    "whatwg-fetch": "^3.6"
+  },
+  "resolutions": {
+    "@cypress/request": "3.0.0"
+  }
+}

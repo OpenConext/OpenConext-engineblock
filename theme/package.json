@@ -8,10 +8,10 @@
   "scripts": {
     "test": "@cy:run",
     "test:visual-regression": "CYPRESS_integrationFolder=cypress/visual-regression/${EB_THEME:=skeune} yarn cy:run",
-    "cy:run": "cypress run --browser firefox --headless",
-    "cy:run:theme": "cypress run --browser firefox --headless --spec 'cypress/integration/skeune/**/*.spec.js,cypress/integration/shared/*.spec.js'",
-    "cy:open": "cypress open",
-    "cypress:open": "npx cypress open",
+    "cy:run": "../tests/e2e/cypress run --browser firefox --headless",
+    "cy:run:theme": "../tests/e2e/cypress run --browser firefox --headless --spec 'cypress/integration/skeune/**/*.spec.js,cypress/integration/shared/*.spec.js'",
+    "cy:open": "../tests/e2e/cypress open",
+    "cypress:open": "npx ../tests/e2e/cypress open",
     "audit": "yarn audit",
     "lint": "yarn lint:js && yarn lint:css",
     "lint:js": "jshint **/javascripts/",
@@ -41,15 +41,11 @@
     "@babel/polyfill": "^7.12",
     "@babel/preset-env": "^7.22",
     "autoprefixer": "^10.4",
-    "axe-core": "^4.7",
     "babelify": "^10.0",
     "browserify": "^17.0",
     "copyfiles": "^2.4",
     "core-js": "^3.32",
     "cssnano": "^6.0",
-    "cypress": "^12.17",
-    "cypress-axe": "^1.4",
-    "cypress-html-validate": "^6.0",
     "jshint": "^2.13",
     "postcss-cli": "^10.1",
     "postcss-sass": "^0.5",
@@ -70,7 +66,6 @@
     "tippy.js": "^6.3"
   },
   "resolutions": {
-    "@cypress/request": "3.0.0",
     "terser": "5.19.2"
   }
 }
