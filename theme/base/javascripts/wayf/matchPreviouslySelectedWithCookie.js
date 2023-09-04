@@ -1,5 +1,5 @@
 import {configurationId, deleteButtonTemplateId, idpContentClass, idpDeleteSelector, idpDeleteDisabledSelector, remainingIdpSelector, selectedIdpsListSelector, selectedIdpsSelector, selectedIdpsLiSelector} from '../selectors';
-import * as Cookies from 'js-cookie';
+import Cookies from 'js-cookie';
 import {sortIdpList} from './utility/sortIdpList';
 import {getData} from '../utility/getData';
 

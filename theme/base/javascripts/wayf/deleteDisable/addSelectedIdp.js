@@ -1,6 +1,6 @@
 import {savePreviousSelection} from './savePreviousSelection';
 import {configurationId} from '../../selectors';
-import * as Cookies from 'js-cookie';
+import Cookies from 'js-cookie';
 
 /**
  * Add the selected idp to the list of previouslyselected idps and save it to the cookie.

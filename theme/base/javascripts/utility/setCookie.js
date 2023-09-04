@@ -1,4 +1,4 @@
-import * as Cookies from 'js-cookie';
+import Cookies from 'js-cookie';
 
 /**
  * Save a cookie, by default for 365 days
@@ -18,5 +18,5 @@ export const setCookie = (content, cookieName, expires = 365, path = '/', secure
   if(typeof path !== 'string') return;
   if(typeof secure !== 'boolean') return;
   if(typeof sameSite !== 'string') return;
-  Cookies.set(cookieName, content, { expires: expires, path: path, secure: secure, sameSite: sameSite });
+  Cookies.set(cookieName, JSON.stringify(content), { expires: expires, path: path, secure: secure, sameSite: sameSite });
 };
