@@ -26,6 +26,13 @@ The LOA minimally required for any login to this SP.
 **Example value:** `http://vm.openconext.org/assurance/loa2`
 
 
+#### metadata:coin:stepup:forceauthn
+**Type:** boolean
+
+Set the ForceAuthn flag in the callout authentication request to the Stepup Gateway for any authentication
+that involves this service provider. The meaning of the flag to the Stepup Gateway is to disable Single
+Sign On on the second factor for this request.
+
 
 ### IdP
 #### metadata:coin:stepup_connections
