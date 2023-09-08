@@ -78,7 +78,7 @@ fi
 # can be removed when we stop doing that
 echo "Build assets"
 cd ${PROJECT_DIR}/theme &&
-npm ci --unsafe-perm &&
+CYPRESS_INSTALL_BINARY=0 npm ci --unsafe-perm &&
 npm run release
 
 if [ $? -eq 0 ]; then
