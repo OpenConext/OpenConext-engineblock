@@ -5,7 +5,10 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
-## 6.12.00
+## 6.12.1
+* Repaired tag-release blockage
+
+## 6.12.0
 **Feature**
 * Inject the logger on StepupDecision #1254
 
