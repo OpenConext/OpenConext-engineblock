@@ -48,7 +48,7 @@
     "copyfiles": "^2.4.1",
     "core-js": "^3.9.1",
     "cssnano": "^4.1.10",
-    "cypress": "^9.6",
+    "cypress": "^13.1",
     "cypress-axe": "^0",
     "cypress-html-validate": "^2",
     "cypress-terminal-report": "^3.3.2",
