@@ -19,7 +19,7 @@ jobs:
       - name: Pull OpenConext build container
         run: cd docker && ${DOCKER_COMPOSE} up -d
       - name: Make the release files
-        run: cd docker && ${DOCKER_COMPOSE} exec -T openconext bash -c 'HOME=/home/runner/work/OpenConext-engineblock ./bin/makeRelease.sh ${{ steps.vars.outputs.tag }}'
+        run: cd docker && ${DOCKER_COMPOSE} exec -T openconext bash -lc 'HOME=/home/runner/work/OpenConext-engineblock ./bin/makeRelease.sh ${{ steps.vars.outputs.tag }}'
       - name: Create Draft Release
         id: create_release
         uses: actions/create-release@v1
