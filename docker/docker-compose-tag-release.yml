@@ -4,9 +4,7 @@ version: "3.8"
 
 services:
     openconext:
-        image: ghcr.io/openconext/openconext-containers/openconext-php-build-eb:latest
+        image: ghcr.io/openconext/openconext-basecontainers/php72-apache2-node14-composer2:latest
         volumes:
             - ../:/home/runner/work/OpenConext-engineblock
         working_dir: /home/runner/work/OpenConext-engineblock
-        environment:
-            - PHPFPM_PORT=9000
