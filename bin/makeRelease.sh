@@ -64,7 +64,7 @@ fi
 
 # Install composer dependencies
 echo "Running Composer Install" &&
-php $(which composer) install -n --no-dev --prefer-dist --ignore-platform-req=ext-exif -o
+php $(which composer) install -n --no-dev --prefer-dist -o
 
 if [ $? -eq 0 ]; then
     echo "Composer install ran"
