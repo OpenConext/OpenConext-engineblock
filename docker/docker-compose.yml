@@ -83,7 +83,8 @@ services:
         working_dir: /e2e
         entrypoint: cypress open --project .
         volumes:
-            - ../theme:/e2e
+            - ../tests:/e2e
+            - ../theme:/theme
 
 volumes:
     eb-mysql-data:
