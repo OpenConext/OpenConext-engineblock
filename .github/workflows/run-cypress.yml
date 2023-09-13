@@ -1,0 +1,62 @@
+name: test-integration
+on:
+    push:
+        branches:
+            - master
+    pull_request:
+    # run at 6 hour UTC
+    schedule:
+      - cron: "0 6 * * *"
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        continue-on-error: true
+        strategy:
+          matrix:
+            php: [php72, php82]
+        env:
+          PROD_PHP: php72
+          DOCKER_COMPOSE:  docker compose -f docker-compose.yml -f docker-compose-${{matrix.php}}.yml
+        steps:
+            - name: Checkout
+              uses: actions/checkout@master
+            - name: Get Composer cache directory
+              id: composer-cache
+              run: |
+                echo "::set-output name=dir::$(composer config cache-files-dir)"
+            - name: Restore Composer cache
+              uses: actions/cache@v1
+              with:
+                path: ${{ steps.composer-cache.outputs.dir }}
+                key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                restore-keys: |
+                  ${{ runner.os }}-composer-
+            - name: chown some dirs
+              run: |
+                mkdir tmp vendor && sudo chown -R  33 app/ theme/ web/ tmp/ vendor/
+            - name: Build Docker environmnent
+              if: always()
+              run: |
+                cd docker &&
+                ${DOCKER_COMPOSE} up -d --build &&
+                docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
+                    SYMFONY_ENV=ci composer install --prefer-dist -n -o --ignore-platform-reqs && \
+                    ./app/console cache:clear --env=ci && \
+                    cd theme && CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile && EB_THEME=skeune yarn build
+            - name: Run Cypress integration tests
+              if: always()
+              run: |
+                  cd docker && \
+                  docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
+                    EB_THEME=skeune ./theme/scripts/prepare-test.js
+                  ' && \
+                  docker compose exec -T cypress bash -c '
+                    cd e2e && cypress run --spec cypress/integration/skeune/**/*.spec.js,cypress/integration/shared/*.spec.js --browser=electron --headless
+                  ' && \
+                  docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
+                    EB_THEME=openconext ./theme/scripts/prepare-test.js
+                  ' && \
+                  docker compose exec -T cypress bash -c '
+                    cd e2e && cypress run --spec cypress/integration/openconext/**/*.spec.js --browser=electron --headless
+                  '
