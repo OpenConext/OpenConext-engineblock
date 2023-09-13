@@ -1,9 +1,11 @@
-name: test-integration
+name: run cypress
 on:
     push:
         branches:
             - master
+            - feature/move-cypress-tests
     pull_request:
+    workflow_dispatch:
     # run at 6 hour UTC
     schedule:
       - cron: "0 6 * * *"
@@ -44,6 +46,7 @@ jobs:
                     SYMFONY_ENV=ci composer install --prefer-dist -n -o --ignore-platform-reqs && \
                     ./app/console cache:clear --env=ci && \
                     cd theme && CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile && EB_THEME=skeune yarn build
+                    '
             - name: Run Cypress integration tests
               if: always()
               run: |
