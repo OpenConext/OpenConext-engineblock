@@ -16,7 +16,7 @@
     "axe-core": "^4.7",
     "cypress": "^13.1",
     "cypress-axe": "^1.4",
-    "cypress-html-validate": "^6.0",
+    "cypress-html-validate": "^6.1",
     "cypress-terminal-report": "^5.3",
     "html-validate": "^8.3",
     "whatwg-fetch": "^3.6"

@@ -1,6 +1,7 @@
 const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
+
   e2e: {
     excludeSpecPattern: [
       "**/__snapshots__/*",
@@ -8,23 +9,22 @@ module.exports = defineConfig({
       "**/unit-tests/**"
     ],
     screenshotOnRunFailure: false,
-    setupNodeEvents(on, config) {
-      const htmlvalidate = require('cypress-html-validate/dist/plugin');
+    setupNodeEvents: function (on, config) {
+      const htmlvalidate = require('cypress-html-validate/plugin');
+
+      htmlvalidate.install(on, {
+        "rules": {
+          "prefer-button": "off",
+          "prefer-native-element": ["error", {
+            "exclude": ["button"],
+          }],
+          "require-sri": ["error", {
+            "target": "crossorigin",
+          }],
+        },
+      });
 
       module.exports = (on, config) => {
-        // require('cypress-terminal-report/src/installLogsPrinter')(on);
-
-        htmlvalidate.install(on, {
-          "rules": {
-            "prefer-button": "off",
-            "prefer-native-element": [ "error", {
-              "exclude": [ "button" ],
-            }],
-            "require-sri": [ "error", {
-              "target": "crossorigin",
-            }],
-          },
-        });
 
         // debug a11y in ci
         on('task', {
@@ -37,6 +37,11 @@ module.exports = defineConfig({
             console.table(message);
 
             return null;
+          },
+          'htmlvalidate:options'(opts) {
+            console.log(opts);
+            return null;
+
           }
         });
 

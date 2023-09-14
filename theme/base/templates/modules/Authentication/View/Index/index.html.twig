@@ -5,7 +5,7 @@
 
 {% block content %}
     <main id="engine-main-page" class="box">
-        <div class="mod-content">
+        <div class="mod-content mod-content__index">
             <header>
                 <img class="logo" src="{{ defaultLogo }}?v={{ assetsVersion }}" alt="">
                 <h1>{{ 'suite_name'|trans }} EngineBlock</h1>
@@ -14,7 +14,7 @@
             <div class="main">
                 {% include '@theme/Authentication/View/Proxy/Partials/Shared/site-notice.html.twig' %}
 
-                <h1>{{ subHeader }}</h1>
+                <h2>{{ subHeader }}</h2>
                 <dl class="metadata-certificates-list">
                     <dt>
                         The Public SAML Signing certificate of the {{ 'suite_name'|trans }} IdP
@@ -77,7 +77,7 @@
             </div>
 
             <div class="main">
-                <h1>SP Certificate and Metadata</h1>
+                <h2>SP Certificate and Metadata</h2>
                 <dl class="metadata-certificates-list">
                     <dt>
                         Test authentication with an identity provider.
