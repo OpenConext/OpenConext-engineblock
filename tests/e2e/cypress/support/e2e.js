@@ -17,7 +17,7 @@
 import './commands';
 
 import 'cypress-axe';
-import 'cypress-html-validate/dist/commands';
+import "cypress-html-validate/commands";
 
 import { fetch } from 'whatwg-fetch';
 global.fetch = fetch;
