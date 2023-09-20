@@ -77,6 +77,8 @@ twig:
         defaultTitle: "%view_default_title%"
         defaultHeader: "%view_default_header%"
         defaultLogo: "%view_default_logo%"
+        envName: "%env_name%"
+        envRibbonColor: "%env_ribbon_color%"
 
 doctrine:
     dbal:

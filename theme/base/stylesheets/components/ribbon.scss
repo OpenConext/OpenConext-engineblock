@@ -1,0 +1,30 @@
+body::after {
+    position: fixed;
+    width: 109px;
+    height: 28px;
+    top: 15px;
+    right: -25px;
+    text-align: center;
+    font-size: 16px;
+    font-family: sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: white;
+    line-height: 30px;
+    transform: rotate(45deg);
+    content: attr(data-envname);
+}
+
+body[data-ribboncolor="red"]::after {
+    background-color: crimson;
+}
+body[data-ribboncolor="orange"]::after {
+    background-color: orange;
+}
+body[data-ribboncolor="pink"]::after {
+    background-color: hotpink;
+}
+body[data-ribboncolor="beige"]::after {
+    background-color: khaki;
+}
+
