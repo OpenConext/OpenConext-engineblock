@@ -17,7 +17,7 @@
         <link href="/stylesheets/application.css?v={{ assetsVersion }}" rel="stylesheet">
     {% endspaceless %}{% endblock %}
 </head>
-<body>
+<body{% if envName is defined and envName %} data-envname="{{ envName }}" data-ribboncolor="{{ envRibbonColor }}"{% endif %}>
 {% block nojs %}{% endblock %}
 {% block background %}{% endblock %}
 

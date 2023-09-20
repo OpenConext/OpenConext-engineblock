@@ -155,6 +155,8 @@ parameters:
     view_default_logo: /images/logo.png
     view_default_logo_width: 96
     view_default_logo_height: 96
+    env_name: ""
+    env_ribbon_color: ""
 
     ui_return_to_sp_link: false
 
