@@ -55,11 +55,11 @@ jobs:
                     EB_THEME=skeune ./theme/scripts/prepare-test.js
                   ' && \
                   docker compose exec -T cypress bash -c '
-                    cd e2e && yarn install && cypress run --spec cypress/integration/skeune/**/*.spec.js,cypress/integration/shared/*.spec.js --browser=electron --headless
+                    cd e2e && yarn install && cypress run --spec cypress/integration/skeune/**/*.spec.js,cypress/integration/shared/*.spec.js --browser=chrome --headless
                   ' && \
                   docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
                     EB_THEME=openconext ./theme/scripts/prepare-test.js
                   ' && \
                   docker compose exec -T cypress bash -c '
-                    cd e2e && cypress run --spec cypress/integration/openconext/**/*.spec.js --browser=electron --headless
+                    cd e2e && cypress run --spec cypress/integration/openconext/**/*.spec.js --browser=chrome --headless
                   '

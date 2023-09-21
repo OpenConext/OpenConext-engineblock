@@ -17,13 +17,15 @@ import {getData} from '../../utility/getData';
  */
 export const deleteIdp = (element) => {
   const cookieName = JSON.parse(document.getElementById(configurationId).innerHTML).previousSelectionCookieName;
+  const cookieValue = Cookies.get(cookieName);
+  const cookie = JSON.parse(cookieValue);
+
   const idp = element.closest(idpSelector);
   const id = getData(idp, 'entityid');
   const parent = idp.parentElement;
   const title = getData(parent, 'title');
   const parentIndex = parseInt(getData(parent, 'index'));
-  console.log(Cookies.get(cookieName));
-  const cookie = JSON.parse(Cookies.get(cookieName));
+
 
 
   cookie.forEach((idp, index) => {

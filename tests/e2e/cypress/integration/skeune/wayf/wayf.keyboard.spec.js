@@ -1,4 +1,26 @@
-import {addAccountButtonSelector, cancelButtonSelector, defaultIdpClass, defaultIdpItemSelector, defaultIdpSelector, emailErrorSelector, emailFieldSelector, idpClass, nameErrorSelector, nameFieldSelector, noAccessTitle, noAccessFieldsetsSelector, previousSelectionTitleSelector, remainingIdpSelector, searchFieldClass, searchFieldSelector, selectedIdpsSelector, selectedIdpsSectionSelector, showFormSelector, submitRequestSelector, succesMessageSelector} from '../../../../../../theme/base/javascripts/selectors';
+import {
+  addAccountButtonSelector,
+  cancelButtonSelector,
+  defaultIdpClass,
+  defaultIdpItemSelector,
+  defaultIdpSelector,
+  emailErrorSelector,
+  emailFieldSelector,
+  idpClass,
+  nameErrorSelector,
+  nameFieldSelector,
+  noAccessTitle,
+  noAccessFieldsetsSelector,
+  previousSelectionTitleSelector,
+  remainingIdpSelector,
+  searchFieldClass,
+  searchFieldSelector,
+  selectedIdpsSelector,
+  selectedIdpsSectionSelector,
+  showFormSelector,
+  submitRequestSelector,
+  succesMessageSelector
+} from '../../../../../../theme/base/javascripts/selectors';
 import {firstRemainingIdp, firstSelectedIdpDeleteDisable, selectedIdpDataIndex1} from '../testSelectors';
 
 /**
@@ -87,7 +109,7 @@ context('WAYF when using the keyboard', () => {
 
     it('Should show the form fields after hitting request access', () => {
       cy.openUnconnectedIdp();
-      cy.getAndEnter(showFormSelector);
+      cy.focusAndEnter(showFormSelector);
       cy.beVisible(noAccessFieldsetsSelector);
     });
 
@@ -105,19 +127,26 @@ context('WAYF when using the keyboard', () => {
     });
 
     it('Should be able to partially fill the request access form and get validation message', () => {
+      cy.clearCookies();
+
       cy.openUnconnectedIdp();
+      cy.focusAndEnter(showFormSelector);
+
+      cy.screenshot("1");
       cy.fillNoAccessForm();
-      cy.get(nameFieldSelector).clear();
-      cy.getAndEnter(submitRequestSelector);
-      cy.get(nameErrorSelector)
-        .should('not.have.class', 'hidden');
+      cy.get(nameFieldSelector).clear({force:true});
+      cy.screenshot("2");
+      cy.focusAndEnter(submitRequestSelector);
+      cy.doesNotHaveClass(nameErrorSelector, 'hidden');
       cy.notBeVisible('This is an invalid email address');
     });
 
     it('Email validation should be triggered', () => {
+      cy.clearCookies();
       cy.openUnconnectedIdp();
+      cy.focusAndEnter(showFormSelector);
       cy.fillNoAccessForm();
-      cy.get(emailFieldSelector).clear();
+      cy.get(emailFieldSelector).clear({force:true});
       cy.getAndEnter(submitRequestSelector);
       cy.notBeVisible('Your name needs to be at least 2 characters long');
       cy.doesNotHaveClass(emailErrorSelector, 'hidden');

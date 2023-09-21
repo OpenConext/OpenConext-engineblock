@@ -24,11 +24,11 @@ context('Consent on Skeune theme', () => {
     it('Hides the tooltip on load', () => {
       cy.get(tooltip3Selector)
         .next()
-        .should('not.be.visible');
+        .should('not.exist');
     });
 
     it('Should not show the nok-modal on load', () => {
-      cy.notBeVisible(nokSectionTitleSelector);
+      cy.notExistOrVisible(nokSectionTitleSelector);
     });
   });
 

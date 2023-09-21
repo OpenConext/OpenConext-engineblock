@@ -1,4 +1,4 @@
-import * as Cookies from 'js-cookie';
+import Cookies from 'js-cookie';
 
 export class RememberChoiceStorage {
     constructor(cookieName) {
@@ -6,6 +6,6 @@ export class RememberChoiceStorage {
     }
 
     save(entityId) {
-        Cookies.set(this.cookieName, entityId, { expires: 365, path: '/' });
+        Cookies.set(this.cookieName, JSON.stringify(entityId), { expires: 365, path: '/' });
     }
 }
