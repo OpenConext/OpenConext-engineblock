@@ -1,4 +1,4 @@
-import * as Cookies from 'js-cookie';
+import Cookies from 'js-cookie';
 
 export class PreviousSelectionStorage {
     constructor(cookieName) {
@@ -13,6 +13,6 @@ export class PreviousSelectionStorage {
             };
         });
 
-        Cookies.set(this.cookieName, simplifiedPreviousSelection, { expires: 365, path: '/' });
+        Cookies.set(this.cookieName, JSON.stringify(simplifiedPreviousSelection), { expires: 365, path: '/' }, );
     }
 }

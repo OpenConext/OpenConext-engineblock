@@ -12,11 +12,15 @@ Cypress.Commands.add('doesNotHaveClass', (selector, klasse) => {
 });
 
 Cypress.Commands.add('beVisible', (selector) => {
-  cy.get(selector).should('be.visible');
+  cy.get(selector).should('not.have.css', 'display', 'none');
 });
 
 Cypress.Commands.add('notBeVisible', (selector) => {
   cy.get(selector).should('not.be.visible');
+});
+
+Cypress.Commands.add('notExistOrVisible', (selector, isNotExist) => {
+  cy.get(selector).should(isNotExist ? 'not.exist' : 'not.be.visible');
 });
 
 Cypress.Commands.add('onPage', (expectedText) => {

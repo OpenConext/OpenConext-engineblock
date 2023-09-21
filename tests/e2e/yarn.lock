@@ -430,10 +430,10 @@ cypress-axe@^1.4:
   resolved "https://registry.yarnpkg.com/cypress-axe/-/cypress-axe-1.4.0.tgz#e67482bfe9e740796bf77c7823f19781a8a2faff"
   integrity sha512-Ut7NKfzjyKm0BEbt2WxuKtLkIXmx6FD2j0RwdvO/Ykl7GmB/qRQkwbKLk3VP35+83hiIr8GKD04PDdrTK5BnyA==
 
-cypress-html-validate@^6.0:
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/cypress-html-validate/-/cypress-html-validate-6.0.2.tgz#d22e8a39fb2ff9aaffa32e878a39a6c547c73434"
-  integrity sha512-Y9hm0cGx8rlta2aJif7cnLZfUZ2zY+t0L5acFuWOH6ySkV05vwyNhqE+lyx14leNcMSgkfUBJ3J0+K/qONhj0g==
+cypress-html-validate@^6.1:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/cypress-html-validate/-/cypress-html-validate-6.1.0.tgz#4e6d311a380b3fc9c503c489b261973dc424c757"
+  integrity sha512-IXVB1ZzdSHMzPM/QYZCXlG3yW2CdvSVY7bJtlijmk4kCRepfdHe0JLQ939h2Dj9ZsjyBockPQpun4omq1uRW6Q==
 
 cypress-terminal-report@^5.3:
   version "5.3.3"

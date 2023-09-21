@@ -146,7 +146,7 @@ context('WAYF when using the mouse', () => {
       cy.selectAccountButton(false);
       cy.selectFirstIdpAndReturn(false);
       cy.toggleEditButton(false);
-      cy.hitDeleteButton(false);
+      cy.hitDeleteButton();
       // The previous selection is now closed and empty
       cy.get('.wayf__previousSelection .wayf__idp h3')
         .should('have.length', 0);

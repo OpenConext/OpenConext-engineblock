@@ -53,7 +53,7 @@ services:
             db-test.vm.openconext.org:
                 condition: service_healthy
         extra_hosts:
-          engine.vm.openconext.org: 127.0.0.1
+          - 'engine.vm.openconext.org: 127.0.0.1'
         environment:
           APP_ENV: ci
           SYMFONY_ENV: ci

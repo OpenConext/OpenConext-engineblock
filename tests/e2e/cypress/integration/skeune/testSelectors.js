@@ -3,7 +3,7 @@ import {attributesSelector, idpDeleteDisabledSelector, idpSelector, nokSectionSe
 /***
  * INDEX SELECTORS
  * ***/
-export const indexPageHeader = 'main div.main:first-of-type h1';
+export const indexPageHeader = 'main div.main:first-of-type h2';
 
 /***
  * CONSENT SELECTORS
@@ -12,7 +12,7 @@ export const attribute6 = `${attributesSelector}:nth-of-type(6)`;
 export const labelSelector = 'label';
 export const tooltip3Selector = `${tooltipLabelSelector}[for="tooltip3consent_attribute_source_idp"]`;
 export const primaryTooltip3Selector = `${primaryTooltipLabelSelector}[for="tooltip3consent_attribute_source_idp"]`;
-export const nokSectionTitleSelector = `${nokSectionSelector} h3`;
+export const nokSectionTitleSelector = `${nokSectionSelector} h2`;
 
 
 /***
