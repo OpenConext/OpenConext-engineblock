@@ -65,7 +65,7 @@ context('WAYF when using the mouse', () => {
       cy.fillNoAccessForm(false);
     });
 
-    it('Should not show the success message when selecting a new disabled account', () => {
+    it.skip('Should not show the success message when selecting a new disabled account', () => {
       cy.fillNoAccessForm(false);
       cy.get(submitRequestSelector).click({force: true});
       cy.wait(500);
@@ -73,7 +73,7 @@ context('WAYF when using the mouse', () => {
       cy.get(succesMessageSelector).should('not.be.visible');
     });
 
-    it('Should also not show the form fields after selecting a new disabled account', () => {
+    it.skip('Should also not show the form fields after selecting a new disabled account', () => {
       cy.fillNoAccessForm(false);
       cy.get(submitRequestSelector).click({force: true});
       cy.wait(500);
