@@ -14,24 +14,14 @@ jobs:
         continue-on-error: true
         strategy:
           matrix:
-            php: [php72, php82]
+            # php82 is ready to run alongside the 72, but is not enabled now as the code is not 82 compatible yet
+            php: [php72]
         env:
           PROD_PHP: php72
           DOCKER_COMPOSE:  docker compose -f docker-compose.yml -f docker-compose-${{matrix.php}}.yml
         steps:
             - name: Checkout
               uses: actions/checkout@master
-            - name: Get Composer cache directory
-              id: composer-cache
-              run: |
-                echo "::set-output name=dir::$(composer config cache-files-dir)"
-            - name: Restore Composer cache
-              uses: actions/cache@v1
-              with:
-                path: ${{ steps.composer-cache.outputs.dir }}
-                key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                restore-keys: |
-                  ${{ runner.os }}-composer-
             - name: chown some dirs
               run: |
                 mkdir tmp vendor && sudo chown -R  33 app/ theme/ web/ tmp/ vendor/
