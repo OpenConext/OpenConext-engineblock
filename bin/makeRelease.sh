@@ -38,8 +38,8 @@ PROJECT_DIR=${RELEASE_DIR}/${PROJECT_DIR_NAME} &&
 # Check requirements
 command -v php >/dev/null 2>&1 || { echo >&2 "Missing PHP 7.2. Aborting"; exit 1; }
 command -v composer >/dev/null 2>&1 || { echo >&2 "Missing Composer.  Aborting."; exit 1; }
-command -v npm >/dev/null 2>&1 || { echo >&2 "Misisng NPM.  Aborting."; exit 1; }
-command -v git >/dev/null 2>&1 || { echo >&2 "Misisng Git.  Aborting."; exit 1; }
+command -v yarn >/dev/null 2>&1 || { echo >&2 "Missing yarn.  Aborting."; exit 1; }
+command -v git >/dev/null 2>&1 || { echo >&2 "Missing Git.  Aborting."; exit 1; }
 
 # Prepare environment
 echo "Preparing environment" &&
@@ -69,17 +69,15 @@ php $(which composer) install -n --no-dev --prefer-dist -o
 if [ $? -eq 0 ]; then
     echo "Composer install ran"
 else
-    echo "Unable to run compopser install"
+    echo "Unable to run composer install"
     exit 1
 fi
 
-# Build NPM frontend assets
-# --unsafe-perm because we do branch install as root.
-# can be removed when we stop doing that
+# Install JavaScript dependencies
 echo "Build assets"
 cd ${PROJECT_DIR}/theme &&
-CYPRESS_INSTALL_BINARY=0 npm ci --unsafe-perm &&
-npm run release
+CYPRESS_INSTALL_BINARY=0 yarn &&
+yarn release
 
 if [ $? -eq 0 ]; then
     echo "Assets build"
