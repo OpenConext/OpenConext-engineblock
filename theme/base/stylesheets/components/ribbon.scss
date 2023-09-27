@@ -15,16 +15,16 @@ body::after {
     content: attr(data-envname);
 }
 
-body[data-ribboncolor="red"]::after {
+body[data-ribboncolor="crimson"]::after {
     background-color: crimson;
 }
 body[data-ribboncolor="orange"]::after {
     background-color: orange;
 }
-body[data-ribboncolor="pink"]::after {
+body[data-ribboncolor="hotpink"]::after {
     background-color: hotpink;
 }
-body[data-ribboncolor="beige"]::after {
+body[data-ribboncolor="khaki"]::after {
     background-color: khaki;
 }
 
