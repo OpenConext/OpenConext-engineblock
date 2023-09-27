@@ -51,9 +51,9 @@
     <fieldset class="hidden">
         <legend class="hidden">Motivation</legend>
         <label for="motivation">
-            {{ 'wayf_noaccess_motivation'|trans }}
+            <strong aria-hidden="true">*</strong> {{ 'wayf_noaccess_motivation'|trans }}
         </label>
-        <textarea name="comment" id="motivation" rows="5"></textarea>
+        <textarea name="comment" required id="motivation" rows="5"></textarea>
     </fieldset>
 
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noAccess/ctas.html.twig' %}
