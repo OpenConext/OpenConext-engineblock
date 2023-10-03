@@ -8,7 +8,7 @@
     <div class="mod-content">
         <h1>{{ 'cookie_removal_header'|trans }}</h1>
         {% include '@theme/Authentication/View/Proxy/Partials/Shared/site-notice.html.twig' %}
-        {{ 'cookie_removal_description'|trans|raw }}
+        <p>{{ 'cookie_removal_description'|trans }}</p>
         <form id="remove_cookie_form" method="post" class="apply clearfix l-overflow">
             <table class="remove-cookies">
                 {% for cookie in cookies %}

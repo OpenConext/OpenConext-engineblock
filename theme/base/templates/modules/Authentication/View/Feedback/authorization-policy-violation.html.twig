@@ -8,9 +8,9 @@
 {% block errorMessage %}
     <h2>
         {% if withIdpName %}
-            {{ 'error_authorization_policy_violation_info'|trans({'%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+            {{ 'error_authorization_policy_violation_info'|trans({'%idpName%': feedbackInfoMap['identityProviderName']}) }}
         {% else %}
-            {{ 'error_authorization_policy_violation_info_no_idp_name'|trans|raw }}
+            {{ 'error_authorization_policy_violation_info_no_idp_name'|trans }}
         {% endif %}
     </h2>
 
@@ -32,13 +32,13 @@
 
     {% endif %}
     {% if withIdpName and withSpName %}
-        {{ 'error_authorization_policy_violation_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName'], '%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+        {{ 'error_authorization_policy_violation_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName'], '%idpName%': feedbackInfoMap['identityProviderName']}) }}
     {% elseif withIdpName %}
-        {{ 'error_authorization_policy_violation_desc_no_sp_name'|trans({'%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+        {{ 'error_authorization_policy_violation_desc_no_sp_name'|trans({'%idpName%': feedbackInfoMap['identityProviderName']}) }}
     {% elseif withSpName %}
-        {{ 'error_authorization_policy_violation_desc_no_idp_name'|trans({'%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
+        {{ 'error_authorization_policy_violation_desc_no_idp_name'|trans({'%spName%': feedbackInfoMap['serviceProviderName']}) }}
     {% else %}
-        {{ 'error_authorization_policy_violation_desc_no_name'|trans|raw }}
+        {{ 'error_authorization_policy_violation_desc_no_name'|trans }}
     {% endif %}
 
 {% endblock %}

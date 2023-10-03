@@ -85,7 +85,7 @@ HTML
     'cookie_removal_header'     => 'Remove cookies',
     'cookie_remove_button'      => 'Remove',
     'cookie_remove_all_button'  => 'Remove all',
-    'cookie_removal_description' => '<p>Below you will find an overview of your cookies and the possibility to remove them individually or all at once.</p>',
+    'cookie_removal_description' => 'Below you will find an overview of your cookies and the possibility to remove them individually or all at once.',
     'cookie_removal_confirm'     => 'Your cookie has been removed.',
     'cookies_removal_confirm'    => 'Your cookies have been removed.',
 
@@ -113,7 +113,7 @@ HTML
     'close'                 => 'Close',
     'required'              => 'Required',
     'send_confirm'          => 'Your request has been sent',
-    'send_confirm_desc'     => '<p>Your request has been forwarded to your %organisationNoun%. Further settlement and decisions on the availability of this service will be taken by the ICT staff of your %organisationNoun%.</p>',
+    'send_confirm_desc'     => 'Your request has been forwarded to your %organisationNoun%. Further settlement and decisions on the availability of this service will be taken by the ICT staff of your %organisationNoun%.',
 
     // Consent
     'consent_attributes_screenreader'         => 'about %orgName%',
@@ -155,7 +155,7 @@ HTML
     'error_404_desc'                    => 'This page has not been found.',
     'error_405'                         => 'HTTP Method not allowed',
     'error_405_desc'                    => 'The HTTP method "%requestMethod%" is not allowed for location "%uri%". Supported methods are: %allowedMethods%.',
-    'error_help_desc'               => '<p></p>',
+    'error_help_desc'               => '',
     'error_no_idps'                 => 'Error - No %organisationNounPlural% found',
     'error_no_idps_desc'            => 'Logging into %spName% is not possible via %suiteName%. %spName% is not connected to any %organisationNounPlural%.',
     'error_no_idps_desc_no_sp_name'            => 'Logging into this service is not possible via %suiteName%. The service is not connected to any %organisationNounPlural%.',
@@ -164,10 +164,10 @@ HTML
     'error_session_not_started'            => 'Error - No session found',
     'error_session_not_started_desc'       => 'To continue to the service an active session is required. However, no session was found. Your browser must accept cookies. Alternatively, the link you used to get to the service might be wrong. Please go back to the service and try again. If that doesn\'t work, try a different browser.',
     'error_authorization_policy_violation'            => 'Error - Access denied',
-    'error_authorization_policy_violation_desc'       => 'You cannot use %spName% because %idpName% limits access to it (the &lsquo;Service Provider&rsquo;) with an <i>authorization policy</i>. Please contact the service desk of %idpName% if you think you should be allowed access to %spName%.',
-    'error_authorization_policy_violation_desc_no_idp_name'       => 'You cannot use %spName% because your %organisationNoun% limits access to it (the &lsquo;Service Provider&rsquo;) with an <i>authorization policy</i>. Please contact the service desk of your %organisationNoun% if you think you should be allowed access to %spName%.',
-    'error_authorization_policy_violation_desc_no_sp_name'       => 'You cannot use this service because %idpName% limits access to it (the &lsquo;Service Provider&rsquo;) with an <i>authorization policy</i>. Please contact the service desk of %idpName% if you think you should be allowed access to this service.',
-    'error_authorization_policy_violation_desc_no_name' => 'You cannot use this service because your %organisationNoun% limits access to this service (the &lsquo;Service Provider&rsquo;) with an <i>authorization policy</i>. Please contact the helpdesk of your %organisationNoun% if you think you should be allowed access to this service.',
+    'error_authorization_policy_violation_desc'       => 'You cannot use %spName% because %idpName% limits access to it (the "Service Provider") with an authorization policy. Please contact the service desk of %idpName% if you think you should be allowed access to %spName%.',
+    'error_authorization_policy_violation_desc_no_idp_name'       => 'You cannot use %spName% because your %organisationNoun% limits access to it (the "Service Provider") with an authorization policy. Please contact the service desk of your %organisationNoun% if you think you should be allowed access to %spName%.',
+    'error_authorization_policy_violation_desc_no_sp_name'       => 'You cannot use this service because %idpName% limits access to it (the "Service Provider") with an authorization policy. Please contact the service desk of %idpName% if you think you should be allowed access to this service.',
+    'error_authorization_policy_violation_desc_no_name' => 'You cannot use this service because your %organisationNoun% limits access to this service (the "Service Provider") with an authorization policy. Please contact the helpdesk of your %organisationNoun% if you think you should be allowed access to this service.',
     'error_authorization_policy_violation_info'       => 'Message from %idpName%: ',
     'error_authorization_policy_violation_info_no_idp_name'       => 'Message from your %organisationNoun%: ',
     'error_no_message'              => 'Error - No message received',
@@ -182,7 +182,7 @@ HTML
     'error_unknown_preselected_idp' => 'Error - %spName% not accessible through your %organisationNoun%',
     'error_unknown_preselected_idp_no_sp_name' => 'Error - Service not accessible through your %organisationNoun%',
     'error_unknown_preselected_idp_desc' => 'The %organisationNoun% that you want to use to login to %spName% did not activate access to it. This means you are unable to use %spName% through %suiteName%. Please contact the service desk of your %organisationNoun% to request access. State it is about %spName% and why you need access.',
-    'error_unknown_preselected_idp_desc_no_sp_name' => 'The %organisationNoun% that you want to use to login to this service did not activate access to this service. This means you are unable to use this service through %suiteName%. Please contact the helpdesk of your %organisationNoun% to request access to this service. State what service it is about (the &lsquo;SP&rsquo;) and why you need access.',
+    'error_unknown_preselected_idp_desc_no_sp_name' => 'The %organisationNoun% that you want to use to login to this service did not activate access to this service. This means you are unable to use this service through %suiteName%. Please contact the helpdesk of your %organisationNoun% to request access to this service. State what service it is about (the "SP") and why you need access.',
     'error_unknown_service_provider'            => 'Error - %spName% unknown',
     'error_unknown_service_provider_no_sp_name' => 'Error - Unknown service',
     'error_unknown_service_provider_desc'     => 'You are trying to log in to %spName%, but this is unknown to %suiteName%. Possibly %idpName% has never enabled access to %spName%. If you would like to use it, please contact the service desk of %idpName%.',
@@ -242,9 +242,7 @@ Your %organisationNoun% does not provide the mandatory information. Therefore, y
     'error_invalid_attribute_value_desc' => '%idpName% sends a value for attribute %attributeName% ("%attributeValue%") which is not allowed for this %organisationNoun%. Therefore you cannot log in. Only %idpName% can resolve this. Please contact the service desk of %idpName% to fix this problem.',
     'error_invalid_attribute_value_desc_no_idp_name' => 'Your %organisationNoun% sends a value for attribute %attributeName% ("%attributeValue%") which is not allowed for this %organisationNoun%. Therefore you cannot log in. Only your %organisationNoun% can resolve this. Please contact the service desk of your own %organisationNoun% to fix this problem.',
     'error_received_error_status_code'     => 'Error - Identity Provider error',
-    'error_received_error_status_code_desc'=> '<p>
-Your %organisationNoun% has denied you access to this service. You will have to contact your own (IT-)service desk to see if this can be fixed.
-</p>',
+    'error_received_error_status_code_desc'=> 'Your %organisationNoun% has denied you access to this service. You will have to contact your own (IT-)service desk to see if this can be fixed.',
     'error_received_invalid_response'       => 'Error - Invalid %idpName% SAML response',
     'error_received_invalid_response_no_idp_name'       => 'Error - Invalid %organisationNoun% SAML response',
     'error_received_invalid_signed_response'=> 'Error - Invalid signature on %idpName% response',
@@ -256,11 +254,11 @@ Your %organisationNoun% has denied you access to this service. You will have to 
     'error_stuck_in_authentication_loop_desc_no_name' => 'You\'ve successfully authenticated at your %organisationNoun% but the service you are trying to access sends you back again to %suiteName%. Because you are already logged in, %suiteName% then sends you back to the service, which results in an infinite black hole. Likely, this is caused by an error at the Service Provider.',
     'error_no_authentication_request_received' => 'Error - No authentication request received.',
     'error_authn_context_class_ref_blacklisted'                     => 'Error - AuthnContextClassRef value is not allowed',
-    'error_authn_context_class_ref_blacklisted_desc'                => '<p>You cannot login because %idpName% sent a value for AuthnContextClassRef that is not allowed. Please contact the service desk of %idpName% to solve this.</p>',
-    'error_authn_context_class_ref_blacklisted_desc_no_idp_name'                => '<p>You cannot login because your %organisationNoun% sent a value for AuthnContextClassRef that is not allowed. Please contact the service desk of your %organisationNoun% to solve this.</p>',
+    'error_authn_context_class_ref_blacklisted_desc'                => 'You cannot login because %idpName% sent a value for AuthnContextClassRef that is not allowed. Please contact the service desk of %idpName% to solve this.',
+    'error_authn_context_class_ref_blacklisted_desc_no_idp_name'                => 'You cannot login because your %organisationNoun% sent a value for AuthnContextClassRef that is not allowed. Please contact the service desk of your %organisationNoun% to solve this.',
     'error_invalid_mfa_authn_context_class_ref' => 'Error - Multi factor authentication failed',
-    'error_invalid_mfa_authn_context_class_ref_desc' => '<p>%idpName% requires multi-factor authentication for this service. However, your second factor could not be validated. Please contact the service desk of %idpName% to solve this.</p>',
-    'error_invalid_mfa_authn_context_class_ref_desc_no_idp_name' => '<p>Your %organisationNoun% requires multi-factor authentication for this service. However, your second factor could not be validated. Please contact the service desk of your %organisationNoun% to solve this.</p>',
+    'error_invalid_mfa_authn_context_class_ref_desc' => '%idpName% requires multi-factor authentication for this service. However, your second factor could not be validated. Please contact the service desk of %idpName% to solve this.',
+    'error_invalid_mfa_authn_context_class_ref_desc_no_idp_name' => 'Your %organisationNoun% requires multi-factor authentication for this service. However, your second factor could not be validated. Please contact the service desk of your %organisationNoun% to solve this.',
     /**
      * %1 AttributeName
      * %2 Options
@@ -283,7 +281,7 @@ Your %organisationNoun% has denied you access to this service. You will have to 
     'allowed_scopes'                                => 'Allowed scopes',
 
     'error_unknown_requesterid_in_authnrequest'         => 'Error - Unknown service',
-    'error_unknown_requesterid_in_authnrequest_desc'    => '<p>Your requested service couldn\'t be found.</p>',
+    'error_unknown_requesterid_in_authnrequest_desc'    => 'Your requested service couldn\'t be found.',
     'error_clock_issue_title' => 'Error - The Assertion is not yet valid or has expired',
     'error_clock_issue_desc' => 'This is likely because the difference in time between %idpName% and %suiteName% it too large. Please verify that the time on the %organisationNoun% is correct.',
     'error_clock_issue_desc_no_idp_name' => 'This is likely because the difference in time between %organisationNoun% and %suiteName% it too large. Please verify that the time on the IdP is correct.',

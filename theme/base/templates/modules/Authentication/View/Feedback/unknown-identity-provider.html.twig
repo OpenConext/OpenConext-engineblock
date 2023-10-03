@@ -18,8 +18,8 @@
 
 {% block errorMessage %}
     {% if withIdpName %}
-        {{ 'error_unknown_identity_provider_desc'|trans({'%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+        {{ 'error_unknown_identity_provider_desc'|trans({'%idpName%': feedbackInfoMap['identityProviderName']}) }}
     {% else %}
-        {{ 'error_unknown_identity_provider_desc_no_idp_name'|trans|raw }}
+        {{ 'error_unknown_identity_provider_desc_no_idp_name'|trans }}
     {% endif %}
 {% endblock %}

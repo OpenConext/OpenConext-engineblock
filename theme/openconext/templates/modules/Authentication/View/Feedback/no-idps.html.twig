@@ -7,8 +7,8 @@
 
 {% block errorMessage %}
     {% if withSpName %}
-        {{ 'error_no_idps_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName'] })|raw }}
+        {{ 'error_no_idps_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName'] }) }}
     {% else %}
-        {{ 'error_no_idps_desc_no_sp_name'|trans|raw }}
+        {{ 'error_no_idps_desc_no_sp_name'|trans }}
     {% endif %}
 {% endblock %}

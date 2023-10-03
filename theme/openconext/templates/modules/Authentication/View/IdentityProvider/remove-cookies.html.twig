@@ -11,7 +11,7 @@
     <div class="mod-content">
         <h1>{{ 'cookie_removal_header'|trans }}</h1>
         {% include '@theme/Authentication/View/Proxy/site-notice.html.twig' with { className: 'full-width' } %}
-        {{ 'cookie_removal_description'|trans|raw }}
+        <p>{{ 'cookie_removal_description'|trans }}</p>
         <form id="remove_cookie_form" method="post" class="apply clearfix">
             <table class="remove-cookies">
                 {% for cookie in cookies %}
