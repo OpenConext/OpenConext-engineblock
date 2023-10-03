@@ -25,19 +25,12 @@ return $overrides + [
     'consent_footer_text_plural'              => 'Je gebruikt al %arg1% diensten via %suiteName%. <a href="%arg2%" target="_blank"><span>Bekijk hier het overzicht en je profielinformatie.</span></a>',
     'consent_footer_text_first_consent'       => 'Je gebruikt nog geen diensten via %suiteName%. <a href="%arg1%" target="_blank"><span>Bekijk hier je profielinformatie.</span></a>',
     // Consent slidein: About OpenConext
-    'consent_slidein_about_text'  => <<<'TXT'
-<h1>Inloggen met %suiteName%</h1>
-<p>Via %suiteName% loggen personen met hun eigen %accountNoun% veilig en gemakkelijk in bij clouddiensten van verschillende aanbieders. %suiteName% biedt extra privacy-bescherming doordat een minimaal aantal persoonlijke gegevens wordt doorgegeven aan deze clouddiensten.</p>
-TXT
-    ,
+    'consent_slidein_about_head'  => 'Inloggen met %suiteName%',
+    'consent_slidein_about_text'  => 'Via %suiteName% loggen personen met hun eigen %accountNoun% veilig en gemakkelijk in bij clouddiensten van verschillende aanbieders. %suiteName% biedt extra privacy-bescherming doordat een minimaal aantal persoonlijke gegevens wordt doorgegeven aan deze clouddiensten.',
 
     // Consent slidein: Reject
-    'consent_slidein_reject_text'  => <<<'TXT'
-<h1>Je wilt geen gegevens delen met de dienst</h1>
-<p>De dienst waar je probeert in te loggen heeft jouw gegevens nodig om te kunnen functioneren. Als je deze gegevens niet wilt delen dan kun je geen gebruik maken van deze dienst. Door je browser of dit tabblad af te sluiten voorkom je het doorsturen van je gegevens. Als je je hierna bedenkt, log dan opnieuw in bij de dienst; je krijgt dit scherm dan opnieuw te zien.</p>
-TXT
-    ,
-
+    'consent_slidein_reject_head'  => 'Je wilt geen gegevens delen met de dienst',
+    'consent_slidein_reject_text'  => 'De dienst waar je probeert in te loggen heeft jouw gegevens nodig om te kunnen functioneren. Als je deze gegevens niet wilt delen dan kun je geen gebruik maken van deze dienst. Door je browser of dit tabblad af te sluiten voorkom je het doorsturen van je gegevens. Als je je hierna bedenkt, log dan opnieuw in bij de dienst; je krijgt dit scherm dan opnieuw te zien.',
     // Generic slide-in
     'slidein_close' => 'Sluiten',
 ];

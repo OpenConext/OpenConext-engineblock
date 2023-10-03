@@ -5,4 +5,7 @@
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
-{% block errorMessage %}{{ 'error_stepup_callout_unmet_loa_desc'|trans|raw }}{% endblock %}
+{% block errorMessage %}<p>{{ 'error_stepup_callout_unmet_loa_desc'|trans }}</p>
+
+<p><a href="{{ 'error_stepup_callout_unmet_loa_link_target'|trans }}">{{ 'error_stepup_callout_unmet_loa_link_text'|trans }}</a></p>
+{% endblock %}

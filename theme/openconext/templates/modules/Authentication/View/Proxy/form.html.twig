@@ -36,14 +36,13 @@
             <p class="hideNoJS">{{ 'processing_long'|trans }}</p>
 
             <form id="ProcessForm" method="post" action="{{ action }}">
-                <input type="hidden" name="{{ name }}" value="{{ message }}"/>
-                {{ xtra|raw }}
+                <input type="hidden" name="{{ name }}" value="{{ message }}">
                 <noscript>
                     <p>
                         <strong>{{ 'note'|trans }}:</strong>
                         {{ 'note_no_script'|trans }}
                     </p>
-                    <input type="submit" value="Submit" class="form__noJsSubmit"/>
+                    <input type="submit" value="Submit" class="form__noJsSubmit">
                 </noscript>
             </form>
         </main>
