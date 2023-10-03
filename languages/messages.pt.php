@@ -90,15 +90,16 @@ HTML
 
     // Footer
     'service_by'            => 'Este serviço está ligado através da',
-    'serviceprovider_link'  => '<a href="https://openconext.org/" target="_blank">%suiteName%</a>',
-    'terms_of_service_link' => '<a href="#" target="_blank">Termos do Serviço</a>',
+    'serviceprovider_link_text'  => '%suiteName%',
+    'serviceprovider_link_target'  => 'https://openconext.org/',
+    'terms_of_service_link_text' => 'Termos do Serviço',
+    'terms_of_service_link_target' => '#',
 
     // Form
-    'request_access_instructions' => '<h2>Infelizmente, você não tem acesso ao serviço que seleccionou.
-                                   O que pode fazer?</h2>
-                                <p>Se pretende ter acesso a este serviço, preencha o formulário em baixo.
+    'request_access_instructions_head' => 'Infelizmente, você não tem acesso ao serviço que seleccionou. O que pode fazer?',
+    'request_access_instructions_text' => 'Se pretende ter acesso a este serviço, preencha o formulário em baixo.
                                    Em seguida, nós iremos encaminhar o seu pedido à pessoa responsável pela
-                                   gestão dos portfolios de serviço da sua %organisationNoun%.</p>',
+                                   gestão dos portfolios de serviço da sua %organisationNoun%.',
     'name'                  => 'Nome',
     'name_error'            => 'Insira o seu nome',
     'email'                 => 'E-mail',

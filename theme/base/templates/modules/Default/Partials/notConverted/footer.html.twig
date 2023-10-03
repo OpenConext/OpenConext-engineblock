@@ -6,7 +6,7 @@
             <ul class="footer-menu">
 
                 <li class="nav-row left">
-                    {{ 'service_by'|trans }} {{ 'serviceprovider_link'|trans|raw }}
+                    {{ 'service_by'|trans }} <a href="{{ 'serviceprovider_link_target'|trans }}">{{ 'serviceprovider_link_text'|trans }}</a>
                 </li>
 
                 <li class="nav-row">
@@ -31,7 +31,7 @@
                         {% endif %}
 
                         <li>
-                            {{ 'terms_of_service_link'|trans|raw }}
+                            <a href="{{ 'terms_of_service_link_target'|trans }}" target="_blank">{{ 'terms_of_service_link_text'|trans }}</a>
                         </li>
 
                     </ul>

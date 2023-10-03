@@ -3,7 +3,8 @@
 {% block content %}
 
 <div class="mod-form">
-  {{ 'request_access_instructions'|trans|raw }}
+  <h2>{{ 'request_access_instructions_head'|trans }}</h2>
+  <p>{{ 'request_access_instructions_text'|trans }}</p>
   <form id="request_access_form" action="#" method="post" class="apply clearfix">
     <input name="spName" type="hidden" value="{{ queryParameters['spName']|default('') }}">
     <input name="spEntityId" type="hidden" value="{{ queryParameters['spEntityId']|default('') }}">
