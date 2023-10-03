@@ -84,7 +84,7 @@ HTML
     'cookie_removal_header'     => 'Remover cookies',
     'cookie_remove_button'      => 'Remover',
     'cookie_remove_all_button'  => 'Remover todos',
-    'cookie_removal_description' => '<p>Em baixo poderá encontrar uma visão geral dos seus cookies e a possibilidade de os remover individualmente ou todos de uma vez.</p>',
+    'cookie_removal_description' => 'Em baixo poderá encontrar uma visão geral dos seus cookies e a possibilidade de os remover individualmente ou todos de uma vez.',
     'cookie_removal_confirm'     => 'O seu cookie foi removido.',
     'cookies_removal_confirm'    => 'Os seus cookies foram removidos.',
 
@@ -113,7 +113,7 @@ HTML
     'required'              => 'Obrigatório',
 
     'send_confirm'          => 'O seu pedido foi enviado',
-    'send_confirm_desc'     => '<p>A sua solicitação foi encaminha para a sua %organisationNoun%. As decisões para a disponibilidade deste serviço serão tomadas pela equipa de IT da sua %organisationNoun%.</p>',
+    'send_confirm_desc'     => 'A sua solicitação foi encaminha para a sua %organisationNoun%. As decisões para a disponibilidade deste serviço serão tomadas pela equipa de IT da sua %organisationNoun%.',
 
     // Consent page
     'consent_attributes_screenreader'         => 'about %orgName%',
@@ -141,7 +141,7 @@ HTML
     'slidein_read_more' => 'Leia mais',
 
     // Error screens
-    'error_feedback_info_intro' => '<span class="heading@small">Does this error message recur?</span> Use the resources below to get help. When contacting the help desk, please include the following codes:',
+    'error_feedback_info_intro' => 'Does this error message recur? Use the resources below to get help. When contacting the help desk, please include the following codes:',
     'error_wiki-href' => 'https://nl.wikipedia.org/wiki/SURFnet',
     'error_wiki-link-text' => '%suiteName% Wiki',
     'error_wiki-link-text-short' => 'Wiki',
@@ -155,19 +155,19 @@ HTML
     'error_404_desc'                    => 'Esta página não foi encontrada.',
     'error_405'                         => 'Método HTTP não permitido',
     'error_405_desc'                    => 'O método HTTP "%requestMethod%" não é permitido para o endereço "%uri%". Os métodos suportados são: %allowedMethods%.',
-    'error_help_desc'               => '<p></p>',
+    'error_help_desc'               => '',
     'error_no_idps'                 => 'Erro - Não foi encontrado nenhum Fornecedor de Identidade',
     'error_no_idps_desc'            => 'O %spName% a que pretende ligar-se não está acessível através da %organisationNounPlural%.',
-    'error_no_idps_desc_no_sp_name'            => 'O serviço (&lsquo;Service Provider&rsquo;) a que pretende ligar-se não está acessível através da %organisationNounPlural%.',
+    'error_no_idps_desc_no_sp_name'            => 'O serviço ("Service Provider") a que pretende ligar-se não está acessível através da %organisationNounPlural%.',
     'error_session_lost'            => 'Erro - a sua sessão foi perdida',
     'error_session_lost_desc'       => '<p>Esta ação requer uma sessão ativa, no entanto, não conseguimos encontrar a sessão. Está a aguardar há muito tempo? Feche o browser e tente novamente, ou tente um browser diferente.</p>',
     'error_session_not_started'            => 'Erro - a sua sessão não foi encontrada',
     'error_session_not_started_desc'       => '<p>Esta ação requer uma sessão ativa, no entanto, não recebemos nenhum cookie de sessão. O browser deve aceitar cookies. Não utilize endereços do marcador ou link. Feche o browser e tente novamente, ou tente um browser diferente.</p>',
     'error_authorization_policy_violation'            => 'Erro - Sem acesso',
-    'error_authorization_policy_violation_desc'       => 'Você autenticu-se com sucesso na %idpName%, mas infelizmente você não pode utilizar %spName% (o &lsquo;Fornecedor de Serviço&rsquo;) porque não tem acesso. A %idpName% limita o acesso a %spName% com uma <i>política de autorização</i>. Entre em contacto com o suporte da %idpName% se acha que deve ser-lhe concedido acesso ao serviço.',
-    'error_authorization_policy_violation_desc_no_idp_name'       => 'Você autenticu-se com sucesso na sua %organisationNoun%, mas infelizmente você não pode utilizar %spName% (o &lsquo;Fornecedor de Serviço&rsquo;) porque não tem acesso. A sua %organisationNoun% limita o acesso a %spName% com uma <i>política de autorização</i>. Entre em contacto com o suporte da sua %organisationNoun% se acha que deve ser-lhe concedido acesso ao serviço.',
-    'error_authorization_policy_violation_desc_no_sp_name'       => 'Você autenticu-se com sucesso na %idpName%, mas infelizmente você não pode utilizar este serviço (o &lsquo;Fornecedor de Serviço&rsquo;) porque não tem acesso. A %idpName% limita o acesso a este serviço com uma <i>política de autorização</i>. Entre em contacto com o suporte da %idpName% se acha que deve ser-lhe concedido acesso ao serviço.',
-    'error_authorization_policy_violation_desc_no_name'       => 'Você autenticu-se com sucesso na sua %organisationNoun%, mas infelizmente você não pode utilizar este serviço (o &lsquo;Fornecedor de Serviço&rsquo;) porque não tem acesso. A sua %organisationNoun% limita o acesso a este serviço com uma <i>política de autorização</i>. Entre em contacto com o suporte da sua %organisationNoun% se acha que deve ser-lhe concedido acesso ao serviço.',
+    'error_authorization_policy_violation_desc'       => 'Você autenticu-se com sucesso na %idpName%, mas infelizmente você não pode utilizar %spName% (o "Fornecedor de Serviço") porque não tem acesso. A %idpName% limita o acesso a %spName% com uma política de autorização. Entre em contacto com o suporte da %idpName% se acha que deve ser-lhe concedido acesso ao serviço.',
+    'error_authorization_policy_violation_desc_no_idp_name'       => 'Você autenticu-se com sucesso na sua %organisationNoun%, mas infelizmente você não pode utilizar %spName% (o "Fornecedor de Serviço") porque não tem acesso. A sua %organisationNoun% limita o acesso a %spName% com uma política de autorização. Entre em contacto com o suporte da sua %organisationNoun% se acha que deve ser-lhe concedido acesso ao serviço.',
+    'error_authorization_policy_violation_desc_no_sp_name'       => 'Você autenticu-se com sucesso na %idpName%, mas infelizmente você não pode utilizar este serviço (o "Fornecedor de Serviço") porque não tem acesso. A %idpName% limita o acesso a este serviço com uma política de autorização. Entre em contacto com o suporte da %idpName% se acha que deve ser-lhe concedido acesso ao serviço.',
+    'error_authorization_policy_violation_desc_no_name'       => 'Você autenticu-se com sucesso na sua %organisationNoun%, mas infelizmente você não pode utilizar este serviço (o "Fornecedor de Serviço") porque não tem acesso. A sua %organisationNoun% limita o acesso a este serviço com uma política de autorização. Entre em contacto com o suporte da sua %organisationNoun% se acha que deve ser-lhe concedido acesso ao serviço.',
     'error_authorization_policy_violation_info'       => 'Mensagem da %idpName%: ',
     'error_authorization_policy_violation_info_no_idp_name'       => 'Mensagem da sua %organisationNoun%: ',
     'error_no_message'              => 'Erro - Não foi recebido nenhuma mensagem',
@@ -181,8 +181,8 @@ HTML
     'error_unknown_keyid_desc' => 'The requested key-ID is not known to %suiteName%. Perhaps the service provider is using outdated metadata or has a configuration error.',
     'error_unknown_preselected_idp' => 'Erro - Não há ligação entre %organisationNoun% e o serviço',
     'error_unknown_preselected_idp_no_sp_name' => 'Erro - Não há ligação entre %organisationNoun% e o serviço',
-    'error_unknown_preselected_idp_desc' => 'A %organisationNoun% que pretende utilizar para se autenticar e aceder ao serviço, não tem activado o acesso a este serviço. Isto significa que não pode aceder a este serviço através da %suiteName%. Entre em contacto com com o suporte da sua %organisationNoun% para solicitar o acesso a este serviço. Declare que serviço se trata (o &lsquo;Fornecedor de Serviço&rsquo;) e porque necessita do acesso.',
-    'error_unknown_preselected_idp_desc_no_sp_name' => 'A %organisationNoun% que pretende utilizar para se autenticar e aceder ao serviço, não tem activado o acesso a este serviço. Isto significa que não pode aceder a este serviço através da %suiteName%. Entre em contacto com com o suporte da sua %organisationNoun% para solicitar o acesso a este serviço. Declare que serviço se trata (o &lsquo;Fornecedor de Serviço&rsquo;) e porque necessita do acesso.',
+    'error_unknown_preselected_idp_desc' => 'A %organisationNoun% que pretende utilizar para se autenticar e aceder ao serviço, não tem activado o acesso a este serviço. Isto significa que não pode aceder a este serviço através da %suiteName%. Entre em contacto com com o suporte da sua %organisationNoun% para solicitar o acesso a este serviço. Declare que serviço se trata (o "Fornecedor de Serviço") e porque necessita do acesso.',
+    'error_unknown_preselected_idp_desc_no_sp_name' => 'A %organisationNoun% que pretende utilizar para se autenticar e aceder ao serviço, não tem activado o acesso a este serviço. Isto significa que não pode aceder a este serviço através da %suiteName%. Entre em contacto com com o suporte da sua %organisationNoun% para solicitar o acesso a este serviço. Declare que serviço se trata (o "Fornecedor de Serviço") e porque necessita do acesso.',
     'error_unknown_service_provider'          => 'Erro - Serviço desconhecido',
     'error_unknown_service_provider_desc'     => 'O serviço a que pretende autenticar-se é desconhecido para a %suiteName%. Possivelmente a sua %organisationNoun% nunca permitiu o acesso a este serviço. Entre em contacto com o suporte da sua %organisationNoun% e fornecer-lhes as seguintes informações:',
 
