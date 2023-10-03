@@ -202,42 +202,11 @@ HTML
     'error_generic_desc_no_idp_name' => 'Logging in has failed and we don\'t know exactly why. Please try again first by going back to %spName% and logging in again. If this doesn\'t work, please contact the service desk of your %organisationNoun%.',
     'error_generic_desc_no_names' => 'Logging in has failed and we don\'t know exactly why. Please try again first by going back to the service and logging in again. If this doesn\'t work, please contact the service desk of your %organisationNoun%.',
     'error_missing_required_fields'     => 'Error - Missing required fields',
-    'error_missing_required_fields_desc'=> '<p>
-%idpName% does not provide the mandatory information or it has an invalid format. Therefore, you can not use %spName%. Please contact the service desk of %idpName% and tell them one or more of the the following required attributes are not being set correctly for %suiteName%:
-</p>
-<p>
-    <ul>
-        <li>UID</li>
-        <li>schacHomeOrganization</li>
-    </ul>
-</p>',
-    'error_missing_required_fields_desc_no_idp_name'=> '<p>
-Your %organisationNoun% does not provide the mandatory information. Therefore, you can not use %spName%. Please contact your %organisationNoun% and tell them one or more of the the following required attribute(s) are missing within %suiteName%:
-</p>
-<p>
-    <ul>
-        <li>UID</li>
-        <li>schacHomeOrganization</li>
-    </ul>
-</p>',
-    'error_missing_required_fields_desc_no_sp_name'=> '<p>
-%idpName% does not provide the mandatory information. Therefore, you can not use this service. Please contact the service desk of %idpName% and tell them one or more of the the following required attribute(s) are missing within %suiteName%:
-</p>
-<p>
-    <ul>
-        <li>UID</li>
-        <li>schacHomeOrganization</li>
-    </ul>
-</p>',
-    'error_missing_required_fields_desc_no_name'=> '<p>
-Your %organisationNoun% does not provide the mandatory information. Therefore, you can not use this service. Please contact your %organisationNoun% and tell them one or more of the the following required attribute(s) are missing within %suiteName%:
-</p>
-<p>
-    <ul>
-        <li>UID</li>
-        <li>schacHomeOrganization</li>
-    </ul>
-</p>',
+    'error_missing_required_fields_desc'=> '%idpName% does not provide the mandatory information or it has an invalid format. Therefore, you can not use %spName%. Please contact the service desk of %idpName% and tell them one or more of the the following required attributes are not being set correctly for %suiteName%:',
+    'error_missing_required_fields_desc_no_idp_name'=> 'Your %organisationNoun% does not provide the mandatory information. Therefore, you can not use %spName%. Please contact your %organisationNoun% and tell them one or more of the the following required attribute(s) are missing within %suiteName%:',
+    'error_missing_required_fields_desc_no_sp_name'=> '%idpName% does not provide the mandatory information. Therefore, you can not use this service. Please contact the service desk of %idpName% and tell them one or more of the the following required attribute(s) are missing within %suiteName%:',
+    'error_missing_required_fields_desc_no_name'=> '
+Your %organisationNoun% does not provide the mandatory information. Therefore, you can not use this service. Please contact your %organisationNoun% and tell them one or more of the the following required attribute(s) are missing within %suiteName%:',
     'error_invalid_attribute_value' => 'Error - Attribute value not allowed',
     'error_invalid_attribute_value_desc' => '%idpName% sends a value for attribute %attributeName% ("%attributeValue%") which is not allowed for this %organisationNoun%. Therefore you cannot log in. Only %idpName% can resolve this. Please contact the service desk of %idpName% to fix this problem.',
     'error_invalid_attribute_value_desc_no_idp_name' => 'Your %organisationNoun% sends a value for attribute %attributeName% ("%attributeValue%") which is not allowed for this %organisationNoun%. Therefore you cannot log in. Only your %organisationNoun% can resolve this. Please contact the service desk of your own %organisationNoun% to fix this problem.',
@@ -288,7 +257,9 @@ Your %organisationNoun% does not provide the mandatory information. Therefore, y
     'error_stepup_callout_unknown_title' => 'Error - Unknown strong authentication failure',
     'error_stepup_callout_unknown_desc' => 'Logging in with strong authentication has failed and we don\'t know exactly why . Please try again first by going back to the service and logging in again . If this doesn\'t work, please contact the service desk of your %organisationNoun%.',
     'error_stepup_callout_unmet_loa_title' => 'Error - No suitable token found',
-    'error_stepup_callout_unmet_loa_desc' => 'To continue to this service, a registered token with a certain level of assurance is required. Currently, you either haven\'t registered a token at all, or the level of assurance of the token you did register is too low. See the link below for more information about the registration process.<br/><br/><a target="_blank" href="https://support.surfconext.nl/stepup-noauthncontext-en">Read more about the registration process.</a>',
+    'error_stepup_callout_unmet_loa_desc' => 'To continue to this service, a registered token with a certain level of assurance is required. Currently, you either haven\'t registered a token at all, or the level of assurance of the token you did register is too low. See the link below for more information about the registration process.',
+    'error_stepup_callout_unmet_loa_link_text' => 'Read more about the registration process.',
+    'error_stepup_callout_unmet_loa_link_target' => 'https://support.surfconext.nl/stepup-noauthncontext-en',
     'error_stepup_callout_user_cancelled_title' => 'Error - Logging in cancelled',
     'error_stepup_callout_user_cancelled_desc' => 'You have aborted the login process. Go back to the service if you want to try again.',
     'error_metadata_entity_id_not_found' => 'Metadata can not be generated',
@@ -309,7 +280,8 @@ Your %organisationNoun% does not provide the mandatory information. Therefore, y
     // Logout
     'logout' => 'logout',
     'logout_description' => 'This application uses centralized log in, which provides single sign on for several applications. To be sure your log out is 100% secure you should close your browser completely.',
-    'logout_information_link' => '',
+    'logout_information_link_text' => '',
+    'logout_information_link_target' => '',
 
     // Error page wiki link in footer, keep empty to hide block in footer
     'error_feedback_wiki_links_feedback_unknown_error' => 'https://support.surfconext.nl/help-error-error-en',

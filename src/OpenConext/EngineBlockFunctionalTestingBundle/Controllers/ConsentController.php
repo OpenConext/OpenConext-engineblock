@@ -47,7 +47,6 @@ class ConsentController
         return new Response($this->twig->render('@theme/Authentication/View/Proxy/form.html.twig', [
             'action' => $action,
             'message' => $encodedMessage,
-            'xtra' => '<input type="hidden" name="RelayState" value="relaystate">',
             'name' => 'SAMLResponse',
             'preventAutoSubmit' => true
         ]), 200);

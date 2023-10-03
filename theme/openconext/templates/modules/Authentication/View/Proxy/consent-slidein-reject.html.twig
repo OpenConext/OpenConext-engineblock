@@ -3,7 +3,8 @@
     <div class="mod-content">
         <a class="close" href="#">{{ 'slidein_close'|trans }}</a>
         <section>
-            {{ 'consent_slidein_reject_text'|trans|raw }}
+            <h1>{{ 'consent_slidein_reject_head'|trans }}</h1>
+            <p>{{ 'consent_slidein_reject_text'|trans }}</p>
             {% include '@theme/Authentication/View/Proxy/consent-slidein-contact-details.html.twig' %}
         </section>
     </div>

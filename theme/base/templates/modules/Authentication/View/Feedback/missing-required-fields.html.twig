@@ -7,12 +7,20 @@
 
 {% block errorMessage %}
     {% if withIdpName and withSpName %}
-        {{ 'error_missing_required_fields_desc'|trans({'%idpName%': feedbackInfoMap['identityProviderName']|escape, '%spName%': feedbackInfoMap['serviceProviderName']|escape})|raw }}
+        {{ 'error_missing_required_fields_desc'|trans({'%idpName%': feedbackInfoMap['identityProviderName'], '%spName%': feedbackInfoMap['serviceProviderName']}) }}
     {% elseif withIdpName %}
-        {{ 'error_missing_required_fields_desc_no_sp_name'|trans({'%idpName%': feedbackInfoMap['identityProviderName']|escape})|raw }}
+        {{ 'error_missing_required_fields_desc_no_sp_name'|trans({'%idpName%': feedbackInfoMap['identityProviderName']}) }}
     {% elseif withSpName %}
-        {{ 'error_missing_required_fields_desc_no_idp_name'|trans({'%spName%': feedbackInfoMap['serviceProviderName']|escape})|raw }}
+        {{ 'error_missing_required_fields_desc_no_idp_name'|trans({'%spName%': feedbackInfoMap['serviceProviderName']}) }}
     {% else %}
-        {{ 'error_missing_required_fields_desc_no_name'|trans|raw }}
+        {{ 'error_missing_required_fields_desc_no_name'|trans }}
     {% endif %}
+
+    <p>
+        <ul>
+            <li>UID</li>
+            <li>schacHomeOrganization</li>
+        </ul>
+    </p>
+
 {% endblock %}

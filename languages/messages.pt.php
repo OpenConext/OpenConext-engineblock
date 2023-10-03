@@ -195,58 +195,10 @@ HTML
     'error_generic'                     => 'Erro - Ocorreu um erro',
     'error_generic_desc'                => 'A sua autenticação falhou e não sabemos exactamente porquê. Tente de novo e no caso de voltar a não funcionar, entre em contacto com o suporte da %idpName% para pedir ajuda.',
     'error_missing_required_fields'     => 'Erro - Campo necessário em falta',
-    'error_missing_required_fields_desc'=> '<p>
-Não pode usar esta aplicação porque a %idpName% não está a fornecer a informação necessária.
-    </p>
-    <p>
-        Entre em contacto com a %idpName% com a informação indicada em baixo.
-    </p>
-    <p>
-        A autenticação falhou porque o Fornecedor de Identidade da %idpName% não forneceu %suiteName% com um ou mais dos seguintes atributos obrigatórios:
-        <ul>
-            <li>UID</li>
-            <li>schacHomeOrganization</li>
-        </ul>
-    </p>',
-        'error_missing_required_fields_desc_no_idp_name'=> '<p>
-Não pode usar esta aplicação porque a sua %organisationNoun% não está a fornecer a informação necessária.
-    </p>
-    <p>
-        Entre em contacto com a sua %organisationNoun% com a informação indicada em baixo.
-    </p>
-    <p>
-        A autenticação falhou porque o Fornecedor de Identidade da sua %organisationNoun% não forneceu %suiteName% com um ou mais dos seguintes atributos obrigatórios:
-        <ul>
-            <li>UID</li>
-            <li>schacHomeOrganization</li>
-        </ul>
-    </p>',
-        'error_missing_required_fields_desc_no_sp_name'=> '<p>
-Não pode usar esta aplicação porque a %idpName% não está a fornecer a informação necessária.
-    </p>
-    <p>
-        Entre em contacto com a %idpName% com a informação indicada em baixo.
-    </p>
-    <p>
-        A autenticação falhou porque o Fornecedor de Identidade da %idpName% não forneceu %suiteName% com um ou mais dos seguintes atributos obrigatórios:
-        <ul>
-            <li>UID</li>
-            <li>schacHomeOrganization</li>
-        </ul>
-    </p>',
-    'error_missing_required_fields_desc_no_name'=> '<p>
-Não pode usar esta aplicação porque a sua %organisationNoun% não está a fornecer a informação necessária.
-</p>
-<p>
-    Entre em contacto com a sua %organisationNoun% com a informação indicada em baixo.
-</p>
-<p>
-    A autenticação falhou porque o Fornecedor de Identidade da sua %organisationNoun% não forneceu %suiteName% com um ou mais dos seguintes atributos obrigatórios:
-    <ul>
-        <li>UID</li>
-        <li>schacHomeOrganization</li>
-    </ul>
-</p>',
+    'error_missing_required_fields_desc'=> 'Não pode usar esta aplicação porque a %idpName% não está a fornecer a informação necessária. Entre em contacto com a %idpName% com a informação indicada em baixo. A autenticação falhou porque o Fornecedor de Identidade da %idpName% não forneceu %suiteName% com um ou mais dos seguintes atributos obrigatórios:',
+    'error_missing_required_fields_desc_no_idp_name'=> 'Não pode usar esta aplicação porque a sua %organisationNoun% não está a fornecer a informação necessária. Entre em contacto com a sua %organisationNoun% com a informação indicada em baixo. A autenticação falhou porque o Fornecedor de Identidade da sua %organisationNoun% não forneceu %suiteName% com um ou mais dos seguintes atributos obrigatórios:',
+    'error_missing_required_fields_desc_no_sp_name'=> 'Não pode usar esta aplicação porque a %idpName% não está a fornecer a informação necessária. Entre em contacto com a %idpName% com a informação indicada em baixo. A autenticação falhou porque o Fornecedor de Identidade da %idpName% não forneceu %suiteName% com um ou mais dos seguintes atributos obrigatórios:',
+    'error_missing_required_fields_desc_no_name'=> 'Não pode usar esta aplicação porque a sua %organisationNoun% não está a fornecer a informação necessária. Entre em contacto com a sua %organisationNoun% com a informação indicada em baixo. A autenticação falhou porque o Fornecedor de Identidade da sua %organisationNoun% não forneceu %suiteName% com um ou mais dos seguintes atributos obrigatórios:',
     'error_invalid_attribute_value' => 'Valor do atributo não permitido',
     'error_invalid_attribute_value_desc' => 'A %idpName% utilizou um valor para o atributo %attributeName% ("%attributeValue%") o que não é permitido para esta %organisationNoun%. Desta forma, não pode autenticar-se. Apenas a %idpName% pode resolver esta situação. Entre em contacto com o suporte deste serviço da %idpName%.',
     'error_invalid_attribute_value_desc_no_idp_name' => 'A sua %organisationNoun% utilizou um valor para o atributo %attributeName% ("%attributeValue%") o que não é permitido para esta %organisationNoun%. Desta forma, não pode autenticar-se. Apenas a sua %organisationNoun% pode resolver esta situação. Entre em contacto com o suporte deste serviço da sua %organisationNoun%.',
@@ -299,7 +251,9 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_stepup_callout_unknown_title' => 'Erro - falha por autenticação forte desconhecida',
     'error_stepup_callout_unknown_desc' => 'O login com autenticação forte falhou e não sabemos exatamente qual o motivo. Tente aceder de novo ao serviço e efetuar uma nova autenticação. Se voltar a não funcionar, entre em contato com o suporte técnico da sua %organisationNoun%.',
     'error_stepup_callout_unmet_loa_title' => 'Erro - não foi encontrado nenhum token adequado',
-    'error_stepup_callout_unmet_loa_desc' => 'Para continuar neste serviço, é necessário que o token registado tenho um determinado nível de confiança. Atualmente, você não tem um token registado, ou o nível de confiança do seu token é muito baixo. Veja o endereço abaixo para mais informações sobre o processo de registo.<br/><br/><a target="_blank" href="https://support.surfconext.nl/stepup-noauthncontext">Leia mais sobre o processo de registro.</a>',
+    'error_stepup_callout_unmet_loa_desc' => 'Para continuar neste serviço, é necessário que o token registado tenho um determinado nível de confiança. Atualmente, você não tem um token registado, ou o nível de confiança do seu token é muito baixo. Veja o endereço abaixo para mais informações sobre o processo de registo.',
+    'error_stepup_callout_unmet_loa_link_text' => 'Leia mais sobre o processo de registro.',
+    'error_stepup_callout_unmet_loa_link_target' => 'https://support.surfconext.nl/stepup-noauthncontext',
     'error_stepup_callout_user_cancelled_title' => 'Erro - Carregamento cancelado',
     'error_stepup_callout_user_cancelled_desc' => 'Você cancelou o processo de autenticação. Volte ao serviço se você pretender tentar de novo.',
     'error_metadata_entity_id_not_found' => 'Metadata can not be generated',
@@ -321,6 +275,8 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'logout' => 'logout',
     'logout_description' => 'Esta aplicação utiliza autenticação centralizada, que permite uma única autenticação para várias aplicações. Para garantir que o seu logout está 100% assegurado, deve fe3char o seu browser completamente.',
     'logout_information_link' => '',
+    'logout_information_link_text' => '',
+    'logout_information_link_target' => '',
 
     // Error page wiki link in footer, keep empty to hide block in footer
     'error_feedback_wiki_links_feedback_unknown_error' => 'https://support.surfconext.nl/help-error-error-en',
