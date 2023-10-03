@@ -7,8 +7,8 @@
 
 {% block errorMessage %}
     {% if withIdpName %}
-        {{ 'error_invalid_attribute_value_desc'|trans({'%attributeName%': attributeName,'%attributeValue%': attributeValue, '%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+        {{ 'error_invalid_attribute_value_desc'|trans({'%attributeName%': attributeName,'%attributeValue%': attributeValue, '%idpName%': feedbackInfoMap['identityProviderName']}) }}
     {% else %}
-        {{ 'error_invalid_attribute_value_desc_no_idp_name'|trans({'%attributeName%': attributeName,'%attributeValue%': attributeValue})|raw }}
+        {{ 'error_invalid_attribute_value_desc_no_idp_name'|trans({'%attributeName%': attributeName,'%attributeValue%': attributeValue}) }}
     {% endif %}
 {% endblock %}

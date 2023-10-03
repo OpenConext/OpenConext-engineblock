@@ -6,9 +6,9 @@
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
 {% block errorMessage %}
-    {% if withIdpName %}
-        {{ 'error_invalid_mfa_authn_context_class_ref_desc'|trans({'%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+    <p>{% if withIdpName %}
+        {{ 'error_invalid_mfa_authn_context_class_ref_desc'|trans({'%idpName%': feedbackInfoMap['identityProviderName']}) }}
     {% else %}
-        {{ 'error_invalid_mfa_authn_context_class_ref_desc_no_idp_name'|trans|raw }}
-    {% endif %}
+        {{ 'error_invalid_mfa_authn_context_class_ref_desc_no_idp_name'|trans }}
+    {% endif %}</p>
 {% endblock %}

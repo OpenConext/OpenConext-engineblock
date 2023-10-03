@@ -6,9 +6,9 @@
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
 {% block errorMessage %}
-    {% if withIdpName %}
-        {{ 'error_authn_context_class_ref_blacklisted_desc'|trans({'%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+    <p>{% if withIdpName %}
+        {{ 'error_authn_context_class_ref_blacklisted_desc'|trans({'%idpName%': feedbackInfoMap['identityProviderName']}) }}
     {% else %}
-        {{ 'error_authn_context_class_ref_blacklisted_desc_no_idp_name'|trans|raw }}
-    {% endif %}
+        {{ 'error_authn_context_class_ref_blacklisted_desc_no_idp_name'|trans }}
+    {% endif %}</p>
 {% endblock %}

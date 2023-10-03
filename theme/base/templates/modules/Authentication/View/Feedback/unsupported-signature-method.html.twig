@@ -5,4 +5,4 @@
 {% block title %}{{ parent() }}{% endblock %}
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
-{% block errorMessage %}{{ 'error_unsupported_signature_method_desc'|trans({'%arg1%': signatureMethod})|raw }}{% endblock %}
+{% block errorMessage %}{{ 'error_unsupported_signature_method_desc'|trans({'%arg1%': signatureMethod}) }}{% endblock %}

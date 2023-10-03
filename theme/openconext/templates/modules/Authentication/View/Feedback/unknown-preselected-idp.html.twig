@@ -18,8 +18,8 @@
 
 {% block errorMessage %}
     {% if withSpName %}
-        {{ 'error_unknown_preselected_idp_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
+        {{ 'error_unknown_preselected_idp_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName']}) }}
     {% else %}
-        {{ 'error_unknown_preselected_idp_desc_no_sp_name'|trans|raw }}
+        {{ 'error_unknown_preselected_idp_desc_no_sp_name'|trans }}
     {% endif %}
 {% endblock %}

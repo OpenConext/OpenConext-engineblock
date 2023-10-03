@@ -7,12 +7,12 @@
 
 {% block errorMessage %}
     {% if withIdpName and withSpName %}
-        {{ 'error_stuck_in_authentication_loop_desc'|trans({'%idpName%': feedbackInfoMap['identityProviderName'], '%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
+        {{ 'error_stuck_in_authentication_loop_desc'|trans({'%idpName%': feedbackInfoMap['identityProviderName'], '%spName%': feedbackInfoMap['serviceProviderName']}) }}
     {% elseif withIdpName %}
-        {{ 'error_stuck_in_authentication_loop_desc_no_sp_name'|trans({'%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+        {{ 'error_stuck_in_authentication_loop_desc_no_sp_name'|trans({'%idpName%': feedbackInfoMap['identityProviderName']}) }}
     {% elseif withSpName %}
-        {{ 'error_stuck_in_authentication_loop_desc_no_idp_name'|trans({'%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
+        {{ 'error_stuck_in_authentication_loop_desc_no_idp_name'|trans({'%spName%': feedbackInfoMap['serviceProviderName']}) }}
     {% else %}
-        {{ 'error_stuck_in_authentication_loop_desc_no_name'|trans|raw }}
+        {{ 'error_stuck_in_authentication_loop_desc_no_name'|trans }}
     {% endif %}
 {% endblock %}

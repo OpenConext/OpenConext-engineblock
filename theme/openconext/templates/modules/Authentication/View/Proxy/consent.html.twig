@@ -20,7 +20,7 @@
             <header>
                 <h1>{{ pageTitle }}</h1>
                 <p>
-                    {{ 'consent_header_text'|trans({'%arg1%': spName})|raw }}
+                    {{ 'consent_header_text'|trans({'%arg1%': spName|escape})|raw }}
                 </p>
                 {% if sp.coins.termsOfServiceUrl is not null %}
                     <p>
@@ -200,11 +200,11 @@
             <footer>
                 <p>
                     {% if consentCount == 0 %}
-                        {{ 'consent_footer_text_first_consent'|trans({'%arg1%': profileUrl})|raw }}
+                        {{ 'consent_footer_text_first_consent'|trans({'%arg1%': profileUrl|escape})|raw }}
                     {% elseif consentCount == 1 %}
-                        {{ 'consent_footer_text_singular'|trans({'%arg1%': profileUrl})|raw }}
+                        {{ 'consent_footer_text_singular'|trans({'%arg1%': profileUrl|escape})|raw }}
                     {% else %}
-                        {{ 'consent_footer_text_plural'|trans({'%arg1%': consentCount, '%arg2%': profileUrl})|raw }}
+                        {{ 'consent_footer_text_plural'|trans({'%arg1%': consentCount|escape, '%arg2%': profileUrl|escape})|raw }}
                     {% endif %}
                 </p>
             </footer>

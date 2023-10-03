@@ -18,12 +18,12 @@
 
 {% block errorMessage %}
     {% if withSpName and withIdpName %}
-        {{ 'error_unknown_service_provider_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName'], '%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+        {{ 'error_unknown_service_provider_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName'], '%idpName%': feedbackInfoMap['identityProviderName']}) }}
     {% elseif withSpName %}
-        {{ 'error_unknown_service_provider_desc_no_idp_name'|trans({'%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
+        {{ 'error_unknown_service_provider_desc_no_idp_name'|trans({'%spName%': feedbackInfoMap['serviceProviderName']}) }}
     {% elseif withIdpName %}
-        {{ 'error_unknown_service_provider_desc_no_sp_name'|trans({'%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+        {{ 'error_unknown_service_provider_desc_no_sp_name'|trans({'%idpName%': feedbackInfoMap['identityProviderName']}) }}
     {% else %}
-        {{ 'error_unknown_service_provider_desc_no_names'|trans|raw }}
+        {{ 'error_unknown_service_provider_desc_no_names'|trans }}
     {% endif %}
 {% endblock %}

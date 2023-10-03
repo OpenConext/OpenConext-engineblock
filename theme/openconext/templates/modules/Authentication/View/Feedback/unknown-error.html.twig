@@ -8,12 +8,12 @@
 
 {% block errorMessage %}
     {% if withSpName and withIdpName %}
-        {{ 'error_generic_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName'], '%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+        {{ 'error_generic_desc'|trans({'%spName%': feedbackInfoMap['serviceProviderName'], '%idpName%': feedbackInfoMap['identityProviderName']}) }}
     {% elseif withIdpName %}
-        {{ 'error_generic_desc_no_sp_name'|trans({'%idpName%': feedbackInfoMap['identityProviderName']})|raw }}
+        {{ 'error_generic_desc_no_sp_name'|trans({'%idpName%': feedbackInfoMap['identityProviderName']}) }}
     {% elseif withSpName %}
-        {{ 'error_generic_desc_no_idp_name'|trans({'%spName%': feedbackInfoMap['serviceProviderName']})|raw }}
+        {{ 'error_generic_desc_no_idp_name'|trans({'%spName%': feedbackInfoMap['serviceProviderName']}) }}
     {% else %}
-        {{ 'error_generic_desc_no_names'|trans|raw }}
+        {{ 'error_generic_desc_no_names'|trans }}
     {% endif %}
 {% endblock %}
