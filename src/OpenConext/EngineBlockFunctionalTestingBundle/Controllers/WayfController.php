@@ -73,8 +73,7 @@ class WayfController extends Controller
                 'requestId' => 'bogus-request-id',
                 'serviceProvider' => TestEntitySeeder::buildSp(),
                 'idpList' => $idpList,
-                'beforeScriptHtml' => '<div id="request-access-scroller"><div id="request-access-container">' .
-                    '<div id="request-access"></div></div></div>',
+                'showRequestAccessContainer' => true,
             ]
         ));
     }

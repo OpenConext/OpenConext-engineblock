@@ -91,15 +91,16 @@ HTML
 
     // Footer
     'service_by'            => 'This is a service connected through',
-    'serviceprovider_link'  => '<a href="https://openconext.org/" target="_blank">%suiteName%</a>',
-    'terms_of_service_link' => '<a href="#" target="_blank">Terms of Service</a>',
+    'serviceprovider_link_text'  => '%suiteName%',
+    'serviceprovider_link_target'  => 'https://openconext.org/',
+    'terms_of_service_link_text' => 'Terms of Service',
+    'terms_of_service_link_target' => '#',
 
     // Form
-    'request_access_instructions' => '<h2>Unfortunately, you do not have access to the service you are looking for.
-                               What can you do?</h2>
-                            <p>If you want to access this service, please fill out the form below.
+    'request_access_instructions_head' => 'Unfortunately, you do not have access to the service you are looking for. What can you do?',
+    'request_access_instructions_text' => 'If you want to access this service, please fill out the form below.
                                We will then forward your request to the person responsible for the services
-                               portfolio management at your %organisationNoun%.</p>',
+                               portfolio management at your %organisationNoun%.',
     'name'                  => 'Name',
     'name_error'            => 'Enter your name',
     'email'                 => 'E-mail',

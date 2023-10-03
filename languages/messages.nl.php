@@ -90,13 +90,15 @@ HTML
 
     // Footer
     'service_by'            => 'Deze dienst is verbonden via',
-    'serviceprovider_link'  => '%suiteName%',
-    'terms_of_service_link' => '<a href="#" target="_blank">Gebruiksvoorwaarden</a>',
+    'serviceprovider_link_text'  => '%suiteName%',
+    'serviceprovider_link_target'  => 'https://openconext.org/',
+    'terms_of_service_link_text' => 'Gebruiksvoorwaarden',
+    'terms_of_service_link_target' => '#',
 
     // Request Access Form
-    'request_access_instructions' => '<h2>Helaas, je hebt geen toegang tot de dienst die je zoekt. Wat nu?</h2>
-                                <p>Wil je toch graag toegang tot deze dienst, vul dan het onderstaande formulier in.
-                                   Wij sturen je verzoek door naar de juiste persoon binnen jouw %organisationNoun%.</p>',
+    'request_access_instructions_head' => 'Helaas, je hebt geen toegang tot de dienst die je zoekt. Wat nu?',
+    'request_access_instructions_text' => 'Wil je toch graag toegang tot deze dienst, vul dan het onderstaande formulier in.
+                                   Wij sturen je verzoek door naar de juiste persoon binnen jouw %organisationNoun%.',
     'name'                  => 'Naam',
     'name_error'            => 'Vul je naam in',
     'email'                 => 'E-mail',

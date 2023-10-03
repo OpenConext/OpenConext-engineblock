@@ -479,7 +479,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
                 'serviceProvider' => $serviceProvider,
                 'idpList' => $idpList,
                 'cookies' => $cookies,
-                'beforeScriptHtml' => '<div id="request-access-scroller"><div id="request-access-container"><div id="request-access"></div></div></div>',
+                'showRequestAccessContainer' => true,
             ]
         );
         $this->_server->sendOutput($output);
