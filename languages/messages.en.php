@@ -141,7 +141,7 @@ HTML
     'slidein_read_more' => 'Read more',
 
     // Error screens
-    'error_feedback_info_intro' => '<span class="heading@small">Does this error message recur?</span> Use the resources below to get help. When contacting the service desk, please include the following codes:',
+    'error_feedback_info_intro' => 'Does this error message recur? Use the resources below to get help. When contacting the service desk, please include the following codes:',
     'error_wiki-href' => 'https://nl.wikipedia.org/wiki/SURFnet',
     'error_wiki-link-text' => '%suiteName% Wiki',
     'error_wiki-link-text-short' => 'Wiki',

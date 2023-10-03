@@ -140,7 +140,7 @@ HTML
     'slidein_read_more' => 'Lees meer',
 
     // Error screens
-    'error_feedback_info_intro' => '<span class="heading@small">Blijft deze foutmelding terugkomen?</span> Maak dan gebruik van de hieronder vermelde hulpopties. Vermeld bij contact met de helpdesk de onderstaande codes:',
+    'error_feedback_info_intro' => 'Blijft deze foutmelding terugkomen? Maak dan gebruik van de hieronder vermelde hulpopties. Vermeld bij contact met de helpdesk de onderstaande codes:',
     'error_wiki-href' => 'https://nl.wikipedia.org/wiki/SURFnet',
     'error_wiki-link-text' => '%suiteName% Wiki',
     'error_wiki-link-text-short' => 'Wiki',
