@@ -11,7 +11,9 @@
     <h1>Logout</h1>
     {% include '@theme/Authentication/View/Proxy/site-notice.html.twig' with { className: 'full-width' } %}
     <p>{{ 'logout_description'|trans }}</p>
-    <p><a href="{{ 'logout_information_link_target'|trans }}">{{ 'logout_information_link_text'|trans }}</a></p>
+    {% if 'logout_information_link_text'|trans %}
+        <p><a href="{{ 'logout_information_link_target'|trans }}">{{ 'logout_information_link_text'|trans }}</a></p>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
