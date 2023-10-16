@@ -28,6 +28,7 @@
         </p>
         <form id="ProcessForm" method="post" action="{{ action }}">
             <input type="hidden" name="{{ name }}" value="{{ message }}">
+            {{ xtra|raw }}
             <noscript>
                 <p>
                     <strong>{{ 'note'|trans }}:</strong>
