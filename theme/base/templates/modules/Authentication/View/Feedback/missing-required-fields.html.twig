@@ -6,6 +6,7 @@
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
 {% block errorMessage %}
+    <p>
     {% if withIdpName and withSpName %}
         {{ 'error_missing_required_fields_desc'|trans({'%idpName%': feedbackInfoMap['identityProviderName'], '%spName%': feedbackInfoMap['serviceProviderName']}) }}
     {% elseif withIdpName %}
@@ -15,6 +16,7 @@
     {% else %}
         {{ 'error_missing_required_fields_desc_no_name'|trans }}
     {% endif %}
+    </p>
 
     <p>
         <ul>

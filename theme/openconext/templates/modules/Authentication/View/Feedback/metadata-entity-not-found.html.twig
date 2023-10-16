@@ -5,4 +5,4 @@
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
-{% block errorMessage %}<p>{{ 'error_metadata_entity_id_not_found_desc'|trans({'%message%': message}) }}</p>{% endblock %}
+{% block errorMessage %}{{ 'error_metadata_entity_id_not_found_desc'|trans({'%message%': message}) }}{% endblock %}
