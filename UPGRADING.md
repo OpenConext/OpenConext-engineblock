@@ -1,5 +1,19 @@
 # UPGRADE NOTES
 
+## 6.12 -> 6.13
+
+Some translatable strings have been changed and "raw" use of HTML in
+translations mostly reduced.
+
+If you override translation strings, the following strings have been
+replaced:
+
+* `serviceprovider_link`, `terms_of_service_link` and `logout_information_link`. They are now replaced by separate `serviceprovider_link_text` (the words) and `serviceprovider_link_target` (the URL to link to), same for the other variants.
+* `request_access_instructions` is split into `request_access_instructions_head` (the heading line) and `request_access_instructions_text` (the body text).
+
+If you've overridden other translatable strings, note that use of HTML may not be possible
+anymore where it was before, and you would need to remove it.
+
 ## 6.7 -> 6.8
 The consent removal feature was introduced in release 6.8. This means that consent that is deleted from the profile
 application will result in the soft deletion of the consent row for that person, for the service they requested the

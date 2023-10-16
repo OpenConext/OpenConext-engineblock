@@ -5,6 +5,14 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.13.0
+
+* Move most HTML from translatable strings into Twig templates, where it
+  belongs. This makes the code more robust and predictable, and reduces
+  the chances of cross site scripting injections. Some translatable strings
+  were changed, see upgrade notes.
+* Install a NPM package update.
+
 ## 6.12.2
 
 * Add optional configurable environment-specific ribbon to top-right of UI.
