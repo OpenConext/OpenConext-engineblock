@@ -29,3 +29,9 @@ Feature:
     And I should see "test"
     And I should see "urn:mace:terena.org:attribute-def:schacHomeOrganization"
     And I should see "engine-test-stand.openconext.org"
+
+  Scenario: A debug AuthnRequest should force the user to relogin
+    When I go to Engineblock URL "/authentication/sp/debug"
+    And I select "Second-IdP" on the WAYF
+    And I pass through EngineBlock
+    Then the received AuthnRequest should match xpath '/samlp:AuthnRequest[@ForceAuthn="true"]'
