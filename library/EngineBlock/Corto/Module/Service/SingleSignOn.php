@@ -375,6 +375,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         $issuer = new Issuer();
         $issuer->setValue($this->_server->getUrl('spMetadataService'));
         $sspRequest->setIssuer($issuer);
+        $sspRequest->setForceAuthn(true);
 
         $request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
         $request->setDebug();
