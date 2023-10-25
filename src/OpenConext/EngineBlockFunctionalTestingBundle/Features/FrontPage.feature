@@ -13,6 +13,7 @@ Feature:
     Then I should see 8 links on the front page
      And I should see text matching "The Public SAML Signing certificate of the OpenConext IdP"
      And I should see URL "/authentication/idp/certificate"
+     # The default key should not get a separate URL next to the key-less url
      And I should not see URL "/authentication/idp/certificate/key:default"
      And I should see text matching "The Public SAML metadata \(the entity descriptor\) of the OpenConext IdP Proxy"
      And I should see URL "/authentication/idp/metadata"
@@ -28,14 +29,15 @@ Feature:
      And I should see URL "/authentication/sp/debug"
      And I should see text matching "The Public SAML Signing certificate of the OpenConext SP"
      And I should see URL "/authentication/sp/certificate"
-     And I should not see URL "/authentication/sp/certificate/key:default"
+     # The key:-variants should only be shown for the IdP metadata feeds
+     And I should not see URL "/authentication/sp/certificate/key:"
      And I should see text matching "The Public SAML metadata \(the entity descriptor\) of the OpenConext SP Proxy"
      And I should see URL "/authentication/sp/metadata"
-     And I should not see URL "/authentication/sp/metadata/key:default"
+     And I should not see URL "/authentication/sp/metadata/key:"
      And I should see text matching "Step-up authentication Certificate and Metadata"
      And I should see text matching "The Public SAML metadata \(the entity descriptor\) of the OpenConext step-up authentication Proxy"
      And I should see URL "/authentication/stepup/metadata"
-     And I should not see URL "/authentication/stepup/metadata/key:default"
+     And I should not see URL "/authentication/stepup/metadata/key:"
      # eduGAIN metadata is no longer created by EngineBlock
      And I should not see text matching "eduGAIN"
      # IdP / SP metadata combination (for Shiboleth entities) is no longer supported
