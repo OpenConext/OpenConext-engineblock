@@ -20,6 +20,7 @@ bin/ignore_me.php
 .idea
 local-php-security-checker
 /tests/e2e/node_modules
+/tests/.phpunit.result.cache
 /languages/overrides.*.php
 /theme/node_modules
 /theme/.sass-cache

@@ -1,12 +1,12 @@
 parameters:
-    engineblock.functional_testing.service_registry_data_store.dir:           "%kernel.root_dir%/../tmp/eb-fixtures/metadata-push/"
-    engineblock.functional_testing.service_registry_data_store.file:          "%kernel.root_dir%/../tmp/eb-fixtures/metadata-push/entities"
-    engineblock.functional_testing.features_data_store.file:                  "%kernel.root_dir%/../tmp/eb-fixtures/features.json"
-    engineblock.functional_testing.authentication_loop_guard_data_store.file: "%kernel.root_dir%/../tmp/eb-fixtures/authentication-loop-guard.json"
-    engineblock.functional_testing.pdp_data_store.file:                       "%kernel.root_dir%/../tmp/eb-fixtures/policy_decision.json"
-    engineblock.functional_testing.attribute_aggregation_data_store.file:     "%kernel.root_dir%/../tmp/eb-fixtures/attribute_aggregation.json"
-    engineblock.functional_testing.stepup_gateway_mock_data_store.file:       "%kernel.root_dir%/../tmp/eb-fixtures/stepup_gateway_mock.json"
-    engineblock.functional_testing.translator_mock_data_store.file:           "%kernel.root_dir%/../tmp/eb-fixtures/translator_mock.json"
+    engineblock.functional_testing.service_registry_data_store.dir:           "/tmp/eb-fixtures/metadata-push/"
+    engineblock.functional_testing.service_registry_data_store.file:          "/tmp/eb-fixtures/metadata-push/entities"
+    engineblock.functional_testing.features_data_store.file:                  "/tmp/eb-fixtures/features.json"
+    engineblock.functional_testing.authentication_loop_guard_data_store.file: "/tmp/eb-fixtures/authentication-loop-guard.json"
+    engineblock.functional_testing.pdp_data_store.file:                       "/tmp/eb-fixtures/policy_decision.json"
+    engineblock.functional_testing.attribute_aggregation_data_store.file:     "/tmp/eb-fixtures/attribute_aggregation.json"
+    engineblock.functional_testing.stepup_gateway_mock_data_store.file:       "/tmp/eb-fixtures/stepup_gateway_mock.json"
+    engineblock.functional_testing.translator_mock_data_store.file:           "/tmp/eb-fixtures/translator_mock.json"
 
 services:
     engineblock.functional_testing.service.engine_block:
@@ -109,3 +109,13 @@ services:
         class: OpenConext\EngineBlockBundle\Configuration\ErrorFeedbackConfiguration
         arguments:
             - "@engineblock.functional_testing.mock.translator"
+
+    engineblock.factory.service_provider_factory:
+        class: OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory
+        arguments:
+            - '@engineblock.compat.metadata.definitions'
+            - '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory'
+            - '@OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration'
+            - '@engineblock.url_provider'
+            - '@engineblock.functional_testing.fixture.features'
+            - '%stepup.sfo.override_engine_entityid%'

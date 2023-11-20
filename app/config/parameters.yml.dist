@@ -223,6 +223,7 @@ parameters:
     feature_run_all_manipulations_prior_to_consent: false
     feature_block_user_on_violation: false
     feature_enable_consent: true
+    feature_stepup_sfo_override_engine_entityid: false
 
     ##########################################################################################
     ## PROFILE SETTINGS
@@ -261,6 +262,7 @@ parameters:
     stepup.gateway.sfo.sso_location: 'https://gateway.stepup.vm.openconext.org/second-factor-only/single-sign-on'
     ## The public key from the Stepup Gateway IdP
     stepup.gateway.sfo.key_file: /etc/openconext/engineblock.crt
+    stepup.sfo.override_engine_entityid: 'https://engine.vm.openconext.com/new/stepup/metadata'
 
     ##########################################################################################
     ## THEME SETTINGS

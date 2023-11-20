@@ -18,14 +18,11 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ExpectationException;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
-use Ingenerator\BehatTableAssert\AssertTable;
-use Ingenerator\BehatTableAssert\TableParser\HTMLTable;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration;
@@ -39,10 +36,6 @@ use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RuntimeException;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use function assertStringNotMatchesFormat;
-use function assertStringStartsWith;
-use function preg_match;
-use function sprintf;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Both set up and tasks can be a lot...

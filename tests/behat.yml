@@ -87,4 +87,3 @@ default:
                                     - "--no-sandbox"
                                     - "--disable-dev-shm-usage"
         Behat\Symfony2Extension: ~
-
