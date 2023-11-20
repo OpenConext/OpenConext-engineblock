@@ -129,6 +129,8 @@ services:
             - '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory'
             - '@OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration'
             - '@engineblock.url_provider'
+            - '@engineblock.features'
+            - '%stepup.sfo.override_engine_entityid%'
 
     OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration:
         public: false

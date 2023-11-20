@@ -48,6 +48,7 @@ monolog:
             activation_strategy: engineblock.logger.manual_or_error_activation_strategy
             passthru_level: "%logger.fingers_crossed.passthru_level%"
             handler: file
+            channels: ['!event']
         file:
             type:   stream
             path:   "%kernel.logs_dir%/%kernel.environment%.log"

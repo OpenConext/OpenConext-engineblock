@@ -27,6 +27,8 @@ open_conext_engine_block:
         eb.enable_sso_notification: "%feature_enable_sso_notification%"
         eb.feature_enable_consent: "%feature_enable_consent%"
         eb.enable_sso_session_cookie: "%feature_enable_sso_session_cookie%"
+        eb.stepup.sfo.override_engine_entityid: "%feature_stepup_sfo_override_engine_entityid%"
+
 
 swiftmailer:
     transport: "%mailer_transport%"

@@ -1,5 +1,24 @@
 # UPGRADE NOTES
 
+## 6.13 -> 6.14
+Previously the SAML EntityID of the EngineBlock SP that was used to do Stepup (SFO) authentications to the Stepup-Gateway 
+always was https://<engineblock.sever.domain.name>/authentication/stepup/metadata. For these authentication the default
+EngineBlock key is always used for signing.
+
+If you'd like to key-rollover the StepUp entity (baked into EngineBlock).
+The key used to sign the SAML AuthnRequests from this SP is the engineblock default key.
+
+To facilitate a rolling configuration update I want the SP entityID that is used for Stepup to be configurable so that at the same time that the engineblock default key is updated, this entityID can be changed. This then allows two entities, with two different keys, to be configured in the Stepup-Gateway.
+
+There are two new parameters that configure this behavior.
+
+1. `feature_stepup_sfo_override_engine_entityid` [bool] enables/disables the feature. Default: disabled
+2. `stepup.sfo.override_engine_entityid` [string] should be set with the Entity ID you'd like to use for the stepup EntityId. Default: ''
+
+The feature flag was added mainly to aid our test suite to easily test this feature.
+
+By default this feature is disabled and the default Entity Id is used for the StepUp entity.
+
 ## 6.12 -> 6.13
 
 Some translatable strings have been changed and "raw" use of HTML in
