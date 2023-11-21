@@ -42,7 +42,7 @@ final class FunctionalTestingFeatureConfiguration implements FeatureConfiguratio
      */
     private $dataStore;
 
-    public function __construct(TestFeatureConfiguration $featureConfiguration, AbstractDataStore $dataStore)
+    public function __construct(FeatureConfigurationInterface $featureConfiguration, AbstractDataStore $dataStore)
     {
         $this->featureConfiguration = $featureConfiguration;
         $this->dataStore            = $dataStore;
