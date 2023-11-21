@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlock\Exception\MissingParameterException;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
@@ -486,6 +487,32 @@ class EngineBlock_Corto_ProxyServer
         $nameIdOverwrite->setValue($nameId->getValue());
         $nameIdOverwrite->setFormat(Constants::NAMEID_UNSPECIFIED);
         $sspMessage->setNameId($nameIdOverwrite);
+
+        // See: UPGRADING.md -> ## 6.13 -> 6.14
+        $container = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $entityIdOverrideValue = $container->getStepupEntityIdOverrideValue();
+        $features = $container->getFeatureConfiguration();
+        $isConfigured = $features->hasFeature('eb.stepup.sfo.override_engine_entityid');
+        $isEnabled = $features->isEnabled('eb.stepup.sfo.override_engine_entityid');
+
+        if ($isEnabled && $isConfigured) {
+            if (empty($entityIdOverrideValue)) {
+                throw new MissingParameterException(
+                    'When feature "feature_stepup_sfo_override_engine_entityid" is enabled,
+                     you must provide the "stepup.sfo.override_engine_entityid" parameter.'
+                );
+            }
+            $this->_logger->notice(
+                sprintf(
+                    'Feature eb.stepup.sfo.override_engine_entityid is enabled, overriding the Issuer of the AR to the ' .
+                    'StepUp Gateway. Updated the Issuer to "%s"',
+                    $entityIdOverrideValue
+                )
+            );
+            $issuer = new Issuer();
+            $issuer->setValue($entityIdOverrideValue);
+            $sspMessage->setIssuer($issuer);
+        }
 
         // Link with the original Request
         $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_logger);

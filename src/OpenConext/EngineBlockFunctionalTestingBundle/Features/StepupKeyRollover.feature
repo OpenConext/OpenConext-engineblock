@@ -25,11 +25,19 @@ Feature:
     When I go to Engineblock URL "/authentication/stepup/metadata"
     Then the response should match xpath '//md:EntityDescriptor[@entityID="https://engine.vm.openconext.com/new/stepup/metadata"]'
 
+  # Note that we can not ascertain programatically if the Issuer is updated as this is an internal
+  # redirect response where we can not easily intervene with the browser (we would need to disable
+  # auto-following of redirects). This test does hit the code, and proves that the authentication
+  # is not broken by it.
   Scenario: When stepup.sfo.override_engine_entityid is configured, the the Issuer is updated
-    Given the SP "SSO-SP" requires Stepup LoA "http://vm.openconext.org/assurance/loa2"
-    And feature "eb.stepup.sfo.override_engine_entityid" is enabled
+    Given feature "eb.stepup.sfo.override_engine_entityid" is enabled
+    And the SP "SSO-SP" requires Stepup LoA "http://vm.openconext.org/assurance/loa2"
     When I log in at "SSO-SP"
     And I select "SSO-IdP" on the WAYF
-    Then the response should match xpath '//md:EntityDescriptor[@entityID="https://engine.vm.openconext.com/new/stepup/metadata"]'
-
-
+    And I pass through EngineBlock
+    # This is where the Issuer is overridden. See: \EngineBlock_Corto_ProxyServer::sendStepupAuthenticationRequest
+    And I pass through the IdP
+    And Stepup will successfully verify a user
+    And I give my consent
+    And I pass through EngineBlock
+    Then the url should match "/functional-testing/SSO-SP/acs"

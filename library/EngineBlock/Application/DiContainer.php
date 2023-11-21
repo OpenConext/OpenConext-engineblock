@@ -17,7 +17,7 @@
  */
 
 use Doctrine\ORM\EntityManager;
-use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactor;
+use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\LoaRepository;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlock\Service\MfaHelperInterface;
@@ -519,6 +519,12 @@ class EngineBlock_Application_DiContainer extends Pimple
     protected function getStepupEndpoint()
     {
         return $this->container->get('engineblock.configuration.stepup.endpoint');
+    }
+
+    /** @return string */
+    public function getStepupEntityIdOverrideValue()
+    {
+        return $this->container->getParameter('stepup.sfo.override_engine_entityid');
     }
 
     public function getCookieDomain()

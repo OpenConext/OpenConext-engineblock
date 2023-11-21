@@ -35,6 +35,7 @@ use OpenConext\EngineBlockBundle\Url\UrlProvider;
 /**
  * This factory is used for instantiating an entity with the required adapters and/or decorators set.
  * It also makes sure that static, internally used, entities can be generated without the use of the database.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ServiceProviderFactory
 {
@@ -108,7 +109,10 @@ class ServiceProviderFactory
 
         if ($isEnabled && $isConfigured) {
             if (empty($this->entityIdOverrideValue)) {
-                throw new MissingParameterException('When feature "feature_stepup_sfo_override_engine_entityid" is enabled, you must provide the "stepup.sfo.override_engine_entityid" parameter.');
+                throw new MissingParameterException(
+                    'When feature "feature_stepup_sfo_override_engine_entityid" is enabled, you must provide the '.
+                    '"stepup.sfo.override_engine_entityid" parameter.'
+                );
             }
             $entityId = $this->entityIdOverrideValue;
         }

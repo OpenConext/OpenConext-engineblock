@@ -18,7 +18,6 @@
 namespace OpenConext\EngineBlock\Stepup;
 
 use EngineBlock_X509_CertificateFactory;
-use OpenConext\EngineBlock\Metadata\EmptyMduiElement;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\IndexedService;
@@ -29,7 +28,6 @@ use SAML2\Constants;
 
 class StepupEntityFactory
 {
-
     /**
      * @throws \EngineBlock_Exception
      */
