@@ -11,7 +11,7 @@ Engineblock picks the highest of any LoA configured in these places to enforce.
 
 ## Engineblock metadata configuration
 ### SP
-#### metadata:coin:stepup:allow_no_token
+#### `metadata:coin:stepup:allow_no_token`
 **Type:** boolean
 
 To continue with LOA 1 if no second factor token found. This goes for all
@@ -19,14 +19,14 @@ modes of LoA requirement, also per IdP-SP and via the PDP.
 
 Note that this mode is very risky; the associated SP needs to do something with the resulting AuthnContextClassRef and take further measures based on the attained LoA level of the user.
 
-#### metadata:coin:stepup:requireloa
+#### `metadata:coin:stepup:requireloa`
 The LOA minimally required for any login to this SP.
 
 **Type:** string
 **Example value:** `http://vm.openconext.org/assurance/loa2`
 
 
-#### metadata:coin:stepup:forceauthn
+#### `metadata:coin:stepup:forceauthn`
 **Type:** boolean
 
 Set the ForceAuthn flag in the callout authentication request to the Stepup Gateway for any authentication
@@ -35,7 +35,7 @@ Sign On on the second factor for this request.
 
 
 ### IdP
-#### metadata:coin:stepup_connections
+#### `metadata:coin:stepup_connections`
 
 **Type:** object
 * name: _entityId_,
