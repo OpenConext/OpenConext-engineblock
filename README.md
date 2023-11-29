@@ -194,6 +194,10 @@ Use these URLs to test your EngineBlock instance:
 - https://engine.example.com/authentication/proxy/idps-metadata, this should present you with the proxy IdP metadata
 - https://engine-api.example.com, this should return an empty 200 OK response
 
+### Security
+
+Please see [security considerations](docs/security.md) to harden your Engineblock after installation.
+
 ## Updating
 
 It is recommended practice that you deploy engineblock in a directory that includes the version number and use a
