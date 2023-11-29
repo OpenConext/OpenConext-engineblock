@@ -221,7 +221,7 @@ parameters:
     feature_api_metadata_api: true
     feature_api_deprovision: true
     feature_run_all_manipulations_prior_to_consent: false
-    feature_block_user_on_violation: false
+    feature_block_user_on_violation: true
     feature_enable_consent: true
     feature_stepup_sfo_override_engine_entityid: false
     feature_enable_idp_initiated_flow: true
