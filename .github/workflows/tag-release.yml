@@ -55,3 +55,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           release_id: ${{ steps.create_release.outputs.id }}
+
+  after_build:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Docker container build
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: build-push-docker-image.yml
