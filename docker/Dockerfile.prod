@@ -10,4 +10,4 @@ COPY ./docker/php-fpm/apache2.conf /etc/apache2/sites-enabled/apache2.conf
 # Set the default workdir
 WORKDIR /var/www/html
 EXPOSE 80
-CMD ["apache2-foreground"]
+ENTRYPOINT ["apache2-foreground"]
