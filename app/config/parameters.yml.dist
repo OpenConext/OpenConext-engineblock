@@ -157,7 +157,7 @@ parameters:
     view_default_logo_height: 96
     # when set, will show a ribbon top-right to visually distinguish this install from other
     # environments in your constellation (e.g. "test", "qa"), with the given ribbon color in
-    # env_ribbon_color. You can choose from colors: crimson,orange,hotpink,khaki.
+    # env_ribbon_color. You can choose from colors: crimson,darkorchid,orange,hotpink,khaki.
     env_name: ""
     env_ribbon_color: ""
 
