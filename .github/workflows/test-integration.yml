@@ -35,6 +35,7 @@ jobs:
                     ./app/console cache:clear --env=ci && \
                     cd theme && CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile && EB_THEME=skeune yarn build
                 '
+
             - name: Run code quality tests
               if: always()
               run: |
