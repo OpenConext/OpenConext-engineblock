@@ -6,10 +6,7 @@ RUN tar --strip-components=1 -xvzf /tmp/*tar.gz -C /var/www/html/ && \
 # Add the config files for Apache2
 RUN rm -rf /etc/apache2/sites-enabled/*
 COPY ./docker/conf/engine.conf /etc/apache2/sites-enabled/engine.conf
-COPY ./docker/conf/logging.yml /var/www/html/app/config/
-RUN mkdir /var/www/html/app/cache && \
-    chmod -R 777 /var/www/html/app/cache/ && \
-    chmod 777 /var/www/html/app/logs/
+COPY ./docker/conf/logging.yml /var/www/html/config/packages/
 
 # Set the default workdir
 WORKDIR /var/www/html
