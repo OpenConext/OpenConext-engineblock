@@ -11,11 +11,11 @@ parameters:
     ## from the Host header will be used) or set to match the domain
     ## setting. For example:
     ##
-    ##    domain = vm.openconext.org
-    ##    hostname = engine.vm.openconext.org
-    domain: vm.openconext.org
+    ##    domain = dev.openconext.local
+    ##    hostname = engine.dev.openconext.local
+    domain: dev.openconext.local
     ## Set a fixed hostname for OpenConext EngineBlock to use.
-    hostname: engine.vm.openconext.org
+    hostname: engine.dev.openconext.local
 
     ## Configure trusted proxies to use their X-Forwarded-For header.
     trusted_proxies:
@@ -43,8 +43,8 @@ parameters:
     ## or requests (when it acts as an SP) it uses these X.509 certs.
     encryption_keys:
         default:
-            publicFile: /etc/openconext/engineblock.crt
-            privateFile: /etc/openconext/engineblock.pem
+            publicFile: /config/engine/engineblock.crt
+            privateFile: /config/engine/engineblock.pem
 
     ## List of signature methods explicitly forbidden by EngineBlock.
     forbidden_signature_methods: {  }
@@ -84,7 +84,7 @@ parameters:
     ## PDP SETTINGS
     ##########################################################################################
     ## Location of PDP
-    pdp.host: 'https://pdp.vm.openconext.org'
+    pdp.host: 'https://pdp.dev.openconext.local'
 
     ## PDP uses basic auth
     pdp.username: pdp_admin
@@ -96,7 +96,7 @@ parameters:
     ## ATTRIBUTE AGGREGATION SETTINGS
     ##########################################################################################
     ## Location of AA
-    attribute_aggregation.base_url: 'https://aa.vm.openconext.org/aa/api/internal/attribute/aggregation'
+    attribute_aggregation.base_url: 'https://aa.dev.openconext.local/aa/api/internal/attribute/aggregation'
     attribute_aggregation.username: eb
     attribute_aggregation.password: secret
 
@@ -138,13 +138,13 @@ parameters:
     ## Minimum execution time in milliseconds when a received response is deemed invalid (default: 5000 ms)
     minimum_execution_time_on_invalid_received_response: 5000
     ## The value for guest qualifier. Can be overridden for specific environments
-    addgueststatus_guestqualifier: 'urn:collab:org:vm.openconext.org'
+    addgueststatus_guestqualifier: 'urn:collab:org:dev.openconext.local'
 
     ## Language cookie settings
     ## The value for the domain is also used for clearing SSO Notification cookies if the feature is enabled
     cookie.path: /
     cookie.secure: true
-    cookie.locale.domain: .vm.openconext.org
+    cookie.locale.domain: .dev.openconext.local
     cookie.locale.expiry: 5184000
     cookie.locale.http_only: false
     cookie.locale.secure: true
@@ -178,7 +178,7 @@ parameters:
 
     ## Toggle the default IdP quick link banner on the WAYF.
     wayf.display_default_idp_banner_on_wayf: true
-    wayf.default_idp_entity_id: https://default-idp.vm.openconext.org
+    wayf.default_idp_entity_id: https://default-idp.dev.openconext.local
 
     ## Toggle display & content of global site notice
     global.site_notice.show: false
@@ -228,7 +228,7 @@ parameters:
     ## PROFILE SETTINGS
     ##########################################################################################
     ## Location of Profile
-    profile_base_url: 'https://profile.vm.openconext.org'
+    profile_base_url: 'https://profile.dev.openconext.local'
 
     ##########################################################################################
     ## SFO SETTINGS
@@ -242,25 +242,25 @@ parameters:
     ## The engineblock or gateway keys specify the LoAs identifier as will be carried in the AuthnContextClassRef of an assertion.
     stepup.loa.mapping:
         10:
-            engineblock: 'http://vm.openconext.org/assurance/loa1'
-            gateway: 'http://stepup.vm.openconext.org/assurance/loa1'
+            engineblock: 'http://dev.openconext.local/assurance/loa1'
+            gateway: 'http://dev.openconext.local/assurance/loa1'
         15:
-            engineblock: 'http://vm.openconext.org/assurance/loa1_5'
-            gateway: 'http://stepup.vm.openconext.org/assurance/loa1_5'
+            engineblock: 'http://dev.openconext.local/assurance/loa1_5'
+            gateway: 'http://dev.openconext.local/assurance/loa1_5'
         20:
-            engineblock: 'http://vm.openconext.org/assurance/loa2'
-            gateway: 'http://stepup.vm.openconext.org/assurance/loa2'
+            engineblock: 'http://dev.openconext.local/assurance/loa2'
+            gateway: 'http://dev.openconext.local/assurance/loa2'
         30:
-            engineblock: 'http://vm.openconext.org/assurance/loa3'
-            gateway: 'http://stepup.vm.openconext.org/assurance/loa3'
+            engineblock: 'http://dev.openconext.local/assurance/loa3'
+            gateway: 'http://dev.openconext.local/assurance/loa3'
     ## The fallback LoA to return when the Stepup authentication fails but is not required
-    stepup.loa.loa1: 'http://vm.openconext.org/assurance/loa1'
+    stepup.loa.loa1: 'http://dev.openconext.local/assurance/loa1'
     ## The EntityId (metadata URL) used in the callout to the SFO endpoint of the configured Stepup Gateway
-    stepup.gateway.sfo.entity_id: 'https://gateway.stepup.vm.openconext.org/second-factor-only/metadata'
+    stepup.gateway.sfo.entity_id: 'https://gateway.dev.openconext.local/second-factor-only/metadata'
     ## The single sign-on endpoint used for Stepup Gateway SFO callouts
-    stepup.gateway.sfo.sso_location: 'https://gateway.stepup.vm.openconext.org/second-factor-only/single-sign-on'
+    stepup.gateway.sfo.sso_location: 'https://gateway.dev.openconext.local/second-factor-only/single-sign-on'
     ## The public key from the Stepup Gateway IdP
-    stepup.gateway.sfo.key_file: /etc/openconext/engineblock.crt
+    stepup.gateway.sfo.key_file: /config/engine/engineblock.crt
 
     ##########################################################################################
     ## THEME SETTINGS
