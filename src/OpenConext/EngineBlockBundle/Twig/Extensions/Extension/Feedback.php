@@ -155,15 +155,16 @@ class Feedback extends Twig_Extension
         return '';
     }
 
-    public function hasBackToSpLink()
+    public function hasBackToSpLink(): bool
     {
         $info = $this->retrieveFeedbackInfo();
+        if (!$info->has('serviceProvider') ||
+            !$info->has('identityProvider') ||
+            !$info->has('requestId')) {
+            return false;
+        }
         $response = $this->getSamlFailedResponse();
-
-        return $info->has('serviceProvider') &&
-            $info->has('identityProvider') &&
-            $info->has('requestId') &&
-            $response !== '';
+        return $response !== '';
     }
 
     public function getSpName(): ?string
