@@ -73,11 +73,14 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
      */
     public function serve($serviceName, Request $httpRequest)
     {
-        $serviceEntityId = $this->_server->getUrl('stepupMetadataService');
-        $expectedDestination = $this->_server->getUrl('stepupAssertionConsumerService');
-
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $log = $application->getLogInstance();
+
+        // EngineBlock will verify the incoming assertion's Audience which will
+        // be set to the entityID it used on the outgoing AuthNRequest, so this
+        // place will also need to handle the override if present.
+        $serviceEntityId = $this->determineRemoteSpEntityId();
+        $expectedDestination = $this->_server->getUrl('stepupAssertionConsumerService');
 
         $checkResponseSignature = true;
         try {
@@ -136,6 +139,30 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
         $this->_server->sendConsentAuthenticationRequest($receivedResponse, $receivedRequest, $nextProcessStep->getRole(), $this->getAuthenticationState());
 
         return;
+    }
+
+    /**
+     * Returns the `stepupMetadataService` if no override is defined.
+     * To define an override (for StepUp key rollover) configure:
+     * `eb.stepup.sfo.override_engine_entityid`. See UPGRADING.md (6.13 -> 6.14)
+     * for details.
+     *
+     * @return string
+     */
+    private function determineRemoteSpEntityId()
+    {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $container = $application->getDiContainer();
+        $entityIdOverrideValue = $container->getStepupEntityIdOverrideValue();
+        $features = $container->getFeatureConfiguration();
+        $isConfigured = $features->hasFeature('eb.stepup.sfo.override_engine_entityid');
+        $isEnabled = $features->isEnabled('eb.stepup.sfo.override_engine_entityid');
+
+        $serviceEntityId = $this->_server->getUrl('stepupMetadataService');
+        if ($isEnabled && $isConfigured) {
+            return $entityIdOverrideValue;
+        }
+        return $serviceEntityId;
     }
 
     /**
