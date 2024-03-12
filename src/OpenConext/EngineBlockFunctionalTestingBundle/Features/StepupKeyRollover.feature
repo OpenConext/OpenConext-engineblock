@@ -37,7 +37,7 @@ Feature:
     And I pass through EngineBlock
     # This is where the Issuer is overridden. See: \EngineBlock_Corto_ProxyServer::sendStepupAuthenticationRequest
     And I pass through the IdP
-    And Stepup will successfully verify a user
+    And Stepup will successfully verify a user with override entityID
     And I give my consent
     And I pass through EngineBlock
     Then the url should match "/functional-testing/SSO-SP/acs"

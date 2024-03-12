@@ -71,9 +71,10 @@ class MockStepupGateway
     /**
      * @param Request $request
      * @param string $fullRequestUri
+     * @param string $ebEntityId
      * @return Response
      */
-    public function handleSsoSuccess(Request $request, $fullRequestUri)
+    public function handleSsoSuccess(Request $request, $fullRequestUri, string $ebEntityId = null)
     {
         // parse the authnRequest
         $authnRequest = $this->parseRequest($request, $fullRequestUri);
@@ -89,7 +90,8 @@ class MockStepupGateway
             $nameId,
             $destination,
             $authnContextClassRef,
-            $requestId
+            $requestId,
+            $ebEntityId
         );
     }
 
@@ -144,16 +146,18 @@ class MockStepupGateway
      * @param string $destination The ACS location
      * @param string|null $authnContextClassRef The loa level
      * @param string $requestId The requestId
+     * @param string $ebEntityId
      * @return Response
      */
-    private function createSecondFactorOnlyResponse($nameId, $destination, $authnContextClassRef, $requestId)
+    private function createSecondFactorOnlyResponse($nameId, $destination, $authnContextClassRef, $requestId, $ebEntityId)
     {
         return $this->createNewAuthnResponse(
             $this->createNewAssertion(
                 $nameId,
                 $authnContextClassRef,
                 $destination,
-                $requestId
+                $requestId,
+                $ebEntityId
             ),
             $destination,
             $requestId
@@ -320,9 +324,10 @@ class MockStepupGateway
      * @param string $authnContextClassRef
      * @param string $destination The ACS location
      * @param string $requestId The requestId
+     * @param string $audience
      * @return Assertion
      */
-    private function createNewAssertion($nameId, $authnContextClassRef, $destination, $requestId)
+    private function createNewAssertion($nameId, $authnContextClassRef, $destination, $requestId, $audience)
     {
         $newAssertion = new Assertion();
         $newAssertion->setNotBefore($this->currentTime->getTimestamp());
@@ -337,7 +342,7 @@ class MockStepupGateway
         $newNameId->setValue($nameId);
         $newNameId->setFormat(Constants::NAMEID_UNSPECIFIED);
         $newAssertion->setNameId($newNameId);
-        $newAssertion->setValidAudiences([$this->gatewayConfiguration->getServiceProviderEntityId()]);
+        $newAssertion->setValidAudiences([$audience ?? $this->gatewayConfiguration->getServiceProviderEntityId()]);
         $this->addAuthenticationStatementTo($newAssertion, $authnContextClassRef);
 
         return $newAssertion;
