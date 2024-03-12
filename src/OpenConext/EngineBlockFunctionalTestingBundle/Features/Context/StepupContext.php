@@ -74,7 +74,7 @@ class StepupContext extends AbstractSubContext
     /**
      * @Given /^Stepup will successfully verify a user with override entityID$/
      */
-    public function stepupWillsSuccessfullyVerifyAUser()
+    public function stepupWillsSuccessfullyVerifyAUserForChangedAudience()
     {
         $mink = $this->getMinkContext();
 
