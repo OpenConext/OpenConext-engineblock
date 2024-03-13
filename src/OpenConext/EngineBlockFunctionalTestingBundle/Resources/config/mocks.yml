@@ -30,3 +30,4 @@ services:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockStepupGateway
         arguments:
             - "@engineblock.functional_testing.fixture.stepup_gateway_mock"
+            - '%stepup.sfo.override_engine_entityid%'
