@@ -6,7 +6,8 @@ We will continue to post relevant release notes on the GitHub release page. More
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
 ## 6.14.0
-* A new feature was added to allow overwriting the internal StepUp auth EntityId 
+* Support overriding StepUp EntityId #1279
+* Check for needed parameters before constructing an auth failed response. #1289
 
 ## 6.13.0
 
