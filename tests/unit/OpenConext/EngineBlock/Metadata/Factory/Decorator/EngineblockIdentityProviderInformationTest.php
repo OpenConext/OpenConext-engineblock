@@ -31,34 +31,17 @@ class EngineblockIdentityProviderInformationTest extends AbstractEntityTest
         $adapter = $this->createIdentityProviderAdapter();
 
         $translator = $this->createMock(TranslatorInterface::class);
-        $translator->expects($this->at(0))
-            ->method('trans')
-            ->with('suite_name')
-            ->willReturn('test-suite');
 
-        $translator->expects($this->at(1))
-            ->method('trans')
-            ->with('metadata_organization_name')
-            ->willReturn('configuredOrganizationName');
-
-        $translator->expects($this->at(2))
-            ->method('trans')
-            ->with('metadata_organization_displayname')
-            ->willReturn('configuredOrganizationDisplayName');
-
-        $translator->expects($this->at(3))
-            ->method('trans')
-            ->with('metadata_organization_url')
-            ->willReturn('configuredOrganizationUrl');
+        $this->setTranslationExpectancies($translator);
 
         $configuration = new EngineBlockConfiguration(
             $translator,
-        'configuredSupportMail',
-        'configuredDescription',
-        'example.org',
-        '/configuredLogoUrl',
-        1209,
-        1009
+            'configuredSupportMail',
+            'configuredDescription',
+            'example.org',
+            '/configuredLogoUrl',
+            1209,
+            1009
         );
 
         $decorator = new EngineBlockIdentityProviderInformation($adapter, $configuration);

@@ -18,11 +18,9 @@
 namespace OpenConext\EngineBlock\Metadata\Factory\Factory;
 
 use EngineBlock_Attributes_Metadata as AttributesMetadata;
-use Mockery\Mock;
 use OpenConext\EngineBlock\Exception\MissingParameterException;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
-use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
@@ -114,25 +112,7 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
 
     public function test_eb_properties()
     {
-        $this->translator->expects($this->at(0))
-            ->method('trans')
-            ->with('suite_name')
-            ->willReturn('test-suite');
-
-        $this->translator->expects($this->at(1))
-            ->method('trans')
-            ->with('metadata_organization_name')
-            ->willReturn('configuredOrganizationName');
-
-        $this->translator->expects($this->at(2))
-            ->method('trans')
-            ->with('metadata_organization_displayname')
-            ->willReturn('configuredOrganizationDisplayName');
-
-        $this->translator->expects($this->at(3))
-            ->method('trans')
-            ->with('metadata_organization_url')
-            ->willReturn('configuredOrganizationUrl');
+        $this->setTranslationExpectancies($this->translator);
 
         $this->configuration = new EngineBlockConfiguration(
             $this->translator,
@@ -294,16 +274,6 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
             ->method('trans')
             ->with('metadata_organization_name')
             ->willReturn('configuredOrganizationName');
-
-        $this->translator->expects($this->at(2))
-            ->method('trans')
-            ->with('metadata_organization_displayname')
-            ->willReturn('configuredOrganizationDisplayName');
-
-        $this->translator->expects($this->at(3))
-            ->method('trans')
-            ->with('metadata_organization_url')
-            ->willReturn('configuredOrganizationUrl');
 
         $this->configuration = new EngineBlockConfiguration(
             $this->translator,
