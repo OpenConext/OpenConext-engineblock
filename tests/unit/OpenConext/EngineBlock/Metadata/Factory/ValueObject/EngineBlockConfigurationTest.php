@@ -44,15 +44,20 @@ class EngineBlockConfigurationTest extends TestCase
             ->andReturn($suitName);
         $translator
             ->shouldReceive('trans')
+            ->with('metadata_organization_name', [], null, 'en')->once()
+            ->andReturn($orgName);
+        $translator
+            ->shouldReceive('trans')
             ->with('metadata_organization_name')->once()
             ->andReturn($orgName);
         $translator
             ->shouldReceive('trans')
-            ->with('metadata_organization_displayname')->once()
+            ->with('metadata_organization_displayname', [], null, 'en')->once()
             ->andReturn($orgDisplayName);
+
         $translator
             ->shouldReceive('trans')
-            ->with('metadata_organization_url')->once()
+            ->with('metadata_organization_url', [], null, 'en')->once()
             ->andReturn($orgUrl);
 
         $mail = 'mail@example.org';
@@ -98,9 +103,10 @@ class EngineBlockConfigurationTest extends TestCase
         $this->assertEquals($width, $configuration->getLogo()->width);
         $this->assertEquals($height, $configuration->getLogo()->height);
 
-        $this->assertInstanceOf(Organization::class, $configuration->getOrganization());
-        $this->assertEquals($orgUrl, $configuration->getOrganization()->url);
-        $this->assertEquals($orgName, $configuration->getOrganization()->name);
-        $this->assertEquals($orgDisplayName, $configuration->getOrganization()->displayName);
+        $organization = $configuration->getOrganization('en');
+        $this->assertInstanceOf(Organization::class, $organization);
+        $this->assertEquals($orgUrl, $organization->url);
+        $this->assertEquals($orgName, $organization->name);
+        $this->assertEquals($orgDisplayName, $organization->displayName);
     }
 }
