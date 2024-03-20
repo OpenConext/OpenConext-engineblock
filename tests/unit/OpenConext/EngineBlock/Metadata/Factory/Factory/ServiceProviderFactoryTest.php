@@ -126,10 +126,15 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
 
         $this->translator->expects($this->at(2))
             ->method('trans')
+            ->with('metadata_organization_name')
+            ->willReturn('configuredOrganizationName');
+
+        $this->translator->expects($this->at(3))
+            ->method('trans')
             ->with('metadata_organization_displayname')
             ->willReturn('configuredOrganizationDisplayName');
 
-        $this->translator->expects($this->at(3))
+        $this->translator->expects($this->at(4))
             ->method('trans')
             ->with('metadata_organization_url')
             ->willReturn('configuredOrganizationUrl');
@@ -294,16 +299,6 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
             ->method('trans')
             ->with('metadata_organization_name')
             ->willReturn('configuredOrganizationName');
-
-        $this->translator->expects($this->at(2))
-            ->method('trans')
-            ->with('metadata_organization_displayname')
-            ->willReturn('configuredOrganizationDisplayName');
-
-        $this->translator->expects($this->at(3))
-            ->method('trans')
-            ->with('metadata_organization_url')
-            ->willReturn('configuredOrganizationUrl');
 
         $this->configuration = new EngineBlockConfiguration(
             $this->translator,
