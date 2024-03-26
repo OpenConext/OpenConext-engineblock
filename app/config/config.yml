@@ -30,31 +30,22 @@ open_conext_engine_block:
         eb.stepup.sfo.override_engine_entityid: "%feature_stepup_sfo_override_engine_entityid%"
 
 
-swiftmailer:
-    transport: "%mailer_transport%"
-    host: "%mailer_host%"
-    port: "%mailer_port%"
-    username: "%mailer_user%"
-    password: "%mailer_password%"
-
 framework:
     esi:             false
     translator:
         fallbacks: ["%locale%"]
         paths:
-          - '%kernel.root_dir%/../languages'
-          - '%kernel.root_dir%/../theme/base/translations'
-          - '%kernel.root_dir%/../theme/%theme.name%/translations'
+          - '%kernel.project_dir%/languages'
+          - '%kernel.project_dir%/theme/base/translations'
+          - '%kernel.project_dir%/theme/%theme.name%/translations'
     secret:          "%secret%"
     router:
-        resource: "%kernel.root_dir%/config/routing.yml"
+        resource: "%kernel.project_dir%/app/config/routing.yml"
         strict_requirements: ~
     form:            ~
     csrf_protection: ~
     validation:      { enable_annotations: true }
     #serializer:      { enable_annotations: true }
-    templating:
-        engines: ['php']
     default_locale:  "%locale%"
     trusted_hosts:   ~
     session:
@@ -62,18 +53,27 @@ framework:
         handler_id:  ~
     fragments:       false
     http_method_override: true
+    mailer:
+        transports:
+            smtp: "smtp://%mailer_user%:%mailer_password%@%mailer_host%:%mailer_port%"
+    cache:
+        pools:
+            doctrine.result_cache_pool:
+                adapter: cache.adapter.apcu
+            doctrine.system_cache_pool:
+                adapter: cache.adapter.apcu
 
 # Twig Configuration
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     paths:
-        "%kernel.root_dir%/../theme/%theme.name%/templates/modules": theme
-        "%kernel.root_dir%/../theme/%theme.name%/templates/layouts": themeLayouts
-        "%kernel.root_dir%/../theme/%theme.name%/images": images
-        "%kernel.root_dir%/../theme/base/templates/modules": theme
-        "%kernel.root_dir%/../theme/base/templates/layouts": themeLayouts
-        "%kernel.root_dir%/../theme/base/images": images
+        "%kernel.project_dir%/theme/%theme.name%/templates/modules": theme
+        "%kernel.project_dir%/theme/%theme.name%/templates/layouts": themeLayouts
+        "%kernel.project_dir%/theme/%theme.name%/images": images
+        "%kernel.project_dir%/theme/base/templates/modules": theme
+        "%kernel.project_dir%/theme/base/templates/layouts": themeLayouts
+        "%kernel.project_dir%/theme/base/images": images
     globals:
         assetsVersion: "%asset_version%"
         defaultTitle: "%view_default_title%"
@@ -113,24 +113,27 @@ doctrine:
             engineblock:
                 naming_strategy: doctrine.orm.naming_strategy.underscore
                 query_cache_driver:
-                    type: apc
+                    type: service
+                    id: doctrine.system_cache_provider
                 metadata_cache_driver:
-                    type: apc
+                    type: service
+                    id: doctrine.system_cache_provider
                 result_cache_driver:
-                    type: apc
+                    type: service
+                    id: doctrine.result_cache_provider
                 connection: ~
                 mappings:
                     # An array of mappings, which may be a bundle name or something else
                     Authentication:
                         mapping:   true
                         type:      annotation
-                        dir:       "%kernel.root_dir%/../src/OpenConext/EngineBlockBundle/Authentication"
+                        dir:       "%kernel.project_dir%/src/OpenConext/EngineBlockBundle/Authentication"
                         prefix:    OpenConext\EngineBlockBundle\Authentication
                         is_bundle: false
                     Metadata:
                         mapping:   true
                         type:      annotation
-                        dir:       "%kernel.root_dir%/../src/OpenConext/EngineBlock/Metadata"
+                        dir:       "%kernel.project_dir%/src/OpenConext/EngineBlock/Metadata"
                         prefix:    OpenConext\EngineBlock\Metadata
                         is_bundle: false
                 dql:
@@ -138,7 +141,23 @@ doctrine:
                         md5: OpenConext\EngineBlockBundle\Doctrine\DqlFunction\Md5
 
 doctrine_migrations:
-    dir_name:   "%kernel.root_dir%/../database/DoctrineMigrations"
-    namespace:  OpenConext\EngineBlock\Doctrine\Migrations
-    table_name: migration_versions
-    name:       OpenConext EngineBlock Migrations
+    migrations_paths:
+        'OpenConext\EngineBlock\Doctrine\Migrations': '%kernel.project_dir%/database/DoctrineMigrations'
+    #    dir_name:   "%kernel.project_dir%/database/DoctrineMigrations"
+    #    namespace:  OpenConext\EngineBlock\Doctrine\Migrations
+    storage:
+        table_storage:
+            table_name: migration_versions
+#    name:       OpenConext EngineBlock Migrations
+
+services:
+    doctrine.result_cache_provider:
+        class: Symfony\Component\Cache\DoctrineProvider
+        public: false
+        arguments:
+            - '@doctrine.result_cache_pool'
+    doctrine.system_cache_provider:
+        class: Symfony\Component\Cache\DoctrineProvider
+        public: false
+        arguments:
+            - '@doctrine.system_cache_pool'

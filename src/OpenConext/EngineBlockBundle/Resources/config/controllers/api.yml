@@ -1,4 +1,7 @@
 services:
+    _defaults:
+        public: true
+
     engineblock.controller.api.connections:
         class: OpenConext\EngineBlockBundle\Controller\Api\ConnectionsController
         arguments:

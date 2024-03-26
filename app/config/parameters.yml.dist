@@ -36,7 +36,7 @@ parameters:
     ## * How attributes are displayed in Profile and Consent
     ## * How attributes are Normalized and Denormalized
     ## * How attributes are validated
-    attribute_definition_file_path: %kernel.project_dir%/application/configs/attributes.json
+    attribute_definition_file_path: '%kernel.project_dir%/application/configs/attributes.json'
 
     ## The Signing / Encryption keys used for the SAML2 authentication and metadata
     ## When EngineBlock signs responses (when it acts as an Idp)

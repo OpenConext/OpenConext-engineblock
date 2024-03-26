@@ -116,7 +116,7 @@ class EngineBlock_Corto_Model_Consent
      */
     protected function _getConsentDatabaseConnection()
     {
-        return $this->_databaseConnectionFactory->create();
+        return $this->_databaseConnectionFactory->getConnection();
     }
 
     protected function _getConsentUid()

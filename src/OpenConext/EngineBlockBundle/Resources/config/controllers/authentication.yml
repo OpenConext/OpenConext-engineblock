@@ -1,6 +1,7 @@
 services:
     _defaults:
         autowire: true
+        public: true
 
     engineblock.controller.authentication.service_provider:
         class: OpenConext\EngineBlockBundle\Controller\ServiceProviderController

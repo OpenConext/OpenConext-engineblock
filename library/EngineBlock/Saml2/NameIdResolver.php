@@ -264,8 +264,7 @@ class EngineBlock_Saml2_NameIdResolver
         $statement = $this->_getDb()->prepare(
             'SELECT uuid FROM service_provider_uuid WHERE service_provider_entity_id=?'
         );
-        $statement->execute(array($spEntityId));
-        $result = $statement->fetchAll();
+        $result = $statement->executeQuery(array($spEntityId))->fetchAllAssociative();
 
         if (count($result) > 1) {
             throw new EngineBlock_Exception(sprintf('Multiple SP UUIDs found? For SP: "%s"', $spEntityId));
@@ -278,7 +277,7 @@ class EngineBlock_Saml2_NameIdResolver
     {
         $this->_getDb()->prepare(
             'INSERT INTO service_provider_uuid (uuid, service_provider_entity_id) VALUES (?,?)'
-        )->execute(
+        )->executeStatement(
             array($uuid, $spEntityId)
         );
     }
@@ -288,8 +287,7 @@ class EngineBlock_Saml2_NameIdResolver
         $statement = $this->_getDb()->prepare(
             "SELECT persistent_id FROM saml_persistent_id WHERE service_provider_uuid = ? AND user_uuid = ?"
         );
-        $statement->execute(array($serviceProviderUuid, $userUuid));
-        $result = $statement->fetchAll();
+        $result = $statement->executeQuery(array($serviceProviderUuid, $userUuid))->fetchAllAssociative();
         if (count($result) > 1) {
             throw new EngineBlock_Exception(
                 sprintf(
@@ -311,7 +309,7 @@ class EngineBlock_Saml2_NameIdResolver
     {
         $this->_getDb()->prepare(
             "INSERT INTO saml_persistent_id (persistent_id, service_provider_uuid, user_uuid) VALUES (?,?,?)"
-        )->execute(
+        )->executeStatement(
             array($persistentId, $serviceProviderUuid, $userUuid)
         );
     }
@@ -324,7 +322,7 @@ class EngineBlock_Saml2_NameIdResolver
         }
 
         $factory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getDatabaseConnectionFactory();
-        $s_db = $factory->create();
+        $s_db = $factory->getConnection();
 
         return $s_db;
     }

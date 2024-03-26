@@ -22,6 +22,8 @@ use OpenConext\EngineBlockBundle\Http\Cookies\CookieFactory;
 use OpenConext\EngineBlockBundle\Localization\LocaleProvider;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 final class LocaleListener
 {
@@ -45,7 +47,7 @@ final class LocaleListener
         $this->cookieFactory = $cookieFactory;
     }
 
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();
 
@@ -54,7 +56,7 @@ final class LocaleListener
         $request->setLocale($this->localeProvider->getLocale());
     }
 
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
         $cookie = $this->cookieFactory->createCookie($this->localeProvider->getLocale());
         $event->getResponse()->headers->setCookie($cookie);

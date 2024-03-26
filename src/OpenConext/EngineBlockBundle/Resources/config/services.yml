@@ -1,4 +1,7 @@
 services:
+    _defaults:
+        public: true
+
     OpenConext\EngineBlock\Xml\:
         resource: '../../../EngineBlock/Xml'
         exclude: '../../../EngineBlock/Xml/ValueObjects'
@@ -370,3 +373,10 @@ services:
             - "@translator"
         tags:
              - { name: 'twig.extension' }
+
+    engineblock.push.voter:
+        class: OpenConext\EngineBlockBundle\Security\Voter\MetadataPushVoter
+        arguments:
+            - "@security.helper"
+        tags:
+            - { name: 'security.voter' }

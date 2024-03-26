@@ -26,8 +26,8 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $root = $treeBuilder->root('open_conext_engine_block');
+        $treeBuilder = new TreeBuilder('open_conext_engine_block');
+        $root = $treeBuilder->getRootNode();
 
         $this->appendFeatureConfiguration($root);
         $this->appendErrorFeedbackConfiguration($root);
@@ -60,16 +60,16 @@ class Configuration implements ConfigurationInterface
                                     ->isRequired()
                                     ->info('Provide a fallback wiki link that is used when a language/page combination cannot be found.')
                                     ->scalarPrototype()
-                                        ->info('Provide a URI to the default/fallback wiki page for this specific error page language combination. 
+                                        ->info('Provide a URI to the default/fallback wiki page for this specific error page language combination.
                                         Please review the example in parameter.yml.dist')
                                     ->end()
                                 ->end()
                                 ->arrayNode('specified')
                                     ->arrayPrototype()
-                                        ->info('Please specify an array of i18n language abbreviation keys, mapped to wiki links matching 
+                                        ->info('Please specify an array of i18n language abbreviation keys, mapped to wiki links matching
                                         that language. Example: [en => https://wiki.example.com/page1, pt => https://wiki.example.pt/page1].')
                                         ->scalarPrototype()
-                                            ->info('Provide a URI to the wiki page for this specific error page language combination. 
+                                            ->info('Provide a URI to the wiki page for this specific error page language combination.
                                             Please review the example in parameter.yml.dist')
                                         ->end()
                                     ->end()

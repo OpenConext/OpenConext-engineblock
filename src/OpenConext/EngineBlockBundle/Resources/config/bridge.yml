@@ -1,4 +1,7 @@
 services:
+    _defaults:
+        public: true
+
     engineblock.bridge.error_reporter:
         class: OpenConext\EngineBlockBridge\ErrorReporter
         arguments:

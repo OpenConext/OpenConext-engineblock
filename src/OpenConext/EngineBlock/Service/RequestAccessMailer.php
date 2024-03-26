@@ -20,6 +20,8 @@ namespace OpenConext\EngineBlock\Service;
 
 use Swift_Mailer;
 use Swift_Message;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\RawMessage;
 
 class RequestAccessMailer
 {
@@ -47,7 +49,7 @@ The comment was:
 TPL;
 
     /**
-     * @var Swift_Mailer
+     * @var Mailer
      */
     private $mailer;
 
@@ -57,10 +59,10 @@ TPL;
     private $requestAccessEmailAddress;
 
     /**
-     * @param Swift_Mailer $mailer
+     * @param Mailer $mailer
      * @param string $requestAccessEmailAddress
      */
-    public function __construct(Swift_Mailer $mailer, $requestAccessEmailAddress)
+    public function __construct(Mailer $mailer, $requestAccessEmailAddress)
     {
         $this->mailer = $mailer;
         $this->requestAccessEmailAddress = $requestAccessEmailAddress;
@@ -93,12 +95,13 @@ TPL;
 
         // We use the destination email address also as a From since we do
         // not have a better generic sender address available currently.
-        $message = new Swift_Message();
-        $message
-            ->setSubject($subject)
-            ->setFrom($this->requestAccessEmailAddress)
-            ->setTo($this->requestAccessEmailAddress)
-            ->setBody($body, 'text/plain');
+        $message = new RawMessage($body);
+        // @TODO: ENT-4567 fix from SwiftMailer to Mailer
+//        $message
+//            ->setSubject($subject)
+//            ->setFrom($email, $name)
+//            ->setTo($this->requestAccessEmailAddress)
+//            ->setBody($body, 'text/plain');
 
         $this->mailer->send($message);
     }
