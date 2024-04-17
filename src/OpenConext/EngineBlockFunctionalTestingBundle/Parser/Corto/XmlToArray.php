@@ -50,7 +50,7 @@ class XmlToArray
         'urn:oasis:names:tc:SAML:2.0:protocol'          => 'samlp',
         'urn:oasis:names:tc:SAML:2.0:assertion'         => 'saml',
         'urn:oasis:names:tc:SAML:2.0:metadata'          => 'md',
-        'urn:oasis:names:tc:SAML:2.0:metadata:ui'       => 'mdui',
+        'urn:oasis:names:tc:SAML:metadata:ui'           => 'mdui',
         'http://www.w3.org/2001/XMLSchema-instance'     => 'xsi',
         'http://www.w3.org/2001/XMLSchema'              => 'xs',
         'http://schemas.xmlsoap.org/soap/envelope/'     => 'SOAP-ENV',

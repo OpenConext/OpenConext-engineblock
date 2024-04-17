@@ -33,20 +33,20 @@ class EngineBlock_Corto_XmlToArray
     /**
      * @var array All namespaces used in SAML2 messages.
      */
-    protected static $_namespaces = array(
+    protected static $_namespaces = [
         'urn:oasis:names:tc:SAML:1.0:protocol'          => 'samlp',
         'urn:oasis:names:tc:SAML:1.0:assertion'         => 'saml',
         'urn:oasis:names:tc:SAML:2.0:protocol'          => 'samlp',
         'urn:oasis:names:tc:SAML:2.0:assertion'         => 'saml',
         'urn:oasis:names:tc:SAML:2.0:metadata'          => 'md',
-        'urn:oasis:names:tc:SAML:2.0:metadata:ui'       => 'mdui',
+        'urn:oasis:names:tc:SAML:metadata:ui'           => 'mdui',
         'http://www.w3.org/2001/XMLSchema-instance'     => 'xsi',
         'http://www.w3.org/2001/XMLSchema'              => 'xs',
         'http://schemas.xmlsoap.org/soap/envelope/'     => 'SOAP-ENV',
         'http://www.w3.org/2000/09/xmldsig#'            => 'ds',
         'http://www.w3.org/2001/04/xmlenc#'             => 'xenc',
         'http://www.w3.org/2001/10/xml-exc-c14n#'       => 'ec',
-    );
+    ];
 
     /**
      * @var array All XML entities which are treated as single values in Corto.
