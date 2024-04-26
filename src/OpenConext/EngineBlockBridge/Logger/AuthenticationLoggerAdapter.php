@@ -39,6 +39,21 @@ class AuthenticationLoggerAdapter
         $this->authenticationLogger = $authenticationLogger;
     }
 
+    /**
+     * @param ServiceProvider $serviceProvider
+     * @param IdentityProvider $identityProvider
+     * @param string $collabPersonId
+     * @param string|null $keyId
+     * @param array $proxiedServiceProviders
+     * @param string $originalNameId
+     * @param string|null $authnContextClassRef
+     * @param string|null $engineSsoEndpointUsed
+     * @param array|null $requestedIdPlist
+     * @param array $logAttributes
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
     public function logLogin(
         ServiceProvider $serviceProvider,
         IdentityProvider $identityProvider,
@@ -48,7 +63,8 @@ class AuthenticationLoggerAdapter
         string $originalNameId,
         ?string $authnContextClassRef,
         ?string $engineSsoEndpointUsed,
-        ?array $requestedIdPlist
+        ?array $requestedIdPlist,
+        array $logAttributes = []
     ) {
         $keyId = $keyId ? new KeyId($keyId) : null;
 
@@ -69,7 +85,8 @@ class AuthenticationLoggerAdapter
             $authnContextClassRef,
             $engineSsoEndpointUsed,
             $requestedIdPlist,
-            $keyId
+            $keyId,
+            $logAttributes
         );
     }
 }
