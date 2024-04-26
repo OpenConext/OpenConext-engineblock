@@ -555,4 +555,12 @@ class EngineBlock_Application_DiContainer extends Pimple
     {
         return $this->container->get('engineblock.service.sso_notification');
     }
+
+    /**
+     * @return array
+     */
+    public function getAuthLogAttributes()
+    {
+        return $this->container->getParameter('auth.log.attributes');
+    }
 }

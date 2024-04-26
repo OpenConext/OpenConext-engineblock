@@ -87,7 +87,7 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             new EngineBlock_Corto_Filter_Command_DenormalizeAttributes(),
 
             // Log the login
-            new EngineBlock_Corto_Filter_Command_LogLogin($diContainer->getAuthenticationLogger()),
+            new EngineBlock_Corto_Filter_Command_LogLogin($diContainer->getAuthenticationLogger(), $diContainer->getAuthLogAttributes()),
         );
     }
 }
