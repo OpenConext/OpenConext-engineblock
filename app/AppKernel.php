@@ -13,11 +13,6 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
-//            new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
-
-            // Sensio helpers
-//            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-//            new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle(),
 
             // Doctrine integration
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),

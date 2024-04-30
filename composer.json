@@ -30,7 +30,6 @@
         "pimple/pimple": "~2.1",
         "ramsey/uuid": "^3.3.0",
         "simplesamlphp/saml2": "^4.1",
-        "swiftmailer/swiftmailer": "^5.4",
         "symfony/twig-bundle": "v5.4.19",
         "symfony/monolog-bundle": "v3.8.0",
         "symfony/security-bundle": "v5.4.20",
