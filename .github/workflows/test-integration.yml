@@ -3,6 +3,7 @@ on:
     push:
         branches:
             - master
+            - symfony_upgrade_5_4
     pull_request:
     # run at 6 hour UTC
     schedule:
