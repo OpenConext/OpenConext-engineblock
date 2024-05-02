@@ -22,5 +22,4 @@ require_once realpath(__DIR__) . '/../app/autoload.php';
 require_once realpath(__DIR__) . '/../app/AppKernel.php';
 
 $kernel = new AppKernel('test', true);
-$kernel->loadClassCache();
 $kernel->boot();

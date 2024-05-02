@@ -19,7 +19,7 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Controllers;
 
 use OpenConext\EngineBlockFunctionalTestingBundle\Helper\TestEntitySeeder;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -29,7 +29,7 @@ use Twig_Environment;
  * @package OpenConext\EngineBlockFunctionalTestingBundle\Controllers
  * @SuppressWarnings("PMD")
  */
-class WayfController extends Controller
+class WayfController extends AbstractController
 {
     private $twig;
 

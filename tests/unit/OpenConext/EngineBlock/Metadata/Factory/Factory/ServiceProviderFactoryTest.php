@@ -39,7 +39,7 @@ use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ServiceProviderFactoryTest extends AbstractEntityTest
 {

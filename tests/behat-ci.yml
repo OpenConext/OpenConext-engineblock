@@ -68,12 +68,7 @@ default:
     extensions:
         Behat\MinkExtension:
             base_url: https://engine.vm.openconext.org/
-            goutte: ~
             sessions:
-                default:
-                    goutte:
-                        guzzle_parameters:
-                            verify: false
                 chrome:
                     selenium2:
                         browser: chrome

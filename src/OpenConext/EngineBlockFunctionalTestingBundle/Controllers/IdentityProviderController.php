@@ -25,7 +25,7 @@ use SAML2\AuthnRequest;
 use SAML2\HTTPPost;
 use SAML2\HTTPRedirect;
 use SAML2\Utils;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,7 +35,7 @@ use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Compat\Container;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) just does a lot of manual lifting :(
  */
-class IdentityProviderController extends Controller
+class IdentityProviderController extends AbstractController
 {
     /**
      * @var EntityRegistry
