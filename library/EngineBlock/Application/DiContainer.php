@@ -286,7 +286,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getMailer()
     {
-        return $this->container->get('mailer');
+        return $this->container->get('app.mailer');
     }
 
     /**

@@ -161,3 +161,6 @@ services:
         public: false
         arguments:
             - '@doctrine.system_cache_pool'
+    app.mailer:
+        alias: Symfony\Component\Mailer\MailerInterface
+        public: true

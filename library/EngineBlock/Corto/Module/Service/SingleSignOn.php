@@ -561,8 +561,8 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         $message = new Email();
         $message
             ->subject(sprintf($emailConfiguration['subject'], $identityProvider->nameEn))
-            ->from($emailConfiguration['from']['address'], $emailConfiguration['from']['name'])
-            ->to($emailConfiguration['to']['address'], $emailConfiguration['to']['name'])
+            ->from($emailConfiguration['from']['address'])
+            ->to($emailConfiguration['to']['address'])
             ->text($output, 'text/plain');
 
         $diContainer->getMailer()->send($message);
