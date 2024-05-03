@@ -16,6 +16,8 @@
  * limitations under the License.
  */
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Statement;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -24,10 +26,25 @@ class EngineBlock_Corto_Model_Consent_Test extends TestCase
     private $consentDisabled;
     private $consent;
     private $mockedDatabaseConnection;
+    private $mockedStatement;
 
     public function setUp(): void
     {
         $this->mockedDatabaseConnection = Phake::mock('EngineBlock_Database_ConnectionFactory');
+        $dbConnection = Phake::mock(Connection::class);
+        $this->mockedStatement = Phake::mock(Statement::class);
+        Phake::when($this->mockedDatabaseConnection)
+            ->getConnection()
+            ->thenReturn($dbConnection);
+        Phake::when($dbConnection)
+            ->prepare(Phake::anyParameters())
+            ->thenReturn($this->mockedStatement);
+        Phake::when($this->mockedStatement)
+            ->execute(Phake::anyParameters())
+            ->thenReturn(true);
+        Phake::when($this->mockedStatement)
+            ->fetchAll()
+            ->thenReturn([1, 2]);
         $mockedResponse = Phake::mock('EngineBlock_Saml2_ResponseAnnotationDecorator');
 
         $this->consentDisabled = new EngineBlock_Corto_Model_Consent(
@@ -59,7 +76,7 @@ class EngineBlock_Corto_Model_Consent_Test extends TestCase
         $this->consentDisabled->giveExplicitConsentFor($serviceProvider);
         $this->consentDisabled->giveImplicitConsentFor($serviceProvider);
 
-        Phake::verify($this->mockedDatabaseConnection, Phake::times(0))->create();
+        Phake::verify($this->mockedStatement, Phake::times(0))->execute(Phake::anyParameters());
     }
 
     public function testConsentWriteToDatabase()
@@ -70,6 +87,6 @@ class EngineBlock_Corto_Model_Consent_Test extends TestCase
         $this->consent->giveExplicitConsentFor($serviceProvider);
         $this->consent->giveImplicitConsentFor($serviceProvider);
 
-        Phake::verify($this->mockedDatabaseConnection, Phake::times(4))->create();
+        Phake::verify($this->mockedStatement, Phake::times(4))->execute(Phake::anyParameters());
     }
 }

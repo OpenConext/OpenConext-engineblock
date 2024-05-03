@@ -25,6 +25,7 @@ services:
 
     engineblock.configuration.stepup.endpoint:
         class: OpenConext\EngineBlock\Stepup\StepupEndpoint
+        public: true
         arguments:
             - "%stepup.gateway.sfo.entity_id%"
             - "%stepup.gateway.sfo.sso_location%"
