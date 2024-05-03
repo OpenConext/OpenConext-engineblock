@@ -30,7 +30,7 @@ framework:
         storage_id: session.storage.mock_file
         name: MOCKSESSION
     router:
-        resource: "%kernel.project_dir%/config/routing_test.yml"
+        resource: "%kernel.project_dir%/app/config/routing_test.yml"
         strict_requirements: true
     profiler:
         collect: false
