@@ -11,7 +11,7 @@
         "source": "https://github.com/OpenConext/OpenConext-engineblock"
     },
     "require": {
-        "php": "7.4",
+        "php": "<=7.4",
         "ext-dom": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
@@ -19,7 +19,7 @@
         "beberlei/assert": "^2.6",
         "composer/package-versions-deprecated": "^1.11",
         "doctrine/annotations": "1.14.3",
-        "doctrine/dbal": "3.6.0",
+        "doctrine/dbal": "2.13.9",
         "doctrine/doctrine-migrations-bundle": "^3.2.1",
         "doctrine/orm": "2.14.1",
         "guzzlehttp/guzzle": "^6.3",
@@ -48,8 +48,8 @@
         "behat/mink": "^1.11",
         "behat/mink-browserkit-driver": "^2.2",
         "behat/mink-selenium2-driver": "^1.7",
-        "friends-of-behat/mink-extension": "^2.7",
-        "friends-of-behat/symfony-extension": "^2.4",
+        "friends-of-behat/mink-extension": "^2.5",
+        "friends-of-behat/symfony-extension": "^2.1",
         "league/flysystem": "^2.5",
         "liip/functional-test-bundle": "^4.7.0",
         "malukenho/docheader": "^0.1.8",
@@ -100,7 +100,7 @@
     "config": {
         "optimize-autoloader": true,
         "platform": {
-            "php": "7.4"
+            "php": "7.2"
         },
         "sort-packages": true,
         "allow-plugins": {

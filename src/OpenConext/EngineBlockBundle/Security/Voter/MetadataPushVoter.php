@@ -8,9 +8,12 @@ use Symfony\Component\Security\Core\Security;
 
 class MetadataPushVoter implements VoterInterface
 {
-    private const PUSH_ROLE = "ROLE_API_USER_METADATA_PUSH";
+    const PUSH_ROLE = "ROLE_API_USER_METADATA_PUSH";
 
-    private Security $security;
+    /**
+     * @var Security
+     */
+    private $security;
 
     public function __construct(Security $security)
     {
