@@ -80,7 +80,7 @@ default:
                                     - "--disable-gpu"
                                     - "--window-size=1920,1080"
                                     - "--no-sandbox"
-        Behat\Symfony2Extension:
+        FriendsOfBehat\Symfony2Extension:
             kernel:
                 env: ci
                 debug: true
