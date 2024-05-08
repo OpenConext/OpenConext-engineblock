@@ -64,16 +64,16 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
                 EngineBlock_Corto_Filter_Command_RunAttributeManipulations::TYPE_IDP
             ),
 
-            new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($logger, $blockUsersOnViolation),
+//            new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($logger, $blockUsersOnViolation),
 
-            new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($logger, $blockUsersOnViolation),
+  //          new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($logger, $blockUsersOnViolation),
 
-            new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectId($logger, $blockUsersOnViolation),
+//            new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectId($logger, $blockUsersOnViolation),
 
             // Check whether this IdP is allowed to send a response to the destination SP
             new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection(),
 
-            // Require valid UID and SchacHomeOrganization
+            // Validate attributes that are required and check scopes
             new EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes(),
 
             // Add guest status (isMemberOf)

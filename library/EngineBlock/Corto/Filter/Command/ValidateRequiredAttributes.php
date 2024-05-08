@@ -46,7 +46,7 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
         $validationResult = EngineBlock_ApplicationSingleton::getInstance()
             ->getDiContainer()
             ->getAttributeValidator()
-            ->validate($this->_responseAttributes, $excluded);
+            ->validate($this->_responseAttributes, $excluded, $this->_identityProvider);
 
         if ($validationResult->hasErrors()) {
             throw new EngineBlock_Corto_Exception_MissingRequiredFields(
