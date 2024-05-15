@@ -82,5 +82,5 @@ default:
                                     - "--no-sandbox"
         FriendsOfBehat\SymfonyExtension:
             kernel:
-                env: ci
+                environment: ci
                 debug: true
