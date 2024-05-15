@@ -31,6 +31,7 @@ class AppKernel extends Kernel
 
             // own bundles
             $bundles[] = new OpenConext\EngineBlockFunctionalTestingBundle\OpenConextEngineBlockFunctionalTestingBundle();
+            $bundles[] = new FriendsOfBehat\SymfonyExtension\Bundle\FriendsOfBehatSymfonyExtensionBundle();
         }
 
         return $bundles;
