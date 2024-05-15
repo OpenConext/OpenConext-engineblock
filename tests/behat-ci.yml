@@ -66,7 +66,7 @@ default:
             contexts: *defaultContexts
 
     extensions:
-        Behat\MinkExtension:
+        FriendsOfBehat\MinkExtension:
             base_url: https://engine.vm.openconext.org/
             sessions:
                 chrome:
@@ -80,7 +80,7 @@ default:
                                     - "--disable-gpu"
                                     - "--window-size=1920,1080"
                                     - "--no-sandbox"
-        FriendsOfBehat\Symfony2Extension:
+        FriendsOfBehat\SymfonyExtension:
             kernel:
                 env: ci
                 debug: true
