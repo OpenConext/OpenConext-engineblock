@@ -27,6 +27,7 @@ services:
             - '@engineblock.compat.doctrine.entity_manager'
 
     engineblock.functional_testing.fixture.features:
+        public: true
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration
         arguments:
             - '@engineblock.features'
