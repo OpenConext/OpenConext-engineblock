@@ -114,6 +114,7 @@ services:
             - "@engineblock.functional_testing.mock.translator"
 
     engineblock.factory.service_provider_factory:
+        public: true
         class: OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory
         arguments:
             - '@engineblock.compat.metadata.definitions'
