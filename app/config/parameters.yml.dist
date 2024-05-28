@@ -300,6 +300,6 @@ parameters:
     # parameter can be used to define a mapping of attributes that will be used to enrich the authentication log.
     # A (list) mapping is for example <attributeLabel>: <attributeName> where the label represents the label that is
     # used in the authentication log record. The attributeName will be searched in the response attributes and if present
-    # the log data will be enriched.
+    # the log data will be enriched. The values of the response attributes are the final values after ARP and Attribute Manipulation.
     auth.log.attributes: []
 
