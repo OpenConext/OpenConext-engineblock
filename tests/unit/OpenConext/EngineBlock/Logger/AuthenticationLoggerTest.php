@@ -162,7 +162,7 @@ class AuthenticationLoggerTest extends TestCase
             'authncontextclassref' => $authnContextClassRef,
             'requestedidps' => $requestedIdPs,
             'engine_sso_endpoint_used' => $ssoEndpointUsed,
-            'label' => 'attributeValue'
+            'response_attributes' => ['label' => 'attributeValue']
         ];
 
         $mockLogger = m::mock('\Psr\Log\LoggerInterface');

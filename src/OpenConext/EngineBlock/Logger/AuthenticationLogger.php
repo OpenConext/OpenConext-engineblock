@@ -79,10 +79,8 @@ class AuthenticationLogger
             'authncontextclassref' => $authnContextClassRef,
             'requestedidps' => $requestedIdPlist,
             'engine_sso_endpoint_used' => $engineSsoEndpointUsed,
+            'response_attributes' => $logAttributes
         ];
-        if (!empty($logAttributes)) {
-            $logData = array_merge($logData, $logAttributes);
-        }
 
         $this->logger->info(
             'login granted',
