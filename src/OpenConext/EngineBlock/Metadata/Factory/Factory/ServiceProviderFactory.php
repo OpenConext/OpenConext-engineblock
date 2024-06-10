@@ -53,6 +53,7 @@ class ServiceProviderFactory
      * @var EngineBlockConfiguration
      */
     private $engineBlockConfiguration;
+
     /**
      * @var UrlProvider
      */
@@ -95,7 +96,9 @@ class ServiceProviderFactory
                 new ServiceProviderEntity($entity),
                 $this->engineBlockConfiguration
             ),
-            $this->keyPairFactory->buildFromIdentifier($keyId),
+            ($keyId === KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER || $keyId === null)
+                ? $this->keyPairFactory->buildAll()
+                : [$this->keyPairFactory->buildFromIdentifier($keyId)],
             $this->attributes,
             $this->urlProvider
         );

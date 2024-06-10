@@ -30,9 +30,10 @@ use SAML2\Constants;
 class EngineBlockIdentityProvider extends AbstractIdentityProvider
 {
     /**
-     * @var X509KeyPair
+     * @var array<X509KeyPair>
      */
-    private $keyPair;
+    private array $keyPairs;
+
     /**
      * @var UrlProvider
      */
@@ -46,20 +47,23 @@ class EngineBlockIdentityProvider extends AbstractIdentityProvider
     public function __construct(
         IdentityProviderEntityInterface $entity,
         ?string $keyId,
-        X509KeyPair $keyPair,
+        array $keyPairs,
         UrlProvider $urlProvider
     ) {
         parent::__construct($entity);
         $this->keyId = $keyId;
-        $this->keyPair = $keyPair;
+        $this->keyPairs = $keyPairs;
         $this->urlProvider = $urlProvider;
     }
 
     public function getCertificates(): array
     {
-        return [
-            $this->keyPair->getCertificate(),
-        ];
+        $certificates = [];
+        foreach ($this->keyPairs as $keyPair) {
+            $certificates[] = $keyPair->getCertificate();
+        }
+
+        return $certificates;
     }
 
     public function getSupportedNameIdFormats(): array
