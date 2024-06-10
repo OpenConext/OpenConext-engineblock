@@ -131,7 +131,6 @@ class MetadataProvider
     /**
      * Generate XML metadata for the internal used stepup authentication SP
      *
-     * @param string $acsLocation
      * @param string $keyId
      * @return string
      * @throws \EngineBlock_Exception
