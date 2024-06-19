@@ -102,7 +102,7 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
                 eval($manipulationCode);
             },
             // Should an error occur, log the input, if nothing happens, then don't
-            function(EngineBlock_Exception $exception)
+            function($exception)
                 use (
                     $entityType,
                     $manipulationCode,
