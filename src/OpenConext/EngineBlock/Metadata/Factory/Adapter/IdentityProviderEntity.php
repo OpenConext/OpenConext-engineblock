@@ -126,10 +126,10 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
     }
 
     /**
-     * @param $locale
+     * @param string $locale
      * @return Organization
      */
-    public function getOrganization($locale): ?Organization
+    public function getOrganization(string $locale): ?Organization
     {
         switch (true) {
             case ($locale == 'nl'):
