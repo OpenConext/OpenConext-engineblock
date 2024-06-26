@@ -516,7 +516,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             $wayfIdp = array(
                 'Name'   => $name,
                 'Logo'      => $identityProvider->getMdui()->hasLogo() ? $identityProvider->getMdui()->getLogo()->url : '/images/placeholder.png',
-                'Keywords'  => $this->getKeywords($identityProvider),
+                'Keywords'  => $this->getKeywords($currentLocale, $identityProvider),
                 'Access'    => $isAccessible ? '1' : '0',
                 'ID'        => md5($identityProvider->entityId),
                 'EntityID'  => $identityProvider->entityId,
@@ -643,18 +643,15 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         return $identityProvider->entityId;
     }
 
-    private function getKeywords(IdentityProvider $identityProvider)
+    private function getKeywords(string $locale, IdentityProvider $identityProvider)
     {
+        if ($identityProvider->getMdui()->hasKeywords($locale)) {
+            return explode(' ', $identityProvider->getMdui()->getKeywords($locale));
+        }
+
+        // Fall back to EN if current language has no keywords
         if ($identityProvider->getMdui()->hasKeywords('en')) {
             return explode(' ', $identityProvider->getMdui()->getKeywords('en'));
-        }
-
-        if ($identityProvider->getMdui()->hasKeywords('nl')) {
-            return explode(' ', $identityProvider->getMdui()->getKeywords('nl'));
-        }
-
-        if ($identityProvider->getMdui()->hasKeywords('pt')) {
-            return explode(' ', $identityProvider->getMdui()->getKeywords('pt'));
         }
 
         return 'Undefined';
