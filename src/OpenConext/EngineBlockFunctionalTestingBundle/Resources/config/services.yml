@@ -46,6 +46,7 @@ services:
             - '@engineblock.functional_testing.data_store.authentication_loop_guard'
 
     engineblock.functional_testing.fixture.attribute_aggregation_client:
+        public: true
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient
         arguments:
             - '@engineblock.function_testing.data_store.attribute_aggregation_client'

@@ -41,8 +41,10 @@ default:
 
     extensions:
         Behat\MinkExtension:
-            base_url: ~
+            base_url: https://engine.vm.openconext.org/
             sessions:
+                default:
+                    symfony: ~
                 chrome:
                     selenium2:
                         browser: chrome

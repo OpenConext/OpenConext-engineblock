@@ -183,7 +183,6 @@ class EngineBlockContext extends AbstractSubContext
     public function iPassThroughEngineblock()
     {
         $mink = $this->getMinkContext();
-
         $mink->pressButton('Submit');
     }
 
@@ -343,14 +342,12 @@ class EngineBlockContext extends AbstractSubContext
         }
 
         $selector = '[data-entityid="' . $mockIdp->entityId() . '"] button.idp__submit';
-
         $mink = $this->getMinkContext()->getSession()->getPage();
         $button = $mink->find('css', $selector);
 
         if (!$button) {
             throw new RuntimeException(sprintf('Unable to find button with selector "%s"', $selector));
         }
-
         $button->click();
     }
 

@@ -1,13 +1,15 @@
 default:
     autoload:
         - '%paths.base%/../src/OpenConext/EngineBlockFunctionalTestingBundle/Features/Context'
-
+    calls:
+        error_reporting: 16383 # E_ALL & ~E_USER_DEPRECATED
     suites:
         default:
             paths:
                 - '%paths.base%/../src/OpenConext/EngineBlockFunctionalTestingBundle/Features'
             formatter:
                 name: progress
+
             filters:
                 tags: "~@WIP&&~@SKIP&&~@selenium"
             contexts: &defaultContexts
@@ -43,6 +45,8 @@ default:
         Behat\MinkExtension:
             base_url: https://engine.vm.openconext.org/
             sessions:
+                default:
+                    symfony: ~
                 chrome:
                     selenium2:
                         browser: chrome
@@ -58,4 +62,5 @@ default:
             kernel:
                 environment: ci
                 debug: true
+                class: 'AppKernel'
             bootstrap: tests/bootstrap.php
