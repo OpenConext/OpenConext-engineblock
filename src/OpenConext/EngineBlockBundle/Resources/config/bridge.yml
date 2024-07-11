@@ -7,7 +7,7 @@ services:
         arguments:
             - "@engineblock.compat.application"
             - "@logger"
-            - "@session"
+            - "@request_stack"
 
     engineblock.bridge.authentication_logger_adapter:
         class: OpenConext\EngineBlockBridge\Logger\AuthenticationLoggerAdapter

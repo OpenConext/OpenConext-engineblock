@@ -61,12 +61,12 @@ services:
     engineblock.service.authentication_state_helper:
         class: OpenConext\EngineBlock\Service\AuthenticationStateHelper
         arguments:
-            - "@session"
+            - "@request_stack"
 
     engineblock.service.processing_state_helper:
         class: OpenConext\EngineBlock\Service\ProcessingStateHelper
         arguments:
-            - "@session"
+            - "@request_stack"
 
     engineblock.service.stepup.gateway_callout_helper:
         class: OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper

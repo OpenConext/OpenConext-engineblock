@@ -65,7 +65,7 @@ services:
     engineblock.listener.authentication_state_initializer:
         class: OpenConext\EngineBlockBundle\EventListener\AuthenticationStateInitializer
         arguments:
-            - "@session"
+            - "@request_stack"
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 10 }
 

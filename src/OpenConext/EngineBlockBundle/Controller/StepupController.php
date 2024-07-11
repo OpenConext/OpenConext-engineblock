@@ -33,11 +33,6 @@ class StepupController implements AuthenticationLoopThrottlingController
     private $engineBlockApplicationSingleton;
 
     /**
-     * @var Session
-     */
-    private $session;
-
-    /**
      * @var RequestValidator
      */
     private $requestValidator;
@@ -54,13 +49,11 @@ class StepupController implements AuthenticationLoopThrottlingController
 
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        Session $session,
         RequestValidator $requestValidator,
         RequestValidator $bindingValidator,
         RequestValidator $samlResponseValidator
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
-        $this->session = $session;
         $this->requestValidator = $requestValidator;
         $this->bindingValidator = $bindingValidator;
         $this->responseValidator = $samlResponseValidator;

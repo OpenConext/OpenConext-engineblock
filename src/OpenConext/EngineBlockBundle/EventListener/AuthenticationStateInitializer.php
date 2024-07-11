@@ -20,7 +20,7 @@ namespace OpenConext\EngineBlockBundle\EventListener;
 
 use EngineBlock_ApplicationSingleton;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
-use OpenConext\EngineBlockBundle\Controller\AuthenticationLoopThrottlingController;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
@@ -32,9 +32,9 @@ final class AuthenticationStateInitializer
      */
     private $session;
 
-    public function __construct(Session $session)
+    public function __construct(RequestStack $requestStack)
     {
-        $this->session = $session;
+        $this->session = $requestStack->getSession();
     }
 
     public function onKernelController(ControllerEvent $event)
