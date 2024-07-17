@@ -23,6 +23,7 @@ use OpenConext\EngineBlockBundle\Exception\AddExecutionTimePadding;
 use OpenConext\EngineBlockBundle\Value\ExecutionTime;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -67,9 +68,9 @@ final class ExecutionTimePaddingListener
         $this->minimumExecutionTime = $minimumExecutionTime;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event)
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
 
         if (!$exception instanceof AddExecutionTimePadding) {
             return;

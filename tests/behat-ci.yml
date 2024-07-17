@@ -1,48 +1,24 @@
 default:
     autoload:
         - '%paths.base%/../src/OpenConext/EngineBlockFunctionalTestingBundle/Features/Context'
-
+    calls:
+        error_reporting: 16383 # E_ALL & ~E_USER_DEPRECATED
     suites:
         default:
             paths:
                 - '%paths.base%/../src/OpenConext/EngineBlockFunctionalTestingBundle/Features'
             formatter:
                 name: progress
+
             filters:
                 tags: "~@WIP&&~@SKIP&&~@selenium"
             contexts: &defaultContexts
-                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\EngineBlockContext:
-                    serviceRegistry: '@engineblock.functional_testing.fixture.service_registry'
-                    engineBlock: '@engineblock.functional_testing.service.engine_block'
-                    mockSpRegistry: '@engineblock.mock_entities.sp_registry'
-                    mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
-                    features: '@engineblock.functional_testing.fixture.features'
-                    pdpClient: '@engineblock.functional_testing.fixture.pdp_client'
-                    authenticationLoopGuard: '@engineblock.functional_testing.fixture.authentication_loop_guard'
-                    attributeAggregationClient: '@engineblock.functional_testing.fixture.attribute_aggregation_client'
-                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MockIdpContext:
-                    serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
-                    engineBlock: '@engineblock.functional_testing.service.engine_block'
-                    idpFactory: '@engineblock.mock_entities.idp_factory'
-                    mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
-                    mockSpRegistry: '@engineblock.mock_entities.sp_registry'
-                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MockSpContext:
-                    serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
-                    engineBlock: '@engineblock.functional_testing.service.engine_block'
-                    mockSpFactory: '@engineblock.mock_entities.sp_factory'
-                    mockSpRegistry: '@engineblock.mock_entities.sp_registry'
-                    mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
-                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\StepupContext:
-                    mockSpRegistry: '@engineblock.mock_entities.sp_registry'
-                    mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
-                    gatewayMockConfiguration: '@engineblock.functional_testing.fixture.stepup_gateway_mock'
-                    serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
-                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MfaEntitiesContext:
-                    mockSpRegistry: '@engineblock.mock_entities.sp_registry'
-                    mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
-                    serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
-                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\TranslationContext:
-                   mockTranslator: '@engineblock.functional_testing.mock.translator'
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\EngineBlockContext
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MockIdpContext
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MockSpContext
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\StepupContext
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MfaEntitiesContext
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\TranslationContext
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext
         selenium:
             mink_session: chrome
@@ -68,12 +44,9 @@ default:
     extensions:
         Behat\MinkExtension:
             base_url: https://engine.vm.openconext.org/
-            goutte: ~
             sessions:
                 default:
-                    goutte:
-                        guzzle_parameters:
-                            verify: false
+                    symfony: ~
                 chrome:
                     selenium2:
                         browser: chrome
@@ -85,7 +58,9 @@ default:
                                     - "--disable-gpu"
                                     - "--window-size=1920,1080"
                                     - "--no-sandbox"
-        Behat\Symfony2Extension:
+        FriendsOfBehat\SymfonyExtension:
             kernel:
-                env: ci
+                environment: ci
                 debug: true
+                class: 'AppKernel'
+            bootstrap: tests/bootstrap.php

@@ -1,4 +1,7 @@
 services:
+    _defaults:
+        public: true
+
     OpenConext\EngineBlock\Xml\:
         resource: '../../../EngineBlock/Xml'
         exclude: '../../../EngineBlock/Xml/ValueObjects'
@@ -22,6 +25,7 @@ services:
 
     engineblock.configuration.stepup.endpoint:
         class: OpenConext\EngineBlock\Stepup\StepupEndpoint
+        public: true
         arguments:
             - "%stepup.gateway.sfo.entity_id%"
             - "%stepup.gateway.sfo.sso_location%"
@@ -57,12 +61,12 @@ services:
     engineblock.service.authentication_state_helper:
         class: OpenConext\EngineBlock\Service\AuthenticationStateHelper
         arguments:
-            - "@session"
+            - "@request_stack"
 
     engineblock.service.processing_state_helper:
         class: OpenConext\EngineBlock\Service\ProcessingStateHelper
         arguments:
-            - "@session"
+            - "@request_stack"
 
     engineblock.service.stepup.gateway_callout_helper:
         class: OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper
@@ -370,3 +374,10 @@ services:
             - "@translator"
         tags:
              - { name: 'twig.extension' }
+
+    engineblock.push.voter:
+        class: OpenConext\EngineBlockBundle\Security\Voter\MetadataPushVoter
+        arguments:
+            - "@security.helper"
+        tags:
+            - { name: 'security.voter' }

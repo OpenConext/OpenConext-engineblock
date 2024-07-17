@@ -27,6 +27,7 @@ services:
             - '@engineblock.compat.doctrine.entity_manager'
 
     engineblock.functional_testing.fixture.features:
+        public: true
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration
         arguments:
             - '@engineblock.features'
@@ -38,12 +39,14 @@ services:
             - '@engineblock.function_testing.data_store.pdp_client'
 
     engineblock.functional_testing.fixture.authentication_loop_guard:
+        public: true
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard
         arguments:
             - '@engineblock.authentication.authentication_loop_guard'
             - '@engineblock.functional_testing.data_store.authentication_loop_guard'
 
     engineblock.functional_testing.fixture.attribute_aggregation_client:
+        public: true
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient
         arguments:
             - '@engineblock.function_testing.data_store.attribute_aggregation_client'
@@ -94,6 +97,7 @@ services:
 
     engineblock.configuration.stepup.endpoint:
         class: OpenConext\EngineBlock\Stepup\StepupEndpoint
+        public: true
         arguments:
             - "https://engine.vm.openconext.org/authentication/stepup/metadata"
             - "https://engine.vm.openconext.org/functional-testing/gateway/second-factor-only/single-sign-on"
@@ -111,6 +115,7 @@ services:
             - "@engineblock.functional_testing.mock.translator"
 
     engineblock.factory.service_provider_factory:
+        public: true
         class: OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory
         arguments:
             - '@engineblock.compat.metadata.definitions'

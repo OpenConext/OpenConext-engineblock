@@ -1,10 +1,13 @@
 services:
+    _defaults:
+        public: true
+
     engineblock.bridge.error_reporter:
         class: OpenConext\EngineBlockBridge\ErrorReporter
         arguments:
             - "@engineblock.compat.application"
             - "@logger"
-            - "@session"
+            - "@request_stack"
 
     engineblock.bridge.authentication_logger_adapter:
         class: OpenConext\EngineBlockBridge\Logger\AuthenticationLoggerAdapter

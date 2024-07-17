@@ -18,7 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
-use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -35,7 +35,7 @@ final class HeartbeatControllerTest extends WebTestCase
         $this->assertStatusCode(Response::HTTP_OK, $client);
     }
 
-    private function assertStatusCode($expectedStatusCode, Client $client)
+    private function assertStatusCode($expectedStatusCode, KernelBrowser $client)
     {
         $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
     }

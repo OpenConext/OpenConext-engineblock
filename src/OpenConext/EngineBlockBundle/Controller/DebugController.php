@@ -24,6 +24,7 @@ use OpenConext\EngineBlockBridge\ResponseFactory;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class DebugController implements AuthenticationLoopThrottlingController
@@ -40,10 +41,10 @@ class DebugController implements AuthenticationLoopThrottlingController
 
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        SessionInterface $session
+        RequestStack $requestStack
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
-        $this->session = $session;
+        $this->session = $requestStack->getSession();
     }
 
     /**

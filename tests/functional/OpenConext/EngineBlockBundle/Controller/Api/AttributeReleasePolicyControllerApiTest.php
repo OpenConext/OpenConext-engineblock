@@ -20,16 +20,23 @@ namespace OpenConext\EngineBlockBundle\Tests;
 
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class AttributeReleasePolicyControllerApiTest extends WebTestCase
 {
+    private $phpAuthUser;
+    private $phpAuthPassword;
+
     public function setUp(): void
     {
         $this->clearMetadataFixtures();
+        self::bootKernel();
+        $this->phpAuthUser = static::getContainer()->getParameter('api.users.profile.username');
+        $this->phpAuthPassword = static::getContainer()->getParameter('api.users.profile.password');
+        self::ensureKernelShutdown();
     }
 
     public function tearDown(): void
@@ -47,7 +54,7 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
     {
         $unauthenticatedClient = static::createClient();
         $unauthenticatedClient->request('POST', 'https://engine-api.vm.openconext.org/arp');
-        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
+        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED, $unauthenticatedClient);
     }
 
     /**
@@ -61,9 +68,9 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
      */
     public function only_post_requests_are_allowed_when_applying_arp($invalidHttpMethod)
     {
-        $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+        $client = self::createClient([], [
+            'PHP_AUTH_USER' => $this->phpAuthUser,
+            'PHP_AUTH_PW' => $this->phpAuthPassword
         ]);
 
         $client->request($invalidHttpMethod, 'https://engine-api.vm.openconext.org/arp');
@@ -105,8 +112,8 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
     public function cannot_push_invalid_content_to_the_arp_api($invalidJsonPayload)
     {
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+            'PHP_AUTH_USER' => $this->phpAuthUser,
+            'PHP_AUTH_PW' => $this->phpAuthPassword
         ]);
 
         $client->request(
@@ -138,10 +145,11 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
 
         $serviceProvider = new ServiceProvider($spEntityId);
         $this->addServiceProviderFixture($serviceProvider);
+        self::ensureKernelShutdown();
 
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+            'PHP_AUTH_USER' => $this->phpAuthUser,
+            'PHP_AUTH_PW' => $this->phpAuthPassword
         ]);
 
         $arpRequestData = [
@@ -204,10 +212,11 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
         );
         $this->addServiceProviderFixture($spNotReceivingSpecialAttribute);
         $this->addServiceProviderFixture($spReceivingSpecialAttribute);
+        self::ensureKernelShutdown();
 
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+            'PHP_AUTH_USER' => $this->phpAuthUser,
+            'PHP_AUTH_PW' => $this->phpAuthPassword
         ]);
 
         $arpRequestData = [
@@ -278,10 +287,11 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
         );
         $this->addServiceProviderFixture($spNotReceivingSpecialAttribute);
         $this->addServiceProviderFixture($spReceivingSpecialAttribute);
+        self::ensureKernelShutdown();
 
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+            'PHP_AUTH_USER' => $this->phpAuthUser,
+            'PHP_AUTH_PW' => $this->phpAuthPassword
         ]);
 
         $arpRequestData = [
@@ -352,10 +362,11 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
         );
         $this->addServiceProviderFixture($spNotReceivingSpecialAttribute);
         $this->addServiceProviderFixture($spReceivingSpecialAttribute);
+        self::ensureKernelShutdown();
 
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+            'PHP_AUTH_USER' => $this->phpAuthUser,
+            'PHP_AUTH_PW' => $this->phpAuthPassword
         ]);
 
         $arpRequestData = [
@@ -453,12 +464,12 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
         ];
     }
 
-    private function assertStatusCode($expectedStatusCode, Client $client)
+    private function assertStatusCode($expectedStatusCode, KernelBrowser $client)
     {
         $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
     }
 
-    private function getContainer() : ContainerInterface
+    private function getContainerInterface() : ContainerInterface
     {
         self::bootKernel();
         return self::$kernel->getContainer();
@@ -473,14 +484,14 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
 
     private function addServiceProviderFixture(ServiceProvider $serviceProvider)
     {
-        $em = $this->getContainer()->get('doctrine')->getEntityManager();
+        $em = $this->getContainerInterface()->get('doctrine')->getManager();
         $em->persist($serviceProvider);
         $em->flush();
     }
 
     private function clearMetadataFixtures()
     {
-        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        $queryBuilder = $this->getContainerInterface()->get('doctrine')->getConnection()->createQueryBuilder();
         $queryBuilder
             ->delete('sso_provider_roles_eb5')
             ->execute();

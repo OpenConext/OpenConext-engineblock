@@ -3,6 +3,7 @@ on:
     push:
         branches:
             - master
+            - symfony_upgrade_5_4
     pull_request:
     # run at 6 hour UTC
     schedule:
@@ -58,13 +59,13 @@ jobs:
                       ./app/console doctrine:schema:drop --force --env=ci && \
                       ./app/console doctrine:schema:create --env=ci && \
                       echo -e "\nPHPUnit legacy tests\n" && \
-                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=eb4 --coverage-text && \
+                      XDEBUG_MODE=coverage ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=eb4 --coverage-text && \
                       echo -e "\nPHPUnit unit tests\n" && \
-                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=unit --coverage-text && \
+                      XDEBUG_MODE=coverage  ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=unit --coverage-text && \
                       echo -e "\nPHPUnit API acceptance tests\n" && \
                       APP_ENV=ci ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=functional --coverage-text && \
                       echo -e "\nPHPUnit integration tests\n" && \
-                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=integration --coverage-text
+                      XDEBUG_MODE=coverage  ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=integration --coverage-text
                   '
               env:
                   SYMFONY_ENV: ci

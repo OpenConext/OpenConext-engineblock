@@ -22,13 +22,13 @@ use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockStepupGateway;
 use SAML2\Constants;
 use SAML2\HTTPRedirect;
 use SAML2\Response as SamlResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Twig_Environment;
 
-class StepupMockController extends Controller
+class StepupMockController extends AbstractController
 {
     /**
      * @var MockStepupGateway

@@ -21,7 +21,7 @@ namespace OpenConext\EngineBlock\Metadata\Factory\ValueObject;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Contains the EngineBlock information that is required to generate SP and IdP XML metadata

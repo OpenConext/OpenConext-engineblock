@@ -20,8 +20,8 @@ namespace OpenConext\EngineBlock\Service;
 
 use Phake;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\HttpKernel\Tests\Logger;
 
 class SsoSessionServiceTest extends TestCase
 {
@@ -43,7 +43,7 @@ class SsoSessionServiceTest extends TestCase
     public function setUp(): void
     {
         $this->cookieServiceMock = Phake::mock(CookieService::class);
-        $loggerMock = Phake::mock(Logger::class);
+        $loggerMock = Phake::mock(LoggerInterface::class);
         $this->ssoQueryService = new SsoSessionService(
             self::SSO_SESSION_COOKIE_MAX_AGE,
             self::SSO_SESSION_COOKIE_DOMAIN,

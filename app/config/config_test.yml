@@ -22,15 +22,15 @@ framework:
     translator:
         fallbacks: ["%locale%"]
         paths:
-            - '%kernel.root_dir%/../languages'
-            - '%kernel.root_dir%/../theme/base/translations'
-            - '%kernel.root_dir%/../theme/%theme.name%/translations'
-            - '%kernel.root_dir%/../src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/languages'
+            - '%kernel.project_dir%/languages'
+            - '%kernel.project_dir%/theme/base/translations'
+            - '%kernel.project_dir%/theme/%theme.name%/translations'
+            - '%kernel.project_dir%/src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/languages'
     session:
         storage_id: session.storage.mock_file
         name: MOCKSESSION
     router:
-        resource: "%kernel.root_dir%/config/routing_test.yml"
+        resource: "%kernel.project_dir%/app/config/routing_test.yml"
         strict_requirements: true
     profiler:
         collect: false

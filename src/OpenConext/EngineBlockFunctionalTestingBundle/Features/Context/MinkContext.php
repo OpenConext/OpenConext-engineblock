@@ -26,7 +26,6 @@ use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RuntimeException;
 use SAML2\XML\mdui\Common;
 use SAML2\XML\shibmd\Scope;
-use function count;
 
 /**
  * Mink-enabled context.
@@ -46,6 +45,19 @@ class MinkContext extends BaseMinkContext
     {
         $driver = $this->getSession()->getDriver();
         $driver->setCookie('XDEBUG_SESSION', 'PHPSTORM');
+    }
+
+
+    /**
+     * @Then /^printDebugDie$/
+     */
+    public function debugout()
+    {
+        echo PHP_EOL;
+        echo $this->getMink()->getSession()->getCurrentUrl();
+        echo PHP_EOL . PHP_EOL;
+        echo $this->getMink()->getSession()->getPage()->getContent();
+        die;
     }
 
     /**

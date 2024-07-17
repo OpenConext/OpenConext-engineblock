@@ -16,10 +16,6 @@
  * limitations under the License.
  */
 
-define('TEST_RESOURCES_DIR', dirname(__FILE__) . '/resources');
-
-require_once realpath(__DIR__) . '/../app/autoload.php';
-require_once realpath(__DIR__) . '/../app/AppKernel.php';
-
-$kernel = new AppKernel('test', true);
-$kernel->boot();
+class EngineBlock_Corto_Module_Services_SessionNotStartedException extends EngineBlock_Corto_Module_Services_Exception
+{
+}

@@ -15,6 +15,7 @@ Feature:
 
   Scenario: The Malicious SP AuthnRequest is denied by EngineBlock
     Given I log in at "Malicious SP"
+    And printDebugDie
     Then I should see "Error - Unsupported URI scheme in ACS location"
 
   Scenario: The Malconfigured SP AuthnRequest is denied by EngineBlock
