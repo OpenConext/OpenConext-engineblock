@@ -391,6 +391,32 @@ QUERY;
         return $this;
     }
 
+    public function allowAttributeReleasedAsForSp($entityId, $arpAttribute, $releasedAs)
+    {
+        /** @var AttributeReleasePolicy $arp */
+        $arp = $this->getServiceProvider($entityId)->attributeReleasePolicy;
+
+        $rules = [];
+
+        if (!empty($arp)) {
+            $rules = $arp->getAttributeRules();
+        }
+
+        $attributeSource = 'idp';
+
+        $arpRule = [
+            'value' => "*",
+            'source' => $attributeSource,
+            'release_as' => $releasedAs,
+        ];
+
+        $rules[$arpAttribute] = [$arpRule];
+
+        $this->getServiceProvider($entityId)->attributeReleasePolicy = new AttributeReleasePolicy($rules);
+
+        return $this;
+    }
+
     public function setSpWorkflowState($entityId, $workflowState)
     {
         $this->getServiceProvider($entityId)->workflowState = $workflowState;

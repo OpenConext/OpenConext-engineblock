@@ -18,6 +18,7 @@ Feature:
     And a Service Provider named "Trusted Proxy"
     And a Service Provider named "Stepup Gateway"
     And a Service Provider named "Stepup SelfService"
+    And a Service Provider named "Release As"
     And SP "Empty ARP" allows no attributes
     And SP "Wildcard ARP" allows an attribute named "urn:mace:dir:attribute-def:uid"
     And SP "Wrong Value ARP" allows an attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization" with value "example.edu"
@@ -29,6 +30,7 @@ Feature:
     And SP "Stepup Gateway" allows an attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization"
     And SP "Stepup Gateway" allows an attribute named "urn:mace:terena.org:attribute-def:eduPersonAffiliation"
     And SP "Stepup SelfService" allows an attribute named "urn:mace:dir:attribute-def:uid"
+    And SP "Release As" allows an attribute named "urn:mace:dir:attribute-def:uid" released as "UiD"
     And feature "eb.run_all_manipulations_prior_to_consent" is disabled
 
   Scenario: As a user for an Idp SP without ARPs I get all attributes
@@ -74,6 +76,17 @@ Feature:
     And I pass through EngineBlock
     Then the response should not contain "urn:mace:dir:attribute-def:uid"
     And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+
+  Scenario: As a user for an SP renaming the uid attribute in the ARP I do not see the original attribute but the alias
+    When I log in at "Release As"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the response should not contain "urn:mace:dir:attribute-def:uid"
+    And the response should contain "UiD"
+    When I give my consent
+    And I pass through EngineBlock
+    Then the response should not contain "urn:mace:dir:attribute-def:uid"
+    And the response should contain "UiD"
 
   Scenario: As a user for an SP with a specific value ARP I do see the attribute if it has the right value
     When I log in at "Right Value ARP"
