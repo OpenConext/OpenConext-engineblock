@@ -21,6 +21,7 @@ use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\LoaRepository;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlock\Service\MfaHelperInterface;
+use OpenConext\EngineBlock\Service\ReleaseAsEnforcer;
 use OpenConext\EngineBlock\Service\TimeProvider\TimeProviderInterface;
 use OpenConext\EngineBlock\Stepup\StepupEntityFactory;
 use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
@@ -287,6 +288,14 @@ class EngineBlock_Application_DiContainer extends Pimple
     public function getMailer()
     {
         return $this->container->get('mailer');
+    }
+
+    /**
+     * @return ReleaseAsEnforcer
+     */
+    public function getReleaseAsEnforcer()
+    {
+        return $this->container->get(ReleaseAsEnforcer::class);
     }
 
     /**
