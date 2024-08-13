@@ -3,7 +3,7 @@
 
 Build Status:
 
-![test-integration](https://github.com/OpenConext/OpenConext-engineblock/workflows/test-integration/badge.svg?branch=master&event=push)
+![test-integration](https://github.com/OpenConext/OpenConext-engineblock/workflows/test-integration/badge.svg?branch=main&event=push)
 
 ## License
 
