@@ -43,8 +43,7 @@ use ReflectionClass;
 use SAML2\Constants;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings("PMD")
  */
 class ServiceRegistryFixture
 {
