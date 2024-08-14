@@ -30,7 +30,7 @@ Feature:
     And SP "Stepup Gateway" allows an attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization"
     And SP "Stepup Gateway" allows an attribute named "urn:mace:terena.org:attribute-def:eduPersonAffiliation"
     And SP "Stepup SelfService" allows an attribute named "urn:mace:dir:attribute-def:uid"
-    And SP "Release As" allows an attribute named "urn:mace:dir:attribute-def:uid" released as "UiD"
+    And SP "Release As" allows an attribute named "urn:mace:dir:attribute-def:uid" released as "Kustom-UiD"
     And feature "eb.run_all_manipulations_prior_to_consent" is disabled
 
   Scenario: As a user for an Idp SP without ARPs I get all attributes
@@ -81,12 +81,13 @@ Feature:
     When I log in at "Release As"
     And I pass through EngineBlock
     And I pass through the IdP
-    Then the response should not contain "urn:mace:dir:attribute-def:uid"
-    And the response should contain "UiD"
+    Then the response should contain "urn:mace:dir:attribute-def:uid"
+    And the response should not contain "Kustom-UiD"
     When I give my consent
     And I pass through EngineBlock
+    # The release_as logic is applied after consent
     Then the response should not contain "urn:mace:dir:attribute-def:uid"
-    And the response should contain "UiD"
+    And the response should contain "Kustom-UiD"
 
   Scenario: As a user for an SP with a specific value ARP I do see the attribute if it has the right value
     When I log in at "Right Value ARP"

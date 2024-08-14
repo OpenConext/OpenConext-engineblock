@@ -68,6 +68,9 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             // Then don't continue with the rest of the modifications
             new EngineBlock_Corto_Filter_Command_RejectProcessingMode(),
 
+            // Apply the ARP 'release_as' logic
+            new EngineBlock_Corto_Filter_Command_AttributeReleaseAs(),
+
             // Run custom attribute manipulations
             new EngineBlock_Corto_Filter_Command_RunAttributeManipulations(
                 EngineBlock_Corto_Filter_Command_RunAttributeManipulations::TYPE_SP
