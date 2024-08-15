@@ -572,4 +572,12 @@ class EngineBlock_Application_DiContainer extends Pimple
     {
         return $this->container->getParameter('auth.log.attributes');
     }
+
+    /**
+     * @return EngineBlock_Arp_NameIdSubstituteResolver
+     */
+    public function getNameIdSubstituteResolver()
+    {
+        return new EngineBlock_Arp_NameIdSubstituteResolver($this->container->get('engineblock.compat.logger'));
+    }
 }
