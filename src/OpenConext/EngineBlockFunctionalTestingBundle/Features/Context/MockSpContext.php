@@ -462,6 +462,19 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^SP "([^"]*)" uses the value of attribute "([^"]*)" as the NameId$/
+     **/
+    public function spOverridesNameId($spName, $attributeName)
+    {
+        /** @var MockServiceProvider $sp */
+        $sp = $this->mockSpRegistry->get($spName);
+
+        $this->serviceRegistryFixture
+            ->substituteNameIdWithAttributeValue($sp->entityId(), $attributeName)
+            ->save();
+    }
+
+    /**
      * @Given /^SP "([^"]*)" allows an attribute named "([^"]*)" and configures it for aggregation from "([^"]*)"$/
      */
     public function spAllowsAnAttributeWithNameFromSource($spName, $arpAttribute, $attributeSource)
