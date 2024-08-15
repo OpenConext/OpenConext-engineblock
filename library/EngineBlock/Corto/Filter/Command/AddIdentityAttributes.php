@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use Psr\Log\LoggerInterface;
 use SAML2\Constants;
 
@@ -27,8 +28,14 @@ class EngineBlock_Corto_Filter_Command_AddIdentityAttributes extends EngineBlock
      */
     private $logger;
 
-    public function __construct(LoggerInterface $logger)
+    /**
+     * @var EngineBlock_Arp_NameIdSubstituteResolver
+     */
+    private $substituteResolver;
+
+    public function __construct(EngineBlock_Arp_NameIdSubstituteResolver $resolver, LoggerInterface $logger)
     {
+        $this->substituteResolver = $resolver;
         $this->logger = $logger;
     }
 
@@ -66,16 +73,25 @@ class EngineBlock_Corto_Filter_Command_AddIdentityAttributes extends EngineBlock
         $this->logger->info('Setting the NameId on the Assertion');
         $this->_response->getAssertion()->setNameId($nameId);
 
-
-        // Find out if the EduPersonTargetedId is in the ARP of the destination SP.
-        // If the ARP is NULL this means no ARP = let everything through including ePTI.
-        // Otherwise only add ePTI if it's acutally in the ARP.
         $arp = $destinationMetadata->getAttributeReleasePolicy();
-        if (!is_null($arp) && !$arp->hasAttribute(Constants::EPTI_URN_MACE)) {
-            return;
-        }
-        $this->logger->info('Adding the EduPersonTargetedId on the Assertion');
-        $this->_responseAttributes[Constants::EPTI_URN_MACE] = [ $nameId ];
+        if (!is_null($arp)) {
+            // Now check if we should update the NameID value according to the 'use_as_nameid' directive in the ARP.
+            $arpSubstitute = $this->substituteResolver->findNameIdSubstitute($arp, $this->getResponseAttributes());
+            if ($arpSubstitute !== null) {
+                $nameId->setFormat(Constants::NAMEID_UNSPECIFIED);
+                $nameId->setValue($arpSubstitute);
+                $this->_response->getAssertion()->setNameId($nameId);
+            }
 
+            // Find out if the EduPersonTargetedId is in the ARP of the destination SP.
+            // If the ARP is NULL this means no ARP = let everything through including ePTI.
+            // Otherwise, only add ePTI if it's actually in the ARP.
+            if (!$arp->hasAttribute(Constants::EPTI_URN_MACE)) {
+                return;
+            }
+        }
+
+        $this->logger->info('Adding the EduPersonTargetedId on the Assertion');
+        $this->_responseAttributes[Constants::EPTI_URN_MACE] = [$nameId];
     }
 }
