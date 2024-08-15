@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlock\Metadata;
 
 use InvalidArgumentException;
+use function array_key_exists;
 
 class AttributeReleasePolicy
 {
@@ -139,6 +140,9 @@ class AttributeReleasePolicy
         foreach ($this->attributeRules as $name => $rules) {
             foreach ($rules as $rule) {
                 if (isset($rule['use_as_nameid']) && $rule['use_as_nameid'] === true) {
+                    if (array_key_exists('release_as', $rule)) {
+                        return $rule['release_as'];
+                    }
                     return $name;
                 }
             }

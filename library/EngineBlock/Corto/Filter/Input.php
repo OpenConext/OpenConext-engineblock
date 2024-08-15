@@ -80,7 +80,9 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
             new EngineBlock_Corto_Filter_Command_AddGuestStatus(),
 
             // Figure out the collabPersonId
-            new EngineBlock_Corto_Filter_Command_ProvisionUser(),
+            new EngineBlock_Corto_Filter_Command_ProvisionUser(
+                $diContainer->getUserDirectory()
+            ),
 
             // Aggregate additional attributes for this Service Provider
             new EngineBlock_Corto_Filter_Command_AttributeAggregator(

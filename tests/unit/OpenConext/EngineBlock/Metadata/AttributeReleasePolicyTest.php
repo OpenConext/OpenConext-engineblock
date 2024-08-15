@@ -221,4 +221,21 @@ class AttributeReleasePolicyTest extends TestCase
 
         $this->assertNull($policyWithoutNameId->findNameIdSubstitute());
     }
+    public function testFindNameIdSubstituteWithReleaseAs()
+    {
+        $policy = new AttributeReleasePolicy([
+            'attr1' => [
+                ['value' => 'value1', 'use_as_nameid' => false],
+            ],
+            'attr2' => [
+                // When release_as is set, the name id value must be retrieved on that
+                // attribute in the assertion (release as is evaluated first)
+                ['value' => 'value2', 'use_as_nameid' => true, 'release_as' => 'new_attr_name'],
+            ],
+            'attr3' => [
+                ['value' => 'value3', 'use_as_nameid' => false],
+            ],
+        ]);
+        $this->assertEquals('new_attr_name', $policy->findNameIdSubstitute());
+    }
 }
