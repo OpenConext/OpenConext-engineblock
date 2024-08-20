@@ -83,7 +83,7 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             new EngineBlock_Corto_Filter_Command_ApplyTrustedProxyBehavior($logger),
 
             // Add the appropriate NameID to the 'eduPeronTargetedID' and the Assertions NameId.
-            new EngineBlock_Corto_Filter_Command_AddIdentityAttributes($diContainer->getNameIdSubstituteResolver(), $logger),
+            new EngineBlock_Corto_Filter_Command_AddIdentityAttributes($diContainer->getNameIdResolver(), $diContainer->getNameIdSubstituteResolver(), $logger),
 
             // Convert all attributes to their OID format (if known) and add these.
             new EngineBlock_Corto_Filter_Command_DenormalizeAttributes(),

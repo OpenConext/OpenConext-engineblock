@@ -574,6 +574,14 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
+     * @return EngineBlock_Saml2_NameIdResolver
+     */
+    public function getNameIdResolver()
+    {
+        return new EngineBlock_Saml2_NameIdResolver($this->container->get('engineblock.compat.logger'));
+    }
+
+    /**
      * @return EngineBlock_Arp_NameIdSubstituteResolver
      */
     public function getNameIdSubstituteResolver()
