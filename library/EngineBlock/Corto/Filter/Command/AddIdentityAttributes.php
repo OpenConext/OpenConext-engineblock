@@ -16,7 +16,6 @@
  * limitations under the License.
  */
 
-use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use Psr\Log\LoggerInterface;
 use SAML2\Constants;
 
@@ -83,14 +82,16 @@ class EngineBlock_Corto_Filter_Command_AddIdentityAttributes extends EngineBlock
                 $this->_response->getAssertion()->setNameId($nameId);
             }
 
-            // Find out if the EduPersonTargetedId is in the ARP of the destination SP.
-            // If the ARP is NULL this means no ARP = let everything through including ePTI.
-            // Otherwise, only add ePTI if it's actually in the ARP.
+            // If there's an ARP, but it does not contain the EPTI, we're done now.
             if (!$arp->hasAttribute(Constants::EPTI_URN_MACE)) {
                 return;
             }
         }
 
+        // We arrive here if either:
+        // 1) the ARP is NULL, this means no ARP = let everything through including EPTI; or
+        // 2) the ARP is not null and does contain the EPTI attribute.
+        // In both cases, set the EPTI attribute.
         $this->logger->info('Adding the EduPersonTargetedId on the Assertion');
         $this->_responseAttributes[Constants::EPTI_URN_MACE] = [$nameId];
     }
