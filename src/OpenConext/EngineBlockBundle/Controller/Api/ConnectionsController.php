@@ -18,11 +18,13 @@
 
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
+use Exception;
 use OpenConext\EngineBlock\Metadata\Entity\Assembler\MetadataAssemblerInterface;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataPushRepository;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
+use OpenConext\EngineBlockBundle\Http\Exception\ApiInternalServerErrorHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
@@ -113,7 +115,11 @@ class ConnectionsController
 
         unset($body);
 
-        $result    = $this->repository->synchronize($roles);
+        try {
+            $result = $this->repository->synchronize($roles);
+        } catch (Exception $exception) {
+            throw new ApiInternalServerErrorHttpException('Unable to synchronize the assembled roles to the repository', $exception);
+        }
 
         return new JsonResponse($result);
     }

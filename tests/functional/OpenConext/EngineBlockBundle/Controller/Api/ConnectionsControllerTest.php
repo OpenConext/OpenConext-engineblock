@@ -54,7 +54,7 @@ class ConnectionsControllerTest extends WebTestCase
      */
     public function only_post_requests_are_allowed_when_pushing_metadata($invalidHttpMethod)
     {
-        $client = $client = static::createClient([], [
+        $client = static::createClient([], [
             'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
         ]);
@@ -75,7 +75,7 @@ class ConnectionsControllerTest extends WebTestCase
      */
     public function cannot_push_metadata_if_feature_is_disabled()
     {
-        $client = $client = static::createClient([], [
+        $client = static::createClient([], [
             'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
         ]);
@@ -97,7 +97,7 @@ class ConnectionsControllerTest extends WebTestCase
      */
     public function cannot_push_metadata_if_user_does_not_have_manage_role()
     {
-        $client = $client = static::createClient([], [
+        $client = static::createClient([], [
             'PHP_AUTH_USER' => 'no_roles',
             'PHP_AUTH_PW' => 'no_roles',
         ]);
@@ -120,7 +120,7 @@ class ConnectionsControllerTest extends WebTestCase
      */
     public function cannot_push_invalid_content_to_the_metadata_push_api($invalidJsonPayload)
     {
-        $client = $client = static::createClient([], [
+        $client = static::createClient([], [
             'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
         ]);
@@ -150,7 +150,7 @@ class ConnectionsControllerTest extends WebTestCase
     {
         $this->clearMetadataFixtures();
 
-        $client = $client = static::createClient([], [
+        $client = static::createClient([], [
             'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
         ]);
@@ -219,7 +219,7 @@ class ConnectionsControllerTest extends WebTestCase
     {
         $this->clearMetadataFixtures();
 
-        $client = $client = static::createClient([], [
+        $client = static::createClient([], [
             'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
         ]);
@@ -273,7 +273,7 @@ class ConnectionsControllerTest extends WebTestCase
     {
         $this->clearMetadataFixtures();
 
-        $client = $client = static::createClient([], [
+        $client = static::createClient([], [
             'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
         ]);
@@ -349,6 +349,42 @@ class ConnectionsControllerTest extends WebTestCase
         $emptyIdp = $metadata['empty-idp'];
         $this->assertInstanceOf(StepupConnections::class, $emptyIdp->getCoins()->stepupConnections());
         $this->assertFalse($emptyIdp->getCoins()->stepupConnections()->hasConnections());
+    }
+
+
+    /**
+     * @test
+     * @group Api
+     * @group Connections
+     * @group MetadataPush
+     */
+    public function pushing_data_to_engineblock_can_fail()
+    {
+        $this->clearMetadataFixtures();
+
+        $client = static::createClient([], [
+            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
+            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
+        ]);
+
+        // The second 'step' will overwrite the entity id for the one entry. It only changes some case, resulting in
+        // a sql error in Engine. That exception results in a 500 JSON response
+        foreach ($this->failingConnectionsData() as $expectedHttpCode => $step) {
+
+            $payload = $this->createJsonData($step);
+
+            $client->request(
+                'POST',
+                'https://engine-api.vm.openconext.org/api/connections',
+                [],
+                [],
+                [],
+                $payload
+            );
+            $this->assertStatusCode($expectedHttpCode, $client);
+            $this->assertJson($client->getResponse()->getContent());
+
+        }
     }
 
     public function invalidHttpMethodProvider()
@@ -601,5 +637,28 @@ class ConnectionsControllerTest extends WebTestCase
                 ]
             ],
         ];
+    }
+
+    private function failingConnectionsData()
+    {
+        return
+            [
+                200 => [
+                    [
+                        'uuid' => '00000000-0000-0000-0000-000000000000',
+                        'entityId' => 'https://my-idp.test/1',
+                        'name' => 'SP0',
+                        'type' => 'saml20-sp',
+                    ],
+                ],
+                500 => [
+                    [
+                        'uuid' => '00000000-0000-0000-0000-000000000000',
+                        'entityId' => 'https://mY-iDp.test/1',
+                        'name' => 'SP0',
+                        'type' => 'saml20-sp',
+                    ],
+                ]
+            ];
     }
 }
