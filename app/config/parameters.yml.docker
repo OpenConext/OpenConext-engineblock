@@ -1,0 +1,293 @@
+parameters:
+    ##########################################################################################
+    ## GLOBAL SETTINGS
+    ##########################################################################################
+    ## This is a string that should be unique to your application and it's commonly used to add more
+    ## entropy to security related operations. Its value should be a series of characters, numbers and
+    ## symbols chosen randomly and the recommended length is around 32 characters.
+    secret: secret
+
+    ## Note: due to legacy reasons, hostname must be left empty (hostname
+    ## from the Host header will be used) or set to match the domain
+    ## setting. For example:
+    ##
+    ##    domain = dev.openconext.local
+    ##    hostname = engine.dev.openconext.local
+    domain: dev.openconext.local
+    ## Set a fixed hostname for OpenConext EngineBlock to use.
+    hostname: engine.dev.openconext.local
+
+    ## Configure trusted proxies to use their X-Forwarded-For header.
+    trusted_proxies:
+        - 192.168.1.1
+        - 10.0.0.1
+
+    ## The enabled languages, currently 'en', 'nl' and 'pt' are supported
+    enabled_languages:
+        - nl
+        - en
+
+    ##########################################################################################
+    ## SAML2 SETTINGS
+    ##########################################################################################
+    ## Path to the attribute definition file.
+    ## Where EngineBlock can look for attribute definitions.
+    ## These determine:
+    ## * How attributes are displayed in Profile and Consent
+    ## * How attributes are Normalized and Denormalized
+    ## * How attributes are validated
+    attribute_definition_file_path: %kernel.project_dir%/application/configs/attributes.json
+
+    ## The Signing / Encryption keys used for the SAML2 authentication and metadata
+    ## When EngineBlock signs responses (when it acts as an Idp)
+    ## or requests (when it acts as an SP) it uses these X.509 certs.
+    encryption_keys:
+        default:
+            publicFile: /config/engine/engineblock.crt
+            privateFile: /config/engine/engineblock.pem
+
+    ## List of signature methods explicitly forbidden by EngineBlock.
+    forbidden_signature_methods: {  }
+
+    ## List of allowed ACS location URI schemes
+    allowed_acs_location_schemes:
+        - http
+        - https
+
+    ## Add RequestedAttributes to the AttributeConsumingService of the SP Proxy metadata of Engineblock, default is all
+    ## Options are 'all' (optional and required attributes), 'required' (only required attributes) or 'none'
+    metadata_add_requested_attributes: all
+
+    ##########################################################################################
+    ## PHP SETTINGS
+    ##########################################################################################
+    ## Ideally, PHP is configured using the regular PHP configuration in
+    ## /etc, but EngineBlock supports runtime modification of PHP
+    ## settings.
+    php_settings:
+        memory_limit: 256M
+        display_errors: '1'
+        error_reporting: '6135'
+        date.timezone: Europe/Amsterdam
+        sendmail_from: 'OpenConext EngineBlock <openconext-engineblock@openconext.org>'
+
+    ## EngineBlock API credentials
+    ## The API user config, allows for configuration of multiple different users
+    api.users.metadataPush.username: serviceregistry
+    api.users.metadataPush.password: secret
+    api.users.profile.username: profile
+    api.users.profile.password: secret
+    api.users.deprovision.username: lifecycle
+    api.users.deprovision.password: secret
+
+    ##########################################################################################
+    ## PDP SETTINGS
+    ##########################################################################################
+    ## Location of PDP
+    pdp.host: 'https://pdp.dev.openconext.local'
+
+    ## PDP uses basic auth
+    pdp.username: pdp_admin
+    pdp.password: secret
+    pdp.client_id: EngineBlock
+    pdp.policy_decision_point_path: /pdp/api/decide/policy
+
+    ##########################################################################################
+    ## ATTRIBUTE AGGREGATION SETTINGS
+    ##########################################################################################
+    ## Location of AA
+    attribute_aggregation.base_url: 'https://aa.dev.openconext.local/aa/api/internal/attribute/aggregation'
+    attribute_aggregation.username: eb
+    attribute_aggregation.password: secret
+
+    ## LOGGING / ERROR HANDLING
+    ## Note that we have the following priorities:
+    ## EMERGENCY: system is unusable
+    ## ALERT: action must be taken immediately
+    ## CRITICAL: critical conditions
+    ## ERROR: error conditions
+    ## WARNING: warning conditions
+    ## NOTICE: normal but significant condition
+    ## INFO: informational messages
+    ## DEBUG: debug messages
+    logger.channel: engineblock
+    logger.fingers_crossed.passthru_level: NOTICE
+    logger.fingers_crossed.action_level: ERROR
+    logger.syslog.ident: EBLOG
+    logger.line_format: '[%%datetime%%] %%channel%%.%%level_name%%: %%message%% %%extra%% %%context%%'
+
+    ##########################################################################################
+    ## DATABASE SETTINGS
+    ##########################################################################################
+    database.host: localhost
+    database.port: '3306'
+    database.user: ebrw
+    database.password: secret
+    database.dbname: eb
+    database.test.host: localhost
+    database.test.port: '3306'
+    database.test.user: eb_testrw
+    database.test.password: secret
+    database.test.dbname: eb_test
+
+    ##########################################################################################
+    ## MISCELLANEOUS SETTINGS
+    ##########################################################################################
+    ## The memory limit used for the metadata push this setting is overridden in the ConnectionsController
+    engineblock.metadata_push_memory_limit: 256M
+    ## Minimum execution time in milliseconds when a received response is deemed invalid (default: 5000 ms)
+    minimum_execution_time_on_invalid_received_response: 5000
+    ## The value for guest qualifier. Can be overridden for specific environments
+    addgueststatus_guestqualifier: 'urn:collab:org:dev.openconext.local'
+
+    ## Language cookie settings
+    ## The value for the domain is also used for clearing SSO Notification cookies if the feature is enabled
+    cookie.path: /
+    cookie.secure: true
+    cookie.locale.domain: .dev.openconext.local
+    cookie.locale.expiry: 5184000
+    cookie.locale.http_only: false
+    cookie.locale.secure: true
+
+    ## UI settings
+    view_default_title: OpenConext
+    view_default_header: OpenConext
+    view_default_logo: /images/logo.png
+    view_default_logo_width: 96
+    view_default_logo_height: 96
+    # when set, will show a ribbon top-right to visually distinguish this install from other
+    # environments in your constellation (e.g. "test", "qa"), with the given ribbon color in
+    # env_ribbon_color. You can choose from colors: crimson,orange,hotpink,khaki.
+    env_name: ""
+    env_ribbon_color: ""
+
+    ui_return_to_sp_link: false
+
+    ## The default email where IdP request access are send
+    email_request_access_address: help@example.org
+
+    ## The query to be used to detect if healthy
+    monitor_database_health_check_query: 'SELECT uuid FROM user LIMIT 1;'
+
+    ## Cutoff point for showing unfiltered IdPs on the WAYF.
+    ## Do not show unfiltered IdPs on the WAYF if there are more IdPs than the cutoff point.
+    wayf.cutoff_point_for_showing_unfiltered_idps: 50
+
+    ## Allow users to save their selected IdP and then auto-select it on returning visits.
+    wayf.remember_choice: false
+
+    ## Toggle the default IdP quick link banner on the WAYF.
+    wayf.display_default_idp_banner_on_wayf: true
+    wayf.default_idp_entity_id: https://default-idp.dev.openconext.local
+
+    ## Toggle display & content of global site notice
+    global.site_notice.show: false
+    global.site_notice.allowed.tags: '<a><u><i><br><wbr><strong><em><blink><marquee><p><ul><ol><dl><li><dd><dt><div><span><blockquote><hr><h2></h2><h3><h4><h5><h6>'
+
+    ## Settings for detecting whether the user is stuck in a authentication loop within his session
+    time_frame_for_authentication_loop_in_seconds: 60
+    maximum_authentication_procedures_allowed: 5
+
+    ## Store attributes with their values, meaning that if an Idp suddenly
+    ## sends a new value (like a new e-mail address) consent has to be
+    ## given again.
+    consent_store_values: true
+
+    ## Email configuration
+    email_idp_debugging:
+        from:
+            name: 'OpenConext EngineBlock'
+            address: no-reply@example.org
+        to:
+            address: coin-logs-dev@list.surfnet.nl
+            name: 'OpenConext Admin'
+        subject: 'IdP debug info from %%1$s'
+
+    ## Swiftmailer configuration
+    mailer_transport: 'smtp'
+    mailer_host: 'localhost'
+    mailer_port: '25'
+    mailer_user: ''
+    mailer_password: ''
+
+    ##########################################################################################
+    ## FEATURE SETTINGS
+    ##########################################################################################
+    feature_eb_encrypted_assertions: true
+    feature_eb_encrypted_assertions_require_outer_signature: true
+    feature_api_metadata_push: true
+    feature_api_consent_listing: true
+    feature_api_consent_remove: true
+    feature_api_metadata_api: true
+    feature_api_deprovision: true
+    feature_run_all_manipulations_prior_to_consent: false
+    feature_block_user_on_violation: false
+    feature_enable_consent: true
+
+    ##########################################################################################
+    ## PROFILE SETTINGS
+    ##########################################################################################
+    ## Location of Profile
+    profile_base_url: 'https://profile.dev.openconext.local'
+
+    ##########################################################################################
+    ## SFO SETTINGS
+    ##########################################################################################
+    ## This PCRE regex is used to blacklist incoming AuthnContextClassRef attributes on. If an empty string is used
+    ## the validation is skipped. The validator will throw an exception if the used regex is invalid.
+    stepup.authn_context_class_ref_blacklist_regex: '/http:\/\/vm\.openconext\.org\/assurance\/loa[1-3]/'
+    ## The loa mapping from the internal used LoA's to the Stepup Gateway LOA's.
+    ## Specification of the mapping: stepup.loa.mapping.[int 1|2|3].[string engineblock|gateway]
+    ## The integer after the mapping field indicates the LoA level (1, 2 or 3 are supported).
+    ## The engineblock or gateway keys specify the LoAs identifier as will be carried in the AuthnContextClassRef of an assertion.
+    stepup.loa.mapping:
+        10:
+            engineblock: 'http://dev.openconext.local/assurance/loa1'
+            gateway: 'http://dev.openconext.local/assurance/loa1'
+        15:
+            engineblock: 'http://dev.openconext.local/assurance/loa1_5'
+            gateway: 'http://dev.openconext.local/assurance/loa1_5'
+        20:
+            engineblock: 'http://dev.openconext.local/assurance/loa2'
+            gateway: 'http://dev.openconext.local/assurance/loa2'
+        30:
+            engineblock: 'http://dev.openconext.local/assurance/loa3'
+            gateway: 'http://dev.openconext.local/assurance/loa3'
+    ## The fallback LoA to return when the Stepup authentication fails but is not required
+    stepup.loa.loa1: 'http://dev.openconext.local/assurance/loa1'
+    ## The EntityId (metadata URL) used in the callout to the SFO endpoint of the configured Stepup Gateway
+    stepup.gateway.sfo.entity_id: 'https://gateway.dev.openconext.local/second-factor-only/metadata'
+    ## The single sign-on endpoint used for Stepup Gateway SFO callouts
+    stepup.gateway.sfo.sso_location: 'https://gateway.dev.openconext.local/second-factor-only/single-sign-on'
+    ## The public key from the Stepup Gateway IdP
+    stepup.gateway.sfo.key_file: /config/engine/engineblock.crt
+
+    ##########################################################################################
+    ## THEME SETTINGS
+    ##########################################################################################
+    # When changing the default theme name, be aware that the CI build will no longer be able to select our default
+    # test suite for js e2e tests. This because a SED command is in place to rewrite the parameters.yml.
+    # See the SED command in Gitlab Actions runner: 'Run Cypress integration tests'
+    theme.name: skeune
+
+    ##########################################################################################
+    ## SSO NOTIFICATION SETTINGS
+    ##########################################################################################
+    feature_enable_sso_notification: false
+    sso_notification_encryption_algorithm: AES-256-CBC
+    ## The encryption key used to decrypt the SSO notification
+    sso_notification_encryption_key: <xxx>
+    ## The encryption key salt used to decrypt the SSO notification
+    sso_notification_encryption_key_salt: <xxx>
+
+    ##########################################################################################
+    ## SSO SESSION COOKIES SETTINGS
+    ##########################################################################################
+    # When the user is successfully authenticated by an Identity Provider, Engineblock stores an SSO session cookie in
+    # their browser. OpenConext's SSO query service is then able, if necessary, to verify whether this cookie exists and
+    # to return the correct answer to the requesting party based on this.
+    feature_enable_sso_session_cookie: false
+    # The time the cookie expires. This is a timestamp in number of seconds since the authentication.
+    # If set to 0 the cookie will expire at the end of the session (when the browser closes).
+    sso_session_cookie_max_age: 0
+

@@ -7,6 +7,8 @@ RUN tar --strip-components=1 -xvzf /tmp/*tar.gz -C /var/www/html/ && \
 RUN rm -rf /etc/apache2/sites-enabled/*
 COPY ./docker/conf/engine.conf /etc/apache2/sites-enabled/engine.conf
 COPY ./docker/conf/logging.yml /var/www/html/config/packages/
+# Instantiate devconf config
+RUN cp app/config/parameters.yml.docker app/config/parameters.yml
 
 # Set the default workdir
 WORKDIR /var/www/html
