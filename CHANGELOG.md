@@ -8,13 +8,28 @@ More information about our release strategy can be found in the [Development Gui
 ## 6.15.0
 
 New features:
-* Authentication logging additions
 * Support and follow `release_as` and `use_as_nameid` when configured in ARP
     *  Overwrite the NameID when specified in use_as_nameid ARP setting #1308
     *  Create Corto input filter for the ARP directive release_as to be applied #1307
 
 Bugfix:
 *  Ensure HTTP exception is thrown when API fails #1310
+
+## 6.14.1
+
+New features:
+* Authentication logging additions
+
+Bugfix:
+* Locale is considered when providing keywords to WAYF
+* Re-add missing CSS class for PEP error screen
+* Update subject-id validation regexp
+* Set the proper content-type for SAML-metadata
+* When AM error occurs, accept any type of exception for logging
+
+Maintenance:
+* Remove unused Xml Validator class
+* Update an npm dependency
 
 ## 6.14.0
 * Support overriding StepUp EntityId #1279
