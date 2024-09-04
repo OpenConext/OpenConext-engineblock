@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use Psr\Log\LoggerInterface;
 use SAML2\Constants;
@@ -84,11 +85,6 @@ class EngineBlock_Corto_Filter_Command_AddIdentityAttributes extends EngineBlock
                 $isResolved = true;
                 $this->_response->getAssertion()->setNameId($nameId);
             }
-
-            // If there's an ARP, but it does not contain the EPTI, we're done now.
-            if (!$arp->hasAttribute(Constants::EPTI_URN_MACE)) {
-                return;
-            }
         }
 
         if (!$isResolved || !isset($nameId)){
@@ -103,6 +99,11 @@ class EngineBlock_Corto_Filter_Command_AddIdentityAttributes extends EngineBlock
 
             $this->logger->info('Setting the NameId on the Assertion');
             $this->_response->getAssertion()->setNameId($nameId);
+        }
+
+        // If there's an ARP, but it does not contain the EPTI, we're done now.
+        if ($arp instanceof AttributeReleasePolicy && !$arp->hasAttribute(Constants::EPTI_URN_MACE)) {
+            return;
         }
 
         // We arrive here if either:
