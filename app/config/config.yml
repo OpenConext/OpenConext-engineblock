@@ -60,9 +60,9 @@ framework:
     cache:
         pools:
             doctrine.result_cache_pool:
-                adapter: cache.adapter.apcu
+                adapter: cache.adapter.array
             doctrine.system_cache_pool:
-                adapter: cache.adapter.apcu
+                adapter: cache.adapter.array
 
 # Twig Configuration
 twig:
