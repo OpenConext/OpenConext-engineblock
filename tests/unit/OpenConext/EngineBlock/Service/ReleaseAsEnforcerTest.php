@@ -53,8 +53,18 @@ class ReleaseAsEnforcerTest extends TestCase
 
         foreach ($releaseAsOverrides as $oldName => $override) {
             $this->assertArrayNotHasKey($oldName, $result);
-            $this->assertArrayHasKey($override[0]['release_as'], $result);
         }
+    }
+
+
+    /**
+     * @dataProvider enforceDataProviderWarnings
+     */
+    public function testEnforceImpossible($attributes, $releaseAsOverrides, $expectedResult, $expectedLogMessage)
+    {
+        $this->logger->shouldReceive('warning')->with($expectedLogMessage);
+        $result = $this->enforcer->enforce($attributes, $releaseAsOverrides);
+        $this->assertEquals($expectedResult, $result);
     }
 
     public function enforceDataProvider()
@@ -83,6 +93,34 @@ class ReleaseAsEnforcerTest extends TestCase
                     "urn:mace:dir:attribute-def:givenName" => ["Ad"],
                     "urn:mace:dir:attribute-def:mail" => ["ad@example.com"],
                     "ComonNaam" => ["Ad Doe"]
+                ],
+                'expectedLogMessages' => [
+                    'Releasing attribute "urn:mace:dir:attribute-def:cn" as "ComonNaam" as specified in the release_as ARP setting'
+                ]
+            ],
+            'single attribute override, empty attribute value is allowed' => [
+                'attributes' => [
+                    "urn:mace:dir:attribute-def:displayName" => ["Ad Doe"],
+                    "urn:mace:dir:attribute-def:cn" => [],
+                    "urn:mace:dir:attribute-def:sn" => ["Doe"],
+                    "urn:mace:dir:attribute-def:givenName" => ["Ad"],
+                    "urn:mace:dir:attribute-def:mail" => ["ad@example.com"]
+                ],
+                'releaseAsOverrides' => [
+                    "urn:mace:dir:attribute-def:cn" => [
+                        [
+                            "value" => "*",
+                            "release_as" => "ComonNaam",
+                            "use_as_nameid" => false
+                        ]
+                    ]
+                ],
+                'expectedResult' => [
+                    "urn:mace:dir:attribute-def:displayName" => ["Ad Doe"],
+                    "urn:mace:dir:attribute-def:sn" => ["Doe"],
+                    "urn:mace:dir:attribute-def:givenName" => ["Ad"],
+                    "urn:mace:dir:attribute-def:mail" => ["ad@example.com"],
+                    "ComonNaam" => []
                 ],
                 'expectedLogMessages' => [
                     'Releasing attribute "urn:mace:dir:attribute-def:cn" as "ComonNaam" as specified in the release_as ARP setting'
@@ -138,6 +176,65 @@ class ReleaseAsEnforcerTest extends TestCase
                 ],
                 'expectedLogMessages' => [
                 ]
+            ],
+            'targeted attribute not in assertion' => [
+                'attributes' => [
+                    "urn:mace:dir:attribute-def:displayName" => ["Ad Doe"],
+                    "urn:mace:dir:attribute-def:cn" => ["Ad Doe"],
+                    "urn:mace:dir:attribute-def:sn" => ["Doe"],
+                    "urn:mace:dir:attribute-def:givenName" => ["Ad"],
+                    "urn:mace:dir:attribute-def:mail" => ["ad@example.com"],
+                ],
+                'releaseAsOverrides' => [
+                    "urn:mace:dir:attribute-def:eduPersonTargetedId" => [
+                        [
+                            "value" => "*",
+                            "release_as" => "UserName",
+                            "use_as_nameid" => false
+                        ]
+                    ]
+                ],
+                'expectedResult' => [
+                    "urn:mace:dir:attribute-def:displayName" => ["Ad Doe"],
+                    "urn:mace:dir:attribute-def:cn" => ["Ad Doe"],
+                    "urn:mace:dir:attribute-def:sn" => ["Doe"],
+                    "urn:mace:dir:attribute-def:givenName" => ["Ad"],
+                    "urn:mace:dir:attribute-def:mail" => ["ad@example.com"]
+                ],
+                'expectedLogMessages' => ['Releasing "urn:mace:dir:attribute-def:eduPersonTargetedId" as "UserName" is not possible, "urn:mace:dir:attribute-def:eduPersonTargetedId" is not in assertion']
+            ],
+        ];
+    }
+
+    public function enforceDataProviderWarnings()
+    {
+        return [
+            'targeted attribute value is set to null in assertion' => [
+                'attributes' => [
+                    "urn:mace:dir:attribute-def:displayName" => ["Ad Doe"],
+                    "urn:mace:dir:attribute-def:cn" => ["Ad Doe"],
+                    "urn:mace:dir:attribute-def:sn" => ["Doe"],
+                    "urn:mace:dir:attribute-def:eduPersonTargetedId" => null,
+                    "urn:mace:dir:attribute-def:givenName" => ["Ad"],
+                    "urn:mace:dir:attribute-def:mail" => ["ad@example.com"],
+                ],
+                'releaseAsOverrides' => [
+                    "urn:mace:dir:attribute-def:eduPersonTargetedId" => [
+                        [
+                            "value" => "*",
+                            "release_as" => "UserName",
+                            "use_as_nameid" => false
+                        ]
+                    ]
+                ],
+                'expectedResult' => [
+                    "urn:mace:dir:attribute-def:displayName" => ["Ad Doe"],
+                    "urn:mace:dir:attribute-def:cn" => ["Ad Doe"],
+                    "urn:mace:dir:attribute-def:sn" => ["Doe"],
+                    "urn:mace:dir:attribute-def:givenName" => ["Ad"],
+                    "urn:mace:dir:attribute-def:mail" => ["ad@example.com"]
+                ],
+                'expectedLogMessages' => 'Releasing "urn:mace:dir:attribute-def:eduPersonTargetedId" as "UserName" is not possible, value for "urn:mace:dir:attribute-def:eduPersonTargetedId" is null'
             ],
         ];
     }

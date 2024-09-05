@@ -37,6 +37,29 @@ class ReleaseAsEnforcer implements ReleaseAsEnforcerInterface
     {
         foreach ($releaseAsOverrides as $oldAttributeName => $overrideValue) {
             $newAttributeName = $overrideValue[0]['release_as'];
+            if (!array_key_exists($oldAttributeName, $attributes)) {
+                $this->logger->notice(
+                    sprintf(
+                        'Releasing "%s" as "%s" is not possible, "%s" is not in assertion',
+                        $oldAttributeName,
+                        $newAttributeName,
+                        $oldAttributeName
+                    )
+                );
+                continue;
+            }
+            if (is_null($attributes[$oldAttributeName])) {
+                $this->logger->warning(
+                    sprintf(
+                        'Releasing "%s" as "%s" is not possible, value for "%s" is null',
+                        $oldAttributeName,
+                        $newAttributeName,
+                        $oldAttributeName
+                    )
+                );
+                unset($attributes[$oldAttributeName]);
+                continue;
+            }
             $attributeValue = $attributes[$oldAttributeName];
             unset($attributes[$oldAttributeName]);
             $this->logger->notice(
