@@ -22,6 +22,7 @@ services:
             - "@engineblock.validator.saml_binding_validator"
             - "@engineblock.validator.unsolicited_sso_request_validator"
             - "@engineblock.service.authentication_state_helper"
+            - "@engineblock.features"
 
     engineblock.controller.authentication.index:
         class: OpenConext\EngineBlockBundle\Controller\IndexController

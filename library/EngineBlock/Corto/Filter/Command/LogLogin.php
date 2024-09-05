@@ -25,9 +25,15 @@ class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter
      */
     private $authenticationLogger;
 
-    public function __construct(AuthenticationLoggerAdapter $authenticationLogger)
+    /**
+     * @var array
+     */
+    private $configuredLogAttributes;
+
+    public function __construct(AuthenticationLoggerAdapter $authenticationLogger, array $configuredLogAttributes)
     {
         $this->authenticationLogger = $authenticationLogger;
+        $this->configuredLogAttributes = $configuredLogAttributes;
     }
 
     public function execute()
@@ -48,6 +54,16 @@ class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter
         // Remove the SP that is our next hop
         array_pop($requesterChain);
 
+        $logAttributes = [];
+        if (!empty($this->configuredLogAttributes)) {
+            foreach ($this->configuredLogAttributes as $attributeLabel => $responseAttributeKey) {
+                if (array_key_exists($responseAttributeKey, $this->_responseAttributes)) {
+                    $attributeValues = implode(',', $this->_responseAttributes[$responseAttributeKey]);
+                    $logAttributes[$attributeLabel] = $attributeValues;
+                }
+            }
+        }
+
         $this->authenticationLogger->logLogin(
             $this->_serviceProvider,
             $this->_identityProvider,
@@ -57,7 +73,8 @@ class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter
             $this->_response->getNameIdValue(),
             $this->_response->getAssertion()->getAuthnContextClassRef(),
             $this->_request->getDestination(),
-            $this->_request->getIDPList()
+            $this->_request->getIDPList(),
+            $logAttributes
         );
     }
 }

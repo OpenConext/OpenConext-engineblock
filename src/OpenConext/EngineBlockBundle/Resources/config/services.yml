@@ -239,6 +239,11 @@ services:
             - '%cookie.locale.http_only%'
             - '%cookie.locale.secure%'
 
+    OpenConext\EngineBlock\Service\ReleaseAsEnforcer:
+        class: OpenConext\EngineBlock\Service\ReleaseAsEnforcer
+        arguments:
+            - "@logger"
+
     engineblock.attribute_aggregation.client:
         class: OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClient
         arguments:

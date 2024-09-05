@@ -79,6 +79,7 @@ class AuthenticationLoggerAdapterTest extends TestCase
                     $ssoEndpointUsed,
                     $requestedIdPs,
                     new ValueObjectEqualsMatcher(new KeyId($keyIdValue)),
+                    []
                 ]
             )
             ->once();
@@ -97,6 +98,70 @@ class AuthenticationLoggerAdapterTest extends TestCase
             $authnContextClassRef,
             $ssoEndpointUsed,
             $requestedIdPs
+        );
+    }
+
+    /**
+     * @test
+     * @group EngineBlockBridge
+     * @group Logger
+     */
+    public function arguments_with_log_attributes_are_converted_correctly()
+    {
+        $serviceProviderEntityId  = 'SpEntityId';
+        $identityProviderEntityId = 'IdpEntityId';
+        $collabPersonIdValue      = 'urn:collab:person:openconext:some-person';
+        $keyIdValue               = '20160403';
+        $spProxy1EntityId         = 'SpProxy1EntityId';
+        $spProxy2EntityId         = 'SpProxy2EntityId';
+        $originalNameId           = 'urn:collab:person:original:some-person';
+        $authnContextClassRef     = 'urn:oasis:names:tc:SAML:2.0:ac:classes:Password';
+        $requestedIdPs            = ['aap', 'noot'];
+        $ssoEndpointUsed          = '/authentication/idp/single-sign-on';
+        $logAttributes            = ['label' => 'attributeValue'];
+
+        $mockAuthenticationLogger = m::mock(AuthenticationLogger::class);
+        $mockAuthenticationLogger
+            ->shouldReceive('logGrantedLogin')
+            ->withArgs(
+                [
+                    new ValueObjectEqualsMatcher(new Entity(new EntityId($serviceProviderEntityId), EntityType::SP())),
+                    new ValueObjectEqualsMatcher(
+                        new Entity(new EntityId($identityProviderEntityId), EntityType::IdP())
+                    ),
+                    new ValueObjectEqualsMatcher(new CollabPersonId($collabPersonIdValue)),
+                    new ValueObjectListEqualsMatcher(
+                        [
+                            new Entity(new EntityId($spProxy1EntityId), EntityType::SP()),
+                            new Entity(new EntityId($spProxy2EntityId), EntityType::SP()),
+                        ]
+                    ),
+                    AbstractRole::WORKFLOW_STATE_PROD,
+                    $originalNameId,
+                    $authnContextClassRef,
+                    $ssoEndpointUsed,
+                    $requestedIdPs,
+                    new ValueObjectEqualsMatcher(new KeyId($keyIdValue)),
+                    $logAttributes
+                ]
+            )
+            ->once();
+
+        $authenticationLoggerAdapter = new AuthenticationLoggerAdapter($mockAuthenticationLogger);
+        $authenticationLoggerAdapter->logLogin(
+            new ServiceProvider($serviceProviderEntityId),
+            new IdentityProvider($identityProviderEntityId),
+            $collabPersonIdValue,
+            $keyIdValue,
+            [
+                new ServiceProvider($spProxy1EntityId),
+                new ServiceProvider($spProxy2EntityId),
+            ],
+            $originalNameId,
+            $authnContextClassRef,
+            $ssoEndpointUsed,
+            $requestedIdPs,
+            $logAttributes
         );
     }
 }

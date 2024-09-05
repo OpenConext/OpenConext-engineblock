@@ -62,11 +62,13 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
     {
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
         $logger = EngineBlock_ApplicationSingleton::getLog();
-
         return array(
             // If EngineBlock is in Processing mode (redirecting to it's self)
             // Then don't continue with the rest of the modifications
             new EngineBlock_Corto_Filter_Command_RejectProcessingMode(),
+
+            // Apply the ARP 'release_as' logic
+            new EngineBlock_Corto_Filter_Command_AttributeReleaseAs(),
 
             // Run custom attribute manipulations
             new EngineBlock_Corto_Filter_Command_RunAttributeManipulations(
@@ -81,13 +83,13 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             new EngineBlock_Corto_Filter_Command_ApplyTrustedProxyBehavior($logger),
 
             // Add the appropriate NameID to the 'eduPeronTargetedID' and the Assertions NameId.
-            new EngineBlock_Corto_Filter_Command_AddIdentityAttributes($logger),
+            new EngineBlock_Corto_Filter_Command_AddIdentityAttributes($diContainer->getNameIdResolver(), $diContainer->getNameIdSubstituteResolver(), $logger),
 
             // Convert all attributes to their OID format (if known) and add these.
             new EngineBlock_Corto_Filter_Command_DenormalizeAttributes(),
 
             // Log the login
-            new EngineBlock_Corto_Filter_Command_LogLogin($diContainer->getAuthenticationLogger()),
+            new EngineBlock_Corto_Filter_Command_LogLogin($diContainer->getAuthenticationLogger(), $diContainer->getAuthLogAttributes()),
         );
     }
 }

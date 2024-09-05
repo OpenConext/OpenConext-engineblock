@@ -18,6 +18,9 @@ Feature:
     And a Service Provider named "Trusted Proxy"
     And a Service Provider named "Stepup Gateway"
     And a Service Provider named "Stepup SelfService"
+    And a Service Provider named "Release As"
+    And a Service Provider named "Use as NameID"
+    And a Service Provider named "Use as NameID and Release As"
     And SP "Empty ARP" allows no attributes
     And SP "Wildcard ARP" allows an attribute named "urn:mace:dir:attribute-def:uid"
     And SP "Wrong Value ARP" allows an attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization" with value "example.edu"
@@ -29,6 +32,11 @@ Feature:
     And SP "Stepup Gateway" allows an attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization"
     And SP "Stepup Gateway" allows an attribute named "urn:mace:terena.org:attribute-def:eduPersonAffiliation"
     And SP "Stepup SelfService" allows an attribute named "urn:mace:dir:attribute-def:uid"
+    And SP "Release As" allows an attribute named "urn:mace:dir:attribute-def:uid" released as "Kustom-UiD"
+    And SP "Use as NameID" allows an attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    And SP "Use as NameID" uses the value of attribute "urn:mace:terena.org:attribute-def:schacHomeOrganization" as the NameId
+    And SP "Use as NameID and Release As" allows an attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization" released as "Kustom-schacHomeOrganization"
+    And SP "Use as NameID and Release As" uses the value of attribute "urn:mace:terena.org:attribute-def:schacHomeOrganization" as the NameId
     And feature "eb.run_all_manipulations_prior_to_consent" is disabled
 
   Scenario: As a user for an Idp SP without ARPs I get all attributes
@@ -74,6 +82,44 @@ Feature:
     And I pass through EngineBlock
     Then the response should not contain "urn:mace:dir:attribute-def:uid"
     And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+
+  Scenario: As a user for an SP renaming the uid attribute in the ARP I do not see the original attribute but the alias
+    When I log in at "Release As"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the response should contain "urn:mace:dir:attribute-def:uid"
+    And the response should not contain "Kustom-UiD"
+    When I give my consent
+    And I pass through EngineBlock
+    # The release_as logic is applied after consent
+    Then the response should not contain "urn:mace:dir:attribute-def:uid"
+    And the response should contain "Kustom-UiD"
+
+  Scenario: As a user for an SP the ARP can overwrite the NameId with a given attribute value
+    When I log in at "Use as NameID"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    When I give my consent
+    And I pass through EngineBlock
+    # The NameID is overwritten with the value of the schacHomeOrganization
+    # The IdP always releases the value: engine-test-stand.openconext.org for this schacHomeOrganization
+    # See: MockIdentityProviderFactory::generateDefaultResponse
+    Then the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    # The name id always becomes unspecified after substitution
+    And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="engine-test-stand.openconext.org"]'
+
+  Scenario: As a user for an SP the ARP can overwrite the NameId with a given attribute value and rename the attribute at the same time
+    When I log in at "Use as NameID and Release As"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    And the response should not contain "Kustom-schacHomeOrganization"
+    When I give my consent
+    And I pass through EngineBlock
+    Then the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    And the response should contain "Kustom-schacHomeOrganization"
+    And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="engine-test-stand.openconext.org"]'
 
   Scenario: As a user for an SP with a specific value ARP I do see the attribute if it has the right value
     When I log in at "Right Value ARP"

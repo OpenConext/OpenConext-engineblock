@@ -41,10 +41,10 @@ use OpenConext\EngineBlock\Metadata\X509\X509CertificateFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy;
 use ReflectionClass;
 use SAML2\Constants;
+use function array_key_exists;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings("PMD")
  */
 class ServiceRegistryFixture
 {
@@ -385,6 +385,61 @@ QUERY;
         ];
 
         $rules[$arpAttribute] = [$arpRule];
+
+        $this->getServiceProvider($entityId)->attributeReleasePolicy = new AttributeReleasePolicy($rules);
+
+        return $this;
+    }
+
+    public function allowAttributeReleasedAsForSp($entityId, $arpAttribute, $releasedAs)
+    {
+        /** @var AttributeReleasePolicy $arp */
+        $arp = $this->getServiceProvider($entityId)->attributeReleasePolicy;
+
+        $rules = [];
+
+        if (!empty($arp)) {
+            $rules = $arp->getAttributeRules();
+        }
+
+        $arpRule = [
+            'value' => "*",
+            'source' => 'idp',
+            'release_as' => $releasedAs,
+        ];
+
+        $rules[$arpAttribute] = [$arpRule];
+
+        $this->getServiceProvider($entityId)->attributeReleasePolicy = new AttributeReleasePolicy($rules);
+
+        return $this;
+    }
+
+
+    public function substituteNameIdWithAttributeValue(string $entityId, $attributeName)
+    {
+        /** @var AttributeReleasePolicy $arp */
+        $arp = $this->getServiceProvider($entityId)->attributeReleasePolicy;
+
+        $rules = [];
+
+        if (!empty($arp)) {
+            $rules = $arp->getAttributeRules();
+        }
+
+        $arpRule = [
+            'value' => "*",
+            'source' => 'idp',
+            'use_as_nameid' => true,
+        ];
+        // It could be the rule was already added (for example to set the release_as directive)
+        // in that case, load the existing rule and add the 'use_as_nameid'
+        if (array_key_exists($attributeName, $rules)) {
+            $arpRule = $rules[$attributeName][0];
+            $arpRule['use_as_nameid'] = true;
+        }
+
+        $rules[$attributeName] = [$arpRule];
 
         $this->getServiceProvider($entityId)->attributeReleasePolicy = new AttributeReleasePolicy($rules);
 

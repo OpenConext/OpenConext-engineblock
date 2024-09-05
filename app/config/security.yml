@@ -22,16 +22,16 @@ security:
             security: false
             stateless: true
 
+        monitor:
+            pattern: ^/(info|health)$
+            security: false
+
         api:
             host: ^engine-api\..+
             http_basic: ~
             entry_point: engineblock.security.http_basic_entry_point
             stateless: true
             pattern: ^/.+
-
-        monitor:
-            pattern: ^/(info|health)$
-            security: false
 
         main:
             anonymous: ~

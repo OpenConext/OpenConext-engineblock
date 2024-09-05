@@ -80,13 +80,6 @@ Feature:
      And the response should contain "Motivation for affiliation"
      And the response should contain "Motivation for orcid"
 
-  Scenario: The user is presented with an institution provided consent text
-    Given I log in at "Dummy-SP"
-    And the IdP "Dummy-IdP" provides a consent message "Institutional privacy message" for SP "Dummy-SP"
-    And I pass through EngineBlock
-    And I pass through the IdP
-    Then the response should contain "Institutional privacy message"
-
   Scenario: The user can reload the consent screen without error
     Given I log in at "Dummy-SP"
      And I pass through EngineBlock
@@ -94,6 +87,13 @@ Feature:
     Then the response should contain "Proceed to Dummy-SP"
     When I reload the page
     Then the response should contain "Proceed to Dummy-SP"
+
+  Scenario: The user is presented with an institution provided consent text
+    Given I log in at "Dummy-SP"
+    And the IdP "Dummy-IdP" provides a consent message "Institutional privacy message" for SP "Dummy-SP"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the response should contain "Institutional privacy message"
 
   Scenario: The user sees the identifier section when nameid is persistent
     Given SP "Dummy-SP" uses the Persistent NameID format

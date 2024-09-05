@@ -19,11 +19,8 @@
 namespace OpenConext\EngineBlock\Metadata;
 
 use InvalidArgumentException;
+use function array_key_exists;
 
-/**
- * Class AttributeReleasePolicy
- * @package OpenConext\EngineBlock\Metadata
- */
 class AttributeReleasePolicy
 {
     const WILDCARD_CHARACTER = '*';
@@ -106,7 +103,7 @@ class AttributeReleasePolicy
      *
      * @return array
      */
-    public function getRulesWithSourceSpecification()
+    public function getRulesWithSourceSpecification(): array
     {
         $rulesWithSource = [];
 
@@ -120,6 +117,37 @@ class AttributeReleasePolicy
         }
 
         return array_filter($rulesWithSource);
+    }
+
+    public function getRulesWithReleaseAsSpecification(): array
+    {
+        $rulesWithReleaseAs = [];
+
+        foreach ($this->attributeRules as $name => $rules) {
+            $rulesWithReleaseAs[$name] = array_filter(
+                $rules,
+                function ($rule) {
+                    return isset($rule['release_as']);
+                }
+            );
+        }
+
+        return array_filter($rulesWithReleaseAs);
+    }
+
+    public function findNameIdSubstitute(): ?string
+    {
+        foreach ($this->attributeRules as $name => $rules) {
+            foreach ($rules as $rule) {
+                if (isset($rule['use_as_nameid']) && $rule['use_as_nameid'] === true) {
+                    if (array_key_exists('release_as', $rule)) {
+                        return $rule['release_as'];
+                    }
+                    return $name;
+                }
+            }
+        }
+        return null;
     }
 
     /**

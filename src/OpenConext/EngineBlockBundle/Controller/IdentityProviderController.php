@@ -24,9 +24,11 @@ use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\RequestAccessMailer;
 use OpenConext\EngineBlock\Validator\RequestValidator;
 use OpenConext\EngineBlockBridge\ResponseFactory;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig_Environment;
 
 /**
@@ -74,6 +76,11 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
      */
     private $bindingValidator;
 
+    /**
+     * @var FeatureConfigurationInterface
+     */
+    private $featureConfiguration;
+
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
         Twig_Environment $twig,
@@ -82,7 +89,8 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
         RequestValidator $requestValidator,
         RequestValidator $bindingValidator,
         RequestValidator $unsolicitedRequestValidator,
-        AuthenticationStateHelperInterface $authenticationStateHelper
+        AuthenticationStateHelperInterface $authenticationStateHelper,
+        FeatureConfigurationInterface $featureConfiguration
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->twig = $twig;
@@ -92,6 +100,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
         $this->bindingValidator = $bindingValidator;
         $this->unsolicitedRequestValidator = $unsolicitedRequestValidator;
         $this->authenticationStateHelper = $authenticationStateHelper;
+        $this->featureConfiguration = $featureConfiguration;
     }
 
     /**
@@ -130,9 +139,14 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
      * @param null|string $keyId
      * @param null|string $idpHash
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws NotFoundHttpException If the IdP-initiated flow has been disabled by config
      */
     public function unsolicitedSingleSignOnAction(Request $request, $keyId = null, $idpHash = null)
     {
+        if (!$this->featureConfiguration->isEnabled('eb.feature_enable_idp_initiated_flow')) {
+            throw new NotFoundHttpException();
+        }
+
         $this->unsolicitedRequestValidator->isValid($request);
 
         $cortoAdapter = new EngineBlock_Corto_Adapter();

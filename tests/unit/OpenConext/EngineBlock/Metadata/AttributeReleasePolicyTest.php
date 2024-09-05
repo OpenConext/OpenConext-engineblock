@@ -172,4 +172,70 @@ class AttributeReleasePolicyTest extends TestCase
         $this->assertEquals('b', $policy->getSource('b'));
         $this->assertEquals('idp', $policy->getSource('c'), 'Default source should equal idp');
     }
+    public function testGetRulesWithReleaseAsSpecification()
+    {
+        $policy = new AttributeReleasePolicy([
+            'attr1' => [
+                ['value' => 'arbitrary', 'release_as' => 'Noot'],
+            ],
+            'attr2' => [
+                ['value' => 'arbitrary', 'release_as' => 'Mies'],
+            ],
+            'attr3' => [
+                ['value' => 'arbitrary'],
+            ],
+        ]);
+
+        $expected = [
+            'attr1' => [
+                ['value' => 'arbitrary', 'release_as' => 'Noot'],
+            ],
+            'attr2' => [
+                ['value' => 'arbitrary', 'release_as' => 'Mies'],
+            ],
+        ];
+
+        $this->assertEquals($expected, $policy->getRulesWithReleaseAsSpecification());
+    }
+
+    public function testFindNameIdSubstitute()
+    {
+        $policy = new AttributeReleasePolicy([
+            'attr1' => [
+                ['value' => 'value1', 'use_as_nameid' => false],
+            ],
+            'attr2' => [
+                ['value' => 'value2', 'use_as_nameid' => true],
+            ],
+            'attr3' => [
+                ['value' => 'value3', 'use_as_nameid' => false],
+            ],
+        ]);
+
+        $this->assertEquals('attr2', $policy->findNameIdSubstitute());
+
+        $policyWithoutNameId = new AttributeReleasePolicy([
+            'attr1' => [['value' => 'value1', 'use_as_nameid' => false]],
+            'attr2' => [['value' => 'value2', 'use_as_nameid' => false]],
+        ]);
+
+        $this->assertNull($policyWithoutNameId->findNameIdSubstitute());
+    }
+    public function testFindNameIdSubstituteWithReleaseAs()
+    {
+        $policy = new AttributeReleasePolicy([
+            'attr1' => [
+                ['value' => 'value1', 'use_as_nameid' => false],
+            ],
+            'attr2' => [
+                // When release_as is set, the name id value must be retrieved on that
+                // attribute in the assertion (release as is evaluated first)
+                ['value' => 'value2', 'use_as_nameid' => true, 'release_as' => 'new_attr_name'],
+            ],
+            'attr3' => [
+                ['value' => 'value3', 'use_as_nameid' => false],
+            ],
+        ]);
+        $this->assertEquals('new_attr_name', $policy->findNameIdSubstitute());
+    }
 }

@@ -44,4 +44,9 @@
     img {
         padding: 0 0 1em 1em;
     }
+
+    img.pull-right {
+        float: right;
+        margin-left: 1em;
+    }
 }

@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlockBridge\Authentication\Repository\UserDirectoryAdapter;
 use SAML2\Constants;
 use SAML2\XML\saml\NameID;
 
@@ -23,6 +24,16 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
     implements EngineBlock_Corto_Filter_Command_ResponseModificationInterface,
     EngineBlock_Corto_Filter_Command_CollabPersonIdModificationInterface
 {
+    /**
+     * @var UserDirectoryAdapter
+     */
+    private $userDirectory;
+
+    public function __construct(UserDirectoryAdapter $userDirectory)
+    {
+        $this->userDirectory = $userDirectory;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -41,8 +52,7 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
 
     public function execute()
     {
-        $userDirectory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getUserDirectory();
-        $user = $userDirectory->identifyUser($this->_responseAttributes);
+        $user = $this->userDirectory->identifyUser($this->_responseAttributes);
 
         $collabPersonIdValue = $user->getCollabPersonId()->getCollabPersonId();
         $this->setCollabPersonId($collabPersonIdValue);

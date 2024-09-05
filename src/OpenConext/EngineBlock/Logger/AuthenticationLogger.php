@@ -55,7 +55,8 @@ class AuthenticationLogger
         ?string $authnContextClassRef,
         ?string $engineSsoEndpointUsed,
         ?array $requestedIdPlist,
-        KeyId $keyId = null
+        KeyId $keyId = null,
+        array $logAttributes = []
     ) {
         $proxiedServiceProviderEntityIds = array_map(
             function (Entity $entity) {
@@ -66,21 +67,26 @@ class AuthenticationLogger
 
         $timestamp = $this->generateTimestamp();
 
+        $logData = [
+            'login_stamp' => $timestamp,
+            'user_id' => $collabPersonId->getCollabPersonId(),
+            'sp_entity_id' => $serviceProvider->getEntityId()->getEntityId(),
+            'idp_entity_id' => $identityProvider->getEntityId()->getEntityId(),
+            'key_id' => $keyId ? $keyId->getKeyId() : null,
+            'proxied_sp_entity_ids' => $proxiedServiceProviderEntityIds,
+            'workflow_state' => $workflowState,
+            'original_name_id' => $originalNameId,
+            'authncontextclassref' => $authnContextClassRef,
+            'requestedidps' => $requestedIdPlist,
+            'engine_sso_endpoint_used' => $engineSsoEndpointUsed
+        ];
+        if (!empty($logAttributes)) {
+            $logData['response_attributes'] = $logAttributes;
+        }
+
         $this->logger->info(
             'login granted',
-            [
-                'login_stamp' => $timestamp,
-                'user_id' => $collabPersonId->getCollabPersonId(),
-                'sp_entity_id' => $serviceProvider->getEntityId()->getEntityId(),
-                'idp_entity_id' => $identityProvider->getEntityId()->getEntityId(),
-                'key_id' => $keyId ? $keyId->getKeyId() : null,
-                'proxied_sp_entity_ids' => $proxiedServiceProviderEntityIds,
-                'workflow_state' => $workflowState,
-                'original_name_id' => $originalNameId,
-                'authncontextclassref' => $authnContextClassRef,
-                'requestedidps' => $requestedIdPlist,
-                'engine_sso_endpoint_used' => $engineSsoEndpointUsed,
-            ]
+            $logData
         );
     }
 

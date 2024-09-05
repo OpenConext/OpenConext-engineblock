@@ -46,6 +46,7 @@ class TestFeatureConfiguration implements FeatureConfigurationInterface
         $this->setFeature(new Feature('eb.feature_enable_consent', true));
         $this->setFeature(new Feature('eb.enable_sso_session_cookie', true));
         $this->setFeature(new Feature('eb.stepup.sfo.override_engine_entityid', false));
+        $this->setFeature(new Feature('eb.feature_enable_idp_initiated_flow', true));
     }
 
     public function setFeature(Feature $feature): void

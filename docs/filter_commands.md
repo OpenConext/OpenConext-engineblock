@@ -235,6 +235,12 @@ handling an internal request (e.g. from a received Reponse to Consent).
 Uses:
  - EngineBlock_Corto_ProxyServer
 
+### AttributeReleaseAs
+
+If in the ARP any attribute has a "release_as" setting that specifies another name
+for this attribute, the attribute values will be released under that name and not
+the original, official attribute name.
+
 ### RunAttributeManipulations (for SP)
 Run the configured Attribute Manipulations for the current Service Provider. Attribute Manipulations are code that is
 executed that allows the modification of response attribute values.
@@ -286,7 +292,13 @@ Modifies:
 - responseAttributes
 
 ### AddIdentityAttributes
-Sets the NameID and/or the eduPersonTargetedId (EPTI) on the Response
+Sets the NameID and/or the eduPersonTargetedId (EPTI) on the Response.
+
+By default it will use the NameIDFormat defined for the SP in its metadata to
+determine whether to generate a persistent or transient ID, or release the
+unspecified/collabPersonId plainly. Also the 'use_as_nameid' flag in the ARP
+is inspected, if set the first value of the attribute with that flag will be
+used as the NameID, with format=unspecified.
 
 Depends on:
 - EngineBlock_Saml2_NameIdResolver
