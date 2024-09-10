@@ -5,6 +5,11 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.16.0
+- Stepup ACS: add check that returned NameID matches the one we requested. #1281
+- Default feature block_user_on_violation to on #1282
+- Bump twig/twig from 2.15.3 to 2.16.1 #1323
+
 ## 6.15.0
 
 New features:
