@@ -10,7 +10,7 @@ More information about our release strategy can be found in the [Development Gui
 New features:
 * Support and follow `release_as` and `use_as_nameid` when configured in ARP
     *  Overwrite the NameID when specified in use_as_nameid ARP setting #1308
-    *  Create Corto input filter for the ARP directive release_as to be applied #1307
+    *  Create Corto input filter for the ARP directive release_as to be applied #1307 #1322
  * Added feature toggle to disable unsolicited SSO entirely
 
 Bugfix:
