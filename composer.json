@@ -2,7 +2,11 @@
     "name": "openconext/engineblock",
     "description": "OpenConext SAML proxy",
     "type": "project",
-    "keywords": ["saml", "proxy", "openconext"],
+    "keywords": [
+        "saml",
+        "proxy",
+        "openconext"
+    ],
     "homepage": "http://www.openconext.org",
     "license": "Apache-2.0",
     "support": {
@@ -90,7 +94,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "OpenConext\\": ["tests/unit/OpenConext/", "tests/integration/OpenConext/", "tests/functional/OpenConext/"]
+            "OpenConext\\": [
+                "tests/unit/OpenConext/",
+                "tests/integration/OpenConext/",
+                "tests/functional/OpenConext/"
+            ]
         },
         "files": [
             "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php"
@@ -115,6 +123,24 @@
             {
                 "file": "app/config/functional_testing.yml"
             }
+        ]
+    },
+    "archive": {
+        "exclude": [
+            "*",
+            ".*",
+            "!/.env",
+            "*/Tests/*",
+            "!/app",
+            "!/application",
+            "!/component_info",
+            "!/database",
+            "!/languages",
+            "!/library",
+            "!/src",
+            "!/theme",
+            "!/vendor",
+            "!/web"
         ]
     }
 }

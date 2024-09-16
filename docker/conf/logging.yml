@@ -1,0 +1,22 @@
+monolog:
+    channels: ["%logger.channel%", "authentication"]
+    handlers:
+        main:
+            type: fingers_crossed
+            activation_strategy: engineblock.logger.manual_or_error_activation_strategy
+            passthru_level: "%logger.fingers_crossed.passthru_level%"
+            handler: stderr
+            channels: ["!authentication"]
+        stderr:
+            type:      stream
+            path:      php://stderr
+            ident:     "%logger.syslog.ident%"
+            formatter: engineblock.logger.additional_info_formatter
+        authentication:
+            type:      stream
+            path:      php://stderr
+            ident:     EBAUTH
+            facility:  user
+            level:     INFO
+            channels:  [authentication]
+            formatter: engineblock.logger.formatter.syslog_json

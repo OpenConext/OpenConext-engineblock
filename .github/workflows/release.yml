@@ -1,0 +1,12 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "*.*.*"
+
+jobs:
+  build-release-and-push-container:
+    uses: openconext/openconext-githubactions/.github/workflows/symfony-release.yml@main
+    with:
+      component_name: "OpenConext-engineblock"
