@@ -1,8 +1,15 @@
 FROM ghcr.io/openconext/openconext-basecontainers/php72-apache2:latest
-COPY  ./*tar.gz  /tmp/
-RUN tar --strip-components=1 -xvzf /tmp/*tar.gz -C /var/www/html/ && \
-    rm -rf /tmp/*.tar.gz
+ARG APP_VERSION
+ARG GIT_SHA
+ARG GIT_COMMIT_TIME
+ENV OPENCONEXT_APP_VERSION=${APP_VERSION}
+ENV OPENCONEXT_GIT_SHA=${GIT_SHA}
+ENV OPENCONEXT_COMMIT_DATE=${GIT_COMMIT_TIME}
 
+WORKDIR /var/www/html
+COPY *.tar.bz2 /tmp/
+RUN tar -xvjf /tmp/*.tar.bz2 -C /var/www/html/ && \
+    rm -rf /tmp/*.tar.bz2
 # Add the config files for Apache2
 RUN rm -rf /etc/apache2/sites-enabled/*
 COPY ./docker/conf/engine.conf /etc/apache2/sites-enabled/engine.conf
@@ -11,6 +18,5 @@ COPY ./docker/conf/logging.yml /var/www/html/config/packages/
 RUN cp app/config/parameters.yml.docker app/config/parameters.yml
 
 # Set the default workdir
-WORKDIR /var/www/html
 EXPOSE 80
 CMD ["apache2-foreground"]
