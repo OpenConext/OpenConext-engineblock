@@ -1,6 +1,0 @@
-version: '2.4'
-
-services:
-    php-fpm.vm.openconext.org:
-        build:
-            dockerfile: docker/php-fpm/Dockerfile-php82
