@@ -29,4 +29,4 @@ jobs:
       - name: Run test curl
         run: |
           cd docker &&
-          docker compose exec web.vm.openconext.org bash -c 'curl https://engine.vm.openconext.org/info'
+          docker compose exec web.vm.openconext.org bash -c 'curl -k https://engine.vm.openconext.org/info'
