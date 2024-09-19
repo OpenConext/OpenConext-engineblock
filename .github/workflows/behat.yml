@@ -19,9 +19,10 @@ jobs:
       - name: Run composer and yarn install
         run: |
           cd docker &&
-          docker compose exec -T --user www-data web.vm.openconext.org bash -c '
+          docker compose exec -T web.vm.openconext.org bash -c '
             SYMFONY_ENV=ci composer install --prefer-dist -n -o --ignore-platform-reqs && \
             ./app/console cache:clear --env=ci && \
+            chown -R www-data /var/www/html/app/cache && \
             cd theme && CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile && EB_THEME=skeune yarn build
           '
 
