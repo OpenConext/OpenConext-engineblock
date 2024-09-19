@@ -23,6 +23,7 @@ jobs:
             SYMFONY_ENV=ci composer install --prefer-dist -n -o --ignore-platform-reqs && \
             ./app/console cache:clear --env=ci && \
             chown -R www-data /var/www/html/app/cache && \
+            chown -R www-data /var/www/html/app/logs && \
             cd theme && CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile && EB_THEME=skeune yarn build
           '
 
