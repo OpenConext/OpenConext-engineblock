@@ -69,7 +69,7 @@
     "urn:mace:dir:attribute-def:eduPersonEntitlement": {
         "Description": {
             "en": "entitlement which decides upon your authorization within the application",
-            "nl": "rechtaanduiding; URI (URL of URN) dat een recht op iets aangeeft; wordt bepaald door een contract tussen dienstaanbieder en instelling"
+            "nl": "rechtaanduiding; URI (URL of URN) dat een recht op iets aangeeft; wordt bepaald door een contract tussen applicatieaanbieder en instelling"
         },
         "Name": {
             "en": "Entitlement",
@@ -411,8 +411,8 @@
     },
     "urn:nl.surfconext.licenseInfo": {
         "Description": {
-            "en": "License information for the current service",
-            "nl": "Licentieinformatie voor de huidige dienst"
+            "en": "License information for the current application",
+            "nl": "Licentieinformatie voor de huidige applicatie"
         },
         "Name": {
             "en": "License information",

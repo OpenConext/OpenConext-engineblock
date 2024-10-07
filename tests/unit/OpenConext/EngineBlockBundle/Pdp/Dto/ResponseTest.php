@@ -172,12 +172,12 @@ class ResponseTest extends TestCase
         $attributeAssignmentEn              = new AttributeAssignment();
         $attributeAssignmentEn->category    = 'urn:oasis:names:tc:xacml:3.0:attribute-category:resource';
         $attributeAssignmentEn->attributeId = 'DenyMessage:en';
-        $attributeAssignmentEn->value       = 'Students do not have access to this resource';
+        $attributeAssignmentEn->value       = 'Students do not have access to this application';
         $attributeAssignmentEn->dataType    = 'http://www.w3.org/2001/XMLSchema#string';
         $attributeAssignmentNl              = new AttributeAssignment();
         $attributeAssignmentNl->category    = 'urn:oasis:names:tc:xacml:3.0:attribute-category:resource';
         $attributeAssignmentNl->attributeId = 'DenyMessage:nl';
-        $attributeAssignmentNl->value       = 'Studenten hebben geen toegang tot deze dienst';
+        $attributeAssignmentNl->value       = 'Studenten hebben geen toegang tot deze applicatie';
         $attributeAssignmentNl->dataType    = 'http://www.w3.org/2001/XMLSchema#string';
         $associatedAdvice->attributeAssignments = [$attributeAssignmentEn, $attributeAssignmentNl];
         $associatedAdvice->id = 'urn:surfconext:xacml:policy:id:openconext_pdp_test_deny_policy_xml';

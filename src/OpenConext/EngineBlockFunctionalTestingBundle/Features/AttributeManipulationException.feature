@@ -18,9 +18,9 @@ Feature:
 $e = new EngineBlock_Attributes_Manipulator_CustomException("AM_ERROR Authorization Incorrect _ Affilliation Incorrect", EngineBlock_Attributes_Manipulator_CustomException::CODE_NOTICE);
 $e->setFeedbackTitle(array("nl" => "Autorisatie Incorrect", "en" => "Authorization Incorrect"));
 $e->setFeedbackDescription(array(
-    "en" => 'This user does not have access to desired service. ' .
+    "en" => 'This user does not have access to desired application. ' .
         'Contact the system administrator.',
-    "nl" => 'Deze gebruikersnaam heeft geen toegang tot de gewenste dienst. ' .
+    "nl" => 'Deze gebruikersnaam heeft geen toegang tot de gewenste applicatie. ' .
         'Neem contact op met de systeem beheerder. '
   ));
 throw $e;
