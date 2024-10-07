@@ -272,7 +272,7 @@ Your %organisationNoun% does not provide the mandatory information. Therefore, y
     'error_stepup_callout_unmet_loa_desc' => 'To continue to this application, a registered token with a certain level of assurance is required. Currently, you either haven\'t registered a token at all, or the level of assurance of the token you did register is too low. See the link below for more information about the registration process.',
     'error_stepup_callout_unmet_loa_link_text' => 'Read more about the registration process.',
     'error_stepup_callout_unmet_loa_link_target' => 'https://support.surfconext.nl/stepup-noauthncontext-en',
-    'error_stepup_callout_user_cancelled' => 'Error - Logging in cancelled',
+    'error_stepup_callout_user_cancelled_title' => 'Error - Logging in cancelled',
     'error_stepup_callout_user_cancelled_desc' => 'You have aborted the login process. Go back to the application if you want to try again.',
     'error_metadata_entity_id_not_found' => 'Metadata can not be generated',
     'error_metadata_entity_id_not_found_desc' => 'The following error occurred: %message%',
