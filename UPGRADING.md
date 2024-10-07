@@ -139,7 +139,7 @@ Therefore you should push the data from Manage after you have updated the codeba
 Be aware that you need to be logged in into manage to push the data after updating the codebase and database schema.
 
 In order to let this work you need to do the following:
- 1. Login into manage
+ 1. Log in to manage
  1. Update codebase
  1. Run migrations
  1. Push metadata

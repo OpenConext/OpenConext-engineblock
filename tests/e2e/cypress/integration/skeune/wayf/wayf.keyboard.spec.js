@@ -28,7 +28,7 @@ import {firstRemainingIdp, firstSelectedIdpDeleteDisable, selectedIdpDataIndex1}
  */
 context('WAYF when using the keyboard', () => {
   describe('Test logging in', () => {
-    it('Should login when selecting an idp', () => {
+    it('Should log in when selecting an idp', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.get(remainingIdpSelector)
         .eq(1)
@@ -40,7 +40,7 @@ context('WAYF when using the keyboard', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
     });
 
-    it('Should login to first IdP when hitting enter', () => {
+    it('Should log in to first IdP when hitting enter', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.get(searchFieldSelector)
         .type('{enter}');
@@ -49,7 +49,7 @@ context('WAYF when using the keyboard', () => {
       });
     });
 
-    it('Should login to topmost  IdP when hitting enter', () => {
+    it('Should log in to topmost  IdP when hitting enter', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.get(searchFieldSelector)
         .type('2')

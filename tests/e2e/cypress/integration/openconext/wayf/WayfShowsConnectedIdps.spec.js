@@ -14,7 +14,7 @@ context('WayfMouseBehaviour', () => {
       // After filtering the search results, verify one result is visible
       cy.countIdps(1).should('have.text', 'Connected IdP 4 en');
 
-      cy.onPage('Select an organisation to login to the service');
+      cy.onPage('Select an organisation to log in to the service');
       // Ensure some elements are NOT on the page
       cy.notOnPage('Identity providers without access').should('not.exist');
       cy.notOnPage('Remember my choice');
@@ -37,7 +37,7 @@ context('WayfMouseBehaviour', () => {
 
   it('Should show the return to service link when configured', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5&backLink=true');
-      cy.onPage('Select an organisation to login to the service');
+      cy.onPage('Select an organisation to log in to the service');
       cy.onPage('Return to service provider');
 
       // Ensure some elements are NOT on the page
@@ -52,7 +52,7 @@ context('WayfMouseBehaviour', () => {
   it('Should show the remember my choice option', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true');
       // Ensure some elements are on the page
-      cy.onPage('Select an organisation to login to the service');
+      cy.onPage('Select an organisation to log in to the service');
       cy.onPage('Remember my choice');
       // Ensure some elements are NOT on the page
       cy.notOnPage('Identity providers without access');
