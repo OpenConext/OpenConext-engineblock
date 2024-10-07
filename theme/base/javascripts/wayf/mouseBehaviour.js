@@ -15,7 +15,7 @@ import {checkHover} from './idpFocus/checkHover';
 import {isVisibleElement} from '../utility/isVisibleElement';
 
 export const mouseBehaviour = () => {
-  // allow chosing an idp to login
+  // allow choosing an idp to log in
   const idpLists = document
     .querySelectorAll(idpListSelector);
   idpLists.forEach(list => {

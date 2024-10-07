@@ -75,10 +75,10 @@ final class FunctionalTestingPdpClient implements PdpClientInterface
 
                 $englishDenyMessage = new AttributeAssignment();
                 $englishDenyMessage->attributeId = 'DenyMessage:en';
-                $englishDenyMessage->value = sprintf('Students of %s do not have access to this resource', $idp);
+                $englishDenyMessage->value = sprintf('Students of %s do not have access to this application', $idp);
                 $dutchDenyMessage = new AttributeAssignment();
                 $dutchDenyMessage->attributeId = 'DenyMessage:nl';
-                $dutchDenyMessage->value = sprintf('Studenten van %s hebben geen toegang tot deze dienst', $idp);
+                $dutchDenyMessage->value = sprintf('Studenten van %s hebben geen toegang tot deze applicatie', $idp);
                 $idpOnlyMessage = new AttributeAssignment();
                 $idpOnlyMessage->attributeId = 'IdPOnly';
                 $idpOnlyMessage->value = true;

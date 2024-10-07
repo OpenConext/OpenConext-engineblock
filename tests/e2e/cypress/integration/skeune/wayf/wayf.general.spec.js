@@ -163,7 +163,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.get(idpTitle)
         .should('have.length', 6)
         .eq(2)
-        .should('have.text', 'Login with Connected IdP 3 en');
+        .should('have.text', 'Log in with Connected IdP 3 en');
     });
 
     it('Check if the search field is present', () => {
@@ -191,7 +191,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
   describe('Should show the remember my choice option', () => {
     it('Ensure some elements are on the page', () => {
       cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true');
-      cy.onPage('Select an account to login');
+      cy.onPage('Select an account to log in');
       cy.onPage('Remember my choice');
     });
 
