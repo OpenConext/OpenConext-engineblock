@@ -30,7 +30,7 @@ return $overrides + [
 
     // Consent slidein: Reject
     'consent_slidein_reject_head'  => "You don't want to share your data with the application",
-    'consent_slidein_reject_text'  => "The application you're logging into requires your data to function properly. If you prefer not to share your data, you cannot use this application. By closing your browser or just this tab you prevent your information from being shared with the application. If you change your mind later, please log in to the application again and this screen will reappear.",
+    'consent_slidein_reject_text'  => "The application you're logging in to requires your data to function properly. If you prefer not to share your data, you cannot use this application. By closing your browser or just this tab you prevent your information from being shared with the application. If you change your mind later, please log in to the application again and this screen will reappear.",
 
     // Generic slide-in
     'slidein_close' => 'Close',

@@ -56,7 +56,7 @@ Processing of the request:
 * Both the trusted proxy and the end-SP being proxied must be known to engineblock (= configured as SP entities in Manage)
 * Both the trusted proxy and the end-SP being proxied must have the same workflow state
 
-* The ACL of both the trusted proxy and the end-SP are verified. Only IdPs are allowed access to both SPs are allowed to login
+* The ACL of both the trusted proxy and the end-SP are verified. Only IdPs are allowed access to both SPs are allowed to log in
 * The ARPs of both the trusted proxy and the end-SP being proxied are applied. Only attributes and attribute values that are allowed by both ARP are included in the response
 * The attribute manipulations (AMs) of both the trusted proxy and the end-SP are run. The AMs of the trusted proxy are run first.
 * Stepup-invocation is done if configured for the end-SP.
