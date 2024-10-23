@@ -65,7 +65,7 @@ class EngineBlock_Application_ErrorHandler
 
         $this->_application->reportError($e);
 
-        $message = 'An exceptional condition occurred, it has been logged and sent to the administrator.';
+        $message = 'An exceptional condition occurred. Contact support if this error persists.';
         die($message);
     }
 
@@ -124,7 +124,7 @@ class EngineBlock_Application_ErrorHandler
         if (ini_get('display_errors')) {
             echo "<br />" . PHP_EOL;
         }
-        $message = 'A very serious error occurred, it has been logged and sent to the administrator.';
+        $message = 'A very serious error occurred. Contact support if the error persists.';
         $message .= PHP_EOL . '<br /><br /> ERROR: ' . PHP_EOL . '<br />';
         $message .= '<strong style="color: red"><pre>' . var_export($lastError->toArray(), true) . '</pre></strong>';
         echo($message);
