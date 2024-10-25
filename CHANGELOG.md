@@ -5,6 +5,17 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.15.1
+
+Changed:
+ * Stepup: add check that returned NameID matches the one we requested,
+   should never happen, added for defense-in-depth.
+ * Improved error message on fatal error.
+ * Change the default for the feature block_user_on_violation to on.
+
+Maintenance:
+ * Upgrade twig dependency
+
 ## 6.15.0
 
 New features:
