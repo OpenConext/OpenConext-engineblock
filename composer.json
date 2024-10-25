@@ -139,6 +139,7 @@
             "!/library",
             "!/src",
             "!/theme",
+            "/theme/node_modules",
             "!/vendor",
             "!/web"
         ]
