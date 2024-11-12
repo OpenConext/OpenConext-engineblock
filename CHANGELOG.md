@@ -5,6 +5,12 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.15.2
+Changed:
+  * Docker: Change logging to json5
+Maintenance:
+  * Upgrade elliptic
+
 ## 6.15.1
 
 Changed:
@@ -73,12 +79,12 @@ Maintenance:
 * Improve MDUI Logo usage #1264
 
 **Improvement**
-* Documentation regarding the `metadata:coin:stepup:forceauthn` feature was added. 
+* Documentation regarding the `metadata:coin:stepup:forceauthn` feature was added.
 * Specify data types of roles columns #1262
 
 **Maintenance**
 * Test integration Github Action utilizes base container
-* Test integration runs against PHP 7.2 and PHP 8.2 (removed PHP 5.6 test runs) 
+* Test integration runs against PHP 7.2 and PHP 8.2 (removed PHP 5.6 test runs)
 
 ## 6.11.0
 **Feature**
