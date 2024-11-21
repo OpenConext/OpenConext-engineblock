@@ -2,7 +2,7 @@ name: run cypress
 on:
     push:
         branches:
-            - master
+            - main
     pull_request:
     workflow_dispatch:
     # run at 6 hour UTC
