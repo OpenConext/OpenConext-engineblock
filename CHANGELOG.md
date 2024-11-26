@@ -5,6 +5,10 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.15.3-beta
+Maintenance:
+  * Upgrade saml2 library
+
 ## 6.15.2
 Changed:
   * Docker: Change logging to json5
