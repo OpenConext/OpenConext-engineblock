@@ -100,6 +100,9 @@ class IdentityProviderController extends Controller
                 $authnRequest->getAssertionConsumerServiceURL() :
                 $response->getDestination());
 
+        /* set the destination element of the response to the ACS URL */
+        $response->setDestination($destination);
+
         if ($mockIdp->mustUseHttpRedirect()) {
             $redirect = new HTTPRedirect();
             $redirect->setDestination($destination);
