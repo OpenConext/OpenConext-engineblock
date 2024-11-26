@@ -193,7 +193,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             return;
         }
 
-        $log->info('Handle Stepup authentication callout', array('key_id' => $receivedRequest->getId()));
+        $log->info('Handle Stepup authentication callout');
 
         // Add Stepup authentication step
         $currentProcessStep = $this->_processingStateHelper->addStep(
