@@ -111,16 +111,6 @@ class ProxiedIdentityProviderTest extends AbstractEntityTest
             ->with('metadata_organization_name')
             ->willReturn('configuredOrganizationName');
 
-        $translator->expects($this->at(2))
-            ->method('trans')
-            ->with('metadata_organization_displayname')
-            ->willReturn('configuredOrganizationDisplayName');
-
-        $translator->expects($this->at(3))
-            ->method('trans')
-            ->with('metadata_organization_url')
-            ->willReturn('configuredOrganizationUrl');
-
         $configuration = new EngineBlockConfiguration(
             $translator,
             'configuredSupportMail',
