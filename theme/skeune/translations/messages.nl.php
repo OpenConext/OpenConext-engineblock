@@ -23,7 +23,7 @@ return $overrides + [
     'footer_navigation_screenreader'    => 'Footer navigatie',
 
     // Forms
-    'form_general_error'    =>  'Er ging iets fout tijdens het insturen van het formulier. Dit kan een probleem zijn met je internetverbinding of iets anders.  Controleer je invoer en probeer het later opnieuw.  Mocht het probleem zich blijven voordoen, neem dan contact op met je servicedesk.',
+    'form_general_error'    =>  'Er ging iets fout tijdens het insturen van het formulier. Dit kan een probleem zijn met je internetverbinding of iets anders.  Controleer je invoer en probeer het later opnieuw.  Mocht het probleem zich blijven voordoen, neem dan contact op met je helpdesk.',
     'form_error_name'       =>  'Je naam moet minstens twee tekens lang zijn',
     'form_error_email'      =>  'Dit is geen geldig e-mailadres',
 
