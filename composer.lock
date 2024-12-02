@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "75e0838cd30c0a80bdbad193bdcf465c",
+    "content-hash": "71a37d02a121077e833a90ca029d301f",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2839,16 +2839,16 @@
         },
         {
             "name": "simplesamlphp/saml2",
-            "version": "v4.6.13",
+            "version": "v4.16.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/saml2.git",
-                "reference": "f32fdf3b86b156adfb982a09c902790dc6562b34"
+                "reference": "fe6c7bdda5e166e326d19d78f230d959ab51d01d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/f32fdf3b86b156adfb982a09c902790dc6562b34",
-                "reference": "f32fdf3b86b156adfb982a09c902790dc6562b34",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/fe6c7bdda5e166e326d19d78f230d959ab51d01d",
+                "reference": "fe6c7bdda5e166e326d19d78f230d959ab51d01d",
                 "shasum": ""
             },
             "require": {
@@ -2894,9 +2894,9 @@
             "description": "SAML2 PHP library from SimpleSAMLphp",
             "support": {
                 "issues": "https://github.com/simplesamlphp/saml2/issues",
-                "source": "https://github.com/simplesamlphp/saml2/tree/v4.6.13"
+                "source": "https://github.com/simplesamlphp/saml2/tree/v4.16.14"
             },
-            "time": "2024-11-20T21:03:56+00:00"
+            "time": "2024-12-01T22:26:30+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
