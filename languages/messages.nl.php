@@ -70,7 +70,7 @@ return $overrides + [
     'no_idp_results'            => 'Je zoekterm heeft geen resultaten opgeleverd.',
     'no_idp_results_request_access' => 'Kun je je %organisationNoun% niet vinden? &nbsp;<a href="#no-access" class="noaccess">Vraag toegang aan</a>&nbsp;of pas je zoekopdracht aan.',
     'more_idp_results'          => '%arg1% resultaten worden niet getoond. Verfijn je zoekopdracht voor specifiekere resultaten.',
-    'return_to_sp'              => 'Keer terug naar applicatieaanbieder',
+    'return_to_sp'              => 'Keer terug naar applicatie',
 
     // Help page
     'help_header'       => 'Help',
