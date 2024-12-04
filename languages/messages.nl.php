@@ -209,7 +209,7 @@ HTML
     'error_invalid_attribute_value_desc' => '%idpName% geeft een waarde door in het attribuut %attributeName% ("%attributeValue%") die niet is toegestaan voor deze %organisationNoun%. Inloggen is daarom niet mogelijk. Alleen %idpName% kan dit oplossen. Neem dus contact op met de helpdesk van %idpName%.',
     'error_invalid_attribute_value_desc_no_idp_name' => 'Je %organisationNoun% geeft een waarde door in het attribuut %attributeName% ("%attributeValue%") die niet is toegestaan voor deze %organisationNoun%. Inloggen is daarom niet mogelijk. Alleen jouw %organisationNoun% kan dit oplossen. Neem dus contact op met de helpdesk van je eigen %organisationNoun%.',
     'error_received_error_status_code'     => 'Error - Fout bij Identity Provider',
-    'error_received_error_status_code_desc'=> 'Je %organisationNoun% heeft je de toegang geweigerd tot deze applicatie. Je zult dus contact moeten opnemen met de (IT-)helpdesk van je eigen %organisationNoun% om te kijken of dit verholpen kan worden.',
+    'error_received_error_status_code_desc'=> 'Je %organisationNoun% heeft je de toegang geweigerd tot deze applicatie. Neem contact op met de helpdesk van je eigen %organisationNoun% om te kijken of dit verholpen kan worden.',
     'error_received_invalid_response'        => 'Fout - Ongeldig SAML-bericht van %idpName%',
     'error_received_invalid_response_no_idp_name'        => 'Fout - Ongeldig SAML-bericht van %organisationNoun%',
     'error_received_invalid_signed_response' => 'Fout - Ongeldige handtekening op antwoord van %idpName%',
