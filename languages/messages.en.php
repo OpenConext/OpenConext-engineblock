@@ -179,7 +179,7 @@ HTML
     'error_unsupported_signature_method' => 'Error - Signature method is not supported',
     'error_unsupported_signature_method_desc' => 'The signature method %arg1% is not supported, please upgrade to RSA-SHA256 (http://www.w3.org/2001/04/xmldsig-more#rsa-sha256).',
     'error_unknown_keyid' => 'Error - unknown key id',
-    'error_unknown_keyid_desc' => 'The requested key-ID is not known to %suiteName%. Perhaps the application provider is using outdated metadata or has a configuration error.',
+    'error_unknown_keyid_desc' => 'The requested key-ID is not known to %suiteName%. Perhaps the application is using outdated metadata or has a configuration error.',
     'error_unknown_preselected_idp' => 'Error - %spName% not accessible through your %organisationNoun%',
     'error_unknown_preselected_idp_no_sp_name' => 'Error - Application not accessible through your %organisationNoun%',
     'error_unknown_preselected_idp_desc' => 'The %organisationNoun% that you want to use to log in to %spName% did not activate access to it. This means you are unable to use %spName% through %suiteName%. Please contact the service desk of your %organisationNoun% to request access. State it is about %spName% and why you need access.',
