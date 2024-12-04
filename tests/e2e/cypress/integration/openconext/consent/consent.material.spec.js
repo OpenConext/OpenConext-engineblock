@@ -42,7 +42,7 @@ context('Consent on Material theme', () => {
       .click()
       .get('section h1')
       .should('be.visible')
-      .and('contain.text', 'You don\'t want to share your data with the service');
+      .and('contain.text', 'You don\'t want to share your data with the application');
 
     cy.get('div.slidein.reject')
       .should('be.visible');
