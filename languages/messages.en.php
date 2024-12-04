@@ -70,7 +70,7 @@ return $overrides + [
     'no_idp_results'            => 'Your search did not return any results.',
     'no_idp_results_request_access' => 'Can\'t find your %organisationNoun%? &nbsp;<a href="#no-access" class="noaccess">Request access</a>&nbsp;or try tweaking your search.',
     'more_idp_results'          => '%arg1% results not shown. Refine your search to show more specific results.',
-    'return_to_sp'              => 'Return to application provider',
+    'return_to_sp'              => 'Return to application',
 
     // Help page
     'help'                  => 'Help',
