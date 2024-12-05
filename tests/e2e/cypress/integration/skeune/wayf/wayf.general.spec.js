@@ -20,7 +20,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.visit('https://engine.dev.openconext.local/functional-testing/wayf');
       cy.notOnPage('Identity providers without access').should('not.exist');
       cy.notOnPage('Remember my choice');
-      cy.notOnPage('Return to service provider');
+      cy.notOnPage('Return to application');
     });
 
     it('Should show ten connected IdPs', () => {
@@ -198,7 +198,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
     it('Ensure some elements are NOT on the page', () => {
       cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true');
       cy.notOnPage('Identity providers without access');
-      cy.notOnPage('Return to service provideraccess');
+      cy.notOnPage('Return to applicationaccess');
     });
   });
 
