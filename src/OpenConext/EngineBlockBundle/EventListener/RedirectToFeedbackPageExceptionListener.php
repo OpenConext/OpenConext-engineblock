@@ -156,7 +156,7 @@ class RedirectToFeedbackPageExceptionListener
             $message         = 'Unable to verify message';
             $redirectToRoute = 'authentication_feedback_verification_failed';
         } elseif ($exception instanceof EngineBlock_Exception_UnknownServiceProvider) {
-            $message         = 'Unknown application Provider';
+            $message         = 'Unknown Service Provider';
             $redirectToRoute = 'authentication_feedback_unknown_service_provider';
 
             $redirectParams  = [

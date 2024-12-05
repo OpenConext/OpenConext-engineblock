@@ -9,8 +9,8 @@ Feature:
         And no registered SPs
         And no registered Idps
         And an Identity Provider named "SSO-IdP"
-        And an application named "SSO-SP"
-        And an application named "SSO-Two"
+        And a Service Provider named "SSO-SP"
+        And a Service Provider named "SSO-Two"
         And I open 2 browser tabs identified by "Browser tab 1, Browser tab 2"
 
     Scenario: Two solicited authentication requests sequential

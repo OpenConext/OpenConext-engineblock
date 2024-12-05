@@ -8,11 +8,11 @@ Feature:
     And no registered SPs
     And no registered Idps
     And an Identity Provider named "TestIdp"
-    And an application named "No ARP"
-    And an application named "Empty ARP"
-    And an application named "ARP without ePTI"
-    And an application named "ARP with ePTI"
-    And an application named "Step Up"
+    And a Service Provider named "No ARP"
+    And a Service Provider named "Empty ARP"
+    And a Service Provider named "ARP without ePTI"
+    And a Service Provider named "ARP with ePTI"
+    And a Service Provider named "Step Up"
     And SP "ARP with ePTI" uses the Unspecified NameID format
     And SP "Empty ARP" allows no attributes
     And SP "ARP without ePTI" allows an attribute named "urn:mace:dir:attribute-def:uid"

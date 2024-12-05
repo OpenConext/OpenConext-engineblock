@@ -8,10 +8,10 @@ Feature:
       And no registered SPs
       And no registered Idps
       And an Identity Provider named "SSO-IdP"
-      And an application named "SSO-SP"
+      And a Service Provider named "SSO-SP"
       And an Identity Provider named "Dummy-IdP"
-      And an application named "Dummy-SP"
-      And an application named "Proxy-SP"
+      And a Service Provider named "Dummy-SP"
+      And a Service Provider named "Proxy-SP"
 
   Scenario: Stepup authentication should be supported if set through SP configuration
     Given the SP "SSO-SP" requires Stepup LoA "http://vm.openconext.org/assurance/loa2"

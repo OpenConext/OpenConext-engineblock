@@ -11,8 +11,8 @@ Feature:
       And an Identity Provider named "IDP2"
       And an Identity Provider named "IDP3"
       And an Identity Provider named "IDP4"
-      And an application named "SP"
-      And an application named "remoteSP"
+      And a Service Provider named "SP"
+      And a Service Provider named "remoteSP"
 
   Scenario: The WAYF shows only allowed IDPs
     Given SP "SP" is not connected to IdP "IDP2"

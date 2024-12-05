@@ -8,7 +8,7 @@ Feature:
     And no registered SPs
     And no registered Idps
     And an Identity Provider named "Dummy Idp"
-    And an application named "Dummy SP"
+    And a Service Provider named "Dummy SP"
 
   Scenario: When a wiki link is configured in a translation the wiki link should be visible
    Given I have configured the following translations:

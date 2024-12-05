@@ -8,8 +8,8 @@ Feature:
     And no registered SPs
     And no registered Idps
     And an Identity Provider named "SSO-IdP"
-    And an application named "SSO-SP"
-    And an application named "Trusted SP"
+    And a Service Provider named "SSO-SP"
+    And a Service Provider named "Trusted SP"
 
   Scenario: The configured authn method should be set as AuthnContextClassRef if configured with the IdP configuration mapping
     Given the IdP "SSO-IdP" is configured for MFA authn method "http://schemas.microsoft.com/claims/multipleauthn" for SP "SSO-SP"

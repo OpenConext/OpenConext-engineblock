@@ -9,8 +9,8 @@ Feature:
       And no registered Idps
       And an Identity Provider named "Dummy-IdP"
       And an Identity Provider named "IdP-with-Attribute-Manipulations"
-      And an application named "Dummy-SP"
-      And an application named "SP-with-Attribute-Manipulations"
+      And a Service Provider named "Dummy-SP"
+      And a Service Provider named "SP-with-Attribute-Manipulations"
 
   Scenario: The application can have an attribute added
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:

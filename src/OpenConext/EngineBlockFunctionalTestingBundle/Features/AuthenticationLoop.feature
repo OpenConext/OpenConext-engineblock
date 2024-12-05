@@ -9,7 +9,7 @@ Feature:
       And no registered SPs
       And no registered Idps
       And an Identity Provider named "Dummy Idp"
-      And an application named "Dummy SP"
+      And a Service Provider named "Dummy SP"
 
   Scenario: an authentication loop is detected
     When I log in at "Dummy SP"

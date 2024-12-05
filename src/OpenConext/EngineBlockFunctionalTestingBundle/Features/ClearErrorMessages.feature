@@ -8,9 +8,9 @@ Feature:
       And no registered SPs
       And no registered Idps
       And an Identity Provider named "Dummy Idp"
-      And an application named "Dummy SP"
-      And an application named "Unconnected SP"
-      And an application named "Trusted SP"
+      And a Service Provider named "Dummy SP"
+      And a Service Provider named "Unconnected SP"
+      And a Service Provider named "Trusted SP"
       And an unregistered application named "Unregistered SP"
       And SP "Unconnected SP" is not connected to IdP "Dummy Idp"
 

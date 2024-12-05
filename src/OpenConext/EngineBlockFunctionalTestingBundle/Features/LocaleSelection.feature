@@ -8,7 +8,7 @@ Feature:
     Given an EngineBlock instance on "vm.openconext.org"
     And an Identity Provider named "First IdP"
     And an Identity Provider named "Second IdP"
-    And an application named "Test SP"
+    And a Service Provider named "Test SP"
     And my browser is configured to accept language "nl-NL"
 
   Scenario: a user makes their first visit and doesn't have a locale cookie

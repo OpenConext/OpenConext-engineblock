@@ -7,8 +7,8 @@ Feature:
   Background:
     Given an EngineBlock instance on "vm.openconext.org"
       And an Identity Provider named "Dummy-IdP"
-      And an application named "Dummy-SP"
-      And an application named "Trusted Proxy"
+      And a Service Provider named "Dummy-SP"
+      And a Service Provider named "Trusted Proxy"
       And SP "Dummy-SP" allows the following attributes:
 
         | Name                                                    | Value | Source | Motivation                 |

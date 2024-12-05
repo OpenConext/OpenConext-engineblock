@@ -9,8 +9,8 @@ Feature:
       And no registered Idps
       And an Identity Provider named "SSO-IdP"
       And an Identity Provider named "SSO-Foobar"
-      And an application named "SSO-SP"
-      And an application named "SSO-Foobar"
+      And a Service Provider named "SSO-SP"
+      And a Service Provider named "SSO-Foobar"
 
   Scenario: IdPs are allowed to create NameIDs
     When I log in at "SSO-SP"
