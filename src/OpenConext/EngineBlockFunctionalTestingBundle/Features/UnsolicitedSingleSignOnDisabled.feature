@@ -9,7 +9,7 @@ Feature:
     And no registered SPs
     And no registered Idps
     And an Identity Provider named "Dummy IdP"
-    And a Service Provider named "Dummy SP"
+    And an application named "Dummy SP"
 
   # The feature flag: eb.feature_enable_idp_initiated_flow can disable unsolicited login
   # EB Shows a 404 page in that case as the entire HTTP route is blocked in that case

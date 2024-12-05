@@ -8,10 +8,10 @@ Feature:
       And no registered SPs
       And no registered Idps
       And an Identity Provider named "Dummy Idp"
-      And a Service Provider named "Dummy SP"
-      And a Service Provider named "Unconnected SP"
-      And a Service Provider named "Trusted SP"
-      And an unregistered Service Provider named "Unregistered SP"
+      And an application named "Dummy SP"
+      And an application named "Unconnected SP"
+      And an application named "Trusted SP"
+      And an unregistered application named "Unregistered SP"
       And SP "Unconnected SP" is not connected to IdP "Dummy Idp"
 
   Scenario: I log in at my Identity Provider, but something goes wrong and it returns an error response.
@@ -105,7 +105,7 @@ Feature:
       And I should see "SP Name:"
       And I should see "IdP:"
 
-  Scenario: I want to log on, but this Service Provider may not access any Identity Providers
+  Scenario: I want to log on, but this application may not access any Identity Providers
     When I log in at "Unconnected SP"
     Then I should see "No organisations found"
      And I should see "UR ID:"
@@ -115,7 +115,7 @@ Feature:
      And I should see "SP Name:"
      And I should not see "IdP:"
 
-  Scenario: I want to log on, but the proxied Service Provider may not access any Identity Providers
+  Scenario: I want to log on, but the proxied application may not access any Identity Providers
     Given SP "Trusted SP" is a trusted proxy
     And SP "Trusted SP" signs its requests
     And  SP "Trusted SP" is authenticating for SP "Unconnected SP"
@@ -123,7 +123,7 @@ Feature:
     Then I should see "Error - No organisations found"
     And I should see "Proxy SP:"
 
-  Scenario: I want to log on but this Service Provider is not yet registered at OpenConext
+  Scenario: I want to log on but this application is not yet registered at OpenConext
     When I log in at "Unregistered SP"
     Then I should see "Error - Unknown application"
      And I should see "UR ID:"
@@ -198,7 +198,7 @@ Feature:
   Scenario: An SP sends a AuthnRequest transparently for an IdP that doesn't exist
      When I log in at SP "Dummy SP" which attempts to preselect nonexistent IdP "DoesNotExist"
      Then the url should match "/authentication/feedback/unknown-preselected-idp"
-      And I should see "Error - Service not accessible through your organisation"
+      And I should see "Error - Application not accessible through your organisation"
       And I should see "UR ID:"
       And I should see "IP:"
       And I should see "EC:"
@@ -423,8 +423,8 @@ Feature:
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a binding
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying an invalid index
 #
-#  Scenario: I don't give consent to release my attributes to a Service Provider
+#  Scenario: I don't give consent to release my attributes to an application
 #
 #  Scenario: An attribute manipulation determines that a user may not continue
 #
-#  Scenario: I want to log in to a service but am not a member of the appropriate VO
+#  Scenario: I want to log in to an application but am not a member of the appropriate VO

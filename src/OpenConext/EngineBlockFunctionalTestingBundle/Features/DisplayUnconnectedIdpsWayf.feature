@@ -7,7 +7,7 @@ Feature:
     Given an EngineBlock instance on "vm.openconext.org"
     And no registered SPs
     And no registered Idps
-    And a Service Provider named "SP"
+    And an application named "SP"
     And an Identity Provider named "Connected IdP1"
     And an Identity Provider named "Connected IdP2"
     And an Identity Provider named "Unconnected IdP1"

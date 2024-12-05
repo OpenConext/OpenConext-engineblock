@@ -8,7 +8,7 @@ Feature:
       And no registered SPs
       And no registered Idps
       And an Identity Provider named "Dummy IdP"
-      And a Service Provider named "Dummy SP"
+      And an application named "Dummy SP"
 
   Scenario: An IdP can initiated a login
      When An IdP initiated Single Sign on for SP "Dummy SP" is triggered by IdP "Dummy IdP"

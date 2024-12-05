@@ -8,12 +8,12 @@ Feature:
     And no registered SPs
     And no registered Idps
     And an Identity Provider named "TestIdp"
-    And a Service Provider named "No ARP"
-    And a Service Provider named "Empty ARP"
-    And a Service Provider named "Wildcard ARP"
-    And a Service Provider named "Wrong Value ARP"
-    And a Service Provider named "Right Value ARP"
-    And a Service Provider named "Two value ARP"
+    And an application named "No ARP"
+    And an application named "Empty ARP"
+    And an application named "Wildcard ARP"
+    And an application named "Wrong Value ARP"
+    And an application named "Right Value ARP"
+    And an application named "Two value ARP"
     And SP "Empty ARP" allows no attributes
     And SP "Wildcard ARP" allows an attribute named "urn:mace:dir:attribute-def:uid"
     And SP "Wrong Value ARP" allows an attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization" with value "example.edu"

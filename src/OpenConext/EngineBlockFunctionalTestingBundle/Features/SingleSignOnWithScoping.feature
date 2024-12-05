@@ -1,5 +1,5 @@
 Feature:
-  In order for a service provider to pre-select one or more IDPs
+  In order for an application to pre-select one or more IDPs
   As EngineBlock
   I want to limit the available IDPs in the WAYF based on ACLs or elements in the AuthnRequest
 
@@ -11,8 +11,8 @@ Feature:
       And an Identity Provider named "IDP2"
       And an Identity Provider named "IDP3"
       And an Identity Provider named "IDP4"
-      And a Service Provider named "SP"
-      And a Service Provider named "remoteSP"
+      And an application named "SP"
+      And an application named "remoteSP"
 
   Scenario: The WAYF shows only allowed IDPs
     Given SP "SP" is not connected to IdP "IDP2"

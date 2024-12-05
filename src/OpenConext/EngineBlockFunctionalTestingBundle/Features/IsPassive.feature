@@ -8,7 +8,7 @@ Feature:
     And no registered SPs
     And no registered Idps
     And an Identity Provider named "Dummy IdP"
-    And a Service Provider named "Dummy SP"
+    And an application named "Dummy SP"
 
   Scenario: A passive AuthnRequest is handled without issue
     Given SP "Dummy SP" is configured to generate a passive AuthnRequest

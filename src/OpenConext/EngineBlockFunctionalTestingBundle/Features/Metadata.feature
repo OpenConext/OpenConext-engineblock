@@ -103,7 +103,7 @@ Feature:
     Given an Identity Provider named "Connected-IdP"
       And an Identity Provider named "Second-Connected-IdP"
       And an Identity Provider named "Not-Connected-IdP"
-      And a Service Provider named "Test-SP"
+      And an application named "Test-SP"
       And SP "Test-SP" is not connected to IdP "Not-Connected-IdP"
     When I go to Engineblock URL "/authentication/proxy/idps-metadata?sp-entity-id=https://engine.vm.openconext.org/functional-testing/Test-SP/metadata"
     # Verify the two connected IdPs are present in the list
@@ -185,7 +185,7 @@ Feature:
     Given an Identity Provider named "Connected-IdP"
       And an Identity Provider named "Second-Connected-IdP"
       And an Identity Provider named "Not-Connected-IdP"
-      And a Service Provider named "Test-SP"
+      And an application named "Test-SP"
       And SP "Test-SP" is not connected to IdP "Not-Connected-IdP"
     When I go to Engineblock URL "/authentication/proxy/idps-metadata/key:default?sp-entity-id=https://engine.vm.openconext.org/functional-testing/Test-SP/metadata"
     # Verify the two connected IdPs are present in the list
