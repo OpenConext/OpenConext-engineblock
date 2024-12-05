@@ -125,7 +125,7 @@ Feature:
 
   Scenario: I want to log on but this Service Provider is not yet registered at OpenConext
     When I log in at "Unregistered SP"
-    Then I should see "Error - Unknown service"
+    Then I should see "Error - Unknown application"
      And I should see "UR ID:"
      And I should see "IP:"
      And I should see "EC:"
@@ -153,7 +153,7 @@ Feature:
       And SP "Trusted SP" requires a RequesterId
       And SP "Trusted SP" is authenticating and uses RequesterID ""
      When I log in at "Trusted SP"
-     Then I should see "Error - Unknown service"
+     Then I should see "Error - Unknown application"
       And I should see "UR ID:"
       And I should see "IP:"
       And I should see "EC:"
