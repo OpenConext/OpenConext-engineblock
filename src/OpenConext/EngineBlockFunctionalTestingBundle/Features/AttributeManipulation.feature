@@ -9,10 +9,10 @@ Feature:
     And no registered Idps
     And an Identity Provider named "Dummy-IdP"
     And an Identity Provider named "IdP-with-Attribute-Manipulations"
-    And an application named "Dummy-SP"
-    And an application named "SP-with-Attribute-Manipulations"
-    And an application named "Stepup Gateway"
-    And an application named "Stepup SelfService"
+    And a Service Provider named "Dummy-SP"
+    And a Service Provider named "SP-with-Attribute-Manipulations"
+    And a Service Provider named "Stepup Gateway"
+    And a Service Provider named "Stepup SelfService"
     And feature "eb.run_all_manipulations_prior_to_consent" is disabled
 
   Scenario: The application can have an attribute added
