@@ -222,7 +222,7 @@ Feature:
       And SP "Step Up" does not require consent
       And SP "Step Up" uses the Unspecified NameID format
     When I log in at "Step Up"
-    Then I should see "Error - Unknown service"
+    Then I should see "Error - Unknown application"
      And I should see "Proxy SP:"
 
   Scenario: User logs in via misconfigured trusted proxy and sees error
@@ -230,14 +230,14 @@ Feature:
     And SP "Step Up" is a trusted proxy
     And SP "Step Up" signs its requests
     When I log in at "Step Up"
-    Then I should see "Error - Unknown service"
+    Then I should see "Error - Unknown application"
 
   Scenario: User logs in via trusted proxy which requests unknown SP and sees error
     Given SP "Step Up" is authenticating for SP "Unregistered SP"
     And SP "Step Up" is a trusted proxy
     And SP "Step Up" signs its requests
     When I log in at "Step Up"
-    Then I should see "Error - Unknown service"
+    Then I should see "Error - Unknown application"
      And I should see "UR ID:"
      And I should see "EC:"
      And I should see "SP:"
