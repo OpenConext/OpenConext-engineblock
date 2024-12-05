@@ -26,7 +26,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Dump the contents of the (fake) Service Registry
+ * Dump the contents of the (fake) application Registry
  */
 #[AsCommand(name: 'engineblock:dump:sr', description: 'Find all sessions from log output on STDIN or for a given file', aliases: ['dump:sr'])]
 class DumpServiceRegistryCommand extends Command

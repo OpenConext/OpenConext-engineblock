@@ -8,8 +8,8 @@ Feature:
     And no registered SPs
     And no registered Idps
     And an Identity Provider named "AlwaysAuth"
-    And a Service Provider named "Step Up TP"
-    And a Service Provider named "SelfService"
+    And an application named "Step Up TP"
+    And an application named "SelfService"
 
   Scenario: User logs in to SP, in that case the internalCollabPersonId should NOT be present
     Given  SP "SelfService" signs its requests

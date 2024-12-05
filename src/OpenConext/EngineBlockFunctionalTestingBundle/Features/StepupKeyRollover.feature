@@ -10,10 +10,10 @@ Feature:
     And no registered SPs
     And no registered Idps
     And an Identity Provider named "SSO-IdP"
-    And a Service Provider named "SSO-SP"
+    And an application named "SSO-SP"
     And an Identity Provider named "Dummy-IdP"
-    And a Service Provider named "Dummy-SP"
-    And a Service Provider named "Proxy-SP"
+    And an application named "Dummy-SP"
+    And an application named "Proxy-SP"
 
   Scenario: When stepup.sfo.override_engine_entityid is not configured, stepup/metadata should show default EntityId
     Given feature "eb.stepup.sfo.override_engine_entityid" is disabled
