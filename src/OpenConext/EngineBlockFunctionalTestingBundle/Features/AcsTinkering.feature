@@ -8,8 +8,8 @@ Feature:
     And no registered SPs
     And no registered Idps
     And an Identity Provider named "AlwaysAuth"
-    And a Service Provider named "Malicious SP"
-    And a Service Provider named "Malconfigured SP"
+    And an application named "Malicious SP"
+    And an application named "Malconfigured SP"
     And SP "Malicious SP" is set with acs location "javascript:alert('Hello world')"
     And SP "Malconfigured SP" is set with acs location "sp.example.com"
 
