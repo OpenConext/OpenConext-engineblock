@@ -68,6 +68,8 @@ class EngineBlock_Test_Validator_UrnTest extends TestCase
         yield ['urn:org.openconext.licenseInfo'];
         yield ['foo:bar:baz'];
         yield ['urn:f:bar'];
+        yield ["\nurn:mace:dir:attribute-def:eduPersonPrincipalName"];
+        yield ["urn:mace:dir:attribute-def:eduPersonPrincipalName\n"];
         yield [' urn:collab:person:example.org:jdoe'];
         yield ['urn:collab:person:example.org:jdoe '];
         yield ['urn:collab:person:example org:jdoe'];
