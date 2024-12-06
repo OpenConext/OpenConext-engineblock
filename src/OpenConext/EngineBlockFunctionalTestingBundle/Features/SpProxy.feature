@@ -16,7 +16,7 @@ Feature:
       And a Service Provider named "Far SP"
       And a Service Provider named "Test SP"
       And a Service Provider named "Second SP"
-      And an unregistered Service Provider named "Unregistered SP"
+      And an unregistered application named "Unregistered SP"
       And SP "Far SP" is not connected to IdP "CombinedAuth"
       And SP "Far SP" is not connected to IdP "LoaOnlyAuth"
       And SP "Far SP" is not connected to IdP "StepUpOnlyAuth"
@@ -92,7 +92,7 @@ Feature:
       And SP "Step Up" is a trusted proxy
       And SP "Step Up" signs its requests
      When I log in at "Step Up"
-     Then I should see "Select an account to login to Loa SP"
+     Then I should see "Select an account to log in to Loa SP"
       And I select "AlwaysAuth" on the WAYF
       And I pass through EngineBlock
       And I pass through the IdP
@@ -222,7 +222,7 @@ Feature:
       And SP "Step Up" does not require consent
       And SP "Step Up" uses the Unspecified NameID format
     When I log in at "Step Up"
-    Then I should see "Error - Unknown service"
+    Then I should see "Error - Unknown application"
      And I should see "Proxy SP:"
 
   Scenario: User logs in via misconfigured trusted proxy and sees error
@@ -230,14 +230,14 @@ Feature:
     And SP "Step Up" is a trusted proxy
     And SP "Step Up" signs its requests
     When I log in at "Step Up"
-    Then I should see "Error - Unknown service"
+    Then I should see "Error - Unknown application"
 
   Scenario: User logs in via trusted proxy which requests unknown SP and sees error
     Given SP "Step Up" is authenticating for SP "Unregistered SP"
     And SP "Step Up" is a trusted proxy
     And SP "Step Up" signs its requests
     When I log in at "Step Up"
-    Then I should see "Error - Unknown service"
+    Then I should see "Error - Unknown application"
      And I should see "UR ID:"
      And I should see "EC:"
      And I should see "SP:"
@@ -261,7 +261,7 @@ Feature:
          # Bug report: https://www.pivotaltracker.com/story/show/164069793
     Then I should not see "Error - No organisations found"
          # The WAYF should be visible
-     And I should see "Select an account to login to"
+     And I should see "Select an account to log in to"
 
   Scenario: Trusted proxy not signing requests results in an error
     Given SP "Step Up" is authenticating for SP "Loa SP"

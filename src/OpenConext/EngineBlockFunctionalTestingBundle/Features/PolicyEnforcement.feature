@@ -20,7 +20,7 @@ Feature:
     And I pass through the IdP
     And I should see "Error - Access denied"
     And I should see "Message from your organisation:"
-    And I should see "Students of MyIdP do not have access to this resource"
+    And I should see "Students of MyIdP do not have access to this application"
     And the response should contain "idp-logo.jpg"
 
   Scenario: Access is denied because of a Deny policy

@@ -1,5 +1,5 @@
 Feature:
-  In order for a service provider to pre-select one or more IDPs
+  In order for an application to pre-select one or more IDPs
   As EngineBlock
   I want to limit the available IDPs in the WAYF based on ACLs or elements in the AuthnRequest
 
