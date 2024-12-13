@@ -18,6 +18,7 @@
 
 use OpenConext\EngineBlock\Metadata\Loa;
 use SAML2\AuthnRequest;
+use SAML2\DOMDocumentFactory;
 
 /**
  * @method getProxyCount()
@@ -25,7 +26,7 @@ use SAML2\AuthnRequest;
  * @method getForceAuthn()
  * @method toUnsignedXML()
  */
-class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml2_MessageAnnotationDecorator
+class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml2_MessageAnnotationDecorator implements Serializable
 {
     /**
      * @var AuthnRequest
@@ -60,9 +61,9 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     /**
      * @param AuthnRequest $request
      */
-    public function __construct(AuthnRequest $request)
+    public function __construct(AuthnRequest $sspMessage)
     {
-        $this->sspMessage = $request;
+        $this->sspMessage = $sspMessage;
     }
 
     /**
@@ -183,5 +184,44 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     public function setForceAuthn(bool $isForceAuthn)
     {
         $this->sspMessage->setForceAuthn($isForceAuthn);
+    }
+
+    /**
+     * Since php 8 serialisation of the DOMDocument is no longer supported. This means that the sspMessage (AuthnRequest)
+     * is no longer serializable. However since the AuthnRequest is a xml request converted to a php object we can save
+     * the object by converted it back to its XML message, save it in cache and rebuild the object.
+     *
+     * Do note that any newly added fields to the decorator class (this class) will have to be added to the data array
+     * to be saved in session storage.
+     */
+    public function serialize()
+    {
+        $requestXML = $this->sspMessage->toUnsignedXML();
+        $requestStringXML = $requestXML->ownerDocument->saveXML();
+        $data = array(
+            "sspMessage" => $requestStringXML,
+            "keyId" => $this->keyId,
+            "wasSigned" => $this->wasSigned,
+            "debug" => $this->debug,
+            "unsolicited" => $this->unsolicited,
+            "transparent" => $this->transparent,
+
+            "deliverByBinding" => $this->deliverByBinding, // from extended wrapper
+        );
+        return serialize($data);
+    }
+
+    public function unserialize(string $data)
+    {
+        $data = unserialize($data);
+        $dom = DOMDocumentFactory::fromString($data['sspMessage']);
+        $this->sspMessage = new AuthnRequest($dom->firstChild);
+        $this->keyId = $data['keyId'];
+        $this->wasSigned = $data['wasSigned'];
+        $this->debug = $data['debug'];
+        $this->unsolicited = $data['unsolicited'];
+        $this->transparent = $data['transparent'];
+
+        $this->deliverByBinding = $data['deliverByBinding'];
     }
 }

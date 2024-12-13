@@ -23,7 +23,6 @@ use EngineBlock_Corto_Adapter;
 use OpenConext\EngineBlock\Validator\RequestValidator;
 use OpenConext\EngineBlockBridge\ResponseFactory;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 class ServiceProviderController implements AuthenticationLoopThrottlingController
 {

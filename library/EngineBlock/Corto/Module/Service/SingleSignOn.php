@@ -683,7 +683,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         }
 
         /** @var Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
-        $response = $_SESSION['debugIdpResponse'];
+        $response = unserialize($_SESSION['debugIdpResponse']);
 
         $log = $this->_server->getLogger();
         $log->info(
