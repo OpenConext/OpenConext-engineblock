@@ -16,7 +16,6 @@
  * limitations under the License.
  */
 
-use OpenConext\EngineBlock\Stepup\StepupEndpoint;
 use OpenConext\EngineBlockBundle\Pdp\PdpClientInterface;
 
 /**
@@ -49,7 +48,7 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
         return $this->pdpClient ?? parent::getPdpClient();
     }
 
-    public function setPdpClient(PdpClientInterface $pdpClient)
+    public function setPdpClient(?PdpClientInterface $pdpClient)
     {
         $this->pdpClient = $pdpClient;
     }

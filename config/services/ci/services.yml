@@ -7,6 +7,8 @@ parameters:
     engineblock.functional_testing.attribute_aggregation_data_store.file:     "/tmp/eb-fixtures/attribute_aggregation.json"
     engineblock.functional_testing.stepup_gateway_mock_data_store.file:       "/tmp/eb-fixtures/stepup_gateway_mock.json"
     engineblock.functional_testing.translator_mock_data_store.file:           "/tmp/eb-fixtures/translator_mock.json"
+    engineblock.functional_testing.sbs_client_state_manager_data_store.file:  "/tmp/eb-fixtures/sbs_client_state_manager.json"
+    engineblock.functional_testing.sbs_controller_data_store.file:            "/tmp/eb-fixtures/sbs_server_state.json"
 
 services:
     _defaults:
@@ -58,6 +60,11 @@ services:
             - '@engineblock.mock_entities.sp_factory'
             - "@engineblock.compat.application"
 
+    engineblock.functional_testing.fixture.sbs_client_state_manager:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\SbsClientStateManager
+        arguments:
+            - "@engineblock.functional_testing.data_store.sbs_client_state_mananger"
+
     #endregion Fixtures
 
     #region Data Stores
@@ -76,6 +83,14 @@ services:
     engineblock.functional_testing.data_store.authentication_loop_guard:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
         arguments: ['%engineblock.functional_testing.authentication_loop_guard_data_store.file%']
+
+    engineblock.functional_testing.data_store.sbs_client_state_mananger:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
+        arguments: ['%engineblock.functional_testing.sbs_client_state_manager_data_store.file%']
+
+    engineblock.functional_testing.data_store.sbs_server_state:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
+        arguments: [ '%engineblock.functional_testing.sbs_controller_data_store.file%' ]
 
     engineblock.function_testing.data_store.attribute_aggregation_client:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore

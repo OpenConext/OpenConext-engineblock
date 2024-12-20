@@ -15,3 +15,4 @@ parameters:
         eb.feature_enable_idp_initiated_flow: "%feature_enable_idp_initiated_flow%"
         eb.stepup.sfo.override_engine_entityid: "%feature_stepup_sfo_override_engine_entityid%"
         eb.stepup.send_user_attributes: "%feature_stepup_send_user_attributes%"
+        eb.feature_enable_sram_interrupt: "%feature_enable_sram_interrupt%"

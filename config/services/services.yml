@@ -342,3 +342,33 @@ services:
     symfony.mailer:
         public: true
         alias: mailer
+
+    engineblock.sbs.sbs_client:
+        class: OpenConext\EngineBlockBundle\Sbs\SbsClient
+        arguments:
+            - "@engineblock.sbs.http_client"
+            - "%sram.base_url%"
+            - "%sram.authz_location%"
+            - "%sram.attributes_location%"
+            - "%sram.interrupt_location%"
+            - "%sram.api_token%"
+            - "%sram.verify_peer%"
+
+    engineblock.sbs.http_client:
+        class: OpenConext\EngineBlock\Http\HttpClient
+        arguments:
+            - "@engineblock.sbs.guzzle_http_client"
+
+    engineblock.sbs.guzzle_http_client:
+        class: GuzzleHttp\Client
+        arguments:
+            - base_uri: "%sram.base_url%/"
+              options:
+                  headers:
+                      Authentication: "%sram.api_token%"
+              timeout: "%http_client.timeout%"
+
+    engineblock.sbs.attribute_merger:
+        class: OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger
+        arguments:
+            - "%sram.allowed_attributes%"

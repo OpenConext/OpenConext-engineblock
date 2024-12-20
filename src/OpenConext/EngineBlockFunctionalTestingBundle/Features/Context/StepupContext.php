@@ -23,6 +23,7 @@ use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixtur
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
+use RuntimeException;
 
 class StepupContext extends AbstractSubContext
 {
@@ -66,9 +67,19 @@ class StepupContext extends AbstractSubContext
      */
     public function stepupWillsSuccessfullyVerifyAUser()
     {
-        $mink = $this->getMinkContext();
+        $page = $this->getMinkContext()->getSession()->getPage();
+        $form = $page->find('css', 'form[action*="/authentication/stepup/consume-assertion"]');
 
-        $mink->pressButton('Submit-success');
+        if ($form === null) {
+            throw new RuntimeException('No form found for "/authentication/stepup/consume-assertion"');
+        }
+
+        $button = $form->find('css', 'input[type="submit"][value="Submit-success"]');
+        if ($button === null) {
+            throw new RuntimeException('No form with submit button found for "/authentication/stepup/consume-assertion"');
+        }
+
+        $button->click();
     }
 
     /**

@@ -67,7 +67,7 @@ class EntityRegistry extends ParameterBag
 
     public function save()
     {
-        $this->dataStore->save($this->parameters);
+        $this->parameters = $this->dataStore->save($this->parameters);
 
         return $this;
     }

@@ -23,11 +23,13 @@ use Behat\Mink\Exception\ExpectationException;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
+use OpenConext\EngineBlockBundle\Sbs\Msg;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingPdpClient;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\SbsClientStateManager;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
@@ -44,6 +46,7 @@ use SAML2\DOMDocumentFactory;
  * @SuppressWarnings(PHPMD.TooManyMethods) Both set up and tasks can be a lot...
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to all integration specific features
  * @SuppressWarnings(PHPMD.ExcessivePublicCount) Both set up and tasks can be a lot...
+ * @SuppressWarnings(PHPMD.TooManyFields) Both set up and tasks can be a lot...
  */
 class EngineBlockContext extends AbstractSubContext
 {
@@ -116,6 +119,10 @@ class EngineBlockContext extends AbstractSubContext
      * @var string
      */
     private $currentRequestId = '';
+    /**
+     * @var SbsClientStateManager
+     */
+    private $sbsClientStateManager;
 
     private AbstractDataStore $dataStore;
 
@@ -141,6 +148,7 @@ class EngineBlockContext extends AbstractSubContext
         FunctionalTestingAuthenticationLoopGuard $authenticationLoopGuard,
         FunctionalTestingAttributeAggregationClient $attributeAggregationClient,
         AbstractDataStore $authGuardDataStore,
+        SbsClientStateManager $sbsClientStateManager
     ) {
         $this->serviceRegistryFixture = $serviceRegistry;
         $this->engineBlock = $engineBlock;
@@ -151,6 +159,7 @@ class EngineBlockContext extends AbstractSubContext
         $this->authenticationLoopGuard = $authenticationLoopGuard;
         $this->attributeAggregationClient = $attributeAggregationClient;
         $this->dataStore = $authGuardDataStore;
+        $this->sbsClientStateManager = $sbsClientStateManager;
     }
 
     /**
@@ -190,6 +199,16 @@ class EngineBlockContext extends AbstractSubContext
         $mink = $this->getMinkContext();
 
         $mink->pressButton('Submit');
+    }
+
+    /**
+     * @Given /^I pass through SBS/
+     */
+    public function iPassThroughSBS()
+    {
+        $mink = $this->getMinkContext();
+
+        $mink->clickLink('Continue');
     }
 
     /**
@@ -744,6 +763,44 @@ class EngineBlockContext extends AbstractSubContext
                 $attribute['Source']
             );
         }
+    }
+
+    /**
+     * @Given /^the sbs server will trigger the "([^"]*)" authz flow when called$/
+    */
+    public function primeAuthzResponse(string $msgString): void
+    {
+        $msg = Msg::fromString($msgString);
+        if ($msg === Msg::Error) {
+            $this->sbsClientStateManager->prepareAuthzResponse(Msg::Error);
+            return;
+        }
+
+        $this->sbsClientStateManager->prepareAuthzResponse($msg);
+    }
+
+    /**
+     * @Given /^the sbs server will trigger the 'authorized' authz flow and will return invalid attributes$/
+    */
+    public function authzWillReturnInvalidAttributes(): void
+    {
+        $this->sbsClientStateManager->prepareAuthzResponse(Msg::Authorized, ['attributes' => ['foo' => ['bar' => 'baz']]]);
+    }
+
+    /**
+     * @Given /^the sbs server will return valid attributes/
+    */
+    public function attributesWillReturnValidAttributes(): void
+    {
+        $this->sbsClientStateManager->prepareAttributesResponse($this->sbsClientStateManager->getValidMockAttributes());
+    }
+
+    /**
+     * @Given /^the sbs server will return invalid attributes/
+    */
+    public function attributesWillReturnInvalidAttributes(): void
+    {
+        $this->sbsClientStateManager->prepareAttributesResponse(['msg' => 'error', 'message' => 'something went wrong']);
     }
 
     /**
