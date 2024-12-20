@@ -541,6 +541,12 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
         return $this->container->get(\OpenConext\EngineBlock\Stepup\StepupEndpoint::class);
     }
 
+    /** @return \OpenConext\EngineBlock\SRAM\SRAMEndpoint $sramEndpoint */
+    public function getSRAMEndpoint()
+    {
+        return $this->container->get('engineblock.configuration.sram.endpoint');
+    }
+
     /** @return string */
     public function getStepupEntityIdOverrideValue()
     {
