@@ -30,6 +30,7 @@ interface ProcessingStateHelperInterface
 {
     const STEP_CONSENT = 'consent';
     const STEP_STEPUP = 'stepup';
+    const STEP_SRAM = 'sram';
 
     /**
      * @param string $requestId
