@@ -176,6 +176,20 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
      * @return Response
      * @throws \EngineBlock_Exception
      */
+    public function processSRAMInterrupt(Request $request)
+    {
+        error_log("processSRAMInterrupt");
+
+        $body = "processSRAMInterrupt";
+
+        return new Response($body);
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function requestAccessAction(Request $request)
     {
         $body = $this->twig->render(

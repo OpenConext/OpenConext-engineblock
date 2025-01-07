@@ -18,6 +18,12 @@ authentication_idp_process_consent:
     defaults:
         _controller: engineblock.controller.authentication.identity_provider:processConsentAction
 
+authentication_idp_process_sraminterrupt:
+    path:       '/authentication/idp/process-sraminterrupt'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.identity_provider:processSRAMInterrupt
+
 ### Sollicited
 
 authentication_idp_sso:
