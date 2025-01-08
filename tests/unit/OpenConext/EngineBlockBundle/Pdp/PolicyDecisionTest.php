@@ -60,8 +60,8 @@ class PolicyDecisionTest extends TestCase
 
         $decision = PolicyDecision::fromResponse($response);
 
-        $expectedDenyMessageEn = 'Students do not have access to this resource';
-        $expectedDenyMessageNl = 'Studenten hebben geen toegang tot deze dienst';
+        $expectedDenyMessageEn = 'Students do not have access to this application';
+        $expectedDenyMessageNl = 'Studenten hebben geen toegang tot deze applicatie';
 
         $denyMessageEn = $decision->getLocalizedDenyMessage('en');
         $denyMessageNl = $decision->getLocalizedDenyMessage('nl');
@@ -81,7 +81,7 @@ class PolicyDecisionTest extends TestCase
 
         $decision = PolicyDecision::fromResponse($response);
 
-        $expectedFallbackDenyMessage = 'Students do not have access to this resource';
+        $expectedFallbackDenyMessage = 'Students do not have access to this application';
 
         $fallbackDenyMessage = $decision->getLocalizedDenyMessage('de', 'en');
 

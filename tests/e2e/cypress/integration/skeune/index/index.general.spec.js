@@ -9,7 +9,7 @@ context('Index on Skeune theme', () => {
   it('Renders the index page and has all relevant data', () => {
     cy.beVisible(indexPageHeader).should('have.text', 'IdP Certificate and Metadata');
     cy.contains('SP Certificate and Metadata').should('be.visible');
-    cy.contains('This is a service connected through').should('be.visible');
+    cy.contains('This is an application connected through').should('be.visible');
     cy.contains('Terms of Service').should('be.visible');
   });
 

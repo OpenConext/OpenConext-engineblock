@@ -20,7 +20,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
       cy.notOnPage('Identity providers without access').should('not.exist');
       cy.notOnPage('Remember my choice');
-      cy.notOnPage('Return to service provider');
+      cy.notOnPage('Return to application');
     });
 
     it('Should show ten connected IdPs', () => {
@@ -155,7 +155,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.get(idpTitle)
         .should('have.length', 6)
         .eq(2)
-        .should('have.text', 'Login with Connected IdP 3 en');
+        .should('have.text', 'Log in with Connected IdP 3 en');
     });
 
     it('Check if the search field is present', () => {
@@ -183,14 +183,14 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
   describe('Should show the remember my choice option', () => {
     it('Ensure some elements are on the page', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true');
-      cy.onPage('Select an account to login');
+      cy.onPage('Select an account to log in');
       cy.onPage('Remember my choice');
     });
 
     it('Ensure some elements are NOT on the page', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true');
       cy.notOnPage('Identity providers without access');
-      cy.notOnPage('Return to service provideraccess');
+      cy.notOnPage('Return to applicationaccess');
     });
   });
 

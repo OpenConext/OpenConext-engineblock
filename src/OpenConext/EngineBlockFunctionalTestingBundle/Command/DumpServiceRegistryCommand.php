@@ -25,7 +25,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Dump the contents of the (fake) Service Registry
+ * Dump the contents of the (fake) application Registry
  */
 class DumpServiceRegistryCommand extends ContainerAwareCommand
 {

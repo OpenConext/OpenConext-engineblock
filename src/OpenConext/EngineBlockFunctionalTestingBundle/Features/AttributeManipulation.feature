@@ -15,7 +15,7 @@ Feature:
     And a Service Provider named "Stepup SelfService"
     And feature "eb.run_all_manipulations_prior_to_consent" is disabled
 
-  Scenario: The Service Provider can have an attribute added
+  Scenario: The application can have an attribute added
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
       $attributes['nl:surf:test:something'] = array("arbitrary-value");
@@ -31,7 +31,7 @@ Feature:
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="nl:surf:test:something"]/saml:AttributeValue[text()="arbitrary-value"]'
 
-  Scenario: The Service Provider can have the attributes manipulated
+  Scenario: The application can have the attributes manipulated
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
       $attributes['urn:mace:dir:attribute-def:uid'] = array("the-manipulated-value");
@@ -46,7 +46,7 @@ Feature:
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:uid"]/saml:AttributeValue[text()="the-manipulated-value"]'
 
-  Scenario: The Service Provider can have the SubjectID manipulated
+  Scenario: The application can have the SubjectID manipulated
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
       $subjectId = 'arthur.dent@domain.test';
@@ -63,7 +63,7 @@ Feature:
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="arthur.dent@domain.test"]'
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="arthur.dent@domain.test"]'
 
-  Scenario: The Service Provider cannot have the SubjectID manipulated if using a NameID format other than unspecified
+  Scenario: The application cannot have the SubjectID manipulated if using a NameID format other than unspecified
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
       $subjectId = "arthur.dent@domain.test";
@@ -82,7 +82,7 @@ Feature:
      And the response should not match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" and text()="arthur.dent@domain.test"]'
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"]'
 
-  Scenario: The Service Provider cannot have the Subject NameID manipulated by setting the IntendedNameId in the reponse as it is overwritten by the subjectId
+  Scenario: The application cannot have the Subject NameID manipulated by setting the IntendedNameId in the reponse as it is overwritten by the subjectId
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
       $response['__']['IntendedNameId'] = 'NOOT';
@@ -103,7 +103,7 @@ Feature:
      And the response should not match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="NOOT"]'
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="AAP"]'
 
-  Scenario: The Service Provider can replace the NameID by setting the CustomNameID with an array representation of the NameID
+  Scenario: The application can replace the NameID by setting the CustomNameID with an array representation of the NameID
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
       $response['__']['CustomNameId'] = array('Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient', 'Value' => 'NOOT');
@@ -121,7 +121,7 @@ Feature:
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient" and text()="NOOT"]'
 
   # See: https://www.pivotaltracker.com/story/show/159760842
-  Scenario: The Service Provider can replace the NameID by setting the CustomNameID with an object representation of the NameID
+  Scenario: The application can replace the NameID by setting the CustomNameID with an object representation of the NameID
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
       $nameId = new \SAML2\XML\saml\NameID();
@@ -141,7 +141,7 @@ Feature:
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient" and text()="MIES"]'
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient" and text()="MIES"]'
 
-  Scenario: The Service Provider cannot have the SubjectID manipulated by manipulating the responseObj using the unspecified NameID Format
+  Scenario: The application cannot have the SubjectID manipulated by manipulating the responseObj using the unspecified NameID Format
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
       $responseObj->setCollabPersonId('NOOT');
@@ -160,7 +160,7 @@ Feature:
      And the response should not match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="NOOT"]'
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"]'
 
-  Scenario: The Service Provider cannot have the SubjectID manipulated by manipulating the responseObj when using a NameID Format other than unspecified
+  Scenario: The application cannot have the SubjectID manipulated by manipulating the responseObj when using a NameID Format other than unspecified
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
       $responseObj->setCollabPersonId('NOOT');

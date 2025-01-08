@@ -14,11 +14,11 @@ context('WayfMouseBehaviour', () => {
       // After filtering the search results, verify one result is visible
       cy.countIdps(1).should('have.text', 'Connected IdP 4 en');
 
-      cy.onPage('Select an organisation to login to the service');
+      cy.onPage('Select an organisation to log in to the application');
       // Ensure some elements are NOT on the page
       cy.notOnPage('Identity providers without access').should('not.exist');
       cy.notOnPage('Remember my choice');
-      cy.notOnPage('Return to service provider');
+      cy.notOnPage('Return to application');
 
   });
 
@@ -37,25 +37,25 @@ context('WayfMouseBehaviour', () => {
 
   it('Should show the return to service link when configured', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5&backLink=true');
-      cy.onPage('Select an organisation to login to the service');
-      cy.onPage('Return to service provider');
+      cy.onPage('Select an organisation to log in to the application');
+      cy.onPage('Return to application');
 
       // Ensure some elements are NOT on the page
       cy.notOnPage('Identity providers without access');
       cy.notOnPage('Remember my choice');
 
       // To be more precise, the links should be in the header and footer
-      cy.get('.mod-header .comp-links li:nth-child(1) a').should('have.text', 'Return to service provider');
-      cy.get('.footer-menu .comp-links li:nth-child(2) a').should('have.text', 'Return to service provider');
+      cy.get('.mod-header .comp-links li:nth-child(1) a').should('have.text', 'Return to application');
+      cy.get('.footer-menu .comp-links li:nth-child(2) a').should('have.text', 'Return to application');
   });
 
   it('Should show the remember my choice option', () => {
       cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true');
       // Ensure some elements are on the page
-      cy.onPage('Select an organisation to login to the service');
+      cy.onPage('Select an organisation to log in to the application');
       cy.onPage('Remember my choice');
       // Ensure some elements are NOT on the page
       cy.notOnPage('Identity providers without access');
-      cy.notOnPage('Return to service provideraccess');
+      cy.notOnPage('Return to applicationaccess');
   });
 })

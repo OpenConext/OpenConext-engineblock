@@ -12,15 +12,15 @@ Feature:
       And a Service Provider named "Dummy-SP"
       And a Service Provider named "SP-with-Attribute-Manipulations"
 
-  Scenario: The Service Provider can have an attribute added
+  Scenario: The application can have an attribute added
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
 $e = new EngineBlock_Attributes_Manipulator_CustomException("AM_ERROR Authorization Incorrect _ Affilliation Incorrect", EngineBlock_Attributes_Manipulator_CustomException::CODE_NOTICE);
 $e->setFeedbackTitle(array("nl" => "Autorisatie Incorrect", "en" => "Authorization Incorrect"));
 $e->setFeedbackDescription(array(
-    "en" => 'This user does not have access to desired service. ' .
+    "en" => 'This user does not have access to desired application. ' .
         'Contact the system administrator.',
-    "nl" => 'Deze gebruikersnaam heeft geen toegang tot de gewenste dienst. ' .
+    "nl" => 'Deze gebruikersnaam heeft geen toegang tot de gewenste applicatie. ' .
         'Neem contact op met de systeem beheerder. '
   ));
 throw $e;
@@ -31,7 +31,7 @@ throw $e;
       And I pass through the IdP
       And I give my consent
     Then I should see "Authorization Incorrect"
-      And I should see "This user does not have access to desired service. Contact the system administrator."
+      And I should see "This user does not have access to desired application. Contact the system administrator."
       And I should see "UR ID:"
       And I should see "IP:"
       And I should see "EC:"

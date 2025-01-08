@@ -110,7 +110,7 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^a Service Provider named "([^"]*)"$/
+     * @Given /^an application named "([^"]*)"$/
      */
     public function aServiceProviderNamedWithEntityid($name)
     {
@@ -124,7 +124,7 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^an unregistered Service Provider named "([^"]*)"$/
+     * @Given /^an unregistered application named "([^"]*)"$/
      */
     public function anUnregisteredServiceProviderNamed($name)
     {
