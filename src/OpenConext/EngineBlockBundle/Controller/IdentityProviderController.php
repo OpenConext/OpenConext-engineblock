@@ -179,10 +179,10 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
     public function processSRAMInterrupt(Request $request)
     {
         error_log("processSRAMInterrupt");
+        $proxyServer = new EngineBlock_Corto_Adapter();
+        $proxyServer->processSRAMInterrupt();
 
-        $body = "processSRAMInterrupt";
-
-        return new Response($body);
+        return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
 
     /**

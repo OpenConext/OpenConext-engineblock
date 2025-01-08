@@ -41,6 +41,7 @@ use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\saml\SubjectConfirmationData;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class EngineBlock_Corto_ProxyServer
 {
@@ -71,7 +72,8 @@ class EngineBlock_Corto_ProxyServer
         'idpMetadataService'                => '/authentication/idp/metadata',
         'spMetadataService'                 => '/authentication/sp/metadata',
         'stepupMetadataService'             => '/authentication/stepup/metadata',
-        'singleLogoutService'               => '/logout'
+        'singleLogoutService'               => '/logout',
+        'SRAMInterruptService'              => '/authentication/idp/process-sraminterrupt'
     );
 
     // Todo: Make this mapping obsolete by updating all proxyserver getUrl callers. If they would reference the correct
@@ -90,7 +92,8 @@ class EngineBlock_Corto_ProxyServer
         'idpMetadataService'                => 'metadata_idp',
         'spMetadataService'                 => 'metadata_sp',
         'stepupMetadataService'             => 'metadata_stepup',
-        'singleLogoutService'               => 'authentication_logout'
+        'singleLogoutService'               => 'authentication_logout',
+        'SRAMInterruptService'              => 'authentication_idp_process_sraminterrupt'
     );
 
     protected $_servicesNotNeedingSession = array(
@@ -543,6 +546,16 @@ class EngineBlock_Corto_ProxyServer
         $authenticationState->authenticatedAt($inResponseTo, $identityProvider);
 
         $this->_server->getBindingsModule()->send($newResponse, $serviceProvider);
+    }
+
+    function sendSRAMInterruptRequest($id) {
+        $this->setProcessingMode();
+
+        $redirect_url = $this->getUrl('SRAMInterruptService', '') . "?ID=$id";
+        error_log("sendSRAMInterruptRequest: " . $redirect_url);
+
+        $this->redirect($redirect_url, '');
+
     }
 
 //////// RESPONSE HANDLING ////////

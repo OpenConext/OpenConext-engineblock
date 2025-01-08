@@ -170,6 +170,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
 
         $this->_server->filterInputAssertionAttributes($receivedResponse, $receivedRequest);
 
+
         // Add the consent step
         $currentProcessStep = $this->_processingStateHelper->addStep(
             $receivedRequest->getId(),
@@ -177,6 +178,11 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             $this->getEngineSpRole($this->_server),
             $receivedResponse
         );
+
+        $this->_server->sendSRAMInterruptRequest($receivedRequest->getId());
+
+        /*
+         * All this moved into EngineBlock_Corto_Module_Service_SRAMInterrupt
 
         // When dealing with an SP that acts as a trusted proxy, we should use the proxying SP and not the proxy itself.
         if ($sp->getCoins()->isTrustedProxy()) {
@@ -214,6 +220,8 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             $nameId,
             $sp->getCoins()->isStepupForceAuthn()
         );
+
+        */
     }
 
     /**
