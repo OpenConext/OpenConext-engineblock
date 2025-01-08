@@ -70,9 +70,6 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $log = $application->getLogInstance();
 
-        /*
-        * TODO Add SRAM stuff
-        */
         error_log("EngineBlock_Corto_Module_Service_SRAMInterrupt");
 
         // Get active request
@@ -86,6 +83,23 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
         $receivedResponse = $nextProcessStep->getResponse();
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
 
+        /*
+         * TODO Add SRAM stuff
+         * Manipulate attributes
+         */
+
+        error_log("EngineBlock_Corto_Module_Service_SRAMInterrupt");
+
+        $attributes = $receivedResponse->getAssertion()->getAttributes();
+
+        $attributes['schacPersonalUniqueCode'] = ["SRAMPersonalUniqueCode"];
+        $receivedResponse->getAssertion()->setAttributes($attributes);
+
+
+        /*
+         * Continue to Consent/StepUp
+         */
+
         // Flush log if SP or IdP has additional logging enabled
         $issuer = $receivedResponse->getIssuer() ? $receivedResponse->getIssuer()->getValue() : '';
         $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($issuer);
@@ -97,13 +111,12 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
             $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($issuer);
         }
 
-        // error_log("sp: " . var_export($sp, true));
-
         // When dealing with an SP that acts as a trusted proxy, we should use the proxying SP and not the proxy itself.
         if ($sp->getCoins()->isTrustedProxy()) {
             // Overwrite the trusted proxy SP instance with that of the SP that uses the trusted proxy.
             $sp = $this->_server->findOriginalServiceProvider($receivedRequest, $log);
         }
+
         $pdpLoas = $receivedResponse->getPdpRequestedLoas();
         $loaRepository = $application->getDiContainer()->getLoaRepository();
         $authnRequestLoas = $receivedRequest->getStepupObligations($loaRepository->getStepUpLoas());
