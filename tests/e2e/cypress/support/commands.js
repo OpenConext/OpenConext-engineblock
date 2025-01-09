@@ -80,7 +80,7 @@ Cypress.Commands.add('selectFirstIdp', (click = true, firstElementSelector = '.w
   cy.get(firstElementSelector).type('{enter}', {force: true});
 });
 
-Cypress.Commands.add('selectFirstIdpAndReturn', (click = true, url = 'https://engine.vm.openconext.org/functional-testing/wayf') => {
+Cypress.Commands.add('selectFirstIdpAndReturn', (click = true, url = 'https://engine.dev.openconext.local/functional-testing/wayf') => {
   cy.selectFirstIdp(click).then(() => {
     cy.visit(url);
   });
@@ -104,7 +104,7 @@ Cypress.Commands.add('hitDeleteButton', (click = true, deleteSelector = '.wayf__
   cy.get(deleteSelector).focus().type('{enter}', {force: true});
 });
 
-Cypress.Commands.add('openUnconnectedIdp', (keyboard = true, url = 'https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=true&unconnectedIdps=5', idpSelector = '.wayf__idp[data-entityid="https://unconnected.example.com/entityId/4"]') => {
+Cypress.Commands.add('openUnconnectedIdp', (keyboard = true, url = 'https://engine.dev.openconext.local/functional-testing/wayf?displayUnconnectedIdpsWayf=true&unconnectedIdps=5', idpSelector = '.wayf__idp[data-entityid="https://unconnected.example.com/entityId/4"]') => {
   cy.visit(url);
 
   if (keyboard) {
@@ -128,11 +128,11 @@ Cypress.Commands.add('fillNoAccessForm', (keyboard = true, showFormSelector = '.
   cy.get('#motivation').focus().type('tis toapuh dattem tuis is', {force: true});
 });
 
-Cypress.Commands.add('loadWayf', (url = 'https://engine.vm.openconext.org/functional-testing/wayf') => {
+Cypress.Commands.add('loadWayf', (url = 'https://engine.dev.openconext.local/functional-testing/wayf') => {
   cy.visit(url);
 });
 
-Cypress.Commands.add('addOnePreviouslySelectedIdp', (keyboard = true, url = 'https://engine.vm.openconext.org/functional-testing/wayf') => {
+Cypress.Commands.add('addOnePreviouslySelectedIdp', (keyboard = true, url = 'https://engine.dev.openconext.local/functional-testing/wayf') => {
   cy.loadWayf(url).then(() => {
     cy.selectFirstIdpAndReturn(!keyboard, url);
   });

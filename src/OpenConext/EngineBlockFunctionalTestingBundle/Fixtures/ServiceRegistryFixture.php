@@ -157,7 +157,7 @@ class ServiceRegistryFixture
             0
         );
 
-        $this->setCoin($sp, 'termsOfServiceUrl', 'http://welcome.vm.openconext.org');
+        $this->setCoin($sp, 'termsOfServiceUrl', 'http://welcome.dev.openconext.local');
         $sp->getMdui()->setLogo(new Logo('/images/placeholder.png'));
 
 

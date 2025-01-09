@@ -4,7 +4,7 @@ Feature:
   I need to see useful error information when something goes wrong
 
   Background:
-    Given an EngineBlock instance on "vm.openconext.org"
+    Given an EngineBlock instance on "dev.openconext.local"
       And no registered SPs
       And no registered Idps
       And an Identity Provider named "Dummy Idp"
@@ -165,7 +165,7 @@ Feature:
      When I log in at "Dummy SP"
       And I pass through EngineBlock
      Then I should see "HTTP Method not allowed"
-      And I should see "The HTTP method \"GET\" is not allowed for location \"https://engine.vm.openconext.org/authentication/sp/consume-assertion\". Supported methods are: POST."
+      And I should see "The HTTP method \"GET\" is not allowed for location \"https://engine.dev.openconext.local/authentication/sp/consume-assertion\". Supported methods are: POST."
 
   Scenario: An Identity Provider sends a response without a SHO
     Given the IdP does not send the attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization"

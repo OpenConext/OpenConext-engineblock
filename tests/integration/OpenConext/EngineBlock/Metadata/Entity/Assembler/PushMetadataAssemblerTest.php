@@ -99,7 +99,7 @@ class PushMetadataAssemblerTest extends TestCase
                     },
                     "logo": [{
                         "width": "96",
-                        "url": "https:\/\/static.vm.openconext.org\/media\/conext_logo.png",
+                        "url": "https:\/\/static.dev.openconext.local\/media\/conext_logo.png",
                         "height": "96"
                     }],
                     "name": {
@@ -107,7 +107,7 @@ class PushMetadataAssemblerTest extends TestCase
                         "nl": "Test SP"
                     }
                 },
-                "name": "https:\/\/serviceregistry.vm.openconext.org\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-sp",
+                "name": "https:\/\/serviceregistry.dev.openconext.local\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-sp",
                 "state": "prodaccepted",
                 "type": "saml20-sp"
             }
@@ -199,7 +199,7 @@ class PushMetadataAssemblerTest extends TestCase
                         }
                     }
                 },
-                "name": "https:\/\/serviceregistry.vm.openconext.org\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-sp",
+                "name": "https:\/\/serviceregistry.dev.openconext.local\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-sp",
                 "state": "prodaccepted",
                 "type": "saml20-sp"
             },
@@ -214,7 +214,7 @@ class PushMetadataAssemblerTest extends TestCase
                       "level": "http://test.openconext.nl/assurance/loa3"
                     }
                 ],
-                "name": "https:\/\/serviceregistry.vm.openconext.org\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-idp",
+                "name": "https:\/\/serviceregistry.dev.openconext.local\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-idp",
                 "state": "prodaccepted",
                 "type": "saml20-idp"
             }
@@ -253,7 +253,7 @@ class PushMetadataAssemblerTest extends TestCase
                       "level3": "http://test.openconext.nl/assurance/loa3"
                     }
                 ],
-                "name": "https:\/\/serviceregistry.vm.openconext.org\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-idp",
+                "name": "https:\/\/serviceregistry.dev.openconext.local\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-idp",
                 "state": "prodaccepted",
                 "type": "saml20-idp"
             }
@@ -277,13 +277,13 @@ class PushMetadataAssemblerTest extends TestCase
         $connection = '{
             "2d96e27a-76cf-4ca2-ac70-ece5d4c49524": {
                 "mfa_entities": [{
-                    "name": "https://teams.vm.openconext.org/shibboleth",
+                    "name": "https://teams.dev.openconext.local/shibboleth",
                     "level": "http://schemas.microsoft.com/claims/multipleauthn"
                 }, {
-                    "name": "https://aa.vm.openconext.org/shibboleth",
+                    "name": "https://aa.dev.openconext.local/shibboleth",
                     "level": "http://schemas.microsoft.com/claims/multipleauthn"
                 }],
-                "name": "https:\/\/serviceregistry.vm.openconext.org\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-idp",
+                "name": "https:\/\/serviceregistry.dev.openconext.local\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-idp",
                 "state": "prodaccepted",
                 "type": "saml20-idp"
             }
@@ -305,7 +305,7 @@ class PushMetadataAssemblerTest extends TestCase
     {
         $connection = '{
             "2d96e27a-76cf-4ca2-ac70-ece5d4c49524": {
-                "name": "https:\/\/serviceregistry.vm.openconext.org\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-idp",
+                "name": "https:\/\/serviceregistry.dev.openconext.local\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-idp",
                 "state": "prodaccepted",
                 "type": "saml20-idp"
             }
@@ -328,16 +328,16 @@ class PushMetadataAssemblerTest extends TestCase
         $connection = '{
             "2d96e27a-76cf-4ca2-ac70-ece5d4c49524": {
                 "mfa_entities": [{
-                    "name": "https://teams.vm.openconext.org/shibboleth",
+                    "name": "https://teams.dev.openconext.local/shibboleth",
                     "level": "http://schemas.microsoft.com/claims/multipleauthn"
                 }, {
-                    "name": "https://aa.vm.openconext.org/shibboleth",
+                    "name": "https://aa.dev.openconext.local/shibboleth",
                     "level": "http://schemas.microsoft.com/claims/multipleauthn"
                 }, {
-                    "name": "https://test-sp.vm.openconext.org",
+                    "name": "https://test-sp.dev.openconext.local",
                     "level": "transparent_authn_context"
                 }],
-                "name": "https:\/\/serviceregistry.vm.openconext.org\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-idp",
+                "name": "https:\/\/serviceregistry.dev.openconext.local\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-idp",
                 "state": "prodaccepted",
                 "type": "saml20-idp"
             }
@@ -353,7 +353,7 @@ class PushMetadataAssemblerTest extends TestCase
         $mfaEntities = $idp->getCoins()->mfaEntities();
         $this->assertInstanceOf(MfaEntityCollection::class, $mfaEntities);
         $this->assertCount(3, $mfaEntities);
-        $transparent = $mfaEntities->findByEntityId('https://test-sp.vm.openconext.org');
+        $transparent = $mfaEntities->findByEntityId('https://test-sp.dev.openconext.local');
         $this->assertInstanceOf(TransparentMfaEntity::class, $transparent);
     }
 

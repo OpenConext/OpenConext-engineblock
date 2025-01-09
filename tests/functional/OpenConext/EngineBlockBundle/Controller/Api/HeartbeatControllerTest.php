@@ -31,7 +31,7 @@ final class HeartbeatControllerTest extends WebTestCase
     public function engineblock_has_a_heartbeat()
     {
         $client = $this->createClient();
-        $client->request('GET', 'https://engine-api.vm.openconext.org/');
+        $client->request('GET', 'https://engine-api.dev.openconext.local/');
         $this->assertStatusCode(Response::HTTP_OK, $client);
     }
 

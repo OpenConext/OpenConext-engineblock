@@ -73,7 +73,7 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
 
         return [
             'default' => [
-                'publicFile' => '/etc/openconext/engineblock.crt',
+                'publicFile' => '/config/engine/engineblock.crt',
                 'privateFile' => $basePath . '/ci/qa-config/files/engineblock.pem',
             ],
         ];

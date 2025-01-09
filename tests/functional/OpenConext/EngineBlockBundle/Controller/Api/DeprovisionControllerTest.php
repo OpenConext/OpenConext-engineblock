@@ -45,19 +45,19 @@ final class DeprovisionControllerTest extends WebTestCase
         $collabPersonId = 'urn:collab:person:test';
 
         $unauthenticatedClient = static::createClient();
-        $unauthenticatedClient->request('GET', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId);
+        $unauthenticatedClient->request('GET', 'https://engine-api.dev.openconext.local/deprovision/' . $collabPersonId);
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
 
         $unauthenticatedClient = static::createClient();
-        $unauthenticatedClient->request('DELETE', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId);
+        $unauthenticatedClient->request('DELETE', 'https://engine-api.dev.openconext.local/deprovision/' . $collabPersonId);
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
 
         $unauthenticatedClient = static::createClient();
-        $unauthenticatedClient->request('DELETE', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId . '/dry-run');
+        $unauthenticatedClient->request('DELETE', 'https://engine-api.dev.openconext.local/deprovision/' . $collabPersonId . '/dry-run');
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
 
         $unauthenticatedClient = static::createClient();
-        $unauthenticatedClient->request('DELETE', 'https://engine-api.vm.openconext.org/remove-consent');
+        $unauthenticatedClient->request('DELETE', 'https://engine-api.dev.openconext.local/remove-consent');
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
     }
 
@@ -75,13 +75,13 @@ final class DeprovisionControllerTest extends WebTestCase
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
         ]);
 
-        $client->request('PUT', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId);
+        $client->request('PUT', 'https://engine-api.dev.openconext.local/deprovision/' . $collabPersonId);
         $this->assertStatusCode(Response::HTTP_METHOD_NOT_ALLOWED, $client);
 
-        $client->request('HEAD', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId);
+        $client->request('HEAD', 'https://engine-api.dev.openconext.local/deprovision/' . $collabPersonId);
         $this->assertStatusCode(Response::HTTP_METHOD_NOT_ALLOWED, $client);
 
-        $client->request('GET', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId . '/dry-run');
+        $client->request('GET', 'https://engine-api.dev.openconext.local/deprovision/' . $collabPersonId . '/dry-run');
         $this->assertStatusCode(Response::HTTP_METHOD_NOT_ALLOWED, $client);
 
         $this->assertResponseIsJson($client);
@@ -104,7 +104,7 @@ final class DeprovisionControllerTest extends WebTestCase
 
         $this->disableDeprovisionApiFeatureFor($client);
 
-        $client->request('GET', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId);
+        $client->request('GET', 'https://engine-api.dev.openconext.local/deprovision/' . $collabPersonId);
 
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $client);
         $this->assertResponseIsJson($client);
@@ -124,7 +124,7 @@ final class DeprovisionControllerTest extends WebTestCase
             'PHP_AUTH_PW' => 'no_roles',
         ]);
 
-        $client->request('GET', 'https://engine-api.vm.openconext.org/deprovision/' . $collabPersonId);
+        $client->request('GET', 'https://engine-api.dev.openconext.local/deprovision/' . $collabPersonId);
 
         $this->assertStatusCode(Response::HTTP_FORBIDDEN, $client);
         $this->assertResponseIsJson($client);
@@ -144,7 +144,7 @@ final class DeprovisionControllerTest extends WebTestCase
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
         ]);
 
-        $client->request($method, 'https://engine-api.vm.openconext.org/' . trim($path, '/'));
+        $client->request($method, 'https://engine-api.dev.openconext.local/' . trim($path, '/'));
 
         $this->assertStatusCode(Response::HTTP_OK, $client);
         $this->assertResponseIsJson($client);
@@ -208,7 +208,7 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->addConsentFixture($userId, $spEntityId1, $attributeHash, $consentType, $consentDate);
         $this->addConsentFixture($userId, $spEntityId2, $attributeHash, $consentType, $consentDate);
 
-        $client->request($method, 'https://engine-api.vm.openconext.org/' . trim($path, '/'));
+        $client->request($method, 'https://engine-api.dev.openconext.local/' . trim($path, '/'));
 
         $this->assertStatusCode(Response::HTTP_OK, $client);
         $this->assertResponseIsJson($client);
@@ -266,7 +266,7 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertEquals($expectedData, $responseData);
 
         // Now test if the data was deleted by checking the response of a subsequent call to the API.
-        $client->request('GET', 'https://engine-api.vm.openconext.org/deprovision/urn:collab:person:test');
+        $client->request('GET', 'https://engine-api.dev.openconext.local/deprovision/urn:collab:person:test');
         $responseData = json_decode($client->getResponse()->getContent(), true);
 
         if ($method === 'DELETE' && !preg_match('#/dry-run$#', $path)) {

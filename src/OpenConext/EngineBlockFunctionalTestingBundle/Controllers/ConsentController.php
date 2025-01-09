@@ -90,7 +90,7 @@ class ConsentController
             'urn:mace:dir:attribute-def:givenName' => ['John'],
             'urn:mace:dir:attribute-def:mail' => ['j.doe@example.com'],
             'urn:mace:terena.org:attribute-def:schacHomeOrganization' => ['example.com'],
-            'urn:mace:dir:attribute-def:isMemberOf' => ['urn:collab:org:vm.openconext.org', 'urn:collab:org:example.com'],
+            'urn:mace:dir:attribute-def:isMemberOf' => ['urn:collab:org:dev.openconext.local', 'urn:collab:org:example.com'],
         ];
         $attributeMotivations = [
             'urn:mace:dir:attribute-def:eduPersonPrincipalName' => 'Test  tooltip',

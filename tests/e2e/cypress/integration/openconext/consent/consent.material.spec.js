@@ -1,7 +1,7 @@
 context('Consent on Material theme', () => {
 
   beforeEach(() => {
-    cy.visit('https://engine.vm.openconext.org/functional-testing/consent');
+    cy.visit('https://engine.dev.openconext.local/functional-testing/consent');
   });
 
   it('gives openconext information', () => {

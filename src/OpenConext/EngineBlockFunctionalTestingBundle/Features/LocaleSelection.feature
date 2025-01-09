@@ -5,7 +5,7 @@ Feature:
   Where desired, I want to override the language with the EN/NL buttons in the interface.
 
   Background:
-    Given an EngineBlock instance on "vm.openconext.org"
+    Given an EngineBlock instance on "dev.openconext.local"
     And an Identity Provider named "First IdP"
     And an Identity Provider named "Second IdP"
     And a Service Provider named "Test SP"

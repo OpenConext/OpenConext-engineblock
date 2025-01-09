@@ -4,7 +4,7 @@ Feature:
   The IsPassive implementation in EB should function correctly
 
   Background:
-    Given an EngineBlock instance on "vm.openconext.org"
+    Given an EngineBlock instance on "dev.openconext.local"
     And no registered SPs
     And no registered Idps
     And an Identity Provider named "Dummy IdP"

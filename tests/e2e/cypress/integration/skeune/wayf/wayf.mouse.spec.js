@@ -7,14 +7,14 @@ import {firstRemainingIdp, firstSelectedIdpDeleteDisable, selectedIdpDataIndex1}
 context('WAYF when using the mouse', () => {
   describe('Test logging in', () => {
     it('Should login when selecting an idp', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf');
       cy.get(remainingIdpSelector)
         .eq(1)
         .click({force: true});
       cy.location().should((loc) => {
-        expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/2');
+        expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https%3A//example.com/entityId/2');
       });
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf');
     });
   });
 
@@ -85,12 +85,12 @@ context('WAYF when using the mouse', () => {
 
   describe('Should have a working default Idp Banner', () => {
     it('Should have a default Idp banner visible', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?showIdpBanner=1');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?showIdpBanner=1');
       cy.get(defaultIdpSelector).should('be.visible');
     });
 
     it('Should scroll to the default Idp when clicking the banner link', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=10&defaultIdpEntityId=https://example.com/entityId/9&showIdpBanner=1');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=10&defaultIdpEntityId=https://example.com/entityId/9&showIdpBanner=1');
 
       // click the banner link & check if it did what it should have
       cy.get(defaultIdpSelector).click();
@@ -123,7 +123,7 @@ context('WAYF when using the mouse', () => {
       cy.addOnePreviouslySelectedIdp(false);
       cy.selectFirstIdp(true, selectedIdpDataIndex1);
       cy.location().should((loc) => {
-        expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/1');
+        expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https%3A//example.com/entityId/1');
       });
     });
 

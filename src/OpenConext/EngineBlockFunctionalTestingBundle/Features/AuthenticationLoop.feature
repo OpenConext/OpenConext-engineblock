@@ -4,7 +4,7 @@ Feature:
   I want to prevent authentication loops from happening
 
   Background:
-    Given an EngineBlock instance on "vm.openconext.org"
+    Given an EngineBlock instance on "dev.openconext.local"
       And EngineBlock is configured to allow a maximum of 2 authentication procedures within a time frame of 6000 seconds
       And no registered SPs
       And no registered Idps

@@ -62,11 +62,11 @@ final class ConsentControllerTest extends WebTestCase
         $userId = 'my-name-id';
 
         $unauthenticatedClient = static::createClient();
-        $unauthenticatedClient->request('GET', 'https://engine-api.vm.openconext.org/consent/' . $userId);
+        $unauthenticatedClient->request('GET', 'https://engine-api.dev.openconext.local/consent/' . $userId);
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
 
         $unauthenticatedClient = static::createClient();
-        $unauthenticatedClient->request('POST', 'https://engine-api.vm.openconext.org/remove-consent');
+        $unauthenticatedClient->request('POST', 'https://engine-api.dev.openconext.local/remove-consent');
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
 
     }
@@ -89,7 +89,7 @@ final class ConsentControllerTest extends WebTestCase
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
         ]);
 
-        $client->request($invalidHttpMethod, 'https://engine-api.vm.openconext.org/consent/' . $userId);
+        $client->request($invalidHttpMethod, 'https://engine-api.dev.openconext.local/consent/' . $userId);
         $this->assertStatusCode(Response::HTTP_METHOD_NOT_ALLOWED, $client);
 
         $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
@@ -114,7 +114,7 @@ final class ConsentControllerTest extends WebTestCase
 
         $this->disableConsentApiFeatureFor($client);
 
-        $client->request('GET', 'https://engine-api.vm.openconext.org/consent/' . $userId);
+        $client->request('GET', 'https://engine-api.dev.openconext.local/consent/' . $userId);
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $client);
 
         $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
@@ -136,7 +136,7 @@ final class ConsentControllerTest extends WebTestCase
             'PHP_AUTH_PW' => 'no_roles',
         ]);
 
-        $client->request('GET', 'https://engine-api.vm.openconext.org/consent/' . $userId);
+        $client->request('GET', 'https://engine-api.dev.openconext.local/consent/' . $userId);
 
         $this->assertStatusCode(Response::HTTP_FORBIDDEN, $client);
 
@@ -159,7 +159,7 @@ final class ConsentControllerTest extends WebTestCase
             'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
         ]);
 
-        $client->request('GET', 'https://engine-api.vm.openconext.org/consent/' . $userId);
+        $client->request('GET', 'https://engine-api.dev.openconext.local/consent/' . $userId);
 
         $this->assertStatusCode(Response::HTTP_OK, $client);
         $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
@@ -216,7 +216,7 @@ final class ConsentControllerTest extends WebTestCase
         $this->addServiceProviderFixture($serviceProvider);
         $this->addConsentFixture($userId, $spEntityId, $attributeHash, $consentType, $consentDate, $deletedAt);
 
-        $client->request('GET', 'https://engine-api.vm.openconext.org/consent/' . $userId);
+        $client->request('GET', 'https://engine-api.dev.openconext.local/consent/' . $userId);
 
         $this->assertStatusCode(Response::HTTP_OK, $client);
         $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
@@ -300,7 +300,7 @@ final class ConsentControllerTest extends WebTestCase
         $this->addConsentFixture($userId, $spEntityId, $attributeHash, $consentType, $consentDate, $deletedAt);
 
         $data = json_encode(['collabPersonId' => $userId, 'serviceProviderEntityId' => $spEntityId]);
-        $client->request('POST', 'https://engine-api.vm.openconext.org/remove-consent', [], [], [], $data);
+        $client->request('POST', 'https://engine-api.dev.openconext.local/remove-consent', [], [], [], $data);
         $this->assertStatusCode(Response::HTTP_OK, $client);
         $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
@@ -367,7 +367,7 @@ final class ConsentControllerTest extends WebTestCase
         $this->assertEquals(1, $count['active']);
         $this->assertEquals(2, $count['removed']);
         $data = json_encode(['collabPersonId' => $userId, 'serviceProviderEntityId' => $spEntityId]);
-        $client->request('POST', 'https://engine-api.vm.openconext.org/remove-consent', [], [], [], $data);
+        $client->request('POST', 'https://engine-api.dev.openconext.local/remove-consent', [], [], [], $data);
         $this->assertStatusCode(Response::HTTP_OK, $client);
         $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
@@ -397,7 +397,7 @@ final class ConsentControllerTest extends WebTestCase
         $this->disableRemoveConsentApiFeatureFor($client);
 
         $data = json_encode(['collabPersonId' => $collabPersonId, 'serviceProviderEntityId' => 'https://example.com/metadata']);
-        $client->request('POST', 'https://engine-api.vm.openconext.org/remove-consent', [], [], [], $data);
+        $client->request('POST', 'https://engine-api.dev.openconext.local/remove-consent', [], [], [], $data);
 
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $client);
         $this->assertResponseIsJson($client);
@@ -430,7 +430,7 @@ final class ConsentControllerTest extends WebTestCase
         ]);
 
         $data = json_encode(['collabPersonId' => $collabPersonId, 'serviceProviderEntityId' => 'https://example.com/metadata']);
-        $client->request('POST', 'https://engine-api.vm.openconext.org/remove-consent', [], [], [], $data);
+        $client->request('POST', 'https://engine-api.dev.openconext.local/remove-consent', [], [], [], $data);
 
         $this->assertStatusCode(Response::HTTP_FORBIDDEN, $client);
         $this->assertResponseIsJson($client);
@@ -449,7 +449,7 @@ final class ConsentControllerTest extends WebTestCase
         ]);
 
         $data = json_encode(['userId' => 'urn:collab:person:test', 'serviceProviderId' => 'https://example.com/metadata']);
-        $client->request('POST', 'https://engine-api.vm.openconext.org/remove-consent', [], [], [], $data);
+        $client->request('POST', 'https://engine-api.dev.openconext.local/remove-consent', [], [], [], $data);
 
         $this->assertStatusCode(Response::HTTP_FOUND, $client);
         $this->assertResponseIsJson($client);
@@ -468,7 +468,7 @@ final class ConsentControllerTest extends WebTestCase
         ]);
 
         $data = json_encode(['collabPersonId' => 'urn:collab:person:test', 'serviceProviderEntityId' => 'https://example.com/metadata']);
-        $client->request('POST', 'https://engine-api.vm.openconext.org/remove-consent', [], [], [], $data);
+        $client->request('POST', 'https://engine-api.dev.openconext.local/remove-consent', [], [], [], $data);
 
         $this->assertStatusCode(Response::HTTP_OK, $client);
         $this->assertResponseIsJson($client);
@@ -537,7 +537,7 @@ final class ConsentControllerTest extends WebTestCase
         $this->disableEngineConsentFeatureFor($client);
 
         $data = json_encode(['collabPersonId' => $collabPersonId, 'serviceProviderEntityId' => 'https://example.com/metadata']);
-        $client->request('POST', 'https://engine-api.vm.openconext.org/remove-consent', [], [], [], $data);
+        $client->request('POST', 'https://engine-api.dev.openconext.local/remove-consent', [], [], [], $data);
 
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $client);
         $this->assertResponseIsJson($client);
@@ -561,7 +561,7 @@ final class ConsentControllerTest extends WebTestCase
 
         $this->disableEngineConsentFeatureFor($client);
 
-        $client->request('GET', 'https://engine-api.vm.openconext.org/consent/' . $userId);
+        $client->request('GET', 'https://engine-api.dev.openconext.local/consent/' . $userId);
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $client);
 
         $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
