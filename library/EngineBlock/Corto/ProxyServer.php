@@ -548,14 +548,12 @@ class EngineBlock_Corto_ProxyServer
         $this->_server->getBindingsModule()->send($newResponse, $serviceProvider);
     }
 
-    function sendSRAMInterruptRequest($id) {
-        $this->setProcessingMode();
-
+    function sendSRAMInterruptRequest($request) {
+        $id = $request->getId();
         $redirect_url = $this->getUrl('SRAMInterruptService', '') . "?ID=$id";
         error_log("sendSRAMInterruptRequest: " . $redirect_url);
 
         $this->redirect($redirect_url, '');
-
     }
 
 //////// RESPONSE HANDLING ////////
