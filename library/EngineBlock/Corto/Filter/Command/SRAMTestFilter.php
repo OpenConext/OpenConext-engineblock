@@ -19,14 +19,6 @@
 class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_Filter_Command_Abstract
     implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
 {
-    private $_string = null;
-
-    public function __construct($string)
-    {
-        $this->_string = $string;
-        error_log("SRAMTestFilter __construct(" . $this->_string. ")");
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -38,7 +30,42 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
     public function execute(): void
     {
         error_log("SRAMTestFilter execute(" . $this->_string. ")");
-        $this->_responseAttributes['eduPersonEntitlement'] = ['aa-foobar', 'bb-foobar'];
-        error_log("_responseAttributes: " . var_export($this->_responseAttributes, true));
+
+        $attributes = $this->getResponseAttributes();
+
+        $uid = $attributes['urn:mace:dir:attribute-def:uid'][0];
+        $id = $this->_request->getId();
+
+        $headers = array(
+            'Authorization: Test'
+        );
+
+        $post = array(
+            'uid' => $uid,
+            'id' => $id
+        );
+
+        $options = [
+            CURLOPT_HEADER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => $headers,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $post,
+        ];
+
+        $ch = curl_init("http://192.168.0.1:12345/ping");
+        curl_setopt_array($ch, $options);
+
+        $data = curl_exec($ch);
+        curl_close($ch);
+
+        $body = json_decode($data);
+        $msg = $body->msg;
+
+        if ('pong' == $msg) {
+            error_log("SRAMTestFilter PONG!");
+            $this->_response->setSRAMInterrupt(true);
+        }
+
     }
 }

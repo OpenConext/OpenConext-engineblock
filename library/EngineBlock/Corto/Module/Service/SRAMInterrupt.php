@@ -77,7 +77,7 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
 
         $nextProcessStep = $this->_processingStateHelper->getStepByRequestId(
             $id,
-            ProcessingStateHelperInterface::STEP_CONSENT
+            ProcessingStateHelperInterface::STEP_SRAM
         );
 
         $receivedResponse = $nextProcessStep->getResponse();
@@ -87,14 +87,38 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
          * TODO Add SRAM stuff
          * Manipulate attributes
          */
-
-        error_log("EngineBlock_Corto_Module_Service_SRAMInterrupt");
-
         $attributes = $receivedResponse->getAssertion()->getAttributes();
 
-        $attributes['schacPersonalUniqueCode'] = ["SRAMPersonalUniqueCode"];
-        $receivedResponse->getAssertion()->setAttributes($attributes);
+        $headers = array(
+            'Authorization: Test'
+        );
 
+        $post = array(
+            'foo' => 'bar'
+        );
+
+        $options = [
+            CURLOPT_HEADER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => $headers,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $post,
+        ];
+
+        $ch = curl_init("http://192.168.0.1:12345/entitlements");
+        curl_setopt_array($ch, $options);
+
+        $data = curl_exec($ch);
+        curl_close($ch);
+
+        $body = json_decode($data);
+        $entitlements = $body->entitlements;
+
+
+        if ($entitlements) {
+            $attributes['eduPersonEntitlement'] = $entitlements;
+            $receivedResponse->getAssertion()->setAttributes($attributes);
+        }
 
         /*
          * Continue to Consent/StepUp
@@ -142,6 +166,8 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
         // Get mapped AuthnClassRef and get NameId
         $nameId = clone $receivedResponse->getNameId();
         $authnClassRef = $this->_stepupGatewayCallOutHelper->getStepupLoa($idp, $sp, $authnRequestLoas, $pdpLoas);
+
+
 
         $this->_server->sendStepupAuthenticationRequest(
             $receivedRequest,

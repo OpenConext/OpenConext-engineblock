@@ -97,7 +97,7 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
             new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
 
             // SRAM Test filter
-            new EngineBlock_Corto_Filter_Command_SRAMTestFilter('Foobar'),
+            new EngineBlock_Corto_Filter_Command_SRAMTestFilter(),
 
         );
 
