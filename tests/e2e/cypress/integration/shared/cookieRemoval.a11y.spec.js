@@ -3,7 +3,7 @@
  */
 context.skip('Cookie removal page verify a11y', () => {
   beforeEach(() => {
-    cy.visit('https://engine.vm.openconext.org/authentication/idp/remove-cookies');
+    cy.visit('https://engine.dev.openconext.local/authentication/idp/remove-cookies');
   });
 
   it('contains no a11y problems on load', () => {

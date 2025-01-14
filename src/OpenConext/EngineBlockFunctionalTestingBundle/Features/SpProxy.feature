@@ -4,7 +4,7 @@ Feature:
   I need EB to proxy for my Step Up proxy
 
   Background:
-    Given an EngineBlock instance on "vm.openconext.org"
+    Given an EngineBlock instance on "dev.openconext.local"
       And no registered SPs
       And no registered Idps
       And an Identity Provider named "AlwaysAuth"
@@ -206,7 +206,7 @@ Feature:
     And SP "Step Up" does not require consent
     And SP "Loa SP" does not require consent
     And SP "Loa SP" requires a policy enforcement decision
-    And pdp gives a stepup obligation response for "http://vm.openconext.org/assurance/loa3"
+    And pdp gives a stepup obligation response for "http://dev.openconext.local/assurance/loa3"
     When I log in at "Step Up"
     And I select "AlwaysAuth" on the WAYF
     And I pass through EngineBlock

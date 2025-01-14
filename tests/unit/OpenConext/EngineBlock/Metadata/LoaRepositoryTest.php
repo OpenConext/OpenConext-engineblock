@@ -43,7 +43,7 @@ class LoaRepositoryTest extends TestCase
     {
         $repository = new LoaRepository($this->getValidConfigAsArray());
 
-        $existingLoa = 'http://vm.openconext.org/assurance/loa1';
+        $existingLoa = 'http://dev.openconext.local/assurance/loa1';
         $loa = $repository->getByIdentifier($existingLoa);
 
         $this->assertInstanceOf(Loa::class, $loa);
@@ -84,10 +84,10 @@ class LoaRepositoryTest extends TestCase
     private function getValidConfigAsArray()
     {
         return [
-            10 => ["engineblock" => "http://vm.openconext.org/assurance/loa1", "gateway" => "https://gateway.tld/authentication/loa1"],
-            15 => ["engineblock" => "http://vm.openconext.org/assurance/loa1_5", "gateway" => "https://gateway.tld/authentication/loa1_5"],
-            20 => ["engineblock" => "http://vm.openconext.org/assurance/loa2", "gateway" => "https://gateway.tld/authentication/loa2"],
-            30 => ["engineblock" => "http://vm.openconext.org/assurance/loa3", "gateway" => "https://gateway.tld/authentication/loa3"]
+            10 => ["engineblock" => "http://dev.openconext.local/assurance/loa1", "gateway" => "https://gateway.tld/authentication/loa1"],
+            15 => ["engineblock" => "http://dev.openconext.local/assurance/loa1_5", "gateway" => "https://gateway.tld/authentication/loa1_5"],
+            20 => ["engineblock" => "http://dev.openconext.local/assurance/loa2", "gateway" => "https://gateway.tld/authentication/loa2"],
+            30 => ["engineblock" => "http://dev.openconext.local/assurance/loa3", "gateway" => "https://gateway.tld/authentication/loa3"]
         ];
     }
 

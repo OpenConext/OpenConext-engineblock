@@ -4,7 +4,7 @@ Feature:
   I want to send Encrypted SAML Responses
 
   Background:
-    Given an EngineBlock instance on "vm.openconext.org"
+    Given an EngineBlock instance on "dev.openconext.local"
       And no registered SPs
       And no registered Idps
       And an Identity Provider named "Dummy Idp"
@@ -13,7 +13,7 @@ Feature:
   Scenario: EngineBlock accepts RSA Encrypted Responses
     Given the SP uses the HTTP POST Binding
       And feature "eb.encrypted_assertions" is enabled
-      And the IdP encrypts its assertions with the public key in "/etc/openconext/engineblock.crt"
+      And the IdP encrypts its assertions with the public key in "/config/engine/engineblock.crt"
      When I log in at "Dummy SP"
       And I pass through the SP
       And I pass through EngineBlock

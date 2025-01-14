@@ -91,7 +91,7 @@ This script changes the Twig theme and builds the chosen frontend theme assets. 
 $ EB_THEME=skeune ./scripts/prepare-test.js
 ```
 
-The script must be run on the php-fpm instance on your CI environment as it also clears the application cache in order to let the correct Twig templates to be included in the cache.
+The script must be run on the engine instance on your CI environment as it also clears the application cache in order to let the correct Twig templates to be included in the cache.
 
 ### Writing your own custom theme:
 
@@ -149,7 +149,7 @@ To override a twig file create one with the same name in the same location.  Thi
 Below you'll find a list of the "entry points" for each page with corresponding testing urls to ease development.  If you want to override the entire page, you will need to have those in your theme.
 - consent page:
     - `templates > modules > authentication > view > proxy > consent.html.twig`.
-    - You can use `https://engine.vm.openconext.org/functional-testing/consent` to develop the page.
+    - You can use `https://engine.dev.openconext.local/functional-testing/consent` to develop the page.
     - To test group memberships, you will need to make the following change to \src\OpenConext\EngineBlockFunctionalTestingBundle\Controllers\ConsentController.php:
         - find the attribute `'urn:mace:dir:attribute-def:isMemberOf'` (at the time of writing on line 93)
         - add some values to the array.  Eg:
@@ -166,16 +166,16 @@ Below you'll find a list of the "entry points" for each page with corresponding 
                   ],
       ```
 
-- wayf: `templates > modules > authentication > view > proxy > wayf.html.twig `.  You can use `https://engine.vm.openconext.org/functional-testing/wayf` to develop the page.
-- error: `templates > modules > default > view > error > error.html.twig`.  You can use `https://engine.vm.openconext.org/feedback/unknown-error` to develop the page.
+- wayf: `templates > modules > authentication > view > proxy > wayf.html.twig `.  You can use `https://engine.dev.openconext.local/functional-testing/wayf` to develop the page.
+- error: `templates > modules > default > view > error > error.html.twig`.  You can use `https://engine.dev.openconext.local/feedback/unknown-error` to develop the page.
 There are a lot of error pages.  To test all different kinds, you can use the urls on this page: `https://github.com/OpenConext/OpenConext-engineblock/blob/master/tests/e2e/cypress/visual-regression/ErrorPage.spec.js#L72`
 
 - redirect page: `templates > modules > authentication > view > proxy > redirect.html.twig`.
 - spinner page: `templates > modules > authentication > view > proxy > form.html.twig`.  To test it disable the onload handler on the body-tag and go to your profile (or load the page without JS).
-- index.html.twig: `templates > modules > authentication > view > index > index.html.twig`.  You can use `https://engine.vm.openconext.org/` to develop the page.
-- cookie removal page: `templates > modules > authentication > view > identityprovider > remove-cookies.html.twig`.  You can use `https://engine.vm.openconext.org/authentication/idp/remove-cookies` to develop the page.  The page is only accessible if you set the `wayf.remember_choice` parameter in `parameters.yml` to true.
-- debug page: `templates > modules > authentication > view > proxy > debug-idp-response.html.twig`.  You can use `https://engine.vm.openconext.org/authentication/sp/debug` to develop the page.
-- logout page: `templates > modules > logout > view > index > index.html.twig`.  You can use `https://engine.vm.openconext.org/logout` to develop the page.
+- index.html.twig: `templates > modules > authentication > view > index > index.html.twig`.  You can use `https://engine.dev.openconext.local/` to develop the page.
+- cookie removal page: `templates > modules > authentication > view > identityprovider > remove-cookies.html.twig`.  You can use `https://engine.dev.openconext.local/authentication/idp/remove-cookies` to develop the page.  The page is only accessible if you set the `wayf.remember_choice` parameter in `parameters.yml` to true.
+- debug page: `templates > modules > authentication > view > proxy > debug-idp-response.html.twig`.  You can use `https://engine.dev.openconext.local/authentication/sp/debug` to develop the page.
+- logout page: `templates > modules > logout > view > index > index.html.twig`.  You can use `https://engine.dev.openconext.local/logout` to develop the page.
 
 #### Supported feature / testing flags
 
@@ -195,7 +195,7 @@ There is currently one flag which allows for testing a more realistic scenario. 
 
 **The following test flag exist (name of query param):**
 - randomIdps: whether to use random Idp names (taken from a selection of real IDP names) with random connected status.  Example usage:
-`https://engine.vm.openconext.org/functional-testing/wayf?randomIdps=20&displayUnconnectedIdpsWayf=true`
+`https://engine.dev.openconext.local/functional-testing/wayf?randomIdps=20&displayUnconnectedIdpsWayf=true`
 There are only 25 random names to choose from.  If you enter a number larger than 25, number 26 & greater will receive names as normal for the FT idps.
 **Note:** these idps are randomly assigned connected / unconnected status.
 

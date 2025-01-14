@@ -95,8 +95,8 @@ services:
     engineblock.configuration.stepup.endpoint:
         class: OpenConext\EngineBlock\Stepup\StepupEndpoint
         arguments:
-            - "https://engine.vm.openconext.org/authentication/stepup/metadata"
-            - "https://engine.vm.openconext.org/functional-testing/gateway/second-factor-only/single-sign-on"
+            - "https://engine.dev.openconext.local/authentication/stepup/metadata"
+            - "https://engine.dev.openconext.local/functional-testing/gateway/second-factor-only/single-sign-on"
             - "%stepup.gateway.sfo.key_file%"
 
     engineblock.functional_testing.mock.translator:

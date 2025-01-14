@@ -4,7 +4,7 @@ Feature:
   I need EB to filter malicious asc values in AuthnRequests
 
   Background:
-    Given an EngineBlock instance on "vm.openconext.org"
+    Given an EngineBlock instance on "dev.openconext.local"
     And no registered SPs
     And no registered Idps
     And an Identity Provider named "AlwaysAuth"

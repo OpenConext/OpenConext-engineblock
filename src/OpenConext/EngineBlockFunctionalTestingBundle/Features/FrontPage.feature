@@ -4,7 +4,7 @@ Feature:
   I want to display a front page with links to my metadata endpoints and other features
 
   Background:
-    Given an EngineBlock instance on "vm.openconext.org"
+    Given an EngineBlock instance on "dev.openconext.local"
       And no registered SPs
       And no registered Idps
 

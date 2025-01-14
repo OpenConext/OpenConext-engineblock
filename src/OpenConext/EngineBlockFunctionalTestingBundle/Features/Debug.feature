@@ -4,7 +4,7 @@ Feature:
   I want to perform test authentication requests on EngineBlock
 
   Background:
-    Given an EngineBlock instance on "vm.openconext.org"
+    Given an EngineBlock instance on "dev.openconext.local"
     And an Identity Provider named "First-IdP" with logo "idp-logo.jpg"
     And an Identity Provider named "Second-IdP" with logo "idp2-logo.jpg"
     And my browser is configured to accept language "nl-NL"
@@ -20,7 +20,7 @@ Feature:
     And I pass through the IdP
     Then I should see "Identity Provider"
     And I should see "Entity ID"
-    And I should see "https://engine.vm.openconext.org/functional-testing/Second-IdP/metadata"
+    And I should see "https://engine.dev.openconext.local/functional-testing/Second-IdP/metadata"
     And I should see "Naam"
     And I should see "Second-IdP"
     And I should see "Logo"

@@ -6,7 +6,7 @@ Feature:
   This then allows two entities, with two different keys, to be configured in the Stepup-Gateway
 
   Background:
-    Given an EngineBlock instance on "vm.openconext.org"
+    Given an EngineBlock instance on "dev.openconext.local"
     And no registered SPs
     And no registered Idps
     And an Identity Provider named "SSO-IdP"
@@ -18,12 +18,13 @@ Feature:
   Scenario: When stepup.sfo.override_engine_entityid is not configured, stepup/metadata should show default EntityId
     Given feature "eb.stepup.sfo.override_engine_entityid" is disabled
     When I go to Engineblock URL "/authentication/stepup/metadata"
-    Then the response should match xpath '//md:EntityDescriptor[@entityID="https://engine.vm.openconext.org/authentication/stepup/metadata"]'
+    Then the response should match xpath '//md:EntityDescriptor[@entityID="https://engine.dev.openconext.local/authentication/stepup/metadata"]'
 
   Scenario: When stepup.sfo.override_engine_entityid is configured with a valid EntityId, stepup/metadata should show that EntityId
     Given feature "eb.stepup.sfo.override_engine_entityid" is enabled
     When I go to Engineblock URL "/authentication/stepup/metadata"
-    Then the response should match xpath '//md:EntityDescriptor[@entityID="https://engine.vm.openconext.com/new/stepup/metadata"]'
+    Then print last response
+    Then the response should match xpath '//md:EntityDescriptor[@entityID="https://engine.dev.openconext.local/new/stepup/metadata"]'
 
   # Note that we can not ascertain programatically if the Issuer is updated as this is an internal
   # redirect response where we can not easily intervene with the browser (we would need to disable
@@ -31,7 +32,7 @@ Feature:
   # is not broken by it.
   Scenario: When stepup.sfo.override_engine_entityid is configured, the the Issuer is updated
     Given feature "eb.stepup.sfo.override_engine_entityid" is enabled
-    And the SP "SSO-SP" requires Stepup LoA "http://vm.openconext.org/assurance/loa2"
+    And the SP "SSO-SP" requires Stepup LoA "http://dev.openconext.local/assurance/loa2"
     When I log in at "SSO-SP"
     And I select "SSO-IdP" on the WAYF
     And I pass through EngineBlock

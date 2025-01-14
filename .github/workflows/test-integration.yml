@@ -29,7 +29,7 @@ jobs:
               run: |
                 cd docker &&
                 ${DOCKER_COMPOSE} up -d --build &&
-                docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
+                docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
                     SYMFONY_ENV=ci composer install --prefer-dist -n -o --ignore-platform-reqs && \
                     ./app/console cache:clear --env=ci && \
                     cd theme && CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile && EB_THEME=skeune yarn build
@@ -37,7 +37,7 @@ jobs:
             - name: Run code quality tests
               if: always()
               run: |
-                  cd docker && docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
+                  cd docker && docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
                       echo -e "\nPHP Mess Detector\n" && \
                       ./vendor/bin/phpmd src text ci/qa-config/phpmd.xml --exclude */Tests/* && \
                       echo -e "\nPHP CodeSniffer\n" && \
@@ -52,7 +52,7 @@ jobs:
             - name: Run unit tests
               if: always()
               run: |
-                  cd docker && APP_ENV=ci docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
+                  cd docker && APP_ENV=ci SYMFONY_ENV=ci docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
                       echo -e "\nInstalling database fixtures...\n" && \
                       ./app/console doctrine:schema:drop --force --env=ci && \
                       ./app/console doctrine:schema:create --env=ci && \
@@ -70,7 +70,7 @@ jobs:
             - name: Run acceptance tests
               if: always()
               run: |
-                  cd docker && docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
+                  cd docker && docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
                       echo -e "\nInstalling database fixtures...\n" && \
                       ./app/console doctrine:schema:drop --force --env=ci && \
                       ./app/console doctrine:schema:create --env=ci && \
@@ -86,7 +86,7 @@ jobs:
             - name: Run linting tests
               if: always()
               run: |
-                  cd docker && docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
+                  cd docker && docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
                       echo -e "\nTwig lint\n"  && \
                       app/console lint:twig theme/ && \
                       cd theme && \
@@ -98,7 +98,7 @@ jobs:
             - name: Show log on failure
               if: failure()
               run:  |
-                  cd docker && docker compose exec -T php-fpm.vm.openconext.org cat /opt/openconext/OpenConext-engineblock/app/logs/ci/ci.log
+                  cd docker && docker compose exec -T engine.dev.openconext.local cat /var/www/html/app/logs/ci/ci.log
             - name: Send notification on production build nightly build failure
               uses: sonots/slack-notice-action@v3
               with:

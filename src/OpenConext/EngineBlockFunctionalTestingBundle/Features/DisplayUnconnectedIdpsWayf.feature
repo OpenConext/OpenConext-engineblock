@@ -4,7 +4,7 @@ Feature:
   I need EB to show me all the unconnected identity providers in the WAYF
 
   Background:
-    Given an EngineBlock instance on "vm.openconext.org"
+    Given an EngineBlock instance on "dev.openconext.local"
     And no registered SPs
     And no registered Idps
     And a Service Provider named "SP"

@@ -9,7 +9,7 @@ import {
  */
 context('Error pages on skeune theme', () => {
   it('Test if the error page loads with the unknown error notice & all components', () => {
-    cy.visit('https://engine.vm.openconext.org/feedback/unknown-error', {failOnStatusCode: false
+    cy.visit('https://engine.dev.openconext.local/feedback/unknown-error', {failOnStatusCode: false
     });
     cy.beVisible(errorTitleHeadingSelector);
     cy.beVisible(errorTitleMessageSelector);
@@ -21,7 +21,7 @@ context('Error pages on skeune theme', () => {
   });
 
   it('Test if a faulty url loads the 404 page with all components', () => {
-    cy.visit('https://engine.vm.openconext.org/functional-testing/a;dkfj;ad', {failOnStatusCode: false
+    cy.visit('https://engine.dev.openconext.local/functional-testing/a;dkfj;ad', {failOnStatusCode: false
     });
     cy.beVisible(errorTitleHeadingSelector);
     cy.beVisible(errorTitleMessageSelector);

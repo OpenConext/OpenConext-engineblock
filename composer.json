@@ -15,7 +15,7 @@
         "source": "https://github.com/OpenConext/OpenConext-engineblock"
     },
     "require": {
-        "php": "7.2",
+        "php": "~7.2",
         "ext-dom": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
@@ -43,6 +43,7 @@
         "twig/twig": "^2.0"
     },
     "require-dev": {
+        "ext-zlib": "*",
         "behat/behat": "~3.0",
         "behat/mink": "~1.7",
         "behat/mink-extension": "~2.0",

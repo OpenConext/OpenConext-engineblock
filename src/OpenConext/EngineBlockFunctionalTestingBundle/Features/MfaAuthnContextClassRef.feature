@@ -4,7 +4,7 @@ Feature:
   I want to support configurable AuthnContextClassRefs for certain IdP SP combinations
 
   Background:
-    Given an EngineBlock instance on "vm.openconext.org"
+    Given an EngineBlock instance on "dev.openconext.local"
     And no registered SPs
     And no registered Idps
     And an Identity Provider named "SSO-IdP"

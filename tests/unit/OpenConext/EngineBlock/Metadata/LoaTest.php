@@ -55,10 +55,10 @@ class LoaTest extends TestCase
 
     public function test_loa_can_be_compared_to_other_loa()
     {
-        $loa1 = Loa::create(10, 'https://vm.openconext.org/assurance/loa1');
-        $loa15 = Loa::create(15, 'https://vm.openconext.org/assurance/loa1_5');
-        $loa2 = Loa::create(20, 'https://vm.openconext.org/assurance/loa2');
-        $loa3 = Loa::create(30, 'https://vm.openconext.org/assurance/loa3');
+        $loa1 = Loa::create(10, 'https://dev.openconext.local/assurance/loa1');
+        $loa15 = Loa::create(15, 'https://dev.openconext.local/assurance/loa1_5');
+        $loa2 = Loa::create(20, 'https://dev.openconext.local/assurance/loa2');
+        $loa3 = Loa::create(30, 'https://dev.openconext.local/assurance/loa3');
 
         $this->assertTrue($loa3->levelIsHigherOrEqualTo($loa3));
         $this->assertTrue($loa3->levelIsHigherOrEqualTo($loa2));

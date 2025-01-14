@@ -60,12 +60,6 @@ class AppKernel extends Kernel
 
     public function getCacheDir()
     {
-        // In the dev & test environments use a folder outside the shared filesystem. This greatly improves cache clear
-        // and warmup time.
-        if ($this->getEnvironment() === 'dev' || $this->getEnvironment() === 'test') {
-            return sprintf('/tmp/engineblock/cache/%s', $this->getEnvironment());
-        }
-
         return $this->rootDir . '/cache/' . $this->environment;
     }
 
@@ -73,4 +67,12 @@ class AppKernel extends Kernel
     {
         return $this->rootDir . '/logs/' . $this->environment;
     }
+
+    public function getProjectDir()
+    {
+        // This is needed to define the project dir without composer.json
+        // @see: https://symfony.com/doc/current/reference/configuration/kernel.html#configuration-kernel-project-directory
+        return \dirname(__DIR__);
+    }
+
 }

@@ -6,7 +6,7 @@ import {backButtonSelector, contentSectionSelector, nokButtonSelectorForKeyboard
  */
 context('Consent when using the keyboard', () => {
   beforeEach(() => {
-    cy.visit('https://engine.vm.openconext.org/functional-testing/consent');
+    cy.visit('https://engine.dev.openconext.local/functional-testing/consent');
   });
 
   describe('Test showing / hiding the extra attributes', () => {
