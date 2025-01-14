@@ -29,12 +29,15 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
 
     public function execute(): void
     {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+
         error_log("SRAMTestFilter execute(" . $this->_string. ")");
 
         $attributes = $this->getResponseAttributes();
 
         $uid = $attributes['urn:mace:dir:attribute-def:uid'][0];
         $id = $this->_request->getId();
+        $continue_url = $this->_server->getUrl('SRAMInterruptService', '') . "?ID=$id";
 
         $headers = array(
             'Authorization: Test'
@@ -42,7 +45,7 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
 
         $post = array(
             'uid' => $uid,
-            'id' => $id
+            'continue_url' => $continue_url,
         );
 
         $options = [
@@ -53,18 +56,22 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
             CURLOPT_POSTFIELDS => $post,
         ];
 
-        $ch = curl_init("http://192.168.0.1:12345/ping");
+        $sramEndpoint = $application->getDiContainer()->getSRAMEndpoint();
+        $sramApiLocation = $sramEndpoint->getApiLocation();
+        // $sramApiLocation = 'http://192.168.0.1:12345/api';
+
+        $ch = curl_init($sramApiLocation);
         curl_setopt_array($ch, $options);
 
         $data = curl_exec($ch);
         curl_close($ch);
 
         $body = json_decode($data);
-        $msg = $body->msg;
+        error_log("SRAMTestFilter " . var_export($body, true));
 
-        if ('pong' == $msg) {
-            error_log("SRAMTestFilter PONG!");
-            $this->_response->setSRAMInterrupt(true);
+        $msg = $body->msg;
+        if ('interrupt' == $msg) {
+            $this->_response->setSRAMInterruptNonce($body->nonce);
         }
 
     }

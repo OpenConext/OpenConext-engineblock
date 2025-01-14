@@ -548,9 +548,16 @@ class EngineBlock_Corto_ProxyServer
         $this->_server->getBindingsModule()->send($newResponse, $serviceProvider);
     }
 
-    function sendSRAMInterruptRequest($request) {
+    function sendSRAMInterruptRequest($response, $request) {
         $id = $request->getId();
-        $redirect_url = $this->getUrl('SRAMInterruptService', '') . "?ID=$id";
+        $nonce = $response->getSRAMInterruptNonce();
+
+        $sramEndpoint = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSRAMEndpoint();
+        $interruptLocation = $sramEndpoint->getInterruptLocation();
+        // $interruptLocation = 'http://localhost:12345/interrupt';
+
+        // $redirect_url = $this->getUrl('SRAMInterruptService', '') . "?ID=$id&nonce=$nonce";
+        $redirect_url = "$interruptLocation?nonce=$nonce";
         error_log("sendSRAMInterruptRequest: " . $redirect_url);
 
         $this->redirect($redirect_url, '');

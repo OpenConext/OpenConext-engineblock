@@ -230,6 +230,7 @@ parameters:
     feature_enable_consent: true
     feature_stepup_sfo_override_engine_entityid: false
     feature_enable_idp_initiated_flow: true
+    feature_enable_sram_interrupt: true
 
     ##########################################################################################
     ## PROFILE SETTINGS
