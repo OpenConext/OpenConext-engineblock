@@ -48,6 +48,10 @@ class AttributeReleasePolicy
     public function __construct(array $attributeRules)
     {
         foreach ($attributeRules as $key => $rules) {
+            if (is_numeric($key)) {
+                throw new InvalidArgumentException(sprintf('Unsupported numeric key: "%s"', var_export($key, true)));
+            }
+
             if (!is_string($key)) {
                 throw new InvalidArgumentException(sprintf('Invalid key: "%s"', var_export($key, true)));
             }
