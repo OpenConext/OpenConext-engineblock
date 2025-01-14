@@ -82,7 +82,7 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
 
     protected $isTransparentErrorResponse = false;
 
-    protected $SRAMInterrupt = false;
+    protected $SRAMInterruptNonce = Null;
 
     /**
      * @param Response $response
@@ -320,11 +320,18 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     }
 
     /**
-     * @return bool
+     * @param string
      */
-    public function getSRAMInterrupt(): bool
+    public function setSRAMInterruptNonce(string $SRAMInterruptNonce)
     {
-        return $this->SRAMInterrupt;
+        $this->SRAMInterruptNonce = $SRAMInterruptNonce;
+    }
+    /**
+     * @return string
+     */
+    public function getSRAMInterruptNonce(): string
+    {
+        return $this->SRAMInterruptNonce;
     }
 
 }

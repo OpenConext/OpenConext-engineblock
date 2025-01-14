@@ -223,6 +223,7 @@ parameters:
     feature_run_all_manipulations_prior_to_consent: false
     feature_block_user_on_violation: false
     feature_enable_consent: true
+    feature_enable_sram_interrupt: true
 
     ##########################################################################################
     ## PROFILE SETTINGS

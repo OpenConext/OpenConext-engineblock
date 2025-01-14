@@ -27,6 +27,13 @@ services:
             - "%stepup.gateway.sfo.sso_location%"
             - "%stepup.gateway.sfo.key_file%"
 
+    engineblock.configuration.sram.endpoint:
+        class: OpenConext\EngineBlock\SRAM\SRAMEndpoint
+        arguments:
+            - "%sram.api_location%"
+            - "%sram.interrupt_location%"
+            - "%sram.entitlements_location%"
+
     engineblock.configuration.stepup.loa_repository:
         class: OpenConext\EngineBlock\Metadata\LoaRepository
         arguments:

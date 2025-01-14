@@ -88,13 +88,14 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
          * Manipulate attributes
          */
         $attributes = $receivedResponse->getAssertion()->getAttributes();
+        $nonce = $receivedResponse->getSRAMInterruptNonce();
 
         $headers = array(
             'Authorization: Test'
         );
 
         $post = array(
-            'foo' => 'bar'
+            'nonce' => $nonce
         );
 
         $options = [
@@ -105,7 +106,11 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
             CURLOPT_POSTFIELDS => $post,
         ];
 
-        $ch = curl_init("http://192.168.0.1:12345/entitlements");
+        $sramEndpoint = $application->getDiContainer()->getSRAMEndpoint();
+        $sramEntitlementsLocation = $sramEndpoint->getEntitlementsLocation();
+        // $sramEntitlementsLocation = 'http://192.168.0.1:12345/entitlements';
+
+        $ch = curl_init($sramEntitlementsLocation);
         curl_setopt_array($ch, $options);
 
         $data = curl_exec($ch);
