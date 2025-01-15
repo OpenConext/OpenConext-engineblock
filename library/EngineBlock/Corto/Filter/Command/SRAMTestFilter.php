@@ -29,7 +29,13 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
 
     public function execute(): void
     {
+
         $application = EngineBlock_ApplicationSingleton::getInstance();
+
+        $sramEndpoint = $application->getDiContainer()->getSRAMEndpoint();
+        $sramApiSecret = $sramEndpoint->getApiSecret();
+        $sramApiLocation = $sramEndpoint->getApiLocation();
+        // $sramApiLocation = 'http://192.168.0.1:12345/api';
 
         error_log("SRAMTestFilter execute(" . $this->_string. ")");
 
@@ -40,7 +46,7 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
         $continue_url = $this->_server->getUrl('SRAMInterruptService', '') . "?ID=$id";
 
         $headers = array(
-            'Authorization: Test'
+            "Authorization: $sramApiSecret"
         );
 
         $post = array(
@@ -56,9 +62,6 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
             CURLOPT_POSTFIELDS => $post,
         ];
 
-        $sramEndpoint = $application->getDiContainer()->getSRAMEndpoint();
-        $sramApiLocation = $sramEndpoint->getApiLocation();
-        // $sramApiLocation = 'http://192.168.0.1:12345/api';
 
         $ch = curl_init($sramApiLocation);
         curl_setopt_array($ch, $options);

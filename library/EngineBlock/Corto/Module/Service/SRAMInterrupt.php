@@ -68,6 +68,12 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
     {
 
         $application = EngineBlock_ApplicationSingleton::getInstance();
+
+        $sramEndpoint = $application->getDiContainer()->getSRAMEndpoint();
+        $sramApiSecret = $sramEndpoint->getApiSecret();
+        $sramEntitlementsLocation = $sramEndpoint->getEntitlementsLocation();
+        // $sramEntitlementsLocation = 'http://192.168.0.1:12345/entitlements';
+
         $log = $application->getLogInstance();
 
         error_log("EngineBlock_Corto_Module_Service_SRAMInterrupt");
@@ -91,7 +97,7 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
         $nonce = $receivedResponse->getSRAMInterruptNonce();
 
         $headers = array(
-            'Authorization: Test'
+            "Authorization: $sramApiSecret"
         );
 
         $post = array(
@@ -106,9 +112,6 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
             CURLOPT_POSTFIELDS => $post,
         ];
 
-        $sramEndpoint = $application->getDiContainer()->getSRAMEndpoint();
-        $sramEntitlementsLocation = $sramEndpoint->getEntitlementsLocation();
-        // $sramEntitlementsLocation = 'http://192.168.0.1:12345/entitlements';
 
         $ch = curl_init($sramEntitlementsLocation);
         curl_setopt_array($ch, $options);
