@@ -30,6 +30,7 @@ services:
     engineblock.configuration.sram.endpoint:
         class: OpenConext\EngineBlock\SRAM\SRAMEndpoint
         arguments:
+            - "%sram.api_token%"
             - "%sram.api_location%"
             - "%sram.interrupt_location%"
             - "%sram.entitlements_location%"

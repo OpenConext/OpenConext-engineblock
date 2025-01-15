@@ -24,6 +24,11 @@ class SRAMEndpoint
     /**
      * @var string|null
      */
+    private $apiSecret;
+
+    /**
+     * @var string|null
+     */
     private $apiLocation;
 
     /**
@@ -36,11 +41,24 @@ class SRAMEndpoint
      */
     private $entitlementsLocation;
 
-    public function __construct(?string $apiLocation, ?string $interruptLocation, ?string $entitlementsLocation)
+    public function __construct(?string $apiSecret,
+                                ?string $apiLocation,
+                                ?string $interruptLocation,
+                                ?string $entitlementsLocation
+                                )
     {
+        $this->apiSecret = $apiSecret;
         $this->apiLocation = $apiLocation;
         $this->interruptLocation = $interruptLocation;
         $this->entitlementsLocation = $entitlementsLocation;
+    }
+
+    /**
+     * @throws InvalidSRAMConfigurationException
+     */
+    public function getApiSecret() : string
+    {
+        return $this->apiSecret;
     }
 
     /**
