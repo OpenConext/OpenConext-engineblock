@@ -70,7 +70,7 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
         $application = EngineBlock_ApplicationSingleton::getInstance();
 
         $sramEndpoint = $application->getDiContainer()->getSRAMEndpoint();
-        $sramApiSecret = $sramEndpoint->getApiSecret();
+        $sramApiToken = $sramEndpoint->getApiToken();
         $sramEntitlementsLocation = $sramEndpoint->getEntitlementsLocation();
         // $sramEntitlementsLocation = 'http://192.168.0.1:12345/entitlements';
 
@@ -97,7 +97,7 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
         $nonce = $receivedResponse->getSRAMInterruptNonce();
 
         $headers = array(
-            "Authorization: $sramApiSecret"
+            "Authorization: $sramApiToken"
         );
 
         $post = array(
