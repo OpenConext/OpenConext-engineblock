@@ -24,12 +24,12 @@ class SRAMEndpoint
     /**
      * @var string|null
      */
-    private $apiSecret;
+    private $apiToken;
 
     /**
      * @var string|null
      */
-    private $apiLocation;
+    private $authzLocation;
 
     /**
      * @var string|null
@@ -41,14 +41,14 @@ class SRAMEndpoint
      */
     private $entitlementsLocation;
 
-    public function __construct(?string $apiSecret,
-                                ?string $apiLocation,
+    public function __construct(?string $apiToken,
+                                ?string $authzLocation,
                                 ?string $interruptLocation,
                                 ?string $entitlementsLocation
                                 )
     {
-        $this->apiSecret = $apiSecret;
-        $this->apiLocation = $apiLocation;
+        $this->apiToken = $apiToken;
+        $this->authzLocation = $authzLocation;
         $this->interruptLocation = $interruptLocation;
         $this->entitlementsLocation = $entitlementsLocation;
     }
@@ -56,17 +56,17 @@ class SRAMEndpoint
     /**
      * @throws InvalidSRAMConfigurationException
      */
-    public function getApiSecret() : string
+    public function getApiToken() : string
     {
-        return $this->apiSecret;
+        return $this->apiToken;
     }
 
     /**
      * @throws InvalidSRAMConfigurationException
      */
-    public function getApiLocation() : string
+    public function getAuthzLocation() : string
     {
-        return $this->apiLocation;
+        return $this->authzLocation;
     }
 
     /**

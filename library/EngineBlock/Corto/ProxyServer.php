@@ -556,8 +556,9 @@ class EngineBlock_Corto_ProxyServer
         $interruptLocation = $sramEndpoint->getInterruptLocation();
         // $interruptLocation = 'http://localhost:12345/interrupt';
 
-        // $redirect_url = $this->getUrl('SRAMInterruptService', '') . "?ID=$id&nonce=$nonce";
         $redirect_url = "$interruptLocation?nonce=$nonce";
+        // $redirect_url = $this->getUrl('SRAMInterruptService', '') . "?ID=$id&nonce=$nonce";
+
         error_log("sendSRAMInterruptRequest: " . $redirect_url);
 
         $this->redirect($redirect_url, '');
