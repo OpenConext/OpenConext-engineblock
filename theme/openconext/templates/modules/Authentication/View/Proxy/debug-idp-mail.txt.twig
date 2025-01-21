@@ -17,10 +17,12 @@ Error: {{ error[0]|trans({'%arg1%': error[1], '%arg2%': error[2], '%arg3%': erro
 Warning: {{ warning[0]|trans({'%arg1%': warning[1], '%arg2%': warning[2], '%arg3%': warning[3]}) }}
 {% endfor %}
 
+
 {% for attributeName, attributeValues in attributes %}
 "{{ attributeName }}"
 ----------------------------------------------------------
-Name: {{ attributeName(attributeName, 'en') }}
+
+English name: {{ attributeName(attributeName, 'en') }}
 
 Values:
 {% for attributeValue in attributeValues %}
@@ -34,7 +36,9 @@ Error: {{ error[0]|trans({'%arg1%': error[1], '%arg2%': error[2], '%arg3%': erro
 {% for warning in validationResult.warnings(attributeName) %}
 Warning: {{ warning[0]|trans({'%arg1%': warning[1], '%arg2%': warning[2], '%arg3%': warning[3]}) }}
 {% endfor %}
+
 {% endfor %}
+
 
 Raw data
 ========
