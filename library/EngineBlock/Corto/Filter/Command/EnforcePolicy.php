@@ -20,6 +20,13 @@ use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
 
 class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_Filter_Command_Abstract
 {
+    /**
+     * @throws EngineBlock_Exception_UnknownRequesterIdInAuthnRequest
+     * @throws EngineBlock_Exception_UnknownServiceProvider
+     * @throws EngineBlock_Exception
+     * @throws EngineBlock_Corto_Exception_PEPNoAccess
+     * @throws EngineBlock_Exception_PdpCheckFailed
+     */
     public function execute()
     {
         $log = EngineBlock_ApplicationSingleton::getLog();
@@ -54,8 +61,15 @@ class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_F
 
         $log->debug("Policy Enforcement Point: Requesting decision from PDP");
 
-        $pdp = $this->getPdpClient();
-        $policyDecision = $pdp->requestDecisionFor($pdpRequest);
+        try {
+            $pdp = $this->getPdpClient();
+            $policyDecision = $pdp->requestDecisionFor($pdpRequest);
+        } catch (\OpenConext\EngineBlock\Http\Exception\HttpException $e) {
+            throw new EngineBlock_Exception_PdpCheckFailed(
+                'Policy Enforcement Point: Could not perform PDP check: ' . $e->getMessage()
+            );
+        }
+
         // The IdP logo is set after getting the PolicyDecision as it would be inappropriate to inject this into the
         // decision request.
         if ($this->_identityProvider->getMdui()->hasLogo()){
