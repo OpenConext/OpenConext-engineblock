@@ -312,3 +312,12 @@ parameters:
     # used in the authentication log record. The attributeName will be searched in the response attributes and if present
     # the log data will be enriched. The values of the response attributes are the final values after ARP and Attribute Manipulation.
     auth.log.attributes: []
+
+    ##########################################################################################
+    ## SRAM Settings
+    ##########################################################################################
+    ## Currently this is used for the outgoing requests with the PDP and AA client
+    sram.api_token: "xxx"
+    sram.authz_location: "http://127.0.0.1:12345/api"
+    sram.interrupt_location: "http://127.0.0.1:12345/interrupt"
+    sram.entitlements_location: "http://127.0.0.1:12345/entitlements"
