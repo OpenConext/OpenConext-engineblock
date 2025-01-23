@@ -41,12 +41,12 @@ class SRAMEndpoint
      */
     private $entitlementsLocation;
 
-    public function __construct(?string $apiToken,
-                                ?string $authzLocation,
-                                ?string $interruptLocation,
-                                ?string $entitlementsLocation
-                                )
-    {
+    public function __construct(
+        ?string $apiToken,
+        ?string $authzLocation,
+        ?string $interruptLocation,
+        ?string $entitlementsLocation
+    ) {
         $this->apiToken = $apiToken;
         $this->authzLocation = $authzLocation;
         $this->interruptLocation = $interruptLocation;
@@ -84,5 +84,4 @@ class SRAMEndpoint
     {
         return $this->entitlementsLocation;
     }
-
 }
