@@ -120,11 +120,9 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
         curl_close($ch);
 
         $body = json_decode($data);
-        $entitlements = $body->entitlements;
 
-
-        if ($entitlements) {
-            $attributes['eduPersonEntitlement'] = $entitlements;
+        if ($body->attributes) {
+            $attributes = array_merge_recursive($attributes, (array) $body->attributes);
             $receivedResponse->getAssertion()->setAttributes($attributes);
         }
 
