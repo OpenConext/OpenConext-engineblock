@@ -48,6 +48,11 @@ authentication_feedback_unknown_identity_provider:
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:unknownIdentityProviderAction }
 
+authentication_feedback_unknown_signing_key:
+    path:       '/authentication/feedback/unknown-signing-key'
+    methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:unknownSigningKeyAction }
+
 authentication_feedback_missing_required_fields:
     path:       '/authentication/feedback/missing-required-fields'
     methods:    [GET]

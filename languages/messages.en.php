@@ -197,6 +197,8 @@ HTML
     'error_unknown_identity_provider_no_idp_name'   => 'Error - Unknown %organisationNoun%',
     'error_unknown_identity_provider_desc'     => '%idpName%, which you are trying to log in with, is unknown to %suiteName%.',
     'error_unknown_identity_provider_desc_no_idp_name'     => 'The %organisationNoun% you are trying to log in with is unknown to %suiteName%.',
+    'error_unknown_signing_key' => 'Error - unknown signing key',
+    'error_unknown_signing_key_desc' => 'The signing key used is not known to %suiteName%. This is possibly a configuration error.',
     'error_generic'                     => 'Error - An error occurred',
     'error_generic_desc'                => 'Logging in has failed and we don\'t know exactly why. Please try again first by going back to %spName% and logging in again. If this doesn\'t work, please contact the service desk of %idpName%.',
     'error_generic_desc_no_sp_name' => 'Logging in has failed and we don\'t know exactly why. Please try again first by going back to the service and logging in again. If this doesn\'t work, please contact the service desk of %idpName%.',
