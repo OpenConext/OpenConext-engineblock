@@ -84,6 +84,16 @@ class AttributeReleasePolicy
                 );
             }
 
+            if (isset($rule['release_as']) && is_numeric($rule['release_as'])) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Invalid release as for attribute "%s", attribute cannot be numeric, got: "%s"',
+                        $key,
+                        (string)$rule['release_as']
+                    )
+                );
+            }
+
             $value = $rule['value'];
         } else {
             $value = $rule;

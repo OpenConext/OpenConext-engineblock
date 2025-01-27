@@ -36,6 +36,8 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Static calls, factories, and having to check HTTP methods which is
  *                                                 usually done by Symfony
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity) Extensive role validation
+ * @SuppressWarnings(PHPMD.NPathComplexity) Extensive role validation
  */
 class ConnectionsController
 {
@@ -111,7 +113,11 @@ class ConnectionsController
             throw new BadApiRequestHttpException('Unrecognized structure for JSON');
         }
 
-        $roles     = $this->pushMetadataAssembler->assemble($body->connections);
+        try {
+            $roles = $this->pushMetadataAssembler->assemble($body->connections);
+        } catch (Exception $exception) {
+            throw new BadApiRequestHttpException(sprintf('Unable to assemble the pushed metadata: %s', $exception->getMessage()), $exception);
+        }
 
         unset($body);
 
