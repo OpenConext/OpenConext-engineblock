@@ -533,7 +533,7 @@
             "caseInsensitive": true,
             "warning": {
                 "min": "1",
-                "regex": "\/[\\S]+@[\\S]+\/"
+                "regex": "\/(affiliate|alum|employee|faculty|library-walk-in|member|student|staff)@[a-z0-9.-]+\\.[a-z]{2,4}\/"
             }
         }
     },
