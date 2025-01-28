@@ -113,7 +113,6 @@ parameters:
     logger.channel: engineblock
     logger.fingers_crossed.passthru_level: NOTICE
     logger.fingers_crossed.action_level: ERROR
-    logger.syslog.ident: EBLOG
     logger.line_format: '[%%datetime%%] %%channel%%.%%level_name%%: %%message%% %%extra%% %%context%%'
 
     ##########################################################################################
