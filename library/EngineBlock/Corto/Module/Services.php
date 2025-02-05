@@ -102,7 +102,8 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer->getConsentService(),
                     $diContainer->getAuthenticationStateHelper(),
                     $diContainer->getTwigEnvironment(),
-                    $diContainer->getProcessingStateHelper()
+                    $diContainer->getProcessingStateHelper(),
+                    $diContainer->getDiscoverySelectionService()
                 );
             case EngineBlock_Corto_Module_Service_ProcessConsent::class :
                 return new EngineBlock_Corto_Module_Service_ProcessConsent(
@@ -139,7 +140,8 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $server,
                     $diContainer->getXmlConverter(),
                     $diContainer->getTwigEnvironment(),
-                    $diContainer->getServiceProviderFactory()
+                    $diContainer->getServiceProviderFactory(),
+                    $diContainer->getDiscoverySelectionService()
                 );
             case EngineBlock_Corto_Module_Service_ContinueToIdp::class :
                 return new EngineBlock_Corto_Module_Service_ContinueToIdp(

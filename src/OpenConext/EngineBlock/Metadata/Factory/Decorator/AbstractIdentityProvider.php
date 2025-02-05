@@ -17,6 +17,7 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
+use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
@@ -238,5 +239,13 @@ abstract class AbstractIdentityProvider implements IdentityProviderEntityInterfa
     public function getMdui(): Mdui
     {
         return $this->entity->getMdui();
+    }
+
+    /**
+     * @return array<Discovery>
+     */
+    public function getDiscoveries(): array
+    {
+        return $this->entity->getDiscoveries();
     }
 }

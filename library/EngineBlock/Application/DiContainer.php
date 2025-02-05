@@ -463,6 +463,14 @@ class EngineBlock_Application_DiContainer extends Pimple
         return $this->container->get('engineblock.service.processing_state_helper');
     }
 
+    /**
+     * @return \OpenConext\EngineBlockBundle\Service\DiscoverySelectionService
+     */
+    public function getDiscoverySelectionService()
+    {
+        return $this->container->get('engineblock.service.discovery_selection_service');
+    }
+
     public function getMfaHelper(): MfaHelperInterface
     {
         return $this->container->get('engineblock.service.mfa_helper');

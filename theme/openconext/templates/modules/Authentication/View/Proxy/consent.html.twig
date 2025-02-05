@@ -2,7 +2,11 @@
 
 {# SP and IdP name are stored in a local variable for convenience #}
 {% set spName = sp.displayName(locale()) %}
-{% set idpName = idp.displayName(locale()) %}
+{% if idpDiscovery is defined and idpDiscovery is not null %}
+    {% set idpName = idpDiscovery.name(locale()) %}
+{% else %}
+    {% set idpName = idp.displayName(locale()) %}
+{% endif %}
 
 {# Prepare the page title #}
 {% set pageTitle = 'consent_header_title'|trans({'%arg1%': spName}) %}

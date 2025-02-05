@@ -182,7 +182,7 @@ QUERY;
         return $this;
     }
 
-    public function registerIdp($name, $entityId, $ssoLocation, $certData = '')
+    public function registerIdp($name, $entityId, $ssoLocation, $certData = '', $discoveries = [])
     {
         $idp = new IdentityProvider($entityId);
         $this->assembleEntityName($idp, $name);
@@ -213,6 +213,8 @@ QUERY;
             $sp->allowedIdpEntityIds[] = $idp->entityId;
             $this->entityManager->persist($sp);
         }
+
+        $idp->setDiscoveries($discoveries);
 
         $this->entityManager->persist($idp);
 

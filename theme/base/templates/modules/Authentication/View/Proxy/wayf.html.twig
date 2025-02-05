@@ -7,7 +7,7 @@
 {% set pageTitle = 'log_in_to'|trans({'%arg1%': spName, '%organisationNoun%': organisationNoun}) %}
 
 {# Data object containing the formatted IdP's #}
-{% set connectedIdps = connectedIdps(idpList, locale()) %}
+{% set connectedIdps = connectedIdps(idpList) %}
 
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
 

@@ -21,6 +21,8 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\ConsentServiceInterface;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
+use OpenConext\EngineBlockBundle\Service\DiscoverySelectionService;
+use Psr\Log\LogLevel;
 use SAML2\Constants;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
@@ -69,7 +71,8 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         ConsentServiceInterface $consentService,
         AuthenticationStateHelperInterface $authStateHelper,
         Environment $twig,
-        ProcessingStateHelperInterface $processingStateHelper
+        ProcessingStateHelperInterface $processingStateHelper,
+        DiscoverySelectionService $discoverySelectionService
     )
     {
         $this->_server = $server;
@@ -80,6 +83,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $this->twig = $twig;
         $this->_processingStateHelper = $processingStateHelper;
         $this->logger = EngineBlock_ApplicationSingleton::getLog();
+        $this->discoverySelectionService = $discoverySelectionService;
     }
 
     /**
@@ -131,6 +135,13 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $consentRepository = $this->_consentFactory->create($this->_server, $response, $attributes);
 
         $authenticationState = $this->_authenticationStateHelper->getAuthenticationState();
+
+        $session = $httpRequest->getSession();
+        if($session === null){
+            throw new EngineBlock_Exception('Discovery override failure: No session available.');
+        }
+        $idpDiscovery = $this->discoverySelectionService->getDiscoveryFromRequest($session, $identityProvider);
+
 
         if ($this->isConsentDisabled($spMetadataChain, $identityProvider)) {
             if (!$consentRepository->implicitConsentWasGivenFor($serviceProviderMetadata)) {
@@ -217,6 +228,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'responseId' => $receivedRequest->getId(),
                 'sp' => $serviceProviderMetadata,
                 'idp' => $identityProvider,
+                'idpDiscovery' => $idpDiscovery,
                 'idpSupport' => $this->getSupportContact($identityProvider),
                 'attributes' => $attributes,
                 'attributeSources' => $this->getAttributeSources($request->getId()),

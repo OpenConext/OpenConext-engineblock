@@ -44,6 +44,7 @@ class WayfController extends Controller
         $request->cookies->set('lang', $currentLocale);
         $backLink = (bool) $request->get('backLink', false);
         $displayUnconnectedIdpsWayf = (bool) $request->get('displayUnconnectedIdpsWayf', false);
+        $addDiscoveries = (bool) $request->get('addDiscoveries', true);
         $rememberChoiceFeature = (bool) $request->get('rememberChoiceFeature', false);
         $cutoffPointForShowingUnfilteredIdps = $request->get('cutoffPointForShowingUnfilteredIdps', 100);
         $showIdPBanner = $request->get('showIdPBanner', true);
@@ -56,7 +57,7 @@ class WayfController extends Controller
         $randomIdps = (int) $request->get('randomIdps', 0);
 
         $idpList = $randomIdps === 0
-            ? TestEntitySeeder::buildIdps($connectedIdps, $unconnectedIdps, $currentLocale, $defaultIdpEntityId)
+            ? TestEntitySeeder::buildIdps($connectedIdps, $unconnectedIdps, $currentLocale, $defaultIdpEntityId, $addDiscoveries)
             : TestEntitySeeder::buildRandomIdps($randomIdps, $currentLocale, $defaultIdpEntityId);
 
         return new Response($this->twig->render(

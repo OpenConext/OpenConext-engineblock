@@ -6,7 +6,13 @@
     {% set logoUrl = attributeSourceLogoUrl(attributeSource) %}
 {% else %}
     {% set organisationName = idpName %}
-    {% if idp.logo is not null %}
+    {% if idpDiscovery is defined and idpDiscovery is not null %}
+        {% if idpDiscovery.logo is not null and idpDiscovery.logo.url is not null %}
+            {% set logoUrl = idpDiscovery.logo.url %}
+        {% else %}
+            {% set logoUrl = '/images/placeholder.png' %}
+        {% endif %}
+    {% elseif idp.logo is not null %}
         {% set logoUrl = idp.logo.url %}
     {% else %}
         {% set logoUrl = '/images/placeholder.png' %}

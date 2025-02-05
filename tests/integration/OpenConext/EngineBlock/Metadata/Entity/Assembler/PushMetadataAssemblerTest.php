@@ -20,13 +20,16 @@ namespace OpenConext\EngineBlock\Tests;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\Entity\Assembler\PushMetadataAssembler;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MfaEntityCollection;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlock\Metadata\TransparentMfaEntity;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
+use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Psr\Log\LoggerInterface;
@@ -40,7 +43,11 @@ class PushMetadataAssemblerTest extends TestCase
     public function setUp(): void
     {
         $logger = m::mock(LoggerInterface::class);
-        $this->assembler = new PushMetadataAssembler(new AllowedSchemeValidator(['http', 'https']), $logger);
+        $this->assembler = new PushMetadataAssembler(
+            new AllowedSchemeValidator(['http', 'https']),
+            new LanguageSupportProvider(['en', 'nl'], ['en', 'nl']),
+            $logger
+        );
     }
 
     public function test_it_rejects_empty_push()
@@ -499,6 +506,58 @@ class PushMetadataAssemblerTest extends TestCase
 
         $this->assertSame('Dummy IdP', $idp->nameEn);
         $this->assertSame(false, $idp->getCoins()->collabEnabled());
+    }
+
+
+    public function test_it_assembles_idp_details()
+    {
+        $input = $this->readFixture('metadata_idp_display_data.json');
+        $connections = $this->assembler->assemble($input);
+
+        /** @var IdentityProvider $idp */
+        $idp = $connections[0];
+        $this->assertInstanceOf(IdentityProvider::class, $idp);
+
+        $this->assertSame('Dummy IdP', $idp->nameEn);
+        $this->assertSame('Dummy IdP nl', $idp->nameNl);
+
+        $this->assertSame('idp keywords', $idp->keywordsEn);
+        $this->assertSame('idp keywords nl', $idp->keywordsNl);
+        $this->assertSame('idp keywords', $idp->getMdui()->getKeywords('en'));
+        $this->assertSame('idp keywords nl', $idp->getMdui()->getKeywords('nl'));
+
+        $this->assertSame('https://engine.dev.openconext.local/images/logo.png?v=dev', $idp->logo->url);
+        $this->assertSame('https://engine.dev.openconext.local/images/logo.png?v=dev', $idp->getMdui()->getLogo()->url);
+
+        $expectedDiscoveryLogo = new Logo('https://engine.dev.openconext.local/images/discovery_logo.png?v=dev');
+        $expectedDiscoveryLogo->height = 96;
+        $expectedDiscoveryLogo->width = 128;
+
+        $this->assertEquals(
+            [
+                Discovery::create(
+                    ['en' => 'Discovery #1', 'nl' => 'Discovery #1 nl'],
+                    ['en' => 'disco keywords, (test)', 'nl' => 'disco keywords, nl'],
+                    $expectedDiscoveryLogo
+                ),
+                Discovery::create(['en' => 'Minimal discovery'], [], null),
+            ],
+            $idp->getDiscoveries()
+        );
+    }
+
+    public function test_it_assembles_metadata_without_discoveries_details()
+    {
+        $input = $this->readFixture('metadata_without_discoveries.json');
+        $connections = $this->assembler->assemble($input);
+
+        /** @var IdentityProvider $idp */
+        $idp = $connections[0];
+        $this->assertInstanceOf(IdentityProvider::class, $idp);
+
+        $this->assertSame('Dummy IdP', $idp->nameEn);
+        $this->assertSame('idp keywords', $idp->getMdui()->getKeywords('en'));
+        $this->assertSame('https://engine.dev.openconext.local/images/logo.png?v=dev', $idp->logo->url);
     }
 
     private function readFixture(string $file): object

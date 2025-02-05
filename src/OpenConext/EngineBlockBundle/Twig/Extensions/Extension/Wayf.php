@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlockBundle\Service\IdpHistoryService;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig\TwigFunction;
@@ -29,6 +30,7 @@ class Wayf extends Twig_Extension
     const PREVIOUS_SELECTION_COOKIE_NAME = 'selectedidps';
     const REMEMBER_CHOICE_COOKIE_NAME = 'rememberchoice';
 
+    private const ACCESS_ENABLED = '1';
 
     /**
      * @var TranslatorInterface
@@ -57,59 +59,95 @@ class Wayf extends Twig_Extension
                 'connectedIdps',
                 [$this, 'getConnectedIdps']
             ),
+            new TwigFunction(
+                'idpDiscoveryHash',
+                [$this, 'idpDiscoveryHash']
+            ),
 
         ];
     }
 
     /**
      * @param array $idpList
-     * @param $locale
      *
      * @return ConnectedIdps
      */
-    public function getConnectedIdps(
-        array $idpList,
-        $locale
-    ) {
-        $previousSelectionIndex = [];
-        if (!empty($this->previousSelection)) {
-            foreach ($this->previousSelection as $idp) {
-                $previousSelectionIndex[$idp['idp']] = $idp;
-            }
+    public function getConnectedIdps(array $idpList): ConnectedIdps
+    {
+        $previousSelectionIndex = $this->indexPreviousSelection();
+
+        $formattedIdpList = $this->formatIdpList($idpList);
+        $previousSelected = $this->filterPreviouslySelected(
+            $formattedIdpList,
+            $previousSelectionIndex
+        );
+
+        return new ConnectedIdps($previousSelected, $formattedIdpList);
+    }
+
+    /**
+     * Create an index of previous selections by IDP identifier
+     *
+     * @return array<string, array<mixed>>
+     */
+    private function indexPreviousSelection(): array
+    {
+        if (empty($this->previousSelection)) {
+            return [];
         }
 
-        $formattedPreviousSelectionList = [];
-        $formattedIdpList = [];
-        foreach ($idpList as $idp) {
-            $idpKeywords = $idp['Keywords'] === 'Undefined' ? array() : array_values((array)$idp['Keywords']);
+        return array_column($this->previousSelection, null, 'idp');
+    }
 
-            if (isset($previousSelectionIndex[$idp['EntityID']])) {
-                $formattedPreviousSelectionList[] = array_merge(
-                    $previousSelectionIndex[$idp['EntityID']],
-                    [
-                        'entityId' => $idp['EntityID'],
-                        'connected' => $idp['Access'] === '1',
-                        'displayTitle' => $idp['Name'],
-                        'title' => strtolower($idp['Name']),
-                        'keywords' => strtolower(join('|', $idpKeywords)),
-                        'logo' => $idp['Logo'],
-                        'isDefaultIdp' => (bool) $idp['isDefaultIdp'],
-                    ]
-                );
-            }
+    private function formatIdpEntry(array $idp): array
+    {
+        $keywords = $idp['Keywords'] === 'Undefined'
+            ? []
+            : array_values((array)$idp['Keywords']);
 
-            $formattedIdpList[] = [
-                'entityId' => $idp['EntityID'],
-                'connected' => $idp['Access'] === '1',
-                'displayTitle' => $idp['Name'],
-                'title' => strtolower($idp['Name']),
-                'keywords' => strtolower(join('|', $idpKeywords)),
-                'logo' => $idp['Logo'],
-                'isDefaultIdp' => (bool) $idp['isDefaultIdp'],
-            ];
-        }
+        // In SingleSignOn.php, the IDP is transformed into an array for the frontend
+        // Then, here, the array is transformed into another array for the frontend which is actually used in twig
+        return [
+            'entityId' => $idp['EntityID'],
+            'connected' => $idp['Access'] === self::ACCESS_ENABLED,
+            'displayTitle' => $idp['Name'],
+            'title' => strtolower($idp['Name']),
+            'keywords' => strtolower(implode('|', $keywords)),
+            'logo' => $idp['Logo'],
+            'isDefaultIdp' => (bool)$idp['isDefaultIdp'],
+            'discoveryHash' => $idp['DiscoveryHash']
+        ];
+    }
 
-        return new ConnectedIdps($formattedPreviousSelectionList, $formattedIdpList);
+    private function formatIdpList(array $idpList): array
+    {
+        return array_map(
+            function (array $idp) {
+                return $this->formatIdpEntry($idp);
+            },
+            $idpList
+        );
+    }
+
+    private function filterPreviouslySelected(
+        array $formattedList,
+        array $previousSelectionIndex
+    ): array {
+        return array_filter(
+            array_map(
+                function (array $idp) use ($previousSelectionIndex) {
+                    $entryKey = $this->idpDiscoveryHash($idp['entityId'], $idp['discoveryHash']);
+                    if (!isset($previousSelectionIndex[$entryKey])) {
+                        return null;
+                    }
+                    return array_merge(
+                        $previousSelectionIndex[$entryKey],
+                        $idp
+                    );
+                },
+                $formattedList
+            )
+        );
     }
 
     /**
@@ -187,5 +225,10 @@ class Wayf extends Twig_Extension
             }
         }
         return $previousSelectionIndexed;
+    }
+
+    public function idpDiscoveryHash(string $entityId, ?string $discoveryHash = null): string
+    {
+        return (new IdpHistoryService())->makeIdpDiscoveryHash($entityId, $discoveryHash);
     }
 }

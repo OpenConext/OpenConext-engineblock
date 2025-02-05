@@ -72,6 +72,8 @@ context('WAYF when using the keyboard', () => {
       cy.pressArrowOnIdpList('down', idpClass, '3');
       cy.pressArrowOnIdpList('down', idpClass, '4');
       cy.pressArrowOnIdpList('down', idpClass, '5');
+      cy.pressArrowOnIdpList('down', idpClass, '6');
+      cy.pressArrowOnIdpList('down', idpClass, '7');
       cy.pressArrowOnIdpList('down', searchFieldClass);
     });
 
@@ -79,6 +81,8 @@ context('WAYF when using the keyboard', () => {
       cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?showIdpBanner=1');
       cy.get(searchFieldSelector).focus();
       cy.pressArrowOnIdpList('up', searchFieldClass);
+      cy.pressArrowOnIdpList('up', idpClass, '7');
+      cy.pressArrowOnIdpList('up', idpClass, '6');
       cy.pressArrowOnIdpList('up', idpClass, '5');
       cy.pressArrowOnIdpList('up', idpClass, '4');
       cy.pressArrowOnIdpList('up', idpClass, '3');

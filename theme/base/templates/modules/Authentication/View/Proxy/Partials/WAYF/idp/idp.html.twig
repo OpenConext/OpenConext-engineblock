@@ -14,6 +14,7 @@
     tabindex="0"
     data-entityid="{{ idp['entityId'] }}"
     data-title="{{ idp['displayTitle'] }}"
+    data-idpkey="{{ idpDiscoveryHash(idp['entityId'], idp['discoveryHash']) }}"
 >
     <div class="idp__logo">
         {% if idp.logo is not null %}
