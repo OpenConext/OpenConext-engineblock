@@ -1,6 +1,7 @@
 <form class="idp__form" method="post" action="{{ action }}">
     <input type="hidden" name="ID" value="{{ requestId }}"/>
     <input type="hidden" name="idp" value="{{ idp['entityId'] }}"/>
+    <input type="hidden" name="discovery" value="{{ idp['discoveryHash'] }}"/>
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpSubmitButton.html.twig' with { hidden: true } %}
     <noscript>
         {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpSubmitButton.html.twig' %}

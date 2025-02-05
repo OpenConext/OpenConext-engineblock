@@ -32,6 +32,7 @@ use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
+use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -104,11 +105,12 @@ abstract class AbstractEntityTest extends TestCase
             'singleSignOnServices' => function(IdentityProviderEntityInterface $entity) { return  $entity->getSingleSignOnServices(); },
             'consentSettings' => function(IdentityProviderEntityInterface $entity) { return  $entity->getConsentSettings(); },
             'shibMdScopes' => function(IdentityProviderEntityInterface $entity) { return  $entity->getShibMdScopes(); },
+            'discoveries' => function(IdentityProviderEntityInterface $entity) { return  $entity->getDiscoveries(); },
         ];
 
         $missing = array_diff_key($implemented, $assertions);
         $this->assertCount(0, $missing, 'missing tests for: '. json_encode($missing));
-        $this->assertCount(32, $implemented);
+        $this->assertCount(33, $implemented);
         $this->assertCount(count($implemented), $assertions);
 
         foreach ($assertions as $name => $assertion) {
@@ -201,6 +203,7 @@ abstract class AbstractEntityTest extends TestCase
             'setConsentSettings',
             'toggleWorkflowState',
             'hasCompleteOrganizationData',
+            'setDiscoveries'
         ];
 
         // Get all state from the old mutable entity
@@ -439,6 +442,9 @@ abstract class AbstractEntityTest extends TestCase
             'shibMdScopes' => [
                 $this->createMock(ShibMdScope::class),
                 $this->createMock(ShibMdScope::class),
+            ],
+            'discoveries' => [
+                $this->createMock(Discovery::class),
             ]
         ];
     }

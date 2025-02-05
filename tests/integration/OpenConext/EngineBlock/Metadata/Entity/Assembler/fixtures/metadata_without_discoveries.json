@@ -1,0 +1,46 @@
+{
+    "2d96e27a-76cf-4ca2-ac70-ece5d4c49524": {
+        "stepup_connections": [
+            {
+                "name": "https://serviceregistry.test2.openconext.nl/simplesaml/module.php/saml/sp/metadata.php/default-sp",
+                "level": "http://test.openconext.nl/assurance/loa2"
+            },
+            {
+                "name": "http://mock-sp",
+                "level": "http://test.openconext.nl/assurance/loa3"
+            }
+        ],
+        "name": "https:\/\/serviceregistry.dev.openconext.local\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-idp",
+        "state": "prodaccepted",
+        "type": "saml20-idp",
+        "metadata": {
+            "OrganizationName": {
+                "en": "OpenConext DEV"
+            },
+            "SingleSignOnService": [
+                {
+                    "Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+                    "Location": "https://mujina-idp.dev.openConext.local/SingleSignOnService"
+                }
+            ],
+            "certData": "MIIDEzCCAfugAwIBAgIJAKoK/heBjcOYMA0GCSqGSIb3DQEBBQUAMCAxHjAcBgNVBAoMFU9yZ2FuaXphdGlvbiwgQ049T0lEQzAeFw0xNTExMTExMDEyMTVaFw0yNTExMTAxMDEyMTVaMCAxHjAcBgNVBAoMFU9yZ2FuaXphdGlvbiwgQ049T0lEQzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANBGwJ/qpTQNiSgUglSE2UzEkUow+wS8r67etxoEhlzJZfgK/k5TfG1wICDqapHAxEVgUM10aBHRctNocA5wmlHtxdidhzRZroqHwpKy2BmsKX5Z2oK25RLpsyusB1KroemgA/CjUnI6rIL1xxFn3KyOFh1ZBLUQtKNQeMS7HFGgSDAp+sXuTFujz12LFDugX0T0KB5a1+0l8y0PEa0yGa1oi6seONx849ZHxM0PRvUunWkuTM+foZ0jZpFapXe02yWMqhc/2iYMieE/3GvOguJchJt6R+cut8VBb6ubKUIGK7pmoq/TB6DVXpvsHqsDJXechxcicu4pdKVDHSec850CAwEAAaNQME4wHQYDVR0OBBYEFK7RqjoodSYVXGTVEdLf3kJflP/sMB8GA1UdIwQYMBaAFK7RqjoodSYVXGTVEdLf3kJflP/sMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADggEBADNZkxlFXh4F45muCbnQd+WmaXlGvb9tkUyAIxVL8AIu8J18F420vpnGpoUAE+Hy3evBmp2nkrFAgmr055fAjpHeZFgDZBAPCwYd3TNMDeSyMta3Ka+oS7GRFDePkMEm+kH4/rITNKUF1sOvWBTSowk9TudEDyFqgGntcdu/l/zRxvx33y3LMG5USD0x4X4IKjRrRN1BbcKgi8dq10C3jdqNancTuPoqT3WWzRvVtB/q34B7F74/6JzgEoOCEHufBMp4ZFu54P0yEGtWfTwTzuoZobrChVVBt4w/XZagrRtUCDNwRpHNbpjxYudbqLqpi1MQpV9oht/BpTHVJG2i0ro=",
+            "coin": {
+                "guest_qualifier": "None"
+            },
+            "description": {
+                "en": "Dummy IDP"
+            },
+            "logo": [
+                {
+                    "url": "https://engine.dev.openconext.local/images/logo.png?v=dev"
+                }
+            ],
+            "name": {
+                "en": "Dummy IdP"
+            },
+            "keywords": {
+                "en": "idp keywords"
+            }
+        }
+    }
+}

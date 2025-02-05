@@ -291,6 +291,7 @@ services:
         class: OpenConext\EngineBlock\Metadata\Entity\Assembler\PushMetadataAssembler
         arguments:
             - "@engineblock.validator.allowed_scheme_validator"
+            - "@engineblock.language_support_provider"
             - "@engineblock.compat.logger"
 
     OpenConext\EngineBlock\Metadata\X509\KeyPairFactory:
@@ -377,3 +378,6 @@ services:
             - "@translator"
         tags:
              - { name: 'twig.extension' }
+
+    engineblock.service.discovery_selection_service:
+        class: OpenConext\EngineBlockBundle\Service\DiscoverySelectionService

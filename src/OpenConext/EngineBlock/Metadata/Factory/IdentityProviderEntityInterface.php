@@ -148,4 +148,6 @@ interface IdentityProviderEntityInterface
     public function getShibMdScopes(): array;
 
     public function getMdui(): Mdui;
+
+    public function getDiscoveries(): array;
 }
