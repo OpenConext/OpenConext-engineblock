@@ -40,9 +40,11 @@ class AuthenticationLoopGuardTest extends TestCase
     {
         $maximumNumberOfAuthenticationProceduresAllowed = 1;
         $timeFrameForCheckingAuthenticationLoopInSeconds = 60000;
+        $maximumAuthenticationsPerSession = 20;
         $authenticationLoopGuard = new AuthenticationLoopGuard(
             $maximumNumberOfAuthenticationProceduresAllowed,
-            $timeFrameForCheckingAuthenticationLoopInSeconds
+            $timeFrameForCheckingAuthenticationLoopInSeconds,
+            $maximumAuthenticationsPerSession
         );
 
         $serviceProvider  = new Entity(new EntityId('some.serviceprovider.example'), EntityType::SP());
@@ -82,9 +84,11 @@ class AuthenticationLoopGuardTest extends TestCase
     {
         $maximumNumberOfAuthenticationProceduresAllowed = 2;
         $timeFrameForCheckingAuthenticationLoopInSeconds = 60000;
+        $maximumAuthenticationsPerSession = 20;
         $authenticationLoopGuard = new AuthenticationLoopGuard(
             $maximumNumberOfAuthenticationProceduresAllowed,
-            $timeFrameForCheckingAuthenticationLoopInSeconds
+            $timeFrameForCheckingAuthenticationLoopInSeconds,
+            $maximumAuthenticationsPerSession
         );
 
         $serviceProvider  = new Entity(new EntityId('some.serviceprovider.example'), EntityType::SP());

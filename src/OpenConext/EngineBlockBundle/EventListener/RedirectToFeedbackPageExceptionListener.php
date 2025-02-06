@@ -47,6 +47,7 @@ use OpenConext\EngineBlock\Exception\InvalidBindingException;
 use OpenConext\EngineBlock\Exception\InvalidRequestMethodException;
 use OpenConext\EngineBlock\Exception\MissingParameterException;
 use OpenConext\EngineBlockBridge\ErrorReporter;
+use OpenConext\EngineBlockBundle\Exception\AuthenticationSessionLimitExceededException;
 use OpenConext\EngineBlockBundle\Exception\EntityCanNotBeFoundException;
 use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
 use OpenConext\EngineBlockBundle\Exception\UnknownKeyIdException;
@@ -192,6 +193,9 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof StuckInAuthenticationLoopException) {
             $message         = 'Stuck in authentication loop';
             $redirectToRoute = 'authentication_feedback_stuck_in_authentication_loop';
+        } elseif ($exception instanceof AuthenticationSessionLimitExceededException) {
+            $message         = 'Authentication procedure limit exceeded';
+            $redirectToRoute = 'authentication_feedback_authentication_limit_exceeded';
         } elseif ($exception instanceof InvalidRequestMethodException ||
             $exception instanceof InvalidBindingException ||
             $exception instanceof  MissingParameterException

@@ -34,9 +34,15 @@ final class AuthenticationLoopGuard implements AuthenticationLoopGuardInterface
      */
     private $timeFrameForAuthenticationLoopInSeconds;
 
+    /**
+     * @var int
+     */
+    private $maximumAuthenticationsPerSession;
+
     public function __construct(
         $maximumAuthenticationProceduresAllowed,
-        $timeFrameForAuthenticationLoopInSeconds
+        $timeFrameForAuthenticationLoopInSeconds,
+        $maximumAuthenticationsPerSession
     ) {
         Assertion::integer(
             $maximumAuthenticationProceduresAllowed,
@@ -46,20 +52,20 @@ final class AuthenticationLoopGuard implements AuthenticationLoopGuardInterface
             $timeFrameForAuthenticationLoopInSeconds,
             'Expected time frame for determining authentication loop in seconds to be an integer, got "%s"'
         );
+        Assertion::integer(
+            $maximumAuthenticationsPerSession,
+            'Expected maximum authentication per session to be an integer, got "%s"'
+        );
 
         $this->maximumAuthenticationProceduresAllowed  = $maximumAuthenticationProceduresAllowed;
         $this->timeFrameForAuthenticationLoopInSeconds = $timeFrameForAuthenticationLoopInSeconds;
+        $this->maximumAuthenticationsPerSession  = $maximumAuthenticationsPerSession;
     }
 
-    /**
-     * @param Entity $serviceProvider
-     * @param AuthenticationProcedureMap $pastAuthenticationProcedures
-     * @return bool
-     */
     public function detectsAuthenticationLoop(
         Entity $serviceProvider,
         AuthenticationProcedureMap $pastAuthenticationProcedures
-    ) {
+    ): bool {
         $now  = new DateTimeImmutable;
         $startDate = $now->modify(sprintf('-%d seconds', $this->timeFrameForAuthenticationLoopInSeconds));
 
@@ -69,5 +75,19 @@ final class AuthenticationLoopGuard implements AuthenticationLoopGuardInterface
             ->count();
 
         return $processedLoginProcedures >= $this->maximumAuthenticationProceduresAllowed;
+    }
+
+
+    /**
+     * @param AuthenticationProcedureMap $pastAuthenticationProcedures
+     * @return bool
+     */
+    public function detectsAuthenticationLimit(
+        AuthenticationProcedureMap $pastAuthenticationProcedures
+    ): bool {
+        $processedLoginProcedures = $pastAuthenticationProcedures
+            ->count();
+
+        return $processedLoginProcedures >= $this->maximumAuthenticationsPerSession;
     }
 }

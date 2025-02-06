@@ -540,17 +540,20 @@ class EngineBlockContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^EngineBlock is configured to allow a maximum of (\d+) authentication procedures within a time frame of (\d+) seconds$/
-     * @param int $timeFrameForAuthenticationLoopInSeconds
+     * @Given /^EngineBlock is configured to allow a maximum of (\d+) per SP within a timeframe of (\d+) seconds and with (\d+) authentications$/
      * @param int $maximumAuthenticationProceduresAllowed
+     * @param int $timeFrameForAuthenticationLoopInSeconds
+     * @param int $maxiumumAuth
      */
-    public function engineblockIsConfiguredToAllowAMaximumOfAuthenticationProceduresWithinATimeFrameOfSeconds(
+    public function engineblockIsConfiguredToAllowAMaximumOfAuthenticationProcedures(
         $maximumAuthenticationProceduresAllowed,
-        $timeFrameForAuthenticationLoopInSeconds
+        $timeFrameForAuthenticationLoopInSeconds,
+        $maximumAuthenticationsPerSession
     ) {
         $this->authenticationLoopGuard->saveAuthenticationLoopGuardConfiguration(
             (int) $maximumAuthenticationProceduresAllowed,
-            (int) $timeFrameForAuthenticationLoopInSeconds
+            (int) $timeFrameForAuthenticationLoopInSeconds,
+            (int) $maximumAuthenticationsPerSession
         );
         $this->usingAuthenticationLoopGuard = true;
     }

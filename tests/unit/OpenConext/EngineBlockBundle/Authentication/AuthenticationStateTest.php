@@ -37,7 +37,7 @@ class AuthenticationStateTest extends TestCase
      */
     public function an_authentication_procedure_cannot_be_authenticated_if_it_has_not_been_started()
     {
-        $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30);
+        $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30, 20);
 
         $identityProvider = new Entity(new EntityId('https://my-identity-provider.example'), EntityType::IdP());
 
@@ -55,7 +55,7 @@ class AuthenticationStateTest extends TestCase
      */
     public function an_authentication_procedure_cannot_be_completed_if_it_has_not_been_started()
     {
-        $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30);
+        $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30, 20);
 
         $authenticationState = new AuthenticationState($authenticationLoopGuard);
 
@@ -71,7 +71,7 @@ class AuthenticationStateTest extends TestCase
      */
     public function an_authentication_procedure_cannot_be_completed_if_it_has_not_been_authenticated()
     {
-        $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30);
+        $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30, 20);
 
         $serviceProvider = new Entity(new EntityId('https://my-service-provider.example'), EntityType::SP());
 
@@ -90,7 +90,7 @@ class AuthenticationStateTest extends TestCase
      */
     public function an_authentication_procedure_can_be_completed_multiple_times()
     {
-        $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30);
+        $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30, 20);
 
         $serviceProvider = new Entity(new EntityId('https://my-service-provider.example'), EntityType::SP());
         $identityProvider = new Entity(new EntityId('https://my-service-provider.example'), EntityType::IdP());
@@ -112,7 +112,7 @@ class AuthenticationStateTest extends TestCase
      */
     public function an_authentication_procedure_is_not_authenticated_before_consent()
     {
-        $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30);
+        $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30, 20);
 
         $serviceProvider = new Entity(new EntityId('https://my-service-provider.example'), EntityType::SP());
         $identityProvider = new Entity(new EntityId('https://my-service-provider.example'), EntityType::IdP());

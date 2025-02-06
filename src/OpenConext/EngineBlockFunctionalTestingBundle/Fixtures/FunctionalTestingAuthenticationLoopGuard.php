@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuardInterface;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedureMap;
+use OpenConext\EngineBlockBundle\Exception\AuthenticationSessionLimitExceededException;
 use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use OpenConext\Value\Saml\Entity;
@@ -30,7 +31,12 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
     /**
      * @var AuthenticationLoopGuardInterface
      */
-    private $authenticationLoopGuard;
+    private $originalAuthenticationLoopGuard;
+
+    /**
+     * @var AuthenticationLoopGuardInterface
+     */
+    private $activeAuthenticationLoopGuard;
 
     /**
      * @var AbstractDataStore
@@ -47,7 +53,7 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
         AuthenticationLoopGuardInterface $authenticationLoopGuard,
         AbstractDataStore $dataStore
     ) {
-        $this->authenticationLoopGuard = $authenticationLoopGuard;
+        $this->originalAuthenticationLoopGuard = $authenticationLoopGuard;
         $this->dataStore               = $dataStore;
 
         $this->authenticationGuardFixture = $dataStore->load(false);
@@ -56,14 +62,16 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
     /**
      * @param int $maximumAuthenticationProceduresAllowed
      * @param int $timeFrameForAuthenticationLoopInSeconds
+     * @param int $maximumAuthenticationsPerSession
      */
     public function saveAuthenticationLoopGuardConfiguration(
-        $maximumAuthenticationProceduresAllowed,
-        $timeFrameForAuthenticationLoopInSeconds
+        int $maximumAuthenticationProceduresAllowed,
+        int $timeFrameForAuthenticationLoopInSeconds,
+        int $maximumAuthenticationsPerSession
     ) {
         $this->authenticationGuardFixture['maximumAuthenticationProceduresAllowed'] = $maximumAuthenticationProceduresAllowed;
-        $this->authenticationGuardFixture['timeFrameForAuthenticationLoopInSeconds']
-            = $timeFrameForAuthenticationLoopInSeconds;
+        $this->authenticationGuardFixture['timeFrameForAuthenticationLoopInSeconds'] = $timeFrameForAuthenticationLoopInSeconds;
+        $this->authenticationGuardFixture['maximumAuthenticationsPerSession'] = $maximumAuthenticationsPerSession;
 
         $this->dataStore->save($this->authenticationGuardFixture);
     }
@@ -75,17 +83,10 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
     public function detectsAuthenticationLoop(
         Entity $serviceProvider,
         AuthenticationProcedureMap $pastAuthenticationProcedures
-    ) {
-        if ($this->authenticationGuardFixture === false) {
-            $authenticationLoopGuard = $this->authenticationLoopGuard;
-        } else {
-            $authenticationLoopGuard = new AuthenticationLoopGuard(
-                $this->authenticationGuardFixture['maximumAuthenticationProceduresAllowed'],
-                $this->authenticationGuardFixture['timeFrameForAuthenticationLoopInSeconds']
-            );
-        }
+    ): bool {
+        $this->initAuthenticationLoopGuard();
 
-        if ($authenticationLoopGuard->detectsAuthenticationLoop($serviceProvider, $pastAuthenticationProcedures)) {
+        if ($this->activeAuthenticationLoopGuard->detectsAuthenticationLoop($serviceProvider, $pastAuthenticationProcedures)) {
             throw new StuckInAuthenticationLoopException(
                 sprintf(
                     'More than the configured maximum authentication procedures for the current user from SP "%s"'
@@ -96,11 +97,42 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
                 )
             );
         }
+
+        return false;
+    }
+
+    public function detectsAuthenticationLimit(AuthenticationProcedureMap $pastAuthenticationProcedures): bool
+    {
+        $this->initAuthenticationLoopGuard();
+
+        if ($this->activeAuthenticationLoopGuard->detectsAuthenticationLimit($pastAuthenticationProcedures)) {
+            throw new AuthenticationSessionLimitExceededException(
+                'More than the configured maximum authentication procedures for the current user'
+                . ' the user seems to be stuck in an authentication loop. '
+                . ' Aborting the current authentication procedure.'
+            );
+        }
+
+        return false;
     }
 
     public function cleanUp()
     {
         $this->authenticationGuardFixture = [];
+        $this->activeAuthenticationLoopGuard = $this->originalAuthenticationLoopGuard;
         $this->dataStore->save($this->authenticationGuardFixture);
+    }
+
+    private function initAuthenticationLoopGuard(): void
+    {
+        if ($this->authenticationGuardFixture === false) {
+            $this->activeAuthenticationLoopGuard = $this->originalAuthenticationLoopGuard;
+        } else {
+            $this->activeAuthenticationLoopGuard = new AuthenticationLoopGuard(
+                $this->authenticationGuardFixture['maximumAuthenticationProceduresAllowed'],
+                $this->authenticationGuardFixture['timeFrameForAuthenticationLoopInSeconds'],
+                $this->authenticationGuardFixture['maximumAuthenticationsPerSession']
+            );
+        }
     }
 }
