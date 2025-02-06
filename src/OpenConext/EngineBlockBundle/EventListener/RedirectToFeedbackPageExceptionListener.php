@@ -47,6 +47,7 @@ use OpenConext\EngineBlock\Exception\InvalidBindingException;
 use OpenConext\EngineBlock\Exception\InvalidRequestMethodException;
 use OpenConext\EngineBlock\Exception\MissingParameterException;
 use OpenConext\EngineBlockBridge\ErrorReporter;
+use OpenConext\EngineBlockBundle\Exception\AuthenticationSessionLimitExceededException;
 use OpenConext\EngineBlockBundle\Exception\EntityCanNotBeFoundException;
 use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
 use OpenConext\EngineBlockBundle\Exception\UnknownKeyIdException;
@@ -192,6 +193,9 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof StuckInAuthenticationLoopException) {
             $message         = 'Stuck in authentication loop';
             $redirectToRoute = 'authentication_feedback_stuck_in_authentication_loop';
+        } elseif ($exception instanceof AuthenticationSessionLimitExceededException) {
+            $message         = 'Authentication procedure limit exceeded';
+            $redirectToRoute = 'authentication_feedback_authentication_limit_exceeded';
         } elseif ($exception instanceof InvalidRequestMethodException ||
             $exception instanceof InvalidBindingException ||
             $exception instanceof  MissingParameterException
@@ -205,13 +209,13 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof EngineBlock_Corto_Exception_UserCancelledStepupCallout) {
             $message = $exception->getMessage();
             $redirectToRoute = 'authentication_feedback_stepup_callout_user_cancelled';
-        } else if ($exception instanceof EngineBlock_Corto_Exception_InvalidStepupLoaLevel) {
+        } elseif ($exception instanceof EngineBlock_Corto_Exception_InvalidStepupLoaLevel) {
             $message = $exception->getMessage();
             $redirectToRoute = 'authentication_feedback_stepup_callout_unmet_loa';
-        } else if ($exception instanceof EngineBlock_Corto_Exception_InvalidStepupCalloutResponse) {
+        } elseif ($exception instanceof EngineBlock_Corto_Exception_InvalidStepupCalloutResponse) {
             $message = $exception->getMessage();
             $redirectToRoute = 'authentication_feedback_stepup_callout_unknown';
-        } else if ($exception instanceof EntityCanNotBeFoundException) {
+        } elseif ($exception instanceof EntityCanNotBeFoundException) {
             $event->getRequest()->getSession()->set('feedback_custom', $exception->getMessage());
             $redirectToRoute = 'authentication_feedback_metadata_entity_not_found';
         } else {

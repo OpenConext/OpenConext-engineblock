@@ -16,18 +16,10 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Authentication;
+namespace OpenConext\EngineBlockBundle\Exception;
 
-use OpenConext\Value\Saml\Entity;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
-interface AuthenticationLoopGuardInterface
+final class AuthenticationSessionLimitExceededException extends TooManyRequestsHttpException
 {
-    public function detectsAuthenticationLoop(
-        Entity $serviceProvider,
-        AuthenticationProcedureMap $pastAuthenticationProcedures
-    ): bool;
-
-    public function detectsAuthenticationLimit(
-        AuthenticationProcedureMap $pastAuthenticationProcedures
-    ): bool;
 }

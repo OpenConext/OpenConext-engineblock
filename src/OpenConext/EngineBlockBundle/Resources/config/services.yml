@@ -209,6 +209,7 @@ services:
         arguments:
             - "%maximum_authentication_procedures_allowed%"
             - "%time_frame_for_authentication_loop_in_seconds%"
+            - "%maximum_authentications_per_session%"
 
     engineblock.language_support_provider:
         class: OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider
