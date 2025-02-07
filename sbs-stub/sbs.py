@@ -31,14 +31,23 @@ def api():
 
     uid = request.form.get('uid')
     continue_url = request.form.get('continue_url')
+    entity_id = request.form.get('entity_id')
 
     nonce = secrets.token_urlsafe()
-    nonces[nonce] = (uid, continue_url)
+    nonces[nonce] = (uid, continue_url, entity_id)
 
     response = Response(status=200)
     body = {
         'msg': 'interrupt',
-        'nonce': nonce
+        # 'msg': 'skip',
+        'nonce': nonce,
+        'attributes': {
+            'urn:mace:dir:attribute-def:eduPersonEntitlement': [
+                uid,
+                nonce,
+                'urn:foobar'
+            ]
+        }
     }
 
     logging.debug(f'<- {body}')
@@ -63,15 +72,17 @@ def entitlements():
     debug(request)
 
     nonce = request.form.get('nonce')
-    (uid, _) = nonces.pop(nonce)
+    (uid, _, _) = nonces.pop(nonce)
 
     response = Response(status=200)
     body = {
-        'entitlements': [
-            uid,
-            nonce,
-            'urn:foobar',
-        ]
+        'attributes': {
+            'urn:mace:dir:attribute-def:eduPersonEntitlement': [
+                uid,
+                nonce,
+                'urn:foobar',
+            ]
+        }
     }
 
     logging.debug(f'<- {body}')

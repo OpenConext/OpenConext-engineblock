@@ -44,6 +44,7 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
         $uid = $attributes['urn:mace:dir:attribute-def:uid'][0];
         $id = $this->_request->getId();
         $continue_url = $this->_server->getUrl('SRAMInterruptService', '') . "?ID=$id";
+        $entity_id = $this->_serviceProvider->entityId;
 
         $headers = array(
             "Authorization: $sramApiToken"
@@ -52,6 +53,7 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
         $post = array(
             'uid' => $uid,
             'continue_url' => $continue_url,
+            'entity_id' => $entity_id
         );
 
         $options = [
@@ -70,11 +72,15 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
         curl_close($ch);
 
         $body = json_decode($data);
-        error_log("SRAMTestFilter " . var_export($body, true));
+        // error_log("SRAMTestFilter " . var_export($body, true));
 
         $msg = $body->msg;
         if ('interrupt' == $msg) {
             $this->_response->setSRAMInterruptNonce($body->nonce);
+        } else {
+            if ($body->attributes) {
+                $this->_responseAttributes = array_merge_recursive($this->_responseAttributes, (array) $body->attributes);
+            }
         }
 
     }
