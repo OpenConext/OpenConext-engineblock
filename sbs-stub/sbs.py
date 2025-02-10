@@ -29,17 +29,13 @@ def api():
     logging.debug('-> /authz')
     debug(request)
 
-    # eduTeams,  see SBS/server/api/user_saml.py
-#    uid = json_dict["user_id"]
-#    service_entity_id = json_dict["service_id"].lower()
-#    issuer_id = json_dict["issuer_id"]
-
-    uid = request.form.get('uid')
+    uid = request.form.get('user_id')
     continue_url = request.form.get('continue_url')
-    entity_id = request.form.get('entity_id')
+    service_entity_id = request.form.get('service_id')
+    issuer_id = request.form.get('issuer_id')
 
     nonce = secrets.token_urlsafe()
-    nonces[nonce] = (uid, continue_url, entity_id)
+    nonces[nonce] = (uid, continue_url, service_entity_id, issuer_id)
 
     response = Response(status=200)
     body = {
@@ -65,8 +61,9 @@ def api():
 def interrupt():
     logging.debug('-> /interrupt')
     nonce = request.args.get('nonce')
-    (uid, continue_url) = nonces.get(nonce, ('unknown', '/'))
-    response = render_template('interrupt.j2', uid=uid, url=continue_url)
+    (uid, continue_url, service_entity_id, issuer_id) = nonces.get(nonce, ('unknown', '/', '/', ''))
+    response = render_template('interrupt.j2', uid=uid,
+                               service_entity_id=service_entity_id, issuer_id=issuer_id, url=continue_url)
 
     return response
 
@@ -77,7 +74,7 @@ def entitlements():
     debug(request)
 
     nonce = request.form.get('nonce')
-    (uid, _, _) = nonces.pop(nonce)
+    (uid, _, _, _) = nonces.pop(nonce)
 
     response = Response(status=200)
     body = {
