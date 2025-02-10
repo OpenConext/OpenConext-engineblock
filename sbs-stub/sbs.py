@@ -29,7 +29,7 @@ def api():
     logging.debug('-> /authz')
     debug(request)
 
-    # eduTeams
+    # eduTeams,  see SBS/server/api/user_saml.py
 #    uid = json_dict["user_id"]
 #    service_entity_id = json_dict["service_id"].lower()
 #    issuer_id = json_dict["issuer_id"]
