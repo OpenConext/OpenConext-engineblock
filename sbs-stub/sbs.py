@@ -24,9 +24,9 @@ def debug(request):
         logging.debug(f'POST {key}: {value}')
 
 
-@app.route('/authz', methods=['POST'])
+@app.route('/api/users/proxy_authz_eb', methods=['POST'])
 def api():
-    logging.debug('-> /authz')
+    logging.debug('-> /api/users/proxy_authz_eb')
     debug(request)
 
     uid = request.form.get('user_id')
@@ -57,9 +57,9 @@ def api():
     return response
 
 
-@app.route('/interrupt', methods=['GET'])
+@app.route('/api/users/interrupt', methods=['GET'])
 def interrupt():
-    logging.debug('-> /interrupt')
+    logging.debug('-> /api/users/interrupt')
     nonce = request.args.get('nonce')
     (uid, continue_url, service_entity_id, issuer_id) = nonces.get(nonce, ('unknown', '/', '/', ''))
     response = render_template('interrupt.j2', uid=uid,
@@ -68,9 +68,9 @@ def interrupt():
     return response
 
 
-@app.route('/entitlements', methods=['POST'])
+@app.route('/api/users/attributes', methods=['POST'])
 def entitlements():
-    logging.debug('-> /entitlements')
+    logging.debug('-> /api/users/attributes')
     debug(request)
 
     nonce = request.form.get('nonce')
