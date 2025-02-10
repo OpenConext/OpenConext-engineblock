@@ -29,6 +29,11 @@ def api():
     logging.debug('-> /authz')
     debug(request)
 
+    # eduTeams
+#    uid = json_dict["user_id"]
+#    service_entity_id = json_dict["service_id"].lower()
+#    issuer_id = json_dict["issuer_id"]
+
     uid = request.form.get('uid')
     continue_url = request.form.get('continue_url')
     entity_id = request.form.get('entity_id')
