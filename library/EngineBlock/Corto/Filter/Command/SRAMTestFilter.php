@@ -41,19 +41,22 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
 
         $attributes = $this->getResponseAttributes();
 
-        $uid = $attributes['urn:mace:dir:attribute-def:uid'][0];
         $id = $this->_request->getId();
+
+        $user_id = $attributes['urn:mace:dir:attribute-def:uid'][0];
         $continue_url = $this->_server->getUrl('SRAMInterruptService', '') . "?ID=$id";
-        $entity_id = $this->_serviceProvider->entityId;
+        $service_id = $this->_serviceProvider->entityId;
+        $issuer_id = $this->_identityProvider->entityId;
 
         $headers = array(
             "Authorization: $sramApiToken"
         );
 
         $post = array(
-            'uid' => $uid,
+            'user_id' => $user_id,
             'continue_url' => $continue_url,
-            'entity_id' => $entity_id
+            'service_id' => $service_id,
+            'issuer_id' => $issuer_id
         );
 
         $options = [
