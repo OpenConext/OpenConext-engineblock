@@ -7,7 +7,7 @@ Build Status:
 
 ## License
 
-See the [LICENSE-2.0.txt][license] file
+See the [LICENSE][license] file
 
 ## Disclaimer
 
@@ -250,7 +250,7 @@ Also, the following documentation can be found in the [docs][docs] directory:
 1. [Release notes for releases < 5.0.0][docs-release-notes]
 
 [qa-build]: https://github.com/OpenConext/OpenConext-engineblock/workflows/test-integration/badge.svg
-[license]: LICENSE-2.0.txt
+[license]: LICENSE
 [notice]: NOTICE.txt
 [upgrading]: UPGRADING.md
 [comp]: https://getcomposer.org/
