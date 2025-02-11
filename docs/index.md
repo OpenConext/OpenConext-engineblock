@@ -9,6 +9,7 @@
 1. [Release notes for releases < 5.0.0][release-notes]
 1. [PHP testing][php-testing]
 1. [Javscript testing][js-testing]
+1. [Logging][logging]
 
 [license]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/LICENSE
 [release]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/release_procedure.md
@@ -16,3 +17,4 @@
 [release-notes]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/release_notes
 [php-testing]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/php_testing.md
 [js-testing]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/js_testing.md
+[logging]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/logging.md
