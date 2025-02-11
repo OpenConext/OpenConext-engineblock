@@ -193,6 +193,8 @@ HTML
     'error_unknown_identity_provider_no_idp_name'   => 'Erro - %organisationNoun% desconhecido',
     'error_unknown_identity_provider_desc'     => 'O %organisationNoun% a que pretende autenticar-se é desconhecido para a %suiteName%.',
     'error_unknown_identity_provider_desc_no_idp_name'     => 'O %organisationNoun% a que pretende autenticar-se é desconhecido para a %suiteName%.',
+    'error_unknown_signing_key' => 'Erro - chave de assinatura desconhecida',
+    'error_unknown_signing_key_desc' => 'A chave de assinatura utilizada não é conhecida por %suiteName%. Isto pode ser um erro de configuração.',
     'error_generic'                     => 'Erro - Ocorreu um erro',
     'error_generic_desc'                => 'A sua autenticação falhou e não sabemos exactamente porquê. Tente de novo e no caso de voltar a não funcionar, entre em contacto com o suporte da %idpName% para pedir ajuda.',
     'error_missing_required_fields'     => 'Erro - Campo necessário em falta',

@@ -28,6 +28,7 @@ use EngineBlock_Corto_Exception_InvalidStepupLoaLevel;
 use EngineBlock_Corto_Exception_MissingRequiredFields;
 use EngineBlock_Corto_Exception_PEPNoAccess;
 use EngineBlock_Corto_Exception_ReceivedErrorStatusCode;
+use EngineBlock_Corto_Exception_UnknownIdentityProviderSigningKey;
 use EngineBlock_Corto_Exception_UnknownPreselectedIdp;
 use EngineBlock_Corto_Exception_InvalidAttributeValue;
 use EngineBlock_Corto_Exception_UserCancelledStepupCallout;
@@ -170,6 +171,9 @@ class RedirectToFeedbackPageExceptionListener
                 'entity-id'   => $exception->getEntityId(),
                 'destination' => $exception->getDestination()
             ];
+        } elseif ($exception instanceof EngineBlock_Corto_Exception_UnknownIdentityProviderSigningKey) {
+            $message         = $exception->getMessage();
+            $redirectToRoute = 'authentication_feedback_unknown_signing_key';
         } elseif ($exception instanceof EngineBlock_Exception_UnknownRequesterIdInAuthnRequest) {
             $message         = 'Encountered unknown RequesterID for the Service Provider (transparant proxying)';
             $redirectToRoute = 'authentication_feedback_unknown_requesterid_in_authnrequest';
@@ -205,13 +209,13 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof EngineBlock_Corto_Exception_UserCancelledStepupCallout) {
             $message = $exception->getMessage();
             $redirectToRoute = 'authentication_feedback_stepup_callout_user_cancelled';
-        } else if ($exception instanceof EngineBlock_Corto_Exception_InvalidStepupLoaLevel) {
+        } elseif ($exception instanceof EngineBlock_Corto_Exception_InvalidStepupLoaLevel) {
             $message = $exception->getMessage();
             $redirectToRoute = 'authentication_feedback_stepup_callout_unmet_loa';
-        } else if ($exception instanceof EngineBlock_Corto_Exception_InvalidStepupCalloutResponse) {
+        } elseif ($exception instanceof EngineBlock_Corto_Exception_InvalidStepupCalloutResponse) {
             $message = $exception->getMessage();
             $redirectToRoute = 'authentication_feedback_stepup_callout_unknown';
-        } else if ($exception instanceof EntityCanNotBeFoundException) {
+        } elseif ($exception instanceof EntityCanNotBeFoundException) {
             $event->getRequest()->getSession()->set('feedback_custom', $exception->getMessage());
             $redirectToRoute = 'authentication_feedback_metadata_entity_not_found';
         } else {
