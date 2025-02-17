@@ -118,6 +118,11 @@ authentication_feedback_stuck_in_authentication_loop:
     methods:    [GET]
     defaults:    { _controller: engineblock.controller.authentication.feedback:stuckInAuthenticationLoopAction }
 
+authentication_feedback_authentication_limit_exceeded:
+    path: '/authentication/feedback/authentication-limit-exceeded'
+    methods: [ GET ]
+    defaults: { _controller: engineblock.controller.authentication.feedback:authenticationLimitExceededAction }
+
 authentication_feedback_no_authentication_request_received:
     path:       '/authentication/feedback/invalid-request-method-on-sso'
     methods:    [GET]

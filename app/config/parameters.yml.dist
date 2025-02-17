@@ -192,6 +192,7 @@ parameters:
     ## Settings for detecting whether the user is stuck in a authentication loop within his session
     time_frame_for_authentication_loop_in_seconds: 60
     maximum_authentication_procedures_allowed: 5
+    maximum_authentications_per_session: 20
 
     ## Store attributes with their values, meaning that if an Idp suddenly
     ## sends a new value (like a new e-mail address) consent has to be
