@@ -9,7 +9,6 @@ default:
                 - '%paths.base%/../src/OpenConext/EngineBlockFunctionalTestingBundle/Features'
             formatter:
                 name: progress
-
             filters:
                 tags: "~@WIP&&~@SKIP&&~@selenium"
             contexts: &defaultContexts
@@ -43,14 +42,14 @@ default:
 
     extensions:
         Behat\MinkExtension:
-            base_url: https://engine.vm.openconext.org/
+            base_url: https://engine.dev.openconext.local/
             sessions:
                 default:
                     symfony: ~
                 chrome:
                     selenium2:
                         browser: chrome
-                        wd_host: http://selenium.vm.openconext.org:4444/wd/hub
+                        wd_host: http://selenium.dev.openconext.local:4444/wd/hub
                         capabilities:
                             chrome:
                                 switches:

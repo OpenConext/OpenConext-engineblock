@@ -4,7 +4,7 @@ Feature:
   I want to limit the available IDPs in the WAYF based on ACLs or elements in the AuthnRequest
 
   Background:
-    Given an EngineBlock instance on "vm.openconext.org"
+    Given an EngineBlock instance on "dev.openconext.local"
       And no registered SPs
       And no registered Idps
       And an Identity Provider named "IDP1"

@@ -6,7 +6,7 @@ const viewports = [
 const pageTests = [
   {
     title: 'default',
-    url: 'https://engine.vm.openconext.org/functional-testing/consent'
+    url: 'https://engine.dev.openconext.local/functional-testing/consent'
   }
 ];
 

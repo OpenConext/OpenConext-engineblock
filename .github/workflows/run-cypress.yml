@@ -2,7 +2,7 @@ name: run cypress
 on:
     push:
         branches:
-            - master
+            - main
     pull_request:
     workflow_dispatch:
     # run at 6 hour UTC
@@ -12,7 +12,6 @@ jobs:
     build:
         runs-on: ubuntu-latest
         timeout-minutes: 30
-        continue-on-error: true
         strategy:
           matrix:
             php: [php72]
@@ -30,7 +29,7 @@ jobs:
               run: |
                 cd docker &&
                 ${DOCKER_COMPOSE} up -d --build &&
-                docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
+                docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
                     SYMFONY_ENV=ci composer install --prefer-dist -n -o --ignore-platform-reqs && \
                     ./app/console cache:clear --env=ci && \
                     cd theme && CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile && EB_THEME=skeune yarn build
@@ -39,13 +38,13 @@ jobs:
               if: always()
               run: |
                   cd docker && \
-                  docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
+                  docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
                     EB_THEME=skeune ./theme/scripts/prepare-test.js
                   ' && \
                   docker compose exec -T cypress bash -c '
                     cd e2e && yarn install && cypress run --spec cypress/integration/skeune/**/*.spec.js,cypress/integration/shared/*.spec.js --browser=chrome --headless
                   ' && \
-                  docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
+                  docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
                     EB_THEME=openconext ./theme/scripts/prepare-test.js
                   ' && \
                   docker compose exec -T cypress bash -c '

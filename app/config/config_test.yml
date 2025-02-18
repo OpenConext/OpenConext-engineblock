@@ -47,9 +47,9 @@ monolog:
             type: fingers_crossed
             activation_strategy: engineblock.logger.manual_or_error_activation_strategy
             passthru_level: "%logger.fingers_crossed.passthru_level%"
-            handler: file
+            handler: nested
             channels: ['!event']
-        file:
+        nested:
             type:   stream
             path:   "%kernel.logs_dir%/%kernel.environment%.log"
             level:  DEBUG

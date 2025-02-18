@@ -1,6 +1,6 @@
 context('Index verify a11y', () => {
   beforeEach(() => {
-    cy.visit('https://engine.vm.openconext.org/');
+    cy.visit('https://engine.dev.openconext.local/');
   });
 
 

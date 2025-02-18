@@ -5,12 +5,33 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.15.3
+Maintenance:
+  * Upgrade saml2 library
+
+## 6.15.2
+Changed:
+  * Docker: Change logging to json5
+Maintenance:
+  * Upgrade elliptic
+
+## 6.15.1
+
+Changed:
+ * Stepup: add check that returned NameID matches the one we requested,
+   should never happen, added for defense-in-depth.
+ * Improved error message on fatal error.
+ * Change the default for the feature block_user_on_violation to on.
+
+Maintenance:
+ * Upgrade twig dependency
+
 ## 6.15.0
 
 New features:
 * Support and follow `release_as` and `use_as_nameid` when configured in ARP
     *  Overwrite the NameID when specified in use_as_nameid ARP setting #1308
-    *  Create Corto input filter for the ARP directive release_as to be applied #1307
+    *  Create Corto input filter for the ARP directive release_as to be applied #1307 #1322
  * Added feature toggle to disable unsolicited SSO entirely
 
 Bugfix:
@@ -62,12 +83,12 @@ Maintenance:
 * Improve MDUI Logo usage #1264
 
 **Improvement**
-* Documentation regarding the `metadata:coin:stepup:forceauthn` feature was added. 
+* Documentation regarding the `metadata:coin:stepup:forceauthn` feature was added.
 * Specify data types of roles columns #1262
 
 **Maintenance**
 * Test integration Github Action utilizes base container
-* Test integration runs against PHP 7.2 and PHP 8.2 (removed PHP 5.6 test runs) 
+* Test integration runs against PHP 7.2 and PHP 8.2 (removed PHP 5.6 test runs)
 
 ## 6.11.0
 **Feature**

@@ -5,7 +5,7 @@ Feature:
   I want to see what information the SP requires
 
   Background:
-    Given an EngineBlock instance on "vm.openconext.org"
+    Given an EngineBlock instance on "dev.openconext.local"
       And an Identity Provider named "Dummy-IdP"
       And a Service Provider named "Dummy-SP"
       And a Service Provider named "Trusted Proxy"

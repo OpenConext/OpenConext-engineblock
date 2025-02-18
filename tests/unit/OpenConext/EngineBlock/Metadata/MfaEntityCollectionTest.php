@@ -33,14 +33,14 @@ class MfaEntityCollectionTest extends TestCase
     {
         $collection = MfaEntityCollection::fromMetadataPush($this->validData());
         $this->assertCount(2, $collection);
-        $entity = $collection->findByEntityId('https://teams.vm.openconext.org/shibboleth');
+        $entity = $collection->findByEntityId('https://teams.dev.openconext.local/shibboleth');
         $this->assertInstanceOf(MfaEntity::class, $entity);
-        $this->assertEquals('https://teams.vm.openconext.org/shibboleth', $entity->entityId());
+        $this->assertEquals('https://teams.dev.openconext.local/shibboleth', $entity->entityId());
         $this->assertEquals('http://schemas.microsoft.com/claims/multipleauthn', $entity->level());
 
-        $entity = $collection->findByEntityId('https://aa.vm.openconext.org/shibboleth');
+        $entity = $collection->findByEntityId('https://aa.dev.openconext.local/shibboleth');
         $this->assertInstanceOf(MfaEntity::class, $entity);
-        $this->assertEquals('https://aa.vm.openconext.org/shibboleth', $entity->entityId());
+        $this->assertEquals('https://aa.dev.openconext.local/shibboleth', $entity->entityId());
         $this->assertEquals('http://schemas.microsoft.com/claims/multipleauthn', $entity->level());
     }
 
@@ -48,7 +48,7 @@ class MfaEntityCollectionTest extends TestCase
     {
         $data = [
             [
-                "name" => "https://teams.vm.openconext.org/shibboleth",
+                "name" => "https://teams.dev.openconext.local/shibboleth",
                 "level" => "http://schemas.microsoft.com/claims/multipleauthn",
             ],
         ];
@@ -60,11 +60,11 @@ class MfaEntityCollectionTest extends TestCase
     {
         $data = [
             [
-                "name" => "https://teams.vm.openconext.org/shibboleth",
+                "name" => "https://teams.dev.openconext.local/shibboleth",
                 "level" => "http://schemas.microsoft.com/claims/multipleauthn",
             ],
             [
-                "name" => "https://teams.vm.openconext.org/shibboleth",
+                "name" => "https://teams.dev.openconext.local/shibboleth",
                 "level" => "http://schemas.microsoft.com/claims/multipleauthn",
             ],
         ];
@@ -78,11 +78,11 @@ class MfaEntityCollectionTest extends TestCase
     {
         return [
             [
-                "name" => "https://teams.vm.openconext.org/shibboleth",
+                "name" => "https://teams.dev.openconext.local/shibboleth",
                 "level" => "http://schemas.microsoft.com/claims/multipleauthn",
             ],
             [
-                "name" => "https://aa.vm.openconext.org/shibboleth",
+                "name" => "https://aa.dev.openconext.local/shibboleth",
                 "level" => "http://schemas.microsoft.com/claims/multipleauthn",
             ],
         ];

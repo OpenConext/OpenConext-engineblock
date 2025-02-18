@@ -2,17 +2,15 @@ name: test-integration
 on:
     push:
         branches:
-            - master
-            - symfony_upgrade_5_4
+            - main
     pull_request:
     # run at 6 hour UTC
     schedule:
-      - cron: "0 6 * * *"
+        - cron: "0 6 * * *"
 jobs:
     build:
         runs-on: ubuntu-latest
         timeout-minutes: 30
-        continue-on-error: true
         strategy:
           matrix:
             # php82 is ready to run alongside the 72, but is not enabled now as the code is not 82 compatible yet
@@ -31,7 +29,7 @@ jobs:
               run: |
                 cd docker &&
                 ${DOCKER_COMPOSE} up -d --build &&
-                docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
+                docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
                     SYMFONY_ENV=ci composer install --prefer-dist -n -o --ignore-platform-reqs && \
                     ./app/console cache:clear --env=ci && \
                     cd theme && CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile && EB_THEME=skeune yarn build
@@ -39,7 +37,7 @@ jobs:
             - name: Run code quality tests
               if: always()
               run: |
-                  cd docker && docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
+                  cd docker && docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
                       echo -e "\nPHP Mess Detector\n" && \
                       ./vendor/bin/phpmd src text ci/qa-config/phpmd.xml --exclude */Tests/* && \
                       echo -e "\nPHP CodeSniffer\n" && \
@@ -54,25 +52,25 @@ jobs:
             - name: Run unit tests
               if: always()
               run: |
-                  cd docker && APP_ENV=ci docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
+                  cd docker && APP_ENV=ci SYMFONY_ENV=ci docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
                       echo -e "\nInstalling database fixtures...\n" && \
                       ./app/console doctrine:schema:drop --force --env=ci && \
                       ./app/console doctrine:schema:create --env=ci && \
                       echo -e "\nPHPUnit legacy tests\n" && \
-                      XDEBUG_MODE=coverage ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=eb4 --coverage-text && \
+                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=eb4 --coverage-text && \
                       echo -e "\nPHPUnit unit tests\n" && \
-                      XDEBUG_MODE=coverage  ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=unit --coverage-text && \
+                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=unit --coverage-text && \
                       echo -e "\nPHPUnit API acceptance tests\n" && \
                       APP_ENV=ci ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=functional --coverage-text && \
                       echo -e "\nPHPUnit integration tests\n" && \
-                      XDEBUG_MODE=coverage  ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=integration --coverage-text
+                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=integration --coverage-text
                   '
               env:
                   SYMFONY_ENV: ci
             - name: Run acceptance tests
               if: always()
               run: |
-                  cd docker && docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
+                  cd docker && docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
                       echo -e "\nInstalling database fixtures...\n" && \
                       ./app/console doctrine:schema:drop --force --env=ci && \
                       ./app/console doctrine:schema:create --env=ci && \
@@ -88,7 +86,7 @@ jobs:
             - name: Run linting tests
               if: always()
               run: |
-                  cd docker && docker compose exec -T --user www-data php-fpm.vm.openconext.org bash -c '
+                  cd docker && docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
                       echo -e "\nTwig lint\n"  && \
                       app/console lint:twig theme/ && \
                       cd theme && \
@@ -100,7 +98,7 @@ jobs:
             - name: Show log on failure
               if: failure()
               run:  |
-                  cd docker && docker compose exec -T php-fpm.vm.openconext.org cat /opt/openconext/OpenConext-engineblock/app/logs/ci/ci.log
+                  cd docker && docker compose exec -T engine.dev.openconext.local cat /var/www/html/app/logs/ci/ci.log
             - name: Send notification on production build nightly build failure
               uses: sonots/slack-notice-action@v3
               with:

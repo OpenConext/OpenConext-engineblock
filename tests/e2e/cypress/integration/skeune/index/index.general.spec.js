@@ -3,7 +3,7 @@ import {siteNoticeSelector} from '../../../../../../theme/base/javascripts/selec
 
 context('Index on Skeune theme', () => {
   beforeEach(() => {
-    cy.visit('https://engine.vm.openconext.org/');
+    cy.visit('https://engine.dev.openconext.local/');
   });
 
   it('Renders the index page and has all relevant data', () => {
@@ -14,7 +14,7 @@ context('Index on Skeune theme', () => {
   });
 
   it('Shows the global site notice', () => {
-    cy.visit('https://engine.vm.openconext.org/functional-testing/consent?showGlobalSiteNotice=1');
+    cy.visit('https://engine.dev.openconext.local/functional-testing/consent?showGlobalSiteNotice=1');
     cy.beVisible(siteNoticeSelector);
   });
 });

@@ -206,6 +206,7 @@ services:
               # Verify CAs for certificates for prod, but not for other environments
               # as we are working with self signed signatures
               verify: "@=service('kernel').getEnvironment() === 'prod'"
+              timeout: "%http_client.timeout%"
 
     engineblock.authentication.authentication_loop_guard:
         class: OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard
@@ -259,6 +260,7 @@ services:
         class: GuzzleHttp\Client
         arguments:
             - auth: ["%attribute_aggregation.username%", "%attribute_aggregation.password%", "Basic"]
+              timeout: "%http_client.timeout%"
 
     engineblock.metadata.repository.cached_doctrine:
         class: OpenConext\EngineBlock\Metadata\MetadataRepository\CachedDoctrineMetadataRepository

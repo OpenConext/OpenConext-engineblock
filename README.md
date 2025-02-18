@@ -7,7 +7,7 @@ Build Status:
 
 ## License
 
-See the [LICENSE-2.0.txt][license] file
+See the [LICENSE][license] file
 
 ## Disclaimer
 
@@ -42,7 +42,7 @@ Finally, when not in an environment with the debug flag enabled, you need to cle
 $ php72 ./app/console cache:clear --env=prod
 ```
 
-To setup the required tooling on the VM, the following steps might be useful:
+To setup the required tooling on the container, the following steps might be useful:
 
     cd /opt/openconext/OpenConext-engineblock/theme
     sudo curl --silent --location https://rpm.nodesource.com/setup_11.x | sudo bash -
@@ -82,12 +82,12 @@ it is only regularly tested with RedHat Enterprise Linux and CentOS._
 
 ## Installation
 
-_**Note**: you are highly encouraged to use [OpenConext-Deploy][op-dep] to deploy OpenConext installations._
+_**Note**: you are highly encouraged to use [OpenConext-Devconf][op-dev] to deploy OpenConext installations._
 
 If you are reading this then you've probably already installed a copy of EngineBlock somewhere on the destination server,
 if not, then that would be step 1 for the installation.
 
-If you do not use [OpenConext-Deploy][op-dep] and have an installed copy and your server meets all the requirements
+If you do not use [OpenConext-Devconf][op-dev] and have an installed copy and your server meets all the requirements
 above, then please follow the steps below to start your installation.
 
 ### First, create an empty database
@@ -143,11 +143,11 @@ It should also serve both the `engine.yourdomain.example` and `engine-api.yourdo
 Make sure the `ENGINEBLOCK_ENV` is set, and that the `SYMFONY_ENV` is set, this can be mapped from `ENGINEBLOCK_ENV` as:
 
 | `ENGINEBLOCK_ENV` | `SYMFONY_ENV` |
-| --- | --- |
-| production | prod |
-| acceptance | acc |
-| test | test |
-| vm | dev |
+|-------------------| --- |
+| production        | prod |
+| acceptance        | acc |
+| test              | test |
+| dev               | dev |
 
 **EXAMPLE**
 
@@ -250,11 +250,11 @@ Also, the following documentation can be found in the [docs][docs] directory:
 1. [Release notes for releases < 5.0.0][docs-release-notes]
 
 [qa-build]: https://github.com/OpenConext/OpenConext-engineblock/workflows/test-integration/badge.svg
-[license]: LICENSE-2.0.txt
+[license]: LICENSE
 [notice]: NOTICE.txt
 [upgrading]: UPGRADING.md
 [comp]: https://getcomposer.org/
-[op-dep]: https://github.com/OpenConext/OpenConext-deploy
+[op-dev]: https://github.com/OpenConext/OpenConext-devconf
 [manage]: https://github.com/OpenConext/OpenConext-manage
 [eb-wiki-theme-development]: https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#theme-development
 [wiki]: https://github.com/OpenConext/OpenConext-engineblock/wiki

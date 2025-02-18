@@ -93,7 +93,7 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
             $receivedLoa = $this->_stepupGatewayCallOutHelper->getEbLoa($receivedResponse->getAssertion()->getAuthnContextClassRef());
             $this->updateProcessingStateLoa($receivedRequest, $receivedResponse, $receivedLoa);
 
-            $log->warning('After Stepup authentication update received LoA', array('key_id' => $receivedRequest->getId(), 'result' => $receivedLoa));
+            $log->warning('After Stepup authentication update received LoA', ['result' => $receivedLoa]);
         } catch (EngineBlock_Corto_Exception_ReceivedErrorStatusCode $e) {
 
             // The user is allowed to continue upon subcode: NoAuthnContext when the SP is configured with the coin: coin:stepup:allow_no_token == true
@@ -108,7 +108,7 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
             // Update the AuthnContextClassRef to LoA 1
             $mappedLoa = $this->_stepupGatewayCallOutHelper->getStepupLoa1();
             $this->updateProcessingStateLoa($receivedRequest, $receivedResponse, $mappedLoa);
-            $log->warning('After failed Stepup authentication set LoA to Loa1', array('key_id' => $receivedRequest->getId(), 'result' => $mappedLoa));
+            $log->warning('After failed Stepup authentication set LoA to Loa1', ['result' => $mappedLoa]);
         }
 
         if ($checkResponseSignature) {
@@ -125,18 +125,24 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
             $this->_server->getRepository()
         );
 
-        $log->info('Handled Stepup authentication callout successfully', array('key_id' => $receivedRequest->getId()));
+        $log->info('Handled Stepup authentication callout successfully');
 
         // Get active request
         $processStep = $this->_processingStateHelper->getStepByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_STEPUP);
-        $receivedResponse = $processStep->getResponse();
+        $originalReceivedResponse = $processStep->getResponse();
+
+        // Only non-error responses will have a NameID in them
+        if ($checkResponseSignature) {
+            $this->verifyReceivedNameID($originalReceivedResponse, $receivedResponse);
+        }
 
         $nextProcessStep = $this->_processingStateHelper->getStepByRequestId(
             $receivedRequest->getId(),
             ProcessingStateHelperInterface::STEP_CONSENT
         );
 
-        $this->_server->sendConsentAuthenticationRequest($receivedResponse, $receivedRequest, $nextProcessStep->getRole(), $this->getAuthenticationState());
+
+        $this->_server->sendConsentAuthenticationRequest($originalReceivedResponse, $receivedRequest, $nextProcessStep->getRole(), $this->getAuthenticationState());
 
         return;
     }
@@ -187,7 +193,7 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
         switch (true) {
             case ($e->getFeedbackStatusCode() === 'Responder/AuthnFailed' && $e->getFeedbackStatusMessage() === 'Authentication cancelled by user'):
                 // user cancelled
-                $log->info('User cancelled Stepup authentication callout', array('key_id' => $receivedRequest->getId(), 'result' => $e->getFeedbackInfo()));
+                $log->info('User cancelled Stepup authentication callout', ['result' => $e->getFeedbackInfo()]);
 
                 throw new EngineBlock_Corto_Exception_UserCancelledStepupCallout(
                     'User cancelled Stepup authentication callout',
@@ -198,7 +204,7 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
                 // invalid loa level
                 // should continue if no valid token is allowed
 
-                $log->warning('Unmet loa level for Stepup authentication callout, trying allow no token', array('key_id' => $receivedRequest->getId(), 'result' => $e->getFeedbackInfo()));
+                $log->warning('Unmet loa level for Stepup authentication callout, trying allow no token', ['result' => $e->getFeedbackInfo()]);
 
                 // check if no token allowed
                 $processStep = $this->_processingStateHelper->getStepByRequestId($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_STEPUP);
@@ -210,7 +216,7 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
 
                 if ($this->_stepupGatewayCallOutHelper->allowNoToken($idp, $sp)) {
 
-                    $log->warning('Allow no token allowed from sp/idp configuration, continuing', array('key_id' => $receivedRequest->getId(), 'result' => $e->getFeedbackInfo()));
+                    $log->warning('Allow no token allowed from sp/idp configuration, continuing', ['result' => $e->getFeedbackInfo()]);
                     return;
                 }
 
@@ -220,7 +226,7 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
                 );
         }
 
-        $log->warning('Invalid status returned from Stepup authentication gateway', array('key_id' => $receivedRequest->getId(), 'result' => $e->getFeedbackInfo()));
+        $log->warning('Invalid status returned from Stepup authentication gateway', ['result' => $e->getFeedbackInfo()]);
 
         throw new EngineBlock_Corto_Exception_InvalidStepupCalloutResponse(
             sprintf(
@@ -308,5 +314,21 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
             );
         }
         $log->info('Received a suitable LoA response from the stepup gateway.');
+    }
+
+    /**
+     * The NameID that the assertion from Stepup reports back, must always match the one we
+     * requested Stepup for when sending the request to Stepup. As a defense in depth against
+     * any gaps elsewhere, we doublecheck that this indeed matches.
+     */
+    private function verifyReceivedNameID(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $originalReceivedResponse,
+        EngineBlock_Saml2_ResponseAnnotationDecorator $stepupReceivedResponse
+    ): void {
+        if ($originalReceivedResponse->getNameID()->getValue() !== $stepupReceivedResponse->getNameID()->getValue()) {
+            throw new EngineBlock_Exception(
+                'Stepup authentication failed, the received NameID from Stepup does not match the one we sent out.'
+            );
+        }
     }
 }

@@ -20,7 +20,7 @@ return $overrides + [
 
     // FOOTER
     'log_in_to'     => 'Select an %organisationNoun% to login to %arg1%',
-    'helpLink'       => 'https://wiki.surfnet.nl/display/conextsupport/The+WAYF-page',
+    'helpLink'       => 'https://support.surfconext.nl/wayf-en',
     'footer_navigation_screenreader'    => 'Footer navigation',
 
     // Forms

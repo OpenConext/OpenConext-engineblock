@@ -2,7 +2,11 @@
     "name": "openconext/engineblock",
     "description": "OpenConext SAML proxy",
     "type": "project",
-    "keywords": ["saml", "proxy", "openconext"],
+    "keywords": [
+        "saml",
+        "proxy",
+        "openconext"
+    ],
     "homepage": "http://www.openconext.org",
     "license": "Apache-2.0",
     "support": {
@@ -48,6 +52,7 @@
         "twig/twig": "^2.0"
     },
     "require-dev": {
+        "ext-zlib": "*",
         "behat/mink": "^1.11",
         "behat/mink-browserkit-driver": "^2.2",
         "behat/mink-selenium2-driver": "^1.7",
@@ -101,7 +106,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "OpenConext\\": ["tests/unit/OpenConext/", "tests/integration/OpenConext/", "tests/functional/OpenConext/"]
+            "OpenConext\\": [
+                "tests/unit/OpenConext/",
+                "tests/integration/OpenConext/",
+                "tests/functional/OpenConext/"
+            ]
         }
     },
     "config": {
@@ -135,6 +144,25 @@
             {
                 "file": "app/config/functional_testing.yml"
             }
+        ]
+    },
+    "archive": {
+        "exclude": [
+            "*",
+            ".*",
+            "!/.env",
+            "*/Tests/*",
+            "!/app",
+            "!/application",
+            "!/component_info",
+            "!/database",
+            "!/languages",
+            "!/library",
+            "!/src",
+            "!/theme",
+            "/theme/node_modules",
+            "!/vendor",
+            "!/web"
         ]
     }
 }

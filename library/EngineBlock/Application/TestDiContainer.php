@@ -17,12 +17,18 @@
  */
 
 use OpenConext\EngineBlock\Stepup\StepupEndpoint;
+use OpenConext\EngineBlockBundle\Pdp\PdpClientInterface;
 
 /**
  * Creates mocked versions of dependencies for unit testing
  */
 class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_DiContainer
 {
+    /**
+     * @var PdpClientInterface|null
+     */
+    private $pdpClient;
+
     public function getXmlConverter()
     {
         return Phake::mock('EngineBlock_Corto_XmlToArray');
@@ -36,6 +42,16 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
     public function getDatabaseConnectionFactory()
     {
         return Phake::mock('EngineBlock_Database_ConnectionFactory');
+    }
+
+    public function getPdpClient()
+    {
+        return $this->pdpClient ?? parent::getPdpClient();
+    }
+
+    public function setPdpClient(PdpClientInterface $pdpClient)
+    {
+        $this->pdpClient = $pdpClient;
     }
 
     public function getConsentFactory()
@@ -73,7 +89,7 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
 
         return [
             'default' => [
-                'publicFile' => '/etc/openconext/engineblock.crt',
+                'publicFile' => '/config/engine/engineblock.crt',
                 'privateFile' => $basePath . '/ci/qa-config/files/engineblock.pem',
             ],
         ];

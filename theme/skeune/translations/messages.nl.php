@@ -19,7 +19,7 @@ return $overrides + [
 
     // FOOTER
     'log_in_to'     => 'Selecteer een account om in te loggen bij %arg1%',
-    'helpLink'       => 'https://wiki.surfnet.nl/display/conextsupport/De+WAYF-pagina',
+    'helpLink'       => 'https://support.surfconext.nl/wayf-nl',
     'footer_navigation_screenreader'    => 'Footer navigatie',
 
     // Forms

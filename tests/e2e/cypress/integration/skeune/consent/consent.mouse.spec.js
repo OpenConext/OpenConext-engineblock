@@ -6,7 +6,7 @@ import {backButtonSelector, contentSectionSelector, nokButtonSelector, nokSectio
  */
 context('Consent when using the mouse', () => {
   beforeEach(() => {
-    cy.visit('https://engine.vm.openconext.org/functional-testing/consent');
+    cy.visit('https://engine.dev.openconext.local/functional-testing/consent');
   });
 
   describe('Test showing / hiding the extra attributes', () => {

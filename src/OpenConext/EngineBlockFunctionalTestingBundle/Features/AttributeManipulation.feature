@@ -4,7 +4,7 @@ Feature:
   I want to be able to manipulate the response attributes through configured code
 
   Background:
-    Given an EngineBlock instance on "vm.openconext.org"
+    Given an EngineBlock instance on "dev.openconext.local"
     And no registered SPs
     And no registered Idps
     And an Identity Provider named "Dummy-IdP"
@@ -188,11 +188,11 @@ Feature:
      And I select "Dummy-IdP" on the WAYF
      And I pass through EngineBlock
      And I pass through the IdP
-    Then I should not see "https://engine.vm.openconext.org/authentication/idp/single-sign-on"
+    Then I should not see "https://engine.dev.openconext.local/authentication/idp/single-sign-on"
     When I give my consent
      And I pass through EngineBlock
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
-    And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:uid"]/saml:AttributeValue[text()="https://engine.vm.openconext.org/authentication/idp/single-sign-on"]'
+    And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:uid"]/saml:AttributeValue[text()="https://engine.dev.openconext.local/authentication/idp/single-sign-on"]'
 
   Scenario: The manipulation reduces a multivalued attribute to a single value
     Given the IdP "Dummy-IdP" sends attribute "urn:mace:dir:attribute-def:eduPersonAffiliation" with values "student,faculty,guest,member" and xsi:type is "xs:string"

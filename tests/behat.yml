@@ -41,7 +41,7 @@ default:
 
     extensions:
         Behat\MinkExtension:
-            base_url: https://engine.vm.openconext.org/
+            base_url: https://engine.dev.openconext.local/
             sessions:
                 default:
                     symfony: ~
@@ -57,4 +57,7 @@ default:
                                     - "--window-size=1920,1080"
                                     - "--no-sandbox"
                                     - "--disable-dev-shm-usage"
-        FriendsOfBehat\SymfonyExtension: ~
+        FriendsOfBehat\SymfonyExtension:
+            kernel:
+                env: ci
+                debug: true

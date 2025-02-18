@@ -1,0 +1,6 @@
+version: '2.4'
+
+services:
+    engine.dev.openconext.local:
+        build:
+            dockerfile: docker/ci/Dockerfile-php82

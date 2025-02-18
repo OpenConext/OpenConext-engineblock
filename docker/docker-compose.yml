@@ -1,24 +1,9 @@
+version: '2.4'
+
 services:
 
-    db.vm.openconext.org:
-        image: mariadb:10.6
-        restart: always
-        container_name: eb-db
-        environment:
-            MYSQL_ROOT_PASSWORD: "root"
-            MYSQL_DATABASE: "eb"
-            MYSQL_USER: "eb_rw"
-            MYSQL_PASSWORD: "secret"
-            MYSQL_INITDB_SKIP_TZINFO: 1
-        volumes:
-            - eb-mysql-data:/var/lib/mysql
-        healthcheck:
-            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-            timeout: 2s
-            retries: 20
-
-    db-test.vm.openconext.org:
-        image: mariadb:10.6
+    mariadb:
+        image: mariadb:10.2
         restart: always
         container_name: eb-db-test
         environment:
@@ -35,32 +20,47 @@ services:
             retries: 20
             interval: 2s
 
-    web.vm.openconext.org:
-        image: ghcr.io/openconext/openconext-basecontainers/php82-apache2-node20-composer2:latest
+    engine.dev.openconext.local:
+        build:
+            context: ../
+            # override this in a dedicated dockerfile per php version
+            # dockerfile: docker/ci/Dockerfile
+        container_name: eb-phpfpm
         volumes:
-            - ../:/var/www/html/
-            - ./config/apache2.conf:/etc/apache2/sites-enabled/appconf.conf
-            - ../ci/qa-config/files/engine.vm.openconext.org.crt:/etc/apache2/ssl/engine.vm.openconext.org.crt
-            - ../ci/qa-config/files/engine.vm.openconext.org.key:/etc/apache2/ssl/engine.vm.openconext.org.key
+            - ../:/var/www/html
+            - ../ci/qa-config/files/engine.dev.openconext.local.crt:/config/engine/engineblock.crt
+            - ../ci/qa-config/files/engine.dev.openconext.local.key:/config/engine/engineblock.pem
         depends_on:
-            db.vm.openconext.org:
+            mariadb:
                 condition: service_healthy
-            db-test.vm.openconext.org:
-                condition: service_healthy
-        extra_hosts:
-          - 'engine.vm.openconext.org: 127.0.0.1'
         environment:
           APP_ENV: ci
           SYMFONY_ENV: ci
-        networks:
-          default:
-            aliases:
-                - engine.vm.openconext.org
 
+    selenium.dev.openconext.local:
+        image: selenium/standalone-chrome:2.53.1
+        container_name: eb-selenium
+        user: "${UID}:${GID}"
+        environment:
+            START_XVFB: "false"
+        volumes:
+            - /dev/shm:/dev/shm
+        healthcheck:
+            test: ["CMD", "/opt/bin/check-grid.sh:", "--host", "0.0.0.0", "--port", "4444"]
+            timeout: 30s
+            retries: 5
+            interval: 15s
+
+    cypress:
+        image: "cypress/included:13.1.0"
+        environment:
+            - CYPRESS_baseUrl=https://engine.dev.openconext.local
+        working_dir: /e2e
+        entrypoint: cypress open --project .
+        volumes:
+            - ../tests:/e2e
+            - ../theme:/theme
 
 volumes:
     eb-mysql-data:
     eb-mysql-test-data:
-
-
-

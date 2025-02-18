@@ -29,33 +29,33 @@ import {firstRemainingIdp, firstSelectedIdpDeleteDisable, selectedIdpDataIndex1}
 context('WAYF when using the keyboard', () => {
   describe('Test logging in', () => {
     it('Should login when selecting an idp', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf');
       cy.get(remainingIdpSelector)
         .eq(1)
         .focus()
         .type('{enter}');
       cy.location().should((loc) => {
-        expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/2');
+        expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https%3A//example.com/entityId/2');
       });
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf');
     });
 
     it('Should login to first IdP when hitting enter', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf');
       cy.get(searchFieldSelector)
         .type('{enter}');
       cy.location().should((loc) => {
-        expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/1');
+        expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https%3A//example.com/entityId/1');
       });
     });
 
     it('Should login to topmost  IdP when hitting enter', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf');
       cy.get(searchFieldSelector)
         .type('2')
         .type('{enter}');
       cy.location().should((loc) => {
-        expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/2');
+        expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https%3A//example.com/entityId/2');
       });
     });
   });
@@ -63,7 +63,7 @@ context('WAYF when using the keyboard', () => {
   // todo if html spec is changed, or cypress fixes bug 6207, get rid of the manual focus on search.  See https://github.com/cypress-io/cypress/issues/6207
   describe('Should be able to traverse the remaining idp section with arrow keys', () => {
     it('check if pressing down works as expected', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?showIdpBanner=1');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?showIdpBanner=1');
       cy.get(searchFieldSelector).focus();
       cy.pressArrowOnIdpList('down', searchFieldClass);
       cy.pressArrowOnIdpList('down', defaultIdpClass);
@@ -76,7 +76,7 @@ context('WAYF when using the keyboard', () => {
     });
 
     it('check if pressing up works as expected', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?showIdpBanner=1');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?showIdpBanner=1');
       cy.get(searchFieldSelector).focus();
       cy.pressArrowOnIdpList('up', searchFieldClass);
       cy.pressArrowOnIdpList('up', idpClass, '5');
@@ -128,7 +128,7 @@ context('WAYF when using the keyboard', () => {
 
     it('Should be able to partially fill the request access form and get validation message', () => {
       cy.clearAllCookies();
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
       cy.openUnconnectedIdp();
       cy.focusAndEnter(showFormSelector);
       cy.fillNoAccessForm();
@@ -179,12 +179,12 @@ context('WAYF when using the keyboard', () => {
 
   describe('Should have a working default Idp Banner', () => {
     it('Should have a default Idp banner visible', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?showIdpBanner=1');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?showIdpBanner=1');
       cy.beVisible(defaultIdpSelector);
     });
 
     it('Should scroll to the default Idp when clicking the banner link', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=10&defaultIdpEntityId=https://example.com/entityId/9&showIdpBanner=1');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=10&defaultIdpEntityId=https://example.com/entityId/9&showIdpBanner=1');
 
       // click the banner link & check if it did what it should have
       cy.focusAndEnter(defaultIdpSelector);
@@ -215,7 +215,7 @@ context('WAYF when using the keyboard', () => {
       cy.addOnePreviouslySelectedIdp();
       cy.selectFirstIdp(false, selectedIdpDataIndex1);
       cy.location().should((loc) => {
-        expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/1');
+        expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https%3A//example.com/entityId/1');
       });
     });
 

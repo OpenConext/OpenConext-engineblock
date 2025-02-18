@@ -8,7 +8,7 @@ context('WayfMouseBehaviour', () => {
    */
   it.skip('Disconnected IdPs should be highlighted on mouse hover', () => {
     // Open a dummy wayf with 5 connected IdPs and 5 unconnected IdPs
-    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=10&displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
+    cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=10&displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
     cy.get('#unconnected-idp-picker > div > div.idp-list > a.result.active.noaccess:nth-child(1)')
       .hover()
       .should('have.class', 'focussed');
@@ -19,23 +19,23 @@ context('WayfMouseBehaviour', () => {
    */
   it('Connected IdP should respond to mouse click after clearing previous selections', () => {
     // Open a dummy wayf with 5 connected IdPs
-    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=10&displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
+    cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=10&displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
     // Click the first IdP, adding it to the list of previously chosen IdPs
     cy.get('a.result.active.access:nth-child(1)').click({force:true});
     // We visit the fake IdP, verify the right redirect is performed
     cy.location().should((loc) => {
-      expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/1');
+      expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https%3A//example.com/entityId/1');
     });
     // Go back to the WAYF
-    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=10&displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
+    cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=10&displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
     // Click the second IdP, adding it to the list of previously chosen IdPs
     cy.get('a.result.active.access:nth-child(2)').click({force:true});
     // We visit the fake IdP, verify the right redirect is performed
     cy.location().should((loc) => {
-      expect(loc.href).to.eq('https://engine.vm.openconext.org/?idp=https%3A//example.com/entityId/2');
+      expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https%3A//example.com/entityId/2');
     });
     // Go back to the WAYF
-    cy.visit('https://engine.vm.openconext.org/functional-testing/wayf?connectedIdps=10&displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
+    cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=10&displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
     cy.get('div.preselection header h2')
       .should('contain.text', 'Previously chosen:');
     cy.get('.edit')

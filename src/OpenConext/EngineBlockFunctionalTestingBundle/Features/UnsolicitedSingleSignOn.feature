@@ -4,7 +4,7 @@ Feature:
   I want to be able to initiate a login
 
   Background:
-    Given an EngineBlock instance on "vm.openconext.org"
+    Given an EngineBlock instance on "dev.openconext.local"
       And no registered SPs
       And no registered Idps
       And an Identity Provider named "Dummy IdP"

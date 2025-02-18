@@ -3,7 +3,7 @@ import {attribute6, labelSelector, nokSectionTitleSelector, tooltip3Selector} fr
 
 context('Consent on Skeune theme', () => {
   beforeEach(() => {
-    cy.visit('https://engine.vm.openconext.org/functional-testing/consent');
+    cy.visit('https://engine.dev.openconext.local/functional-testing/consent');
   });
 
   describe('Handles additional attributes correctly', () => {
@@ -34,7 +34,7 @@ context('Consent on Skeune theme', () => {
 
   describe('Shows the right content on load', () => {
     it('Shows the global site notice', () => {
-      cy.visit('https://engine.vm.openconext.org/functional-testing/consent?showGlobalSiteNotice=1');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/consent?showGlobalSiteNotice=1');
       cy.beVisible(siteNoticeSelector);
     });
   });

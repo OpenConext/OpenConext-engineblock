@@ -53,7 +53,7 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
     public function authentication_is_required_for_applying_arps()
     {
         $unauthenticatedClient = static::createClient();
-        $unauthenticatedClient->request('POST', 'https://engine-api.vm.openconext.org/arp');
+        $unauthenticatedClient->request('POST', 'https://engine-api.dev.openconext.local/arp');
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED, $unauthenticatedClient);
     }
 
@@ -73,7 +73,7 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
             'PHP_AUTH_PW' => $this->phpAuthPassword
         ]);
 
-        $client->request($invalidHttpMethod, 'https://engine-api.vm.openconext.org/arp');
+        $client->request($invalidHttpMethod, 'https://engine-api.dev.openconext.local/arp');
         $this->assertStatusCode(Response::HTTP_METHOD_NOT_ALLOWED, $client);
 
         $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
@@ -93,7 +93,7 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
             'PHP_AUTH_PW' => 'no_roles',
         ]);
 
-        $client->request('POST', 'https://engine-api.vm.openconext.org/arp');
+        $client->request('POST', 'https://engine-api.dev.openconext.local/arp');
         $this->assertStatusCode(Response::HTTP_FORBIDDEN, $client);
 
         $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
@@ -118,7 +118,7 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
 
         $client->request(
             'POST',
-            'https://engine-api.vm.openconext.org/arp',
+            'https://engine-api.dev.openconext.local/arp',
             [],
             [],
             [],
@@ -161,7 +161,7 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
 
         $client->request(
             'POST',
-            'https://engine-api.vm.openconext.org/arp',
+            'https://engine-api.dev.openconext.local/arp',
             [],
             [],
             [],
@@ -229,7 +229,7 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
 
         $client->request(
             'POST',
-            'https://engine-api.vm.openconext.org/arp',
+            'https://engine-api.dev.openconext.local/arp',
             [],
             [],
             [],
@@ -304,7 +304,7 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
 
         $client->request(
             'POST',
-            'https://engine-api.vm.openconext.org/arp',
+            'https://engine-api.dev.openconext.local/arp',
             [],
             [],
             [],
@@ -379,7 +379,7 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
 
         $client->request(
             'POST',
-            'https://engine-api.vm.openconext.org/arp',
+            'https://engine-api.dev.openconext.local/arp',
             [],
             [],
             [],
