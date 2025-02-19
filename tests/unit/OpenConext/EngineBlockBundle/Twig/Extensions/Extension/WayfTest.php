@@ -16,14 +16,16 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
+namespace Tests\OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Wayf;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\TranslatorInterface;
+use OpenConext\EngineBlockBundle\Twig\Extensions\Extension\ConnectedIdps;
 
 
 class WayfTest extends TestCase
