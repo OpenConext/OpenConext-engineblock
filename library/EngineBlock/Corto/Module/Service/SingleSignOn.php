@@ -20,8 +20,10 @@ use OpenConext\EngineBlock\Logger\Message\AdditionalInfo;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
+use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlockBundle\Exception\InvalidArgumentException as EngineBlockBundleInvalidArgumentException;
+use OpenConext\EngineBlockBundle\Service\DiscoverySelectionService;
 use SAML2\AuthnRequest;
 use SAML2\Response;
 use SAML2\XML\saml\Issuer;
@@ -49,16 +51,23 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
      */
     private $_serviceProviderFactory;
 
+    /**
+     * @var DiscoverySelectionService
+     */
+    private $discoverySelectionService;
+
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
         Twig_Environment $twig,
-        ServiceProviderFactory $serviceProviderFactory
+        ServiceProviderFactory $serviceProviderFactory,
+        DiscoverySelectionService $discoverySelectionService
     ) {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->twig = $twig;
         $this->_serviceProviderFactory = $serviceProviderFactory;
+        $this->discoverySelectionService = $discoverySelectionService;
     }
 
     public function serve($serviceName, Request $httpRequest)
@@ -513,21 +522,54 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
 
             $name = $this->getName($currentLocale, $identityProvider, $additionalInfo);
 
-            $wayfIdp = array(
-                'Name'   => $name,
-                'Logo'      => $identityProvider->getMdui()->hasLogo() ? $identityProvider->getMdui()->getLogo()->url : '/images/placeholder.png',
-                'Keywords'  => $this->getKeywords($currentLocale, $identityProvider),
-                'Access'    => $isAccessible ? '1' : '0',
-                'ID'        => md5($identityProvider->entityId),
-                'EntityID'  => $identityProvider->entityId,
-                self::IS_DEFAULT_IDP_KEY => $isDefaultIdP
+            $wayfIdp = $this->buildIdp(
+                $name,
+                $identityProvider->getMdui()->hasLogo() ? $identityProvider->getMdui()->getLogo()->url : '/images/placeholder.png',
+                $this->getKeywords($currentLocale, $identityProvider),
+                $identityProvider->entityId,
+                $isAccessible,
+                $isDefaultIdP,
+                null
             );
             $wayfIdps[] = $wayfIdp;
+
+            foreach ($identityProvider->getDiscoveries() as $discovery) {
+                /** @var Discovery $discovery */
+                $wayfIdps[] = $this->buildIdp(
+                    $discovery->getName($currentLocale),
+                    $discovery->hasLogo() ? $discovery->getLogo()->url : '/images/placeholder.png',
+                    $discovery->getKeywordsArray($currentLocale),
+                    $identityProvider->entityId,
+                    $isAccessible,
+                    $isDefaultIdP,
+                    $this->discoverySelectionService->hash($discovery)
+                );
+            }
         }
 
         return $wayfIdps;
     }
 
+    private function buildIdp(
+        ?string $name,
+        string $logo,
+        $keywords,
+        string $entityId,
+        bool $isAccessible,
+        bool $isDefaultIdP,
+        ?string $discoveryHash
+    ): array {
+        return array(
+            'Name' => $name,
+            'Logo' => $logo,
+            'Keywords' => $keywords,
+            'Access' => $isAccessible ? '1' : '0',
+            'ID' => md5($entityId),
+            'EntityID' => $entityId,
+            self::IS_DEFAULT_IDP_KEY => $isDefaultIdP,
+            'DiscoveryHash' => $discoveryHash,
+        );
+    }
     /**
      * @param Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response
      */

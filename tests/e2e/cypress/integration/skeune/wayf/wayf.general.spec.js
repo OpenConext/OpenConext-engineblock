@@ -87,6 +87,14 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
         .should('contain.text', 'Connected IdP 4 en');
     });
 
+    it('Should be able to find IDP by entering keyword for discovery idp', () => {
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf');
+      cy.get(searchFieldSelector).type('royal');
+      cy.get(matchSelector)
+        .should('have.length', 2)
+        .should('contain.text', 'National University of the Netherlands');
+    });
+
     it('Should get the correct weight for an idp with a full match on the title', () => {
       cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=50');
       cy.get(searchFieldSelector).type('Connected Idp 4 en');

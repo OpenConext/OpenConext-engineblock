@@ -22,6 +22,9 @@ use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
 use OpenConext\EngineBlock\Service\SsoSessionService;
 use OpenConext\EngineBlockBridge\ResponseFactory;
+use OpenConext\EngineBlockBundle\Service\DiscoverySelectionService;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Twig_Environment;
@@ -40,6 +43,15 @@ class WayfController
      * @var SsoSessionService
      */
     private $sessionService;
+    /**
+     * @var DiscoverySelectionService
+     */
+    private $discoverySelectionService;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * @param EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton
@@ -49,22 +61,43 @@ class WayfController
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
         Twig_Environment $twig,
-        SsoSessionService $sessionService
+        SsoSessionService $sessionService,
+        DiscoverySelectionService $discoverySelectionService,
+        LoggerInterface $logger
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->twig = $twig;
         $this->sessionService = $sessionService;
+        $this->discoverySelectionService = $discoverySelectionService;
+        $this->logger = $logger;
     }
 
     /**
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
-    public function processWayfAction()
+    public function processWayfAction(Request $request)
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
         $proxyServer->processWayf();
 
-        return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
+        $response = ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
+
+        $session = $request->getSession();
+        if ($session === null) {
+            $this->logger->log(LogLevel::ERROR, 'Could not handle discovery override, no session available!');
+            return $response;
+        }
+
+        if ($request->request->get(DiscoverySelectionService::USED_DISCOVERY_HASH_PARAM, '') !== '') {
+            $this->discoverySelectionService->registerDiscoveryHash(
+                $session,
+                $request->request->get(DiscoverySelectionService::USED_DISCOVERY_HASH_PARAM)
+            );
+        } else {
+            $this->discoverySelectionService->clearDiscoveryHash($session);
+        }
+
+        return $response;
     }
 
     /**

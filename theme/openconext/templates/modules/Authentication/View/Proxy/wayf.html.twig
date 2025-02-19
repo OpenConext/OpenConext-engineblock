@@ -4,7 +4,7 @@
 {% set pageTitle = 'log_in_to'|trans %}
 
 {# Data object containing the formatted IdP's #}
-{% set connectedIdps = connectedIdps(idpList, locale()) %}
+{% set connectedIdps = connectedIdps(idpList) %}
 
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
 {% block pageHeading %}{{ parent() }} - {{ pageTitle }}{% endblock %}

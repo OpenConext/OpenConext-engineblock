@@ -22,6 +22,8 @@ use OpenConext\EngineBlock\Exception\LogicException;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Logo;
+use OpenConext\EngineBlock\Metadata\Discovery;
+use OpenConext\EngineBlockBundle\Service\DiscoverySelectionService;
 use Webmozart\Assert\Assert;
 
 class TestEntitySeeder
@@ -32,12 +34,13 @@ class TestEntitySeeder
      * This is not an array of IdentityProvider value objects, but a derivative that can be used for showing IdPs on
      * the WAYF.
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @param int $numberOfIdps
      * @param int $numberOfUnconnectedIdps
      * @param string $locale
      * @return array[]
      */
-    public static function buildIdps($numberOfIdps, $numberOfUnconnectedIdps, $locale, $defaultIdpEntityId)
+    public static function buildIdps($numberOfIdps, $numberOfUnconnectedIdps, $locale, $defaultIdpEntityId, bool $addDiscoveries)
     {
         Assert::integer($numberOfIdps);
         Assert::integer($numberOfUnconnectedIdps);
@@ -47,6 +50,7 @@ class TestEntitySeeder
             throw new LogicException('The number of IdPs that are to be created should be greater or equal to the number of unconnected IdPs');
         }
 
+        // Discoveries
         $idps = [];
 
         for ($i=1; $i < (int) ($numberOfIdps - $numberOfUnconnectedIdps) + 1; $i++) {
@@ -56,7 +60,29 @@ class TestEntitySeeder
             if ($defaultIdpEntityId === $entityId) {
                 $isDefaultIdp = true;
             }
-            $idps[$entityId] = ['name' => $name, 'enabled' => true, 'isDefaultIdp' => $isDefaultIdp];
+
+            $discoveries = [];
+            if ($addDiscoveries && $i === 1) {
+                $discoveries = [
+                    Discovery::create(
+                        ['en' => 'National University of the Netherlands', 'nl' => 'Rijksuniversiteit der Nederlanden'],
+                        ['en' => 'royal', 'nl' => 'koninklijke'],
+                        new Logo('/images/logo.png')
+                    ),
+                    Discovery::create(
+                        ['en' => 'Foreign embassy of the Republic'],
+                        [],
+                        null
+                    )
+                ];
+            }
+
+            $idps[$entityId] = [
+                'name' => $name,
+                'enabled' => true,
+                'isDefaultIdp' => $isDefaultIdp,
+                'discoveries' => $discoveries,
+            ];
         }
 
         if ($numberOfUnconnectedIdps > 0) {
@@ -67,7 +93,24 @@ class TestEntitySeeder
                 if ($defaultIdpEntityId === $entityId) {
                     $isDefaultIdp = true;
                 }
-                $idps[$entityId] = ['name' => $name, 'enabled' => false, 'isDefaultIdp' => $isDefaultIdp];
+
+                $discoveries = [];
+                if ($addDiscoveries && $i === 1) {
+                    $discoveries = [
+                        Discovery::create(
+                            ['en' => 'Disconnected National University of the Netherlands', 'nl' => 'Disconnected Rijksuniversiteit der Nederlanden'],
+                            ['en' => 'Disconnected royal', 'nl' => 'Disconnected koninklijke'],
+                            new Logo('/images/logo.png')
+                        ),
+                        Discovery::create(
+                            ['en' => 'Disconnected Foreign embassy of the Republic'],
+                            [],
+                            null
+                        )
+                    ];
+                }
+
+                $idps[$entityId] = ['name' => $name, 'enabled' => false, 'isDefaultIdp' => $isDefaultIdp, 'discoveries' => $discoveries];
             }
         }
 
@@ -149,6 +192,7 @@ class TestEntitySeeder
      */
     private static function transformIdpsForWayf(array $idpEntityIds, $currentLocale)
     {
+        $discoveryService = new DiscoverySelectionService();
         $identityProviders = self::findIdentityProvidersByEntityId($idpEntityIds);
 
         $wayfIdps = array();
@@ -161,9 +205,22 @@ class TestEntitySeeder
                 'Access' => ($identityProvider->enabledInWayf) ? '1' : '0',
                 'ID' => md5($identityProvider->entityId),
                 'EntityID' => $identityProvider->entityId,
-                'isDefaultIdp' => $idpEntityIds[$identityProvider->entityId]['isDefaultIdp']
+                'isDefaultIdp' => $idpEntityIds[$identityProvider->entityId]['isDefaultIdp'],
             );
             $wayfIdps[] = $wayfIdp;
+
+            foreach ($identityProvider->getDiscoveries() as $discovery) {
+                $wayfIdps[] = array(
+                    'Name' => $discovery->getName($currentLocale),
+                    'Logo' => $discovery->getLogo() ? $discovery->getLogo()->url : '/images/placeholder.png',
+                    'Keywords' => $discovery->getKeywords('en'),
+                    'Access' => ($identityProvider->enabledInWayf) ? '1' : '0',
+                    'ID' => md5($identityProvider->entityId),
+                    'EntityID' => $identityProvider->entityId,
+                    'isDefaultIdp' => $idpEntityIds[$identityProvider->entityId]['isDefaultIdp'],
+                    'DiscoveryHash' => $discoveryService->hash($discovery),
+                );
+            }
         }
 
         $nameSort = function ($a, $b) {
@@ -176,7 +233,10 @@ class TestEntitySeeder
         return $wayfIdps;
     }
 
-    private static function findIdentityProvidersByEntityId(array $idpEntityIds)
+    /**
+     * @return IdentityProvider[]
+     */
+    private static function findIdentityProvidersByEntityId(array $idpEntityIds): array
     {
         $idps = [];
         foreach ($idpEntityIds as $idpEntityId => $idpData) {
@@ -187,6 +247,7 @@ class TestEntitySeeder
             $idp->namePt = $idpData['name'];
             $idp->keywordsEn = ['Awesome IdP', 'Another keyword', 'Example'];
             $idp->enabledInWayf = $idpData['enabled'];
+            $idp->setDiscoveries($idpData['discoveries'] ?? []);
 
             $idps[] = $idp;
         }

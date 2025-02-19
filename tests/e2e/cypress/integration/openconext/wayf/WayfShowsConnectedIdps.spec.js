@@ -4,7 +4,7 @@ context('WayfMouseBehaviour', () => {
       cy.visit('https://engine.dev.openconext.local/functional-testing/wayf');
 
       // Load the connected IdPs by selecting their h3 titles
-      cy.countIdps(5)
+      cy.countIdps(7)
           .eq(2)
           .should('have.text', 'Connected IdP 3 en');
 
@@ -23,7 +23,7 @@ context('WayfMouseBehaviour', () => {
   });
 
   it('Should show ten connected IdPs', () => {
-      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=10');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=10&addDiscoveries=0');
       cy.countIdps(10);
   });
 
