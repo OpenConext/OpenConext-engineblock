@@ -72,7 +72,7 @@ final class DbalConsentRepository implements ConsentRepository
 
         try {
             $statement = $this->connection->executeQuery($sql, ['hashed_user_id' => sha1($userId)]);
-            $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $rows = $statement->fetchAllAssociative();
         } catch (DBALException $exception) {
             throw new RuntimeException('Could not fetch user consents from the database', 0, $exception);
         }

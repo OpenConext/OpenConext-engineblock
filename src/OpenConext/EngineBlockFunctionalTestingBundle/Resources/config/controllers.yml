@@ -1,4 +1,8 @@
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
     engineblock.functional_test.controller.identity_provider:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\IdentityProviderController
         arguments:

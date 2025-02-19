@@ -126,7 +126,7 @@ class EngineBlock_User
     protected function _getDatabaseConnection()
     {
         $pdo = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getDatabaseConnectionFactory();
-        return $pdo->create();
+        return $pdo->getConnection();
     }
 
     /**

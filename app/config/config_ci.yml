@@ -1,7 +1,13 @@
 imports:
     - { resource: functional_testing.yml }
     - { resource: config_test.yml }
-
+framework:
+    cache:
+        pools:
+            doctrine.result_cache_pool:
+                adapter: cache.adapter.filesystem
+            doctrine.system_cache_pool:
+                adapter: cache.adapter.filesystem
 doctrine:
     dbal:
         default_connection: engineblock_test

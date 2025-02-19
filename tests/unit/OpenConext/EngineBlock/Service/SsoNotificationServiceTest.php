@@ -24,8 +24,8 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
 use Phake;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Tests\Logger;
 
 class SsoNotificationServiceTest extends TestCase
 {
@@ -44,7 +44,7 @@ class SsoNotificationServiceTest extends TestCase
     private $request;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $loggerMock;
 
@@ -65,7 +65,7 @@ class SsoNotificationServiceTest extends TestCase
 
     public function setUp(): void
     {
-        $this->loggerMock = Phake::mock(Logger::class);
+        $this->loggerMock = Phake::mock(LoggerInterface::class);
         $this->proxyServerMock = Phake::mock(EngineBlock_Corto_ProxyServer::class);
         $this->requestMock = Phake::mock(EngineBlock_Saml2_AuthnRequestAnnotationDecorator::class);
         $this->ssoNotificationService = new SsoNotificationService(

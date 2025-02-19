@@ -22,6 +22,7 @@ use EngineBlock_ApplicationSingleton;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiHttpException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig_Environment;
@@ -61,9 +62,9 @@ class NotFoundHttpExceptionListener
         $this->logger = $logger;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event)
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
         if (!$exception instanceof NotFoundHttpException) {
             return;
         }

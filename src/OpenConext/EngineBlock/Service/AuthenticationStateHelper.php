@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlock\Service;
 
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationStateInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class AuthenticationStateHelper implements AuthenticationStateHelperInterface
@@ -28,9 +29,9 @@ class AuthenticationStateHelper implements AuthenticationStateHelperInterface
      */
     private $session;
 
-    public function __construct(SessionInterface $session)
+    public function __construct(RequestStack $requestStack)
     {
-        $this->session = $session;
+        $this->session = $requestStack->getSession();
     }
 
     /**

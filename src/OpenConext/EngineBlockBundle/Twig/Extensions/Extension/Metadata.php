@@ -21,7 +21,7 @@ namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 use EngineBlock_Attributes_Metadata;
 use OpenConext\Value\Saml\NameIdFormat;
 use SAML2\XML\saml\NameID;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\TwigFunction;
 use Twig_Extension;
 

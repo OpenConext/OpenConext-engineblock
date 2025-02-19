@@ -1,0 +1,33 @@
+name: Run QA tests (static analysis, lint and unit tests)
+on: [pull_request]
+
+jobs:
+  run-qa-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: chown some dirs
+        run: |
+          mkdir tmp vendor && sudo chown -R  33 app/ theme/ web/ tmp/ vendor/
+
+      - name: Start the containers
+        run: cd docker && docker compose up -d
+
+      - name: Run composer and yarn install
+        run: |
+          cd docker &&
+          docker compose exec -T web.vm.openconext.org bash -c '
+            SYMFONY_ENV=ci composer install --prefer-dist -n -o --ignore-platform-reqs && \
+            ./app/console cache:clear --env=ci && \
+            chown -R www-data /var/www/html/app/cache && \
+            chown -R www-data /var/www/html/app/logs && \
+            cd theme && CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile && EB_THEME=skeune yarn build
+          '
+
+      - name: Run test curl
+        run: |
+          cd docker &&
+          docker compose exec web.vm.openconext.org bash -c 'curl -k https://engine.vm.openconext.org/info'

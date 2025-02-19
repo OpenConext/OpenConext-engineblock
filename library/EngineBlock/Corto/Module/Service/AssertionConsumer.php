@@ -143,7 +143,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         }
 
         if ($receivedRequest->isDebugRequest()) {
-            $_SESSION['debugIdpResponse'] = $receivedResponse;
+            $_SESSION['debugIdpResponse'] = serialize($receivedResponse);
             $requestId = $receivedResponse->getInResponseTo();
 
             // Authentication state needs to be registered here as the debug flow differs from the regular flow,

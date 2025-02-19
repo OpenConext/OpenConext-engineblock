@@ -47,7 +47,7 @@ use SAML2\DOMDocumentFactory;
 use SAML2\XML\md\EntitiesDescriptor;
 use SAML2\XML\md\EntityDescriptor;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 class MetadataRendererTest extends TestCase

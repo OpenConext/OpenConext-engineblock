@@ -17,6 +17,7 @@
  */
 
 use SAML2\Assertion;
+use SAML2\DOMDocumentFactory;
 use SAML2\EncryptedAssertion;
 use SAML2\Response;
 use SAML2\XML\saml\NameID;
@@ -28,7 +29,7 @@ use SAML2\XML\saml\NameID;
  * @method void setAssertions(array)
  * @method void setIssuer(string)
  */
-class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_MessageAnnotationDecorator
+class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_MessageAnnotationDecorator implements Serializable
 {
     /**
      * @var Response
@@ -83,11 +84,11 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     protected $isTransparentErrorResponse = false;
 
     /**
-     * @param Response $response
+     * @param Response $sspMessage
      */
-    function __construct(Response $response)
+    function __construct(Response $sspMessage)
     {
-        $this->sspMessage = $response;
+        $this->sspMessage = $sspMessage;
     }
 
     /**
@@ -307,5 +308,64 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     public function setIsTransparentErrorResponse(bool $isTransparentErrorResponse): void
     {
         $this->isTransparentErrorResponse = $isTransparentErrorResponse;
+    }
+
+    public function getSspMessage(): Response
+    {
+        return $this->sspMessage;
+    }
+
+    public function setSspMessage(Response $sspMessage): void
+    {
+        $this->sspMessage = $sspMessage;
+    }
+
+    /**
+     * Since php 8 serialisation of the DOMDocument is no longer supported. This means that the sspMessage (AuthnRequest)
+     * is no longer serializable. However since the AuthnRequest is a xml request converted to a php object we can save
+     * the object by converted it back to its XML message, save it in cache and rebuild the object.
+     *
+     * Do note that any newly added fields to the decorator class (this class) will have to be added to the data array
+     * to be saved in session storage.
+     */
+    public function serialize()
+    {
+        $requestXML = $this->sspMessage->toUnsignedXML();
+        $requestStringXML = $requestXML->ownerDocument->saveXML();
+        $data = array(
+            "sspMessage" => $requestStringXML,
+            "return" => $this->return,
+            "originalIssuer" => $this->originalIssuer,
+            "originalNameId" => $this->originalNameId,
+            "originalBinding" => $this->originalBinding,
+            "originalResponse" => $this->originalResponse,
+            "collabPersonId" => $this->collabPersonId,
+            "customNameId" => $this->customNameId,
+            "intendedNameId" => $this->intendedNameId,
+            "pdpRequestedLoas" => $this->pdpRequestedLoas,
+            "isTransparentErrorResponse" => $this->isTransparentErrorResponse,
+
+            "deliverByBinding" => $this->deliverByBinding, // from extended wrapper
+        );
+        return serialize($data);
+    }
+
+    public function unserialize(string $data)
+    {
+        $data = unserialize($data);
+        $dom = DOMDocumentFactory::fromString($data['sspMessage']);
+        $this->sspMessage = new Response($dom->firstChild);
+        $this->return = $data['return'];
+        $this->originalIssuer = $data['originalIssuer'];
+        $this->originalNameId = $data['originalNameId'];
+        $this->originalBinding = $data['originalBinding'];
+        $this->originalResponse = $data['originalResponse'];
+        $this->collabPersonId = $data['collabPersonId'];
+        $this->customNameId = $data['customNameId'];
+        $this->intendedNameId = $data['intendedNameId'];
+        $this->pdpRequestedLoas = $data['pdpRequestedLoas'];
+        $this->isTransparentErrorResponse = $data['isTransparentErrorResponse'];
+
+        $this->deliverByBinding = $data['deliverByBinding'];
     }
 }

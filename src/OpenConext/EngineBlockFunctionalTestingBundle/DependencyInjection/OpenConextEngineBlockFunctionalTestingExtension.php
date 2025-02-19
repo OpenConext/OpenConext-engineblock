@@ -29,6 +29,7 @@ class OpenConextEngineBlockFunctionalTestingExtension extends Extension
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        $loader->load('services_test.yml');
         $loader->load('mocks.yml');
         $loader->load('controllers.yml');
     }

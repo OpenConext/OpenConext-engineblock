@@ -16,10 +16,11 @@
  * limitations under the License.
  */
 
-define('TEST_RESOURCES_DIR', dirname(__FILE__) . '/resources');
+class EngineBlock_Corto_Module_Services_Exception extends EngineBlock_Corto_ProxyServer_Exception
+{
+    public function __construct($message, $severity = self::CODE_NOTICE, Exception $previous = null)
+    {
+        parent::__construct($message, $severity, $previous);
+    }
 
-require_once realpath(__DIR__) . '/../app/autoload.php';
-require_once realpath(__DIR__) . '/../app/AppKernel.php';
-
-$kernel = new AppKernel('test', true);
-$kernel->boot();
+}

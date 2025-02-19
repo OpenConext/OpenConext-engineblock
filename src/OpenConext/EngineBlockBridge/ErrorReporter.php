@@ -24,6 +24,7 @@ use EngineBlock_Corto_Exception_HasFeedbackInfoInterface;
 use EngineBlock_Exception;
 use Exception;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class ErrorReporter
@@ -44,11 +45,11 @@ class ErrorReporter
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
         LoggerInterface $logger,
-        SessionInterface $session
+        RequestStack $requestStack
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->logger = $logger;
-        $this->session = $session;
+        $this->session = $requestStack->getSession();
     }
 
     /**

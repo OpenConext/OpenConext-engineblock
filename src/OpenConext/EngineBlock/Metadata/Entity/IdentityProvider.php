@@ -76,7 +76,7 @@ class IdentityProvider extends AbstractRole
     /**
      * @var ConsentSettings
      *
-     * @ORM\Column(name="consent_settings", type="json_array", length=16777215)
+     * @ORM\Column(name="consent_settings", type="json", length=16777215)
      */
     private $consentSettings;
 

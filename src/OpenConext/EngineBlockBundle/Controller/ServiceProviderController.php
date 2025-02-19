@@ -23,7 +23,6 @@ use EngineBlock_Corto_Adapter;
 use OpenConext\EngineBlock\Validator\RequestValidator;
 use OpenConext\EngineBlockBridge\ResponseFactory;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 class ServiceProviderController implements AuthenticationLoopThrottlingController
 {
@@ -31,11 +30,6 @@ class ServiceProviderController implements AuthenticationLoopThrottlingControlle
      * @var EngineBlock_ApplicationSingleton
      */
     private $engineBlockApplicationSingleton;
-
-    /**
-     * @var Session
-     */
-    private $session;
 
     /**
      * @var RequestValidator
@@ -54,13 +48,11 @@ class ServiceProviderController implements AuthenticationLoopThrottlingControlle
 
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        Session $session,
         RequestValidator $requestValidator,
         RequestValidator $bindingValidator,
         RequestValidator $samlResponseValidator
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
-        $this->session                         = $session;
         $this->requestValidator = $requestValidator;
         $this->bindingValidator = $bindingValidator;
         $this->responseValidator = $samlResponseValidator;

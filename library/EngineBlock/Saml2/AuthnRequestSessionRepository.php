@@ -64,7 +64,8 @@ class EngineBlock_Saml2_AuthnRequestSessionRepository
             return null;
         }
 
-        return $this->requestStorage[$requestId];
+        $serializedRequest = $this->requestStorage[$requestId];
+        return unserialize($serializedRequest);
     }
 
     /**
@@ -90,7 +91,7 @@ class EngineBlock_Saml2_AuthnRequestSessionRepository
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $spRequest
     ) {
         // Store the original Request
-        $this->requestStorage[$spRequest->getId()] = $spRequest;
+        $this->requestStorage[$spRequest->getId()] = serialize($spRequest);
         return $this;
     }
 
