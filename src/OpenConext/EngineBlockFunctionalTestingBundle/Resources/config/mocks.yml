@@ -8,10 +8,12 @@ services:
         arguments: ['@router']
 
     engineblock.mock_entities.idp_registry:
+        public: true
         class: OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry
         arguments: ['@engineblock.mock_entities.data_store.mock_idps']
 
     engineblock.mock_entities.sp_registry:
+        public: true
         class: OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry
         arguments: ['@engineblock.mock_entities.data_store.mock_sps']
 

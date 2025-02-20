@@ -9,7 +9,11 @@ parameters:
     engineblock.functional_testing.translator_mock_data_store.file:           "/tmp/eb-fixtures/translator_mock.json"
 
 services:
+    _defaults:
+        public: true
+
     engineblock.functional_testing.service.engine_block:
+        public: true
         class: OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock
         arguments:
             - '%engineblock_url%'
@@ -21,23 +25,27 @@ services:
 
     #region Fixtures
     engineblock.functional_testing.fixture.service_registry:
+        public: true
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture
         arguments:
             - '@engineblock.metadata.repository.doctrine'
             - '@engineblock.compat.doctrine.entity_manager'
 
     engineblock.functional_testing.fixture.features:
+        public: true
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration
         arguments:
             - '@engineblock.features'
             - '@engineblock.functional_testing.data_store.features'
 
     engineblock.functional_testing.fixture.pdp_client:
+        public: true
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingPdpClient
         arguments:
             - '@engineblock.function_testing.data_store.pdp_client'
 
     engineblock.functional_testing.fixture.authentication_loop_guard:
+        public: true
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard
         arguments:
             - '@engineblock.authentication.authentication_loop_guard'

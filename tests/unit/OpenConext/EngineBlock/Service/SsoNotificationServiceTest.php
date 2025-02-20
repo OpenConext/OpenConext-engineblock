@@ -20,12 +20,12 @@ namespace OpenConext\EngineBlock\Service;
 
 use EngineBlock_Corto_ProxyServer;
 use EngineBlock_Saml2_AuthnRequestAnnotationDecorator;
+use Monolog\Logger;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
 use Phake;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Tests\Logger;
 
 class SsoNotificationServiceTest extends TestCase
 {

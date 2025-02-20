@@ -18,10 +18,10 @@
 
 namespace OpenConext\EngineBlock\Service;
 
+use Monolog\Logger;
 use Phake;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\HttpKernel\Tests\Logger;
 
 class SsoSessionServiceTest extends TestCase
 {
