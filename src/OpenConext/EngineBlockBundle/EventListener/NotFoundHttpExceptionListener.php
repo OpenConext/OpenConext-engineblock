@@ -61,9 +61,9 @@ class NotFoundHttpExceptionListener
         $this->logger = $logger;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(\Symfony\Component\HttpKernel\Event\ExceptionEvent $event)
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
         if (!$exception instanceof NotFoundHttpException) {
             return;
         }

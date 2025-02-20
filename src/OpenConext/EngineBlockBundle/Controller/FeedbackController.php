@@ -35,7 +35,7 @@ use Twig_Environment;
 class FeedbackController
 {
     /**
-     * @var TranslatorInterface
+     * @var \Symfony\Contracts\Translation\TranslatorInterface
      */
     private $translator;
 
@@ -50,7 +50,7 @@ class FeedbackController
     private $logger;
 
     public function __construct(
-        TranslatorInterface $translator,
+        \Symfony\Contracts\Translation\TranslatorInterface $translator,
         Twig_Environment $twig,
         LoggerInterface $logger
     ) {

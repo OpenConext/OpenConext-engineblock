@@ -16,6 +16,18 @@
  * limitations under the License.
  */
 
+namespace Tests\library\EngineBlock\Test\Corto\Module\Service;
+
+use EngineBlock_ApplicationSingleton;
+use EngineBlock_Corto_Model_Consent;
+use EngineBlock_Corto_Model_Consent_Factory;
+use EngineBlock_Corto_Module_Bindings;
+use EngineBlock_Corto_Module_Service_ProvideConsent;
+use EngineBlock_Corto_ProxyServer;
+use EngineBlock_Corto_XmlToArray;
+use EngineBlock_Saml2_AuthnRequestAnnotationDecorator;
+use EngineBlock_Saml2_AuthnRequestSessionRepository;
+use EngineBlock_Saml2_ResponseAnnotationDecorator;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
@@ -23,12 +35,15 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
+use OpenConext\EngineBlock\Service\ConsentService;
 use OpenConext\EngineBlock\Service\ConsentServiceInterface;
 use OpenConext\EngineBlock\Service\Dto\ProcessingStateStep;
 use OpenConext\EngineBlock\Service\ProcessingStateHelper;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationStateInterface;
+use Phake;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Response;
@@ -37,6 +52,7 @@ use SAML2\XML\saml\NameID;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Twig_Environment;
 
 class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
 {
@@ -204,7 +220,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
         $ebRequest->setId('EBREQUEST');
         $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($ebRequest);
 
-        $dummyLog = new Psr\Log\NullLogger();
+        $dummyLog = new NullLogger();
         $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($dummyLog);
         $authnRequestRepository->store($spRequest);
         $authnRequestRepository->store($ebRequest);

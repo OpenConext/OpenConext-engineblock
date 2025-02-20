@@ -28,7 +28,7 @@ class ErrorFeedbackConfigurationTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     /**
-     * @var TranslatorInterface|m\MockInterface
+     * @var \Symfony\Contracts\Translation\TranslatorInterface|m\MockInterface
      */
     private $translator;
 
@@ -36,7 +36,7 @@ class ErrorFeedbackConfigurationTest extends TestCase
     {
         parent::setUp();
 
-        $this->translator = m::mock(TranslatorInterface::class);
+        $this->translator = m::mock(\Symfony\Contracts\Translation\TranslatorInterface::class);
     }
 
     /**

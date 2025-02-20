@@ -29,10 +29,10 @@ use Twig_Environment;
  * @package OpenConext\EngineBlockFunctionalTestingBundle\Controllers
  * @SuppressWarnings("PMD")
  */
-class FeedbackController extends Controller
+class FeedbackController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
     /**
-     * @var TranslatorInterface
+     * @var \Symfony\Contracts\Translation\TranslatorInterface
      */
     private $translator;
 
@@ -47,7 +47,7 @@ class FeedbackController extends Controller
     private $logger;
 
     public function __construct(
-        TranslatorInterface $translator,
+        \Symfony\Contracts\Translation\TranslatorInterface $translator,
         Twig_Environment $twig,
         LoggerInterface $logger
     ) {

@@ -96,13 +96,13 @@ class RedirectToFeedbackPageExceptionListener
     }
 
     /**
-     * @param GetResponseForExceptionEvent $event
+     * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength) - See comment in class doc block
      */
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(\Symfony\Component\HttpKernel\Event\ExceptionEvent $event)
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
 
         $redirectParams = [];
         if ($exception instanceof EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException) {

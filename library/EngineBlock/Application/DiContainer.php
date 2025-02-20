@@ -330,7 +330,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return \Symfony\Component\Translation\TranslatorInterface
+     * @return \Symfony\Contracts\Translation\TranslatorInterface
      */
     public function getTranslator()
     {

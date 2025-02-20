@@ -67,9 +67,9 @@ final class ExecutionTimePaddingListener
         $this->minimumExecutionTime = $minimumExecutionTime;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(\Symfony\Component\HttpKernel\Event\ExceptionEvent $event)
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
 
         if (!$exception instanceof AddExecutionTimePadding) {
             return;

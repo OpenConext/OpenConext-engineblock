@@ -27,8 +27,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Dump the contents of the (fake) Service Registry
  */
-class DumpServiceRegistryCommand extends ContainerAwareCommand
+class DumpServiceRegistryCommand extends \Symfony\Component\Console\Command\Command
 {
+    /**
+     * @var \OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\SerializedDataStore
+     */
+    private $serializedDataStore;
+    public function __construct(\OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\SerializedDataStore $serializedDataStore)
+    {
+        $this->serializedDataStore = $serializedDataStore;
+    }
     protected function configure()
     {
         $this
@@ -38,10 +46,10 @@ class DumpServiceRegistryCommand extends ContainerAwareCommand
             ->addArgument('file', InputArgument::OPTIONAL, 'File to get sessions from.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var JsonDataStore $jsonDataStore */
-        $jsonDataStore = $this->getContainer()->get('engineblock.functional_testing.data_store.service_registry');
+        $jsonDataStore = $this->serializedDataStore;
         $output->write(print_r($jsonDataStore->load(), true));
         return 0;
     }

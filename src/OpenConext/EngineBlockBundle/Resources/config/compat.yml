@@ -1,4 +1,7 @@
 services:
+    _defaults:
+        public: true
+
     engineblock.compat.application:
         class: EngineBlock_ApplicationSingleton
         factory:  [EngineBlock_ApplicationSingleton, getInstance]

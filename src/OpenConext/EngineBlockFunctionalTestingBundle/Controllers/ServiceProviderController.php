@@ -38,7 +38,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  * @package OpenConext\EngineBlockFunctionalTestingBundle\Controllers
  * @SuppressWarnings("PMD")
  */
-class ServiceProviderController extends Controller
+class ServiceProviderController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
     /**
      * @var EntityRegistry

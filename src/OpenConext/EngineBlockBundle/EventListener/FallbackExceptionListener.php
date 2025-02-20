@@ -66,9 +66,9 @@ class FallbackExceptionListener
         $this->urlGenerator = $urlGenerator;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(\Symfony\Component\HttpKernel\Event\ExceptionEvent $event)
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
 
         $this->logger->debug(sprintf(
             'Caught Exception "%s":"%s"',

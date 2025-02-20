@@ -22,7 +22,7 @@ use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDat
 use Symfony\Component\Translation\DataCollectorTranslator;
 use Symfony\Component\Translation\TranslatorInterface;
 
-final class MockTranslator implements TranslatorInterface
+final class MockTranslator implements \Symfony\Contracts\Translation\TranslatorInterface
 {
     /**
      * @var DataCollectorTranslator

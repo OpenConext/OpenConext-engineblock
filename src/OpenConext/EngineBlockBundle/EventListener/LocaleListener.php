@@ -45,7 +45,7 @@ final class LocaleListener
         $this->cookieFactory = $cookieFactory;
     }
 
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(\Symfony\Component\HttpKernel\Event\RequestEvent $event)
     {
         $request = $event->getRequest();
 
@@ -54,7 +54,7 @@ final class LocaleListener
         $request->setLocale($this->localeProvider->getLocale());
     }
 
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(\Symfony\Component\HttpKernel\Event\ResponseEvent $event)
     {
         $cookie = $this->cookieFactory->createCookie($this->localeProvider->getLocale());
         $event->getResponse()->headers->setCookie($cookie);

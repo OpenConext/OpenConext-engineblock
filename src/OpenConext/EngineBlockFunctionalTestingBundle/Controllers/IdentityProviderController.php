@@ -35,7 +35,7 @@ use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Compat\Container;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) just does a lot of manual lifting :(
  */
-class IdentityProviderController extends Controller
+class IdentityProviderController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
     /**
      * @var EntityRegistry

@@ -29,7 +29,7 @@ use Twig_Environment;
  * @package OpenConext\EngineBlockFunctionalTestingBundle\Controllers
  * @SuppressWarnings("PMD")
  */
-class WayfController extends Controller
+class WayfController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
     private $twig;
 

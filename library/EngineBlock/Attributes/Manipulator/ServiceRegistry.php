@@ -98,7 +98,7 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
                     $idpMetadata,
                     $spMetadata,
                     $requestObj
-            ) {
+            ): void {
                 eval($manipulationCode);
             },
             // Should an error occur, log the input, if nothing happens, then don't
@@ -113,7 +113,7 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
                     $responseObj,
                     $idpMetadata,
                     $spMetadata
-            ) {
+            ): void {
                 EngineBlock_ApplicationSingleton::getLog()->error(
                     'An error occurred while running service registry manipulation code',
                     array(

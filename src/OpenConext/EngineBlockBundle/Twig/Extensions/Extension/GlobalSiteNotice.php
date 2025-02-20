@@ -35,14 +35,14 @@ class GlobalSiteNotice extends Twig_Extension
     private $allowedHtml;
 
     /**
-     * @var TranslatorInterface
+     * @var \Symfony\Contracts\Translation\TranslatorInterface
      */
     private $translator;
 
     public function __construct(
         bool $shouldDisplayGlobalSiteNotice,
         string $allowedHtml,
-        TranslatorInterface $translator
+        \Symfony\Contracts\Translation\TranslatorInterface $translator
     ) {
         $this->shouldDisplayGlobalSiteNotice = $shouldDisplayGlobalSiteNotice;
         $this->allowedHtml = $allowedHtml;

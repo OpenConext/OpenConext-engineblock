@@ -31,7 +31,7 @@ class Wayf extends Twig_Extension
 
 
     /**
-     * @var TranslatorInterface
+     * @var \Symfony\Contracts\Translation\TranslatorInterface
      */
     private $translator;
 
@@ -40,7 +40,7 @@ class Wayf extends Twig_Extension
      */
     private $previousSelection;
 
-    public function __construct(RequestStack $requestStack, TranslatorInterface $translator)
+    public function __construct(RequestStack $requestStack, \Symfony\Contracts\Translation\TranslatorInterface $translator)
     {
         $this->previousSelection = $this->loadPreviousSelectionFromCookie($requestStack);
         $this->translator = $translator;

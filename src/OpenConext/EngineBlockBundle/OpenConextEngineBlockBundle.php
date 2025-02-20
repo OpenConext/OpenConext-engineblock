@@ -19,10 +19,13 @@
 namespace OpenConext\EngineBlockBundle;
 
 use EngineBlock_ApplicationSingleton;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class OpenConextEngineBlockBundle extends Bundle
 {
+    use ContainerAwareTrait;
+
     public function boot()
     {
         $engineBlockApplicationSingleton = EngineBlock_ApplicationSingleton::getInstance();

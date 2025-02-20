@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Twig_Environment;
 
-class StepupMockController extends Controller
+class StepupMockController extends \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 {
     /**
      * @var MockStepupGateway

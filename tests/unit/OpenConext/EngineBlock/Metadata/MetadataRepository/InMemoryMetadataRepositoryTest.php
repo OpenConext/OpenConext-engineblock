@@ -135,7 +135,7 @@ class MetadataRepositoryTest extends TestCase
             'OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface'
         );
         $visitor->shouldReceive('visitIdentityProvider')->andReturnUsing(
-            function (IdentityProvider $idp) {
+            function (IdentityProvider $idp): void {
                 $idp->nameEn = 'MOCKED';
             }
         );

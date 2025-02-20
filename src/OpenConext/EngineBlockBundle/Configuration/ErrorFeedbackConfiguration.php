@@ -26,14 +26,14 @@ class ErrorFeedbackConfiguration implements ErrorFeedbackConfigurationInterface
     private $idpContactTranslationPrefix = 'error_feedback_idp_contact_label_small_';
 
     /**
-     * @var TranslatorInterface
+     * @var \Symfony\Contracts\Translation\TranslatorInterface
      */
     private $translator;
 
     /**
-     * @param TranslatorInterface $translator
+     * @param \Symfony\Contracts\Translation\TranslatorInterface $translator
      */
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(\Symfony\Contracts\Translation\TranslatorInterface $translator)
     {
         $this->translator = $translator;
     }

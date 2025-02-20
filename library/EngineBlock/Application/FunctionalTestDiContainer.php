@@ -25,6 +25,24 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Application_DiContainer
 {
+    /**
+     * @var \OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration
+     */
+    private $functionalTestingFeatureConfiguration;
+    /**
+     * @var \OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard
+     */
+    private $functionalTestingAuthenticationLoopGuard;
+    /**
+     * @var \OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient
+     */
+    private $functionalTestingAttributeAggregationClient;
+    public function __construct(\OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration $functionalTestingFeatureConfiguration, \OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard $functionalTestingAuthenticationLoopGuard, \OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient $functionalTestingAttributeAggregationClient)
+    {
+        $this->functionalTestingFeatureConfiguration = $functionalTestingFeatureConfiguration;
+        $this->functionalTestingAuthenticationLoopGuard = $functionalTestingAuthenticationLoopGuard;
+        $this->functionalTestingAttributeAggregationClient = $functionalTestingAttributeAggregationClient;
+    }
     public function getUserDirectory()
     {
         return new FakeUserDirectory(new Filesystem());
@@ -32,12 +50,12 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
 
     public function getFeatureConfiguration()
     {
-        return $this->getSymfonyContainer()->get('engineblock.functional_testing.fixture.features');
+        return $this->functionalTestingFeatureConfiguration;
     }
 
     public function getAuthenticationLoopGuard()
     {
-        return $this->getSymfonyContainer()->get('engineblock.functional_testing.fixture.authentication_loop_guard');
+        return $this->functionalTestingAuthenticationLoopGuard;
     }
 
     public function getPdpClient()
@@ -55,7 +73,7 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
      */
     public function getAttributeAggregationClient()
     {
-        return $this->getSymfonyContainer()->get('engineblock.functional_testing.fixture.attribute_aggregation_client');
+        return $this->functionalTestingAttributeAggregationClient;
     }
 
     public function getAuthnContextClassRefBlacklistRegex()
