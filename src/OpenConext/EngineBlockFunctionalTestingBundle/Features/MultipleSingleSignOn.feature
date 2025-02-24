@@ -1,4 +1,4 @@
-@selenium
+@functional
 Feature:
     In order to offer a stable and user friendly service
     As EngineBlock
@@ -11,10 +11,10 @@ Feature:
         And an Identity Provider named "SSO-IdP"
         And a Service Provider named "SSO-SP"
         And a Service Provider named "SSO-Two"
-        And I open 2 browser tabs identified by "Browser tab 1, Browser tab 2"
 
     Scenario: Two solicited authentication requests sequential
-       When I switch to "Browser tab 1"
+      When I open 2 browser tabs identified by "Browser tab 1, Browser tab 2"
+        And I switch to "Browser tab 1"
         And I log in at "SSO-SP"
         And I pass through the SP
         And I give my consent
@@ -26,7 +26,8 @@ Feature:
        Then the url should match "functional-testing/SSO-Two/acs"
 
     Scenario: Two solicited authentication requests mixed
-       When I switch to "Browser tab 1"
+      When I open 2 browser tabs identified by "Browser tab 1, Browser tab 2"
+        And I switch to "Browser tab 1"
         And I log in at "SSO-SP"
         And I pass through the SP
         And I switch to "Browser tab 2"
@@ -39,7 +40,8 @@ Feature:
        Then the url should match "functional-testing/SSO-SP/acs"
 
     Scenario: One solicited and one unsolicited authentication requests
-       When I switch to "Browser tab 1"
+       When I open 2 browser tabs identified by "Browser tab 1, Browser tab 2"
+        And I switch to "Browser tab 1"
         And I log in at "SSO-SP"
         And I pass through the SP
         And I switch to "Browser tab 2"

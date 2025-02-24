@@ -1,0 +1,30 @@
+# Test service DI container overwrites (used for test and ci envs)
+services:
+    engineblock.features:
+        class: OpenConext\EngineBlockBundle\Configuration\TestFeatureConfiguration
+        public: true
+
+    engineblock.twig.extension.global_site_notice:
+        class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\FunctionalTestingGlobalSiteNotice
+        arguments:
+            - "@request_stack"
+            - "%global.site_notice.allowed.tags%"
+        tags:
+            - { name: 'twig.extension' }
+
+web_profiler:
+    toolbar: false
+    intercept_redirects: false
+
+
+security:
+    providers:
+        in_memory:
+            memory:
+                users:
+                    no_roles:
+                        password: no_roles
+                        roles: []
+
+
+

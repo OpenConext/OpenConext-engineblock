@@ -19,17 +19,17 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Controllers;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Translation\TranslatorInterface;
-use Twig_Environment;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
 /**
  * @package OpenConext\EngineBlockFunctionalTestingBundle\Controllers
  * @SuppressWarnings("PMD")
  */
-class FeedbackController extends Controller
+class FeedbackController extends AbstractController
 {
     /**
      * @var TranslatorInterface
@@ -37,7 +37,7 @@ class FeedbackController extends Controller
     private $translator;
 
     /**
-     * @var Twig_Environment
+     * @var Environment
      */
     private $twig;
 
@@ -48,7 +48,7 @@ class FeedbackController extends Controller
 
     public function __construct(
         TranslatorInterface $translator,
-        Twig_Environment $twig,
+        Environment $twig,
         LoggerInterface $logger
     ) {
         $this->translator = $translator;

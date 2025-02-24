@@ -1,9 +1,9 @@
 {% extends '@themeLayouts/scripts/default.html.twig' %}
 {% import "@themeLayouts/scripts/language-switcher.html.twig" as languageSwitcher %}
 
-{% block stylesheets %}{% spaceless %}
+{% block stylesheets %}{% apply spaceless %}
     <link href="/stylesheets/error-page.css?v={{ assetsVersion }}" rel="stylesheet">
-{% endspaceless %}{% endblock %}
+{% endapply %}{% endblock %}
 
 {% set feedbackInfoMap = feedbackInfo().data %}
 {% set hideHeader = true %}
@@ -69,7 +69,7 @@
                 <p>{{ 'error_help_desc'|trans }}</p>
 
             </div>
-            {% spaceless %}{% include "@theme/Default/View/Error/partial/footer.html.twig" %}{% endspaceless %}
+            {% apply spaceless %}{% include "@theme/Default/View/Error/partial/footer.html.twig" %}{% endapply %}
         </div>
     </div>
 

@@ -49,6 +49,7 @@ use SAML2\XML\md\EntityDescriptor;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 class MetadataRendererTest extends TestCase
 {
@@ -314,7 +315,7 @@ class MetadataRendererTest extends TestCase
         $samlIdGenerator->method('generate')
             ->willReturn('EB_metadata');
 
-        $twigLoader = new \Twig_Loader_Filesystem();
+        $twigLoader = new FilesystemLoader();
         $twigLoader->addPath($basePath . '/theme/openconext/templates/modules', 'theme');
         $environment = new Environment($twigLoader);
 

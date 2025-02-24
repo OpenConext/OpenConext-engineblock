@@ -20,8 +20,8 @@ namespace OpenConext\EngineBlock\Service;
 
 use Phake;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\HttpKernel\Tests\Logger;
 
 class SsoSessionServiceTest extends TestCase
 {

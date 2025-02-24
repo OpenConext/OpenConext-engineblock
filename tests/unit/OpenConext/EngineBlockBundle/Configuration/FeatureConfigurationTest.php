@@ -36,8 +36,8 @@ class FeatureConfigurationTest extends TestCase
     public function all_features_must_be_an_instance_of_feature()
     {
         $features = [
-            'some.feature' => new Feature('some.feature', true),
-            'other.feature' => new Feature('other.feature', false),
+            'some.feature' => true,
+            'other.feature' => false,
             'foo' => new stdClass()
         ];
 
@@ -54,8 +54,8 @@ class FeatureConfigurationTest extends TestCase
     public function all_features_must_have_a_string_key()
     {
         $features = [
-            'some.feature'  => new Feature('some.feature', true),
-            1 => new Feature('other.feature', false),
+            'some.feature'  => true,
+            1 => false,
         ];
 
         $this->expectException(InvalidArgumentException::class);
@@ -71,8 +71,8 @@ class FeatureConfigurationTest extends TestCase
     public function a_feature_can_be_queried_for_presence()
     {
         $features = [
-            'some.feature'  => new Feature('some.feature', true),
-            'other.feature' => new Feature('other.feature', false)
+            'some.feature'  => true,
+            'other.feature' => false
         ];
 
         $featureConfiguration = new FeatureConfiguration($features);
@@ -90,8 +90,8 @@ class FeatureConfigurationTest extends TestCase
     public function a_feature_is_correctly_reported_to_be_enabled()
     {
         $features = [
-            'some.feature'  => new Feature('some.feature', true),
-            'disabled.feature' => new Feature('disabled.feature', false)
+            'some.feature'  => true,
+            'disabled.feature' => false
         ];
 
         $featureConfiguration = new FeatureConfiguration($features);
@@ -108,8 +108,8 @@ class FeatureConfigurationTest extends TestCase
     public function querying_whether_a_not_configured_feature_is_enabled_causes_an_exception_to_be_thrown()
     {
         $features = [
-            'some.feature'  => new Feature('some.feature', true),
-            'other.feature' => new Feature('other.feature', false)
+            'some.feature'  => true,
+            'other.feature' => false
         ];
 
         $featureConfiguration = new FeatureConfiguration($features);

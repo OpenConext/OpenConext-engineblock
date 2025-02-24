@@ -18,9 +18,8 @@
 
 define('TEST_RESOURCES_DIR', dirname(__FILE__) . '/resources');
 
-require_once realpath(__DIR__) . '/../app/autoload.php';
-require_once realpath(__DIR__) . '/../app/AppKernel.php';
+require_once realpath(__DIR__) . '/../vendor/autoload.php';
+require_once realpath(__DIR__) . '/../src/Kernel.php';
 
-$kernel = new AppKernel('test', true);
-$kernel->loadClassCache();
+$kernel = new \App\Kernel('test', true);
 $kernel->boot();

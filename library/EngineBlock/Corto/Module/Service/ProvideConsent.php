@@ -180,7 +180,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         }
 
         $settings = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
-        // Profile url is configurable in parameters.yml (profile_base_url)
+        // Profile url is configurable in parameters.yaml (profile_base_url)
         $profileUrl = '#';
         $configuredUrl = $settings->getProfileBaseUrl();
         if (!empty($configuredUrl)) {

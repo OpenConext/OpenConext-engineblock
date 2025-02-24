@@ -473,7 +473,7 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
 
     private function addServiceProviderFixture(ServiceProvider $serviceProvider)
     {
-        $em = $this->getContainer()->get('doctrine')->getEntityManager();
+        $em = $this->getContainer()->get('doctrine')->getManager();
         $em->persist($serviceProvider);
         $em->flush();
     }

@@ -1,6 +1,0 @@
-_main:
-    resource: routing.yml
-
-functional_tests:
-    prefix:   functional-testing
-    resource: "@OpenConextEngineBlockFunctionalTestingBundle/Resources/config/routing.yml"

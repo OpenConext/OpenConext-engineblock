@@ -1,0 +1,75 @@
+# also see bridge_event_listeners.yml for event listeners that provide bridge functionality
+# TIP: To see priority run: php bin/console debug:event-dispatcher kernel.exception
+
+services:
+    _defaults:
+        public: true
+
+    OpenConext\EngineBlockBundle\EventListener\ExecutionTimeTracker:
+        arguments:
+            - '@debug.stopwatch'
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: startTracking, priority: 1000 }
+
+    OpenConext\EngineBlockBundle\EventListener\ExecutionTimePaddingListener:
+        arguments:
+            - '@OpenConext\EngineBlockBundle\EventListener\ExecutionTimeTracker'
+            - '@router'
+            - '@engineblock.compat.logger'
+            - '@OpenConext\EngineBlockBridge\ErrorReporter'
+            - '@OpenConext\EngineBlockBundle\Value\ExecutionTime'
+        tags:
+            - { name: kernel.event_listener, event: Symfony\Component\HttpKernel\Event\ExceptionEvent, method: onKernelException, priority: 1000 }
+
+    OpenConext\EngineBlockBundle\EventListener\RedirectToFeedbackPageExceptionListener:
+        arguments:
+            - '@engineblock.compat.application'
+            - '@router'
+            - '@OpenConext\EngineBlockBridge\ErrorReporter'
+            - '@engineblock.compat.logger'
+        tags:
+            - { name: kernel.event_listener, event: Symfony\Component\HttpKernel\Event\ExceptionEvent, method: onKernelException }
+
+    OpenConext\EngineBlockBundle\EventListener\ApiHttpExceptionListener:
+        arguments:
+            - '@engineblock.compat.logger'
+            - '@OpenConext\EngineBlockBridge\ErrorReporter'
+        tags:
+            - { name: kernel.event_listener, event: Symfony\Component\HttpKernel\Event\ExceptionEvent, method: onKernelException }
+
+    OpenConext\EngineBlockBundle\EventListener\NotFoundHttpExceptionListener:
+        arguments:
+            - '@engineblock.compat.application'
+            - '@twig'
+            - '@engineblock.compat.logger'
+        tags:
+            - { name: kernel.event_listener, event: Symfony\Component\HttpKernel\Event\ExceptionEvent, method: onKernelException, priority: 25 }
+
+    OpenConext\EngineBlockBundle\EventListener\MethodNotAllowedHttpExceptionListener:
+        arguments:
+            - '@twig'
+            - '@engineblock.compat.logger'
+        tags:
+            - { name: kernel.event_listener, event: Symfony\Component\HttpKernel\Event\ExceptionEvent, method: onKernelException, priority: 25 }
+
+    OpenConext\EngineBlockBundle\EventListener\FallbackExceptionListener:
+        arguments:
+            - '@engineblock.compat.logger'
+            - '@OpenConext\EngineBlockBridge\ErrorReporter'
+            - '@router'
+        tags:
+            - { name: kernel.event_listener, event: Symfony\Component\HttpKernel\Event\ExceptionEvent, method: onKernelException, priority: -100 }
+
+    OpenConext\EngineBlockBundle\EventListener\AuthenticationStateInitializer:
+        arguments:
+            - '@session'
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 10 }
+
+    OpenConext\EngineBlockBundle\EventListener\LocaleListener:
+        arguments:
+            - '@OpenConext\EngineBlockBundle\Localization\LocaleProvider'
+            - '@OpenConext\EngineBlockBundle\Http\Cookies\CookieFactory'
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 15 }
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 15 }

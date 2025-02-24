@@ -27,6 +27,7 @@ use OpenConext\EngineBlockBundle\Http\Request\JsonRequestHelper;
 use OpenConext\EngineBlockBundle\Http\Response\JsonResponse;
 use OpenConext\Value\Saml\EntityId;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class AttributeReleasePolicyController
@@ -57,8 +58,7 @@ final class AttributeReleasePolicyController
     }
 
     /**
-     * @param Request $request
-     * @return JsonResponse
+     * @Route("/arp", name="api_apply_attribute_release_policy", defaults={"_format"="json"})
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity) Extensive request validation
      * @SuppressWarnings(PHPMD.NPathComplexity) Extensive request validation
@@ -122,8 +122,7 @@ final class AttributeReleasePolicyController
     }
 
     /**
-     * @param Request $request
-     * @return JsonResponse
+     * @Route("/read-arp", name="api_read_attribute_release_policy", defaults={"_format"="json"})
      */
     public function readArpAction(Request $request)
     {

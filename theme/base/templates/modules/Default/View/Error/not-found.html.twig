@@ -15,7 +15,7 @@
         <span class="error-title__error-message">{{ 'error_404_desc'|trans }}</span>
       </div>
     </main>
-    {% spaceless %}{% include "@theme/Default/View/Error/partial/footer.html.twig" %}{% endspaceless %}
+    {% apply spaceless %}{% include "@theme/Default/View/Error/partial/footer.html.twig" %}{% endapply %}
   </div>
 
 {% endblock %}

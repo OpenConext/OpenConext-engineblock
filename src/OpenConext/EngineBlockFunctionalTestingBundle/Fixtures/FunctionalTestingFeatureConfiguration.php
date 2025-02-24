@@ -28,7 +28,7 @@ use RuntimeException;
 final class FunctionalTestingFeatureConfiguration implements FeatureConfigurationInterface
 {
     /**
-     * @var FeatureConfiguration
+     * @var TestFeatureConfiguration
      */
     private $featureConfiguration;
 
@@ -42,7 +42,7 @@ final class FunctionalTestingFeatureConfiguration implements FeatureConfiguratio
      */
     private $dataStore;
 
-    public function __construct(FeatureConfigurationInterface $featureConfiguration, AbstractDataStore $dataStore)
+    public function __construct(TestFeatureConfiguration $featureConfiguration, AbstractDataStore $dataStore)
     {
         $this->featureConfiguration = $featureConfiguration;
         $this->dataStore            = $dataStore;
