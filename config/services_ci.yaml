@@ -1,0 +1,68 @@
+# Legacy way to import services
+imports:
+    - { resource: services/ci/services.yml }
+    - { resource: services/ci/controllers.yml }
+    - { resource: services/ci/mocks.yml }
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\:
+        resource: '../src/OpenConext/EngineBlockFunctionalTestingBundle/Features/Context/*'
+        tags: [ 'fob.context' ]
+
+    OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\EngineBlockContext:
+        arguments:
+            $serviceRegistry: '@engineblock.functional_testing.fixture.service_registry'
+            $engineBlock: '@engineblock.functional_testing.service.engine_block'
+            $mockSpRegistry: '@engineblock.mock_entities.sp_registry'
+            $mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
+            $features: '@engineblock.functional_testing.fixture.features'
+            $pdpClient: '@engineblock.functional_testing.fixture.pdp_client'
+            $authenticationLoopGuard: '@engineblock.functional_testing.fixture.authentication_loop_guard'
+            $attributeAggregationClient: '@engineblock.functional_testing.fixture.attribute_aggregation_client'
+        tags: ['fob.context']
+
+    OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MockIdpContext:
+        arguments:
+            $serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
+            $engineBlock: '@engineblock.functional_testing.service.engine_block'
+            $idpFactory: '@engineblock.mock_entities.idp_factory'
+            $mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
+            $mockSpRegistry: '@engineblock.mock_entities.sp_registry'
+        tags: ['fob.context']
+
+    OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MockSpContext:
+        arguments:
+            $serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
+            $engineBlock: '@engineblock.functional_testing.service.engine_block'
+            $mockSpFactory: '@engineblock.mock_entities.sp_factory'
+            $mockSpRegistry: '@engineblock.mock_entities.sp_registry'
+            $mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
+        tags: ['fob.context']
+
+    OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\StepupContext:
+        arguments:
+            $mockSpRegistry: '@engineblock.mock_entities.sp_registry'
+            $mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
+            $gatewayMockConfiguration: '@engineblock.functional_testing.fixture.stepup_gateway_mock'
+            $serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
+        tags: ['fob.context']
+
+    OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MfaEntitiesContext:
+        arguments:
+            $mockSpRegistry: '@engineblock.mock_entities.sp_registry'
+            $mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
+            $serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
+        tags: ['fob.context']
+
+    OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\TranslationContext:
+        arguments:
+            $mockTranslator: '@engineblock.functional_testing.mock.translator'
+        tags: ['fob.context']
+
+    OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext:
+        tags: ['fob.context']

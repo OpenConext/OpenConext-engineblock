@@ -21,14 +21,14 @@ namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Twig_Extension;
 
 /**
  * The Locale extension can be used to retrieve the currently active locale. By default returns the locale that
  * can be found in the RequestStack. If none can be found in the request stack, the default locale is returned.
  */
-class Locale extends Twig_Extension
+class Locale extends AbstractExtension
 {
     /**
      * @var string

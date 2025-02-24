@@ -32,6 +32,7 @@ use SAML2\XML\saml\Issuer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Twig\Environment;
 
 class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends TestCase
 {
@@ -167,7 +168,7 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends TestCase
     private function mockProxyServer()
     {
         // Mock twig, a dependency of proxy server
-        $twigMock = Phake::mock(Twig_Environment::class);
+        $twigMock = Phake::mock(Environment::class);
 
         // Mock proxy server
         $_SERVER['HTTP_HOST'] = 'test-host';

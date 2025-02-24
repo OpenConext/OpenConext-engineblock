@@ -18,7 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Configuration;
 
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ErrorFeedbackConfiguration implements ErrorFeedbackConfigurationInterface
 {

@@ -13,7 +13,7 @@
             }
         %}
     </div>
-    {% spaceless %}
+    {% apply spaceless %}
     <div
         aria-hidden="true"
         class="tooltip__value"
@@ -22,5 +22,5 @@
     >
         {{ tooltipValue }}
     </div>
-    {% endspaceless %}
+    {% endapply %}
 {% endif %}

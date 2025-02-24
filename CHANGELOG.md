@@ -11,6 +11,12 @@ More information about our release strategy can be found in
 the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on
 the EngineBlock wiki.
 
+## 7.0.0
+Breaking changes please see: [upgrading](UPGRADING.md#700)
+
+Maintenance:
+* upgrade to symfony 4.4
+
 ## 6.18.0
 
 Dependencies:

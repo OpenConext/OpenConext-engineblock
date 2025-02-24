@@ -23,7 +23,6 @@ Feature:
   Scenario: When stepup.sfo.override_engine_entityid is configured with a valid EntityId, stepup/metadata should show that EntityId
     Given feature "eb.stepup.sfo.override_engine_entityid" is enabled
     When I go to Engineblock URL "/authentication/stepup/metadata"
-    Then print last response
     Then the response should match xpath '//md:EntityDescriptor[@entityID="https://engine.dev.openconext.local/new/stepup/metadata"]'
 
   # Note that we can not ascertain programatically if the Issuer is updated as this is an internal

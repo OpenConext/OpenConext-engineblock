@@ -192,7 +192,7 @@ Feature:
     When I give my consent
      And I pass through EngineBlock
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
-    And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:uid"]/saml:AttributeValue[text()="https://engine.dev.openconext.local/authentication/idp/single-sign-on"]'
+    And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:uid"]/saml:AttributeValue[text()="/authentication/idp/single-sign-on"]'
 
   Scenario: The manipulation reduces a multivalued attribute to a single value
     Given the IdP "Dummy-IdP" sends attribute "urn:mace:dir:attribute-def:eduPersonAffiliation" with values "student,faculty,guest,member" and xsi:type is "xs:string"

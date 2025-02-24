@@ -25,6 +25,7 @@ use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DebugController implements AuthenticationLoopThrottlingController
 {
@@ -47,7 +48,7 @@ class DebugController implements AuthenticationLoopThrottlingController
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @Route("/authentication/sp/debug", name="authentication_sp_debug", methods={"GET","POST"})
      */
     public function debugSpConnectionAction()
     {

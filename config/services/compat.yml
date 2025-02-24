@@ -1,0 +1,61 @@
+services:
+    _defaults:
+        public: true
+
+    engineblock.compat.application:
+        class: EngineBlock_ApplicationSingleton
+        factory:  [EngineBlock_ApplicationSingleton, getInstance]
+
+    engineblock.compat.di_container:
+        public: false
+        class: EngineBlock_Application_DiContainer
+        factory: ["@engineblock.compat.application", getDiContainer]
+
+    engineblock.compat.repository.metadata:
+        public: false
+        class: OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface
+        factory: ["@engineblock.compat.di_container", getMetadataRepository]
+
+    engineblock.compat.metadata.definitions:
+        public: false
+        class: EngineBlock_Attributes_Metadata
+        factory: ["@engineblock.compat.di_container", getAttributeMetadata]
+
+    engineblock.compat.doctrine.entity_manager:
+        public: false
+        class: Doctrine\ORM\EntityManager
+        factory: ["@engineblock.compat.di_container", getEntityManager]
+
+    engineblock.compat.doctrine.dbal_connection:
+        public: false
+        class: Doctrine\DBAL\Connection
+        factory: ["@engineblock.compat.doctrine.entity_manager", getConnection]
+
+    engineblock.compat.logger:
+        class: Monolog\Logger
+        factory: [EngineBlock_ApplicationSingleton, getLog]
+    #    Services that were previously configured and gotten through the DiContainer
+    engineblock.compat.xml_converter:
+        class: EngineBlock_Corto_XmlToArray
+
+    engineblock.compat.corto_filter_command_factory:
+        class: EngineBlock_Corto_Filter_Command_Factory
+
+    engineblock.compat.database_connection_factory:
+        class: EngineBlock_Database_ConnectionFactory
+        arguments:
+            - "@engineblock.compat.doctrine.entity_manager"
+
+    engineblock.compat.corto_model_consent_factory:
+        class: EngineBlock_Corto_Model_Consent_Factory
+        arguments:
+            - "@engineblock.compat.corto_filter_command_factory"
+            - "@engineblock.compat.database_connection_factory"
+
+    engineblock.compat.saml2_id_generator:
+        public: true
+        class: EngineBlock_Saml2_IdGenerator_Default
+
+    engineblock.compat.attribute_release_policy_enforcer:
+        public: false
+        class: EngineBlock_Arp_AttributeReleasePolicyEnforcer

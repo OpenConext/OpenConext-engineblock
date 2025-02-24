@@ -1,0 +1,10 @@
+services:
+    _defaults:
+        public: true
+
+    # also see @engineblock.listener.locale for the event listener that scopes the LocaleProvider with the current request
+    OpenConext\EngineBlockBridge\EventListener\SetCortoTranslationsLocaleListener:
+        arguments:
+            - '@OpenConext\EngineBlockBundle\Localization\LocaleProvider'
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 10 }

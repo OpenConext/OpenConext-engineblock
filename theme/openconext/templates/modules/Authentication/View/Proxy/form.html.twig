@@ -13,9 +13,9 @@
         <meta content="translucent-black" name="apple-mobile-web-app-status-bar-style">
         <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
 
-        {% block stylesheets %}{% spaceless %}
+        {% block stylesheets %}{% apply spaceless %}
             <link href="/stylesheets/application.css?v={{ assetsVersion }}" rel="stylesheet">
-        {% endspaceless %}{% endblock %}
+        {% endapply %}{% endblock %}
     </head>
     <body class="index" {% if preventAutoSubmit is not defined %} onload="document.forms[0].submit()" {% endif %}>
 
