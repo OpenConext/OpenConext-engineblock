@@ -44,15 +44,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
         );
 
         $nameIdPolicy = $enhancedRequest->getNameIdPolicy();
-
-        $this->assertNotContains(
-            'Format',
-            array_keys($nameIdPolicy),
-            'The NameIDPolicy should not contain the key "Format"',
-            false,
-            true,
-            true
-        );
+        $this->assertSame(['AllowCreate' => true], $nameIdPolicy);
     }
 
     public function testAllowCreateIsSet()
@@ -69,15 +61,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
         );
 
         $nameIdPolicy = $enhancedRequest->getNameIdPolicy();
-
-        $this->assertContains(
-            'AllowCreate',
-            array_keys($nameIdPolicy),
-            'The NameIDPolicy should contain the key "AllowCreate"',
-            false,
-            true,
-            true
-        );
+        $this->assertSame(['AllowCreate' => true], $nameIdPolicy);
     }
 
     public function testNameIDFormatIsSetFromRemoteMetaData()

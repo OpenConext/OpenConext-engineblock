@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2010 SURFnet B.V.
+ * Copyright 2025 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,13 @@
  * limitations under the License.
  */
 
-define('TEST_RESOURCES_DIR', dirname(__FILE__) . '/resources');
+/**
+ * @TODO remove post SF upgrade
+ */
 
-require_once realpath(__DIR__) . '/../app/autoload.php';
-require_once realpath(__DIR__) . '/../app/AppKernel.php';
+require __DIR__ . '/bootstrap.php';
 
-$kernel = new AppKernel('test', true);
-$kernel->boot();
+$appKernel = new AppKernel('ci', false);
+$appKernel->boot();
+
+return $appKernel->getContainer();
