@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockBundle\Controller;
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
 use OpenConext\EngineBlockBridge\ResponseFactory;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ProxyController
 {
@@ -39,6 +40,8 @@ class ProxyController
 
     /**
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/authentication/proxy/processed-assertion", name="authentication_proxy_processed_assertion", methods={"GET","POST"})
      */
     public function processedAssertionAction()
     {

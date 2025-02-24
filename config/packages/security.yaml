@@ -1,0 +1,38 @@
+security:
+    providers:
+        in_memory:
+            memory:
+                users:
+                    "%api.users.metadataPush.username%":
+                        password: "%api.users.metadataPush.password%"
+                        roles: 'ROLE_API_USER_METADATA_PUSH'
+                    "%api.users.profile.username%":
+                        password: "%api.users.profile.password%"
+                        roles: 'ROLE_API_USER_PROFILE'
+                    "%api.users.deprovision.username%":
+                        password: "%api.users.deprovision.password%"
+                        roles: 'ROLE_API_USER_DEPROVISION'
+
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|stylesheets|images|js|javascripts)/
+            security: false
+            stateless: true
+
+        monitor:
+            pattern: ^/(info|health)$
+            security: false
+
+        api:
+            host: ^engine-api\..+
+            http_basic: ~
+            entry_point: OpenConext\EngineBlockBundle\Security\Http\EntryPoint\JsonBasicAuthenticationEntryPoint
+            stateless: true
+            pattern: ^/.+
+
+        main:
+            anonymous: ~
+            stateless:  true

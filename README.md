@@ -1,4 +1,3 @@
-
 # OpenConext EngineBlock
 
 Build Status:
@@ -19,10 +18,12 @@ See the [UPGRADING.md][upgrading] file
 
 ## (Theme) Development
 
-Please see the [wiki][eb-wiki-theme-development] for information on how to get started with developing themes for OpenConext EngineBlock
+Please see the [wiki][eb-wiki-theme-development] for information on how to get started with developing themes for
+OpenConext EngineBlock
 In short, themes require front-end resource compilation which can be done by running the following commands:
 
-First set the desired theme name in the parameters.yml. This will load the correct Twig templates as they are a part of the Symfony config.
+First set the desired theme name in the parameters.yml. This will load the correct Twig templates as they are a part of
+the Symfony config.
 
 ```
 parameters:
@@ -36,10 +37,11 @@ Next build the front-end assets for the selected theme.
     (cd theme && yarn install --frozen-lockfile && yarn build)
 ```
 
-Finally, when not in an environment with the debug flag enabled, you need to clear the cache. This will ensure the translations and templates are swapped out for the ones found in the new theme.
+Finally, when not in an environment with the debug flag enabled, you need to clear the cache. This will ensure the
+translations and templates are swapped out for the ones found in the new theme.
 
 ```
-$ php72 ./app/console cache:clear --env=prod
+$ php72 ./bin/console cache:clear --env=prod
 ```
 
 To setup the required tooling on the container, the following steps might be useful:
@@ -50,7 +52,8 @@ To setup the required tooling on the container, the following steps might be use
     sudo npm install --global yarn
     (yarn install --frozen-lockfile && yarn build)
 
-In addition to the npm/yarn scripts that are available to run (unit/e2e) tests and quality assurance, you can also use the
+In addition to the npm/yarn scripts that are available to run (unit/e2e) tests and quality assurance, you can also use
+the
 Twig linting tool built into Symfony. To run this linter:
 
 ```
@@ -58,7 +61,7 @@ If you are able to run Ant build targets use:
 $ ant php-twig-lint
 
 But you can also run the linter directly from the Symfony console. From the webroot:
-$ php72 ./app/console lint:twig theme/
+$ php72 ./bin/console lint:twig theme/
 ```
 
 ## System Requirements
@@ -84,7 +87,8 @@ it is only regularly tested with RedHat Enterprise Linux and CentOS._
 
 _**Note**: you are highly encouraged to use [OpenConext-Devconf][op-dev] to deploy OpenConext installations._
 
-If you are reading this then you've probably already installed a copy of EngineBlock somewhere on the destination server,
+If you are reading this then you've probably already installed a copy of EngineBlock somewhere on the destination
+server,
 if not, then that would be step 1 for the installation.
 
 If you do not use [OpenConext-Devconf][op-dev] and have an installed copy and your server meets all the requirements
@@ -104,57 +108,62 @@ above, then please follow the steps below to start your installation.
 
     mysql> create database engineblock default charset utf8 default collate utf8_unicode_ci;
 
-
 ### Then configure application
 
 EngineBlock requires you to have the folders below writable by your webserver user.
 
-     app/cache
+    var/cache
+    var/log
 
 Run the command below in the root of your project to install the required dependencies.
 
     composer install --no-interaction --optimize-autoloader --prefer-dist --no-dev
 
- **Note**:
+**Note**:
 The command above assumes that the application must be build for production, and omits development dependencies.
 
-Then edit the `parameters.yml` with your favorite editor and review the settings to make sure it matches your configuration.
+Then edit the `parameters.yml` with your favorite editor and review the settings to make sure it matches your
+configuration.
 
 ### Install database schema updates
 
 To install possible database updates, call doctrine migrations by using the following console command:
 
-    app/console doctrine:migrations:migrate --env=prod
+    bin/console doctrine:migrations:migrate --env=prod
 
 _**Note**:
 EngineBlock requires database settings, without it doctrine migrate will not function. Furthermore, this assumes that
 the application must use the production settings (`--env=prod`), this could be replaced with `dev` should you run a
 development version._
 
-
 ### Configure HTTP server
 
-Configure a single virtual host, this should point to the `web` directory:
+Configure a single virtual host, this should point to the `public` directory:
 
-    DocumentRoot    /opt/www/engineblock/web
+    DocumentRoot    /opt/www/engineblock/public
 
 It should also serve both the `engine.yourdomain.example` and `engine-api.yourdomain.example` domains.
 
-Make sure the `ENGINEBLOCK_ENV` is set, and that the `SYMFONY_ENV` is set, this can be mapped from `ENGINEBLOCK_ENV` as:
+Make sure the `APP_ENV` is set for the correct environment:
 
-| `ENGINEBLOCK_ENV` | `SYMFONY_ENV` |
-|-------------------| --- |
-| production        | prod |
-| acceptance        | acc |
-| test              | test |
-| dev               | dev |
+| `APP_ENV` | Command                                                                                               |
+|---------------|-------------------------------------------------------------------------------------------------------|
+| prod          | For production environment                                                                            |
+| acc           | For acceptance environment                                                                            |
+| testing       | For test environment                                                                                  |
+| test          | For unit testing: This suite has additional configuration and loads additional testing services       |
+| ci            | For functional testing: This suite has additional configuration and loads additional testing services |
+| dev           | For development: This suite has additional debug configuration                                        |
+
+Besides `APP_ENV` the only other environment variable supported is `APP_DEBUG`. For other adjustments, you would have to
+adjust the parameters.yml file and place it in the corresponding environment folder in `config/`.
 
 **EXAMPLE**
 
-    SetEnv ENGINEBLOCK_ENV !!ENV!!
-    SetEnv SYMFONY_ENV !!SF_ENV!!
+    SetEnv APP_ENV !!SF_ENV!!
+    SetEnv APP_DEBUG true/false
 
-Make sure you have the following rewrite rules (replace `app.php` with `app_dev.php` for development):
+Make sure you have the following rewrite rules:
 
     RewriteEngine On
     # We support only GET/POST/HEAD
@@ -164,10 +173,10 @@ Make sure you have the following rewrite rules (replace `app.php` with `app_dev.
     # Note that the requested URL MUST be appended because Corto uses the PATH_INFO server variable
     RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
     RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ /app.php/$1 [L] # Send the query string to index.php
+    RewriteRule ^(.*)$ /index.php/$1 [L] # Send the query string to index.php
 
     # Requests to the domain (no query string)
-    RewriteRule ^$ app.php/ [L]
+    RewriteRule ^$ index.php/ [L]
 
 Note that EngineBlock SHOULD run on HTTPS, you can redirect users from HTTP to HTTPS
 with the following Apache rewrite rules on a *:80 VirtualHost:
@@ -175,13 +184,6 @@ with the following Apache rewrite rules on a *:80 VirtualHost:
     RewriteEngine   on
     RewriteCond     %{SERVER_PORT} ^80$
     RewriteRule     ^(.*)$ https://%{SERVER_NAME}$1 [L,R=301]
-
-### Grab the front controller
-Copy the `app_dev.php.dist` file to the `web` directory.
-
-```bash
-Openconext-engineblock $ cp app_dev.php.dist web/app_dev.php
-```
 
 ### Test your EngineBlock instance
 
@@ -219,7 +221,7 @@ If you are using this pattern, an update can be done with the following:
 
 3. Run the database migrations script.
 
-        app/console doctrine:migrations:migrate --env=prod
+       bin/console doctrine:migrations:migrate --env=prod
 
 4. Change the symlink.
 
@@ -228,14 +230,14 @@ If you are using this pattern, an update can be done with the following:
 The list of browsers that should be supported:
 
 | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari-ios/safari-ios_48x48.png" alt="iOS Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>iOS Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/samsung-internet/samsung-internet_48x48.png" alt="Samsung" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Samsung | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" alt="Opera" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Opera |
-| --------- | --------- | --------- | --------- | --------- | --------- | --------- |
-| IE10, IE11, Edge| last 2 versions| last 2 versions| last 2 versions| last 2 versions| last 2 versions| last 2 versions
+|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| IE10, IE11, Edge                                                                                                                                                                                                | last 2 versions                                                                                                                                                                                                   | last 2 versions                                                                                                                                                                                               | last 2 versions                                                                                                                                                                                               | last 2 versions                                                                                                                                                                                                               | last 2 versions                                                                                                                                                                                                                     | last 2 versions
 
 The list of browsers being tested:
 
 | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome Android | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari-ios/safari-ios_48x48.png" alt="iOS Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>iOS Safari |
-| --------- | --------- | --------- | --------- | --------- | --------- |
-| IE11, Edge last version| last version| last version| last version| last version| last version|
+|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| IE11, Edge last version                                                                                                                                                                                         | last version                                                                                                                                                                                                      | last version                                                                                                                                                                                                  | last version                                                                                                                                                                                                          | last version                                                                                                                                                                                                  | last version                                                                                                                                                                                                                  |
 
 ## Additional Documentation
 
@@ -250,17 +252,31 @@ Also, the following documentation can be found in the [docs][docs] directory:
 1. [Release notes for releases < 5.0.0][docs-release-notes]
 
 [qa-build]: https://github.com/OpenConext/OpenConext-engineblock/workflows/test-integration/badge.svg
+
 [license]: LICENSE
+
 [notice]: NOTICE.txt
+
 [upgrading]: UPGRADING.md
+
 [comp]: https://getcomposer.org/
+
 [op-dev]: https://github.com/OpenConext/OpenConext-devconf
+
 [manage]: https://github.com/OpenConext/OpenConext-manage
+
 [eb-wiki-theme-development]: https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#theme-development
+
 [wiki]: https://github.com/OpenConext/OpenConext-engineblock/wiki
+
 [wiki-development]: https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines
+
 [docs]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/index.md
+
 [docs-license]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/LICENSE
+
 [docs-release]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/release_procedure.md
+
 [docs-filter]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/filter_commands.md
+
 [docs-release-notes]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/release_notes

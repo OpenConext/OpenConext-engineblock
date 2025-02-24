@@ -24,8 +24,8 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
 use Phake;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Tests\Logger;
 
 class SsoNotificationServiceTest extends TestCase
 {

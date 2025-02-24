@@ -24,9 +24,6 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\PhpUnit\ClockMock;
 use Symfony\Component\Stopwatch\Stopwatch;
 
-// in order to be in control of time during our tests with the Stopwatch, we use the Symfony's ClockMock
-require_once ENGINEBLOCK_FOLDER_VENDOR . '/symfony/symfony/src/Symfony/Bridge/PhpUnit/ClockMock.php';
-
 class ExecutionTimeTrackerTest extends TestCase
 {
     public static function setUpBeforeClass(): void

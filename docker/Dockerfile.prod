@@ -14,7 +14,7 @@ RUN tar -xvjf /tmp/*.tar.bz2 -C /var/www/html/ && \
 RUN rm -rf /etc/apache2/sites-enabled/*
 COPY ./docker/conf/engine.conf /etc/apache2/sites-enabled/engine.conf
 # Instantiate devconf config
-RUN cp app/config/parameters.yml.dist app/config/parameters.yml
+RUN cp config/packages/parameters.yml.dist config/packages/parameters.yml
 
 # Set the default workdir
 EXPOSE 80

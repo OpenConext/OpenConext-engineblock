@@ -1,8 +1,0 @@
-services:
-    # also see @engineblock.listener.locale for the event listener that scopes the LocaleProvider with the current request
-    engineblock.bridge.listener.corto_translations_locale:
-        class: OpenConext\EngineBlockBridge\EventListener\SetCortoTranslationsLocaleListener
-        arguments:
-            - '@engineblock.locale_provider'
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 10 }

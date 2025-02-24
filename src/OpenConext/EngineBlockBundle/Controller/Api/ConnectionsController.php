@@ -31,6 +31,7 @@ use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
 use OpenConext\EngineBlockBundle\Http\Request\JsonRequestHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
@@ -87,6 +88,9 @@ class ConnectionsController
         $this->memoryLimit                     = $memoryLimit;
     }
 
+    /**
+     * @Route("/api/connections", name="api_connections", defaults={"_format"="json"})
+     */
     public function pushConnectionsAction(Request $request)
     {
         if (!$request->isMethod(Request::METHOD_POST)) {

@@ -22,7 +22,7 @@ use EngineBlock_Exception;
 use OpenConext\EngineBlockBridge\ErrorReporter;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -66,7 +66,7 @@ class FallbackExceptionListener
         $this->urlGenerator = $urlGenerator;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event)
     {
         $exception = $event->getException();
 

@@ -30,6 +30,7 @@ use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use function array_key_exists;
 use function sprintf;
@@ -64,6 +65,9 @@ final class ConsentController
         $this->consentService       = $consentService;
     }
 
+    /**
+     * @Route("/consent/{userId}", name="api_consent_user", defaults={"_format"="json"})
+     */
     public function userAction($userId, Request $request)
     {
         if (!$request->isMethod(Request::METHOD_GET)) {
@@ -100,6 +104,9 @@ final class ConsentController
         return new JsonResponse($consentList, Response::HTTP_OK);
     }
 
+    /**
+     * @Route("/remove-consent", name="api_remove_consent_user", defaults={"_format"="json"})
+     */
     public function removeAction(Request $request): JsonResponse
     {
         if (!$request->isMethod(Request::METHOD_POST)) {

@@ -18,13 +18,13 @@
 
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Twig_Extension;
 
 /**
  * The debug extension is used to provide var_dump, var_export and print_r functions for usage in Twig templates.
  */
-class Debug extends Twig_Extension
+class Debug extends AbstractExtension
 {
     public function getFunctions()
     {

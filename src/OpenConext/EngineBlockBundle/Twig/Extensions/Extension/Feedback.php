@@ -28,10 +28,10 @@ use OpenConext\EngineBlockBundle\Configuration\WikiLink;
 use OpenConext\EngineBlockBundle\Value\FeedbackInformation;
 use OpenConext\EngineBlockBundle\Value\FeedbackInformationMap;
 use SAML2\XML\saml\Issuer;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Twig_Extension;
 
-class Feedback extends Twig_Extension
+class Feedback extends AbstractExtension
 {
     /**
      * @var EngineBlock_ApplicationSingleton

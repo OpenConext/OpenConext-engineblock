@@ -44,7 +44,7 @@ class MinkContext extends BaseMinkContext
      */
     public function putDebugCookie()
     {
-        $driver = $this->getSession()->getDriver();
+        $driver = $this->getSession();
         $driver->setCookie('XDEBUG_SESSION', 'PHPSTORM');
     }
 
@@ -235,6 +235,9 @@ class MinkContext extends BaseMinkContext
      */
     public function iOpenTwoBrowserTabsIdentifiedBy($numberOfTabs, $tabNames)
     {
+        $this->getMink()->getSession()->restart();
+        $this->windows = []; // Reset the windows array to avoid confusion with previous tests
+
         $tabs = explode(',', $tabNames);
         if (count($tabs) != $numberOfTabs) {
             throw new RuntimeException(
@@ -243,17 +246,23 @@ class MinkContext extends BaseMinkContext
         }
 
         foreach ($tabs as $tab) {
-            $this->getMink()
-                ->getSession()
-                ->executeScript("window.open('/','_blank');");
-
-            $windowsNames = $this->getSession()->getWindowNames();
-
+            $windowsNames = $this->getMink()->getSession()->getWindowNames();
             if (!$windowsNames) {
                 throw new RuntimeException('The windows where not opened correctly.');
             }
+
+            $this->getMink()
+                ->getSession()
+                ->executeScript("window.open('about:blank','_blank');");
+
+            $newWindows = array_diff($this->getMink()->getSession()->getWindowNames(), $windowsNames);
+
+            if (count($newWindows) != 1) {
+                throw new RuntimeException('The new windows where not opened correctly.');
+            }
+
             // Grab the window name (which is the last one added to the window list)
-            $windowName = array_pop($windowsNames);
+            $windowName = array_pop($newWindows);
             // Keep track of the opened windows in order allow switching between them
             $this->windows[trim($tab)] = $windowName;
         }

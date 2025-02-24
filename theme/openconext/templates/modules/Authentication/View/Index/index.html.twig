@@ -3,9 +3,9 @@
 {% block title %}{{ parent() }} - Metadata & Certificates{% endblock %}
 {% set pageHeadingTitle = subHeader %}
 
-{% block stylesheets %}{% spaceless %}
+{% block stylesheets %}{% apply spaceless %}
     <link href="/stylesheets/front-page.css?v={{ assetsVersion }}" rel="stylesheet">
-{% endspaceless %}{% endblock %}
+{% endapply %}{% endblock %}
 
 {% block content %}
     <main id="engine-main-page" class="box">

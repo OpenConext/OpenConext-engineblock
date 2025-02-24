@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-/** Simple script to build based on CLI or chosen theme in parameters.yml
+/** Simple script to build based on CLI or chosen theme in parameters.yaml
  * Using library js-yaml, repo can be found at: https://github.com/nodeca/js-yaml
  * Tutorial can be found at https://stackabuse.com/reading-and-writing-yaml-to-a-file-in-node-js-javascript/
  *
@@ -11,10 +11,10 @@
  **/
 const fs = require('fs');
 const yaml = require('js-yaml');
-const config = `${__dirname}/../../app/config/parameters.yml`;
+const config = `${__dirname}/../../config/packages/parameters.yml`;
 
 try {
-    console.log('Reading contents of parameters.yml.\n');
+    console.log('Reading contents of parameters.yaml.\n');
     const fileContents = fs.readFileSync(config, 'utf8');
     const parameters = yaml.loadAll(fileContents);
     const theme = process.env.EB_THEME || parameters[0].parameters['theme.name'] || 'skeune';

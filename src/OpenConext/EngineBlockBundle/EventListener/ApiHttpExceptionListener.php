@@ -22,7 +22,7 @@ use OpenConext\EngineBlockBundle\Http\Exception\ApiHttpException;
 use OpenConext\EngineBlockBridge\ErrorReporter;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 class ApiHttpExceptionListener
 {
@@ -46,7 +46,7 @@ class ApiHttpExceptionListener
         $this->errorReporter = $errorReporter;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event)
     {
         $exception = $event->getException();
 

@@ -1,0 +1,18 @@
+services:
+    _defaults:
+        public: true
+
+    OpenConext\EngineBlockBridge\ErrorReporter:
+        arguments:
+            - '@engineblock.compat.application'
+            - '@logger'
+            - '@session'
+
+    OpenConext\EngineBlockBridge\Logger\AuthenticationLoggerAdapter:
+        arguments:
+            - '@OpenConext\EngineBlock\Logger\AuthenticationLogger'
+
+    OpenConext\EngineBlockBridge\Authentication\Repository\UserDirectoryAdapter:
+        arguments:
+            - '@OpenConext\EngineBlockBundle\Authentication\Service\UserService'
+            - '@logger'

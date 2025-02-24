@@ -1,0 +1,39 @@
+#!/usr/bin/env php
+<?php
+
+use App\Kernel;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\ErrorHandler\Debug;
+
+set_time_limit(0);
+
+require dirname(__DIR__) . '/vendor/autoload.php';
+
+if (!class_exists(Application::class)) {
+    throw new RuntimeException('You need to add "symfony/framework-bundle" as a Composer dependency.');
+}
+
+if (!isset($_ENV['APP_ENV'])) {
+    throw new RuntimeException('APP_ENV environment variable is not defined.');
+}
+if (!isset($_ENV['APP_SECRET']) || trim($_ENV['APP_SECRET']) === '') {
+    throw new RuntimeException('APP_SECRET is missing or empty. Set it in your environment configuration.');
+}
+if ($_ENV['APP_ENV'] === 'prod' && strlen($_ENV['APP_SECRET']) < 32) {
+    throw new RuntimeException('APP_SECRET must be at least 32 characters long in production.');
+}
+
+$input = new ArgvInput();
+$env = $input->getParameterOption(['--env', '-e'], $_ENV['APP_ENV'], true);
+$debug = filter_var($_ENV['APP_DEBUG'], FILTER_VALIDATE_BOOLEAN) && !$input->hasParameterOption('--no-debug', true);
+
+if ($debug) {
+    umask(0000);
+
+    Debug::enable();
+}
+
+$kernel = new Kernel($env, $debug);
+$application = new Application($kernel);
+$application->run($input);
