@@ -1,0 +1,16 @@
+parameters:
+    locale: 'en'
+    container.autowiring.strict_mode: true
+    asset_version: "#ASSET_VERSION#"
+
+# Legacy way to import services
+imports:
+    - { resource: services/services.yml }
+    - { resource: services/repositories.yml }
+    - { resource: services/logging.yml }
+    - { resource: services/event_listeners.yml }
+    - { resource: services/compat.yml }
+    - { resource: services/bridge_event_listeners.yml }
+    - { resource: services/bridge.yml }
+    - { resource: services/controllers/api.yml }
+    - { resource: services/controllers/authentication.yml }

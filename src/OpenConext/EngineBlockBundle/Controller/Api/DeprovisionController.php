@@ -27,6 +27,7 @@ use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
@@ -73,9 +74,11 @@ final class DeprovisionController
     }
 
     /**
-     * @param Request $request
-     * @param string $collabPersonId
-     * @return JsonResponse
+     * @Route(
+     *     "/deprovision/{collabPersonId}",
+     *     name="api_deprovision_get_user_data",
+     *     defaults={"_format"="json"}
+     * )
      */
     public function userDataAction(Request $request, $collabPersonId)
     {
@@ -95,9 +98,11 @@ final class DeprovisionController
     }
 
     /**
-     * @param Request $request
-     * @param string $collabPersonId
-     * @return JsonResponse
+     * @Route(
+     *     "/deprovision/{collabPersonId}/dry-run",
+     *     name="api_deprovision_delete_user_data_dry_run",
+     *     defaults={"_format"="json"}
+     * )
      */
     public function dryRunAction(Request $request, $collabPersonId)
     {

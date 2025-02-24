@@ -1,0 +1,23 @@
+framework:
+    secret: '%env(APP_SECRET)%'
+    esi: false
+    translator:
+        fallbacks: [ "%locale%" ]
+        paths:
+            - '%kernel.root_dir%/../languages'
+            - '%kernel.root_dir%/../theme/base/translations'
+            - '%kernel.root_dir%/../theme/%theme.name%/translations'
+    form: ~
+    csrf_protection: ~
+    validation: { enable_annotations: true }
+    default_locale: "%locale%"
+    trusted_hosts: ~
+    session:
+        # handler_id set to null will use default session handler from php.ini
+        handler_id: ~
+    fragments: false
+    http_method_override: true
+    assets: ~
+    php_errors:
+        log: true
+    error_controller: 'Symfony\Component\HttpKernel\Controller\ErrorController::show'

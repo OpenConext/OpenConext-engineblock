@@ -1,0 +1,17 @@
+parameters:
+    custom_features:
+        api.metadata_push:   "%feature_api_metadata_push%"
+        api.consent_listing: "%feature_api_consent_listing%"
+        api.consent_remove: "%feature_api_consent_remove%"
+        api.metadata_api:    "%feature_api_metadata_api%"
+        api.deprovision:     "%feature_api_deprovision%"
+        eb.encrypted_assertions: "%feature_eb_encrypted_assertions%"
+        eb.encrypted_assertions_require_outer_signature: "%feature_eb_encrypted_assertions_require_outer_signature%"
+        eb.run_all_manipulations_prior_to_consent: "%feature_run_all_manipulations_prior_to_consent%"
+        eb.block_user_on_violation: "%feature_block_user_on_violation%"
+        eb.enable_sso_notification: "%feature_enable_sso_notification%"
+        eb.feature_enable_consent: "%feature_enable_consent%"
+        eb.enable_sso_session_cookie: "%feature_enable_sso_session_cookie%"
+        eb.feature_enable_idp_initiated_flow: "%feature_enable_idp_initiated_flow%"
+        eb.stepup.sfo.override_engine_entityid: "%feature_stepup_sfo_override_engine_entityid%"
+        eb.stepup.send_user_attributes: "%feature_stepup_send_user_attributes%"

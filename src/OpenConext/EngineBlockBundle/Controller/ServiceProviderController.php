@@ -24,6 +24,7 @@ use OpenConext\EngineBlock\Validator\RequestValidator;
 use OpenConext\EngineBlockBridge\ResponseFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ServiceProviderController implements AuthenticationLoopThrottlingController
 {
@@ -69,6 +70,8 @@ class ServiceProviderController implements AuthenticationLoopThrottlingControlle
     /**
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/authentication/sp/consume-assertion", name="authentication_sp_consume_assertion", methods={"POST"})
      */
     public function consumeAssertionAction(Request $request)
     {
@@ -84,6 +87,8 @@ class ServiceProviderController implements AuthenticationLoopThrottlingControlle
 
     /**
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/authentication/sp/process-consent", name="authentication_sp_process_consent", methods={"GET","POST"})
      */
     public function processConsentAction()
     {

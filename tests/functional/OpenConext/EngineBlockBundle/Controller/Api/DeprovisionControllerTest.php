@@ -19,7 +19,6 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use DateTime;
-use OpenConext\EngineBlockBundle\Configuration\Feature;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -312,10 +311,10 @@ final class DeprovisionControllerTest extends WebTestCase
      */
     private function disableDeprovisionApiFeatureFor(Client $client)
     {
-        $featureToggles = new FeatureConfiguration([
-            'api.deprovision' => new Feature('api.deprovision', false)
+        $mock = new FeatureConfiguration([
+            'api.deprovision' => false
         ]);
-        $client->getContainer()->set('engineblock.features', $featureToggles);
+        $client->getContainer()->set('OpenConext\\EngineBlockBundle\\Configuration\\FeatureConfiguration', $mock);
     }
 
     /**

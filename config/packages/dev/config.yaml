@@ -1,0 +1,24 @@
+parameters:
+    # This value is used as cache-buster
+    asset_version: "dev"
+    global.site_notice.show: false
+
+framework:
+    translator:
+        enabled: true
+        fallbacks: [ "%locale%" ]
+        paths:
+            - '%kernel.root_dir%/../languages'
+            - '%kernel.root_dir%/../theme/base/translations'
+            - '%kernel.root_dir%/../theme/%theme.name%/translations'
+    profiler: { only_exceptions: false }
+
+web_profiler:
+    toolbar: true
+    intercept_redirects: false
+
+twig:
+    cache: false
+    auto_reload: true
+    debug: true
+    strict_variables: false

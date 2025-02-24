@@ -33,10 +33,13 @@ class FeatureConfiguration implements FeatureConfigurationInterface
      */
     public function __construct(array $features)
     {
-        Assertion::allIsInstanceOf($features, Feature::class);
-        Assertion::allString(array_keys($features), 'All keys for features must be a string (the feature key itself).');
+        $this->features = [];
+        foreach ($features as $feature => $onOrOff) {
+            $this->features[$feature] = new Feature($feature, $onOrOff);
+        }
 
-        $this->features = $features;
+        Assertion::allIsInstanceOf($this->features, Feature::class);
+        Assertion::allString(array_keys($this->features), 'All keys for features must be a string (the feature key itself).');
     }
 
     public function hasFeature($featureKey)

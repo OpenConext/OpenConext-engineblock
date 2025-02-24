@@ -86,7 +86,7 @@
                                         <td class="attr-name" data-identifier="{{ attributeIdentifier }}">{{ 'consent_name_id_label'|trans }}</td>
                                         <td class="attr-value" data-identifier="{{ attributeIdentifier }}">
 
-                                            {% spaceless %}
+                                            {% apply spaceless %}
                                                 {% if nameIdIsPersistent %}
                                                 <a class="help tooltip" title="{{ 'consent_name_id_value_tooltip'|trans({'%arg1%': 'suite_name'|trans }) }}" href="#">
                                                 {% endif %}
@@ -94,7 +94,7 @@
                                                 {% if nameIdIsPersistent %}
                                                 </a>
                                                 {% endif %}
-                                            {% endspaceless %}
+                                            {% endapply %}
                                         </td>
                                     </tr>
                                 {% else %}
@@ -106,11 +106,11 @@
                                             {# Single attribute value #}
                                             {% if attributeValues|length == 1 %}
                                                 {% if attributeMotivations[attributeIdentifier] is defined %}
-                                                    {% spaceless %}
+                                                    {% apply spaceless %}
                                                     <a class="help tooltip" title="{{ attributeMotivations[attributeIdentifier] }}" href="#">
                                                         <span>{{ attributeValues|first }}</span>
                                                     </a>
-                                                    {% endspaceless %}
+                                                    {% endapply %}
                                                 {% else %}
                                                     {{ attributeValues|first }}
                                                 {% endif %}
@@ -120,11 +120,11 @@
                                                     {% for value in attributeValues %}
                                                         <li>
                                                             {% if attributeMotivations[attributeIdentifier] is defined %}
-                                                                {% spaceless %}
+                                                                {% apply spaceless %}
                                                                 <a class="help tooltip" title="{{ attributeMotivations[attributeIdentifier] }}" href="#">
                                                                     <span>{{ value }}</span>
                                                                 </a>
-                                                                {% endspaceless %}
+                                                                {% endapply %}
                                                             {% else %}
                                                                 {{ value }}
                                                             {% endif %}

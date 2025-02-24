@@ -21,7 +21,7 @@ namespace OpenConext\EngineBlockBundle\Configuration;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Mockery as m;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ErrorFeedbackConfigurationTest extends TestCase
 {

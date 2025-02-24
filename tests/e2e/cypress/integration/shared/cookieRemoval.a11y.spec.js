@@ -1,5 +1,5 @@
 /**
- * This doesn't run in CI, which is why it's skipped.  You can run it locally by setting the wayf.remember_choice flag to true in parameters.yml.
+ * This doesn't run in CI, which is why it's skipped.  You can run it locally by setting the wayf.remember_choice flag to true in parameters.yaml.
  */
 context.skip('Cookie removal page verify a11y', () => {
   beforeEach(() => {

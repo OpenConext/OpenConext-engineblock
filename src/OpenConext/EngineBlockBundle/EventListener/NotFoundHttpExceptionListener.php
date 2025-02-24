@@ -22,9 +22,9 @@ use EngineBlock_ApplicationSingleton;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiHttpException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Twig_Environment;
+use Twig\Environment;
 
 /**
  * When there was nothing to dispatch to, the dispatcher invoked a 404 page. This mimics that behaviour. When
@@ -34,7 +34,7 @@ use Twig_Environment;
 class NotFoundHttpExceptionListener
 {
     /**
-     * @var Twig_Environment
+     * @var Environment
      */
     private $twig;
     /**
@@ -48,12 +48,12 @@ class NotFoundHttpExceptionListener
 
     /**
      * @param EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton
-     * @param Twig_Environment $twig
+     * @param Environment $twig
      * @param LoggerInterface $logger
      */
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        Twig_Environment $twig,
+        Environment $twig,
         LoggerInterface $logger
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
@@ -61,7 +61,7 @@ class NotFoundHttpExceptionListener
         $this->logger = $logger;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event)
     {
         $exception = $event->getException();
         if (!$exception instanceof NotFoundHttpException) {

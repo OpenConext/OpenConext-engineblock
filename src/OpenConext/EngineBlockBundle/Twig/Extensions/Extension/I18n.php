@@ -18,13 +18,12 @@
 
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
-use Twig_Extensions_Extension_I18n;
-use Symfony\Component\Translation\TranslatorInterface;
-use Twig_SimpleFilter;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class I18n extends Twig_Extensions_Extension_I18n
+class I18n extends AbstractExtension
 {
-
     /**
      * @var TranslatorInterface
      */
@@ -35,55 +34,35 @@ class I18n extends Twig_Extensions_Extension_I18n
         $this->translator = $translator;
     }
 
-    /**
-     * Returns a list of filters to add to the existing list.
-     *
-     * @return array An array of filters
-     */
     public function getFilters()
     {
-        return array(
-            new Twig_SimpleFilter('trans', array($this, 'translateSingular')),
-            new Twig_SimpleFilter('transchoice', array($this, 'translatePlural')),
-        );
+        return [
+            new TwigFilter('trans', [$this, 'translateSingular']),
+            new TwigFilter('transchoice', [$this, 'translatePlural']),
+        ];
     }
 
-    /**
-     * @return string
-     */
-    public function translateSingular()
+    public function translateSingular($id, array $parameters = [], $domain = null, $locale = null)
     {
-        $args = func_get_args();
-        return call_user_func_array(
-            [$this->translator, 'trans'],
-            $this->prepareDefaultPlaceholders($args)
-        );
+        $parameters = $this->addDefaultPlaceholders($parameters);
+        return $this->translator->trans($id, $parameters, $domain, $locale);
     }
 
-    /**
-     * @return string
-     */
-    public function translatePlural()
+    public function translatePlural($id, $count, array $parameters = [], $domain = null, $locale = null)
     {
-        $args = func_get_args();
-        return call_user_func_array(
-            [$this->translator, 'transChoice'],
-            $this->prepareDefaultPlaceholders($args)
-        );
+        $parameters = $this->addDefaultPlaceholders($parameters);
+        $parameters['%count%'] = $count;
+        return $this->translator->trans($id, $parameters, $domain, $locale);
     }
 
-    /**
-     * @param array $args
-     * @return array
-     */
-    private function prepareDefaultPlaceholders(array $args)
+    private function addDefaultPlaceholders(array $parameters)
     {
-        $args[1]['%suiteName%'] = $this->translator->trans('suite_name');
-        $args[1]['%supportUrl%'] = $this->translator->trans('openconext_support_url');
-        $args[1]['%organisationNoun%'] = $this->translator->trans('organisation_noun');
-        $args[1]['%organisationNounPlural%'] = $this->translator->trans('organisation_noun_plural');
-        $args[1]['%accountNoun%'] = $this->translator->trans('account_noun');
+        $parameters['%suiteName%'] = $this->translator->trans('suite_name');
+        $parameters['%supportUrl%'] = $this->translator->trans('openconext_support_url');
+        $parameters['%organisationNoun%'] = $this->translator->trans('organisation_noun');
+        $parameters['%organisationNounPlural%'] = $this->translator->trans('organisation_noun_plural');
+        $parameters['%accountNoun%'] = $this->translator->trans('account_noun');
 
-        return $args;
+        return $parameters;
     }
 }
