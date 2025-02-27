@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2010 SURFnet B.V.
+ * Copyright 2025 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,38 +16,60 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Pdp;
+namespace OpenConext\EngineBlockBundle\Sbs;
 
-use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlock\Http\HttpClient;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response;
+use OpenConext\EngineBlockBundle\Pdp\PdpClientInterface;
+use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
 
-final class PdpClient implements PdpClientInterface
+final class SbsClient implements PdpClientInterface
 {
     /**
      * @var HttpClient
      */
     private $httpClient;
-
     /**
      * @var string
      */
-    private $policyDecisionPointPath;
+    private $interruptLocation;
+    /**
+     * @var string
+     */
+    private $entitlementsLocation;
+
 
     public function __construct(
         HttpClient $httpClient,
-        string $policyDecisionPointPath
+        string $interruptLocation,
+        string $entitlementsLocation
     ) {
         $this->httpClient              = $httpClient;
-        $this->policyDecisionPointPath = $policyDecisionPointPath;
+        $this->interruptLocation = $interruptLocation;
+        $this->entitlementsLocation = $entitlementsLocation;
     }
 
     public function requestInterruptDecisionFor(Request $request) : PolicyDecision
     {
         $jsonData = $this->httpClient->post(
             json_encode($request),
-            $this->policyDecisionPointPath,
+            $this->interruptLocation,
+            [],
+            [
+                'Content-Type' => 'application/json',
+                'Accept'       => 'application/json',
+            ]
+        );
+        $response = Response::fromData($jsonData);
+
+        return PolicyDecision::fromResponse($response);
+    }
+    public function requestEntitlementsFor(Request $request) : PolicyDecision
+    {
+        $jsonData = $this->httpClient->post(
+            json_encode($request),
+            $this->entitlementsLocation,
             [],
             [
                 'Content-Type' => 'application/json',
