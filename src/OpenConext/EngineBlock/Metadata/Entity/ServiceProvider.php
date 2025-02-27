@@ -157,7 +157,8 @@ class ServiceProvider extends AbstractRole
         ?string $supportUrlPt = null,
         ?bool $stepupAllowNoToken = null,
         ?string $stepupRequireLoa = null,
-        bool $stepupForceAuthn = false
+        bool $stepupForceAuthn = false,
+        bool $collabEnabled = false
     ) {
         if (is_null($mdui)) {
             $mdui = Mdui::emptyMdui();
@@ -215,7 +216,8 @@ class ServiceProvider extends AbstractRole
             $disableScoping,
             $additionalLogging,
             $signatureMethod,
-            $stepupForceAuthn
+            $stepupForceAuthn,
+            $collabEnabled
         );
     }
 
