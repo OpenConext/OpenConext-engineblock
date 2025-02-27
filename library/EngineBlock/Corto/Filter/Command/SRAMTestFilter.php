@@ -29,7 +29,6 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
 
     public function execute(): void
     {
-
         $application = EngineBlock_ApplicationSingleton::getInstance();
 
         $sramEndpoint = $application->getDiContainer()->getSRAMEndpoint();
@@ -46,7 +45,14 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
         $user_id = $attributes['urn:mace:dir:attribute-def:uid'][0];
         $continue_url = $this->_server->getUrl('SRAMInterruptService', '') . "?ID=$id";
         $service_id = $this->_serviceProvider->entityId;
+        // @TODO at the very start of this function, check if the SP has `coin:collab_enabled`, skip otherwise?
         $issuer_id = $this->_identityProvider->entityId;
+
+        /***
+         * @TODO Move all curl related things to new HttpClient. See PDPClient as an example.
+         * @TODO Make sure it has tests
+         * @TODO add tests for this Input Filter
+         */
 
         $headers = array(
             "Authorization: $sramApiToken"
@@ -74,16 +80,16 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
         $data = curl_exec($ch);
         curl_close($ch);
 
-        $body = json_decode($data);
+        $body = json_decode($data, false);
         // error_log("SRAMTestFilter " . var_export($body, true));
 
+        // @TODO Add integration test: Assert the redirect url on the saml response is SRAM
+
         $msg = $body->msg;
-        if ('interrupt' == $msg) {
+        if ($msg === 'interrupt') {
             $this->_response->setSRAMInterruptNonce($body->nonce);
-        } else {
-            if ($body->attributes) {
-                $this->_responseAttributes = array_merge_recursive($this->_responseAttributes, (array) $body->attributes);
-            }
+        } elseif ($body->attributes) {
+            $this->_responseAttributes = array_merge_recursive($this->_responseAttributes, (array) $body->attributes);
         }
 
     }
