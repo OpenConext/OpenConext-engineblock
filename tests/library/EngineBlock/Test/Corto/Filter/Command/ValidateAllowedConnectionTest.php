@@ -84,6 +84,7 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateAllowedConnectionTest extend
         $verifier->setProxyServer($server);
         $verifier->setRequest(m::mock(EngineBlock_Saml2_AuthnRequestAnnotationDecorator::class));
         $sp->shouldReceive('getCoins->isTrustedProxy')->andReturn(true);
+        $sp->shouldReceive('getCoins->collabEnabled')->andReturn(false);
         $server->shouldReceive('findOriginalServiceProvider')->andReturn($sp);
         $server->shouldReceive('getLogger')->andReturn($logger);
         $verifier->setIdentityProvider(new IdentityProvider('OpenConext'));
@@ -101,6 +102,73 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateAllowedConnectionTest extend
         $verifier->setServiceProvider($sp);
         self::expectException(EngineBlock_Corto_Exception_InvalidConnection::class);
         self::expectExceptionMessage('Disallowed response by SP configuration. Response from IdP "OpenConext" to SP "FoobarSP"');
+        $verifier->execute();
+    }
+
+    public function testIsAllowedWhenCollabEnabledCoinIsTrueEvenWhenNotAllowed()
+    {
+        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection();
+        $verifier->setResponse($this->response);
+
+        /**
+         * @TODO Use PHP8 named parameters to pass collabEnabled: true, all other params are default.
+         */
+        $sp = new ServiceProvider(
+            'FoobarSP',
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            [],
+            [],
+            '',
+            '',
+            '',
+            false,
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            null,
+            '',
+            '',
+            '',
+            null,
+            [],
+            false,
+            '',
+            '',
+            [],
+            false,
+            [],
+            false,
+            null,
+            true,
+            false,
+            false,
+            null,
+            false,
+            false,
+            false,
+            false,
+            '',
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            true
+        );
+        $sp->allowAll = false;
+
+        $verifier->setIdentityProvider(new IdentityProvider('OpenConext'));
+        $verifier->setServiceProvider($sp);
         $verifier->execute();
     }
 }

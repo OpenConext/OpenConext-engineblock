@@ -63,7 +63,7 @@ class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_F
 
         try {
             $pdp = $this->getPdpClient();
-            $policyDecision = $pdp->requestDecisionFor($pdpRequest);
+            $policyDecision = $pdp->requestInterruptDecisionFor($pdpRequest);
         } catch (\OpenConext\EngineBlock\Http\Exception\HttpException $e) {
             throw new EngineBlock_Exception_PdpCheckFailed(
                 'Policy Enforcement Point: Could not perform PDP check: ' . $e->getMessage()

@@ -207,9 +207,30 @@ services:
         arguments:
             - base_uri: "%pdp.host%"
               auth: ["%pdp.username%", "%pdp.password%", "Basic"]
-              # Verify CAs for certificates for prod, but not for other environments
-              # as we are working with self signed signatures
+                # Verify CAs for certificates for prod, but not for other environments
+                # as we are working with self signed signatures
               verify: "@=service('kernel').getEnvironment() === 'prod'"
+              timeout: "%http_client.timeout%"
+
+    engineblock.sbs.sbs_client:
+        class: OpenConext\EngineBlockBundle\Sbs\SbsClient
+        arguments:
+            - "@engineblock.sbs.http_client"
+            - "%sram.interrupt_location%"
+            - "%sram.entitlements_location%"
+
+    engineblock.sbs.http_client:
+        class: OpenConext\EngineBlock\Http\HttpClient
+        arguments:
+            - "@engineblock.sbs.guzzle_http_client"
+
+    engineblock.sbs.guzzle_http_client:
+        class: GuzzleHttp\Client
+        arguments:
+            - base_uri: "%sram.authz_location%"
+              options:
+                  headers:
+                        Authentication: "%sram.api_token%"
               timeout: "%http_client.timeout%"
 
     engineblock.authentication.authentication_loop_guard:
