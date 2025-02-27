@@ -311,24 +311,11 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
         $this->isTransparentErrorResponse = $isTransparentErrorResponse;
     }
 
-    /**
-     * @param bool
-     */
-    public function setSRAMInterrupt(bool $SRAMInterrupt)
-    {
-        $this->SRAMInterrupt = $SRAMInterrupt;
-    }
-
-    /**
-     * @param string
-     */
-    public function setSRAMInterruptNonce(string $SRAMInterruptNonce)
+    public function setSRAMInterruptNonce(string $SRAMInterruptNonce): void
     {
         $this->SRAMInterruptNonce = $SRAMInterruptNonce;
     }
-    /**
-     * @return string
-     */
+
     public function getSRAMInterruptNonce(): string
     {
         return $this->SRAMInterruptNonce;

@@ -51,7 +51,7 @@ final class FunctionalTestingPdpClient implements PdpClientInterface
     /**
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function requestDecisionFor(Request $request) : PolicyDecision
+    public function requestInterruptDecisionFor(Request $request) : PolicyDecision
     {
         $pdpResponse = new Response();
 
@@ -92,7 +92,7 @@ final class FunctionalTestingPdpClient implements PdpClientInterface
 
                 $pdpResponse->status = new Status();
                 $pdpResponse->status->statusDetail = <<<XML
-    <MissingAttributeDetail 
+    <MissingAttributeDetail
         Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
         AttributeId="urn:mace:dir:attribute-def:eduPersonAffiliation"
         DataType="http://www.w3.org/2001/XMLSchema#string"/>

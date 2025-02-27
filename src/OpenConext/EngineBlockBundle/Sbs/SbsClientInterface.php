@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2010 SURFnet B.V.
+ * Copyright 2025 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,12 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Pdp;
+namespace OpenConext\EngineBlockBundle\Sbs;
 
 use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
+use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
 
-interface PdpClientInterface
+interface SbsClientInterface
 {
-    public function requestInterruptDecisionFor(Request $request) : PolicyDecision;
+    public function requestDecisionFor(Request $request) : PolicyDecision;
 }
