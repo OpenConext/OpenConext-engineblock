@@ -465,4 +465,44 @@ class PushMetadataAssemblerTest extends TestCase
             ["0", false]
         ];
     }
+
+    public function test_it_assembles_coin_collab_enabled()
+    {
+        $input = $this->readFixture('metadata_coin_collab.json');
+        $connections = $this->assembler->assemble($input->connections);
+
+        /** @var ServiceProvider $sp */
+        $sp = $connections[0];
+        $this->assertInstanceOf(ServiceProvider::class, $sp);
+
+        $this->assertSame('sp coin_collab_true', $sp->nameEn);
+        $this->assertSame(true, $sp->getCoins()->collabEnabled());
+
+        /** @var ServiceProvider $sp */
+        $sp = $connections[1];
+        $this->assertInstanceOf(ServiceProvider::class, $sp);
+
+        $this->assertSame('sp coin_collab_false', $sp->nameEn);
+        $this->assertSame(false, $sp->getCoins()->collabEnabled());
+
+        /** @var ServiceProvider $sp */
+        $sp = $connections[2];
+        $this->assertInstanceOf(ServiceProvider::class, $sp);
+
+        $this->assertSame('sp coin_collab_unset', $sp->nameEn);
+        $this->assertSame(false, $sp->getCoins()->collabEnabled());
+
+
+        /** @var IdentityProvider $idp */
+        $idp = $connections[3];
+        $this->assertInstanceOf(IdentityProvider::class, $idp);
+
+        $this->assertSame('Dummy IdP', $idp->nameEn);
+        $this->assertSame(false, $idp->getCoins()->collabEnabled());
+    }
+
+    private function readFixture(string $file): object
+    {
+        return json_decode(file_get_contents(__DIR__ . '/fixtures/'. basename($file)), false);
+    }
 }

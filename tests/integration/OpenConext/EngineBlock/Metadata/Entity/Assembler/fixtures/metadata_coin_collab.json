@@ -1,0 +1,141 @@
+{
+    "connections": {
+        "ccd61cb5-5c59-4608-b037-a39a92ad5bca": {
+            "allow_all_entities": true,
+            "allowed_connections": [],
+            "metadata": {
+                "AssertionConsumerService": [
+                    {
+                        "Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+                        "Location": "https://spdashboard.dev.openconext.local/saml/acs"
+                    }
+                ],
+                "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+                "OrganizationName": {
+                    "en": "OpenConext DEV"
+                },
+                "coin": {
+                    "no_consent_required": "1",
+                    "collab_enabled": "1",
+                    "signature_method": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+                },
+                "description": {
+                    "en": "spdashboard OpenConext DEV"
+                },
+                "name": {
+                    "en": "sp coin_collab_true"
+                }
+            },
+            "name": "https://spdashboard.dev.openconext.local/saml/metadata",
+            "state": "prodaccepted",
+            "type": "saml20-sp"
+        },
+        "377f0366-c593-43fa-880a-169469d6990b": {
+            "allow_all_entities": true,
+            "allowed_connections": [],
+            "metadata": {
+                "AssertionConsumerService": [
+                    {
+                        "Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+                        "Location": "https://spdashboard.dev.openconext.local/saml/acs"
+                    }
+                ],
+                "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+                "OrganizationName": {
+                    "en": "OpenConext DEV"
+                },
+                "coin": {
+                    "no_consent_required": "1",
+                    "collab_enabled": "0",
+                    "signature_method": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+                },
+                "description": {
+                    "en": "spdashboard OpenConext DEV"
+                },
+                "name": {
+                    "en": "sp coin_collab_false"
+                }
+            },
+            "name": "https://spdashboard.dev.openconext.local/saml/metadata",
+            "state": "prodaccepted",
+            "type": "saml20-sp"
+        },
+        "a2592ad5-7288-4443-9529-45484ae36254": {
+            "allow_all_entities": true,
+            "allowed_connections": [],
+            "metadata": {
+                "AssertionConsumerService": [
+                    {
+                        "Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+                        "Location": "https://spdashboard.dev.openconext.local/saml/acs"
+                    }
+                ],
+                "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+                "OrganizationName": {
+                    "en": "OpenConext DEV"
+                },
+                "coin": {
+                    "no_consent_required": "1",
+                    "signature_method": "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+                },
+                "description": {
+                    "en": "spdashboard OpenConext DEV"
+                },
+                "name": {
+                    "en": "sp coin_collab_unset"
+                }
+            },
+            "name": "https://spdashboard.dev.openconext.local/saml/metadata",
+            "state": "prodaccepted",
+            "type": "saml20-sp"
+        },
+        "43468888-4f10-494e-80a1-c7f8569c0fdd": {
+            "allow_all_entities": true,
+            "allowed_connections": [],
+            "disable_consent_connections": [],
+            "metadata": {
+                "OrganizationName": {
+                    "en": "OpenConext DEV"
+                },
+                "SingleSignOnService": [
+                    {
+                        "Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+                        "Location": "https://mujina-idp.dev.openConext.local/SingleSignOnService"
+                    }
+                ],
+                "certData": "MIIDEzCCAfugAwIBAgIJAKoK/heBjcOYMA0GCSqGSIb3DQEBBQUAMCAxHjAcBgNVBAoMFU9yZ2FuaXphdGlvbiwgQ049T0lEQzAeFw0xNTExMTExMDEyMTVaFw0yNTExMTAxMDEyMTVaMCAxHjAcBgNVBAoMFU9yZ2FuaXphdGlvbiwgQ049T0lEQzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANBGwJ/qpTQNiSgUglSE2UzEkUow+wS8r67etxoEhlzJZfgK/k5TfG1wICDqapHAxEVgUM10aBHRctNocA5wmlHtxdidhzRZroqHwpKy2BmsKX5Z2oK25RLpsyusB1KroemgA/CjUnI6rIL1xxFn3KyOFh1ZBLUQtKNQeMS7HFGgSDAp+sXuTFujz12LFDugX0T0KB5a1+0l8y0PEa0yGa1oi6seONx849ZHxM0PRvUunWkuTM+foZ0jZpFapXe02yWMqhc/2iYMieE/3GvOguJchJt6R+cut8VBb6ubKUIGK7pmoq/TB6DVXpvsHqsDJXechxcicu4pdKVDHSec850CAwEAAaNQME4wHQYDVR0OBBYEFK7RqjoodSYVXGTVEdLf3kJflP/sMB8GA1UdIwQYMBaAFK7RqjoodSYVXGTVEdLf3kJflP/sMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADggEBADNZkxlFXh4F45muCbnQd+WmaXlGvb9tkUyAIxVL8AIu8J18F420vpnGpoUAE+Hy3evBmp2nkrFAgmr055fAjpHeZFgDZBAPCwYd3TNMDeSyMta3Ka+oS7GRFDePkMEm+kH4/rITNKUF1sOvWBTSowk9TudEDyFqgGntcdu/l/zRxvx33y3LMG5USD0x4X4IKjRrRN1BbcKgi8dq10C3jdqNancTuPoqT3WWzRvVtB/q34B7F74/6JzgEoOCEHufBMp4ZFu54P0yEGtWfTwTzuoZobrChVVBt4w/XZagrRtUCDNwRpHNbpjxYudbqLqpi1MQpV9oht/BpTHVJG2i0ro=",
+                "coin": {
+                    "guest_qualifier": "None"
+                },
+                "description": {
+                    "en": "Dummy IDP"
+                },
+                "discoveries": [
+                    {
+                        "keywords_en": "idp keyword 1",
+                        "logo_url": "https://engine.dev.openconext.local/images/logo.png?v=dev",
+                        "name_en": "Dummy IdP",
+                        "name_nl": "Dummy IdP"
+                    }
+                ],
+                "keywords": {
+                    "en": "idp keyword 1"
+                },
+                "logo": [
+                    {
+                        "url": "https://engine.dev.openconext.local/images/logo.png?v=dev"
+                    }
+                ],
+                "name": {
+                    "en": "Dummy IdP",
+                    "nl": "Dummy IdP"
+                }
+            },
+            "mfa_entities": [],
+            "name": "http://mock-idp",
+            "state": "prodaccepted",
+            "stepup_connections": [],
+            "type": "saml20-idp"
+        }
+    }
+}

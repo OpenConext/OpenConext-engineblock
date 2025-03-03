@@ -44,7 +44,8 @@ class Coins
         $disableScoping,
         $additionalLogging,
         $signatureMethod,
-        $stepupForceAuthn
+        $stepupForceAuthn,
+        $collabEnabled
     ) {
         return new self([
             'isConsentRequired' => $isConsentRequired,
@@ -62,6 +63,7 @@ class Coins
             'stepupAllowNoToken' => $stepupAllowNoToken,
             'stepupRequireLoa' => $stepupRequireLoa,
             'stepupForceAuthn' => $stepupForceAuthn,
+            'collabEnabled' => $collabEnabled,
         ]);
     }
 
@@ -227,6 +229,11 @@ class Coins
     public function signatureMethod()
     {
         return $this->getValue('signatureMethod', XMLSecurityKey::RSA_SHA256);
+    }
+
+    public function collabEnabled()
+    {
+        return $this->getValue('collabEnabled', false);
     }
 
     public function mfaEntities(): MfaEntityCollection
