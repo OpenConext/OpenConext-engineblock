@@ -37,13 +37,16 @@ use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
+use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\Utils;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy;
 use OpenConext\EngineBlock\Validator\ValidatorInterface;
+use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use stdClass;
+
 use function array_key_exists;
 
 /**
@@ -57,6 +60,11 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
     private $allowedAcsLocationsValidator;
 
     /**
+     * @var DiscoveryAssembler
+     */
+    private $discoveryAssembler;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -66,9 +74,13 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
      */
     private const FIELDS_MAX_LENGTH = 255;
 
-    public function __construct(ValidatorInterface $allowedAcsLocations, LoggerInterface $logger)
-    {
+    public function __construct(
+        ValidatorInterface $allowedAcsLocations,
+        LanguageSupportProvider $languageSupportProvider,
+        LoggerInterface $logger
+    ) {
         $this->allowedAcsLocationsValidator = $allowedAcsLocations;
+        $this->discoveryAssembler = new DiscoveryAssembler($languageSupportProvider);
         $this->logger = $logger;
     }
 
@@ -254,6 +266,8 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->assembleStepupConnections($connection);
         $properties += $this->assembleMfaEntities($connection);
 
+        $properties += $this->discoveryAssembler->assembleDiscoveries($connection);
+
         return Utils::instantiate(
             IdentityProvider::class,
             $properties
@@ -412,6 +426,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         if ($limitlength) {
             $reference = $this->limitValueLength($reference);
         }
+
         return array($to => (string)$reference);
     }
 

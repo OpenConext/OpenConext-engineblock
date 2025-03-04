@@ -60,6 +60,8 @@ services:
             - "@engineblock.compat.application"
             - "@twig"
             - "@engineblock.service.sso_session"
+            - "@engineblock.service.discovery_selection_service"
+            - "@engineblock.compat.logger"
 
     engineblock.controller.authentication.proxy:
         class: OpenConext\EngineBlockBundle\Controller\ProxyController

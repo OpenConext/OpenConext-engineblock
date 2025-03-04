@@ -260,4 +260,9 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
     {
         return $this->entity->getMdui();
     }
+
+    public function getDiscoveries(): array
+    {
+        return $this->entity->getDiscoveries();
+    }
 }

@@ -9,14 +9,15 @@ import Cookies from 'js-cookie';
  */
 export const addSelectedIdp = (element) => {
   const cookieName = JSON.parse(document.getElementById(configurationId).innerHTML).previousSelectionCookieName;
-  const entityId = element.getAttribute('data-entityid');
+  const entryKey = element.getAttribute('data-idpkey');
+
   let alreadyInCookie = false;
   let cookie = Cookies.get(cookieName) || [];
 
   if (cookie.length) {
     cookie = JSON.parse(cookie);
     cookie.forEach(idp => {
-      if (idp.idp === entityId) {
+      if (idp.idp === entryKey) {
         idp.count += 1;
         savePreviousSelection(cookie, cookieName);
         alreadyInCookie = true;
@@ -26,7 +27,7 @@ export const addSelectedIdp = (element) => {
   }
 
   if (!alreadyInCookie) {
-    cookie = [...cookie, { idp: entityId, count: 1 }];
+    cookie = [...cookie, { idp: entryKey, count: 1 }];
     savePreviousSelection(cookie, cookieName);
   }
 };

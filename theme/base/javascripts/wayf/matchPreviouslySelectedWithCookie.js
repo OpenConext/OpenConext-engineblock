@@ -27,7 +27,7 @@ export const matchPreviouslySelectedWithCookie = () => {
       cookie = JSON.parse(cookie);
       // check if each idp in the cookie is in the list, if not add it
       cookie.forEach(idp => {
-        const id = `[data-entityid="${idp.idp}"]`;
+        const id = `[data-idpkey="${idp.idp}"]`;
         const inPreviouslySelected = document.querySelector(`${selectedIdpsSelector}${id}:first-of-type`);
 
         if (!inPreviouslySelected) {

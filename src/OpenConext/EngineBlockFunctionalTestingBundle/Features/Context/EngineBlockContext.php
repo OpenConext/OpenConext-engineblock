@@ -355,6 +355,21 @@ class EngineBlockContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^I select IdP by label "([^"]*)" on the WAYF$/
+     */
+    public function iSelectByLabelOnTheWAYF($idpLabel)
+    {
+        $selector = '[data-title="' . $idpLabel . '"] button.idp__submit';
+        $mink = $this->getMinkContext()->getSession()->getPage();
+        $button = $mink->find('css', $selector);
+        if (!$button) {
+            throw new RuntimeException(sprintf('Unable to find button with selector "%s"', $selector));
+        }
+
+        $button->click();
+    }
+
+    /**
      * @Then /^The process form should have the "([^"]*)" field$/
      */
     public function iSeeACertainFormFieldOnTheProcessForm($formFieldName)

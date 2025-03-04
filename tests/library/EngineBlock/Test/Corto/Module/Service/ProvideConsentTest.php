@@ -28,6 +28,7 @@ use OpenConext\EngineBlock\Service\Dto\ProcessingStateStep;
 use OpenConext\EngineBlock\Service\ProcessingStateHelper;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationStateInterface;
+use OpenConext\EngineBlockBundle\Service\DiscoverySelectionService;
 use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
@@ -83,6 +84,11 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
      */
     private $sessionMock;
 
+    /**
+     * @var DiscoverySelectionService
+     */
+    private $discoverySelectionService;
+
     public function setUp(): void
     {
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
@@ -97,6 +103,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
         $this->twig = $this->mockTwig();
         $this->processingStateHelperMock = $this->mockProcessingStateHelper();
         $this->httpRequestMock = $this->mockHttpRequest();
+        $this->discoverySelectionService = Phake::mock(DiscoverySelectionService::class);
     }
 
     public function testConsentRequested()
@@ -327,7 +334,8 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
             $this->consentService,
             $this->authStateHelperMock,
             $this->twig,
-            $this->processingStateHelperMock
+            $this->processingStateHelperMock,
+            $this->discoverySelectionService
         );
     }
 
@@ -366,6 +374,10 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
     private function mockHttpRequest()
     {
         $helperMock = Phake::mock(Request::class);
+
+        Phake::when($helperMock)
+            ->getSession(Phake::anyParameters())
+            ->thenReturn(new Session());
 
         return $helperMock;
     }

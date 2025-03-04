@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
+use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
@@ -80,9 +81,15 @@ class MockIdpContext extends AbstractSubContext
 
     /**
      * @Given /^an Identity Provider named "([^"]*)"$/
+     * @Given /^an Identity Provider named "([^"]*)" with discovery "([^"]*)"$/
      */
-    public function anIdentityProviderNamed($name)
+    public function anIdentityProviderNamed($name, string $discoveryName = null)
     {
+        $discoveries = [];
+        if ($discoveryName !== null) {
+            $discoveries[] = Discovery::create(['en' => $discoveryName], [], null);
+        }
+
         $mockIdp = $this->mockIdpFactory->createNew($name);
         $this->mockIdpRegistry->set($name, $mockIdp);
         $this->mockIdpRegistry->save();
@@ -90,7 +97,8 @@ class MockIdpContext extends AbstractSubContext
             $name,
             $mockIdp->entityId(),
             $mockIdp->singleSignOnLocation(),
-            $mockIdp->publicKeyCertData()
+            $mockIdp->publicKeyCertData(),
+            $discoveries
         )->save();
     }
 

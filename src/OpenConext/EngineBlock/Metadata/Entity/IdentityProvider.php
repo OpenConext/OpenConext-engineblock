@@ -19,9 +19,11 @@
 namespace OpenConext\EngineBlock\Metadata\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
+use OpenConext\EngineBlock\Exception\InvalidDiscoveryException;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
-use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
+use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
@@ -38,6 +40,7 @@ use SAML2\Constants;
  * @ORM\Entity
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * WARNING: Please don't use this entity directly but use the dedicated factory instead.
  * @see \OpenConext\EngineBlock\Factory\Factory\IdentityProviderFactory
@@ -88,6 +91,13 @@ class IdentityProvider extends AbstractRole
     public $shibMdScopes = array();
 
     /**
+     * @var array<int, Discovery>
+     *
+     * @ORM\Column(name="idp_discoveries", type="json")
+     */
+    private $discoveries;
+
+    /**
      * WARNING: Please don't use this entity directly but use the dedicated factory instead.
      * @see \OpenConext\EngineBlock\Factory\Factory\IdentityProviderFactory
      */
@@ -132,7 +142,8 @@ class IdentityProvider extends AbstractRole
         array $singleSignOnServices = array(),
         ConsentSettings $consentSettings = null,
         StepupConnections $stepupConnections = null,
-        MfaEntityCollection $mfaEntities = null
+        MfaEntityCollection $mfaEntities = null,
+        array $discoveries = []
     ) {
         if (is_null($mdui)) {
             $mdui = Mdui::emptyMdui();
@@ -181,6 +192,9 @@ class IdentityProvider extends AbstractRole
             $signatureMethod,
             $mfaEntities
         );
+
+        $this->assertAllDiscoveries($discoveries);
+        $this->discoveries = $discoveries;
     }
 
     /**
@@ -236,5 +250,58 @@ class IdentityProvider extends AbstractRole
         }
 
         return $this->consentSettings;
+    }
+
+    /**
+     * @return array<int, Discovery>
+     */
+    public function getDiscoveries(): array
+    {
+        $this->ensureDiscoveriesDeserialized();
+        return $this->discoveries;
+    }
+
+    /**
+     * @param array<Discovery> $discoveries
+     */
+    public function setDiscoveries(array $discoveries)
+    {
+        $this->assertAllDiscoveries($discoveries);
+        $this->discoveries = $discoveries;
+    }
+
+    private function ensureDiscoveriesDeserialized(): void
+    {
+        if (!is_array($this->discoveries)) {
+            $this->discoveries = [];
+            return;
+        }
+
+        foreach ($this->discoveries as $index => $discovery) {
+            try {
+                if (!$discovery instanceof Discovery) {
+                    $logo = new Logo($discovery['logo']['url']);
+                    $logo->width = $discovery['logo']['width'];
+                    $logo->height = $discovery['logo']['height'];
+
+                    $this->discoveries[$index] = Discovery::create(
+                        $discovery['names'] ?? [],
+                        $discovery['keywords'] ?? [],
+                        $logo
+                    );
+                }
+            } catch (InvalidDiscoveryException $e) {
+                unset($this->discoveries[$index]);
+            }
+        }
+    }
+
+    private function assertAllDiscoveries(array $discoveries): void
+    {
+        foreach ($discoveries as $discovery) {
+            if (!$discovery instanceof Discovery) {
+                throw new InvalidArgumentException('Discovery must be instance of Discovery');
+            }
+        }
     }
 }
