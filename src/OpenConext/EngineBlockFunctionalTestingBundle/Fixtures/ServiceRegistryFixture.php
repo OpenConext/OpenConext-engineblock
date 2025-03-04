@@ -260,6 +260,13 @@ QUERY;
         return $this;
     }
 
+    public function setSpCollabEnabled($entityId)
+    {
+        $this->setCoin($this->getServiceProvider($entityId), 'collabEnabled', true);
+
+        return $this;
+    }
+
     public function setSpEntityWantsSignature($entityId)
     {
         $this->getServiceProvider($entityId)->requestsMustBeSigned = true;

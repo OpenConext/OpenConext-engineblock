@@ -1,5 +1,10 @@
 <?php
 
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
+use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
+use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
+use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
+
 /**
  * Copyright 2021 Stichting Kennisnet
  *
@@ -27,70 +32,72 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
         return $this->_responseAttributes;
     }
 
+    public function getResponse()
+    {
+        return $this->_response;
+    }
+
     public function execute(): void
     {
-        $application = EngineBlock_ApplicationSingleton::getInstance();
+        if (!$this->getFeatureConfiguration()->isEnabled('eb.feature_enable_sram_interrupt')) {
+            return;
+        }
 
-        $sramEndpoint = $application->getDiContainer()->getSRAMEndpoint();
-        $sramApiToken = $sramEndpoint->getApiToken();
-        $sramAuthzLocation = $sramEndpoint->getAuthzLocation();
-        // $sramAuthzLocation = 'http://192.168.0.1:12345/api';
+        if ($this->_serviceProvider->getCoins()->collabEnabled() === false) {
+            return;
+        }
 
-        error_log("SRAMTestFilter execute");
+        try {
+            $request = $this->buildRequest();
 
+            $interruptResponse = $this->getSbsClient()->authz($request);
+
+            if ($interruptResponse->msg === 'interrupt') {
+                $this->_response->setSRAMInterruptNonce($interruptResponse->nonce);
+            } elseif ($interruptResponse->msg === 'authorized' && !empty($interruptResponse->attributes)) {
+                $this->_responseAttributes = $this->getSbsAttributeMerger()->mergeAttributes($this->_responseAttributes, $interruptResponse->attributes);
+            } else {
+                throw new InvalidSbsResponseException(sprintf('Invalid SBS response received: %s', $interruptResponse->msg));
+            }
+        }catch (Throwable $e){
+            throw new EngineBlock_Exception_SbsCheckFailed('The SBS server could not be queried: ' . $e->getMessage());
+        }
+    }
+
+    private function getSbsClient()
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSbsClient();
+    }
+
+    private function getFeatureConfiguration(): FeatureConfigurationInterface
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getFeatureConfiguration();
+    }
+
+    private function getSbsAttributeMerger(): SbsAttributeMerger
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSbsAttributeMerger();
+    }
+
+    /**
+     * @return AuthzRequest
+     * @throws EngineBlock_Corto_ProxyServer_Exception
+     */
+    private function buildRequest(): AuthzRequest
+    {
         $attributes = $this->getResponseAttributes();
-
         $id = $this->_request->getId();
 
         $user_id = $attributes['urn:mace:dir:attribute-def:uid'][0];
         $continue_url = $this->_server->getUrl('SRAMInterruptService', '') . "?ID=$id";
         $service_id = $this->_serviceProvider->entityId;
-        // @TODO at the very start of this function, check if the SP has `coin:collab_enabled`, skip otherwise?
         $issuer_id = $this->_identityProvider->entityId;
 
-        /***
-         * @TODO Move all curl related things to new HttpClient. See PDPClient as an example.
-         * @TODO Make sure it has tests
-         * @TODO add tests for this Input Filter
-         */
-
-        $headers = array(
-            "Authorization: $sramApiToken"
+        return AuthzRequest::create(
+            $user_id,
+            $continue_url,
+            $service_id,
+            $issuer_id
         );
-
-        $post = array(
-            'user_id' => $user_id,
-            'continue_url' => $continue_url,
-            'service_id' => $service_id,
-            'issuer_id' => $issuer_id
-        );
-
-        $options = [
-            CURLOPT_HEADER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => $headers,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => $post,
-        ];
-
-
-        $ch = curl_init($sramAuthzLocation);
-        curl_setopt_array($ch, $options);
-
-        $data = curl_exec($ch);
-        curl_close($ch);
-
-        $body = json_decode($data, false);
-        // error_log("SRAMTestFilter " . var_export($body, true));
-
-        // @TODO Add integration test: Assert the redirect url on the saml response is SRAM
-
-        $msg = $body->msg;
-        if ($msg === 'interrupt') {
-            $this->_response->setSRAMInterruptNonce($body->nonce);
-        } elseif ($body->attributes) {
-            $this->_responseAttributes = array_merge_recursive($this->_responseAttributes, (array) $body->attributes);
-        }
-
     }
 }

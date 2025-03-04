@@ -26,6 +26,7 @@ use OpenConext\EngineBlock\Service\TimeProvider\TimeProviderInterface;
 use OpenConext\EngineBlock\Stepup\StepupEntityFactory;
 use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
+use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Twig\Environment;
@@ -309,6 +310,16 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
         return $this->container;
     }
 
+    public function getSbsAttributeMerger(): SbsAttributeMerger
+    {
+        return $this->container->get('engineblack.sbs.attribute_merger');
+    }
+
+    public function getSbsClient(): \OpenConext\EngineBlockBundle\Sbs\SbsClientInterface
+    {
+        return $this->container->get('engineblock.sbs.sbs_client');
+    }
+
     public function getPdpClient()
     {
         return $this->container->get(\OpenConext\EngineBlockBundle\Pdp\PdpClient::class);
@@ -539,12 +550,6 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
     protected function getStepupEndpoint()
     {
         return $this->container->get(\OpenConext\EngineBlock\Stepup\StepupEndpoint::class);
-    }
-
-    /** @return \OpenConext\EngineBlock\SRAM\SRAMEndpoint $sramEndpoint */
-    public function getSRAMEndpoint()
-    {
-        return $this->container->get('engineblock.configuration.sram.endpoint');
     }
 
     /** @return string */

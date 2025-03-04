@@ -23,11 +23,14 @@ use Behat\Mink\Exception\ExpectationException;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
+use InvalidArgumentException;
+use OpenConext\EngineBlockBundle\Sbs\SbsClientInterface;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingPdpClient;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\SbsClientStateManager;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
@@ -116,6 +119,10 @@ class EngineBlockContext extends AbstractSubContext
      * @var string
      */
     private $currentRequestId = '';
+    /**
+     * @var SbsClientStateManager
+     */
+    private $sbsClientStateManager;
 
     private AbstractDataStore $dataStore;
 
@@ -141,6 +148,7 @@ class EngineBlockContext extends AbstractSubContext
         FunctionalTestingAuthenticationLoopGuard $authenticationLoopGuard,
         FunctionalTestingAttributeAggregationClient $attributeAggregationClient,
         AbstractDataStore $authGuardDataStore,
+        SbsClientStateManager $sbsClientStateManager
     ) {
         $this->serviceRegistryFixture = $serviceRegistry;
         $this->engineBlock = $engineBlock;
@@ -151,6 +159,7 @@ class EngineBlockContext extends AbstractSubContext
         $this->authenticationLoopGuard = $authenticationLoopGuard;
         $this->attributeAggregationClient = $attributeAggregationClient;
         $this->dataStore = $authGuardDataStore;
+        $this->sbsClientStateManager = $sbsClientStateManager;
     }
 
     /**
@@ -186,6 +195,16 @@ class EngineBlockContext extends AbstractSubContext
      * @Given /^I pass through EngineBlock$/
      */
     public function iPassThroughEngineblock()
+    {
+        $mink = $this->getMinkContext();
+
+        $mink->pressButton('Submit');
+    }
+
+    /**
+     * @Given /^I pass through SBS/
+     */
+    public function iPassThroughSBS()
     {
         $mink = $this->getMinkContext();
 
@@ -744,6 +763,46 @@ class EngineBlockContext extends AbstractSubContext
                 $attribute['Source']
             );
         }
+    }
+
+    /**
+     * @Given /^the sbs server will trigger the "([^"]*)" authz flow when called$/
+    */
+    public function primeAuthzResponse(string $msg): void
+    {
+        if ($msg === 'error') {
+            $this->sbsClientStateManager->prepareAuthzResponse('error');
+            return;
+        }
+
+        if (!in_array($msg, SbsClientInterface::VALID_MESSAGES)) {
+            throw  new InvalidArgumentException("$msg is not a valid message type");
+        }
+        $this->sbsClientStateManager->prepareAuthzResponse($msg);
+    }
+
+    /**
+     * @Given /^the sbs server will trigger the 'authorized' authz flow and will return invalid attributes$/
+    */
+    public function authzWillReturnInvalidAttributes(): void
+    {
+        $this->sbsClientStateManager->prepareAuthzResponse(SbsClientInterface::AUTHORIZED, ['foo' => ['bar' => 'baz']]);
+    }
+
+    /**
+     * @Given /^the sbs server will return valid entitlements$/
+    */
+    public function entitlementsWillReturnValidAttributes(): void
+    {
+        $this->sbsClientStateManager->prepareEntitlementsResponse($this->sbsClientStateManager->getValidMockAttributes());
+    }
+
+    /**
+     * @Given /^the sbs server will return invalid entitlements$/
+    */
+    public function entitlementsWillReturnInvalidAttributes(): void
+    {
+        $this->sbsClientStateManager->prepareEntitlementsResponse(['foo' => ['bar' => 'baz']]);
     }
 
     /**

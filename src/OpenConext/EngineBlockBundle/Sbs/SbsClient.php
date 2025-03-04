@@ -19,12 +19,11 @@
 namespace OpenConext\EngineBlockBundle\Sbs;
 
 use OpenConext\EngineBlock\Http\HttpClient;
-use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
-use OpenConext\EngineBlockBundle\Pdp\Dto\Response;
-use OpenConext\EngineBlockBundle\Pdp\PdpClientInterface;
-use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
+use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
+use OpenConext\EngineBlockBundle\Sbs\Dto\EntitlementsRequest;
+use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
 
-final class SbsClient implements PdpClientInterface
+final class SbsClient implements SbsClientInterface
 {
     /**
      * @var HttpClient
@@ -39,45 +38,89 @@ final class SbsClient implements PdpClientInterface
      */
     private $entitlementsLocation;
 
+    /**
+     * @var string
+     */
+    private $apiToken;
+
+    /**
+     * @var string
+     */
+    private $sbsBaseUrl;
+
+    /**
+     * @var string
+     */
+    private $authzLocation;
+    /**
+     * @var bool
+     */
+    private $verifyPeer;
+
 
     public function __construct(
         HttpClient $httpClient,
+        string $sbsBaseUrl,
+        string $authzLocation,
         string $interruptLocation,
-        string $entitlementsLocation
+        string $entitlementsLocation,
+        string $apiToken,
+        bool $verifyPeer
     ) {
-        $this->httpClient              = $httpClient;
+        $this->httpClient = $httpClient;
+        $this->sbsBaseUrl = $sbsBaseUrl;
+        $this->authzLocation = $authzLocation;
         $this->interruptLocation = $interruptLocation;
         $this->entitlementsLocation = $entitlementsLocation;
+        $this->apiToken = $apiToken;
+        $this->verifyPeer = $verifyPeer;
     }
 
-    public function requestInterruptDecisionFor(Request $request) : PolicyDecision
+    public function authz(AuthzRequest $request): AuthzResponse
     {
         $jsonData = $this->httpClient->post(
             json_encode($request),
-            $this->interruptLocation,
+            $this->authzLocation,
             [],
-            [
-                'Content-Type' => 'application/json',
-                'Accept'       => 'application/json',
-            ]
+            $this->requestHeaders(),
+            $this->verifyPeer
         );
-        $response = Response::fromData($jsonData);
 
-        return PolicyDecision::fromResponse($response);
+        if (!is_array($jsonData)) {
+            throw new InvalidSbsResponseException('Received non-array from SBS server');
+        }
+
+        return AuthzResponse::fromData($jsonData);
     }
-    public function requestEntitlementsFor(Request $request) : PolicyDecision
+
+    public function requestEntitlementsFor(EntitlementsRequest $request): EntitlementsResponse
     {
         $jsonData = $this->httpClient->post(
             json_encode($request),
             $this->entitlementsLocation,
             [],
-            [
-                'Content-Type' => 'application/json',
-                'Accept'       => 'application/json',
-            ]
+            $this->requestHeaders(),
+            $this->verifyPeer
         );
-        $response = Response::fromData($jsonData);
 
-        return PolicyDecision::fromResponse($response);
+        if (!is_array($jsonData)) {
+            throw new InvalidSbsResponseException('Received non-array from SBS server');
+        }
+
+        return EntitlementsResponse::fromData($jsonData);
+    }
+
+    private function requestHeaders(): array
+    {
+        return [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => $this->apiToken,
+        ];
+    }
+
+    public function getInterruptLocationLink(string $nonce): string
+    {
+        return $this->sbsBaseUrl . $this->interruptLocation . "?nonce=$nonce";
     }
 }

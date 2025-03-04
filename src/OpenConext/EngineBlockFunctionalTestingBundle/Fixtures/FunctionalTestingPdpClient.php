@@ -51,7 +51,7 @@ final class FunctionalTestingPdpClient implements PdpClientInterface
     /**
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function requestInterruptDecisionFor(Request $request) : PolicyDecision
+    public function requestDecisionFor(Request $request) : PolicyDecision
     {
         $pdpResponse = new Response();
 
