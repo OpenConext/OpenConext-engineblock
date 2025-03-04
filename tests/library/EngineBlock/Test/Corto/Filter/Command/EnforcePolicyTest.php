@@ -82,11 +82,20 @@ class EngineBlock_Test_Corto_Filter_Command_EnforcePolicyTest extends TestCase
     private function mockPdpClientWithException(Throwable $exception): void
     {
         $pdpClient = Mockery::mock(PdpClientInterface::class);
-        $pdpClient->expects('requestInterruptDecisionFor')->andThrow($exception);
+        $pdpClient->expects('requestDecisionFor')->andThrow($exception);
 
         /** @var EngineBlock_Application_TestDiContainer $container */
         $container = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
         $container->setPdpClient($pdpClient);
+    }
+
+    protected function tearDown(): void
+    {
+        /** @var EngineBlock_Application_TestDiContainer $container */
+        $container = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $container->setPdpClient(null);
+
+        parent::tearDown();
     }
 
 }

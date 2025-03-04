@@ -16,21 +16,33 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Sbs;
+namespace OpenConext\EngineBlockBundle\Sbs\Dto;
 
-use OpenConext\EngineBlockBundle\Sbs\Dto\EntitlementsRequest;
-use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
+use JsonSerializable;
+use OpenConext\EngineBlock\Assert\Assertion;
 
-interface SbsClientInterface
+class EntitlementsRequest implements JsonSerializable
 {
-    public const INTERRUPT = 'interrupt';
-    public const AUTHORIZED = 'authorized';
+    /**
+     * @var string
+     */
+    public $nonce;
 
-    public const VALID_MESSAGES = [self::INTERRUPT, self::AUTHORIZED];
+    public static function create(
+        string $nonce
+    ) : EntitlementsRequest {
+        Assertion::string($nonce, 'The nonce must be a string.');
 
-    public function getInterruptLocationLink(string $nonce);
+        $request = new self();
+        $request->nonce = $nonce;
 
-    public function requestEntitlementsFor(EntitlementsRequest $request) : EntitlementsResponse;
+        return $request;
+    }
 
-    public function authz(AuthzRequest $request) : AuthzResponse;
+    public function jsonSerialize() : array
+    {
+        return [
+            'nonce' => $this->nonce,
+        ];
+    }
 }

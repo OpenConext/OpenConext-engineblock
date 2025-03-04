@@ -118,7 +118,8 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $server,
                     $diContainer->getAuthenticationStateHelper(),
                     $diContainer->getProcessingStateHelper(),
-                    $diContainer->getStepupGatewayCallOutHelper()
+                    $diContainer->getStepupGatewayCallOutHelper(),
+                    $diContainer->getSbsAttributeMerger()
                 );
             case EngineBlock_Corto_Module_Service_AssertionConsumer::class :
                 return new EngineBlock_Corto_Module_Service_AssertionConsumer(

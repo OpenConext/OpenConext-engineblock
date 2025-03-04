@@ -17,14 +17,18 @@
  */
 
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use OpenConext\EngineBlock\Http\Exception\UnreadableResourceException;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
-use OpenConext\EngineBlockBundle\Pdp\PdpClientInterface;
+use OpenConext\EngineBlockBundle\Configuration\Feature;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
+use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
+use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
+use OpenConext\EngineBlockBundle\Sbs\AuthzResponse;
+use OpenConext\EngineBlockBundle\Sbs\SbsClientInterface;
 use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
+use SAML2\Response;
 
 class EngineBlock_Test_Corto_Filter_Command_SramTestFilterTest extends TestCase
 {
@@ -32,67 +36,215 @@ class EngineBlock_Test_Corto_Filter_Command_SramTestFilterTest extends TestCase
 
     public function testItDoesNothingIfFeatureFlagNotEnabled(): void
     {
-        $this->fail('TODO: Implement me');
+        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMTestFilter();
+
+        $request = $this->mockRequest();
+        $sramFilter->setRequest($request);
+
+        $this->mockFeatureConfiguration(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => new Feature('eb.feature_enable_sram_interrupt', false)]));
+
+        $sramFilter->execute();
+        $this->assertEmpty($sramFilter->getResponseAttributes());
     }
 
     public function testItDoesNothingIfSpDoesNotHaveCollabEnabled(): void
     {
-        $this->fail('TODO: Implement me');
+        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMTestFilter();
+
+        $request = $this->mockRequest();
+        $sramFilter->setRequest($request);
+
+        $this->mockFeatureConfiguration(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => new Feature('eb.feature_enable_sram_interrupt', true)]));
+
+        /** @var \Mockery\Mock $sbsClient */
+        $sbsClient = $this->mockSbsClient();
+        $sbsClient->shouldNotReceive('authz');
+
+        $sp = $this->mockServiceProvider('spEntityId');
+        $sp->expects('getCoins->collabEnabled')->andReturn(false);
+
+        $sramFilter->setServiceProvider($sp);
+
+        $sramFilter->execute();
+        $this->assertEmpty($sramFilter->getResponseAttributes());
     }
 
-    public function testItCallsSram(): void
+    public function testItAddsNonceWhenMessageInterrupt(): void
     {
-        $this->fail('TODO: Implement me');
+        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMTestFilter();
+
+        $initialAttributes = ['urn:mace:dir:attribute-def:uid' => ['userIdValue']];
+        $sramFilter->setResponseAttributes($initialAttributes);
+
+        $server = Mockery::mock(EngineBlock_Corto_ProxyServer::class);
+        $server->expects('getUrl')->andReturn('https://example.org');
+
+        $sramFilter->setProxyServer($server);
+
+        $request = $this->mockRequest();
+        $sramFilter->setRequest($request);
+
+        $sramFilter->setResponse(new EngineBlock_Saml2_ResponseAnnotationDecorator(new Response()));
+
+        $this->mockFeatureConfiguration(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => new Feature('eb.feature_enable_sram_interrupt', true)]));
+
+        /** @var \Mockery\Mock $sbsClient */
+        $sbsClient = $this->mockSbsClient();
+
+        $response = new AuthzResponse();
+        $response->msg = 'interrupt';
+        $response->nonce = 'hash123';
+        $response->attributes = ['dummy' => 'attributes'];
+
+        $expectedRequest = new AuthzRequest();
+        $expectedRequest->userId = 'userIdValue';
+        $expectedRequest->continueUrl = 'https://example.org?ID=';
+        $expectedRequest->serviceId = 'spEntityId';
+        $expectedRequest->issuerId = 'idpEntityId';
+
+        $sbsClient->shouldReceive('authz')
+            ->withArgs(function ($args) use ($expectedRequest) {
+
+                return $args->userId === $expectedRequest->userId
+                    && strpos($args->continueUrl, $expectedRequest->continueUrl) === 0
+                    && $args->serviceId === $expectedRequest->serviceId
+                    && $args->issuerId === $expectedRequest->issuerId;
+            })
+            ->andReturn($response);
+
+        /** @var \Mockery\Mock|ServiceProvider $sp */
+        $sp = $this->mockServiceProvider('spEntityId');
+        $sp->expects('getCoins->collabEnabled')->andReturn(true);
+        $sramFilter->setServiceProvider($sp);
+
+        /** @var \Mockery\Mock|IdentityProvider $sp */
+        $idp = $this->mockIdentityProvider('idpEntityId');
+        $sramFilter->setIdentityProvider($idp);
+
+        $sramFilter->execute();
+        $this->assertSame($initialAttributes, $sramFilter->getResponseAttributes());
+        $this->assertSame('hash123', $sramFilter->getResponse()->getSRAMInterruptNonce());
     }
 
     public function testItAddsSramAttributesOnStatusAuthorized(): void
     {
-        $this->fail('TODO: Implement me');
-    }
+        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMTestFilter();
 
-    public function testItAdds()
-    {
-        $this->fail('TODO: Implement me');
+        $initialAttributes = ['urn:mace:dir:attribute-def:uid' => ['userIdValue']];
+        $sramFilter->setResponseAttributes($initialAttributes);
+
+        $server = Mockery::mock(EngineBlock_Corto_ProxyServer::class);
+        $server->expects('getUrl')->andReturn('https://example.org');
+
+        $sramFilter->setProxyServer($server);
+
+        $request = $this->mockRequest();
+        $sramFilter->setRequest($request);
+
+        $sramFilter->setResponse(new EngineBlock_Saml2_ResponseAnnotationDecorator(new Response()));
+
+        $this->mockFeatureConfiguration(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => new Feature('eb.feature_enable_sram_interrupt', true)]));
+
+        /** @var \Mockery\Mock $sbsClient */
+        $sbsClient = $this->mockSbsClient();
+
+        $response = new AuthzResponse();
+        $response->msg = 'authorized';
+        $response->nonce = 'hash123';
+        $response->attributes = ['eduPersonEntitlement' => 'attributes', 'uid' => ['more' => ['attributes' => 'attributeValues']]];
+
+        $expectedRequest = new AuthzRequest();
+        $expectedRequest->userId = 'userIdValue';
+        $expectedRequest->continueUrl = 'https://example.org?ID=';
+        $expectedRequest->serviceId = 'spEntityId';
+        $expectedRequest->issuerId = 'idpEntityId';
+
+        $sbsClient->shouldReceive('authz')
+            ->withArgs(function ($args) use ($expectedRequest) {
+
+                return $args->userId === $expectedRequest->userId
+                    && strpos($args->continueUrl, $expectedRequest->continueUrl) === 0
+                    && $args->serviceId === $expectedRequest->serviceId
+                    && $args->issuerId === $expectedRequest->issuerId;
+            })
+            ->andReturn($response);
+
+        /** @var \Mockery\Mock|ServiceProvider $sp */
+        $sp = $this->mockServiceProvider('spEntityId');
+        $sp->expects('getCoins->collabEnabled')->andReturn(true);
+        $sramFilter->setServiceProvider($sp);
+
+        /** @var \Mockery\Mock|IdentityProvider $sp */
+        $idp = $this->mockIdentityProvider('idpEntityId');
+        $sramFilter->setIdentityProvider($idp);
+
+
+        $expectedAttributes = [
+            'urn:mace:dir:attribute-def:uid' => ['userIdValue'],
+            'eduPersonEntitlement' => 'attributes',
+            'uid' => [
+                'more' =>
+                    ['attributes' => 'attributeValues']
+            ]
+        ];
+
+        $sramFilter->execute();
+        $this->assertSame($expectedAttributes, $sramFilter->getResponseAttributes());
+        $this->assertSame('', $sramFilter->getResponse()->getSRAMInterruptNonce());
     }
 
     public function testThrowsEngineBlockExceptionIfPolicyCannotBeChecked()
     {
-//        $this->expectException('EngineBlock_Exception_PdpCheckFailed');
-//        $this->expectExceptionMessage('Policy Enforcement Point: Could not perform PDP check: Resource could not be read (status code "503")');
-//
-//        $this->mockPdpClientWithException(new UnreadableResourceException('Resource could not be read (status code "503")'));
-//
-//        $policy = new EngineBlock_Corto_Filter_Command_EnforcePolicy();
-//
-//        $request = $this->mockRequest();
-//        $policy->setRequest($request);
-//
-//        $repo = Mockery::mock(MetadataRepositoryInterface::class);
-//        $server = Mockery::mock(EngineBlock_Corto_ProxyServer::class);
-//        $server->expects('getRepository')->andReturn($repo);
-//
-//        $sp = $this->mockServiceProvider();
-//
-//        $policy->setServiceProvider($sp);
-//        $policy->setProxyServer($server);
-//        $policy->setResponseAttributes([]);
-//
-//        $policy->setCollabPersonId('foo');
-//
-//        $idp = Mockery::mock(IdentityProvider::class);
-//        $idp->entityId = 'bar';
-//        $policy->setIdentityProvider($idp);
-//
-//        $policy->execute();
+        $this->expectException(EngineBlock_Exception_SbsCheckFailed::class);
+        $this->expectExceptionMessage('The SBS server could not be queried: Server could not be reached.');
+
+        $sbsClient = $this->mockSbsClient();
+        $sbsClient->expects('authz')->andThrows(new InvalidSbsResponseException('Server could not be reached.'));
+
+
+        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMTestFilter();
+
+        $initialAttributes = ['urn:mace:dir:attribute-def:uid' => ['userIdValue']];
+        $sramFilter->setResponseAttributes($initialAttributes);
+
+        $server = Mockery::mock(EngineBlock_Corto_ProxyServer::class);
+        $server->expects('getUrl')->andReturn('https://example.org');
+
+        $sramFilter->setProxyServer($server);
+
+        $request = $this->mockRequest();
+        $sramFilter->setRequest($request);
+
+        $sramFilter->setResponse(new EngineBlock_Saml2_ResponseAnnotationDecorator(new Response()));
+
+        $this->mockFeatureConfiguration(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => new Feature('eb.feature_enable_sram_interrupt', true)]));
+
+        /** @var \Mockery\Mock|ServiceProvider $sp */
+        $sp = $this->mockServiceProvider('spEntityId');
+        $sp->expects('getCoins->collabEnabled')->andReturn(true);
+        $sramFilter->setServiceProvider($sp);
+
+        /** @var \Mockery\Mock|IdentityProvider $sp */
+        $idp = $this->mockIdentityProvider('idpEntityId');
+        $sramFilter->setIdentityProvider($idp);
+
+        $sramFilter->execute();
     }
 
-    private function mockServiceProvider(): ServiceProvider
+    private function mockServiceProvider(string $entityId): ServiceProvider
     {
         $sp = Mockery::mock(ServiceProvider::class);
-        $sp->entityId = 'bar';
+        $sp->entityId = $entityId;
         $sp->shouldReceive('getCoins->isTrustedProxy')->andReturn(false);
         $sp->shouldReceive('getCoins->policyEnforcementDecisionRequired')->andReturn(true);
         return $sp;
+    }
+
+    private function mockIdentityProvider(string $entityId): IdentityProvider
+    {
+        $idp = Mockery::mock(IdentityProvider::class);
+        $idp->entityId = $entityId;
+        return $idp;
     }
 
     private function mockRequest(): EngineBlock_Saml2_AuthnRequestAnnotationDecorator
@@ -104,14 +256,33 @@ class EngineBlock_Test_Corto_Filter_Command_SramTestFilterTest extends TestCase
         return new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($request);
     }
 
-//    private function mockPdpClientWithException(Throwable $exception): void
-//    {
-//        $pdpClient = Mockery::mock(PdpClientInterface::class);
-//        $pdpClient->expects('requestDecisionFor')->andThrow($exception);
-//
-//        /** @var EngineBlock_Application_TestDiContainer $container */
-//        $container = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
-//        $container->setPdpClient($pdpClient);
-//    }
+    private function mockSbsClient()
+    {
+        $sbsClient = Mockery::mock(SbsClientInterface::class);
+
+        /** @var EngineBlock_Application_TestDiContainer $container */
+        $container = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $container->setSbsClient($sbsClient);
+
+        return $sbsClient;
+    }
+
+    private function mockFeatureConfiguration(FeatureConfiguration $featureConfiguration)
+    {
+        /** @var EngineBlock_Application_TestDiContainer $container */
+        $container = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $container->setFeatureConfiguration($featureConfiguration);
+    }
+
+    protected function tearDown(): void
+    {
+        $container = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $container->setSbsClient(null);
+
+        $container = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $container->setFeatureConfiguration(null);
+
+        parent::tearDown();
+    }
 
 }

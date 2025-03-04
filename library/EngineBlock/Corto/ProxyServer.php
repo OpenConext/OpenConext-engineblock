@@ -41,7 +41,6 @@ use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\saml\SubjectConfirmationData;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class EngineBlock_Corto_ProxyServer
 {
@@ -560,18 +559,10 @@ class EngineBlock_Corto_ProxyServer
     }
 
     function sendSRAMInterruptRequest($response, $request) {
-        $id = $request->getId();
         $nonce = $response->getSRAMInterruptNonce();
 
-        $sramEndpoint = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSRAMEndpoint();
-        $interruptLocation = $sramEndpoint->getInterruptLocation();
-        // $interruptLocation = 'http://localhost:12345/interrupt';
-
-        $redirect_url = "$interruptLocation?nonce=$nonce";
-        // $redirect_url = $this->getUrl('SRAMInterruptService', '') . "?ID=$id&nonce=$nonce";
-
-        error_log("sendSRAMInterruptRequest: " . $redirect_url);
-
+        $sbsClient = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSbsClient();
+        $redirect_url = $sbsClient->getInterruptLocationLink($nonce);
         $this->redirect($redirect_url, '');
     }
 
