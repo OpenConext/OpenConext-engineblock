@@ -8,7 +8,7 @@ doctrine:
         connections:
             engineblock:
                 driver:   pdo_mysql         # This must be PDO until all database interaction runs through doctrine
-                server_version: 5.5
+                server_version: '10.6.0-MariaDB'
                 dbname:   "%database.dbname%"
                 host:     "mariadb"
                 port:     "%database.port%"
@@ -16,7 +16,7 @@ doctrine:
                 password: "%database.password%"
             engineblock_test:
                 driver:   pdo_mysql         # This must be PDO until all database interaction runs through doctrine
-                server_version: 5.5
+                server_version: '10.6.0-MariaDB'
                 dbname:   "%database.test.dbname%"
                 host:     "mariadb"
                 port:     "%database.test.port%"
