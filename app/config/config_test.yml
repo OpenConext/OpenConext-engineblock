@@ -69,7 +69,7 @@ doctrine:
         connections:
             engineblock_test:
                 driver:   pdo_mysql         # This must be PDO until all database interaction runs through doctrine
-                server_version: 5.5
+                server_version: '10.6.0-MariaDB'
                 dbname:   "%database.test.dbname%"
                 host:     "%database.test.host%"
                 port:     "%database.test.port%"
