@@ -17,7 +17,7 @@
             <link href="/stylesheets/application.css?v={{ assetsVersion }}" rel="stylesheet">
         {% endspaceless %}{% endblock %}
     </head>
-    <body class="index" {% if preventAutoSubmit is not defined %} onload="document.forms[0].submit()" {% endif %}>
+    <body class="index">
 
     <div class="container form mod-redirect">
         <div class="hideNoJS">
@@ -54,6 +54,9 @@
             document.querySelector('div.hideNoJS').classList.remove('hideNoJS');
         });
     </script>
+    {% if preventAutoSubmit is not defined %}
+        <script src="/javascripts/application.min.js?v={{ assetsVersion }}"></script>
+    {% endif %}
     </body>
     </html>
 {% endblock %}
