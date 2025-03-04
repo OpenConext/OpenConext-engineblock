@@ -27,14 +27,6 @@ services:
             - "%stepup.gateway.sfo.sso_location%"
             - "%stepup.gateway.sfo.key_file%"
 
-    engineblock.configuration.sram.endpoint:
-        class: OpenConext\EngineBlock\SRAM\SRAMEndpoint
-        arguments:
-            - "%sram.api_token%"
-            - "%sram.authz_location%"
-            - "%sram.interrupt_location%"
-            - "%sram.entitlements_location%"
-
     engineblock.configuration.stepup.loa_repository:
         class: OpenConext\EngineBlock\Metadata\LoaRepository
         arguments:
@@ -202,13 +194,18 @@ services:
         arguments:
             - "@engineblock.pdp.guzzle_http_client"
 
+    engineblack.sbs.attribute_merger:
+        class: OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger
+        arguments:
+            - "%sram.allowed_attributes%"
+
     engineblock.pdp.guzzle_http_client:
         class: GuzzleHttp\Client
         arguments:
             - base_uri: "%pdp.host%"
               auth: ["%pdp.username%", "%pdp.password%", "Basic"]
-                # Verify CAs for certificates for prod, but not for other environments
-                # as we are working with self signed signatures
+              # Verify CAs for certificates for prod, but not for other environments
+              # as we are working with self signed signatures
               verify: "@=service('kernel').getEnvironment() === 'prod'"
               timeout: "%http_client.timeout%"
 
@@ -216,8 +213,12 @@ services:
         class: OpenConext\EngineBlockBundle\Sbs\SbsClient
         arguments:
             - "@engineblock.sbs.http_client"
+            - "%sram.base_url%"
+            - "%sram.authz_location%"
             - "%sram.interrupt_location%"
             - "%sram.entitlements_location%"
+            - "%sram.api_token%"
+            - "%sram.verify_peer%"
 
     engineblock.sbs.http_client:
         class: OpenConext\EngineBlock\Http\HttpClient
@@ -227,7 +228,7 @@ services:
     engineblock.sbs.guzzle_http_client:
         class: GuzzleHttp\Client
         arguments:
-            - base_uri: "%sram.authz_location%"
+            - base_uri: "%sram.base_url%"
               options:
                   headers:
                         Authentication: "%sram.api_token%"

@@ -23,7 +23,7 @@ use OpenConext\EngineBlock\Http\Exception\AccessDeniedException;
 use OpenConext\EngineBlock\Http\Exception\MalformedResponseException;
 use OpenConext\EngineBlock\Http\Exception\UnreadableResourceException;
 
-final class HttpClient
+class HttpClient
 {
     /**
      * @var ClientInterface
@@ -89,13 +89,14 @@ final class HttpClient
      * @param array $headers
      * @return mixed
      */
-    public function post($data, $path, $parameters = [], array $headers = [])
+    public function post($data, $path, $parameters = [], array $headers = [], bool $verify = true)
     {
         $resource = ResourcePathFormatter::format($path, $parameters);
         $response = $this->httpClient->request('POST', $resource, [
             'exceptions' => false,
             'body' => $data,
-            'headers' => $headers
+            'headers' => $headers,
+            'verify' => $verify,
         ]);
         $statusCode = $response->getStatusCode();
 

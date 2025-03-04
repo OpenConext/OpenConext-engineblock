@@ -175,13 +175,14 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             $log->info('Handle SRAM Interrupt callout');
 
             // Add the SRAM step
-            $currentProcessStep = $this->_processingStateHelper->addStep(
+            $this->_processingStateHelper->addStep(
                 $receivedRequest->getId(),
                 ProcessingStateHelperInterface::STEP_SRAM,
                 $this->getEngineSpRole($this->_server),
                 $receivedResponse
             );
 
+            // Redirect to SRAM
             $this->_server->sendSRAMInterruptRequest($receivedResponse, $receivedRequest);
         }
 
@@ -229,7 +230,6 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             $nameId,
             $sp->getCoins()->isStepupForceAuthn()
         );
-
    }
 
     /**

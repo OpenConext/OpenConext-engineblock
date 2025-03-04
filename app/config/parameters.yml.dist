@@ -316,8 +316,16 @@ parameters:
     ##########################################################################################
     ## SRAM Settings
     ##########################################################################################
-    ## Currently this is used for the outgoing requests with the PDP and AA client
-    sram.api_token: "xxx"
-    sram.authz_location: "http://127.0.0.1:12345/api"
-    sram.interrupt_location: "http://127.0.0.1:12345/interrupt"
-    sram.entitlements_location: "http://127.0.0.1:12345/entitlements"
+    ## Config for connecting with SBS server
+    ## base_url must end with /. Locations must not start with /.
+    sram.api_token: xxx
+    sram.base_url: 'https://engine.dev.openconext.local/functional-testing/'
+    sram.authz_location: authz
+    sram.interrupt_location: interrupt
+    sram.entitlements_location: entitlements
+    sram.verify_peer: false
+    sram.allowed_attributes:
+        - eduPersonEntitlement
+        - eduPersonPrincipalName
+        - uid
+        - sshkey
