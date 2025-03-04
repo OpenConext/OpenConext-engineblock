@@ -454,6 +454,14 @@ class FeedbackController
         );
     }
 
+    public function authenticationLimitExceededAction()
+    {
+        return new Response(
+            $this->twig->render('@theme/Authentication/View/Feedback/authentication-limit-exceeded.html.twig'),
+            429
+        );
+    }
+
     /**
      * @return Response
      */

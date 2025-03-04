@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockBundle\Authentication;
 use Assert\AssertionFailedException;
 use DateTimeImmutable;
 use OpenConext\EngineBlock\Assert\Assertion;
+use OpenConext\EngineBlockBundle\Exception\AuthenticationSessionLimitExceededException;
 use OpenConext\EngineBlockBundle\Exception\LogicException;
 use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
 use OpenConext\Value\Saml\Entity;
@@ -54,6 +55,23 @@ final class AuthenticationState implements AuthenticationStateInterface
         Assertion::string($requestId, 'The requestId must be a string (XML ID) value');
         $currentAuthenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
 
+        // Validate if the processed authentications this session do not exceed the configured maximum of authentications
+        $authenticationLimitExceeded = $this->authenticationLoopGuard->detectsAuthenticationLimit(
+            $this->authenticationProcedures
+        );
+
+        if ($authenticationLimitExceeded) {
+            session_destroy();
+
+            throw new AuthenticationSessionLimitExceededException(
+                'More than the configured maximum authentication procedures for this session'
+                    . ' the user seems to have started too much authentications this session. '
+                    . ' Resetting the session.'
+            );
+        }
+
+        // Validate if the processed authentications for the service provider for this session do not exceed
+        // the configured maximum authentications in a configured time frame.
         $inAuthenticationLoop = $this->authenticationLoopGuard->detectsAuthenticationLoop(
             $serviceProvider,
             $this->authenticationProcedures

@@ -16,18 +16,8 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlockBundle\Authentication;
+namespace OpenConext\EngineBlockBundle\Exception;
 
-use OpenConext\Value\Saml\Entity;
-
-interface AuthenticationLoopGuardInterface
+final class AuthenticationSessionLimitExceededException extends RuntimeException
 {
-    public function detectsAuthenticationLoop(
-        Entity $serviceProvider,
-        AuthenticationProcedureMap $pastAuthenticationProcedures
-    ): bool;
-
-    public function detectsAuthenticationLimit(
-        AuthenticationProcedureMap $pastAuthenticationProcedures
-    ): bool;
 }

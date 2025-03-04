@@ -1,0 +1,8 @@
+{% extends '@theme/Default/View/Error/error.html.twig' %}
+
+{% set pageTitle = 'error_authentication_limit_exceeded'|trans %}
+{% block pageTitle %}{{ pageTitle }}{% endblock %}
+{% block title %}{{ parent() }}{% endblock %}
+{% block pageHeading %}{{ pageTitle }}{% endblock %}
+
+{% block errorMessage %}{{ 'error_authentication_limit_exceeded_desc'|trans }}{% endblock %}

@@ -219,6 +219,8 @@ HTML
     'error_stuck_in_authentication_loop_desc_no_idp_name' => 'Je bent succesvol ingelogd bij je %organisationNoun% maar %spName% stuurt je weer terug naar %suiteName%. Omdat je succesvol bent ingelogd, stuurt %suiteName% je weer naar %spName%, wat resulteert in een oneindig zwart gat. Dit komt waarschijnlijk door een foutje aan de kant van %spName%.',
     'error_stuck_in_authentication_loop_desc_no_sp_name' => 'Je bent succesvol ingelogd bij %idpName% maar de dienst waar je naartoe wilt stuurt je weer terug naar %suiteName%. Omdat je succesvol bent ingelogd, stuurt %suiteName% je weer naar de dienst, wat resulteert in een oneindig zwart gat. Dit komt waarschijnlijk door een foutje aan de kant van de dienst.',
     'error_stuck_in_authentication_loop_desc_no_name' => 'Je bent succesvol ingelogd bij je %organisationNoun% maar de dienst waar je naartoe wilt stuurt je weer terug naar %suiteName%. Omdat je succesvol bent ingelogd, stuurt %suiteName% je weer naar de dienst, wat resulteert in een oneindig zwart gat. Dit komt waarschijnlijk door een foutje aan de kant van de dienst.',
+    'error_authentication_limit_exceeded' => 'Fout - teveel onafgeronde authenticaties tegelijkertijd.',
+    'error_authentication_limit_exceeded_desc' => 'Teveel onafgeronde authenticaties tegelijkertijd.',
     'error_no_authentication_request_received' => 'Fout - Geen authenticatie-aanvraag ontvangen.',
     'error_authn_context_class_ref_blacklisted' => 'Fout - Waarde van AuthnContextClassRef is niet toegestaan',
     'error_authn_context_class_ref_blacklisted_desc' => 'Je kunt niet inloggen omdat %idpName% een waarde stuurde voor AuthnContextClassRef die niet is toegestaan. Neem contact op met de helpdesk van %idpName% om dit op te lossen.',
