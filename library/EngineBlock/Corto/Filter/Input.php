@@ -96,15 +96,8 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
             // Apply the Attribute Release Policy before we do consent.
             new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
 
+            new EngineBlock_Corto_Filter_Command_SRAMTestFilter(),
         );
-
-        // SRAM Test filter
-        // When feature_enable_sram_interrupt enabled
-        // @TODO Should this check be here, or in the filter itself like \EngineBlock_Corto_Filter_Command_SsoNotificationCookieFilter
-        // @TODO if it stays here, add test to make sure it's in the command[] or not
-        if ($featureConfiguration->isEnabled('eb.feature_enable_sram_interrupt')) {
-            $commands[] = new EngineBlock_Corto_Filter_Command_SRAMTestFilter();
-        }
 
         if (!$featureConfiguration->isEnabled('eb.run_all_manipulations_prior_to_consent')) {
             return $commands;

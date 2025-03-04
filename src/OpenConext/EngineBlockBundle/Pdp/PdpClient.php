@@ -43,7 +43,7 @@ final class PdpClient implements PdpClientInterface
         $this->policyDecisionPointPath = $policyDecisionPointPath;
     }
 
-    public function requestInterruptDecisionFor(Request $request) : PolicyDecision
+    public function requestDecisionFor(Request $request) : PolicyDecision
     {
         $jsonData = $this->httpClient->post(
             json_encode($request),

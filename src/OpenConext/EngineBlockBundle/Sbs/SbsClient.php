@@ -19,12 +19,13 @@
 namespace OpenConext\EngineBlockBundle\Sbs;
 
 use OpenConext\EngineBlock\Http\HttpClient;
-use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
-use OpenConext\EngineBlockBundle\Pdp\Dto\Response;
-use OpenConext\EngineBlockBundle\Pdp\PdpClientInterface;
-use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
+use OpenConext\EngineBlockBundle\Sbs\Dto\Request;
 
-final class SbsClient implements PdpClientInterface
+/***
+ * @TODO Make sure it has tests
+ * @TODO be sure to test the correct url's are called, to prevent basurl collapsing issues
+ */
+final class SbsClient implements SbsClientInterface
 {
     /**
      * @var HttpClient
@@ -39,45 +40,54 @@ final class SbsClient implements PdpClientInterface
      */
     private $entitlementsLocation;
 
+    /**
+     * @var string
+     */
+    private $apiToken;
+
 
     public function __construct(
         HttpClient $httpClient,
         string $interruptLocation,
-        string $entitlementsLocation
+        string $entitlementsLocation,
+        string $apiToken
     ) {
         $this->httpClient              = $httpClient;
         $this->interruptLocation = $interruptLocation;
         $this->entitlementsLocation = $entitlementsLocation;
+        $this->apiToken = $apiToken;
     }
 
-    public function requestInterruptDecisionFor(Request $request) : PolicyDecision
+    public function requestInterruptDecisionFor(Request $request) : InterruptResponse
     {
         $jsonData = $this->httpClient->post(
             json_encode($request),
             $this->interruptLocation,
             [],
-            [
-                'Content-Type' => 'application/json',
-                'Accept'       => 'application/json',
-            ]
+            $this->requestHeaders()
         );
-        $response = Response::fromData($jsonData);
 
-        return PolicyDecision::fromResponse($response);
+        return InterruptResponse::fromData($jsonData);
     }
-    public function requestEntitlementsFor(Request $request) : PolicyDecision
+
+    public function requestEntitlementsFor(Request $request) : EntitlementsResponse
     {
         $jsonData = $this->httpClient->post(
             json_encode($request),
             $this->entitlementsLocation,
             [],
-            [
-                'Content-Type' => 'application/json',
-                'Accept'       => 'application/json',
-            ]
+            $this->requestHeaders()
         );
-        $response = Response::fromData($jsonData);
 
-        return PolicyDecision::fromResponse($response);
+        return EntitlementsResponse::fromData($jsonData);
+    }
+
+    private function requestHeaders(): array
+    {
+        return [
+            'Content-Type' => 'application/json',
+            'Accept'       => 'application/json',
+            'Authorization' => $this->apiToken,
+        ];
     }
 }

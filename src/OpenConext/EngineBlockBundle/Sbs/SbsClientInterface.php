@@ -18,10 +18,10 @@
 
 namespace OpenConext\EngineBlockBundle\Sbs;
 
-use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
-use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
+use OpenConext\EngineBlockBundle\Sbs\Dto\Request;
 
 interface SbsClientInterface
 {
-    public function requestDecisionFor(Request $request) : PolicyDecision;
+    public function requestEntitlementsFor(Request $request) : EntitlementsResponse;
+    public function requestInterruptDecisionFor(Request $request) : InterruptResponse;
 }

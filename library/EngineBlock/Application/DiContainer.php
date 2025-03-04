@@ -26,6 +26,7 @@ use OpenConext\EngineBlock\Service\TimeProvider\TimeProviderInterface;
 use OpenConext\EngineBlock\Stepup\StepupEntityFactory;
 use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
+use OpenConext\EngineBlockBundle\Sbs\SbsClient;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
 class EngineBlock_Application_DiContainer extends Pimple
@@ -306,6 +307,11 @@ class EngineBlock_Application_DiContainer extends Pimple
         return $this->container;
     }
 
+    public function getSbsClient(): \OpenConext\EngineBlockBundle\Sbs\SbsClientInterface
+    {
+        return $this->container->get('engineblock.sbs.sbs_client');
+    }
+
     public function getPdpClient()
     {
         return $this->container->get('engineblock.pdp.pdp_client');
@@ -536,12 +542,6 @@ class EngineBlock_Application_DiContainer extends Pimple
     protected function getStepupEndpoint()
     {
         return $this->container->get('engineblock.configuration.stepup.endpoint');
-    }
-
-    /** @return \OpenConext\EngineBlock\SRAM\SRAMEndpoint $sramEndpoint */
-    public function getSRAMEndpoint()
-    {
-        return $this->container->get('engineblock.configuration.sram.endpoint');
     }
 
     /** @return string */

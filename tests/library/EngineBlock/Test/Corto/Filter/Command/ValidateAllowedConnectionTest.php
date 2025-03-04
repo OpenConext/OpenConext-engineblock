@@ -170,5 +170,6 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateAllowedConnectionTest extend
         $verifier->setIdentityProvider(new IdentityProvider('OpenConext'));
         $verifier->setServiceProvider($sp);
         $verifier->execute();
+        $this->expectNotToPerformAssertions();
     }
 }
