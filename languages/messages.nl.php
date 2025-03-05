@@ -195,6 +195,8 @@ HTML
     'error_unknown_identity_provider_no_idp_name'   => 'Error - Onbekende %organisationNoun%',
     'error_unknown_identity_provider_desc'     => '%idpName%, waarmee je probeert in te loggen, is onbekend bij %suiteName%.',
     'error_unknown_identity_provider_desc_no_idp_name'     => 'De %organisationNoun% waarmee je probeert in te loggen is onbekend bij %suiteName%.',
+    'error_unknown_signing_key' => 'Error - onbekende signing key',
+    'error_unknown_signing_key_desc' => 'De gebruikte signing key is niet bekend bij %suiteName%. Dit komt waarschijnlijk door een configuratiefout.',
     'error_generic'                     => 'Fout - Generieke foutmelding',
     'error_generic_desc'                => 'Inloggen is niet gelukt en we weten niet precies waarom. Probeer het eerst eens opnieuw door terug te gaan naar %spName% en opnieuw in te loggen. Lukt dit niet, neem dan contact op met de helpdesk van %idpName%.',
     'error_generic_desc_no_sp_name' => 'Inloggen is niet gelukt en we weten niet precies waarom. Probeer het eerst eens opnieuw door terug te gaan naar de dienst en opnieuw in te loggen. Lukt dit niet, neem dan contact op met de helpdesk van %idpName%.',

@@ -342,6 +342,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         // check the IssueInstant against our own time to see if the SP's clock is getting out of sync
         $this->_checkIssueInstant( $sspResponse->getIssueInstant(), 'IdP', $idpEntityId );
 
+        // This is an initial check to validate when a signing key is in the
+        // response if it's the one that's expected by EB for that IdP,
+        //  so a decent error message can be shown if this is not the case.
+        $this->assertKnownIdPSigningKey($cortoIdpMetadata, $sspResponse);
+
         try {
             // 'Process' the response, verify the signature, verify the timings.
             if ($this->hasEncryptedAssertion($sspResponse)
@@ -885,5 +890,45 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             }
         }
         return $hasEncryptedAssertion;
+    }
+
+    /**
+     * This is an initial check to validate when a signing key is in the
+     * response, if it's the one that's expected by EB for that IdP,
+     * so a decent error message can be shown if this is not the case.
+     */
+    private function assertKnownIdPSigningKey(IdentityProvider $metadata, Response $sspResponse): void {
+
+        // If no key is in the response we don't need to validate if it's known because the
+        // validation if the signature is present is the responsibility of the SamlResponseValidator.
+        if (count($sspResponse->getCertificates()) === 0) {
+            return;
+        }
+
+        if (count($sspResponse->getCertificates()) > 1) {
+            $this->_logger->notice(
+                sprintf(
+                    'Tried to verify a message from issuer "%s", but requests with multiple signing keys are not supported.',
+                    $metadata->entityId
+                )
+            );
+
+            throw new EngineBlock_Corto_Module_Bindings_Exception(sprintf('Multiple signing keys supplied for issuer: %s', $metadata->entityId));
+        }
+
+        foreach ($metadata->certificates as $metaDataCertificate) {
+            if ($metaDataCertificate->toCertData() === $sspResponse->getCertificates()[0]) {
+                return;
+            }
+        }
+
+        $this->_logger->notice(
+            sprintf(
+                'Tried to verify a message from issuer "%s", but the expected signing key does not match.',
+                $metadata->entityId
+            )
+        );
+
+        throw new EngineBlock_Corto_Exception_UnknownIdentityProviderSigningKey('Unknown signing key supplied for issuer', $metadata->entityId);
     }
 }

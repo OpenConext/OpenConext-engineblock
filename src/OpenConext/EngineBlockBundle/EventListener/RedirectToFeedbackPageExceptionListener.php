@@ -28,6 +28,7 @@ use EngineBlock_Corto_Exception_InvalidStepupLoaLevel;
 use EngineBlock_Corto_Exception_MissingRequiredFields;
 use EngineBlock_Corto_Exception_PEPNoAccess;
 use EngineBlock_Corto_Exception_ReceivedErrorStatusCode;
+use EngineBlock_Corto_Exception_UnknownIdentityProviderSigningKey;
 use EngineBlock_Corto_Exception_UnknownPreselectedIdp;
 use EngineBlock_Corto_Exception_InvalidAttributeValue;
 use EngineBlock_Corto_Exception_UserCancelledStepupCallout;
@@ -171,6 +172,9 @@ class RedirectToFeedbackPageExceptionListener
                 'entity-id'   => $exception->getEntityId(),
                 'destination' => $exception->getDestination()
             ];
+        } elseif ($exception instanceof EngineBlock_Corto_Exception_UnknownIdentityProviderSigningKey) {
+            $message         = $exception->getMessage();
+            $redirectToRoute = 'authentication_feedback_unknown_signing_key';
         } elseif ($exception instanceof EngineBlock_Exception_UnknownRequesterIdInAuthnRequest) {
             $message         = 'Encountered unknown RequesterID for the Service Provider (transparant proxying)';
             $redirectToRoute = 'authentication_feedback_unknown_requesterid_in_authnrequest';
