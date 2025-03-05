@@ -18,11 +18,11 @@
 
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
-use Twig_Extensions_Extension_I18n;
+use Twig\Extensions\I18nExtension;
+use Twig\TwigFilter;
 use Symfony\Component\Translation\TranslatorInterface;
-use Twig_SimpleFilter;
 
-class I18n extends Twig_Extensions_Extension_I18n
+class I18n extends I18nExtension
 {
 
     /**
@@ -43,8 +43,8 @@ class I18n extends Twig_Extensions_Extension_I18n
     public function getFilters()
     {
         return array(
-            new Twig_SimpleFilter('trans', array($this, 'translateSingular')),
-            new Twig_SimpleFilter('transchoice', array($this, 'translatePlural')),
+            new TwigFilter('trans', array($this, 'translateSingular')),
+            new TwigFilter('transchoice', array($this, 'translatePlural')),
         );
     }
 

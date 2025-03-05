@@ -23,19 +23,22 @@ use SAML2\Constants;
 use SAML2\XML\saml\NameID;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Twig_Environment;
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use function base64_encode;
 
 class ConsentController
 {
 
     /**
-     * @var Twig_Environment
+     * @var Environment
      */
     private $twig;
 
     public function __construct(
-        Twig_Environment $twig
+        Environment $twig
     ) {
         $this->twig = $twig;
     }
@@ -56,9 +59,9 @@ class ConsentController
     /**
      * @param Request $request
      * @return Response
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function consentAction(Request $request)
     {
