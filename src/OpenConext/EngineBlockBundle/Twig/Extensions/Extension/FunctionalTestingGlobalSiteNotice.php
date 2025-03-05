@@ -19,10 +19,10 @@
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use Symfony\Component\HttpFoundation\RequestStack;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Twig_Extension;
 
-class FunctionalTestingGlobalSiteNotice extends Twig_Extension implements GlobalSiteNoticeInterface
+class FunctionalTestingGlobalSiteNotice extends AbstractExtension implements GlobalSiteNoticeInterface
 {
     private $request;
 
