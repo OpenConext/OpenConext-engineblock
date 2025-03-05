@@ -29,7 +29,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Twig_Environment;
+use Twig\Environment;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to the compatibility requirements
@@ -42,7 +42,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
     private $engineBlockApplicationSingleton;
 
     /**
-     * @var Twig_Environment
+     * @var Environment
      */
     private $twig;
 
@@ -83,7 +83,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
 
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        Twig_Environment $twig,
+        Environment $twig,
         LoggerInterface $loggerInterface,
         RequestAccessMailer $requestAccessMailer,
         RequestValidator $requestValidator,
