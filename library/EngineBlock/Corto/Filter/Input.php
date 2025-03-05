@@ -95,6 +95,8 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
 
             // Apply the Attribute Release Policy before we do consent.
             new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
+
+            new EngineBlock_Corto_Filter_Command_SRAMTestFilter(),
         );
 
         if (!$featureConfiguration->isEnabled('eb.run_all_manipulations_prior_to_consent')) {
