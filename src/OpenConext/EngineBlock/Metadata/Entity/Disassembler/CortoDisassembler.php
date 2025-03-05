@@ -122,6 +122,10 @@ class CortoDisassembler
             );
         }
 
+        if ($entity->getCoins()->defaultRAC()) {
+            $cortoEntity['DefaultRAC'] = $entity->getCoins()->defaultRAC();
+        }
+
         return $cortoEntity;
     }
 

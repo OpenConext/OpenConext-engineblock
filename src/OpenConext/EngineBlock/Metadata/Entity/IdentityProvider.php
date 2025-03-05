@@ -143,7 +143,8 @@ class IdentityProvider extends AbstractRole
         ConsentSettings $consentSettings = null,
         StepupConnections $stepupConnections = null,
         MfaEntityCollection $mfaEntities = null,
-        array $discoveries = []
+        array $discoveries = [],
+        ?string $defaultRAC = null
     ) {
         if (is_null($mdui)) {
             $mdui = Mdui::emptyMdui();
@@ -190,7 +191,8 @@ class IdentityProvider extends AbstractRole
             $disableScoping,
             $additionalLogging,
             $signatureMethod,
-            $mfaEntities
+            $mfaEntities,
+            $defaultRAC
         );
 
         $this->assertAllDiscoveries($discoveries);

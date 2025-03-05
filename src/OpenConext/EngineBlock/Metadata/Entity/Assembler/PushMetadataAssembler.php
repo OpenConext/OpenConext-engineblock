@@ -267,6 +267,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->assembleMfaEntities($connection);
 
         $properties += $this->discoveryAssembler->assembleDiscoveries($connection);
+        $properties += $this->setPathFromObjectString(array($connection, 'metadata:coin:defaultRAC'), 'defaultRAC');
 
         return Utils::instantiate(
             IdentityProvider::class,

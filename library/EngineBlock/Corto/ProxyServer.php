@@ -426,6 +426,7 @@ class EngineBlock_Corto_ProxyServer
             // entity which does not reside in the database.
             $originalSpEnitytId = $spEntityId;
         }
+
         // Add authncontextclassref if configured
         $service = $identityProvider->getCoins()->mfaEntities()->findByEntityId($originalSpEnitytId);
         if ($service instanceof MfaEntity) {
@@ -438,6 +439,16 @@ class EngineBlock_Corto_ProxyServer
             // When transparent_authn_context is configured, forward the SP AuthnClassRefContext to the IdP
             // See: https://www.pivotaltracker.com/story/show/173305494
             $sspMessage->setRequestedAuthnContext($spRequest->getRequestedAuthnContext());
+        } elseif ($spRequest->getRequestedAuthnContext() === null) {
+            // The request didn't have a RequestedAuthnContext set, but we do have a default to fall back to
+            $defaultRAC = $identityProvider->getCoins()->defaultRAC();
+            if ($defaultRAC !== null) {
+                $sspMessage->setRequestedAuthnContext([
+                    'AuthnContextClassRef' => [
+                        $defaultRAC,
+                    ],
+                ]);
+            }
         }
 
         $authenticationState = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()
