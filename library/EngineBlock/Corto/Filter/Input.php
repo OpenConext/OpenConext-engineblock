@@ -96,6 +96,8 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
             // Apply the Attribute Release Policy before we do consent.
             new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
 
+            /* @TODO According to spec, this should be between AttributeAggregator and EnforcePolicy.
+             * Why is it here? */
             new EngineBlock_Corto_Filter_Command_SRAMTestFilter(),
         );
 

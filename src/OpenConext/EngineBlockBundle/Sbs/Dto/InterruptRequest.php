@@ -20,12 +20,8 @@ namespace OpenConext\EngineBlockBundle\Sbs\Dto;
 
 use JsonSerializable;
 use OpenConext\EngineBlock\Assert\Assertion;
-use OpenConext\EngineBlockBundle\Pdp\Dto\Attribute;
-use OpenConext\EngineBlockBundle\Pdp\Dto\Request\AccessSubject;
-use OpenConext\EngineBlockBundle\Pdp\Dto\Request\Resource;
-use OpenConext\Value\Saml\NameIdFormat;
 
-final class Request implements JsonSerializable
+final class InterruptRequest implements JsonSerializable
 {
     /**
      * @var string
@@ -47,17 +43,12 @@ final class Request implements JsonSerializable
      */
     public $issuerId;
 
-    /**
-     * @var \OpenConext\EngineBlockBundle\Pdp\Dto\Request\Resource
-     */
-    public $resource;
-
     public static function create(
         string $userId,
         string $continueUrl,
         string $serviceId,
         string $issuerId
-    ) : Request {
+    ) : InterruptRequest {
         Assertion::string($userId, 'The userId must be a string.');
         Assertion::string($continueUrl, 'The continueUrl must be a string.');
         Assertion::string($serviceId, 'The serviceId must be a string.');

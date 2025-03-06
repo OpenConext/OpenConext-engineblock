@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2010 SURFnet B.V.
+ * Copyright 2025 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,7 @@
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
-use SAML2\Constants;
-use SAML2\Response;
+use OpenConext\EngineBlockBundle\Sbs\Dto\EntitlementsRequest;
 use Symfony\Component\HttpFoundation\Request;
 
 class EngineBlock_Corto_Module_Service_SRAMInterrupt
@@ -61,22 +60,17 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
     }
 
     /**
+     * route that receives the user when they get back from their SBS interrupt,
+     * fetches the attribues from SBS,
+     * and resumes the AuthN flow.
+     *
      * @param $serviceName
      * @param Request $httpRequest
      */
     public function serve($serviceName, Request $httpRequest)
     {
-
+        /** @TODO How to test this class? */
         $application = EngineBlock_ApplicationSingleton::getInstance();
-
-        $sramEndpoint = $application->getDiContainer()->getSRAMEndpoint();
-        $sramApiToken = $sramEndpoint->getApiToken();
-        $sramEntitlementsLocation = $sramEndpoint->getEntitlementsLocation();
-        // $sramEntitlementsLocation = 'http://192.168.0.1:12345/entitlements';
-
-        $log = $application->getLogInstance();
-
-        error_log("EngineBlock_Corto_Module_Service_SRAMInterrupt");
 
         // Get active request
         $id = $httpRequest->get('ID');
@@ -89,42 +83,24 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
         $receivedResponse = $nextProcessStep->getResponse();
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
 
-        /*
-         * TODO Add SRAM stuff
-         * Manipulate attributes
-         */
         $attributes = $receivedResponse->getAssertion()->getAttributes();
         $nonce = $receivedResponse->getSRAMInterruptNonce();
 
-        $headers = array(
-            "Authorization: $sramApiToken"
-        );
+        $request = EntitlementsRequest::create($nonce);
+        $interruptResponse = $this->getSbsClient()->requestEntitlementsFor($request);
 
-        $post = array(
-            'nonce' => $nonce
-        );
-
-        $options = [
-            CURLOPT_HEADER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => $headers,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => $post,
-        ];
-
-
-        $ch = curl_init($sramEntitlementsLocation);
-        curl_setopt_array($ch, $options);
-
-        $data = curl_exec($ch);
-        curl_close($ch);
-
-        $body = json_decode($data);
-
-        if ($body->attributes) {
-            $attributes = array_merge_recursive($attributes, (array) $body->attributes);
+        if (!empty($interruptResponse->attributes)) {
+            /**
+             * @TODO make sure this has test coverage
+             */
+            $attributes = array_merge_recursive($attributes, $interruptResponse->attributes);
             $receivedResponse->getAssertion()->setAttributes($attributes);
         }
+
+        /**
+         * @JOHAN Waarom zit hier stepup in? Zou dat niet via de 'reguliere' flow afgetrapt moeten worden?
+         * Kunnen we hier \EngineBlock_Corto_Module_Service_AssertionConsumer::serve gebruiken? Code daar wegsplitsen naar een shared service?
+         */
 
         /*
          * Continue to Consent/StepUp
@@ -144,7 +120,7 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
         // When dealing with an SP that acts as a trusted proxy, we should use the proxying SP and not the proxy itself.
         if ($sp->getCoins()->isTrustedProxy()) {
             // Overwrite the trusted proxy SP instance with that of the SP that uses the trusted proxy.
-            $sp = $this->_server->findOriginalServiceProvider($receivedRequest, $log);
+            $sp = $this->_server->findOriginalServiceProvider($receivedRequest, $this->_server->getLogger());
         }
 
         $pdpLoas = $receivedResponse->getPdpRequestedLoas();
@@ -173,8 +149,6 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
         $nameId = clone $receivedResponse->getNameId();
         $authnClassRef = $this->_stepupGatewayCallOutHelper->getStepupLoa($idp, $sp, $authnRequestLoas, $pdpLoas);
 
-
-
         $this->_server->sendStepupAuthenticationRequest(
             $receivedRequest,
             $currentProcessStep->getRole(),
@@ -182,7 +156,10 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
             $nameId,
             $sp->getCoins()->isStepupForceAuthn()
         );
+    }
 
-
+    private function getSbsClient()
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSbsClient();
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
-use OpenConext\EngineBlockBundle\Sbs\Dto\Request;
+use OpenConext\EngineBlockBundle\Sbs\Dto\InterruptRequest;
 
 /**
  * Copyright 2021 Stichting Kennisnet
@@ -37,6 +37,8 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
 
     public function execute(): void
     {
+        $this->_response->setSRAMInterruptNonce('hoeuoeu');
+        return;
         if (!$this->getFeatureConfiguration()->isEnabled('eb.feature_enable_sram_interrupt')) {
             return;
         }
@@ -47,13 +49,14 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
 
         try {
             $request = $this->buildRequest();
-            $interruptResponse = $this->getSbsClient()->requestInterruptDecisionFor($request);
+            $interruptResponse = $this->getSbsClient()->interruptCheck($request);
 
             if ($interruptResponse->msg === 'interrupt') {
                 // @TODO Consider if this should be an attribute?
                 $this->_response->setSRAMInterruptNonce($interruptResponse->nonce);
-            } elseif (!empty($interruptResponse->attributes)) {
+            } elseif ($interruptResponse->msg === 'authorized' && !empty($interruptResponse->attributes)) {
                 // @TODO make sure this has test coverage
+                // @TODO Discussed with Bas/Peter: Add list of allowed parameter names via parameters.yml
                 $this->_responseAttributes = array_merge_recursive(
                     $this->_responseAttributes,
                     $interruptResponse->attributes
@@ -75,10 +78,10 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
     }
 
     /**
-     * @return Request
+     * @return InterruptRequest
      * @throws EngineBlock_Corto_ProxyServer_Exception
      */
-    private function buildRequest(): Request
+    private function buildRequest(): InterruptRequest
     {
         $attributes = $this->getResponseAttributes();
         $id = $this->_request->getId();
@@ -89,7 +92,7 @@ class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_
         $service_id = $this->_serviceProvider->entityId;
         $issuer_id = $this->_identityProvider->entityId;
 
-        return Request::create(
+        return InterruptRequest::create(
             $user_id,
             $continue_url,
             $service_id,

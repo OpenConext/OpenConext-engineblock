@@ -26,9 +26,8 @@ use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException;
 use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
 use OpenConext\EngineBlockBundle\Pdp\PdpClientInterface;
-use OpenConext\EngineBlockBundle\Sbs\Dto\Request;
+use OpenConext\EngineBlockBundle\Sbs\Dto\InterruptRequest;
 use OpenConext\EngineBlockBundle\Sbs\InterruptResponse;
-use OpenConext\EngineBlockBundle\Sbs\SbsClient;
 use OpenConext\EngineBlockBundle\Sbs\SbsClientInterface;
 use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
@@ -101,7 +100,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramTestFilterTest extends TestCase
         $response->nonce = 'hash123';
         $response->attributes = ['dummy' => 'attributes'];
 
-        $expectedRequest = new Request();
+        $expectedRequest = new InterruptRequest();
         $expectedRequest->userId = 'userIdValue';
         $expectedRequest->continueUrl = 'https://example.org?ID=';
         $expectedRequest->serviceId = 'spEntityId';
@@ -154,11 +153,11 @@ class EngineBlock_Test_Corto_Filter_Command_SramTestFilterTest extends TestCase
         $sbsClient = $this->mockSbsClient();
 
         $response = new InterruptResponse();
-        $response->msg = 'not-interrupt';
+        $response->msg = 'authorized';
         $response->nonce = 'hash123';
         $response->attributes = ['dummy' => 'attributes', ['more' => ['attributes' => 'attributeValues']]];
 
-        $expectedRequest = new Request();
+        $expectedRequest = new InterruptRequest();
         $expectedRequest->userId = 'userIdValue';
         $expectedRequest->continueUrl = 'https://example.org?ID=';
         $expectedRequest->serviceId = 'spEntityId';
@@ -204,7 +203,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramTestFilterTest extends TestCase
         $this->expectExceptionMessage('The SBS server could not be queried: Server could not be reached.');
 
         $sbsClient = $this->mockSbsClient();
-        $sbsClient->expects('requestInterruptDecisionFor')->andThrows(new InvalidSbsResponseException('Server could not be reached.'));
+        $sbsClient->expects('interruptCheck')->andThrows(new InvalidSbsResponseException('Server could not be reached.'));
 
 
         $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMTestFilter();

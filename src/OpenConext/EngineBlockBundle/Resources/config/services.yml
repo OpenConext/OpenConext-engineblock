@@ -208,6 +208,7 @@ services:
         class: OpenConext\EngineBlockBundle\Sbs\SbsClient
         arguments:
             - "@engineblock.sbs.http_client"
+            - "%sram.authz_location%"
             - "%sram.interrupt_location%"
             - "%sram.entitlements_location%"
             - "%sram.api_token%"

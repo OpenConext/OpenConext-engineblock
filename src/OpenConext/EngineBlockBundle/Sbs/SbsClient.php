@@ -19,7 +19,8 @@
 namespace OpenConext\EngineBlockBundle\Sbs;
 
 use OpenConext\EngineBlock\Http\HttpClient;
-use OpenConext\EngineBlockBundle\Sbs\Dto\Request;
+use OpenConext\EngineBlockBundle\Sbs\Dto\EntitlementsRequest;
+use OpenConext\EngineBlockBundle\Sbs\Dto\InterruptRequest;
 
 /***
  * @TODO Make sure it has tests
@@ -45,20 +46,27 @@ final class SbsClient implements SbsClientInterface
      */
     private $apiToken;
 
+    /**
+     * @var string
+     */
+    private $sbsBaseUrl;
+
 
     public function __construct(
         HttpClient $httpClient,
+        string $sbsBaseUrl,
         string $interruptLocation,
         string $entitlementsLocation,
         string $apiToken
     ) {
-        $this->httpClient              = $httpClient;
+        $this->httpClient = $httpClient;
+        $this->sbsBaseUrl = $sbsBaseUrl;
         $this->interruptLocation = $interruptLocation;
         $this->entitlementsLocation = $entitlementsLocation;
         $this->apiToken = $apiToken;
     }
 
-    public function requestInterruptDecisionFor(Request $request) : InterruptResponse
+    public function interruptCheck(InterruptRequest $request): InterruptResponse
     {
         $jsonData = $this->httpClient->post(
             json_encode($request),
@@ -70,7 +78,7 @@ final class SbsClient implements SbsClientInterface
         return InterruptResponse::fromData($jsonData);
     }
 
-    public function requestEntitlementsFor(Request $request) : EntitlementsResponse
+    public function requestEntitlementsFor(EntitlementsRequest $request): EntitlementsResponse
     {
         $jsonData = $this->httpClient->post(
             json_encode($request),
@@ -86,8 +94,13 @@ final class SbsClient implements SbsClientInterface
     {
         return [
             'Content-Type' => 'application/json',
-            'Accept'       => 'application/json',
+            'Accept' => 'application/json',
             'Authorization' => $this->apiToken,
         ];
+    }
+
+    public function getInterruptLocationLink(string $nonce): string
+    {
+        return $this->sbsBaseUrl . $this->interruptLocation . "?nonce=$nonce";
     }
 }

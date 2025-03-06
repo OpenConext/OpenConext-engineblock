@@ -18,35 +18,26 @@
 
 namespace OpenConext\EngineBlockBundle\Sbs;
 
-use OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException;
-use OpenConext\EngineBlockBundle\Pdp\Dto\Attribute;
-use OpenConext\EngineBlockBundle\Pdp\Dto\Response\AssociatedAdvice;
-use OpenConext\EngineBlockBundle\Pdp\Dto\Response\AttributeAssignment;
-use OpenConext\EngineBlockBundle\Pdp\Dto\Response\Category;
-use OpenConext\EngineBlockBundle\Pdp\Dto\Response\Obligation;
-use OpenConext\EngineBlockBundle\Pdp\Dto\Response\PolicyIdentifier;
-use OpenConext\EngineBlockBundle\Pdp\Dto\Response\PolicyIdReference;
-use OpenConext\EngineBlockBundle\Pdp\Dto\Response\PolicySetIdReference;
-use OpenConext\EngineBlockBundle\Pdp\Dto\Response\Status;
-use OpenConext\EngineBlockBundle\Pdp\Dto\Response\StatusCode;
+use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
 
 final class EntitlementsResponse
 {
     /**
-     * @var Status
+     * @var array
      */
-    public $status;
+    public $attributes;
 
     public static function fromData(array $jsonData) : EntitlementsResponse
     {
-        if (!isset($jsonData['Response'])) {
-            throw new InvalidPdpResponseException('Key: Response was not found in the PDP response');
+        if (!isset($jsonData['attributes'])) {
+            throw new InvalidSbsResponseException('Key: Attributes was not found in the SBS entitlements response');
+        }
+        if (!is_array($jsonData['attributes'])) {
+            throw new InvalidSbsResponseException('Key: Attributes was not found in the SBS entitlements response');
         }
 
-
         $response = new self;
-
-        $response->status = 'status';
+        $response->attributes = $jsonData['attributes'];
 
         return $response;
     }

@@ -64,7 +64,7 @@ class EngineBlock_Application_ErrorHandler
         }
 
         $this->_application->reportError($e);
-
+        die($e->getMessage());
         $message = 'An exceptional condition occurred. Contact support if this error persists.';
         die($message);
     }

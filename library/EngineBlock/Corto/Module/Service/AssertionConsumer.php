@@ -182,6 +182,8 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
                 $receivedResponse
             );
 
+            // Redirect to SBS?
+            // It sets the header?
             $this->_server->sendSRAMInterruptRequest($receivedResponse, $receivedRequest);
         }
 
