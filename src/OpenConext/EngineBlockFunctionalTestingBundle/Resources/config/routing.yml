@@ -69,3 +69,8 @@ functional_testing_gateway:
     path: "/gateway/second-factor-only/single-sign-on"
     defaults:
         _controller: engineblock.functional_test.controller.stepup_mock:ssoAction
+
+functional_testing_sram_interrupt:
+    path: "/sram-interrupt"
+    defaults:
+        _controller: engineblock.functional_test.controller.sbs:interruptAction

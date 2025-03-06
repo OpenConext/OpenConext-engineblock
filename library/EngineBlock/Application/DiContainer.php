@@ -306,6 +306,11 @@ class EngineBlock_Application_DiContainer extends Pimple
         return $this->container;
     }
 
+    public function getSbsClient(): \OpenConext\EngineBlockBundle\Sbs\SbsClientInterface
+    {
+        return $this->container->get('engineblock.sbs.sbs_client');
+    }
+
     public function getPdpClient()
     {
         return $this->container->get('engineblock.pdp.pdp_client');

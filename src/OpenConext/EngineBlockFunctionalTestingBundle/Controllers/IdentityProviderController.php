@@ -124,4 +124,8 @@ class IdentityProviderController extends Controller
         );
         return $container->getPostResponse();
     }
+
+    /**
+     * @TODO Can/Should \OpenConext\EngineBlockBundle\Controller\IdentityProviderController::processSRAMInterrupt be implemented here so we can functional test?
+     */
 }
