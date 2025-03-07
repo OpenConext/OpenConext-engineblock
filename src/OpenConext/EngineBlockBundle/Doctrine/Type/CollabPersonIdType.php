@@ -81,4 +81,12 @@ class CollabPersonIdType extends Type
     {
         return self::NAME;
     }
+
+    /**
+     * @see https://github.com/doctrine/DoctrineBundle/issues/977#issuecomment-497215968
+     */
+    public function requiresSQLCommentHint(AbstractPlatform $platform) : bool
+    {
+        return true;
+    }
 }
