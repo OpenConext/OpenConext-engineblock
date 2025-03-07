@@ -75,7 +75,8 @@ class Coins
         $disableScoping,
         $additionalLogging,
         $signatureMethod,
-        $mfaEntities
+        $mfaEntities,
+        $defaultRAC
     ) {
         return new self([
             'guestQualifier' => $guestQualifier,
@@ -86,6 +87,7 @@ class Coins
             'signatureMethod' => $signatureMethod,
             'stepupConnections' => $stepupConnections,
             'mfaEntities' => $mfaEntities,
+            'defaultRAC' => $defaultRAC,
         ]);
     }
 
@@ -192,6 +194,11 @@ class Coins
     }
 
     // IDP
+    public function defaultRAC()
+    {
+        return $this->getValue('defaultRAC');
+    }
+
     public function guestQualifier()
     {
         return $this->getValue('guestQualifier', IdentityProvider::GUEST_QUALIFIER_ALL);
