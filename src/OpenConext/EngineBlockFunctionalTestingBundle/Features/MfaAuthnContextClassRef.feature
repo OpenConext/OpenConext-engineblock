@@ -103,3 +103,15 @@ Feature:
    Then the url should match "/functional-testing/SSO-SP/acs"
     And the response should contain "urn:oasis:names:tc:SAML:2.0:status:Responder"
     And the response should contain "urn:oasis:names:tc:SAML:2.0:status:AuthnFailed"
+
+  Scenario: A login should succeed if the we don't have a RequestedAuthnContext but a default authn class ref is configured
+    Given the IdP "SSO-IdP" has a default RequestedAuthnContext configured as "http://default-context.example.com/authn"
+    And the SP "SSO-SP" sends no AuthnContextClassRef
+    When I log in at "SSO-SP"
+    And I pass through EngineBlock
+    Then the url should match "functional-testing/SSO-IdP/sso"
+    And the response should contain "http://default-context.example.com/authn"
+    And I pass through the IdP
+    And I give my consent
+    And I pass through EngineBlock
+    Then the url should match "/functional-testing/SSO-SP/acs"

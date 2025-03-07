@@ -71,4 +71,17 @@ class MfaEntitiesContext extends AbstractSubContext
             ]])
             ->save();
     }
+
+    /**
+     * @Given /^the IdP "([^"]*)" has a default RequestedAuthnContext configured as "([^"]*)"$/
+     */
+    public function setIdpConfiguredAuthnContext(string $idpName, string $authnContextClassRef): void
+    {
+        /** @var MockIdentityProvider $mockIdp */
+        $mockIdp = $this->mockIdpRegistry->get($idpName);
+
+        $this->serviceRegistryFixture
+            ->setDefaultRequestedAuthContext($mockIdp->entityId(), $authnContextClassRef)
+            ->save();
+    }
 }

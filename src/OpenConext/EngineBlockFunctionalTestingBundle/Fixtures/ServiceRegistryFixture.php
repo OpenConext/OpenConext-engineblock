@@ -492,6 +492,13 @@ QUERY;
         return $this;
     }
 
+    public function setDefaultRequestedAuthContext(string $entityId, string $defaultRAC): self
+    {
+        $this->setCoin($this->getIdentityProvider($entityId), 'defaultRAC', $defaultRAC);
+
+        return $this;
+    }
+
     public function setIdpLogo($entityId, $url)
     {
         $logo = new Logo($url);
