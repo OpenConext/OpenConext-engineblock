@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "821d1f528d2f110522289a2f2e7735ed",
+    "content-hash": "a90b70e06dff9ca0ddc5cdf9a1b27ba7",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2484,6 +2484,9 @@
                 "psr",
                 "psr-3"
             ],
+            "support": {
+                "source": "https://github.com/php-fig/log/tree/1.1.4"
+            },
             "time": "2021-05-03T11:20:27+00:00"
         },
         {
@@ -2839,16 +2842,16 @@
         },
         {
             "name": "simplesamlphp/saml2",
-            "version": "v4.16.14",
+            "version": "v4.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/saml2.git",
-                "reference": "fe6c7bdda5e166e326d19d78f230d959ab51d01d"
+                "reference": "bdf16d1021363a0819c35806124a20e74a78c2c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/fe6c7bdda5e166e326d19d78f230d959ab51d01d",
-                "reference": "fe6c7bdda5e166e326d19d78f230d959ab51d01d",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/bdf16d1021363a0819c35806124a20e74a78c2c9",
+                "reference": "bdf16d1021363a0819c35806124a20e74a78c2c9",
                 "shasum": ""
             },
             "require": {
@@ -2894,9 +2897,9 @@
             "description": "SAML2 PHP library from SimpleSAMLphp",
             "support": {
                 "issues": "https://github.com/simplesamlphp/saml2/issues",
-                "source": "https://github.com/simplesamlphp/saml2/tree/v4.16.14"
+                "source": "https://github.com/simplesamlphp/saml2/tree/v4.17.0"
             },
-            "time": "2024-12-01T22:26:30+00:00"
+            "time": "2025-03-11T17:35:33+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -3116,8 +3119,8 @@
             "type": "library",
             "extra": {
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "autoload": {
@@ -7145,7 +7148,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
@@ -7161,5 +7164,5 @@
     "platform-overrides": {
         "php": "7.2"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
