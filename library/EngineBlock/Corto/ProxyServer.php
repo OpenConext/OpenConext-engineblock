@@ -41,6 +41,7 @@ use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\saml\SubjectConfirmationData;
+use Twig\Environment;
 
 class EngineBlock_Corto_ProxyServer
 {
@@ -135,11 +136,11 @@ class EngineBlock_Corto_ProxyServer
     private $_repository;
 
     /**
-     * @var Twig_Environment
+     * @var Environment
      */
     private $twig;
 
-    public function __construct(Twig_Environment $twig)
+    public function __construct(Environment $twig)
     {
         $this->_server = $this;
         $this->twig = $twig;

@@ -15,7 +15,7 @@
       <span class="error-title__error-message">{{ 'error_405_desc'|trans({'%requestMethod%': requestMethod, '%uri%': uri,'%allowedMethods%': allowedMethods}) }}</span>
     </div>
   </div>
-        {% spaceless %}{% include "@theme/Default/View/Error/partial/footer.html.twig" %}{% endspaceless %}
+        {% apply spaceless %}{% include "@theme/Default/View/Error/partial/footer.html.twig" %}{% endapply %}
     </div>
 </div>
 {% endblock %}
