@@ -1,5 +1,7 @@
 <?php
 
+use Twig\Environment;
+
 /**
  * Copyright 2010 SURFnet B.V.
  *
@@ -28,14 +30,14 @@ abstract class EngineBlock_Corto_Module_Service_Abstract
     protected $_xmlConverter;
 
     /**
-     * @var Twig_Environment
+     * @var Environment
      */
     protected $twig;
 
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
-        Twig_Environment $twig
+        Environment $twig
     ) {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;

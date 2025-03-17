@@ -12,13 +12,13 @@
     <meta property="og:image" content="{{ defaultLogo }}">
     <title>{% block title %}{{ defaultTitle }}{% endblock %}</title>
     <link href="/favicon.ico?v={{ assetsVersion }}" rel="shortcut icon" type="image/x-icon">
-    {% block stylesheets %}{% spaceless %}
+    {% block stylesheets %}{% apply spaceless %}
         <link rel="preload" href="/fonts/sourcesanspro-semibold-webfont.woff2?v={{ assetsVersion }}" as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="/fonts/sourcesanspro-bold-webfont.woff2?v={{ assetsVersion }}" as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="/fonts/nunito-semibold.woff2?v={{ assetsVersion }}" as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="/fonts/sourcesanspro-regular-webfont.woff2?v={{ assetsVersion }}" as="font" type="font/woff2" crossorigin>
         <link href="/stylesheets/application.css?v={{ assetsVersion }}" rel="stylesheet">
-    {% endspaceless %}{% endblock %}
+    {% endapply %}{% endblock %}
 </head>
 <body{% if envName is defined and envName %} data-envname="{{ envName }}" data-ribboncolor="{{ envRibbonColor }}"{% endif %}>
 {% block nojs %}{% endblock %}

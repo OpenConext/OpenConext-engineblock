@@ -1,5 +1,7 @@
 <?php
 
+use Twig\Environment;
+
 /**
  * Copyright 2010 SURFnet B.V.
  *
@@ -21,7 +23,7 @@ interface EngineBlock_Corto_Module_Service_Interface
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
-        Twig_Environment $twig
+        Environment $twig
     );
 
     public function serve($serviceName);
