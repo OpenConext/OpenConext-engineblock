@@ -38,6 +38,7 @@ use SAML2\XML\saml\NameID;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Twig\Environment;
 
 class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
 {
@@ -58,7 +59,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
     /** @var EngineBlock_Corto_ProxyServer */
     private $proxyServerMock;
 
-    /** @var Twig_Environment */
+    /** @var Environment */
     private $twig;
 
     /** @var AuthenticationStateHelperInterface|Mock */
@@ -171,7 +172,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
     private function mockProxyServer()
     {
         // Mock twig, a dependency of proxy server
-        $twigMock = Phake::mock(Twig_Environment::class);
+        $twigMock = Phake::mock(Environment::class);
         // Mock proxy server
         /** @var EngineBlock_Corto_ProxyServer $proxyServerMock */
         $proxyServerMock = Phake::partialMock('EngineBlock_Corto_ProxyServer', $twigMock);
@@ -314,7 +315,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
 
     private function mockTwig()
     {
-        $mock = Phake::mock(\Twig\Environment::class);
+        $mock = Phake::mock(Environment::class);
         Phake::when($mock)
             ->render(Phake::anyParameters())
             ->thenReturn('');

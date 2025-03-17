@@ -1,9 +1,9 @@
 {% extends '@themeLayouts/scripts/default.html.twig' %}
 {% import "@themeLayouts/scripts/language-switcher.html.twig" as languageSwitcher %}
 
-{% block stylesheets %}{% spaceless %}
+{% block stylesheets %}{% apply spaceless %}
     <link href="/stylesheets/error-page.css?v={{ assetsVersion }}" rel="stylesheet">
-{% endspaceless %}{% endblock %}
+{% endapply %}{% endblock %}
 
 {% set feedbackInfoMap = feedbackInfo().data %}
 {% set hideHeader = true %}
