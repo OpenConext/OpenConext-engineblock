@@ -67,7 +67,7 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
      */
     public function invoke($name, array $args)
     {
-        $signature = $name . ':' . serialize($args);
+        $signature = $name . ':' . json_encode($args);
 
         if (!isset($this->cache[$signature])) {
             $this->cache[$signature] = call_user_func_array(array($this->repository, $name), $args);

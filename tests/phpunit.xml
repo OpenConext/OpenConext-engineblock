@@ -29,7 +29,7 @@
     </filter>
 
     <php>
-        <server name="KERNEL_DIR" value="../app/" />
+        <server name="KERNEL_CLASS" value="AppKernel" />
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="3"/>
         <ini name="memory_limit" value="512M" />
     </php>
