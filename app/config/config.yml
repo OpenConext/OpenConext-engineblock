@@ -64,6 +64,10 @@ framework:
         handler_id:  ~
     fragments:       false
     http_method_override: true
+    cache:
+        pools:
+            doctrine.system_cache_pool:
+                adapter: cache.system
 
 # Twig Configuration
 twig:
@@ -113,13 +117,16 @@ doctrine:
         proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'
         entity_managers:
             engineblock:
-                naming_strategy: doctrine.orm.naming_strategy.underscore
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
                 query_cache_driver:
-                    type: apc
+                    type: pool
+                    pool: doctrine.system_cache_pool
                 metadata_cache_driver:
-                    type: apc
+                    type: pool
+                    pool: doctrine.system_cache_pool
                 result_cache_driver:
-                    type: apc
+                    type: pool
+                    pool: doctrine.system_cache_pool
                 connection: ~
                 mappings:
                     # An array of mappings, which may be a bundle name or something else
