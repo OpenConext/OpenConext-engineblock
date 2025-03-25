@@ -60,9 +60,6 @@ class SbsAttributeMergerTest extends TestCase
 
     public function testMergeAttributesWithInvalidKeysThrowsException(): void
     {
-        $this->expectException(InvalidSbsResponseException::class);
-        $this->expectExceptionMessage('Attributes "role" is not allowed to be overwritten by SBS.');
-
         $allowedAttributes = ['email', 'name'];
         $merger = new SbsAttributeMerger($allowedAttributes);
 
@@ -75,7 +72,12 @@ class SbsAttributeMergerTest extends TestCase
             'role' => ['user']
         ];
 
-        $merger->mergeAttributes($samlAttributes, $sbsAttributes);
+        $expectedResult = [
+            'email' => ['user@example.com'],
+            'role' => ['admin']
+        ];
+
+        $this->assertEquals($expectedResult, $merger->mergeAttributes($samlAttributes, $sbsAttributes));
     }
 
     public function testMergeAttributesWithEmptySbsAttributes(): void

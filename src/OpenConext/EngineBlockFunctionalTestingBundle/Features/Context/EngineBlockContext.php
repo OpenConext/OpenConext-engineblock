@@ -208,7 +208,7 @@ class EngineBlockContext extends AbstractSubContext
     {
         $mink = $this->getMinkContext();
 
-        $mink->pressButton('Submit');
+        $mink->clickLink('Continue');
     }
 
     /**
