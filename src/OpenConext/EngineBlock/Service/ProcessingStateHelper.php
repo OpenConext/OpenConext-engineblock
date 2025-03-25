@@ -73,7 +73,7 @@ class ProcessingStateHelper implements ProcessingStateHelperInterface
     {
         $processing = $this->session->get(self::SESSION_KEY);
         if (empty($processing)) {
-            throw new EngineBlock_Corto_Module_Services_SessionLostException('Session lost after consent');
+            throw new EngineBlock_Corto_Module_Services_SessionLostException('Session lost');
         }
         if (!isset($processing[$requestId])) {
             throw new EngineBlock_Corto_Module_Services_SessionLostException(
