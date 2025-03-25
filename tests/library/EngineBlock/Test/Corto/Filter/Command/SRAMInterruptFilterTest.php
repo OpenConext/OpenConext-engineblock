@@ -30,13 +30,13 @@ use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Response;
 
-class EngineBlock_Test_Corto_Filter_Command_SramTestFilterTest extends TestCase
+class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
     public function testItDoesNothingIfFeatureFlagNotEnabled(): void
     {
-        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMTestFilter();
+        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMInterruptFilter();
 
         $request = $this->mockRequest();
         $sramFilter->setRequest($request);
@@ -49,7 +49,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramTestFilterTest extends TestCase
 
     public function testItDoesNothingIfSpDoesNotHaveCollabEnabled(): void
     {
-        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMTestFilter();
+        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMInterruptFilter();
 
         $request = $this->mockRequest();
         $sramFilter->setRequest($request);
@@ -71,7 +71,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramTestFilterTest extends TestCase
 
     public function testItAddsNonceWhenMessageInterrupt(): void
     {
-        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMTestFilter();
+        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMInterruptFilter();
 
         $initialAttributes = ['urn:mace:dir:attribute-def:uid' => ['userIdValue']];
         $sramFilter->setResponseAttributes($initialAttributes);
@@ -128,7 +128,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramTestFilterTest extends TestCase
 
     public function testItAddsSramAttributesOnStatusAuthorized(): void
     {
-        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMTestFilter();
+        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMInterruptFilter();
 
         $initialAttributes = ['urn:mace:dir:attribute-def:uid' => ['userIdValue']];
         $sramFilter->setResponseAttributes($initialAttributes);
@@ -202,7 +202,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramTestFilterTest extends TestCase
         $sbsClient->expects('authz')->andThrows(new InvalidSbsResponseException('Server could not be reached.'));
 
 
-        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMTestFilter();
+        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMInterruptFilter();
 
         $initialAttributes = ['urn:mace:dir:attribute-def:uid' => ['userIdValue']];
         $sramFilter->setResponseAttributes($initialAttributes);

@@ -90,7 +90,7 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
                 $diContainer->getAttributeAggregationClient()
             ),
 
-            new EngineBlock_Corto_Filter_Command_SRAMTestFilter(),
+            new EngineBlock_Corto_Filter_Command_SRAMInterruptFilter(),
 
             // Check if the Policy Decision Point needs to be consulted for this request
             new EngineBlock_Corto_Filter_Command_EnforcePolicy(),

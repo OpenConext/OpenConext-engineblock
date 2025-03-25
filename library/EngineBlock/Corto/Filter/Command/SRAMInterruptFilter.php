@@ -21,7 +21,7 @@ use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
  * limitations under the License.
  */
 
-class EngineBlock_Corto_Filter_Command_SRAMTestFilter extends EngineBlock_Corto_Filter_Command_Abstract
+class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_Corto_Filter_Command_Abstract
     implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
 {
     /**

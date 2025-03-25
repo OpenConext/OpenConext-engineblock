@@ -171,8 +171,16 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         $originalAssertions = clone $receivedResponse->getAssertions()[0];
         $this->_server->filterInputAssertionAttributes($receivedResponse, $receivedRequest);
 
+        // Add the consent step
+        $currentProcessStep = $this->_processingStateHelper->addStep(
+            $receivedRequest->getId(),
+            ProcessingStateHelperInterface::STEP_CONSENT,
+            $this->getEngineSpRole($this->_server),
+            $receivedResponse
+        );
+
         // Send SRAM Interrupt call
-        if ($receivedResponse->getSRAMInterruptNonce() !== "") {
+        if ("" != $receivedResponse->getSRAMInterruptNonce()) {
             $log->info('Handle SRAM Interrupt callout');
 
             // Add the SRAM step
@@ -185,15 +193,9 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
 
             // Redirect to SRAM
             $this->_server->sendSRAMInterruptRequest($receivedResponse, $receivedRequest);
-        }
 
-        // Add the consent step
-        $currentProcessStep = $this->_processingStateHelper->addStep(
-            $receivedRequest->getId(),
-            ProcessingStateHelperInterface::STEP_CONSENT,
-            $this->getEngineSpRole($this->_server),
-            $receivedResponse
-        );
+            return;
+        }
 
         // When dealing with an SP that acts as a trusted proxy, we should use the proxying SP and not the proxy itself.
         if ($sp->getCoins()->isTrustedProxy()) {
@@ -232,6 +234,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             $sp->getCoins()->isStepupForceAuthn(),
             $originalAssertions
         );
+
    }
 
     /**

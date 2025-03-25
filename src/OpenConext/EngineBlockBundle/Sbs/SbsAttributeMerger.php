@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Sbs;
 
+use EngineBlock_ApplicationSingleton;
 use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
 
 class SbsAttributeMerger
@@ -35,9 +36,9 @@ class SbsAttributeMerger
 
     public function mergeAttributes(array $samlAttributes, array $sbsAttributes): array
     {
-        $this->assertOnlyAllowedSbsAttributes($sbsAttributes);
+        $validAttributes = $this->validSbsAttributes($sbsAttributes);
 
-        foreach ($sbsAttributes as $key => $value) {
+        foreach ($validAttributes as $key => $value) {
             if (!isset($samlAttributes[$key])) {
                 $samlAttributes[$key] = $value;
                 continue;
@@ -58,22 +59,25 @@ class SbsAttributeMerger
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable) $value is never used in the foreach
      */
-    private function assertOnlyAllowedSbsAttributes(array $sbsAttributes): void
+    private function validSbsAttributes(array $sbsAttributes): array
     {
+        $validAttributes = [];
         $invalidKeys = [];
 
         foreach ($sbsAttributes as $key => $value) {
-            if (!in_array($key, $this->allowedAttributeNames, true)) {
+            if (in_array($key, $this->allowedAttributeNames, true)) {
+                $validAttributes[$key] = $sbsAttributes[$key];
+            } else {
                 $invalidKeys[] = $key;
             }
         }
 
-        if (empty($invalidKeys)) {
-            return;
+        if (!empty($invalidKeys)) {
+            $application = EngineBlock_ApplicationSingleton::getInstance();
+            $log = $application->getLogInstance();
+            $log->warning(sprintf('Attributes "%s" is not allowed to be overwritten by SBS.', implode(', ', $invalidKeys)));
         }
 
-        throw new InvalidSbsResponseException(
-            sprintf('Attributes "%s" is not allowed to be overwritten by SBS.', implode(', ', $invalidKeys))
-        );
+        return $validAttributes;
     }
 }

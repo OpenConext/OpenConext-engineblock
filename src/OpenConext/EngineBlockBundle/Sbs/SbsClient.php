@@ -63,7 +63,6 @@ final class SbsClient implements SbsClientInterface
         string $sbsBaseUrl,
         string $authzLocation,
         string $interruptLocation,
-        string $entitlementsLocation,
         string $apiToken,
         bool $verifyPeer
     ) {
@@ -71,7 +70,6 @@ final class SbsClient implements SbsClientInterface
         $this->sbsBaseUrl = $sbsBaseUrl;
         $this->authzLocation = $authzLocation;
         $this->interruptLocation = $interruptLocation;
-        $this->entitlementsLocation = $entitlementsLocation;
         $this->apiToken = $apiToken;
         $this->verifyPeer = $verifyPeer;
     }
@@ -93,11 +91,12 @@ final class SbsClient implements SbsClientInterface
         return AuthzResponse::fromData($jsonData);
     }
 
+    // Entitlements use authzLocation !!
     public function requestEntitlementsFor(EntitlementsRequest $request): EntitlementsResponse
     {
         $jsonData = $this->httpClient->post(
             json_encode($request),
-            $this->entitlementsLocation,
+            $this->authzLocation,
             [],
             $this->requestHeaders(),
             $this->verifyPeer
