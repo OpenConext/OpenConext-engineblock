@@ -43,7 +43,6 @@ class SbsClientTest extends TestCase
             'https://sbs.example.com',
             '/authz',
             '/interrupt',
-            '/entitlements',
             'Bearer test_token',
             true
         );
@@ -82,7 +81,7 @@ class SbsClientTest extends TestCase
             ->method('post')
             ->with(
                 $this->anything(),
-                '/entitlements',
+                '/authz',
                 [],
                 [
                     'Content-Type' => 'application/json',

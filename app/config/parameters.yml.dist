@@ -322,7 +322,6 @@ parameters:
     sram.base_url: 'https://engine.dev.openconext.local/functional-testing/'
     sram.authz_location: authz
     sram.interrupt_location: interrupt
-    sram.entitlements_location: entitlements
     sram.verify_peer: false
     sram.allowed_attributes:
         - eduPersonEntitlement

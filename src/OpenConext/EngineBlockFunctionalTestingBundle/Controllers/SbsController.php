@@ -65,7 +65,7 @@ class SbsController extends Controller
 
         // url contains the ID=<ID>, so the session is preserved
         return new Response(sprintf(
-            '<html><body><form action="%s"><button type="submit">Submit</button></form></body></html>',
+            '<html><body><a href="%s">Continue</a></body></html>',
             $returnUrl
         ));
     }
