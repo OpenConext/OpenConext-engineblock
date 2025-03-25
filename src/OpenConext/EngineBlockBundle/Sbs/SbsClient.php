@@ -29,14 +29,11 @@ final class SbsClient implements SbsClientInterface
      * @var HttpClient
      */
     private $httpClient;
+
     /**
      * @var string
      */
     private $interruptLocation;
-    /**
-     * @var string
-     */
-    private $entitlementsLocation;
 
     /**
      * @var string
@@ -52,6 +49,7 @@ final class SbsClient implements SbsClientInterface
      * @var string
      */
     private $authzLocation;
+
     /**
      * @var bool
      */
