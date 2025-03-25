@@ -49,7 +49,7 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
     /**
      * @var SbsAttributeMerger
      */
-    private $sbsAttributeMerger;
+    private $_sbsAttributeMerger;
 
 
     public function __construct(
@@ -64,12 +64,12 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
         $this->_authenticationStateHelper = $stateHelper;
         $this->_processingStateHelper = $processingStateHelper;
         $this->_stepupGatewayCallOutHelper = $stepupGatewayCallOutHelper;
-        $this->sbsAttributeMerger = $sbsAttributeMerger;
+        $this->_sbsAttributeMerger = $sbsAttributeMerger;
     }
 
     /**
      * route that receives the user when they get back from their SBS interrupt,
-     * fetches the attribues from SBS,
+     * fetches the attributes from SBS,
      * and resumes the AuthN flow.
      *
      * @param $serviceName
@@ -97,7 +97,7 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
         $interruptResponse = $this->getSbsClient()->requestEntitlementsFor($request);
 
         if (!empty($interruptResponse->attributes)) {
-            $attributes = $this->sbsAttributeMerger->mergeAttributes($attributes, $interruptResponse->attributes);
+            $attributes = $this->_sbsAttributeMerger->mergeAttributes($attributes, $interruptResponse->attributes);
             $receivedResponse->getAssertion()->setAttributes($attributes);
         }
 

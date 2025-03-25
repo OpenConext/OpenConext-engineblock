@@ -309,7 +309,7 @@ class EngineBlock_Application_DiContainer extends Pimple
 
     public function getSbsAttributeMerger(): SbsAttributeMerger
     {
-        return $this->container->get('engineblack.sbs.attribute_merger');
+        return $this->container->get('engineblock.sbs.attribute_merger');
     }
 
     public function getSbsClient(): \OpenConext\EngineBlockBundle\Sbs\SbsClientInterface

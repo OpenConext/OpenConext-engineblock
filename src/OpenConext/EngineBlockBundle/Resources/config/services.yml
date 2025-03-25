@@ -194,7 +194,7 @@ services:
         arguments:
             - "@engineblock.pdp.guzzle_http_client"
 
-    engineblack.sbs.attribute_merger:
+    engineblock.sbs.attribute_merger:
         class: OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger
         arguments:
             - "%sram.allowed_attributes%"
@@ -216,7 +216,6 @@ services:
             - "%sram.base_url%"
             - "%sram.authz_location%"
             - "%sram.interrupt_location%"
-            - "%sram.entitlements_location%"
             - "%sram.api_token%"
             - "%sram.verify_peer%"
 
