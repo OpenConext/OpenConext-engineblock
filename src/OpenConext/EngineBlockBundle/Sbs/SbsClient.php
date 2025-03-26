@@ -90,7 +90,7 @@ final class SbsClient implements SbsClientInterface
     }
 
     // Entitlements use authzLocation !!
-    public function requestEntitlementsFor(EntitlementsRequest $request): EntitlementsResponse
+    public function requestEntitlementsFor(EntitlementsRequest $request): AuthzResponse
     {
         $jsonData = $this->httpClient->post(
             json_encode($request),
@@ -104,7 +104,7 @@ final class SbsClient implements SbsClientInterface
             throw new InvalidSbsResponseException('Received non-array from SBS server');
         }
 
-        return EntitlementsResponse::fromData($jsonData);
+        return AuthzResponse::fromData($jsonData);
     }
 
     private function requestHeaders(): array

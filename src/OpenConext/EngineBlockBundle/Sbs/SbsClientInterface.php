@@ -30,7 +30,7 @@ interface SbsClientInterface
 
     public function getInterruptLocationLink(string $nonce);
 
-    public function requestEntitlementsFor(EntitlementsRequest $request) : EntitlementsResponse;
+    public function requestEntitlementsFor(EntitlementsRequest $request) : AuthzResponse;
 
     public function authz(AuthzRequest $request) : AuthzResponse;
 }
