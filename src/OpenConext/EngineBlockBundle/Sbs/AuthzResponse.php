@@ -58,6 +58,7 @@ final class AuthzResponse
         $response = new self;
         $response->msg = $jsonData['msg'];
         $response->nonce = $jsonData['nonce'] ?? null;
+        $response->message = $jsonData['message'] ?? null;
 
         if (is_array($jsonData['attributes'])) {
             $response->attributes = $jsonData['attributes'];

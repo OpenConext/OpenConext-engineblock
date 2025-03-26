@@ -39,6 +39,8 @@ class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_C
 
     public function execute(): void
     {
+        $log = EngineBlock_ApplicationSingleton::getLog();
+
         if (!$this->getFeatureConfiguration()->isEnabled('eb.feature_enable_sram_interrupt')) {
             return;
         }
@@ -53,13 +55,14 @@ class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_C
             $interruptResponse = $this->getSbsClient()->authz($request);
 
             if ($interruptResponse->msg === 'interrupt') {
+                $log->notice("SBS: " . $interruptResponse->message);
                 $this->_response->setSRAMInterruptNonce($interruptResponse->nonce);
             } elseif ($interruptResponse->msg === 'authorized' && !empty($interruptResponse->attributes)) {
                 $this->_responseAttributes = $this->getSbsAttributeMerger()->mergeAttributes($this->_responseAttributes, $interruptResponse->attributes);
             } else {
                 throw new InvalidSbsResponseException(sprintf('Invalid SBS response received: %s', $interruptResponse->msg));
             }
-        }catch (Throwable $e){
+        } catch (Throwable $e){
             throw new EngineBlock_Exception_SbsCheckFailed('The SBS server could not be queried: ' . $e->getMessage());
         }
     }
