@@ -14,11 +14,12 @@ Feature:
     Given the SP "SSO-SP" requires SRAM collaboration
     And feature "eb.feature_enable_sram_interrupt" is enabled
     And the sbs server will trigger the "interrupt" authz flow when called
-    And the sbs server will return valid entitlements
+#    And the sbs server will return valid entitlements ## @TODO Remove this endpoint call altogether?
     When I log in at "SSO-SP"
     And I pass through EngineBlock
     And I pass through the IdP
     Then the url should match "/functional-testing/interrupt"
+    Given the sbs server will trigger the "authorized" authz flow when called
     And I pass through SBS
     Then the url should match "/authentication/idp/process-sraminterrupt"
     And the response should contain "Review your information that will be shared."
@@ -61,23 +62,25 @@ Feature:
     Given the SP "SSO-SP" requires SRAM collaboration
     And feature "eb.feature_enable_sram_interrupt" is enabled
     And the sbs server will trigger the "interrupt" authz flow when called
-    And the sbs server will return invalid entitlements
+#    And the sbs server will return invalid entitlements ## @TODO remove entitlements call?
     When I log in at "SSO-SP"
     And I pass through EngineBlock
     And I pass through the IdP
     Then the url should match "/functional-testing/interrupt"
+    And the sbs server will trigger the "error" authz flow when called
     And I pass through SBS
     And the response should contain "Logging in has failed"
 
-  Scenario: If the authz call returns unknown attributes, the flow is halted
+  Scenario: If the authz call returns unknown attributes, the unknown attributes are ignored
     Given the SP "SSO-SP" requires SRAM collaboration
     And feature "eb.feature_enable_sram_interrupt" is enabled
     And the sbs server will trigger the 'authorized' authz flow and will return invalid attributes
     When I log in at "SSO-SP"
     And I pass through EngineBlock
     And I pass through the IdP
-    Then the url should match "/feedback/unknown-error"
-    And the response should contain "Logging in has failed"
+    Then the url should match "/authentication/sp/consume-assertion"
+    And the response should not contain "foo"
+    And the response should not contain "baz"
 
   Scenario: If the sbs flow is active, other filters like PDP are still executed
     Given SP "SSO-SP" requires a policy enforcement decision

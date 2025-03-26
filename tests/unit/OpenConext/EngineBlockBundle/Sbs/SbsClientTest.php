@@ -75,7 +75,10 @@ class SbsClientTest extends TestCase
     public function testRequestEntitlementsFor(): void
     {
         $requestMock = $this->createMock(EntitlementsRequest::class);
-        $jsonResponse = ['attributes' => ['name' => 'value']];
+        $jsonResponse = [
+            'msg' => 'authorized',
+            'attributes' => ['name' => 'value']
+        ];
 
         $this->httpClient->expects($this->once())
             ->method('post')
@@ -93,6 +96,6 @@ class SbsClientTest extends TestCase
 
         $entitlementsResponse = $this->sbsClient->requestEntitlementsFor($requestMock);
 
-        $this->assertInstanceOf(EntitlementsResponse::class, $entitlementsResponse);
+        $this->assertInstanceOf(AuthzResponse::class, $entitlementsResponse);
     }
 }
