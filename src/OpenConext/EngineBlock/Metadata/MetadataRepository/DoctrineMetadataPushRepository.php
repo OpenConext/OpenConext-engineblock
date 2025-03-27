@@ -80,7 +80,7 @@ class DoctrineMetadataPushRepository
     {
         $result = new SynchronizationResult();
 
-        $this->connection->transactional(function () use ($roles, $result) {
+        $this->connection->transactional(function () use ($roles, $result): void {
             $idpsToBeRemoved = $this->findAllRoleEntityIds($this->idpMetadata);
             $spsToBeRemoved = $this->findAllRoleEntityIds($this->spMetadata);
 

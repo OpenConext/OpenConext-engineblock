@@ -93,6 +93,7 @@ services:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Validator\SsoRequestValidator
 
     engineblock.configuration.stepup.endpoint:
+        public: true
         class: OpenConext\EngineBlock\Stepup\StepupEndpoint
         arguments:
             - "https://engine.dev.openconext.local/authentication/stepup/metadata"

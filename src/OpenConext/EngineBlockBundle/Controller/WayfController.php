@@ -28,7 +28,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Twig_Environment;
+use Twig\Environment;
 
 class WayfController
 {
@@ -37,7 +37,7 @@ class WayfController
      */
     private $engineBlockApplicationSingleton;
     /**
-     * @var Twig_Environment
+     * @var Environment
      */
     private $twig;
     /**
@@ -56,12 +56,12 @@ class WayfController
 
     /**
      * @param EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton
-     * @param Twig_Environment $twig
+     * @param Environment $twig
      * @param SsoSessionService $sessionService
      */
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        Twig_Environment $twig,
+        Environment $twig,
         SsoSessionService $sessionService,
         DiscoverySelectionService $discoverySelectionService,
         LoggerInterface $logger

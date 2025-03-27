@@ -9,6 +9,7 @@ parameters:
     # https://github.com/OpenConext/OpenConext-engineblock/blob/
     #   4102bffe58a9ecbce3c7c934e0aa8ece46efcf82/library/EngineBlock/Application/Bootstrapper.php#L242
     locale: en
+    container.autowiring.strict_mode: true
 
     # This value is used as cache-buster, replaced by the release script
     asset_version: "#ASSET_VERSION#"
@@ -63,6 +64,12 @@ framework:
         handler_id:  ~
     fragments:       false
     http_method_override: true
+    cache:
+        pools:
+            doctrine.result_cache_pool:
+                adapter: cache.adapter.apcu
+            doctrine.system_cache_pool:
+                adapter: cache.adapter.apcu
 
 # Twig Configuration
 twig:
@@ -112,13 +119,16 @@ doctrine:
         proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'
         entity_managers:
             engineblock:
-                naming_strategy: doctrine.orm.naming_strategy.underscore
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
                 query_cache_driver:
-                    type: apc
+                    type: service
+                    id: doctrine.system_cache_provider
                 metadata_cache_driver:
-                    type: apc
+                    type: service
+                    id: doctrine.system_cache_provider
                 result_cache_driver:
-                    type: apc
+                    type: service
+                    id: doctrine.result_cache_provider
                 connection: ~
                 mappings:
                     # An array of mappings, which may be a bundle name or something else
@@ -143,3 +153,15 @@ doctrine_migrations:
     namespace:  OpenConext\EngineBlock\Doctrine\Migrations
     table_name: migration_versions
     name:       OpenConext EngineBlock Migrations
+
+services:
+    doctrine.result_cache_provider:
+        class: Symfony\Component\Cache\DoctrineProvider
+        public: false
+        arguments:
+            - '@doctrine.result_cache_pool'
+    doctrine.system_cache_provider:
+        class: Symfony\Component\Cache\DoctrineProvider
+        public: false
+        arguments:
+            - '@doctrine.system_cache_pool'

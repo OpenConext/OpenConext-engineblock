@@ -1,9 +1,7 @@
 <?php
 
-use Twig\Environment;
-
 /**
- * Copyright 2010 SURFnet B.V.
+ * Copyright 2025 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +16,13 @@ use Twig\Environment;
  * limitations under the License.
  */
 
-interface EngineBlock_Corto_Module_Service_Interface
-{
-    public function __construct(
-        EngineBlock_Corto_ProxyServer $server,
-        EngineBlock_Corto_XmlToArray $xmlConverter,
-        Environment $twig
-    );
+/**
+ * @TODO remove post SF upgrade
+ */
 
-    public function serve($serviceName);
-}
+require __DIR__ . '/bootstrap.php';
+
+$appKernel = new AppKernel('ci', false);
+$appKernel->boot();
+
+return $appKernel->getContainer();

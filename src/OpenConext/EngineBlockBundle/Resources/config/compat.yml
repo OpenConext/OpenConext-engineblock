@@ -50,6 +50,7 @@ services:
             - "@engineblock.compat.database_connection_factory"
 
     engineblock.compat.saml2_id_generator:
+        public: true
         class: EngineBlock_Saml2_IdGenerator_Default
 
     engineblock.compat.attribute_release_policy_enforcer:
