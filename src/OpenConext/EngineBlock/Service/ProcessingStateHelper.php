@@ -73,7 +73,7 @@ class ProcessingStateHelper implements ProcessingStateHelperInterface
     {
         $processing = $this->session->get(self::SESSION_KEY);
         if (empty($processing)) {
-            throw new EngineBlock_Corto_Module_Services_SessionLostException('Session lost after consent');
+            throw new EngineBlock_Corto_Module_Services_SessionLostException('Session lost');
         }
         if (!isset($processing[$requestId])) {
             throw new EngineBlock_Corto_Module_Services_SessionLostException(
@@ -82,7 +82,7 @@ class ProcessingStateHelper implements ProcessingStateHelperInterface
         }
         if (!isset($processing[$requestId][$name])) {
             throw new EngineBlock_Corto_Module_Services_Exception(
-                sprintf('Process step requested for ResponseID "%s" not found', $requestId)
+                sprintf('Process step requested for ResponseID "%s" with "%s" not found', $requestId, $name)
             );
         }
 

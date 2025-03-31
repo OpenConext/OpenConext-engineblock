@@ -17,7 +17,9 @@
  */
 
 use OpenConext\EngineBlock\Stepup\StepupEndpoint;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Pdp\PdpClientInterface;
+use OpenConext\EngineBlockBundle\Sbs\SbsClientInterface;
 
 /**
  * Creates mocked versions of dependencies for unit testing
@@ -28,6 +30,16 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
      * @var PdpClientInterface|null
      */
     private $pdpClient;
+
+    /**
+     * @var SbsClientInterface|null
+     */
+    private $sbsClient;
+
+    /**
+     * @var FeatureConfigurationInterface|null
+     */
+    private $featureConfiguration;
 
     public function getXmlConverter()
     {
@@ -49,9 +61,29 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
         return $this->pdpClient ?? parent::getPdpClient();
     }
 
-    public function setPdpClient(PdpClientInterface $pdpClient)
+    public function setPdpClient(?PdpClientInterface $pdpClient)
     {
         $this->pdpClient = $pdpClient;
+    }
+
+    public function setSbsClient(?SbsClientInterface $sbsClient)
+    {
+        $this->sbsClient = $sbsClient;
+    }
+
+    public function getSbsClient(): SbsClientInterface
+    {
+        return $this->sbsClient ?? parent::getSbsClient();
+    }
+
+    public function setFeatureConfiguration(?FeatureConfigurationInterface $featureConfiguration)
+    {
+        $this->featureConfiguration = $featureConfiguration;
+    }
+
+    public function getFeatureConfiguration(): FeatureConfigurationInterface
+    {
+        return $this->featureConfiguration ?? parent::getFeatureConfiguration();
     }
 
     public function getConsentFactory()

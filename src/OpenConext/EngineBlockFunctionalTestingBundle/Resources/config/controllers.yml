@@ -34,6 +34,12 @@ services:
             - "@engineblock.mock_clients.mock_stepup_gateway"
             - "@twig"
 
+    engineblock.functional_test.controller.sbs:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\SbsController
+        arguments:
+            - '@engineblock.functional_testing.fixture.sbs_client_state_manager'
+            - '@engineblock.functional_testing.data_store.sbs_server_state'
+
     engineblock.controller.authentication.identity_provider:
         class: OpenConext\EngineBlockBundle\Controller\IdentityProviderController
         arguments:
