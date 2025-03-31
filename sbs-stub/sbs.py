@@ -50,9 +50,10 @@ def authz():
 
     response = Response(status=200)
     body = {
-        # 'msg': 'interrupt',
-        'msg': 'authorized',
+        'msg': 'interrupt',
+        # 'msg': 'authorized',
         'nonce': nonce,
+        'message': 'Foobar message',
         'attributes': {
             'urn:mace:dir:attribute-def:eduPersonEntitlement': [
                 uid,
