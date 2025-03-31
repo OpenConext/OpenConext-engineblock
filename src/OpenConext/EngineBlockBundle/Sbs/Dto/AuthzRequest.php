@@ -31,6 +31,11 @@ class AuthzRequest implements JsonSerializable
     /**
      * @var string
      */
+    public $eduPersonPrincipalName;
+
+    /**
+     * @var string
+     */
     public $continueUrl;
 
     /**
@@ -45,17 +50,21 @@ class AuthzRequest implements JsonSerializable
 
     public static function create(
         string $userId,
+        string $eppn,
         string $continueUrl,
         string $serviceId,
         string $issuerId
     ) : AuthzRequest {
         Assertion::string($userId, 'The userId must be a string.');
+        Assertion::string($eppn, 'The eduPersonPrincipalName must be a string.');
         Assertion::string($continueUrl, 'The continueUrl must be a string.');
         Assertion::string($serviceId, 'The serviceId must be a string.');
         Assertion::string($issuerId, 'The issuerId must be a string.');
 
         $request = new self();
         $request->userId = $userId;
+        $request->schacHomeOrganization = $sho;
+        $request->eduPersonPrincipalName = $eppn;
         $request->continueUrl = $continueUrl;
         $request->serviceId = $serviceId;
         $request->issuerId = $issuerId;
@@ -67,6 +76,7 @@ class AuthzRequest implements JsonSerializable
     {
         return [
             'user_id' => $this->userId,
+            'eppn' => $this->eduPersonPrincipalName,
             'continue_url' => $this->continueUrl,
             'service_id' => $this->serviceId,
             'issuer_id' => $this->issuerId
