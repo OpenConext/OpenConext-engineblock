@@ -94,10 +94,13 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
         $response = new AuthzResponse();
         $response->msg = 'interrupt';
         $response->nonce = 'hash123';
-        $response->attributes = ['dummy' => 'attributes'];
+        $response->attributes = [
+            'dummy' => 'attributes',
+        ];
 
         $expectedRequest = new AuthzRequest();
-        $expectedRequest->userId = 'userIdValue';
+        $expectedRequest->userId = '';
+        $expectedRequest->eduPersonPrincipalName = '';
         $expectedRequest->continueUrl = 'https://example.org?ID=';
         $expectedRequest->serviceId = 'spEntityId';
         $expectedRequest->issuerId = 'idpEntityId';
@@ -106,6 +109,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
             ->withArgs(function ($args) use ($expectedRequest) {
 
                 return $args->userId === $expectedRequest->userId
+                    && $args->eduPersonPrincipalName === $expectedRequest->eduPersonPrincipalName
                     && strpos($args->continueUrl, $expectedRequest->continueUrl) === 0
                     && $args->serviceId === $expectedRequest->serviceId
                     && $args->issuerId === $expectedRequest->issuerId;
@@ -151,10 +155,18 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
         $response = new AuthzResponse();
         $response->msg = 'authorized';
         $response->nonce = 'hash123';
-        $response->attributes = ['eduPersonEntitlement' => 'attributes', 'uid' => ['more' => ['attributes' => 'attributeValues']]];
+        $response->attributes = [
+            'eduPersonEntitlement' => 'attributes',
+            'uid' => [
+                'more' => [
+                    'attributes' => 'attributeValues'
+                ]
+            ]
+        ];
 
         $expectedRequest = new AuthzRequest();
-        $expectedRequest->userId = 'userIdValue';
+        $expectedRequest->userId = '';
+        $expectedRequest->eduPersonPrincipalName = '';
         $expectedRequest->continueUrl = 'https://example.org?ID=';
         $expectedRequest->serviceId = 'spEntityId';
         $expectedRequest->issuerId = 'idpEntityId';
@@ -163,6 +175,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
             ->withArgs(function ($args) use ($expectedRequest) {
 
                 return $args->userId === $expectedRequest->userId
+                    && $args->eduPersonPrincipalName === $expectedRequest->eduPersonPrincipalName
                     && strpos($args->continueUrl, $expectedRequest->continueUrl) === 0
                     && $args->serviceId === $expectedRequest->serviceId
                     && $args->issuerId === $expectedRequest->issuerId;
