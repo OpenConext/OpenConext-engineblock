@@ -36,6 +36,7 @@ use SAML2\HTTPRedirect;
 use SAML2\Message;
 use SAML2\Response;
 use SAML2\Signature\PublicKeyValidator;
+use Twig\Environment;
 
 /**
  * The bindings module for Corto, which implements support for various data
@@ -94,7 +95,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     private $_logger;
 
     /**
-     * @var Twig_Environment
+     * @var Environment
      */
     private $twig;
 

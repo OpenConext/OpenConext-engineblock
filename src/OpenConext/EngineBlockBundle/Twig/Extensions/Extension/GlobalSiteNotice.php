@@ -19,10 +19,10 @@
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use Symfony\Component\Translation\TranslatorInterface;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Twig_Extension;
 
-class GlobalSiteNotice extends Twig_Extension
+class GlobalSiteNotice extends AbstractExtension
 {
     /**
      * @var bool

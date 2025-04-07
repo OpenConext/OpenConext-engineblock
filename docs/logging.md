@@ -18,14 +18,14 @@ monolog:
             type: fingers_crossed
             activation_strategy: engineblock.logger.manual_or_error_activation_strategy
             passthru_level: "%logger.fingers_crossed.passthru_level%"
-            channels: [!authentication]
+            channels: ["!authentication"]
             handler: nested
         authentication:
             type:      syslog
             ident:     EBAUTH
             facility:  user
             level:     INFO
-            channels:  [authentication]
+            channels:  ["authentication"]
             formatter: engineblock.logger.formatter.syslog_json
         nested:
             type: syslog
@@ -34,4 +34,4 @@ monolog:
         console:
             type: console
             process_psr_3_messages: false
-            channels: [!event, !doctrine, !console]
+            channels: ["!event", "!doctrine", "!console"]

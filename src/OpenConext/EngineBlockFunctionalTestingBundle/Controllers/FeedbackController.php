@@ -23,7 +23,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\TranslatorInterface;
-use Twig_Environment;
+use Twig\Environment;
 
 /**
  * @package OpenConext\EngineBlockFunctionalTestingBundle\Controllers
@@ -37,7 +37,7 @@ class FeedbackController extends Controller
     private $translator;
 
     /**
-     * @var Twig_Environment
+     * @var Environment
      */
     private $twig;
 
@@ -48,7 +48,7 @@ class FeedbackController extends Controller
 
     public function __construct(
         TranslatorInterface $translator,
-        Twig_Environment $twig,
+        Environment $twig,
         LoggerInterface $logger
     ) {
         $this->translator = $translator;

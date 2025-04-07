@@ -22,14 +22,14 @@ use EngineBlock_Attributes_Metadata;
 use OpenConext\Value\Saml\NameIdFormat;
 use SAML2\XML\saml\NameID;
 use Symfony\Component\Translation\TranslatorInterface;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Twig_Extension;
 
 /**
  * Used to perform certain view related operations on metadata. For example this extension provides a function that
  * can sort metadata by display order.
  */
-class Metadata extends Twig_Extension
+class Metadata extends AbstractExtension
 {
     /**
      * @var string

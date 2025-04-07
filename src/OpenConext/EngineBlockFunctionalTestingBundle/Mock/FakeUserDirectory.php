@@ -70,7 +70,7 @@ class FakeUserDirectory extends UserDirectoryAdapter
         }
 
         $users = json_decode($content, true);
-        array_walk($users, function (&$user) {
+        array_walk($users, function (&$user): void {
             $user = new User(
                 new CollabPersonId($user['collab_person_id']),
                 new CollabPersonUuid($user['collab_person_uuid'])
@@ -165,7 +165,7 @@ class FakeUserDirectory extends UserDirectoryAdapter
         $filePath = self::$directory . self::$fileName;
 
         $users = $this->users;
-        array_walk($users, function (&$user) {
+        array_walk($users, function (&$user): void {
             $user = [
                 'collab_person_id' => $user->getCollabPersonId()->getCollabPersonId(),
                 'collab_person_uuid' => $user->getCollabPersonUuid()->getUuid()
