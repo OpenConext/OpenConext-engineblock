@@ -76,6 +76,7 @@ jobs:
                       ./app/console doctrine:schema:create --env=ci && \
                       echo -e "\nPreparing frontend assets\n" && \
                       EB_THEME=skeune ./theme/scripts/prepare-test.js > /dev/null && \
+                      ls app/cache/ -al && \
                       echo -e "\nRun the Behat tests\n" && \
                       ./vendor/bin/behat -c ./tests/behat-ci.yml --suite default -vv --format progress --strict && \
                       echo -e "\nBehat tests (with selenium and headless Chrome)\n" && \
