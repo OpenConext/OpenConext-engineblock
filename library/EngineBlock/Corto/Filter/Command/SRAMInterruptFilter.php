@@ -91,7 +91,7 @@ class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_C
         $attributes = $this->getResponseAttributes();
         $id = $this->_request->getId();
 
-        $user_id = $this->_collabPersonId;
+        $user_id = $this->_collabPersonId ?? "";
         $eppn = $attributes['urn:mace:dir:attribute-def:eduPersonPrincipalName'][0] ?? "";
         $continue_url = $this->_server->getUrl('SRAMInterruptService', '') . "?ID=$id";
         $service_id = $this->_serviceProvider->entityId;

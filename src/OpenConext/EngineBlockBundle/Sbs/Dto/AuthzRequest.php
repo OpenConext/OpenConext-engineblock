@@ -63,7 +63,6 @@ class AuthzRequest implements JsonSerializable
 
         $request = new self();
         $request->userId = $userId;
-        $request->schacHomeOrganization = $sho;
         $request->eduPersonPrincipalName = $eppn;
         $request->continueUrl = $continueUrl;
         $request->serviceId = $serviceId;
