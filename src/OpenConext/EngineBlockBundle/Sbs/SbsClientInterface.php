@@ -27,11 +27,11 @@ interface SbsClientInterface
     public const AUTHORIZED = 'authorized';
     public const ERROR = 'error';
 
-    public const VALID_MESSAGES = [self::INTERRUPT, self::AUTHORIZED];
+    public const VALID_MESSAGES = [self::INTERRUPT, self::AUTHORIZED, self::ERROR];
 
     public function authz(AuthzRequest $request) : AuthzResponse;
 
-    public function requestEntitlementsFor(EntitlementsRequest $request) : AuthzResponse;
+    public function requestEntitlementsFor(EntitlementsRequest $request) : EntitlementsResponse;
 
     public function getInterruptLocationLink(string $nonce);
 }

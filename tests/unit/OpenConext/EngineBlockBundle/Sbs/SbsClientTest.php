@@ -42,6 +42,7 @@ class SbsClientTest extends TestCase
             $this->httpClient,
             'https://sbs.example.com',
             '/authz',
+            '/authz',
             '/interrupt',
             'Bearer test_token',
             true
@@ -96,6 +97,6 @@ class SbsClientTest extends TestCase
 
         $entitlementsResponse = $this->sbsClient->requestEntitlementsFor($requestMock);
 
-        $this->assertInstanceOf(AuthzResponse::class, $entitlementsResponse);
+        $this->assertInstanceOf(EntitlementsResponse::class, $entitlementsResponse);
     }
 }

@@ -51,6 +51,11 @@ final class SbsClient implements SbsClientInterface
     private $authzLocation;
 
     /**
+     * @var string
+     */
+    private $attributesLocation;
+
+    /**
      * @var bool
      */
     private $verifyPeer;
@@ -60,6 +65,7 @@ final class SbsClient implements SbsClientInterface
         HttpClient $httpClient,
         string $sbsBaseUrl,
         string $authzLocation,
+        string $attributesLocation,
         string $interruptLocation,
         string $apiToken,
         bool $verifyPeer
@@ -67,6 +73,7 @@ final class SbsClient implements SbsClientInterface
         $this->httpClient = $httpClient;
         $this->sbsBaseUrl = $sbsBaseUrl;
         $this->authzLocation = $authzLocation;
+        $this->attributesLocation = $attributesLocation;
         $this->interruptLocation = $interruptLocation;
         $this->apiToken = $apiToken;
         $this->verifyPeer = $verifyPeer;
@@ -90,11 +97,11 @@ final class SbsClient implements SbsClientInterface
     }
 
     // Entitlements use authzLocation !!
-    public function requestEntitlementsFor(EntitlementsRequest $request): AuthzResponse
+    public function requestEntitlementsFor(EntitlementsRequest $request): EntitlementsResponse
     {
         $jsonData = $this->httpClient->post(
             json_encode($request),
-            $this->authzLocation,
+            $this->attributesLocation,
             [],
             $this->requestHeaders(),
             $this->verifyPeer
@@ -104,7 +111,7 @@ final class SbsClient implements SbsClientInterface
             throw new InvalidSbsResponseException('Received non-array from SBS server');
         }
 
-        return AuthzResponse::fromData($jsonData);
+        return EntitlementsResponse::fromData($jsonData);
     }
 
     private function requestHeaders(): array

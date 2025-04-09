@@ -52,6 +52,7 @@ def authz():
     body = {
         'msg': 'interrupt',
         # 'msg': 'authorized',
+        # 'msg': 'error',
         'nonce': nonce,
         'message': 'Foobar message',
         'attributes': {
@@ -82,9 +83,9 @@ def interrupt():
     return response
 
 
-@app.route('/api/users/attributes', methods=['POST'])
+@app.route('/api/users/attributes_eb', methods=['POST'])
 def attributes():
-    logging.debug('-> /api/users/attributes')
+    logging.debug('-> /api/users/attributes_eb')
     debug(request)
 
     nonce = request.json.get('nonce')
