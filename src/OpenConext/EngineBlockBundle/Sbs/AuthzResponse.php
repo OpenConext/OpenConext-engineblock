@@ -55,6 +55,10 @@ final class AuthzResponse
             throw new InvalidSbsResponseException('Key: "attributes" was not found in the SBS response');
         }
 
+        if (($jsonData['msg'] === SbsClientInterface::ERROR)) {
+            throw new InvalidSbsResponseException('SBS returned an error: '  . $jsonData['message']);
+        }
+
         $response = new self;
         $response->msg = $jsonData['msg'];
         $response->nonce = $jsonData['nonce'] ?? null;

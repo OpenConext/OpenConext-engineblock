@@ -321,6 +321,7 @@ parameters:
     sram.api_token: xxx
     sram.base_url: 'https://engine.dev.openconext.local/functional-testing/'
     sram.authz_location: authz
+    sram.attributes_location: authz
     sram.interrupt_location: interrupt
     sram.verify_peer: false
     sram.allowed_attributes:

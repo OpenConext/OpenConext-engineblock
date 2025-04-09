@@ -215,6 +215,7 @@ services:
             - "@engineblock.sbs.http_client"
             - "%sram.base_url%"
             - "%sram.authz_location%"
+            - "%sram.attributes_location%"
             - "%sram.interrupt_location%"
             - "%sram.api_token%"
             - "%sram.verify_peer%"
