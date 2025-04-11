@@ -20,7 +20,7 @@ namespace OpenConext\EngineBlockBundle\Sbs;
 
 use OpenConext\EngineBlock\Http\HttpClient;
 use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
-use OpenConext\EngineBlockBundle\Sbs\Dto\EntitlementsRequest;
+use OpenConext\EngineBlockBundle\Sbs\Dto\AttributesRequest;
 use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
 
 final class SbsClient implements SbsClientInterface
@@ -96,8 +96,8 @@ final class SbsClient implements SbsClientInterface
         return AuthzResponse::fromData($jsonData);
     }
 
-    // Entitlements use authzLocation !!
-    public function requestEntitlementsFor(EntitlementsRequest $request): EntitlementsResponse
+    // Attributes use authzLocation !!
+    public function requestAttributesFor(AttributesRequest $request): AttributesResponse
     {
         $jsonData = $this->httpClient->post(
             json_encode($request),
@@ -111,7 +111,7 @@ final class SbsClient implements SbsClientInterface
             throw new InvalidSbsResponseException('Received non-array from SBS server');
         }
 
-        return EntitlementsResponse::fromData($jsonData);
+        return AttributesResponse::fromData($jsonData);
     }
 
     private function requestHeaders(): array

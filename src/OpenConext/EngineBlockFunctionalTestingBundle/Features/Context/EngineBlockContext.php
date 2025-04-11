@@ -782,19 +782,19 @@ class EngineBlockContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^the sbs server will return valid entitlements$/
+     * @Given /^the sbs server will return valid attributes/
     */
-    public function entitlementsWillReturnValidAttributes(): void
+    public function attributesWillReturnValidAttributes(): void
     {
-        $this->sbsClientStateManager->prepareEntitlementsResponse($this->sbsClientStateManager->getValidMockAttributes());
+        $this->sbsClientStateManager->prepareAttributesResponse($this->sbsClientStateManager->getValidMockAttributes());
     }
 
     /**
-     * @Given /^the sbs server will return invalid entitlements$/
+     * @Given /^the sbs server will return invalid attributes/
     */
-    public function entitlementsWillReturnInvalidAttributes(): void
+    public function attributesWillReturnInvalidAttributes(): void
     {
-        $this->sbsClientStateManager->prepareEntitlementsResponse(['foo' => ['bar' => 'baz']]);
+        $this->sbsClientStateManager->prepareAttributesResponse(['foo' => ['bar' => 'baz']]);
     }
 
     /**
