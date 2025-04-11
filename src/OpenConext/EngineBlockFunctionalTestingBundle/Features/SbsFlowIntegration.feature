@@ -14,7 +14,7 @@ Feature:
     Given the SP "SSO-SP" requires SRAM collaboration
     And feature "eb.feature_enable_sram_interrupt" is enabled
     And the sbs server will trigger the "interrupt" authz flow when called
-#    And the sbs server will return valid entitlements ## @TODO Remove this endpoint call altogether?
+#    And the sbs server will return valid attributes ## @TODO Remove this endpoint call altogether?
     When I log in at "SSO-SP"
     And I pass through EngineBlock
     And I pass through the IdP
@@ -58,11 +58,11 @@ Feature:
     Then the url should match "/feedback/unknown-error"
     And the response should contain "Logging in has failed"
 
-  Scenario: If the SBS authz check returns an 'interrupt' response, and the entitlements call to sbs returns an invalid response
+  Scenario: If the SBS authz check returns an 'interrupt' response, and the attributes call to sbs returns an invalid response
     Given the SP "SSO-SP" requires SRAM collaboration
     And feature "eb.feature_enable_sram_interrupt" is enabled
     And the sbs server will trigger the "interrupt" authz flow when called
-#    And the sbs server will return invalid entitlements ## @TODO remove entitlements call?
+#    And the sbs server will return invalid attributes ## @TODO remove attributes call?
     When I log in at "SSO-SP"
     And I pass through EngineBlock
     And I pass through the IdP

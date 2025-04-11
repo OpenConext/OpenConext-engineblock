@@ -71,13 +71,13 @@ class SbsController extends Controller
     }
 
     /**
-     * The endpoint called by Engine to fetch the entitlements after the browser has made a trip to the interrupt action
+     * The endpoint called by Engine to fetch the attributes after the browser has made a trip to the interrupt action
      * and has returned to the continue_url
      */
-    public function entitlementsAction()
+    public function attributesAction()
     {
         return new JsonResponse([
-            'attributes' => $this->sbsClientStateManager->getPreparedEntitlementsResponse()
+            'attributes' => $this->sbsClientStateManager->getPreparedAttributesResponse()
         ]);
     }
 }

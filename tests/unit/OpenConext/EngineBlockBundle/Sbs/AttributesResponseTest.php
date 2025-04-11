@@ -19,36 +19,36 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
-use OpenConext\EngineBlockBundle\Sbs\EntitlementsResponse;
+use OpenConext\EngineBlockBundle\Sbs\AttributesResponse;
 use PHPUnit\Framework\TestCase;
 
-class EntitlementsResponseTest extends TestCase
+class AttributesResponseTest extends TestCase
 {
     public function testFromDataValidAttributes()
     {
         $jsonData = ['attributes' => ['key1' => 'value1', 'key2' => 'value2']];
 
-        $response = EntitlementsResponse::fromData($jsonData);
+        $response = AttributesResponse::fromData($jsonData);
 
-        $this->assertInstanceOf(EntitlementsResponse::class, $response);
+        $this->assertInstanceOf(AttributesResponse::class, $response);
         $this->assertEquals($jsonData['attributes'], $response->attributes);
     }
 
     public function testFromDataMissingAttributes()
     {
         $this->expectException(InvalidSbsResponseException::class);
-        $this->expectExceptionMessage('Key: Attributes was not found in the SBS entitlements response');
+        $this->expectExceptionMessage('Key: Attributes was not found in the SBS attributes response');
 
         $jsonData = ['someOtherKey' => []];
-        EntitlementsResponse::fromData($jsonData);
+        AttributesResponse::fromData($jsonData);
     }
 
     public function testFromDataAttributesNotArray()
     {
         $this->expectException(InvalidSbsResponseException::class);
-        $this->expectExceptionMessage('Key: Attributes was not found in the SBS entitlements response');
+        $this->expectExceptionMessage('Key: Attributes was not an array in the SBS attributes response');
 
         $jsonData = ['attributes' => 'not_an_array'];
-        EntitlementsResponse::fromData($jsonData);
+        AttributesResponse::fromData($jsonData);
     }
 }

@@ -19,7 +19,7 @@
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
-use OpenConext\EngineBlockBundle\Sbs\Dto\EntitlementsRequest;
+use OpenConext\EngineBlockBundle\Sbs\Dto\AttributesRequest;
 use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -93,8 +93,8 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
         $attributes = $receivedResponse->getAssertion()->getAttributes();
         $nonce = $receivedResponse->getSRAMInterruptNonce();
 
-        $request = EntitlementsRequest::create($nonce);
-        $interruptResponse = $this->getSbsClient()->requestEntitlementsFor($request);
+        $request = AttributesRequest::create($nonce);
+        $interruptResponse = $this->getSbsClient()->requestAttributesFor($request);
 
         if (!empty($interruptResponse->attributes)) {
             $attributes = $this->_sbsAttributeMerger->mergeAttributes($attributes, $interruptResponse->attributes);

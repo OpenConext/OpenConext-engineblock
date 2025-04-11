@@ -21,7 +21,7 @@ namespace OpenConext\EngineBlockBundle\Sbs\Dto;
 use JsonSerializable;
 use OpenConext\EngineBlock\Assert\Assertion;
 
-class EntitlementsRequest implements JsonSerializable
+class AttributesRequest implements JsonSerializable
 {
     /**
      * @var string
@@ -30,7 +30,7 @@ class EntitlementsRequest implements JsonSerializable
 
     public static function create(
         string $nonce
-    ) : EntitlementsRequest {
+    ) : AttributesRequest {
         Assertion::string($nonce, 'The nonce must be a string.');
 
         $request = new self();

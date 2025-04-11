@@ -22,8 +22,8 @@ use GuzzleHttp\ClientInterface;
 use OpenConext\EngineBlock\Http\HttpClient;
 use OpenConext\EngineBlockBundle\Sbs\AuthzResponse;
 use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
-use OpenConext\EngineBlockBundle\Sbs\Dto\EntitlementsRequest;
-use OpenConext\EngineBlockBundle\Sbs\EntitlementsResponse;
+use OpenConext\EngineBlockBundle\Sbs\Dto\AttributesRequest;
+use OpenConext\EngineBlockBundle\Sbs\AttributesResponse;
 use OpenConext\EngineBlockBundle\Sbs\SbsClient;
 use PHPUnit\Framework\TestCase;
 
@@ -73,9 +73,9 @@ class SbsClientTest extends TestCase
         $this->assertInstanceOf(AuthzResponse::class, $authzResponse);
     }
 
-    public function testRequestEntitlementsFor(): void
+    public function testRequestAttributesFor(): void
     {
-        $requestMock = $this->createMock(EntitlementsRequest::class);
+        $requestMock = $this->createMock(AttributesRequest::class);
         $jsonResponse = [
             'msg' => 'authorized',
             'attributes' => ['name' => 'value']
@@ -95,8 +95,8 @@ class SbsClientTest extends TestCase
             )
             ->willReturn($jsonResponse);
 
-        $entitlementsResponse = $this->sbsClient->requestEntitlementsFor($requestMock);
+        $attributesResponse = $this->sbsClient->requestAttributesFor($requestMock);
 
-        $this->assertInstanceOf(EntitlementsResponse::class, $entitlementsResponse);
+        $this->assertInstanceOf(AttributesResponse::class, $attributesResponse);
     }
 }
