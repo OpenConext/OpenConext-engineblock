@@ -20,20 +20,20 @@ namespace OpenConext\EngineBlockBundle\Sbs;
 
 use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
 
-class EntitlementsResponse
+class AttributesResponse
 {
     /**
      * @var array
      */
     public $attributes;
 
-    public static function fromData(array $jsonData) : EntitlementsResponse
+    public static function fromData(array $jsonData) : AttributesResponse
     {
         if (!isset($jsonData['attributes'])) {
-            throw new InvalidSbsResponseException('Key: Attributes was not found in the SBS entitlements response');
+            throw new InvalidSbsResponseException('Key: Attributes was not found in the SBS attributes response');
         }
         if (!is_array($jsonData['attributes'])) {
-            throw new InvalidSbsResponseException('Key: Attributes was not found in the SBS entitlements response');
+            throw new InvalidSbsResponseException('Key: Attributes was not an array in the SBS attributes response');
         }
 
         $response = new self;

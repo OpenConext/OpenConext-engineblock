@@ -80,7 +80,7 @@ functional_testing_sram_interrupt:
     defaults:
         _controller: engineblock.functional_test.controller.sbs:interruptAction
 
-functional_testing_sram_entitlements:
-    path: "/entitlements"
+functional_testing_sram_attributes:
+    path: "/attributes"
     defaults:
-        _controller: engineblock.functional_test.controller.sbs:entitlementsAction
+        _controller: engineblock.functional_test.controller.sbs:attributesAction

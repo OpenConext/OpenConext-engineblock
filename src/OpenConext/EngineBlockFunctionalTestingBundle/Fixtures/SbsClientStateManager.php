@@ -37,7 +37,7 @@ class SbsClientStateManager
     /**
      * @var array
      */
-    private $entitlements = [];
+    private $attributes = [];
 
     public function __construct(
         AbstractDataStore $dataStore
@@ -87,22 +87,22 @@ class SbsClientStateManager
         ];
     }
 
-    public function prepareEntitlementsResponse(array $entitlements): void
+    public function prepareAttributesResponse(array $attributes): void
     {
-        $this->entitlements = $entitlements;
+        $this->attributes = $attributes;
         $this->save();
     }
 
-    public function getPreparedEntitlementsResponse(): array
+    public function getPreparedAttributesResponse(): array
     {
-        return $this->dataStore->load()['entitlements'];
+        return $this->dataStore->load()['attributes'];
     }
 
     private function save()
     {
         $this->dataStore->save([
             'authz' => $this->authz,
-            'entitlements' => $this->entitlements,
+            'attributes' => $this->attributes,
         ]);
     }
 }

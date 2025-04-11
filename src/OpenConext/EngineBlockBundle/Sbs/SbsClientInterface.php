@@ -18,7 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Sbs;
 
-use OpenConext\EngineBlockBundle\Sbs\Dto\EntitlementsRequest;
+use OpenConext\EngineBlockBundle\Sbs\Dto\AttributesRequest;
 use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
 
 interface SbsClientInterface
@@ -31,7 +31,7 @@ interface SbsClientInterface
 
     public function authz(AuthzRequest $request) : AuthzResponse;
 
-    public function requestEntitlementsFor(EntitlementsRequest $request) : EntitlementsResponse;
+    public function requestAttributesFor(AttributesRequest $request) : AttributesResponse;
 
     public function getInterruptLocationLink(string $nonce);
 }
