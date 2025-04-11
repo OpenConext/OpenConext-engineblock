@@ -50,7 +50,6 @@ class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
             array_keys($nameIdPolicy),
             'The NameIDPolicy should not contain the key "Format"',
             false,
-            true,
             true
         );
     }
@@ -75,7 +74,6 @@ class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
             array_keys($nameIdPolicy),
             'The NameIDPolicy should contain the key "AllowCreate"',
             false,
-            true,
             true
         );
     }

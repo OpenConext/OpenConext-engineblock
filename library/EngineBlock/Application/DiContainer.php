@@ -26,6 +26,7 @@ use OpenConext\EngineBlock\Service\TimeProvider\TimeProviderInterface;
 use OpenConext\EngineBlock\Stepup\StepupEntityFactory;
 use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
+use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
 class EngineBlock_Application_DiContainer extends Pimple
@@ -304,6 +305,16 @@ class EngineBlock_Application_DiContainer extends Pimple
     protected function getSymfonyContainer()
     {
         return $this->container;
+    }
+
+    public function getSbsAttributeMerger(): SbsAttributeMerger
+    {
+        return $this->container->get('engineblock.sbs.attribute_merger');
+    }
+
+    public function getSbsClient(): \OpenConext\EngineBlockBundle\Sbs\SbsClientInterface
+    {
+        return $this->container->get('engineblock.sbs.sbs_client');
     }
 
     public function getPdpClient()
