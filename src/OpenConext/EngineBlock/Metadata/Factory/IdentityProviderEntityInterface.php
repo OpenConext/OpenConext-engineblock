@@ -71,10 +71,10 @@ interface IdentityProviderEntityInterface
     public function hasCompleteOrganizationData(string $locale): bool;
 
     /**
-     * @param $locale
+     * @param string $locale
      * @return Organization|null
      */
-    public function getOrganization($locale): ?Organization;
+    public function getOrganization(string $locale): ?Organization;
 
     /**
      * @param $locale
