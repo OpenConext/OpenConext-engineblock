@@ -55,7 +55,7 @@ class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_C
             $interruptResponse = $this->getSbsClient()->authz($request);
 
             if ($interruptResponse->msg === 'interrupt') {
-                $log->notice("SBS: " . $interruptResponse->message);
+                $log->info("SBS interrupt reason: " . $interruptResponse->message);
                 $this->_response->setSRAMInterruptNonce($interruptResponse->nonce);
             } elseif ($interruptResponse->msg === 'authorized' && !empty($interruptResponse->attributes)) {
                 $this->_responseAttributes = $this->getSbsAttributeMerger()->mergeAttributes($this->_responseAttributes, $interruptResponse->attributes);
