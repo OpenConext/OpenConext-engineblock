@@ -778,7 +778,7 @@ class EngineBlockContext extends AbstractSubContext
     */
     public function authzWillReturnInvalidAttributes(): void
     {
-        $this->sbsClientStateManager->prepareAuthzResponse(SbsClientInterface::AUTHORIZED, ['foo' => ['bar' => 'baz']]);
+        $this->sbsClientStateManager->prepareAuthzResponse(SbsClientInterface::AUTHORIZED, ['attributes' => ['foo' => ['bar' => 'baz']]]);
     }
 
     /**
@@ -794,7 +794,7 @@ class EngineBlockContext extends AbstractSubContext
     */
     public function attributesWillReturnInvalidAttributes(): void
     {
-        $this->sbsClientStateManager->prepareAttributesResponse(['foo' => ['bar' => 'baz']]);
+        $this->sbsClientStateManager->prepareAttributesResponse(['msg' => 'error', 'message' => 'something went wrong']);
     }
 
     /**
