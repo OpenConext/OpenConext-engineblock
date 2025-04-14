@@ -14,12 +14,11 @@ Feature:
     Given the SP "SSO-SP" requires SRAM collaboration
     And feature "eb.feature_enable_sram_interrupt" is enabled
     And the sbs server will trigger the "interrupt" authz flow when called
-#    And the sbs server will return valid attributes ## @TODO Remove this endpoint call altogether?
+    And the sbs server will return valid attributes
     When I log in at "SSO-SP"
     And I pass through EngineBlock
     And I pass through the IdP
     Then the url should match "/functional-testing/interrupt"
-    Given the sbs server will trigger the "authorized" authz flow when called
     And I pass through SBS
     Then the url should match "/authentication/idp/process-sraminterrupt"
     And the response should contain "Review your information that will be shared."
@@ -28,8 +27,8 @@ Feature:
     When I give my consent
     And I pass through EngineBlock
     Then the url should match "/functional-testing/SSO-SP/acs"
-    Then the response should contain "sshkey"
     Then the response should contain "ssh_key1"
+    And the response should contain "ssh_key2"
 
   Scenario: If the SBS authz check returns 'authorized', the attributes are merged, and the browser is not redirected.
     Given the SP "SSO-SP" requires SRAM collaboration
@@ -45,8 +44,8 @@ Feature:
     When I give my consent
     And I pass through EngineBlock
     Then the url should match "/functional-testing/SSO-SP/acs"
-    Then the response should contain "sshkey"
     Then the response should contain "ssh_key1"
+    And the response should contain "ssh_key2"
 
   Scenario: If the SBS authz check returns an invalid response, the flow is halted.
     Given the SP "SSO-SP" requires SRAM collaboration
@@ -62,7 +61,7 @@ Feature:
     Given the SP "SSO-SP" requires SRAM collaboration
     And feature "eb.feature_enable_sram_interrupt" is enabled
     And the sbs server will trigger the "interrupt" authz flow when called
-#    And the sbs server will return invalid attributes ## @TODO remove attributes call?
+    And the sbs server will return invalid attributes
     When I log in at "SSO-SP"
     And I pass through EngineBlock
     And I pass through the IdP

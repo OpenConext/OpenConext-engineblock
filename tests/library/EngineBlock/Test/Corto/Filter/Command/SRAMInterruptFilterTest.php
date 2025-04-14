@@ -156,12 +156,8 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
         $response->msg = 'authorized';
         $response->nonce = 'hash123';
         $response->attributes = [
-            'eduPersonEntitlement' => 'attributes',
-            'uid' => [
-                'more' => [
-                    'attributes' => 'attributeValues'
-                ]
-            ]
+            'urn:mace:dir:attribute-def:uid' => ['userIdValue'],
+            'urn:mace:dir:attribute-def:eduPersonEntitlement' => 'attributes',
         ];
 
         $expectedRequest = new AuthzRequest();
@@ -194,11 +190,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
 
         $expectedAttributes = [
             'urn:mace:dir:attribute-def:uid' => ['userIdValue'],
-            'eduPersonEntitlement' => 'attributes',
-            'uid' => [
-                'more' =>
-                    ['attributes' => 'attributeValues']
-            ]
+            'urn:mace:dir:attribute-def:eduPersonEntitlement' => 'attributes',
         ];
 
         $sramFilter->execute();

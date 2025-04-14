@@ -55,12 +55,11 @@ class SbsClientStateManager
         } elseif ($msg === SbsClientInterface::AUTHORIZED) {
             $this->authz = [
                 'msg' => SbsClientInterface::AUTHORIZED,
-                'attributes' => $attributes ?? $this->getValidMockAttributes(),
             ];
-        } elseif ($msg === 'error') {
+            $this->authz += $attributes ?? $this->getValidMockAttributes();
+        } elseif ($msg === SbsClientInterface::ERROR) {
             $this->authz = [
-                'msg' => 'gibberish',
-                'nonce' => 'my-nonce',
+                'msg' => SbsClientInterface::ERROR,
             ];
         } else {
             throw new InvalidArgumentException(sprintf('"%s" is not a valid authz message.', $msg));
@@ -80,10 +79,12 @@ class SbsClientStateManager
     public function getValidMockAttributes(): array
     {
         return [
-            "eduPersonEntitlement" => ["user_aff1@test.sram.surf.nl", "user_aff2@test.sram.surf.nl"],
-            "eduPersonPrincipalName" => ["test_user@test.sram.surf.nl"],
-            "uid" => ["test_user"],
-            "sshkey" => ["ssh_key1", "ssh_key2"]
+            "attributes" => [
+                "urn:mace:dir:attribute-def:eduPersonEntitlement" => ["user_aff1@test.sram.surf.nl", "user_aff2@test.sram.surf.nl"],
+                "urn:mace:dir:attribute-def:eduPersonPrincipalName" => ["test_user@test.sram.surf.nl"],
+                "urn:mace:dir:attribute-def:uid" => ["test_user"],
+                "urn:oid:1.3.6.1.4.1.24552.500.1.1.1.13" => ["ssh_key1", "ssh_key2"],
+            ],
         ];
     }
 

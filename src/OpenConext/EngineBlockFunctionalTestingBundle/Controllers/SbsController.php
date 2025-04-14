@@ -76,8 +76,6 @@ class SbsController extends Controller
      */
     public function attributesAction()
     {
-        return new JsonResponse([
-            'attributes' => $this->sbsClientStateManager->getPreparedAttributesResponse()
-        ]);
+        return new JsonResponse($this->sbsClientStateManager->getPreparedAttributesResponse());
     }
 }
