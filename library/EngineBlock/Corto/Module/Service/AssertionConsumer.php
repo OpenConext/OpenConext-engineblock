@@ -170,69 +170,18 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
 
         $this->_server->filterInputAssertionAttributes($receivedResponse, $receivedRequest);
 
-        // Add the consent step
-        $currentProcessStep = $this->_processingStateHelper->addStep(
-            $receivedRequest->getId(),
-            ProcessingStateHelperInterface::STEP_CONSENT,
-            $this->getEngineSpRole($this->_server),
-            $receivedResponse
-        );
-
-        // Send SRAM Interrupt call
-        if ("" != $receivedResponse->getSRAMInterruptNonce()) {
-            $log->info('Handle SRAM Interrupt callout');
-
-            // Add the SRAM step
-            $this->_processingStateHelper->addStep(
-                $receivedRequest->getId(),
-                ProcessingStateHelperInterface::STEP_SRAM,
-                $this->getEngineSpRole($this->_server),
-                $receivedResponse
-            );
-
-            // Redirect to SRAM
-            $this->_server->sendSRAMInterruptRequest($receivedResponse, $receivedRequest);
-
+        //Send SRAM Interrupt call
+        if ($this->_server->handleSRAMInterruptCallout($receivedResponse, $receivedRequest)) {
             return;
         }
 
-        // When dealing with an SP that acts as a trusted proxy, we should use the proxying SP and not the proxy itself.
-        if ($sp->getCoins()->isTrustedProxy()) {
-            // Overwrite the trusted proxy SP instance with that of the SP that uses the trusted proxy.
-            $sp = $this->_server->findOriginalServiceProvider($receivedRequest, $log);
-        }
-
-        $pdpLoas = $receivedResponse->getPdpRequestedLoas();
-        $loaRepository = $application->getDiContainer()->getLoaRepository();
-        $authnRequestLoas = $receivedRequest->getStepupObligations($loaRepository->getStepUpLoas());
-        // Goto consent if no Stepup authentication is needed
-        if (!$this->_stepupGatewayCallOutHelper->shouldUseStepup($idp, $sp, $authnRequestLoas, $pdpLoas)) {
-            $this->_server->sendConsentAuthenticationRequest($receivedResponse, $receivedRequest, $currentProcessStep->getRole(), $this->getAuthenticationState());
+        // Handle Consent authentication callout
+        if ($this->_server->handleConsentAuthenticationCallout($receivedResponse, $receivedRequest)) {
             return;
         }
 
-        $log->info('Handle Stepup authentication callout');
-
-        // Add Stepup authentication step
-        $currentProcessStep = $this->_processingStateHelper->addStep(
-            $receivedRequest->getId(),
-            ProcessingStateHelperInterface::STEP_STEPUP,
-            $application->getDiContainer()->getStepupIdentityProvider($this->_server),
-            $receivedResponse
-        );
-
-        // Get mapped AuthnClassRef and get NameId
-        $nameId = clone $receivedResponse->getNameId();
-        $authnClassRef = $this->_stepupGatewayCallOutHelper->getStepupLoa($idp, $sp, $authnRequestLoas, $pdpLoas);
-
-        $this->_server->sendStepupAuthenticationRequest(
-            $receivedRequest,
-            $currentProcessStep->getRole(),
-            $authnClassRef,
-            $nameId,
-            $sp->getCoins()->isStepupForceAuthn()
-        );
-
+        // Handle Stepup authentication callout
+        $this->_server->handleStepupAuthenticationCallout($receivedResponse, $receivedRequest);
    }
 
     /**
