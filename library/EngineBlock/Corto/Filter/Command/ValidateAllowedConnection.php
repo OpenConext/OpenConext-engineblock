@@ -16,6 +16,8 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+
 /**
  * Validate if the IDP sending this response is allowed to connect to the SP that made the request.
  **/
@@ -24,6 +26,11 @@ class EngineBlock_Corto_Filter_Command_ValidateAllowedConnection extends EngineB
     public function execute()
     {
         $sp = $this->_serviceProvider;
+
+        if ($this->sbsFlowActive($sp)) {
+            return;
+        }
+
         // When dealing with an SP that acts as a trusted proxy, we should perform the validatoin on the proxying SP
         // and not the proxy itself.
         if ($sp->getCoins()->isTrustedProxy()) {
@@ -40,5 +47,10 @@ class EngineBlock_Corto_Filter_Command_ValidateAllowedConnection extends EngineB
                 )
             );
         }
+    }
+
+    private function sbsFlowActive(ServiceProvider $sp)
+    {
+        return $sp->getCoins()->collabEnabled();
     }
 }
