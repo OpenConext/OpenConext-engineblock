@@ -27,8 +27,10 @@ use OpenConext\EngineBlock\Metadata\MfaEntity;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\TransparentMfaEntity;
 use OpenConext\EngineBlock\Stepup\StepupGsspUserAttributeExtension;
+use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\EngineBlockBundle\Exception\UnknownKeyIdException;
+use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
@@ -575,14 +577,6 @@ class EngineBlock_Corto_ProxyServer
         $authenticationState->authenticatedAt($inResponseTo, $identityProvider);
 
         $this->_server->getBindingsModule()->send($newResponse, $serviceProvider);
-    }
-
-    function sendSRAMInterruptRequest($response, $request) {
-        $nonce = $response->getSRAMInterruptNonce();
-
-        $sbsClient = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSbsClient();
-        $redirect_url = $sbsClient->getInterruptLocationLink($nonce);
-        $this->redirect($redirect_url, '');
     }
 
 //////// RESPONSE HANDLING ////////
