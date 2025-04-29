@@ -544,6 +544,12 @@ class EngineBlock_Application_DiContainer extends Pimple
         return $this->container->getParameter('stepup.sfo.override_engine_entityid');
     }
 
+    /** @return string[] */
+    public function getStepupUserAttributes(): array
+    {
+        return $this->container->getParameter('stepup.callout_user_attributes');
+    }
+
     public function getCookieDomain()
     {
         return $this->container->getParameter('cookie.locale.domain');

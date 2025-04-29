@@ -32,21 +32,19 @@ final class StepupGatewayCallOutHelper
      */
     private $gatewayLoaMapping;
 
-    /**
-     * @var StepupEndpoint
-     */
-    private $stepupEndpoint;
-
     private $logger;
+
+    /**
+     * @var LoaRepository
+     */
+    private $loaRepository;
 
     public function __construct(
         StepupGatewayLoaMapping $gatewayLoaMapping,
-        StepupEndpoint $stepupEndpoint,
         LoaRepository $loaRepository,
         LoggerInterface $logger
     ) {
         $this->gatewayLoaMapping = $gatewayLoaMapping;
-        $this->stepupEndpoint = $stepupEndpoint;
         $this->loaRepository = $loaRepository;
         $this->logger = $logger;
     }
