@@ -94,7 +94,7 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends TestCase
     public function testSessionLostExceptionIfNoSession()
     {
         $this->expectException(EngineBlock_Corto_Module_Services_SessionLostException::class);
-        $this->expectExceptionMessage('Session lost after consent');
+        $this->expectExceptionMessage('Session lost');
 
         $sessionData = [
             'Processing' => [],

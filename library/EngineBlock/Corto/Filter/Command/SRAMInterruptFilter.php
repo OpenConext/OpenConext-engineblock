@@ -1,0 +1,122 @@
+<?php
+
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
+use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
+use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
+use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
+
+/**
+ * Copyright 2021 Stichting Kennisnet
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_Corto_Filter_Command_Abstract
+    implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function getResponseAttributes()
+    {
+        return $this->_responseAttributes;
+    }
+
+    public function getResponse()
+    {
+        return $this->_response;
+    }
+
+    public function execute(): void
+    {
+        $log = EngineBlock_ApplicationSingleton::getLog();
+
+        if (!$this->getFeatureConfiguration()->isEnabled('eb.feature_enable_sram_interrupt')) {
+            return;
+        }
+
+        $serviceProvider = EngineBlock_SamlHelper::findRequesterServiceProvider(
+            $this->_serviceProvider,
+            $this->_request,
+            $this->_server->getRepository(),
+            $this->logger
+        );
+
+        if (!$serviceProvider) {
+            $serviceProvider = $this->_serviceProvider;
+        }
+
+        if ($serviceProvider->getCoins()->collabEnabled() === false) {
+            $log->notice("No SBS interrupt for serviceProvider: " . $serviceProvider->entityId);
+            return;
+        }
+
+        $log->notice("SBS interrupt for serviceProvider: " . $serviceProvider->entityId);
+
+        try {
+            $request = $this->buildRequest($serviceProvider);
+
+            $interruptResponse = $this->getSbsClient()->authz($request);
+
+            if ($interruptResponse->msg === 'interrupt') {
+                $log->info("SBS interrupt reason: " . $interruptResponse->message);
+                $this->_response->setSRAMInterruptNonce($interruptResponse->nonce);
+            } elseif ($interruptResponse->msg === 'authorized' && !empty($interruptResponse->attributes)) {
+                $this->_responseAttributes = $this->getSbsAttributeMerger()->mergeAttributes($this->_responseAttributes, $interruptResponse->attributes);
+            } else {
+                throw new InvalidSbsResponseException(sprintf('Invalid SBS response received: %s', $interruptResponse->msg));
+            }
+        } catch (Throwable $e){
+            throw new EngineBlock_Exception_SbsCheckFailed('The SBS server could not be queried: ' . $e->getMessage());
+        }
+    }
+
+    private function getSbsClient()
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSbsClient();
+    }
+
+    private function getFeatureConfiguration(): FeatureConfigurationInterface
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getFeatureConfiguration();
+    }
+
+    private function getSbsAttributeMerger(): SbsAttributeMerger
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSbsAttributeMerger();
+    }
+
+    /**
+     * @return AuthzRequest
+     * @throws EngineBlock_Corto_ProxyServer_Exception
+     */
+    private function buildRequest($serviceProvider): AuthzRequest
+    {
+        $attributes = $this->getResponseAttributes();
+        $id = $this->_request->getId();
+
+        $user_id = $this->_collabPersonId ?? "";
+        $eppn = $attributes['urn:mace:dir:attribute-def:eduPersonPrincipalName'][0] ?? "";
+        $continue_url = $this->_server->getUrl('SRAMInterruptService', '') . "?ID=$id";
+        $service_id = $serviceProvider->entityId;
+        $issuer_id = $this->_identityProvider->entityId;
+
+        return AuthzRequest::create(
+            $user_id,
+            $eppn,
+            $continue_url,
+            $service_id,
+            $issuer_id
+        );
+    }
+}

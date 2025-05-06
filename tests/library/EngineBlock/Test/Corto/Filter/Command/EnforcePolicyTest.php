@@ -89,4 +89,13 @@ class EngineBlock_Test_Corto_Filter_Command_EnforcePolicyTest extends TestCase
         $container->setPdpClient($pdpClient);
     }
 
+    protected function tearDown(): void
+    {
+        /** @var EngineBlock_Application_TestDiContainer $container */
+        $container = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $container->setPdpClient(null);
+
+        parent::tearDown();
+    }
+
 }

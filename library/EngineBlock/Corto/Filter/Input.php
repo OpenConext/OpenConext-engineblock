@@ -90,6 +90,10 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
                 $diContainer->getAttributeAggregationClient()
             ),
 
+            // Check if we need to callout to SRAM to enforce AUP's
+            // Add SRAM attributes if not
+            new EngineBlock_Corto_Filter_Command_SRAMInterruptFilter(),
+
             // Check if the Policy Decision Point needs to be consulted for this request
             new EngineBlock_Corto_Filter_Command_EnforcePolicy(),
 
