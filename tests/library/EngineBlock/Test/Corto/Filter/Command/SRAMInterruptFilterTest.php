@@ -19,6 +19,7 @@
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlockBundle\Configuration\Feature;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
@@ -33,6 +34,25 @@ use SAML2\Response;
 class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
+
+    /**
+     * @var ServiceProvider
+     */
+    private $sp;
+
+    /**
+     * @var MetadataRepositoryInterface
+     */
+    private $repository;
+
+    public function setUp(): void
+    {
+        $this->sp = new ServiceProvider('SP');
+
+        $this->repository = Mockery::mock(MetadataRepositoryInterface::class);
+        $this->repository->shouldReceive('findServiceProviderByEntityId')
+            ->andReturn($this->sp);
+    }
 
     public function testItDoesNothingIfFeatureFlagNotEnabled(): void
     {
@@ -50,6 +70,12 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
     public function testItDoesNothingIfSpDoesNotHaveCollabEnabled(): void
     {
         $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMInterruptFilter();
+
+        $server = Mockery::mock(EngineBlock_Corto_ProxyServer::class);
+        $server->shouldReceive('getRepository')
+            ->andReturn($this->repository);
+
+        $sramFilter->setProxyServer($server);
 
         $request = $this->mockRequest();
         $sramFilter->setRequest($request);
@@ -78,6 +104,8 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
 
         $server = Mockery::mock(EngineBlock_Corto_ProxyServer::class);
         $server->expects('getUrl')->andReturn('https://example.org');
+        $server->shouldReceive('getRepository')
+            ->andReturn($this->repository);
 
         $sramFilter->setProxyServer($server);
 
@@ -139,6 +167,8 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
 
         $server = Mockery::mock(EngineBlock_Corto_ProxyServer::class);
         $server->expects('getUrl')->andReturn('https://example.org');
+        $server->shouldReceive('getRepository')
+            ->andReturn($this->repository);
 
         $sramFilter->setProxyServer($server);
 
@@ -206,7 +236,6 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
         $sbsClient = $this->mockSbsClient();
         $sbsClient->expects('authz')->andThrows(new InvalidSbsResponseException('Server could not be reached.'));
 
-
         $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMInterruptFilter();
 
         $initialAttributes = ['urn:mace:dir:attribute-def:uid' => ['userIdValue']];
@@ -214,6 +243,8 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
 
         $server = Mockery::mock(EngineBlock_Corto_ProxyServer::class);
         $server->expects('getUrl')->andReturn('https://example.org');
+        $server->shouldReceive('getRepository')
+            ->andReturn($this->repository);
 
         $sramFilter->setProxyServer($server);
 
