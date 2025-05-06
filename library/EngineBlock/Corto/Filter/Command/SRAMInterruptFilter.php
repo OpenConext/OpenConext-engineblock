@@ -45,12 +45,26 @@ class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_C
             return;
         }
 
-        if ($this->_serviceProvider->getCoins()->collabEnabled() === false) {
+        $serviceProvider = EngineBlock_SamlHelper::findRequesterServiceProvider(
+            $this->_serviceProvider,
+            $this->_request,
+            $this->_server->getRepository(),
+            $this->logger
+        );
+
+        if (!$serviceProvider) {
+            $serviceProvider = $this->_serviceProvider;
+        }
+
+        if ($serviceProvider->getCoins()->collabEnabled() === false) {
+            $log->notice("No SBS interrupt for serviceProvider: " . $serviceProvider->entityId);
             return;
         }
 
+        $log->notice("SBS interrupt for serviceProvider: " . $serviceProvider->entityId);
+
         try {
-            $request = $this->buildRequest();
+            $request = $this->buildRequest($serviceProvider);
 
             $interruptResponse = $this->getSbsClient()->authz($request);
 
@@ -86,7 +100,7 @@ class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_C
      * @return AuthzRequest
      * @throws EngineBlock_Corto_ProxyServer_Exception
      */
-    private function buildRequest(): AuthzRequest
+    private function buildRequest($serviceProvider): AuthzRequest
     {
         $attributes = $this->getResponseAttributes();
         $id = $this->_request->getId();
@@ -94,7 +108,7 @@ class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_C
         $user_id = $this->_collabPersonId ?? "";
         $eppn = $attributes['urn:mace:dir:attribute-def:eduPersonPrincipalName'][0] ?? "";
         $continue_url = $this->_server->getUrl('SRAMInterruptService', '') . "?ID=$id";
-        $service_id = $this->_serviceProvider->entityId;
+        $service_id = $serviceProvider->entityId;
         $issuer_id = $this->_identityProvider->entityId;
 
         return AuthzRequest::create(
