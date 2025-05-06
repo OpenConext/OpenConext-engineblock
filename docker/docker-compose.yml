@@ -62,5 +62,5 @@ services:
             - ../theme:/theme
 
 volumes:
-    eb-mysql-data:
+    # eb-mysql-data:
     eb-mysql-test-data:
