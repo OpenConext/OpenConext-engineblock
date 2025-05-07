@@ -647,6 +647,7 @@ class EngineBlockContext extends AbstractSubContext
         $authnRequest->loadXML($authnRequestXml);
 
         $xpathObject = new DOMXPath($authnRequest);
+        $xpathObject->registerNamespace('gssp', 'urn:mace:surf.nl:stepup:gssp-extensions');
         $nodeList = $xpathObject->query($xpath);
 
         if (!$nodeList || $nodeList->length === 0) {

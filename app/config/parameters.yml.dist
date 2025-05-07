@@ -229,8 +229,9 @@ parameters:
     feature_run_all_manipulations_prior_to_consent: false
     feature_block_user_on_violation: false
     feature_enable_consent: true
-    feature_stepup_sfo_override_engine_entityid: false
     feature_enable_idp_initiated_flow: true
+    feature_stepup_sfo_override_engine_entityid: false
+    feature_stepup_send_user_attributes: false
 
     ##########################################################################################
     ## PROFILE SETTINGS
@@ -272,6 +273,9 @@ parameters:
     ## You can override the default entityID used by Engineblock for its callout to stepup gateway.
     ## You also need to enable the feature toggle feature_stepup_sfo_override_engine_entityid above.
     stepup.sfo.override_engine_entityid: "https://engine.dev.openconext.local/new/stepup/metadata"
+    ## The name of the SAML attributes to send to Stepup with the GSSP SAML extension
+    stepup.callout_user_attributes:
+      - urn:mace:dir:attribute-def:mail
 
     ##########################################################################################
     ## THEME SETTINGS

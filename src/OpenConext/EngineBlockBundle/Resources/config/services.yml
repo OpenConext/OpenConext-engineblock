@@ -68,7 +68,6 @@ services:
         class: OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper
         arguments:
             - "@engineblock.configuration.stepup.gateway_loa_mapping"
-            - "@engineblock.configuration.stepup.endpoint"
             - "@engineblock.configuration.stepup.loa_repository"
             - "@logger"
 

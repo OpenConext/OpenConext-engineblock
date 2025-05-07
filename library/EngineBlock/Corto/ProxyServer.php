@@ -26,6 +26,7 @@ use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterfa
 use OpenConext\EngineBlock\Metadata\MfaEntity;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\TransparentMfaEntity;
+use OpenConext\EngineBlock\Stepup\StepupGsspUserAttributeExtension;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\EngineBlockBundle\Exception\UnknownKeyIdException;
 use OpenConext\Value\Saml\Entity;
@@ -470,7 +471,8 @@ class EngineBlock_Corto_ProxyServer
         IdentityProvider $identityProvider,
         Loa $authnContextClassRef,
         NameID $nameId,
-        bool $isForceAuthn
+        bool $isForceAuthn,
+        Assertion $assertion
     ) {
         $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
             $spRequest,
@@ -492,7 +494,7 @@ class EngineBlock_Corto_ProxyServer
             'AuthnContextClassRef' => [
                 $authnContextClassRef->getIdentifier()
             ],
-            'Comparison' => 'minimal',
+            'Comparison' => Constants::COMPARISON_MINIMUM,
         ]);
         $nameIdOverwrite = new NameID();
         $nameIdOverwrite->setValue($nameId->getValue());
@@ -503,10 +505,12 @@ class EngineBlock_Corto_ProxyServer
         $container = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
         $entityIdOverrideValue = $container->getStepupEntityIdOverrideValue();
         $features = $container->getFeatureConfiguration();
-        $isConfigured = $features->hasFeature('eb.stepup.sfo.override_engine_entityid');
-        $isEnabled = $features->isEnabled('eb.stepup.sfo.override_engine_entityid');
 
-        if ($isEnabled && $isConfigured) {
+        // Override the issuer to the StepUp Gateway if configured
+        $isEntityIdOverrideConfigured = $features->hasFeature('eb.stepup.sfo.override_engine_entityid');
+        $isEntityIdOverrideEnabled = $features->isEnabled('eb.stepup.sfo.override_engine_entityid');
+
+        if ($isEntityIdOverrideConfigured && $isEntityIdOverrideEnabled) {
             if (empty($entityIdOverrideValue)) {
                 throw new MissingParameterException(
                     'When feature "feature_stepup_sfo_override_engine_entityid" is enabled,
@@ -524,6 +528,19 @@ class EngineBlock_Corto_ProxyServer
             $issuer->setValue($entityIdOverrideValue);
             $sspMessage->setIssuer($issuer);
         }
+
+        // Add user attributes in the GSSP SAML extension to Stepup Gateway if configured
+        // and also if there are attributes available, if no attributes are available, this is omitted.
+        $isSendUserAttributesConfigured = $features->hasFeature('eb.stepup.send_user_attributes');
+        $isSendUserAttributesEnabled = $features->isEnabled('eb.stepup.send_user_attributes');
+
+        if ($isSendUserAttributesConfigured && $isSendUserAttributesEnabled) {
+            $stepupUserAttributes = $container->getStepupUserAttributes();
+            if (!empty($stepupUserAttributes)) {
+                StepupGsspUserAttributeExtension::add($sspMessage, $assertion, $container->getStepupUserAttributes());
+            }
+        }
+
 
         // Link with the original Request
         $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_logger);
