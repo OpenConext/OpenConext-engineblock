@@ -228,7 +228,7 @@ services:
     engineblock.sbs.guzzle_http_client:
         class: GuzzleHttp\Client
         arguments:
-            - base_uri: "%sram.base_url%"
+            - base_uri: "%sram.base_url%/"
               options:
                   headers:
                         Authentication: "%sram.api_token%"
