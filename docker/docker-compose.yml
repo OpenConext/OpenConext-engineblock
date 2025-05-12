@@ -4,7 +4,6 @@ services:
 
     mariadb:
         image: mariadb:10.2
-        restart: always
         container_name: eb-db-test
         environment:
             MYSQL_ROOT_PASSWORD: "root"
