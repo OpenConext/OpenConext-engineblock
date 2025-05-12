@@ -90,7 +90,7 @@ final class SbsClient implements SbsClientInterface
         );
 
         if (!is_array($jsonData)) {
-            throw new InvalidSbsResponseException('Received non-array from SBS server');
+            throw new InvalidSbsResponseException('Received non-array from SBS server: ' . var_export($jsonData, true));
         }
 
         return AuthzResponse::fromData($jsonData);
@@ -108,7 +108,7 @@ final class SbsClient implements SbsClientInterface
         );
 
         if (!is_array($jsonData)) {
-            throw new InvalidSbsResponseException('Received non-array from SBS server');
+            throw new InvalidSbsResponseException('Received non-array from SBS server: ' . var_export($jsonData, true));
         }
 
         return AttributesResponse::fromData($jsonData);
