@@ -1,4 +1,4 @@
-{% spaceless %}
+{% apply spaceless %}
 <!-- {{ 'openconext_terms_of_use_url'|trans }} -->
 <md:EntitiesDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" validUntil="{{ validUntil }}" ID="{{ id }}">
     {% for metadata in metadataCollection %}
@@ -33,4 +33,4 @@
         </md:EntityDescriptor>
     {% endfor %}
 </md:EntitiesDescriptor>
-{% endspaceless %}
+{% endapply %}

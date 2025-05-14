@@ -188,7 +188,7 @@ class MockStepupGateway
 
         // Catch any errors gzinflate triggers
         $errorNo = $errorMessage = null;
-        set_error_handler(function ($number, $message) use (&$errorNo, &$errorMessage) {
+        set_error_handler(function ($number, $message) use (&$errorNo, &$errorMessage): void {
             $errorNo      = $number;
             $errorMessage = $message;
         });

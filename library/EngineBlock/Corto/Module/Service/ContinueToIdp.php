@@ -20,6 +20,7 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Environment;
 
 class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
@@ -32,7 +33,7 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
     protected $_xmlConverter;
 
     /**
-     * @var Twig_Environment
+     * @var Environment
      */
     protected $twig;
 
@@ -44,7 +45,7 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
-        Twig_Environment $twig,
+        Environment $twig,
         ServiceProviderFactory $serviceProviderFactory
     ) {
         $this->_server = $server;

@@ -21,6 +21,7 @@ services:
             - "%minimum_execution_time_on_invalid_received_response%"
 
     engineblock.configuration.stepup.endpoint:
+        public: true
         class: OpenConext\EngineBlock\Stepup\StepupEndpoint
         arguments:
             - "%stepup.gateway.sfo.entity_id%"
@@ -223,6 +224,7 @@ services:
             - '%kernel.default_locale%'
 
     engineblock.url_provider:
+        public: true
         class: OpenConext\EngineBlockBundle\Url\UrlProvider
         arguments:
             - '@Symfony\Component\Routing\Generator\UrlGeneratorInterface'
@@ -259,6 +261,7 @@ services:
               timeout: "%http_client.timeout%"
 
     engineblock.metadata.repository.cached_doctrine:
+        public: true
         class: OpenConext\EngineBlock\Metadata\MetadataRepository\CachedDoctrineMetadataRepository
         arguments:
             - "@engineblock.metadata.repository.doctrine"
@@ -299,6 +302,7 @@ services:
             - '%encryption_keys%'
 
     engineblock.validator.allowed_scheme_validator:
+        public: true
         class: OpenConext\EngineBlock\Validator\AllowedSchemeValidator
         arguments:
             - "%allowed_acs_location_schemes%"

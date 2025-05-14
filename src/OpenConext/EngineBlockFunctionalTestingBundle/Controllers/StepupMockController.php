@@ -26,7 +26,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Twig_Environment;
+use Twig\Environment;
 
 class StepupMockController extends Controller
 {
@@ -35,11 +35,11 @@ class StepupMockController extends Controller
      */
     private $mockStepupGateway;
     /**
-     * @var Twig_Environment
+     * @var Environment
      */
     private $twig;
 
-    public function __construct(MockStepupGateway $mockStepupGateway, Twig_Environment $twig)
+    public function __construct(MockStepupGateway $mockStepupGateway, Environment $twig)
     {
         $this->mockStepupGateway = $mockStepupGateway;
         $this->twig = $twig;
