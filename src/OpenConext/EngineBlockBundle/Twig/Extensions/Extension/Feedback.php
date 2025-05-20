@@ -28,10 +28,10 @@ use OpenConext\EngineBlockBundle\Configuration\WikiLink;
 use OpenConext\EngineBlockBundle\Value\FeedbackInformation;
 use OpenConext\EngineBlockBundle\Value\FeedbackInformationMap;
 use SAML2\XML\saml\Issuer;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Twig_Extension;
 
-class Feedback extends Twig_Extension
+class Feedback extends AbstractExtension
 {
     /**
      * @var EngineBlock_ApplicationSingleton
@@ -65,7 +65,7 @@ class Feedback extends Twig_Extension
         $this->samlResponseHelper = $samlResponseHelper;
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('feedbackInfo', [$this, 'getFeedbackInfo']),
@@ -82,7 +82,7 @@ class Feedback extends Twig_Extension
         ];
     }
 
-    public function flushLog($message)
+    public function flushLog($message): void
     {
         // For now use the EngineBlock_ApplicationSingleton to flush the log
         $this->application->flushLog($message);
@@ -91,16 +91,16 @@ class Feedback extends Twig_Extension
     /**
      * @return FeedbackInformationMap
      */
-    public function getFeedbackInfo()
+    public function getFeedbackInfo(): FeedbackInformationMap
     {
         return $this->retrieveFeedbackInfo();
     }
 
     /**
-     * @param string $templateName
+     * @param string|null $templateName
      * @return bool
      */
-    public function hasWikiLink($templateName)
+    public function hasWikiLink(?string $templateName = null): bool
     {
         return $this->errorFeedbackConfiguration->hasWikiLink($templateName);
     }
@@ -109,16 +109,16 @@ class Feedback extends Twig_Extension
      * @param string $templateName
      * @return string
      */
-    public function getWikiLink($templateName)
+    public function getWikiLink(string $templateName): string
     {
         return $this->errorFeedbackConfiguration->getWikiLink($templateName);
     }
 
     /**
-     * @param string $templateName
+     * @param string|null $templateName
      * @return bool
      */
-    public function hasIdPContactMailLink($templateName)
+    public function hasIdPContactMailLink(string $templateName = null): bool
     {
         return $this->errorFeedbackConfiguration->isIdPContactPage($templateName) && $this->getIdPContactMailLink();
     }
@@ -127,7 +127,7 @@ class Feedback extends Twig_Extension
      * @param string $templateName
      * @return string
      */
-    public function getIdpContactShortLabel($templateName)
+    public function getIdpContactShortLabel(string $templateName): string
     {
         return $this->errorFeedbackConfiguration->getIdpContactShortLabel($templateName);
     }
@@ -135,7 +135,7 @@ class Feedback extends Twig_Extension
     /**
      * @return string
      */
-    public function getIdPContactMailLink()
+    public function getIdPContactMailLink(): string
     {
         $feedbackInfo = $this->retrieveFeedbackInfo();
         if ($feedbackInfo->has('identityProvider')) {
@@ -203,7 +203,7 @@ class Feedback extends Twig_Extension
      *
      * @return FeedbackInformationMap
      */
-    private function retrieveFeedbackInfo()
+    private function retrieveFeedbackInfo(): FeedbackInformationMap
     {
         $session = $this->application->getSession();
         $feedbackInfo = $session->get('feedbackInfo');

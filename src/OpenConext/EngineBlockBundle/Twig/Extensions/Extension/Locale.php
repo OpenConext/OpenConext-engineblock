@@ -21,14 +21,14 @@ namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Twig_Extension;
 
 /**
  * The Locale extension can be used to retrieve the currently active locale. By default returns the locale that
  * can be found in the RequestStack. If none can be found in the request stack, the default locale is returned.
  */
-class Locale extends Twig_Extension
+class Locale extends AbstractExtension
 {
     /**
      * @var string
@@ -39,19 +39,23 @@ class Locale extends Twig_Extension
      * @var null|Request
      */
     private $request;
+
     /**
      * @var LanguageSupportProvider
      */
     private $languageSupportProvider;
 
-    public function __construct(RequestStack $requestStack, LanguageSupportProvider $languageSupportProvider, $defaultLocale)
-    {
+    public function __construct(
+        RequestStack $requestStack,
+        LanguageSupportProvider $languageSupportProvider,
+        string $defaultLocale
+    ) {
         $this->request = $requestStack->getCurrentRequest();
         $this->locale = $this->retrieveLocale($requestStack, $defaultLocale);
         $this->languageSupportProvider = $languageSupportProvider;
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('locale', [$this, 'getLocale']),
@@ -62,7 +66,7 @@ class Locale extends Twig_Extension
         ];
     }
 
-    public function getPostData()
+    public function getPostData(): array
     {
         $postArray = [];
         if ($this->request->isMethod(Request::METHOD_POST)) {
@@ -73,10 +77,10 @@ class Locale extends Twig_Extension
 
     /**
      * Reads the query string parameters, adds the lang parameter and returns the merged query string.
-     * @param $locale
+     * @param string $locale
      * @return string
      */
-    public function getQueryStringFor($locale)
+    public function getQueryStringFor(string $locale): string
     {
         $params = ['lang' => $locale];
         // re-create URL from GET parameters
@@ -94,17 +98,17 @@ class Locale extends Twig_Extension
         return $query;
     }
 
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
 
-    public function getSupportedLocales()
+    public function getSupportedLocales(): array
     {
         return $this->languageSupportProvider->getSupportedLanguages();
     }
 
-    private function retrieveLocale(RequestStack $requestStack, $defaultLocale)
+    private function retrieveLocale(RequestStack $requestStack, string $defaultLocale): string
     {
         $currentRequest = $requestStack->getCurrentRequest();
         $locale = $defaultLocale;

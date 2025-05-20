@@ -22,14 +22,14 @@ use EngineBlock_Attributes_Metadata;
 use OpenConext\Value\Saml\NameIdFormat;
 use SAML2\XML\saml\NameID;
 use Symfony\Component\Translation\TranslatorInterface;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Twig_Extension;
 
 /**
  * Used to perform certain view related operations on metadata. For example this extension provides a function that
  * can sort metadata by display order.
  */
-class Metadata extends Twig_Extension
+class Metadata extends AbstractExtension
 {
     /**
      * @var string
@@ -47,7 +47,7 @@ class Metadata extends Twig_Extension
         $this->translator = $translator;
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction(
@@ -88,7 +88,7 @@ class Metadata extends Twig_Extension
      * @param NaneID|null $nameId
      * @return array
      */
-    public function sortByDisplayOrder($attributes, array $attributeSources = null, NameID $nameId = null)
+    public function sortByDisplayOrder($attributes, array $attributeSources = null, NameID $nameId = null): array
     {
         $sortedAttributes = $this->attributeMetadata->sortByDisplayOrder($attributes);
         $normalizedAttributes = $this->attributeMetadata->normalizeEptiAttributeValue($sortedAttributes);
@@ -106,7 +106,7 @@ class Metadata extends Twig_Extension
      * @param string $source Source identifier (e.g. "voot")
      * @return string URL
      */
-    public function getAttributeSourceLogoUrl($source)
+    public function getAttributeSourceLogoUrl(string $source): string
     {
         return $this->translator->trans('consent_attribute_source_logo_url_' . strtolower($source));
     }
@@ -117,7 +117,7 @@ class Metadata extends Twig_Extension
      * @param string $source Source identifier (e.g. "voot")
      * @return string
      */
-    public function getAttributeSourceDisplayName($source)
+    public function getAttributeSourceDisplayName(string $source): string
     {
         return $this->translator->trans('consent_attribute_source_' . strtolower($source));
     }
@@ -126,11 +126,11 @@ class Metadata extends Twig_Extension
      * Looks up the Attribute Id in the attribute metadata definition. If it is found, the name defined in the
      * definition list is used. Otherwise, falls back on the attribute id that was passed in the first place.
      *
-     * @param $attributeId
+     * @param string $attributeId
      * @param string $preferecLocale
-     * @return mixed
+     * @return string
      */
-    public function getAttributeShortName($attributeId, $preferecLocale = 'en')
+    public function getAttributeShortName(string $attributeId, string $preferecLocale = 'en'): string
     {
         $attributeShortName = $this->getAttributeName($attributeId, $preferecLocale);
         if (trim($attributeShortName) === '') {
@@ -141,20 +141,20 @@ class Metadata extends Twig_Extension
     }
 
     /**
-     * @param $attributeId
+     * @param string $attributeId
      * @param string $preferedLocale
      * @return string
      */
-    public function getAttributeName($attributeId, $preferedLocale = 'en')
+    public function getAttributeName(string $attributeId, string $preferedLocale = 'en'): string
     {
         return $this->attributeMetadata->getName($attributeId, $preferedLocale);
     }
 
-    private function groupAttributesBySource($attributes, array $attributeSources = array(), NameID $nameID = null)
+    private function groupAttributesBySource(array $attributes, array $attributeSources = array(), NameID $nameID = null): array
     {
-        $groupedAttributes = array(
-            'idp' => array(),
-        );
+        $groupedAttributes = [
+            'idp' => [],
+        ];
 
         if ($nameID && ($nameID->getFormat() == NameIdFormat::PERSISTENT_IDENTIFIER || $nameID->getFormat() == NameIdFormat::UNSPECIFIED)) {
             $groupedAttributes['engineblock']['name_id'] = $nameID->getValue();

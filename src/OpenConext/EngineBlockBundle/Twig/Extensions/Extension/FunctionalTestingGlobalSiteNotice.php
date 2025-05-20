@@ -19,15 +19,15 @@
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use Symfony\Component\HttpFoundation\RequestStack;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Twig_Extension;
 
-class FunctionalTestingGlobalSiteNotice extends Twig_Extension implements GlobalSiteNoticeInterface
+class FunctionalTestingGlobalSiteNotice extends AbstractExtension implements GlobalSiteNoticeInterface
 {
     private $request;
 
     /**
-     * @var String
+     * @var string
      */
     private $allowedHtml;
 
@@ -39,7 +39,7 @@ class FunctionalTestingGlobalSiteNotice extends Twig_Extension implements Global
         $this->allowedHtml = $allowedHtml;
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('shouldDisplayGlobalSiteNotice', [$this, 'shouldDisplayGlobalSiteNotice']),
@@ -48,7 +48,7 @@ class FunctionalTestingGlobalSiteNotice extends Twig_Extension implements Global
         ];
     }
 
-    public function shouldDisplayGlobalSiteNotice() : bool
+    public function shouldDisplayGlobalSiteNotice(): bool
     {
         return (bool) $this->request->get('showGlobalSiteNotice', false);
     }
