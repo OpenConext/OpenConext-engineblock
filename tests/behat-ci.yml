@@ -86,9 +86,9 @@ default:
                                     - "--window-size=1920,1080"
                                     - "--no-sandbox"
         FriendsOfBehat\SymfonyExtension:
+            bootstrap: 'vendor/autoload.php'
             kernel:
-                bootstrap: 'vendor/autoload.php'
                 path: app/AppKernel.php
                 class: 'AppKernel'
-                env: ci
+                environment: ci
                 debug: true
