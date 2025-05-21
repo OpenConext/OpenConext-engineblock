@@ -85,7 +85,10 @@ default:
                                     - "--disable-gpu"
                                     - "--window-size=1920,1080"
                                     - "--no-sandbox"
-        Behat\Symfony2Extension:
+        FriendsOfBehat\SymfonyExtension:
             kernel:
+                bootstrap: 'vendor/autoload.php'
+                path: app/AppKernel.php
+                class: 'AppKernel'
                 env: ci
                 debug: true

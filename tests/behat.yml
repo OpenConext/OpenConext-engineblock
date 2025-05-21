@@ -86,8 +86,10 @@ default:
                                     - "--window-size=1920,1080"
                                     - "--no-sandbox"
                                     - "--disable-dev-shm-usage"
-        Behat\Symfony2Extension:
+        FriendsOfBehat\SymfonyExtension:
             kernel:
+                bootstrap: 'vendor/autoload.php'
+                path: app/AppKernel.php
+                class: 'AppKernel'
                 env: ci
                 debug: true
-
