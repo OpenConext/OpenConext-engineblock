@@ -18,11 +18,11 @@
 
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
-use Twig_Extensions_Extension_I18n;
+use Twig\Extension\AbstractExtension;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig_SimpleFilter;
 
-class I18n extends Twig_Extensions_Extension_I18n
+class I18n extends AbstractExtension
 {
 
     /**
@@ -40,7 +40,7 @@ class I18n extends Twig_Extensions_Extension_I18n
      *
      * @return array An array of filters
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return array(
             new Twig_SimpleFilter('trans', array($this, 'translateSingular')),
@@ -51,7 +51,7 @@ class I18n extends Twig_Extensions_Extension_I18n
     /**
      * @return string
      */
-    public function translateSingular()
+    public function translateSingular(): string
     {
         $args = func_get_args();
         return call_user_func_array(
@@ -63,7 +63,7 @@ class I18n extends Twig_Extensions_Extension_I18n
     /**
      * @return string
      */
-    public function translatePlural()
+    public function translatePlural(): string
     {
         $args = func_get_args();
         return call_user_func_array(
@@ -76,7 +76,7 @@ class I18n extends Twig_Extensions_Extension_I18n
      * @param array $args
      * @return array
      */
-    private function prepareDefaultPlaceholders(array $args)
+    private function prepareDefaultPlaceholders(array $args): array
     {
         $args[1]['%suiteName%'] = $this->translator->trans('suite_name');
         $args[1]['%supportUrl%'] = $this->translator->trans('openconext_support_url');
