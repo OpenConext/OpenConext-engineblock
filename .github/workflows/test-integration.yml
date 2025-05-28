@@ -6,104 +6,104 @@ on:
     pull_request:
     # run at 6 hour UTC
     schedule:
-        - cron: "0 6 * * *"
+        -   cron: "0 6 * * *"
 jobs:
     build:
         runs-on: ubuntu-latest
         timeout-minutes: 30
         strategy:
-          matrix:
-            # php82 is ready to run alongside the 72, but is not enabled now as the code is not 82 compatible yet
-            php: [php72]
+            matrix:
+                # php82 is ready to run alongside the 72, but is not enabled now as the code is not 82 compatible yet
+                php: [ php72 ]
         env:
-          PROD_PHP: php72
-          DOCKER_COMPOSE:  docker compose -f docker-compose.yml -f docker-compose-${{matrix.php}}.yml
+            PROD_PHP: php72
+            DOCKER_COMPOSE: docker compose -f docker-compose.yml -f docker-compose-${{matrix.php}}.yml
         steps:
-            - name: Checkout
-              uses: actions/checkout@master
-            - name: chown some dirs
-              run: |
-                mkdir tmp vendor && sudo chown -R  33 app/ theme/ web/ tmp/ vendor/
-            - name: Build Docker environmnent
-              if: always()
-              run: |
-                cd docker &&
-                ${DOCKER_COMPOSE} up -d --build &&
-                docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
-                    SYMFONY_ENV=ci composer install --prefer-dist -n -o --ignore-platform-reqs && \
-                    ./app/console cache:clear --env=ci && \
-                    cd theme && CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile && EB_THEME=skeune yarn build
-                '
-            - name: Run code quality tests
-              if: always()
-              run: |
-                  cd docker && docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
-                      echo -e "\nPHP Mess Detector\n" && \
-                      ./vendor/bin/phpmd src text ci/qa-config/phpmd.xml --exclude */Tests/* && \
-                      echo -e "\nPHP CodeSniffer\n" && \
-                      ./vendor/bin/phpcs --report=full --standard=ci/qa-config/phpcs.xml --warning-severity=0 --extensions=php src  && \
-                      echo -e "\nPHP CodeSniffer (legacy code)\n" && \
-                      ./vendor/bin/phpcs --standard=ci/qa-config/phpcs-legacy.xml --warning-severity=0 --extensions=php -s library  && \
-                      echo -e "\nDoc header check\n" && \
-                      ./vendor/bin/docheader check src/ tests/ library/ --exclude-dir resources --exclude-dir languages
-                  '
-              env:
-                  SYMFONY_ENV: ci
-            - name: Run unit tests
-              if: always()
-              run: |
-                  cd docker && APP_ENV=ci SYMFONY_ENV=ci docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
-                      echo -e "\nInstalling database fixtures...\n" && \
-                      ./app/console doctrine:schema:drop --force --env=ci && \
-                      ./app/console doctrine:schema:create --env=ci && \
-                      echo -e "\nPHPUnit legacy tests\n" && \
-                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=eb4 --coverage-text && \
-                      echo -e "\nPHPUnit unit tests\n" && \
-                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=unit --coverage-text && \
-                      echo -e "\nPHPUnit API acceptance tests\n" && \
-                      APP_ENV=ci ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=functional --coverage-text && \
-                      echo -e "\nPHPUnit integration tests\n" && \
-                      ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=integration --coverage-text
-                  '
-              env:
-                  SYMFONY_ENV: ci
-            - name: Run acceptance tests
-              if: always()
-              run: |
-                  cd docker && docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
-                      echo -e "\nInstalling database fixtures...\n" && \
-                      ./app/console doctrine:schema:drop --force --env=ci && \
-                      ./app/console doctrine:schema:create --env=ci && \
-                      echo -e "\nPreparing frontend assets\n" && \
-                      EB_THEME=skeune ./theme/scripts/prepare-test.js > /dev/null && \
-                      echo -e "\nRun the Behat tests\n" && \
-                      ./vendor/bin/behat -c ./tests/behat-ci.yml --suite default -vv --format progress --strict && \
-                      echo -e "\nBehat tests (with selenium and headless Chrome)\n" && \
-                      ./vendor/bin/behat -c ./tests/behat-ci.yml --suite selenium -vv --format progress --strict
-                  '
-              env:
-                  SYMFONY_ENV: ci
-            - name: Run linting tests
-              if: always()
-              run: |
-                  cd docker && docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
-                      echo -e "\nTwig lint\n"  && \
-                      app/console lint:twig theme/ && \
-                      cd theme && \
-                      echo -e "\nLint frontend assets\n" && \
-                      yarn lint
-                  '
-              env:
-                  SYMFONY_ENV: ci
-            - name: Show log on failure
-              if: failure()
-              run:  |
-                  cd docker && docker compose exec -T engine.dev.openconext.local cat /var/www/html/app/logs/ci/ci.log
-            - name: Send notification on production build nightly build failure
-              uses: sonots/slack-notice-action@v3
-              with:
-                  status: ${{ job.status }}
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-              if: ${{ failure() && github.event_name == 'schedule' && matrix.php == env.PROD_PHP }}
+            -   name: Checkout
+                uses: actions/checkout@master
+            -   name: chown some dirs
+                run: |
+                    mkdir tmp vendor && sudo chown -R  33 app/ theme/ web/ tmp/ vendor/
+            -   name: Build Docker environmnent
+                if: always()
+                run: |
+                    cd docker &&
+                    ${DOCKER_COMPOSE} up -d --build &&
+                    docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+                        SYMFONY_ENV=ci composer install --prefer-dist -n -o --ignore-platform-reqs && \
+                        ./app/console cache:clear --env=ci && \
+                        cd theme && CYPRESS_INSTALL_BINARY=0 yarn install --frozen-lockfile && EB_THEME=skeune yarn build
+                    '
+            -   name: Run code quality tests
+                if: always()
+                run: |
+                    cd docker && docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+                        echo -e "\nPHP Mess Detector\n" && \
+                        ./vendor/bin/phpmd src text ci/qa-config/phpmd.xml --exclude */Tests/* && \
+                        echo -e "\nPHP CodeSniffer\n" && \
+                        ./vendor/bin/phpcs --report=full --standard=ci/qa-config/phpcs.xml --warning-severity=0 --extensions=php src  && \
+                        echo -e "\nPHP CodeSniffer (legacy code)\n" && \
+                        ./vendor/bin/phpcs --standard=ci/qa-config/phpcs-legacy.xml --warning-severity=0 --extensions=php -s library  && \
+                        echo -e "\nDoc header check\n" && \
+                        ./vendor/bin/docheader check src/ tests/ library/ --exclude-dir resources --exclude-dir languages
+                    '
+                env:
+                    SYMFONY_ENV: ci
+            -   name: Run unit tests
+                if: always()
+                run: |
+                    cd docker && APP_ENV=ci SYMFONY_ENV=ci docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+                        echo -e "\nInstalling database fixtures...\n" && \
+                        ./app/console doctrine:schema:drop --force --env=ci && \
+                        ./app/console doctrine:schema:create --env=ci && \
+                        echo -e "\nPHPUnit legacy tests\n" && \
+                        ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=eb4 --coverage-text && \
+                        echo -e "\nPHPUnit unit tests\n" && \
+                        ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=unit --coverage-text && \
+                        echo -e "\nPHPUnit API acceptance tests\n" && \
+                        APP_ENV=ci ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=functional --coverage-text && \
+                        echo -e "\nPHPUnit integration tests\n" && \
+                        ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=integration --coverage-text
+                    '
+                env:
+                    SYMFONY_ENV: ci
+            -   name: Run acceptance tests
+                if: always()
+                run: |
+                    cd docker && docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+                        echo -e "\nInstalling database fixtures...\n" && \
+                        ./app/console doctrine:schema:drop --force --env=ci && \
+                        ./app/console doctrine:schema:create --env=ci && \
+                        echo -e "\nPreparing frontend assets\n" && \
+                        EB_THEME=skeune ./theme/scripts/prepare-test.js > /dev/null && \
+                        echo -e "\nRun the Behat tests\n" && \
+                        ./vendor/bin/behat -c ./tests/behat-ci.yml --suite default -vv --format progress --strict && \
+                        echo -e "\nBehat tests (with selenium and headless Chrome)\n" && \
+                        ./vendor/bin/behat -c ./tests/behat-ci.yml --suite selenium -vv --format progress --strict
+                    '
+                env:
+                    SYMFONY_ENV: ci
+            -   name: Run linting tests
+                if: always()
+                run: |
+                    cd docker && docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+                        echo -e "\nTwig lint\n"  && \
+                        app/console lint:twig theme/ && \
+                        cd theme && \
+                        echo -e "\nLint frontend assets\n" && \
+                        yarn lint
+                    '
+                env:
+                    SYMFONY_ENV: ci
+            -   name: Show log on failure
+                if: failure()
+                run: |
+                    cd docker && docker compose exec -T engine.dev.openconext.local cat /var/www/html/app/logs/ci/ci.log
+            -   name: Send notification on production build nightly build failure
+                uses: sonots/slack-notice-action@v3
+                with:
+                    status: ${{ job.status }}
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+                if: ${{ failure() && github.event_name == 'schedule' && matrix.php == env.PROD_PHP }}
