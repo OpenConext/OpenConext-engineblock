@@ -5,18 +5,13 @@ set -e
 PHPVERSION=${PRODPHP:-72}
 #export COMPOSE_BAKE=true
 
-ls -la .
-ls -la ..
-
 docker compose \
     -f docker-compose.yml \
     -f docker-compose-php${PHPVERSION}.yml \
     up -d --build
 
 mkdir -p ../tmp ../vendor
-ls -la ..
 docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
-    ls -la
     git config --global --add safe.directory /var/www/html
 '
 
