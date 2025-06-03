@@ -10,10 +10,9 @@ docker compose \
     -f docker-compose-php${PHPVERSION}.yml \
     up -d --build
 
+mkdir -p tmp vendor
 docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
-    mkdir -p tmp vendor &&
     git config --global --add safe.directory /var/www/html
-
 '
 
 docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
