@@ -1,7 +1,3 @@
-# This routing file is separated due to being hosted on a different sub-domain
-# see app/config/routing.yml
-# Allowed methods are registered in the controllers so API specific exceptions are thrown
-
 api_heartbeat:
     path:     /
     defaults:
