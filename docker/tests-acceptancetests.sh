@@ -33,10 +33,10 @@ docker compose exec -T engine.dev.openconext.local bash -c '
     ./theme/scripts/prepare-test.js
 '
 
-#echo "Behat tests"
-#docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
-#    ./vendor/bin/behat -c ./tests/behat-ci.yml --suite default -vv --format progress --strict
-#'
+echo "Behat tests"
+docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+    ./vendor/bin/behat -c ./tests/behat-ci.yml --suite default -vv --format progress --strict
+'
 
 echo "Behat tests (with selenium and headless Chrome)"
 docker compose exec -T engine.dev.openconext.local bash -c '
