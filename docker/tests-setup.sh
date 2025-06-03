@@ -11,21 +11,23 @@ docker compose \
     up -d --build
 
 mkdir -p ../tmp ../vendor
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+
+docker compose exec -T engine.dev.openconext.local bash -c '
+    mkdir -p tmp vendor
     git config --global --add safe.directory /var/www/html
 '
 
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     export SYMFONY_ENV=ci;
     test -e ./app/config/parameters.yml && rm -v ./app/config/parameters.yml;
     composer install --prefer-dist -n -o --ignore-platform-reqs;
 '
 
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     ./app/console cache:clear --env=ci;
 '
 
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     cd theme;
     export CYPRESS_INSTALL_BINARY=0;
     export EB_THEME=skeune;

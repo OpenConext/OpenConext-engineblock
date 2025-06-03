@@ -10,7 +10,7 @@ docker compose \
     -f "docker-compose-php${PHPVERSION}.yml" \
     up -d
 
-if [[ $( docker compose exec -T --user www-data engine.dev.openconext.local \
+if [[ $( docker compose exec -T engine.dev.openconext.local \
          bash -c 'test -e /setup.txt && cat /setup.txt || echo ""'
        ) != 'done' ]]
 then
@@ -20,22 +20,22 @@ fi
 
 echo
 echo "PHP Mess Detector"
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     ./vendor/bin/phpmd src text ci/qa-config/phpmd.xml --exclude */Tests/*
 '
 
 echo "PHP CodeSniffer..."
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     ./vendor/bin/phpcs --report=full --standard=ci/qa-config/phpcs.xml --warning-severity=0 --extensions=php src
 '
 
 echo "PHP CodeSniffer (legacy code)"
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     ./vendor/bin/phpcs --standard=ci/qa-config/phpcs-legacy.xml --warning-severity=0 --extensions=php -s library
 '
 
 echo "Doc header check..."
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     ./vendor/bin/docheader check src/ tests/ library/ --exclude-dir resources --exclude-dir languages
 '
 

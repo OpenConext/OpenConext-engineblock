@@ -10,7 +10,7 @@ docker compose \
     -f docker-compose-php${PHPVERSION}.yml \
     up -d
 
-if [[ $( docker compose exec -T --user www-data engine.dev.openconext.local \
+if [[ $( docker compose exec -T engine.dev.openconext.local \
          bash -c 'test -e /setup.txt && cat /setup.txt || echo ""'
        ) != 'done' ]]
 then
@@ -20,7 +20,7 @@ fi
 
 echo
 echo  "Installing database fixtures..."
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     export APP_ENV=ci
     export SYMFONY_ENV=ci
     ./app/console doctrine:schema:drop --force --env=ci &&
@@ -28,28 +28,28 @@ docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
 '
 
 echo "PHPUnit legacy tests..."
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     export APP_ENV=ci
     export SYMFONY_ENV=ci
     ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=eb4 --no-coverage
 '
 
 echo "PHPUnit unit tests"
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     export APP_ENV=ci
     export SYMFONY_ENV=ci
     ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=unit --no-coverage
 '
 
 echo "PHPUnit API acceptance tests"
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     export APP_ENV=ci
     export SYMFONY_ENV=ci
     ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=functional --no-coverage
 '
 
 echo "PHPUnit integration tests"
-docker compose exec -T --user www-data  engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     export APP_ENV=ci
     export SYMFONY_ENV=ci
     ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=integration --no-coverage
@@ -64,7 +64,7 @@ exit 0
 
 echo
 echo  "Code coverage..."
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     export APP_ENV=ci
     export SYMFONY_ENV=ci
     export XDEBUG_MODE=coverage

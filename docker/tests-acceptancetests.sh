@@ -10,7 +10,7 @@ docker compose \
     -f docker-compose-php${PHPVERSION}.yml \
     up -d
 
-if [[ $( docker compose exec -T --user www-data engine.dev.openconext.local \
+if [[ $( docker compose exec -T engine.dev.openconext.local \
          bash -c 'test -e /setup.txt && cat /setup.txt || echo ""'
        ) != 'done' ]]
 then
@@ -20,7 +20,7 @@ fi
 
 echo
 echo  "Installing database fixtures..."
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     export APP_ENV=ci;
     export SYMFONY_ENV=ci
     ./app/console doctrine:schema:drop --force --env=ci &&
@@ -28,7 +28,7 @@ docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
 '
 
 echo "Preparing frontend assets..."
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     export EB_THEME=skeune
     ./theme/scripts/prepare-test.js
 '
@@ -39,7 +39,7 @@ docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
 #'
 
 echo "Behat tests (with selenium and headless Chrome)"
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     ./vendor/bin/behat -c ./tests/behat-ci.yml --suite selenium -vv --format progress --strict
 '
 

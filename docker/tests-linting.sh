@@ -10,12 +10,12 @@ docker compose \
     up -d
 
 echo "Lint twig..."
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     app/console lint:twig theme/
 '
 
 echo "Lint frontend assets..."
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     cd theme
     yarn lint
 '
