@@ -25,7 +25,7 @@ docker compose exec -T engine.dev.openconext.local bash -c '
     export SYMFONY_ENV=ci
     ./app/console doctrine:schema:drop --force --env=ci &&
     ./app/console doctrine:schema:create --env=ci
-
+    chmod -R 0777 /tmp/eb-fixtures
 '
 
 echo "Preparing frontend assets..."
