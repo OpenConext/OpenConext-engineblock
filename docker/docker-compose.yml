@@ -29,6 +29,16 @@ services:
             - ../:/var/www/html
             - ../ci/qa-config/files/engine.dev.openconext.local.crt:/config/engine/engineblock.crt
             - ../ci/qa-config/files/engine.dev.openconext.local.key:/config/engine/engineblock.pem
+            - type: "volume"
+              source: "eb-engine-vendor"
+              target: "/var/www/html/vendor"
+              tmpfs: { mode: 01777 }
+            - type: "tmpfs"
+              target: "/var/www/html/tmp"
+              tmpfs: { mode: 01777 }
+            - type: "tmpfs"
+              target: "/var/www/html/cache"
+              tmpfs: { mode: 01777 }
         depends_on:
             mariadb:
                 condition: service_healthy
@@ -63,3 +73,4 @@ services:
 volumes:
     eb-mysql-data:
     eb-mysql-test-data:
+    eb-engine-vendor:
