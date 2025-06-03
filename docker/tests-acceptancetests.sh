@@ -21,26 +21,25 @@ fi
 echo
 echo  "Installing database fixtures..."
 docker compose exec -T engine.dev.openconext.local bash -c '
-    ls -la /var/www/html/app/cache/ci
-    ls -la /var/www/html/app/cache/
     export APP_ENV=ci;
     export SYMFONY_ENV=ci
     ./app/console doctrine:schema:drop --force --env=ci &&
     ./app/console doctrine:schema:create --env=ci
+
 '
 
 echo "Preparing frontend assets..."
 docker compose exec -T engine.dev.openconext.local bash -c '
-    ls -la /var/www/html/app/cache/ci
-    ls -la /var/www/html/app/cache/
     export EB_THEME=skeune
+    umask 000
     ./theme/scripts/prepare-test.js
+    # prepare-test.js secretly clears the cache, so we need to make everything wtiable again
+    ls -la /var/www/html/app/cache/ci
 '
 
 echo "Behat tests"
 docker compose exec -T engine.dev.openconext.local bash -c '
     ls -la /var/www/html/app/cache/ci
-    ls -la /var/www/html/app/cache/
     ./vendor/bin/behat -c ./tests/behat-ci.yml --suite default -vv --format progress --strict
 '
 
