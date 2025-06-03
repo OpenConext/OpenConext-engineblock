@@ -21,6 +21,8 @@ fi
 echo
 echo  "Installing database fixtures..."
 docker compose exec -T engine.dev.openconext.local bash -c '
+    ls -la /var/www/html/app/cache/ci
+    ls -la /var/www/html/app/cache/
     export APP_ENV=ci;
     export SYMFONY_ENV=ci
     ./app/console doctrine:schema:drop --force --env=ci &&
@@ -29,12 +31,16 @@ docker compose exec -T engine.dev.openconext.local bash -c '
 
 echo "Preparing frontend assets..."
 docker compose exec -T engine.dev.openconext.local bash -c '
+    ls -la /var/www/html/app/cache/ci
+    ls -la /var/www/html/app/cache/
     export EB_THEME=skeune
     ./theme/scripts/prepare-test.js
 '
 
 echo "Behat tests"
 docker compose exec -T engine.dev.openconext.local bash -c '
+    ls -la /var/www/html/app/cache/ci
+    ls -la /var/www/html/app/cache/
     ./vendor/bin/behat -c ./tests/behat-ci.yml --suite default -vv --format progress --strict
 '
 
