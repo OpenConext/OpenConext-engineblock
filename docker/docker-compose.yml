@@ -39,6 +39,9 @@ services:
             - type: "tmpfs"
               target: "/var/www/html/cache"
               tmpfs: { mode: 01777 }
+            - type: "tmpfs"
+              target: "/tmp"
+              tmpfs: { mode: 01777 }
         depends_on:
             mariadb:
                 condition: service_healthy
