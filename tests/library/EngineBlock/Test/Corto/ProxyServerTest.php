@@ -31,24 +31,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    public function testNameIDFormatIsNotSetByDefault()
-    {
-        $proxyServer = $this->factoryProxyServer();
-
-        $originalRequest = $this->factoryOriginalRequest();
-        $identityProvider = $proxyServer->getRepository()->fetchIdentityProviderByEntityId('testIdp');
-        /** @var AuthnRequest $enhancedRequest */
-        $enhancedRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
-            $originalRequest,
-            $identityProvider,
-            $proxyServer
-        );
-
-        $nameIdPolicy = $enhancedRequest->getNameIdPolicy();
-        $this->assertSame(['AllowCreate' => true], $nameIdPolicy);
-    }
-
-    public function testAllowCreateIsSet()
+    public function testDefaultNameIDPolicy()
     {
         $proxyServer = $this->factoryProxyServer();
 
