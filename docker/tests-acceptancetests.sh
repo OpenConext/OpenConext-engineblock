@@ -34,7 +34,7 @@ docker compose exec -T engine.dev.openconext.local bash -c '
 '
 
 echo "Behat tests"
-docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+docker compose exec -T engine.dev.openconext.local bash -c '
     ./vendor/bin/behat -c ./tests/behat-ci.yml --suite default -vv --format progress --strict
 '
 
