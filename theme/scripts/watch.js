@@ -11,7 +11,7 @@
  **/
 const fs = require('fs');
 const yaml = require('js-yaml');
-const config = `${__dirname}/../../app/config/parameters.yml`;
+const config = `${__dirname}/../../config/packages/parameters.yml`;
 
 try {
   console.log('Reading contents of parameters.yaml.\n');

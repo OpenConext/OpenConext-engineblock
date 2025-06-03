@@ -14,7 +14,7 @@
  */
 const fs = require('fs');
 const yaml = require('js-yaml');
-const config = `${__dirname}/../../app/config/parameters.yml`;
+const config = `${__dirname}/../../config/packages/parameters.yml`;
 
 if (process.env.EB_THEME === undefined) {
   console.error('You must specifiy the EB_THEME env var in order to run the tests.\n');
