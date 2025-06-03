@@ -40,14 +40,16 @@ docker compose exec -T engine.dev.openconext.local bash -c '
 echo "Behat tests"
 docker compose exec -T engine.dev.openconext.local bash -c '
     ls -la /var/www/html/app/logs/ci
-    chmod 666 /var/www/html/app/logs/ci/*
+    rm -f /var/www/html/app/logs/ci/*
+    ls -la /var/www/html/app/logs/ci
     ./vendor/bin/behat -c ./tests/behat-ci.yml --suite default -vv --format progress --strict
 '
 
 echo "Behat tests (with selenium and headless Chrome)"
 docker compose exec -T engine.dev.openconext.local bash -c '
     ls -la /var/www/html/app/logs/ci
-    chmod 666 /var/www/html/app/logs/ci/*
+    rm -f /var/www/html/app/logs/ci/*
+    ls -la /var/www/html/app/logs/ci
     ./vendor/bin/behat -c ./tests/behat-ci.yml --suite selenium -vv --format progress --strict
 '
 
