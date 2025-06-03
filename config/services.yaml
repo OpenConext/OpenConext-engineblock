@@ -38,7 +38,32 @@ parameters:
 #    doctrine.system_cache_provider:
 #        class: Doctrine\Common\Cache\ApcuCache
 
+# Legacy way to import services
+imports:
+    - { resource: services/api.yml }
+    - { resource: services/authentication.yml }
+
 services:
+    _defaults:
+        #            autowire: true
+        #            autoconfigure: true
+        public: true
+
+#
+#
+#    OpenConext\EngineBlockBundle\Controller\:
+#        resource: '../src/OpenConext/EngineBlockBundle/Controller/*'
+
+#    engineblock.controller.authentication.index:
+#        class: OpenConext\EngineBlockBundle\Controller\IndexController
+#        arguments:
+#            - "@twig"
+#            - "%encryption_keys%"
+#        public: true
+
+
+
+
     OpenConext\EngineBlock\Xml\:
         resource: '../src/OpenConext/EngineBlock/Xml'
         exclude: '../src/OpenConext/EngineBlock/Xml/ValueObjects'

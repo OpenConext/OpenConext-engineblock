@@ -1,5 +1,5 @@
-openconext_engineblock_authentication:
-    resource: '../src/OpenConext/EngineBlockBundle/Resources/config/routing.yml'
+engineblock_controllers:
+    resource: '../src/OpenConext/EngineBlockBundle/Controller/'
     type: annotation
     host: "engine.{domain}"
     requirements:
@@ -7,11 +7,15 @@ openconext_engineblock_authentication:
     defaults:
         domain: "%domain%"
 
-openconext_engineblock_api:
-    resource: '../src/OpenConext/EngineBlockBundle/Resources/config/routing_api.yml'
+engineblock_api_controllers:
+    resource: '../src/OpenConext/EngineBlockBundle/Controller/Api'
     type: annotation
     host: "engine-api.{domain}"
     requirements:
         domain: ".*"
     defaults:
         domain: "%domain%"
+
+#controllers:
+#    resource: '../../src/OpenConext/EngineBlockBundle/Controller/'
+#    type: annotation

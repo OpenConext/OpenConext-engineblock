@@ -19,10 +19,12 @@
 namespace OpenConext\EngineBlockBundle\Controller;
 
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
-class IndexController
+class IndexController extends AbstractController
 {
     /**
      * @var Environment
@@ -41,7 +43,7 @@ class IndexController
     }
 
     /**
-     * @return Response
+     * @Route("/", name="open_conext_engine_block_authentication_homepage")
      */
     public function indexAction()
     {

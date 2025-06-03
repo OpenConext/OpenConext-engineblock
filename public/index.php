@@ -16,7 +16,7 @@ if (!isset($_SERVER['APP_ENV'])) {
 }
 
 // Load environment variables from .env file
-$env = $_SERVER['APP_ENV'] ?? 'prod';
+$env = $_ENV['APP_ENV'] ?? 'prod';
 $debug = (bool) ($_SERVER['APP_DEBUG'] ?? ('prod' !== $env));
 
 if ($debug) {

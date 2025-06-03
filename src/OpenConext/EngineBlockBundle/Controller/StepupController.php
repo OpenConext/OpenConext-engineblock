@@ -24,6 +24,7 @@ use OpenConext\EngineBlock\Validator\RequestValidator;
 use OpenConext\EngineBlockBridge\ResponseFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Annotation\Route;
 
 class StepupController implements AuthenticationLoopThrottlingController
 {
@@ -69,6 +70,8 @@ class StepupController implements AuthenticationLoopThrottlingController
     /**
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/authentication/stepup/consume-assertion", name="authentication_stepup_consume_assertion", methods={"POST"})
      */
     public function consumeAssertionAction(Request $request)
     {
