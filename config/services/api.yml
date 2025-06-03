@@ -1,0 +1,38 @@
+services:
+    _defaults:
+        public: true
+
+    OpenConext\EngineBlockBundle\Controller\Api\ConnectionsController:
+        arguments:
+            - "@engineblock.metadata.push_metadata_assembler"
+            - "@security.authorization_checker"
+            - "@engineblock.features"
+            - "@engineblock.metadata_push.repository.doctrine"
+            - "%engineblock.metadata_push_memory_limit%"
+
+    OpenConext\EngineBlockBundle\Controller\Api\ConsentController:
+        arguments:
+            - "@security.authorization_checker"
+            - "@engineblock.features"
+            - "@engineblock.service.consent"
+
+    OpenConext\EngineBlockBundle\Controller\Api\DeprovisionController:
+        arguments:
+            - "@security.authorization_checker"
+            - "@engineblock.features"
+            - "@engineblock.service.deprovision"
+            - 'EngineBlock'
+
+    OpenConext\EngineBlockBundle\Controller\Api\HeartbeatController:
+
+    OpenConext\EngineBlockBundle\Controller\Api\MetadataController:
+        arguments:
+            - "@security.authorization_checker"
+            - "@engineblock.features"
+            - "@engineblock.service.metadata"
+
+    OpenConext\EngineBlockBundle\Controller\Api\AttributeReleasePolicyController:
+        arguments:
+            - "@security.authorization_checker"
+            - "@engineblock.service.metadata"
+            - "@engineblock.compat.attribute_release_policy_enforcer"
