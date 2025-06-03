@@ -23,7 +23,7 @@ docker compose exec -T engine.dev.openconext.local bash -c '
 
 docker compose exec -T engine.dev.openconext.local bash -c '
     ./app/console cache:clear --env=ci;
-    chmod 1777 app/cache/ci app/cache/logs
+    chmod 1777 app/cache/ci app/logs/ci
 '
 
 docker compose exec -T engine.dev.openconext.local bash -c '
