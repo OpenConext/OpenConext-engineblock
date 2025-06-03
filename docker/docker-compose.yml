@@ -1,9 +1,8 @@
-version: '2.4'
-
+---
 services:
 
     mariadb:
-        image: mariadb:10.2
+        image: mariadb:10.7
         restart: always
         container_name: eb-db-test
         environment:
@@ -15,7 +14,7 @@ services:
         volumes:
             - eb-mysql-test-data:/var/lib/mysql
         healthcheck:
-            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+            test: ["CMD-SHELL", "mysqladmin --user=root --password=$${MYSQL_ROOT_PASSWORD} ping"]
             timeout: 2s
             retries: 20
             interval: 2s
