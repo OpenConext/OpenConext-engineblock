@@ -1,9 +1,8 @@
-version: '2.4'
-
+---
 services:
 
     mariadb:
-        image: mariadb:10.2
+        image: mariadb:10.7
         restart: always
         container_name: eb-db-test
         environment:
@@ -15,36 +14,43 @@ services:
         volumes:
             - eb-mysql-test-data:/var/lib/mysql
         healthcheck:
-            test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+            test: ["CMD-SHELL", "mysqladmin --user=root --password=$${MYSQL_ROOT_PASSWORD} ping"]
             timeout: 2s
             retries: 20
             interval: 2s
 
-    engine.dev.openconext.local:
+    engine:
         build:
             context: ../
             # override this in a dedicated dockerfile per php version
             # dockerfile: docker/ci/Dockerfile
-        container_name: eb-phpfpm
-        volumes:
-            - ../:/var/www/html
-            - ../ci/qa-config/files/engine.dev.openconext.local.crt:/config/engine/engineblock.crt
-            - ../ci/qa-config/files/engine.dev.openconext.local.key:/config/engine/engineblock.pem
+        hostname: engine.dev.openconext.local
         depends_on:
             mariadb:
                 condition: service_healthy
         environment:
-          APP_ENV: ci
-          SYMFONY_ENV: ci
-
-    selenium.dev.openconext.local:
-        image: selenium/standalone-chrome:2.53.1
-        container_name: eb-selenium
-        user: "${UID}:${GID}"
-        environment:
-            START_XVFB: "false"
+            APP_ENV: ci
+            SYMFONY_ENV: ci
+            APACHE_UID: "#${APACHE_UID}"
+            APACHE_GUID: "#${APACHE_GID}"
         volumes:
-            - /dev/shm:/dev/shm
+            - ../:/var/www/html
+            - ../ci/qa-config/files/engine.dev.openconext.local.crt:/config/engine/engineblock.crt
+            - ../ci/qa-config/files/engine.dev.openconext.local.key:/config/engine/engineblock.pem
+        healthcheck:
+            test: ["CMD-SHELL", "curl -sI http://localhost/| grep '^Server: Apache'"]
+            timeout: 2s
+            retries: 20
+            interval: 5s
+
+    selenium:
+        image: selenium/standalone-chrome:2.53.1
+        hostname: selenium.dev.openconext.local
+        # NB: Selenium2 is OLD and doesn't have arm64 images; to run this on arm64, you need Rosetta enabled
+        platform: amd64
+        shm_size: 2gb
+#        environment:
+#            START_XVFB: "false"
         healthcheck:
             test: ["CMD", "/opt/bin/check-grid.sh:", "--host", "0.0.0.0", "--port", "4444"]
             timeout: 30s
@@ -64,3 +70,4 @@ services:
 volumes:
     eb-mysql-data:
     eb-mysql-test-data:
+    eb-engine-vendor:
