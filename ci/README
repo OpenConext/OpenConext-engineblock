@@ -1,3 +1,5 @@
 Directory with helper files for our ci builds.
-cpd.xsl -> makes nice html output of cpd 
+cpd.xsl -> makes nice html output of cpd
 dependencies.html -> html wrapper for pdepend output svgs
+
+To run all tests on local code, run ./qa/all.sh
