@@ -1,0 +1,3 @@
+To start Enginblock in docker, run ./docker-setup.sh
+
+To run the integration tests in the container, run ./docker-runtests.sh

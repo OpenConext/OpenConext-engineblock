@@ -1,6 +1,5 @@
-version: '2.4'
-
+---
 services:
-    engine.dev.openconext.local:
+    engine:
         build:
             dockerfile: docker/ci/Dockerfile-php72
