@@ -23,6 +23,12 @@ jobs:
                 run: |
                     cd docker && ./docker-setup.sh
 
+            -   name: debug
+                run: |
+                    docker inspect eb-engine-1
+                    ps aux
+                    ls -laR app
+
             -   name: Run tests
                 run: |
                     cd docker && ./docker-runtests.sh
