@@ -8,3 +8,5 @@ echo -e "\nPHP CodeSniffer\n"
 
 echo -e "\nPHP CodeSniffer (legacy code)\n"
 ./vendor/bin/phpcs --standard=ci/qa-config/phpcs-legacy.xml --warning-severity=0 --extensions=php -s library
+echo "PHP CodeBeautifier"
+./vendor/bin/phpcbf -p --standard=ci/qa-config/phpcs.xml src
