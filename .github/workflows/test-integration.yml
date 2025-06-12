@@ -36,6 +36,9 @@ jobs:
             -   name: Show log on failure
                 if: failure()
                 run: |
+                    docker inspect eb-engine-1
+                    ps aux
+                    ls -laR app
                     cd docker && docker compose exec -T engine cat /var/www/html/app/logs/ci/ci.log
 
             -   name: Send notification on production build nightly build failure
