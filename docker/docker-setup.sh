@@ -56,8 +56,8 @@ docker compose exec -T engine bash -c '
 '
 
 docker compose exec -T engine bash -c '
-    chmod 1777 app/cache app/cache/*
-    chmod 1777 app/logs app/logs/*
+    chmod -R og=rwX app/cache app/cache/*
+    chmod -R og=rwX app/logs app/logs/*
 '
 
 docker compose exec -T engine bash -c '
