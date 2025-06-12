@@ -54,7 +54,7 @@ docker compose exec -T engine bash -c '
     yarn build
 '
 
-docker compose exec -T engine bash -c '
+docker compose exec engine bash -c '
     echo done > /setup.txt
 '
 

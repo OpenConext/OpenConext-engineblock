@@ -12,7 +12,7 @@ docker compose \
     up -d
 echo
 
-if [[ $( docker compose exec -T engine \
+if [[ $( docker compose exec engine \
          bash -c 'test -e /setup.txt && cat /setup.txt || echo ""'
        ) != 'done' ]]
 then
@@ -20,4 +20,4 @@ then
     exit 1
 fi
 
-docker compose exec -T engine su -c openconext ./ci/qa/all.sh
+docker compose exec -T engine su openconext -c ./ci/qa/all.sh
