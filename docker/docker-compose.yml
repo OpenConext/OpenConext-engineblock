@@ -38,15 +38,15 @@ services:
             - ../ci/qa-config/files/engine.dev.openconext.local.crt:/config/engine/engineblock.crt
             - ../ci/qa-config/files/engine.dev.openconext.local.key:/config/engine/engineblock.pem
             # NB: we can't use bind mounts for these dirs, as they need to be chowned to the openconext user
-            - type: tmpfs
-              target: /var/www/html/app/cache
-              tmpfs: {size: "128M"}
-            - type: tmpfs
-              target: /var/www/html/app/logs
-              tmpfs: {size: "128M"}
-            - type: tmpfs
-              target: /tmp/
-              tmpfs: {size: "128M"}
+            -   type: tmpfs
+                target: /var/www/html/app/cache
+                tmpfs: {size: "128M"}
+            -   type: tmpfs
+                target: /var/www/html/app/logs
+                tmpfs: {size: "128M"}
+            -   type: tmpfs
+                target: /tmp/
+                tmpfs: {size: "128M"}
         healthcheck:
             test: ["CMD-SHELL", "curl -sI http://localhost/| grep '^Server: Apache'"]
             timeout: 2s
