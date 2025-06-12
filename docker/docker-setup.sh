@@ -25,6 +25,7 @@ docker compose \
 
 docker compose exec -T engine bash -c '
     mkdir -p tmp vendor
+    install -d --owner=openconext --group=openconext --mode=0755 /home/openconext
     git config --global --add safe.directory /var/www/html
 '
 
