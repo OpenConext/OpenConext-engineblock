@@ -26,6 +26,7 @@ EB_THEME=skeune ./theme/scripts/prepare-test.js > /dev/null
 chown -R www-data app/cache/
 chmod -R 0777 /tmp/eb-fixtures
 
+env
 ls -laR app/cache
 
 
