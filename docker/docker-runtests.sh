@@ -20,4 +20,4 @@ then
     exit 1
 fi
 
-docker compose exec -T engine ./ci/qa/all.sh
+docker compose exec -T engine su -c openconext ./ci/qa/all.sh

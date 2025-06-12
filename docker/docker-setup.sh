@@ -36,14 +36,13 @@ then
     exit 0
 fi
 
-
-docker compose exec -T engine bash -c '
+docker compose exec -T engine su openconext -c '
     export SYMFONY_ENV=ci
     test -e ./app/config/parameters.yml && rm -v ./app/config/parameters.yml
     composer install --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-reqs
 '
 
-docker compose exec -T engine bash -c '
+docker compose exec -T engine su openconext -c '
     ./app/console cache:clear --env=ci
 '
 
@@ -53,11 +52,6 @@ docker compose exec -T engine bash -c '
     export EB_THEME=skeune
     yarn install --frozen-lockfile
     yarn build
-'
-
-docker compose exec -T engine bash -c '
-    chmod -R og=rwX app/cache app/cache/*
-    chmod -R og=rwX app/logs app/logs/*
 '
 
 docker compose exec -T engine bash -c '

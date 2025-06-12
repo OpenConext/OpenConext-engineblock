@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-
-chown -R www-data app/cache/
-mkdir -p /tmp/eb-fixtures
-chmod -R 0777 /tmp/eb-fixtures
-
-ls -la app/cache/ci
 cd "$(dirname "$0")/../../"
 
 echo "====================================================="
@@ -14,8 +8,6 @@ echo "Installing database fixtures..."
 echo "====================================================="
 ./app/console doctrine:schema:drop --force --env=ci
 ./app/console doctrine:schema:create --env=ci
-
-ls -la app/cache/ci
 
 echo
 echo "====================================================="

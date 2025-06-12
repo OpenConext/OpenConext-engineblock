@@ -23,12 +23,19 @@ echo "Preparing frontend assets"
 echo "====================================================="
 EB_THEME=skeune ./theme/scripts/prepare-test.js > /dev/null
 
-chown -R www-data app/cache/
-chmod -R 0777 /tmp/eb-fixtures
-
-env
-ls -laR app/cache
-
+echo "====================================================="
+echo "Fixing file permissions"
+echo "====================================================="
+# handle the case that we run this in docker
+if [[ -v APACHE_UID ]]
+then
+    # permissions handled in Dockerfile.prod
+    mkdir -p /tmp/eb-fixtures
+else
+    # local use
+    chown -R www-data app/cache/
+    chmod -R 0777 /tmp/eb-fixtures
+fi
 
 echo "====================================================="
 echo "Run the Behat tests"
