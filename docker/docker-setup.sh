@@ -40,7 +40,7 @@ fi
 docker compose exec -T engine bash -c '
     export SYMFONY_ENV=ci
     test -e ./app/config/parameters.yml && rm -v ./app/config/parameters.yml
-    composer install --prefer-dist -n -o --ignore-platform-reqs
+    composer install --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-reqs
 '
 
 docker compose exec -T engine bash -c '
