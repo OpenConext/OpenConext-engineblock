@@ -78,6 +78,4 @@ services:
             - ../theme:/theme
 
 volumes:
-    eb-mysql-data:
     eb-mysql-test-data:
-    eb-engine-vendor:
