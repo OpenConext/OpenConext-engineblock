@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-cd $(dirname $0)/../../
+cd "$(dirname "$0")/../../"
 
 
 CURRENT_ENV="${SYMFONY_ENV:-dev}"
@@ -33,7 +33,7 @@ ls -laR app/cache
 echo "====================================================="
 echo "Run the Behat tests"
 echo "====================================================="
-./vendor/bin/behat -c ./tests/behat-ci.yml --suite default -vv --format progress --strict $@
+./vendor/bin/behat -c ./tests/behat-ci.yml --suite default -vv --format progress --strict "$@"
 
 # TODO!
 #echo -e "\nBehat tests (with selenium and headless Chrome)\n"
