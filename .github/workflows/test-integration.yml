@@ -23,12 +23,6 @@ jobs:
                 run: |
                     cd docker && ./docker-setup.sh
 
-            -   name: debug
-                run: |
-                    docker inspect eb-engine-1
-                    ps aux
-                    ls -laR app
-
             -   name: Run tests
                 run: |
                     cd docker && ./docker-runtests.sh
@@ -37,8 +31,7 @@ jobs:
                 if: failure()
                 run: |
                     docker inspect eb-engine-1
-                    ps aux
-                    ls -laR app
+                    compose exec -T engine ps aux
                     cd docker && docker compose exec -T engine cat /var/www/html/app/logs/ci/ci.log
 
             -   name: Send notification on production build nightly build failure
