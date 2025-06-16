@@ -8,7 +8,8 @@ module.exports = defineConfig({
       "**/__image_snapshots__/*",
       "**/unit-tests/**"
     ],
-    screenshotOnRunFailure: false,
+    screenshotOnRunFailure: true,
+    screenshotsFolder: "./screenshots/",
     setupNodeEvents: function (on, config) {
       const htmlvalidate = require('cypress-html-validate/plugin');
 

@@ -91,7 +91,7 @@ class StepupEndpoint
             Assertion::string($this->entityId, 'stepup.gateway.sfo.entity_id should be a string');
             Assertion::string($this->ssoLocation, 'stepup.gateway.sfo.sso_location should be a string');
             Assertion::string($this->keyFile, 'stepup.gateway.sfo.key_file should be a string');
-            Assertion::file($this->keyFile, 'stepup.gateway.sfo.key_file should be a valid file');
+            Assertion::file($this->keyFile, "stepup.gateway.sfo.key_file should be a valid file, not '$this->keyFile'");
         } catch (AssertionFailedException $e) {
             throw new InvalidStepupConfigurationException(sprintf('Invalid stepup endpoint configuration: %s', $e->getMessage()));
         }
