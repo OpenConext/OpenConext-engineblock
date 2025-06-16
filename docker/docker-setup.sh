@@ -33,30 +33,36 @@ if [[ $( docker compose exec -T engine bash -c '
             test -e /setup.txt && cat /setup.txt || echo ""
     ') == 'done' ]]
 then
-    echo "setup has already run; nothing to do here"
-    exit 0
+    echo "engine: setup has already run; nothing to do here"
+else
+
+    docker compose exec -T engine su openconext -c '
+        export SYMFONY_ENV=ci
+        test -e ./app/config/parameters.yml && rm -v ./app/config/parameters.yml
+        composer install --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-reqs
+    '
+
+    docker compose exec -T engine su openconext -c '
+        ./app/console cache:clear --env=ci
+    '
+
+    docker compose exec -T engine su openconext -c '
+        cd theme
+        export CYPRESS_INSTALL_BINARY=0
+        export EB_THEME=skeune
+        yarn install --frozen-lockfile
+        yarn build
+    '
+
+    docker compose exec engine bash -c '
+        echo done > /setup.txt
+    '
 fi
 
-docker compose exec -T engine su openconext -c '
-    export SYMFONY_ENV=ci
-    test -e ./app/config/parameters.yml && rm -v ./app/config/parameters.yml
-    composer install --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-reqs
+docker compose exec -T cypress bash -c '
+    cd e2e
+    yarn install
 '
 
-docker compose exec -T engine su openconext -c '
-    ./app/console cache:clear --env=ci
-'
-
-docker compose exec -T engine su openconext -c '
-    cd theme
-    export CYPRESS_INSTALL_BINARY=0
-    export EB_THEME=skeune
-    yarn install --frozen-lockfile
-    yarn build
-'
-
-docker compose exec engine bash -c '
-    echo done > /setup.txt
-'
 
 exit 0
