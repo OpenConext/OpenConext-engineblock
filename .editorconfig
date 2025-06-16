@@ -12,4 +12,9 @@ indent_size=4
 indent_style=tab
 
 [*.feature]
-indent_size=2
+indent_size = 2
+tab_width = 2
+
+[*.js]
+indent_size = 2
+tab_width = 2

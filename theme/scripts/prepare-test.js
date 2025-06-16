@@ -22,7 +22,7 @@ if (process.env.EB_THEME === undefined) {
 }
 
 try {
-    console.log('Running Cypress tests.\n');
+    console.log('Preparing theme...\n');
     const fileContents = fs.readFileSync(config, 'utf8');
     const parameters = yaml.loadAll(fileContents);
 

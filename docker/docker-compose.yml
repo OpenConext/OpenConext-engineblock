@@ -45,8 +45,8 @@ services:
                 target: /var/www/html/app/logs
                 tmpfs: {size: "128M"}
             -   type: tmpfs
-                target: /tmp/
-                tmpfs: {size: "128M"}
+                target: /tmp
+                tmpfs: {size: "1024M"}
         healthcheck:
             test: ["CMD-SHELL", "curl -sI http://localhost/| grep '^Server: Apache'"]
             timeout: 2s
@@ -69,6 +69,7 @@ services:
 
     cypress:
         image: "cypress/included:13.1.0"
+        platform: amd64
         environment:
             - CYPRESS_baseUrl=https://engine.dev.openconext.local
         working_dir: /e2e
