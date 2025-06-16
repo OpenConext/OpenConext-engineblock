@@ -47,7 +47,7 @@ docker compose exec -T engine su openconext -c '
     ./app/console cache:clear --env=ci
 '
 
-docker compose exec -T engine bash -c '
+docker compose exec -T engine su openconext -c '
     cd theme
     export CYPRESS_INSTALL_BINARY=0
     export EB_THEME=skeune

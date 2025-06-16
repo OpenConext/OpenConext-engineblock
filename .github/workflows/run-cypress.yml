@@ -26,6 +26,6 @@ jobs:
                 run: |
                     cd docker && ./docker-setup.sh
 
-            -   name: Build Docker environmnent
+            -   name: Run Cypress integration tests
                 run: |
                     cd docker && ./docker-runcypress.sh
