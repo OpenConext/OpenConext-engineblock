@@ -3,20 +3,20 @@
 #    handlers:
 #        main:
 #            type: fingers_crossed
-#            activation_strategy: engineblock.logger.manual_or_error_activation_strategy
+#            activation_strategy: OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy
 #            passthru_level: "%logger.fingers_crossed.passthru_level%"
 #            handler: nested
 #            channels: ["!authentication"]
 #        nested:
 #            type:      stream
 #            path:      php://stderr
-#            formatter: engineblock.logger.formatter.syslog_json
+#            formatter: OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter
 #        authentication:
 #            type:      stream
 #            path:      php://stderr
 #            level:     INFO
 #            channels:  ["authentication"]
-#            formatter: engineblock.logger.formatter.syslog_json
+#            formatter: OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter
 #        console:
 #            type: console
 #            process_psr_3_messages: false
@@ -26,7 +26,7 @@ monolog:
     handlers:
         main:
             type: fingers_crossed
-            activation_strategy: engineblock.logger.manual_or_error_activation_strategy
+            activation_strategy: OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy
             passthru_level: "%logger.fingers_crossed.passthru_level%"
             handler: nested
             level:     debug
@@ -35,13 +35,13 @@ monolog:
             type:      stream
             level:     debug
             path:      "/var/www/html/var/log/application.log"
-            formatter: engineblock.logger.formatter.syslog_json
+            formatter: OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter
         authentication:
             type:      stream
             path:      "/var/www/html/var/log/authentication.log"
             level:     debug
             channels:  [authentication]
-            formatter: engineblock.logger.formatter.syslog_json
+            formatter: OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter
         console:
             type: console
             process_psr_3_messages: false

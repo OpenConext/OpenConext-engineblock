@@ -68,7 +68,7 @@ class MetadataController
      * @Route("/authentication/sp/metadata", name="metadata_sp", methods={"GET"})
      * @Route("/authentication/sp/metadata/key:{keyId}", name="metadata_sp_key", methods={"GET"}, requirements={"keyId"=".+"})
      */
-    public function spMetadataAction(string $keyId): Response
+    public function spMetadataAction(string $keyId = ''): Response
     {
         if (empty($keyId)) {
             $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
@@ -118,10 +118,11 @@ class MetadataController
     }
 
     /**
+     * TODO: SYMFONY 4.4 UPGRADE - Is it correct that both SP and IDP point to the same? It was like this in the previous config
      * @Route("/authentication/idp/certificate", name="certificate_idp", methods={"GET"})
-     * @Route("/authentication/idp/certificate/key:{keyId}", name="certificate_idp_key", methods={"GET"}, requirements={"keyId"=".+"})
-     * @Route("/authentication/sp/certificate", name="certificate_idp", methods={"GET"})
-     * @Route("/authentication/sp/certificate/key:{keyId}", name="certificate_idp_key", methods={"GET"}, requirements={"keyId"=".+"})
+     * @Route("/authentication/idp/certificate/key/{keyId}", name="certificate_idp_key", methods={"GET"})
+     * @Route("/authentication/sp/certificate", name="certificate_sp", methods={"GET"})
+     * @Route("/authentication/sp/certificate/key/{keyId}", name="certificate_sp_key", methods={"GET"})
      */
     public function signingCertificateAction(string $keyId = null): Response
     {

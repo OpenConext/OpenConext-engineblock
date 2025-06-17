@@ -4,7 +4,7 @@ monolog:
     handlers:
         main:
             type: fingers_crossed
-            activation_strategy: engineblock.logger.manual_or_error_activation_strategy
+            activation_strategy: OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy
             passthru_level: "%logger.fingers_crossed.passthru_level%"
             handler: nested
             channels: ['!event']

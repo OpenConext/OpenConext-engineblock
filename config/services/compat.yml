@@ -1,4 +1,7 @@
 services:
+    _defaults:
+        public: true
+
     engineblock.compat.application:
         class: EngineBlock_ApplicationSingleton
         factory:  [EngineBlock_ApplicationSingleton, getInstance]
@@ -31,7 +34,7 @@ services:
     engineblock.compat.logger:
         class: Monolog\Logger
         factory: [EngineBlock_ApplicationSingleton, getLog]
-#    Services that were previously configured and gotten through the DiContainer
+    #    Services that were previously configured and gotten through the DiContainer
     engineblock.compat.xml_converter:
         class: EngineBlock_Corto_XmlToArray
 
@@ -50,7 +53,6 @@ services:
             - "@engineblock.compat.database_connection_factory"
 
     engineblock.compat.saml2_id_generator:
-        public: true
         class: EngineBlock_Saml2_IdGenerator_Default
 
     engineblock.compat.attribute_release_policy_enforcer:
