@@ -29,7 +29,7 @@ services:
     engineblock.functional_testing.fixture.features:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration
         arguments:
-            - '@engineblock.features'
+            - '@OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration'
             - '@engineblock.functional_testing.data_store.features'
 
     engineblock.functional_testing.fixture.pdp_client:
@@ -117,6 +117,6 @@ services:
             - '@engineblock.compat.metadata.definitions'
             - '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory'
             - '@OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration'
-            - '@engineblock.url_provider'
+            - '@OpenConext\EngineBlockBundle\Url\UrlProvider'
             - '@engineblock.functional_testing.fixture.features'
             - '%stepup.sfo.override_engine_entityid%'

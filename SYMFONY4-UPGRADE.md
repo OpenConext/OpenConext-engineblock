@@ -20,55 +20,92 @@ This document outlines the steps taken to upgrade OpenConext EngineBlock from Sy
    - bin/console (replaces app/console)
    - .env (environment variables)
 
-3. Created Symfony 4 configuration files:
-   - framework.yaml
-   - doctrine.yaml
-   - security.yaml
-   - twig.yaml
-   - monolog.yaml
-   - swiftmailer.yaml
-   - doctrine_migrations.yaml
+## Todo
 
-## Next Steps
+In the upgrade major changes have been made. I have fixed everything untill a point where engine debug works. I am
+certain a lot of functionality is still broken and needs to be updated. We need to turrowly check every functionality and
+repair the changes were possible. I already implemented the changes in a way so upgrading to symfony 5.5 and 6.4 will run
+more smoothly then this upgrade.
 
-To complete the upgrade, follow these steps:
+1. Functionality
+    - Create a list of all functionalities and check all features
+        - [x] Engine homepage
+        - [x] Engine sp debug
+        - [x] login with sp (manage, profile)
+        - [x] Push from manage
+        - [x] show WAYF screen
+        - [ ] feature ...
+        - [ ] etc ...
 
-1. Run composer update to install the new dependencies:
-   ```
-   composer update
-   ```
+2. Tests: I completely ignored all tests for now, im not familiar with behat so i do not intent to fix those.
+    - Check unit tests
+    - Check functional tests
 
-2. Clear the cache:
-   ```
-   bin/console cache:clear
-   ```
+Please add as you go.
 
-3. Test the application to ensure it works correctly.
+## Good to know
+The project devconf wont work as is. There are many breaking changes since the configuration changed a lot.
 
-4. Update your web server configuration to point to the new public directory instead of web.
+update engineblock `appconf.conf`
 
-5. Gradually migrate the remaining configuration from app/config to config/packages.
+```
+DocumentRoot /var/www/html/public
+ServerName  engine
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
 
-6. Update any hardcoded paths in your code that reference the old directory structure.
+<Directory "/var/www/html/public">
+    Require all granted
+    Options -MultiViews
+    RewriteEngine On
+    RewriteBase /
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</Directory>
 
-7. Update any custom services to use the new autowiring and autoconfiguration features.
+Header always set X-Content-Type-Options "nosniff"
 
-## Backward Compatibility
+SetEnv HTTPS on
+#SetEnv ENGINEBLOCK_ENV dev
+#SetEnv SYMFONY_ENV dev
 
-The upgrade has been designed to maintain backward compatibility as much as possible:
+RewriteEngine On
+# We support only GET/POST
+RewriteCond %{REQUEST_METHOD} !^(POST|GET|DELETE)$
+RewriteRule .* - [R=405,L]
 
-- The Kernel is configured to load both the new Symfony 4 configuration and the legacy configuration from app/config.
-- Routes are imported from the legacy routing.yml file.
-- The old directory structure (app/, web/) is still supported but deprecated.
+# Set the php application handler so mod_php interpets the files
+<FilesMatch \.php$>
+    SetHandler application/x-httpd-php
+</FilesMatch>
 
-## Known Issues
+ExpiresActive on
+ExpiresByType font/* "access plus 1 year"
+ExpiresByType image/* "access plus 6 months"
+ExpiresByType text/css "access plus 1 year"
+ExpiresByType text/js "access plus 1 year"
+```
 
-- Some services may need to be manually configured if they rely on the old service container.
-- Custom bundles may need to be updated to be compatible with Symfony 4.
-- The application may need additional testing to ensure all features work correctly.
+update `docker-compose.override.yml`
 
-## References
+```
+---
+# This configuration uses a sub-mount for ./engine/parameters.yml
+# Make sure to NEVER write to parameters.yml in ${ENGINE_CODE_PATH} after starting
+# the container. It will destroy the sub-mount!!
+services:
+  engine:
+    image: ghcr.io/openconext/openconext-basecontainers/${ENGINE_PHP_IMAGE:-php72-apache2-node14-composer2:latest}
+    volumes:
+      - ${ENGINE_CODE_PATH}:/var/www/html
+      - ./engine/parameters.yml:/var/www/html/config/packages/parameters.yml
+      - ./engine/appconf.conf:/etc/apache2/sites-enabled/appconf.conf
+    environment:
+      - APP_ENV=${APP_ENV:-dev}
+      - SYMFONY_ENV=${APP_ENV:-dev}
+      - APP_DEBUG=1
+    healthcheck:
+      test: ["CMD", "true"]
+      interval: 10s
+```
 
-- [Symfony 4.4 Documentation](https://symfony.com/doc/4.4)
-- [Upgrading from Symfony 3 to 4](https://symfony.com/doc/4.4/setup/upgrade_major.html)
-- [Symfony Flex](https://symfony.com/doc/4.4/setup/flex.html)
+It would maybe be a good idea to create a separate branch for this.

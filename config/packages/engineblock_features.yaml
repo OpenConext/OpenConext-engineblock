@@ -1,5 +1,5 @@
-open_conext_engine_block:
-    features:
+parameters:
+    custom_features:
         api.metadata_push:   "%feature_api_metadata_push%"
         api.consent_listing: "%feature_api_consent_listing%"
         api.consent_remove: "%feature_api_consent_remove%"
