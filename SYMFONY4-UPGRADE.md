@@ -31,6 +31,9 @@ more smoothly then this upgrade.
     - Create a list of all functionalities and check all features
         - [x] Engine homepage
         - [x] Engine sp debug
+        - [x] login with sp (manage, profile)
+        - [x] Push from manage
+        - [x] show WAYF screen
         - [ ] feature ...
         - [ ] etc ...
 

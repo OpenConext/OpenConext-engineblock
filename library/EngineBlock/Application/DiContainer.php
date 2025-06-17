@@ -70,7 +70,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getAuthenticationLogger()
     {
-        return $this->container->get('engineblock.bridge.authentication_logger_adapter');
+        return $this->container->get('OpenConext\EngineBlockBridge\Logger\AuthenticationLoggerAdapter');
     }
 
     /**
