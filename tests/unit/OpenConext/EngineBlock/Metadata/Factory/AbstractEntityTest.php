@@ -34,6 +34,7 @@ use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionProperty;
@@ -516,6 +517,64 @@ abstract class AbstractEntityTest extends TestCase
             'supportUrlNl' => 'support-url-nl',
             'supportUrlPt' => 'support-url-pt',
         ];
+    }
+
+    protected function setTranslationExpectancies(MockObject $translator)
+    {
+        $translator->expects($this->at(0))
+            ->method('trans')
+            ->with('suite_name')
+            ->willReturn('test-suite');
+
+        $translator->expects($this->at(1))
+            ->method('trans')
+            ->with('metadata_organization_name')
+            ->willReturn('configuredOrganizationName');
+
+        $translator->expects($this->at(2))
+            ->method('trans')
+            ->with('metadata_organization_name', [], null, 'nl')
+            ->willReturn('configuredOrganizationName');
+
+        $translator->expects($this->at(3))
+            ->method('trans')
+            ->with('metadata_organization_displayname', [], null, 'nl')
+            ->willReturn('configuredOrganizationDisplayName');
+
+        $translator->expects($this->at(4))
+            ->method('trans')
+            ->with('metadata_organization_url', [], null, 'nl')
+            ->willReturn('configuredOrganizationUrl');
+
+        $translator->expects($this->at(5))
+            ->method('trans')
+            ->with('metadata_organization_name', [], null, 'en')
+            ->willReturn('configuredOrganizationName');
+
+        $translator->expects($this->at(6))
+            ->method('trans')
+            ->with('metadata_organization_displayname', [], null, 'en')
+            ->willReturn('configuredOrganizationDisplayName');
+
+        $translator->expects($this->at(7))
+            ->method('trans')
+            ->with('metadata_organization_url', [], null, 'en')
+            ->willReturn('configuredOrganizationUrl');
+
+        $translator->expects($this->at(8))
+            ->method('trans')
+            ->with('metadata_organization_name', [], null, 'pt')
+            ->willReturn('configuredOrganizationName');
+
+        $translator->expects($this->at(9))
+            ->method('trans')
+            ->with('metadata_organization_displayname', [], null, 'pt')
+            ->willReturn('configuredOrganizationDisplayName');
+
+        $translator->expects($this->at(10))
+            ->method('trans')
+            ->with('metadata_organization_url', [], null, 'pt')
+            ->willReturn('configuredOrganizationUrl');
     }
 
     private function getParameters($className, $skipParameters = [])
