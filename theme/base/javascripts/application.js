@@ -1,3 +1,4 @@
+import "./postForm";
 import {initializeIndex} from "./index";
 import {initializeWayf} from "./wayf";
 import {initializeConsent} from './consent';
