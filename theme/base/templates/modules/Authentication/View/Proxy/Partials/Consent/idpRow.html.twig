@@ -10,7 +10,7 @@
     {% set id %}
         incorrect_{{ attributeSource }}
     {% endset %}
-    <input type="checkbox" tabindex="-1" aria-hidden="true" class="modal visually-hidden" id="{{ id|trim }}" name="{{ id|trim }}" />
+    <input type="checkbox" tabindex="-1" aria-hidden="true" class="modal visually-hidden" id="{{ id|trim }}" name="{{ id|trim }}">
     {# note: the empty label is for display on mobile #}
     <p>{{ text|raw }}<label tabindex="0" for="{{ id|trim }}" class="modal"></label>
     </p>
