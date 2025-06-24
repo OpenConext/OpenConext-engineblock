@@ -3,7 +3,7 @@
           action="{{ action }}">
         <input type="hidden" name="ID"
                value="{{ responseId }}">
-        <input type="hidden" name="consent" value="yes"/>
+        <input type="hidden" name="consent" value="yes">
 
         {% if informationalConsent %}
             {% set text_ok = 'consent_buttons_ok_informational'|trans({'%sp%': spName}) %}
@@ -21,7 +21,7 @@
             }
         %}
     </form>
-    <input type="checkbox" tabindex="-1" role="button" aria-expanded="false" aria-pressed="false" class="modal visually-hidden" id="cta_consent_nok" name="cta_consent_nok" />
+    <input type="checkbox" tabindex="-1" role="button" aria-expanded="false" aria-pressed="false" class="modal visually-hidden" id="cta_consent_nok" name="cta_consent_nok">
     <div class="button--tertiary" tabindex="0">
         <div>
             {% include '@theme/Default/Partials/label.html.twig' with

@@ -10,7 +10,7 @@
     {% endif %}
     {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/value.html.twig' with { attributeValue: attributeValues } %}
     {% if addTooltip %}
-        <input type="checkbox" tabindex="-1" aria-expanded="false" role="button" aria-pressed="false" class="tooltip visually-hidden" id="{{ id }}" name="{{ id }}" />
+        <input type="checkbox" tabindex="-1" aria-expanded="false" role="button" aria-pressed="false" class="tooltip visually-hidden" id="{{ id }}" name="{{ id }}">
         {% include '@theme/Authentication/View/Proxy/Partials/Consent/Attributes/tooltip.html.twig' with {
             tooltipValue: 'consent_name_id_value_tooltip'|trans({'%arg1%': 'suite_name'|trans })
         } %}

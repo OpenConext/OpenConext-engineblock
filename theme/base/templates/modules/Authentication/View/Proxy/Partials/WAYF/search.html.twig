@@ -1,6 +1,6 @@
 <form class="wayf__search" method="post" action="{{ action }}" role="search" aria-label="{{ 'wayf_search_screenreader'|trans }}">
-    <input type="hidden" name="ID" value="{{ requestId }}"/>{# needed for the ContinueToIdp module #}
-    <input type="hidden" id="form-idp" name="idp" value=""/>{# needed for the ContinueToIdp module #}
+    <input type="hidden" name="ID" value="{{ requestId }}">{# needed for the ContinueToIdp module #}
+    <input type="hidden" id="form-idp" name="idp" value="">{# needed for the ContinueToIdp module #}
     <label for="wayf_search" class="visually-hidden">{{ 'search_screenreader'|trans }}</label>
     <input
         autofocus
@@ -9,7 +9,7 @@
         name="wayf_search"
         placeholder="{{ 'wayf_search_placeholder'|trans }}"
         type="search"
-    />
+    >
     <button type="reset" class="search__reset visually-hidden" tabindex="-1"><span class="visually-hidden">{{ 'wayf_search_reset_screenreader'|trans }}</span></button>
     <button type="submit" class="search__submit"><span class="visually-hidden">{{ 'search_screenreader'|trans }}</span></button>
     <div class="visually-hidden" aria-live="polite" id="searchResultAnnouncement" data-announcementOne=" {{ 'wayf_search_results_screenreader'|trans({'%orgNoun%': 'organisation_noun'|trans }) }}" data-announcementMultiple=" {{ 'wayf_search_results_screenreader'|trans({'%orgNoun%': 'organisation_noun_plural'|trans}) }}"></div>

@@ -52,17 +52,17 @@
                             <td colspan="2">
                                 {% if attributeSource == 'engineblock' %}
                                     <img class="logo-small" src="{{ defaultLogo }}?v={{ assetsVersion }}"
-                                         alt=""/>
+                                         alt="">
                                     <h2>{{ 'suite_name'|trans }}</h2>
                                 {% elseif attributeSource != 'idp' %}
                                     <img class="logo-small" src="{{ attributeSourceLogoUrl(attributeSource)|escape('html_attr') }}"
-                                         alt=""/>
+                                         alt="">
                                     <h2>{{ attributeSourceDisplayName(attributeSource) }}</h2>
                                 {% else %}
                                     {% if idp.mdui.hasLogo %}
-                                        <img class="logo-small" src="{{ idp.mdui.logo.url }}" alt=""/>
+                                        <img class="logo-small" src="{{ idp.mdui.logo.url }}" alt="">
                                     {% else %}
-                                        <img class="logo-small" src="/images/placeholder.png?v={{ assetsVersion }}" alt=""/>
+                                        <img class="logo-small" src="/images/placeholder.png?v={{ assetsVersion }}" alt="">
                                     {% endif %}
                                     <h2>{{ idpName }}</h2>
                                 {% endif %}
@@ -161,7 +161,7 @@
             <section class="idp-consent-explanation">
                 {% if idp.mdui.hasLogo %}
                     <div class="idp-logo">
-                        <img class="idp-logo logo-small" src="{{ idp.mdui.logo.url }}?v={{ assetsVersion }}" alt=""/>
+                        <img class="idp-logo logo-small" src="{{ idp.mdui.logo.url }}?v={{ assetsVersion }}" alt="">
                     </div>
                 {% endif %}
                 <p class="title">{{ 'consent_explanation_title'|trans }}</p>
@@ -179,7 +179,7 @@
                       action="{{ action }}">
                     <input type="hidden" name="ID"
                            value="{{ responseId }}">
-                    <input type="hidden" name="consent" value="yes"/>
+                    <input type="hidden" name="consent" value="yes">
                     <input id="accept_terms_button"
                            class="submit c-button"
                            type="submit"
@@ -188,7 +188,7 @@
                             {% else %}
                                 value="{{ 'consent_buttons_ok'|trans({'%arg1%': spName}) }}"
                             {% endif %}
-                    />
+                    >
                 </form>
 
                 <!-- NO -->

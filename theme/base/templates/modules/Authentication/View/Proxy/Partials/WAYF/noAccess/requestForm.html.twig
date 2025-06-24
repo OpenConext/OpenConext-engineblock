@@ -10,10 +10,10 @@
         data-announcement="{{ 'wayf_noaccess_form_announcement_screenreader'|trans }}"
         id="requestFormAnnouncement"
     ></div>
-    <input type="hidden" name="spName" value="{{ serviceProvider.displayName(locale()) }}" />
-    <input type="hidden" name="spEntityId" value="{{ serviceProvider.entityId }}" />
-    <input type="hidden" name="idpEntityId" value="" />
-    <input type="hidden" name="institution" value="" />
+    <input type="hidden" name="spName" value="{{ serviceProvider.displayName(locale()) }}">
+    <input type="hidden" name="spEntityId" value="{{ serviceProvider.entityId }}">
+    <input type="hidden" name="idpEntityId" value="">
+    <input type="hidden" name="institution" value="">
     <fieldset class="hidden">
         <legend class="hidden">Name</legend>
         <label for="name">
@@ -27,7 +27,7 @@
             id="name"
             minlength="2"
             type="text"
-        />
+        >
         <p class="form__error hidden" data-labelfor="name" id="nameerror">
             {{ 'form_error_name'|trans }}
         </p>
@@ -43,7 +43,7 @@
             id="email"
             name="email"
             type="email"
-        />
+        >
         <p class="form__error hidden" id="emailerror" data-labelfor="email">
             {{ 'form_error_email'|trans }}
         </p>

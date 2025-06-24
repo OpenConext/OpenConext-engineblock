@@ -13,8 +13,8 @@
     {% include '@theme/Authentication/View/Proxy/site-notice.html.twig' with { className: 'full-width' } %}
 
     <form class="mod-search hidden" method="post" action="{{ action }}">
-        <input type="hidden" name="ID" value="{{ requestId }}"/>
-        <input type="hidden" id="form-idp" name="idp" value=""/>
+        <input type="hidden" name="ID" value="{{ requestId }}">
+        <input type="hidden" id="form-idp" name="idp" value="">
 
         <h2 class="search-institutions">{{ 'search'|trans }}</h2>
         <input placeholder="{{ 'search'|trans }}" type="search" tabindex="0" class="mod-search-input active">
@@ -47,7 +47,7 @@
                 <h2>{{ 'idps_with_access'|trans|capitalize }}</h2>
                 <form method="post" action="{{ action }}">
                     <label for="rememberChoice">{{ 'remember_choice'|trans }}</label>
-                    <input type="checkbox" name="rememberChoice" id="rememberChoice"/>
+                    <input type="checkbox" name="rememberChoice" id="rememberChoice">
                 </form>
             </header>
             {% else %}
@@ -59,7 +59,7 @@
 
                 <div class="loading spinner hidden">
                     <div class="logo">
-                        <img class="rotate-img" src="/images/spinner.svg?v={{ assetsVersion }}" alt=""/>
+                        <img class="rotate-img" src="/images/spinner.svg?v={{ assetsVersion }}" alt="">
                     </div>
                     {{ 'loading_idps'|trans }}
                 </div>
@@ -76,10 +76,10 @@
                                 </div>
                                 <h3>{{ idp['displayTitle'] }}</h3>
                                 <form class="mod-search login" method="post" action="{{ action }}">
-                                    <input type="hidden" name="ID" value="{{ requestId }}"/>
-                                    <input type="hidden" name="idp" value="{{ idp['entityId'] }}"/>
+                                    <input type="hidden" name="ID" value="{{ requestId }}">
+                                    <input type="hidden" name="idp" value="{{ idp['entityId'] }}">
                                     <input type="submit" data-entityid="{{ idp['entityId'] }}" class="c-button white"
-                                           value="Login"/>
+                                           value="Login">
                                 </form>
                             </a>
                         {% endfor %}

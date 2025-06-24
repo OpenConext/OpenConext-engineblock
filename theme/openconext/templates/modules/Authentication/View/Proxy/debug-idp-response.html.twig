@@ -38,8 +38,8 @@
             </p>
 
             <form method="post">
-                <input type="hidden" name="clear" value="true"/>
-                <input type="submit" class="c-button" value="{{ 'retry'|trans }}"/>
+                <input type="hidden" name="clear" value="true">
+                <input type="submit" class="c-button" value="{{ 'retry'|trans }}">
             </form>
 
             <h2>Identity Provider</h2>
@@ -52,7 +52,7 @@
                         <td>
                             <img class="logo"
                                  src="{% if idp.mdui.hasLogo %}{{ idp.mdui.logo.url }}{% else %} {{ '/images/placeholder.png' }}{% endif %}"
-                                 alt="IdP logo"/>
+                                 alt="IdP logo">
                         </td>
                     </tr>
                     <tr>
@@ -172,8 +172,8 @@
             <p>{{ 'idp_debugging_mail_explain'|trans }}</p>
 
             <form method="post">
-                <input type="hidden" name="mail" value="true"/>
-                <input type="submit" class="c-button" value="{{ 'idp_debugging_mail_button'|trans }}"/>
+                <input type="hidden" name="mail" value="true">
+                <input type="submit" class="c-button" value="{{ 'idp_debugging_mail_button'|trans }}">
             </form>
         </div>
     </div>
