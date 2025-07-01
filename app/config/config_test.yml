@@ -1,5 +1,4 @@
 imports:
-    - { resource: functional_testing.yml }
     - { resource: config_dev.yml }
 
 # Test service DI container overwrites (used for test and ci envs)
