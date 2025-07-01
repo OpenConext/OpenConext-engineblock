@@ -3,6 +3,7 @@ on:
     push:
         branches:
             - main
+            - upgrade
     pull_request:
     # run at 6 hour UTC
     schedule:
