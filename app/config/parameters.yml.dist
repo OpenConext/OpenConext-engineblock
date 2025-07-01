@@ -36,7 +36,7 @@ parameters:
     ## * How attributes are displayed in Profile and Consent
     ## * How attributes are Normalized and Denormalized
     ## * How attributes are validated
-    attribute_definition_file_path: "%kernel.project_dir%/application/configs/attributes.json"
+    attribute_definition_file_path: '%kernel.project_dir%/application/configs/attributes.json'
 
     ## The Signing / Encryption keys used for the SAML2 authentication and metadata
     ## When EngineBlock signs responses (when it acts as an Idp)
@@ -272,7 +272,7 @@ parameters:
     stepup.gateway.sfo.key_file: /config/engine/engineblock.crt
     ## You can override the default entityID used by Engineblock for its callout to stepup gateway.
     ## You also need to enable the feature toggle feature_stepup_sfo_override_engine_entityid above.
-    stepup.sfo.override_engine_entityid: "https://engine.dev.openconext.local/new/stepup/metadata"
+    stepup.sfo.override_engine_entityid: 'https://engine.dev.openconext.local/new/stepup/metadata'
     ## The name of the SAML attributes to send to Stepup with the GSSP SAML extension
     stepup.callout_user_attributes:
       - urn:mace:dir:attribute-def:mail
