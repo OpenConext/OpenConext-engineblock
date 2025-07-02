@@ -215,7 +215,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         if (($application->getDiContainer()->getRememberChoice() === true) && !($request->getForceAuthn() || $request->isDebugRequest())) {
             $cookies = $application->getDiContainer()->getSymfonyRequest()->cookies->all();
             if (array_key_exists('rememberchoice', $cookies)) {
-                $remembered = $cookies['rememberchoice'];
+                $remembered = json_decode($cookies['rememberchoice']);
                 if (array_search($remembered, $candidateIDPs) !== false) {
                     $log->info("Auto-selecting IdP ('$remembered'): omitting WAYF, sending authentication request");
                     $this->_server->sendAuthenticationRequest($request, $remembered);
