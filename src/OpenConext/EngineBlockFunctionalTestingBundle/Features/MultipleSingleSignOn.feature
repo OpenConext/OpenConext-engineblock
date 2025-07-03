@@ -1,4 +1,4 @@
-@selenium
+@functional
 Feature:
     In order to offer a stable and user friendly service
     As EngineBlock

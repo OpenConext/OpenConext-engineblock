@@ -37,19 +37,14 @@ services:
           APP_ENV: ci
           SYMFONY_ENV: ci
 
-    selenium.dev.openconext.local:
-        image: selenium/standalone-chrome:2.53.1
-        container_name: eb-selenium
-        user: "${UID}:${GID}"
+    chrome.dev.openconext.local:
+        image: alpeware/chrome-headless-trunk
+        ports:
+            - 9222:9222
         environment:
-            START_XVFB: "false"
+            - CHROME_OPTS=--ignore-certificate-errors --window-size=1920,1080 --ignore-ssl-errors
         volumes:
-            - /dev/shm:/dev/shm
-        healthcheck:
-            test: ["CMD", "/opt/bin/check-grid.sh:", "--host", "0.0.0.0", "--port", "4444"]
-            timeout: 30s
-            retries: 5
-            interval: 15s
+            - /tmp/chromedata/:/data
 
     cypress:
         image: "cypress/included:13.1.0"
