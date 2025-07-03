@@ -9,7 +9,7 @@ default:
             formatter:
                 name: progress
             filters:
-                tags: "~@WIP&&~@SKIP&&~@selenium"
+                tags: "~@WIP&&~@SKIP&&~@functional"
             contexts: &defaultContexts
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\EngineBlockContext:
                     serviceRegistry: '@engineblock.functional_testing.fixture.service_registry'
@@ -44,7 +44,7 @@ default:
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\TranslationContext:
                    mockTranslator: '@engineblock.functional_testing.mock.translator'
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext
-        selenium:
+        functional:
             mink_session: chrome
             mink_javascript_session: chrome
             paths:
@@ -52,7 +52,7 @@ default:
             formatter:
                 name: progress
             filters:
-                tags: "@selenium&&~@SKIP&&~@WIP"
+                tags: "@functional&&~@SKIP&&~@WIP"
             contexts: *defaultContexts
         wip:
             paths:
@@ -62,11 +62,13 @@ default:
                   parameters:
                       verbose: true
             filters:
-                tags: "@WIP&&~@SKIP&&~@selenium"
+                tags: "@WIP&&~@SKIP&&~@functional"
             contexts: *defaultContexts
 
     extensions:
+        DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension: ~
         Behat\MinkExtension:
+            browser_name: chrome
             base_url: https://engine.dev.openconext.local/
             goutte: ~
             sessions:
@@ -75,19 +77,10 @@ default:
                         guzzle_parameters:
                             verify: false
                 chrome:
-                    selenium2:
-                        browser: chrome
-                        wd_host: http://127.0.0.1:4444/wd/hub
-                        capabilities:
-                            chrome:
-                                switches:
-                                    - "--headless"
-                                    - "--disable-gpu"
-                                    - "--window-size=1920,1080"
-                                    - "--no-sandbox"
-                                    - "--disable-dev-shm-usage"
+                    chrome:
+                        api_url: http://chrome.dev.openconext.local:9222
+
         Behat\Symfony2Extension:
             kernel:
                 env: ci
                 debug: true
-

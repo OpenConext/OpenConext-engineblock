@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "666072d224a3de688ba7a3da81714ee6",
+    "content-hash": "6f0824361fe35b47e576acfe14cbf7cc",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -4836,74 +4836,6 @@
             "time": "2021-10-12T11:35:46+00:00"
         },
         {
-            "name": "behat/mink-selenium2-driver",
-            "version": "v1.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/minkphp/MinkSelenium2Driver.git",
-                "reference": "e5f8421654930da725499fb92983e6948c6f973e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/minkphp/MinkSelenium2Driver/zipball/e5f8421654930da725499fb92983e6948c6f973e",
-                "reference": "e5f8421654930da725499fb92983e6948c6f973e",
-                "shasum": ""
-            },
-            "require": {
-                "behat/mink": "^1.9@dev",
-                "ext-json": "*",
-                "instaclick/php-webdriver": "^1.4",
-                "php": ">=7.2"
-            },
-            "require-dev": {
-                "mink/driver-testsuite": "dev-master",
-                "phpunit/phpunit": "^8.5.22 || ^9.5.11",
-                "symfony/error-handler": "^4.4 || ^5.0"
-            },
-            "type": "mink-driver",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Behat\\Mink\\Driver\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Pete Otaqui",
-                    "email": "pete@otaqui.com",
-                    "homepage": "https://github.com/pete-otaqui"
-                },
-                {
-                    "name": "Konstantin Kudryashov",
-                    "email": "ever.zet@gmail.com",
-                    "homepage": "http://everzet.com"
-                }
-            ],
-            "description": "Selenium2 (WebDriver) driver for Mink framework",
-            "homepage": "https://mink.behat.org/",
-            "keywords": [
-                "ajax",
-                "browser",
-                "javascript",
-                "selenium",
-                "testing",
-                "webdriver"
-            ],
-            "support": {
-                "issues": "https://github.com/minkphp/MinkSelenium2Driver/issues",
-                "source": "https://github.com/minkphp/MinkSelenium2Driver/tree/v1.6.0"
-            },
-            "time": "2022-03-28T14:55:17+00:00"
-        },
-        {
             "name": "behat/symfony2-extension",
             "version": "2.1.5",
             "source": {
@@ -5157,6 +5089,108 @@
             "time": "2022-02-24T20:20:32+00:00"
         },
         {
+            "name": "dmore/behat-chrome-extension",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/behat-chrome/behat-chrome-extension.git",
+                "reference": "888e91f52b3ffd19afe61cea3d5edebb0a4d43a7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/behat-chrome%2Fbehat-chrome-extension/repository/archive.zip?sha=888e91f52b3ffd19afe61cea3d5edebb0a4d43a7",
+                "reference": "888e91f52b3ffd19afe61cea3d5edebb0a4d43a7",
+                "shasum": ""
+            },
+            "require": {
+                "behat/behat": "^3.0.4",
+                "dmore/chrome-mink-driver": "^2.4.1",
+                "friends-of-behat/mink-extension": "^2.0",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.5 || ^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DMore\\ChromeExtension\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dorian More",
+                    "email": "doriancmore@gmail.com"
+                }
+            ],
+            "description": "Behat extension for controlling Chrome without Selenium",
+            "homepage": "https://gitlab.com/behat-chrome/chrome-mink-driver",
+            "keywords": [
+                "Behat",
+                "chrome",
+                "driver",
+                "headless"
+            ],
+            "support": {
+                "issues": "https://gitlab.com/behat-chrome/behat-chrome-extension/-/issues",
+                "source": "https://gitlab.com/behat-chrome/behat-chrome-extension/-/tree/1.4.0"
+            },
+            "time": "2022-04-10T04:25:11+00:00"
+        },
+        {
+            "name": "dmore/chrome-mink-driver",
+            "version": "2.9.2",
+            "source": {
+                "type": "git",
+                "url": "git@gitlab.com:behat-chrome/chrome-mink-driver.git",
+                "reference": "a91b61c809c2e834c5f94f6df3af4d4117735e70"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/behat-chrome%2Fchrome-mink-driver/repository/archive.zip?sha=a91b61c809c2e834c5f94f6df3af4d4117735e70",
+                "reference": "a91b61c809c2e834c5f94f6df3af4d4117735e70",
+                "shasum": ""
+            },
+            "require": {
+                "behat/mink": "^1.9",
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "textalk/websocket": "^1.2.0"
+            },
+            "require-dev": {
+                "mink/driver-testsuite": "dev-master",
+                "phpunit/phpunit": "^8.5.22 || ^9.5.11",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DMore\\ChromeDriver\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dorian More",
+                    "email": "doriancmore@gmail.com"
+                }
+            ],
+            "description": "Mink driver for controlling chrome without selenium",
+            "homepage": "https://gitlab.com/behat-chrome/chrome-mink-driver",
+            "support": {
+                "issues": "https://gitlab.com/behat-chrome/chrome-mink-driver/-/issues"
+            },
+            "time": "2023-04-03T10:37:34+00:00"
+        },
+        {
             "name": "fabpot/goutte",
             "version": "v3.2.3",
             "source": {
@@ -5215,6 +5249,68 @@
             },
             "abandoned": "symfony/browser-kit",
             "time": "2018-06-29T15:13:57+00:00"
+        },
+        {
+            "name": "friends-of-behat/mink-extension",
+            "version": "2.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FriendsOfBehat/MinkExtension.git",
+                "reference": "80f7849ba53867181b7e412df9210e12fba50177"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FriendsOfBehat/MinkExtension/zipball/80f7849ba53867181b7e412df9210e12fba50177",
+                "reference": "80f7849ba53867181b7e412df9210e12fba50177",
+                "shasum": ""
+            },
+            "require": {
+                "behat/behat": "^3.0.5",
+                "behat/mink": "^1.5",
+                "php": ">=5.3.2",
+                "symfony/config": "^2.7|^3.0|^4.0"
+            },
+            "require-dev": {
+                "behat/mink-goutte-driver": "^1.1",
+                "phpspec/phpspec": "^2.0"
+            },
+            "type": "behat-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Behat\\MinkExtension": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Konstantin Kudryashov",
+                    "email": "ever.zet@gmail.com"
+                },
+                {
+                    "name": "Christophe Coevoet",
+                    "email": "stof@notk.org"
+                }
+            ],
+            "description": "Mink extension for Behat",
+            "homepage": "http://extensions.behat.org/mink",
+            "keywords": [
+                "browser",
+                "gui",
+                "test",
+                "web"
+            ],
+            "support": {
+                "source": "https://github.com/FriendsOfBehat/MinkExtension/tree/2.3.1"
+            },
+            "time": "2018-02-06T15:36:30+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -5318,69 +5414,6 @@
                 "source": "https://github.com/ingenerator/behat-tableassert/"
             },
             "time": "2020-06-07T08:26:31+00:00"
-        },
-        {
-            "name": "instaclick/php-webdriver",
-            "version": "1.4.19",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/instaclick/php-webdriver.git",
-                "reference": "3b2a2ddc4e0a690cc691d7e5952964cc4b9538b1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/instaclick/php-webdriver/zipball/3b2a2ddc4e0a690cc691d7e5952964cc4b9538b1",
-                "reference": "3b2a2ddc4e0a690cc691d7e5952964cc4b9538b1",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "php": ">=5.3.2"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^8.5 || ^9.5",
-                "satooshi/php-coveralls": "^1.0 || ^2.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.4.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "WebDriver": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Justin Bishop",
-                    "email": "jubishop@gmail.com",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Anthon Pang",
-                    "email": "apang@softwaredevelopment.ca",
-                    "role": "Fork Maintainer"
-                }
-            ],
-            "description": "PHP WebDriver for Selenium 2",
-            "homepage": "http://instaclick.com/",
-            "keywords": [
-                "browser",
-                "selenium",
-                "webdriver",
-                "webtest"
-            ],
-            "support": {
-                "issues": "https://github.com/instaclick/php-webdriver/issues",
-                "source": "https://github.com/instaclick/php-webdriver/tree/1.4.19"
-            },
-            "time": "2024-03-19T01:58:53+00:00"
         },
         {
             "name": "league/flysystem",
@@ -7483,6 +7516,55 @@
                 }
             ],
             "time": "2025-06-04T07:29:26+00:00"
+        },
+        {
+            "name": "textalk/websocket",
+            "version": "1.5.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Textalk/websocket-php.git",
+                "reference": "d05dbaa97500176447ffb1f1800573f23085ab13"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Textalk/websocket-php/zipball/d05dbaa97500176447ffb1f1800573f23085ab13",
+                "reference": "d05dbaa97500176447ffb1f1800573f23085ab13",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2 | ^8.0",
+                "psr/log": "^1 | ^2 | ^3"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2.0",
+                "phpunit/phpunit": "^8.0|^9.0",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "WebSocket\\": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "ISC"
+            ],
+            "authors": [
+                {
+                    "name": "Fredrik Liljegren"
+                },
+                {
+                    "name": "Sören Jensen",
+                    "email": "soren@abicart.se"
+                }
+            ],
+            "description": "WebSocket client and server",
+            "support": {
+                "issues": "https://github.com/Textalk/websocket-php/issues",
+                "source": "https://github.com/Textalk/websocket-php/tree/1.5.8"
+            },
+            "time": "2022-04-26T06:28:24+00:00"
         },
         {
             "name": "theseer/tokenizer",
