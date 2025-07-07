@@ -2,7 +2,7 @@
 
 namespace OpenConext\EngineBlock\Doctrine\Migrations;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
@@ -13,7 +13,7 @@ class Version20161123131704 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
 
@@ -30,7 +30,7 @@ class Version20161123131704 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema)
+    public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE IF NOT EXISTS virtual_organisation (vo_id VARCHAR(255) NOT NULL, vo_type enum(\'GROUP\',\'STEM\',\'IDP\', \'MIXED\') NOT NULL, PRIMARY KEY (vo_id)) ENGINE=InnoDB');
