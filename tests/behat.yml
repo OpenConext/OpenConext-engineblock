@@ -1,7 +1,6 @@
 default:
-    autoload:
-        - '%paths.base%/../src/OpenConext/EngineBlockFunctionalTestingBundle/Features/Context'
-
+#    autoload:
+#        - '%paths.base%/../src/OpenConext/EngineBlockFunctionalTestingBundle/Features/Context'
     suites:
         default:
             paths:
@@ -11,6 +10,7 @@ default:
             filters:
                 tags: "~@WIP&&~@SKIP&&~@functional"
             contexts: &defaultContexts
+                # TODO: Does this still work?
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\EngineBlockContext:
                     serviceRegistry: '@engineblock.functional_testing.fixture.service_registry'
                     engineBlock: '@engineblock.functional_testing.service.engine_block'
@@ -80,7 +80,7 @@ default:
                     chrome:
                         api_url: http://chrome.dev.openconext.local:9222
 
-        Behat\Symfony2Extension:
+        FriendsOfBehat\SymfonyExtension:
             kernel:
-                env: ci
+                environment: ci
                 debug: true

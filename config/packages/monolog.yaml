@@ -1,26 +1,3 @@
-#monolog:
-#    channels: ["%logger.channel%", "authentication"]
-#    handlers:
-#        main:
-#            type: fingers_crossed
-#            activation_strategy: OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy
-#            passthru_level: "%logger.fingers_crossed.passthru_level%"
-#            handler: nested
-#            channels: ["!authentication"]
-#        nested:
-#            type:      stream
-#            path:      php://stderr
-#            formatter: OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter
-#        authentication:
-#            type:      stream
-#            path:      php://stderr
-#            level:     INFO
-#            channels:  ["authentication"]
-#            formatter: OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter
-#        console:
-#            type: console
-#            process_psr_3_messages: false
-#            channels: ["!event", "!doctrine", "!console"]
 monolog:
     channels: ["engineblock", "authentication"]
     handlers:
@@ -34,11 +11,11 @@ monolog:
         nested:
             type:      stream
             level:     debug
-            path:      "/var/www/html/var/log/application.log"
+            path:      "%kernel.logs_dir%/var/log/application.log"
             formatter: OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter
         authentication:
             type:      stream
-            path:      "/var/www/html/var/log/authentication.log"
+            path:      "%kernel.logs_dir%/var/log/authentication.log"
             level:     debug
             channels:  [authentication]
             formatter: OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter
