@@ -61,7 +61,6 @@ services:
     OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper:
         arguments:
             - '@OpenConext\EngineBlock\Stepup\StepupGatewayLoaMapping'
-            - '@OpenConext\EngineBlock\Stepup\StepupEndpoint'
             - '@OpenConext\EngineBlock\Metadata\LoaRepository'
             - '@logger'
 

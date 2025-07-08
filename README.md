@@ -39,7 +39,7 @@ Next build the front-end assets for the selected theme.
 Finally, when not in an environment with the debug flag enabled, you need to clear the cache. This will ensure the translations and templates are swapped out for the ones found in the new theme.
 
 ```
-$ php72 ./app/console cache:clear --env=prod
+$ php72 ./bin/console cache:clear --env=prod
 ```
 
 To setup the required tooling on the container, the following steps might be useful:
@@ -58,7 +58,7 @@ If you are able to run Ant build targets use:
 $ ant php-twig-lint
 
 But you can also run the linter directly from the Symfony console. From the webroot:
-$ php72 ./app/console lint:twig theme/
+$ php72 ./bin/console lint:twig theme/
 ```
 
 ## System Requirements
@@ -124,7 +124,7 @@ Then edit the `parameters.yml` with your favorite editor and review the settings
 
 To install possible database updates, call doctrine migrations by using the following console command:
 
-    app/console doctrine:migrations:migrate --env=prod
+    bin/console doctrine:migrations:migrate --env=prod
 
 _**Note**:
 EngineBlock requires database settings, without it doctrine migrate will not function. Furthermore, this assumes that
@@ -219,7 +219,7 @@ If you are using this pattern, an update can be done with the following:
 
 3. Run the database migrations script.
 
-        app/console doctrine:migrations:migrate --env=prod
+        bin/console doctrine:migrations:migrate --env=prod
 
 4. Change the symlink.
 

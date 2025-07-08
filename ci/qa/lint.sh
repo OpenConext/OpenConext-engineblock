@@ -4,7 +4,7 @@ set -e
 cd $(dirname $0)/../../
 
 echo -e "\nTwig lint\n"
-app/console lint:twig theme/
+bin/console lint:twig theme/
 
 cd theme
 

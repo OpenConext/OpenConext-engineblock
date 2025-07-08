@@ -29,7 +29,7 @@ try {
     let theme = process.env.EB_THEME;
     parameters[0].parameters['theme.name'] = theme;
     fs.writeFileSync(config, yaml.dump(parameters[0]));
-    executeShellCommand(`${__dirname}/../../app/console ca:cl --env=ci && cd ${__dirname}/../ && EB_THEME=${theme} yarn buildtheme`);
+    executeShellCommand(`${__dirname}/../../bin/console ca:cl --env=ci && cd ${__dirname}/../ && EB_THEME=${theme} yarn buildtheme`);
 } catch (e) {
     console.log(e);
 }

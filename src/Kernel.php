@@ -42,17 +42,6 @@ class Kernel extends BaseKernel
         $loader->load($confDir.'/{packages}/'.$this->environment.'/*'.self::CONFIG_EXTS, 'glob');
         $loader->load($confDir.'/{services}'.self::CONFIG_EXTS, 'glob');
         $loader->load($confDir.'/{services}_'.$this->environment.self::CONFIG_EXTS, 'glob');
-
-        // Load legacy configuration if it exists
-        $legacyConfigDir = $this->getProjectDir().'/app/config';
-        if (file_exists($legacyConfigDir)) {
-            $loader->load($legacyConfigDir.'/config_'.$this->environment.'.yml');
-
-            $localConfiguration = $legacyConfigDir.'/config_local.yml';
-            if (file_exists($localConfiguration) && is_readable($localConfiguration)) {
-                $loader->load($localConfiguration);
-            }
-        }
     }
 
     protected function configureRoutes(RouteCollectionBuilder $routes): void
@@ -62,14 +51,5 @@ class Kernel extends BaseKernel
         $routes->import($confDir.'/{routes}/'.$this->environment.'/*'.self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir.'/{routes}/*'.self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir.'/{routes}'.self::CONFIG_EXTS, '/', 'glob');
-
-        // Load legacy routes if they exist
-        $legacyConfigDir = $this->getProjectDir().'/app/config';
-        if (file_exists($legacyConfigDir.'/routing.yml')) {
-            $routes->import($legacyConfigDir.'/routing.yml');
-        }
-        if (file_exists($legacyConfigDir.'/routing_'.$this->environment.'.yml')) {
-            $routes->import($legacyConfigDir.'/routing_'.$this->environment.'.yml');
-        }
     }
 }
