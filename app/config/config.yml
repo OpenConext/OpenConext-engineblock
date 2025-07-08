@@ -1,0 +1,6 @@
+
+services:
+    doctrine.result_cache_provider:
+        class: Doctrine\Common\Cache\ApcuCache
+    doctrine.system_cache_provider:
+        class: Doctrine\Common\Cache\ApcuCache

@@ -212,7 +212,8 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             $currentProcessStep->getRole(),
             $authnClassRef,
             $nameId,
-            $sp->getCoins()->isStepupForceAuthn()
+            $sp->getCoins()->isStepupForceAuthn(),
+            $receivedResponse->getAssertions()[0]
         );
     }
 
