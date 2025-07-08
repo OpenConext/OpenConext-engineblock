@@ -1,4 +1,3 @@
-# TODO: Does this still work?
 parameters:
     engineblock.functional_testing.service_registry_data_store.dir:           "/tmp/eb-fixtures/metadata-push/"
     engineblock.functional_testing.service_registry_data_store.file:          "/tmp/eb-fixtures/metadata-push/entities"
@@ -10,6 +9,9 @@ parameters:
     engineblock.functional_testing.translator_mock_data_store.file:           "/tmp/eb-fixtures/translator_mock.json"
 
 services:
+    _defaults:
+        public: true
+
     engineblock.functional_testing.service.engine_block:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock
         arguments:
@@ -24,7 +26,7 @@ services:
     engineblock.functional_testing.fixture.service_registry:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture
         arguments:
-            - '@engineblock.metadata.repository.doctrine'
+            - '@OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository'
             - '@engineblock.compat.doctrine.entity_manager'
 
     engineblock.functional_testing.fixture.features:
@@ -41,7 +43,7 @@ services:
     engineblock.functional_testing.fixture.authentication_loop_guard:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard
         arguments:
-            - '@engineblock.authentication.authentication_loop_guard'
+            - '@OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard'
             - '@engineblock.functional_testing.data_store.authentication_loop_guard'
 
     engineblock.functional_testing.fixture.attribute_aggregation_client:

@@ -1,5 +1,7 @@
-# TODO: Does this still work?
 services:
+    _defaults:
+        public: true
+
     engineblock.mock_entities.idp_factory:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProviderFactory
         arguments: ['@router']

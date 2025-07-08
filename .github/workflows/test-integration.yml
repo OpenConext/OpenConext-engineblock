@@ -4,6 +4,7 @@ on:
         branches:
             - main
             - upgrade
+            - feature/sf_upgrade_44
     pull_request:
     # run at 6 hour UTC
     schedule:

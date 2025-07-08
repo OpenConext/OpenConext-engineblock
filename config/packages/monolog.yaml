@@ -11,11 +11,11 @@ monolog:
         nested:
             type:      stream
             level:     debug
-            path:      "%kernel.logs_dir%/var/log/application.log"
+            path:      "%kernel.logs_dir%/application.log"
             formatter: OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter
         authentication:
             type:      stream
-            path:      "%kernel.logs_dir%/var/log/authentication.log"
+            path:      "%kernel.logs_dir%/authentication.log"
             level:     debug
             channels:  [authentication]
             formatter: OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter
