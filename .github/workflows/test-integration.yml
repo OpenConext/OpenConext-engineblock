@@ -54,7 +54,7 @@ jobs:
             -   name: Run unit tests
                 if: always()
                 run: |
-                    cd docker && APP_ENV=ci SYMFONY_ENV=ci docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+                    cd docker && APP_ENV=ci SYMFONY_ENV=ci docker compose exec -e XDEBUG_MODE=coverage -T --user www-data engine.dev.openconext.local bash -c '
                         echo -e "\nInstalling database fixtures...\n" && \
                         ./bin/console doctrine:schema:drop --force --env=ci && \
                         ./bin/console doctrine:schema:create --env=ci && \
