@@ -1,0 +1,29 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ directory configure your dependencies.
+
+parameters:
+    locale: 'en'
+    container.autowiring.strict_mode: true
+    asset_version: "#ASSET_VERSION#"
+
+# Legacy way to import services
+imports:
+    - { resource: services/services.yml }
+    - { resource: services/repositories.yml }
+    - { resource: services/logging.yml }
+    - { resource: services/event_listeners.yml }
+    - { resource: services/compat.yml }
+    - { resource: services/bridge_event_listeners.yml }
+    - { resource: services/bridge.yml }
+    - { resource: services/controllers/api.yml }
+    - { resource: services/controllers/authentication.yml }
+
+#services:
+#    _defaults:
+#        autowire: true
+#        autoconfigure: true
+#        public: true
+
+#    OpenConext\EngineBlockBundle\DependencyInjection\:
+#        resource: '../src/EngineBlockBundle/*'
+#        exclude: '../src/EngineBlockBundle/DependencyInjection/{Compiler,Traits}'

@@ -2,12 +2,12 @@
 
 namespace OpenConext\EngineBlock\Doctrine\Migrations;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 class Version20170912155800 extends AbstractMigration
 {
-    public function up(Schema $schema)
+    public function up(Schema $schema): void
     {
         $this->addSql('DROP TABLE IF EXISTS group_provider');
         $this->addSql('DROP TABLE IF EXISTS group_provider_decorator');
@@ -21,7 +21,7 @@ class Version20170912155800 extends AbstractMigration
         $this->addSql('DROP TABLE IF EXISTS service_provider_group_acl');
     }
 
-    public function down(Schema $schema)
+    public function down(Schema $schema): void
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 

@@ -1,0 +1,5 @@
+doctrine_migrations:
+    dir_name:   "%kernel.root_dir%/../database/DoctrineMigrations"
+    namespace:  OpenConext\EngineBlock\Doctrine\Migrations
+    table_name: migration_versions
+    name:       OpenConext EngineBlock Migrations

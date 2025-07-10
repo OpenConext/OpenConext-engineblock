@@ -1,7 +1,7 @@
 # UPGRADE NOTES
 
 ## 6.13 -> 6.14
-Previously the SAML EntityID of the EngineBlock SP that was used to do Stepup (SFO) authentications to the Stepup-Gateway 
+Previously the SAML EntityID of the EngineBlock SP that was used to do Stepup (SFO) authentications to the Stepup-Gateway
 always was https://<engineblock.sever.domain.name>/authentication/stepup/metadata. For these authentication the default
 EngineBlock key is always used for signing.
 
@@ -39,7 +39,7 @@ application will result in the soft deletion of the consent row for that person,
 consent removal of.
 
 In order to work with this feature, the latest database migration must be installed on your database(s) containing the
-`consent` table. This should be as simple as running `app/console doctrine:migrations:migrate`. Or executing
+`consent` table. This should be as simple as running `bin/console doctrine:migrations:migrate`. Or executing
 `Version20220425090852` manually.
 
 ## 6.2 > 6.3
@@ -457,7 +457,7 @@ database.dbname = engineblock
 
 When a master/slave setup is still required, this can be configured by creating a `config_local.yml` in `app/config`.
 This file will be loaded automatically if present and will allow overriding any configuration present. Do note that in
-order to be able to load the file `app/console cache:clear --env={current_env_as_in_vhost}` must be executed once.
+order to be able to load the file `bin/console cache:clear --env={current_env_as_in_vhost}` must be executed once.
 More information on how to configure Doctrine can be found in [the bundle documentation][doct1] and the [configuration
 reference documentation][doct2]. Before considering using a master/slave setup, please review [this documentation][doct3]
 as to when a master or slave is used for a connection.
