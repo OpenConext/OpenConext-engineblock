@@ -49,8 +49,8 @@ parameters:
     database.user: ebrw
     database.password: secret
     database.dbname: eb
-    database.test.host: localhost
-    database.test.port: '3306'
+    database.test.host: 127.0.0.1
+    database.test.port: 3306
     database.test.user: eb_testrw
     database.test.password: secret
     database.test.dbname: eb_test
