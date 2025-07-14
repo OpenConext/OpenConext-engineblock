@@ -31,14 +31,8 @@ class EngineBlock
     const UNSOLICITED_SSO_START_PATH = '/authentication/idp/unsolicited-single-sign-on/%s';
     const LOGOUT                    = '/logout';
 
-    protected $baseUrl;
-
-    /**
-     * @param $baseUrl
-     */
-    public function __construct($baseUrl)
+    public function __construct()
     {
-        $this->baseUrl = $baseUrl;
     }
 
     public function idpEntityId()
@@ -79,11 +73,11 @@ class EngineBlock
 
     public function assertionConsumerLocation()
     {
-        return $this->baseUrl . self::ASSERTION_CONSUMER_PATH;
+        return self::ASSERTION_CONSUMER_PATH;
     }
 
     public function logoutLocation()
     {
-        return $this->baseUrl . self::LOGOUT;
+        return self::LOGOUT;
     }
 }

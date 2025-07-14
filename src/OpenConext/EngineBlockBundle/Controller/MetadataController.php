@@ -120,9 +120,9 @@ class MetadataController
     /**
      * TODO: SYMFONY 4.4 UPGRADE - Is it correct that both SP and IDP point to the same? It was like this in the previous config
      * @Route("/authentication/idp/certificate", name="certificate_idp", methods={"GET"})
-     * @Route("/authentication/idp/certificate/key/{keyId}", name="certificate_idp_key", methods={"GET"})
+     * @Route("/authentication/idp/certificate/key:{keyId}", name="certificate_idp_key", methods={"GET"})
      * @Route("/authentication/sp/certificate", name="certificate_sp", methods={"GET"})
-     * @Route("/authentication/sp/certificate/key/{keyId}", name="certificate_sp_key", methods={"GET"})
+     * @Route("/authentication/sp/certificate/key:{keyId}", name="certificate_sp_key", methods={"GET"})
      */
     public function signingCertificateAction(string $keyId = null): Response
     {

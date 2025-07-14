@@ -37,14 +37,13 @@ services:
             - '@engineblock.mock_clients.mock_stepup_gateway'
             - '@twig'
 
-    engineblock.controller.authentication.identity_provider:
-        class: OpenConext\EngineBlockBundle\Controller\IdentityProviderController
+    OpenConext\EngineBlockBundle\Controller\IdentityProviderController:
         arguments:
             - '@engineblock.compat.application'
             - '@twig'
             - '@engineblock.compat.logger'
             - '@OpenConext\EngineBlock\Service\RequestAccessMailer'
-            - '@engineblock.validator.sso_request_validator'
+            - '@OpenConext\EngineBlockFunctionalTestingBundle\Validator\SsoRequestValidator'
             - '@OpenConext\EngineBlock\Validator\SamlBindingValidator'
             - '@OpenConext\EngineBlock\Validator\UnsolicitedSsoRequestValidator'
             - '@OpenConext\EngineBlock\Service\AuthenticationStateHelper'
