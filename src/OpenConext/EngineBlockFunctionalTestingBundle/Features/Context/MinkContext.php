@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\MinkExtension\Context\MinkContext as BaseMinkContext;
 use DOMDocument;
@@ -39,13 +40,10 @@ class MinkContext extends BaseMinkContext
      */
     private $windows = [];
 
-    /**
-     * @Given /^Xdebug step debugging is enabled in the browser$/
-     */
-    public function putDebugCookie()
+    /** @BeforeScenario */
+    public function setDebugCookie(BeforeScenarioScope $scope)
     {
-        $driver = $this->getSession()->getDriver();
-        $driver->setCookie('XDEBUG_SESSION', 'PHPSTORM');
+        $this->getSession()->setCookie('XDEBUG_SESSION', 'PHPSTORM');
     }
 
     /**

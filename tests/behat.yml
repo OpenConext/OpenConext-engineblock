@@ -9,8 +9,7 @@ default:
                 name: progress
             filters:
                 tags: "~@WIP&&~@SKIP&&~@functional"
-            contexts:
-                # TODO: Does this still work?
+            contexts: &defaultContexts
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\EngineBlockContext:
                     serviceRegistry: '@engineblock.functional_testing.fixture.service_registry'
                     engineBlock: '@engineblock.functional_testing.service.engine_block'
@@ -53,6 +52,7 @@ default:
                 name: progress
             filters:
                 tags: "@functional&&~@SKIP&&~@WIP"
+            contexts: *defaultContexts
         wip:
             paths:
                 - '%paths.base%/../src/OpenConext/EngineBlockFunctionalTestingBundle/Features'
@@ -62,6 +62,7 @@ default:
                       verbose: true
             filters:
                 tags: "@WIP&&~@SKIP&&~@functional"
+            contexts: *defaultContexts
 
     extensions:
         DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension: ~

@@ -12,6 +12,8 @@ services:
     _defaults:
         public: true
 
+    OpenConext\EngineBlockBundle\Configuration\TestFeatureConfiguration:
+
     engineblock.functional_testing.service.engine_block:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock
         arguments:
@@ -32,7 +34,7 @@ services:
     engineblock.functional_testing.fixture.features:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration
         arguments:
-            - '@OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration'
+            - '@OpenConext\EngineBlockBundle\Configuration\TestFeatureConfiguration'
             - '@engineblock.functional_testing.data_store.features'
 
     engineblock.functional_testing.fixture.pdp_client:

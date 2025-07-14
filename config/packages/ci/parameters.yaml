@@ -5,5 +5,4 @@ parameters:
     idp_fixture_file: /tmp/eb-fixtures/db/idp.states.php.serialized
     sp_fixture_file: /tmp/eb-fixtures/db/sp.states.php.serialized
     stepup.sfo.override_engine_entityid: 'https://engine.vm.openconext.com/new/stepup/metadata'
-    #TODO: What url is required here?
     engineblock_url: 'engine.dev.openconext.local'

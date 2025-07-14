@@ -6,7 +6,7 @@ doctrine:
                 driver:   pdo_mysql         # This must be PDO until all database interaction runs through doctrine
                 server_version: '10.6.0-MariaDB'
                 dbname:   "%database.dbname%"
-                host:     "mariadb"
+                host:     "%database.test.host%"
                 port:     "%database.port%"
                 user:     "%database.user%"
                 password: "%database.password%"
@@ -14,7 +14,7 @@ doctrine:
                 driver:   pdo_mysql         # This must be PDO until all database interaction runs through doctrine
                 server_version: '10.6.0-MariaDB'
                 dbname:   "%database.test.dbname%"
-                host:     "mariadb"
+                host:     "%database.test.host%"
                 port:     "%database.test.port%"
                 user:     "%database.test.user%"
                 password: "%database.test.password%"

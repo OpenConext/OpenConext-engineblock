@@ -43,7 +43,7 @@ class EngineBlock
 
     public function idpEntityId()
     {
-        return $this->baseUrl . self::IDP_METADATA_PATH;
+        return self::IDP_METADATA_PATH;
     }
 
     public function transparentSsoLocation($idpEntityId)
@@ -53,7 +53,7 @@ class EngineBlock
 
     public function singleSignOnLocation()
     {
-        return $this->baseUrl . self::SINGLE_SIGN_ON_PATH;
+        return self::SINGLE_SIGN_ON_PATH;
     }
 
     public function unsolicitedLocation($identityProviderEntityId, $serviceProviderEntityId, $keyId = false)
@@ -62,21 +62,19 @@ class EngineBlock
         if ($keyId) {
             $keyParameter = sprintf('key:%s/', $keyId);
         }
-        return $this->baseUrl
-               . sprintf(self::UNSOLICITED_SSO_START_PATH, $keyParameter . md5($identityProviderEntityId))
+        return sprintf(self::UNSOLICITED_SSO_START_PATH, $keyParameter . md5($identityProviderEntityId))
                . '?sp-entity-id=' . urlencode($serviceProviderEntityId);
     }
 
     public function unsolicitedLocationInvalidParam($identityProviderEntityId, $serviceProviderEntityId)
     {
-        return $this->baseUrl
-               . sprintf(self::UNSOLICITED_SSO_START_PATH, md5($identityProviderEntityId))
+        return sprintf(self::UNSOLICITED_SSO_START_PATH, md5($identityProviderEntityId))
                . '?wrong-parameter=' . urlencode($serviceProviderEntityId);
     }
 
     public function spEntityId()
     {
-        return $this->baseUrl . self::SP_METADATA_PATH;
+        return self::SP_METADATA_PATH;
     }
 
     public function assertionConsumerLocation()
