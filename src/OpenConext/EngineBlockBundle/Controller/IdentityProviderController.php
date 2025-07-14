@@ -107,24 +107,44 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
     /**
      * The SSO action
      *
-     *  Currently supported request method / binding combinations for SSO are:
+     * Currently supported request method / binding combinations for SSO are:
      *
-     *  | SAML Binding     | Request method | Parameter name |
-     *  | ---------------- | -------------- | -------------- |
-     *  | HttpRedirect     | GET            | SAMLRequest    |
-     *  | HTTPPost         | POST           | SAMLRequest    |
+     * | SAML Binding | Request method | Parameter name |
+     * |--------------|----------------|----------------|
+     * | HttpRedirect | GET            | SAMLRequest    |
+     * | HTTPPost     | POST           | SAMLRequest    |
      *
-     * @param Request $request
-     * @param null|string $keyId
-     * @param null|string $idpHash
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/authentication/idp/single-sign-on", name="authentication_idp_sso", methods={"GET","POST"})
-     * @Route("/authentication/idp/single-sign-on/key:{keyId}/{idpHash}", name="authentication_idp_sso_keyid_idphash", methods={"GET","POST"}, requirements={"keyId"="[^/]+", "idpHash"=".+"})
-     * @Route("/authentication/idp/single-sign-on/key:{keyId}", name="authentication_idp_sso_keyid", methods={"GET","POST"})
-     * @Route("/authentication/idp/single-sign-on/{idpHash}", name="authentication_idp_sso_idphash", methods={"GET","POST"}, requirements={"idpHash"=".+"})
+     * @Route(
+     *     "/authentication/idp/single-sign-on",
+     *     name="authentication_idp_sso",
+     *     methods={"GET", "POST"}
+     * )
+     * @Route(
+     *     "/authentication/idp/single-sign-on/key:{keyId}/{idpHash}",
+     *     name="authentication_idp_sso_keyid_idphash",
+     *     methods={"GET", "POST"},
+     *     requirements={
+     *         "keyId"="[^/]+",
+     *         "idpHash"=".+"
+     *     }
+     * )
+     * @Route(
+     *     "/authentication/idp/single-sign-on/key:{keyId}",
+     *     name="authentication_idp_sso_keyid",
+     *     methods={"GET", "POST"}
+     * )
+     * @Route(
+     *     "/authentication/idp/single-sign-on/{idpHash}",
+     *     name="authentication_idp_sso_idphash",
+     *     methods={"GET", "POST"},
+     *     requirements={
+     *         "idpHash"=".+"
+     *     }
+     * )
      */
-    public function singleSignOnAction(Request $request, $keyId = null, $idpHash = null)
+    public function singleSignOnAction(Request $request, string $keyId = null, string $idpHash = null)
     {
         $this->requestValidator->isValid($request);
         $this->bindingValidator->isValid($request);
@@ -141,18 +161,39 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
     }
 
     /**
-     * @param Request $request
-     * @param null|string $keyId
-     * @param null|string $idpHash
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @throws NotFoundHttpException If the IdP-initiated flow has been disabled by config
      *
-     * @Route("/authentication/idp/unsolicited-single-sign-on", name="authentication_idp_unsolicited_sso", methods={"GET"})
-     * @Route("/authentication/idp/unsolicited-single-sign-on/key:{keyId}/{idpHash}", name="authentication_idp_unsolicited_sso_keyid_idphash", methods={"GET"}, requirements={"keyId"="[^/]+", "idpHash"=".+"})
-     * @Route("/authentication/idp/unsolicited-single-sign-on/key:{keyId}", name="authentication_idp_unsolicited_sso_keyid", methods={"GET"})
-     * @Route("/authentication/idp/unsolicited-single-sign-on/{idpHash}", name="authentication_idp_unsolicited_sso_idphash", methods={"GET"}, requirements={"idpHash"=".+"})
+     * @Route(
+     *     "/authentication/idp/unsolicited-single-sign-on",
+     *     name="authentication_idp_unsolicited_sso",
+     *     methods={"GET"}
+     * )
+     * @Route(
+     *     "/authentication/idp/unsolicited-single-sign-on/key:{keyId}/{idpHash}",
+     *     name="authentication_idp_unsolicited_sso_keyid_idphash",
+     *     methods={"GET"},
+     *     requirements={
+     *         "keyId"="[^/]+",
+     *         "idpHash"=".+"
+     *     }
+     * )
+     * @Route(
+     *     "/authentication/idp/unsolicited-single-sign-on/key:{keyId}",
+     *     name="authentication_idp_unsolicited_sso_keyid",
+     *     methods={"GET"}
+     * )
+     * @Route(
+     *     "/authentication/idp/unsolicited-single-sign-on/{idpHash}",
+     *     name="authentication_idp_unsolicited_sso_idphash",
+     *     methods={"GET"},
+     *     requirements={
+     *         "idpHash"=".+"
+     *     }
+     * )
      */
-    public function unsolicitedSingleSignOnAction(Request $request, $keyId = null, $idpHash = null)
+
+    public function unsolicitedSingleSignOnAction(Request $request, string $keyId = null, string $idpHash = null)
     {
         if (!$this->featureConfiguration->isEnabled('eb.feature_enable_idp_initiated_flow')) {
             throw new NotFoundHttpException();

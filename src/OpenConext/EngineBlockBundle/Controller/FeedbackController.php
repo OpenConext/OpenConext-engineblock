@@ -65,7 +65,11 @@ class FeedbackController
     }
 
     /**
-     * @Route("/authentication/feedback/unable-to-receive-message", name="authentication_feedback_unable_to_receive_message", methods={"GET"})
+     * @Route(
+     *     "/authentication/feedback/unable-to-receive-message",
+     *     name="authentication_feedback_unable_to_receive_message",
+     *     methods={"GET"}
+     * )
      */
     public function unableToReceiveMessageAction()
     {
@@ -125,7 +129,11 @@ class FeedbackController
     }
 
     /**
-     * @Route("/authentication/feedback/unsupportedSignatureMethod", name="authentication_feedback_unsupported_signature_method", methods={"GET"})
+     * @Route(
+     *     "/authentication/feedback/unsupportedSignatureMethod",
+     *     name="authentication_feedback_unsupported_signature_method",
+     *     methods={"GET"}
+     * )
      */
     public function unsupportedSignatureMethodAction(Request $request)
     {
@@ -142,7 +150,11 @@ class FeedbackController
     }
 
     /**
-     * @Route("/authentication/feedback/unsupported-acs-location-scheme", name="authentication_feedback_unsupported_acs_location_uri_scheme", methods={"GET"})
+     * @Route(
+     *     "/authentication/feedback/unsupported-acs-location-scheme",
+     *     name="authentication_feedback_unsupported_acs_location_uri_scheme",
+     *     methods={"GET"}
+     * )
      */
     public function unsupportedAcsLocationSchemeAction()
     {
@@ -157,7 +169,11 @@ class FeedbackController
 
 
     /**
-     * @Route("/authentication/feedback/unknown-service-provider", name="authentication_feedback_unknown_service_provider", methods={"GET"})
+     * @Route(
+     *     "/authentication/feedback/unknown-service-provider",
+     *     name="authentication_feedback_unknown_service_provider",
+     *     methods={"GET"}
+     * )
      */
     public function unknownServiceProviderAction(Request $request)
     {
@@ -178,7 +194,11 @@ class FeedbackController
     }
 
     /**
-     * @Route("/authentication/feedback/unknown-identity-provider", name="authentication_feedback_unknown_identity_provider", methods={"GET"})
+     * @Route(
+     *     "/authentication/feedback/unknown-identity-provider",
+     *     name="authentication_feedback_unknown_identity_provider",
+     *     methods={"GET"}
+     * )
      */
     public function unknownIdentityProviderAction(Request $request)
     {
@@ -196,7 +216,11 @@ class FeedbackController
     }
 
     /**
-     * @Route("/authentication/feedback/unknown-signing-key", name="authentication_feedback_unknown_signing_key", methods={"GET"})
+     * @Route(
+     *     "/authentication/feedback/unknown-signing-key",
+     *     name="authentication_feedback_unknown_signing_key",
+     *     methods={"GET"}
+     * )
      */
     public function unknownSigningKeyAction(Request $request)
     {
@@ -208,7 +232,11 @@ class FeedbackController
 
 
     /**
-     * @Route("/authentication/feedback/missing-required-fields", name="authentication_feedback_missing_required_fields", methods={"GET"})
+     * @Route(
+     *     "/authentication/feedback/missing-required-fields",
+     *     name="authentication_feedback_missing_required_fields",
+     *     methods={"GET"}
+     * )
      */
     public function missingRequiredFieldsAction()
     {
@@ -219,7 +247,11 @@ class FeedbackController
     }
 
     /**
-     * @Route("/authentication/feedback/authn-context-class-ref-blacklisted", name="authentication_authn_context_class_ref_blacklisted", methods={"GET"})
+     * @Route(
+     *     "/authentication/feedback/authn-context-class-ref-blacklisted",
+     *     name="authentication_authn_context_class_ref_blacklisted",
+     *     methods={"GET"}
+     * )
      */
     public function authnContextClassRefBlacklistedAction()
     {
@@ -231,7 +263,11 @@ class FeedbackController
 
 
     /**
-     * @Route("/authentication/feedback/invalid-mfa-authn-context-class-ref", name="authentication_invalid_mfa_authn_context_class_ref", methods={"GET"})
+     * @Route(
+     *     "/authentication/feedback/invalid-mfa-authn-context-class-ref",
+     *     name="authentication_invalid_mfa_authn_context_class_ref",
+     *     methods={"GET"}
+     * )
      */
     public function invalidMfAuthnContextClassRefAction()
     {
@@ -265,7 +301,11 @@ class FeedbackController
     }
 
     /**
-     * @Route("/authentication/feedback/metadata-entity-not-found", name="authentication_feedback_metadata_entity_not_found", methods={"GET"})
+     * @Route(
+     *     "/authentication/feedback/metadata-entity-not-found",
+     *     name="authentication_feedback_metadata_entity_not_found",
+     *     methods={"GET"}
+     * )
      */
     public function metadataEntityNotFoundAction(Request $request)
     {
@@ -334,7 +374,11 @@ class FeedbackController
     }
 
     /**
-     * @Route("/authentication/feedback/received-error-status-code", name="authentication_feedback_received_error_status_code", methods={"GET"})
+     * @Route(
+     *     "/authentication/feedback/received-error-status-code",
+     *     name="authentication_feedback_received_error_status_code",
+     *     methods={"GET"}
+     * )
      */
     public function receivedErrorStatusCodeAction()
     {
@@ -345,7 +389,11 @@ class FeedbackController
     }
 
     /**
-     * @Route("/authentication/feedback/received-invalid-signed-response", name="authentication_feedback_signature_verification_failed", methods={"GET"})
+     * @Route(
+     *     "/authentication/feedback/received-invalid-signed-response",
+     *     name="authentication_feedback_signature_verification_failed",
+     *     methods={"GET"}
+     * )
      */
     public function signatureVerificationFailedAction()
     {
@@ -367,7 +415,11 @@ class FeedbackController
     }
 
     /**
-     * @Route("/authentication/feedback/unknown_requesterid_in_authnrequest", name="authentication_feedback_unknown_requesterid_in_authnrequest", methods={"GET"})
+     * @Route(
+     *     "/authentication/feedback/unknown_requesterid_in_authnrequest",
+     *     name="authentication_feedback_unknown_requesterid_in_authnrequest",
+     *     methods={"GET"}
+     * )
      */
     public function unknownRequesterIdInAuthnRequestAction()
     {
@@ -379,7 +431,11 @@ class FeedbackController
 
 
     /**
-     * @Route("/authentication/feedback/authorization-policy-violation", name="authentication_feedback_pep_violation", methods={"GET"})
+     * @Route(
+     *     "/authentication/feedback/authorization-policy-violation",
+     *     name="authentication_feedback_pep_violation",
+     *     methods={"GET"}
+     * )
      */
     public function authorizationPolicyViolationAction(Request $request)
     {
@@ -414,7 +470,11 @@ class FeedbackController
     }
 
     /**
-     * @Route("/authentication/feedback/unknown-preselected-idp", name="authentication_feedback_unknown_preselected_idp", methods={"GET"})
+     * @Route(
+     *     "/authentication/feedback/unknown-preselected-idp",
+     *     name="authentication_feedback_unknown_preselected_idp",
+     *     methods={"GET"}
+     * )
      */
     public function unknownPreselectedIdpAction(Request $request)
     {
@@ -459,7 +519,11 @@ class FeedbackController
     }
 
     /**
-     * @Route("/authentication/feedback/authentication-limit-exceeded", name="authentication_feedback_authentication_limit_exceeded", methods={"GET"})
+     * @Route(
+     *     "/authentication/feedback/authentication-limit-exceeded",
+     *     name="authentication_feedback_authentication_limit_exceeded",
+     *     methods={"GET"}
+     * )
      */
     public function authenticationLimitExceededAction()
     {
@@ -470,7 +534,11 @@ class FeedbackController
     }
 
     /**
-     * @Route("/authentication/feedback/invalid-request-method-on-sso", name="authentication_feedback_no_authentication_request_received", methods={"GET"})
+     * @Route(
+     *     "/authentication/feedback/invalid-request-method-on-sso",
+     *     name="authentication_feedback_no_authentication_request_received",
+     *     methods={"GET"}
+     * )
      */
     public function noAuthenticationRequestReceivedAction(Request $request)
     {

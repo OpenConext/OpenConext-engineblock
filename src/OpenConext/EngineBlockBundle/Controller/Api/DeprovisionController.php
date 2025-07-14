@@ -74,7 +74,12 @@ final class DeprovisionController
     }
 
     /**
-     * @Route("/deprovision/{collabPersonId}", name="api_deprovision_get_user_data", requirements={"collabPersonId"=".+"}, defaults={"_format"="json"})
+     * @Route(
+     *     "/deprovision/{collabPersonId}",
+     *     name="api_deprovision_get_user_data",
+     *     requirements={"collabPersonId"=".+"},
+     *     defaults={"_format"="json"}
+     * )
      */
     public function userDataAction(Request $request, $collabPersonId)
     {
@@ -94,7 +99,12 @@ final class DeprovisionController
     }
 
     /**
-     * @Route("/deprovision/{collabPersonId}/dry-run", name="api_deprovision_delete_user_data_dry_run", requirements={"collabPersonId"=".+"}, defaults={"_format"="json"})
+     * @Route(
+     *     "/deprovision/{collabPersonId}/dry-run",
+     *     name="api_deprovision_delete_user_data_dry_run",
+     *     requirements={"collabPersonId"=".+"},
+     *     defaults={"_format"="json"}
+     * )
      */
     public function dryRunAction(Request $request, $collabPersonId)
     {
