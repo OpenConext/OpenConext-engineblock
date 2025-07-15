@@ -10,3 +10,6 @@ doctrine:
                 port:     "%database.test.port%"
                 user:     "%database.test.user%"
                 password: "%database.test.password%"
+#
+#parameters:
+#    database.test.host: 127.0.0.1

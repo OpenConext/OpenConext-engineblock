@@ -17,7 +17,7 @@ echo -e "\nPHPUnit unit tests\n"
 XDEBUG_MODE=coverage ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=unit --coverage-clover coverage.xml
 
 echo -e "\nPHPUnit API acceptance tests\n"
-APP_ENV=ci XDEBUG_MODE=coverage ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=functional --coverage-clover coverage.xml
+APP_ENV=test XDEBUG_MODE=coverage ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=functional --coverage-clover coverage.xml
 
 echo -e "\nPHPUnit integration tests\n"
 XDEBUG_MODE=coverage ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=integration --coverage-clover coverage.xml
