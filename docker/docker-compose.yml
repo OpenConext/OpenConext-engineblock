@@ -26,6 +26,9 @@ services:
             # override this in a dedicated dockerfile per php version
             # dockerfile: docker/ci/Dockerfile
         container_name: eb-phpfpm
+# Local debugging
+#        ports:
+#            - 443:443
         volumes:
             - ../:/var/www/html
             - ../ci/qa-config/files/engine.dev.openconext.local.crt:/config/engine/engineblock.crt
@@ -46,14 +49,17 @@ services:
         volumes:
             - /tmp/chromedata/:/data
 
+#   Remove commands for local X11 debugging
     cypress:
         image: "cypress/included:13.1.0"
         environment:
             - CYPRESS_baseUrl=https://engine.dev.openconext.local
-        working_dir: /e2e
+#            - DISPLAY=${DISPLAY}
+        working_dir: /e2e/
         entrypoint: cypress open --project .
         volumes:
-            - ../tests:/e2e
+#            - /tmp/.X11-unix:/tmp/.X11-unix
+            - ../tests/e2e:/e2e
             - ../theme:/theme
 
 volumes:

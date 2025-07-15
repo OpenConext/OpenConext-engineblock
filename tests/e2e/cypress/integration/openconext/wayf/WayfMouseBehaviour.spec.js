@@ -24,7 +24,7 @@ context('WayfMouseBehaviour', () => {
     cy.get('a.result.active.access:nth-child(1)').click({force:true});
     // We visit the fake IdP, verify the right redirect is performed
     cy.location().should((loc) => {
-      expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https%3A//example.com/entityId/1');
+      expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https://example.com/entityId/1');
     });
     // Go back to the WAYF
     cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=10&displayUnconnectedIdpsWayf=true&unconnectedIdps=5');
@@ -32,7 +32,7 @@ context('WayfMouseBehaviour', () => {
     cy.get('a.result.active.access:nth-child(2)').click({force:true});
     // We visit the fake IdP, verify the right redirect is performed
     cy.location().should((loc) => {
-      expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https%3A//example.com/entityId/2');
+      expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https://example.com/entityId/2');
     });
     // Go back to the WAYF
     cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=10&displayUnconnectedIdpsWayf=true&unconnectedIdps=5');

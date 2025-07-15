@@ -14,6 +14,7 @@ theme/node_modules
 vendor
 
 tests/.phpunit.result.cache
+tests/e2e/node_modules
 
 coverage.xml
 

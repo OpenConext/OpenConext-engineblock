@@ -77,7 +77,7 @@ Cypress.Commands.add('selectFirstIdp', (click = true, firstElementSelector = '.w
     return;
   }
 
-  cy.get(firstElementSelector).type('{enter}', {force: true});
+  cy.get(firstElementSelector).focus().type('{enter}', {force: true});
 });
 
 Cypress.Commands.add('selectFirstIdpAndReturn', (click = true, url = 'https://engine.dev.openconext.local/functional-testing/wayf') => {
