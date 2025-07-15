@@ -43,7 +43,11 @@ class MinkContext extends BaseMinkContext
     /** @BeforeScenario */
     public function setDebugCookie(BeforeScenarioScope $scope)
     {
-        $this->getSession()->setCookie('XDEBUG_SESSION', 'PHPSTORM');
+        $session = $this->getSession();
+        if (!$session->isStarted()) {
+            $session->start();
+        }
+        $session->setCookie('XDEBUG_SESSION', 'PHPSTORM');
     }
 
     /**
