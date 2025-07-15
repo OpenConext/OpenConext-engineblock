@@ -66,7 +66,7 @@ final class ConsentController
     }
 
     /**
-     * @Route("/consent/{userId}", name="api_consent_user", requirements={"userId"=".+"}, defaults={"_format"="json"})
+     * @Route("/consent/{userId}", name="api_consent_user", defaults={"_format"="json"})
      */
     public function userAction($userId, Request $request)
     {

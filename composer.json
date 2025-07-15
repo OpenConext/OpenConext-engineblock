@@ -87,7 +87,13 @@
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
-        }
+        },
+        "post-install-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+        ],
+        "post-update-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+        ]
     },
     "autoload": {
         "psr-0": {
@@ -131,7 +137,11 @@
         },
         "symfony-var-dir": "var",
         "symfony-bin-dir": "bin",
-        "symfony-web-dir": "public"
+        "symfony-web-dir": "public",
+        "incenteev-parameters": {
+            "file": "config/packages/parameters.yml",
+            "dist-file": "config/packages/parameters.yml.dist"
+        }
     },
     "archive": {
         "exclude": [

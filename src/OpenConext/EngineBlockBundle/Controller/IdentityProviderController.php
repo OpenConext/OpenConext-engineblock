@@ -124,11 +124,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
      * @Route(
      *     "/authentication/idp/single-sign-on/key:{keyId}/{idpHash}",
      *     name="authentication_idp_sso_keyid_idphash",
-     *     methods={"GET", "POST"},
-     *     requirements={
-     *         "keyId"="[^/]+",
-     *         "idpHash"=".+"
-     *     }
+     *     methods={"GET", "POST"}
      * )
      * @Route(
      *     "/authentication/idp/single-sign-on/key:{keyId}",
@@ -138,10 +134,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
      * @Route(
      *     "/authentication/idp/single-sign-on/{idpHash}",
      *     name="authentication_idp_sso_idphash",
-     *     methods={"GET", "POST"},
-     *     requirements={
-     *         "idpHash"=".+"
-     *     }
+     *     methods={"GET", "POST"}
      * )
      */
     public function singleSignOnAction(Request $request, string $keyId = null, string $idpHash = null)
@@ -172,11 +165,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
      * @Route(
      *     "/authentication/idp/unsolicited-single-sign-on/key:{keyId}/{idpHash}",
      *     name="authentication_idp_unsolicited_sso_keyid_idphash",
-     *     methods={"GET"},
-     *     requirements={
-     *         "keyId"="[^/]+",
-     *         "idpHash"=".+"
-     *     }
+     *     methods={"GET"}
      * )
      * @Route(
      *     "/authentication/idp/unsolicited-single-sign-on/key:{keyId}",
@@ -186,10 +175,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
      * @Route(
      *     "/authentication/idp/unsolicited-single-sign-on/{idpHash}",
      *     name="authentication_idp_unsolicited_sso_idphash",
-     *     methods={"GET"},
-     *     requirements={
-     *         "idpHash"=".+"
-     *     }
+     *     methods={"GET"}
      * )
      */
 

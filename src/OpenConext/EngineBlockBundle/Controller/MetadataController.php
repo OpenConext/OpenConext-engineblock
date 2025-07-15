@@ -52,7 +52,7 @@ class MetadataController
 
     /**
      * @Route("/authentication/idp/metadata", name="metadata_idp", methods={"GET"})
-     * @Route("/authentication/idp/metadata/key:{keyId}", name="metadata_idp_key", methods={"GET"}, requirements={"keyId"=".+"})
+     * @Route("/authentication/idp/metadata/key:{keyId}", name="metadata_idp_key", methods={"GET"})
      */
     public function idpMetadataAction(string $keyId = null): Response
     {
@@ -66,7 +66,7 @@ class MetadataController
 
     /**
      * @Route("/authentication/sp/metadata", name="metadata_sp", methods={"GET"})
-     * @Route("/authentication/sp/metadata/key:{keyId}", name="metadata_sp_key", methods={"GET"}, requirements={"keyId"=".+"})
+     * @Route("/authentication/sp/metadata/key:{keyId}", name="metadata_sp_key", methods={"GET"})
      */
     public function spMetadataAction(string $keyId = ''): Response
     {
@@ -84,7 +84,7 @@ class MetadataController
 
     /**
      * @Route("/authentication/proxy/idps-metadata", name="metadata_all_idps", methods={"GET"})
-     * @Route("/authentication/proxy/idps-metadata/key:{keyId}", name="metadata_all_idps_key", methods={"GET"}, requirements={"keyId"=".+"})
+     * @Route("/authentication/proxy/idps-metadata/key:{keyId}", name="metadata_all_idps_key", methods={"GET"})
      */
     public function allIdpsMetadataAction(Request $request, string $keyId = null): Response
     {
@@ -101,7 +101,7 @@ class MetadataController
 
     /**
      * @Route("/authentication/stepup/metadata", name="metadata_stepup", methods={"GET"})
-     * @Route("/authentication/stepup/metadata/key:{keyId}", name="metadata_stepup_key", methods={"GET"}, requirements={"keyId"=".+"})
+     * @Route("/authentication/stepup/metadata/key:{keyId}", name="metadata_stepup_key", methods={"GET"})
      */
     public function stepupMetadataAction(string $keyId = null): Response
     {
