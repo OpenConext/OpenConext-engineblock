@@ -282,6 +282,13 @@ class MinkContext extends BaseMinkContext
             throw new RuntimeException(sprintf('Unknown window/tab name "%s"', $windowName));
         }
         $this->getSession()->switchToWindow($this->windows[$windowName]);
+
+        // Wait for page switch to prevent timing issues
+        $this->getSession()->getPage()->waitFor(10, function () {
+            // Wait for the page to be loaded by checking if the body is present
+            $body = $this->getSession()->getPage()->find('css', 'body');
+            return $body !== null;
+        });
     }
 
     /**
