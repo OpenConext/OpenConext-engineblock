@@ -115,3 +115,10 @@ services:
             - '@OpenConext\EngineBlockBundle\Url\UrlProvider'
             - '@engineblock.functional_testing.fixture.features'
             - '%stepup.sfo.override_engine_entityid%'
+
+    OpenConext\EngineBlockBundle\Twig\Extensions\Extension\FunctionalTestingGlobalSiteNotice:
+        arguments:
+            - "@request_stack"
+            - "%global.site_notice.allowed.tags%"
+        tags:
+            - { name: 'twig.extension' }
