@@ -18,7 +18,6 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
-use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\MinkExtension\Context\MinkContext as BaseMinkContext;
 use DOMDocument;
@@ -40,14 +39,13 @@ class MinkContext extends BaseMinkContext
      */
     private $windows = [];
 
-    /** @BeforeScenario */
-    public function setDebugCookie(BeforeScenarioScope $scope)
+    /**
+     * @Given /^Xdebug step debugging is enabled in the browser$/
+     */
+    public function putDebugCookie()
     {
-        $session = $this->getSession();
-        if (!$session->isStarted()) {
-            $session->start();
-        }
-        $session->setCookie('XDEBUG_SESSION', 'PHPSTORM');
+        $driver = $this->getSession();
+        $driver->setCookie('XDEBUG_SESSION', 'PHPSTORM');
     }
 
     /**
@@ -237,12 +235,8 @@ class MinkContext extends BaseMinkContext
      */
     public function iOpenTwoBrowserTabsIdentifiedBy($numberOfTabs, $tabNames)
     {
-        // On successive scenarios, reset the session to get rid of browser (session) state from previous scenarios
-        if ($this->getMink()->getSession()->isStarted()) {
-            $this->getMink()->getSession()->restart();
-        }
-        // Make sure the browser is ready (without this other browser interactions fail)
-        $this->getSession()->visit($this->locatePath('#'));
+        $this->getMink()->getSession()->restart();
+        $this->windows = []; // Reset the windows array to avoid confusion with previous tests
 
         $tabs = explode(',', $tabNames);
         if (count($tabs) != $numberOfTabs) {
@@ -252,17 +246,23 @@ class MinkContext extends BaseMinkContext
         }
 
         foreach ($tabs as $tab) {
-            $this->getMink()
-                ->getSession()
-                ->executeScript("window.open('/','_blank');");
-
-            $windowsNames = $this->getSession()->getWindowNames();
-
+            $windowsNames = $this->getMink()->getSession()->getWindowNames();
             if (!$windowsNames) {
                 throw new RuntimeException('The windows where not opened correctly.');
             }
+
+            $this->getMink()
+                ->getSession()
+                ->executeScript("window.open('about:blank','_blank');");
+
+            $newWindows = array_diff($this->getMink()->getSession()->getWindowNames(), $windowsNames);
+
+            if (count($newWindows) != 1) {
+                throw new RuntimeException('The new windows where not opened correctly.');
+            }
+
             // Grab the window name (which is the last one added to the window list)
-            $windowName = array_pop($windowsNames);
+            $windowName = array_pop($newWindows);
             // Keep track of the opened windows in order allow switching between them
             $this->windows[trim($tab)] = $windowName;
         }

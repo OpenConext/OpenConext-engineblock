@@ -20,6 +20,7 @@ echo -e "\nPreparing frontend assets\n"
 rm -rf var/cache/ci
 EB_THEME=skeune ./theme/scripts/prepare-test.js > /dev/null
 chown -R www-data var/cache/
+chmod -R 0777 /tmp/eb-fixtures
 
 echo -e "\nRun the Behat tests\n"
 ./vendor/bin/behat -c ./tests/behat.yml --suite default -vv --format pretty --strict
