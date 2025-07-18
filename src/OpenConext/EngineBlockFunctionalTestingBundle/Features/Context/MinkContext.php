@@ -18,7 +18,6 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
-use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\MinkExtension\Context\MinkContext as BaseMinkContext;
 use DOMDocument;
@@ -40,14 +39,13 @@ class MinkContext extends BaseMinkContext
      */
     private $windows = [];
 
-    /** @BeforeScenario */
-    public function setDebugCookie(BeforeScenarioScope $scope)
+    /**
+     * @Given /^Xdebug step debugging is enabled in the browser$/
+     */
+    public function putDebugCookie()
     {
-        $session = $this->getSession();
-        if (!$session->isStarted()) {
-            $session->start();
-        }
-        $session->setCookie('XDEBUG_SESSION', 'PHPSTORM');
+        $driver = $this->getSession();
+        $driver->setCookie('XDEBUG_SESSION', 'PHPSTORM');
     }
 
     /**
@@ -237,10 +235,8 @@ class MinkContext extends BaseMinkContext
      */
     public function iOpenTwoBrowserTabsIdentifiedBy($numberOfTabs, $tabNames)
     {
-        // On successive scenarios, reset the session to get rid of browser (session) state from previous scenarios
-        if ($this->getMink()->getSession()->isStarted()) {
-            $this->getMink()->getSession()->restart();
-        }
+        $this->getMink()->getSession()->restart();
+
         // Make sure the browser is ready (without this other browser interactions fail)
         $this->getSession()->visit($this->locatePath('#'));
 
@@ -282,13 +278,6 @@ class MinkContext extends BaseMinkContext
             throw new RuntimeException(sprintf('Unknown window/tab name "%s"', $windowName));
         }
         $this->getSession()->switchToWindow($this->windows[$windowName]);
-
-        // Wait for page switch to prevent timing issues
-        $this->getSession()->getPage()->waitFor(10, function () {
-            // Wait for the page to be loaded by checking if the body is present
-            $body = $this->getSession()->getPage()->find('css', 'body');
-            return $body !== null;
-        });
     }
 
     /**
