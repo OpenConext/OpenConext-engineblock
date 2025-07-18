@@ -35,7 +35,7 @@ context('WAYF when using the keyboard', () => {
         .focus()
         .type('{enter}');
       cy.location().should((loc) => {
-        expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https%3A//example.com/entityId/2');
+        expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https://example.com/entityId/2');
       });
       cy.visit('https://engine.dev.openconext.local/functional-testing/wayf');
     });
@@ -45,7 +45,7 @@ context('WAYF when using the keyboard', () => {
       cy.get(searchFieldSelector)
         .type('{enter}');
       cy.location().should((loc) => {
-        expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https%3A//example.com/entityId/1');
+        expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https://example.com/entityId/1');
       });
     });
 
@@ -55,7 +55,7 @@ context('WAYF when using the keyboard', () => {
         .type('2')
         .type('{enter}');
       cy.location().should((loc) => {
-        expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https%3A//example.com/entityId/2');
+        expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https://example.com/entityId/2');
       });
     });
   });
@@ -219,7 +219,7 @@ context('WAYF when using the keyboard', () => {
       cy.addOnePreviouslySelectedIdp();
       cy.selectFirstIdp(false, selectedIdpDataIndex1);
       cy.location().should((loc) => {
-        expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https%3A//example.com/entityId/1');
+        expect(loc.href).to.eq('https://engine.dev.openconext.local/?idp=https://example.com/entityId/1');
       });
     });
 

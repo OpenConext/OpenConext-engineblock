@@ -44,7 +44,7 @@ class MinkContext extends BaseMinkContext
      */
     public function putDebugCookie()
     {
-        $driver = $this->getSession()->getDriver();
+        $driver = $this->getSession();
         $driver->setCookie('XDEBUG_SESSION', 'PHPSTORM');
     }
 
@@ -235,10 +235,8 @@ class MinkContext extends BaseMinkContext
      */
     public function iOpenTwoBrowserTabsIdentifiedBy($numberOfTabs, $tabNames)
     {
-        // On successive scenarios, reset the session to get rid of browser (session) state from previous scenarios
-        if ($this->getMink()->getSession()->isStarted()) {
-            $this->getMink()->getSession()->restart();
-        }
+        $this->getMink()->getSession()->restart();
+
         // Make sure the browser is ready (without this other browser interactions fail)
         $this->getSession()->visit($this->locatePath('#'));
 

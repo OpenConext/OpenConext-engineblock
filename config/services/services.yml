@@ -1,0 +1,336 @@
+services:
+    _defaults:
+        public: true
+
+    OpenConext\EngineBlock\Xml\:
+        resource: '../../src/OpenConext/EngineBlock/Xml'
+        exclude: '../../src/OpenConext/EngineBlock/Xml/ValueObjects'
+        autowire: true
+        autoconfigure: true
+
+    OpenConext\EngineBlockBundle\HealthCheck\DoctrineConnectionHealthCheck:
+        arguments:
+            - '%monitor_database_health_check_query%'
+        calls:
+            - [ setEntityManager, ['@?doctrine.orm.entity_manager']]
+        tags:
+            - { name: openconext.monitor.health_check }
+
+    OpenConext\EngineBlockBundle\Value\ExecutionTime:
+        factory: [ OpenConext\EngineBlockBundle\Value\ExecutionTime, 'of' ]
+        arguments:
+            - '%minimum_execution_time_on_invalid_received_response%'
+
+    OpenConext\EngineBlock\Stepup\StepupEndpoint:
+        public: true
+        arguments:
+            - '%stepup.gateway.sfo.entity_id%'
+            - '%stepup.gateway.sfo.sso_location%'
+            - '%stepup.gateway.sfo.key_file%'
+
+    OpenConext\EngineBlock\Metadata\LoaRepository:
+        arguments:
+            - '%stepup.loa.mapping%'
+
+    OpenConext\EngineBlock\Stepup\StepupGatewayLoaMapping:
+        arguments:
+            - '%stepup.loa.mapping%'
+            - '%stepup.loa.loa1%'
+            - '@OpenConext\EngineBlock\Metadata\LoaRepository'
+
+    OpenConext\EngineBlock\Request\UniqidGenerator:
+        public: false
+
+    OpenConext\EngineBlock\Request\RequestId:
+        arguments:
+            - '@OpenConext\EngineBlock\Request\UniqidGenerator'
+        public: true
+
+    OpenConext\EngineBlockBundle\Security\Http\EntryPoint\JsonBasicAuthenticationEntryPoint:
+        arguments:
+            - 'engine-api.%domain%'
+
+    OpenConext\EngineBlock\Service\AuthenticationStateHelper:
+        arguments:
+            - '@session'
+
+    OpenConext\EngineBlock\Service\ProcessingStateHelper:
+        arguments:
+            - '@session'
+
+    OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper:
+        arguments:
+            - '@OpenConext\EngineBlock\Stepup\StepupGatewayLoaMapping'
+            - '@OpenConext\EngineBlock\Metadata\LoaRepository'
+            - '@logger'
+
+    OpenConext\EngineBlock\Service\ConsentService:
+        arguments:
+            - '@OpenConext\EngineBlockBundle\Authentication\Repository\DbalConsentRepository'
+            - '@OpenConext\EngineBlock\Service\MetadataService'
+            - '@engineblock.compat.logger'
+
+    OpenConext\EngineBlock\Service\DeprovisionService:
+        arguments:
+            - '@OpenConext\EngineBlockBundle\Authentication\Repository\DbalConsentRepository'
+            - '@OpenConext\EngineBlockBundle\Authentication\Service\UserService'
+            - '@OpenConext\EngineBlockBundle\Authentication\Repository\SamlPersistentIdRepository'
+            - '@OpenConext\EngineBlockBundle\Authentication\Repository\ServiceProviderUuidRepository'
+
+    OpenConext\EngineBlock\Service\MetadataService:
+        arguments:
+            - '@engineblock.compat.repository.metadata'
+            - '@engineblock.compat.logger'
+
+    OpenConext\EngineBlock\Service\MfaHelper:
+        arguments:
+            - '@engineblock.compat.logger'
+            - '@OpenConext\EngineBlock\Metadata\MetadataRepository\CachedDoctrineMetadataRepository'
+
+    OpenConext\EngineBlock\Service\TimeProvider\TimeProvider:
+
+    OpenConext\EngineBlock\Service\SsoNotificationService:
+        arguments:
+            - '%sso_notification_encryption_key%'
+            - '%sso_notification_encryption_key_salt%'
+            - '%sso_notification_encryption_algorithm%'
+            - '@engineblock.compat.logger'
+
+    OpenConext\EngineBlock\Service\SsoSessionService:
+        arguments:
+            - '%sso_session_cookie_max_age%'
+            - '%cookie.locale.domain%'
+            - '%cookie.path%'
+            - '@OpenConext\EngineBlock\Service\CookieService'
+            - '@engineblock.compat.logger'
+
+    OpenConext\EngineBlock\Service\CookieService:
+
+    OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory:
+        arguments:
+            - '@engineblock.compat.metadata.definitions'
+            - '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory'
+            - '@OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration'
+            - '@OpenConext\EngineBlockBundle\Url\UrlProvider'
+            - '@OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration'
+            - '%stepup.sfo.override_engine_entityid%'
+
+    OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration:
+        public: false
+        arguments:
+            - '@translator'
+            - '%email_request_access_address%'
+            - '%view_default_header%'
+            - '%hostname%'
+            - '%view_default_logo%'
+            - '%view_default_logo_width%'
+            - '%view_default_logo_height%'
+
+    OpenConext\EngineBlock\Metadata\Factory\Factory\IdentityProviderFactory:
+        arguments:
+            - '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory'
+            - '@OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration'
+            - '@OpenConext\EngineBlockBundle\Url\UrlProvider'
+
+    OpenConext\EngineBlock\Xml\MetadataRenderer:
+        arguments:
+            - '@OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider'
+            - '@twig'
+            - '@engineblock.compat.saml2_id_generator'
+            - '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory'
+            - '@OpenConext\EngineBlock\Xml\DocumentSigner'
+            - '@OpenConext\EngineBlock\Service\TimeProvider\TimeProvider'
+            - '%metadata_add_requested_attributes%'
+
+    OpenConext\EngineBlock\Xml\MetadataProvider:
+        arguments:
+            - '@OpenConext\EngineBlock\Xml\MetadataRenderer'
+            - '@OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory'
+            - '@OpenConext\EngineBlock\Metadata\Factory\Factory\IdentityProviderFactory'
+            - '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory'
+            - '@OpenConext\EngineBlock\Metadata\MetadataRepository\IdpsMetadataRepository'
+
+    OpenConext\EngineBlockBundle\Authentication\Service\UserService:
+        arguments:
+            - '@OpenConext\EngineBlockBundle\Authentication\Repository\UserRepository'
+
+    OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration:
+        arguments:
+            - '%custom_features%'
+
+    OpenConext\EngineBlockBundle\Configuration\ErrorFeedbackConfiguration:
+        arguments:
+            - '@translator'
+
+    engineblock.pdp.http_client:
+        class: OpenConext\EngineBlock\Http\HttpClient
+        arguments:
+            - "@engineblock.pdp.guzzle_http_client"
+
+    engineblock.pdp.guzzle_http_client:
+        class: GuzzleHttp\Client
+        arguments:
+            -   base_uri: "%pdp.host%"
+                auth: [ "%pdp.username%", "%pdp.password%", "Basic" ]
+                  # Verify CAs for certificates for prod, but not for other environments
+                # as we are working with self signed signatures
+                verify: "@=service('kernel').getEnvironment() === 'prod'"
+
+    OpenConext\EngineBlockBundle\Pdp\PdpClient:
+        arguments:
+            - '@engineblock.pdp.http_client'
+            - '%pdp.policy_decision_point_path%'
+
+    OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard:
+        arguments:
+            - '%maximum_authentication_procedures_allowed%'
+            - '%time_frame_for_authentication_loop_in_seconds%'
+            - '%maximum_authentications_per_session%'
+
+    OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider:
+        arguments:
+            - ['en', 'nl', 'pt']
+            - '%enabled_languages%'
+
+    OpenConext\EngineBlockBundle\Localization\LocaleProvider:
+        arguments:
+            - '@OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider'
+            - '%kernel.default_locale%'
+
+    OpenConext\EngineBlockBundle\Url\UrlProvider:
+        public: true
+        arguments:
+            - '@Symfony\Component\Routing\Generator\UrlGeneratorInterface'
+
+    OpenConext\EngineBlockBundle\Http\Cookies\CookieFactory:
+        arguments:
+            - 'lang'
+            - '%cookie.locale.domain%'
+            - '%cookie.locale.expiry%'
+            - '%cookie.locale.http_only%'
+            - '%cookie.locale.secure%'
+
+    OpenConext\EngineBlock\Service\ReleaseAsEnforcer:
+        arguments:
+            - '@logger'
+
+    OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClient:
+        arguments:
+            - '@engineblock.attribute_aggregation.http_client'
+            - '%attribute_aggregation.base_url%'
+
+    engineblock.attribute_aggregation.http_client:
+        class: OpenConext\EngineBlock\Http\HttpClient
+        arguments:
+            - "@engineblock.attribute_aggregation.guzzle_http_client"
+
+    engineblock.attribute_aggregation.guzzle_http_client:
+        class: GuzzleHttp\Client
+        arguments:
+            - auth: ["%attribute_aggregation.username%", "%attribute_aggregation.password%", "Basic"]
+
+    OpenConext\EngineBlock\Metadata\MetadataRepository\CachedDoctrineMetadataRepository:
+        public: true
+        arguments:
+            - '@OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository'
+
+    OpenConext\EngineBlock\Metadata\MetadataRepository\IdpsMetadataRepository:
+        arguments:
+            - '@OpenConext\EngineBlock\Metadata\MetadataRepository\CachedDoctrineMetadataRepository'
+            - '@OpenConext\EngineBlock\Metadata\Factory\Factory\IdentityProviderFactory'
+            - '@OpenConext\EngineBlockBundle\Url\UrlProvider'
+
+    OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface: '@OpenConext\EngineBlock\Metadata\MetadataRepository\CachedDoctrineMetadataRepository'
+
+    OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository:
+        public: false
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@engineblock.repository.service_provider'
+            - '@engineblock.repository.identity_provider'
+
+    OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataPushRepository:
+        public: false
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    OpenConext\EngineBlock\Metadata\Entity\Assembler\PushMetadataAssembler:
+        public: false
+        arguments:
+            - '@OpenConext\EngineBlock\Validator\AllowedSchemeValidator'
+            - '@OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider'
+            - '@engineblock.compat.logger'
+
+    OpenConext\EngineBlock\Metadata\X509\KeyPairFactory:
+        arguments:
+            - '%encryption_keys%'
+
+    OpenConext\EngineBlock\Validator\AllowedSchemeValidator:
+        public: true
+        arguments:
+            - '%allowed_acs_location_schemes%'
+
+    OpenConext\EngineBlock\Validator\SamlBindingValidator:
+
+    OpenConext\EngineBlock\Validator\AcsRequestValidator:
+
+    OpenConext\EngineBlock\Validator\SsoRequestValidator:
+
+    OpenConext\EngineBlock\Validator\UnsolicitedSsoRequestValidator:
+
+    OpenConext\EngineBlock\Validator\SamlResponseValidator:
+
+    OpenConext\EngineBlockBundle\Authentication\Service\SamlResponseHelper:
+        arguments:
+            - '@OpenConext\EngineBlock\Metadata\MetadataRepository\CachedDoctrineMetadataRepository'
+
+    OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Debug:
+        tags:
+             - { name: 'twig.extension' }
+
+    OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Feedback:
+        arguments:
+            - '@engineblock.compat.application'
+            - '@OpenConext\EngineBlockBundle\Configuration\ErrorFeedbackConfiguration'
+            - '@engineblock.compat.repository.metadata'
+            - '@OpenConext\EngineBlockBundle\Authentication\Service\SamlResponseHelper'
+        tags:
+             - { name: 'twig.extension' }
+
+    OpenConext\EngineBlockBundle\Twig\Extensions\Extension\GlobalSiteNotice:
+        arguments:
+            - '%global.site_notice.show%'
+            - '%global.site_notice.allowed.tags%'
+            - '@translator'
+        tags:
+             - { name: 'twig.extension' }
+
+    OpenConext\EngineBlockBundle\Twig\Extensions\Extension\I18n:
+        arguments:
+            - '@translator'
+        tags:
+             - { name: 'twig.extension' }
+
+    OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Locale:
+        arguments:
+            - '@request_stack'
+            - '@OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider'
+            - '%locale%'
+        tags:
+             - { name: 'twig.extension' }
+
+    OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Metadata:
+        arguments:
+            - '@engineblock.compat.metadata.definitions'
+            - '@translator'
+        tags:
+             - { name: 'twig.extension' }
+
+    OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Wayf:
+        arguments:
+            - '@request_stack'
+            - '@translator'
+        tags:
+             - { name: 'twig.extension' }
+
+    OpenConext\EngineBlockBundle\Service\DiscoverySelectionService:

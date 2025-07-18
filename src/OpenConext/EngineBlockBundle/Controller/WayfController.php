@@ -28,6 +28,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
 class WayfController
@@ -74,7 +75,7 @@ class WayfController
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @Route("/authentication/idp/process-wayf", name="authentication_wayf_process_wayf", methods={"GET", "POST"})
      */
     public function processWayfAction(Request $request)
     {
@@ -101,10 +102,7 @@ class WayfController
     }
 
     /**
-     * This method is not used in the skeune theme
-     *
-     * @return Response
-     * @throws \EngineBlock_Exception
+     * @Route("/authentication/idp/help-discover", name="authentication_wayf_help_discover", methods={"GET"})
      */
     public function helpDiscoverAction()
     {
@@ -124,8 +122,7 @@ class WayfController
     }
 
     /**
-     * @return Response
-     * @throws \EngineBlock_Exception
+     * @Route("/authentication/idp/remove-cookies", name="authentication_wayf_remove_cookie", methods={"GET", "POST"})
      */
     public function cookieAction(Request $request)
     {

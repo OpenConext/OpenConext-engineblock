@@ -1,0 +1,38 @@
+services:
+    _defaults:
+        public: true
+
+    OpenConext\EngineBlockBundle\Controller\Api\ConnectionsController:
+        arguments:
+            - '@OpenConext\EngineBlock\Metadata\Entity\Assembler\PushMetadataAssembler'
+            - '@security.authorization_checker'
+            - '@OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration'
+            - '@OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataPushRepository'
+            - '%engineblock.metadata_push_memory_limit%'
+
+    OpenConext\EngineBlockBundle\Controller\Api\ConsentController:
+        arguments:
+            - '@security.authorization_checker'
+            - '@OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration'
+            - '@OpenConext\EngineBlock\Service\ConsentService'
+
+    OpenConext\EngineBlockBundle\Controller\Api\DeprovisionController:
+        arguments:
+            - '@security.authorization_checker'
+            - '@OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration'
+            - '@OpenConext\EngineBlock\Service\DeprovisionService'
+            - 'EngineBlock'
+
+    OpenConext\EngineBlockBundle\Controller\Api\HeartbeatController:
+
+    OpenConext\EngineBlockBundle\Controller\Api\MetadataController:
+        arguments:
+            - '@security.authorization_checker'
+            - '@OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration'
+            - '@OpenConext\EngineBlock\Service\MetadataService'
+
+    OpenConext\EngineBlockBundle\Controller\Api\AttributeReleasePolicyController:
+        arguments:
+            - '@security.authorization_checker'
+            - '@OpenConext\EngineBlock\Service\MetadataService'
+            - '@engineblock.compat.attribute_release_policy_enforcer'
