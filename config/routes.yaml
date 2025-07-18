@@ -15,7 +15,3 @@ engineblock_api_controllers:
         domain: ".*"
     defaults:
         domain: "%domain%"
-
-#controllers:
-#    resource: '../../src/OpenConext/EngineBlockBundle/Controller/'
-#    type: annotation

@@ -1,14 +1,15 @@
 # Twig Configuration
 twig:
+    exception_controller: null
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     paths:
-        "%kernel.root_dir%/../theme/%theme.name%/templates/modules": theme
-        "%kernel.root_dir%/../theme/%theme.name%/templates/layouts": themeLayouts
-        "%kernel.root_dir%/../theme/%theme.name%/images": images
-        "%kernel.root_dir%/../theme/base/templates/modules": theme
-        "%kernel.root_dir%/../theme/base/templates/layouts": themeLayouts
-        "%kernel.root_dir%/../theme/base/images": images
+        "%kernel.project_dir%/theme/%theme.name%/templates/modules": theme
+        "%kernel.project_dir%/theme/%theme.name%/templates/layouts": themeLayouts
+        "%kernel.project_dir%/theme/%theme.name%/images": images
+        "%kernel.project_dir%/theme/base/templates/modules": theme
+        "%kernel.project_dir%/theme/base/templates/layouts": themeLayouts
+        "%kernel.project_dir%/theme/base/images": images
     globals:
         assetsVersion: "%asset_version%"
         defaultTitle: "%view_default_title%"

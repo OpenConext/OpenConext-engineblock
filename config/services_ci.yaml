@@ -1,3 +1,4 @@
+# Legacy way to import services
 imports:
     - { resource: services/ci/services.yml }
     - { resource: services/ci/controllers.yml }
