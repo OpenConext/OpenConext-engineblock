@@ -1,6 +1,7 @@
 {
     "name": "openconext/engineblock",
     "description": "OpenConext SAML proxy",
+    "version": "7.0.0-dev",
     "type": "project",
     "keywords": [
         "saml",

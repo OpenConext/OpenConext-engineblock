@@ -4,7 +4,7 @@ set -e
 cd $(dirname $0)/../../
 
 
-CURRENT_ENV="${SYMFONY_ENV:-dev}"
+CURRENT_ENV="${APP_ENV:-dev}"
 
 if [ "${CURRENT_ENV}" != "ci" ]
 then

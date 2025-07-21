@@ -2,11 +2,6 @@ parameters:
     ##########################################################################################
     ## GLOBAL SETTINGS
     ##########################################################################################
-    ## This is a string that should be unique to your application and it's commonly used to add more
-    ## entropy to security related operations. Its value should be a series of characters, numbers and
-    ## symbols chosen randomly and the recommended length is around 32 characters.
-    secret: secret
-
     ## Note: due to legacy reasons, hostname must be left empty (hostname
     ## from the Host header will be used) or set to match the domain
     ## setting. For example:

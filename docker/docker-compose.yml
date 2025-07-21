@@ -38,7 +38,8 @@ services:
                 condition: service_healthy
         environment:
           APP_ENV: ci
-          SYMFONY_ENV: ci
+          APP_SECRET: secret
+          APP_DEBUG: false
 
     chrome.dev.openconext.local:
         image: alpeware/chrome-headless-trunk
