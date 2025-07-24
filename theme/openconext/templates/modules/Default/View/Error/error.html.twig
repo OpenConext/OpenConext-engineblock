@@ -69,7 +69,7 @@
                 <p>{{ 'error_help_desc'|trans }}</p>
 
             </div>
-            {% spaceless %}{% include "@theme/Default/View/Error/partial/footer.html.twig" %}{% endspaceless %}
+            {% apply spaceless %}{% include "@theme/Default/View/Error/partial/footer.html.twig" %}{% endapply %}
         </div>
     </div>
 
