@@ -21,7 +21,6 @@ namespace OpenConext\EngineBlockBundle\Tests;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
-use OpenConext\EngineBlockBundle\Configuration\Feature;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -424,10 +423,10 @@ class ConnectionsControllerTest extends WebTestCase
 
     private function disableMetadataPushApiFeatureFor(Client $client)
     {
-        $featureToggles = new FeatureConfiguration([
-            'api.metadata_push' => new Feature('api.metadata_push', false)
+        $mock = new FeatureConfiguration([
+            'api.metadata_push' => false,
         ]);
-        $client->getContainer()->set('engineblock.features', $featureToggles);
+        $client->getContainer()->set('OpenConext\\EngineBlockBundle\\Configuration\\FeatureConfiguration', $mock);
     }
 
     private function clearMetadataFixtures()

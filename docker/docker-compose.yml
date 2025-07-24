@@ -3,7 +3,7 @@ version: '2.4'
 services:
 
     mariadb:
-        image: mariadb:10.2
+        image: mariadb:10.6
         restart: always
         container_name: eb-db-test
         environment:
@@ -26,6 +26,9 @@ services:
             # override this in a dedicated dockerfile per php version
             # dockerfile: docker/ci/Dockerfile
         container_name: eb-phpfpm
+# Local debugging
+#        ports:
+#            - 443:443
         volumes:
             - ../:/var/www/html
             - ../ci/qa-config/files/engine.dev.openconext.local.crt:/config/engine/engineblock.crt
@@ -35,7 +38,8 @@ services:
                 condition: service_healthy
         environment:
           APP_ENV: ci
-          SYMFONY_ENV: ci
+          APP_SECRET: secret
+          APP_DEBUG: false
 
     chrome.dev.openconext.local:
         image: alpeware/chrome-headless-trunk
@@ -46,14 +50,17 @@ services:
         volumes:
             - /tmp/chromedata/:/data
 
+#   Remove commands for local X11 debugging
     cypress:
         image: "cypress/included:13.1.0"
         environment:
             - CYPRESS_baseUrl=https://engine.dev.openconext.local
-        working_dir: /e2e
+#            - DISPLAY=${DISPLAY}
+        working_dir: /e2e/
         entrypoint: cypress open --project .
         volumes:
-            - ../tests:/e2e
+#            - /tmp/.X11-unix:/tmp/.X11-unix
+            - ../tests/e2e:/e2e
             - ../theme:/theme
 
 volumes:

@@ -1,0 +1,48 @@
+doctrine:
+    dbal:
+        default_connection: engineblock
+        connections:
+            engineblock:
+                #                schema_filter: ~^(?!group_|virtual_|service_provider_|saml_persistent_id|sso_provider_roles|log_logins|db_changelog|consent)~
+                driver:   pdo_mysql         # This must be PDO until all database interaction runs through doctrine
+                dbname:   "%database.dbname%"
+                host:     "%database.host%"
+                port:     "%database.port%"
+                user:     "%database.user%"
+                password: "%database.password%"
+                charset:  UTF8
+                # when true, queries are logged to a 'doctrine' monolog channel
+                logging: '%kernel.debug%'
+                profiling: '%kernel.debug%'
+                server_version: '10.6.0-MariaDB'
+                mapping_types:
+                    enum: string
+        types:
+            engineblock_collab_person_id: OpenConext\EngineBlockBundle\Doctrine\Type\CollabPersonIdType
+            engineblock_collab_person_uuid: OpenConext\EngineBlockBundle\Doctrine\Type\CollabPersonUuidType
+            engineblock_metadata_coins: OpenConext\EngineBlockBundle\Doctrine\Type\MetadataCoinType
+            engineblock_metadata_mdui: OpenConext\EngineBlockBundle\Doctrine\Type\MetadataMduiType
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'
+        entity_managers:
+            engineblock:
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+                connection: ~
+                mappings:
+                    # An array of mappings, which may be a bundle name or something else
+                    Authentication:
+                        mapping:   true
+                        type:      annotation
+                        dir:       "%kernel.root_dir%/../src/OpenConext/EngineBlockBundle/Authentication"
+                        prefix:    OpenConext\EngineBlockBundle\Authentication
+                        is_bundle: false
+                    Metadata:
+                        mapping:   true
+                        type:      annotation
+                        dir:       "%kernel.root_dir%/../src/OpenConext/EngineBlock/Metadata"
+                        prefix:    OpenConext\EngineBlock\Metadata
+                        is_bundle: false
+                dql:
+                    string_functions:
+                        md5: OpenConext\EngineBlockBundle\Doctrine\DqlFunction\Md5

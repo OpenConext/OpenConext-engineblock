@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
@@ -49,6 +50,10 @@ class MetadataController
         $this->engineBlockConfiguration = $engineBlockConfiguration;
     }
 
+    /**
+     * @Route("/authentication/idp/metadata", name="metadata_idp", methods={"GET"})
+     * @Route("/authentication/idp/metadata/key:{keyId}", name="metadata_idp_key", methods={"GET"})
+     */
     public function idpMetadataAction(string $keyId = null): Response
     {
         $metadataXml = $this->metadataService->metadataForIdp($keyId);
@@ -59,7 +64,11 @@ class MetadataController
         return $response;
     }
 
-    public function spMetadataAction(string $keyId): Response
+    /**
+     * @Route("/authentication/sp/metadata", name="metadata_sp", methods={"GET"})
+     * @Route("/authentication/sp/metadata/key:{keyId}", name="metadata_sp_key", methods={"GET"})
+     */
+    public function spMetadataAction(string $keyId = ''): Response
     {
         if (empty($keyId)) {
             $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
@@ -73,6 +82,10 @@ class MetadataController
         return $response;
     }
 
+    /**
+     * @Route("/authentication/proxy/idps-metadata", name="metadata_all_idps", methods={"GET"})
+     * @Route("/authentication/proxy/idps-metadata/key:{keyId}", name="metadata_all_idps_key", methods={"GET"})
+     */
     public function allIdpsMetadataAction(Request $request, string $keyId = null): Response
     {
         $spEntityId = $request->query->get('sp-entity-id', null);
@@ -86,6 +99,10 @@ class MetadataController
         return $response;
     }
 
+    /**
+     * @Route("/authentication/stepup/metadata", name="metadata_stepup", methods={"GET"})
+     * @Route("/authentication/stepup/metadata/key:{keyId}", name="metadata_stepup_key", methods={"GET"})
+     */
     public function stepupMetadataAction(string $keyId = null): Response
     {
         if (empty($keyId)) {
@@ -100,6 +117,13 @@ class MetadataController
         return $response;
     }
 
+    /**
+     * TODO: SYMFONY 4.4 UPGRADE - Is it correct that both SP and IDP point to the same? It was like this in the previous config
+     * @Route("/authentication/idp/certificate", name="certificate_idp", methods={"GET"})
+     * @Route("/authentication/idp/certificate/key:{keyId}", name="certificate_idp_key", methods={"GET"})
+     * @Route("/authentication/sp/certificate", name="certificate_sp", methods={"GET"})
+     * @Route("/authentication/sp/certificate/key:{keyId}", name="certificate_sp_key", methods={"GET"})
+     */
     public function signingCertificateAction(string $keyId = null): Response
     {
         if (empty($keyId)) {

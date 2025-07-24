@@ -21,7 +21,7 @@ namespace OpenConext\EngineBlockBundle\EventListener;
 use EngineBlock_ApplicationSingleton;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Twig\Environment;
 
@@ -49,7 +49,7 @@ final class MethodNotAllowedHttpExceptionListener
         $this->logger = $logger;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event)
     {
         $exception = $event->getException();
         if (!$exception instanceof MethodNotAllowedHttpException) {

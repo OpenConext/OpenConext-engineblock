@@ -1,9 +1,7 @@
 #!/bin/bash
 
-PREVIOUS_SF_ENV=${SYMFONY_ENV}
-PREVIOUS_EB_ENV=${ENGINEBLOCK_ENV}
-export SYMFONY_ENV=prod
-export ENGINEBLOCK_ENV=production
+PREVIOUS_APP_ENV=${APP_ENV}
+export APP_ENV=prod
 
 RELEASE_DIR=${HOME}/Releases
 GITHUB_USER=OpenConext
@@ -166,5 +164,4 @@ then
 	fi
 fi
 
-export SYMFONY_ENV=${PREVIOUS_SF_ENV}
-export ENGINEBLOCK_ENV=${PREVIOUS_EB_ENV}
+export APP_ENV=${PREVIOUS_APP_ENV}

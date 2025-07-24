@@ -28,8 +28,8 @@ class OpenConextEngineBlockBundle extends Bundle
         $engineBlockApplicationSingleton = EngineBlock_ApplicationSingleton::getInstance();
         $engineBlockApplicationSingleton->bootstrap(
             $this->container->get('monolog.logger.public'),
-            $this->container->get('engineblock.logger.manual_or_error_activation_strategy'),
-            $this->container->get('engineblock.request.request_id'),
+            $this->container->get('OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy'),
+            $this->container->get('OpenConext\EngineBlock\Request\RequestId'),
             $this->container
         );
     }

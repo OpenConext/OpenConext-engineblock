@@ -1,0 +1,124 @@
+parameters:
+    engineblock.functional_testing.service_registry_data_store.dir:           "/tmp/eb-fixtures/metadata-push/"
+    engineblock.functional_testing.service_registry_data_store.file:          "/tmp/eb-fixtures/metadata-push/entities"
+    engineblock.functional_testing.features_data_store.file:                  "/tmp/eb-fixtures/features.json"
+    engineblock.functional_testing.authentication_loop_guard_data_store.file: "/tmp/eb-fixtures/authentication-loop-guard.json"
+    engineblock.functional_testing.pdp_data_store.file:                       "/tmp/eb-fixtures/policy_decision.json"
+    engineblock.functional_testing.attribute_aggregation_data_store.file:     "/tmp/eb-fixtures/attribute_aggregation.json"
+    engineblock.functional_testing.stepup_gateway_mock_data_store.file:       "/tmp/eb-fixtures/stepup_gateway_mock.json"
+    engineblock.functional_testing.translator_mock_data_store.file:           "/tmp/eb-fixtures/translator_mock.json"
+
+services:
+    _defaults:
+        public: true
+
+    OpenConext\EngineBlockBundle\Configuration\TestFeatureConfiguration:
+
+    engineblock.functional_testing.service.engine_block:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock
+
+#    #region Behat Contexts
+    engineblock.functional_testing.behat_context.mink:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext
+#    #endregion Behat Contexts
+
+    #region Fixtures
+    engineblock.functional_testing.fixture.service_registry:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture
+        arguments:
+            - '@OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository'
+            - '@engineblock.compat.doctrine.entity_manager'
+
+    engineblock.functional_testing.fixture.features:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration
+        arguments:
+            - '@OpenConext\EngineBlockBundle\Configuration\TestFeatureConfiguration'
+            - '@engineblock.functional_testing.data_store.features'
+
+    engineblock.functional_testing.fixture.pdp_client:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingPdpClient
+        arguments:
+            - '@engineblock.function_testing.data_store.pdp_client'
+
+    engineblock.functional_testing.fixture.authentication_loop_guard:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard
+        arguments:
+            - '@OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard'
+            - '@engineblock.functional_testing.data_store.authentication_loop_guard'
+
+    engineblock.functional_testing.fixture.attribute_aggregation_client:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient
+        arguments:
+            - '@engineblock.function_testing.data_store.attribute_aggregation_client'
+
+    engineblock.functional_testing.fixture.stepup_gateway_mock:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingStepupGatewayMockConfiguration
+        arguments:
+            - '@engineblock.mock_entities.idp_factory'
+            - '@engineblock.mock_entities.sp_factory'
+            - "@engineblock.compat.application"
+
+    #endregion Fixtures
+
+    #region Data Stores
+    engineblock.functional_testing.data_store.service_registry:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\SerializedDataStore
+        arguments: ['%engineblock.functional_testing.service_registry_data_store.file%']
+
+    engineblock.functional_testing.data_store.features:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
+        arguments: ['%engineblock.functional_testing.features_data_store.file%']
+
+    engineblock.function_testing.data_store.pdp_client:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
+        arguments: ['%engineblock.functional_testing.pdp_data_store.file%']
+
+    engineblock.functional_testing.data_store.authentication_loop_guard:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
+        arguments: ['%engineblock.functional_testing.authentication_loop_guard_data_store.file%']
+
+    engineblock.function_testing.data_store.attribute_aggregation_client:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
+        arguments: ['%engineblock.functional_testing.attribute_aggregation_data_store.file%']
+
+    engineblock.function_testing.data_store.stepup_gateway_mock:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
+        arguments: ['%engineblock.functional_testing.stepup_gateway_mock_data_store.file%']
+
+    engineblock.function_testing.data_store.translator_mock:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
+        arguments: ['%engineblock.functional_testing.translator_mock_data_store.file%']
+
+    #endregion Data Stores
+
+    engineblock.functional_testing.mock.translator:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockTranslator
+        arguments:
+            - '@translator'
+            - '@engineblock.function_testing.data_store.translator_mock'
+
+    # test stand ins
+    OpenConext\EngineBlockFunctionalTestingBundle\Validator\SsoRequestValidator:
+    OpenConext\EngineBlock\Stepup\StepupEndpoint:
+        arguments:
+            - "https://engine.dev.openconext.local/authentication/stepup/metadata"
+            - "https://engine.dev.openconext.local/functional-testing/gateway/second-factor-only/single-sign-on"
+            - "%stepup.gateway.sfo.key_file%"
+    OpenConext\EngineBlockBundle\Configuration\ErrorFeedbackConfiguration:
+        arguments:
+            - "@engineblock.functional_testing.mock.translator"
+    OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory:
+        arguments:
+            - '@engineblock.compat.metadata.definitions'
+            - '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory'
+            - '@OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration'
+            - '@OpenConext\EngineBlockBundle\Url\UrlProvider'
+            - '@engineblock.functional_testing.fixture.features'
+            - '%stepup.sfo.override_engine_entityid%'
+
+    OpenConext\EngineBlockBundle\Twig\Extensions\Extension\FunctionalTestingGlobalSiteNotice:
+        arguments:
+            - "@request_stack"
+            - "%global.site_notice.allowed.tags%"
+        tags:
+            - { name: 'twig.extension' }

@@ -1,0 +1,14 @@
+# override the logging settings so that we can log to readable files on github actions
+monolog:
+    channels: ["%logger.channel%", "authentication"]
+    handlers:
+        main:
+            type: fingers_crossed
+            activation_strategy: OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy
+            passthru_level: "%logger.fingers_crossed.passthru_level%"
+            handler: nested
+            channels: ['!event']
+        nested:
+            type:   stream
+            path:   "%kernel.logs_dir%/%kernel.environment%.log"
+            level:  DEBUG

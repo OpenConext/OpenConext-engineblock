@@ -1,12 +1,12 @@
 {% set cutoffMet = cutoffPointForShowingUnfilteredIdps < idpList|length %}
-{% spaceless %}
+{% apply spaceless %}
 <ul
     class="wayf__idpList
           {% if cutoffMet %} wayf__idpList--cutoffMet{% endif %}"
     aria-labelledby="{{ id }}"
     {% if showIdPBanner and listName == 'remaining' %} aria-describedby="defaultIdpDescription"{% endif %}
 >
-{% endspaceless %}
+{% endapply %}
     {# First show all connected Idps #}
     {% for idp in idpList %}
         {% if idp['connected'] is defined and idp['connected'] %}

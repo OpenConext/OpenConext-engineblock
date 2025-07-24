@@ -1,0 +1,25 @@
+monolog:
+    channels: ["engineblock", "authentication"]
+    handlers:
+        main:
+            type: fingers_crossed
+            activation_strategy: OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy
+            passthru_level: "%logger.fingers_crossed.passthru_level%"
+            handler: nested
+            level: info
+            channels: ["!authentication"]
+        nested:
+            type:      stream
+            level:     info
+            path:      "%kernel.logs_dir%/application.log"
+            formatter: OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter
+        authentication:
+            type:      stream
+            path:      "%kernel.logs_dir%/authentication.log"
+            level:     info
+            channels:  [authentication]
+            formatter: OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter
+        console:
+            type: console
+            process_psr_3_messages: false
+            channels: ["!event", "!doctrine", "!console"]

@@ -1,0 +1,19 @@
+# Twig Configuration
+twig:
+    exception_controller: null
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    paths:
+        "%kernel.project_dir%/theme/%theme.name%/templates/modules": theme
+        "%kernel.project_dir%/theme/%theme.name%/templates/layouts": themeLayouts
+        "%kernel.project_dir%/theme/%theme.name%/images": images
+        "%kernel.project_dir%/theme/base/templates/modules": theme
+        "%kernel.project_dir%/theme/base/templates/layouts": themeLayouts
+        "%kernel.project_dir%/theme/base/images": images
+    globals:
+        assetsVersion: "%asset_version%"
+        defaultTitle: "%view_default_title%"
+        defaultHeader: "%view_default_header%"
+        defaultLogo: "%view_default_logo%"
+        envName: "%env_name%"
+        envRibbonColor: "%env_ribbon_color%"
