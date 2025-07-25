@@ -5,6 +5,26 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.18.0
+New feature:
+  * Support for adding UserAtributes in the SFO AuthnRequest to the Stepup-Gateway required for GSSP Fallback
+    The `feature_stepup_send_user_attributes` setting is used to enable this feature
+    If enabled, specify the attributes the add in the AuthnRequest using `stepup.callout_user_attributes`.
+
+## 6.17.0
+Maintenance:
+  * Upgrade saml2 library to 4.17.0
+New:
+  * Add default RequestedAuthnContext
+  * Add explicit IdP signing key feedback (#1791)
+  * Add in flight authentication limit (#1803)
+Changed:
+  * Update database client version to MariaDB 10.6.0 (#1820)
+  * Add discovery support (#1800)
+  * Read & store metadata coin:collab_enabled (#1818)
+
+TODO: Add changes since last release
+
 ## 6.15.3
 Maintenance:
   * Upgrade saml2 library
