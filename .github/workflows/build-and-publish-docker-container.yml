@@ -1,0 +1,15 @@
+name: build-and-publish-docker
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'The tag of the release that should be dockerized'
+        required: true
+
+jobs:
+  include-docker-build:
+    uses: openconext/openconext-githubactions/.github/workflows/build-push-docker-image.yml@feature/checkout_tag
+    with:
+      component_name: "OpenConext-engineblock"
+      tag: "${{ inputs.tag }}"
