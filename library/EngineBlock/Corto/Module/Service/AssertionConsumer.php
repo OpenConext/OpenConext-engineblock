@@ -168,6 +168,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         // or another service.
         EngineBlock_Corto_Model_Response_Cache::rememberIdp($receivedRequest, $receivedResponse);
 
+        $originalAssertions = clone $receivedResponse->getAssertions()[0];
         $this->_server->filterInputAssertionAttributes($receivedResponse, $receivedRequest);
 
         // Add the consent step
@@ -213,7 +214,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             $authnClassRef,
             $nameId,
             $sp->getCoins()->isStepupForceAuthn(),
-            $receivedResponse->getAssertions()[0]
+            $originalAssertions
         );
     }
 
