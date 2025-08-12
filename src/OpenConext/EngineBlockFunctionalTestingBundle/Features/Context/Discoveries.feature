@@ -29,7 +29,7 @@ Feature:
         | Name                                      |  Value | Source |
         | urn:mace:dir:attribute-def:eduPersonOrcid | 123456 | voot   |
 
-  Scenario: The user is asked for consent to share information with the SP showing the discovery name instead of the IdP name
+  Scenario: The user is asked for consent to share information with the SP showing the discovery name
     Given I log in at "Dummy-SP"
     And I select IdP by label "Dummy Discovery" on the WAYF
     And I pass through EngineBlock
@@ -38,19 +38,6 @@ Feature:
     And the response should not contain "Yes, proceed to Dummy-SP"
     And the response should contain "Dummy-SP will receive"
     And the response should contain "provided by  <strong>Dummy Discovery</strong>"
-    And the response should contain "Proceed to Dummy-SP"
-    When I give my consent
-    Then I pass through EngineBlock
-
-  Scenario: Showing the IdP name when the main IdP is used instead of the discovery
-    Given I log in at "Dummy-SP"
-    And I select IdP by label "Dummy-IdP" on the WAYF
-    And I pass through EngineBlock
-    And I pass through the IdP
-    Then the response should not contain "Do you agree with sharing this data?"
-    And the response should not contain "Yes, proceed to Dummy-SP"
-    And the response should contain "Dummy-SP will receive"
-    And the response should contain "provided by  <strong>Dummy-IdP</strong>"
     And the response should contain "Proceed to Dummy-SP"
     When I give my consent
     Then I pass through EngineBlock

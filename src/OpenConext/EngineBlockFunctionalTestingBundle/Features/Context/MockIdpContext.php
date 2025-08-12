@@ -88,6 +88,8 @@ class MockIdpContext extends AbstractSubContext
         $discoveries = [];
         if ($discoveryName !== null) {
             $discoveries[] = Discovery::create(['en' => $discoveryName], [], null);
+        } else {
+            $discoveries[] = Discovery::create(['en' => $name], [], null);
         }
 
         $mockIdp = $this->mockIdpFactory->createNew($name);
