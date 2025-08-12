@@ -516,22 +516,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
                 continue;
             }
 
-            $additionalInfo = AdditionalInfo::create()->setIdp($identityProvider->entityId);
-
             $isAccessible = $identityProvider->enabledInWayf || $isDebugRequest;
-
-            $name = $this->getName($currentLocale, $identityProvider, $additionalInfo);
-
-            $wayfIdp = $this->buildIdp(
-                $name,
-                $identityProvider->getMdui()->hasLogo() ? $identityProvider->getMdui()->getLogo()->url : '/images/placeholder.png',
-                $this->getKeywords($currentLocale, $identityProvider),
-                $identityProvider->entityId,
-                $isAccessible,
-                $isDefaultIdP,
-                null
-            );
-            $wayfIdps[] = $wayfIdp;
 
             foreach ($identityProvider->getDiscoveries() as $discovery) {
                 /** @var Discovery $discovery */
@@ -607,96 +592,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             ->setBody($output, 'text/plain');
 
         $diContainer->getMailer()->send($message);
-    }
-
-    private function getName(string $locale, IdentityProvider $identityProvider, AdditionalInfo $additionalInfo)
-    {
-        switch ($locale) {
-            case "nl":
-                return $this->getNameNl($identityProvider, $additionalInfo);
-            case "en":
-                return $this->getNameEn($identityProvider, $additionalInfo);
-            case "pt":
-                return $this->getNamePt($identityProvider, $additionalInfo);
-            default:
-                throw new EngineBlockBundleInvalidArgumentException(
-                    sprintf('Trying to get the IdP name for an unsupported language (%s)', $locale)
-                );
-        }
-    }
-
-    private function getNameNl(
-        IdentityProvider $identityProvider,
-        AdditionalInfo $additionalLogInfo
-    ) {
-        if ($identityProvider->getMdui()->hasDisplayName('nl')) {
-            return $identityProvider->getMdui()->getDisplayName('nl');
-        }
-
-        if ($identityProvider->nameNl) {
-            return $identityProvider->nameNl;
-        }
-
-        EngineBlock_ApplicationSingleton::getLog()->notice(
-            'No NL displayName and name found for idp: ' . $identityProvider->entityId,
-            array('additional_info' => $additionalLogInfo->toArray())
-        );
-
-        return $identityProvider->entityId;
-    }
-
-    private function getNameEn(
-        IdentityProvider $identityProvider,
-        AdditionalInfo $additionalInfo
-    ) {
-        if ($identityProvider->getMdui()->hasDisplayName('en')) {
-            return $identityProvider->getMdui()->getDisplayName('en');
-        }
-
-        if ($identityProvider->nameEn) {
-            return $identityProvider->nameEn;
-        }
-
-        EngineBlock_ApplicationSingleton::getLog()->notice(
-            'No EN displayName and name found for idp: ' . $identityProvider->entityId,
-            array('additional_info' => $additionalInfo->toArray())
-        );
-
-        return $identityProvider->entityId;
-    }
-
-    private function getNamePt(
-        IdentityProvider $identityProvider,
-        AdditionalInfo $additionalInfo
-    ) {
-        if ($identityProvider->getMdui()->hasDisplayName('pt')) {
-            return $identityProvider->getMdui()->getDisplayName('pt');
-        }
-
-        if ($identityProvider->namePt) {
-            return $identityProvider->namePt;
-        }
-
-        EngineBlock_ApplicationSingleton::getLog()->notice(
-            'No PT displayName and name found for idp: ' . $identityProvider->entityId,
-            array('additional_info' => $additionalInfo->toArray())
-        );
-
-        return $identityProvider->entityId;
-    }
-
-    private function getKeywords(string $locale, IdentityProvider $identityProvider)
-    {
-        if ($identityProvider->getMdui()->hasKeywords($locale)) {
-            return explode(' ', $identityProvider->getMdui()->getKeywords($locale));
-        }
-
-        // Fall back to EN if current language has no keywords
-        if ($identityProvider->getMdui()->hasKeywords('en')) {
-            return explode(' ', $identityProvider->getMdui()->getKeywords('en'));
-        }
-
-        return 'Undefined';
     }
 
     /**
