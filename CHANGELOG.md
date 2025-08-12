@@ -22,7 +22,7 @@ New Features:
   * Discovery support for WAYF (#1800)
   * Add configurable client timeout fopr AA and PDP (#1797)
 
-**Bugfixes:**
+Bugfixes:
   * Add explicit IdP signing key feedback  (#1803)
   * Add in flight authentication limit
   * Use assertion id for session index (#1794)
