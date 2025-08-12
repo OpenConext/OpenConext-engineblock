@@ -5,6 +5,39 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.15.4
+New Features:
+* Allow configurable user attributes for Stepup (#1828)
+
+Bugfixes:
+  * Prevent Stepup user attributes filtered by ARP  (#1850)
+  * Remove trailing slash on void elements
+  * Decode entityID from json.stringify
+  * Set width of debug page to browser width
+
+## 6.17.0
+New Features:
+  * Add configurable default RequestedAuthnContext (#1791)
+  * Read & store metadata coin collab_enabled (#1804)
+  * Discovery support for WAYF (#1800)
+  * Add configurable client timeout fopr AA and PDP (#1797)
+
+**Bugfixes:**
+  * Add explicit IdP signing key feedback  (#1803)
+  * Add in flight authentication limit
+  * Use assertion id for session index (#1794)
+  * Handle metadata push assembler exceptions (#1783)
+  * Improve handling of PDP timeout error (#1787)
+  * Improve IDP debug email (#1788)
+  * Make content container slightly wider (#1784)
+
+## 6.15.4
+Maintenance:
+  * Fix composer lockfile (#1785)
+  * Add qa tooling helper scripts and drop Ant build.xml (#1781)
+  * Update Devconf installation and docs (#1781)
+  * Remove confusing key_id from stepup callout logging
+
 ## 6.15.3
 Maintenance:
   * Upgrade saml2 library
