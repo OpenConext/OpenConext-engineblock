@@ -3,7 +3,7 @@ version: '2.4'
 services:
 
     mariadb:
-        image: mariadb:10.2
+        image: mariadb:10.6
         restart: always
         container_name: eb-db-test
         environment:
@@ -26,6 +26,9 @@ services:
             # override this in a dedicated dockerfile per php version
             # dockerfile: docker/ci/Dockerfile
         container_name: eb-phpfpm
+# Local debugging
+#        ports:
+#            - 443:443
         volumes:
             - ../:/var/www/html
             - ../ci/qa-config/files/engine.dev.openconext.local.crt:/config/engine/engineblock.crt
@@ -35,30 +38,29 @@ services:
                 condition: service_healthy
         environment:
           APP_ENV: ci
-          SYMFONY_ENV: ci
+          APP_SECRET: secret
+          APP_DEBUG: false
 
-    selenium.dev.openconext.local:
-        image: selenium/standalone-chrome:2.53.1
-        container_name: eb-selenium
-        user: "${UID}:${GID}"
+    chrome.dev.openconext.local:
+        image: alpeware/chrome-headless-trunk
+        ports:
+            - 9222:9222
         environment:
-            START_XVFB: "false"
+            - CHROME_OPTS=--ignore-certificate-errors --window-size=1920,1080 --ignore-ssl-errors
         volumes:
-            - /dev/shm:/dev/shm
-        healthcheck:
-            test: ["CMD", "/opt/bin/check-grid.sh:", "--host", "0.0.0.0", "--port", "4444"]
-            timeout: 30s
-            retries: 5
-            interval: 15s
+            - /tmp/chromedata/:/data
 
+#   Remove commands for local X11 debugging
     cypress:
         image: "cypress/included:13.1.0"
         environment:
             - CYPRESS_baseUrl=https://engine.dev.openconext.local
-        working_dir: /e2e
+#            - DISPLAY=${DISPLAY}
+        working_dir: /e2e/
         entrypoint: cypress open --project .
         volumes:
-            - ../tests:/e2e
+#            - /tmp/.X11-unix:/tmp/.X11-unix
+            - ../tests/e2e:/e2e
             - ../theme:/theme
 
 volumes:

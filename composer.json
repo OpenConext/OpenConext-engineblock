@@ -1,6 +1,7 @@
 {
     "name": "openconext/engineblock",
     "description": "OpenConext SAML proxy",
+    "version": "7.0.0-dev",
     "type": "project",
     "keywords": [
         "saml",
@@ -15,16 +16,16 @@
         "source": "https://github.com/OpenConext/OpenConext-engineblock"
     },
     "require": {
-        "php": "~7.2",
+        "php": "^7.2.5",
         "ext-dom": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",
         "beberlei/assert": "^2.6",
         "composer/package-versions-deprecated": "^1.11",
-        "doctrine/doctrine-bundle": "^1.11",
-        "doctrine/doctrine-migrations-bundle": "^1.3",
-        "doctrine/orm": "~2.6",
+        "doctrine/doctrine-bundle": "^2.5.7",
+        "doctrine/doctrine-migrations-bundle": "^3.2.5",
+        "doctrine/orm": "^2.20.5",
         "guzzlehttp/guzzle": "^6.3",
         "incenteev/composer-parameter-handler": "~2.0",
         "monolog/monolog": "~1.13",
@@ -32,24 +33,35 @@
         "openconext/saml-value-object": "^1.3",
         "pimple/pimple": "~2.1",
         "ramsey/uuid": "^3.3.0",
-        "sensio/framework-extra-bundle": "^3.0",
-        "sensio/generator-bundle": "^3.0",
+        "sensio/framework-extra-bundle": "^5.0",
         "simplesamlphp/saml2": "4.17.*",
-        "swiftmailer/swiftmailer": "^5.4",
-        "symfony/monolog-bundle": "^3.1.0",
-        "symfony/swiftmailer-bundle": "^2.6",
-        "symfony/symfony": "3.4.*",
-        "twig/extensions": "^1.5",
-        "twig/twig": "^2.0"
+        "swiftmailer/swiftmailer": "^6.0",
+        "symfony/asset": "^4.4",
+        "symfony/console": "^4.4",
+        "symfony/dotenv": "^4.4",
+        "symfony/expression-language": "^4.4",
+        "symfony/flex": "^1.17",
+        "symfony/form": "^4.4",
+        "symfony/framework-bundle": "^4.4",
+        "symfony/monolog-bundle": "^3.5",
+        "symfony/security-bundle": "^4.4",
+        "symfony/swiftmailer-bundle": "^3.0",
+        "symfony/templating": "4.4.*",
+        "symfony/translation": "^4.4",
+        "symfony/twig-bundle": "^4.4",
+        "symfony/validator": "^4.4",
+        "symfony/yaml": "^4.4",
+        "twig/twig": "^v3.11.3"
     },
     "require-dev": {
         "ext-zlib": "*",
         "behat/behat": "~3.7.0",
         "behat/mink": "~1.7",
-        "behat/mink-extension": "~2.0",
         "behat/mink-goutte-driver": "~1.0",
-        "behat/mink-selenium2-driver": "^1.3",
-        "behat/symfony2-extension": "~2.0",
+        "dmore/behat-chrome-extension": "^1.4",
+        "dmore/chrome-mink-driver": "^2.9",
+        "friends-of-behat/mink-extension": "^2.5",
+        "friends-of-behat/symfony-extension": "^2.1",
         "ingenerator/behat-tableassert": "^1.1",
         "league/flysystem": "^2.5",
         "liip/functional-test-bundle": "^4.3",
@@ -60,7 +72,10 @@
         "phpmd/phpmd": "^2.13",
         "phpunit/phpunit": "^8.5",
         "squizlabs/php_codesniffer": "^3.7",
-        "symfony/phpunit-bridge": "^3.0"
+        "symfony/debug-bundle": "4.4.*",
+        "symfony/phpunit-bridge": "^6.4",
+        "symfony/var-dumper": "4.4.*",
+        "symfony/web-profiler-bundle": "4.4.*"
     },
     "replace": {
         "symfony/polyfill-mbstring": "1.99",
@@ -69,6 +84,10 @@
         "symfony/polyfill-php56": "1.99"
     },
     "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
         ],
@@ -89,8 +108,7 @@
             "OpenConext\\": "src/OpenConext"
         },
         "classmap": [
-            "app/AppKernel.php",
-            "app/AppCache.php"
+            "src/Kernel.php"
         ]
     },
     "autoload-dev": {
@@ -100,31 +118,30 @@
                 "tests/integration/OpenConext/",
                 "tests/functional/OpenConext/"
             ]
-        },
-        "files": [
-            "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php"
-        ]
+        }
     },
     "config": {
         "optimize-autoloader": true,
         "platform": {
-            "php": "7.2"
+            "php": "7.2.5"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "symfony/flex": true
+        }
     },
     "extra": {
-        "symfony-app-dir": "app",
-        "symfony-var-dir": "app",
-        "symfony-bin-dir": "app",
-        "symfony-web-dir": "web",
-        "incenteev-parameters": [
-            {
-                "file": "app/config/parameters.yml"
-            },
-            {
-                "file": "app/config/functional_testing.yml"
-            }
-        ]
+        "symfony": {
+            "allow-contrib": false,
+            "require": "4.4.*"
+        },
+        "symfony-var-dir": "var",
+        "symfony-bin-dir": "bin",
+        "symfony-web-dir": "public",
+        "incenteev-parameters": {
+            "file": "config/packages/parameters.yml",
+            "dist-file": "config/packages/parameters.yml.dist"
+        }
     },
     "archive": {
         "exclude": [

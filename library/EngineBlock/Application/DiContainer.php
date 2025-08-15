@@ -27,6 +27,7 @@ use OpenConext\EngineBlock\Stepup\StepupEntityFactory;
 use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
+use Twig\Environment;
 
 class EngineBlock_Application_DiContainer extends Pimple
 {
@@ -69,7 +70,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getAuthenticationLogger()
     {
-        return $this->container->get('engineblock.bridge.authentication_logger_adapter');
+        return $this->container->get('OpenConext\EngineBlockBridge\Logger\AuthenticationLoggerAdapter');
     }
 
     /**
@@ -117,7 +118,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getAttributeAggregationClient()
     {
-        return $this->container->get('engineblock.attribute_aggregation.client');
+        return $this->container->get('OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClient');
     }
 
     /**
@@ -125,7 +126,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getMetadataRepository()
     {
-        return $this->container->get('engineblock.metadata.repository.cached_doctrine');
+        return $this->container->get('OpenConext\EngineBlock\Metadata\MetadataRepository\CachedDoctrineMetadataRepository');
     }
 
     /**
@@ -133,7 +134,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getUserDirectory()
     {
-        return $this->container->get('engineblock.bridge.authentication.user_directory');
+        return $this->container->get('OpenConext\EngineBlockBridge\Authentication\Repository\UserDirectoryAdapter');
     }
 
     /**
@@ -141,7 +142,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getFeatureConfiguration()
     {
-        return $this->container->get('engineblock.features');
+        return $this->container->get('OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration');
     }
 
     /**
@@ -149,7 +150,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getAuthenticationLoopGuard()
     {
-        return $this->container->get('engineblock.authentication.authentication_loop_guard');
+        return $this->container->get('OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard');
     }
 
     /**
@@ -157,7 +158,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getConsentService()
     {
-        return $this->container->get('engineblock.service.consent');
+        return $this->container->get('OpenConext\EngineBlock\Service\ConsentService');
     }
 
     /**
@@ -165,7 +166,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getTimeProvider()
     {
-        return $this->container->get('engineblock.service.time_provider');
+        return $this->container->get('OpenConext\EngineBlock\Service\TimeProvider\TimeProvider');
     }
 
     /**
@@ -308,7 +309,7 @@ class EngineBlock_Application_DiContainer extends Pimple
 
     public function getPdpClient()
     {
-        return $this->container->get('engineblock.pdp.pdp_client');
+        return $this->container->get('OpenConext\EngineBlockBundle\Pdp\PdpClient');
     }
 
     public function getPdpClientId()
@@ -326,7 +327,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getLocaleProvider()
     {
-        return $this->container->get('engineblock.locale_provider');
+        return $this->container->get('OpenConext\EngineBlockBundle\Localization\LocaleProvider');
     }
 
     /**
@@ -342,7 +343,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getUrlProvider()
     {
-        return $this->container->get('engineblock.url_provider');
+        return $this->container->get('OpenConext\EngineBlockBundle\Url\UrlProvider');
     }
 
     /**
@@ -374,7 +375,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getStepupGatewayCallOutHelper()
     {
-        return $this->container->get('engineblock.service.stepup.gateway_callout_helper');
+        return $this->container->get('OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper');
     }
 
 
@@ -383,7 +384,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getServiceProviderFactory()
     {
-        return $this->container->get('engineblock.factory.service_provider_factory');
+        return $this->container->get('OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory');
     }
 
     /**
@@ -391,7 +392,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getLoaRepository()
     {
-        return $this->container->get('engineblock.configuration.stepup.loa_repository');
+        return $this->container->get('OpenConext\EngineBlock\Metadata\LoaRepository');
     }
 
     /**
@@ -403,7 +404,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return Twig_Environment
+     * @return Environment
      */
     public function getTwigEnvironment()
     {
@@ -431,7 +432,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getAcsLocationSchemeValidator()
     {
-        return $this->container->get('engineblock.validator.allowed_scheme_validator');
+        return $this->container->get('OpenConext\EngineBlock\Validator\AllowedSchemeValidator');
     }
 
     /**
@@ -452,7 +453,7 @@ class EngineBlock_Application_DiContainer extends Pimple
 
     public function getAuthenticationStateHelper()
     {
-        return $this->container->get('engineblock.service.authentication_state_helper');
+        return $this->container->get('OpenConext\EngineBlock\Service\AuthenticationStateHelper');
     }
 
     /**
@@ -460,7 +461,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getProcessingStateHelper()
     {
-        return $this->container->get('engineblock.service.processing_state_helper');
+        return $this->container->get('OpenConext\EngineBlock\Service\ProcessingStateHelper');
     }
 
     /**
@@ -468,12 +469,12 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getDiscoverySelectionService()
     {
-        return $this->container->get('engineblock.service.discovery_selection_service');
+        return $this->container->get('OpenConext\EngineBlockBundle\Service\DiscoverySelectionService');
     }
 
     public function getMfaHelper(): MfaHelperInterface
     {
-        return $this->container->get('engineblock.service.mfa_helper');
+        return $this->container->get('OpenConext\EngineBlock\Service\MfaHelper');
     }
 
     /**
@@ -535,7 +536,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     /** @return \OpenConext\EngineBlock\Stepup\StepupEndpoint $stepupEndpoint */
     protected function getStepupEndpoint()
     {
-        return $this->container->get('engineblock.configuration.stepup.endpoint');
+        return $this->container->get('OpenConext\EngineBlock\Stepup\StepupEndpoint');
     }
 
     /** @return string */
@@ -560,7 +561,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getCookieService()
     {
-        return $this->container->get('engineblock.service.cookie');
+        return $this->container->get('OpenConext\EngineBlock\Service\CookieService');
     }
 
     /**
@@ -568,7 +569,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getSsoSessionService()
     {
-        return $this->container->get('engineblock.service.sso_session');
+        return $this->container->get('OpenConext\EngineBlock\Service\SsoSessionService');
     }
 
     /**
@@ -576,7 +577,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getSsoNotificationService()
     {
-        return $this->container->get('engineblock.service.sso_notification');
+        return $this->container->get('OpenConext\EngineBlock\Service\SsoNotificationService');
     }
 
     /**

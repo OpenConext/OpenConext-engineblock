@@ -1,0 +1,78 @@
+services:
+    _defaults:
+        public: true
+
+    OpenConext\EngineBlockBundle\Controller\ServiceProviderController:
+        arguments:
+            - '@engineblock.compat.application'
+            - '@session'
+            - '@OpenConext\EngineBlock\Validator\AcsRequestValidator'
+            - '@OpenConext\EngineBlock\Validator\SamlBindingValidator'
+            - '@OpenConext\EngineBlock\Validator\SamlResponseValidator'
+
+    OpenConext\EngineBlockBundle\Controller\IdentityProviderController:
+        arguments:
+            - '@engineblock.compat.application'
+            - '@twig'
+            - '@engineblock.compat.logger'
+            - '@OpenConext\EngineBlock\Service\RequestAccessMailer'
+            - '@OpenConext\EngineBlock\Validator\SsoRequestValidator'
+            - '@OpenConext\EngineBlock\Validator\SamlBindingValidator'
+            - '@OpenConext\EngineBlock\Validator\UnsolicitedSsoRequestValidator'
+            - '@OpenConext\EngineBlock\Service\AuthenticationStateHelper'
+            - '@OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration'
+
+    OpenConext\EngineBlockBundle\Controller\IndexController:
+        arguments:
+            - '@twig'
+            - '%encryption_keys%'
+
+    OpenConext\EngineBlockBundle\Controller\FeedbackController:
+        arguments:
+            - '@translator'
+            - '@twig'
+            - '@engineblock.compat.logger'
+
+    OpenConext\EngineBlockBundle\Controller\MetadataController:
+        arguments:
+            - '@OpenConext\EngineBlock\Xml\MetadataProvider'
+            - '@OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration'
+
+    OpenConext\EngineBlockBundle\Controller\CertificateController:
+        arguments:
+            - '@engineblock.compat.application'
+
+    OpenConext\EngineBlockBundle\Controller\DebugController:
+        arguments:
+            - '@engineblock.compat.application'
+            - '@session'
+
+    OpenConext\EngineBlockBundle\Controller\WayfController:
+        arguments:
+            - '@engineblock.compat.application'
+            - '@twig'
+            - '@OpenConext\EngineBlock\Service\SsoSessionService'
+            - '@OpenConext\EngineBlockBundle\Service\DiscoverySelectionService'
+            - '@engineblock.compat.logger'
+
+    OpenConext\EngineBlockBundle\Controller\ProxyController:
+        arguments:
+            - '@engineblock.compat.application'
+
+    OpenConext\EngineBlockBundle\Controller\StepupController:
+        arguments:
+            - '@engineblock.compat.application'
+            - '@session'
+            - '@OpenConext\EngineBlock\Validator\AcsRequestValidator'
+            - '@OpenConext\EngineBlock\Validator\SamlBindingValidator'
+            - '@OpenConext\EngineBlock\Validator\SamlResponseValidator'
+
+    OpenConext\EngineBlockBundle\Controller\LogoutController:
+        arguments:
+            - '@twig'
+            - '@OpenConext\EngineBlock\Service\SsoSessionService'
+
+    OpenConext\EngineBlock\Service\RequestAccessMailer:
+        arguments:
+            - '@mailer'
+            - '%email_request_access_address%'

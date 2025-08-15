@@ -28,6 +28,7 @@ use SAML2\AuthnRequest;
 use SAML2\Response;
 use SAML2\XML\saml\Issuer;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Environment;
 
 class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
@@ -42,7 +43,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
     protected $_xmlConverter;
 
     /**
-     * @var Twig_Environment
+     * @var Environment
      */
     protected $twig;
 
@@ -59,7 +60,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
-        Twig_Environment $twig,
+        Environment $twig,
         ServiceProviderFactory $serviceProviderFactory,
         DiscoverySelectionService $discoverySelectionService
     ) {

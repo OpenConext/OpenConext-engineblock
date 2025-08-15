@@ -1,0 +1,14 @@
+# Only use dev toolbar locally as cypress test fail when adding toolbar, because of invalid HTML syntax
+#
+#web_profiler:
+#    toolbar: true
+#    intercept_redirects: false
+#
+#framework:
+#    profiler: { only_exceptions: false }
+web_profiler:
+    toolbar: false
+    intercept_redirects: false
+
+framework:
+    profiler: { collect: false }

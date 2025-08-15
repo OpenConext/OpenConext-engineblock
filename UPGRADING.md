@@ -1,7 +1,72 @@
 # UPGRADE NOTES
 
+## 7.0.0
+Upgraded Symfony from **version 3.3** to **version 4.4 (LTS)**.
+This update brings modernized architecture, performance improvements, enhanced developer experience, and long-term support till November 2023.
+
+### Directory Structure Overhaul - technical changes:
+- The `app/` directory has been replaced with `config/` and `src/`
+- All configuration files now reside under [config/](config), organized by environment
+- Application configuration resides in [config/packages](config/packages)
+- The console has moved form `app/console` to [bin/console](bin/console)
+- Database migrations have moved to [migrations/](migrations)
+- `AppKernel` has been replaced with [Kernel](src/Kernel.php)
+- Logs has moved from `app/logs` to [var/log](var/log)
+- cache has moved from `app/cache` to [var/cache](var/cache)
+- The public access folder has changed from `web/` to [public/](public)
+- The entry point has changed from `app.php` to [index.php](public/index.php)
+- Some environment variables have changed.
+- [index.php](public/index.php) has been updated to load based on environment variables and has some additional environment variables checks.
+- All configurations injections from inside `src/` has been moved to `config/`
+
+### ⚠️ Breaking Changes - Configurational adjustments required:
+
+#### New public folder
+Replace `web/` with `public/`. Ensure the folder `public/` is accessible and your php webservice is pointing to `public/index.php`. In apache this would mean:
+
+```shell
+DocumentRoot /var/www/html/public
+<Directory "/var/www/html/public">
+    Require all granted
+    Options -MultiViews
+    RewriteEngine On
+    RewriteBase /
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</Directory>
+```
+
+#### Configuration
+1. **Any** configuration parameters should be mapped to a different folder location inside `config/`.
+Most likely the only change will be `app/config/parameters.yml` to `config/packages/[env]/parameters.yml`
+2. Overwriting the `config/packages/parameters.yml` will still work however, using the correct environment package is encouraged.
+3. The value 'secret' in the parameters.yml is no longer used. Instead you should set `APP_SECRET` as an
+environment variable:
+<br>
+Length: While Symfony doesn’t enforce a strict length, at least 32 bytes (64 hex characters) is recommended for strong security. Uniqueness: Each application instance should have its own unique secret. Reusing secrets across projects or environments is discouraged
+4. Remove the following environment variables:
+   - `ENGINEBLOCK_ENV`
+   - `SYMFONY_ENV`
+5. Add the following environment variables:
+   - `APP_ENV` set for the correct env. See [README](README.md#configure-http-server)
+   - `APP_SECRET`
+   - `APP_DEBUG` set to true to enable debug mode.
+
+Example `.env`
+```shell
+APP_ENV=prod
+APP_DEBUG=false
+APP_SECRET=04d8ec52d3fd4eb9a8f5d4c69d82cfaec39f764af74b223c44e1ba9574b4b3d6
+```
+
+Note:
+<br>
+See [apache2.conf](docker/ci/apache2.conf) and [docker-compose.yml](docker/docker-compose.yml) as an example.
+<br>
+See The changes in [https://github.com/OpenConext/OpenConext-devconf/compare/main...feature/sf_upgrade_44](https://github.com/OpenConext/OpenConext-devconf/compare/main...feature/sf_upgrade_44) as an example
+
 ## 6.13 -> 6.14
-Previously the SAML EntityID of the EngineBlock SP that was used to do Stepup (SFO) authentications to the Stepup-Gateway 
+Previously the SAML EntityID of the EngineBlock SP that was used to do Stepup (SFO) authentications to the Stepup-Gateway
 always was https://<engineblock.sever.domain.name>/authentication/stepup/metadata. For these authentication the default
 EngineBlock key is always used for signing.
 
@@ -39,7 +104,7 @@ application will result in the soft deletion of the consent row for that person,
 consent removal of.
 
 In order to work with this feature, the latest database migration must be installed on your database(s) containing the
-`consent` table. This should be as simple as running `app/console doctrine:migrations:migrate`. Or executing
+`consent` table. This should be as simple as running `bin/console doctrine:migrations:migrate`. Or executing
 `Version20220425090852` manually.
 
 ## 6.2 > 6.3
@@ -457,7 +522,7 @@ database.dbname = engineblock
 
 When a master/slave setup is still required, this can be configured by creating a `config_local.yml` in `app/config`.
 This file will be loaded automatically if present and will allow overriding any configuration present. Do note that in
-order to be able to load the file `app/console cache:clear --env={current_env_as_in_vhost}` must be executed once.
+order to be able to load the file `bin/console cache:clear --env={current_env_as_in_vhost}` must be executed once.
 More information on how to configure Doctrine can be found in [the bundle documentation][doct1] and the [configuration
 reference documentation][doct2]. Before considering using a master/slave setup, please review [this documentation][doct3]
 as to when a master or slave is used for a connection.

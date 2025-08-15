@@ -1,4 +1,4 @@
-{% spaceless %}
+{% apply spaceless %}
 <!-- {{ 'openconext_terms_of_use_url'|trans }} -->
 <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="{{ id }}" entityID="{{ metadata.entityId }}" validUntil="{{ validUntil }}">
     <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
@@ -30,4 +30,4 @@
     {% endif %}
 
 </md:EntityDescriptor>
-{% endspaceless %}
+{% endapply %}

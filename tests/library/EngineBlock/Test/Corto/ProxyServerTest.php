@@ -22,6 +22,7 @@ use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepositor
 use PHPUnit\Framework\TestCase;
 use SAML2\AuthnRequest;
 use Surfnet\SamlBundle\Signing\KeyPair;
+use Twig\Environment;
 
 /**
  * Note: this Test only tests setting of NameIDFormat, add other tests if required
@@ -30,7 +31,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    public function testNameIDFormatIsNotSetByDefault()
+    public function testDefaultNameIDPolicy()
     {
         $proxyServer = $this->factoryProxyServer();
 
@@ -44,40 +45,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
         );
 
         $nameIdPolicy = $enhancedRequest->getNameIdPolicy();
-
-        $this->assertNotContains(
-            'Format',
-            array_keys($nameIdPolicy),
-            'The NameIDPolicy should not contain the key "Format"',
-            false,
-            true,
-            true
-        );
-    }
-
-    public function testAllowCreateIsSet()
-    {
-        $proxyServer = $this->factoryProxyServer();
-
-        $originalRequest = $this->factoryOriginalRequest();
-        $identityProvider = $proxyServer->getRepository()->fetchIdentityProviderByEntityId('testIdp');
-        /** @var AuthnRequest $enhancedRequest */
-        $enhancedRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
-            $originalRequest,
-            $identityProvider,
-            $proxyServer
-        );
-
-        $nameIdPolicy = $enhancedRequest->getNameIdPolicy();
-
-        $this->assertContains(
-            'AllowCreate',
-            array_keys($nameIdPolicy),
-            'The NameIDPolicy should contain the key "AllowCreate"',
-            false,
-            true,
-            true
-        );
+        $this->assertSame(['AllowCreate' => true], $nameIdPolicy);
     }
 
     public function testNameIDFormatIsSetFromRemoteMetaData()
@@ -150,7 +118,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
 
     private function factoryProxyServer()
     {
-        $twig = Mockery::mock(Twig_Environment::class);
+        $twig = Mockery::mock(Environment::class);
         $proxyServer = new EngineBlock_Corto_ProxyServer($twig);
 
         $proxyServer->setRepository(new InMemoryMetadataRepository(

@@ -4,14 +4,14 @@
         {{ 'wayf_your_accounts'|trans }}
     </h2>
     <input type="checkbox" name="previousSelectionToggle" id="previousSelectionToggle" class="visually-hidden previousSelection__toggle" tabindex="-1" role="button" aria-pressed="false">
-    {% spaceless %}
+    {% apply spaceless %}
     <div class="ie11__label">
         <label for="previousSelectionToggle" tabindex="0" class="previousSelection__toggleLabel">
             <span class="previousSelection__edit">{{ 'edit'|trans }}</span>
             <span class="previousSelection__done">{{ 'done'|trans }}</span>
         </label>
     </div>
-    {% endspaceless %}
+    {% endapply %}
     <template id="deleteButton">
         {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpDeleteDisable.html.twig' with { delete: true, idp: { connected: true} }%}
     </template>

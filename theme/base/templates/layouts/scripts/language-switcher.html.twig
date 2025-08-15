@@ -15,11 +15,11 @@
     </form>
     {% else %}
         <ul class="comp-language{% if className is defined %} {{ className }}{% endif %}">
-            {% for locale in supportedLocales() %}{% spaceless %}
+            {% for locale in supportedLocales() %}{% apply spaceless %}
             <li>
                 <a{% if currentLanguage == locale %} class="selected"{% endif %} href="{{ queryStringFor(locale)|escape('html_attr') }}">{{ locale | upper}}</a>
             </li>
-            {% endspaceless %}{% endfor %}
+            {% endapply %}{% endfor %}
         </ul>
     {% endif %}
 {% endmacro form %}

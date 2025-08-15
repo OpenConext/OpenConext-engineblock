@@ -1,0 +1,50 @@
+services:
+    _defaults:
+        public: true
+
+    engineblock.functional_test.controller.identity_provider:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\IdentityProviderController
+        arguments:
+            - '@engineblock.mock_entities.idp_registry'
+            - '@engineblock.mock_entities.saml_response_factory'
+
+    engineblock.functional_test.controller.service_provider:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\ServiceProviderController
+        arguments:
+            - '@engineblock.mock_entities.sp_registry'
+            - '@engineblock.functional_testing.service.engine_block'
+
+    engineblock.functional_test.controller.wayf:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\WayfController
+        arguments:
+            - '@twig'
+
+    engineblock.functional_test.controller.feedback:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\FeedbackController
+        arguments:
+            - '@translator'
+            - '@twig'
+            - '@engineblock.compat.logger'
+
+    engineblock.functional_test.controller.consent:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\ConsentController
+        arguments:
+            - '@twig'
+
+    engineblock.functional_test.controller.stepup_mock:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\StepupMockController
+        arguments:
+            - '@engineblock.mock_clients.mock_stepup_gateway'
+            - '@twig'
+
+    OpenConext\EngineBlockBundle\Controller\IdentityProviderController:
+        arguments:
+            - '@engineblock.compat.application'
+            - '@twig'
+            - '@engineblock.compat.logger'
+            - '@OpenConext\EngineBlock\Service\RequestAccessMailer'
+            - '@OpenConext\EngineBlockFunctionalTestingBundle\Validator\SsoRequestValidator'
+            - '@OpenConext\EngineBlock\Validator\SamlBindingValidator'
+            - '@OpenConext\EngineBlock\Validator\UnsolicitedSsoRequestValidator'
+            - '@OpenConext\EngineBlock\Service\AuthenticationStateHelper'
+            - '@engineblock.functional_testing.fixture.features'

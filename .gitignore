@@ -1,29 +1,42 @@
-/build
-/vendor/
-/www/authentication/generated/
-bin/ignore_me.php
-/web/bundles
-/web/app_dev.php
-/web/javascripts/*
-/web/stylesheets/*
-/web/images/*
-/web/fonts/*
-!/web/fonts/.gitkeep
-/app/cache
-/app/logs
-/app/SymfonyRequirements.php
-/app/check.php
-/tmp/
-/app/config/functional_testing.yml
-/app/config/parameters.yml
-/app/config/config_local.yml
+config/packages/parameters.yml
+
+var/cache/*
+var/log/*
+!var/cache/.gitkeep
+!var/log/.gitkeep
+
+public/fonts
+public/images
+public/javascripts
+public/stylesheets
+
+theme/node_modules
+vendor
+
+tests/.phpunit.result.cache
+tests/e2e/node_modules
+
+coverage.xml
+
 .idea
-local-php-security-checker
-/tests/e2e/node_modules
-/tests/.phpunit.result.cache
-/languages/overrides.*.php
-/theme/node_modules
-/theme/.sass-cache
-/theme/**/visual-regression/screenshots/*
-!/theme/**/visual-regression/screenshots/.gitkeep
-/theme/**/__image_snapshots__
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###

@@ -24,8 +24,9 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
-use Twig_Environment;
+use Twig\Environment;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Mimics the previous methodology, will be refactored
@@ -40,7 +41,7 @@ class FeedbackController
     private $translator;
 
     /**
-     * @var Twig_Environment
+     * @var Environment
      */
     private $twig;
 
@@ -51,7 +52,7 @@ class FeedbackController
 
     public function __construct(
         TranslatorInterface $translator,
-        Twig_Environment $twig,
+        Environment $twig,
         LoggerInterface $logger
     ) {
         $this->translator = $translator;
@@ -64,8 +65,11 @@ class FeedbackController
     }
 
     /**
-     * @return Response
-     * @throws \EngineBlock_Exception
+     * @Route(
+     *     "/authentication/feedback/unable-to-receive-message",
+     *     name="authentication_feedback_unable_to_receive_message",
+     *     methods={"GET"}
+     * )
      */
     public function unableToReceiveMessageAction()
     {
@@ -75,6 +79,9 @@ class FeedbackController
         );
     }
 
+    /**
+     * @Route("/feedback/unknown-error", name="feedback_unknown_error", methods={"GET"})
+     */
     public function unknownErrorAction()
     {
         return new Response(
@@ -83,9 +90,9 @@ class FeedbackController
         );
     }
 
+
     /**
-     * @return Response
-     * @throws \EngineBlock_Exception
+     * @Route("/authentication/feedback/session-lost", name="authentication_feedback_session_lost", methods={"GET"})
      */
     public function sessionLostAction()
     {
@@ -93,8 +100,7 @@ class FeedbackController
     }
 
     /**
-     * @return Response
-     * @throws \EngineBlock_Exception
+     * @Route("/authentication/feedback/session-not-started", name="authentication_feedback_session_not_started", methods={"GET"})
      */
     public function sessionNotStartedAction()
     {
@@ -102,8 +108,7 @@ class FeedbackController
     }
 
     /**
-     * @return Response
-     * @throws \EngineBlock_Exception
+     * @Route("/authentication/feedback/no-idps", name="authentication_feedback_no_idps", methods={"GET"})
      */
     public function noIdpsAction()
     {
@@ -113,8 +118,7 @@ class FeedbackController
     }
 
     /**
-     * @return Response
-     * @throws \EngineBlock_Exception
+     * @Route("/authentication/feedback/invalidAcsLocation", name="authentication_feedback_invalid_acs_location", methods={"GET"})
      */
     public function invalidAcsLocationAction()
     {
@@ -125,9 +129,11 @@ class FeedbackController
     }
 
     /**
-     * @param Request $request
-     * @return Response
-     * @throws \EngineBlock_Exception
+     * @Route(
+     *     "/authentication/feedback/unsupportedSignatureMethod",
+     *     name="authentication_feedback_unsupported_signature_method",
+     *     methods={"GET"}
+     * )
      */
     public function unsupportedSignatureMethodAction(Request $request)
     {
@@ -144,8 +150,11 @@ class FeedbackController
     }
 
     /**
-     * @return Response
-     * @throws \EngineBlock_Exception
+     * @Route(
+     *     "/authentication/feedback/unsupported-acs-location-scheme",
+     *     name="authentication_feedback_unsupported_acs_location_uri_scheme",
+     *     methods={"GET"}
+     * )
      */
     public function unsupportedAcsLocationSchemeAction()
     {
@@ -158,10 +167,13 @@ class FeedbackController
         );
     }
 
+
     /**
-     * @param Request $request
-     * @return Response
-     * @throws \EngineBlock_Exception
+     * @Route(
+     *     "/authentication/feedback/unknown-service-provider",
+     *     name="authentication_feedback_unknown_service_provider",
+     *     methods={"GET"}
+     * )
      */
     public function unknownServiceProviderAction(Request $request)
     {
@@ -182,9 +194,11 @@ class FeedbackController
     }
 
     /**
-     * @param Request $request
-     * @return Response
-     * @throws \EngineBlock_Exception
+     * @Route(
+     *     "/authentication/feedback/unknown-identity-provider",
+     *     name="authentication_feedback_unknown_identity_provider",
+     *     methods={"GET"}
+     * )
      */
     public function unknownIdentityProviderAction(Request $request)
     {
@@ -202,9 +216,11 @@ class FeedbackController
     }
 
     /**
-     * @param Request $request
-     * @return Response
-     * @throws \EngineBlock_Exception
+     * @Route(
+     *     "/authentication/feedback/unknown-signing-key",
+     *     name="authentication_feedback_unknown_signing_key",
+     *     methods={"GET"}
+     * )
      */
     public function unknownSigningKeyAction(Request $request)
     {
@@ -214,9 +230,13 @@ class FeedbackController
         );
     }
 
+
     /**
-     * @return Response
-     * @throws \EngineBlock_Exception
+     * @Route(
+     *     "/authentication/feedback/missing-required-fields",
+     *     name="authentication_feedback_missing_required_fields",
+     *     methods={"GET"}
+     * )
      */
     public function missingRequiredFieldsAction()
     {
@@ -227,7 +247,11 @@ class FeedbackController
     }
 
     /**
-     * @return Response
+     * @Route(
+     *     "/authentication/feedback/authn-context-class-ref-blacklisted",
+     *     name="authentication_authn_context_class_ref_blacklisted",
+     *     methods={"GET"}
+     * )
      */
     public function authnContextClassRefBlacklistedAction()
     {
@@ -239,7 +263,11 @@ class FeedbackController
 
 
     /**
-     * @return Response
+     * @Route(
+     *     "/authentication/feedback/invalid-mfa-authn-context-class-ref",
+     *     name="authentication_invalid_mfa_authn_context_class_ref",
+     *     methods={"GET"}
+     * )
      */
     public function invalidMfAuthnContextClassRefAction()
     {
@@ -249,9 +277,9 @@ class FeedbackController
         );
     }
 
+
     /**
-     * @param Request $request
-     * @return Response
+     * @Route("/authentication/feedback/invalid-attribute-value", name="authentication_feedback_invalid_attribute_value", methods={"GET"})
      */
     public function invalidAttributeValueAction(Request $request)
     {
@@ -272,6 +300,13 @@ class FeedbackController
         );
     }
 
+    /**
+     * @Route(
+     *     "/authentication/feedback/metadata-entity-not-found",
+     *     name="authentication_feedback_metadata_entity_not_found",
+     *     methods={"GET"}
+     * )
+     */
     public function metadataEntityNotFoundAction(Request $request)
     {
         // The exception message is used on the error page. As mostly developers or other tech-savvy people will see
@@ -297,8 +332,7 @@ class FeedbackController
     }
 
     /**
-     * @param Request $request
-     * @return Response
+     * @Route("/authentication/feedback/custom", name="authentication_feedback_custom", methods={"GET"})
      */
     public function customAction(Request $request)
     {
@@ -331,8 +365,7 @@ class FeedbackController
     }
 
     /**
-     * @return Response
-     * @throws \EngineBlock_Exception
+     * @Route("/authentication/feedback/invalid-acs-binding", name="authentication_feedback_invalid_acs_binding", methods={"GET"})
      */
     public function invalidAcsBindingAction()
     {
@@ -341,8 +374,11 @@ class FeedbackController
     }
 
     /**
-     * @return Response
-     * @throws \EngineBlock_Exception
+     * @Route(
+     *     "/authentication/feedback/received-error-status-code",
+     *     name="authentication_feedback_received_error_status_code",
+     *     methods={"GET"}
+     * )
      */
     public function receivedErrorStatusCodeAction()
     {
@@ -353,8 +389,11 @@ class FeedbackController
     }
 
     /**
-     * @return Response
-     * @throws \EngineBlock_Exception
+     * @Route(
+     *     "/authentication/feedback/received-invalid-signed-response",
+     *     name="authentication_feedback_signature_verification_failed",
+     *     methods={"GET"}
+     * )
      */
     public function signatureVerificationFailedAction()
     {
@@ -365,8 +404,7 @@ class FeedbackController
     }
 
     /**
-     * @return Response
-     * @throws \EngineBlock_Exception
+     * @Route("/authentication/feedback/received-invalid-response", name="authentication_feedback_verification_failed", methods={"GET"})
      */
     public function receivedInvalidResponseAction()
     {
@@ -377,8 +415,11 @@ class FeedbackController
     }
 
     /**
-     * @return Response
-     * @throws \EngineBlock_Exception
+     * @Route(
+     *     "/authentication/feedback/unknown_requesterid_in_authnrequest",
+     *     name="authentication_feedback_unknown_requesterid_in_authnrequest",
+     *     methods={"GET"}
+     * )
      */
     public function unknownRequesterIdInAuthnRequestAction()
     {
@@ -388,9 +429,13 @@ class FeedbackController
         );
     }
 
+
     /**
-     * @param Request $request
-     * @return Response
+     * @Route(
+     *     "/authentication/feedback/authorization-policy-violation",
+     *     name="authentication_feedback_pep_violation",
+     *     methods={"GET"}
+     * )
      */
     public function authorizationPolicyViolationAction(Request $request)
     {
@@ -425,8 +470,11 @@ class FeedbackController
     }
 
     /**
-     * @param Request $request
-     * @return Response
+     * @Route(
+     *     "/authentication/feedback/unknown-preselected-idp",
+     *     name="authentication_feedback_unknown_preselected_idp",
+     *     methods={"GET"}
+     * )
      */
     public function unknownPreselectedIdpAction(Request $request)
     {
@@ -442,6 +490,9 @@ class FeedbackController
         );
     }
 
+    /**
+     * @Route("/authentication/feedback/unknown-keyid", name="authentication_feedback_unknown_keyid", methods={"GET"})
+     */
     public function unknownKeyIdAction(Request $request): Response
     {
         // Add feedback info from url
@@ -457,7 +508,7 @@ class FeedbackController
     }
 
     /**
-     * @return Response
+     * @Route("/authentication/feedback/stuck-in-authentication-loop", name="authentication_feedback_stuck_in_authentication_loop", methods={"GET"})
      */
     public function stuckInAuthenticationLoopAction()
     {
@@ -467,6 +518,13 @@ class FeedbackController
         );
     }
 
+    /**
+     * @Route(
+     *     "/authentication/feedback/authentication-limit-exceeded",
+     *     name="authentication_feedback_authentication_limit_exceeded",
+     *     methods={"GET"}
+     * )
+     */
     public function authenticationLimitExceededAction()
     {
         return new Response(
@@ -476,7 +534,11 @@ class FeedbackController
     }
 
     /**
-     * @return Response
+     * @Route(
+     *     "/authentication/feedback/invalid-request-method-on-sso",
+     *     name="authentication_feedback_no_authentication_request_received",
+     *     methods={"GET"}
+     * )
      */
     public function noAuthenticationRequestReceivedAction(Request $request)
     {
@@ -503,7 +565,7 @@ class FeedbackController
     }
 
     /**
-     * @return Response
+     * @Route("/authentication/feedback/clock-issue", name="authentication_feedback_response_clock_issue", methods={"GET"})
      */
     public function clockIssueAction()
     {
@@ -514,7 +576,7 @@ class FeedbackController
     }
 
     /**
-     * @return Response
+     * @Route("/authentication/feedback/stepup-callout-user-cancelled", name="authentication_feedback_stepup_callout_user_cancelled", methods={"GET"})
      */
     public function stepupCalloutUserCancelledAction(Request $request)
     {
@@ -525,7 +587,7 @@ class FeedbackController
     }
 
     /**
-     * @return Response
+     * @Route("/authentication/feedback/stepup-callout-unmet-loa", name="authentication_feedback_stepup_callout_unmet_loa", methods={"GET"})
      */
     public function stepupCalloutUnmetLoaAction(Request $request)
     {
@@ -536,7 +598,7 @@ class FeedbackController
     }
 
     /**
-     * @return Response
+     * @Route("/authentication/feedback/stepup-callout-unknown", name="authentication_feedback_stepup_callout_unknown", methods={"GET"})
      */
     public function stepupCalloutUnknownAction(Request $request)
     {

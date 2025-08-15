@@ -5,6 +5,12 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 7.0.0
+Breaking changes please see: [upgrading](UPGRADING.md#700)
+
+Maintance:
+* upgrade to symfony 4.4
+
 ## 6.15.4
 New Features:
 * Allow configurable user attributes for Stepup (#1828)

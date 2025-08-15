@@ -1,0 +1,36 @@
+services:
+    _defaults:
+        public: true
+
+    engineblock.mock_entities.idp_factory:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProviderFactory
+        arguments: ['@router']
+
+    engineblock.mock_entities.sp_factory:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProviderFactory
+        arguments: ['@router']
+
+    engineblock.mock_entities.idp_registry:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry
+        arguments: ['@engineblock.mock_entities.data_store.mock_idps']
+
+    engineblock.mock_entities.sp_registry:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry
+        arguments: ['@engineblock.mock_entities.data_store.mock_sps']
+
+    engineblock.mock_entities.saml_response_factory:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Saml2\ResponseFactory
+
+    engineblock.mock_entities.data_store.mock_idps:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\SerializedDataStore
+        arguments: ['%idp_fixture_file%']
+
+    engineblock.mock_entities.data_store.mock_sps:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\SerializedDataStore
+        arguments: ['%sp_fixture_file%']
+
+    engineblock.mock_clients.mock_stepup_gateway:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockStepupGateway
+        arguments:
+            - "@engineblock.functional_testing.fixture.stepup_gateway_mock"
+            - '%stepup.sfo.override_engine_entityid%'

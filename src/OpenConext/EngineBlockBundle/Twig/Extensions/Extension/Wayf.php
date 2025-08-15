@@ -22,10 +22,10 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlockBundle\Service\IdpHistoryService;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\TranslatorInterface;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Twig_Extension;
 
-class Wayf extends Twig_Extension
+class Wayf extends AbstractExtension
 {
     const PREVIOUS_SELECTION_COOKIE_NAME = 'selectedidps';
     const REMEMBER_CHOICE_COOKIE_NAME = 'rememberchoice';

@@ -2,7 +2,7 @@
 !ci
 !config
 !data
-!database
+!migrations
 !docker
 !languages
 !library

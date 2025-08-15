@@ -1,0 +1,9 @@
+# This file is auto-generated during the composer install
+parameters:
+    router.request_context.host: engine.%domain%
+    router.request_context.scheme: https
+    idp_fixture_file: /tmp/eb-fixtures/db/idp.states.php.serialized
+    sp_fixture_file: /tmp/eb-fixtures/db/sp.states.php.serialized
+    stepup.sfo.override_engine_entityid: 'https://engine.dev.openconext.local/new/stepup/metadata'
+    # Disable for local tests
+    database.test.host: mariadb
