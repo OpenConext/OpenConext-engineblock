@@ -58,9 +58,9 @@ default:
             paths:
                 - '%paths.base%/../src/OpenConext/EngineBlockFunctionalTestingBundle/Features'
             formatter:
-                  name: pretty
-                  parameters:
-                      verbose: true
+                name: pretty
+                parameters:
+                    verbose: true
             filters:
                 tags: "@WIP&&~@SKIP&&~@selenium"
             contexts: *defaultContexts
@@ -90,4 +90,3 @@ default:
             kernel:
                 env: ci
                 debug: true
-

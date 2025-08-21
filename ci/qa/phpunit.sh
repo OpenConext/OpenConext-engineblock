@@ -1,23 +1,37 @@
 #!/usr/bin/env bash
 set -e
 
-cd $(dirname $0)/../../
+cd "$(dirname "$0")/../../"
 
-chown -R www-data app/cache/
-chmod -R 0777 /tmp/eb-fixtures
-
-echo -e "\nInstalling database fixtures...\n"
+echo "====================================================="
+echo "Installing database fixtures..."
+echo "====================================================="
 ./app/console doctrine:schema:drop --force --env=ci
 ./app/console doctrine:schema:create --env=ci
 
-echo -e "\nPHPUnit legacy tests\n"
+echo
+echo "====================================================="
+echo "PHPUnit legacy tests"
+echo "====================================================="
 ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=eb4 --coverage-text
 
-echo -e "\nPHPUnit unit tests\n"
+echo
+echo "====================================================="
+echo  "PHPUnit unit tests"
+echo "====================================================="
 ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=unit --coverage-text
 
-echo -e "\nPHPUnit API acceptance tests\n"
+echo
+echo "====================================================="
+echo "PHPUnit API acceptance tests"
+echo "====================================================="
 APP_ENV=ci ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=functional --coverage-text
 
-echo -e "\nPHPUnit integration tests\n"
+echo
+echo "====================================================="
+echo -e "PHPUnit integration tests"
+echo "====================================================="
 ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=integration --coverage-text
+echo
+
+
