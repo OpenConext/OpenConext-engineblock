@@ -36,7 +36,7 @@ final class AuthenticationStateInitializer
         $this->session = $session;
     }
 
-    public function onKernelController(FilterControllerEvent $event)
+    public function onKernelController(\Symfony\Component\HttpKernel\Event\ControllerEvent $event)
     {
         if (!$event->getController()[0] instanceof AuthenticationLoopThrottlingController) {
             return;

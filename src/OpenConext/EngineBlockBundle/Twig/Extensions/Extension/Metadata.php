@@ -37,11 +37,11 @@ class Metadata extends AbstractExtension
     private $attributeMetadata;
 
     /**
-     * @var TranslatorInterface
+     * @var \Symfony\Contracts\Translation\TranslatorInterface
      */
     private $translator;
 
-    public function __construct(EngineBlock_Attributes_Metadata $attributesMetadata, TranslatorInterface $translator)
+    public function __construct(EngineBlock_Attributes_Metadata $attributesMetadata, \Symfony\Contracts\Translation\TranslatorInterface $translator)
     {
         $this->attributeMetadata = $attributesMetadata;
         $this->translator = $translator;

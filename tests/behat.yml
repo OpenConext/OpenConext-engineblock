@@ -73,6 +73,11 @@ default:
             sessions:
                 default:
                     goutte:
+                        # For Goutte 4+/Symfony HttpClient, use server_parameters
+                        server_parameters:
+                            verify_peer: false
+                            verify_host: false
+                        # For older Goutte/Guzzle setups, keep for compatibility
                         guzzle_parameters:
                             verify: false
                 chrome:

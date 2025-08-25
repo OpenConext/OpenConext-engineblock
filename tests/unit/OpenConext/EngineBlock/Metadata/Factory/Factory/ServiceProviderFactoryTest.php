@@ -91,7 +91,7 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
             $this->entityIdOverride
         );
 
-        $this->translator = $this->createMock(TranslatorInterface::class);
+        $this->translator = $this->createMock(\Symfony\Contracts\Translation\TranslatorInterface::class);
     }
 
     public function test_create_engineblock_entity_from()

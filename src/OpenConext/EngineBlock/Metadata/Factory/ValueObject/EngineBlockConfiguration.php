@@ -76,7 +76,7 @@ class EngineBlockConfiguration
     private $contactPersons;
 
     public function __construct(
-        TranslatorInterface $translator,
+        \Symfony\Contracts\Translation\TranslatorInterface $translator,
         string $supportMail,
         string $description,
         string $engineHostName,

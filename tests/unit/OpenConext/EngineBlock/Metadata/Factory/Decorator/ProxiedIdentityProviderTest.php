@@ -100,7 +100,7 @@ class ProxiedIdentityProviderTest extends AbstractEntityTest
 
     private function createConfiguration(): EngineBlockConfiguration
     {
-        $translator = $this->createMock(TranslatorInterface::class);
+        $translator = $this->createMock(\Symfony\Contracts\Translation\TranslatorInterface::class);
         $translator->expects($this->at(0))
             ->method('trans')
             ->with('suite_name')

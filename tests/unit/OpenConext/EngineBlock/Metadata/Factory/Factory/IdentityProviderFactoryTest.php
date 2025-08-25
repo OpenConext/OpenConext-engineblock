@@ -53,7 +53,7 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
      */
     private $urlProvider;
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|TranslatorInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Contracts\Translation\TranslatorInterface
      */
     private $translator;
 
@@ -62,7 +62,7 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
         $this->keyPairFactory = $this->createMock(KeyPairFactory::class);
         $this->configuration = $this->createMock(EngineBlockConfiguration::class);
         $this->urlProvider = $this->createMock(UrlProvider::class);
-        $this->translator = $this->createMock(TranslatorInterface::class);
+        $this->translator = $this->createMock(\Symfony\Contracts\Translation\TranslatorInterface::class);
 
         $this->factory = new IdentityProviderFactory($this->keyPairFactory, $this->configuration, $this->urlProvider);
     }

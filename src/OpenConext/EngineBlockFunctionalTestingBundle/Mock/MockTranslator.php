@@ -58,7 +58,7 @@ final class MockTranslator implements TranslatorInterface
     }
 
     // Decorated methods
-    public function trans($id, array $parameters = [], $domain = null, $locale = null)
+    public function trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null)
     {
         $this->translator->getCatalogue($locale)->add($this->translations);
         return $this->translator->trans($id, $parameters, $domain, $locale);
@@ -70,7 +70,7 @@ final class MockTranslator implements TranslatorInterface
         return $this->translator->transChoice($id, $number, $parameters, $domain, $locale);
     }
 
-    public function setLocale($locale)
+    public function setLocale(string $locale)
     {
         $this->translator->setLocale($locale);
     }
