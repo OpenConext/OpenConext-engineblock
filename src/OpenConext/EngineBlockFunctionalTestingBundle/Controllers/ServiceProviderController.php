@@ -28,7 +28,7 @@ use SAML2\HTTPPost;
 use SAML2\HTTPRedirect;
 use SAML2\Response as SAMLResponse;
 use SAML2\Utils;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,7 +38,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  * @package OpenConext\EngineBlockFunctionalTestingBundle\Controllers
  * @SuppressWarnings("PMD")
  */
-class ServiceProviderController extends Controller
+class ServiceProviderController extends AbstractController
 {
     /**
      * @var EntityRegistry

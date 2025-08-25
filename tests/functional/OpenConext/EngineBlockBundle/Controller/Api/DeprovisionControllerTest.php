@@ -21,8 +21,8 @@ namespace OpenConext\EngineBlockBundle\Tests;
 use DateTime;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use function json_decode;
 use function trim;
@@ -69,10 +69,7 @@ final class DeprovisionControllerTest extends WebTestCase
     {
         $collabPersonId = 'urn:collab:person:test';
 
-        $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
-        ]);
+        $client = $this->createAuthorizedClient();
 
         $client->request('PUT', 'https://engine-api.dev.openconext.local/deprovision/' . $collabPersonId);
         $this->assertStatusCode(Response::HTTP_METHOD_NOT_ALLOWED, $client);
@@ -96,10 +93,7 @@ final class DeprovisionControllerTest extends WebTestCase
     {
         $collabPersonId = 'urn:collab:person:test';
 
-        $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
-        ]);
+        $client = $this->createAuthorizedClient();
 
         $this->disableDeprovisionApiFeatureFor($client);
 
@@ -138,10 +132,7 @@ final class DeprovisionControllerTest extends WebTestCase
      */
     public function no_user_data_is_returned_if_collab_person_id_is_unknown($method, $path)
     {
-        $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
-        ]);
+        $client = $this->createAuthorizedClient();
 
         $client->request($method, 'https://engine-api.dev.openconext.local/' . trim($path, '/'));
 
@@ -194,10 +185,7 @@ final class DeprovisionControllerTest extends WebTestCase
         $consentType = 'explicit';
         $consentDate = '2017-04-18 13:37:00';
 
-        $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
-        ]);
+        $client = $this->createAuthorizedClient();
 
         $this->addServiceProviderUuidFixture($spUuid1, $spEntityId1);
         $this->addServiceProviderUuidFixture($spUuid2, $spEntityId2);
@@ -300,12 +288,6 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
     }
 
-    private function getContainer() : ContainerInterface
-    {
-        self::bootKernel();
-        return self::$kernel->getContainer();
-    }
-
     /**
      * @param Client $client
      */
@@ -323,7 +305,7 @@ final class DeprovisionControllerTest extends WebTestCase
      */
     private function addUserFixture($userId, $uuid)
     {
-        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         $queryBuilder
             ->insert('user')
             ->values([
@@ -343,7 +325,7 @@ final class DeprovisionControllerTest extends WebTestCase
      */
     private function addServiceProviderUuidFixture($spUuid, $spEntityId)
     {
-        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         $queryBuilder
             ->insert('service_provider_uuid')
             ->values([
@@ -364,7 +346,7 @@ final class DeprovisionControllerTest extends WebTestCase
      */
     private function addSamlPersistentIdFixture($userUuid, $spUuid, $persistentId)
     {
-        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         $queryBuilder
             ->insert('saml_persistent_id')
             ->values([
@@ -389,7 +371,7 @@ final class DeprovisionControllerTest extends WebTestCase
      */
     private function addConsentFixture($userId, $serviceId, $attributeHash, $consentType, $consentDate)
     {
-        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         $queryBuilder
             ->insert('consent')
             ->values([
@@ -412,7 +394,7 @@ final class DeprovisionControllerTest extends WebTestCase
 
     private function clearFixtures()
     {
-        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         $queryBuilder
             ->delete('service_provider_uuid')
             ->execute();
@@ -431,5 +413,17 @@ final class DeprovisionControllerTest extends WebTestCase
     {
         $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
+    }
+
+    private function createAuthorizedClient(): KernelBrowser
+    {
+        $client = static::createClient();
+        $client->setServerParameters(
+            [
+                'PHP_AUTH_USER' => self::getContainer()->getParameter('api.users.deprovision.username'),
+                'PHP_AUTH_PW' => self::getContainer()->getParameter('api.users.deprovision.password'),
+            ]
+        );
+        return $client;
     }
 }

@@ -34,13 +34,13 @@ doctrine:
                     Authentication:
                         mapping:   true
                         type:      annotation
-                        dir:       "%kernel.root_dir%/../src/OpenConext/EngineBlockBundle/Authentication"
+                        dir:       "%kernel.project_dir%/src/OpenConext/EngineBlockBundle/Authentication"
                         prefix:    OpenConext\EngineBlockBundle\Authentication
                         is_bundle: false
                     Metadata:
                         mapping:   true
                         type:      annotation
-                        dir:       "%kernel.root_dir%/../src/OpenConext/EngineBlock/Metadata"
+                        dir:       "%kernel.project_dir%/src/OpenConext/EngineBlock/Metadata"
                         prefix:    OpenConext\EngineBlock\Metadata
                         is_bundle: false
                 dql:
