@@ -37,7 +37,7 @@ class WayfTest extends TestCase
     protected function setUp(): void
     {
         $this->requestStack = $this->createMock(RequestStack::class);
-        $this->translator = $this->createMock(TranslatorInterface::class);
+        $this->translator = $this->createMock(\Symfony\Contracts\Translation\TranslatorInterface::class);
         $this->wayf = new Wayf($this->requestStack, $this->translator);
     }
 

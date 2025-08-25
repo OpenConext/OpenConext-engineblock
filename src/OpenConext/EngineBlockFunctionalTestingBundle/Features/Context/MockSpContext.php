@@ -75,6 +75,18 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
+     * @AfterScenario
+     */
+    public function cleanUpMockSpRegistry()
+    {
+        // Clear the mock SP registry to prevent state pollution between scenarios
+        // Travis / PHP 5.6 issue requires gc cycle in order to actually clear the fixture
+        // https://www.pivotaltracker.com/story/show/161282428
+        gc_collect_cycles();
+        $this->mockSpRegistry->clear()->save();
+    }
+
+    /**
      * @When /^I log in at SP "([^"]*)" which attempts to preselect nonexistent IdP "([^"]*)"$/
      */
     public function iLogInAtSPWhichAttemptsToPreselectNonexistentIdP($spName, $idpName)
@@ -229,7 +241,7 @@ class MockSpContext extends AbstractSubContext
     public function spIsATrustedProxy($spName)
     {
         $this->serviceRegistryFixture->setSpEntityTrustedProxy(
-            $this->mockSpRegistry->get($spName)->entityid()
+            $this->mockSpRegistry->get($spName)->entityId()
         );
         $this->serviceRegistryFixture->save();
     }
@@ -240,7 +252,7 @@ class MockSpContext extends AbstractSubContext
     public function spRequiresARequesterId($spName)
     {
         $this->serviceRegistryFixture->setSpEntityRequesterIdRequired(
-            $this->mockSpRegistry->get($spName)->entityid()
+            $this->mockSpRegistry->get($spName)->entityId()
         );
         $this->serviceRegistryFixture->save();
     }
@@ -313,10 +325,7 @@ class MockSpContext extends AbstractSubContext
      */
     public function noRegisteredServiceProviders()
     {
-        // Travis / PHP 5.6 issue requires gc cycle in order to actually clear the fixture
-        // https://www.pivotaltracker.com/story/show/161282428
-        gc_collect_cycles();
-        $this->mockSpRegistry->clear()->save();
+        $this->cleanUpMockSpRegistry();
     }
 
     /**

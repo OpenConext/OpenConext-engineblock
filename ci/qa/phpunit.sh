@@ -4,6 +4,7 @@ set -e
 cd $(dirname $0)/../../
 
 chown -R www-data var/cache/
+mkdir -p /tmp/eb-fixtures
 chmod -R 0777 /tmp/eb-fixtures
 
 echo -e "\nInstalling database fixtures...\n"

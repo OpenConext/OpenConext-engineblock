@@ -589,13 +589,14 @@ class EngineBlockContext extends AbstractSubContext
     }
 
     /**
-     * @AftectScenario
+     * @AfterScenario
      */
     public function cleanUpAuthenticationLoopGuard()
     {
         if ($this->usingAuthenticationLoopGuard) {
             $this->authenticationLoopGuard->cleanUp();
         }
+        $this->usingAuthenticationLoopGuard = false;
     }
 
     /**

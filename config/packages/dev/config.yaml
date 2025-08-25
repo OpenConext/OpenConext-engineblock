@@ -8,9 +8,9 @@ framework:
         enabled: true
         fallbacks: [ "%locale%" ]
         paths:
-            - '%kernel.root_dir%/../languages'
-            - '%kernel.root_dir%/../theme/base/translations'
-            - '%kernel.root_dir%/../theme/%theme.name%/translations'
+            - '%kernel.project_dir%/languages'
+            - '%kernel.project_dir%/theme/base/translations'
+            - '%kernel.project_dir%/theme/%theme.name%/translations'
     profiler: { only_exceptions: false }
 
 web_profiler:

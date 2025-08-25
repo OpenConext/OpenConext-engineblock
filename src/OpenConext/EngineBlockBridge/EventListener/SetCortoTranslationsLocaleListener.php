@@ -36,7 +36,7 @@ final class SetCortoTranslationsLocaleListener
     private $localeProvider;
 
     /**
-     * @var TranslatorInterface
+     * @var \Symfony\Contracts\Translation\TranslatorInterface
      */
     private $translator;
 

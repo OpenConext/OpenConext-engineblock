@@ -31,7 +31,7 @@ class EngineblockServiceProviderInformationTest extends AbstractEntityTest
     {
         $adapter = $this->createServiceProviderAdapter();
 
-        $translator = $this->createMock(TranslatorInterface::class);
+        $translator = $this->createMock(\Symfony\Contracts\Translation\TranslatorInterface::class);
         $translator->expects($this->at(0))
             ->method('trans')
             ->with('suite_name')

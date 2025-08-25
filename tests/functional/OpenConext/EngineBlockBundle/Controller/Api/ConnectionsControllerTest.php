@@ -23,8 +23,8 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class ConnectionsControllerTest extends WebTestCase
@@ -37,7 +37,7 @@ class ConnectionsControllerTest extends WebTestCase
      */
     public function authentication_is_required_for_pushing_metadata()
     {
-        $unauthenticatedClient = static::createClient();;
+        $unauthenticatedClient = static::createClient();
         $unauthenticatedClient->request('POST', 'https://engine-api.dev.openconext.local/api/connections');
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
     }
@@ -53,10 +53,7 @@ class ConnectionsControllerTest extends WebTestCase
      */
     public function only_post_requests_are_allowed_when_pushing_metadata($invalidHttpMethod)
     {
-        $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
-        ]);
+        $client = $this->createAuthorizedClient();
 
         $client->request($invalidHttpMethod, 'https://engine-api.dev.openconext.local/api/connections');
         $this->assertStatusCode(Response::HTTP_METHOD_NOT_ALLOWED, $client);
@@ -74,10 +71,7 @@ class ConnectionsControllerTest extends WebTestCase
      */
     public function cannot_push_metadata_if_feature_is_disabled()
     {
-        $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
-        ]);
+        $client = $this->createAuthorizedClient();
 
         $this->disableMetadataPushApiFeatureFor($client);
 
@@ -96,7 +90,8 @@ class ConnectionsControllerTest extends WebTestCase
      */
     public function cannot_push_metadata_if_user_does_not_have_manage_role()
     {
-        $client = static::createClient([], [
+        $client = static::createClient();
+        $client->setServerParameters([
             'PHP_AUTH_USER' => 'no_roles',
             'PHP_AUTH_PW' => 'no_roles',
         ]);
@@ -119,10 +114,7 @@ class ConnectionsControllerTest extends WebTestCase
      */
     public function cannot_push_invalid_content_to_the_metadata_push_api($invalidJsonPayload)
     {
-        $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
-        ]);
+        $client = $this->createAuthorizedClient();
 
         $client->request(
             'POST',
@@ -149,10 +141,7 @@ class ConnectionsControllerTest extends WebTestCase
     {
         $this->clearMetadataFixtures();
 
-        $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
-        ]);
+        $client = $this->createAuthorizedClient();
 
         foreach ($this->validConnectionsData() as $step) {
 
@@ -218,10 +207,7 @@ class ConnectionsControllerTest extends WebTestCase
     {
         $this->clearMetadataFixtures();
 
-        $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
-        ]);
+        $client = $this->createAuthorizedClient();
 
         foreach ($this->validConnectionsWithCoinsData() as $connection) {
 
@@ -272,10 +258,7 @@ class ConnectionsControllerTest extends WebTestCase
     {
         $this->clearMetadataFixtures();
 
-        $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
-        ]);
+        $client = $this->createAuthorizedClient();
 
         $payload = '{"connections" : {
             "2d96e27a-76cf-4ca2-ac70-ece5d4c49523": {
@@ -361,10 +344,7 @@ class ConnectionsControllerTest extends WebTestCase
     {
         $this->clearMetadataFixtures();
 
-        $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
-        ]);
+        $client = $this->createAuthorizedClient();
 
         // The second 'step' will overwrite the entity id for the one entry. It only changes some case, resulting in
         // a sql error in Engine. That exception results in a 500 JSON response
@@ -415,12 +395,6 @@ class ConnectionsControllerTest extends WebTestCase
         $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
     }
 
-    private function getContainer() : ContainerInterface
-    {
-        self::bootKernel();
-        return self::$kernel->getContainer();
-    }
-
     private function disableMetadataPushApiFeatureFor(Client $client)
     {
         $mock = new FeatureConfiguration([
@@ -431,7 +405,7 @@ class ConnectionsControllerTest extends WebTestCase
 
     private function clearMetadataFixtures()
     {
-        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         $queryBuilder
             ->delete('sso_provider_roles_eb5')
             ->execute();
@@ -442,7 +416,7 @@ class ConnectionsControllerTest extends WebTestCase
      */
     private function getStoredMetadata()
     {
-        $doctrine = $this->getContainer()->get('doctrine');
+        $doctrine = self::getContainer()->get('doctrine');
 
         $doctrine->getManager()->clear();
 
@@ -659,5 +633,18 @@ class ConnectionsControllerTest extends WebTestCase
                     ],
                 ]
             ];
+    }
+
+    /**
+     * @return KernelBrowser
+     */
+    private function createAuthorizedClient(): KernelBrowser
+    {
+        $client = static::createClient();
+        $client->setServerParameters([
+            'PHP_AUTH_USER' => self::getContainer()->getParameter('api.users.metadataPush.username'),
+            'PHP_AUTH_PW' => self::getContainer()->getParameter('api.users.metadataPush.password'),
+        ]);
+        return $client;
     }
 }
