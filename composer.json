@@ -57,10 +57,10 @@
         "ext-zlib": "*",
         "behat/behat": "~3.7.0",
         "behat/mink": "~1.7",
-        "behat/mink-goutte-driver": "~1.0",
+        "behat/mink-goutte-driver": "~2.0",
         "dmore/behat-chrome-extension": "^1.4",
         "dmore/chrome-mink-driver": "^2.9",
-        "friends-of-behat/mink-extension": "^2.5",
+        "friends-of-behat/mink-extension": "^2.6",
         "friends-of-behat/symfony-extension": "^2.1",
         "ingenerator/behat-tableassert": "^1.1",
         "league/flysystem": "^2.5",
@@ -123,7 +123,7 @@
     "config": {
         "optimize-autoloader": true,
         "platform": {
-            "php": "7.2.5"
+            "php": "7.4.0"
         },
         "sort-packages": true,
         "allow-plugins": {
