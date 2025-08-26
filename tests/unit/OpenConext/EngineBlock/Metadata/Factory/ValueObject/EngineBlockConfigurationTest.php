@@ -37,7 +37,7 @@ class EngineBlockConfigurationTest extends TestCase
         $orgName = 'OpenestConext Company';
         $orgDisplayName = 'OpenestConext Company Inc.';
 
-        $translator = m::mock(TranslatorInterface::class);
+        $translator = m::mock(\Symfony\Contracts\Translation\TranslatorInterface::class);
         $translator
             ->shouldReceive('trans')
             ->with('suite_name')->once()

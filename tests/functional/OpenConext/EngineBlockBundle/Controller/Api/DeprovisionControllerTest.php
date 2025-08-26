@@ -70,8 +70,8 @@ final class DeprovisionControllerTest extends WebTestCase
         $collabPersonId = 'urn:collab:person:test';
 
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
+            'PHP_AUTH_USER' => self::getContainer()->getParameter('api.users.deprovision.username'),
+            'PHP_AUTH_PW' => self::getContainer()->getParameter('api.users.deprovision.password'),
         ]);
 
         $client->request('PUT', 'https://engine-api.dev.openconext.local/deprovision/' . $collabPersonId);
@@ -97,8 +97,8 @@ final class DeprovisionControllerTest extends WebTestCase
         $collabPersonId = 'urn:collab:person:test';
 
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
+            'PHP_AUTH_USER' => self::getContainer()->getParameter('api.users.deprovision.username'),
+            'PHP_AUTH_PW' => self::getContainer()->getParameter('api.users.deprovision.password'),
         ]);
 
         $this->disableDeprovisionApiFeatureFor($client);
@@ -139,8 +139,8 @@ final class DeprovisionControllerTest extends WebTestCase
     public function no_user_data_is_returned_if_collab_person_id_is_unknown($method, $path)
     {
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
+            'PHP_AUTH_USER' => self::getContainer()->getParameter('api.users.deprovision.username'),
+            'PHP_AUTH_PW' => self::getContainer()->getParameter('api.users.deprovision.password'),
         ]);
 
         $client->request($method, 'https://engine-api.dev.openconext.local/' . trim($path, '/'));
@@ -195,8 +195,8 @@ final class DeprovisionControllerTest extends WebTestCase
         $consentDate = '2017-04-18 13:37:00';
 
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
+            'PHP_AUTH_USER' => self::getContainer()->getParameter('api.users.deprovision.username'),
+            'PHP_AUTH_PW' => self::getContainer()->getParameter('api.users.deprovision.password'),
         ]);
 
         $this->addServiceProviderUuidFixture($spUuid1, $spEntityId1);
@@ -300,12 +300,6 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
     }
 
-    private function getContainer() : ContainerInterface
-    {
-        self::bootKernel();
-        return self::$kernel->getContainer();
-    }
-
     /**
      * @param Client $client
      */
@@ -323,7 +317,7 @@ final class DeprovisionControllerTest extends WebTestCase
      */
     private function addUserFixture($userId, $uuid)
     {
-        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         $queryBuilder
             ->insert('user')
             ->values([
@@ -343,7 +337,7 @@ final class DeprovisionControllerTest extends WebTestCase
      */
     private function addServiceProviderUuidFixture($spUuid, $spEntityId)
     {
-        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         $queryBuilder
             ->insert('service_provider_uuid')
             ->values([
@@ -364,7 +358,7 @@ final class DeprovisionControllerTest extends WebTestCase
      */
     private function addSamlPersistentIdFixture($userUuid, $spUuid, $persistentId)
     {
-        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         $queryBuilder
             ->insert('saml_persistent_id')
             ->values([
@@ -389,7 +383,7 @@ final class DeprovisionControllerTest extends WebTestCase
      */
     private function addConsentFixture($userId, $serviceId, $attributeHash, $consentType, $consentDate)
     {
-        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         $queryBuilder
             ->insert('consent')
             ->values([
@@ -412,7 +406,7 @@ final class DeprovisionControllerTest extends WebTestCase
 
     private function clearFixtures()
     {
-        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         $queryBuilder
             ->delete('service_provider_uuid')
             ->execute();

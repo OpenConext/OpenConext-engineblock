@@ -319,7 +319,7 @@ class MetadataRendererTest extends TestCase
         $twigLoader->addPath($basePath . '/theme/openconext/templates/modules', 'theme');
         $environment = new Environment($twigLoader);
 
-        $translator = m::mock(TranslatorInterface::class);
+        $translator = m::mock(\Symfony\Contracts\Translation\TranslatorInterface::class);
         $translator
             ->shouldReceive('trans')
             ->andReturnUsing(function($key) {

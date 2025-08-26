@@ -19,7 +19,7 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Command;
 
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,7 +27,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Dump the contents of the (fake) Service Registry
  */
-class DumpServiceRegistryCommand extends ContainerAwareCommand
+class DumpServiceRegistryCommand extends Command
 {
     protected function configure()
     {
@@ -38,11 +38,11 @@ class DumpServiceRegistryCommand extends ContainerAwareCommand
             ->addArgument('file', InputArgument::OPTIONAL, 'File to get sessions from.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var JsonDataStore $jsonDataStore */
         $jsonDataStore = $this->getContainer()->get('engineblock.functional_testing.data_store.service_registry');
         $output->write(print_r($jsonDataStore->load(), true));
-        return 0;
+        return \Symfony\Component\Console\Command\Command::SUCCESS;
     }
 }

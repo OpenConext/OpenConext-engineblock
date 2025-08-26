@@ -94,14 +94,6 @@ final class CookieFactory
             $expiresAt = $this->now->add(DateInterval::createFromDateString($this->expiryInSeconds . ' seconds'));
         }
 
-        return new Cookie(
-            $this->name,
-            $value,
-            $expiresAt,
-            '/',
-            $this->domain,
-            $this->secure,
-            $this->httpOnly
-        );
+        return \Symfony\Component\HttpFoundation\Cookie::create($this->name, $value, $expiresAt, '/', $this->domain, $this->secure, $this->httpOnly);
     }
 }

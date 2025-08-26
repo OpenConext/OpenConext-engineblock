@@ -101,7 +101,7 @@ class ConnectionsController
             throw new ApiNotFoundHttpException('Metadata push API is disabled');
         }
 
-        if (!$this->authorizationChecker->isGranted(['ROLE_API_USER_METADATA_PUSH'])) {
+        if (!$this->authorizationChecker->isGranted('ROLE_API_USER_METADATA_PUSH')) {
             throw new ApiAccessDeniedHttpException(
                 'Access to the metadata push API requires the role ROLE_API_USER_METADATA_PUSH'
             );

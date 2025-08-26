@@ -85,8 +85,8 @@ final class ConsentControllerTest extends WebTestCase
         $userId = 'my-name-id';
 
         $client = $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+            'PHP_AUTH_USER' => self::getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => self::getContainer()->getParameter('api.users.profile.password'),
         ]);
 
         $client->request($invalidHttpMethod, 'https://engine-api.dev.openconext.local/consent/' . $userId);
@@ -108,8 +108,8 @@ final class ConsentControllerTest extends WebTestCase
         $userId = 'my-name-id';
 
         $client = $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+            'PHP_AUTH_USER' => self::getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => self::getContainer()->getParameter('api.users.profile.password'),
         ]);
 
         $this->disableConsentApiFeatureFor($client);
@@ -155,8 +155,8 @@ final class ConsentControllerTest extends WebTestCase
         $userId = 'my-name-id';
 
         $client = $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+            'PHP_AUTH_USER' => self::getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => self::getContainer()->getParameter('api.users.profile.password'),
         ]);
 
         $client->request('GET', 'https://engine-api.dev.openconext.local/consent/' . $userId);
@@ -209,8 +209,8 @@ final class ConsentControllerTest extends WebTestCase
         ];
 
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+            'PHP_AUTH_USER' => self::getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => self::getContainer()->getParameter('api.users.profile.password'),
         ]);
 
         $this->addServiceProviderFixture($serviceProvider);
@@ -292,8 +292,8 @@ final class ConsentControllerTest extends WebTestCase
         ];
 
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+            'PHP_AUTH_USER' => self::getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => self::getContainer()->getParameter('api.users.profile.password'),
         ]);
 
         $this->addServiceProviderFixture($serviceProvider);
@@ -351,8 +351,8 @@ final class ConsentControllerTest extends WebTestCase
         ];
 
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+            'PHP_AUTH_USER' => self::getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => self::getContainer()->getParameter('api.users.profile.password'),
         ]);
 
         $this->addServiceProviderFixture($serviceProvider);
@@ -390,8 +390,8 @@ final class ConsentControllerTest extends WebTestCase
         $collabPersonId = 'urn:collab:person:test';
 
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
+            'PHP_AUTH_USER' => self::getContainer()->getParameter('api.users.deprovision.username'),
+            'PHP_AUTH_PW' => self::getContainer()->getParameter('api.users.deprovision.password'),
         ]);
 
         $this->disableRemoveConsentApiFeatureFor($client);
@@ -444,8 +444,8 @@ final class ConsentControllerTest extends WebTestCase
     public function no_consent_is_removed_if_request_parameters_are_missing_or_incorrect()
     {
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+            'PHP_AUTH_USER' => self::getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => self::getContainer()->getParameter('api.users.profile.password'),
         ]);
 
         $data = json_encode(['userId' => 'urn:collab:person:test', 'serviceProviderId' => 'https://example.com/metadata']);
@@ -463,8 +463,8 @@ final class ConsentControllerTest extends WebTestCase
     public function no_consent_is_removed_if_collab_person_id_is_unknown()
     {
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+            'PHP_AUTH_USER' => self::getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => self::getContainer()->getParameter('api.users.profile.password'),
         ]);
 
         $data = json_encode(['collabPersonId' => 'urn:collab:person:test', 'serviceProviderEntityId' => 'https://example.com/metadata']);
@@ -494,9 +494,8 @@ final class ConsentControllerTest extends WebTestCase
         $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
     }
 
-    private function getContainer() : ContainerInterface
+    protected static function getContainer(): ContainerInterface
     {
-        self::bootKernel();
         return self::$kernel->getContainer();
     }
 
@@ -531,8 +530,8 @@ final class ConsentControllerTest extends WebTestCase
         $collabPersonId = 'urn:collab:person:test';
 
         $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.deprovision.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.deprovision.password'),
+            'PHP_AUTH_USER' => self::getContainer()->getParameter('api.users.deprovision.username'),
+            'PHP_AUTH_PW' => self::getContainer()->getParameter('api.users.deprovision.password'),
         ]);
 
         $this->disableEngineConsentFeatureFor($client);
@@ -556,8 +555,8 @@ final class ConsentControllerTest extends WebTestCase
         $userId = 'my-name-id';
 
         $client = $client = static::createClient([], [
-            'PHP_AUTH_USER' => $this->getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => $this->getContainer()->getParameter('api.users.profile.password'),
+            'PHP_AUTH_USER' => self::getContainer()->getParameter('api.users.profile.username'),
+            'PHP_AUTH_PW' => self::getContainer()->getParameter('api.users.profile.password'),
         ]);
 
         $this->disableEngineConsentFeatureFor($client);
@@ -571,7 +570,7 @@ final class ConsentControllerTest extends WebTestCase
 
     private function addConsentFixture($userId, $serviceId, $attributeHash, $consentType, $consentDate, $deletedAt)
     {
-        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         $queryBuilder
             ->insert('consent')
             ->values([
@@ -596,7 +595,7 @@ final class ConsentControllerTest extends WebTestCase
     private function findConsentByUserIdAndSPEntityId(string $collabPersonId, string $spEntityId): array
     {
         /** @var \Doctrine\DBAL\Query\QueryBuilder $queryBuilder */
-        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         $queryBuilder
             ->select('*')
             ->from('consent')
@@ -614,14 +613,14 @@ final class ConsentControllerTest extends WebTestCase
 
     private function addServiceProviderFixture(ServiceProvider $serviceProvider)
     {
-        $em = $this->getContainer()->get('doctrine')->getManager();
+        $em = self::getContainer()->get('doctrine')->getManager();
         $em->persist($serviceProvider);
         $em->flush();
     }
 
     private function clearMetadataFixtures()
     {
-        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         $queryBuilder
             ->delete('sso_provider_roles_eb5')
             ->execute();
@@ -629,7 +628,7 @@ final class ConsentControllerTest extends WebTestCase
 
     private function clearConsentFixtures()
     {
-        $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         $queryBuilder
             ->delete('consent')
             ->execute();

@@ -60,12 +60,17 @@ class Kernel extends BaseKernel
         $loader->load($confDir.'/{services}_'.$this->environment.self::CONFIG_EXTS, 'glob');
     }
 
-    protected function configureRoutes(RouteCollectionBuilder $routes): void
+    protected function configureRoutes(\Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator $routes): void
     {
         $confDir = $this->getProjectDir().'/config';
 
-        $routes->import($confDir.'/{routes}/'.$this->environment.'/*'.self::CONFIG_EXTS, '/', 'glob');
-        $routes->import($confDir.'/{routes}/*'.self::CONFIG_EXTS, '/', 'glob');
-        $routes->import($confDir.'/{routes}'.self::CONFIG_EXTS, '/', 'glob');
+        // Import env-specific routes
+        $routes->import($confDir.'/routes/'.$this->environment.'/*.yaml');
+        $routes->import($confDir.'/routes/'.$this->environment.'/*.yml');
+        // Import generic routes directory
+        $routes->import($confDir.'/routes/*.yaml');
+        $routes->import($confDir.'/routes/*.yml');
+        // Import top-level routes file
+        $routes->import($confDir.'/routes.yaml');
     }
 }
