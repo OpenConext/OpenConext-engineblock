@@ -56,7 +56,11 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
         $this->originalAuthenticationLoopGuard = $authenticationLoopGuard;
         $this->dataStore               = $dataStore;
 
-        $this->authenticationGuardFixture = $dataStore->load(false);
+        try {
+            $this->authenticationGuardFixture = $dataStore->load();
+        } catch (\Throwable $e) {
+            $this->authenticationGuardFixture = [];
+        }
     }
 
     /**
@@ -125,7 +129,7 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
 
     private function initAuthenticationLoopGuard(): void
     {
-        if ($this->authenticationGuardFixture === false) {
+        if ($this->authenticationGuardFixture === []) {
             $this->activeAuthenticationLoopGuard = $this->originalAuthenticationLoopGuard;
         } else {
             $this->activeAuthenticationLoopGuard = new AuthenticationLoopGuard(
