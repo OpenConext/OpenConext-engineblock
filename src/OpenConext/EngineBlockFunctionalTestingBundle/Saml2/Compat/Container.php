@@ -67,7 +67,7 @@ class Container extends AbstractContainer
      */
     public function generateId(): string
     {
-        return self::ID_PREFIX . rand(0, 100000000);
+        return self::ID_PREFIX . random_int(0, 100000000);
     }
 
     /**

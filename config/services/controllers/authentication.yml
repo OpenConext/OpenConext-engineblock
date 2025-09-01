@@ -7,7 +7,6 @@ services:
     OpenConext\EngineBlockBundle\Controller\ServiceProviderController:
         arguments:
             - '@engineblock.compat.application'
-            - '@session'
             - '@OpenConext\EngineBlock\Validator\AcsRequestValidator'
             - '@OpenConext\EngineBlock\Validator\SamlBindingValidator'
             - '@OpenConext\EngineBlock\Validator\SamlResponseValidator'
@@ -47,7 +46,7 @@ services:
     OpenConext\EngineBlockBundle\Controller\DebugController:
         arguments:
             - '@engineblock.compat.application'
-            - '@session'
+            - '@request_stack'
 
     OpenConext\EngineBlockBundle\Controller\WayfController:
         arguments:
@@ -64,7 +63,6 @@ services:
     OpenConext\EngineBlockBundle\Controller\StepupController:
         arguments:
             - '@engineblock.compat.application'
-            - '@session'
             - '@OpenConext\EngineBlock\Validator\AcsRequestValidator'
             - '@OpenConext\EngineBlock\Validator\SamlBindingValidator'
             - '@OpenConext\EngineBlock\Validator\SamlResponseValidator'

@@ -21,3 +21,5 @@ framework:
     php_errors:
         log: true
     error_controller: 'Symfony\Component\HttpKernel\Controller\ErrorController::show'
+    router:
+        utf8: true

@@ -141,7 +141,7 @@ class StepupDecision
                 return $l->getIdentifier();
             }, $this->authnRequestLoas),
             'metadata_sp' => $this->spLoa ? [$this->spLoa->getIdentifier()] : [],
-            'metadata_idp' => $this->idppLoa ? [$this->idpLoa->getIdentifier()] : [],
+            'metadata_idp' => $this->idpLoa ? [$this->idpLoa->getIdentifier()] : [],
         ];
         $this->logger->info(sprintf('StepupDecision: requiring LoA %s', $highestLevel->getIdentifier()), $logData);
         return $highestLevel;

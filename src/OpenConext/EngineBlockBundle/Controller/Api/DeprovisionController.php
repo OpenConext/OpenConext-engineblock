@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockBundle\Controller\Api;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Factory\CollabPersonIdFactory;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
+use OpenConext\EngineBlockBundle\Factory\CollabPersonIdFactory as CollabFactory;
 use OpenConext\EngineBlock\Service\DeprovisionService;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
@@ -28,7 +29,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -46,9 +49,14 @@ final class DeprovisionController
     private $featureConfiguration;
 
     /**
-     * @var AuthorizationCheckerInterface
+     * @var TokenStorageInterface
      */
-    private $authorizationChecker;
+    private $tokenStorage;
+
+    /**
+     * @var AccessDecisionManagerInterface
+     */
+    private $accessDecisionManager;
 
     /**
      * @var string
@@ -56,18 +64,21 @@ final class DeprovisionController
     private $applicationName;
 
     /**
-     * @param AuthorizationCheckerInterface $authorizationChecker
+     * @param TokenStorageInterface $tokenStorage
+     * @param AccessDecisionManagerInterface $accessDecisionManager
      * @param FeatureConfigurationInterface $featureConfiguration
      * @param DeprovisionService $deprovisionService
      * @param string $applicationName
      */
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker,
+        TokenStorageInterface $tokenStorage,
+        AccessDecisionManagerInterface $accessDecisionManager,
         FeatureConfigurationInterface $featureConfiguration,
         DeprovisionService $deprovisionService,
         $applicationName
     ) {
-        $this->authorizationChecker = $authorizationChecker;
+        $this->tokenStorage = $tokenStorage;
+        $this->accessDecisionManager = $accessDecisionManager;
         $this->featureConfiguration = $featureConfiguration;
         $this->deprovisionService   = $deprovisionService;
         $this->applicationName      = $applicationName;
@@ -168,9 +179,14 @@ final class DeprovisionController
     /**
      * @throws ApiAccessDeniedHttpException
      */
-    private function assertUserHasDeprovisionRole()
+    private function assertUserHasDeprovisionRole(): void
     {
-        if (!$this->authorizationChecker->isGranted('ROLE_API_USER_DEPROVISION')) {
+        $token = $this->tokenStorage->getToken();
+        if (!$token || !$token->getUser()) {
+            throw new AuthenticationCredentialsNotFoundException('The token storage contains no authentication token.');
+        }
+
+        if (!$this->accessDecisionManager->decide($token, ['ROLE_API_USER_DEPROVISION'], null)) {
             throw new ApiAccessDeniedHttpException(
                 'Access to the content listing API requires the role ROLE_API_USER_DEPROVISION'
             );

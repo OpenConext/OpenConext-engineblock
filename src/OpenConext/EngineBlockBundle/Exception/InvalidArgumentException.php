@@ -29,7 +29,7 @@ class InvalidArgumentException extends CoreInvalidArgumentException
                 'Invalid argument "%s": "%s" expected, "%s" given',
                 $propertyPath,
                 $expectedType,
-                is_object($parameter) ? get_class($parameter) : gettype($parameter)
+                get_debug_type($parameter)
             )
         );
     }

@@ -20,7 +20,6 @@ namespace OpenConext\EngineBlockBundle\Tests;
 
 use DateTime;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
-use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,9 +28,10 @@ use function trim;
 
 final class DeprovisionControllerTest extends WebTestCase
 {
-    public function setUp(): void
+    public function tearDown(): void
     {
         $this->clearFixtures();
+        parent::tearDown();
     }
 
     /**
@@ -39,25 +39,71 @@ final class DeprovisionControllerTest extends WebTestCase
      * @group Api
      * @group Deprovision
      */
-    public function authentication_is_required_for_accessing_the_deprovision_api()
+    public function authentication_is_required_for_accessing_the_deprovision_api_get()
     {
         $collabPersonId = 'urn:collab:person:test';
-
         $unauthenticatedClient = static::createClient();
-        $unauthenticatedClient->request('GET', 'https://engine-api.dev.openconext.local/deprovision/' . $collabPersonId);
-        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
+        $unauthenticatedClient->request(
+            'GET',
+            'https://engine-api.dev.openconext.local/deprovision/' . $collabPersonId
+        );
+        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED, $unauthenticatedClient);
+    }
 
+    /**
+     * @test
+     * @group Api
+     * @group Deprovision
+     */
+    public function authentication_is_required_for_accessing_the_deprovision_api_delete()
+    {
+        $collabPersonId = 'urn:collab:person:test';
         $unauthenticatedClient = static::createClient();
-        $unauthenticatedClient->request('DELETE', 'https://engine-api.dev.openconext.local/deprovision/' . $collabPersonId);
-        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
+        $unauthenticatedClient->request(
+            'DELETE',
+            'https://engine-api.dev.openconext.local/deprovision/' . $collabPersonId
+        );
+        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED, $unauthenticatedClient);
+    }
 
+    /**
+     * @test
+     * @group Api
+     * @group Deprovision
+     */
+    public function authentication_is_required_for_accessing_the_deprovision_api_delete_dry_run()
+    {
+        $collabPersonId = 'urn:collab:person:test';
         $unauthenticatedClient = static::createClient();
-        $unauthenticatedClient->request('DELETE', 'https://engine-api.dev.openconext.local/deprovision/' . $collabPersonId . '/dry-run');
-        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
+        $unauthenticatedClient->request(
+            'DELETE',
+            'https://engine-api.dev.openconext.local/deprovision/' . $collabPersonId . '/dry-run'
+        );
+        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED, $unauthenticatedClient);
+    }
 
+    /**
+     * @test
+     * @group Api
+     * @group Deprovision
+     */
+    public function authentication_is_required_for_accessing_the_deprovision_api_delete_remove_consent()
+    {
+        $unauthenticatedClient = static::createClient();
+        $unauthenticatedClient->request('POST', 'https://engine-api.dev.openconext.local/remove-consent');
+        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
+    }
+
+    /**
+     * @test
+     * @group Api
+     * @group Deprovision
+     */
+    public function delete_is_not_available_for_accessing_the_deprovision_api_delete_remove_consent()
+    {
         $unauthenticatedClient = static::createClient();
         $unauthenticatedClient->request('DELETE', 'https://engine-api.dev.openconext.local/remove-consent');
-        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
+        $this->assertStatusCode(Response::HTTP_METHOD_NOT_ALLOWED,  $unauthenticatedClient);
     }
 
     /**
@@ -283,15 +329,12 @@ final class DeprovisionControllerTest extends WebTestCase
         ];
     }
 
-    private function assertStatusCode($expectedStatusCode, Client $client)
+    private function assertStatusCode($expectedStatusCode, KernelBrowser $client)
     {
         $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @param Client $client
-     */
-    private function disableDeprovisionApiFeatureFor(Client $client)
+    private function disableDeprovisionApiFeatureFor(KernelBrowser $client)
     {
         $mock = new FeatureConfiguration([
             'api.deprovision' => false
@@ -409,7 +452,7 @@ final class DeprovisionControllerTest extends WebTestCase
             ->execute();
     }
 
-    private function assertResponseIsJson(Client $client)
+    private function assertResponseIsJson(KernelBrowser $client)
     {
         $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');

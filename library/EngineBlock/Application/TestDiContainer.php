@@ -29,17 +29,17 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
      */
     private $pdpClient;
 
-    public function getXmlConverter()
+    public function getXmlConverter(): EngineBlock_Corto_XmlToArray
     {
         return Phake::mock('EngineBlock_Corto_XmlToArray');
     }
 
-    public function getFilterCommandFactory()
+    public function getFilterCommandFactory(): EngineBlock_Corto_Filter_Command_Factory
     {
         return Phake::mock('EngineBlock_Corto_Filter_Command_Factory');
     }
 
-    public function getDatabaseConnectionFactory()
+    public function getDatabaseConnectionFactory(): EngineBlock_Database_ConnectionFactory
     {
         return Phake::mock('EngineBlock_Database_ConnectionFactory');
     }
@@ -54,7 +54,7 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
         $this->pdpClient = $pdpClient;
     }
 
-    public function getConsentFactory()
+    public function getConsentFactory(): EngineBlock_Corto_Model_Consent_Factory
     {
         $consentFactoryMock = Phake::mock('EngineBlock_Corto_Model_Consent_Factory');
 
@@ -72,7 +72,7 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
     {
         // returns a realistic representation of the attribute metadata
         $definitions = json_decode(file_get_contents(__DIR__ . '/../../../tests/resources/config/attributes-fixture.json'), true);
-        return new EngineBlock_Attributes_Metadata($definitions, Phake::mock('\Psr\Log\LoggerInterface'));
+        return new EngineBlock_Attributes_Metadata($definitions, Phake::mock(\Psr\Log\LoggerInterface::class));
     }
 
     /**

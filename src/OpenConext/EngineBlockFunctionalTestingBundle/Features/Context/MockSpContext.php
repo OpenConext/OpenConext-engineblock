@@ -708,4 +708,18 @@ class MockSpContext extends AbstractSubContext
         $request->setRequestedAuthnContext();
         $this->mockSpRegistry->save();
     }
+
+    /**
+     * @Given /^the SP sends RelayState "([^"]*)"$/
+     */
+    public function theSPSendsRelayState($relayState)
+    {
+        /** @var MockServiceProvider $sp */
+        $sp = $this->mockSpRegistry->getOnly();
+
+        $request = $sp->getAuthnRequest();
+        $request->setRelayState($relayState);
+
+        $this->mockSpRegistry->save();
+    }
 }

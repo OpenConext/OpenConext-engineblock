@@ -23,6 +23,7 @@ use EngineBlock_Corto_Module_Services_Exception;
 use EngineBlock_Saml2_ResponseAnnotationDecorator;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Service\Dto\ProcessingStateStep;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class ProcessingStateHelper implements ProcessingStateHelperInterface
@@ -35,9 +36,9 @@ class ProcessingStateHelper implements ProcessingStateHelperInterface
      */
     private $session;
 
-    public function __construct(SessionInterface $session)
+    public function __construct(RequestStack $requestStack)
     {
-        $this->session = $session;
+        $this->session = $requestStack->getSession();
     }
 
     /**

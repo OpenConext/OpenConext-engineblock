@@ -20,7 +20,7 @@ use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 
 class EngineBlock_Arp_AttributeReleasePolicyEnforcer
 {
-    public function enforceArp(AttributeReleasePolicy $arp = null, $responseAttributes, $showSources = false)
+    public function enforceArp($responseAttributes, AttributeReleasePolicy $arp = null, $showSources = false)
     {
         if (!$arp) {
             if ($showSources) {

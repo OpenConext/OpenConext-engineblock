@@ -79,7 +79,7 @@ class IdentityProvider extends AbstractRole
     /**
      * @var ConsentSettings
      *
-     * @ORM\Column(name="consent_settings", type="json_array", length=16777215)
+     * @ORM\Column(name="consent_settings", type="json", length=16777215)
      */
     private $consentSettings;
 
@@ -284,9 +284,12 @@ class IdentityProvider extends AbstractRole
         foreach ($this->discoveries as $index => $discovery) {
             try {
                 if (!$discovery instanceof Discovery) {
-                    $logo = new Logo($discovery['logo']['url']);
-                    $logo->width = $discovery['logo']['width'];
-                    $logo->height = $discovery['logo']['height'];
+                    $logo = null;
+                    if (isset($discovery['logo']) && is_array($discovery['logo'])) {
+                        $logo = new Logo($discovery['logo']['url']);
+                        $logo->width = $discovery['logo']['width'];
+                        $logo->height = $discovery['logo']['height'];
+                    }
 
                     $this->discoveries[$index] = Discovery::create(
                         $discovery['names'] ?? [],
@@ -307,5 +310,48 @@ class IdentityProvider extends AbstractRole
                 throw new InvalidArgumentException('Discovery must be instance of Discovery');
             }
         }
+    }
+
+    /**
+     * Certificates are not available on the object after deserialisation!
+     *
+     * @return array
+     */
+    public function __sleep()
+    {
+        return [
+            'enabledInWayf',
+            'singleSignOnServices',
+            'consentSettings',
+            'shibMdScopes',
+            'discoveries',
+            'id',
+            'entityId',
+            'nameNl',
+            'nameEn',
+            'namePt',
+            'descriptionNl',
+            'descriptionEn',
+            'descriptionPt',
+            'displayNameNl',
+            'displayNameEn',
+            'displayNamePt',
+            'logo',
+            'organizationNl',
+            'organizationEn',
+            'organizationPt',
+            'keywordsNl',
+            'keywordsEn',
+            'keywordsPt',
+            'workflowState',
+            'contactPersons',
+            'nameIdFormat',
+            'supportedNameIdFormats',
+            'singleLogoutService',
+            'requestsMustBeSigned',
+            'manipulation',
+            'coins',
+            'mdui',
+        ];
     }
 }

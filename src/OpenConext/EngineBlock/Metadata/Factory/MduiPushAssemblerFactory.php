@@ -36,21 +36,21 @@ class MduiPushAssemblerFactory
     {
         $displayNameElement = self::assembleElement(
             'DisplayName',
-            $properties['displayNameEn'],
-            $properties['displayNameNl'],
-            $properties['displayNamePt']
+            $properties['displayNameEn'] ?? null,
+            $properties['displayNameNl'] ?? null,
+            $properties['displayNamePt'] ?? null
         );
         $descriptionElement = self::assembleElement(
             'Description',
-            $properties['descriptionEn'],
-            $properties['descriptionNl'],
-            $properties['descriptionPt']
+            $properties['descriptionEn'] ?? null,
+            $properties['descriptionNl'] ?? null,
+            $properties['descriptionPt'] ?? null
         );
         $keywordsElement = self::assembleElement(
             'Keywords',
-            $properties['keywordsEn'],
-            $properties['keywordsNl'],
-            $properties['keywordsPt']
+            $properties['keywordsEn'] ?? null,
+            $properties['keywordsNl'] ?? null,
+            $properties['keywordsPt'] ?? null
         );
 
         $privacyStatementUrlElement = self::assemblePrivacyStatement($connection);

@@ -43,11 +43,12 @@ class CollabPersonIdType extends Type
         }
 
         if (!$value instanceof CollabPersonId) {
+            $valueForMessage = $this->getValueForExceptionMessage($value);
             throw new ConversionException(
                 sprintf(
                     'Value "%s" must be null or an instance of CollabPersonId to be able to ' .
                     'convert it to a database value',
-                    is_object($value) ? get_class($value) : (string)$value
+                    $valueForMessage
                 )
             );
         }
@@ -88,5 +89,18 @@ class CollabPersonIdType extends Type
     public function requiresSQLCommentHint(AbstractPlatform $platform) : bool
     {
         return true;
+    }
+
+    private function getValueForExceptionMessage($value): string
+    {
+        if (is_object($value)) {
+            return get_class($value);
+        }
+
+        if (is_array($value)) {
+            return 'Array';
+        }
+
+        return (string)$value;
     }
 }

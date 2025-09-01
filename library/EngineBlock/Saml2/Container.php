@@ -64,7 +64,7 @@ final class EngineBlock_Saml2_Container extends AbstractContainer
         throw new BadMethodCallException(
             sprintf(
                 '"%s":"%s" may not be called in the Surfnet\\SamlBundle as it doesn\'t work with Symfony',
-                __CLASS__,
+                self::class,
                 __METHOD__
             )
         );
@@ -75,7 +75,7 @@ final class EngineBlock_Saml2_Container extends AbstractContainer
         throw new BadMethodCallException(
             sprintf(
                 '"%s":"%s" may not be called in the Surfnet\\SamlBundle as it doesn\'t work with Symfony"',
-                __CLASS__,
+                self::class,
                 __METHOD__
             )
         );
@@ -86,7 +86,7 @@ final class EngineBlock_Saml2_Container extends AbstractContainer
         throw new BadMethodCallException(
             sprintf(
                 '"%s":"%s" may not be called in the Surfnet\\SamlBundle as it doesn\'t work with Symfony"',
-                __CLASS__,
+                self::class,
                 __METHOD__
             )
         );
@@ -97,7 +97,7 @@ final class EngineBlock_Saml2_Container extends AbstractContainer
         throw new BadMethodCallException(
             sprintf(
                 '"%s":"%s" may not be called in the Surfnet\\SamlBundle as it doesn\'t work with Symfony"',
-                __CLASS__,
+                self::class,
                 __METHOD__
             )
         );

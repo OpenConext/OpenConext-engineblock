@@ -42,7 +42,7 @@ final class ManualOrDecoratedActivationStrategy implements ActivationStrategyInt
         $this->wasManuallyActivated = true;
     }
 
-    public function isHandlerActivated(array $record)
+    public function isHandlerActivated(array $record): bool
     {
         return $this->wasManuallyActivated || $this->decoratedStrategy->isHandlerActivated($record);
     }

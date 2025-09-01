@@ -172,7 +172,7 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
         $overrides['contactPersons'] = $contactPersons;
 
         // EngineBlockIdentityProvider
-        $overrides['certificates'] = [$this->certificateMock];
+        $overrides['certificates'] = [null];
         $overrides['supportedNameIdFormats'] = $supportedNameIdFormats;
         $overrides['singleSignOnServices'] = [new Service('proxiedSsoLocation', Constants::BINDING_HTTP_REDIRECT)];
         $overrides['singleLogoutService'] = new Service(null, null);
