@@ -346,7 +346,7 @@ class ServiceProvider extends AbstractRole
         }
 
         // Fallback to EN naming preferences when the preferred locale was not set or yielded no value
-        if (($preferredLocale !== 'en' && empty($orgName)) || empty($orgName)) {
+        if ((($preferredLocale !== 'en' && empty($orgName)) || empty($orgName)) && isset($this->organizationEn)) {
             $orgName = !empty($this->organizationEn->displayName) ? $this->organizationEn->displayName : $this->organizationEn->name;
         }
 

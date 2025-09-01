@@ -105,17 +105,22 @@ class Wayf extends AbstractExtension
             ? []
             : array_values((array)$idp['Keywords']);
 
+        $connected = false;
+        if (isset($idp['Access']) && $idp['Access'] === self::ACCESS_ENABLED) {
+            $connected = true;
+        }
+
         // In SingleSignOn.php, the IDP is transformed into an array for the frontend
         // Then, here, the array is transformed into another array for the frontend which is actually used in twig
         return [
-            'entityId' => $idp['EntityID'],
-            'connected' => $idp['Access'] === self::ACCESS_ENABLED,
-            'displayTitle' => $idp['Name'],
-            'title' => strtolower($idp['Name']),
+            'entityId' => $idp['EntityID'] ?? null,
+            'connected' => $connected,
+            'displayTitle' => $idp['Name'] ?? null,
+            'title' => strtolower($idp['Name'] ?? ''),
             'keywords' => strtolower(implode('|', $keywords)),
-            'logo' => $idp['Logo'],
-            'isDefaultIdp' => (bool)$idp['isDefaultIdp'],
-            'discoveryHash' => $idp['DiscoveryHash']
+            'logo' => $idp['Logo'] ?? null,
+            'isDefaultIdp' => (bool) ($idp['isDefaultIdp'] ?? null),
+            'discoveryHash' => $idp['DiscoveryHash'] ?? null,
         ];
     }
 

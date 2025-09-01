@@ -113,7 +113,7 @@ class ConnectionsController
 
         $body = JsonRequestHelper::decodeContentOf($request);
 
-        if (!is_object($body) || !isset($body->connections) && !is_object($body->connections)) {
+        if (!is_object($body) || !isset($body->connections) || !is_object($body->connections)) {
             throw new BadApiRequestHttpException('Unrecognized structure for JSON');
         }
 

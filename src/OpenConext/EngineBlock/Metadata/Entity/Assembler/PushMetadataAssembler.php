@@ -104,7 +104,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
                     );
                 }
 
-                if ($connection->allow_all_entities) {
+                if (isset($connection->allow_all_entities) && $connection->allow_all_entities) {
                     $spAllowedEntityIds[$role->entityId] = true;
                 }
             }
@@ -121,7 +121,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
                     );
                 }
 
-                if ($connection->allow_all_entities) {
+                if (isset($connection->allow_all_entities) && $connection->allow_all_entities) {
                     $idpAllowedEntityIds[$role->entityId] = true;
                 }
             }
@@ -136,9 +136,12 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
             }
 
             // Get the IdPs that are allowed for this SP.
-            $allowedIdpEntityIds = $spAllowedEntityIds[$role->entityId];
-            if ($allowedIdpEntityIds === true) {
-                $allowedIdpEntityIds = $allIdpEntityIds;
+            $allowedIdpEntityIds = null;
+            if (isset($spAllowedEntityIds[$role->entityId])) {
+                $allowedIdpEntityIds = $spAllowedEntityIds[$role->entityId];
+                if ($allowedIdpEntityIds === true) {
+                    $allowedIdpEntityIds = $allIdpEntityIds;
+                }
             }
 
             // Strip out the IdPs that disallow the SP
