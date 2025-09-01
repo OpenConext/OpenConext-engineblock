@@ -91,12 +91,12 @@ final class FunctionalTestingPdpClient implements PdpClientInterface
                 $pdpResponse->decision = PolicyDecision::DECISION_INDETERMINATE;
 
                 $pdpResponse->status = new Status();
-                $pdpResponse->status->statusDetail = <<<XML
+                $pdpResponse->status->statusDetail = <<<XML_WRAP
     <MissingAttributeDetail 
         Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
         AttributeId="urn:mace:dir:attribute-def:eduPersonAffiliation"
         DataType="http://www.w3.org/2001/XMLSchema#string"/>
-XML;
+XML_WRAP;
                 $pdpResponse->status->statusCode = new StatusCode();
                 $pdpResponse->status->statusCode->value = 'urn:oasis:names:tc:xacml:1.0:status:missing-attribute';
                 $pdpResponse->status->statusMessage = 'Missing required attribute';
