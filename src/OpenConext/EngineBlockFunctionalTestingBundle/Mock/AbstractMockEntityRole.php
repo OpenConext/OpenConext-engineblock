@@ -135,7 +135,7 @@ abstract class AbstractMockEntityRole
         $certificate = array_reduce(
             $idpSsoRole->getKeyDescriptor()[0]->getKeyInfo()->getInfo(),
             function ($carry, $info) {
-                return $carry ? $carry : $info instanceof Chunk ? $info : false;
+                return $carry ?: ($info instanceof Chunk ? $info : false);
             }
         );
 

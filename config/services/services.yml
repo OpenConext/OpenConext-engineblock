@@ -52,11 +52,11 @@ services:
 
     OpenConext\EngineBlock\Service\AuthenticationStateHelper:
         arguments:
-            - '@session'
+            - '@request_stack'
 
     OpenConext\EngineBlock\Service\ProcessingStateHelper:
         arguments:
-            - '@session'
+            - '@request_stack'
 
     OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper:
         arguments:

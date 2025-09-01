@@ -79,10 +79,13 @@ final class PolicyDecision
             $localizedDenyMessages = [];
             foreach ($response->associatedAdvices as $associatedAdvice) {
                 foreach ($associatedAdvice->attributeAssignments as $attributeAssignment) {
-                    list($identifier, $locale) = explode(':', $attributeAssignment->attributeId);
+                    $parts = explode(':', $attributeAssignment->attributeId);
+                    if (count($parts) >= 2) {
+                        list($identifier, $locale) = $parts;
 
-                    if ($identifier === 'DenyMessage') {
-                        $localizedDenyMessages[$locale] = $attributeAssignment->value;
+                        if ($identifier === 'DenyMessage') {
+                            $localizedDenyMessages[$locale] = $attributeAssignment->value;
+                        }
                     }
 
                     self::setAttributeAssignmentSource($attributeAssignment, $policyDecision);

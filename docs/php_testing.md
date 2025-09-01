@@ -35,6 +35,21 @@ Some aids in working with these tests:
 1. When you want to try the test in your own browser: Echo the `$ssoStartLocation` and stop execution in `MockSpContext::iTriggerTheLoginEitherAtOrUnsolicitedAtEb`. Run the test and open the link in your own browser. Ensure you run EngineBlock in test environment in order to use the test fixtures.
 2. Xdebug Step debugging: Add the `Xdebug step debugging is enabled in the browser` step definition to your test to let Mink set the debug cookie in the browser. Enabling you to listen for incoming debug requests.
 3. WIP tests: add the `@WIP` or `@SKIP` annotations to any scenario to flag it a WIP, or skip it altogether. When calling Behat from CLI, be sure to only run the `wip` suite.
+4. To enable step debugging in web requests triggered through behat tests, enable xdebug by default:
+```bash
+echo "xdebug.start_with_request=yes" | tee -a /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+apachectl graceful
+```
+
+### Showing deprecation notices triggered during behat:
+In order to see deprecation notices generated when running the test suite, add these lines to te top of: `\EngineBlock_Application_ErrorHandler::error`
+```php
+if($errorNumber === E_DEPRECATED || $errorNumber === E_USER_DEPRECATED){
+    file_put_contents(__DIR__ . '/../../../var/log/deprecations.log', $errorMessage . '|' . $errorFile . ':' . $errorLine . PHP_EOL, FILE_APPEND);
+    return false;
+}
+```
+
 
 ## Quality assurance
 The different QA tooling we know and love in other OpenConext projects are also included in EngineBlock. Most can be run using one of the ant build targets.

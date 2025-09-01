@@ -1,4 +1,4 @@
-FROM ghcr.io/openconext/openconext-basecontainers/php82-apache2-node16-composer2:latest
+FROM ghcr.io/openconext/openconext-basecontainers/php82-apache2-node20-composer2:latest
 
 RUN a2enmod ssl
 

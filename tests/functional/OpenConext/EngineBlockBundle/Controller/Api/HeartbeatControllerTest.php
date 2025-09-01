@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,12 +31,12 @@ final class HeartbeatControllerTest extends WebTestCase
      */
     public function engineblock_has_a_heartbeat()
     {
-        $client = $this->createClient();
+        $client = self::createClient();
         $client->request('GET', 'https://engine-api.dev.openconext.local/');
         $this->assertStatusCode(Response::HTTP_OK, $client);
     }
 
-    private function assertStatusCode($expectedStatusCode, Client $client)
+    private function assertStatusCode($expectedStatusCode, KernelBrowser $client)
     {
         $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
     }

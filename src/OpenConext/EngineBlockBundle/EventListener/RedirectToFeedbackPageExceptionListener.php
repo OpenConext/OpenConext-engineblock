@@ -234,7 +234,9 @@ class RedirectToFeedbackPageExceptionListener
             $redirectToRoute
         ));
 
-        $this->logger->notice($message);
+        if (isset($message)) {
+            $this->logger->notice($message);
+        }
 
         $this->errorReporter->reportError($exception, '-> Redirecting to feedback page');
 

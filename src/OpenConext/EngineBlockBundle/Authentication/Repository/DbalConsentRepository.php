@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockBundle\Authentication\Repository;
 use DateTime;
 use Doctrine\DBAL\Connection as DbalConnection;
 use Doctrine\DBAL\DBALException;
+use Doctrine\ORM\EntityManagerInterface;
 use OpenConext\EngineBlock\Authentication\Model\Consent;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
@@ -41,9 +42,9 @@ final class DbalConsentRepository implements ConsentRepository
      */
     private $logger;
 
-    public function __construct(DbalConnection $connection, LoggerInterface $logger)
+    public function __construct(EntityManagerInterface $entityManager, LoggerInterface $logger)
     {
-        $this->connection = $connection;
+        $this->connection = $entityManager->getConnection();
         $this->logger = $logger;
     }
 

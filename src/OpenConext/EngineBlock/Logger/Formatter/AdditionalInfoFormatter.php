@@ -34,12 +34,12 @@ final class AdditionalInfoFormatter implements FormatterInterface
         $this->formatter = $formatter;
     }
 
-    public function format(array $record)
+    public function format(array $record): mixed
     {
         return $this->formatter->format($this->addAdditionalInfoForEngineBlockExceptions($record));
     }
 
-    public function formatBatch(array $records)
+    public function formatBatch(array $records): mixed
     {
         foreach ($records as &$value) {
             $value = $this->addAdditionalInfoForEngineBlockExceptions($value);
