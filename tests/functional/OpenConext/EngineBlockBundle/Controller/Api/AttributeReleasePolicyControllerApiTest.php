@@ -20,21 +20,16 @@ namespace OpenConext\EngineBlockBundle\Tests;
 
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class AttributeReleasePolicyControllerApiTest extends WebTestCase
 {
-    public function setUp(): void
-    {
-        $this->clearMetadataFixtures();
-    }
-
     public function tearDown(): void
     {
         $this->clearMetadataFixtures();
+        parent::tearDown(); // Ensure the kernel is properly shutdown to avoid state pollution between tests.
     }
 
     /**
@@ -78,7 +73,9 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
      */
     public function cannot_apply_arp_if_user_does_not_have_profile_role()
     {
-        $client = static::createClient([], [
+        $client = static::createClient();
+
+        $client->setServerParameters([
             'PHP_AUTH_USER' => 'no_roles',
             'PHP_AUTH_PW' => 'no_roles',
         ]);
@@ -130,13 +127,10 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
             'attribute-key' => ['attribute-value']
         ];
 
+        $client = $this->createAuthorizedClient();
+
         $serviceProvider = new ServiceProvider($spEntityId);
         $this->addServiceProviderFixture($serviceProvider);
-
-        $client = static::createClient([], [
-            'PHP_AUTH_USER' => self::getContainer()->getParameter('api.users.profile.username'),
-            'PHP_AUTH_PW' => self::getContainer()->getParameter('api.users.profile.password'),
-        ]);
 
         $arpRequestData = [
             'entityIds'  => [
@@ -188,6 +182,8 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
             'special-attribute' => ['*'],
         ]);
 
+        $client = $this->createAuthorizedClient();
+
         $spNotReceivingSpecialAttribute = $this->createServiceProviderWithArp(
             $spNotReceivingSpecialAttributeEntityId,
             $arpWithoutSpecialAttribute
@@ -198,8 +194,6 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
         );
         $this->addServiceProviderFixture($spNotReceivingSpecialAttribute);
         $this->addServiceProviderFixture($spReceivingSpecialAttribute);
-
-        $client = $this->createAuthorizedClient();
 
         $arpRequestData = [
             'entityIds'  => [
@@ -259,6 +253,8 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
             'special-attribute' => ['secret-value'],
         ]);
 
+        $client = $this->createAuthorizedClient();
+
         $spNotReceivingSpecialAttribute = $this->createServiceProviderWithArp(
             $spNotReceivingSpecialAttributeEntityId,
             $arpWithoutMatchingSpecialAttribute
@@ -270,7 +266,6 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
         $this->addServiceProviderFixture($spNotReceivingSpecialAttribute);
         $this->addServiceProviderFixture($spReceivingSpecialAttribute);
 
-        $client = $this->createAuthorizedClient();
 
         $arpRequestData = [
             'entityIds'  => [
@@ -330,6 +325,8 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
             'special-attribute' => ['secret-*'],
         ]);
 
+        $client = $this->createAuthorizedClient();
+
         $spNotReceivingSpecialAttribute = $this->createServiceProviderWithArp(
             $spNotReceivingSpecialAttributeEntityId,
             $arpWithoutMatchingSpecialAttribute
@@ -341,7 +338,6 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
         $this->addServiceProviderFixture($spNotReceivingSpecialAttribute);
         $this->addServiceProviderFixture($spReceivingSpecialAttribute);
 
-        $client = $this->createAuthorizedClient();
 
         $arpRequestData = [
             'entityIds'  => [
@@ -438,7 +434,7 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
         ];
     }
 
-    private function assertStatusCode($expectedStatusCode, Client $client)
+    private function assertStatusCode($expectedStatusCode, KernelBrowser $client)
     {
         $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
     }

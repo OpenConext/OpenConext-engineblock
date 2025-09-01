@@ -49,7 +49,7 @@ class EngineBlock_Saml2_AuthnRequestFactory
         $sspRequest = new AuthnRequest();
         $sspRequest->setId($server->getNewId(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_REQUEST));
         $sspRequest->setIssueInstant(time());
-        $sspRequest->setDestination($idpMetadata->singleSignOnServices[0]->location);
+        $sspRequest->setDestination(isset($idpMetadata->singleSignOnServices[0]) ? $idpMetadata->singleSignOnServices[0]->location : null);
         $sspRequest->setForceAuthn($originalRequest->getForceAuthn());
         $sspRequest->setIsPassive($originalRequest->getIsPassive());
         $sspRequest->setAssertionConsumerServiceURL($server->getUrl($acsServiceName));
@@ -81,7 +81,7 @@ class EngineBlock_Saml2_AuthnRequestFactory
 
         // Use the default binding even if more exist
         $request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
-        $request->setDeliverByBinding($idpMetadata->singleSignOnServices[0]->binding);
+        $request->setDeliverByBinding(isset($idpMetadata->singleSignOnServices[0]) ? $idpMetadata->singleSignOnServices[0]->binding : null);
 
         return $request;
     }

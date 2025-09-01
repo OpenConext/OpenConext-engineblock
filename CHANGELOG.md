@@ -17,6 +17,18 @@ Breaking changes please see: [upgrading](UPGRADING.md#700)
 Maintenance:
 * upgrade to symfony 4.4
 
+### DB json_array
+Doctrine no longer supports `json_array` types.
+If the production database currently has columns with `COMMENT '(DC2Type:json_array)'`, they need to be changed to `COMMENT '(DC2Type:json)'`.
+
+This is not done in a Migration, as production is not in sync with the schema as defined in the migrations.
+
+Reference query as an example:
+```mysql
+ALTER TABLE sso_provider_roles_eb5
+    CHANGE consent_settings consent_settings MEDIUMTEXT DEFAULT NULL COMMENT '(DC2Type:json)';
+```
+
 ## 6.18.0
 
 Dependencies:

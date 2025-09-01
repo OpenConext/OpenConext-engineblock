@@ -27,7 +27,7 @@ services:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture
         arguments:
             - '@OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository'
-            - '@engineblock.compat.doctrine.entity_manager'
+            - '@doctrine.orm.entity_manager'
 
     engineblock.functional_testing.fixture.features:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration

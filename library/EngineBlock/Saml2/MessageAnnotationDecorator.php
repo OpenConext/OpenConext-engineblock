@@ -135,7 +135,17 @@ class EngineBlock_Saml2_MessageAnnotationDecorator
     public function __toString()
     {
         $vars = get_object_vars($this);
+
+        if (array_key_exists('_serializableRelayState', $vars) && $vars['_serializableRelayState'] === null) {
+            unset($vars['_serializableRelayState']);
+        }
+
+        if (array_key_exists('_serializableSspMessageXml', $vars) && $vars['_serializableSspMessageXml'] === null) {
+            unset($vars['_serializableSspMessageXml']);
+        }
+
         $vars['sspMessage'] = $this->sspMessage->toUnsignedXML()->ownerDocument->saveXML();
+
         return json_encode($vars);
     }
 }

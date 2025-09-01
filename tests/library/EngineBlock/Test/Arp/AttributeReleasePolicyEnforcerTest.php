@@ -18,6 +18,7 @@
 
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcer extends TestCase
 {
@@ -29,6 +30,7 @@ class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcer extends TestCase
     public function setUp(): void
     {
         $this->_arpEnforcer = new EngineBlock_Arp_AttributeReleasePolicyEnforcer();
+        EngineBlock_ApplicationSingleton::getInstance()->setLogInstance(new NullLogger());
     }
 
     public function testEnforceNullArp()
@@ -120,8 +122,8 @@ class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcer extends TestCase
     {
         $responseAttributes = empty($responseAttributes) ? $this->_responseAttributes() : $responseAttributes;
         return $this->_arpEnforcer->enforceArp(
-            $arp === null ? null : new AttributeReleasePolicy($arp),
-            $responseAttributes
+            $responseAttributes,
+            $arp === null ? null : new AttributeReleasePolicy($arp)
         );
     }
 

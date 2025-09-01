@@ -23,33 +23,22 @@ use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\Organization;
-use OpenConext\EngineBlockBundle\Configuration\Feature;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\Value\Saml\NameIdFormat;
 use PDOStatement;
-use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use function json_decode;
 use function json_encode;
 
 final class ConsentControllerTest extends WebTestCase
 {
-    public function __construct($name = null, array $data = [], $dataName = '')
-    {
-        $this->clearConsentFixtures();
-        $this->clearMetadataFixtures();
-
-        parent::__construct($name, $data, $dataName);
-
-    }
-
     public function tearDown(): void
     {
         $this->clearConsentFixtures();
         $this->clearMetadataFixtures();
+        parent::tearDown();
     }
 
     /**
@@ -64,8 +53,17 @@ final class ConsentControllerTest extends WebTestCase
 
         $unauthenticatedClient = static::createClient();
         $unauthenticatedClient->request('GET', 'https://engine-api.dev.openconext.local/consent/' . $userId);
-        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
+        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED, $unauthenticatedClient);
+    }
 
+    /**
+     * @test
+     * @group Api
+     * @group Consent
+     * @group Profile
+     */
+    public function authentication_is_required_for_accessing_the_remove_consent_api()
+    {
         $unauthenticatedClient = static::createClient();
         $unauthenticatedClient->request('POST', 'https://engine-api.dev.openconext.local/remove-consent');
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
@@ -384,10 +382,7 @@ final class ConsentControllerTest extends WebTestCase
         $this->assertResponseIsJson($client);
     }
 
-    /**
-     * @param Client $client
-     */
-    private function disableRemoveConsentApiFeatureFor(Client $client)
+    private function disableRemoveConsentApiFeatureFor(KernelBrowser $client)
     {
         $mock = new FeatureConfiguration([
             'api.consent_remove' => false,
@@ -464,14 +459,9 @@ final class ConsentControllerTest extends WebTestCase
         ];
     }
 
-    private function assertStatusCode($expectedStatusCode, Client $client)
+    private function assertStatusCode($expectedStatusCode, KernelBrowser $client)
     {
         $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
-    }
-
-    protected static function getContainer(): ContainerInterface
-    {
-        return self::$kernel->getContainer();
     }
 
     private function createAuthorizedProfileClient(): KernelBrowser
@@ -494,7 +484,7 @@ final class ConsentControllerTest extends WebTestCase
         return $client;
     }
 
-    private function disableConsentApiFeatureFor(Client $client)
+    private function disableConsentApiFeatureFor(KernelBrowser $client)
     {
         $mock = new FeatureConfiguration([
             'api.consent_listing' => false,
@@ -504,7 +494,7 @@ final class ConsentControllerTest extends WebTestCase
         $client->getContainer()->set('OpenConext\\EngineBlockBundle\\Configuration\\FeatureConfiguration', $mock);
     }
 
-    private function disableEngineConsentFeatureFor(Client $client)
+    private function disableEngineConsentFeatureFor(KernelBrowser $client)
     {
         $mock = new FeatureConfiguration([
             'eb.feature_enable_consent' => false
@@ -640,7 +630,7 @@ final class ConsentControllerTest extends WebTestCase
         ];
     }
 
-    private function assertResponseIsJson(Client $client)
+    private function assertResponseIsJson(KernelBrowser $client)
     {
         $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');

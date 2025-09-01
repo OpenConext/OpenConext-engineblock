@@ -39,11 +39,6 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
     private $activeAuthenticationLoopGuard;
 
     /**
-     * @var AbstractDataStore
-     */
-    private $dataStore;
-
-    /**
      * @var false|array
      */
     private $authenticationGuardFixture;
@@ -54,7 +49,6 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
         AbstractDataStore $dataStore
     ) {
         $this->originalAuthenticationLoopGuard = $authenticationLoopGuard;
-        $this->dataStore               = $dataStore;
 
         try {
             $this->authenticationGuardFixture = $dataStore->load();
@@ -71,13 +65,14 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
     public function saveAuthenticationLoopGuardConfiguration(
         int $maximumAuthenticationProceduresAllowed,
         int $timeFrameForAuthenticationLoopInSeconds,
-        int $maximumAuthenticationsPerSession
+        int $maximumAuthenticationsPerSession,
+        AbstractDataStore $dataStore
     ) {
         $this->authenticationGuardFixture['maximumAuthenticationProceduresAllowed'] = $maximumAuthenticationProceduresAllowed;
         $this->authenticationGuardFixture['timeFrameForAuthenticationLoopInSeconds'] = $timeFrameForAuthenticationLoopInSeconds;
         $this->authenticationGuardFixture['maximumAuthenticationsPerSession'] = $maximumAuthenticationsPerSession;
 
-        $this->dataStore->save($this->authenticationGuardFixture);
+        $dataStore->save($this->authenticationGuardFixture);
     }
 
     /**
@@ -120,11 +115,11 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
         return false;
     }
 
-    public function cleanUp()
+    public function cleanUp(AbstractDataStore $dataStore)
     {
         $this->authenticationGuardFixture = [];
         $this->activeAuthenticationLoopGuard = $this->originalAuthenticationLoopGuard;
-        $this->dataStore->save($this->authenticationGuardFixture);
+        $dataStore->save($this->authenticationGuardFixture);
     }
 
     private function initAuthenticationLoopGuard(): void

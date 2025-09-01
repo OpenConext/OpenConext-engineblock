@@ -35,7 +35,7 @@ class EngineBlock_Test_Saml2_AuthnRequestAnnotationDecoratorTest extends TestCas
         $annotatedRequest->setDebug();
 
         $this->assertEquals(
-            '{"sspMessage":"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<samlp:AuthnRequest xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\" xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\" ID=\"TEST123\" Version=\"2.0\" IssueInstant=\"1970-01-01T00:00:00Z\"\/>\n","keyId":null,"wasSigned":false,"debug":true,"unsolicited":false,"transparent":false,"deliverByBinding":null}',
+            '{"sspMessage":"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<samlp:AuthnRequest xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\" xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\" ID=\"TEST123\" Version=\"2.0\" IssueInstant=\"1970-01-01T00:00:00Z\"\/>\n","deliverByBinding":null,"keyId":null,"wasSigned":false,"debug":true,"unsolicited":false,"transparent":false}',
             $annotatedRequest->__toString()
         );
     }
@@ -81,5 +81,20 @@ class EngineBlock_Test_Saml2_AuthnRequestAnnotationDecoratorTest extends TestCas
         $obligations = $annotatedRequest->getStepupObligations([$loa2, $loa3]);
         $this->assertTrue(is_array($obligations));
         $this->assertCount(2, $obligations);
+    }
+
+    public function test_relaystate_persists_through_serialization()
+    {
+        $request = new AuthnRequest();
+        $request->setId('RS1');
+        $request->setIssueInstant(0);
+        $request->setRelayState('ss:mem:relay-123');
+
+        $decorator = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($request);
+
+        $serialized = serialize($decorator);
+        $restored = unserialize($serialized);
+
+        $this->assertEquals('ss:mem:relay-123', $restored->getRelayState(), 'RelayState should survive serialization');
     }
 }

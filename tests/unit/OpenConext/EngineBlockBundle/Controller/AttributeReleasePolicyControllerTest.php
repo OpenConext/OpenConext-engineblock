@@ -30,7 +30,11 @@ use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class AttributeReleasePolicyControllerTest extends TestCase
 {
@@ -50,7 +54,12 @@ class AttributeReleasePolicyControllerTest extends TestCase
 
         $authorizationChecker = $this->mockAuthorizationCheckerDenyingAccessToProfile();
 
-        $arpController = new AttributeReleasePolicyController($authorizationChecker, $metadataService, $arpEnforcer);
+        $arpController = new AttributeReleasePolicyController(
+            $this->mockTokenStorage(),
+            $authorizationChecker,
+            $metadataService,
+            $arpEnforcer
+        );
 
         $request = new Request();
         $request->setMethod(Request::METHOD_POST);
@@ -71,7 +80,8 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $request = $this->createRequestWithContent('null');
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
+            $this->mockTokenStorage(),
+            $this->mockAccessGrantingDecisionManager(),
             $this->createDummyMetadataService(),
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -91,7 +101,8 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $request = $this->createRequestWithContent('{}');
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
+            $this->mockTokenStorage(),
+            $this->mockAccessGrantingDecisionManager(),
             $this->createDummyMetadataService(),
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -111,7 +122,8 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $request = $this->createRequestWithContent('{"entityIds": "some-entity-id"}');
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
+            $this->mockTokenStorage(),
+            $this->mockAccessGrantingDecisionManager(),
             $this->createDummyMetadataService(),
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -131,7 +143,8 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $request = $this->createRequestWithContent('{"entityIds": []}');
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
+            $this->mockTokenStorage(),
+            $this->mockAccessGrantingDecisionManager(),
             $this->createDummyMetadataService(),
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -151,7 +164,8 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $request = $this->createRequestWithContent('{"entityIds": ["some-entity-id"]}');
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
+            $this->mockTokenStorage(),
+            $this->mockAccessGrantingDecisionManager(),
             $this->createDummyMetadataService(),
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -171,7 +185,8 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $request = $this->createRequestWithContent('{"entityIds": ["some-entity-id"], "attributes": "some-attribute"}');
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
+            $this->mockTokenStorage(),
+            $this->mockAccessGrantingDecisionManager(),
             $this->createDummyMetadataService(),
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -193,7 +208,8 @@ class AttributeReleasePolicyControllerTest extends TestCase
         );
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
+            $this->mockTokenStorage(),
+            $this->mockAccessGrantingDecisionManager(),
             $this->createDummyMetadataService(),
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -215,7 +231,8 @@ class AttributeReleasePolicyControllerTest extends TestCase
         );
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
+            $this->mockTokenStorage(),
+            $this->mockAccessGrantingDecisionManager(),
             $this->createDummyMetadataService(),
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -248,7 +265,8 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $request = $this->createRequestWithContent($serializedJsonRequest);
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
+            $this->mockTokenStorage(),
+            $this->mockAccessGrantingDecisionManager(),
             $this->createDummyMetadataService(),
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -296,7 +314,8 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $metadataServiceWithServiceProviders = new MetadataService($metadataRepository);
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
+            $this->mockTokenStorage(),
+            $this->mockAccessGrantingDecisionManager(),
             $metadataServiceWithServiceProviders,
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -360,7 +379,8 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $metadataServiceWithServiceProviders = new MetadataService($metadataRepository);
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
+            $this->mockTokenStorage(),
+            $this->mockAccessGrantingDecisionManager(),
             $metadataServiceWithServiceProviders,
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -369,30 +389,34 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $this->assertSame($expectedResponse, $response->getContent());
     }
 
-    /**
-     * @return AuthorizationCheckerInterface
-     */
-    public function mockAuthorizationCheckerGrantingAccessToProfile()
+    private function mockAccessGrantingDecisionManager(): AccessDecisionManagerInterface
     {
-        $authorizationChecker = Mockery::mock(AuthorizationCheckerInterface::class);
-        $authorizationChecker->shouldReceive('isGranted')
-            ->with('ROLE_API_USER_PROFILE')
-            ->andReturn(true);
+        $accessDecisionManager = $this->createMock(AccessDecisionManagerInterface::class);
+        $accessDecisionManager->method('decide')->willReturn(true);
 
-        return $authorizationChecker;
+        return $accessDecisionManager;
     }
 
+    private function mockTokenStorage(): TokenStorageInterface
+    {
+        $token = $this->createMock(TokenInterface::class);
+        $token->method('getUser')->willReturn($this->createMock(UserInterface::class));
+
+        $mock = $this->createMock(TokenStorageInterface::class);
+        $mock->method('getToken')->willReturn($token);
+        return $mock;
+    }
+
+
     /**
      * @return AuthorizationCheckerInterface
      */
-    public function mockAuthorizationCheckerDenyingAccessToProfile()
+    public function mockAuthorizationCheckerDenyingAccessToProfile(): AccessDecisionManagerInterface
     {
-        $authorizationChecker = Mockery::mock(AuthorizationCheckerInterface::class);
-        $authorizationChecker->shouldReceive('isGranted')
-            ->with('ROLE_API_USER_PROFILE')
-            ->andReturn(false);
+        $accessDecisionManager = $this->createMock(AccessDecisionManagerInterface::class);
+        $accessDecisionManager->method('decide')->willReturn(false);
 
-        return $authorizationChecker;
+        return $accessDecisionManager;
     }
 
     /**

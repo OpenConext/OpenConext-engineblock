@@ -19,7 +19,12 @@ echo -e "\nInstalling database fixtures...\n"
 echo -e "\nPreparing frontend assets\n"
 rm -rf var/cache/ci
 EB_THEME=skeune ./theme/scripts/prepare-test.js > /dev/null
-chown -R www-data var/cache/
+mkdir -p var/cache/ci
+chown -R www-data:www-data var
+chmod -R 2775 var
+find var -type d -exec chmod 2775 {} \;
+find var -type d -exec chown www-data:www-data {} \;
+
 mkdir -p /tmp/eb-fixtures
 chmod -R 0777 /tmp/eb-fixtures
 

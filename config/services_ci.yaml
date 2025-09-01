@@ -24,6 +24,7 @@ services:
             $pdpClient: '@engineblock.functional_testing.fixture.pdp_client'
             $authenticationLoopGuard: '@engineblock.functional_testing.fixture.authentication_loop_guard'
             $attributeAggregationClient: '@engineblock.functional_testing.fixture.attribute_aggregation_client'
+            $authGuardDataStore: '@engineblock.functional_testing.data_store.authentication_loop_guard'
         tags: ['fob.context']
 
     OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MockIdpContext:

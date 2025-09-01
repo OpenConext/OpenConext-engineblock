@@ -8,7 +8,7 @@ framework:
             - '%kernel.project_dir%/theme/%theme.name%/translations'
             - '%kernel.project_dir%/src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/languages'
     session:
-        storage_id: session.storage.mock_file
+        storage_factory_id: session.storage.factory.mock_file
         name: MOCKSESSION
     router:
         strict_requirements: true
