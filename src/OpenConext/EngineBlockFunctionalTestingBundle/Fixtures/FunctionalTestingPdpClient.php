@@ -123,7 +123,7 @@ XML_WRAP;
             default:
                 $invalidData = $this->policyDecisionFixture;
                 if (!is_string($invalidData)) {
-                    $invalidData = is_object($invalidData) ? get_class($invalidData) : gettype($invalidData);
+                    $invalidData = get_debug_type($invalidData);
                 }
 
                 throw new RuntimeException(

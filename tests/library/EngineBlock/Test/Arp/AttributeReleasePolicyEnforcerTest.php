@@ -120,8 +120,8 @@ class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcer extends TestCase
     {
         $responseAttributes = empty($responseAttributes) ? $this->_responseAttributes() : $responseAttributes;
         return $this->_arpEnforcer->enforceArp(
+            $responseAttributes,
             $arp === null ? null : new AttributeReleasePolicy($arp),
-            $responseAttributes
         );
     }
 

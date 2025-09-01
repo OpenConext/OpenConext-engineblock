@@ -115,7 +115,7 @@ final class AttributeReleasePolicyController
         $releasedAttributes = [];
         foreach ($body['entityIds'] as $entityId) {
             $arp = $this->metadataService->findArpForServiceProviderByEntityId(new EntityId($entityId));
-            $releasedAttributes[$entityId] = $this->arpEnforcer->enforceArp($arp, $body['attributes'], $showSources);
+            $releasedAttributes[$entityId] = $this->arpEnforcer->enforceArp($body['attributes'], $arp, $showSources);
         }
 
         return new JsonResponse(json_encode($releasedAttributes));
