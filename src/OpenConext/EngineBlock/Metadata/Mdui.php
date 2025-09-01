@@ -163,7 +163,7 @@ class Mdui
     public function hasDisplayName(string $language): bool
     {
         /** @var MultilingualElement $displayName */
-        $displayName = $this->values['DisplayName'];
+        $displayName = $this->values['DisplayName'] ?? null;
         if (!$displayName || $displayName instanceof EmptyMduiElement) {
             return false;
         }

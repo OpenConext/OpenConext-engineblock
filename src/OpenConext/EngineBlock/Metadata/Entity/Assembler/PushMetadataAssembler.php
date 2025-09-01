@@ -530,7 +530,9 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
 
         $connections = [];
         foreach ($connection->stepup_connections as $sp) {
-            $connections[(string)$sp->name] = (string)$sp->level;
+            if (isset($sp->name, $sp->level)) {
+                $connections[(string)$sp->name] = (string)$sp->level;
+            }
         }
 
         return array(

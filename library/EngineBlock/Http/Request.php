@@ -38,17 +38,17 @@ class EngineBlock_Http_Request
         $request = new self();
 
         $request->setProtocol((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']==='on'));
-        $request->setMethod($_SERVER['REQUEST_METHOD']);
-        $request->setHttpProtocol($_SERVER['SERVER_PROTOCOL']);
+        $request->setMethod($_SERVER['REQUEST_METHOD'] ?? null);
+        $request->setHttpProtocol($_SERVER['SERVER_PROTOCOL'] ?? null);
 
-        $queryStart = strpos($_SERVER['REQUEST_URI'], '?');
+        $queryStart = strpos($_SERVER['REQUEST_URI'] ?? null, '?');
         if ($queryStart !== false) {
-            $request->setUri(substr($_SERVER['REQUEST_URI'], 0, $queryStart));
+            $request->setUri(substr($_SERVER['REQUEST_URI'] ?? null, 0, $queryStart));
         }
         else {
-            $request->setUri($_SERVER['REQUEST_URI']);
+            $request->setUri($_SERVER['REQUEST_URI'] ?? null);
         }
-        $request->setQueryString($_SERVER['QUERY_STRING']);
+        $request->setQueryString($_SERVER['QUERY_STRING'] ?? null);
         $request->_setPostParameters($_POST);
 
         $headers = array();

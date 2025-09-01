@@ -542,7 +542,7 @@ abstract class AbstractEntityTest extends TestCase
             if (!$method->isStatic() && !in_array($method->getName(), $skipMethods)) {
                 if ($method->getDocComment()) {
                     preg_match('/@return (.*)\n/', $method->getDocComment(), $matches);
-                    $results[$method->getName()] = $matches[1];
+                    $results[$method->getName()] = isset($matches[1]) ? $matches[1] : null;
                 } elseif ($method->getReturnType()) {
                     $returnType = $method->getReturnType()->getName();
                     $results[$method->getName()] = $returnType;

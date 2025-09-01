@@ -183,7 +183,7 @@ class Feedback extends AbstractExtension
         $session = $this->application->getSession();
         $feedbackInfo = $session->get('feedbackInfo');
         // If AuthnFailedResponse is not set, we are unable to render a createAuthnFailedResponse
-        $sspResponse = $feedbackInfo['AuthnFailedResponse'];
+        $sspResponse = $feedbackInfo['AuthnFailedResponse'] ?? null;
         $value = '';
         if (!is_null($sspResponse)) {
             // Compose the Saml error response that can be used to travel back to the SP

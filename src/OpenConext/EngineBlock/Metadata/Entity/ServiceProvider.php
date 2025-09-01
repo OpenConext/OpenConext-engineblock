@@ -309,7 +309,11 @@ class ServiceProvider extends AbstractRole
         $preferredName = $this->mdui->getDisplayName($preferredLocale);
         $fallback = 'name' . ucfirst($preferredLocale);
 
-        $spName = $preferredName !== '' ? $preferredName : $this->$fallback;
+        if ($preferredName !== '') {
+            $spName = $preferredName;
+        } elseif (isset($this->$fallback)) {
+            $spName = $this->$fallback;
+        }
 
         if ($preferredLocale !== 'en' & empty($spName)) {
             $englishDisplayName = $this->mdui->getDisplayName('en');
@@ -335,9 +339,11 @@ class ServiceProvider extends AbstractRole
     {
         $orgLocale = 'organization' . ucfirst($preferredLocale);
         // Load the preferred locale org. display name, falling back on org. name
-        $orgName = !empty($this->$orgLocale->displayName)
-            ? $this->$orgLocale->displayName
-            : $this->$orgLocale->name;
+        if (isset($this->$orgLocale)) {
+            $orgName = !empty($this->$orgLocale->displayName)
+                ? $this->$orgLocale->displayName
+                : $this->$orgLocale->name;
+        }
 
         // Fallback to EN naming preferences when the preferred locale was not set or yielded no value
         if (($preferredLocale !== 'en' && empty($orgName)) || empty($orgName)) {
