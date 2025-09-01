@@ -172,6 +172,6 @@ class FakeUserDirectory extends UserDirectoryAdapter
             ];
         });
 
-        $this->filesystem->dumpFile($filePath, json_encode($users), 0664);
+        $this->filesystem->dumpFile($filePath, json_encode($users));
     }
 }
