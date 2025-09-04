@@ -28,14 +28,21 @@ use OpenConext\EngineBlockBundle\Http\Response\JsonResponse;
 use OpenConext\Value\Saml\EntityId;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 
 final class AttributeReleasePolicyController
 {
     /**
-     * @var AuthorizationCheckerInterface
+     * @var TokenStorageInterface
      */
-    private $authorizationChecker;
+    private $tokenStorage;
+
+    /**
+     * @var AccessDecisionManagerInterface
+     */
+    private $accessDecisionManager;
 
     /**
      * @var MetadataServiceInterface
@@ -48,11 +55,13 @@ final class AttributeReleasePolicyController
     private $arpEnforcer;
 
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker,
+        TokenStorageInterface $tokenStorage,
+        AccessDecisionManagerInterface $accessDecisionManager,
         MetadataServiceInterface $metadataService,
         EngineBlock_Arp_AttributeReleasePolicyEnforcer $arpEnforcer
     ) {
-        $this->authorizationChecker = $authorizationChecker;
+        $this->tokenStorage = $tokenStorage;
+        $this->accessDecisionManager = $accessDecisionManager;
         $this->metadataService      = $metadataService;
         $this->arpEnforcer          = $arpEnforcer;
     }
@@ -69,9 +78,7 @@ final class AttributeReleasePolicyController
             throw ApiMethodNotAllowedHttpException::methodNotAllowed($request->getMethod(), [Request::METHOD_POST]);
         }
 
-        if (!$this->authorizationChecker->isGranted('ROLE_API_USER_PROFILE')) {
-            throw new ApiAccessDeniedHttpException('Access to the ARP API requires the role ROLE_API_USER_PROFILE');
-        }
+        $this->assertAuthorized();
 
         $body = JsonRequestHelper::decodeContentAsArrayOf($request);
 
@@ -130,9 +137,7 @@ final class AttributeReleasePolicyController
             throw ApiMethodNotAllowedHttpException::methodNotAllowed($request->getMethod(), [Request::METHOD_POST]);
         }
 
-        if (!$this->authorizationChecker->isGranted('ROLE_API_USER_PROFILE')) {
-            throw new ApiAccessDeniedHttpException('Access to the ARP API requires the role ROLE_API_USER_PROFILE');
-        }
+        $this->assertAuthorized();
 
         $body = JsonRequestHelper::decodeContentAsArrayOf($request);
         if (!is_array($body)) {
@@ -159,5 +164,17 @@ final class AttributeReleasePolicyController
         }
 
         return new JsonResponse(json_encode($arpCollection));
+    }
+
+    private function assertAuthorized(): void
+    {
+        $token = $this->tokenStorage->getToken();
+        if (!$token || !$token->getUser()) {
+            throw new AuthenticationCredentialsNotFoundException('The token storage contains no authentication token.');
+        }
+
+        if (!$this->accessDecisionManager->decide($token, ['ROLE_API_USER_PROFILE'], null)) {
+            throw new ApiAccessDeniedHttpException('Access to the ARP API requires the role ROLE_API_USER_PROFILE');
+        }
     }
 }
