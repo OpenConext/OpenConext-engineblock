@@ -15,10 +15,9 @@ jobs:
         timeout-minutes: 30
         strategy:
             matrix:
-                # php82 is ready to run alongside the 72, but is not enabled now as the code is not 82 compatible yet
-                php: [ php72 ]
+                php: [ php82 ]
         env:
-            PROD_PHP: php72
+            PROD_PHP: php82
             DOCKER_COMPOSE: docker compose -f docker-compose.yml -f docker-compose-${{matrix.php}}.yml
         steps:
             -   name: Checkout
