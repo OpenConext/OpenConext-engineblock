@@ -23,6 +23,7 @@ use Behat\Mink\Exception\ExpectationException;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration;
@@ -116,6 +117,8 @@ class EngineBlockContext extends AbstractSubContext
      */
     private $currentRequestId = '';
 
+    private AbstractDataStore $dataStore;
+
     /**
      * @param ServiceRegistryFixture $serviceRegistry
      * @param EngineBlock $engineBlock
@@ -136,7 +139,8 @@ class EngineBlockContext extends AbstractSubContext
         FunctionalTestingFeatureConfiguration $features,
         FunctionalTestingPdpClient $pdpClient,
         FunctionalTestingAuthenticationLoopGuard $authenticationLoopGuard,
-        FunctionalTestingAttributeAggregationClient $attributeAggregationClient
+        FunctionalTestingAttributeAggregationClient $attributeAggregationClient,
+        AbstractDataStore $authGuardDataStore,
     ) {
         $this->serviceRegistryFixture = $serviceRegistry;
         $this->engineBlock = $engineBlock;
@@ -146,6 +150,7 @@ class EngineBlockContext extends AbstractSubContext
         $this->pdpClient = $pdpClient;
         $this->authenticationLoopGuard = $authenticationLoopGuard;
         $this->attributeAggregationClient = $attributeAggregationClient;
+        $this->dataStore = $authGuardDataStore;
     }
 
     /**
@@ -553,7 +558,8 @@ class EngineBlockContext extends AbstractSubContext
         $this->authenticationLoopGuard->saveAuthenticationLoopGuardConfiguration(
             (int) $maximumAuthenticationProceduresAllowed,
             (int) $timeFrameForAuthenticationLoopInSeconds,
-            (int) $maximumAuthenticationsPerSession
+            (int) $maximumAuthenticationsPerSession,
+            $this->dataStore,
         );
         $this->usingAuthenticationLoopGuard = true;
     }
@@ -594,7 +600,7 @@ class EngineBlockContext extends AbstractSubContext
     public function cleanUpAuthenticationLoopGuard()
     {
         if ($this->usingAuthenticationLoopGuard) {
-            $this->authenticationLoopGuard->cleanUp();
+            $this->authenticationLoopGuard->cleanUp($this->dataStore);
         }
         $this->usingAuthenticationLoopGuard = false;
     }
