@@ -51,7 +51,7 @@ final class MethodNotAllowedHttpExceptionListener
 
     public function onKernelException(ExceptionEvent $event)
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
         if (!$exception instanceof MethodNotAllowedHttpException) {
             return;
         }

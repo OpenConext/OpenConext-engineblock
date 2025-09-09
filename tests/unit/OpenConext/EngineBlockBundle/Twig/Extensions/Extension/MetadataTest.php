@@ -39,7 +39,7 @@ class MetadataTest extends TestCase
     private $metadataDefinition;
 
     /**
-     * @var TranslatorInterface
+     * @var \Symfony\Contracts\Translation\TranslatorInterface
      */
     private $translator;
 
@@ -48,7 +48,7 @@ class MetadataTest extends TestCase
         // Note that this unit tests depends on a real EngingeBlock_EngineBlock_Attributes_Metadata instance from the
         // Di container.
         $this->metadataDefinition = \EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAttributeMetadata();
-        $this->translator = m::mock(TranslatorInterface::class);
+        $this->translator = m::mock(\Symfony\Contracts\Translation\TranslatorInterface::class);
         $this->metadata = new Metadata($this->metadataDefinition, $this->translator);
     }
 

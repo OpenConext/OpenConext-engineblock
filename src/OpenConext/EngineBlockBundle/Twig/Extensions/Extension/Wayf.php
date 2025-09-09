@@ -33,7 +33,7 @@ class Wayf extends AbstractExtension
     private const ACCESS_ENABLED = '1';
 
     /**
-     * @var TranslatorInterface
+     * @var \Symfony\Contracts\Translation\TranslatorInterface
      */
     private $translator;
 
@@ -42,7 +42,7 @@ class Wayf extends AbstractExtension
      */
     private $previousSelection;
 
-    public function __construct(RequestStack $requestStack, TranslatorInterface $translator)
+    public function __construct(RequestStack $requestStack, \Symfony\Contracts\Translation\TranslatorInterface $translator)
     {
         $this->previousSelection = $this->loadPreviousSelectionFromCookie($requestStack);
         $this->translator = $translator;

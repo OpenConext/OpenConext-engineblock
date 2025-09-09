@@ -48,7 +48,7 @@ class ApiHttpExceptionListener
 
     public function onKernelException(ExceptionEvent $event)
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
 
         if (!$exception instanceof ApiHttpException) {
             return;

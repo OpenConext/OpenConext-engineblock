@@ -80,6 +80,18 @@ class MockIdpContext extends AbstractSubContext
     }
 
     /**
+     * @AfterScenario
+     */
+    public function cleanUpMockIdpRegistry()
+    {
+        // Clear the mock IdP registry to prevent state pollution between scenarios
+        // Travis / PHP 5.6 issue requires gc cycle in order to actually clear the fixture
+        // https://www.pivotaltracker.com/story/show/161282428
+        gc_collect_cycles();
+        $this->mockIdpRegistry->clear()->save();
+    }
+
+    /**
      * @Given /^an Identity Provider named "([^"]*)"$/
      * @Given /^an Identity Provider named "([^"]*)" with discovery "([^"]*)"$/
      */
