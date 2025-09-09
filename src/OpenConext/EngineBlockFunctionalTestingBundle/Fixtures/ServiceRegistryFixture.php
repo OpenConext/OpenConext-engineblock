@@ -89,6 +89,7 @@ class ServiceRegistryFixture
             );
         }
 
+        // Why is this needed?
         $this->entityManager->persist($entity);
 
         return $entity;
@@ -211,6 +212,8 @@ QUERY;
         foreach ($sps as $spEntityId) {
             $sp = $this->repository->findServiceProviderByEntityId($spEntityId['entity_id']);
             $sp->allowedIdpEntityIds[] = $idp->entityId;
+
+            // Why is this needed?
             $this->entityManager->persist($sp);
         }
 
@@ -368,7 +371,8 @@ QUERY;
     public function allowAttributeValueForSp($entityId, $arpAttribute, $attributeValue, $attributeSource = null, $motivation = null)
     {
         /** @var AttributeReleasePolicy $arp */
-        $arp = $this->getServiceProvider($entityId)->attributeReleasePolicy;
+        $entity = $this->getServiceProvider($entityId);
+        $arp = $entity->attributeReleasePolicy;
 
         $rules = [];
 
@@ -388,7 +392,7 @@ QUERY;
 
         $rules[$arpAttribute] = [$arpRule];
 
-        $this->getServiceProvider($entityId)->attributeReleasePolicy = new AttributeReleasePolicy($rules);
+        $entity->attributeReleasePolicy = new AttributeReleasePolicy($rules);
 
         return $this;
     }
