@@ -17,6 +17,7 @@
  */
 
 use SAML2\Assertion;
+use SAML2\DOMDocumentFactory;
 use SAML2\EncryptedAssertion;
 use SAML2\Response;
 use SAML2\XML\saml\NameID;
@@ -81,6 +82,11 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     protected $pdpRequestedLoas = [];
 
     protected $isTransparentErrorResponse = false;
+
+    /**
+     * @var string Temporary storage for serialized XML
+     */
+    private $_serializedSspMessageXml;
 
     /**
      * @param Response $response
@@ -307,5 +313,46 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     public function setIsTransparentErrorResponse(bool $isTransparentErrorResponse): void
     {
         $this->isTransparentErrorResponse = $isTransparentErrorResponse;
+    }
+
+    /**
+     * @return array
+     */
+    public function __sleep()
+    {
+        if ($this->sspMessage instanceof Response) {
+            $this->_serializedSspMessageXml = $this->sspMessage->toUnsignedXML()->ownerDocument->saveXML();
+        }
+
+        return [
+            'return',
+            'originalIssuer',
+            'originalNameId',
+            'originalBinding',
+            'originalResponse',
+            'collabPersonId',
+            'customNameId',
+            'intendedNameId',
+            'pdpRequestedLoas',
+            'isTransparentErrorResponse',
+            '_serializedSspMessageXml',
+        ];
+    }
+
+    /**
+     * Custom deserialization to recreate $sspMessage from XML string
+     */
+    public function __wakeup()
+    {
+        if (isset($this->_serializedSspMessageXml)) {
+            $document = DOMDocumentFactory::fromString($this->_serializedSspMessageXml);
+            $messageDomElement = $document->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:protocol', 'Response')->item(0);
+
+            if ($messageDomElement) {
+                $this->sspMessage = \OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Response::fromXML($messageDomElement);
+            }
+
+            unset($this->_serializedSspMessageXml);
+        }
     }
 }

@@ -578,6 +578,10 @@ abstract class AbstractEntityTest extends TestCase
                 continue;
             }
 
+            if ($name === '__sleep') {
+                continue;
+            }
+
             $results[$name] = $type;
         }
 

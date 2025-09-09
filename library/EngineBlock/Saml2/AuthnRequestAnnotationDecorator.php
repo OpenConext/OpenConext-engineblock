@@ -18,6 +18,7 @@
 
 use OpenConext\EngineBlock\Metadata\Loa;
 use SAML2\AuthnRequest;
+use SAML2\DOMDocumentFactory;
 
 /**
  * @method getProxyCount()
@@ -56,6 +57,11 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
      * @var bool
      */
     protected $transparent = false;
+
+    /**
+     * @var string Temporary storage for serialized XML
+     */
+    private $_serializedSspMessageXml;
 
     /**
      * @param AuthnRequest $request
@@ -183,5 +189,31 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     public function setForceAuthn(bool $isForceAuthn)
     {
         $this->sspMessage->setForceAuthn($isForceAuthn);
+    }
+
+    /**
+     * @return array
+     */
+    public function __sleep()
+    {
+        if ($this->sspMessage instanceof AuthnRequest) {
+            $this->_serializedSspMessageXml = $this->sspMessage->toUnsignedXML()->ownerDocument->saveXML();
+        }
+
+        return ['keyId', 'wasSigned', 'debug', 'unsolicited', 'transparent', '_serializedSspMessageXml'];
+    }
+
+    public function __wakeup()
+    {
+        if (isset($this->_serializedSspMessageXml)) {
+            $document = DOMDocumentFactory::fromString($this->_serializedSspMessageXml);
+            $messageDomElement = $document->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:protocol', 'AuthnRequest')->item(0);
+
+            if ($messageDomElement) {
+                $this->sspMessage = AuthnRequest::fromXML($messageDomElement);
+            }
+
+            unset($this->_serializedSspMessageXml);
+        }
     }
 }
