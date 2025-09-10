@@ -65,7 +65,7 @@ class Feedback extends AbstractExtension
         $this->samlResponseHelper = $samlResponseHelper;
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('feedbackInfo', [$this, 'getFeedbackInfo']),

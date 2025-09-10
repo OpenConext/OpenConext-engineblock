@@ -84,7 +84,7 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
     /**
      * @return EngineBlock_Corto_XmlToArray
      */
-    public function getXmlConverter()
+    public function getXmlConverter(): EngineBlock_Corto_XmlToArray
     {
         return $this->container->get('engineblock.compat.xml_converter');
     }
@@ -92,7 +92,7 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
     /**
      * @return EngineBlock_Corto_Filter_Command_Factory
      */
-    public function getFilterCommandFactory()
+    public function getFilterCommandFactory(): EngineBlock_Corto_Filter_Command_Factory
     {
         return $this->container->get('engineblock.compat.corto_filter_command_factory');
     }
@@ -100,7 +100,7 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
     /**
      * @return EngineBlock_Database_ConnectionFactory
      */
-    public function getDatabaseConnectionFactory()
+    public function getDatabaseConnectionFactory(): EngineBlock_Database_ConnectionFactory
     {
         return $this->container->get('engineblock.compat.database_connection_factory');
     }
@@ -108,7 +108,7 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
     /**
      * @return EngineBlock_Corto_Model_Consent_Factory
      */
-    public function getConsentFactory()
+    public function getConsentFactory(): EngineBlock_Corto_Model_Consent_Factory
     {
         return $this->container->get('engineblock.compat.corto_model_consent_factory');
     }
