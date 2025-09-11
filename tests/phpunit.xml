@@ -30,7 +30,7 @@
 
     <php>
         <server name="KERNEL_CLASS" value="App\Kernel" />
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="verbose"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[total]=0"/>
         <ini name="memory_limit" value="512M" />
     </php>
 
