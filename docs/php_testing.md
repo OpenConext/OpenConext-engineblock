@@ -41,6 +41,16 @@ echo "xdebug.start_with_request=yes" | tee -a /usr/local/etc/php/conf.d/docker-p
 apachectl graceful
 ```
 
+### Showing deprecation notices triggered during behat:
+In order to see deprecation notices generated when running the test suite, add these lines to te top of: `\EngineBlock_Application_ErrorHandler::error`
+```php
+if($errorNumber === E_DEPRECATED || $errorNumber === E_USER_DEPRECATED){
+    file_put_contents(__DIR__ . '/../../../var/log/deprecations.log', $errorMessage . '|' . $errorFile . ':' . $errorLine . PHP_EOL, FILE_APPEND);
+    return false;
+}
+```
+
+
 ## Quality assurance
 The different QA tooling we know and love in other OpenConext projects are also included in EngineBlock. Most can be run using one of the ant build targets.
 
