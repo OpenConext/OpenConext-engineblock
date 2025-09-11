@@ -34,7 +34,7 @@ final class AdditionalInfoFormatter implements FormatterInterface
         $this->formatter = $formatter;
     }
 
-    public function format(array $record)
+    public function format(array $record): mixed
     {
         return $this->formatter->format($this->addAdditionalInfoForEngineBlockExceptions($record));
     }
