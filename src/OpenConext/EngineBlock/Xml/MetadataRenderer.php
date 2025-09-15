@@ -37,7 +37,7 @@ class MetadataRenderer
     /**
      * The number of seconds a Metadata document is deemed valid
      */
-    const METADATA_EXPIRATION_TIME = 86400;
+    private $metadataExpirationTime;
 
     /**
      * @var Environment
@@ -83,7 +83,8 @@ class MetadataRenderer
         KeyPairFactory $keyPairFactory,
         DocumentSigner $documentSigner,
         TimeProvider $timeProvider,
-        string $addRequestedAttributes
+        string $addRequestedAttributes,
+        int $metadataExpirationTime
     ) {
         $this->languageSupportProvider = $languageSupportProvider;
         $this->twig = $twig;
@@ -92,6 +93,7 @@ class MetadataRenderer
         $this->documentSigner = $documentSigner;
         $this->timeProvider = $timeProvider;
         $this->addRequestedAttributes = $addRequestedAttributes;
+        $this->metadataExpirationTime = $metadataExpirationTime;
     }
 
     public function fromServiceProviderEntity(ServiceProviderEntityInterface $sp, string $keyId) : string
@@ -190,6 +192,6 @@ class MetadataRenderer
 
     private function getValidUntil(): string
     {
-        return $this->timeProvider->timestamp(self::METADATA_EXPIRATION_TIME);
+        return $this->timeProvider->timestamp($this->metadataExpirationTime);
     }
 }

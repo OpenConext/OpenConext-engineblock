@@ -345,7 +345,8 @@ class MetadataRendererTest extends TestCase
             $keyPairFactory,
             $documentSigner,
             new TimeProvider(),
-            $addRequestedAttributes
+            $addRequestedAttributes,
+            86400
         );
     }
 
