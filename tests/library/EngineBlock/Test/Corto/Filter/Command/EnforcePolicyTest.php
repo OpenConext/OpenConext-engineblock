@@ -61,12 +61,89 @@ class EngineBlock_Test_Corto_Filter_Command_EnforcePolicyTest extends TestCase
         $policy->execute();
     }
 
+    public function testExecutesPolicyCheckWhenIdpRequiresPolicyEnforcementDecision()
+    {
+        $this->expectException('EngineBlock_Exception_PdpCheckFailed');
+        $this->expectExceptionMessage('Policy Enforcement Point: Could not perform PDP check: Resource could not be read (status code "503")');
+
+        $this->mockPdpClientWithException(new UnreadableResourceException('Resource could not be read (status code "503")'));
+
+        $policy = new EngineBlock_Corto_Filter_Command_EnforcePolicy();
+
+        $request = $this->mockRequest();
+        $policy->setRequest($request);
+
+        $repo = Mockery::mock(MetadataRepositoryInterface::class);
+        $server = Mockery::mock(EngineBlock_Corto_ProxyServer::class);
+        $server->expects('getRepository')->andReturn($repo);
+
+        // SP does NOT require policy enforcement
+        $sp = $this->mockServiceProviderWithoutPolicyEnforcement();
+
+        // IdP DOES require policy enforcement
+        $idp = $this->mockIdentityProviderWithPolicyEnforcement();
+
+        $policy->setServiceProvider($sp);
+        $policy->setProxyServer($server);
+        $policy->setResponseAttributes([]);
+        $policy->setCollabPersonId('foo');
+        $policy->setIdentityProvider($idp);
+
+        // This should still execute policy check because IdP requires it
+        $policy->execute();
+    }
+
+    public function testSkipsPolicyCheckWhenNeitherSpNorIdpRequiresPolicyEnforcement()
+    {
+        // Mock PDP client that should never be called
+        $pdpClient = Mockery::mock(PdpClientInterface::class);
+        $pdpClient->shouldNotReceive('requestDecisionFor');
+
+        /** @var EngineBlock_Application_TestDiContainer $container */
+        $container = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $container->setPdpClient($pdpClient);
+
+        $policy = new EngineBlock_Corto_Filter_Command_EnforcePolicy();
+
+        $request = $this->mockRequest();
+        $policy->setRequest($request);
+
+        $repo = Mockery::mock(MetadataRepositoryInterface::class);
+        $server = Mockery::mock(EngineBlock_Corto_ProxyServer::class);
+        $server->expects('getRepository')->andReturn($repo);
+
+        // Neither SP nor IdP require policy enforcement
+        $sp = $this->mockServiceProviderWithoutPolicyEnforcement();
+        $idp = $this->mockIdentityProviderWithoutPolicyEnforcement();
+
+        $policy->setServiceProvider($sp);
+        $policy->setProxyServer($server);
+        $policy->setResponseAttributes([]);
+        $policy->setCollabPersonId('foo');
+        $policy->setIdentityProvider($idp);
+
+        // This should return early without calling PDP
+        $policy->execute();
+
+        // Test passes if no exception is thrown and PDP client was not called
+        $this->assertTrue(true);
+    }
+
     private function mockServiceProvider(): ServiceProvider
     {
         $sp = Mockery::mock(ServiceProvider::class);
         $sp->entityId = 'bar';
         $sp->shouldReceive('getCoins->isTrustedProxy')->andReturn(false);
         $sp->shouldReceive('getCoins->policyEnforcementDecisionRequired')->andReturn(true);
+        return $sp;
+    }
+
+    private function mockServiceProviderWithoutPolicyEnforcement(): ServiceProvider
+    {
+        $sp = Mockery::mock(ServiceProvider::class);
+        $sp->entityId = 'bar';
+        $sp->shouldReceive('getCoins->isTrustedProxy')->andReturn(false);
+        $sp->shouldReceive('getCoins->policyEnforcementDecisionRequired')->andReturn(false);
         return $sp;
     }
 
@@ -89,4 +166,19 @@ class EngineBlock_Test_Corto_Filter_Command_EnforcePolicyTest extends TestCase
         $container->setPdpClient($pdpClient);
     }
 
+    private function mockIdentityProviderWithPolicyEnforcement(): IdentityProvider
+    {
+        $idp = Mockery::mock(IdentityProvider::class);
+        $idp->entityId = 'test-idp';
+        $idp->shouldReceive('getCoins->policyEnforcementDecisionRequired')->andReturn(true);
+        return $idp;
+    }
+
+    private function mockIdentityProviderWithoutPolicyEnforcement(): IdentityProvider
+    {
+        $idp = Mockery::mock(IdentityProvider::class);
+        $idp->entityId = 'test-idp';
+        $idp->shouldReceive('getCoins->policyEnforcementDecisionRequired')->andReturn(false);
+        return $idp;
+    }
 }
