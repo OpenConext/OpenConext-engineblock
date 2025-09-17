@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlock\Driver\File;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 
 class FileStorageDriverTest extends TestCase
@@ -64,6 +65,7 @@ class FileStorageDriverTest extends TestCase
     #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
     #[\PHPUnit\Framework\Attributes\Group('Driver')]
     #[\PHPUnit\Framework\Attributes\Test]
+    #[DoesNotPerformAssertions]
     public function data_is_written_unmodified_to_file()
     {
         $data     = 'FooBarBaz';

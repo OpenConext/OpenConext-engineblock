@@ -29,6 +29,7 @@ use OpenConext\EngineBlockBundle\Authentication\Entity\SamlPersistentId;
 use OpenConext\EngineBlockBundle\Authentication\Entity\ServiceProviderUuid;
 use OpenConext\EngineBlockBundle\Authentication\Repository\SamlPersistentIdRepository;
 use OpenConext\EngineBlockBundle\Authentication\Repository\ServiceProviderUuidRepository;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 
 class DeprovisionServiceTest extends TestCase
@@ -203,6 +204,7 @@ class DeprovisionServiceTest extends TestCase
     #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
     #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
     #[\PHPUnit\Framework\Attributes\Test]
+    #[DoesNotPerformAssertions]
     public function delete_deprovisions_all_user_data()
     {
         $this->userDirectory->shouldReceive('findUserBy')
