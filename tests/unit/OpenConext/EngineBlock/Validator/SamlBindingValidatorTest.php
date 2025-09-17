@@ -43,9 +43,7 @@ class SamlBindingValidatorTest extends TestCase
         $_SERVER = [];
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_happy_flow_get()
     {
         // Under the hood, the Binding::getCurrentBinding method is used, which directly reads from the super globals
@@ -59,9 +57,7 @@ class SamlBindingValidatorTest extends TestCase
         $this->assertTrue($this->validator->isValid($request));
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_happy_flow_post()
     {
         // Under the hood, the Binding::getCurrentBinding method is used, which directly reads from the super globals
@@ -75,14 +71,13 @@ class SamlBindingValidatorTest extends TestCase
         $this->assertTrue($this->validator->isValid($request));
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_post_binding_is_not_supported()
     {
         $this->expectException(InvalidBindingException::class);
         $this->expectExceptionMessage('No SAMLRequest or SAMLResponse parameter was found in the HTTP');
 
+        $_SERVER['REQUEST_METHOD'] = ''; // Prevent Warning: Undefined array key "REQUEST_METHOD" in /var/www/html/vendor/simplesamlphp/saml2/src/SAML2/Binding.php on line 69
         $request = m::mock(Request::class);
         $request
             ->shouldReceive('getMethod')
@@ -91,9 +86,7 @@ class SamlBindingValidatorTest extends TestCase
         $this->validator->isValid($request);
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_used_invalid_binding()
     {
         $this->expectException(InvalidBindingException::class);
@@ -112,9 +105,7 @@ class SamlBindingValidatorTest extends TestCase
         $this->validator->isValid($request);
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_used_unsupported_binding()
     {
         $this->expectException(InvalidBindingException::class);

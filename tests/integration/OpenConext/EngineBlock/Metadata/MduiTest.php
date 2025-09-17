@@ -94,9 +94,7 @@ class MduiTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider invalidJsonProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidJsonProvider')]
     public function test_creates_empty_mdui_from_json_invalid_json($invalidJson)
     {
         $mdui = Mdui::fromJson($invalidJson);
@@ -104,7 +102,7 @@ class MduiTest extends TestCase
         $this->assertNull($mdui->getDisplayNameOrNull('en'));
     }
 
-    public function invalidJsonProvider()
+    public static function invalidJsonProvider()
     {
         return [
            'single quotes' => ['{"DisplayName":{\'name\':\'DisplayName\',"values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Description":{"name":"Description","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Keywords":{"name":"Keywords","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}},"Logo":{"name":"Logo","url":"https:\/\/link-to-my.logo.example.org\/img\/logo.png","width":null,"height":null},"PrivacyStatementURL":{"name":"PrivacyStatementURL","values":{"en":{"value":"bogus en value","language":"en"},"nl":{"value":"bogus nl value","language":"nl"}}}}'],

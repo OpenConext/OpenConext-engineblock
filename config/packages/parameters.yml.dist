@@ -62,7 +62,7 @@ parameters:
     php_settings:
         memory_limit: 256M
         display_errors: '1'
-        error_reporting: '6135'
+        error_reporting: '30719'
         date.timezone: Europe/Amsterdam
         sendmail_from: 'OpenConext EngineBlock <openconext-engineblock@openconext.org>'
 
@@ -204,12 +204,8 @@ parameters:
             name: 'OpenConext Admin'
         subject: 'IdP debug info from %%1$s'
 
-    ## Swiftmailer configuration
-    mailer_transport: 'smtp'
-    mailer_host: 'localhost'
-    mailer_port: '25'
-    mailer_user: ''
-    mailer_password: ''
+    ## Symfony Mailer configuration
+    mailer_dsn: 'smtp://user:password@localhost:25'
 
     ##########################################################################################
     ## FEATURE SETTINGS

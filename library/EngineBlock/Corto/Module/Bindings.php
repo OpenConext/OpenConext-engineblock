@@ -456,7 +456,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
             } catch (Exception $exception) {
                 throw new ResponseProcessingFailedException(
-                    sprintf('Response processing failed: "%s"', $exception->getMessage()), null, $exception
+                    sprintf('Response processing failed: "%s"', $exception->getMessage()), 0, $exception
                 );
             }
 
@@ -666,7 +666,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
             // If the processed assertion consumer service is set on the response, it is posted back to the SP using the
             // the 'return' hidden form field.
-            if (method_exists($message, 'getReturn') && !empty(trim($message->getReturn()))) {
+            if (method_exists($message, 'getReturn') && !empty(trim($message->getReturn() ?? ''))) {
                 $extra .= '<input type="hidden" name="return" value="' . htmlspecialchars($message->getReturn()) . '">';
             }
 

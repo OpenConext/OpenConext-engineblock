@@ -31,10 +31,8 @@ class AuthenticationStateTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_cannot_be_authenticated_if_it_has_not_been_started()
     {
         $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30, 20);
@@ -49,10 +47,8 @@ class AuthenticationStateTest extends TestCase
         $authenticationState->authenticatedAt('_00000000-0000-0000-0000-000000000000', $identityProvider);
     }
 
-    /**
-     * @test
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_cannot_be_completed_if_it_has_not_been_started()
     {
         $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30, 20);
@@ -65,10 +61,8 @@ class AuthenticationStateTest extends TestCase
         $authenticationState->completeCurrentProcedure('_00000000-0000-0000-0000-000000000000');
     }
 
-    /**
-     * @test
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_cannot_be_completed_if_it_has_not_been_authenticated()
     {
         $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30, 20);
@@ -84,10 +78,8 @@ class AuthenticationStateTest extends TestCase
         $authenticationState->completeCurrentProcedure($requestId);
     }
 
-    /**
-     * @test
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_can_be_completed_multiple_times()
     {
         $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30, 20);
@@ -106,10 +98,8 @@ class AuthenticationStateTest extends TestCase
         self::assertTrue($authenticationState->isAuthenticated());
     }
 
-    /**
-     * @test
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_is_not_authenticated_before_consent()
     {
         $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30, 20);

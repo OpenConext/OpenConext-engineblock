@@ -76,7 +76,7 @@ final class ConsentType implements JsonSerializable
     /**
      * @return string
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->consentType;
     }

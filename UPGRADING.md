@@ -59,6 +59,21 @@ APP_DEBUG=false
 APP_SECRET=04d8ec52d3fd4eb9a8f5d4c69d82cfaec39f764af74b223c44e1ba9574b4b3d6
 ```
 
+**Swiftmailer > Symfony Mail**
+In parameters.yml, the Swiftmailer smtp configuration has been replaced with a SMTP dsn for Symfony Mailer.
+Replace:
+```dotenv
+mailer_transport: 'smtp'
+mailer_host: 'localhost'
+mailer_port: '25'
+mailer_user: ''
+mailer_password: ''
+```
+with:
+`mailer_dsn: 'smtp://user:password@localhost:25'`
+
+### Devconf
+
 Note:
 <br>
 See [apache2.conf](docker/ci/apache2.conf) and [docker-compose.yml](docker/docker-compose.yml) as an example.

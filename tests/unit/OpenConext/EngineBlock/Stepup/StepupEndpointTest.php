@@ -26,10 +26,8 @@ class StepupEndpointTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group Stepup
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Stepup')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_sfo_endpoint_object_should_be_successful_populated()
     {
         $fileLocation = __DIR__ . '/../../../../resources/key/engineblock.crt';
@@ -40,40 +38,32 @@ class StepupEndpointTest extends TestCase
         $this->assertSame($fileLocation, $endpoint->getKeyFile());
     }
 
-    /**
-     * @test
-     * @group Stepup
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Stepup')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_sfo_endpoint_object_entityId_should_not_throw_an_exception_on_initialization_when_invalid()
     {
         $endpoint = new StepupEndpoint(null, 'https://sso-location', 'tests/resources/key/engineblock.crt');
         $this->assertInstanceOf(StepupEndpoint::class, $endpoint);
     }
 
-    /**
-     * @test
-     * @group Stepup
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Stepup')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_sfo_endpoint_object_ssoLocation_should_not_throw_an_exception_on_initialization_when_invalid()
     {
         $endpoint = new StepupEndpoint('entity-id', null, 'tests/resources/key/engineblock.crt');
         $this->assertInstanceOf(StepupEndpoint::class, $endpoint);
     }
 
-    /**
-     * @test
-     * @group Stepup
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Stepup')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_sfo_endpoint_object_keyFile_should_not_throw_an_exception_on_initialization_when_invalid()
     {
         $endpoint = new StepupEndpoint('entity-id', 'https://sso-location', null);
         $this->assertInstanceOf(StepupEndpoint::class, $endpoint);
     }
 
-    /**
-     * @test
-     * @group Stepup
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Stepup')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_sfo_endpoint_object_entityId_should_be_a_string()
     {
         $this->expectException(InvalidStepupConfigurationException::class);
@@ -83,10 +73,8 @@ class StepupEndpointTest extends TestCase
         $endpoint->getEntityId();
     }
 
-    /**
-     * @test
-     * @group Stepup
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Stepup')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_sfo_endpoint_object_ssoLocation_should_be_a_string()
     {
         $this->expectException(InvalidStepupConfigurationException::class);
@@ -96,10 +84,8 @@ class StepupEndpointTest extends TestCase
         $endpoint->getSsoLocation();
     }
 
-    /**
-     * @test
-     * @group Stepup
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Stepup')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_sfo_endpoint_object_keyFile_should_be_a_string()
     {
         $this->expectException(InvalidStepupConfigurationException::class);
@@ -109,10 +95,8 @@ class StepupEndpointTest extends TestCase
         $endpoint->getKeyFile();
     }
 
-    /**
-     * @test
-     * @group Stepup
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Stepup')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_sfo_endpoint_object_keyFile_should_be_a_file()
     {
         $this->expectException(InvalidStepupConfigurationException::class);
@@ -123,12 +107,12 @@ class StepupEndpointTest extends TestCase
     }
 
     /**
-     * @dataProvider availableMethodProvider
-     * @test
-     * @group Stepup
      *
      * @param string $methodName
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('availableMethodProvider')]
+    #[\PHPUnit\Framework\Attributes\Group('Stepup')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_sfo_endpoint_object_mmethods_should_throw_an_exception_when_not_validated($methodName)
     {
         $this->expectException(InvalidStepupConfigurationException::class);
@@ -138,7 +122,7 @@ class StepupEndpointTest extends TestCase
         $endpoint->$methodName();
     }
 
-    public function availableMethodProvider() {
+    public static function availableMethodProvider() {
         $methods = [];
         $class = new \ReflectionClass(StepupEndpoint::class);
         foreach ($class->getMethods() as $method) {

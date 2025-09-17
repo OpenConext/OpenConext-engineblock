@@ -32,13 +32,13 @@ class EngineBlock_Test_Corto_Module_XMlToArrayTest extends TestCase
     public function testNamespacedAttributes()
     {
         $hash = EngineBlock_Corto_XmlToArray::xml2array(
-<<<SAML
+<<<SAML_WRAP
 <?xml version="1.0"?>
 <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <saml:AttributeValue xsi:type="string">test</saml:AttributeValue>
 </saml:Attribute>
-SAML
+SAML_WRAP
 
         );
 
@@ -220,9 +220,7 @@ SAML
         $this->assertEquals($expectedArray, $xmlConverter->attributesToArray($attributes));
     }
 
-    /**
-     * @dataProvider xmlInputProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('xmlInputProvider')]
     public function testXmlToArray($xmlFile, $phpFile)
     {
         $xmlInput = file_get_contents($xmlFile);
@@ -231,9 +229,7 @@ SAML
         $this->assertEquals($expectedPhpOutput, EngineBlock_Corto_XmlToArray::xml2array($xmlInput));
     }
 
-    /**
-     * @dataProvider xmlOutputProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('xmlOutputProvider')]
     public function testArrayToXml($phpFile, $xmlFile)
     {
         $phpInput = require $phpFile;
@@ -247,7 +243,7 @@ SAML
      *
      * @return array
      */
-    public function xmlInputProvider()
+    public static function xmlInputProvider()
     {
         $testCasesDir = new DirectoryIterator(TEST_RESOURCES_DIR . '/xml-to-array');
 
@@ -272,7 +268,7 @@ SAML
      *
      * @return array
      */
-    public function xmlOutputProvider()
+    public static function xmlOutputProvider()
     {
         $testCasesDir = new DirectoryIterator(TEST_RESOURCES_DIR . '/xml-to-array');
 

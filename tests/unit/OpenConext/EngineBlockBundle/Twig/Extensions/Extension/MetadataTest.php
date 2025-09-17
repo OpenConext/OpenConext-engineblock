@@ -55,10 +55,9 @@ class MetadataTest extends TestCase
     /**
      * This test uses the tests/resources/config/attributes-fixture.json fixture
      * @see \EngineBlock_Application_TestDiContainer::getAttributeMetadata
-     *
-     * @test
-     * @group EngineBlock
      */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function sort_by_display_order_favors_ordered_items_ungrouped()
     {
         // norEduPersonBirthDate is an unordered item, should be sorted at the bottom
@@ -81,10 +80,8 @@ class MetadataTest extends TestCase
         $this->assertEquals($expectedOrder, array_keys($ordered['idp']));
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function sort_by_display_order_favors_ordered_items_grouped()
     {
         // norEduPersonBirthDate is an unordered item, should be sorted at the bottom

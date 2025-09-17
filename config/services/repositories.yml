@@ -1,31 +1,19 @@
 services:
     _defaults:
         public: true
+        autowire: true
 
     OpenConext\EngineBlockBundle\Authentication\Repository\DbalConsentRepository:
         public: false
-        arguments:
-            - "@doctrine.orm.entity_manager"
-            - '@logger'
 
     OpenConext\EngineBlockBundle\Authentication\Repository\UserRepository:
         public: false
-        factory: ['@doctrine.orm.entity_manager', getRepository]
-        arguments:
-            - 'OpenConext\EngineBlockBundle\Authentication\Entity\User'
 
     OpenConext\EngineBlockBundle\Authentication\Repository\SamlPersistentIdRepository:
         public: false
-        factory: ['@doctrine.orm.entity_manager', getRepository]
-        arguments:
-            - 'OpenConext\EngineBlockBundle\Authentication\Entity\SamlPersistentId'
-
 
     OpenConext\EngineBlockBundle\Authentication\Repository\ServiceProviderUuidRepository:
         public: false
-        factory: ['@doctrine.orm.entity_manager', getRepository]
-        arguments:
-            - 'OpenConext\EngineBlockBundle\Authentication\Entity\ServiceProviderUuid'
 
     engineblock.repository.service_provider:
         public: false

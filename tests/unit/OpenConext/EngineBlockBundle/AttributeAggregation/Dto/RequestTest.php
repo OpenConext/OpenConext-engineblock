@@ -24,16 +24,12 @@ use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\AttributeRule;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Request;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @group AttributeAggregation
- */
+#[\PHPUnit\Framework\Attributes\Group('AttributeAggregation')]
 class RequestTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function request_serializes_to_aa_api_format()
     {
         $request = Request::from(
@@ -90,9 +86,7 @@ class RequestTest extends TestCase
         $this->assertEquals($expectedJson, $actualJson);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function request_serializes_to_aa_api_format_filters_non_string_values()
     {
         $request = Request::from(
@@ -145,36 +139,28 @@ class RequestTest extends TestCase
         $this->assertEquals($expectedJson, $actualJson);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function request_subject_must_be_set()
     {
         $this->expectException(InvalidArgumentException::class);
         Request::from('sp-entity-id', 'idp-entity-id',NULL, [], []);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function request_sp_entity_id_must_be_set()
     {
         $this->expectException(InvalidArgumentException::class);
         Request::from(NULL, 'idp-entity-id', 'subject-id', [], []);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function request_idp_entity_id_must_be_set()
     {
         $this->expectException(InvalidArgumentException::class);
         Request::from('sp-entity-id', NULL, 'subject-id', [], []);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function request_attributes_must_be_of_type_dto()
     {
         $this->expectException(InvalidArgumentException::class);
