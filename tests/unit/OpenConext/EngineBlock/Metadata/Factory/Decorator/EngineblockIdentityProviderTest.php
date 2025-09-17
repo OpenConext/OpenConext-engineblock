@@ -61,20 +61,25 @@ class EngineblockIdentityProviderTest extends AbstractEntityTest
     public function test_methods()
     {
         $this->adapter = $this->createIdentityProviderAdapter();
+        $matcher = $this->exactly(2);
 
-        $this->urlProvider->expects($this->exactly(2))
-            ->method('getUrl')
-            ->withConsecutive(
-                // SLO: EngineBlockIdentityProvider::getSingleLogoutService
-                ['authentication_logout', false, null, null],
-                // SSO: EngineBlockIdentityProvider::getSingleSignOnServices
-                ['authentication_idp_sso', false, 'default', null]
-            ) ->willReturnOnConsecutiveCalls(
-                // SLO
-                'sloLocation',
-                // SSO
-                'ssoLocation'
-            );
+        $this->urlProvider->expects($matcher)
+            ->method('getUrl')->willReturnCallback(function (...$parameters) use ($matcher) {
+            if ($matcher->getInvocationCount() === 1) {
+                $this->assertSame('authentication_logout', $parameters[0]);
+                $this->assertSame(false, $parameters[1]);
+                $this->assertSame(null, $parameters[2]);
+                $this->assertSame(null, $parameters[3]);
+                return 'sloLocation';
+            }
+            if ($matcher->getInvocationCount() === 2) {
+                $this->assertSame('authentication_idp_sso', $parameters[0]);
+                $this->assertSame(false, $parameters[1]);
+                $this->assertSame('default', $parameters[2]);
+                $this->assertSame(null, $parameters[3]);
+                return 'ssoLocation';
+            }
+        });
 
         $decorator = new EngineBlockIdentityProvider($this->adapter, 'default', $this->keyPairMock, $this->urlProvider);
 
@@ -120,15 +125,20 @@ class EngineblockIdentityProviderTest extends AbstractEntityTest
     public function test_do_not_add_entity_id_hash_to_service_url_for_sso_service_if_eb_self()
     {
         $this->adapter = $this->createIdentityProviderAdapter();
+        $matcher = $this->exactly(1);
 
-        $this->urlProvider->expects($this->exactly(1))
+        $this->urlProvider->expects($matcher)
             ->method('getUrl')
-            ->withConsecutive(
-                // SSO: EngineBlockIdentityProvider::getSingleSignOnServices
-                ['authentication_idp_sso', false, 'default', null]  // we would expect the fourth paremeter to be null and not 'entity-id' becasue we are EB
-            ) ->willReturnOnConsecutiveCalls(
-                // SSO
-                'ssoLocation'
+            ->willReturnCallback(
+                function (...$parameters) use ($matcher) {
+                    if ($matcher->getInvocationCount() === 1) {
+                        $this->assertSame('authentication_idp_sso', $parameters[0]);
+                        $this->assertSame(false, $parameters[1]);
+                        $this->assertSame('default', $parameters[2]);
+                        $this->assertSame(null, $parameters[3]);
+                        return 'ssoLocation';
+                    }
+                }  // we would expect the fourth paremeter to be null and not 'entity-id' becasue we are EB
             );
 
         $decorator = new EngineBlockIdentityProvider($this->adapter, 'default', $this->keyPairMock, $this->urlProvider);
