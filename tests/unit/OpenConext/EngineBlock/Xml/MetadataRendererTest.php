@@ -39,6 +39,7 @@ use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlock\Metadata\X509\X509PrivateKey;
 use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
 use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
+use OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Spaceless;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
@@ -314,6 +315,8 @@ class MetadataRendererTest extends TestCase
 
         $translatorExtension = new TranslationExtension($translator);
         $environment->addExtension($translatorExtension);
+
+        $environment->addExtension(new Spaceless());
 
         $keyPairFactory = $this->createMock(KeyPairFactory::class);
         $keyPairFactory
