@@ -17,9 +17,9 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory\Adapter;
 
-use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
+use OpenConext\EngineBlock\Metadata\Factory\AbstractEntity;
 
-class IdentityProviderEntityTest extends AbstractEntityTest
+class IdentityProviderEntity extends AbstractEntity
 {
     /**
      * This test will test if all methods work

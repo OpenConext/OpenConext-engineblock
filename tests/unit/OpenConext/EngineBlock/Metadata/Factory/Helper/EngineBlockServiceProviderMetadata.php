@@ -17,7 +17,7 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory\Helper;
 
-use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
+use OpenConext\EngineBlock\Metadata\Factory\AbstractEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\ServiceProviderEntity;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use Mockery;
@@ -25,7 +25,7 @@ use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 
-class EngineBlockServiceProviderMetadataTest extends AbstractEntityTest
+class EngineBlockServiceProviderMetadata extends AbstractEntity
 {
     /**
      * @var LanguageSupportProvider

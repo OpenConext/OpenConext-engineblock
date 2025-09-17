@@ -18,7 +18,7 @@
 namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
 use EngineBlock_Attributes_Metadata as AttributesMetadata;
-use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
+use OpenConext\EngineBlock\Metadata\Factory\AbstractEntity;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
@@ -26,7 +26,7 @@ use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
 
-class EngineBlockServiceProviderTest extends AbstractEntityTest
+class EngineBlockServiceProvider extends AbstractEntity
 {
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject|UrlProvider
