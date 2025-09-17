@@ -34,7 +34,7 @@
     <!-- Configure coverage reports -->
     <coverage includeUncoveredFiles="true">
         <report>
-            <html outputDirectory="var/log/coverage/html"/>
+            <html outputDirectory="../var/log/phpunit/coverage/html"/>
         </report>
     </coverage>
     <source restrictDeprecations="true" restrictNotices="true" restrictWarnings="true">

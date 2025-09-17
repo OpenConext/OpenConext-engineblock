@@ -18,12 +18,12 @@
 namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
 use OpenConext\EngineBlock\Metadata\ContactPerson;
-use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
+use OpenConext\EngineBlock\Metadata\Factory\AbstractEntity;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
 
-class EngineblockServiceProviderInformationTest extends AbstractEntityTest
+class EngineblockServiceProviderInformation extends AbstractEntity
 {
     public function test_methods()
     {

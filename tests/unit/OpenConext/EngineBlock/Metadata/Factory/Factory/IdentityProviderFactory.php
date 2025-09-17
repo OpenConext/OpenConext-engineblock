@@ -20,7 +20,7 @@ namespace OpenConext\EngineBlock\Metadata\Factory\Factory;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
-use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
+use OpenConext\EngineBlock\Metadata\Factory\AbstractEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
@@ -32,7 +32,7 @@ use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class IdentityProviderFactoryTest extends AbstractEntityTest
+class IdentityProviderFactory extends AbstractEntity
 {
     use MockeryPHPUnitIntegration;
 

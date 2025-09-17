@@ -23,7 +23,7 @@ use OpenConext\EngineBlock\Exception\MissingParameterException;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
+use OpenConext\EngineBlock\Metadata\Factory\AbstractEntity;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\IndexedService;
@@ -40,7 +40,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 
-class ServiceProviderFactoryTest extends AbstractEntityTest
+class ServiceProviderFactory extends AbstractEntity
 {
     /**
      * @var ServiceProviderFactory
