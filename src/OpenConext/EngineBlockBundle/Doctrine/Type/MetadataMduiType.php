@@ -28,7 +28,7 @@ class MetadataMduiType extends Type
 {
     const NAME = 'engineblock_metadata_mdui';
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
     {
         // We want a `TEXT` field declaration in our column, the `LONGTEXT` default causes issues when running the
         // DBMS in strict mode.
@@ -36,7 +36,7 @@ class MetadataMduiType extends Type
         return $platform->getJsonTypeDeclarationSQL($fieldDeclaration);
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if (is_null($value)) {
             return $value;
@@ -55,7 +55,7 @@ class MetadataMduiType extends Type
         return $value->toJson();
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         if (is_null($value)) {
             return $value;
@@ -77,7 +77,7 @@ class MetadataMduiType extends Type
         return $mdui;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return self::NAME;
     }

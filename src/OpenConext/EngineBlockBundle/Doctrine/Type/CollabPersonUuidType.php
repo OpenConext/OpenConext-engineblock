@@ -28,12 +28,12 @@ class CollabPersonUuidType extends Type
 {
     const NAME = 'engineblock_collab_person_uuid';
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
     {
         return $platform->getGuidTypeDeclarationSQL($fieldDeclaration);
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if (is_null($value)) {
             return $value;
@@ -53,7 +53,7 @@ class CollabPersonUuidType extends Type
         return $value->getUuid();
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         if (is_null($value)) {
             return $value;
@@ -75,7 +75,7 @@ class CollabPersonUuidType extends Type
         return $collabPersonUuid;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return self:: NAME;
     }
