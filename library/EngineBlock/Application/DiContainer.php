@@ -281,7 +281,11 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
      */
     public function getSession()
     {
-        return $this->container->get('session');
+        $requestStack = $this->container->get('request_stack');
+
+        assert($requestStack instanceof \Symfony\Component\HttpFoundation\RequestStack);
+
+        return $requestStack->getSession();
     }
 
     public function getMailer(): MailerInterface
