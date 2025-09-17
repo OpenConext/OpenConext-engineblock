@@ -349,7 +349,6 @@ abstract class AbstractEntityTest extends TestCase
 
         foreach($values as $key => $value){
             $reflectionProperty = $reflection->getProperty($key);
-            $reflectionProperty->setAccessible(true);
             $reflectionProperty->setValue($entity, $value);
         }
 
@@ -367,7 +366,6 @@ abstract class AbstractEntityTest extends TestCase
 
         foreach($values as $key => $value){
             $reflectionProperty = $reflection->getProperty($key);
-            $reflectionProperty->setAccessible(true);
             $reflectionProperty->setValue($entity, $value);
         }
 
