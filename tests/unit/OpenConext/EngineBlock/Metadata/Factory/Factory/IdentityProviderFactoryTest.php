@@ -71,8 +71,6 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
     {
         $entity = $this->factory->createEngineBlockEntityFrom(
             'entityID',
-            'ssoLocation',
-            'default'
         );
 
         $this->assertInstanceOf(IdentityProviderEntityInterface::class, $entity);
