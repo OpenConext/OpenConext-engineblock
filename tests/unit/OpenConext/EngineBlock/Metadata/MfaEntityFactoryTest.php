@@ -39,9 +39,7 @@ class MfaEntityFactoryTest extends TestCase
         $this->assertInstanceOf(MfaEntity::class, MfaEntityFactory::fromJson($data));
     }
 
-    /**
-     * @dataProvider provideInvalidJsonData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideInvalidJsonData')]
     public function test_from_json_factory_method_performs_input_validation($data, $expectedMessage)
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -49,7 +47,7 @@ class MfaEntityFactoryTest extends TestCase
         MfaEntityFactory::fromJson($data);
     }
 
-    public function provideInvalidJsonData()
+    public static function provideInvalidJsonData()
     {
         yield [['entityId' => null, 'level' => 'transparent_authn_context'], 'MFA entityId must be of type string'];
         yield [['entityId' => 0, 'level' => 'transparent_authn_context'], 'MFA entityId must be of type string'];

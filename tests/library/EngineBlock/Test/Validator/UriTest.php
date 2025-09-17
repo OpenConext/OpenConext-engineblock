@@ -36,15 +36,13 @@ class EngineBlock_Test_Validator_UriTest extends TestCase
         $this->validator = new EngineBlock_Validator_Uri();
     }
 
-    /**
-     * @dataProvider validUriProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validUriProvider')]
     public function testUriValidates($uri)
     {
         $this->assertTrue($this->validator->validate($uri));
     }
 
-    public function validUriProvider()
+    public static function validUriProvider()
     {
         return array(
             array('http://example.com'), // Pretty standard http url

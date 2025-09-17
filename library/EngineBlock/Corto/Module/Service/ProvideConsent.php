@@ -64,6 +64,8 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
     /** @var \Psr\Log\LoggerInterface */
     private $logger;
 
+    private DiscoverySelectionService $discoverySelectionService;
+
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,

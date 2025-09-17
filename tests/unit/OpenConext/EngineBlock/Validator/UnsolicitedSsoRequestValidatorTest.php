@@ -42,9 +42,7 @@ class UnsolicitedSsoRequestValidatorTest extends TestCase
         $_SERVER = [];
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_happy_flow_get()
     {
         // Under the hood, the Binding::getCurrentBinding method is used, which directly reads from the super globals
@@ -56,9 +54,7 @@ class UnsolicitedSsoRequestValidatorTest extends TestCase
         $this->assertTrue($this->validator->isValid($request));
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_post_is_not_allowed()
     {
         $this->expectException(RuntimeException::class);
@@ -71,9 +67,7 @@ class UnsolicitedSsoRequestValidatorTest extends TestCase
         $this->validator->isValid($request);
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_put_binding_is_not_supported()
     {
         $this->expectException(RuntimeException::class);
@@ -86,9 +80,7 @@ class UnsolicitedSsoRequestValidatorTest extends TestCase
         $this->validator->isValid($request);
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_malformed_argument()
     {
         $this->expectException(RuntimeException::class);
@@ -102,9 +94,7 @@ class UnsolicitedSsoRequestValidatorTest extends TestCase
         $this->validator->isValid($request);
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_missing_argument()
     {
         $this->expectException(RuntimeException::class);

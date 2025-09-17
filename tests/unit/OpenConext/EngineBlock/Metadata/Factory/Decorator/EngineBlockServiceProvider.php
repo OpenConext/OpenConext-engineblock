@@ -18,7 +18,7 @@
 namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
 use EngineBlock_Attributes_Metadata as AttributesMetadata;
-use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
+use OpenConext\EngineBlock\Metadata\Factory\AbstractEntity;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
@@ -26,7 +26,7 @@ use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
 
-class EngineBlockServiceProviderTest extends AbstractEntityTest
+class EngineBlockServiceProvider extends AbstractEntity
 {
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject|UrlProvider
@@ -44,15 +44,20 @@ class EngineBlockServiceProviderTest extends AbstractEntityTest
     public function test_methods()
     {
         $adapter = $this->createServiceProviderAdapter();
+        $matcher = $this->exactly(1);
 
-        $this->urlProvider->expects($this->exactly(1))
+        $this->urlProvider->expects($matcher)
             ->method('getUrl')
-            ->withConsecutive(
-                // ACS: EngineBlockServiceProvider::getAssertionConsumerServices
-                ['authentication_sp_consume_assertion', false, null, null]
-            ) ->willReturnOnConsecutiveCalls(
-                // ACS
-                'acsLocation'
+            ->willReturnCallback(
+                function (...$parameters) use ($matcher) {
+                    if ($matcher->numberOfInvocations() === 1) {
+                        $this->assertSame('authentication_sp_consume_assertion', $parameters[0]);
+                        $this->assertSame(false, $parameters[1]);
+                        $this->assertSame(null, $parameters[2]);
+                        $this->assertSame(null, $parameters[3]);
+                        return 'acsLocation';
+                    }
+                }
             );
 
         $certificateMock = $this->createMock(X509Certificate::class);

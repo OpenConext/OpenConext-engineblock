@@ -18,7 +18,7 @@
 namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
 use OpenConext\EngineBlock\Metadata\ContactPerson;
-use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
+use OpenConext\EngineBlock\Metadata\Factory\AbstractEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\Service;
@@ -26,9 +26,8 @@ use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
-use Symfony\Component\Translation\TranslatorInterface;
 
-class ProxiedIdentityProviderTest extends AbstractEntityTest
+class ProxiedIdentityProvider extends AbstractEntity
 {
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject
@@ -101,25 +100,26 @@ class ProxiedIdentityProviderTest extends AbstractEntityTest
     private function createConfiguration(): EngineBlockConfiguration
     {
         $translator = $this->createMock(\Symfony\Contracts\Translation\TranslatorInterface::class);
-        $translator->expects($this->at(0))
-            ->method('trans')
-            ->with('suite_name')
-            ->willReturn('test-suite');
-
-        $translator->expects($this->at(1))
-            ->method('trans')
-            ->with('metadata_organization_name')
-            ->willReturn('configuredOrganizationName');
-
-        $translator->expects($this->at(2))
-            ->method('trans')
-            ->with('metadata_organization_displayname')
-            ->willReturn('configuredOrganizationDisplayName');
-
-        $translator->expects($this->at(3))
-            ->method('trans')
-            ->with('metadata_organization_url')
-            ->willReturn('configuredOrganizationUrl');
+        $matcher = $this->exactly(4);
+        $translator->expects($matcher)
+            ->method('trans')->willReturnCallback(function (...$parameters) use ($matcher) {
+            if ($matcher->numberOfInvocations() === 1) {
+                $this->assertSame('suite_name', $parameters[0]);
+                return 'test-suite';
+            }
+            if ($matcher->numberOfInvocations() === 2) {
+                $this->assertSame('metadata_organization_name', $parameters[0]);
+                return 'configuredOrganizationName';
+            }
+            if ($matcher->numberOfInvocations() === 3) {
+                $this->assertSame('metadata_organization_displayname', $parameters[0]);
+                return 'configuredOrganizationDisplayName';
+            }
+            if ($matcher->numberOfInvocations() === 4) {
+                $this->assertSame('metadata_organization_url', $parameters[0]);
+                return 'configuredOrganizationUrl';
+            }
+        });
 
         $configuration = new EngineBlockConfiguration(
             $translator,
@@ -136,14 +136,19 @@ class ProxiedIdentityProviderTest extends AbstractEntityTest
 
     private function configureUrlProvider(): void
     {
-        $this->urlProvider->expects($this->exactly(1))
+        $matcher = $this->exactly(1);
+        $this->urlProvider->expects($matcher)
             ->method('getUrl')
-            ->withConsecutive(
-            // SSO: EngineBlockIdentityProvider::getSingleSignOnServices
-                ['authentication_idp_sso', false, null, 'entity-id']
-            )->willReturnOnConsecutiveCalls(
-            // SSO
-                'proxiedSsoLocation'
+            ->willReturnCallback(
+            function (...$parameters) use ($matcher) {
+                    if ($matcher->numberOfInvocations() === 1) {
+                        $this->assertSame('authentication_idp_sso', $parameters[0]);
+                        $this->assertSame(false, $parameters[1]);
+                        $this->assertSame(null, $parameters[2]);
+                        $this->assertSame('entity-id', $parameters[3]);
+                        return 'proxiedSsoLocation';
+                    }
+                }
             );
     }
 }

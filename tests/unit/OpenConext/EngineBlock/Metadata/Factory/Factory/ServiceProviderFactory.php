@@ -23,7 +23,7 @@ use OpenConext\EngineBlock\Exception\MissingParameterException;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
+use OpenConext\EngineBlock\Metadata\Factory\AbstractEntity;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\IndexedService;
@@ -39,9 +39,8 @@ use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
-use Symfony\Component\Translation\TranslatorInterface;
 
-class ServiceProviderFactoryTest extends AbstractEntityTest
+class ServiceProviderFactory extends AbstractEntity
 {
     /**
      * @var ServiceProviderFactory
@@ -114,25 +113,26 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
 
     public function test_eb_properties()
     {
-        $this->translator->expects($this->at(0))
-            ->method('trans')
-            ->with('suite_name')
-            ->willReturn('test-suite');
-
-        $this->translator->expects($this->at(1))
-            ->method('trans')
-            ->with('metadata_organization_name')
-            ->willReturn('configuredOrganizationName');
-
-        $this->translator->expects($this->at(2))
-            ->method('trans')
-            ->with('metadata_organization_displayname')
-            ->willReturn('configuredOrganizationDisplayName');
-
-        $this->translator->expects($this->at(3))
-            ->method('trans')
-            ->with('metadata_organization_url')
-            ->willReturn('configuredOrganizationUrl');
+        $matcher = $this->exactly(4);
+        $this->translator->expects($matcher)
+            ->method('trans')->willReturnCallback(function (...$parameters) use ($matcher) {
+            if ($matcher->numberOfInvocations() === 1) {
+                $this->assertSame('suite_name', $parameters[0]);
+                return 'test-suite';
+            }
+            if ($matcher->numberOfInvocations() === 2) {
+                $this->assertSame('metadata_organization_name', $parameters[0]);
+                return 'configuredOrganizationName';
+            }
+            if ($matcher->numberOfInvocations() === 3) {
+                $this->assertSame('metadata_organization_displayname', $parameters[0]);
+                return 'configuredOrganizationDisplayName';
+            }
+            if ($matcher->numberOfInvocations() === 4) {
+                $this->assertSame('metadata_organization_url', $parameters[0]);
+                return 'configuredOrganizationUrl';
+            }
+        });
 
         $this->configuration = new EngineBlockConfiguration(
             $this->translator,
@@ -159,20 +159,25 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         ];
         $this->attributes->method('getRequestedAttributes')
             ->willReturn($attributes);
+        $matcher = $this->exactly(2);
 
-        $this->urlProvider->expects($this->exactly(2))
-            ->method('getUrl')
-            ->withConsecutive(
-            // EntityId: EngineBlockServiceProvider::getEntityId
-                ['metadata_sp', false, null, null],
-                // ACS: EngineBlockServiceProvider::getAssertionConsumerService
-                ['authentication_sp_consume_assertion', false, null, null]
-            )->willReturnOnConsecutiveCalls(
-            // EntityId
-                'EbEntityId',
-                // ACS
-                'proxiedAcsLocation'
-            );
+        $this->urlProvider->expects($matcher)
+            ->method('getUrl')->willReturnCallback(function (...$parameters) use ($matcher) {
+            if ($matcher->numberOfInvocations() === 1) {
+                $this->assertSame('metadata_sp', $parameters[0]);
+                $this->assertSame(false, $parameters[1]);
+                $this->assertSame(null, $parameters[2]);
+                $this->assertSame(null, $parameters[3]);
+                return 'EbEntityId';
+            }
+            if ($matcher->numberOfInvocations() === 2) {
+                $this->assertSame('authentication_sp_consume_assertion', $parameters[0]);
+                $this->assertSame(false, $parameters[1]);
+                $this->assertSame(null, $parameters[2]);
+                $this->assertSame(null, $parameters[3]);
+                return 'proxiedAcsLocation';
+            }
+        });
 
         $this->factory = new ServiceProviderFactory(
             $this->attributes,
@@ -286,25 +291,26 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
 
     public function test_stepup_properties()
     {
-        $this->translator->expects($this->at(0))
-            ->method('trans')
-            ->with('suite_name')
-            ->willReturn('test-suite');
-
-        $this->translator->expects($this->at(1))
-            ->method('trans')
-            ->with('metadata_organization_name')
-            ->willReturn('configuredOrganizationName');
-
-        $this->translator->expects($this->at(2))
-            ->method('trans')
-            ->with('metadata_organization_displayname')
-            ->willReturn('configuredOrganizationDisplayName');
-
-        $this->translator->expects($this->at(3))
-            ->method('trans')
-            ->with('metadata_organization_url')
-            ->willReturn('configuredOrganizationUrl');
+        $matcher = $this->exactly(4);
+        $this->translator->expects($matcher)
+            ->method('trans')->willReturnCallback(function (...$parameters) use ($matcher) {
+            if ($matcher->numberOfInvocations() === 1) {
+                $this->assertSame('suite_name', $parameters[0]);
+                return 'test-suite';
+            }
+            if ($matcher->numberOfInvocations() === 2) {
+                $this->assertSame('metadata_organization_name', $parameters[0]);
+                return 'configuredOrganizationName';
+            }
+            if ($matcher->numberOfInvocations() === 3) {
+                $this->assertSame('metadata_organization_displayname', $parameters[0]);
+                return 'configuredOrganizationDisplayName';
+            }
+            if ($matcher->numberOfInvocations() === 4) {
+                $this->assertSame('metadata_organization_url', $parameters[0]);
+                return 'configuredOrganizationUrl';
+            }
+        });
 
         $this->configuration = new EngineBlockConfiguration(
             $this->translator,
@@ -331,21 +337,26 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         ];
         $this->attributes->method('getRequestedAttributes')
             ->willReturn($attributes);
+        $matcher = $this->exactly(2);
 
 
-        $this->urlProvider->expects($this->exactly(2))
-            ->method('getUrl')
-            ->withConsecutive(
-            // EntityId
-                ['metadata_stepup', false, null, null],
-                // ACS: ServiceProvider::getAssertionConsumerService
-                ['authentication_stepup_consume_assertion', false, null, null]
-            )->willReturnOnConsecutiveCalls(
-            // EntityId
-                'StepupEntityId',
-                // ACS
-                'proxiedAcsLocation'
-            );
+        $this->urlProvider->expects($matcher)
+            ->method('getUrl')->willReturnCallback(function (...$parameters) use ($matcher) {
+            if ($matcher->numberOfInvocations() === 1) {
+                $this->assertSame('metadata_stepup', $parameters[0]);
+                $this->assertSame(false, $parameters[1]);
+                $this->assertSame(null, $parameters[2]);
+                $this->assertSame(null, $parameters[3]);
+                return 'StepupEntityId';
+            }
+            if ($matcher->numberOfInvocations() === 2) {
+                $this->assertSame('authentication_stepup_consume_assertion', $parameters[0]);
+                $this->assertSame(false, $parameters[1]);
+                $this->assertSame(null, $parameters[2]);
+                $this->assertSame(null, $parameters[3]);
+                return 'proxiedAcsLocation';
+            }
+        });
 
         $this->factory = new ServiceProviderFactory(
             $this->attributes,

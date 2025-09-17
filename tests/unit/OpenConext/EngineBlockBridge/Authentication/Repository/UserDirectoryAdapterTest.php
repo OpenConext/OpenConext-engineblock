@@ -51,16 +51,16 @@ class UserDirectoryAdapterTest extends TestCase
         $this->logger               = m::mock(LoggerInterface::class);
 
         // the amount of logging is not really relevant.
-        $this->logger->shouldReceive('debug')->between(0, 1000);
+        $this->logger->shouldReceive('debug');
     }
 
     /**
-     * @test
-     * @group EngineBlockBridge
-     * @group Authentication
-     * @dataProvider noUidValueProvider
      * @param array $invalidAttributes
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('noUidValueProvider')]
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBridge')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function identification_of_a_user_requires_uid_value_to_be_set_as_attribute($invalidAttributes)
     {
         $userDirectoryAdapter = new UserDirectoryAdapter(
@@ -73,7 +73,7 @@ class UserDirectoryAdapterTest extends TestCase
         $userDirectoryAdapter->identifyUser($invalidAttributes);
     }
 
-    public function noUidValueProvider()
+    public static function noUidValueProvider()
     {
         return [
             'no uid'       => [
@@ -97,12 +97,12 @@ class UserDirectoryAdapterTest extends TestCase
     }
 
     /**
-     * @test
-     * @group EngineBlockBridge
-     * @group Authentication
-     * @dataProvider noSchacHomeOrganizationValueProvider
      * @param array $invalidAttributes
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('noSchacHomeOrganizationValueProvider')]
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBridge')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function identification_of_a_user_requires_schacHomeOrganization_value_to_be_set_as_attribute($invalidAttributes)
     {
         $userDirectoryAdapter = new UserDirectoryAdapter(
@@ -115,7 +115,7 @@ class UserDirectoryAdapterTest extends TestCase
         $userDirectoryAdapter->identifyUser($invalidAttributes);
     }
 
-    public function noSchacHomeOrganizationValueProvider()
+    public static function noSchacHomeOrganizationValueProvider()
     {
         return [
             'no schacHomeOrganization'                  => [
@@ -138,11 +138,9 @@ class UserDirectoryAdapterTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     * @group EngineBlockBridge
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBridge')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function registering_a_user_results_in_a_valid_user()
     {
         $uid                   = 'homer@invalid.org';
@@ -179,11 +177,9 @@ class UserDirectoryAdapterTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group EngineBlockBridge
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBridge')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function when_attempting_to_find_a_non_existent_user_null_is_returned()
     {
         $collabPersonId = $this->getCollabPersonId();
@@ -204,11 +200,9 @@ class UserDirectoryAdapterTest extends TestCase
         $this->assertNull($result);
     }
 
-    /**
-     * @test
-     * @group EngineBlockBridge
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBridge')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_user_is_returned_when_attempting_to_find_an_existing_user()
     {
         $collabPersonId = $this->getCollabPersonId();
@@ -230,11 +224,9 @@ class UserDirectoryAdapterTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
-    /**
-     * @test
-     * @group EngineBlockBridge
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBridge')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_request_for_removal_removes_the_user_from_the_database_backend()
     {
         $collabPersonId = $this->getCollabPersonId();
@@ -252,11 +244,9 @@ class UserDirectoryAdapterTest extends TestCase
         $userDirectoryAdapter->deleteUserWith($collabPersonId);
     }
 
-    /**
-     * @test
-     * @group EngineBlockBridge
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBridge')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_request_for_removal_also_removes_the_user_from_the_user_directory_if_enabled()
     {
         $collabPersonId = $this->getCollabPersonId();

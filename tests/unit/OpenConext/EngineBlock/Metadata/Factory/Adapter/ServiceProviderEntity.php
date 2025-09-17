@@ -18,9 +18,9 @@
 namespace OpenConext\EngineBlock\Metadata\Factory\Adapter;
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
+use OpenConext\EngineBlock\Metadata\Factory\AbstractEntity;
 
-class ServiceProviderEntityTest extends AbstractEntityTest
+class ServiceProviderEntity extends AbstractEntity
 {
     /**
      * This test will test if all methods work

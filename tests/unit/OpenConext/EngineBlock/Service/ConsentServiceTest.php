@@ -24,6 +24,7 @@ use OpenConext\EngineBlock\Authentication\Model\User;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonUuid;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -63,11 +64,10 @@ class ConsentServiceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Consent
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Consent')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[DoesNotPerformAssertions]
     public function remove_consent_by_collab_person_id_and_sp_entity_id()
     {
         $this->consentRepository->shouldReceive('deleteOneFor')
