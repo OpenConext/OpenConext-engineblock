@@ -21,7 +21,7 @@ namespace OpenConext\EngineBlock\Metadata\X509;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 
-class X509KeyTest extends TestCase
+class X509PublicKeyTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

@@ -86,25 +86,28 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
 
     public function test_create_idp_entity_from_entity_properties()
     {
-        $this->translator->expects($this->at(0))
-            ->method('trans')
-            ->with('suite_name')
-            ->willReturn('test-suite');
-
-        $this->translator->expects($this->at(1))
-            ->method('trans')
-            ->with('metadata_organization_name')
-            ->willReturn('configuredOrganizationName');
-
-        $this->translator->expects($this->at(2))
-            ->method('trans')
-            ->with('metadata_organization_displayname')
-            ->willReturn('configuredOrganizationDisplayName');
-
-        $this->translator->expects($this->at(3))
-            ->method('trans')
-            ->with('metadata_organization_url')
-            ->willReturn('configuredOrganizationUrl');
+        // Replaced deprecated $this->at(n) expectations with a single batched expectation
+        $matcher = $this->exactly(4);
+        // Replaced deprecated $this->at(n) expectations with a single batched expectation
+        $this->translator->expects($matcher)
+            ->method('trans')->willReturnCallback(function (...$parameters) use ($matcher) {
+            if ($matcher->numberOfInvocations() === 1) {
+                $this->assertSame('suite_name', $parameters[0]);
+                return 'test-suite';
+            }
+            if ($matcher->numberOfInvocations() === 2) {
+                $this->assertSame('metadata_organization_name', $parameters[0]);
+                return 'configuredOrganizationName';
+            }
+            if ($matcher->numberOfInvocations() === 3) {
+                $this->assertSame('metadata_organization_displayname', $parameters[0]);
+                return 'configuredOrganizationDisplayName';
+            }
+            if ($matcher->numberOfInvocations() === 4) {
+                $this->assertSame('metadata_organization_url', $parameters[0]);
+                return 'configuredOrganizationUrl';
+            }
+        });
 
         $this->configuration = new EngineBlockConfiguration(
             $this->translator,

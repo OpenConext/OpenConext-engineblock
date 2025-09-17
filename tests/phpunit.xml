@@ -10,6 +10,11 @@
          failOnWarning="true"
          executionOrder="random"
          displayDetailsOnAllIssues="true"
+         beStrictAboutCoverageMetadata="true"
+         beStrictAboutOutputDuringTests="true"
+         displayDetailsOnPhpunitDeprecations="true"
+         failOnPhpunitDeprecation="true"
+         failOnRisky="true"
 >
     <testsuites>
         <testsuite name="unit">
@@ -25,12 +30,22 @@
             <directory suffix="Test.php">functional</directory>
         </testsuite>
     </testsuites>
+
+    <!-- Configure coverage reports -->
+    <coverage includeUncoveredFiles="true">
+        <report>
+            <html outputDirectory="var/log/coverage/html"/>
+        </report>
+    </coverage>
+    <source restrictDeprecations="true" restrictNotices="true" restrictWarnings="true">
+        <include>
+            <directory>src</directory>
+            <directory>library</directory>
+        </include>
+    </source>
     <php>
         <server name="KERNEL_CLASS" value="App\Kernel"/>
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[total]=0"/>
         <ini name="memory_limit" value="512M"/>
     </php>
-    <listeners>
-        <listener class="\Mockery\Adapter\Phpunit\TestListener"/>
-    </listeners>
 </phpunit>
