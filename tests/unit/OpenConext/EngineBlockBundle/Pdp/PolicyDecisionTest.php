@@ -144,7 +144,7 @@ class PolicyDecisionTest extends TestCase
      */
     public function a_status_message_cannot_be_acquired_from_a_policy_that_has_none()
     {
-        $this->expectException('\OpenConext\EngineBlock\Exception\RuntimeException');
+        $this->expectException(\OpenConext\EngineBlock\Exception\RuntimeException::class);
         $this->expectExceptionMessage('No status message found');
 
         $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_deny.json'), true);

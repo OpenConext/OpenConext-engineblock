@@ -32,37 +32,37 @@ class RemoveOtherWorkflowStatesTest extends TestCase
     public function testRemoveOtherWorkflowState()
     {
         $prodSp = Utils::instantiate(
-            'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider',
+            \OpenConext\EngineBlock\Metadata\Entity\ServiceProvider::class,
             array('entityId' => 'https://prod.sp.example.edu', 'workflowState' => ServiceProvider::WORKFLOW_STATE_PROD)
         );
         $filter = new RemoveOtherWorkflowStatesFilter($prodSp, 'idp', 'sp');
 
         $prodIdp = Utils::instantiate(
-            'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider',
+            \OpenConext\EngineBlock\Metadata\Entity\ServiceProvider::class,
             array('entityId' => 'https://prod.idp.example.edu', 'workflowState' => ServiceProvider::WORKFLOW_STATE_PROD)
         );
         $this->assertNotNull($filter->filterRole($prodIdp));
 
         $testIdp = Utils::instantiate(
-            'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider',
+            \OpenConext\EngineBlock\Metadata\Entity\ServiceProvider::class,
             array('entityId' => 'https://test.idp.example.edu', 'workflowState' => ServiceProvider::WORKFLOW_STATE_PROD)
         );
         $this->assertNotNull($filter->filterRole($testIdp));
 
         $prodSp = Utils::instantiate(
-            'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider',
+            \OpenConext\EngineBlock\Metadata\Entity\ServiceProvider::class,
             array('entityId' => 'https://prod.sp.example.edu', 'workflowState' => ServiceProvider::WORKFLOW_STATE_PROD)
         );
         $this->assertNotNull($filter->filterRole($prodSp));
 
         $testSp = Utils::instantiate(
-            'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider',
+            \OpenConext\EngineBlock\Metadata\Entity\ServiceProvider::class,
             array('entityId' => 'https://test.sp.example.edu', 'workflowState' => ServiceProvider::WORKFLOW_STATE_TEST)
         );
         $this->assertNull($filter->filterRole($testSp));
 
         $buggyIdp = Utils::instantiate(
-            'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider',
+            \OpenConext\EngineBlock\Metadata\Entity\ServiceProvider::class,
             array('entityId' => 'https://buggy.idp.example.edu', 'workflowState' => '')
         );
         $this->assertNull($filter->filterRole($buggyIdp));
@@ -76,12 +76,12 @@ class RemoveOtherWorkflowStatesTest extends TestCase
             ->with('Dissimilar workflow states (OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\RemoveOtherWorkflowStatesFilter -> prodaccepted)');
 
         $prodSp = Utils::instantiate(
-            'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider',
+            \OpenConext\EngineBlock\Metadata\Entity\ServiceProvider::class,
             array('entityId' => 'https://prod.sp.example.edu', 'workflowState' => ServiceProvider::WORKFLOW_STATE_PROD)
         );
         $filter = new RemoveOtherWorkflowStatesFilter($prodSp, 'idp', 'sp');
         $buggyIdp = Utils::instantiate(
-            'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider',
+            \OpenConext\EngineBlock\Metadata\Entity\ServiceProvider::class,
             array('entityId' => 'https://buggy.idp.example.edu', 'workflowState' => '')
         );
         $this->assertNull($filter->filterRole($buggyIdp, $mockLogger));

@@ -30,7 +30,7 @@ class CachedDoctrineMetadataRepositoryTest extends TestCase
 
     public function testMethodsCallsAreProxied()
     {
-        $doctrineRepository = Mockery::mock('OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository');
+        $doctrineRepository = Mockery::mock(\OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository::class);
         $doctrineRepository->shouldReceive('findIdentityProviderByEntityId');
         $doctrineRepository->shouldReceive('findServiceProviderByEntityId');
         $doctrineRepository->shouldReceive('findIdentityProviderByEntityId');
@@ -51,7 +51,7 @@ class CachedDoctrineMetadataRepositoryTest extends TestCase
 
     public function testFetchIdentityProviderThrowExceptions()
     {
-        $doctrineRepository = Mockery::mock('OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository');
+        $doctrineRepository = Mockery::mock(\OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository::class);
         $doctrineRepository->shouldReceive('findIdentityProviderByEntityId');
 
         $this->expectException(EntityNotFoundException::class);
@@ -62,7 +62,7 @@ class CachedDoctrineMetadataRepositoryTest extends TestCase
 
     public function testFetchServiceProviderThrowExceptions()
     {
-        $doctrineRepository = Mockery::mock('OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository');
+        $doctrineRepository = Mockery::mock(\OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository::class);
         $doctrineRepository->shouldReceive('findServiceProviderByEntityId');
 
         $this->expectException(EntityNotFoundException::class);
@@ -73,7 +73,7 @@ class CachedDoctrineMetadataRepositoryTest extends TestCase
 
     public function testAppendVisitor()
     {
-        $doctrineRepository = Mockery::mock('OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository');
+        $doctrineRepository = Mockery::mock(\OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository::class);
         $doctrineRepository->shouldReceive('appendVisitor');
 
         $repository = new CachedDoctrineMetadataRepository($doctrineRepository);
@@ -84,7 +84,7 @@ class CachedDoctrineMetadataRepositoryTest extends TestCase
 
     public function testAppendFilter()
     {
-        $doctrineRepository = Mockery::mock('OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository');
+        $doctrineRepository = Mockery::mock(\OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository::class);
         $doctrineRepository->shouldReceive('appendFilter');
 
         $repository = new CachedDoctrineMetadataRepository($doctrineRepository);
