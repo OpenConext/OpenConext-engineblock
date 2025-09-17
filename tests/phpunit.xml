@@ -1,39 +1,36 @@
 <?xml version="1.0"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- backupGlobals="false"
- bootstrap="bootstrap.php"
- colors="true"
- convertErrorsToExceptions="true"
- convertNoticesToExceptions="false"
- convertWarningsToExceptions="false"
- xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
- >
-  <coverage processUncoveredFiles="true">
-    <include>
-      <directory suffix=".php">../src</directory>
-      <directory suffix=".php">../library</directory>
-    </include>
-  </coverage>
-  <testsuites>
-    <testsuite name="unit">
-      <directory suffix="Test.php">unit</directory>
-    </testsuite>
-    <testsuite name="integration">
-      <directory suffix="Test.php">integration</directory>
-    </testsuite>
-    <testsuite name="eb4">
-      <directory suffix="Test.php">library</directory>
-    </testsuite>
-    <testsuite name="functional">
-      <directory suffix="Test.php">functional</directory>
-    </testsuite>
-  </testsuites>
-  <php>
-    <server name="KERNEL_CLASS" value="App\Kernel"/>
-    <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[total]=0"/>
-    <ini name="memory_limit" value="512M"/>
-  </php>
-  <listeners>
-    <listener class="\Mockery\Adapter\Phpunit\TestListener"/>
-  </listeners>
+         backupGlobals="false"
+         bootstrap="bootstrap.php"
+         colors="true"
+         cacheDirectory="../var/cache/.phpunit.cache"
+         xsi:noNamespaceSchemaLocation="../vendor/phpunit/phpunit/phpunit.xsd"
+         failOnDeprecation="true"
+         failOnNotice="true"
+         failOnWarning="true"
+         executionOrder="random"
+         displayDetailsOnAllIssues="true"
+>
+    <testsuites>
+        <testsuite name="unit">
+            <directory suffix="Test.php">unit</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory suffix="Test.php">integration</directory>
+        </testsuite>
+        <testsuite name="eb4">
+            <directory suffix="Test.php">library</directory>
+        </testsuite>
+        <testsuite name="functional">
+            <directory suffix="Test.php">functional</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <server name="KERNEL_CLASS" value="App\Kernel"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[total]=0"/>
+        <ini name="memory_limit" value="512M"/>
+    </php>
+    <listeners>
+        <listener class="\Mockery\Adapter\Phpunit\TestListener"/>
+    </listeners>
 </phpunit>

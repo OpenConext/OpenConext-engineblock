@@ -53,10 +53,8 @@ class SsoSessionServiceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group SsoSessionCookie
-     */
+    #[\PHPUnit\Framework\Attributes\Group('SsoSessionCookie')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function test_set_sso_session_cookie()
     {
         $cookieMock = Phake::mock(ParameterBag::class);
@@ -74,10 +72,8 @@ class SsoSessionServiceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group SsoSessionCookie
-     */
+    #[\PHPUnit\Framework\Attributes\Group('SsoSessionCookie')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function test_set_sso_session_cookie_invalid_cookie_resets()
     {
         $cookieMock = Phake::mock(ParameterBag::class);
@@ -95,10 +91,8 @@ class SsoSessionServiceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group SsoSessionCookie
-     */
+    #[\PHPUnit\Framework\Attributes\Group('SsoSessionCookie')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function test_set_multiple_sso_session_cookies()
     {
         $cookieMock = Phake::mock(ParameterBag::class);
@@ -116,10 +110,8 @@ class SsoSessionServiceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group SsoSessionCookie
-     */
+    #[\PHPUnit\Framework\Attributes\Group('SsoSessionCookie')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function test_set_multiple_sso_session_cookies_no_duplicates()
     {
         $cookieMock = Phake::mock(ParameterBag::class);
@@ -137,10 +129,8 @@ class SsoSessionServiceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group SsoSessionCookie
-     */
+    #[\PHPUnit\Framework\Attributes\Group('SsoSessionCookie')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function test_remove_sso_session_cookie()
     {
         $this->ssoQueryService->clearSsoSessionCookie();

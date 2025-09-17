@@ -26,11 +26,9 @@ class RequestIdTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Request
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Request')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function request_id_is_unchanged_after_first_retrieval()
     {
         $generatedId = 'generated_id';

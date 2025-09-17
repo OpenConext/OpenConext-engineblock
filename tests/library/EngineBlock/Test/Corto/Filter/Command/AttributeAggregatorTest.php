@@ -26,14 +26,13 @@ use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterfa
 use OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClientInterface;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Response;
 use OpenConext\EngineBlock\Http\Exception\HttpException;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Response as SAMLResponse;
 
-/**
- * @group AttributeAggregation
- */
+#[\PHPUnit\Framework\Attributes\Group('AttributeAggregation')]
 class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
@@ -145,6 +144,7 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Test
         $this->assertTrue($aggregationNotConfiguredLogged, 'Logging that no attributes are configured in ARP for aggregation');
     }
 
+    #[DoesNotPerformAssertions]
     public function testAggregatorIsCalledWhenArpCorrectlyConfigured()
     {
         $client = Mockery::mock(AttributeAggregationClientInterface::class);
@@ -306,6 +306,7 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Test
         $this->assertEquals([], $command->getResponseAttributes());
     }
 
+    #[DoesNotPerformAssertions]
     public function testAggregatorCalledWhenThereAreNonIdpSources()
     {
         $client = Mockery::mock(AttributeAggregationClientInterface::class);

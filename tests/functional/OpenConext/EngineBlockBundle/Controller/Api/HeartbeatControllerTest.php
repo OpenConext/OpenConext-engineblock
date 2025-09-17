@@ -25,10 +25,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class HeartbeatControllerTest extends WebTestCase
 {
-    /**
-     * @test
-     * @group Api
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function engineblock_has_a_heartbeat()
     {
         $client = self::createClient();

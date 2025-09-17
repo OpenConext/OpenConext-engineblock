@@ -197,9 +197,7 @@ class SamlResponseHelperTest extends TestCase
         self::assertEquals($responseSubCode['Value'], 'testSubCode');
     }
 
-    /**
-     * @dataProvider provideAcuData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideAcuData')]
     public function test_get_acu(array $inputAcus, string $expectedAcu): void
     {
         $spEntityId = 'https://existing.example.org';
@@ -212,7 +210,7 @@ class SamlResponseHelperTest extends TestCase
         self::assertEquals($expectedAcu, $this->helper->getAcu($spEntityId));
     }
 
-    public function provideAcuData(): array
+    public static function provideAcuData(): array
     {
         $acuLocation0 = 'https://sp.example.org/assertion/consumer';
         $acuLocation1 = 'https://sp.example.org/assertion/consumer-1';

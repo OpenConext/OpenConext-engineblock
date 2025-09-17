@@ -50,7 +50,7 @@ class ServiceProviderStepupTest extends AbstractEntityTest
             ->method('getUrl')
             ->willReturnCallback(
                 function (...$parameters) use ($matcher) {
-                    if ($matcher->getInvocationCount() === 1) {
+                    if ($matcher->numberOfInvocations() === 1) {
                         $this->assertSame('authentication_stepup_consume_assertion', $parameters[0]);
                         $this->assertSame(false, $parameters[1]);
                         $this->assertSame(null, $parameters[2]);

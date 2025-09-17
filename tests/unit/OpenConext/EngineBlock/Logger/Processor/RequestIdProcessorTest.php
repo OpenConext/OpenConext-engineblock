@@ -27,12 +27,10 @@ class RequestIdProcessorTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Request
-     * @group Logger
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Request')]
+    #[\PHPUnit\Framework\Attributes\Group('Logger')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function request_id_is_added_to_the_record()
     {
         $requestIdValue = 'some_request_id';

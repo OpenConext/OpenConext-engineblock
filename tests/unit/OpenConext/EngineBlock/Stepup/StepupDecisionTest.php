@@ -37,13 +37,13 @@ class StepupDecisionTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     /**
-     * @test
-     * @group Stepup
-     * @dataProvider stepupCoinsAndExpectedResultProvider
      *
      * @param array $input
      * @param array $expectedResult
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('stepupCoinsAndExpectedResultProvider')]
+    #[\PHPUnit\Framework\Attributes\Group('Stepup')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_correct_stepup_decision_should_be_made_based_on_a_coin_data(
         $input,
         $expectedResult

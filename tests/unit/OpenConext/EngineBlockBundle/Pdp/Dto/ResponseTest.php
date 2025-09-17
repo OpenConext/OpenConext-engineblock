@@ -36,10 +36,8 @@ class ResponseTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group Pdp
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_pdp_response_without_a_response_key_is_invalid()
     {
         $this->expectException(\OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException::class);
@@ -50,10 +48,8 @@ class ResponseTest extends TestCase
         Response::fromData(json_decode($responseJson, true));
     }
 
-    /**
-     * @test
-     * @group Pdp
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_pdp_response_without_a_response_key_as_an_array_is_invalid()
     {
         $this->expectException(\OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException::class);
@@ -64,10 +60,8 @@ class ResponseTest extends TestCase
         Response::fromData(json_decode($responseJson, true));
     }
 
-    /**
-     * @test
-     * @group Pdp
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_pdp_response_with_an_empty_response_is_invalid()
     {
         $this->expectException(\OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException::class);
@@ -78,10 +72,8 @@ class ResponseTest extends TestCase
         Response::fromData(json_decode($responseJson, true));
     }
 
-    /**
-     * @test
-     * @group Pdp
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_pdp_response_without_a_status_is_invalid()
     {
         $this->expectException(\OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException::class);
@@ -92,10 +84,8 @@ class ResponseTest extends TestCase
         Response::fromData(json_decode($responseJson, true));
     }
 
-    /**
-     * @test
-     * @group Pdp
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_pdp_response_without_a_policy_identifier_is_invalid()
     {
         $this->expectException(\OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException::class);
@@ -106,10 +96,8 @@ class ResponseTest extends TestCase
         Response::fromData(json_decode($responseJson, true));
     }
 
-    /**
-     * @test
-     * @group Pdp
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_pdp_response_without_a_decision_is_invalid()
     {
         $this->expectException(\OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException::class);
@@ -121,13 +109,12 @@ class ResponseTest extends TestCase
     }
 
     /**
-     * @test
-     * @group Pdp
-     *
-     * @dataProvider pdpResponseProvider
      * @param string $fixtureName
      * @param Response $expectedResponse
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('pdpResponseProvider')]
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function pdp_responses_are_deserialized_correctly($fixtureName, $expectedResponse)
     {
         $responseString = file_get_contents(__DIR__.'/../fixture/response_'. $fixtureName . '.json');
