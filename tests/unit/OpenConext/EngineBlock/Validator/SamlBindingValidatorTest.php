@@ -77,6 +77,7 @@ class SamlBindingValidatorTest extends TestCase
         $this->expectException(InvalidBindingException::class);
         $this->expectExceptionMessage('No SAMLRequest or SAMLResponse parameter was found in the HTTP');
 
+        $_SERVER['REQUEST_METHOD'] = ''; // Prevent Warning: Undefined array key "REQUEST_METHOD" in /var/www/html/vendor/simplesamlphp/saml2/src/SAML2/Binding.php on line 69
         $request = m::mock(Request::class);
         $request
             ->shouldReceive('getMethod')
