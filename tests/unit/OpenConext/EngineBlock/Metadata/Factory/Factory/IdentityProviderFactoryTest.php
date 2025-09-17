@@ -143,7 +143,7 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
             ->method('getUrl')
             ->willReturnCallback(
             function (...$parameters) use ($matcher) {
-                    if ($matcher->getInvocationCount() === 1) {
+                    if ($matcher->numberOfInvocations() === 1) {
                         $this->assertSame('authentication_idp_sso', $parameters[0]);
                         $this->assertSame(false, $parameters[1]);
                         $this->assertSame('default', $parameters[2]);

@@ -163,14 +163,14 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
 
         $this->urlProvider->expects($matcher)
             ->method('getUrl')->willReturnCallback(function (...$parameters) use ($matcher) {
-            if ($matcher->getInvocationCount() === 1) {
+            if ($matcher->numberOfInvocations() === 1) {
                 $this->assertSame('metadata_sp', $parameters[0]);
                 $this->assertSame(false, $parameters[1]);
                 $this->assertSame(null, $parameters[2]);
                 $this->assertSame(null, $parameters[3]);
                 return 'EbEntityId';
             }
-            if ($matcher->getInvocationCount() === 2) {
+            if ($matcher->numberOfInvocations() === 2) {
                 $this->assertSame('authentication_sp_consume_assertion', $parameters[0]);
                 $this->assertSame(false, $parameters[1]);
                 $this->assertSame(null, $parameters[2]);
@@ -341,14 +341,14 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
 
         $this->urlProvider->expects($matcher)
             ->method('getUrl')->willReturnCallback(function (...$parameters) use ($matcher) {
-            if ($matcher->getInvocationCount() === 1) {
+            if ($matcher->numberOfInvocations() === 1) {
                 $this->assertSame('metadata_stepup', $parameters[0]);
                 $this->assertSame(false, $parameters[1]);
                 $this->assertSame(null, $parameters[2]);
                 $this->assertSame(null, $parameters[3]);
                 return 'StepupEntityId';
             }
-            if ($matcher->getInvocationCount() === 2) {
+            if ($matcher->numberOfInvocations() === 2) {
                 $this->assertSame('authentication_stepup_consume_assertion', $parameters[0]);
                 $this->assertSame(false, $parameters[1]);
                 $this->assertSame(null, $parameters[2]);

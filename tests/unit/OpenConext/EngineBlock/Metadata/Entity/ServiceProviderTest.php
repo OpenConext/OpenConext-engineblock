@@ -45,9 +45,8 @@ class ServiceProviderTest extends TestCase
      * 3. display name in english
      * 4. name in english
      * 5. entityID (should never happen)
-     *
-     * @dataProvider displayNameProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('displayNameProvider')]
     public function testGetDisplayName(string $entityId, ?string $displayNameEn, ?string $nameEn, ?string $displayNameLocale, ?string $nameLocale, string $locale, $outcome)
     {
         $sp = $this->createServiceProvider(
@@ -70,9 +69,8 @@ class ServiceProviderTest extends TestCase
      * 3. english organization display name
      * 4. english organization name
      * 5. empty string (will be set to the locale-specific variant of 'unknown' in the template)
-     *
-     * @dataProvider organizationNameProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('organizationNameProvider')]
     public function testGetOrganizationName(string $entityId, ?string $orgDisplayNameEn, ?string $orgNameEn, ?string $orgDisplayNameNl, ?string $orgNameNl, string $locale, $outcome)
     {
         $orgEn = new Organization($orgNameEn, $orgDisplayNameEn, $entityId);
@@ -98,7 +96,7 @@ class ServiceProviderTest extends TestCase
      *
      * @return string[][]
      */
-    public function displayNameProvider()
+    public static function displayNameProvider()
     {
         return [
             ['https://entityId.fake', 'JohnnyEnglish', 'English', 'JohnnyEnglish', 'English', 'en', 'JohnnyEnglish'],
@@ -123,7 +121,7 @@ class ServiceProviderTest extends TestCase
      *
      * @return string[][]
      */
-    public function organizationNameProvider()
+    public static function organizationNameProvider()
     {
         return [
             ['https://entityId.fake', 'JohnnyEnglish', 'English', 'JohnnyDutch', 'Dutch', 'en', 'JohnnyEnglish'],

@@ -7,9 +7,13 @@ return RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/src',
         __DIR__ . '/library',
+        __DIR__ . '/tests',
     ])
+    ->withComposerBased(phpunit: true, symfony: true)
     ->withSets([
         LevelSetList::UP_TO_PHP_82,
+        \Rector\PHPUnit\Set\PHPUnitSetList::PHPUNIT_100,
+//        \Rector\PHPUnit\Set\PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES,
     ])
     ->withSkip([
         \Rector\Php53\Rector\Ternary\TernaryToElvisRector::class,
@@ -26,7 +30,9 @@ return RectorConfig::configure()
         \Rector\Php80\Rector\NotIdentical\StrContainsRector::class,
         \Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector::class,
         \Rector\Php80\Rector\Switch_\ChangeSwitchToMatchRector::class,
-        \Rector\Php80\Rector\FunctionLike\MixedTypeRector::class,
         \Rector\Php80\Rector\FuncCall\ClassOnObjectRector::class,
+        \Rector\Php81\Rector\Array_\FirstClassCallableRector::class,
+        \Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector::class, // Probably do this ..
+        \Rector\Php81\Rector\Property\ReadOnlyPropertyRector::class,
     ])
     ;

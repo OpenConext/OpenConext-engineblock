@@ -29,9 +29,7 @@ class DiscoveryTest extends TestCase
         $this->assertNotNull($discovery);
     }
 
-    /**
-     * @dataProvider localeValueArrayProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('localeValueArrayProvider')]
     public function test_validates_localized_names(array $names, string $expectedExceptionMessage = null): void
     {
         $this->expectException(InvalidDiscoveryException::class);
@@ -40,9 +38,7 @@ class DiscoveryTest extends TestCase
         Discovery::create($names, [], null);
     }
 
-    /**
-     * @dataProvider localeValueArrayProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('localeValueArrayProvider')]
     public function test_validates_localized_keywords(array $keywords, string $expectedExceptionMessage): void
     {
         $this->expectException(InvalidDiscoveryException::class);
@@ -51,7 +47,7 @@ class DiscoveryTest extends TestCase
         Discovery::create([], $keywords, null);
     }
 
-    public function localeValueArrayProvider(): array
+    public static function localeValueArrayProvider(): array
     {
         return [
             'non-string locale key' => [

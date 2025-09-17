@@ -20,7 +20,7 @@ use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcer extends TestCase
+class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcerTest extends TestCase
 {
     /**
      * @var EngineBlock_Arp_AttributeReleasePolicyEnforcer

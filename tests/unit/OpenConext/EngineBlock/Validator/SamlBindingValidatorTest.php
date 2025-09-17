@@ -43,9 +43,7 @@ class SamlBindingValidatorTest extends TestCase
         $_SERVER = [];
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_happy_flow_get()
     {
         // Under the hood, the Binding::getCurrentBinding method is used, which directly reads from the super globals
@@ -59,9 +57,7 @@ class SamlBindingValidatorTest extends TestCase
         $this->assertTrue($this->validator->isValid($request));
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_happy_flow_post()
     {
         // Under the hood, the Binding::getCurrentBinding method is used, which directly reads from the super globals
@@ -75,9 +71,7 @@ class SamlBindingValidatorTest extends TestCase
         $this->assertTrue($this->validator->isValid($request));
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_post_binding_is_not_supported()
     {
         $this->expectException(InvalidBindingException::class);
@@ -91,9 +85,7 @@ class SamlBindingValidatorTest extends TestCase
         $this->validator->isValid($request);
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_used_invalid_binding()
     {
         $this->expectException(InvalidBindingException::class);
@@ -112,9 +104,7 @@ class SamlBindingValidatorTest extends TestCase
         $this->validator->isValid($request);
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_used_unsupported_binding()
     {
         $this->expectException(InvalidBindingException::class);

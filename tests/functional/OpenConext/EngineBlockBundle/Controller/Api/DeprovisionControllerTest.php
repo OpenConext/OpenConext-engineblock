@@ -34,11 +34,9 @@ final class DeprovisionControllerTest extends WebTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authentication_is_required_for_accessing_the_deprovision_api_get()
     {
         $collabPersonId = 'urn:collab:person:test';
@@ -50,11 +48,9 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED, $unauthenticatedClient);
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authentication_is_required_for_accessing_the_deprovision_api_delete()
     {
         $collabPersonId = 'urn:collab:person:test';
@@ -66,11 +62,9 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED, $unauthenticatedClient);
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authentication_is_required_for_accessing_the_deprovision_api_delete_dry_run()
     {
         $collabPersonId = 'urn:collab:person:test';
@@ -82,11 +76,9 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED, $unauthenticatedClient);
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authentication_is_required_for_accessing_the_deprovision_api_delete_remove_consent()
     {
         $unauthenticatedClient = static::createClient();
@@ -94,11 +86,9 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function delete_is_not_available_for_accessing_the_deprovision_api_delete_remove_consent()
     {
         $unauthenticatedClient = static::createClient();
@@ -106,11 +96,9 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertStatusCode(Response::HTTP_METHOD_NOT_ALLOWED,  $unauthenticatedClient);
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function only_get_or_delete_requests_are_allowed_when_accessing_the_deprovision_api()
     {
         $collabPersonId = 'urn:collab:person:test';
@@ -129,12 +117,10 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertResponseIsJson($client);
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     * @group FeatureToggle
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Group('FeatureToggle')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function cannot_access_the_deprovision_api_if_the_feature_has_been_disabled()
     {
         $collabPersonId = 'urn:collab:person:test';
@@ -149,11 +135,9 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertResponseIsJson($client);
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function cannot_access_the_deprovision_api_if_user_does_not_have_deprovision_role()
     {
         $collabPersonId = 'urn:collab:person:test';
@@ -169,13 +153,10 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertResponseIsJson($client);
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     *
-     * @dataProvider provideDeprovisionEndPoints
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideDeprovisionEndPoints')]
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function no_user_data_is_returned_if_collab_person_id_is_unknown($method, $path)
     {
         $client = $this->createAuthorizedClient();
@@ -211,12 +192,12 @@ final class DeprovisionControllerTest extends WebTestCase
      *
      *  - DELETE /deprovision/{collab_person_id}
      *
-     * @test
-     * @group Api
-     * @group Deprovision
      *
-     * @dataProvider provideDeprovisionEndPoints
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideDeprovisionEndPoints')]
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function all_user_data_for_collab_person_id_is_retrieved_and_deleted($method, $path)
     {
         $userId = 'urn:collab:person:test';
@@ -320,7 +301,7 @@ final class DeprovisionControllerTest extends WebTestCase
     /**
      * @return array
      */
-    public function provideDeprovisionEndpoints()
+    public static function provideDeprovisionEndpoints()
     {
         return [
             ['GET', '/deprovision/urn:collab:person:test'],

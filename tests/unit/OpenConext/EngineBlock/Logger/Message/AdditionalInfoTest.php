@@ -26,11 +26,9 @@ final class AdditionalInfoTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Logger
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Logger')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function message_has_correct_severity()
     {
         $exception = new EngineBlock_Exception('message', EngineBlock_Exception::CODE_ALERT);
