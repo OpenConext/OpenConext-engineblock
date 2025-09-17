@@ -79,7 +79,7 @@ class AuthenticationLoggerTest extends TestCase
             'engine_sso_endpoint_used' => $ssoEndpointUsed
         ];
 
-        $mockLogger = m::mock('\Psr\Log\LoggerInterface');
+        $mockLogger = m::mock(\Psr\Log\LoggerInterface::class);
         $mockLogger
             ->shouldReceive('info')
             ->withArgs([
@@ -165,7 +165,7 @@ class AuthenticationLoggerTest extends TestCase
             'response_attributes' => ['label' => 'attributeValue']
         ];
 
-        $mockLogger = m::mock('\Psr\Log\LoggerInterface');
+        $mockLogger = m::mock(\Psr\Log\LoggerInterface::class);
         $mockLogger
             ->shouldReceive('info')
             ->withArgs([

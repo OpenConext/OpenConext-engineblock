@@ -388,7 +388,7 @@ final class ConsentControllerTest extends WebTestCase
             'api.consent_remove' => false,
             'eb.feature_enable_consent' => true,
         ]);
-        $client->getContainer()->set('OpenConext\\EngineBlockBundle\\Configuration\\FeatureConfiguration', $mock);
+        $client->getContainer()->set(\OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration::class, $mock);
     }
 
     /**
@@ -491,7 +491,7 @@ final class ConsentControllerTest extends WebTestCase
             'eb.feature_enable_consent' => false,
         ]);
         //$client->disableReboot();
-        $client->getContainer()->set('OpenConext\\EngineBlockBundle\\Configuration\\FeatureConfiguration', $mock);
+        $client->getContainer()->set(\OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration::class, $mock);
     }
 
     private function disableEngineConsentFeatureFor(KernelBrowser $client)
@@ -500,7 +500,7 @@ final class ConsentControllerTest extends WebTestCase
             'eb.feature_enable_consent' => false
         ]);
         //$client->disableReboot();
-        $client->getContainer()->set('OpenConext\\EngineBlockBundle\\Configuration\\FeatureConfiguration', $mock);
+        $client->getContainer()->set(\OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration::class, $mock);
 
     }
 

@@ -40,7 +40,7 @@ class FileStorageDriverTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        new FileStorageDriver(m::mock('OpenConext\EngineBlock\Driver\File\FileHandler'), $notStringOrEmptyString);
+        new FileStorageDriver(m::mock(\OpenConext\EngineBlock\Driver\File\FileHandler::class), $notStringOrEmptyString);
     }
 
     /**
@@ -56,7 +56,7 @@ class FileStorageDriverTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $storage = new FileStorageDriver(m::mock('OpenConext\EngineBlock\Driver\File\FileHandler'), '/some/path');
+        $storage = new FileStorageDriver(m::mock(\OpenConext\EngineBlock\Driver\File\FileHandler::class), '/some/path');
 
         $storage->save($notString);
     }
@@ -71,7 +71,7 @@ class FileStorageDriverTest extends TestCase
         $data     = 'FooBarBaz';
         $filePath = '/some/file/path';
 
-        $fileHandlerMock = m::mock('OpenConext\EngineBlock\Driver\File\FileHandler');
+        $fileHandlerMock = m::mock(\OpenConext\EngineBlock\Driver\File\FileHandler::class);
         $fileHandlerMock->shouldReceive('writeTo')->withArgs([$data, $filePath]);
 
         $storage = new FileStorageDriver($fileHandlerMock, $filePath);
@@ -88,7 +88,7 @@ class FileStorageDriverTest extends TestCase
         $data = 'FooBarBaz';
         $filePath = '/some/file/path';
 
-        $fileHandlerMock = m::mock('OpenConext\EngineBlock\Driver\File\FileHandler');
+        $fileHandlerMock = m::mock(\OpenConext\EngineBlock\Driver\File\FileHandler::class);
         $fileHandlerMock->shouldReceive('readFrom')->withArgs([$filePath])->andReturn($data);
 
         $storage = new FileStorageDriver($fileHandlerMock, $filePath);

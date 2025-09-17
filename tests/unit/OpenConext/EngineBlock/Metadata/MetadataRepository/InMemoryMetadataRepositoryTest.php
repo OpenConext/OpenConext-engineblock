@@ -108,7 +108,7 @@ class MetadataRepositoryTest extends TestCase
         $repository = $this->getFilledRepository();
 
         $mockFilter = Mockery::mock(
-            'OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface'
+            \OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface::class
         );
         $mockFilter->shouldReceive('filterRole')->andReturnNull();
         $repository->appendFilter($mockFilter);
@@ -132,7 +132,7 @@ class MetadataRepositoryTest extends TestCase
         $repository = $this->getFilledRepository();
 
         $visitor = Mockery::mock(
-            'OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface'
+            \OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface::class
         );
         $visitor->shouldReceive('visitIdentityProvider')->andReturnUsing(
             function (IdentityProvider $idp) {
@@ -160,7 +160,7 @@ class MetadataRepositoryTest extends TestCase
         $repository = new InMemoryMetadataRepository(
             array(
                 Utils::instantiate(
-                    'OpenConext\EngineBlock\Metadata\Entity\IdentityProvider',
+                    \OpenConext\EngineBlock\Metadata\Entity\IdentityProvider::class,
                     array(
                         'entityId' => 'https://idp1.example.edu',
                         'schacHomeOrganization'=> 'idp1.example.edu'

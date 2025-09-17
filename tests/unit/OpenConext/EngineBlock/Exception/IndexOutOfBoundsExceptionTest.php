@@ -37,7 +37,7 @@ class IndexOutOfBoundsExceptionTest extends TestCase
 
         $exception = IndexOutOfBoundsException::tooLow($invalidIndex, $minimumIndex);
 
-        $this->assertInstanceOf('\OpenConext\EngineBlock\Exception\IndexOutOfBoundsException', $exception);
+        $this->assertInstanceOf(\OpenConext\EngineBlock\Exception\IndexOutOfBoundsException::class, $exception);
         $this->assertSame(
             sprintf('Index "%d" is lower than the minimum index "%d"', $invalidIndex, $minimumIndex),
             $exception->getMessage()
@@ -73,7 +73,7 @@ class IndexOutOfBoundsExceptionTest extends TestCase
 
         $exception = IndexOutOfBoundsException::tooHigh($invalidIndex, $maximumIndex);
 
-        $this->assertInstanceOf('\OpenConext\EngineBlock\Exception\IndexOutOfBoundsException', $exception);
+        $this->assertInstanceOf(\OpenConext\EngineBlock\Exception\IndexOutOfBoundsException::class, $exception);
         $this->assertSame(
             sprintf('Index "%d" is higher than the maximum index "%d"', $invalidIndex, $maximumIndex),
             $exception->getMessage()
