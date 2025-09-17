@@ -128,17 +128,17 @@ class ResponseTest extends TestCase
         );
     }
 
-    public function pdpResponseProvider()
+    public static function pdpResponseProvider()
     {
         return [
-            'Decision: Deny'          => ['deny', $this->buildDenyResponse()],
-            'Decision: Permit'        => ['permit', $this->buildPermitResponse()],
-            'Decision: NotApplicable' => ['not_applicable', $this->buildNotApplicableResponse()],
-            'Decision: Indeterminate' => ['indeterminate', $this->buildIndeterminateResponse()],
+            'Decision: Deny'          => ['deny', self::buildDenyResponse()],
+            'Decision: Permit'        => ['permit', self::buildPermitResponse()],
+            'Decision: NotApplicable' => ['not_applicable', self::buildNotApplicableResponse()],
+            'Decision: Indeterminate' => ['indeterminate', self::buildIndeterminateResponse()],
         ];
     }
 
-    private function buildDenyResponse()
+    private static function buildDenyResponse()
     {
         $response = new Response;
 
@@ -185,7 +185,7 @@ class ResponseTest extends TestCase
         return $response;
     }
 
-    private function buildPermitResponse()
+    private static function buildPermitResponse()
     {
         $response = new Response;
 
@@ -217,7 +217,7 @@ class ResponseTest extends TestCase
         return $response;
     }
 
-    private function buildNotApplicableResponse()
+    private static function buildNotApplicableResponse()
     {
         $response = new Response;
 
@@ -236,7 +236,7 @@ class ResponseTest extends TestCase
         return $response;
     }
 
-    private function buildIndeterminateResponse()
+    private static function buildIndeterminateResponse()
     {
         $response = new Response;
 

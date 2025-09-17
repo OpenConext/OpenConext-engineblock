@@ -30,7 +30,7 @@ use PHPUnit\Framework\TestCase;
  * Class MetadataRepositoryTest
  * @package OpenConext\EngineBlock\Metadata\MetadataRepository
  */
-class MetadataRepositoryTest extends TestCase
+class InMemoryMetadataRepositoryTest extends TestCase
 {
     const MOCK_IDP_NAME = 'https://idp.example.edu';
 

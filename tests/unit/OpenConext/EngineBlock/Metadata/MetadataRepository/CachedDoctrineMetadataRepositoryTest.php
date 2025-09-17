@@ -22,12 +22,14 @@ use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 
 class CachedDoctrineMetadataRepositoryTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
+    #[DoesNotPerformAssertions]
     public function testMethodsCallsAreProxied()
     {
         $doctrineRepository = Mockery::mock(\OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository::class);
@@ -71,6 +73,7 @@ class CachedDoctrineMetadataRepositoryTest extends TestCase
         $repository->fetchServiceProviderByEntityId('test');
     }
 
+    #[DoesNotPerformAssertions]
     public function testAppendVisitor()
     {
         $doctrineRepository = Mockery::mock(\OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository::class);
@@ -82,6 +85,7 @@ class CachedDoctrineMetadataRepositoryTest extends TestCase
         );
     }
 
+    #[DoesNotPerformAssertions]
     public function testAppendFilter()
     {
         $doctrineRepository = Mockery::mock(\OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository::class);

@@ -25,7 +25,7 @@ use OpenConext\EngineBlock\Metadata\Utils;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class RemoveOtherWorkflowStatesTest extends TestCase
+class RemoveOtherWorkflowStatesFilterTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 

@@ -230,7 +230,7 @@ class ReleaseAsEnforcerTest extends TestCase
                     "urn:mace:dir:attribute-def:givenName" => ["Ad"],
                     "urn:mace:dir:attribute-def:mail" => ["ad@example.com"]
                 ],
-                'expectedLogMessages' => 'Releasing "urn:mace:dir:attribute-def:eduPersonTargetedId" as "UserName" is not possible, value for "urn:mace:dir:attribute-def:eduPersonTargetedId" is null'
+                'expectedLogMessage' => 'Releasing "urn:mace:dir:attribute-def:eduPersonTargetedId" as "UserName" is not possible, value for "urn:mace:dir:attribute-def:eduPersonTargetedId" is null'
             ],
         ];
     }
