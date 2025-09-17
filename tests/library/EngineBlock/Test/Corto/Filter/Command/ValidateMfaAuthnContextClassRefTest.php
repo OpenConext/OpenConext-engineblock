@@ -287,7 +287,6 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest 
         $object = new ReflectionClass($role);
 
         $property = $object->getProperty('coins');
-        $property->setAccessible(true);
         $property->setValue($role, $coins);
     }
 }
