@@ -572,7 +572,6 @@ QUERY;
         $object = new ReflectionClass($role);
 
         $property = $object->getProperty('coins');
-        $property->setAccessible(true);
         $property->setValue($role, $coins);
     }
     private function setMdui(AbstractRole $role, string $elementName, MultilingualElement $value)
@@ -587,7 +586,6 @@ QUERY;
         $object = new ReflectionClass($role);
 
         $property = $object->getProperty('mdui');
-        $property->setAccessible(true);
         $property->setValue($role, $mdui);
     }
 }
