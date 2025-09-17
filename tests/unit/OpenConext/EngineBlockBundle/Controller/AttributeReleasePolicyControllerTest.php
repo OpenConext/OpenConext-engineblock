@@ -47,7 +47,7 @@ class AttributeReleasePolicyControllerTest extends TestCase
      */
     public function access_is_denied_for_unauthorized_requests()
     {
-        $this->expectException(ApiAccessDeniedHttpException::class, 'ROLE_API_USER_PROFILE');
+        $this->expectException(ApiAccessDeniedHttpException::class);
 
         $metadataService = $this->createDummyMetadataService();
         $arpEnforcer = new EngineBlock_Arp_AttributeReleasePolicyEnforcer();
