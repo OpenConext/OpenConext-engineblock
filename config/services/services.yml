@@ -16,6 +16,10 @@ services:
         tags:
             - { name: openconext.monitor.health_check }
 
+    OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Spaceless:
+        tags:
+             - { name: 'twig.extension' }
+
     OpenConext\EngineBlockBundle\Value\ExecutionTime:
         factory: [ OpenConext\EngineBlockBundle\Value\ExecutionTime, 'of' ]
         arguments:
