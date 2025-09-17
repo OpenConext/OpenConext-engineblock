@@ -38,7 +38,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionProperty;
 
-abstract class AbstractEntityTest extends TestCase
+abstract class AbstractEntity extends TestCase
 {
     /**
      * Create an instance which could be used by decorators

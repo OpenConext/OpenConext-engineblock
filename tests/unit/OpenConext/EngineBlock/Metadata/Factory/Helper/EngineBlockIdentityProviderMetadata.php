@@ -18,14 +18,14 @@
 namespace OpenConext\EngineBlock\Metadata\Factory\Helper;
 
 use Mockery;
-use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
+use OpenConext\EngineBlock\Metadata\Factory\AbstractEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 
-class EngineBlockIdentityProviderMetadataTest extends AbstractEntityTest
+class EngineBlockIdentityProviderMetadata extends AbstractEntity
 {
     use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
     /**
