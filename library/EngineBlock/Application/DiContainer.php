@@ -27,6 +27,7 @@ use OpenConext\EngineBlock\Stepup\StepupEntityFactory;
 use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
+use Symfony\Component\Mailer\MailerInterface;
 use Twig\Environment;
 
 class EngineBlock_Application_DiContainer extends \Pimple\Container
@@ -283,12 +284,9 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
         return $this->container->get('session');
     }
 
-    /**
-     * @return Swift_Mailer
-     */
-    public function getMailer()
+    public function getMailer(): MailerInterface
     {
-        return $this->container->get('mailer');
+        return $this->container->get('symfony.mailer');
     }
 
     /**

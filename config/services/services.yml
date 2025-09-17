@@ -334,3 +334,7 @@ services:
              - { name: 'twig.extension' }
 
     OpenConext\EngineBlockBundle\Service\DiscoverySelectionService:
+
+    symfony.mailer:
+        public: true
+        alias: mailer
