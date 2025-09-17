@@ -51,7 +51,7 @@ class UserDirectoryAdapterTest extends TestCase
         $this->logger               = m::mock(LoggerInterface::class);
 
         // the amount of logging is not really relevant.
-        $this->logger->shouldReceive('debug')->between(0, 1000);
+        $this->logger->shouldReceive('debug');
     }
 
     /**

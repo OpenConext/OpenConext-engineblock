@@ -35,6 +35,8 @@ class RequestTest extends TestCase
     private $validIdpEntityId;
     private $validSpEntityId;
     private $validResponseAttributes;
+    private string $validRemoteIp;
+    private string $validClientId;
 
     public function setUp(): void
     {
