@@ -32,13 +32,13 @@ class EngineBlock_Test_Corto_Module_XMlToArrayTest extends TestCase
     public function testNamespacedAttributes()
     {
         $hash = EngineBlock_Corto_XmlToArray::xml2array(
-<<<SAML
+<<<SAML_WRAP
 <?xml version="1.0"?>
 <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <saml:AttributeValue xsi:type="string">test</saml:AttributeValue>
 </saml:Attribute>
-SAML
+SAML_WRAP
 
         );
 
