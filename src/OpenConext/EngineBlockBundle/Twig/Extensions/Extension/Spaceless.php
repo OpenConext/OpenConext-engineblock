@@ -52,4 +52,3 @@ class Spaceless extends AbstractExtension
         return trim(preg_replace('/>\s+</', '><', $content));
     }
 }
-

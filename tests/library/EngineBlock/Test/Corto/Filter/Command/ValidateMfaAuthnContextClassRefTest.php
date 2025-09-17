@@ -50,6 +50,7 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest 
      */
     private $request;
     private $server;
+    private ServiceProvider $sp;
 
     public function setUp(): void
     {
