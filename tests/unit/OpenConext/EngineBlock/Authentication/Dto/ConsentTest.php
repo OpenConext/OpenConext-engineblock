@@ -297,7 +297,6 @@ class ConsentTest extends TestCase
         $coins = Coins::fromJson($jsonData);
 
         $property = new \ReflectionProperty(ServiceProvider::class, 'coins');
-        $property->setAccessible(true);
         $property->setValue(null, $coins);
     }
 }
