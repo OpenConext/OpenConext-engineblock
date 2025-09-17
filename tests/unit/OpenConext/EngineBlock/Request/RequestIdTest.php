@@ -35,7 +35,7 @@ class RequestIdTest extends TestCase
     {
         $generatedId = 'generated_id';
 
-        $requestIdGenerator = m::mock('OpenConext\EngineBlock\Request\RequestIdGenerator');
+        $requestIdGenerator = m::mock(\OpenConext\EngineBlock\Request\RequestIdGenerator::class);
         $requestIdGenerator->shouldReceive('generateRequestId')
             ->once()
             ->andReturn($generatedId);

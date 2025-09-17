@@ -339,7 +339,7 @@ final class DeprovisionControllerTest extends WebTestCase
         $mock = new FeatureConfiguration([
             'api.deprovision' => false
         ]);
-        $client->getContainer()->set('OpenConext\\EngineBlockBundle\\Configuration\\FeatureConfiguration', $mock);
+        $client->getContainer()->set(\OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration::class, $mock);
     }
 
     /**

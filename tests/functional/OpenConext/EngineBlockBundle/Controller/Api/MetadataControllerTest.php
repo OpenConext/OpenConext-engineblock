@@ -68,7 +68,7 @@ final class MetadataControllerTest extends WebTestCase
         $mock = new FeatureConfiguration([
             'api.metadata_api' => false,
         ]);
-        $client->getContainer()->set('OpenConext\\EngineBlockBundle\\Configuration\\FeatureConfiguration', $mock);
+        $client->getContainer()->set(\OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration::class, $mock);
 
         $client->request('GET', 'https://engine-api.dev.openconext.local/metadata/idp?entity-id=urn:test');
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $client);

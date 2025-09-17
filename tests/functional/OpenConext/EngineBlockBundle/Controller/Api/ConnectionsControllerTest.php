@@ -400,7 +400,7 @@ class ConnectionsControllerTest extends WebTestCase
         $mock = new FeatureConfiguration([
             'api.metadata_push' => false,
         ]);
-        $client->getContainer()->set('OpenConext\\EngineBlockBundle\\Configuration\\FeatureConfiguration', $mock);
+        $client->getContainer()->set(\OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration::class, $mock);
     }
 
     private function clearMetadataFixtures()
