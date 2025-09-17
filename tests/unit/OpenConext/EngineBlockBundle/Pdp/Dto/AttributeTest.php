@@ -27,10 +27,8 @@ class AttributeTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group Pdp
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_attribute_without_a_datatype_is_serialized_correctly()
     {
         $attribute = new Attribute;
@@ -49,10 +47,8 @@ JSON;
         $this->assertEquals($expectedSerializedAttribute, $actualSerializedAttribute);
     }
 
-    /**
-     * @test
-     * @group Pdp
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_attribute_with_a_datatype_is_serialized_correctly()
     {
         $attribute = new Attribute;

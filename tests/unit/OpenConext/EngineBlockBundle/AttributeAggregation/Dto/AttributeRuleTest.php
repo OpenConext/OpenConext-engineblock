@@ -24,43 +24,33 @@ use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\AttributeRule;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @group AttributeAggregation
- */
+#[\PHPUnit\Framework\Attributes\Group('AttributeAggregation')]
 class AttributeRuleTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function rule_name_must_be_set()
     {
         $this->expectException(InvalidArgumentException::class);
         AttributeRule::from(null, 'value', 'source');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function rule_value_must_be_set()
     {
         $this->expectException(InvalidArgumentException::class);
         AttributeRule::from('name', null, 'source');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function rule_source_must_be_set()
     {
         $this->expectException(InvalidArgumentException::class);
         AttributeRule::from('name', 'value', null);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function rules_are_created_from_arp()
     {
         $rules = AttributeRule::fromArp(

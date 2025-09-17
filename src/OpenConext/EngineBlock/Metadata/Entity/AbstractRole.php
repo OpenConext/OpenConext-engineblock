@@ -37,37 +37,19 @@ use SAML2\Constants;
  * @package OpenConext\EngineBlock\Metadata\Entity
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
- * @ORM\Entity
- * @ORM\ChangeTrackingPolicy("DEFERRED_EXPLICIT")
- * @ORM\Table(
- *      name="sso_provider_roles_eb5",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(
- *              name="idx_sso_provider_roles_entity_id_type",
- *              columns={"type", "entity_id"}
- *          )
- *      },
- *      indexes={
- *          @ORM\Index(
- *              name="idx_sso_provider_roles_type",
- *              columns={"type"}
- *          ),
- *          @ORM\Index(
- *              name="idx_sso_provider_roles_entity_id",
- *              columns={"entity_id"}
- *          ),
- *      }
- * )
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="type", type="string")
- * @ORM\DiscriminatorMap({
- *  "sp"  = "OpenConext\EngineBlock\Metadata\Entity\ServiceProvider",
- *  "idp" = "OpenConext\EngineBlock\Metadata\Entity\IdentityProvider"
- * })
  *
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
+#[ORM\Entity]
+#[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
+#[ORM\DiscriminatorMap(['sp' => ServiceProvider::class, 'idp' => IdentityProvider::class])]
+#[ORM\Table(name: 'sso_provider_roles_eb5')]
+#[ORM\Index(name: 'idx_sso_provider_roles_type', columns: ['type'])]
+#[ORM\Index(name: 'idx_sso_provider_roles_entity_id', columns: ['entity_id'])]
+#[ORM\UniqueConstraint(name: 'idx_sso_provider_roles_entity_id_type', columns: ['type', 'entity_id'])]
 abstract class AbstractRole
 {
     const WORKFLOW_STATE_PROD = 'prodaccepted';
@@ -76,199 +58,182 @@ abstract class AbstractRole
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    public $id;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: \Doctrine\DBAL\Types\Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    public ?int $id = null;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="entity_id", type="string")
      */
-    public $entityId;
+    #[ORM\Column(name: 'entity_id', type: \Doctrine\DBAL\Types\Types::STRING)]
+    public ?string $entityId = null;
 
     /**
      * @var string
-     * @ORM\Column(name="name_nl", type="string")
      */
-    public $nameNl;
+    #[ORM\Column(name: 'name_nl', type: \Doctrine\DBAL\Types\Types::STRING)]
+    public ?string $nameNl = null;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="name_en", type="string")
      */
-    public $nameEn;
+    #[ORM\Column(name: 'name_en', type: \Doctrine\DBAL\Types\Types::STRING)]
+    public ?string $nameEn = null;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="name_pt", type="string")
      */
-    public $namePt;
+    #[ORM\Column(name: 'name_pt', type: \Doctrine\DBAL\Types\Types::STRING)]
+    public ?string $namePt = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
-     * @ORM\Column(name="description_nl", type="string")
      */
-    public $descriptionNl;
+    #[ORM\Column(name: 'description_nl', type: \Doctrine\DBAL\Types\Types::STRING)]
+    public ?string $descriptionNl = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
-     * @ORM\Column(name="description_en", type="string")
      */
-    public $descriptionEn;
+    #[ORM\Column(name: 'description_en', type: \Doctrine\DBAL\Types\Types::STRING)]
+    public ?string $descriptionEn = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
-     * @ORM\Column(name="description_pt", type="string")
      */
-    public $descriptionPt;
+    #[ORM\Column(name: 'description_pt', type: \Doctrine\DBAL\Types\Types::STRING)]
+    public ?string $descriptionPt = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
-     * @ORM\Column(name="display_name_nl", type="string")
      */
-    public $displayNameNl;
+    #[ORM\Column(name: 'display_name_nl', type: \Doctrine\DBAL\Types\Types::STRING)]
+    public ?string $displayNameNl = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
-     * @ORM\Column(name="display_name_en", type="string")
      */
-    public $displayNameEn;
+    #[ORM\Column(name: 'display_name_en', type: \Doctrine\DBAL\Types\Types::STRING)]
+    public ?string $displayNameEn = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
-     * @ORM\Column(name="display_name_pt", type="string")
      */
-    public $displayNamePt;
+    #[ORM\Column(name: 'display_name_pt', type: \Doctrine\DBAL\Types\Types::STRING)]
+    public ?string $displayNamePt = null;
 
     /**
      * @var Logo
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
-     * @ORM\Column(name="logo", type="object")
      */
+    #[ORM\Column(name: 'logo', type: \Doctrine\DBAL\Types\Types::OBJECT)]
     public $logo;
 
     /**
      * @var Organization
-     *
-     * @ORM\Column(name="organization_nl_name",type="object", nullable=true, length=65535)
      */
+    #[ORM\Column(name: 'organization_nl_name', type: \Doctrine\DBAL\Types\Types::OBJECT, nullable: true, length: 65535)]
     public $organizationNl;
 
     /**
      * @var Organization
-     *
-     * @ORM\Column(name="organization_en_name",type="object", nullable=true, length=65535)
      */
+    #[ORM\Column(name: 'organization_en_name', type: \Doctrine\DBAL\Types\Types::OBJECT, nullable: true, length: 65535)]
     public $organizationEn;
 
     /**
      * @var Organization
-     *
-     * @ORM\Column(name="organization_pt_name",type="object", nullable=true, length=65535)
      */
+    #[ORM\Column(name: 'organization_pt_name', type: \Doctrine\DBAL\Types\Types::OBJECT, nullable: true, length: 65535)]
     public $organizationPt;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
-     * @ORM\Column(name="keywords_nl", type="string")
      */
-    public $keywordsNl;
+    #[ORM\Column(name: 'keywords_nl', type: \Doctrine\DBAL\Types\Types::STRING)]
+    public ?string $keywordsNl = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
-     * @ORM\Column(name="keywords_en", type="string")
      */
-    public $keywordsEn;
+    #[ORM\Column(name: 'keywords_en', type: \Doctrine\DBAL\Types\Types::STRING)]
+    public ?string $keywordsEn = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
-     * @ORM\Column(name="keywords_pt", type="string")
      */
-    public $keywordsPt;
+    #[ORM\Column(name: 'keywords_pt', type: \Doctrine\DBAL\Types\Types::STRING)]
+    public ?string $keywordsPt = null;
 
     /**
      * @var X509Certificate[]
-     *
-     * @ORM\Column(name="certificates", type="array", length=65535)
      */
+    #[ORM\Column(name: 'certificates', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
     public $certificates = array();
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="workflow_state", type="string")
      */
-    public $workflowState = self::WORKFLOW_STATE_DEFAULT;
+    #[ORM\Column(name: 'workflow_state', type: \Doctrine\DBAL\Types\Types::STRING)]
+    public ?string $workflowState = self::WORKFLOW_STATE_DEFAULT;
 
     /**
      * @var ContactPerson[]
-     *
-     * @ORM\Column(name="contact_persons", type="array", length=65535)
      */
+    #[ORM\Column(name: 'contact_persons', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
     public $contactPersons;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="name_id_format", type="string", nullable=true)
      */
-    public $nameIdFormat;
+    #[ORM\Column(name: 'name_id_format', type: \Doctrine\DBAL\Types\Types::STRING, nullable: true)]
+    public ?string $nameIdFormat = null;
 
     /**
      * @var string[]
-     *
-     * @ORM\Column(name="name_id_formats", type="array", length=65535)
      */
+    #[ORM\Column(name: 'name_id_formats', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
     public $supportedNameIdFormats;
 
     /**
      * @var Service
-     *
-     * @ORM\Column(name="single_logout_service", type="object", nullable=true, length=65535)
      */
+    #[ORM\Column(name: 'single_logout_service', type: \Doctrine\DBAL\Types\Types::OBJECT, nullable: true, length: 65535)]
     public $singleLogoutService;
 
     /**
      * @var bool
-     *
-     * @ORM\Column(name="requests_must_be_signed", type="boolean")
      */
-    public $requestsMustBeSigned = false;
+    #[ORM\Column(name: 'requests_must_be_signed', type: \Doctrine\DBAL\Types\Types::BOOLEAN)]
+    public ?bool $requestsMustBeSigned = false;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="manipulation", type="text", length=65535)
      */
-    public $manipulation;
+    #[ORM\Column(name: 'manipulation', type: \Doctrine\DBAL\Types\Types::TEXT, length: 65535)]
+    public ?string $manipulation = null;
 
     /**
      * @var Coins
-     *
-     * @ORM\Column(name="coins", type="engineblock_metadata_coins")
      */
+    #[ORM\Column(name: 'coins', type: 'engineblock_metadata_coins')]
     protected $coins = array();
 
     /**
      * @var Mdui
-     *
-     * @ORM\Column(name="mdui", type="engineblock_metadata_mdui")
      */
+    #[ORM\Column(name: 'mdui', type: 'engineblock_metadata_mdui')]
     protected $mdui;
 
     public function __construct(

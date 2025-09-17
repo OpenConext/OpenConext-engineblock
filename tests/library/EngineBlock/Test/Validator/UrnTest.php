@@ -33,23 +33,19 @@ class EngineBlock_Test_Validator_UrnTest extends TestCase
         $this->validator = new EngineBlock_Validator_Urn();
     }
 
-    /**
-     * @dataProvider validUrnProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validUrnProvider')]
     public function testUrnValidates($urn)
     {
         $this->assertTrue($this->validator->validate($urn));
     }
 
-    /**
-     * @dataProvider invalidUrnProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidUrnProvider')]
     public function testUrnValidationFails($invalidUrn)
     {
         $this->assertFalse($this->validator->validate($invalidUrn));
     }
 
-    public function validUrnProvider()
+    public static function validUrnProvider()
     {
         yield ['urn:collab:person:example.org:jdoe'];
         yield ['urn:mace:dir:entitlement:common-lib-terms'];
@@ -61,7 +57,7 @@ class EngineBlock_Test_Validator_UrnTest extends TestCase
         yield ['urn:group:team#fragment'];
     }
 
-    public function invalidUrnProvider()
+    public static function invalidUrnProvider()
     {
         yield ['abcdefg'];
         yield ['urn:collab:%0'];

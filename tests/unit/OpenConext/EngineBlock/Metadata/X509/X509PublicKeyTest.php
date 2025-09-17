@@ -21,11 +21,12 @@ namespace OpenConext\EngineBlock\Metadata\X509;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 
-class X509KeyTest extends TestCase
+class X509PublicKeyTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
     private $filePath;
+    private string $filePath2;
 
     public function setUp(): void
     {

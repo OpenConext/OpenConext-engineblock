@@ -17,10 +17,10 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory\Helper;
 
-use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
+use OpenConext\EngineBlock\Metadata\Factory\AbstractEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
 
-class IdentityProviderNameFallbackHelperTest extends AbstractEntityTest
+class IdentityProviderNameFallbackHelper extends AbstractEntity
 {
     /**
      * @var IdentityProviderEntity|null

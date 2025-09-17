@@ -25,13 +25,13 @@ use Ramsey\Uuid\Uuid;
 class CollabPersonUuidTest extends TestCase
 {
     /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     * @dataProvider \OpenConext\TestDataProvider::notStringOrEmptyString
      *
      * @param mixed $notStringOrEmptyString
      */
+    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notStringOrEmptyString')]
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function uuid_must_be_a_non_empty_string($notStringOrEmptyString)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -39,11 +39,9 @@ class CollabPersonUuidTest extends TestCase
         new CollabPersonUuid($notStringOrEmptyString);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function uuid_must_be_a_valid_uuid()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -51,11 +49,9 @@ class CollabPersonUuidTest extends TestCase
         new CollabPersonUuid('not a valid uuid');
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_uuid_can_be_retrieved()
     {
         $uuid = (string) Uuid::uuid4();
@@ -65,11 +61,9 @@ class CollabPersonUuidTest extends TestCase
         $this->assertEquals($uuid, $collabPersonUuid->getUuid());
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function collab_person_uuids_are_equal_when_they_have_the_same_value()
     {
         $uuid = (string) Uuid::uuid4();
@@ -82,11 +76,9 @@ class CollabPersonUuidTest extends TestCase
         $this->assertFalse($base->equals($different));
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_collab_person_uuid_can_be_cast_to_string()
     {
         $collabPersonUuid = new CollabPersonUuid((string) Uuid::uuid4());

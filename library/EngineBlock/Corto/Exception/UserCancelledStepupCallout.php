@@ -32,7 +32,7 @@ class EngineBlock_Corto_Exception_UserCancelledStepupCallout extends EngineBlock
     /**
      * @return array
      */
-    public function getFeedbackInfo()
+    public function getFeedbackInfo(): array
     {
         return $this->feedback;
     }

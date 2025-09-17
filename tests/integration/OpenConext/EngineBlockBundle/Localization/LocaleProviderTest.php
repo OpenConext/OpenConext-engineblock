@@ -40,9 +40,7 @@ class LocaleProviderTest extends TestCase
     }
 
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_default_locale_should_be_returned_if_the_request_is_not_set()
     {
         $this->languageSupportProvider->shouldReceive('getSupportedLanguages')
@@ -53,9 +51,7 @@ class LocaleProviderTest extends TestCase
         $this->assertSame('en', $localeProvider->getLocale());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function if_the_lang_query_string_is_set_it_should_be_used_to_determine_the_locale()
     {
         $this->languageSupportProvider->shouldReceive('getSupportedLanguages')
@@ -70,9 +66,7 @@ class LocaleProviderTest extends TestCase
         $this->assertSame('nl', $localeProvider->getLocale());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_lang_query_string_has_priority_over_the_request_body_cookie_and_accept_language_Header()
     {
         $this->languageSupportProvider->shouldReceive('getSupportedLanguages')
@@ -94,9 +88,7 @@ class LocaleProviderTest extends TestCase
         $this->assertSame('nl', $localeProvider->getLocale());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_query_string_locale_should_be_ignored_if_it_is_not_available()
     {
         $this->languageSupportProvider->shouldReceive('getSupportedLanguages')
@@ -111,9 +103,7 @@ class LocaleProviderTest extends TestCase
         $this->assertSame('en', $localeProvider->getLocale());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function if_the_lang_query_string_is_not_set_the_locale_in_the_request_body_should_be_used()
     {
         $this->languageSupportProvider->shouldReceive('getSupportedLanguages')
@@ -128,9 +118,7 @@ class LocaleProviderTest extends TestCase
         $this->assertSame('nl', $localeProvider->getLocale());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_request_body_has_priority_over_the_cookie_and_accept_language_Header()
     {
         $this->languageSupportProvider->shouldReceive('getSupportedLanguages')
@@ -152,9 +140,7 @@ class LocaleProviderTest extends TestCase
         $this->assertSame('nl', $localeProvider->getLocale());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_request_body_locale_should_be_ignored_if_it_is_not_available()
     {
         $this->languageSupportProvider->shouldReceive('getSupportedLanguages')
@@ -169,9 +155,7 @@ class LocaleProviderTest extends TestCase
         $this->assertSame('en', $localeProvider->getLocale());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_locale_stored_in_the_cookie_should_be_used_if_the_query_string_and_request_body_do_not_contain_a_locale()
     {
         $this->languageSupportProvider->shouldReceive('getSupportedLanguages')
@@ -186,9 +170,7 @@ class LocaleProviderTest extends TestCase
         $this->assertSame('nl', $localeProvider->getLocale());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_cookie_has_priority_over_the_accept_language_header()
     {
         $this->languageSupportProvider->shouldReceive('getSupportedLanguages')
@@ -203,9 +185,7 @@ class LocaleProviderTest extends TestCase
         $this->assertSame('nl', $localeProvider->getLocale());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_locale_stored_in_the_cookie_should_be_ignored_if_it_is_not_one_of_the_available_locales()
     {
         $this->languageSupportProvider->shouldReceive('getSupportedLanguages')
@@ -220,9 +200,7 @@ class LocaleProviderTest extends TestCase
         $this->assertSame('nl', $localeProvider->getLocale());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_accept_language_header_should_be_used_if_the_cookie_is_not_set()
     {
         $this->languageSupportProvider->shouldReceive('getSupportedLanguages')
@@ -237,9 +215,7 @@ class LocaleProviderTest extends TestCase
         $this->assertSame('nl', $localeProvider->getLocale());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function accepted_languages_that_are_not_available_should_be_ignored()
     {
         $this->languageSupportProvider->shouldReceive('getSupportedLanguages')
@@ -254,9 +230,7 @@ class LocaleProviderTest extends TestCase
         $this->assertSame('nl', $localeProvider->getLocale());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_default_language_should_be_used_if_none_of_the_accepted_languages_are_available()
     {
         $this->languageSupportProvider->shouldReceive('getSupportedLanguages')
@@ -271,9 +245,7 @@ class LocaleProviderTest extends TestCase
         $this->assertSame('en', $localeProvider->getLocale());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_default_language_should_be_used_if_neither_the_cookie_nor_the_accept_language_header_is_set()
     {
         $this->languageSupportProvider->shouldReceive('getSupportedLanguages')

@@ -23,5 +23,5 @@ interface EngineBlock_Corto_Filter_Command_ResponseAttributeValueTypesModificati
      *
      * @return array
      */
-    public function getResponseAttributeValueTypes();
+    public function getResponseAttributeValueTypes(): array;
 }

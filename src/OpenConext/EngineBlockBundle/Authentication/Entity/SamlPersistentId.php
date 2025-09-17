@@ -18,35 +18,30 @@
 
 namespace OpenConext\EngineBlockBundle\Authentication\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use OpenConext\EngineBlockBundle\Authentication\Repository\SamlPersistentIdRepository;
 
-/**
- * @ORM\Entity(repositoryClass="OpenConext\EngineBlockBundle\Authentication\Repository\SamlPersistentIdRepository")
- * @ORM\Table(indexes={
- *     @ORM\Index(name="user_uuid", columns={"user_uuid", "service_provider_uuid"}),
- * })
- */
+#[ORM\Entity(repositoryClass: SamlPersistentIdRepository::class)]
+#[ORM\Index(columns: ['user_uuid', 'service_provider_uuid'], name: 'user_uuid')]
 class SamlPersistentId
 {
     /**
      * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(type="string", length=40, options={"fixed": true, "comment": "SHA1 of service_provider_uuid + user_uuid"})
      */
-    public $persistentId;
+    #[ORM\Id]
+    #[ORM\Column(type: Types::STRING, length: 40, options: ['fixed' => true, 'comment' => 'SHA1 of service_provider_uuid + user_uuid'])]
+    public ?string $persistentId = null;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string", length=36, options={"fixed": true})
      */
-    public $userUuid;
+    #[ORM\Column(type: Types::STRING, length: 36, options: ['fixed' => true])]
+    public ?string $userUuid = null;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string", length=36, options={"fixed": true})
      */
-    public $serviceProviderUuid;
+    #[ORM\Column(type: Types::STRING, length: 36, options: ['fixed' => true])]
+    public ?string $serviceProviderUuid = null;
 }

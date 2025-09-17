@@ -66,7 +66,7 @@ class Logo implements MultilingualElement, JsonSerializable
         throw new MduiRuntimeException('We do not implement the Mdui Logo in a multilingual fashion');
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return [
             'name' => $this->getName(),

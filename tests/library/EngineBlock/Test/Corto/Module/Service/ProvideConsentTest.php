@@ -400,7 +400,6 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
         $object = new \ReflectionClass($sp);
 
         $property = $object->getProperty('coins');
-        $property->setAccessible(true);
         $property->setValue($sp, $coins);
     }
 }

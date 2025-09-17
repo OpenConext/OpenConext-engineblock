@@ -1,10 +1,21 @@
-<phpunit
-        backupGlobals="false"
-        bootstrap="bootstrap.php"
-        colors="true"
-        convertErrorsToExceptions="true"
-        convertNoticesToExceptions="false"
-        convertWarningsToExceptions="false">
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         backupGlobals="false"
+         bootstrap="bootstrap.php"
+         colors="true"
+         cacheDirectory="../var/cache/.phpunit.cache"
+         xsi:noNamespaceSchemaLocation="../vendor/phpunit/phpunit/phpunit.xsd"
+         failOnDeprecation="true"
+         failOnNotice="true"
+         failOnWarning="true"
+         executionOrder="random"
+         displayDetailsOnAllIssues="true"
+         beStrictAboutCoverageMetadata="true"
+         beStrictAboutOutputDuringTests="true"
+         displayDetailsOnPhpunitDeprecations="true"
+         failOnPhpunitDeprecation="true"
+         failOnRisky="true"
+>
     <testsuites>
         <testsuite name="unit">
             <directory suffix="Test.php">unit</directory>
@@ -14,27 +25,28 @@
         </testsuite>
         <testsuite name="eb4">
             <directory suffix="Test.php">library</directory>
-            <directory suffix="Test.php">controllers</directory>
         </testsuite>
         <testsuite name="functional">
             <directory suffix="Test.php">functional</directory>
         </testsuite>
     </testsuites>
 
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">../src</directory>
-            <directory suffix=".php">../library</directory>
-        </whitelist>
-    </filter>
-
+    <!-- Configure coverage reports -->
+    <coverage includeUncoveredFiles="true">
+        <report>
+            <html outputDirectory="../var/log/phpunit/coverage/html"/>
+        </report>
+    </coverage>
+    <source restrictDeprecations="true" restrictNotices="true" restrictWarnings="true" ignoreSuppressionOfDeprecations="true">
+        <include>
+            <directory>src</directory>
+            <directory>library</directory>
+        </include>
+    </source>
     <php>
-        <server name="KERNEL_CLASS" value="App\Kernel" />
+        <server name="KERNEL_CLASS" value="App\Kernel"/>
+        <server name="DOCTRINE_DEPRECATIONS" value="trigger"/>
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[total]=0"/>
-        <ini name="memory_limit" value="512M" />
+        <ini name="memory_limit" value="512M"/>
     </php>
-
-    <listeners>
-        <listener class="\Mockery\Adapter\Phpunit\TestListener" />
-    </listeners>
 </phpunit>

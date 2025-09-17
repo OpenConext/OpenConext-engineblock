@@ -28,9 +28,8 @@ use SAML2\XML\saml\NameID;
 
 /**
  * Tests for EngineBlock_Log
- *
- * @group saml2
  */
+#[\PHPUnit\Framework\Attributes\Group('saml2')]
 class EngineBlock_Test_Saml2_NameIdResolverTest extends TestCase
 {
     use MockeryPHPUnitIntegration;

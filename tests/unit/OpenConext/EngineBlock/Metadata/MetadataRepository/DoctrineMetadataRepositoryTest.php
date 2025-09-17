@@ -31,21 +31,21 @@ class DoctrineMetadataRepositoryTest extends TestCase
 
     public function testFindIdentityProviders()
     {
-        $mockQueryBuilder = Mockery::mock('Doctrine\ORM\QueryBuilder');
+        $mockQueryBuilder = Mockery::mock(\Doctrine\ORM\QueryBuilder::class);
         $mockQueryBuilder
             ->shouldReceive('getQuery->execute')
             ->andReturn([new IdentityProvider('https://idp.entity.com')]);
 
-        $mockSpRepository = Mockery::mock('Doctrine\ORM\EntityRepository');
-        $mockIdpRepository = Mockery::mock('Doctrine\ORM\EntityRepository');
+        $mockSpRepository = Mockery::mock(\Doctrine\ORM\EntityRepository::class);
+        $mockIdpRepository = Mockery::mock(\Doctrine\ORM\EntityRepository::class);
         $mockIdpRepository
             ->shouldReceive('getClassName')
-            ->andReturn('OpenConext\EngineBlock\Metadata\Entity\IdentityProvider')
+            ->andReturn(\OpenConext\EngineBlock\Metadata\Entity\IdentityProvider::class)
             ->shouldReceive('createQueryBuilder')
             ->andReturn($mockQueryBuilder);
 
         $repository = new DoctrineMetadataRepository(
-            Mockery::mock('Doctrine\ORM\EntityManager'),
+            Mockery::mock(\Doctrine\ORM\EntityManager::class),
             $mockSpRepository,
             $mockIdpRepository
         );
@@ -55,7 +55,7 @@ class DoctrineMetadataRepositoryTest extends TestCase
 
     public function testFindIdentityProvidersVisitor()
     {
-        $mockQueryBuilder = Mockery::mock('Doctrine\ORM\QueryBuilder');
+        $mockQueryBuilder = Mockery::mock(\Doctrine\ORM\QueryBuilder::class);
         $mockQueryBuilder
             ->shouldReceive('getQuery->execute')
             ->andReturn([
@@ -63,16 +63,16 @@ class DoctrineMetadataRepositoryTest extends TestCase
                 new IdentityProvider('https://unconnected.entity.com')
             ]);
 
-        $mockSpRepository = Mockery::mock('Doctrine\ORM\EntityRepository');
-        $mockIdpRepository = Mockery::mock('Doctrine\ORM\EntityRepository');
+        $mockSpRepository = Mockery::mock(\Doctrine\ORM\EntityRepository::class);
+        $mockIdpRepository = Mockery::mock(\Doctrine\ORM\EntityRepository::class);
         $mockIdpRepository
             ->shouldReceive('getClassName')
-            ->andReturn('OpenConext\EngineBlock\Metadata\Entity\IdentityProvider')
+            ->andReturn(\OpenConext\EngineBlock\Metadata\Entity\IdentityProvider::class)
             ->shouldReceive('createQueryBuilder')
             ->andReturn($mockQueryBuilder);
 
         $repository = new DoctrineMetadataRepository(
-            Mockery::mock('Doctrine\ORM\EntityManager'),
+            Mockery::mock(\Doctrine\ORM\EntityManager::class),
             $mockSpRepository,
             $mockIdpRepository
         );
