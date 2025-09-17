@@ -19,30 +19,26 @@
 namespace OpenConext\EngineBlockBundle\Doctrine\DqlFunction;
 
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
-use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\SqlWalker;
+use Doctrine\ORM\Query\TokenType;
 
 class Md5 extends FunctionNode
 {
     public $value;
 
-    public function getSql(SqlWalker $walker)
+    public function getSql(SqlWalker $sqlWalker): string
     {
-        $platform = $walker->getConnection()->getDatabasePlatform();
-
-        return $platform->getMd5Expression(
-            $this->value->dispatch($walker)
-        );
+        return 'MD5(' . $this->value->dispatch($sqlWalker) . ')';
     }
 
-    public function parse(Parser $parser)
+    public function parse(Parser $parser): void
     {
-        $parser->match(Lexer::T_IDENTIFIER);
-        $parser->match(Lexer::T_OPEN_PARENTHESIS);
+        $parser->match(TokenType::T_IDENTIFIER);
+        $parser->match(TokenType::T_OPEN_PARENTHESIS);
 
         $this->value = $parser->StringPrimary();
 
-        $parser->match(Lexer::T_CLOSE_PARENTHESIS);
+        $parser->match(TokenType::T_CLOSE_PARENTHESIS);
     }
 }

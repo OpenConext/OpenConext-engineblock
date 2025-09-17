@@ -69,9 +69,7 @@ class LoaRepositoryTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider provideInvalidConfig
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideInvalidConfig')]
     public function test_it_raises_exceptions_when_constructed_with_invalid_configuration(
         $config,
         $expectedExceptionMessage
@@ -91,7 +89,7 @@ class LoaRepositoryTest extends TestCase
         ];
     }
 
-    public function provideInvalidConfig()
+    public static function provideInvalidConfig()
     {
         return [
             [[10 => ['engineBlock' => 'loa1', 'gateway' => 'loa1']], 'Both the engineblock and gateway keys must be present in every LoA mapping.'],

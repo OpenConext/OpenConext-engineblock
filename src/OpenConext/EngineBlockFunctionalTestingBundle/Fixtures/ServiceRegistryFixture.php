@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
+use Doctrine\DBAL\Statement;
 use Doctrine\ORM\EntityManager;
 use Exception;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
@@ -125,7 +126,7 @@ class ServiceRegistryFixture
         $queryBuilder = $this->entityManager->getConnection()->createQueryBuilder();
         $queryBuilder
             ->delete('sso_provider_roles_eb5')
-            ->execute();
+            ->executeStatement();
 
         return $this;
     }
@@ -134,12 +135,12 @@ class ServiceRegistryFixture
     {
         $queryBuilder = $this->entityManager->getConnection()->createQueryBuilder();
         $queryBuilder
-            ->delete('sso_provider_roles_eb5', 'roles')
+            ->delete('sso_provider_roles_eb5')
             ->where('roles.entity_id = :entityId')
             ->andWhere('roles.type = :type')
             ->setParameter('entityId', $entityId)
             ->setParameter('type', $role)
-            ->execute();
+            ->executeStatement();
 
         return $this;
     }
@@ -170,8 +171,9 @@ class ServiceRegistryFixture
         WHERE `type` = 'idp'
 QUERY;
         $query = $this->entityManager->getConnection()->prepare($idpEntityIDQuery);
-        $query->execute();
-        $idps = $query->fetchAll();
+        assert($query instanceof Statement);
+        $result = $query->executeQuery();
+        $idps = $result->fetchAllAssociative();
 
         foreach ($idps as $idpEntityId) {
             $idp = $this->repository->findIdentityProviderByEntityId($idpEntityId['entity_id']);
@@ -206,8 +208,9 @@ QUERY;
         WHERE `type` = 'sp'
 QUERY;
         $query = $this->entityManager->getConnection()->prepare($spEntityIDQuery);
-        $query->execute();
-        $sps = $query->fetchAll();
+        assert($query instanceof Statement);
+        $result = $query->executeQuery();
+        $sps = $result->fetchAllAssociative();
 
         foreach ($sps as $spEntityId) {
             $sp = $this->repository->findServiceProviderByEntityId($spEntityId['entity_id']);
@@ -585,7 +588,6 @@ QUERY;
         $object = new ReflectionClass($role);
 
         $property = $object->getProperty('coins');
-        $property->setAccessible(true);
         $property->setValue($role, $coins);
     }
     private function setMdui(AbstractRole $role, string $elementName, MultilingualElement $value)
@@ -600,7 +602,6 @@ QUERY;
         $object = new ReflectionClass($role);
 
         $property = $object->getProperty('mdui');
-        $property->setAccessible(true);
         $property->setValue($role, $mdui);
     }
 }

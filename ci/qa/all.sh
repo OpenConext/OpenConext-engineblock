@@ -9,3 +9,4 @@ cd $(dirname $0)/../../
 ./ci/qa/phpunit.sh
 ./ci/qa/behat.sh
 ./ci/qa/lint.sh
+./ci/qa/rector.sh --dry-run

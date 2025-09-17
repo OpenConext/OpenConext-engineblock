@@ -50,11 +50,9 @@ class HttpClientTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Http
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Http')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function data_from_a_resource_can_be_read()
     {
         $data = 'My first resource';
@@ -72,11 +70,9 @@ class HttpClientTest extends TestCase
         $this->assertEquals($data, $response);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Http
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Http')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function malformed_json_causes_a_malformed_response_exception_when_reading()
     {
         $malformedJson = '{';
@@ -92,11 +88,9 @@ class HttpClientTest extends TestCase
         $client->read('/give-me/malformed-json');
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Http
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Http')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function null_is_returned_when_the_response_status_code_is_404_when_reading()
     {
         $mockHandler   = new MockHandler([
@@ -113,11 +107,9 @@ class HttpClientTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Http
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Http')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_access_denied_exception_is_thrown_if_the_response_status_code_is_403_when_reading()
     {
         $mockHandler   = new MockHandler([
@@ -131,11 +123,9 @@ class HttpClientTest extends TestCase
         $client->read('give-me/403');
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Http
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Http')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function data_from_a_resource_can_be_posted()
     {
         $data     = 'Received data';
@@ -152,11 +142,9 @@ class HttpClientTest extends TestCase
         $this->assertEquals($data, $response);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Http
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Http')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function malformed_json_causes_a_malformed_response_exception_when_posting()
     {
         $malformedJson = '{';
@@ -172,11 +160,9 @@ class HttpClientTest extends TestCase
         $client->post('/post-and-give-me/malformed-json', 'Post body');
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Http
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Http')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function null_is_returned_when_the_response_status_code_is_404_when_posting()
     {
         $mockHandler   = new MockHandler([
@@ -193,11 +179,9 @@ class HttpClientTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Http
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Http')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_access_denied_exception_is_thrown_if_the_response_status_code_is_403_when_posting()
     {
         $mockHandler   = new MockHandler([

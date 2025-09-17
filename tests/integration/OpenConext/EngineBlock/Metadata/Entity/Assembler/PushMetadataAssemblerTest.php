@@ -61,9 +61,7 @@ class PushMetadataAssemblerTest extends TestCase
         $this->assembler->assemble($input);
     }
 
-    /**
-     * @dataProvider invalidAcsLocations
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidAcsLocations')]
     public function test_it_rejects_invalid_acs_location_schemes($acsLocation)
     {
         $this->expectException(\RuntimeException::class);
@@ -127,7 +125,6 @@ class PushMetadataAssemblerTest extends TestCase
     }
 
     /**
-     * @dataProvider validCoins
      *
      * @param string $coinName The name of the coin and used to set the coin in the meta push data
      * @param string $roleType The type of the role and used to set the coin in the meta push data
@@ -135,6 +132,7 @@ class PushMetadataAssemblerTest extends TestCase
      * @param string $type The type of coin data to run possible assertions against see the validCoinValues* helper
      *                     methods below which are used to assert the data after it went through the assembler.
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validCoins')]
     public function testCoins($coinName, $roleType, $parameter, $type) {
         $connection = '{
             "2d96e27a-76cf-4ca2-ac70-ece5d4c49523": {
@@ -364,7 +362,7 @@ class PushMetadataAssemblerTest extends TestCase
         $this->assertInstanceOf(TransparentMfaEntity::class, $transparent);
     }
 
-    public function invalidAcsLocations()
+    public static function invalidAcsLocations()
     {
         return [
             'invalid-scheme' => ['javascript:alert("hello world");'],
@@ -372,7 +370,7 @@ class PushMetadataAssemblerTest extends TestCase
         ];
     }
 
-    public function validCoins()
+    public static function validCoins()
     {
         return [
             // SP

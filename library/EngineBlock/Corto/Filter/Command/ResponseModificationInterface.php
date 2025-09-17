@@ -23,5 +23,5 @@ interface EngineBlock_Corto_Filter_Command_ResponseModificationInterface
      *
      * @return EngineBlock_Saml2_ResponseAnnotationDecorator
      */
-    public function getResponse();
+    public function getResponse(): EngineBlock_Saml2_ResponseAnnotationDecorator;
 }

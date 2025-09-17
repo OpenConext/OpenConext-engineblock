@@ -38,7 +38,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionProperty;
 
-abstract class AbstractEntityTest extends TestCase
+abstract class AbstractEntity extends TestCase
 {
     /**
      * Create an instance which could be used by decorators
@@ -349,7 +349,6 @@ abstract class AbstractEntityTest extends TestCase
 
         foreach($values as $key => $value){
             $reflectionProperty = $reflection->getProperty($key);
-            $reflectionProperty->setAccessible(true);
             $reflectionProperty->setValue($entity, $value);
         }
 
@@ -367,7 +366,6 @@ abstract class AbstractEntityTest extends TestCase
 
         foreach($values as $key => $value){
             $reflectionProperty = $reflection->getProperty($key);
-            $reflectionProperty->setAccessible(true);
             $reflectionProperty->setValue($entity, $value);
         }
 

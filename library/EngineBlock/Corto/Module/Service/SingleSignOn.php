@@ -28,6 +28,7 @@ use SAML2\AuthnRequest;
 use SAML2\Response;
 use SAML2\XML\saml\Issuer;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mime\Address;
 use Twig\Environment;
 
 class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto_Module_Service_ServiceInterface
@@ -585,13 +586,12 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
         $emailConfiguration = $diContainer->getEmailIdpDebuggingConfiguration();
 
-        $message = new Swift_Message();
+        $message = new Symfony\Component\Mime\Email();
         $message
-            ->setSubject(sprintf($emailConfiguration['subject'], $identityProvider->nameEn))
-            ->setFrom($emailConfiguration['from']['address'], $emailConfiguration['from']['name'])
-            ->setTo($emailConfiguration['to']['address'], $emailConfiguration['to']['name'])
-            ->setBody($output, 'text/plain');
-
+            ->subject(sprintf($emailConfiguration['subject'], $identityProvider->nameEn))
+            ->from(new Address($emailConfiguration['from']['address'], $emailConfiguration['from']['name']))
+            ->to(new Address($emailConfiguration['to']['address'], $emailConfiguration['to']['name']))
+            ->text($output);
         $diContainer->getMailer()->send($message);
     }
 

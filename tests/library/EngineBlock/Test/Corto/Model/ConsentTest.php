@@ -19,7 +19,7 @@
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use PHPUnit\Framework\TestCase;
 
-class EngineBlock_Corto_Model_Consent_Test extends TestCase
+class EngineBlock_Corto_Model_ConsentTest extends TestCase
 {
     private $consentDisabled;
     private $consent;

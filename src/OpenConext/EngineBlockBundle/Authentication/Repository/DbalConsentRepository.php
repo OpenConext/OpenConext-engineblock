@@ -19,18 +19,20 @@
 namespace OpenConext\EngineBlockBundle\Authentication\Repository;
 
 use DateTime;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Connection as DbalConnection;
-use Doctrine\DBAL\DBALException;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use OpenConext\EngineBlock\Authentication\Model\Consent;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 use OpenConext\EngineBlock\Exception\RuntimeException;
-use PDO;
 use Psr\Log\LoggerInterface;
 use function sha1;
 
-final class DbalConsentRepository implements ConsentRepository
+/**
+ * @extends \Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository<\OpenConext\EngineBlock\Authentication\Model\Consent>
+ */
+final class DbalConsentRepository extends ServiceEntityRepository implements ConsentRepository
 {
     /**
      * @var DbalConnection
@@ -42,9 +44,11 @@ final class DbalConsentRepository implements ConsentRepository
      */
     private $logger;
 
-    public function __construct(EntityManagerInterface $entityManager, LoggerInterface $logger)
+    public function __construct(ManagerRegistry $registry, LoggerInterface $logger)
     {
-        $this->connection = $entityManager->getConnection();
+        parent::__construct($registry, Consent::class);
+
+        $this->connection = $registry->getConnection();
         $this->logger = $logger;
     }
 
@@ -73,8 +77,8 @@ final class DbalConsentRepository implements ConsentRepository
 
         try {
             $statement = $this->connection->executeQuery($sql, ['hashed_user_id' => sha1($userId)]);
-            $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
-        } catch (DBALException $exception) {
+            $rows = $statement->fetchAllAssociative();
+        } catch (\Doctrine\DBAL\Exception $exception) {
             throw new RuntimeException('Could not fetch user consents from the database', 0, $exception);
         }
 
@@ -104,7 +108,7 @@ final class DbalConsentRepository implements ConsentRepository
         try {
             $this->connection->executeQuery($sql, ['hashed_user_id' => sha1($userId)]);
             $this->logger->notice(sprintf('Removed consent for hashed user id %s (%s)', sha1($userId), $userId));
-        } catch (DBALException $exception) {
+        } catch (\Doctrine\DBAL\Exception $exception) {
             throw new RuntimeException(
                 sprintf(
                     'Could not delete user consents from the database for user %s',
@@ -150,7 +154,7 @@ final class DbalConsentRepository implements ConsentRepository
             );
 
             return $result->rowCount() > 0;
-        } catch (DBALException $exception) {
+        } catch (\Doctrine\DBAL\Exception $exception) {
             throw new RuntimeException(
                 sprintf(
                     'Could not delete user %s consent from the database for a specific SP %s',

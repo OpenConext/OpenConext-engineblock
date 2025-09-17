@@ -35,6 +35,8 @@ class RequestTest extends TestCase
     private $validIdpEntityId;
     private $validSpEntityId;
     private $validResponseAttributes;
+    private string $validRemoteIp;
+    private string $validClientId;
 
     public function setUp(): void
     {
@@ -48,10 +50,8 @@ class RequestTest extends TestCase
         $this->validRemoteIp    = '2001:610:0:8010::213';
     }
 
-    /**
-     * @test
-     * @group Pdp
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_pdp_requests_response_attribute_keys_must_be_strings()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -72,12 +72,9 @@ class RequestTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group Pdp
-     *
-     * @dataProvider \OpenConext\TestDataProvider::notArray()
-     */
+    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notArray')]
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_pdp_requests_response_attribute_values_must_be_arrays($nonArray)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -97,10 +94,8 @@ class RequestTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group Pdp
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_pdp_request_is_built_correctly()
     {
         $resourceAttributeValues = [
@@ -128,10 +123,8 @@ class RequestTest extends TestCase
         $this->assertEquals($expectedRequest, $actualRequest);
     }
 
-    /**
-     * @test
-     * @group Pdp
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_pdp_request_is_serialized_correctly()
     {
         $fixturePath = __DIR__.'/../fixture/request.json';

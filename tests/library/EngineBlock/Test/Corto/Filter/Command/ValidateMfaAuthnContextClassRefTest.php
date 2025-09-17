@@ -25,6 +25,7 @@ use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MfaEntityCollection;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
@@ -49,6 +50,7 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest 
      */
     private $request;
     private $server;
+    private ServiceProvider $sp;
 
     public function setUp(): void
     {
@@ -70,6 +72,7 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest 
         ;
     }
 
+    #[DoesNotPerformAssertions]
     public function testNoConfiguredMfaCombinationShouldPass()
     {
         $response = $this->createTestResponse('urn:oasis:names:tc:SAML:2.0:ac:classes:Password');
@@ -287,7 +290,6 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateMfaAuthnContextClassRefTest 
         $object = new ReflectionClass($role);
 
         $property = $object->getProperty('coins');
-        $property->setAccessible(true);
         $property->setValue($role, $coins);
     }
 }

@@ -23,11 +23,9 @@ use PHPUnit\Framework\TestCase;
 
 class AssertionTest extends TestCase
 {
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Assertion
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Assertion')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function non_empty_strings_are_valid()
     {
         $this->expectNotToPerformAssertions();
@@ -37,14 +35,14 @@ class AssertionTest extends TestCase
     }
 
     /**
-     * @test
-     * @group EngineBlock
-     * @group Assertion
      *
-     * @dataProvider \OpenConext\TestDataProvider::notStringOrEmptyString()
      *
      * @param mixed $value
      */
+    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notStringOrEmptyString')]
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Assertion')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function not_strings_or_empty_strings_are_invalid($value)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -52,11 +50,9 @@ class AssertionTest extends TestCase
         Assertion::nonEmptyString($value, 'value');
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Assertion
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Assertion')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_missing_key_makes_the_assertion_fail()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -67,11 +63,9 @@ class AssertionTest extends TestCase
         Assertion::keysExist($actualData, $requiredKeys);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Assertion
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Assertion')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function keys_exists_assertion_succeeds_if_all_required_keys_are_present_()
     {
         $requiredKeys = ['a', 'b', 'c'];
@@ -89,12 +83,10 @@ class AssertionTest extends TestCase
         $this->assertFalse($exceptionCaught, 'When all required keys are present, no exception should be thrown');
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Assertion
-     * @dataProvider \OpenConext\TestDataProvider::notStringOrEmptyString
-     */
+    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notStringOrEmptyString')]
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Assertion')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function valid_hashing_algorithm_only_accepts_non_empty_strings($notStringOrEmptyString)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -102,11 +94,9 @@ class AssertionTest extends TestCase
         Assertion::validHashingAlgorithm($notStringOrEmptyString);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Assertion
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Assertion')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_invalid_hashing_algorithm_causes_the_assertion_to_throw_an_exception()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -114,12 +104,10 @@ class AssertionTest extends TestCase
         Assertion::validHashingAlgorithm('invalid');
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Assertion
-     * @dataProvider validHashingAlgorithmProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validHashingAlgorithmProvider')]
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Assertion')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function existing_hashing_algorithms_are_considered_valid($validHashingAlgorithm)
     {
         $exceptionCaught = false;
@@ -132,7 +120,7 @@ class AssertionTest extends TestCase
         $this->assertFalse($exceptionCaught, 'A valid hashing algorithm should not cause an exception to be thrown');
     }
 
-    public function validHashingAlgorithmProvider()
+    public static function validHashingAlgorithmProvider()
     {
         return array_map(function ($algorithm) {
             return [$algorithm];

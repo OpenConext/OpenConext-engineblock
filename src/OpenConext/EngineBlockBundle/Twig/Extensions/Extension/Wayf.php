@@ -219,7 +219,7 @@ class Wayf extends AbstractExtension
         $previousSelectionIndexed = [];
         if ($request) {
             $previousSelection = json_decode(
-                $request->cookies->get(self::PREVIOUS_SELECTION_COOKIE_NAME, null),
+                $request->cookies->get(self::PREVIOUS_SELECTION_COOKIE_NAME, ''),
                 true
             );
             if ($previousSelection) {
