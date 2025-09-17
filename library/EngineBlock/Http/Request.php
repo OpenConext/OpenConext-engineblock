@@ -41,7 +41,7 @@ class EngineBlock_Http_Request
         $request->setMethod($_SERVER['REQUEST_METHOD'] ?? null);
         $request->setHttpProtocol($_SERVER['SERVER_PROTOCOL'] ?? null);
 
-        $queryStart = strpos($_SERVER['REQUEST_URI'] ?? null, '?');
+        $queryStart = strpos($_SERVER['REQUEST_URI'] ?? '', '?');
         if ($queryStart !== false) {
             $request->setUri(substr($_SERVER['REQUEST_URI'] ?? null, 0, $queryStart));
         }
@@ -95,6 +95,12 @@ class EngineBlock_Http_Request
 
     public function setUri($uri)
     {
+        if (!is_string($uri)) {
+            $this->_uri = '';
+
+            return $this;
+        }
+
         $this->_uri = urldecode($uri);
         return $this;
     }
@@ -131,6 +137,10 @@ class EngineBlock_Http_Request
 
     protected function _setQueryParameters($queryString)
     {
+        if (!is_string($queryString)) {
+            return;
+        }
+
         $this->_queryParameters = array();
         $queryParts = explode("&", $queryString);
         foreach($queryParts as $queryPart) {

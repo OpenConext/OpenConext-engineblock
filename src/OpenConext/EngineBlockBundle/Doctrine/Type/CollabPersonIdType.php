@@ -28,7 +28,7 @@ class CollabPersonIdType extends Type
 {
     const NAME = 'engineblock_collab_person_id';
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
     {
         // overwrite the fieldDeclaration to always be MAX_LENGTH characters max, this is also enforced in the VO.
         $fieldDeclaration['length'] = CollabPersonId::MAX_LENGTH;
@@ -36,7 +36,7 @@ class CollabPersonIdType extends Type
         return $platform->getVarcharTypeDeclarationSQL($fieldDeclaration);
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if (is_null($value)) {
             return $value;
@@ -56,7 +56,7 @@ class CollabPersonIdType extends Type
         return $value->getCollabPersonId();
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         if (is_null($value)) {
             return $value;
@@ -78,7 +78,7 @@ class CollabPersonIdType extends Type
         return $entityId;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return self::NAME;
     }

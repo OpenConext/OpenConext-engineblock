@@ -65,7 +65,7 @@ class StepupConnections implements JsonSerializable
         return $this->connections[$entityId];
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->connections;
     }
