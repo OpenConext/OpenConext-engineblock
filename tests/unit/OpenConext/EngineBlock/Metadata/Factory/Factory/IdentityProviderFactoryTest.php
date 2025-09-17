@@ -137,15 +137,20 @@ class IdentityProviderFactoryTest extends AbstractEntityTest
             ContactPerson::from('technical', 'configuredOrganizationName', 'Support', 'configuredSupportMail'),
             ContactPerson::from('administrative', 'configuredOrganizationName', 'Support', 'configuredSupportMail'),
         ];
+        $matcher = $this->exactly(1);
 
-        $this->urlProvider->expects($this->exactly(1))
+        $this->urlProvider->expects($matcher)
             ->method('getUrl')
-            ->withConsecutive(
-            // SSO: EngineBlockIdentityProvider::getSingleSignOnServices
-                ['authentication_idp_sso', false, 'default', 'entity-id']
-            ) ->willReturnOnConsecutiveCalls(
-            // SSO
-                'proxiedSsoLocation'
+            ->willReturnCallback(
+            function (...$parameters) use ($matcher) {
+                    if ($matcher->getInvocationCount() === 1) {
+                        $this->assertSame('authentication_idp_sso', $parameters[0]);
+                        $this->assertSame(false, $parameters[1]);
+                        $this->assertSame('default', $parameters[2]);
+                        $this->assertSame('entity-id', $parameters[3]);
+                        return 'proxiedSsoLocation';
+                    }
+                }
             );
 
         $supportedNameIdFormats = [

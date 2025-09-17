@@ -159,20 +159,25 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         ];
         $this->attributes->method('getRequestedAttributes')
             ->willReturn($attributes);
+        $matcher = $this->exactly(2);
 
-        $this->urlProvider->expects($this->exactly(2))
-            ->method('getUrl')
-            ->withConsecutive(
-            // EntityId: EngineBlockServiceProvider::getEntityId
-                ['metadata_sp', false, null, null],
-                // ACS: EngineBlockServiceProvider::getAssertionConsumerService
-                ['authentication_sp_consume_assertion', false, null, null]
-            )->willReturnOnConsecutiveCalls(
-            // EntityId
-                'EbEntityId',
-                // ACS
-                'proxiedAcsLocation'
-            );
+        $this->urlProvider->expects($matcher)
+            ->method('getUrl')->willReturnCallback(function (...$parameters) use ($matcher) {
+            if ($matcher->getInvocationCount() === 1) {
+                $this->assertSame('metadata_sp', $parameters[0]);
+                $this->assertSame(false, $parameters[1]);
+                $this->assertSame(null, $parameters[2]);
+                $this->assertSame(null, $parameters[3]);
+                return 'EbEntityId';
+            }
+            if ($matcher->getInvocationCount() === 2) {
+                $this->assertSame('authentication_sp_consume_assertion', $parameters[0]);
+                $this->assertSame(false, $parameters[1]);
+                $this->assertSame(null, $parameters[2]);
+                $this->assertSame(null, $parameters[3]);
+                return 'proxiedAcsLocation';
+            }
+        });
 
         $this->factory = new ServiceProviderFactory(
             $this->attributes,
@@ -331,21 +336,26 @@ class ServiceProviderFactoryTest extends AbstractEntityTest
         ];
         $this->attributes->method('getRequestedAttributes')
             ->willReturn($attributes);
+        $matcher = $this->exactly(2);
 
 
-        $this->urlProvider->expects($this->exactly(2))
-            ->method('getUrl')
-            ->withConsecutive(
-            // EntityId
-                ['metadata_stepup', false, null, null],
-                // ACS: ServiceProvider::getAssertionConsumerService
-                ['authentication_stepup_consume_assertion', false, null, null]
-            )->willReturnOnConsecutiveCalls(
-            // EntityId
-                'StepupEntityId',
-                // ACS
-                'proxiedAcsLocation'
-            );
+        $this->urlProvider->expects($matcher)
+            ->method('getUrl')->willReturnCallback(function (...$parameters) use ($matcher) {
+            if ($matcher->getInvocationCount() === 1) {
+                $this->assertSame('metadata_stepup', $parameters[0]);
+                $this->assertSame(false, $parameters[1]);
+                $this->assertSame(null, $parameters[2]);
+                $this->assertSame(null, $parameters[3]);
+                return 'StepupEntityId';
+            }
+            if ($matcher->getInvocationCount() === 2) {
+                $this->assertSame('authentication_stepup_consume_assertion', $parameters[0]);
+                $this->assertSame(false, $parameters[1]);
+                $this->assertSame(null, $parameters[2]);
+                $this->assertSame(null, $parameters[3]);
+                return 'proxiedAcsLocation';
+            }
+        });
 
         $this->factory = new ServiceProviderFactory(
             $this->attributes,
