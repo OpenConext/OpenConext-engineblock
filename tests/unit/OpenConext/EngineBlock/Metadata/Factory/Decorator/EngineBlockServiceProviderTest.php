@@ -44,15 +44,20 @@ class EngineBlockServiceProviderTest extends AbstractEntityTest
     public function test_methods()
     {
         $adapter = $this->createServiceProviderAdapter();
+        $matcher = $this->exactly(1);
 
-        $this->urlProvider->expects($this->exactly(1))
+        $this->urlProvider->expects($matcher)
             ->method('getUrl')
-            ->withConsecutive(
-                // ACS: EngineBlockServiceProvider::getAssertionConsumerServices
-                ['authentication_sp_consume_assertion', false, null, null]
-            ) ->willReturnOnConsecutiveCalls(
-                // ACS
-                'acsLocation'
+            ->willReturnCallback(
+                function (...$parameters) use ($matcher) {
+                    if ($matcher->getInvocationCount() === 1) {
+                        $this->assertSame('authentication_sp_consume_assertion', $parameters[0]);
+                        $this->assertSame(false, $parameters[1]);
+                        $this->assertSame(null, $parameters[2]);
+                        $this->assertSame(null, $parameters[3]);
+                        return 'acsLocation';
+                    }
+                }
             );
 
         $certificateMock = $this->createMock(X509Certificate::class);

@@ -136,14 +136,19 @@ class ProxiedIdentityProviderTest extends AbstractEntityTest
 
     private function configureUrlProvider(): void
     {
-        $this->urlProvider->expects($this->exactly(1))
+        $matcher = $this->exactly(1);
+        $this->urlProvider->expects($matcher)
             ->method('getUrl')
-            ->withConsecutive(
-            // SSO: EngineBlockIdentityProvider::getSingleSignOnServices
-                ['authentication_idp_sso', false, null, 'entity-id']
-            )->willReturnOnConsecutiveCalls(
-            // SSO
-                'proxiedSsoLocation'
+            ->willReturnCallback(
+            function (...$parameters) use ($matcher) {
+                    if ($matcher->getInvocationCount() === 1) {
+                        $this->assertSame('authentication_idp_sso', $parameters[0]);
+                        $this->assertSame(false, $parameters[1]);
+                        $this->assertSame(null, $parameters[2]);
+                        $this->assertSame('entity-id', $parameters[3]);
+                        return 'proxiedSsoLocation';
+                    }
+                }
             );
     }
 }
