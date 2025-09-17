@@ -27,13 +27,13 @@ class ResourcePathFormatterTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     /**
-     * @test
-     * @group EngineBlock
-     * @group Http
      *
-     * @dataProvider \OpenConext\TestDataProvider::notString()
      * @param $nonString
      */
+    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notString')]
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Http')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function resource_path_formats_can_only_be_strings($nonString)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -42,11 +42,9 @@ class ResourcePathFormatterTest extends TestCase
         ResourcePathFormatter::format($nonString, []);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Http
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Http')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function resource_parameters_are_formatted_correctly()
     {
         $resourcePathFormat = 'resource/%s/%d';

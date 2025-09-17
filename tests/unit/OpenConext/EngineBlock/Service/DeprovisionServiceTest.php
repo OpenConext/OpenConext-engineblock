@@ -73,11 +73,9 @@ class DeprovisionServiceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Deprovision
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function read_returns_all_user_data()
     {
         $this->userDirectory->shouldReceive('findUserBy')
@@ -137,11 +135,9 @@ class DeprovisionServiceTest extends TestCase
         $this->assertEquals(['data' => 'consent3'], $result[2]['value'][2]);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Deprovision
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function read_returns_empty_result_for_unknown_user()
     {
         $this->userDirectory->shouldReceive('findUserBy')
@@ -162,11 +158,9 @@ class DeprovisionServiceTest extends TestCase
         $this->assertEmpty($result);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Deprovision
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function read_returns_user_data_without_consent_or_persistent_id()
     {
         $this->userDirectory->shouldReceive('findUserBy')
@@ -206,11 +200,9 @@ class DeprovisionServiceTest extends TestCase
         $this->assertEmpty($result[2]['value']);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Deprovision
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function delete_deprovisions_all_user_data()
     {
         $this->userDirectory->shouldReceive('findUserBy')

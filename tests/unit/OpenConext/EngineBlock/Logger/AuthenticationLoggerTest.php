@@ -39,11 +39,10 @@ class AuthenticationLoggerTest extends TestCase
      * are actually very valuable: they are used for statistical purpose. Other
      * tools depend on the format and contents of the log. Therefor it is worth
      * to write such a test to ensure compatibility.
-     *
-     * @test
-     * @group EngineBlock
-     * @group Logger
      */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Logger')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_logged_context_contains_all_required_information()
     {
         // raw data so we can compare later on
@@ -123,11 +122,9 @@ class AuthenticationLoggerTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Logger
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Logger')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_logged_context_contains_all_enriched_information()
     {
         // raw data so we can compare later on

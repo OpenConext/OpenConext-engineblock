@@ -63,11 +63,9 @@ class ConsentServiceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Consent
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Consent')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function remove_consent_by_collab_person_id_and_sp_entity_id()
     {
         $this->consentRepository->shouldReceive('deleteOneFor')

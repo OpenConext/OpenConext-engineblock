@@ -32,12 +32,10 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
         parent::tearDown(); // Ensure the kernel is properly shutdown to avoid state pollution between tests.
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Arp
-     * @group Profile
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Arp')]
+    #[\PHPUnit\Framework\Attributes\Group('Profile')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authentication_is_required_for_applying_arps()
     {
         $unauthenticatedClient = static::createClient();
@@ -46,14 +44,14 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
     }
 
     /**
-     * @test
-     * @group Api
-     * @group Arp
-     * @group Profile
      *
-     * @dataProvider invalidHttpMethodProvider
      * @param string $invalidHttpMethod
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidHttpMethodProvider')]
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Arp')]
+    #[\PHPUnit\Framework\Attributes\Group('Profile')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function only_post_requests_are_allowed_when_applying_arp($invalidHttpMethod)
     {
         $client = $this->createAuthorizedClient();
@@ -65,12 +63,10 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Arp
-     * @group Profile
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Arp')]
+    #[\PHPUnit\Framework\Attributes\Group('Profile')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function cannot_apply_arp_if_user_does_not_have_profile_role()
     {
         $client = static::createClient();
@@ -88,14 +84,14 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
     }
 
     /**
-     * @test
-     * @group Api
-     * @group Arp
-     * @group Profile
      *
-     * @dataProvider invalidJsonPayloadProvider
      * @param string $invalidJsonPayload
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidJsonPayloadProvider')]
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Arp')]
+    #[\PHPUnit\Framework\Attributes\Group('Profile')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function cannot_push_invalid_content_to_the_arp_api($invalidJsonPayload)
     {
         $client = $this->createAuthorizedClient();
@@ -114,12 +110,10 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Arp
-     * @group Profile
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Arp')]
+    #[\PHPUnit\Framework\Attributes\Group('Profile')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function all_attributes_are_released_through_the_arp_api_if_no_arp_is_found_for_a_service_provider()
     {
         $spEntityId = 'https://my-test-sp.test';
@@ -160,12 +154,10 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Arp
-     * @group Profile
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Arp')]
+    #[\PHPUnit\Framework\Attributes\Group('Profile')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function arps_are_applied_to_sps_and_attributes_by_the_arp_api()
     {
         $spNotReceivingSpecialAttributeEntityId = 'https://sp-that-does-not-receive-special-attribute.test';
@@ -230,12 +222,10 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Arp
-     * @group Profile
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Arp')]
+    #[\PHPUnit\Framework\Attributes\Group('Profile')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function arps_matching_on_exact_keys_are_applied_to_sps_and_attributes_by_the_arp_api()
     {
         $spNotReceivingSpecialAttributeEntityId = 'https://sp-that-does-not-receive-special-attribute.test';
@@ -302,12 +292,10 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Arp
-     * @group Profile
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Arp')]
+    #[\PHPUnit\Framework\Attributes\Group('Profile')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function arps_matching_on_partial_keys_are_applied_to_sps_and_attributes_by_the_arp_api()
     {
         $spNotReceivingSpecialAttributeEntityId = 'https://sp-that-does-not-receive-special-attribute.test';
@@ -374,7 +362,7 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
-    public function invalidHttpMethodProvider()
+    public static function invalidHttpMethodProvider()
     {
         return [
             'GET' => ['GET'],
@@ -385,7 +373,7 @@ class AttributeReleasePolicyControllerApiTest extends WebTestCase
         ];
     }
 
-    public function invalidJsonPayloadProvider()
+    public static function invalidJsonPayloadProvider()
     {
         return [
             'string body' => ['"not-an-object"'],

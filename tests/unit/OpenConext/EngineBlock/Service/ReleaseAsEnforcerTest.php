@@ -38,9 +38,7 @@ class ReleaseAsEnforcerTest extends TestCase
         m::close();
     }
 
-    /**
-     * @dataProvider enforceDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('enforceDataProvider')]
     public function testEnforce($attributes, $releaseAsOverrides, $expectedResult, $expectedLogMessages)
     {
         foreach ($expectedLogMessages as $message) {
@@ -57,9 +55,7 @@ class ReleaseAsEnforcerTest extends TestCase
     }
 
 
-    /**
-     * @dataProvider enforceDataProviderWarnings
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('enforceDataProviderWarnings')]
     public function testEnforceImpossible($attributes, $releaseAsOverrides, $expectedResult, $expectedLogMessage)
     {
         $this->logger->shouldReceive('warning')->with($expectedLogMessage);
@@ -67,7 +63,7 @@ class ReleaseAsEnforcerTest extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function enforceDataProvider()
+    public static function enforceDataProvider()
     {
         return [
             'single attribute override' => [
@@ -206,7 +202,7 @@ class ReleaseAsEnforcerTest extends TestCase
         ];
     }
 
-    public function enforceDataProviderWarnings()
+    public static function enforceDataProviderWarnings()
     {
         return [
             'targeted attribute value is set to null in assertion' => [

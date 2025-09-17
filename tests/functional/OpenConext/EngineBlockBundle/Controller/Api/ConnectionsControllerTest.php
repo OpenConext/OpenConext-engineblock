@@ -37,12 +37,10 @@ class ConnectionsControllerTest extends WebTestCase
     }
 
 
-    /**
-     * @test
-     * @group Api
-     * @group Connections
-     * @group MetadataPush
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Connections')]
+    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authentication_is_required_for_pushing_metadata()
     {
         $unauthenticatedClient = static::createClient();
@@ -51,14 +49,14 @@ class ConnectionsControllerTest extends WebTestCase
     }
 
     /**
-     * @test
-     * @group Api
-     * @group Connections
-     * @group MetadataPush
      *
-     * @dataProvider invalidHttpMethodProvider
      * @param string $invalidHttpMethod
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidHttpMethodProvider')]
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Connections')]
+    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function only_post_requests_are_allowed_when_pushing_metadata($invalidHttpMethod)
     {
         $client = $this->createAuthorizedClient();
@@ -70,13 +68,11 @@ class ConnectionsControllerTest extends WebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Connections
-     * @group MetadataPush
-     * @group FeatureToggle
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Connections')]
+    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
+    #[\PHPUnit\Framework\Attributes\Group('FeatureToggle')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function cannot_push_metadata_if_feature_is_disabled()
     {
         $client = $this->createAuthorizedClient();
@@ -90,12 +86,10 @@ class ConnectionsControllerTest extends WebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Connections
-     * @group MetadataPush
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Connections')]
+    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function cannot_push_metadata_if_user_does_not_have_manage_role()
     {
         $client = static::createClient();
@@ -112,14 +106,14 @@ class ConnectionsControllerTest extends WebTestCase
     }
 
     /**
-     * @test
-     * @group Api
-     * @group Connections
-     * @group MetadataPush
      *
-     * @dataProvider invalidJsonPayloadProvider
      * @param string $invalidJsonPayload
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidJsonPayloadProvider')]
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Connections')]
+    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function cannot_push_invalid_content_to_the_metadata_push_api($invalidJsonPayload)
     {
         $client = $this->createAuthorizedClient();
@@ -138,13 +132,10 @@ class ConnectionsControllerTest extends WebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Connections
-     * @group MetadataPush
-     *
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Connections')]
+    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function pushing_data_to_engineblock_should_succeed()
     {
         $client = $this->createAuthorizedClient();
@@ -202,13 +193,10 @@ class ConnectionsControllerTest extends WebTestCase
     }
 
 
-    /**
-     * @test
-     * @group Api
-     * @group Connections
-     * @group MetadataPush
-     *
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Connections')]
+    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function pushing_data_with_coins_to_engineblock_should_succeed()
     {
         $client = $this->createAuthorizedClient();
@@ -251,13 +239,10 @@ class ConnectionsControllerTest extends WebTestCase
         }
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Connections
-     * @group MetadataPush
-     *
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Connections')]
+    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function pushing_manage_sfo_data_should_succeed()
     {
         $client = $this->createAuthorizedClient();
@@ -336,12 +321,10 @@ class ConnectionsControllerTest extends WebTestCase
     }
 
 
-    /**
-     * @test
-     * @group Api
-     * @group Connections
-     * @group MetadataPush
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Connections')]
+    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function pushing_data_to_engineblock_can_fail()
     {
         $client = $this->createAuthorizedClient();
@@ -366,7 +349,7 @@ class ConnectionsControllerTest extends WebTestCase
         }
     }
 
-    public function invalidHttpMethodProvider()
+    public static function invalidHttpMethodProvider()
     {
         return [
             'GET' => ['GET'],
@@ -377,7 +360,7 @@ class ConnectionsControllerTest extends WebTestCase
         ];
     }
 
-    public function invalidJsonPayloadProvider()
+    public static function invalidJsonPayloadProvider()
     {
         return [
             'string body' => ['"a-string"'],

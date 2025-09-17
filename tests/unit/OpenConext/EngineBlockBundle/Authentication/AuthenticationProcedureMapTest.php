@@ -31,10 +31,8 @@ class AuthenticationProcedureMapTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group AuthenticationState
-     */
+    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_new_map_is_returned_when_an_authentication_procedure_is_added_to_an_authentication_procedures_map()
     {
         $someServiceProvider  = new Entity(new EntityId('some.serviceprovider.example'), EntityType::SP());
@@ -67,10 +65,8 @@ class AuthenticationProcedureMapTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group AuthenticationState
-     */
+    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_map_can_be_filtered_by_authentications_on_behalf_of_a_given_service_provider_returning_a_new_map()
     {
         $someServiceProvider  = new Entity(new EntityId('some.serviceprovider.example'), EntityType::SP());
@@ -96,10 +92,8 @@ class AuthenticationProcedureMapTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group AuthenticationState
-     */
+    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_map_can_be_filtered_by_completed_procedures_since_a_given_time_returning_a_new_map()
     {
         $someServiceProvider  = new Entity(new EntityId('some.serviceprovider.example'), EntityType::SP());

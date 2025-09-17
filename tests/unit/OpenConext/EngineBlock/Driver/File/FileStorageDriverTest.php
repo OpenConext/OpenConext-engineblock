@@ -28,14 +28,14 @@ class FileStorageDriverTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     /**
-     * @test
-     * @group EngineBlock
-     * @group Driver
      *
-     * @dataProvider \OpenConext\TestDataProvider::notStringOrEmptyString
      *
      * @param mixed $notStringOrEmptyString
      */
+    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notStringOrEmptyString')]
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Driver')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function filepath_must_be_a_non_empty_string($notStringOrEmptyString)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -44,14 +44,14 @@ class FileStorageDriverTest extends TestCase
     }
 
     /**
-     * @test
-     * @group EngineBlock
-     * @group Driver
      *
-     * @dataProvider \OpenConext\TestDataProvider::notString
      *
      * @param mixed $notString
      */
+    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notString')]
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Driver')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function data_to_save_must_be_a_string($notString)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -61,11 +61,9 @@ class FileStorageDriverTest extends TestCase
         $storage->save($notString);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Driver
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Driver')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function data_is_written_unmodified_to_file()
     {
         $data     = 'FooBarBaz';
@@ -78,11 +76,9 @@ class FileStorageDriverTest extends TestCase
         $storage->save($data);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Driver
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Driver')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function data_is_read_from_file_and_returned_unmodified()
     {
         $data = 'FooBarBaz';

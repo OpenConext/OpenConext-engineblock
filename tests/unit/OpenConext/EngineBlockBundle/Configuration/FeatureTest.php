@@ -27,12 +27,12 @@ class FeatureTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     /**
-     * @test
-     * @group EngineBlockBundle
-     * @group Configuration
-     * @dataProvider \OpenConext\TestDataProvider::notStringOrEmptyString
      * @param mixed $notStringOrEmtpyString
      */
+    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notStringOrEmptyString')]
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
+    #[\PHPUnit\Framework\Attributes\Group('Configuration')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function feature_key_is_required_to_be_a_non_empty_string($notStringOrEmtpyString)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -41,12 +41,12 @@ class FeatureTest extends TestCase
     }
 
     /**
-     * @test
-     * @group EngineBlockBundle
-     * @group Configuration
-     * @dataProvider \OpenConext\TestDataProvider::notBoolean
      * @param mixed $notBoolean
      */
+    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notBoolean')]
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
+    #[\PHPUnit\Framework\Attributes\Group('Configuration')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function is_enabled_must_be_a_boolean($notBoolean)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -54,11 +54,9 @@ class FeatureTest extends TestCase
         new Feature('some.feature', $notBoolean);
     }
 
-    /**
-     * @test
-     * @group EngineBlockBundle
-     * @group Configuration
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
+    #[\PHPUnit\Framework\Attributes\Group('Configuration')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_feature_created_as_enabled_is_enabled()
     {
         $feature = new Feature('some.feature', true);
@@ -66,11 +64,9 @@ class FeatureTest extends TestCase
         $this->assertTrue($feature->isEnabled());
     }
 
-    /**
-     * @test
-     * @group EngineBlockBundle
-     * @group Configuration
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
+    #[\PHPUnit\Framework\Attributes\Group('Configuration')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_feature_created_as_disabled_is_disabled()
     {
         $feature = new Feature('some.feature', false);
@@ -78,11 +74,9 @@ class FeatureTest extends TestCase
         $this->assertFalse($feature->isEnabled());
     }
 
-    /**
-     * @test
-     * @group EngineBlockBundle
-     * @group Configuration
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
+    #[\PHPUnit\Framework\Attributes\Group('Configuration')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_feature_key_can_be_retrieved()
     {
         $featureKey = 'some.feature.key';
