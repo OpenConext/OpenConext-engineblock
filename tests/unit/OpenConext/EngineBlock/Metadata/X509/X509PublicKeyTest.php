@@ -26,6 +26,7 @@ class X509PublicKeyTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     private $filePath;
+    private string $filePath2;
 
     public function setUp(): void
     {
