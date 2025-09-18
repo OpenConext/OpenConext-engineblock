@@ -19,6 +19,10 @@ namespace OpenConext\EngineBlock\Metadata\Factory;
 
 class ServiceProviderEntityinterface extends AbstractEntity
 {
+    public function __construct()
+    {
+        parent::__construct(static::class);
+    }
     /**
      * This test will test if all parameters in the old mutable entity are implemented
      */
