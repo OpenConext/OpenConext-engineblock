@@ -33,13 +33,13 @@ doctrine:
                     # An array of mappings, which may be a bundle name or something else
                     Authentication:
                         mapping:   true
-                        type:      annotation
+                        type:      attribute
                         dir:       "%kernel.project_dir%/src/OpenConext/EngineBlockBundle/Authentication"
                         prefix:    OpenConext\EngineBlockBundle\Authentication
                         is_bundle: false
                     Metadata:
                         mapping:   true
-                        type:      annotation
+                        type:      attribute
                         dir:       "%kernel.project_dir%/src/OpenConext/EngineBlock/Metadata"
                         prefix:    OpenConext\EngineBlock\Metadata
                         is_bundle: false
