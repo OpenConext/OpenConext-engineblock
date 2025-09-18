@@ -27,6 +27,10 @@ use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 
 class EngineBlockIdentityProviderMetadata extends AbstractEntity
 {
+    public function __construct()
+    {
+        parent::__construct(static::class);
+    }
     use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
     /**
      * @var LanguageSupportProvider
