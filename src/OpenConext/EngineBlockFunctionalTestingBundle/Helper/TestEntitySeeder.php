@@ -245,7 +245,7 @@ class TestEntitySeeder
             $idp->nameEn = $idpData['name'];
             $idp->nameNl = $idpData['name'];
             $idp->namePt = $idpData['name'];
-            $idp->keywordsEn = ['Awesome IdP', 'Another keyword', 'Example'];
+            $idp->keywordsEn = 'Awesome IdP, Another keyword, Example';
             $idp->enabledInWayf = $idpData['enabled'];
             $idp->setDiscoveries($idpData['discoveries'] ?? []);
 
