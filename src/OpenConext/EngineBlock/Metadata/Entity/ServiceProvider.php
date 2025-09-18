@@ -49,50 +49,50 @@ class ServiceProvider extends AbstractRole
     /**
      * @var null|AttributeReleasePolicy
      */
-    #[ORM\Column(name: 'attribute_release_policy', type: 'array', length: 65535)]
+    #[ORM\Column(name: 'attribute_release_policy', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
     public $attributeReleasePolicy;
 
     /**
      * @var IndexedService[]
      */
-    #[ORM\Column(name: 'assertion_consumer_services', type: 'array', length: 65535)]
+    #[ORM\Column(name: 'assertion_consumer_services', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
     public $assertionConsumerServices;
 
     /**
      * @var string[]
      */
-    #[ORM\Column(name: 'allowed_idp_entity_ids', type: 'array', length: 6777215)]
+    #[ORM\Column(name: 'allowed_idp_entity_ids', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 6777215)]
     public $allowedIdpEntityIds;
 
     /**
      * @var bool
      */
-    #[ORM\Column(name: 'allow_all', type: 'boolean')]
-    public $allowAll;
+    #[ORM\Column(name: 'allow_all', type: \Doctrine\DBAL\Types\Types::BOOLEAN)]
+    public ?bool $allowAll = null;
 
     /**
      * @var null|RequestedAttribute[]
      */
-    #[ORM\Column(name: 'requested_attributes', type: 'array', length: 65535)]
+    #[ORM\Column(name: 'requested_attributes', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
     public $requestedAttributes;
 
     /**
      * @var null|string
      */
-    #[ORM\Column(name: 'support_url_en', type: 'string', nullable: true)]
-    public $supportUrlEn;
+    #[ORM\Column(name: 'support_url_en', type: \Doctrine\DBAL\Types\Types::STRING, nullable: true)]
+    public ?string $supportUrlEn = null;
 
     /**
      * @var null|string
      */
-    #[ORM\Column(name: 'support_url_nl', type: 'string', nullable: true)]
-    public $supportUrlNl;
+    #[ORM\Column(name: 'support_url_nl', type: \Doctrine\DBAL\Types\Types::STRING, nullable: true)]
+    public ?string $supportUrlNl = null;
 
     /**
      * @var null|string
      */
-    #[ORM\Column(name: 'support_url_pt', type: 'string', nullable: true)]
-    public $supportUrlPt;
+    #[ORM\Column(name: 'support_url_pt', type: \Doctrine\DBAL\Types\Types::STRING, nullable: true)]
+    public ?string $supportUrlPt = null;
 
     /**
      * WARNING: Please don't use this entity directly but use the dedicated factory instead.

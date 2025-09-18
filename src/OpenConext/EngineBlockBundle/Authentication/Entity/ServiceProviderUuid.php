@@ -22,7 +22,6 @@ use Doctrine\ORM\Mapping as ORM;
 use OpenConext\EngineBlockBundle\Authentication\Repository\ServiceProviderUuidRepository;
 
 #[ORM\Entity(repositoryClass: ServiceProviderUuidRepository::class)]
-#[ORM\Table]
 #[ORM\Index(name: 'service_provider_entity_id', columns: ['service_provider_entity_id'], options: ['lengths' => [255]])]
 class ServiceProviderUuid
 {
@@ -30,12 +29,12 @@ class ServiceProviderUuid
      * @var string
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'string', length: 36, options: ['fixed' => true])]
-    public $uuid;
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 36, options: ['fixed' => true])]
+    public ?string $uuid = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(type: 'string', length: 1024)]
-    public $serviceProviderEntityId;
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 1024)]
+    public ?string $serviceProviderEntityId = null;
 }
