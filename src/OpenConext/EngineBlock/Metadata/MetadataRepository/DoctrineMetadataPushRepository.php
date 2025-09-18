@@ -154,7 +154,7 @@ class DoctrineMetadataPushRepository
 
         $stmt = $this->connection->prepare($query->getSQL());
         $this->bindParameters($normalized, $stmt);
-        $stmt->execute();
+        $stmt->executeQuery();
     }
 
     private function updateRole(AbstractRole $role, ClassMetadata $metadata)
@@ -166,7 +166,7 @@ class DoctrineMetadataPushRepository
 
         $stmt = $this->connection->prepare($query->getSQL());
         $this->bindParameters($normalized, $stmt);
-        $stmt->execute();
+        $stmt->executeQuery();
     }
 
     private function deleteRolesByIds(array $roles, ClassMetadata $metadata)
