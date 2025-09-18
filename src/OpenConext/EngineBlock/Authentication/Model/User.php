@@ -61,7 +61,7 @@ class User implements JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'collab_person_id' => $this->getCollabPersonId()->getCollabPersonId(),

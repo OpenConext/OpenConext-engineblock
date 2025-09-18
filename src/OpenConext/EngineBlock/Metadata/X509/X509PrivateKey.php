@@ -82,8 +82,6 @@ class X509PrivateKey
         $signature = null;
         openssl_sign($data, $signature, $privateKeyResource);
 
-        openssl_free_key($privateKeyResource);
-
         return $signature;
     }
 }
