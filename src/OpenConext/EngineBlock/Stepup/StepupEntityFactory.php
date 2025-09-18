@@ -78,7 +78,11 @@ class StepupEntityFactory
             [],
             $singleSignOnServices,
             null,
-            null
+            null,
+            null,
+            [],
+            null,
+            false
         );
 
         return $entity;
