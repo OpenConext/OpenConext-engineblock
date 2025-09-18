@@ -25,6 +25,10 @@ use OpenConext\EngineBlock\Metadata\Organization;
 
 class EngineblockIdentityProviderInformation extends AbstractEntity
 {
+    public function __construct()
+    {
+        parent::__construct(static::class);
+    }
     public function test_methods()
     {
         $adapter = $this->createIdentityProviderAdapter();

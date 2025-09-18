@@ -27,6 +27,10 @@ use SAML2\Constants;
 
 class EngineblockIdentityProvider extends AbstractEntity
 {
+    public function __construct()
+    {
+        parent::__construct(static::class);
+    }
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject
      */

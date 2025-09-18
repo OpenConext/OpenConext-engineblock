@@ -27,6 +27,10 @@ use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 
 class EngineBlockServiceProviderMetadata extends AbstractEntity
 {
+    public function __construct()
+    {
+        parent::__construct(static::class);
+    }
     /**
      * @var LanguageSupportProvider
      */
