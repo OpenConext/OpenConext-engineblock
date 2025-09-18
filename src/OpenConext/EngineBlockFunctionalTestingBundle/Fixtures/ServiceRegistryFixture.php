@@ -170,8 +170,8 @@ class ServiceRegistryFixture
         WHERE `type` = 'idp'
 QUERY;
         $query = $this->entityManager->getConnection()->prepare($idpEntityIDQuery);
-        $query->execute();
-        $idps = $query->fetchAll();
+        $query->executeQuery();
+        $idps = $query->fetchAllAssociative();
 
         foreach ($idps as $idpEntityId) {
             $idp = $this->repository->findIdentityProviderByEntityId($idpEntityId['entity_id']);
@@ -206,8 +206,8 @@ QUERY;
         WHERE `type` = 'sp'
 QUERY;
         $query = $this->entityManager->getConnection()->prepare($spEntityIDQuery);
-        $query->execute();
-        $sps = $query->fetchAll();
+        $query->executeQuery();
+        $sps = $query->fetchAllAssociative();
 
         foreach ($sps as $spEntityId) {
             $sp = $this->repository->findServiceProviderByEntityId($spEntityId['entity_id']);
