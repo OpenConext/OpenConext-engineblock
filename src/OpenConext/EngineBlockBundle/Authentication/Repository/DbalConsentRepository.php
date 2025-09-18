@@ -74,7 +74,7 @@ final class DbalConsentRepository implements ConsentRepository
         try {
             $statement = $this->connection->executeQuery($sql, ['hashed_user_id' => sha1($userId)]);
             $rows = $statement->fetchAllAssociative(PDO::FETCH_ASSOC);
-        } catch (DBALException $exception) {
+        } catch (\Doctrine\DBAL\Exception $exception) {
             throw new RuntimeException('Could not fetch user consents from the database', 0, $exception);
         }
 
@@ -104,7 +104,7 @@ final class DbalConsentRepository implements ConsentRepository
         try {
             $this->connection->executeQuery($sql, ['hashed_user_id' => sha1($userId)]);
             $this->logger->notice(sprintf('Removed consent for hashed user id %s (%s)', sha1($userId), $userId));
-        } catch (DBALException $exception) {
+        } catch (\Doctrine\DBAL\Exception $exception) {
             throw new RuntimeException(
                 sprintf(
                     'Could not delete user consents from the database for user %s',
@@ -150,7 +150,7 @@ final class DbalConsentRepository implements ConsentRepository
             );
 
             return $result->rowCount() > 0;
-        } catch (DBALException $exception) {
+        } catch (\Doctrine\DBAL\Exception $exception) {
             throw new RuntimeException(
                 sprintf(
                     'Could not delete user %s consent from the database for a specific SP %s',
