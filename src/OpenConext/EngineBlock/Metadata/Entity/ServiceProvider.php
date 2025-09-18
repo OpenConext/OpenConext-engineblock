@@ -35,7 +35,6 @@ use SAML2\Constants;
 
 /**
  * @package OpenConext\EngineBlock\Metadata\Entity
- * @ORM\Entity
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -44,62 +43,55 @@ use SAML2\Constants;
  * WARNING: Please don't use this entity directly but use the dedicated factory instead.
  * @see \OpenConext\EngineBlock\Factory\Factory\ServiceProviderFactory
  */
+#[ORM\Entity]
 class ServiceProvider extends AbstractRole
 {
     /**
      * @var null|AttributeReleasePolicy
-     *
-     * @ORM\Column(name="attribute_release_policy", type="array", length=65535)
      */
+    #[ORM\Column(name: 'attribute_release_policy', type: 'array', length: 65535)]
     public $attributeReleasePolicy;
 
     /**
      * @var IndexedService[]
-     *
-     * @ORM\Column(name="assertion_consumer_services", type="array", length=65535)
      */
+    #[ORM\Column(name: 'assertion_consumer_services', type: 'array', length: 65535)]
     public $assertionConsumerServices;
 
     /**
      * @var string[]
-     *
-     * @ORM\Column(name="allowed_idp_entity_ids", type="array", length=6777215)
      */
+    #[ORM\Column(name: 'allowed_idp_entity_ids', type: 'array', length: 6777215)]
     public $allowedIdpEntityIds;
 
     /**
      * @var bool
-     *
-     * @ORM\Column(name="allow_all", type="boolean")
      */
+    #[ORM\Column(name: 'allow_all', type: 'boolean')]
     public $allowAll;
 
     /**
      * @var null|RequestedAttribute[]
-     *
-     * @ORM\Column(name="requested_attributes", type="array", length=65535)
      */
+    #[ORM\Column(name: 'requested_attributes', type: 'array', length: 65535)]
     public $requestedAttributes;
 
     /**
      * @var null|string
-     *
-     * @ORM\Column(name="support_url_en", type="string", nullable=true)
      */
+    #[ORM\Column(name: 'support_url_en', type: 'string', nullable: true)]
     public $supportUrlEn;
 
     /**
      * @var null|string
-     *
-     * @ORM\Column(name="support_url_nl", type="string", nullable=true)
      */
+    #[ORM\Column(name: 'support_url_nl', type: 'string', nullable: true)]
     public $supportUrlNl;
 
     /**
      * @var null|string
-     *
-     * @ORM\Column(name="support_url_pt", type="string", nullable=true)
      */
+    #[ORM\Column(name: 'support_url_pt', type: 'string', nullable: true)]
     public $supportUrlPt;
 
     /**

@@ -19,31 +19,23 @@
 namespace OpenConext\EngineBlockBundle\Authentication\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use OpenConext\EngineBlockBundle\Authentication\Repository\ServiceProviderUuidRepository;
 
-/**
- * @ORM\Entity(repositoryClass="OpenConext\EngineBlockBundle\Authentication\Repository\ServiceProviderUuidRepository")
- * @ORM\Table(indexes={
- *     @ORM\Index(
- *         name="service_provider_entity_id",
- *         columns={"service_provider_entity_id"},
- *         options={"lengths" = {255}}
- *     ),
- * })
- */
+#[ORM\Entity(repositoryClass: ServiceProviderUuidRepository::class)]
+#[ORM\Table]
+#[ORM\Index(name: 'service_provider_entity_id', columns: ['service_provider_entity_id'], options: ['lengths' => [255]])]
 class ServiceProviderUuid
 {
     /**
      * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(type="string", length=36, options={"fixed": true})
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'string', length: 36, options: ['fixed' => true])]
     public $uuid;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string", length=1024)
      */
+    #[ORM\Column(type: 'string', length: 1024)]
     public $serviceProviderEntityId;
 }
