@@ -3,69 +3,69 @@ functional_testing_idp_metadata:
     requirements:
         idpName: ".+"
     defaults:
-        _controller: engineblock.functional_test.controller.identity_provider:metadataAction
+        _controller: engineblock.functional_test.controller.identity_provider::metadataAction
 
 functional_testing_idp_sso:
     path: "/{idpName}/sso"
     requirements:
         idpName: ".+"
     defaults:
-        _controller: engineblock.functional_test.controller.identity_provider:singleSignOnAction
+        _controller: engineblock.functional_test.controller.identity_provider::singleSignOnAction
 
 functional_testing_sp_login_redirect:
     path: "/{spName}/login-redirect"
     requirements:
         spName: ".+"
     defaults:
-        _controller: engineblock.functional_test.controller.service_provider:triggerLoginRedirectAction
+        _controller: engineblock.functional_test.controller.service_provider::triggerLoginRedirectAction
 
 functional_testing_sp_login_post:
     path: "/{spName}/login-post"
     requirements:
         spName: ".+"
     defaults:
-        _controller: engineblock.functional_test.controller.service_provider:triggerLoginPostAction
+        _controller: engineblock.functional_test.controller.service_provider::triggerLoginPostAction
 
 functional_testing_sp_acs:
     path: "/{spName}/acs"
     requirements:
         spName: ".+"
     defaults:
-        _controller: engineblock.functional_test.controller.service_provider:assertionConsumerAction
+        _controller: engineblock.functional_test.controller.service_provider::assertionConsumerAction
 
 functional_testing_sp_metadata:
     path: "/{spName}/metadata"
     requirements:
         spName: ".+"
     defaults:
-        _controller: engineblock.functional_test.controller.service_provider:metadataAction
+        _controller: engineblock.functional_test.controller.service_provider::metadataAction
 
 functional_testing_wayf:
     path: "/wayf"
     defaults:
-        _controller: engineblock.functional_test.controller.wayf:wayfAction
+        _controller: engineblock.functional_test.controller.wayf::wayfAction
 
 functional_testing_handle_wayf:
     path: "/handle-wayf"
     defaults:
-        _controller: engineblock.functional_test.controller.wayf:handleWayfAction
+        _controller: engineblock.functional_test.controller.wayf::handleWayfAction
 
 functional_testing_feedback:
     path: "/feedback"
     defaults:
-        _controller: engineblock.functional_test.controller.feedback:feedbackAction
+        _controller: engineblock.functional_test.controller.feedback::feedbackAction
 
 functional_testing_consent:
     path: "/consent"
     defaults:
-        _controller: engineblock.functional_test.controller.consent:consentAction
+        _controller: engineblock.functional_test.controller.consent::consentAction
 
 functional_testing_send_form:
     path: "/send"
     defaults:
-        _controller: engineblock.functional_test.controller.consent:sendAction
+        _controller: engineblock.functional_test.controller.consent::sendAction
 
 functional_testing_gateway:
     path: "/gateway/second-factor-only/single-sign-on"
     defaults:
-        _controller: engineblock.functional_test.controller.stepup_mock:ssoAction
+        _controller: engineblock.functional_test.controller.stepup_mock::ssoAction
