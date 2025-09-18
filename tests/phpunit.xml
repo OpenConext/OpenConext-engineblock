@@ -37,7 +37,7 @@
             <html outputDirectory="../var/log/phpunit/coverage/html"/>
         </report>
     </coverage>
-    <source restrictDeprecations="true" restrictNotices="true" restrictWarnings="true">
+    <source restrictDeprecations="true" restrictNotices="true" restrictWarnings="true" ignoreSuppressionOfDeprecations="true">
         <include>
             <directory>src</directory>
             <directory>library</directory>
@@ -45,6 +45,7 @@
     </source>
     <php>
         <server name="KERNEL_CLASS" value="App\Kernel"/>
+        <server name="DOCTRINE_DEPRECATIONS" value="trigger"/>
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[total]=0"/>
         <ini name="memory_limit" value="512M"/>
     </php>
