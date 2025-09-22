@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
+use Doctrine\DBAL\Statement;
 use Doctrine\ORM\EntityManager;
 use Exception;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
@@ -170,8 +171,9 @@ class ServiceRegistryFixture
         WHERE `type` = 'idp'
 QUERY;
         $query = $this->entityManager->getConnection()->prepare($idpEntityIDQuery);
-        $query->executeQuery();
-        $idps = $query->fetchAllAssociative();
+        assert($query instanceof Statement);
+        $result = $query->executeQuery();
+        $idps = $result->fetchAllAssociative();
 
         foreach ($idps as $idpEntityId) {
             $idp = $this->repository->findIdentityProviderByEntityId($idpEntityId['entity_id']);
@@ -206,8 +208,9 @@ QUERY;
         WHERE `type` = 'sp'
 QUERY;
         $query = $this->entityManager->getConnection()->prepare($spEntityIDQuery);
-        $query->executeQuery();
-        $sps = $query->fetchAllAssociative();
+        assert($query instanceof Statement);
+        $result = $query->executeQuery();
+        $sps = $result->fetchAllAssociative();
 
         foreach ($sps as $spEntityId) {
             $sp = $this->repository->findServiceProviderByEntityId($spEntityId['entity_id']);
