@@ -62,7 +62,7 @@ parameters:
     php_settings:
         memory_limit: 256M
         display_errors: '1'
-        error_reporting: '6135'
+        error_reporting: '30719'
         date.timezone: Europe/Amsterdam
         sendmail_from: 'OpenConext EngineBlock <openconext-engineblock@openconext.org>'
 

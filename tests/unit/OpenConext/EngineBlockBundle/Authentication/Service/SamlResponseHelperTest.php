@@ -102,7 +102,8 @@ class SamlResponseHelperTest extends TestCase
          * Test if the issuer was set correctly
          * @var SimpleXMLElement $issuer
          */
-        $responseResponse = array_pop($responseXml->xpath('/samlp:Response'));
+        $samlResponse = $responseXml->xpath('/samlp:Response');
+        $responseResponse = array_pop($samlResponse);
         self::assertEquals($responseResponse['InResponseTo'], $requestId);
         self::assertEquals($responseResponse['Destination'], 'https://sp.example.org/assertion/consumer');
 
@@ -110,15 +111,18 @@ class SamlResponseHelperTest extends TestCase
          * Test if the issuer was set correctly
          * @var SimpleXMLElement $issuer
          */
-        $responseIssuer = array_pop($responseXml->xpath('/samlp:Response/saml:Issuer'));
+        $issuerResponse = $responseXml->xpath('/samlp:Response/saml:Issuer');
+        $responseIssuer = array_pop($issuerResponse);
         self::assertEquals($responseIssuer, $issuer->getValue());
 
         /**
          * Test if the codes are correctly copied from the original saml failed response
          * @var SimpleXMLElement $code
          */
-        $responseCode = array_pop($responseXml->xpath('/samlp:Response/samlp:Status/samlp:StatusCode'));
-        $responseSubCode = array_pop($responseXml->xpath('/samlp:Response/samlp:Status/samlp:StatusCode/samlp:StatusCode'));
+        $statusCode = $responseXml->xpath('/samlp:Response/samlp:Status/samlp:StatusCode');
+        $innerStatusCode = $responseXml->xpath('/samlp:Response/samlp:Status/samlp:StatusCode/samlp:StatusCode');
+        $responseCode = array_pop($statusCode);
+        $responseSubCode = array_pop($innerStatusCode);
         self::assertEquals($responseCode['Value'], 'testCode');
         self::assertEquals($responseSubCode['Value'], 'testSubCode');
     }
@@ -176,7 +180,8 @@ class SamlResponseHelperTest extends TestCase
          * Test if the issuer was set correctly
          * @var SimpleXMLElement $issuer
          */
-        $responseResponse = array_pop($responseXml->xpath('/samlp:Response'));
+        $samlResponse = $responseXml->xpath('/samlp:Response');
+        $responseResponse = array_pop($samlResponse);
         self::assertEquals($responseResponse['InResponseTo'], $requestId);
         self::assertEquals($responseResponse['Destination'], 'https://sp.example.org/assertion/consumer');
 
@@ -184,15 +189,18 @@ class SamlResponseHelperTest extends TestCase
          * Test if the issuer was set correctly
          * @var SimpleXMLElement $issuer
          */
-        $responseIssuer = array_pop($responseXml->xpath('/samlp:Response/saml:Issuer'));
+        $issuerResponse = $responseXml->xpath('/samlp:Response/saml:Issuer');
+        $responseIssuer = array_pop($issuerResponse);
         self::assertEquals($responseIssuer, $originalSpEntityId);
 
         /**
          * Test if the codes are correctly copied from the original saml failed response
          * @var SimpleXMLElement $code
          */
-        $responseCode = array_pop($responseXml->xpath('/samlp:Response/samlp:Status/samlp:StatusCode'));
-        $responseSubCode = array_pop($responseXml->xpath('/samlp:Response/samlp:Status/samlp:StatusCode/samlp:StatusCode'));
+        $statusResponseCode = $responseXml->xpath('/samlp:Response/samlp:Status/samlp:StatusCode');
+        $innerStatusResponseCode = $responseXml->xpath('/samlp:Response/samlp:Status/samlp:StatusCode/samlp:StatusCode');
+        $responseCode = array_pop($statusResponseCode);
+        $responseSubCode = array_pop($innerStatusResponseCode);
         self::assertEquals($responseCode['Value'], 'testCode');
         self::assertEquals($responseSubCode['Value'], 'testSubCode');
     }

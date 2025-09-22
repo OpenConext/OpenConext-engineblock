@@ -1,5 +1,6 @@
 doctrine:
     dbal:
+
         default_connection: engineblock
         connections:
             engineblock:
@@ -25,10 +26,13 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'
+        enable_lazy_ghost_objects: true
         entity_managers:
             engineblock:
                 naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
                 connection: ~
+                # Opt-in to new mapping driver mode as of Doctrine ORM 2.16, https://github.com/doctrine/orm/pull/10455
+                report_fields_where_declared: true
                 mappings:
                     # An array of mappings, which may be a bundle name or something else
                     Authentication:
