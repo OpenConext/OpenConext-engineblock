@@ -31,17 +31,9 @@ class EngineBlock_Database_ConnectionFactory
         $this->connection = $em->getConnection();
     }
 
-    /**
-     * Create a new Database connection, for a given mode self::MODE_READ and self::MODE_WRITE,
-     * defaults to write mode.
-     *
-     * @return \Doctrine\DBAL\Driver\PDO\Connection
-     *
-     * @deprecated This functionality will be removed
-     */
-    public function create()
+    public function create(): Doctrine\DBAL\Connection
     {
-        return $this->connection->getWrappedConnection();
+        return $this->connection;
     }
 }
 
