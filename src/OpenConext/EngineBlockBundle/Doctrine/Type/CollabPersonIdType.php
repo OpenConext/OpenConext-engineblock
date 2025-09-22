@@ -33,7 +33,7 @@ class CollabPersonIdType extends Type
         // overwrite the fieldDeclaration to always be MAX_LENGTH characters max, this is also enforced in the VO.
         $fieldDeclaration['length'] = CollabPersonId::MAX_LENGTH;
 
-        return $platform->getVarcharTypeDeclarationSQL($fieldDeclaration);
+        return $platform->getStringTypeDeclarationSQL($fieldDeclaration);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
