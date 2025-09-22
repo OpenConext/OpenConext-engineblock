@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use DateTime;
+use Doctrine\DBAL\Query\QueryBuilder;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Mdui;
@@ -522,6 +523,7 @@ final class ConsentControllerTest extends WebTestCase
     private function addConsentFixture($userId, $serviceId, $attributeHash, $consentType, $consentDate, $deletedAt)
     {
         $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        assert($queryBuilder instanceof QueryBuilder);
         $queryBuilder
             ->insert('consent')
             ->values([
@@ -540,13 +542,13 @@ final class ConsentControllerTest extends WebTestCase
                 'consent_date' => $consentDate,
                 'deleted_at' => $deletedAt,
             ])
-            ->execute();
+            ->executeStatement();
     }
 
     private function findConsentByUserIdAndSPEntityId(string $collabPersonId, string $spEntityId): array
     {
-        /** @var \Doctrine\DBAL\Query\QueryBuilder $queryBuilder */
         $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        assert($queryBuilder instanceof QueryBuilder);
         $queryBuilder
             ->select('*')
             ->from('consent')
@@ -557,9 +559,8 @@ final class ConsentControllerTest extends WebTestCase
                 'serviceId' => $spEntityId
             ]);
 
-        /** @var PDOStatement $statement */
-        $statement = $queryBuilder->execute();
-        return (array) $statement->fetchAll();
+        $result = $queryBuilder->executeQuery();
+        return $result->fetchAllAssociative();
     }
 
     private function addServiceProviderFixture(ServiceProvider $serviceProvider)
@@ -572,17 +573,19 @@ final class ConsentControllerTest extends WebTestCase
     private function clearMetadataFixtures()
     {
         $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        assert($queryBuilder instanceof QueryBuilder);
         $queryBuilder
             ->delete('sso_provider_roles_eb5')
-            ->execute();
+            ->executeStatement();
     }
 
     private function clearConsentFixtures()
     {
         $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        assert($queryBuilder instanceof QueryBuilder);
         $queryBuilder
             ->delete('consent')
-            ->execute();
+            ->executeStatement();
     }
 
     private function countConsentRemovals(array $dbResults): array

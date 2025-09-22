@@ -178,7 +178,7 @@ class DoctrineMetadataPushRepository
 
         $this->addDiscriminatorQuery($query, $metadata);
 
-        $result = $query->execute();
+        $result = $query->executeStatement();
         return $result;
     }
 
@@ -188,13 +188,16 @@ class DoctrineMetadataPushRepository
             ->select('id, entity_id')
             ->from(self::ROLES_TABLE_NAME);
 
+        assert($query instanceof QueryBuilder);
         $this->addDiscriminatorQuery($query, $metadata);
 
-        $result = $query->execute();
+        $result = $query->executeQuery();
+
         $results = [];
-        foreach ($result->fetchAll() as $record) {
+        foreach ($result->fetchAllAssociative() as $record) {
             $results[$record['id']] = $record['entity_id'];
         }
+
         return $results;
     }
 

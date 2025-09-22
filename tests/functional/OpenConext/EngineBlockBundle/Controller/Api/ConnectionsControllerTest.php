@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use App\Kernel;
+use Doctrine\DBAL\Query\QueryBuilder;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
@@ -389,9 +390,10 @@ class ConnectionsControllerTest extends WebTestCase
     private function clearMetadataFixtures()
     {
         $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        assert($queryBuilder instanceof QueryBuilder);
         $queryBuilder
             ->delete('sso_provider_roles_eb5')
-            ->execute();
+            ->executeStatement();
     }
 
     /**

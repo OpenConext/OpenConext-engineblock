@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use DateTime;
+use Doctrine\DBAL\Query\QueryBuilder;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -330,6 +331,7 @@ final class DeprovisionControllerTest extends WebTestCase
     private function addUserFixture($userId, $uuid)
     {
         $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        assert($queryBuilder instanceof QueryBuilder);
         $queryBuilder
             ->insert('user')
             ->values([
@@ -340,7 +342,7 @@ final class DeprovisionControllerTest extends WebTestCase
                 'collab_person_id' => $userId,
                 'uuid' => $uuid,
             ])
-            ->execute();
+            ->executeStatement();
     }
 
     /**
@@ -350,6 +352,7 @@ final class DeprovisionControllerTest extends WebTestCase
     private function addServiceProviderUuidFixture($spUuid, $spEntityId)
     {
         $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        assert($queryBuilder instanceof QueryBuilder);
         $queryBuilder
             ->insert('service_provider_uuid')
             ->values([
@@ -360,7 +363,7 @@ final class DeprovisionControllerTest extends WebTestCase
                 'uuid' => $spUuid,
                 'service_provider_entity_id' => $spEntityId,
             ])
-            ->execute();
+            ->executeStatement();
     }
 
     /**
@@ -371,6 +374,7 @@ final class DeprovisionControllerTest extends WebTestCase
     private function addSamlPersistentIdFixture($userUuid, $spUuid, $persistentId)
     {
         $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        assert($queryBuilder instanceof QueryBuilder);
         $queryBuilder
             ->insert('saml_persistent_id')
             ->values([
@@ -383,7 +387,7 @@ final class DeprovisionControllerTest extends WebTestCase
                 'service_provider_uuid' => $spUuid,
                 'persistent_id' => $persistentId,
             ])
-            ->execute();
+            ->executeStatement();
     }
 
     /**
@@ -396,6 +400,7 @@ final class DeprovisionControllerTest extends WebTestCase
     private function addConsentFixture($userId, $serviceId, $attributeHash, $consentType, $consentDate)
     {
         $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        assert($queryBuilder instanceof QueryBuilder);
         $queryBuilder
             ->insert('consent')
             ->values([
@@ -413,24 +418,25 @@ final class DeprovisionControllerTest extends WebTestCase
                 'consent_type' => $consentType,
                 'consent_date' => $consentDate,
             ])
-            ->execute();
+            ->executeStatement();
     }
 
     private function clearFixtures()
     {
         $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        assert($queryBuilder instanceof QueryBuilder);
         $queryBuilder
             ->delete('service_provider_uuid')
-            ->execute();
+            ->executeStatement();
         $queryBuilder
             ->delete('user')
-            ->execute();
+            ->executeStatement();
         $queryBuilder
             ->delete('saml_persistent_id')
-            ->execute();
+            ->executeStatement();
         $queryBuilder
             ->delete('consent')
-            ->execute();
+            ->executeStatement();
     }
 
     private function assertResponseIsJson(KernelBrowser $client)
