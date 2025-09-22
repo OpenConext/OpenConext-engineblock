@@ -337,8 +337,8 @@ final class DeprovisionControllerTest extends WebTestCase
                 'uuid' => ':uuid',
             ])
             ->setParameters([
-                ':collab_person_id' => $userId,
-                ':uuid' => $uuid,
+                'collab_person_id' => $userId,
+                'uuid' => $uuid,
             ])
             ->execute();
     }
@@ -357,8 +357,8 @@ final class DeprovisionControllerTest extends WebTestCase
                 'service_provider_entity_id' => ':service_provider_entity_id',
             ])
             ->setParameters([
-                ':uuid' => $spUuid,
-                ':service_provider_entity_id' => $spEntityId,
+                'uuid' => $spUuid,
+                'service_provider_entity_id' => $spEntityId,
             ])
             ->execute();
     }
@@ -379,9 +379,9 @@ final class DeprovisionControllerTest extends WebTestCase
                 'persistent_id' => ':persistent_id',
             ])
             ->setParameters([
-                ':user_uuid' => $userUuid,
-                ':service_provider_uuid' => $spUuid,
-                ':persistent_id' => $persistentId,
+                'user_uuid' => $userUuid,
+                'service_provider_uuid' => $spUuid,
+                'persistent_id' => $persistentId,
             ])
             ->execute();
     }
@@ -407,11 +407,11 @@ final class DeprovisionControllerTest extends WebTestCase
                 'deleted_at'   => '"0000-00-00 00:00:00"',
             ])
             ->setParameters([
-                ':user_id'      => sha1($userId),
-                ':service_id'   => $serviceId,
-                ':attribute'    => $attributeHash,
-                ':consent_type' => $consentType,
-                ':consent_date' => $consentDate,
+                'user_id'      => sha1($userId),
+                'service_id'   => $serviceId,
+                'attribute'    => $attributeHash,
+                'consent_type' => $consentType,
+                'consent_date' => $consentDate,
             ])
             ->execute();
     }

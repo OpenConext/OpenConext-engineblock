@@ -533,12 +533,12 @@ final class ConsentControllerTest extends WebTestCase
                 'deleted_at'   => ':deleted_at',
             ])
             ->setParameters([
-                ':user_id'      => sha1($userId),
-                ':service_id'   => $serviceId,
-                ':attribute'    => $attributeHash,
-                ':consent_type' => $consentType,
-                ':consent_date' => $consentDate,
-                ':deleted_at' => $deletedAt,
+                'user_id'      => sha1($userId),
+                'service_id'   => $serviceId,
+                'attribute'    => $attributeHash,
+                'consent_type' => $consentType,
+                'consent_date' => $consentDate,
+                'deleted_at' => $deletedAt,
             ])
             ->execute();
     }
@@ -553,8 +553,8 @@ final class ConsentControllerTest extends WebTestCase
             ->where('hashed_user_id = :userId')
             ->andWhere('service_id = :serviceId')
             ->setParameters([
-                ':userId' => sha1($collabPersonId),
-                ':serviceId' => $spEntityId
+                'userId' => sha1($collabPersonId),
+                'serviceId' => $spEntityId
             ]);
 
         /** @var PDOStatement $statement */
