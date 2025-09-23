@@ -28,12 +28,12 @@ class MetadataMduiType extends Type
 {
     const NAME = 'engineblock_metadata_mdui';
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         // We want a `TEXT` field declaration in our column, the `LONGTEXT` default causes issues when running the
         // DBMS in strict mode.
-        $fieldDeclaration['length'] = 65535;
-        return $platform->getJsonTypeDeclarationSQL($fieldDeclaration);
+        $column['length'] = 65535;
+        return $platform->getJsonTypeDeclarationSQL($column);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
@@ -65,11 +65,12 @@ class MetadataMduiType extends Type
             $mdui = Mdui::fromJson($value);
         } catch (InvalidArgumentException $e) {
             // get nice standard message, so we can throw it keeping the exception chain
-            $doctrineExceptionMessage = ConversionException::conversionFailedFormat(
+            $doctrineExceptionMessage = sprintf(
+                'Could not convert database value "%s" to Doctrine Type %s. Expected format: %s',
                 $value,
                 $this->getName(),
                 'valid serialized mdui json'
-            )->getMessage();
+            );
 
             throw new ConversionException($doctrineExceptionMessage, 0, $e);
         }

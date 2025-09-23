@@ -126,7 +126,7 @@ class ServiceRegistryFixture
         $queryBuilder = $this->entityManager->getConnection()->createQueryBuilder();
         $queryBuilder
             ->delete('sso_provider_roles_eb5')
-            ->execute();
+            ->executeStatement();
 
         return $this;
     }
@@ -135,12 +135,12 @@ class ServiceRegistryFixture
     {
         $queryBuilder = $this->entityManager->getConnection()->createQueryBuilder();
         $queryBuilder
-            ->delete('sso_provider_roles_eb5', 'roles')
+            ->delete('sso_provider_roles_eb5')
             ->where('roles.entity_id = :entityId')
             ->andWhere('roles.type = :type')
             ->setParameter('entityId', $entityId)
             ->setParameter('type', $role)
-            ->execute();
+            ->executeStatement();
 
         return $this;
     }
