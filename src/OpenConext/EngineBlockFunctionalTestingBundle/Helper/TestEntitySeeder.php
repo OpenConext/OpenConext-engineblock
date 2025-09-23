@@ -223,8 +223,8 @@ class TestEntitySeeder
             }
         }
 
-        $nameSort = function ($a, $b) {
-            return strtolower($a['Name']) > strtolower($b['Name']);
+        $nameSort = static function ($a, $b) {
+            return strcmp(strtolower($a['Name']), strtolower($b['Name']));
         };
 
         // Sort the IdP entries by name
