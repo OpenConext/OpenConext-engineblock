@@ -67,9 +67,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
         $this->assertEquals($nameIdPolicy['Format'], 'fooFormat');
     }
 
-    /**
-     * @dataProvider provideKeyExpectations
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideKeyExpectations')]
     public function testGetSigningCertificates(?string $keyOverride, bool $force, string $expectedResult)
     {
         $keys = [
@@ -96,7 +94,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
         );
     }
 
-    public function provideKeyExpectations()
+    public static function provideKeyExpectations()
     {
         return [
             'force default signing key' => [null, true, 'default'],

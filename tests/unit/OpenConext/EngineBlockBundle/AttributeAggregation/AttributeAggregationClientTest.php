@@ -29,16 +29,12 @@ use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Request;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Response;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @group AttributeAggregation
- */
+#[\PHPUnit\Framework\Attributes\Group('AttributeAggregation')]
 class AttributeAggregationClientTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_attributeaggregation_client_parses_the_aggregator_response()
     {
         $request = Request::from(

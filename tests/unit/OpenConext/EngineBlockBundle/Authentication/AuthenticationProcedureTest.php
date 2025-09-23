@@ -30,10 +30,8 @@ class AuthenticationProcedureTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group AuthenticationState
-     */
+    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_is_started_on_behalf_of_the_same_service_provider_as_given()
     {
         $serviceProvider = new Entity(new EntityId('my.service-provider.example'), EntityType::SP());
@@ -48,10 +46,8 @@ class AuthenticationProcedureTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group AuthenticationState
-     */
+    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_is_started_on_behalf_of_a_different_service_provider_as_given()
     {
         $serviceProvider = new Entity(new EntityId('my.service-provider.example'), EntityType::SP());
@@ -67,10 +63,8 @@ class AuthenticationProcedureTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group AuthenticationState
-     */
+    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_is_authenticated_at_the_same_identity_provider_as_given()
     {
         $serviceProvider = new Entity(new EntityId('my.service-provider.example'), EntityType::SP());
@@ -88,10 +82,8 @@ class AuthenticationProcedureTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group AuthenticationState
-     */
+    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_is_authenticated_at_the_different_identity_provider_as_given()
     {
         $serviceProvider = new Entity(new EntityId('my.service-provider.example'), EntityType::SP());
@@ -110,10 +102,8 @@ class AuthenticationProcedureTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group AuthenticationState
-     */
+    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_is_not_completed_at_all()
     {
         $serviceProvider = new Entity(new EntityId('my.service-provider.example'), EntityType::SP());
@@ -130,10 +120,8 @@ class AuthenticationProcedureTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group AuthenticationState
-     */
+    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_is_not_completed_after_the_time_given()
     {
         $serviceProvider = new Entity(new EntityId('my.service-provider.example'), EntityType::SP());
@@ -154,10 +142,8 @@ class AuthenticationProcedureTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group AuthenticationState
-     */
+    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_is_completed_after_the_time_given()
     {
         $serviceProvider = new Entity(new EntityId('my.service-provider.example'), EntityType::SP());
@@ -178,10 +164,8 @@ class AuthenticationProcedureTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group AuthenticationState
-     */
+    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_equals_the_same_authentication_procedure()
     {
         $serviceProvider  = new Entity(new EntityId('some.service-provider.example'), EntityType::SP());
@@ -201,10 +185,8 @@ class AuthenticationProcedureTest extends TestCase
         $this->assertTrue($authenticationProceduresAreEqual, 'The same authentication procedures should be equal');
     }
 
-    /**
-     * @test
-     * @group AuthenticationState
-     */
+    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_does_not_equal_an_authentication_procedure_with_another_service_provider()
     {
         $serviceProvider  = new Entity(new EntityId('some.service-provider.example'), EntityType::SP());
@@ -229,10 +211,8 @@ class AuthenticationProcedureTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group AuthenticationState
-     */
+    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_does_not_equal_an_authentication_procedure_without_an_identity_provider()
     {
         $serviceProvider  = new Entity(new EntityId('some.service-provider.example'), EntityType::SP());
@@ -255,10 +235,8 @@ class AuthenticationProcedureTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group AuthenticationState
-     */
+    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_does_not_equal_an_authentication_procedure_with_another_identity_provider()
     {
         $serviceProvider  = new Entity(new EntityId('some.service-provider.example'), EntityType::SP());
@@ -283,10 +261,8 @@ class AuthenticationProcedureTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group AuthenticationState
-     */
+    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_does_not_equal_an_authentication_procedure_with_another_date_of_completion()
     {
         $serviceProvider  = new Entity(new EntityId('some.service-provider.example'), EntityType::SP());
@@ -310,10 +286,8 @@ class AuthenticationProcedureTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group AuthenticationState
-     */
+    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_authentication_procedure_does_not_equal_an_authentication_procedure_without_a_date_of_completion()
     {
         $serviceProvider  = new Entity(new EntityId('some.service-provider.example'), EntityType::SP());

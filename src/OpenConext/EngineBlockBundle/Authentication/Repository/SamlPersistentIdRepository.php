@@ -18,12 +18,21 @@
 
 namespace OpenConext\EngineBlockBundle\Authentication\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonUuid;
 use OpenConext\EngineBlockBundle\Authentication\Entity\SamlPersistentId;
 
-class SamlPersistentIdRepository extends EntityRepository
+/**
+ * @extends \Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository<\OpenConext\EngineBlockBundle\Authentication\Entity\SamlPersistentId>
+ */
+class SamlPersistentIdRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, SamlPersistentId::class);
+    }
+
     /**
      * @param CollabPersonUuid $uuid
      * @return SamlPersistentId[]

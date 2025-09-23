@@ -40,7 +40,7 @@ class IdentityProviderEntityCollection implements IteratorAggregate
         return $this->map[$entityId];
     }
 
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->map);
     }

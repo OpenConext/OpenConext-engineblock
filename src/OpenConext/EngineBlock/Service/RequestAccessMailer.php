@@ -18,8 +18,8 @@
 
 namespace OpenConext\EngineBlock\Service;
 
-use Swift_Mailer;
-use Swift_Message;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 class RequestAccessMailer
 {
@@ -46,10 +46,7 @@ The comment was:
 
 TPL;
 
-    /**
-     * @var Swift_Mailer
-     */
-    private $mailer;
+    private MailerInterface $mailer;
 
     /**
      * @var string
@@ -57,10 +54,9 @@ TPL;
     private $requestAccessEmailAddress;
 
     /**
-     * @param Swift_Mailer $mailer
      * @param string $requestAccessEmailAddress
      */
-    public function __construct(Swift_Mailer $mailer, $requestAccessEmailAddress)
+    public function __construct(MailerInterface $mailer, $requestAccessEmailAddress)
     {
         $this->mailer = $mailer;
         $this->requestAccessEmailAddress = $requestAccessEmailAddress;
@@ -93,12 +89,12 @@ TPL;
 
         // We use the destination email address also as a From since we do
         // not have a better generic sender address available currently.
-        $message = new Swift_Message();
+        $message = new Email();
         $message
-            ->setSubject($subject)
-            ->setFrom($this->requestAccessEmailAddress)
-            ->setTo($this->requestAccessEmailAddress)
-            ->setBody($body, 'text/plain');
+            ->subject($subject)
+            ->from($this->requestAccessEmailAddress)
+            ->to($this->requestAccessEmailAddress)
+            ->text($body);
 
         $this->mailer->send($message);
     }
@@ -126,12 +122,12 @@ TPL;
             $comment
         );
 
-        $message = new Swift_Message();
+        $message = new Email();
         $message
-            ->setSubject($subject)
-            ->setFrom($this->requestAccessEmailAddress)
-            ->setTo($this->requestAccessEmailAddress)
-            ->setBody($body, 'text/plain');
+            ->subject($subject)
+            ->from($this->requestAccessEmailAddress)
+            ->to($this->requestAccessEmailAddress)
+            ->text($body);
 
 
         $this->mailer->send($message);

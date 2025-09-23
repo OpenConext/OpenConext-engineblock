@@ -26,9 +26,7 @@ class FeedbackInformationTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @dataProvider attributePredictions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('attributePredictions')]
     public function test_attr_safe_key_is_returned($identifier, $input, $expectation)
     {
         $feedbackInfo = new FeedbackInformation($input, 'Test value');
@@ -40,7 +38,7 @@ class FeedbackInformationTest extends TestCase
         );
     }
 
-    public function attributePredictions()
+    public static function attributePredictions()
     {
         return [
             ['with whitespace', 'my attribute', 'my-attribute'],

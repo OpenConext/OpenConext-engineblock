@@ -45,9 +45,12 @@ class EngineBlock_User
 
         $query = "DELETE FROM consent
                     WHERE hashed_user_id = ? AND service_id = ?";
-        $parameters = array(sha1($this->getUid()), $spId);
+
         $statement = $pdo->prepare($query);
-        $statement->execute($parameters);
+
+        $statement->bindValue(1, sha1($this->getUid()));
+        $statement->bindValue(2, $spId);
+        $statement->executeStatement();
     }
 
     public function getConsent()
@@ -56,12 +59,9 @@ class EngineBlock_User
         $query = 'SELECT service_id FROM consent
                     WHERE hashed_user_id = ?
                     AND deleted_at IS NULL';
-        $parameters = array(
-            sha1($this->getUid())
-        );
         $statement = $pdo->prepare($query);
-        $statement->execute($parameters);
-        $resultSet = $statement->fetchAll();
+        $statement->bindValue(1, sha1($this->getUid()));
+        $resultSet = $statement->executeQuery()->fetchAllAssociative();
 
         $result = array();
         foreach($resultSet as $value) {
@@ -112,16 +112,14 @@ class EngineBlock_User
 
         $query = "DELETE FROM consent
                     WHERE hashed_user_id = ?";
-        $parameters = array(
-            sha1($this->getUid())
-        );
 
         $statement = $pdo->prepare($query);
-        $statement->execute($parameters);
+        $statement->bindValue(1, sha1($this->getUid()));
+        $statement->executeStatement();
     }
 
     /**
-     * @return PDO
+     * @return \Doctrine\DBAL\Connection
      */
     protected function _getDatabaseConnection()
     {

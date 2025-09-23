@@ -85,10 +85,8 @@ class SsoNotificationServiceTest extends TestCase
             ));
     }
 
-    /**
-     * @test
-     * @group SsoNotification
-     */
+    #[\PHPUnit\Framework\Attributes\Group('SsoNotification')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function test_get_sso_cookie()
     {
         $this->request->cookies->add([ 'ssonot' => $this->cookieValue ]);
@@ -98,10 +96,8 @@ class SsoNotificationServiceTest extends TestCase
 
     }
 
-    /**
-     * @test
-     * @group SsoNotification
-     */
+    #[\PHPUnit\Framework\Attributes\Group('SsoNotification')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function test_handle_sso_notification()
     {
         $this->request->cookies->add([ 'ssonot' => $this->cookieValue ]);
@@ -111,10 +107,8 @@ class SsoNotificationServiceTest extends TestCase
         $this->assertEquals($this->idpEntityId, $entityId);
     }
 
-    /**
-     * @test
-     * @group SsoNotification
-     */
+    #[\PHPUnit\Framework\Attributes\Group('SsoNotification')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function test_handle_unknown_idp()
     {
         $this->request->cookies->add([ 'ssonot' => $this->getStandardCookieValue($this->idpEntityId . "test") ]);
@@ -124,10 +118,8 @@ class SsoNotificationServiceTest extends TestCase
         Phake::verify($this->loggerMock)->warning(Phake::anyParameters());
     }
 
-    /**
-     * @test
-     * @group SsoNotification
-     */
+    #[\PHPUnit\Framework\Attributes\Group('SsoNotification')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function test_invalid_encryption_key()
     {
         $ssoNotificationService = new SsoNotificationService(
@@ -144,10 +136,8 @@ class SsoNotificationServiceTest extends TestCase
         Phake::verify($this->loggerMock)->warning(Phake::anyParameters());
     }
 
-    /**
-     * @test
-     * @group SsoNotification
-     */
+    #[\PHPUnit\Framework\Attributes\Group('SsoNotification')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function test_invalid_json()
     {
         $data = "{\"url\":\"$this->idpUrl\"}";

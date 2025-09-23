@@ -24,13 +24,13 @@ use PHPUnit\Framework\TestCase;
 class UidTest extends TestCase
 {
     /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     * @dataProvider \OpenConext\TestDataProvider::notStringOrEmptyString
      *
      * @param mixed $notStringOrEmptyString
      */
+    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notStringOrEmptyString')]
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function uid_must_be_a_non_empty_string($notStringOrEmptyString)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -38,11 +38,9 @@ class UidTest extends TestCase
         new Uid($notStringOrEmptyString);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function uid_can_be_retrieved()
     {
         $uidValue = md5('foobar');
@@ -52,11 +50,9 @@ class UidTest extends TestCase
         $this->assertSame($uidValue, $uid->getUid());
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function uid_equality_is_determined_based_on_value()
     {
         $base = new Uid('some:uid');
@@ -67,11 +63,9 @@ class UidTest extends TestCase
         $this->assertFalse($base->equals($different));
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_uid_can_be_cast_to_string()
     {
         $uid = new Uid('some:uid');

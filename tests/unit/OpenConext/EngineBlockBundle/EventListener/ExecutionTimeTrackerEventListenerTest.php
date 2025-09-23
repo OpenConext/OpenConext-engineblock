@@ -30,10 +30,8 @@ class ExecutionTimeTrackerEventListenerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group execution-time
-     */
+    #[\PHPUnit\Framework\Attributes\Group('execution-time')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function execution_time_tracker_is_tracking_when_it_has_been_started()
     {
         $stopwatch = Mockery::mock(Stopwatch::class);
@@ -54,10 +52,8 @@ class ExecutionTimeTrackerEventListenerTest extends TestCase
         $this->assertTrue($isTracking);
     }
 
-    /**
-     * @test
-     * @group execution-time
-     */
+    #[\PHPUnit\Framework\Attributes\Group('execution-time')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function execution_time_tracker_is_not_tracking_when_it_has_not_been_started()
     {
         $stopwatch = Mockery::mock(Stopwatch::class);
@@ -73,10 +69,8 @@ class ExecutionTimeTrackerEventListenerTest extends TestCase
         $this->assertFalse($isTracking);
     }
 
-    /**
-     * @test
-     * @group execution-time
-     */
+    #[\PHPUnit\Framework\Attributes\Group('execution-time')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function exceeding_of_execution_time_is_determined_correctly()
     {
         $executionTimeInMilliseconds = 10;
@@ -137,10 +131,8 @@ class ExecutionTimeTrackerEventListenerTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group execution-time
-     */
+    #[\PHPUnit\Framework\Attributes\Group('execution-time')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function how_much_time_remains_until_a_given_time_that_is_longer_than_the_current_execution_time_is_reached_is_calculated_correctly()
     {
         $longerTimeInMilliseconds = 1000;
@@ -168,10 +160,8 @@ class ExecutionTimeTrackerEventListenerTest extends TestCase
         $this->assertEquals($longerTimeInMilliseconds, $timeRemaining->getExecutionTime());
     }
 
-    /**
-     * @test
-     * @group execution-time
-     */
+    #[\PHPUnit\Framework\Attributes\Group('execution-time')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function there_is_no_time_remaining_until_a_given_time_that_is_the_same_as_the_current_execution_time()
     {
         $sameTimeInMilliseconds = 10;
@@ -198,10 +188,8 @@ class ExecutionTimeTrackerEventListenerTest extends TestCase
 
         $this->assertEquals(ExecutionTime::of(0), $timeRemaining);
     }
-    /**
-     * @test
-     * @group execution-time
-     */
+    #[\PHPUnit\Framework\Attributes\Group('execution-time')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function there_is_no_time_remaining_until_a_given_time_that_is_shorter_than_the_current_execution_time()
     {
         $currentExecutionTimeInMilliseconds = 10;

@@ -37,7 +37,7 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
     /**
      * {@inheritdoc}
      */
-    public function getResponse()
+    public function getResponse(): EngineBlock_Saml2_ResponseAnnotationDecorator
     {
         return $this->_response;
     }

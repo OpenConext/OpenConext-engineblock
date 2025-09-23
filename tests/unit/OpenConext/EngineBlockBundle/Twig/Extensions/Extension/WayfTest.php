@@ -101,9 +101,7 @@ class WayfTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider previousSelectionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('previousSelectionProvider')]
     public function testGetConnectedIdpsWithPreviousSelection(string $storedCookieValue, string $expectedName)
     {
         // Create a mock request with cookie

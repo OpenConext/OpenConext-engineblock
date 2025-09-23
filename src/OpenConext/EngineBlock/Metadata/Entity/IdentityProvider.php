@@ -37,7 +37,6 @@ use SAML2\Constants;
 
 /**
  * @package OpenConext\EngineBlock\Metadata\Entity
- * @ORM\Entity
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -45,6 +44,7 @@ use SAML2\Constants;
  * WARNING: Please don't use this entity directly but use the dedicated factory instead.
  * @see \OpenConext\EngineBlock\Factory\Factory\IdentityProviderFactory
  */
+#[ORM\Entity]
 class IdentityProvider extends AbstractRole
 {
     const GUEST_QUALIFIER_ALL = 'All';
@@ -64,37 +64,32 @@ class IdentityProvider extends AbstractRole
 
     /**
      * @var bool
-     *
-     * @ORM\Column(name="enabled_in_wayf", type="boolean")
      */
-    public $enabledInWayf = true;
+    #[ORM\Column(name: 'enabled_in_wayf', type: \Doctrine\DBAL\Types\Types::BOOLEAN)]
+    public ?bool $enabledInWayf = true;
 
     /**
      * @var Service[]
-     *
-     * @ORM\Column(name="single_sign_on_services", type="array", length=65535)
      */
+    #[ORM\Column(name: 'single_sign_on_services', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
     public $singleSignOnServices = array();
 
     /**
      * @var ConsentSettings
-     *
-     * @ORM\Column(name="consent_settings", type="json", length=16777215)
      */
+    #[ORM\Column(name: 'consent_settings', type: \Doctrine\DBAL\Types\Types::JSON, length: 16777215)]
     private $consentSettings;
 
     /**
      * @var ShibMdScope[]
-     *
-     * @ORM\Column(name="shib_md_scopes", type="array", length=65535)
      */
+    #[ORM\Column(name: 'shib_md_scopes', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
     public $shibMdScopes = array();
 
     /**
      * @var array<int, Discovery>
-     *
-     * @ORM\Column(name="idp_discoveries", type="json")
      */
+    #[ORM\Column(name: 'idp_discoveries', type: \Doctrine\DBAL\Types\Types::JSON)]
     private $discoveries;
 
     /**

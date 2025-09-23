@@ -32,3 +32,4 @@ class IdentityProviderTest extends TestCase
         $this->assertEquals($entityId, $idp->entityId);
     }
 }
+

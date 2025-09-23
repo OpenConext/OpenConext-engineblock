@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-define('TEST_RESOURCES_DIR', dirname(__FILE__) . '/resources');
+define('TEST_RESOURCES_DIR', __DIR__ . '/resources');
 
 require_once realpath(__DIR__) . '/../vendor/autoload.php';
 require_once realpath(__DIR__) . '/../src/Kernel.php';

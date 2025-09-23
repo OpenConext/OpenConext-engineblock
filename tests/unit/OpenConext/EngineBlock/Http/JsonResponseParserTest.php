@@ -27,13 +27,10 @@ class JsonResponseParserTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group Http
-     * @group Json
-     *
-     * @dataProvider \OpenConext\TestDataProvider::notString()
-     */
+    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notString')]
+    #[\PHPUnit\Framework\Attributes\Group('Http')]
+    #[\PHPUnit\Framework\Attributes\Group('Json')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function json_response_to_parse_must_be_a_string($nonString)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -42,11 +39,9 @@ class JsonResponseParserTest extends TestCase
         JsonResponseParser::parse($nonString);
     }
 
-    /**
-     * @test
-     * @group Http
-     * @group Json
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Http')]
+    #[\PHPUnit\Framework\Attributes\Group('Json')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_exception_is_thrown_if_the_json_is_malformed()
     {
         $this->expectException(InvalidJsonException::class);

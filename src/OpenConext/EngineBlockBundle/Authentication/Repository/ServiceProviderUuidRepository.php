@@ -18,11 +18,20 @@
 
 namespace OpenConext\EngineBlockBundle\Authentication\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use OpenConext\EngineBlockBundle\Authentication\Entity\ServiceProviderUuid;
 
-class ServiceProviderUuidRepository extends EntityRepository
+/**
+ * @extends \Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository<\OpenConext\EngineBlockBundle\Authentication\Entity\ServiceProviderUuid>
+ */
+class ServiceProviderUuidRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, ServiceProviderUuid::class);
+    }
+
     /**
      * @param string $uuid
      * @return string|null

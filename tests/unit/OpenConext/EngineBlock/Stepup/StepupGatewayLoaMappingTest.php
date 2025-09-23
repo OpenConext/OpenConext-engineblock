@@ -31,10 +31,8 @@ class StepupGatewayLoaMappingTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group Stepup
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Stepup')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_stepup_loa_mapping_object_should_be_successful_populated()
     {
         $mapping = [
@@ -84,10 +82,8 @@ class StepupGatewayLoaMappingTest extends TestCase
         $stepupLoaMapping->transformToGatewayLoa(Loa::create(20, 'loa2'));
     }
 
-    /**
-     * @test
-     * @group Stepup
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Stepup')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_stepup_loa_mapping_object_should_successful_map_back()
     {
         $mapping = [
@@ -145,10 +141,8 @@ class StepupGatewayLoaMappingTest extends TestCase
         $this->assertSame('ebLoa3', $stepupLoaMapping->transformToEbLoa($gwLoa3)->getIdentifier());
     }
 
-    /**
-     * @test
-     * @group Stepup
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Stepup')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_stepup_loa_mapping_object_should_return_an_exception_when_unable_to_map_back()
     {
         $mapping = [
@@ -183,10 +177,8 @@ class StepupGatewayLoaMappingTest extends TestCase
         $stepupLoaMapping->transformToEbLoa(Loa::create(20, 'loa2'));
     }
 
-    /**
-     * @test
-     * @group Stepup
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Stepup')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_mapping_must_be_valid_no_duplicates_allowed()
     {
         $mapping = [
@@ -219,10 +211,8 @@ class StepupGatewayLoaMappingTest extends TestCase
         new StepupGatewayLoaMapping($mapping, 'gatewayLoa1', $loaRepository);
     }
 
-    /**
-     * @test
-     * @group Stepup
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Stepup')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_mapping_must_be_valid_no_duplicates_in_gw_config_allowed()
     {
         $mapping = [

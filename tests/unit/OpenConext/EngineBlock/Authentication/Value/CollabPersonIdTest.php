@@ -23,11 +23,9 @@ use PHPUnit\Framework\TestCase;
 
 class CollabPersonIdTest extends TestCase
 {
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_predictable_collab_person_id_is_generated_with_at_signs_replaced_with_underscores()
     {
         $schacHomeOrganizationValue = 'openconext.org';
@@ -47,13 +45,13 @@ class CollabPersonIdTest extends TestCase
     }
 
     /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     * @dataProvider \OpenConext\TestDataProvider::notStringOrEmptyString
      *
      * @param mixed $notStringOrEmptyString
      */
+    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notStringOrEmptyString')]
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function collab_person_id_must_be_a_non_empty_string($notStringOrEmptyString)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -62,13 +60,13 @@ class CollabPersonIdTest extends TestCase
     }
 
     /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     * @dataProvider invalidNameSpaceProvider
      *
      * @param string $wronglyNamespaced
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidNameSpaceProvider')]
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function collab_person_id_must_start_with_the_correct_namespace($wronglyNamespaced)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -79,7 +77,7 @@ class CollabPersonIdTest extends TestCase
     /**
      * @return array
      */
-    public function invalidNameSpaceProvider()
+    public static function invalidNameSpaceProvider()
     {
         $user = ':openconext:unique-user-id';
 
@@ -90,11 +88,9 @@ class CollabPersonIdTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function collab_person_id_must_not_be_longer_than_the_maximum_allowed_number_of_characters()
     {
         $namespaceLength = strlen(CollabPersonId::URN_NAMESPACE);
@@ -117,11 +113,9 @@ class CollabPersonIdTest extends TestCase
         $this->assertTrue($exceptionCaughtAtConstruction($aboveLimit));
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function collab_person_id_can_be_retrieved()
     {
         $collabPersonIdValue = CollabPersonId::URN_NAMESPACE . ':openconext:unique-user-id';
@@ -131,11 +125,9 @@ class CollabPersonIdTest extends TestCase
         $this->assertEquals($collabPersonIdValue, $collabPersonId->getCollabPersonId());
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function collab_person_ids_are_only_equal_if_created_with_the_same_value()
     {
         $firstId  = CollabPersonId::URN_NAMESPACE . ':openconext:unique-user-id';
@@ -149,11 +141,9 @@ class CollabPersonIdTest extends TestCase
         $this->assertFalse($base->equals($different));
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_collab_person_id_can_be_cast_to_string()
     {
         $collabPersonIdValue = CollabPersonId::URN_NAMESPACE . ':openconext:unique-user-id';

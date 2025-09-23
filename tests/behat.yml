@@ -69,17 +69,12 @@ default:
         Behat\MinkExtension:
             browser_name: chrome
             base_url: https://engine.dev.openconext.local/
-            goutte: ~
             sessions:
                 default:
-                    goutte:
-                        # For Goutte 4+/Symfony HttpClient, use server_parameters
-                        server_parameters:
+                    browserkit_http:
+                        http_client_parameters:
                             verify_peer: false
                             verify_host: false
-                        # For older Goutte/Guzzle setups, keep for compatibility
-                        guzzle_parameters:
-                            verify: false
                 chrome:
                     chrome:
                         api_url: http://chrome.dev.openconext.local:9222
