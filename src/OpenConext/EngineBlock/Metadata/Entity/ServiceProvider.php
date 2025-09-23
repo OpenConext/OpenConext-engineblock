@@ -29,7 +29,6 @@ use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Service;
-use ReflectionClass;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 
@@ -380,22 +379,42 @@ class ServiceProvider extends AbstractRole
      */
     public function __sleep()
     {
-        $properties = [];
-        $reflection = new ReflectionClass($this);
-
-        foreach ($reflection->getProperties() as $property) {
-            // Skip certificates explicitly, as resources cannot be serialized
-            if ($property->getName() === 'certificates') {
-                continue;
-            }
-
-            if ($property->isStatic()) {
-                continue;
-            }
-
-            $properties[] = $property->getName();
-        }
-
-        return $properties;
+        return [
+            'attributeReleasePolicy',
+            'assertionConsumerServices',
+            'allowedIdpEntityIds',
+            'allowAll',
+            'requestedAttributes',
+            'supportUrlEn',
+            'supportUrlNl',
+            'supportUrlPt',
+            'id',
+            'entityId',
+            'nameNl',
+            'nameEn',
+            'namePt',
+            'descriptionNl',
+            'descriptionEn',
+            'descriptionPt',
+            'displayNameNl',
+            'displayNameEn',
+            'displayNamePt',
+            'logo',
+            'organizationNl',
+            'organizationEn',
+            'organizationPt',
+            'keywordsNl',
+            'keywordsEn',
+            'keywordsPt',
+            'workflowState',
+            'contactPersons',
+            'nameIdFormat',
+            'supportedNameIdFormats',
+            'singleLogoutService',
+            'requestsMustBeSigned',
+            'manipulation',
+            'coins',
+            'mdui',
+        ];
     }
 }
