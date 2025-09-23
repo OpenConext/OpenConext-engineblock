@@ -175,7 +175,11 @@ class EngineBlock_Corto_Model_Consent
 
         assert($statement instanceof Statement);
         try{
-            $statement->executeStatement($parameters);
+            foreach ($parameters as $index => $parameter){
+                $statement->bindValue($index + 1, $parameter);
+            }
+
+            $statement->executeStatement();
         }catch (\Doctrine\DBAL\Exception $e){
             throw new EngineBlock_Corto_Module_Services_Exception(
                 sprintf('Error storing consent: "%s"', var_export($e->getMessage(), true)),
@@ -219,7 +223,10 @@ class EngineBlock_Corto_Model_Consent
 
             $statement = $dbh->prepare($query);
             assert($statement instanceof Statement);
-            $rows = $statement->executeQuery($parameters);
+            foreach ($parameters as $position => $parameter) {
+                $statement->bindValue($position + 1, $parameter);
+            }
+            $rows = $statement->executeQuery();
 
             if ($rows->rowCount() < 1) {
                 // No stored consent found
