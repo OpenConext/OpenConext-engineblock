@@ -11,19 +11,45 @@ New feature:
     The `feature_stepup_send_user_attributes` setting is used to enable this feature
     If enabled, specify the attributes the add in the AuthnRequest using `stepup.callout_user_attributes`.
 
-## 6.17.0
 Maintenance:
-  * Upgrade saml2 library to 4.17.0
-New:
-  * Add default RequestedAuthnContext
-  * Add explicit IdP signing key feedback (#1791)
-  * Add in flight authentication limit (#1803)
-Changed:
-  * Update database client version to MariaDB 10.6.0 (#1820)
-  * Add discovery support (#1800)
-  * Read & store metadata coin:collab_enabled (#1818)
+* Update database client version to MariaDB 10.6.0
+* Upgrade saml2 library to 4.17.0
+* Update nanoid to 3.3.6
+* Update elliptic to 6.6.1
+* Update Devconf installation and docs
+* Add qa tooling helper scripts and drop Ant build.xml (#1781)
+* Fix composer lock file (#1785)
 
-TODO: Add changes since last release
+New Features:
+* Add configurable default RequestedAuthnContext
+  By setting the Manage option `metadata:coin:defaultRAC` for an IdP, this value will be sent by
+  default if no other is set (either in the AuthnReqeust or form a fixed MFA rule).
+* Support additional WAYF entries per IdP Endpoint with dedicated name, logo, keywords (#1338);
+  multiple WAYF-entries per IdP can be specified by filling the `DiscoveryName:[0-9]:<lang>`,
+  `keywords:[0-9]:<lang>` and `logo:[0-9]:<lang>` fields.
+  See also [OpenConext-manage#457](https://github.com/OpenConext/OpenConext-manage/issues/457)
+* Add configurable client timeout for AA and PDP (#1797)
+* Limited the number of outstanding AuthNRequests per session (#1345)
+
+Changes:
+* Remove confusing key_id from stepup callout logging (#1343)
+* Read & store metadata coin:collab_enabled (#1818);
+  this setting does nothing for now but prepares for merging of SBS integration
+* Make the consent container slightly wider (#1324)
+* Improve the formatting and readability of the IdP debug mail (#1330)
+* Stricter regex for urn validation (#1339)
+* Improve validation of allowed values for eduPersonScopedAffiliation
+* Use assertion id for session index (#41)
+* Add configurable http client timeout (#1777)
+* Log to stderr by default (#1792)
+* Add explicit IdP signing key feedback (#1328)
+
+
+Bugfixes
+* Improve handling of PDP timeout error (#1285)
+* Validate numeric key in ARP settings on metadata push (#1285)
+* Set the correct database version in doctrine (#1811)
+
 
 ## 6.15.3
 Maintenance:
