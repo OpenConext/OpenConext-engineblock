@@ -6,10 +6,16 @@ We will continue to post relevant release notes on the GitHub release page. More
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
 ## 6.18.0
+
 New feature:
-  * Support for adding UserAtributes in the SFO AuthnRequest to the Stepup-Gateway required for GSSP Fallback
-    The `feature_stepup_send_user_attributes` setting is used to enable this feature
-    If enabled, specify the attributes the add in the AuthnRequest using `stepup.callout_user_attributes`.
+* Support for adding UserAtributes in the SFO AuthnRequest to the Stepup-Gateway required for GSSP Fallback
+  The `feature_stepup_send_user_attributes` setting is used to enable this feature
+  If enabled, specify the attributes the add in the AuthnRequest using `stepup.callout_user_attributes`.
+
+## 6.17.0 (not released)
+
+Dependencies:
+* This release requires Manage >= 9.0.1
 
 Maintenance:
 * Update database client version to MariaDB 10.6.0
@@ -53,21 +59,23 @@ Bugfixes
 
 ## 6.15.3
 Maintenance:
-  * Upgrade saml2 library
+* Upgrade saml2 library
 
 ## 6.15.2
+
 Changed:
-  * Docker: Change logging to json5
+* Docker: Change logging to json5
+
 Maintenance:
-  * Upgrade elliptic
+* Upgrade elliptic
 
 ## 6.15.1
 
 Changed:
- * Stepup: add check that returned NameID matches the one we requested,
-   should never happen, added for defense-in-depth.
- * Improved error message on fatal error.
- * Change the default for the feature block_user_on_violation to on.
+* Stepup: add check that returned NameID matches the one we requested,
+  should never happen, added for defense-in-depth.
+* Improved error message on fatal error.
+* Change the default for the feature block_user_on_violation to on.
 
 Maintenance:
  * Upgrade twig dependency
