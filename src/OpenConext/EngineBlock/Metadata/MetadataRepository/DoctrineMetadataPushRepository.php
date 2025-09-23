@@ -174,7 +174,7 @@ class DoctrineMetadataPushRepository
         $query = $this->connection->createQueryBuilder()
             ->delete(self::ROLES_TABLE_NAME)
             ->where('id IN (:ids)')
-            ->setParameter('ids', $roles, Connection::PARAM_INT_ARRAY);
+            ->setParameter('ids', $roles, \Doctrine\DBAL\ArrayParameterType::INTEGER);
 
         $this->addDiscriminatorQuery($query, $metadata);
 

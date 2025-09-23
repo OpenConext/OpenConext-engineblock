@@ -65,12 +65,12 @@ class CollabPersonIdType extends Type
         try {
             $entityId = new CollabPersonId($value);
         } catch (InvalidArgumentException $e) {
-            // get nice standard message, so we can throw it keeping the exception chain
-            $doctrineExceptionMessage = ConversionException::conversionFailedFormat(
+            $doctrineExceptionMessage = sprintf(
+                'Could not convert database value "%s" to Doctrine Type %s. Expected format: %s',
                 $value,
                 $this->getName(),
                 'a valid CollabPersonId'
-            )->getMessage();
+            );
 
             throw new ConversionException($doctrineExceptionMessage, 0, $e);
         }
