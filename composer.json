@@ -59,7 +59,7 @@
         "ext-zlib": "*",
         "behat/behat": "^3.23",
         "behat/mink": "~1.7",
-        "behat/mink-goutte-driver": "~2.0",
+        "behat/mink-browserkit-driver": "^2.0",
         "dmore/behat-chrome-extension": "^1.4",
         "dmore/chrome-mink-driver": "^2.9",
         "friends-of-behat/mink-extension": "^2.6",
@@ -76,6 +76,7 @@
         "rector/rector": "^2.1",
         "squizlabs/php_codesniffer": "^3.7",
         "symfony/debug-bundle": "5.4.*",
+        "symfony/http-client": "5.4.*",
         "symfony/phpunit-bridge": "^7.3",
         "symfony/var-dumper": "5.4.*",
         "symfony/web-profiler-bundle": "5.4.*"
