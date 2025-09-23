@@ -19,18 +19,20 @@
 namespace OpenConext\EngineBlockBundle\Authentication\Repository;
 
 use DateTime;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Connection as DbalConnection;
-use Doctrine\DBAL\DBALException;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use OpenConext\EngineBlock\Authentication\Model\Consent;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 use OpenConext\EngineBlock\Exception\RuntimeException;
-use PDO;
 use Psr\Log\LoggerInterface;
 use function sha1;
 
-final class DbalConsentRepository implements ConsentRepository
+/**
+ * @extends \Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository<\OpenConext\EngineBlock\Authentication\Model\Consent>
+ */
+final class DbalConsentRepository extends ServiceEntityRepository implements ConsentRepository
 {
     /**
      * @var DbalConnection
@@ -42,9 +44,11 @@ final class DbalConsentRepository implements ConsentRepository
      */
     private $logger;
 
-    public function __construct(EntityManagerInterface $entityManager, LoggerInterface $logger)
+    public function __construct(ManagerRegistry $registry, LoggerInterface $logger)
     {
-        $this->connection = $entityManager->getConnection();
+        parent::__construct($registry, Consent::class);
+
+        $this->connection = $registry->getConnection();
         $this->logger = $logger;
     }
 
