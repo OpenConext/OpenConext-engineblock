@@ -14,7 +14,7 @@ the EngineBlock wiki.
 ## 6.18.0
 
 Dependencies:
-* This release requires Manage >= 9.0.1
+* This release requires Manage >= 9.0.1; for the IdP-based PDP calls, Manage 9.4 is required.
 
 Maintenance:
 * Replace abandoned container-interop/container-interop
@@ -28,6 +28,9 @@ New feature:
   if enabled, specify the attributes to add to the AuthnRequest using `stepup.callout_user_attributes`.
   The default is to send `schacHomeOrganization` and `mail`.
 * Prevent double entries in the Discovery caused by duplicate `name:*` and DiscoveryName:*` entries in Manage (#1852)
+* (**pending**) Request PDP decision based on IdP-setting (#1857); in Manage (>=9.4) it is possible to set the
+  `coin:policy_enforcement_decision_required` flag for an IdP in addition to for an SP. Also policies no longer require an SP to
+  be specified and can be applied to all logins from an IdP.
 
 Changes:
 * Set width of debug page to browser width (#1790)
@@ -82,10 +85,10 @@ Bugfixes
 ## 6.15.4
 
 Maintenance:
-  * Fix composer lockfile (#1785)
-  * Add qa tooling helper scripts and drop Ant build.xml (#1781)
-  * Update Devconf installation and docs (#1781)
-  * Remove confusing key_id from stepup callout logging
+* Fix composer lockfile (#1785)
+* Add qa tooling helper scripts and drop Ant build.xml (#1781)
+* Update Devconf installation and docs (#1781)
+* Remove confusing key_id from stepup callout logging
 
 ## 6.15.3
 
