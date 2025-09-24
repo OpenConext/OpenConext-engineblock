@@ -26,6 +26,7 @@ New feature:
   This is required for GSSP Fallback.
   The `feature_stepup_send_user_attributes` setting is used to enable this feature;
   if enabled, specify the attributes to add to the AuthnRequest using `stepup.callout_user_attributes`.
+  The default is to send `schacHomeOrganization` and `mail`.
 * Prevent double entries in the Discovery caused by duplicate `name:*` and DiscoveryName:*` entries in Manage (#1852)
 
 Changes:
