@@ -7,10 +7,27 @@ More information about our release strategy can be found in the [Development Gui
 
 ## 6.18.0
 
+Dependencies:
+* This release requires Manage >= 9.0.1
+
+Maintenance:
+* Replace abandoned container-interop/container-interop
+* HTML templates: remove trailing slash on void elements
+* Update pbkdf2 from 3.1.2 to 3.1.3 in /theme
+
 New feature:
-* Support for adding UserAtributes in the SFO AuthnRequest to the Stepup-Gateway required for GSSP Fallback
-  The `feature_stepup_send_user_attributes` setting is used to enable this feature
-  If enabled, specify the attributes the add in the AuthnRequest using `stepup.callout_user_attributes`.
+* Support for adding UserAtributes in the SFO AuthnRequest to the Stepup-Gateway (#1826).
+  This is required for GSSP Fallback.
+  The `feature_stepup_send_user_attributes` setting is used to enable this feature;
+  if enabled, specify the attributes to add to the AuthnRequest using `stepup.callout_user_attributes`.
+* Prevent double entries in the Discovery caused by duplicate `name:*` and DiscoveryName:*` entries in Manage (#1852)
+
+Changes:
+* Set width of debug page to browser width (#1790)
+
+Bugfixes:
+* Correctly json-decode the `rememberchoice` cookie
+* Engine ARP must not apply to user atrributes sent to stepup callout (#1849)
 
 ## 6.17.0 (not released)
 
