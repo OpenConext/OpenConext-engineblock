@@ -472,7 +472,7 @@ class EngineBlock_Corto_ProxyServer
         Loa $authnContextClassRef,
         NameID $nameId,
         bool $isForceAuthn,
-        Assertion $assertion
+        Assertion $originalAssertion
     ) {
         $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
             $spRequest,
@@ -537,7 +537,7 @@ class EngineBlock_Corto_ProxyServer
         if ($isSendUserAttributesConfigured && $isSendUserAttributesEnabled) {
             $stepupUserAttributes = $container->getStepupUserAttributes();
             if (!empty($stepupUserAttributes)) {
-                StepupGsspUserAttributeExtension::add($sspMessage, $assertion, $container->getStepupUserAttributes());
+                StepupGsspUserAttributeExtension::add($sspMessage, $originalAssertion, $container->getStepupUserAttributes());
             }
         }
 

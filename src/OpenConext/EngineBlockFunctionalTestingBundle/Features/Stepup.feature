@@ -280,3 +280,14 @@ Feature:
       And I pass through EngineBlock
       And I pass through the IdP
     Then the received AuthnRequest should not match xpath '/samlp:AuthnRequest/samlp:Extensions/gssp:UserAttributes/saml:Attribute[@Name="urn:mace:dir:attribute-def:mail"]/saml:AttributeValue[text()="j.doe@institution-a.example.org"]'
+
+  Scenario: Stepup authentication should pass user attributes when configured even if an ARP is configured
+    Given feature "eb.stepup.send_user_attributes" is enabled
+      And the IdP "SSO-IdP" sends attribute "urn:mace:dir:attribute-def:mail" with value "j.doe@institution-a.example.org"
+      And SP "SSO-SP" requests LoA "http://dev.openconext.local/assurance/loa3"
+      And SP "SSO-SP" allows no attributes
+    When I log in at "SSO-SP"
+      And I select "SSO-IdP" on the WAYF
+      And I pass through EngineBlock
+      And I pass through the IdP
+    Then the received AuthnRequest should match xpath '/samlp:AuthnRequest/samlp:Extensions/gssp:UserAttributes/saml:Attribute[@Name="urn:mace:dir:attribute-def:mail"]/saml:AttributeValue[text()="j.doe@institution-a.example.org"]'

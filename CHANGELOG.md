@@ -79,6 +79,14 @@ Bugfixes
 * Validate numeric key in ARP settings on metadata push (#1285)
 * Set the correct database version in doctrine (#1811)
 
+## 6.15.4
+
+Maintenance:
+  * Fix composer lockfile (#1785)
+  * Add qa tooling helper scripts and drop Ant build.xml (#1781)
+  * Update Devconf installation and docs (#1781)
+  * Remove confusing key_id from stepup callout logging
+
 ## 6.15.3
 
 Maintenance:
