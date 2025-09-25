@@ -22,12 +22,12 @@ use Monolog\Formatter\JsonFormatter;
 
 class SyslogJsonFormatter extends JsonFormatter
 {
-    public function format(array $record)
+    public function format(array $record): string
     {
         return parent::format($this->mapRecord($record));
     }
 
-    public function formatBatch(array $records)
+    public function formatBatch(array $records): string
     {
         return parent::formatBatch(
             array_map(

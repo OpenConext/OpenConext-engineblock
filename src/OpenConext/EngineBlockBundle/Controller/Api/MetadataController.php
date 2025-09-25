@@ -30,7 +30,9 @@ use OpenConext\Value\Exception\InvalidArgumentException;
 use OpenConext\Value\Saml\EntityId;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Static calls, factories, and having to check HTTP methods which is
@@ -49,16 +51,23 @@ final class MetadataController
     private $featureConfiguration;
 
     /**
-     * @var AuthorizationCheckerInterface
+     * @var TokenStorageInterface
      */
-    private $authorizationChecker;
+    private $tokenStorage;
+
+    /**
+     * @var AccessDecisionManagerInterface
+     */
+    private $accessDecisionManager;
 
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker,
+        TokenStorageInterface $tokenStorage,
+        AccessDecisionManagerInterface $accessDecisionManager,
         FeatureConfiguration $featureConfiguration,
         MetadataServiceInterface $metadataService
     ) {
-        $this->authorizationChecker = $authorizationChecker;
+        $this->tokenStorage = $tokenStorage;
+        $this->accessDecisionManager = $accessDecisionManager;
         $this->featureConfiguration = $featureConfiguration;
         $this->metadataService      = $metadataService;
     }
@@ -78,11 +87,7 @@ final class MetadataController
             throw new ApiNotFoundHttpException('Metadata API is disabled');
         }
 
-        if (!$this->authorizationChecker->isGranted('ROLE_API_USER_PROFILE')) {
-            throw new ApiAccessDeniedHttpException(
-                'Access to the Metadata API requires the role ROLE_API_USER_PROFILE'
-            );
-        }
+        $this->assertAuthorized();
 
         try {
             $entityId = new EntityId($entityIdValue);
@@ -100,5 +105,19 @@ final class MetadataController
         }
 
         return new JsonResponse(JsonHelper::serializeIdentityProvider($identityProvider), JsonResponse::HTTP_OK);
+    }
+
+    private function assertAuthorized(): void
+    {
+        $token = $this->tokenStorage->getToken();
+        if (!$token || !$token->getUser()) {
+            throw new AuthenticationCredentialsNotFoundException('The token storage contains no authentication token.');
+        }
+
+        if (!$this->accessDecisionManager->decide($token, ['ROLE_API_USER_PROFILE'], null)) {
+            throw new ApiAccessDeniedHttpException(
+                'Access to the Metadata API requires the role ROLE_API_USER_PROFILE'
+            );
+        }
     }
 }

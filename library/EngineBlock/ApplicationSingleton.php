@@ -128,7 +128,7 @@ class EngineBlock_ApplicationSingleton
      */
     public function flushLog($reason)
     {
-        $logger = $this->getLog();
+        $logger = static::getLog();
 
         if ($this->_activationStrategy) {
             $this->_activationStrategy->activate();

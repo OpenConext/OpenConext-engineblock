@@ -19,19 +19,23 @@
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
 use OpenConext\EngineBlock\Exception\RuntimeException;
+use OpenConext\EngineBlock\Http\Exception\AccessDeniedException;
 use OpenConext\EngineBlock\Service\ConsentServiceInterface;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
-use OpenConext\EngineBlockBundle\Exception\InvalidArgumentException as EngineBlockInvalidArgumentException;
 use OpenConext\EngineBlockBundle\Factory\CollabPersonIdFactory;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiInternalServerErrorHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
+use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
+
 use function array_key_exists;
 use function sprintf;
 
@@ -51,16 +55,23 @@ final class ConsentController
     private $featureConfiguration;
 
     /**
-     * @var AuthorizationCheckerInterface
+     * @var TokenStorageInterface
      */
-    private $authorizationChecker;
+    private $tokenStorage;
+
+    /**
+     * @var AccessDecisionManagerInterface
+     */
+    private $accessDecisionManager;
 
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker,
+        TokenStorageInterface $tokenStorage,
+        AccessDecisionManagerInterface $accessDecisionManager,
         FeatureConfigurationInterface $featureConfiguration,
         ConsentServiceInterface $consentService
     ) {
-        $this->authorizationChecker = $authorizationChecker;
+        $this->tokenStorage                    = $tokenStorage;
+        $this->accessDecisionManager           = $accessDecisionManager;
         $this->featureConfiguration = $featureConfiguration;
         $this->consentService       = $consentService;
     }
@@ -82,11 +93,7 @@ final class ConsentController
             throw new ApiNotFoundHttpException('Consent listing API is disabled');
         }
 
-        if (!$this->authorizationChecker->isGranted('ROLE_API_USER_PROFILE')) {
-            throw new ApiAccessDeniedHttpException(
-                'Access to the content listing API requires the role ROLE_API_USER_PROFILE'
-            );
-        }
+        $this->assertAuthorized();
 
         try {
             $consentList = $this->consentService->findAllFor($userId)->jsonSerialize();
@@ -121,17 +128,12 @@ final class ConsentController
             throw new ApiNotFoundHttpException('Consent remove API is disabled');
         }
 
-        if (!$this->authorizationChecker->isGranted('ROLE_API_USER_PROFILE')) {
-            throw new ApiAccessDeniedHttpException(
-                'Access to the consent removal API requires the role ROLE_API_USER_PROFILE'
-            );
-        }
+        $this->assertAuthorized();
+
         // The data is posted json encoded from EngineBlock
         $data = json_decode($request->getContent(), true);
         if (!$data || !array_key_exists('collabPersonId', $data) || !array_key_exists('serviceProviderEntityId', $data)) {
-            throw new EngineBlockInvalidArgumentException(
-                'The required data for removing the consent is not present in the request parameters json'
-            );
+            return new JsonResponse('The required data for removing the consent is not present in the request parameters json', Response::HTTP_FOUND);
         }
 
         $userId = $data['collabPersonId'];
@@ -152,5 +154,19 @@ final class ConsentController
         }
 
         return new JsonResponse($removed, Response::HTTP_OK);
+    }
+
+    private function assertAuthorized(): void
+    {
+        $token = $this->tokenStorage->getToken();
+        if (!$token || !$token->getUser()) {
+            throw new AuthenticationCredentialsNotFoundException('The token storage contains no authentication token.');
+        }
+
+        if (!$this->accessDecisionManager->decide($token, ['ROLE_API_USER_PROFILE'], null)) {
+            throw new ApiAccessDeniedHttpException(
+                'Access to the content API requires the role ROLE_API_USER_PROFILE'
+            );
+        }
     }
 }

@@ -165,7 +165,7 @@ class TestEntitySeeder
         $idps = [];
 
         for ($i=1; $i < (int) $numberOfIdps + 1; $i++) {
-            $connected = rand(0, 1) === 1;
+            $connected = random_int(0, 1) === 1;
             $entityId = $connected ? sprintf("https://example.com/entityId/%d", $i) : sprintf("https://unconnected.example.com/entityId/%d", $i);
 
             if ($i < 25) {

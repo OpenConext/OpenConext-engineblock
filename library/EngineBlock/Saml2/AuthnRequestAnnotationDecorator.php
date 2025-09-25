@@ -18,6 +18,7 @@
 
 use OpenConext\EngineBlock\Metadata\Loa;
 use SAML2\AuthnRequest;
+use SAML2\DOMDocumentFactory;
 
 /**
  * @method getProxyCount()
@@ -56,6 +57,16 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
      * @var bool
      */
     protected $transparent = false;
+
+    /**
+     * @var string|null Temporary storage for serialized XML
+     */
+    private ?string $_serializableSspMessageXml;
+
+    /**
+     * @var string|null Persisted RelayState while serialized (not part of the AuthnRequest XML itself)
+     */
+    private ?string $_serializableRelayState;
 
     /**
      * @param AuthnRequest $request
@@ -183,5 +194,35 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     public function setForceAuthn(bool $isForceAuthn)
     {
         $this->sspMessage->setForceAuthn($isForceAuthn);
+    }
+
+    /**
+     * @return array
+     */
+    public function __sleep()
+    {
+        if ($this->sspMessage instanceof AuthnRequest) {
+            $this->_serializableSspMessageXml = $this->sspMessage->toUnsignedXML()->ownerDocument->saveXML();
+            $this->_serializableRelayState = $this->sspMessage->getRelayState();
+        }
+
+        return ['keyId', 'wasSigned', 'debug', 'unsolicited', 'transparent', '_serializableSspMessageXml', '_serializableRelayState'];
+    }
+
+    public function __wakeup()
+    {
+        if (isset($this->_serializableSspMessageXml)) {
+            $document = DOMDocumentFactory::fromString($this->_serializableSspMessageXml);
+            $messageDomElement = $document->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:protocol', 'AuthnRequest')->item(0);
+
+            if ($messageDomElement) {
+                $this->sspMessage = AuthnRequest::fromXML($messageDomElement);
+                if (isset($this->_serializableRelayState) && $this->_serializableRelayState !== null) {
+                    $this->sspMessage->setRelayState($this->_serializableRelayState);
+                }
+            }
+
+            unset($this->_serializableSspMessageXml, $this->_serializableRelayState);
+        }
     }
 }

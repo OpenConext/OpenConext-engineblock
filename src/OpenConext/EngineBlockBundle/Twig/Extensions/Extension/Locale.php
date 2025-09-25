@@ -51,7 +51,7 @@ class Locale extends AbstractExtension
         $this->languageSupportProvider = $languageSupportProvider;
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('locale', [$this, 'getLocale']),

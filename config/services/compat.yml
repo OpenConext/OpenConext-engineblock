@@ -29,7 +29,7 @@ services:
     engineblock.compat.doctrine.dbal_connection:
         public: false
         class: Doctrine\DBAL\Connection
-        factory: ["@engineblock.compat.doctrine.entity_manager", getConnection]
+        factory: ["@doctrine.orm.entity_manager", getConnection]
 
     engineblock.compat.logger:
         class: Monolog\Logger
@@ -44,7 +44,7 @@ services:
     engineblock.compat.database_connection_factory:
         class: EngineBlock_Database_ConnectionFactory
         arguments:
-            - "@engineblock.compat.doctrine.entity_manager"
+            - "@doctrine.orm.entity_manager"
 
     engineblock.compat.corto_model_consent_factory:
         class: EngineBlock_Corto_Model_Consent_Factory

@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
+use App\Kernel;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
@@ -29,6 +30,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ConnectionsControllerTest extends WebTestCase
 {
+    protected function tearDown(): void
+    {
+        $this->clearMetadataFixtures();
+        parent::tearDown();
+    }
+
+
     /**
      * @test
      * @group Api
@@ -139,8 +147,6 @@ class ConnectionsControllerTest extends WebTestCase
      */
     public function pushing_data_to_engineblock_should_succeed()
     {
-        $this->clearMetadataFixtures();
-
         $client = $this->createAuthorizedClient();
 
         foreach ($this->validConnectionsData() as $step) {
@@ -205,8 +211,6 @@ class ConnectionsControllerTest extends WebTestCase
      */
     public function pushing_data_with_coins_to_engineblock_should_succeed()
     {
-        $this->clearMetadataFixtures();
-
         $client = $this->createAuthorizedClient();
 
         foreach ($this->validConnectionsWithCoinsData() as $connection) {
@@ -256,8 +260,6 @@ class ConnectionsControllerTest extends WebTestCase
      */
     public function pushing_manage_sfo_data_should_succeed()
     {
-        $this->clearMetadataFixtures();
-
         $client = $this->createAuthorizedClient();
 
         $payload = '{"connections" : {
@@ -342,8 +344,6 @@ class ConnectionsControllerTest extends WebTestCase
      */
     public function pushing_data_to_engineblock_can_fail()
     {
-        $this->clearMetadataFixtures();
-
         $client = $this->createAuthorizedClient();
 
         // The second 'step' will overwrite the entity id for the one entry. It only changes some case, resulting in
@@ -390,12 +390,12 @@ class ConnectionsControllerTest extends WebTestCase
         ];
     }
 
-    private function assertStatusCode($expectedStatusCode, Client $client)
+    private function assertStatusCode($expectedStatusCode, KernelBrowser $client)
     {
         $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
     }
 
-    private function disableMetadataPushApiFeatureFor(Client $client)
+    private function disableMetadataPushApiFeatureFor(KernelBrowser $client)
     {
         $mock = new FeatureConfiguration([
             'api.metadata_push' => false,
@@ -439,7 +439,7 @@ class ConnectionsControllerTest extends WebTestCase
     {
         $connectionsJson = [];
         foreach ($connections as $data) {
-            $connectionsJson[] = $this->createPayloadConnectionJson($data['uuid'], $data['entityId'], $data['name'], $data['type'], $data['coins']);
+            $connectionsJson[] = $this->createPayloadConnectionJson($data['uuid'], $data['entityId'], $data['name'], $data['type'], $data['coins'] ?? []);
         }
         $connectionsJson = implode(',', $connectionsJson);
 

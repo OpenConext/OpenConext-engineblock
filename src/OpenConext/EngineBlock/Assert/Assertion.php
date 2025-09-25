@@ -29,7 +29,7 @@ class Assertion extends BaseAssertion
     const INVALID_NON_EMPTY_STRING  = 1001;
     const INVALID_HASHING_ALGORITHM = 1002;
 
-    protected static $exceptionClass = 'OpenConext\EngineBlock\Exception\InvalidArgumentException';
+    protected static $exceptionClass = \OpenConext\EngineBlock\Exception\InvalidArgumentException::class;
 
     /**
      * @param string $value

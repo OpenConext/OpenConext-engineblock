@@ -215,7 +215,7 @@ class MockStepupGateway
         if (!$authnRequest instanceof SAML2AuthnRequest) {
             throw new RuntimeException(sprintf(
                 'The received request is not an AuthnRequest, "%s" received instead',
-                substr(get_class($authnRequest), strrpos($authnRequest, '_') + 1)
+                substr(get_class($authnRequest), strrpos(get_class($authnRequest), '_') + 1)
             ));
         }
 

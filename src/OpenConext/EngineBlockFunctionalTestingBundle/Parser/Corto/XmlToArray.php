@@ -420,7 +420,7 @@ class XmlToArray
         foreach((array)$attributes as $name => $attribute) {
             // Name must be a uri
             // Uri checking is hard, so at least check for a scheme.
-            assert('(bool)preg_match("|(\w+)\:.+|", $name)');
+            assert((bool) preg_match("|(\\w+)\\:.+|", $name));
             $newAttribute = [
                 '_Name' => $name,
                 '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',

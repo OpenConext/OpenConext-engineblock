@@ -30,6 +30,7 @@ use SAML2\AuthnRequest;
 use SAML2\Response;
 use SAML2\XML\saml\Issuer;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Twig\Environment;
@@ -288,8 +289,12 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends TestCase
 
         $this->sessionMock->setSessionData(['_sf2_attributes' => $sessionData]);
 
-        $session = new Session($this->sessionMock);
-        return new ProcessingStateHelper($session);
+        $request = new Request();
+        $request->setSession(new Session($this->sessionMock));
+        $stack = new RequestStack();
+        $stack->push($request);
+
+        return new ProcessingStateHelper($stack);
     }
 
 
