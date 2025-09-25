@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use DateTime;
+use Doctrine\DBAL\Query\QueryBuilder;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -34,11 +35,9 @@ final class DeprovisionControllerTest extends WebTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authentication_is_required_for_accessing_the_deprovision_api_get()
     {
         $collabPersonId = 'urn:collab:person:test';
@@ -50,11 +49,9 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED, $unauthenticatedClient);
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authentication_is_required_for_accessing_the_deprovision_api_delete()
     {
         $collabPersonId = 'urn:collab:person:test';
@@ -66,11 +63,9 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED, $unauthenticatedClient);
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authentication_is_required_for_accessing_the_deprovision_api_delete_dry_run()
     {
         $collabPersonId = 'urn:collab:person:test';
@@ -82,11 +77,9 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED, $unauthenticatedClient);
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authentication_is_required_for_accessing_the_deprovision_api_delete_remove_consent()
     {
         $unauthenticatedClient = static::createClient();
@@ -94,11 +87,9 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function delete_is_not_available_for_accessing_the_deprovision_api_delete_remove_consent()
     {
         $unauthenticatedClient = static::createClient();
@@ -106,11 +97,9 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertStatusCode(Response::HTTP_METHOD_NOT_ALLOWED,  $unauthenticatedClient);
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function only_get_or_delete_requests_are_allowed_when_accessing_the_deprovision_api()
     {
         $collabPersonId = 'urn:collab:person:test';
@@ -129,12 +118,10 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertResponseIsJson($client);
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     * @group FeatureToggle
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Group('FeatureToggle')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function cannot_access_the_deprovision_api_if_the_feature_has_been_disabled()
     {
         $collabPersonId = 'urn:collab:person:test';
@@ -149,11 +136,9 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertResponseIsJson($client);
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function cannot_access_the_deprovision_api_if_user_does_not_have_deprovision_role()
     {
         $collabPersonId = 'urn:collab:person:test';
@@ -169,13 +154,10 @@ final class DeprovisionControllerTest extends WebTestCase
         $this->assertResponseIsJson($client);
     }
 
-    /**
-     * @test
-     * @group Api
-     * @group Deprovision
-     *
-     * @dataProvider provideDeprovisionEndPoints
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideDeprovisionEndPoints')]
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function no_user_data_is_returned_if_collab_person_id_is_unknown($method, $path)
     {
         $client = $this->createAuthorizedClient();
@@ -211,12 +193,12 @@ final class DeprovisionControllerTest extends WebTestCase
      *
      *  - DELETE /deprovision/{collab_person_id}
      *
-     * @test
-     * @group Api
-     * @group Deprovision
      *
-     * @dataProvider provideDeprovisionEndPoints
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideDeprovisionEndPoints')]
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function all_user_data_for_collab_person_id_is_retrieved_and_deleted($method, $path)
     {
         $userId = 'urn:collab:person:test';
@@ -320,7 +302,7 @@ final class DeprovisionControllerTest extends WebTestCase
     /**
      * @return array
      */
-    public function provideDeprovisionEndpoints()
+    public static function provideDeprovisionEndpoints()
     {
         return [
             ['GET', '/deprovision/urn:collab:person:test'],
@@ -339,7 +321,7 @@ final class DeprovisionControllerTest extends WebTestCase
         $mock = new FeatureConfiguration([
             'api.deprovision' => false
         ]);
-        $client->getContainer()->set('OpenConext\\EngineBlockBundle\\Configuration\\FeatureConfiguration', $mock);
+        $client->getContainer()->set(\OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration::class, $mock);
     }
 
     /**
@@ -349,6 +331,7 @@ final class DeprovisionControllerTest extends WebTestCase
     private function addUserFixture($userId, $uuid)
     {
         $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        assert($queryBuilder instanceof QueryBuilder);
         $queryBuilder
             ->insert('user')
             ->values([
@@ -356,10 +339,10 @@ final class DeprovisionControllerTest extends WebTestCase
                 'uuid' => ':uuid',
             ])
             ->setParameters([
-                ':collab_person_id' => $userId,
-                ':uuid' => $uuid,
+                'collab_person_id' => $userId,
+                'uuid' => $uuid,
             ])
-            ->execute();
+            ->executeStatement();
     }
 
     /**
@@ -369,6 +352,7 @@ final class DeprovisionControllerTest extends WebTestCase
     private function addServiceProviderUuidFixture($spUuid, $spEntityId)
     {
         $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        assert($queryBuilder instanceof QueryBuilder);
         $queryBuilder
             ->insert('service_provider_uuid')
             ->values([
@@ -376,10 +360,10 @@ final class DeprovisionControllerTest extends WebTestCase
                 'service_provider_entity_id' => ':service_provider_entity_id',
             ])
             ->setParameters([
-                ':uuid' => $spUuid,
-                ':service_provider_entity_id' => $spEntityId,
+                'uuid' => $spUuid,
+                'service_provider_entity_id' => $spEntityId,
             ])
-            ->execute();
+            ->executeStatement();
     }
 
     /**
@@ -390,6 +374,7 @@ final class DeprovisionControllerTest extends WebTestCase
     private function addSamlPersistentIdFixture($userUuid, $spUuid, $persistentId)
     {
         $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        assert($queryBuilder instanceof QueryBuilder);
         $queryBuilder
             ->insert('saml_persistent_id')
             ->values([
@@ -398,11 +383,11 @@ final class DeprovisionControllerTest extends WebTestCase
                 'persistent_id' => ':persistent_id',
             ])
             ->setParameters([
-                ':user_uuid' => $userUuid,
-                ':service_provider_uuid' => $spUuid,
-                ':persistent_id' => $persistentId,
+                'user_uuid' => $userUuid,
+                'service_provider_uuid' => $spUuid,
+                'persistent_id' => $persistentId,
             ])
-            ->execute();
+            ->executeStatement();
     }
 
     /**
@@ -415,6 +400,7 @@ final class DeprovisionControllerTest extends WebTestCase
     private function addConsentFixture($userId, $serviceId, $attributeHash, $consentType, $consentDate)
     {
         $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        assert($queryBuilder instanceof QueryBuilder);
         $queryBuilder
             ->insert('consent')
             ->values([
@@ -426,30 +412,31 @@ final class DeprovisionControllerTest extends WebTestCase
                 'deleted_at'   => '"0000-00-00 00:00:00"',
             ])
             ->setParameters([
-                ':user_id'      => sha1($userId),
-                ':service_id'   => $serviceId,
-                ':attribute'    => $attributeHash,
-                ':consent_type' => $consentType,
-                ':consent_date' => $consentDate,
+                'user_id'      => sha1($userId),
+                'service_id'   => $serviceId,
+                'attribute'    => $attributeHash,
+                'consent_type' => $consentType,
+                'consent_date' => $consentDate,
             ])
-            ->execute();
+            ->executeStatement();
     }
 
     private function clearFixtures()
     {
         $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
+        assert($queryBuilder instanceof QueryBuilder);
         $queryBuilder
             ->delete('service_provider_uuid')
-            ->execute();
+            ->executeStatement();
         $queryBuilder
             ->delete('user')
-            ->execute();
+            ->executeStatement();
         $queryBuilder
             ->delete('saml_persistent_id')
-            ->execute();
+            ->executeStatement();
         $queryBuilder
             ->delete('consent')
-            ->execute();
+            ->executeStatement();
     }
 
     private function assertResponseIsJson(KernelBrowser $client)

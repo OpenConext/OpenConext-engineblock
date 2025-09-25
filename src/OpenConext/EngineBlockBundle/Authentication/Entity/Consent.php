@@ -25,56 +25,49 @@ use Doctrine\ORM\Mapping as ORM;
  * Note: this entity is currently only used to configure doctrine to create
  * the schema on installation. The ConsentService and ConsentRepository do not
  * use entities.
- *
- * @ORM\Entity()
- * @ORM\Table(indexes={
- *     @ORM\Index(name="hashed_user_id", columns={"hashed_user_id"}),
- *     @ORM\Index(name="service_id", columns={"service_id"}),
- *     @ORM\Index(name="deleted_at", columns={"deleted_at"}),
- * })
  */
+#[ORM\Entity]
+#[ORM\Index(name: 'hashed_user_id', columns: ['hashed_user_id'])]
+#[ORM\Index(name: 'service_id', columns: ['service_id'])]
+#[ORM\Index(name: 'deleted_at', columns: ['deleted_at'])]
 class Consent
 {
     /**
      * @var DateTime
-     * @ORM\Column(name="consent_date", type="datetime", nullable=false)
      */
-    public $date;
+    #[ORM\Column(name: 'consent_date', type: \Doctrine\DBAL\Types\Types::DATETIME_MUTABLE, nullable: false)]
+    public \DateTimeInterface $date;
 
     /**
      * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(type="string", length=80)
      */
-    public $hashedUserId;
+    #[ORM\Id]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 80)]
+    public ?string $hashedUserId = null;
 
     /**
      * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(type="string")
      */
-    public $serviceId;
+    #[ORM\Id]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING)]
+    public ?string $serviceId = null;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string", length=80)
      */
-    public $attribute;
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 80)]
+    public ?string $attribute = null;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="consent_type", type="string", nullable=true, length=20, options={"default": "explicit"})
      */
-    public $type;
+    #[ORM\Column(name: 'consent_type', type: \Doctrine\DBAL\Types\Types::STRING, nullable: true, length: 20, options: ['default' => 'explicit'])]
+    public ?string $type = null;
 
     /**
-     * @ORM\Id
      * @var DateTime
-     * @ORM\Column(name="deleted_at", type="datetime", nullable=true, options={"default": NULL}))
      */
-    public $deletedAt;
+    #[ORM\Id]
+    #[ORM\Column(name: 'deleted_at', type: \Doctrine\DBAL\Types\Types::DATETIME_MUTABLE, nullable: true, options: ['default' => null])]
+    public ?\DateTimeInterface $deletedAt = null;
 }

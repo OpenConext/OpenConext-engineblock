@@ -62,7 +62,7 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
     /**
      * {@inheritdoc}
      */
-    public function getResponse()
+    public function getResponse(): EngineBlock_Saml2_ResponseAnnotationDecorator
     {
         return $this->_response;
     }

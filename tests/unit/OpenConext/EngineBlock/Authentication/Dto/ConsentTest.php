@@ -79,12 +79,10 @@ class ConsentTest extends TestCase
         return $serviceProvider;
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     * @group Dto
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Group('Dto')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function all_values_are_serialized_to_json()
     {
         $serviceProvider = $this->createServiceProvider();
@@ -125,9 +123,7 @@ class ConsentTest extends TestCase
         $this->assertEquals($serviceProvider->organizationPt->displayName, $json['organization_display_name']['pt']);
     }
 
-    /**
-     * @dataProvider provideOrganizations
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideOrganizations')]
     public function test_display_name_of_organizations_works_as_intended(
         array $organizations,
         array $expectations,
@@ -153,12 +149,10 @@ class ConsentTest extends TestCase
         $this->assertEquals($expectations['pt'], $json['pt'], $errorMessage);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     * @group Dto
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Group('Dto')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function display_name_falls_back_to_name_if_display_name_is_empty()
     {
         $serviceProvider = $this->createServiceProvider([], false);
@@ -187,12 +181,10 @@ class ConsentTest extends TestCase
         $this->assertEquals($serviceProvider->nameNl, $json['service_provider']['display_name']['nl']);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     * @group Dto
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Group('Dto')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function display_name_falls_back_to_entity_id_if_name_is_empty()
     {
         $serviceProvider = $this->createServiceProvider([], true);
@@ -220,7 +212,7 @@ class ConsentTest extends TestCase
         $this->assertEquals($serviceProvider->entityId, $json['service_provider']['display_name']['nl']);
     }
 
-    public function provideOrganizations()
+    public static function provideOrganizations()
     {
         $displayNameEn = 'Organization display name EN';
         $nameEn = 'Organization name EN';
@@ -297,7 +289,6 @@ class ConsentTest extends TestCase
         $coins = Coins::fromJson($jsonData);
 
         $property = new \ReflectionProperty(ServiceProvider::class, 'coins');
-        $property->setAccessible(true);
         $property->setValue(null, $coins);
     }
 }

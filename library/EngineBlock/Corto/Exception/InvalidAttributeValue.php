@@ -45,7 +45,7 @@ class EngineBlock_Corto_Exception_InvalidAttributeValue extends EngineBlock_Exce
     /**
      * @return array
      */
-    public function getFeedbackInfo()
+    public function getFeedbackInfo(): array
     {
         return [
             'attributeName' => $this->attributeName,

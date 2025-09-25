@@ -37,13 +37,13 @@ class StepupDecisionTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     /**
-     * @test
-     * @group Stepup
-     * @dataProvider stepupCoinsAndExpectedResultProvider
      *
      * @param array $input
      * @param array $expectedResult
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('stepupCoinsAndExpectedResultProvider')]
+    #[\PHPUnit\Framework\Attributes\Group('Stepup')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_correct_stepup_decision_should_be_made_based_on_a_coin_data(
         $input,
         $expectedResult
@@ -118,7 +118,7 @@ class StepupDecisionTest extends TestCase
         return $repo;
     }
 
-    public function stepupCoinsAndExpectedResultProvider()
+    public static function stepupCoinsAndExpectedResultProvider()
     {
         return [
             'Use no stepup if no coins set for IdP and SP (do not allow no stepup)' => [[null, null, [], [], false], [false, '', false]],
@@ -140,19 +140,19 @@ class StepupDecisionTest extends TestCase
             'Use highest PdP LoA if multiple PdP LoA set (allow no stepup)' => [['', '', [], ['loa30', 'loa20'], true], [true, 'loa30', true]],
             'Use highest PdP LoA if multiple PdP LoA set in different order (allow no stepup)' => [['', '', [], ['loa30', 'loa20'], true], [true, 'loa30', true]],
 
-            'Allow AuthnRequest (SP) LoA1, but take no action' => [['', '', [$this->buildLoa('loa10')], [], true], [false, 'loa10', false]],
-            'Use AuthnRequest (SP) LoA if SP LoA is lower' => [['loa20', '', [$this->buildLoa('loa30')], [], true], [true, 'loa30', true]],
-            'Use IdP LoA if IdP LoA is highest and AuthnRequest (SP) LoA set (allow no stepup)' => [['', 'loa30', [$this->buildLoa('loa20')], [], true], [true, 'loa30', true]],
-            'Use PdP LoA if  AuthnRequest (SP) LoA set (allow no stepup)' => [['', '', [$this->buildLoa('loa30')], [], true], [true, 'loa30', true]],
-            'Use highest AuthnRequest (SP) LoA if multiple LoA set (allow no stepup)' => [['', '', [$this->buildLoa('loa30'), $this->buildLoa('loa20')], [], true], [true, 'loa30', true]],
-            'Use highest AuthnRequest (SP) LoA if multiple LoA set (authn + pdp) in different order (allow no stepup)' => [['', '', [$this->buildLoa('loa20'), $this->buildLoa('loa30')], ['loa20'], true], [true, 'loa30', true]],
+            'Allow AuthnRequest (SP) LoA1, but take no action' => [['', '', [self::buildLoa('loa10')], [], true], [false, 'loa10', false]],
+            'Use AuthnRequest (SP) LoA if SP LoA is lower' => [['loa20', '', [self::buildLoa('loa30')], [], true], [true, 'loa30', true]],
+            'Use IdP LoA if IdP LoA is highest and AuthnRequest (SP) LoA set (allow no stepup)' => [['', 'loa30', [self::buildLoa('loa20')], [], true], [true, 'loa30', true]],
+            'Use PdP LoA if  AuthnRequest (SP) LoA set (allow no stepup)' => [['', '', [self::buildLoa('loa30')], [], true], [true, 'loa30', true]],
+            'Use highest AuthnRequest (SP) LoA if multiple LoA set (allow no stepup)' => [['', '', [self::buildLoa('loa30'), self::buildLoa('loa20')], [], true], [true, 'loa30', true]],
+            'Use highest AuthnRequest (SP) LoA if multiple LoA set (authn + pdp) in different order (allow no stepup)' => [['', '', [self::buildLoa('loa20'), self::buildLoa('loa30')], ['loa20'], true], [true, 'loa30', true]],
 
             'Use highest LoA from many options (allow no stepup)' => [['loa20', 'loa30', [], ['loa20', 'loa20', 'loa30'], true], [true, 'loa30', true]],
-            'Use highest LoA from many different options (allow no stepup)' => [['loa30', 'loa20', [$this->buildLoa('loa20'), $this->buildLoa('loa20'), $this->buildLoa('loa30')], [], true], [true, 'loa30', true]],
+            'Use highest LoA from many different options (allow no stepup)' => [['loa30', 'loa20', [self::buildLoa('loa20'), self::buildLoa('loa20'), self::buildLoa('loa30')], [], true], [true, 'loa30', true]],
        ];
     }
 
-    private function buildLoa(string $loaLevel): Loa
+    private static function buildLoa(string $loaLevel): Loa
     {
         $matches = [];
         preg_match_all('/\d+/', $loaLevel, $matches);

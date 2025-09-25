@@ -18,54 +18,57 @@
 namespace OpenConext\EngineBlock\Metadata\Factory\Decorator;
 
 use OpenConext\EngineBlock\Metadata\ContactPerson;
-use OpenConext\EngineBlock\Metadata\Factory\AbstractEntityTest;
+use OpenConext\EngineBlock\Metadata\Factory\AbstractEntity;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
-use Symfony\Component\Translation\TranslatorInterface;
 
-class EngineblockServiceProviderInformationTest extends AbstractEntityTest
+class EngineblockIdentityProviderInformation extends AbstractEntity
 {
-
+    public function __construct()
+    {
+        parent::__construct(static::class);
+    }
     public function test_methods()
     {
-        $adapter = $this->createServiceProviderAdapter();
+        $adapter = $this->createIdentityProviderAdapter();
 
         $translator = $this->createMock(\Symfony\Contracts\Translation\TranslatorInterface::class);
-        $translator->expects($this->at(0))
-            ->method('trans')
-            ->with('suite_name')
-            ->willReturn('test-suite');
-
-        $translator->expects($this->at(1))
-            ->method('trans')
-            ->with('metadata_organization_name')
-            ->willReturn('configuredOrganizationName');
-
-        $translator->expects($this->at(2))
-            ->method('trans')
-            ->with('metadata_organization_displayname')
-            ->willReturn('configuredOrganizationDisplayName');
-
-        $translator->expects($this->at(3))
-            ->method('trans')
-            ->with('metadata_organization_url')
-            ->willReturn('configuredOrganizationUrl');
+        $matcher = $this->exactly(4);
+        $translator->expects($matcher)
+            ->method('trans')->willReturnCallback(function (...$parameters) use ($matcher) {
+            if ($matcher->numberOfInvocations() === 1) {
+                $this->assertSame('suite_name', $parameters[0]);
+                return 'test-suite';
+            }
+            if ($matcher->numberOfInvocations() === 2) {
+                $this->assertSame('metadata_organization_name', $parameters[0]);
+                return 'configuredOrganizationName';
+            }
+            if ($matcher->numberOfInvocations() === 3) {
+                $this->assertSame('metadata_organization_displayname', $parameters[0]);
+                return 'configuredOrganizationDisplayName';
+            }
+            if ($matcher->numberOfInvocations() === 4) {
+                $this->assertSame('metadata_organization_url', $parameters[0]);
+                return 'configuredOrganizationUrl';
+            }
+        });
 
         $configuration = new EngineBlockConfiguration(
             $translator,
-            'configuredSupportMail',
-            'configuredDescription',
-            'example.org',
-            '/configuredLogoUrl.gif',
-            1209,
-            1009
+        'configuredSupportMail',
+        'configuredDescription',
+        'example.org',
+        '/configuredLogoUrl',
+        1209,
+        1009
         );
 
-        $decorator = new EngineBlockServiceProviderInformation($adapter, $configuration);
+        $decorator = new EngineBlockIdentityProviderInformation($adapter, $configuration);
 
         // Logo we would expect
-        $logo = new Logo('https://example.org/configuredLogoUrl.gif');
+        $logo = new Logo('https://example.org/configuredLogoUrl');
         $logo->width = 1209;
         $logo->height = 1009;
 
@@ -96,6 +99,6 @@ class EngineblockServiceProviderInformationTest extends AbstractEntityTest
         $overrides['organizationPt'] = $organization;
         $overrides['contactPersons'] = $contactPersons;
 
-        $this->runServiceProviderAssertions($adapter, $decorator, $overrides);
+        $this->runIdentityProviderAssertions($adapter, $decorator, $overrides);
     }
 }

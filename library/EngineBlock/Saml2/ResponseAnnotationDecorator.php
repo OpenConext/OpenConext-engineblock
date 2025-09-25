@@ -86,12 +86,12 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     /**
      * @var string Temporary storage for serialized XML
      */
-    private ?string $_serializableSspMessageXml;
+    private ?string $_serializableSspMessageXml = null;
 
     /**
      * @var string|null Persisted RelayState while serialized (not part of the AuthnRequest XML itself)
      */
-    private ?string $_serializableRelayState;
+    private ?string $_serializableRelayState = null;
 
     /**
      * @param Response $response

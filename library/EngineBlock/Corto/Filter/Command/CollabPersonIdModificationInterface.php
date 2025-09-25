@@ -21,7 +21,7 @@ interface EngineBlock_Corto_Filter_Command_CollabPersonIdModificationInterface
     /**
      * This command modifies the collabPersonId
      *
-     * @return string
+     * @return string|null
      */
     public function getCollabPersonId();
 }

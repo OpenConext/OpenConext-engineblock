@@ -25,15 +25,15 @@ use PHPUnit\Framework\TestCase;
 class ConsentTypeTest extends TestCase
 {
     /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     * @group Value
      *
-     * @dataProvider      \OpenConext\TestDataProvider::notStringOrEmptyString
      *
      * @param mixed $invalid
      */
+    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notStringOrEmptyString')]
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Group('Value')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function cannot_be_other_than_implicit_or_explicit($invalid)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -41,12 +41,10 @@ class ConsentTypeTest extends TestCase
         new ConsentType($invalid);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     * @group Value
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Group('Value')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function different_consent_types_are_not_equal()
     {
         $explicit = ConsentType::explicit();
@@ -56,12 +54,10 @@ class ConsentTypeTest extends TestCase
         $this->assertFalse($implicit->equals($explicit));
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     * @group Value
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Group('Value')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function same_type_of_consent_types_are_equal()
     {
         $explicit = ConsentType::explicit();

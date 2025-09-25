@@ -44,7 +44,7 @@ class EngineBlock_Corto_Exception_ReceivedErrorStatusCode extends EngineBlock_Ex
         $this->response = $response;
     }
 
-    public function getFeedbackInfo()
+    public function getFeedbackInfo(): array
     {
         return $this->feedbackInfo;
     }

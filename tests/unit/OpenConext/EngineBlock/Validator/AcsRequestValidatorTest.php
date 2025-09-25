@@ -43,9 +43,7 @@ class AcsRequestValidatorTest extends TestCase
         $_SERVER = [];
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_happy_flow_get()
     {
         // Under the hood, the Binding::getCurrentBinding method is used, which directly reads from the super globals
@@ -57,9 +55,7 @@ class AcsRequestValidatorTest extends TestCase
         $this->assertTrue($this->validator->isValid($request));
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_happy_flow_post()
     {
         // Under the hood, the Binding::getCurrentBinding method is used, which directly reads from the super globals
@@ -71,9 +67,7 @@ class AcsRequestValidatorTest extends TestCase
         $this->assertTrue($this->validator->isValid($request));
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_patch_method_is_not_supported()
     {
         $this->expectException(InvalidRequestMethodException::class);
@@ -86,9 +80,7 @@ class AcsRequestValidatorTest extends TestCase
         $this->validator->isValid($request);
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_missing_saml_argument_on_post()
     {
         $this->expectException(MissingParameterException::class);
@@ -101,9 +93,7 @@ class AcsRequestValidatorTest extends TestCase
         $this->validator->isValid($request);
     }
 
-    /**
-     * @backupGlobals enabled
-     */
+    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
     public function test_missing_saml_argument_on_get()
     {
         $this->expectException(MissingParameterException::class);

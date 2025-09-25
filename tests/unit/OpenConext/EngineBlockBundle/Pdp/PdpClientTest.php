@@ -32,12 +32,9 @@ class PdpClientTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group Pdp
-     *
-     * @dataProvider pdpResponseNameProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('pdpResponseNameProvider')]
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_pdp_client_gives_policy_decisions_based_on_pdp_responses_to_pdp_requests($responseName)
     {
         $pdpRequest = Request::from('clientid', 'subject', 'idp', 'sp', [], '10.11.12.13');
@@ -55,7 +52,7 @@ class PdpClientTest extends TestCase
         $this->assertInstanceOf(PolicyDecision::class, $policyDecision);
     }
 
-    public function pdpResponseNameProvider()
+    public static function pdpResponseNameProvider()
     {
         return [
             ['deny'],

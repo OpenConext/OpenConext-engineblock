@@ -74,5 +74,5 @@ services:
 
     OpenConext\EngineBlock\Service\RequestAccessMailer:
         arguments:
-            - '@mailer'
+            - '@symfony.mailer'
             - '%email_request_access_address%'

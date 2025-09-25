@@ -44,10 +44,8 @@ class MfaHelperTest extends TestCase
         $this->mfaHelper = new MfaHelper($logger, $this->repo);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function happy_flow()
     {
         $spEntityId = 'arbitrarySpEntityId';
@@ -57,10 +55,8 @@ class MfaHelperTest extends TestCase
         self::assertTrue($isTransparent);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function not_transparent_mfa_entity()
     {
         $spEntityId = 'arbitrarySpEntityId';
@@ -70,10 +66,8 @@ class MfaHelperTest extends TestCase
         self::assertFalse($isTransparent);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function not_an_mfa_entity()
     {
         $spEntityId = 'arbitrarySpEntityId';
@@ -83,10 +77,8 @@ class MfaHelperTest extends TestCase
         self::assertFalse($isTransparent);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function idp_not_found()
     {
         $spEntityId = 'arbitrarySpEntityId';

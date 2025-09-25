@@ -41,7 +41,7 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
     /**
      * {@inheritdoc}
      */
-    public function getResponse()
+    public function getResponse(): EngineBlock_Saml2_ResponseAnnotationDecorator
     {
         return $this->_response;
     }
@@ -57,7 +57,7 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
     /**
      * {@inheritdoc}
      */
-    public function getResponseAttributeValueTypes()
+    public function getResponseAttributeValueTypes(): array
     {
         return $this->_responseAttributeValueTypes;
     }

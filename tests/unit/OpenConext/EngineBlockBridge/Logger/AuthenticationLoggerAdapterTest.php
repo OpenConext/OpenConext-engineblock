@@ -39,11 +39,9 @@ class AuthenticationLoggerAdapterTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group EngineBlockBridge
-     * @group Logger
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBridge')]
+    #[\PHPUnit\Framework\Attributes\Group('Logger')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function arguments_are_converted_correctly()
     {
         $serviceProviderEntityId  = 'SpEntityId';
@@ -101,11 +99,9 @@ class AuthenticationLoggerAdapterTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group EngineBlockBridge
-     * @group Logger
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBridge')]
+    #[\PHPUnit\Framework\Attributes\Group('Logger')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function arguments_with_log_attributes_are_converted_correctly()
     {
         $serviceProviderEntityId  = 'SpEntityId';

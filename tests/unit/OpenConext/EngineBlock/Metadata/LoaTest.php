@@ -24,9 +24,7 @@ use TypeError;
 
 class LoaTest extends TestCase
 {
-    /**
-     * @dataProvider provideValidLoaParameters
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideValidLoaParameters')]
     public function test_loa_happy_flow(int $level, string $identifier, $expectationDescription)
     {
         $loa = Loa::create($level, $identifier);
@@ -35,18 +33,14 @@ class LoaTest extends TestCase
         $this->assertEquals($identifier, $loa->getIdentifier(), $expectationDescription);
     }
 
-    /**
-     * @dataProvider provideInvalidLoaParameters
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideInvalidLoaParameters')]
     public function test_loa_sad_flow($level, $identifier, $expectedException)
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedException);
         Loa::create($level, $identifier);
     }
-    /**
-     * @dataProvider provideErrorneousLoaParameters
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideErrorneousLoaParameters')]
     public function test_loa_errors($level, $identifier)
     {
         $this->expectException(TypeError::class);
@@ -78,7 +72,7 @@ class LoaTest extends TestCase
         $this->assertFalse($loa1->levelIsHigherOrEqualTo($loa3));
     }
 
-    public function provideValidLoaParameters()
+    public static function provideValidLoaParameters()
     {
         return [
             [10, 'https://vm.openconext.nl/loa1', 'A level 1 LoA'],
@@ -88,7 +82,7 @@ class LoaTest extends TestCase
         ];
     }
 
-    public function provideInvalidLoaParameters()
+    public static function provideInvalidLoaParameters()
     {
         return [
             [0, 'https://vm.openconext.nl/loa1', 'Please provide a valid level. Acceptable LoA levels are "10, 15, 20, 30"'],
@@ -99,7 +93,7 @@ class LoaTest extends TestCase
         ];
     }
 
-    public function provideErrorneousLoaParameters()
+    public static function provideErrorneousLoaParameters()
     {
         return [
             [9999999999999999999999999999, 'https://vm.openconext.nl/loa1', 'The LoA level must be an integer value'],
