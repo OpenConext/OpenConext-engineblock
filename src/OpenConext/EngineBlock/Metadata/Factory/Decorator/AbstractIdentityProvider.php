@@ -115,10 +115,10 @@ abstract class AbstractIdentityProvider implements IdentityProviderEntityInterfa
     }
 
     /**
-     * @param $locale
+     * @param string $locale
      * @return Organization|null
      */
-    public function getOrganization($locale): ?Organization
+    public function getOrganization(string $locale): ?Organization
     {
         return $this->entity->getOrganization($locale);
     }
