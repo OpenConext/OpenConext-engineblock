@@ -29,7 +29,6 @@ class Md5 extends FunctionNode
 
     public function getSql(SqlWalker $sqlWalker): string
     {
-        // Directly emit the MD5 SQL function instead of using the deprecated platform->getMd5Expression() helper.
         return 'MD5(' . $this->value->dispatch($sqlWalker) . ')';
     }
 
