@@ -23,6 +23,17 @@ Feature:
     And I should see "Students of MyIdP do not have access to this resource"
     And the response should contain "idp-logo.jpg"
 
+  Scenario: Access is denied because of an IdP specific Deny policy triggered by IdP
+    Given IDP "Dummy IdP" requires a policy enforcement decision
+    And pdp gives an IdP specific deny response for "MyIdP"
+    When I log in at "Dummy SP"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    And I should see "Error - Access denied"
+    And I should see "Message from your organisation:"
+    And I should see "Students of MyIdP do not have access to this resource"
+    And the response should contain "idp-logo.jpg"
+
   Scenario: Access is denied because of a Deny policy
     Given SP "Dummy SP" requires a policy enforcement decision
       And pdp gives a deny response

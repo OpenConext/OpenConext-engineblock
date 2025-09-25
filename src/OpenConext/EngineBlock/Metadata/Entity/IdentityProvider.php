@@ -99,7 +99,7 @@ class IdentityProvider extends AbstractRole
 
     /**
      * WARNING: Please don't use this entity directly but use the dedicated factory instead.
-     * @see \OpenConext\EngineBlock\Factory\Factory\IdentityProviderFactory
+     * @see \OpenConext\EngineBlock\Metadata\Factory\Factory\IdentityProviderFactory
      */
     public function __construct(
         $entityId,
@@ -144,7 +144,8 @@ class IdentityProvider extends AbstractRole
         StepupConnections $stepupConnections = null,
         MfaEntityCollection $mfaEntities = null,
         array $discoveries = [],
-        ?string $defaultRAC = null
+        ?string $defaultRAC = null,
+        bool $policyEnforcementDecisionRequired = false
     ) {
         if (is_null($mdui)) {
             $mdui = Mdui::emptyMdui();
@@ -192,7 +193,8 @@ class IdentityProvider extends AbstractRole
             $additionalLogging,
             $signatureMethod,
             $mfaEntities,
-            $defaultRAC
+            $defaultRAC,
+            $policyEnforcementDecisionRequired
         );
 
         $this->assertAllDiscoveries($discoveries);

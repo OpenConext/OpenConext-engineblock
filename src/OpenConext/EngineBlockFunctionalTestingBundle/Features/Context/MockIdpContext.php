@@ -105,6 +105,19 @@ class MockIdpContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^IDP "([^"]*)" requires a policy enforcement decision$/
+     * @param string $idpName
+     */
+    public function idpRequiresAPolicyEnforcementDecision($idpName)
+    {
+        $idp = $this->mockIdpRegistry->get($idpName);
+
+        $this->serviceRegistryFixture
+            ->requiresPolicyEnforcementDecisionForIdp($idp->entityId())
+            ->save();
+    }
+
+    /**
      * @Given /^an Identity Provider named "([^"]*)" with logo "([^"]*)"$/
      */
     public function anIdentityProviderNamedWithLogo($name, $logo)
