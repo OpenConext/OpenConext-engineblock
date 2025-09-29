@@ -44,7 +44,7 @@ final class FilesystemAdapter implements FileHandler
             $this->filesystem->dumpFile($filePath, $data);
         } catch (IOException $exception) {
             $newMessage = sprintf('Could not write data to file "%s": "%s"', $filePath, $exception->getMessage());
-            throw new RuntimeException($newMessage, null, $exception);
+            throw new RuntimeException($newMessage, 0, $exception);
         }
     }
 

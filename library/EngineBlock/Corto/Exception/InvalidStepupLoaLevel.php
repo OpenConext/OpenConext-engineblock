@@ -32,7 +32,7 @@ class EngineBlock_Corto_Exception_InvalidStepupLoaLevel extends EngineBlock_Exce
     /**
      * @return array
      */
-    public function getFeedbackInfo()
+    public function getFeedbackInfo(): array
     {
         return $this->feedback;
     }

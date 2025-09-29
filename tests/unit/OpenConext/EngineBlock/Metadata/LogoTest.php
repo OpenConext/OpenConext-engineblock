@@ -26,8 +26,8 @@ class LogoTest extends TestCase
 {
     /**
      * @param string $json
-     * @dataProvider provideCorrectJson
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCorrectJson')]
     public function test_create_logo_from_json_happy_flow(string $json): void
     {
         $jsonData = json_decode($json, true);
@@ -48,8 +48,8 @@ class LogoTest extends TestCase
 
     /**
      * @param string $json
-     * @dataProvider provideUrlMissingJson
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideUrlMissingJson')]
     public function test_create_logo_from_json_requires_url(string $json): void
     {
         self::expectException(MduiRuntimeException::class);
@@ -75,7 +75,7 @@ class LogoTest extends TestCase
 
     }
 
-    public function provideCorrectJson()
+    public static function provideCorrectJson()
     {
         return [
             'all data present' => ['{"url": "https://logo.example.com/logo.gif", "height": 12, "width": 50}'],
@@ -87,7 +87,7 @@ class LogoTest extends TestCase
         ];
     }
 
-    public function provideUrlMissingJson()
+    public static function provideUrlMissingJson()
     {
         return [
             'url not present' => ['{"height": 12, "width": 50}'],

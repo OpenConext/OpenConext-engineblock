@@ -21,19 +21,19 @@ use PHPUnit\Framework\TestCase;
 class EngineBlock_Test_TypeTest extends TestCase
 {
     /**
-     * @dataProvider validAttributesProvider
      *
      * @param $attributeName
      * @param $options
      * @param $attributes
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validAttributesProvider')]
     public function testAttributeValidates($attributeName, $options, $attributes)
     {
         $validator = new EngineBlock_Attributes_Validator_Type($attributeName, $options);
         $this->assertTrue($validator->validate($attributes));
     }
 
-    public function validAttributesProvider()
+    public static function validAttributesProvider()
     {
         return array(
             array(

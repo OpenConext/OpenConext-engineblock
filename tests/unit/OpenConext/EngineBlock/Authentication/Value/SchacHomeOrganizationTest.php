@@ -24,13 +24,13 @@ use PHPUnit\Framework\TestCase;
 class SchacHomeOrganizationTest extends TestCase
 {
     /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     * @dataProvider \OpenConext\TestDataProvider::notStringOrEmptyString
      *
      * @param mixed $notStringOrEmptyString
      */
+    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notStringOrEmptyString')]
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function schac_home_organization_must_be_a_non_empty_string($notStringOrEmptyString)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -38,11 +38,9 @@ class SchacHomeOrganizationTest extends TestCase
         new SchacHomeOrganization($notStringOrEmptyString);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function schac_home_organization_can_be_retrieved()
     {
         $schacHomeOrganizationValue = 'OpenConext.org';
@@ -52,11 +50,9 @@ class SchacHomeOrganizationTest extends TestCase
         $this->assertSame($schacHomeOrganizationValue, $schacHomeOrganization->getSchacHomeOrganization());
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function schac_home_organization_equality_is_determined_based_on_value()
     {
         $base      = new SchacHomeOrganization('OpenConext.org');
@@ -67,11 +63,9 @@ class SchacHomeOrganizationTest extends TestCase
         $this->assertFalse($base->equals($different));
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_schac_home_organization_can_be_cast_to_string()
     {
         $schacHomeOrganization = new SchacHomeOrganization('OpenConext.org');

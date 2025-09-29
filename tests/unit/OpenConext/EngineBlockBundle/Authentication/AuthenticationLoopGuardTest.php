@@ -32,10 +32,8 @@ class AuthenticationLoopGuardTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group AuthenticationState
-     */
+    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authentication_loop_guard_determines_that_it_is_in_a_loop()
     {
         $maximumNumberOfAuthenticationProceduresAllowed = 1;
@@ -76,10 +74,8 @@ class AuthenticationLoopGuardTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group AuthenticationState
-     */
+    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authentication_loop_guard_determines_that_it_is_not_in_a_loop()
     {
         $maximumNumberOfAuthenticationProceduresAllowed = 2;

@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+use Doctrine\DBAL\Statement;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 
@@ -112,7 +113,7 @@ class EngineBlock_Corto_Model_Consent
     }
 
     /**
-     * @return bool|PDO
+     * @return Doctrine\DBAL\Connection
      */
     protected function _getConsentDatabaseConnection()
     {
@@ -149,11 +150,16 @@ class EngineBlock_Corto_Model_Consent
             return false;
         }
 
+        $consentUuid = $this->_getConsentUid();
+        if(! is_string($consentUuid)){
+            return false;
+        }
+
         $query = "INSERT INTO consent (hashed_user_id, service_id, attribute, consent_type, consent_date, deleted_at)
                   VALUES (?, ?, ?, ?, NOW(), '0000-00-00 00:00:00')
                   ON DUPLICATE KEY UPDATE attribute=VALUES(attribute), consent_type=VALUES(consent_type), consent_date=NOW()";
         $parameters = array(
-            sha1($this->_getConsentUid()),
+            sha1($consentUuid),
             $serviceProvider->entityId,
             $this->_getAttributesHash($this->_responseAttributes),
             $consentType,
@@ -167,10 +173,16 @@ class EngineBlock_Corto_Model_Consent
             );
         }
 
-        /** @var $statement PDOStatement */
-        if (!$statement->execute($parameters)) {
+        assert($statement instanceof Statement);
+        try{
+            foreach ($parameters as $index => $parameter){
+                $statement->bindValue($index + 1, $parameter);
+            }
+
+            $statement->executeStatement();
+        }catch (\Doctrine\DBAL\Exception $e){
             throw new EngineBlock_Corto_Module_Services_Exception(
-                sprintf('Error storing consent: "%s"', var_export($statement->errorInfo(), true)),
+                sprintf('Error storing consent: "%s"', var_export($e->getMessage(), true)),
                 EngineBlock_Exception::CODE_CRITICAL
             );
         }
@@ -187,6 +199,11 @@ class EngineBlock_Corto_Model_Consent
 
             $attributesHash = $this->_getAttributesHash($this->_responseAttributes);
 
+            $consentUuid = $this->_getConsentUid();
+            if (!is_string($consentUuid)) {
+                return false;
+            }
+
             $query = "
                 SELECT *
                 FROM {$this->_tableName}
@@ -196,7 +213,7 @@ class EngineBlock_Corto_Model_Consent
                   AND consent_type = ?
                   AND deleted_at IS NULL
             ";
-            $hashedUserId = sha1($this->_getConsentUid());
+            $hashedUserId = sha1($consentUuid);
             $parameters = array(
                 $hashedUserId,
                 $serviceProvider->entityId,
@@ -204,12 +221,14 @@ class EngineBlock_Corto_Model_Consent
                 $consentType,
             );
 
-            /** @var $statement PDOStatement */
             $statement = $dbh->prepare($query);
-            $statement->execute($parameters);
-            $rows = $statement->fetchAll();
+            assert($statement instanceof Statement);
+            foreach ($parameters as $position => $parameter) {
+                $statement->bindValue($position + 1, $parameter);
+            }
+            $rows = $statement->executeQuery();
 
-            if (count($rows) < 1) {
+            if ($rows->rowCount() < 1) {
                 // No stored consent found
                 return false;
             }

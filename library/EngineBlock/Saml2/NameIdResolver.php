@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+use Doctrine\DBAL\Statement;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
@@ -264,23 +265,34 @@ class EngineBlock_Saml2_NameIdResolver
         $statement = $this->_getDb()->prepare(
             'SELECT uuid FROM service_provider_uuid WHERE service_provider_entity_id=?'
         );
-        $statement->execute(array($spEntityId));
-        $result = $statement->fetchAll();
+        assert($statement instanceof Statement);
+        $statement->bindValue(1, $spEntityId);
+        $resultSet = $statement->executeQuery();
 
-        if (count($result) > 1) {
+
+        if ($resultSet->rowCount() > 1) {
             throw new EngineBlock_Exception(sprintf('Multiple SP UUIDs found? For SP: "%s"', $spEntityId));
         }
+
+        if($resultSet->rowCount() === 0){
+            return false;
+        }
+
+        $result = $resultSet->fetchAllAssociative();
 
         return isset($result[0]['uuid']) ? $result[0]['uuid'] : false;
     }
 
     protected function _storeServiceProviderUuid($spEntityId, $uuid)
     {
-        $this->_getDb()->prepare(
+        $statement = $this->_getDb()->prepare(
             'INSERT INTO service_provider_uuid (uuid, service_provider_entity_id) VALUES (?,?)'
-        )->execute(
-            array($uuid, $spEntityId)
         );
+
+        $statement->bindValue(1, $uuid);
+        $statement->bindValue(2, $spEntityId);
+
+        $statement->executeStatement();
     }
 
     protected function _fetchPersistentId($serviceProviderUuid, $userUuid)
@@ -288,9 +300,12 @@ class EngineBlock_Saml2_NameIdResolver
         $statement = $this->_getDb()->prepare(
             "SELECT persistent_id FROM saml_persistent_id WHERE service_provider_uuid = ? AND user_uuid = ?"
         );
-        $statement->execute(array($serviceProviderUuid, $userUuid));
-        $result = $statement->fetchAll();
-        if (count($result) > 1) {
+
+        $statement->bindValue(1, $serviceProviderUuid);
+        $statement->bindValue(2, $userUuid);
+
+        $resultSet = $statement->executeQuery();
+        if ($resultSet->rowCount() > 1) {
             throw new EngineBlock_Exception(
                 sprintf(
                     'Multiple persistent IDs found? For: SP UUID: "%s" and user UUID: "%s"',
@@ -299,6 +314,9 @@ class EngineBlock_Saml2_NameIdResolver
                 )
             );
         }
+
+        $result = $resultSet->fetchAllAssociative();
+
         return isset($result[0]['persistent_id']) ? $result[0]['persistent_id'] : false;
     }
 
@@ -309,14 +327,18 @@ class EngineBlock_Saml2_NameIdResolver
 
     protected function _storePersistentId($persistentId, $serviceProviderUuid, $userUuid)
     {
-        $this->_getDb()->prepare(
+        $statement = $this->_getDb()->prepare(
             "INSERT INTO saml_persistent_id (persistent_id, service_provider_uuid, user_uuid) VALUES (?,?,?)"
-        )->execute(
-            array($persistentId, $serviceProviderUuid, $userUuid)
         );
+
+        $statement->bindValue(1, $persistentId);
+        $statement->bindValue(2, $serviceProviderUuid);
+        $statement->bindValue(3, $userUuid);
+
+        $statement->executeStatement();
     }
 
-    protected function _getDb()
+    protected function _getDb(): Doctrine\DBAL\Connection
     {
         static $s_db;
         if ($s_db) {

@@ -22,6 +22,7 @@ use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
 use SAML2\Response;
@@ -72,6 +73,7 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateAllowedConnectionTest extend
         $verifier->execute();
     }
 
+    #[DoesNotPerformAssertions]
     public function testItShouldRunInNormalConditionsWithTrustedProxy()
     {
         $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection();

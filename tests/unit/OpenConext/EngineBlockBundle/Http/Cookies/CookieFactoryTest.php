@@ -26,9 +26,7 @@ class CookieFactoryTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function returns_the_cookie()
     {
         $now = new DateTimeImmutable();
@@ -45,9 +43,7 @@ class CookieFactoryTest extends TestCase
         $this->assertFalse($actual->isSecure());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function sets_the_expiry_time()
     {
         $now = new DateTimeImmutable();

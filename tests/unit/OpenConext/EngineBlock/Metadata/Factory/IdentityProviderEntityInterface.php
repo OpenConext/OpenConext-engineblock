@@ -17,19 +17,18 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory;
 
-class ServiceProviderEntityinterfaceTest extends AbstractEntityTest
+class IdentityProviderEntityInterface extends AbstractEntity
 {
     /**
      * This test will test if all parameters in the old mutable entity are implemented
      */
     public function test_if_all_parameters_are_implemented()
     {
-
         // Get all possible state from the old mutable entity
-        $parameters = $this->getOrmEntityServiceProviderValues();
+        $parameters = $this->getOrmEntityIdentityProviderValues();
 
         // Get all state from the immutable entity adapter
-        $implemented = $this->getServiceProviderValues(ServiceProviderEntityInterface::class);
+        $implemented = $this->getIdentityProviderValues(IdentityProviderEntityInterface::class);
 
         // Remove found valid parameters where the name and hinted type do match
         foreach ($parameters as $name => $type) {
@@ -42,5 +41,14 @@ class ServiceProviderEntityinterfaceTest extends AbstractEntityTest
         // all parameters should be implemented as method
         $result = array_diff_key($parameters, $implemented);
         $this->assertEmpty($result, 'Missing accessor method for entity field(s): '. json_encode(array_keys($result)). ". Please provide an accessor for every field that's available on the entity.");
+    }
+
+    /**
+     * Test if all properties are implemented to mock the old mutable entity
+     */
+    public function test_mock_properties()
+    {
+        $properties = $this->getIdentityProviderMockProperties();
+        $this->assertCount(count($this->getOrmEntityIdentityProviderValues()), $properties);
     }
 }

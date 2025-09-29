@@ -89,7 +89,7 @@ final class Request implements JsonSerializable
         });
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return [
             'userAttributes' => array_merge(

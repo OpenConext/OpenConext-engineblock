@@ -204,10 +204,7 @@ class MockStepupGateway
         }
 
         // 1. Parse to xml object
-        // additional security against XXE Processing vulnerability
-        $previous = libxml_disable_entity_loader(true);
         $document = DOMDocumentFactory::fromString($samlRequest);
-        libxml_disable_entity_loader($previous);
 
         // 2. Parse saml request
         $authnRequest = Message::fromXML($document->firstChild);

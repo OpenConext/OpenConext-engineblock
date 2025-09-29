@@ -102,9 +102,6 @@ class AuthenticationLogger
      */
     private function generateTimestamp()
     {
-        $microTime = microtime(true);
-        $microseconds = sprintf("%06d", ($microTime - floor($microTime)) * 1000000);
-        $timestamp = new DateTime(date('Y-m-d H:i:s.' . $microseconds, $microTime));
-        return $timestamp->format('Y-m-d\TH:i:s.uP');
+        return (new DateTime())->format('Y-m-d\TH:i:s.uP');
     }
 }

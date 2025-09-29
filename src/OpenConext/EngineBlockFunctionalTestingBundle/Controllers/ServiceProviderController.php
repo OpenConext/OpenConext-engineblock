@@ -126,7 +126,6 @@ class ServiceProviderController extends AbstractController
      */
     public function assertionConsumerAction(Request $request)
     {
-        $previous = libxml_disable_entity_loader(true);
         try {
             $httpPostBinding = new HTTPPost();
             $message = $httpPostBinding->receive();
@@ -151,8 +150,6 @@ class ServiceProviderController extends AbstractController
         $doc->formatOutput = true;
         $doc->loadXML($xml);
         $xml = $doc->saveXML();
-
-        libxml_disable_entity_loader($previous);
 
         return new Response(
             $xml,

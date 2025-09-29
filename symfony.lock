@@ -68,6 +68,15 @@
     "openconext/monitor-bundle": {
         "version": "3.1.0"
     },
+    "phpstan/phpstan": {
+        "version": "2.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "5e490cc197fb6bb1ae22e5abbc531ddc633b6767"
+        }
+    },
     "phpunit/phpunit": {
         "version": "8.5",
         "recipe": {
@@ -158,6 +167,18 @@
             "src/Kernel.php"
         ]
     },
+    "symfony/mailer": {
+        "version": "5.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "4.3",
+            "ref": "09051cfde49476e3c12cd3a0e44289ace1c75a4f"
+        },
+        "files": [
+            "config/packages/mailer.yaml"
+        ]
+    },
     "symfony/monolog-bundle": {
         "version": "3.8",
         "recipe": {
@@ -208,20 +229,6 @@
         },
         "files": [
             "config/packages/security.yaml"
-        ]
-    },
-    "symfony/swiftmailer-bundle": {
-        "version": "3.5",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "2.5",
-            "ref": "f0b2fccdca2dfd97dc2fd5ad216d5e27c4f895ac"
-        },
-        "files": [
-            "config/packages/dev/swiftmailer.yaml",
-            "config/packages/swiftmailer.yaml",
-            "config/packages/test/swiftmailer.yaml"
         ]
     },
     "symfony/translation": {

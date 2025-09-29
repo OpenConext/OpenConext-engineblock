@@ -89,7 +89,7 @@ final class AuthenticationProcedureList implements Countable
         return false;
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->authenticationProcedures);
     }

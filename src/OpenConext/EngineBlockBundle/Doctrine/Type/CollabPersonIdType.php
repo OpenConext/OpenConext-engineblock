@@ -28,15 +28,15 @@ class CollabPersonIdType extends Type
 {
     const NAME = 'engineblock_collab_person_id';
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
     {
         // overwrite the fieldDeclaration to always be MAX_LENGTH characters max, this is also enforced in the VO.
         $fieldDeclaration['length'] = CollabPersonId::MAX_LENGTH;
 
-        return $platform->getVarcharTypeDeclarationSQL($fieldDeclaration);
+        return $platform->getStringTypeDeclarationSQL($fieldDeclaration);
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if (is_null($value)) {
             return $value;
@@ -56,7 +56,7 @@ class CollabPersonIdType extends Type
         return $value->getCollabPersonId();
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         if (is_null($value)) {
             return $value;
@@ -66,11 +66,12 @@ class CollabPersonIdType extends Type
             $entityId = new CollabPersonId($value);
         } catch (InvalidArgumentException $e) {
             // get nice standard message, so we can throw it keeping the exception chain
-            $doctrineExceptionMessage = ConversionException::conversionFailedFormat(
+            $doctrineExceptionMessage = sprintf(
+                'Could not convert database value "%s" to Doctrine Type %s. Expected format: %s',
                 $value,
                 $this->getName(),
                 'a valid CollabPersonId'
-            )->getMessage();
+            );
 
             throw new ConversionException($doctrineExceptionMessage, 0, $e);
         }
@@ -78,7 +79,7 @@ class CollabPersonIdType extends Type
         return $entityId;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return self::NAME;
     }

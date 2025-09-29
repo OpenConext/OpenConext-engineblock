@@ -27,11 +27,9 @@ class AdditionalInfoFormatterTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Logger
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Logger')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function additional_info_is_added_for_an_engineblock_exception()
     {
         $exception = new EngineBlock_Exception('message', EngineBlock_Exception::CODE_EMERGENCY);
@@ -50,11 +48,9 @@ class AdditionalInfoFormatterTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Logger
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Logger')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function additional_info_is_added_for_engineblock_exception_when_batch_formatting()
     {
         $exception = new EngineBlock_Exception('message');
@@ -73,11 +69,9 @@ class AdditionalInfoFormatterTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Logger
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Logger')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function additional_info_is_not_added_for_non_engineblock_exceptions()
     {
         $exception = new Exception('message');

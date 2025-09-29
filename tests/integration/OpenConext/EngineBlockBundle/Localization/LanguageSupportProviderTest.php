@@ -23,9 +23,7 @@ use PHPUnit\Framework\TestCase;
 
 class LanguageSupportProviderTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function only_enabled_languages_should_be_supported()
     {
         $LanguageSupportProvider = new LanguageSupportProvider(['nl', 'en', 'pt'], ['nl', 'en']);
@@ -33,9 +31,7 @@ class LanguageSupportProviderTest extends TestCase
         $this->assertSame(['nl', 'en'], $LanguageSupportProvider->getSupportedLanguages());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function duplicate_language_entries_should_not_result_in_duplicate_entries_with_supported_languages()
     {
         $LanguageSupportProvider = new LanguageSupportProvider(['nl', 'en', 'pt', 'nl'], ['nl', 'en', 'nl']);
@@ -43,9 +39,7 @@ class LanguageSupportProviderTest extends TestCase
         $this->assertSame(['nl', 'en'], $LanguageSupportProvider->getSupportedLanguages());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function an_unsupported_language_should_throw_an_exception()
     {
         $this->expectException(UnsupportedLanguageException::class);
@@ -54,9 +48,7 @@ class LanguageSupportProviderTest extends TestCase
         $LanguageSupportProvider = new LanguageSupportProvider(['nl', 'en', 'pt'], ['de']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function no_setting_enabled_languages_should_result_in_an_exception()
     {
         $this->expectException(UnsupportedLanguageException::class);
@@ -65,9 +57,7 @@ class LanguageSupportProviderTest extends TestCase
         $LanguageSupportProvider = new LanguageSupportProvider(['nl', 'en', 'pt'], []);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function no_active_languages_should_result_in_an__excpetion()
     {
         $this->expectException(UnsupportedLanguageException::class);

@@ -28,7 +28,7 @@ class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBloc
         return $this->_responseAttributes;
     }
 
-    public function getResponseAttributeValueTypes()
+    public function getResponseAttributeValueTypes(): array
     {
         return $this->_responseAttributeValueTypes;
     }

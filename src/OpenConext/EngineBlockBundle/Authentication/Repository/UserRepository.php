@@ -18,15 +18,22 @@
 
 namespace OpenConext\EngineBlockBundle\Authentication\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlockBundle\Authentication\Entity\User;
 
 /**
  *
+ * @extends \Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository<\OpenConext\EngineBlockBundle\Authentication\Entity\User>
  */
-class UserRepository extends EntityRepository
+class UserRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, User::class);
+    }
+
     /**
      * @param User $user
      */
@@ -59,7 +66,7 @@ class UserRepository extends EntityRepository
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
         $queryBuilder
-            ->delete($this->_entityName, 'u')
+            ->delete(User::class, 'u')
             ->where('u.collabPersonId = :collabPersonId')
             ->setParameter('collabPersonId', $collabPersonId->getCollabPersonId())
             ->getQuery()

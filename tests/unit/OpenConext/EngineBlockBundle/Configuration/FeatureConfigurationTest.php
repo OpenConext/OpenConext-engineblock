@@ -28,11 +28,9 @@ class FeatureConfigurationTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group EngineBlockBundle
-     * @group Configuration
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
+    #[\PHPUnit\Framework\Attributes\Group('Configuration')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function all_features_must_be_an_instance_of_feature()
     {
         $features = [
@@ -46,11 +44,9 @@ class FeatureConfigurationTest extends TestCase
         new FeatureConfiguration($features);
     }
 
-    /**
-     * @test
-     * @group EngineBlockBundle
-     * @group Configuration
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
+    #[\PHPUnit\Framework\Attributes\Group('Configuration')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function all_features_must_have_a_string_key()
     {
         $features = [
@@ -63,11 +59,9 @@ class FeatureConfigurationTest extends TestCase
         new FeatureConfiguration($features);
     }
 
-    /**
-     * @test
-     * @group EngineBlockBundle
-     * @group Configuration
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
+    #[\PHPUnit\Framework\Attributes\Group('Configuration')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_feature_can_be_queried_for_presence()
     {
         $features = [
@@ -82,11 +76,9 @@ class FeatureConfigurationTest extends TestCase
         $this->assertFalse($featureConfiguration->hasFeature('not.configured'));
     }
 
-    /**
-     * @test
-     * @group EngineBlockBundle
-     * @group Configuration
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
+    #[\PHPUnit\Framework\Attributes\Group('Configuration')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_feature_is_correctly_reported_to_be_enabled()
     {
         $features = [
@@ -100,11 +92,9 @@ class FeatureConfigurationTest extends TestCase
         $this->assertFalse($featureConfiguration->isEnabled('disabled.feature'));
     }
 
-    /**
-     * @test
-     * @group EngineBlockBundle
-     * @group Configuration
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
+    #[\PHPUnit\Framework\Attributes\Group('Configuration')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function querying_whether_a_not_configured_feature_is_enabled_causes_an_exception_to_be_thrown()
     {
         $features = [

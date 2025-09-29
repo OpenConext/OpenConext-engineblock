@@ -120,7 +120,7 @@ class SsoSessionService
 
     private function createSsoSessionCookie(ParameterBag $cookies, string $issuer): string
     {
-        $ssoSession = json_decode($this->getSsoCookie($cookies));
+        $ssoSession = json_decode($this->getSsoCookie($cookies) ?? '');
 
         if (!is_array($ssoSession)) {
             $ssoSession = [];

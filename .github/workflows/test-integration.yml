@@ -88,6 +88,14 @@ jobs:
                         echo -e "\nLint frontend assets\n" && \
                         yarn lint
                     '
+            -   name: Run rectors
+                if: always()
+                continue-on-error: true
+                run: |
+                    cd docker && docker compose exec -T --user www-data engine.dev.openconext.local bash -c '
+                        echo -e "\nRun rector dry run\n" && \
+                        ./vendor/bin/rector --config=ci/qa-config/rector.php --dry-run --no-progress-bar
+                    '
             -   name: Show log on failure
                 if: failure()
                 run: |

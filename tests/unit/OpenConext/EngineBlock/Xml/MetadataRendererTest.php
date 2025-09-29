@@ -39,6 +39,7 @@ use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlock\Metadata\X509\X509PrivateKey;
 use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
 use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
+use OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Spaceless;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
@@ -67,10 +68,8 @@ class MetadataRendererTest extends TestCase
         parent::setUp();
     }
 
-    /**
-     * @test
-     * @group Metadata
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Metadata')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_metadata_factory_should_return_valid_signed_xml_for_idp()
     {
         $ssoLocation = 'https://example.com/sso';
@@ -108,10 +107,8 @@ class MetadataRendererTest extends TestCase
         $this->validateSchema($xml);
     }
 
-    /**
-     * @test
-     * @group Metadata
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Metadata')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_metadata_factory_should_return_valid_signed_xml_for_sp()
     {
         $assertionConsumerServices[] = new IndexedService(
@@ -161,10 +158,8 @@ class MetadataRendererTest extends TestCase
         $this->validateSchema($xml);
     }
 
-    /**
-     * @test
-     * @group Metadata
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Metadata')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function the_metadata_factory_should_return_valid_signed_xml_for_idps_of_sp()
     {
         $ssoLocation = 'https://example.com/sso';
@@ -224,10 +219,8 @@ class MetadataRendererTest extends TestCase
         $this->validateSchema($xml);
     }
 
-    /**
-     * @test
-     * @group Metadata
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Metadata')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function modified_metadata_should_not_pass_signature_validation()
     {
         $assertionConsumerServices[] = new IndexedService(
@@ -257,10 +250,8 @@ class MetadataRendererTest extends TestCase
         $this->assertFalse($this->validateXml($xml));
     }
 
-    /**
-     * @test
-     * @group Metadata
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Metadata')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function metadata_add_all_requested_attributes()
     {
         $xml = $this->metadataRenderer->fromServiceProviderEntity($this->buildSp(), 'default');
@@ -271,10 +262,8 @@ class MetadataRendererTest extends TestCase
         $this->assertStringContainsString($this->getRequestedAttributeXml('attribute3', false), $xml);
     }
 
-    /**
-     * @test
-     * @group Metadata
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Metadata')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function metadata_add_required_requested_attributes()
     {
         $this->metadataRenderer = $this->buildMetadataRenderer('required');
@@ -287,10 +276,8 @@ class MetadataRendererTest extends TestCase
         $this->assertStringNotContainsString($this->getRequestedAttributeXml('attribute3', false), $xml);
     }
 
-    /**
-     * @test
-     * @group Metadata
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Metadata')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function metadata_add_no_requested_attributes()
     {
         $this->metadataRenderer = $this->buildMetadataRenderer('none');
@@ -328,6 +315,8 @@ class MetadataRendererTest extends TestCase
 
         $translatorExtension = new TranslationExtension($translator);
         $environment->addExtension($translatorExtension);
+
+        $environment->addExtension(new Spaceless());
 
         $keyPairFactory = $this->createMock(KeyPairFactory::class);
         $keyPairFactory

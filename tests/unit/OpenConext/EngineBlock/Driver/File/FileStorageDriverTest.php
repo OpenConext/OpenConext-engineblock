@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlock\Driver\File;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 
 class FileStorageDriverTest extends TestCase
@@ -28,67 +29,64 @@ class FileStorageDriverTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     /**
-     * @test
-     * @group EngineBlock
-     * @group Driver
      *
-     * @dataProvider \OpenConext\TestDataProvider::notStringOrEmptyString
      *
      * @param mixed $notStringOrEmptyString
      */
+    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notStringOrEmptyString')]
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Driver')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function filepath_must_be_a_non_empty_string($notStringOrEmptyString)
     {
         $this->expectException(InvalidArgumentException::class);
 
-        new FileStorageDriver(m::mock('OpenConext\EngineBlock\Driver\File\FileHandler'), $notStringOrEmptyString);
+        new FileStorageDriver(m::mock(\OpenConext\EngineBlock\Driver\File\FileHandler::class), $notStringOrEmptyString);
     }
 
     /**
-     * @test
-     * @group EngineBlock
-     * @group Driver
      *
-     * @dataProvider \OpenConext\TestDataProvider::notString
      *
      * @param mixed $notString
      */
+    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notString')]
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Driver')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function data_to_save_must_be_a_string($notString)
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $storage = new FileStorageDriver(m::mock('OpenConext\EngineBlock\Driver\File\FileHandler'), '/some/path');
+        $storage = new FileStorageDriver(m::mock(\OpenConext\EngineBlock\Driver\File\FileHandler::class), '/some/path');
 
         $storage->save($notString);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Driver
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Driver')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    #[DoesNotPerformAssertions]
     public function data_is_written_unmodified_to_file()
     {
         $data     = 'FooBarBaz';
         $filePath = '/some/file/path';
 
-        $fileHandlerMock = m::mock('OpenConext\EngineBlock\Driver\File\FileHandler');
+        $fileHandlerMock = m::mock(\OpenConext\EngineBlock\Driver\File\FileHandler::class);
         $fileHandlerMock->shouldReceive('writeTo')->withArgs([$data, $filePath]);
 
         $storage = new FileStorageDriver($fileHandlerMock, $filePath);
         $storage->save($data);
     }
 
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Driver
-     */
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Driver')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function data_is_read_from_file_and_returned_unmodified()
     {
         $data = 'FooBarBaz';
         $filePath = '/some/file/path';
 
-        $fileHandlerMock = m::mock('OpenConext\EngineBlock\Driver\File\FileHandler');
+        $fileHandlerMock = m::mock(\OpenConext\EngineBlock\Driver\File\FileHandler::class);
         $fileHandlerMock->shouldReceive('readFrom')->withArgs([$filePath])->andReturn($data);
 
         $storage = new FileStorageDriver($fileHandlerMock, $filePath);

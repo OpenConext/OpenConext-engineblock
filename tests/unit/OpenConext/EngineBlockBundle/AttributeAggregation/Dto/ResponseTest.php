@@ -24,16 +24,12 @@ use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Response;
 use OpenConext\EngineBlockBundle\Exception\InvalidAttributeAggregationResponseException;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @group AttributeAggregation
- */
+#[\PHPUnit\Framework\Attributes\Group('AttributeAggregation')]
 class ResponseTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function response_contains_parsed_aggregated_attributes()
     {
         $response = Response::fromData([
@@ -53,18 +49,14 @@ class ResponseTest extends TestCase
         $this->assertInstanceOf(AggregatedAttribute::class, $response->attributes[0]);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function response_data_must_be_an_array()
     {
         $this->expectException(InvalidAttributeAggregationResponseException::class);
         Response::fromData(NULL);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function response_attribute_must_have_a_name()
     {
         $this->expectException(InvalidAttributeAggregationResponseException::class);
@@ -76,9 +68,7 @@ class ResponseTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function response_attribute_must_have_values_property()
     {
         $this->expectException(InvalidAttributeAggregationResponseException::class);
@@ -90,9 +80,7 @@ class ResponseTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function response_attribute_must_have_a_source()
     {
         $this->expectException(InvalidAttributeAggregationResponseException::class);

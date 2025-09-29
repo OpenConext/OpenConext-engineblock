@@ -36,13 +36,11 @@ class ResponseTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /**
-     * @test
-     * @group Pdp
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_pdp_response_without_a_response_key_is_invalid()
     {
-        $this->expectException('\OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException');
+        $this->expectException(\OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException::class);
         $this->expectExceptionMessage('Key: Response was not found in the PDP response');
 
         $responseJson = file_get_contents(__DIR__ . '/../fixture/invalid/response_without_response_key.json');
@@ -50,13 +48,11 @@ class ResponseTest extends TestCase
         Response::fromData(json_decode($responseJson, true));
     }
 
-    /**
-     * @test
-     * @group Pdp
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_pdp_response_without_a_response_key_as_an_array_is_invalid()
     {
-        $this->expectException('\OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException');
+        $this->expectException(\OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException::class);
         $this->expectExceptionMessage('Response is not an array');
 
         $responseJson = file_get_contents(__DIR__ . '/../fixture/invalid/response_without_response_array.json');
@@ -64,13 +60,11 @@ class ResponseTest extends TestCase
         Response::fromData(json_decode($responseJson, true));
     }
 
-    /**
-     * @test
-     * @group Pdp
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_pdp_response_with_an_empty_response_is_invalid()
     {
-        $this->expectException('\OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException');
+        $this->expectException(\OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException::class);
         $this->expectExceptionMessage('No response data found');
 
         $responseJson = file_get_contents(__DIR__ . '/../fixture/invalid/response_with_empty_response.json');
@@ -78,13 +72,11 @@ class ResponseTest extends TestCase
         Response::fromData(json_decode($responseJson, true));
     }
 
-    /**
-     * @test
-     * @group Pdp
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_pdp_response_without_a_status_is_invalid()
     {
-        $this->expectException('\OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException');
+        $this->expectException(\OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException::class);
         $this->expectExceptionMessage('Key: Status was not found in the PDP response');
 
         $responseJson = file_get_contents(__DIR__ . '/../fixture/invalid/response_without_status_key.json');
@@ -92,13 +84,11 @@ class ResponseTest extends TestCase
         Response::fromData(json_decode($responseJson, true));
     }
 
-    /**
-     * @test
-     * @group Pdp
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_pdp_response_without_a_policy_identifier_is_invalid()
     {
-        $this->expectException('\OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException');
+        $this->expectException(\OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException::class);
         $this->expectExceptionMessage('Key: PolicyIdentifier was not found in the PDP response');
 
         $responseJson = file_get_contents(__DIR__ . '/../fixture/invalid/response_without_policy_identifier_key.json');
@@ -106,13 +96,11 @@ class ResponseTest extends TestCase
         Response::fromData(json_decode($responseJson, true));
     }
 
-    /**
-     * @test
-     * @group Pdp
-     */
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function a_pdp_response_without_a_decision_is_invalid()
     {
-        $this->expectException('\OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException');
+        $this->expectException(\OpenConext\EngineBlockBundle\Exception\InvalidPdpResponseException::class);
         $this->expectExceptionMessage('Key: Decision was not found in the PDP response');
 
         $responseJson = file_get_contents(__DIR__ . '/../fixture/invalid/response_without_decision_key.json');
@@ -121,13 +109,12 @@ class ResponseTest extends TestCase
     }
 
     /**
-     * @test
-     * @group Pdp
-     *
-     * @dataProvider pdpResponseProvider
      * @param string $fixtureName
      * @param Response $expectedResponse
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('pdpResponseProvider')]
+    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function pdp_responses_are_deserialized_correctly($fixtureName, $expectedResponse)
     {
         $responseString = file_get_contents(__DIR__.'/../fixture/response_'. $fixtureName . '.json');
@@ -141,17 +128,17 @@ class ResponseTest extends TestCase
         );
     }
 
-    public function pdpResponseProvider()
+    public static function pdpResponseProvider()
     {
         return [
-            'Decision: Deny'          => ['deny', $this->buildDenyResponse()],
-            'Decision: Permit'        => ['permit', $this->buildPermitResponse()],
-            'Decision: NotApplicable' => ['not_applicable', $this->buildNotApplicableResponse()],
-            'Decision: Indeterminate' => ['indeterminate', $this->buildIndeterminateResponse()],
+            'Decision: Deny'          => ['deny', self::buildDenyResponse()],
+            'Decision: Permit'        => ['permit', self::buildPermitResponse()],
+            'Decision: NotApplicable' => ['not_applicable', self::buildNotApplicableResponse()],
+            'Decision: Indeterminate' => ['indeterminate', self::buildIndeterminateResponse()],
         ];
     }
 
-    private function buildDenyResponse()
+    private static function buildDenyResponse()
     {
         $response = new Response;
 
@@ -198,7 +185,7 @@ class ResponseTest extends TestCase
         return $response;
     }
 
-    private function buildPermitResponse()
+    private static function buildPermitResponse()
     {
         $response = new Response;
 
@@ -230,7 +217,7 @@ class ResponseTest extends TestCase
         return $response;
     }
 
-    private function buildNotApplicableResponse()
+    private static function buildNotApplicableResponse()
     {
         $response = new Response;
 
@@ -249,7 +236,7 @@ class ResponseTest extends TestCase
         return $response;
     }
 
-    private function buildIndeterminateResponse()
+    private static function buildIndeterminateResponse()
     {
         $response = new Response;
 

@@ -28,12 +28,12 @@ class CollabPersonUuidType extends Type
 {
     const NAME = 'engineblock_collab_person_uuid';
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        return $platform->getGuidTypeDeclarationSQL($fieldDeclaration);
+        return $platform->getGuidTypeDeclarationSQL($column);
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if (is_null($value)) {
             return $value;
@@ -53,7 +53,7 @@ class CollabPersonUuidType extends Type
         return $value->getUuid();
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         if (is_null($value)) {
             return $value;
@@ -63,11 +63,12 @@ class CollabPersonUuidType extends Type
             $collabPersonUuid = new CollabPersonUuid($value);
         } catch (InvalidArgumentException $e) {
             // get nice standard message, so we can throw it keeping the exception chain
-            $doctrineExceptionMessage = ConversionException::conversionFailedFormat(
+            $doctrineExceptionMessage = sprintf(
+                'Could not convert database value "%s" to Doctrine Type %s. Expected format: %s',
                 $value,
                 $this->getName(),
                 'valid UUIDv4'
-            )->getMessage();
+            );
 
             throw new ConversionException($doctrineExceptionMessage, 0, $e);
         }
@@ -75,7 +76,7 @@ class CollabPersonUuidType extends Type
         return $collabPersonUuid;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return self:: NAME;
     }
