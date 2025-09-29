@@ -4,10 +4,10 @@ use Rector\Config\RectorConfig;
 
 return RectorConfig::configure()
     ->withPaths([
-        __DIR__ . '/config',
-        __DIR__ . '/src',
-        __DIR__ . '/library',
-        __DIR__ . '/tests',
+        __DIR__ . '/../../config',
+        __DIR__ . '/../../src',
+        __DIR__ . '/../../library',
+        __DIR__ . '/../../tests',
     ])
     ->withPhpSets()
     ->withComposerBased(doctrine: true, phpunit: true, symfony: true)

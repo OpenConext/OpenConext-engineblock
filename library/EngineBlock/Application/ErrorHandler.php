@@ -72,10 +72,6 @@ class EngineBlock_Application_ErrorHandler
 
     public function error($errorNumber, $errorMessage, $errorFile, $errorLine)
     {
-        if($errorNumber === E_DEPRECATED || $errorNumber === E_USER_DEPRECATED){
-            file_put_contents(__DIR__ . '/../../../var/log/deprecations.log', $errorMessage . '|' . $errorFile . ':' . $errorLine . PHP_EOL, FILE_APPEND);
-            return false;
-        }
         if (!(error_reporting() & $errorNumber)) {
             // This error code is not included in error_reporting
             // Execute PHP internal error handler
