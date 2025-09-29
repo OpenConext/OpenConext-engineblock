@@ -1,5 +1,7 @@
+@use "../../../skeune/stylesheets/mixins-skeune" as mixins;
+
 .notification__warning {
-    @include warning;
+    @include mixins.warning;
 
     &.notification__global-site-notice {
         margin: 3rem 0;

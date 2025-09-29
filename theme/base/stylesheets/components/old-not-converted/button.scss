@@ -1,30 +1,33 @@
+@use "sass:color";
+@use "../../variables";
+
 .c-button {
-    background: $darkBlue;
+    background: variables.$darkBlue;
     border: 1px solid transparent;
     border-radius: 10rem;
-    color: $white;
+    color: variables.$white;
     cursor: pointer;
     display: inline-block;
-    font-size: $f-normal;
+    font-size: variables.$f-normal;
     line-height: 1rem;
     padding: .5em 1rem;
     text-decoration: none;
     white-space: nowrap;
 
   &:hover {
-      background: darken($darkBlue, 10);
+      background: color.adjust(variables.$darkBlue, $lightness: -10%);
       text-decoration: underline;
   }
 
   &.outline {
-      background: $white;
-      border: 1px solid $borderDark;
-      color: $darkBlue;
+      background: variables.$white;
+      border: 1px solid variables.$borderDark;
+      color: variables.$darkBlue;
 
     &.white {
-        background: $white;
-        border: 1px solid $darkBlue;
-        color: $darkBlue;
+        background: variables.$white;
+        border: 1px solid variables.$darkBlue;
+        color: variables.$darkBlue;
     }
   }
 
@@ -63,6 +66,6 @@
 
   &.c-button-link {
       background: transparent;
-      color: darken($darkBlue,10);
+      color: color.adjust(variables.$darkBlue,$lightness: -10%);
   }
 }

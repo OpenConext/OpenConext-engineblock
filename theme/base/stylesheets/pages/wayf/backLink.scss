@@ -1,5 +1,8 @@
+@use "../../variables";
+@use "../../../../skeune/stylesheets/mixins-skeune" as mixins-skeune;
+
 .wayf__backLink {
-    @include button-secondary($gray);
+    @include mixins-skeune.button-secondary(variables.$gray);
     display: block;
     margin-top: 1rem;
     width: 100%;

@@ -1,7 +1,11 @@
+@use "../../../variables" as vars;
+@use "../../../mixins" as mixins;
+@use "../../../breakpoints" as breakpoints;
+
 .background {
-    $list: $blue, $lightBlue2;
-    @include gradient(to bottom, $list);
-    background: $mediumBlue;
+    $list: vars.$blue, vars.$lightBlue2;
+    @include mixins.gradient(to bottom, $list);
+    background: vars.$mediumBlue;
     bottom: 0;
     height: 100%;
     overflow: hidden;
@@ -9,7 +13,7 @@
     width: 100%;
     z-index: -1;
 
-    @include screen('mobile') {
+    @include breakpoints.screen('mobile') {
         display: none;
     }
 

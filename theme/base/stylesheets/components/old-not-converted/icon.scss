@@ -1,3 +1,5 @@
+@use "../../variables";
+
 /* stylelint-disable font-family-no-missing-generic-family-keyword */
 .c-icon {
     font-family: FontAwesome;
@@ -22,15 +24,15 @@
     }
 
     &.c-icon-warning {
-        background: $yellow;
+        background: variables.$yellow;
     }
 
     &.c-icon-error {
-        background: $red;
+        background: variables.$red;
     }
 
     &.c-icon-checkmark {
-        color: $green;
+        color: variables.$green;
         height: 9px;
         width: 12px;
     }

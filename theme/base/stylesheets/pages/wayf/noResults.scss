@@ -1,10 +1,14 @@
+@use "../../breakpoints";
+@use "../../functions";
+@use "../../../../skeune/stylesheets/mixins-skeune" as mixins-skeune;
+
 .wayf__noResults {
-    @include poirot;
+    @include mixins-skeune.poirot;
     background-position: left top .5rem;
-    margin: calculateRem(50px) 0 1rem;
+    margin: functions.calculateRem(50px) 0 1rem;
     padding-left: 48px;
 
-    @include screen('mobile') {
+    @include breakpoints.screen('mobile') {
         margin: 2rem 0 .5rem;
     }
 

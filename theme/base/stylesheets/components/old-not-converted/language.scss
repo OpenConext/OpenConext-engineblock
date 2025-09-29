@@ -1,3 +1,6 @@
+@use "../../variables";
+@use "../../breakpoints";
+
 .comp-language {
     display: flex;
     flex-wrap: nowrap;
@@ -12,22 +15,22 @@
 
         &:first-child {
             a, button {
-                border-radius: $borderRadius 0 0 $borderRadius;
+                border-radius: variables.$borderRadius 0 0 variables.$borderRadius;
             }
         }
 
         &:last-child {
             a, button {
-                border-radius: 0 $borderRadius $borderRadius 0
+                border-radius: 0 variables.$borderRadius variables.$borderRadius 0
             }
         }
     }
 
     a,
     button {
-        background: rgba($blue,.1);
+        background: rgba(variables.$blue,.1);
         border: 0;
-        color: $darkBlue;
+        color: variables.$darkBlue;
         cursor: pointer;
         display: block;
         font-size: 0.8rem;
@@ -38,16 +41,16 @@
 
         &:hover,
         &.selected {
-            background: $darkBlue;
-            color: $white;
+            background: variables.$darkBlue;
+            color: variables.$white;
         }
     }
 
-    @include screen('tabletAndBigger') {
+    @include breakpoints.screen('tabletAndBigger') {
         margin: 1rem 0;
     }
 
-    @include screen('mobile') {
+    @include breakpoints.screen('mobile') {
         margin: 1rem 0 0;
         padding: 0;
     }

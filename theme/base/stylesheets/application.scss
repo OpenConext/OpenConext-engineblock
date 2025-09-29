@@ -3,10 +3,10 @@
     Anything which does not get added here (or imported in one of the imports) does not get compiled.
  ******************************************************************/
 
-@import 'helpers';
-@import 'shared';
-@import 'components';
-@import 'pages/consent';
-@import 'pages/form';
-@import 'pages/wayf';
-@import 'pages/logout';
+@use 'helpers';
+@use 'shared';
+@use 'components';
+@use 'pages/consent';
+@use 'pages/form';
+@use 'pages/wayf';
+@use 'pages/logout';

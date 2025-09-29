@@ -1,3 +1,6 @@
+@use "../../shared/vars.css.sass" as vars
+@use "../../shared/base/type.css.sass"
+
 .mod-redirect
   text-align: center
   display: flex
@@ -12,16 +15,16 @@
     margin-bottom: 1rem
 
   h1
-    color: $blue
+    color: vars.$blue
     @extend %h1
 
   h2
     @extend %h2
-    color: $medium-grey
+    color: vars.$medium-grey
 
   p
     @extend %h2
-    color: $medium-grey
+    color: vars.$medium-grey
 
   form
     pre.trace

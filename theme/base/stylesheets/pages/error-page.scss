@@ -1,3 +1,5 @@
+@use '../variables';
+
 body {
     margin: 0;
 }
@@ -36,6 +38,6 @@ body {
     font-weight: normal;
 
     .error-title__error-message--institution {
-        font-weight: $boldest;
+        font-weight: variables.$boldest;
     }
 }

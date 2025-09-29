@@ -1,3 +1,8 @@
+@use "../../../skeune/stylesheets/mixins-skeune";
+
+@use "../breakpoints";
+@use "../variables";
+
 /*******************************************************************
     CSS specific to the form page (auto submitted page that sends
     SAML response to SP)
@@ -14,18 +19,18 @@
 }
 
 .redirect__content {
-    color: $white;
+    color: variables.$white;
     margin: auto auto;
     padding: 0 2rem 2.5rem;
     text-align: center;
 
-    @include screen('mobile') {
+    @include breakpoints.screen('mobile') {
         padding: 0 1rem 1.25rem;
     }
 }
 
 .redirect__title {
-    font-size: $f-h5;
+    font-size: variables.$f-h5;
 }
 
 .redirect__spinner {
@@ -33,12 +38,12 @@
 }
 
 .redirect__noJsSubmit {
-    @include button-primary($buttonBlue);
+    @include mixins-skeune.button-primary(variables.$buttonBlue);
     padding: 1rem;
     width: 100%;
 
     &:hover {
-        box-shadow: 0 0 0 3px $lightBlue;
+        box-shadow: 0 0 0 3px variables.$lightBlue;
         text-decoration: underline;
     }
 }

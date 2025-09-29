@@ -1,3 +1,9 @@
+@use "../../breakpoints";
+@use "../../functions";
+@use "../../mixins";
+@use "../../variables";
+@use "../../../../skeune/stylesheets/mixins-skeune" as mixins-skeune;
+
 .wayf__idpList {
     list-style: none;
     padding: 0;
@@ -9,27 +15,27 @@
     }
 
     > li {
-        margin-bottom: calculateRem(19px);
+        margin-bottom: functions.calculateRem(19px);
 
         > .wayf__idp {
-            @include focus;
-            background-color: $white;
+            @include mixins-skeune.focus;
+            background-color: variables.$white;
             border-radius: 8px;
             box-shadow: 0 1px 0 2px #5e6873;
             display: flex;
             text-decoration: none;
 
             &:hover {
-                background-color: $idpBlue;
+                background-color: variables.$idpBlue;
                 cursor: pointer;
 
                 > .idp__content {
                     > button {
-                        @include button-reset($idpBlue);
+                        @include mixins.button-reset(variables.$idpBlue);
                         margin: 3px 0;
 
                         > .idp__delete {
-                            @include trashcan-hover;
+                            @include mixins-skeune.trashcan-hover;
                         }
                     }
                 }
@@ -43,7 +49,7 @@
                 justify-self: center;
                 padding: .5rem;
 
-                @include screen('mobile') {
+                @include breakpoints.screen('mobile') {
                     margin: 0;
                     padding: .25rem;
                 }
@@ -63,26 +69,26 @@
                 display: flex;
                 width: calc(100% - 6.25rem);
 
-                @include screen('mobile') {
+                @include breakpoints.screen('mobile') {
                     width: calc(100% - 4.25rem);
                 }
 
                 > .idp__border {
-                    border-left: 1px solid $idpSeparatorGray;
+                    border-left: 1px solid variables.$idpSeparatorGray;
                     height: calc(100% - 1.625rem);
                 }
 
                 > h3 {
                     display: inline-block;
-                    color: $black;
+                    color: variables.$black;
                     font-family: 'SourceSansPro', sans-serif;
-                    font-size: $f-large;
-                    font-weight: $normal;
-                    margin: calculateRem(13px) 0;
-                    padding: 0 0 0 calculateRem(23.5px);
+                    font-size: variables.$f-large;
+                    font-weight: variables.$normal;
+                    margin: functions.calculateRem(13px) 0;
+                    padding: 0 0 0 functions.calculateRem(23.5px);
                     width: calc(100% - 4rem);
 
-                    @include screen('mobile') {
+                    @include breakpoints.screen('mobile') {
                         height: calc(100% - 1rem);
                         margin: .5rem 0;
                         padding: 0 0 0 0.5rem;
@@ -91,7 +97,7 @@
                 }
 
                 > .idp__deleteDisable {
-                    @include button-reset($white);
+                    @include mixins.button-reset(variables.$white);
                     align-items: center;
                     border-bottom-right-radius: 8px;
                     border-top-right-radius: 8px;
@@ -101,7 +107,7 @@
                     margin: 3px 0;
                     width: 4rem;
 
-                    @include screen('mobile') {
+                    @include breakpoints.screen('mobile') {
                         width: 3rem;
                     }
 
@@ -111,23 +117,23 @@
                     }
 
                     > .idp__delete {
-                        @include trashcan;
+                        @include mixins-skeune.trashcan;
                         background-position: center center;
                         height: 1.5rem;
-                        width: calculateRem(22px);
+                        width: functions.calculateRem(22px);
                     }
 
                     > .idp__disabled {
-                        @include no-talking;
+                        @include mixins-skeune.no-talking;
                         background-position: center center;
-                        height: calculateRem(30px);
-                        width: calculateRem(29px);
+                        height: functions.calculateRem(30px);
+                        width: functions.calculateRem(29px);
                     }
                 }
 
                 > .idp__form {
                     .idp__submit {
-                        @include button-primary($buttonBlue);
+                        @include mixins-skeune.button-primary(variables.$buttonBlue);
                         align-items: center;
                         border-bottom-right-radius: 8px;
                         border-top-right-radius: 8px;
@@ -137,7 +143,7 @@
 
                         &:hover,
                         &focus {
-                            border: 3px solid $white;
+                            border: 3px solid variables.$white;
                         }
 
                         &.visually-hidden {
@@ -156,25 +162,25 @@
         }
 
         > .wayf__idp.wayf__idp--noAccess {
-            @include focus;
-            background-color: $softBorderGray;
-            box-shadow: 0 1px 0 2px $noAccessGray;
+            @include mixins-skeune.focus;
+            background-color: variables.$softBorderGray;
+            box-shadow: 0 1px 0 2px variables.$noAccessGray;
 
             &:hover {
-                background-color: $lightPink;
+                background-color: variables.$lightPink;
 
                 > .idp__content {
                     > button {
-                        @include button-reset($lightPink);
+                        @include mixins.button-reset(variables.$lightPink);
                     }
 
                     > .idp__deleteDisable {
                         > .idp__delete {
-                            @include trashcan-hover-disabled;
+                            @include mixins-skeune.trashcan-hover-disabled;
                         }
 
                         > .idp__disabled {
-                            @include no-talking-hover-disabled;
+                            @include mixins-skeune.no-talking-hover-disabled;
                         }
                     }
                 }
@@ -182,11 +188,11 @@
 
             > .idp__content {
                 > .idp__border {
-                    border-left: 1px solid $white;
+                    border-left: 1px solid variables.$white;
                 }
 
                 > button {
-                    @include button-reset($softBorderGray);
+                    @include mixins.button-reset(variables.$softBorderGray);
                 }
             }
         }

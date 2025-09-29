@@ -1,22 +1,24 @@
+@use "../vars.css.sass" as vars
+
 body
-  font-family: $font
-  color: $dark-grey
+  font-family: vars.$font
+  color: vars.$dark-grey
   -webkit-font-smoothing: antialiased
   -webkit-text-size-adjust: none
-  font-size: $f-normal
+  font-size: vars.$f-normal
   line-height: 20px
 
 blockquote
   margin-bottom: 2rem
 
 a
-  color: $blue
+  color: vars.$blue
 
   &:hover
     text-decoration: underline
 
 strong.service-provider, strong.identity-provider, strong.attribute-source
-  color: $blue
+  color: vars.$blue
 
 %h1
   font-size: 24px
@@ -27,8 +29,8 @@ strong.service-provider, strong.identity-provider, strong.attribute-source
   line-height: 30px
 
 %h3
-  font-size: $f-normal
-  color: $medium-grey
+  font-size: vars.$f-normal
+  color: vars.$medium-grey
   line-height: 25px
 
 %h-uppercase
