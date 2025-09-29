@@ -3,11 +3,11 @@
     Anything which does not get added here (or imported in one of the imports) does not get compiled.
  ******************************************************************/
 
-@import 'helpers';
-@import './mixins-skeune';
-@import '../../base/stylesheets/shared';
-@import '../../base/stylesheets/components';
-@import '../../base/stylesheets/pages/consent';
-@import '../../base/stylesheets/pages/wayf';
-@import '../../base/stylesheets/pages/form';
-@import '../../base/stylesheets/pages/logout';
+@use 'helpers';
+@use 'mixins-skeune';
+@use '../../base/stylesheets/shared';
+@use '../../base/stylesheets/components';
+@use '../../base/stylesheets/pages/consent';
+@use '../../base/stylesheets/pages/wayf';
+@use '../../base/stylesheets/pages/form';
+@use '../../base/stylesheets/pages/logout';

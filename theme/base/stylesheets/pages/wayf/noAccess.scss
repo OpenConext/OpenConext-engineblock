@@ -1,3 +1,9 @@
+@use "../../breakpoints";
+@use "../../functions";
+@use "../../mixins";
+@use "../../variables";
+@use "../../../../skeune/stylesheets/mixins-skeune" as mixins-skeune;
+
 .wayf__noAccess {
     &.wayf__noAccess--connectable {
         .noAccess__unconnectable {
@@ -23,14 +29,14 @@
     }
 
     > .noAccess__helpdesk {
-        font-size: $f-large;
+        font-size: variables.$f-large;
     }
 
     > .noAccess__requestForm {
         margin: 2rem 0;
 
         > .notification__critical {
-            @include critical;
+            @include mixins-skeune.critical;
         }
 
         fieldset {
@@ -48,26 +54,26 @@
 
         input,
         textarea {
-            @include form-focus;
-            border: 1px solid $inputBorderGray;
+            @include mixins-skeune.form-focus;
+            border: 1px solid variables.$inputBorderGray;
             border-radius: 8px;
-            font-size: $f-large;
+            font-size: variables.$f-large;
             line-height: 1.5;
             padding: 1rem;
             width: 100%;
 
             &:hover {
-                background-color: $hoverBlue;
+                background-color: variables.$hoverBlue;
             }
 
             &:invalid {
-                border: 1px solid $red;
-                background-color: $errorRed;
+                border: 1px solid variables.$red;
+                background-color: variables.$errorRed;
             }
 
             &:not(:valid) {
-                border: 1px solid $red;
-                background-color: $errorRed;
+                border: 1px solid variables.$red;
+                background-color: variables.$errorRed;
             }
 
         }
@@ -77,21 +83,21 @@
         }
 
         label {
-            @include font-style-large;
+            @include mixins.font-style-large;
             margin-bottom: .75rem;
 
             > strong {
-                color: $red;
-                font-weight: $bolder;
+                color: variables.$red;
+                font-weight: variables.$bolder;
             }
         }
 
         .form__error {
-            @include triangle;
-            background-size: $f-large $f-large;
-            color: $red;
-            font-size: $f-large;
-            margin: calculateRem(10px) 0 0;
+            @include mixins-skeune.triangle;
+            background-size: variables.$f-large variables.$f-large;
+            color: variables.$red;
+            font-size: variables.$f-large;
+            margin: functions.calculateRem(10px) 0 0;
             padding-left: 1.5rem;
         }
 
@@ -104,36 +110,36 @@
                 padding: .5rem;
                 width: 48%;
 
-                @include screen('mobile') {
+                @include breakpoints.screen('mobile') {
                     width: unset;
                 }
             }
 
             > .cta__cancel {
-                @include button-secondary($gray);
+                @include mixins-skeune.button-secondary(variables.$gray);
 
                 &:focus {
                     padding: .5rem;
                 }
 
-                @include screen('mobile') {
+                @include breakpoints.screen('mobile') {
                     flex-basis: 40%;
                 }
 
-                @include screen('smallMobile') {
+                @include breakpoints.screen('smallMobile') {
                     flex-basis: 35%;
                 }
             }
 
             > .cta__request,
             .cta__showForm {
-                @include button-primary($buttonBlue);
+                @include mixins-skeune.button-primary(variables.$buttonBlue);
 
-                @include screen('mobile') {
+                @include breakpoints.screen('mobile') {
                     flex-basis: 56%;
                 }
 
-                @include screen('smallMobile') {
+                @include breakpoints.screen('smallMobile') {
                     flex-basis: 61%;
                 }
             }

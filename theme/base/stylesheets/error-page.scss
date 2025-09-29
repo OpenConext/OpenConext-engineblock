@@ -1,15 +1,15 @@
-@import "helpers.scss";
+@use "helpers.scss";
 
-@import "components/old-not-converted/fontAwesome";
-@import "components/old-not-converted/error-page/page";
-@import "components/old-not-converted/error-page/language";
-@import "components/old-not-converted/error-page/background";
-@import "components/old-not-converted/error-page/error-container";
-@import "components/old-not-converted/error-page/error-details";
-@import "components/old-not-converted/error-page/error-title";
-@import "components/old-not-converted/error-page/feedback-info";
-@import "components/old-not-converted/error-page/footer";
-@import "components/old-not-converted/error-page/horizontal-rule";
-@import "components/ribbon";
-@import 'pages/error-page';
+@use "components/old-not-converted/fontAwesome";
+@use "components/old-not-converted/error-page/page";
+@use "components/old-not-converted/error-page/language";
+@use "components/old-not-converted/error-page/background";
+@use "components/old-not-converted/error-page/error-container";
+@use "components/old-not-converted/error-page/error-details";
+@use "components/old-not-converted/error-page/error-title";
+@use "components/old-not-converted/error-page/feedback-info";
+@use "components/old-not-converted/error-page/footer";
+@use "components/old-not-converted/error-page/horizontal-rule";
+@use "components/ribbon";
+@use 'pages/error-page';
 

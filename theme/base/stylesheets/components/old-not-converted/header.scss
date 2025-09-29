@@ -1,12 +1,16 @@
+@use "../../variables";
+@use "../../breakpoints";
+@use "../../mixins";
+
 .mod-header {
-    @include clearfix;
+    @include mixins.clearfix;
     background: #fff;
-    border-bottom: 2px solid $blue;
-    box-shadow: 1px 1px $borderRadius rgba(black, .2);
+    border-bottom: 2px solid variables.$blue;
+    box-shadow: 1px 1px variables.$borderRadius rgba(black, .2);
     line-height: 30px;
     padding: 0 1rem;
 
-    @include screen('tabletAndBigger') {
+    @include breakpoints.screen('tabletAndBigger') {
         padding: 0 2rem;
         margin-bottom: 3rem;
     }
@@ -24,21 +28,21 @@
         align-items: center;
         display: flex;
 
-        @include screen('mobile') {
+        @include breakpoints.screen('mobile') {
             padding: 0;
         }
     }
 
     // Main app title
     .title {
-        color: $brownishGray;
+        color: variables.$brownishGray;
         overflow: hidden;
         padding-right: 1rem;
         text-overflow: ellipsis;
         white-space: nowrap;
 
         strong {
-            color: $blue;
+            color: variables.$blue;
         }
     }
 
@@ -54,7 +58,7 @@
         margin: 0;
     }
 
-    @include screen('mobile') {
+    @include breakpoints.screen('mobile') {
         padding: 0.7rem 1rem;
 
         .l-container {

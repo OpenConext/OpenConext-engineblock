@@ -1,3 +1,7 @@
+@use "../../breakpoints";
+@use "../../mixins";
+@use "../../variables";
+
 .consent__disclaimer {
     line-height: 1.5;
     list-style: none;
@@ -18,25 +22,25 @@
         }
 
         > div {
-            @include display-grid;
-            @include grid-template-columns(67px calc(100% - 67px));
+            @include mixins.display-grid;
+            @include mixins.grid-template-columns(67px calc(100% - 67px));
 
             > svg {
-                @include grid-position(1, 2, 1, 2);
+                @include mixins.grid-position(1, 2, 1, 2);
                 margin-left: 14px;
             }
 
-            @include ie11Only('> p, > div') {
+            @include mixins.ie11Only('> p, > div') {
                 width: 87%;
             }
 
             > p,
             > div {
-                @include grid-position(1, 2, 2, 3);
+                @include mixins.grid-position(1, 2, 2, 3);
                 margin: 0;
 
                 > br {
-                    @include screen('mobile') {
+                    @include breakpoints.screen('mobile') {
                         display: none;
                     }
                 }
@@ -44,14 +48,14 @@
                 > label {
                     &:focus {
                         box-shadow: none;
-                        outline: 3px solid $lightBlue;
+                        outline: 3px solid variables.$lightBlue;
                     }
                 }
 
                 label,
                 a {
-                    color: $oceanBlue;
-                    font-weight: $bolder;
+                    color: variables.$oceanBlue;
+                    font-weight: variables.$bolder;
                 }
 
                 a {
@@ -69,7 +73,7 @@
                         margin: 0;
                     }
 
-                    @include screen('mobile') {
+                    @include breakpoints.screen('mobile') {
                         margin: 1rem 0 1rem -4rem;
                     }
 
@@ -97,14 +101,14 @@
                     max-width: unset;
                 }
 
-                @include ie11Only('> #consent_disclaimer_about:checked + label + section.animated, > #consent_disclaimer_about:checked + br + label + section.animated') {
+                @include mixins.ie11Only('> #consent_disclaimer_about:checked + label + section.animated, > #consent_disclaimer_about:checked + br + label + section.animated') {
                     max-height: 40vh;
                 }
             }
         }
 
-        @include ie11Only('> div') {
-            @include grid-template-columns(67px 545px);
+        @include mixins.ie11Only('> div') {
+            @include mixins.grid-template-columns(67px 545px);
         }
     }
 }

@@ -1,10 +1,13 @@
+@use "../../../../base/stylesheets/mixins"
+@use "../vars.css.sass" as vars
+
 .mod-footer
   padding: 2rem
-  border-top: 1px solid $border-dark
+  border-top: 1px solid vars.$border-dark
   margin: 0 auto
   text-align: center
 
-  +min-width($medium)
+  +mixins.min-width(vars.$medium)
     display: flex
     justify-content: space-between
     align-items: center
@@ -17,18 +20,18 @@
   .footer-menu li.nav-row
     display: block
 
-    +min-width($medium)
+    +mixins.min-width(vars.$medium)
       width: 20%
     &.left, &.right
-      +min-width($medium)
+      +mixins.min-width(vars.$medium)
         width: 40%
 
     &.left
-      +min-width($medium)
+      +mixins.min-width(vars.$medium)
         text-align: left
 
     &.right
-      +min-width($medium)
+      +mixins.min-width(vars.$medium)
         text-align: right
 
   .center-footer

@@ -1,26 +1,29 @@
+@use "../../variables";
+@use "../../breakpoints";
+
 .l-container {
     margin: 0 auto;
-    max-width: $containerWidth;
+    max-width: variables.$containerWidth;
     padding: .5rem;
     z-index: 0;
 
-  @include screen('tabletAndBigger') {
+  @include breakpoints.screen('tabletAndBigger') {
     margin: 0 auto 3rem;
     padding: 0 2rem;
   }
 
   &.wide {
-      max-width: $containerWidth*1.5;
+      max-width: variables.$containerWidth*1.5;
       width: auto;
   }
 }
 
 .mod-content{
-    background-color: $white;
+    background-color: variables.$white;
     line-height: 1.5;
     padding: 2rem;
 
-    @include screen('mobile') {
+    @include breakpoints.screen('mobile') {
         padding: .5rem;
     }
 
@@ -47,7 +50,7 @@
 
     header {
         align-items: center;
-        border-bottom: 1px solid $lightGrey;
+        border-bottom: 1px solid variables.$lightGrey;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
@@ -56,7 +59,7 @@
 
         h1 {
             font-size: 200%;
-            font-weight: $boldest;
+            font-weight: variables.$boldest;
         }
     }
 
@@ -64,7 +67,7 @@
         flex-basis: 100%;
         flex-grow: 2;
         font-size: 200%;
-        font-weight: $normal;
+        font-weight: variables.$normal;
         line-height: calculateRem(40px);
         margin: 0;
     }
@@ -82,6 +85,6 @@
 
 .box {
     background: #fff;
-    border-radius: $borderRadius;
-    box-shadow: 0 1px $borderRadius rgba(black,.2);
+    border-radius: variables.$borderRadius;
+    box-shadow: 0 1px variables.$borderRadius rgba(black,.2);
 }

@@ -1,13 +1,16 @@
+@use "../breakpoints";
+@use "../../../skeune/stylesheets/mixins-skeune" as mixins;
+
 noscript {
     > .noScript {
-        @include warning;
+        @include mixins.warning;
         margin: 1rem 2rem;
 
-        @include screen('mobile') {
+        @include breakpoints.screen('mobile') {
             margin: 1rem 1rem;
         }
 
-        @include screen('smallMobile') {
+        @include breakpoints.screen('smallMobile') {
             margin: 1rem .5rem;
         }
 

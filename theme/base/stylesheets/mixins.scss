@@ -1,3 +1,7 @@
+@use "sass:list";
+@use "sass:meta";
+@use "variables";
+
 /*******************************************************************
     Generic sass-mixins
  ******************************************************************/
@@ -44,9 +48,9 @@
 //}
 @mixin position($position, $args) {
     @each $o in top right bottom left {
-        $i: index($args, $o);
-        @if $i and $i + 1 <= length($args) and type-of(nth($args, $i + 1)) == number {
-            #{$o}: nth($args, $i + 1);
+        $i: list.index($args, $o);
+        @if $i and $i + 1 <= list.length($args) and meta.type-of(list.nth($args, $i + 1)) == number {
+            #{$o}: list.nth($args, $i + 1);
         }
     }
     position: $position;
@@ -92,7 +96,7 @@
 @function grid-repeat($repeat, $stuff: 1fr) {
     $list: ();
     @for $i from 1 through $repeat {
-        $list: append($list, $stuff, space);
+        $list: list.append($list, $stuff, space);
     }
     @return $list;
 }
@@ -130,13 +134,13 @@
 }
 
 @mixin font-style-large {
-    font-size: $f-large;
-    font-weight: $bolder;
+    font-size: variables.$f-large;
+    font-weight: variables.$bolder;
 }
 
 @mixin font-style-xl {
-    font-size: $f-xl;
-    font-weight: $bolder;
+    font-size: variables.$f-xl;
+    font-weight: variables.$bolder;
 }
 
 @mixin visually-hidden {

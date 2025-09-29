@@ -1,23 +1,27 @@
+@use "sass:color"
+@use "../../shared/vars.css.sass" as vars
+@use "../../shared/base/type.css.sass"
+
 .comp-table
   width: 100%
   margin-bottom: 2rem
   border-radius: 4px
-  border: 1px solid $border
+  border: 1px solid vars.$border
 
   th, td
     padding: .75rem 1rem
-    border-bottom: 1px solid $border
+    border-bottom: 1px solid vars.$border
     white-space: nowrap
 
   td.smaller
     font-size: 0.8em
 
   td.green
-    color: $bright-green
+    color: vars.$bright-green
 
   thead
     th, td
-      border-bottom: 1px solid $border
+      border-bottom: 1px solid vars.$border
       @extend %h3
 
   @for $i from 1 through 20
@@ -25,7 +29,7 @@
       width: #{$i * 5%}
 
 .comp-small-table
-  font-size: $f-small
+  font-size: vars.$f-small
 
   tr:last-child
     th, td
@@ -33,7 +37,7 @@
 
   th, td
     padding: .5rem 1rem
-    background: mix($border,#fff)
+    background: color.mix(vars.$border,#fff)
     border-bottom: 1px solid #fff
 
 .remove-cookies
@@ -43,8 +47,8 @@
 
   td
     button.grey
-      background: $lighter-dark-grey
-      color: $light-grey
+      background: vars.$lighter-dark-grey
+      color: vars.$light-grey
 
   td.small-column
     width: 20%
