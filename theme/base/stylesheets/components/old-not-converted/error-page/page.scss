@@ -1,14 +1,17 @@
+@use "../../../variables" as vars;
+@use "../../../breakpoints" as breakpoints;
+
 html {
     height: 100%
 }
 
 body {
-    background: $mediumBlue;
+    background: vars.$mediumBlue;
     height: 100%;
-    font-family: $font;
+    font-family: vars.$font;
 
-    @include screen('mobile') {
-        background: $lightGrey;
+    @include breakpoints.screen('mobile') {
+        background: vars.$lightGrey;
     }
 }
 
@@ -16,7 +19,7 @@ body {
     height: 100%;
     position: relative;
 
-    @include screen('mobile') {
+    @include breakpoints.screen('mobile') {
         padding: 1em;
     }
 }

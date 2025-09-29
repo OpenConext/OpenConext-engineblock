@@ -1,11 +1,14 @@
+@use "../../../variables" as vars;
+@use "../../../breakpoints" as breakpoints;
+
 .error-details {
     &__intro-text {
-        font-size: $f-normal;
+        font-size: vars.$f-normal;
         line-height: 1.6em;
         text-align: center;
 
         .heading {
-            @include screen('mobile') {
+            @include breakpoints.screen('mobile') {
                 font-weight: bold;
                 display: block;
             }
@@ -15,7 +18,7 @@
     &__feedback-list {
         width: 100%;
         margin: 1.5em 0 1.5em 0;
-        @include screen('tabletAndBigger') {
+        @include breakpoints.screen('tabletAndBigger') {
             display: grid;
             grid-auto-flow: row dense;
             grid-gap: 0.5em;

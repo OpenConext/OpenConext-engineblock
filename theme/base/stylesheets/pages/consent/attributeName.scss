@@ -1,9 +1,12 @@
+@use "../../breakpoints";
+@use "../../mixins";
+
 .attribute__name {
-    @include grid-position(1, 2, 1, 2);
+    @include mixins.grid-position(1, 2, 1, 2);
     margin-right: 0.5rem;
     text-align: right;
 
-    @include screen('mobile') {
+    @include breakpoints.screen('mobile') {
         display: flex;
         justify-content: space-between;
         margin-right: 0;
@@ -14,7 +17,7 @@
     > label.tooltip {
         display: none;
 
-        @include screen('mobile') {
+        @include breakpoints.screen('mobile') {
             background-position: left 12px bottom 8px;
             display: inline-block;
             margin: 0 0 -11px 0;

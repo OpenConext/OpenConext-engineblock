@@ -2,35 +2,38 @@
     CSS specific to the consent page
  ******************************************************************/
 
-@import '../helpers';
-@import './consent/attributes';
-@import './consent/body';
-@import './consent/ctas';
-@import './consent/disclaimer';
-@import './consent/idpRow';
-@import './consent/nok';
-@import './consent/openToggle';
+@use '../helpers';
+@use 'consent/attributes';
+@use 'consent/body';
+@use 'consent/ctas';
+@use 'consent/disclaimer';
+@use 'consent/idpRow';
+@use 'consent/nok';
+@use 'consent/openToggle';
+@use "../breakpoints";
+@use "../functions";
+@use "../mixins";
 
 .consent {
     margin-bottom: 5rem;
 
-    @include screen('mobile') {
+    @include breakpoints.screen('mobile') {
         margin-bottom: 3rem;
     }
 
     h2 {
-        margin: 1.5rem 2rem calculateRem(34px);
+        margin: 1.5rem 2rem functions.calculateRem(34px);
 
-        @include screen('mobile') {
-            margin: 1.5rem 1rem calculateRem(17px);
+        @include breakpoints.screen('mobile') {
+            margin: 1.5rem 1rem functions.calculateRem(17px);
         }
 
-        @include screen('smallMobile') {
-            margin: .75rem .5rem calculateRem(17px);
+        @include breakpoints.screen('smallMobile') {
+            margin: .75rem .5rem functions.calculateRem(17px);
         }
     }
 
     > :last-child {
-        @include border-bottom-radius(8px);
+        @include mixins.border-bottom-radius(8px);
     }
 }

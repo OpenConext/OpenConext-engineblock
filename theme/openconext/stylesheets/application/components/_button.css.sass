@@ -1,6 +1,9 @@
+@use "sass:color"
+@use "../../shared/vars.css.sass" as vars
+
 .c-button
-  font-size: $f-normal
-  background: $blue
+  font-size: vars.$f-normal
+  background: vars.$blue
   padding: .5em 1rem
   line-height: 1rem
   border-radius: 10rem
@@ -12,17 +15,17 @@
   white-space: nowrap
 
   &:hover
-    background: darken($blue,10)
+    background: color.adjust(vars.$blue,$lightness: -10%)
 
   &.outline
-    border: 1px solid $border-dark
-    color: $blue
+    border: 1px solid vars.$border-dark
+    color: vars.$blue
     background: #fff
 
   &.white
     background: #fff
-    color: $blue
-    border: 1px solid $blue
+    color: vars.$blue
+    border: 1px solid vars.$blue
 
   &.remove
     width: 1rem
@@ -53,4 +56,4 @@
 
   &.c-button-link
     background: transparent
-    color: darken($blue,10)
+    color: color.adjust(vars.$blue,$lightness: -10%)

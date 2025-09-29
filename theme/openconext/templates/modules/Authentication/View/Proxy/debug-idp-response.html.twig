@@ -14,7 +14,7 @@
                 <table class="comp-table">
                     <tr>
                         <td>
-                            <i class="c-icon c-icon-checkmark fa-check" alt="&#9989;"></i>
+                            <i class="c-icon c-icon-checkmark fas fa-check" alt="&#9989;"></i>
                             {{ 'attributes_data_mailed'|trans }}
                         </td>
                     </tr>
@@ -24,13 +24,13 @@
             <h1>{{ pageTitle }}</h1>
             <p>
                 {% if validationResult.isValid %}
-                    <i class="c-icon c-icon-checkmark fa-check"></i>
+                    <i class="c-icon c-icon-checkmark fas fa-check"></i>
                     {{ 'attributes_validation_succeeded'|trans }}
                 {% else %}
                     {% if validationResult.errors|length > 0 %}
-                        <i class="c-icon fa c-icon-error fa-exclamation"></i>
+                        <i class="c-icon fa c-icon-error fas fa-exclamation"></i>
                     {% else %}
-                        <i class="c-icon c-icon-warning fa-exclamation"></i>
+                        <i class="c-icon c-icon-warning fas fa-exclamation"></i>
                     {% endif %}
 
                     {{ 'attributes_validation_failed'|trans }}
@@ -85,13 +85,13 @@
             <h2>{{ 'attributes'|trans }}</h2>
             {% for error in validationResult.errorsForMissingAttributes %}
                 <p class="error">
-                    <i class="c-icon c-icon-error fa-exclamation"></i>
+                    <i class="c-icon c-icon-error fas fa-exclamation"></i>
                     {{ error[0]|trans({'%arg1%': error[1], '%arg2%': error[2], '%arg3%': error[3]}) }}
                 </p>
             {% endfor %}
             {% for warning in validationResult.warningsForMissingAttributes %}
                 <p class="warning">
-                    <i class="c-icon c-icon-warning fa-exclamation"></i>
+                    <i class="c-icon c-icon-warning fas fa-exclamation"></i>
                     {{ warning[0]|trans({'%arg1%': warning[1], '%arg2%': warning[2], '%arg3%': warning[3]}) }}
                 </p>
             {% endfor %}
@@ -121,14 +121,14 @@
                         <tr>
                             <td>
                                 {% if validationResult.isValid(attributeName) %}
-                                    <i class="c-icon c-icon-checkmark fa-check" alt="&#9989;"></i>
+                                    <i class="c-icon c-icon-checkmark fas fa-check" alt="&#9989;"></i>
                                 {% else %}
                                     {% if validationResult.errors(attributeName).length > 0 %}
                                         <p class="error">
-                                            <i class="c-icon c-icon-error fa-exclamation"></i>
+                                            <i class="c-icon c-icon-error fas fa-exclamation"></i>
                                         </p>
                                     {% else %}
-                                        <p class="warning"><i class="c-icon c-icon-warning fa-exclamation"></i>
+                                        <p class="warning"><i class="c-icon c-icon-warning fas fa-exclamation"></i>
                                         </p>
                                     {% endif %}
                                 {% endif %}

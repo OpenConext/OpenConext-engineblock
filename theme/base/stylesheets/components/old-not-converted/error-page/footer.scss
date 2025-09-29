@@ -1,7 +1,11 @@
+@use "../../../variables" as vars;
+@use "../../../mixins" as mixins;
+@use "../../../breakpoints" as breakpoints;
+
 /* stylelint-disable font-family-no-missing-generic-family-keyword */
 .error-page-footer-buttons {
     &__container {
-        background: $contrastBlue2;
+        background: vars.$contrastBlue2;
         border-radius: 0 0 5px 5px;
         overflow: hidden;
         text-align: center;
@@ -28,7 +32,7 @@
     }
 
     &:hover {
-        background: $darkContrastBlue;
+        background: vars.$darkContrastBlue;
     }
 
     &__link {
@@ -44,7 +48,7 @@
     }
 
     &__button {
-        @include button-reset(inherit);
+        @include mixins.button-reset(inherit);
         color: white;
         cursor: pointer;
         padding: 1.5rem 2rem 0.2rem;
@@ -60,7 +64,7 @@
     &__text {
         margin-top: 0.5em;
 
-        @include screen('mobile') {
+        @include breakpoints.screen('mobile') {
             display: none;
             font-weight: bold;
         }
@@ -68,7 +72,7 @@
         &--small {
             display: none;
 
-            @include screen('mobile') {
+            @include breakpoints.screen('mobile') {
                 display: block;
             }
         }
@@ -77,14 +81,14 @@
     &__icon {
         font-family: FontAwesome;
         text-align: center;
-        font-size: $f-large;
+        font-size: vars.$f-large;
         font-style: normal;
         font-weight: bold;
 
         &.fa-w {
             background: white;
             border-radius: 19px;
-            color: $blue;
+            color: vars.$blue;
             display: inline-block;
             height: 19px;
             font-size: 12px;

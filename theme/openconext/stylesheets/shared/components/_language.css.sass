@@ -1,3 +1,6 @@
+@use "../../../../base/stylesheets/mixins"
+@use "../vars.css.sass" as vars
+
 .comp-language
   z-index: 10000
   position: relative
@@ -12,29 +15,29 @@
 
     &:first-child
       a, button
-        border-radius: $br 0 0 $br
+        border-radius: vars.$br 0 0 vars.$br
 
     &:last-child
       a, button
-        border-radius: 0 $br $br 0
+        border-radius: 0 vars.$br vars.$br 0
 
   a, button
     border: 0
-    color: $blue
+    color: vars.$blue
     cursor: pointer
     display: block
     line-height: 1.75rem
     padding: 0 0.5rem
     font-size: 0.8rem
-    background: rgba($blue,.1)
+    background: rgba(vars.$blue,.1)
     margin-right: 1px
     text-decoration: none
 
     &:hover,
     &.selected
-      background: $blue
+      background: vars.$blue
       color: #fff
 
-  +max-width($medium)
+  +mixins.max-width(vars.$medium)
     margin: 1rem 0
 
