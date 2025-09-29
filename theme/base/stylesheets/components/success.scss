@@ -1,4 +1,6 @@
+@use "../../../skeune/stylesheets/mixins-skeune" as mixins-skeune;
+
 .notification__success {
-    @include focus;
-    @include success;
+    @include mixins-skeune.focus;
+    @include mixins-skeune.success;
 }

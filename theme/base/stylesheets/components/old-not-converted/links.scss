@@ -1,9 +1,11 @@
+@use "../../variables";
+
 .comp-links {
     flex-wrap: nowrap;
     justify-content: center;
 
     .help {
-        background: $blue;
+        background: variables.$blue;
         border-radius: 50%;
         box-sizing: border-box;
         color: #FFFFFF;

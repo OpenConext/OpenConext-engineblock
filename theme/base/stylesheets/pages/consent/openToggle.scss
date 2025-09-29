@@ -1,3 +1,8 @@
+@use "../../breakpoints";
+@use "../../mixins";
+@use "../../variables";
+@use "../../../../skeune/stylesheets/mixins-skeune" as mixins-skeune;
+
 .openToggle__checkBox {
     display: none;
 }
@@ -7,13 +12,13 @@
     transition: max-height .6s ease-in;
 
     > .consent__attribute:nth-of-type(n+6) {
-        @include display-grid;
-        @include visually-shown;
+        @include mixins.display-grid;
+        @include mixins.visually-shown;
         padding: 3px 0;
     }
 
     > .consent__attribute:nth-of-type(6) {
-        @include focus;
+        @include mixins-skeune.focus;
     }
 
     > .openToggle {
@@ -29,19 +34,19 @@
     }
 }
 
-@include ie11Only('.openToggle__checkBox:checked ~ .consent__attributes') {
+@include mixins.ie11Only('.openToggle__checkBox:checked ~ .consent__attributes') {
     max-height: 400vh;
 }
 
 .openToggle {
-    @include display-grid;
-    @include grid-template-columns(33% 1% 57% 1% 8%);
-    border-bottom: 1px solid $softBorderGray;
+    @include mixins.display-grid;
+    @include mixins.grid-template-columns(33% 1% 57% 1% 8%);
+    border-bottom: 1px solid variables.$softBorderGray;
     line-height: 1.63;
 
-    @include screen('mobile') {
-        @include grid-template-columns(100%);
-        @include grid-template-rows(min-content min-content);
+    @include breakpoints.screen('mobile') {
+        @include mixins.grid-template-columns(100%);
+        @include mixins.grid-template-rows(min-content min-content);
         padding: 10px;
 
         > * {
@@ -50,19 +55,19 @@
     }
 
     > .openToggle__label {
-        @include grid-position(1, 2, 3, 4);
+        @include mixins.grid-position(1, 2, 3, 4);
         background-image: unset;
-        color: $buttonBlue;
+        color: variables.$buttonBlue;
         cursor: pointer;
         display: flex;
         height: unset;
-        font-weight: $bolder;
+        font-weight: variables.$bolder;
         justify-content: left;
         padding: 1.2rem 0;
         width: max-content;
 
-        @include screen('mobile') {
-            @include grid-position(2, 3, 1, 2);
+        @include breakpoints.screen('mobile') {
+            @include mixins.grid-position(2, 3, 1, 2);
             justify-content: center;
         }
 
@@ -72,12 +77,12 @@
         }
 
         > .showLess {
-            @include openModal;
+            @include mixins-skeune.openModal;
             display: none;
         }
 
         > .showMore {
-            @include closeToggle;
+            @include mixins-skeune.closeToggle;
             display: block;
         }
     }

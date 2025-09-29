@@ -1,16 +1,19 @@
+@use "../../../../base/stylesheets/mixins"
+@use "../vars.css.sass" as vars
+
 .l-container
-  max-width: $container-width
+  max-width: vars.$container-width
   z-index: 0
   padding: 1rem
 
-  +min-width($medium)
+  +mixins.min-width(vars.$medium)
     margin: 0 auto 3rem
     padding: 0 2rem
 
   &.wide
-    max-width: $container-width*1.5
+    max-width: vars.$container-width*1.5
 
 .l-overflow
   overflow-x: auto
-  +scrollbar(8px, rgba(black,.4), 4px, rgba(black,.1), 4px)
+  +mixins.scrollbar(8px, rgba(black,.4), 4px, rgba(black,.1), 4px)
 

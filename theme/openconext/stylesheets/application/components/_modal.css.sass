@@ -1,3 +1,6 @@
+@use "../../shared/vars.css.sass" as vars
+@use "../../shared/utilities/placeholders.css.sass"
+
 #request-access-scroller
   display: none
   position: fixed
@@ -16,4 +19,4 @@
   @extend %box
   margin: auto
   padding: 0.5rem
-  max-width: $container-width
+  max-width: vars.$container-width
