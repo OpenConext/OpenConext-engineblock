@@ -310,9 +310,22 @@ QUERY;
         return $this;
     }
 
-    public function spRequiresPolicyEnforcementDecisionForSp($entityId)
+    public function requiresPolicyEnforcementDecisionForSp($entityId)
     {
-        $this->setCoin($this->getServiceProvider($entityId), 'policyEnforcementDecisionRequired', true);
+        $sp = $this->getServiceProvider($entityId);
+        assert($sp instanceof ServiceProvider);
+
+        $this->setCoin($sp, 'policyEnforcementDecisionRequired', true);
+
+        return $this;
+    }
+
+    public function requiresPolicyEnforcementDecisionForIdp($entityId)
+    {
+        $idp = $this->getIdentityProvider($entityId);
+        assert($idp instanceof IdentityProvider);
+
+        $this->setCoin($idp, 'policyEnforcementDecisionRequired', true);
 
         return $this;
     }

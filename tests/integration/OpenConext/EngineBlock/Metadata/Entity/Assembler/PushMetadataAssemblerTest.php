@@ -390,6 +390,7 @@ class PushMetadataAssemblerTest extends TestCase
             // IDP
             ['guest_qualifier', 'saml20-idp', 'guestQualifier', 'string-guest-qualifier'],
             ['schachomeorganization', 'saml20-idp', 'schacHomeOrganization', 'string'],
+            ['policy_enforcement_decision_required', 'saml20-idp', 'policyEnforcementDecisionRequired', 'bool'],
             ['hidden', 'saml20-idp', 'hidden', 'bool'],
 
             // Abstract
