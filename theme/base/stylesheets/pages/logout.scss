@@ -1,3 +1,5 @@
+@use "../breakpoints";
+
 /*******************************************************************
     CSS specific to the logout page
  ******************************************************************/
@@ -5,13 +7,13 @@
     .page__header {
         margin: 3rem auto 0 ;
 
-        @include screen('mobile') {
+        @include breakpoints.screen('mobile') {
             margin: 0;
         }
     }
 
     .page__title {
-        @include screen('mobile') {
+        @include breakpoints.screen('mobile') {
             padding-top: 3rem;
         }
     }

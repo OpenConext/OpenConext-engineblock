@@ -1,8 +1,11 @@
+@use "../../../../base/stylesheets/mixins"
+@use "../../shared/vars.css.sass" as vars
+
 /* stylelint-disable font-family-no-missing-generic-family-keyword */
 .mod-content.consent
   margin-top: 2rem
 
-  +max-width($small)
+  +mixins.max-width(vars.$small)
     margin-top: 0
 
   padding: 0
@@ -29,9 +32,9 @@
       vertical-align: middle
       width: 1.2em
     &.help::after
-      content: $fa-var-circle-question
+      content: vars.$fa-var-circle-question
     &[target="_blank"]::after
-      content: $fa-var-external-link
+      content: vars.$fa-var-external-link
 
   p
     margin: 0
@@ -53,7 +56,7 @@
     display: block
     padding: 2rem 2rem 0
 
-    +max-width($small)
+    +mixins.max-width(vars.$small)
       padding: 2rem .75rem 0
 
     h1
@@ -62,16 +65,16 @@
   section
     padding: 1rem 2rem
 
-    +max-width($small)
+    +mixins.max-width(vars.$small)
       padding: 2rem .75rem 0
 
     &.privacy
       a
-        color: $link-grey
+        color: vars.$link-grey
 
       h2
         margin-bottom: 0
-        +max-width($small)
+        +mixins.max-width(vars.$small)
           margin-bottom: 1em
 
     &.buttons
@@ -81,7 +84,7 @@
         text-align: left
         margin-bottom: 1rem
 
-      +max-width($small)
+      +mixins.max-width(vars.$small)
         padding: 1rem .75rem 0
 
     form#accept
@@ -101,11 +104,11 @@
           border: 0
 
     a#decline-terms
-      color: $blue
+      color: vars.$blue
       text-decoration: underline
       margin-top: 1.5em
 
-      +max-width($small)
+      +mixins.max-width(vars.$small)
         margin-bottom: 1.5em
 
     &.attributes
@@ -113,7 +116,7 @@
       padding: 0
 
       table
-        background-color: $table-bg
+        background-color: vars.$table-bg
         border-width: 0
         margin: 0
         overflow: hidden
@@ -131,7 +134,7 @@
             &.separator
               display: table-row
 
-              +max-width($small)
+              +mixins.max-width(vars.$small)
                 display: block
 
             &.toggle-attributes
@@ -141,12 +144,12 @@
                 display: none
 
               a
-                color: $blue
+                color: vars.$blue
                 text-decoration: none
 
                 &::after
-                  content: $fa-var-chevron-down
-                  color: $blue
+                  content: vars.$fa-var-chevron-down
+                  color: vars.$blue
                   font-family: FontAwesome
                   display: inline-block
                   height: 0.7em
@@ -168,14 +171,14 @@
             tr
               display: table-row !important
 
-              +max-width($small)
+              +mixins.max-width(vars.$small)
                 display: block
 
               &.toggle-attributes
                 a
                   &::after
-                    content: $fa-var-chevron-up
-                    color: $blue
+                    content: vars.$fa-var-chevron-up
+                    color: vars.$blue
                     font-family: FontAwesome
                     text-decoration: none
 
@@ -194,14 +197,14 @@
           padding: 0 1rem
 
           td
-            border-color: $border-dark
+            border-color: vars.$border-dark
             border-style: solid
             border-width: 1px 0 0 0
             max-width: 200px
             white-space: normal
             word-wrap: break-word
 
-            +max-width($small)
+            +mixins.max-width(vars.$small)
               max-width: none
 
             &.attr-name
@@ -209,7 +212,7 @@
               text-align: right
               width: 35%
 
-              +max-width($small)
+              +mixins.max-width(vars.$small)
                 width: auto
                 padding-bottom: 0.3em
                 border-bottom: none
@@ -218,7 +221,7 @@
             &.attr-value
               ul
                 margin-bottom: 0
-              +max-width($small)
+              +mixins.max-width(vars.$small)
                 border-top: none
                 padding-top: 0
               a
@@ -235,7 +238,7 @@
 
             &.attr-value.full-width
               padding-left: 0.25em
-              +max-width($small)
+              +mixins.max-width(vars.$small)
                 padding-left: 1em
 
           &.source-info
@@ -248,7 +251,7 @@
               padding-left: 0
 
               a
-                color: $link-grey
+                color: vars.$link-grey
 
               img, h2
                 margin-right: 5px
@@ -258,7 +261,7 @@
               text-align: center
 
               a
-                color: $blue
+                color: vars.$blue
 
           &.separator
             background-color: white
@@ -268,7 +271,7 @@
             td
               border-width: 0
 
-        +max-width($small)
+        +mixins.max-width(vars.$small)
           padding: 0
 
           thead, tbody, th, td, tr
@@ -297,14 +300,14 @@
                   margin-top: 0.5em
 
     &.idp-consent-explanation
-      background-color: $light-pink
+      background-color: vars.$light-pink
       border-width: 2em 2em 1em 2em
       border-style: solid
       border-color: white
       min-height: 100px
       padding: 0.75em
       position: relative
-      +max-width($small)
+      +mixins.max-width(vars.$small)
         border-width: 2em 1em 1em
 
       .idp-logo
@@ -313,7 +316,7 @@
         background-color: #ffffff
         width: 34px
         border-radius: 32px
-        border: 1px solid $red
+        border: 1px solid vars.$red
         position: relative
         img
           width: 34px
@@ -322,9 +325,9 @@
           border-radius: 50%
 
       .title::before
-        content: $fa-var-warning
+        content: vars.$fa-var-warning
         font-family: FontAwesome
-        color: $red
+        color: vars.$red
         display: inline-block
         height: 1.2em
         left: 0.75em
@@ -342,7 +345,7 @@
 
 
   footer
-    border-top: 1px solid $border-dark
+    border-top: 1px solid vars.$border-dark
     clear: both
     padding: 2rem
     text-align: center
@@ -351,7 +354,7 @@
       a
         white-space: nowrap
 
-        +max-width($small)
+        +mixins.max-width(vars.$small)
           white-space: normal
 
           // Force the 'more information' link on a new line,

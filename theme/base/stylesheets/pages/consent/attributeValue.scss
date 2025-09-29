@@ -1,11 +1,15 @@
+@use "../../breakpoints";
+@use "../../mixins";
+@use "../../variables";
+
 .attribute__value,
 .attribute__valueWrapper {
-    @include grid-position(1, 2, 3, 4);
-    font-weight: $bolder;
+    @include mixins.grid-position(1, 2, 3, 4);
+    font-weight: variables.$bolder;
     overflow-wrap: break-word;
 
-    @include screen('mobile') {
-        @include grid-position(2, 3, 1, 2);
+    @include breakpoints.screen('mobile') {
+        @include mixins.grid-position(2, 3, 1, 2);
         padding: 0;
     }
 }
@@ -16,16 +20,16 @@
     margin-left: 1rem;
 
     li:nth-child(n+6) {
-        @include visually-hidden;
+        @include mixins.visually-hidden;
     }
 }
 
 .attribute__valueWrapper:not(.joske) {
-    @include grid-position(1, 2, 3, 6);
+    @include mixins.grid-position(1, 2, 3, 6);
     padding: 0;
 
-    @include screen('mobile') {
-        @include grid-position(2, 3, 1, 2);
+    @include breakpoints.screen('mobile') {
+        @include mixins.grid-position(2, 3, 1, 2);
     }
 
     > .attribute__value.attribute__value--list {
@@ -38,7 +42,7 @@
             transition: max-height .6s ease-in;
         }
 
-        @include ie11Only('&.animated') {
+        @include mixins.ie11Only('&.animated') {
             max-height: 60vh;
         }
 
@@ -73,11 +77,11 @@
 
     > .groupMembership__label {
         background-image: unset;
-        color: $buttonBlue;
+        color: variables.$buttonBlue;
         cursor: pointer;
         display: flex;
         height: unset;
-        font-weight: $bolder;
+        font-weight: variables.$bolder;
         justify-content: center;
         margin-top: 1rem;
         width: unset;
@@ -105,13 +109,13 @@
         transition: max-height .6s ease-in;
     }
 
-    @include ie11Only('&.animated') {
+    @include mixins.ie11Only('&.animated') {
         max-height: 140vh;
     }
 
 
     li:nth-child(n+6) {
-        @include visually-shown;
+        @include mixins.visually-shown;
         display: list-item;
     }
 }

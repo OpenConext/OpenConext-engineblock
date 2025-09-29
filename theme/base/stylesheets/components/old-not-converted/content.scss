@@ -1,7 +1,10 @@
+@use "../../variables";
+@use "../../breakpoints";
+
 .mod-content {
   padding: 2rem;
 
-  @include screen('mobile') {
+  @include breakpoints.screen('mobile') {
       padding: .5rem;
   }
 
@@ -27,8 +30,8 @@
   }
 
   h3 {
-      font-size: $f-normal;
-      color: $mediumGrey;
+      font-size: variables.$f-normal;
+      color: variables.$mediumGrey;
       line-height: 25px;
   }
 

@@ -2,7 +2,8 @@
     Generic sass-variables
  ******************************************************************/
 
-@import 'functions';
+@use "sass:color";
+@use 'functions';
 
 // Colors
 $black: #212121 !default;
@@ -46,19 +47,19 @@ $inputBorderGray: #676767 !default;
 $hardBorderGray: #919ba4 !default;
 $brownishGray: #5b5b5b !default;
 $darkGrey: #2b3f44 !default;
-$lightGrey: lighten(black,95) !default;
+$lightGrey: color.adjust(black,$lightness: 95%) !default;
 $borderDark: rgba(black, .1) !default;
 $white: #fff !default;
 
 // Font sizes
-$f-small: calculateRem(14px) !default;
-$f-normal: calculateRem(16px) !default;
-$f-large: calculateRem(19px) !default;
-$f-h5: calculateRem(20px) !default;
-$f-xl: calculateRem(22px) !default;
-$f-h3: calculateRem(24px) !default;
-$f-h2: calculateRem(26px) !default;
-$f-xxl: calculateRem(36px) !default;
+$f-small: functions.calculateRem(14px) !default;
+$f-normal: functions.calculateRem(16px) !default;
+$f-large: functions.calculateRem(19px) !default;
+$f-h5: functions.calculateRem(20px) !default;
+$f-xl: functions.calculateRem(22px) !default;
+$f-h3: functions.calculateRem(24px) !default;
+$f-h2: functions.calculateRem(26px) !default;
+$f-xxl: functions.calculateRem(36px) !default;
 
 // Font weights
 $light: 300 !default;
@@ -68,11 +69,11 @@ $bolder: 600 !default;
 $boldest: 700 !default;
 
 // Borders
-$border: lighten(black,90) !default;
+$border: color.adjust(black,$lightness: 90%) !default;
 $borderRadius: 4px !default;
 
 // Other variables
 $containerWidth: 50rem !default;
 $font: Helvetica, sans-serif !default;
+$fa-var-warning: "\f071";
 $small: 720px !default;
-

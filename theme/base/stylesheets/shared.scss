@@ -1,7 +1,13 @@
+@use "../../skeune/stylesheets/mixins-skeune";
+
 /*******************************************************************
     CSS shared across all pages with the default layout
  ******************************************************************/
-@import 'helpers.scss';
+@use 'helpers.scss';
+@use "breakpoints";
+@use "functions";
+@use "mixins";
+@use "variables";
 
 html {
     scroll-behavior: smooth;
@@ -13,7 +19,7 @@ html {
 
 body {
     align-items: center;
-    background: $darkishBlue;
+    background: variables.$darkishBlue;
     display: flex;
     font-family: 'SourceSansPro', sans-serif;
     font-size: 100%;
@@ -31,7 +37,7 @@ body {
     }
 
     * {
-        @include focus;
+        @include mixins-skeune.focus;
     }
 
     a {
@@ -45,40 +51,40 @@ body {
     }
 
     h2 {
-        color: $green;
+        color: variables.$green;
         font-family: 'Nunito', sans-serif;
-        font-size: $f-h2;
-        font-weight: $bolder;
+        font-size: variables.$f-h2;
+        font-weight: variables.$bolder;
         line-height: 1.15;
     }
 
     h3 {
-        color: $brownishGray;
+        color: variables.$brownishGray;
         font-family: 'Nunito', sans-serif;
-        font-size: $f-h3;
-        font-weight: $bolder;
+        font-size: variables.$f-h3;
+        font-weight: variables.$bolder;
         line-height: 1.5;
     }
 
     h4 {
-        color: $black;
+        color: variables.$black;
         font-family: 'Nunito', sans-serif;
-        font-size: $f-xl;
-        font-weight: $bolder;
+        font-size: variables.$f-xl;
+        font-weight: variables.$bolder;
         line-height: 1.5;
     }
 
     h5 {
-        color: $brownishGray;
-        font-size: $f-h5;
-        font-weight: $normal;
+        color: variables.$brownishGray;
+        font-size: variables.$f-h5;
+        font-weight: variables.$normal;
         line-height: 1.5;
     }
 
     h6 {
-        color: $black;
-        font-size: $f-large;
-        font-weight: $bolder;
+        color: variables.$black;
+        font-size: variables.$f-large;
+        font-weight: variables.$bolder;
         line-height: 1.5;
     }
 
@@ -91,33 +97,33 @@ body {
     }
 
     .page__title {
-        @include font-style-xl;
-        background-color: $yellow;
-        color: $black;
-        line-height: calculateRem(26px);
+        @include mixins.font-style-xl;
+        background-color: variables.$yellow;
+        color: variables.$black;
+        line-height: functions.calculateRem(26px);
         margin: 0;
-        padding: calculateRem(26px) 2rem;
+        padding: functions.calculateRem(26px) 2rem;
 
-        @include screen('mobile') {
+        @include breakpoints.screen('mobile') {
             padding: .8125rem 1rem;
         }
 
-        @include screen('smallMobile') {
+        @include breakpoints.screen('smallMobile') {
             padding: .8125rem .5rem;
         }
     }
 
     .page__content {
-        @include border-bottom-radius(8px);
-        background-color: $gray;
-        box-shadow: 0 3px 0 2px $darkishBlueTwo;
+        @include mixins.border-bottom-radius(8px);
+        background-color: variables.$gray;
+        box-shadow: 0 3px 0 2px variables.$darkishBlueTwo;
         padding: 2rem 2rem 2.5rem;
 
-        @include screen('mobile') {
+        @include breakpoints.screen('mobile') {
             padding: 2rem 1rem 1rem;
         }
 
-        @include screen('smallMobile') {
+        @include breakpoints.screen('smallMobile') {
             padding: 1.5rem .5rem .5rem;
         }
     }
@@ -126,47 +132,47 @@ body {
         > header {
             > h1.redirectBar,
             > p.loginBar {
-                @include font-style-xl;
-                background-color: $darkishBlue;
-                color: $loginBlue;
+                @include mixins.font-style-xl;
+                background-color: variables.$darkishBlue;
+                color: variables.$loginBlue;
                 font-family: 'Nunito', sans-serif;
                 line-height: 5rem;
                 margin: 0;
                 padding: 0 2rem;
 
-                @include screen('mobile') {
-                    @include font-style-large;
+                @include breakpoints.screen('mobile') {
+                    @include mixins.font-style-large;
                     line-height: 3rem;
                     padding: 0 1rem;
                 }
 
-                @include screen('smallMobile') {
+                @include breakpoints.screen('smallMobile') {
                     padding: 0 .5rem;
                 }
             }
         }
 
         > main {
-            @include border-bottom-radius(8px);
-            background-color: $gray;
-            box-shadow: 0 3px 0 2px $darkishBlueTwo;
+            @include mixins.border-bottom-radius(8px);
+            background-color: variables.$gray;
+            box-shadow: 0 3px 0 2px variables.$darkishBlueTwo;
 
             > header {
                 h2 {
-                    background-color: $gray;
-                    color: $green;
-                    font-size: $f-h2;
-                    font-weight: $bolder;
+                    background-color: variables.$gray;
+                    color: variables.$green;
+                    font-size: variables.$f-h2;
+                    font-weight: variables.$bolder;
                     line-height: 1.15;
                     margin: 0;
-                    padding: 1.5rem 2rem calculateRem(34px);
+                    padding: 1.5rem 2rem functions.calculateRem(34px);
 
-                    @include screen('mobile') {
-                        padding: .75rem 1rem calculateRem(17px);
+                    @include breakpoints.screen('mobile') {
+                        padding: .75rem 1rem functions.calculateRem(17px);
                     }
 
-                    @include screen('smallMobile') {
-                        padding: .75rem .5rem calculateRem(17px);
+                    @include breakpoints.screen('smallMobile') {
+                        padding: .75rem .5rem functions.calculateRem(17px);
                     }
                 }
             }
@@ -185,7 +191,7 @@ body {
     input[type="checkbox"]:checked.tooltip ~ .tooltip__value {
         padding: 0 1rem 1rem 0;
 
-        @include screen('mobile') {
+        @include breakpoints.screen('mobile') {
             margin: 0;
             text-align: left;
             padding: 1rem 1rem 1rem 0;
@@ -203,7 +209,7 @@ body {
 
     .modal__value.animated,
     .tooltip__value.animated {
-        @include start-display-animated;
+        @include mixins.start-display-animated;
     }
 
     // if user agrees to animations, animate the display showing / hiding
@@ -211,7 +217,7 @@ body {
     input[type="checkbox"]:checked.tooltip ~ .tooltip__value.animated,
     input[type="checkbox"]:checked.modal + br + label + .modal__value.animated,
     input[type="checkbox"]:checked.modal + .button--tertiary + .modal__value.animated {
-        @include transition-display;
+        @include mixins.transition-display;
     }
 
     // set max-height for modals
@@ -221,23 +227,23 @@ body {
         max-height: initial;
     }
 
-    @include ie11Only('input[type="checkbox"]:checked.modal + label + .modal__value.animated, input[type="checkbox"]:checked.modal + br + label + .modal__value.animated, input[type="checkbox"]:checked.modal + .button--tertiary + .modal__value.animated') {
+    @include mixins.ie11Only('input[type="checkbox"]:checked.modal + label + .modal__value.animated, input[type="checkbox"]:checked.modal + br + label + .modal__value.animated, input[type="checkbox"]:checked.modal + .button--tertiary + .modal__value.animated') {
         max-height: 60vh;
     }
 
         // set max-height for tooltips
     input[type="checkbox"]:checked.tooltip ~ .tooltip__value.animated {
-        font-weight: $normal;
+        font-weight: variables.$normal;
         max-height: initial;
     }
 
-    @include ie11Only('input[type="checkbox"]:checked.tooltip ~ .tooltip__value.animated') {
+    @include mixins.ie11Only('input[type="checkbox"]:checked.tooltip ~ .tooltip__value.animated') {
         max-height: 40vh;
     }
 
     label.tooltip,
     .ie11__label > label.tooltip {
-        @include tooltip;
+        @include mixins-skeune.tooltip;
 
         .expandable {
             display: inline;
@@ -264,13 +270,13 @@ body {
     input[type="checkbox"]:checked.modal + label,
     input[type="checkbox"]:checked.modal + br + label,
     input[type="checkbox"]:checked.modal + .ie11__label > label {
-        @include closeModal;
+        @include mixins-skeune.closeModal;
     }
 
     // set cross for tooltips when opened
     input[type="checkbox"]:checked.tooltip ~ label.tooltip,
     input[type="checkbox"]:checked.tooltip ~ .ie11__label > label.tooltip {
-        @include closeTooltip;
+        @include mixins-skeune.closeTooltip;
 
         .expandable {
             display: none;
@@ -290,7 +296,7 @@ body {
             outline: none;
 
             > * {
-                box-shadow: 0 0 0 3px $lightBlue;
+                box-shadow: 0 0 0 3px variables.$lightBlue;
             }
         }
     }

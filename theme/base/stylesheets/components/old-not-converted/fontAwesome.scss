@@ -1,17 +1,17 @@
 @use 'sass:math';
 
-@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/functions';
-@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/variables';
-@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/mixins';
-@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/core';
-@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/fixed-width';
-@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/list';
-@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/bordered-pulled';
-@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/animated';
-@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/rotated-flipped';
-@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/stacked';
-@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/icons';
-@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/screen-reader';
+@use '../../../../node_modules/@fortawesome/fontawesome-free/scss/functions';
+@use '../../../../node_modules/@fortawesome/fontawesome-free/scss/variables';
+@use '../../../../node_modules/@fortawesome/fontawesome-free/scss/mixins';
+@use '../../../../node_modules/@fortawesome/fontawesome-free/scss/core';
+@use '../../../../node_modules/@fortawesome/fontawesome-free/scss/widths';
+@use '../../../../node_modules/@fortawesome/fontawesome-free/scss/list';
+@use '../../../../node_modules/@fortawesome/fontawesome-free/scss/bordered';
+@use '../../../../node_modules/@fortawesome/fontawesome-free/scss/pulled';
+@use '../../../../node_modules/@fortawesome/fontawesome-free/scss/animated';
+@use '../../../../node_modules/@fortawesome/fontawesome-free/scss/rotated-flipped';
+@use '../../../../node_modules/@fortawesome/fontawesome-free/scss/stacked';
+@use '../../../../node_modules/@fortawesome/fontawesome-free/scss/icons';
 
 @font-face {
     font-display: swap;
@@ -21,4 +21,27 @@
     src: url('../../fonts/fontawesome-webfont.woff2') format('woff2'),
     url('../../fonts/fontawesome-webfont.woff') format('woff'),
     url('../../fonts/fontawesome-webfont.ttf') format('truetype');
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only-focusable:active,
+.sr-only-focusable:focus {
+  position: static !important;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
 }
