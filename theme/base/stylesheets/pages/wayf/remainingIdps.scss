@@ -1,30 +1,35 @@
+@use "../../breakpoints";
+@use "../../mixins";
+@use "../../variables";
+@use "../../../../skeune/stylesheets/mixins-skeune" as mixins-skeune;
+
 .wayf__remainingIdps {
     display: block;
 
     > .wayf__search {
-        @include relative;
+        @include mixins.relative;
         margin: 2rem 0 1.25rem;
 
         > .search__field {
-            @include webkit-input;
-            border: 1px solid $gray;
+            @include mixins.webkit-input;
+            border: 1px solid variables.$gray;
             border-radius: 6px;
             box-shadow: 0 1px 0 2px #5e6873;
             display: block;
-            font-size: $f-large;
+            font-size: variables.$f-large;
             height: 3rem;
             line-height: 3rem;
             padding: 1rem;
             width: 100%;
 
-            @include form-focus;
+            @include mixins-skeune.form-focus;
 
             &:hover {
-                background-color: $hoverBlue;
-                border: solid 1px $inputBorderGray;
+                background-color: variables.$hoverBlue;
+                border: solid 1px variables.$inputBorderGray;
             }
 
-            @include screen('mobile') {
+            @include breakpoints.screen('mobile') {
                 padding: .5rem;
             }
         }
@@ -33,14 +38,14 @@
         .search__field:focus + .search__submit,
         .search__field:hover ~ .search__reset,
         .search__field:focus ~ .search__reset {
-            @include button-reset($hoverBlue);
+            @include mixins.button-reset(variables.$hoverBlue);
         }
 
         > .search__submit,
         > .search__reset {
-            @include absolute(top 3px right 3px);
-            @include button-reset($white);
-            @include poirot;
+            @include mixins.absolute(top 3px right 3px);
+            @include mixins.button-reset(variables.$white);
+            @include mixins-skeune.poirot;
             background-color: transparent;
             background-position: center center;
             background-size: 1.5rem 1.5rem;
@@ -50,29 +55,29 @@
 
             &:hover,
             &:focus {
-                @include button-reset($hoverBlue);
+                @include mixins.button-reset(variables.$hoverBlue);
             }
 
-            @include screen('mobile') {
+            @include breakpoints.screen('mobile') {
                 width: 2rem;
             }
         }
 
         > .search__reset {
-            @include img-reset;
+            @include mixins-skeune.img-reset;
         }
     }
 
     > .remainingIdps__defaultIdp {
-        @include informational;
+        @include mixins-skeune.informational;
         margin: 1.25rem 0 1.25rem;
         min-height: 3rem;
 
         > .wayf__defaultIdpLink {
-            color: $black;
+            color: variables.$black;
 
             &:focus {
-                box-shadow: 0 0 0 3px $white;
+                box-shadow: 0 0 0 3px variables.$white;
             }
         }
     }
@@ -81,8 +86,8 @@
         margin-bottom: 3rem;
 
         > label[for="rememberChoice"] {
-            @include font-style-large;
-            color: $buttonBlue;
+            @include mixins.font-style-large;
+            color: variables.$buttonBlue;
         }
 
         > #rememberChoice {

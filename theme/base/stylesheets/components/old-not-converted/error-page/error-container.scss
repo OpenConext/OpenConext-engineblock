@@ -1,19 +1,24 @@
+@use "../../../mixins" as mixins;
+@use "../../../variables" as vars;
+@use "../../../breakpoints" as breakpoints;
+
+
 .mod-header {
-    @include clearfix;
+    @include mixins.clearfix;
     align-items: center;
     background: #fff;
-    border-bottom: 2px solid $blue;
-    box-shadow: 1px 1px $borderRadius rgba(black, .2);
+    border-bottom: 2px solid vars.$blue;
+    box-shadow: 1px 1px vars.$borderRadius rgba(black, .2);
     display: flex;
     line-height: 30px;
     padding: 1rem 1rem;
 
-    @include screen('tabletAndBigger') {
+    @include breakpoints.screen('tabletAndBigger') {
         margin-bottom: 3rem;
         padding: 1rem 2rem;
     }
 
-    @include screen('tabletAndSmaller') {
+    @include breakpoints.screen('tabletAndSmaller') {
         padding: 0.7rem 1rem;
         .title {
             line-height: 1.3rem;
@@ -35,7 +40,7 @@
         flex-wrap: nowrap;
     }
 
-    @include screen('tabletAndSmaller') {
+    @include breakpoints.screen('tabletAndSmaller') {
         .burger {
             display: block;
         }
@@ -48,7 +53,7 @@
 .error-container {
     margin: 0 0 2rem 0;
     width: 720px;
-    @include screen('mobile') {
+    @include breakpoints.screen('mobile') {
         margin: 0 auto 3em auto;
         width: 100%;
     }

@@ -1,17 +1,20 @@
+@use "../../../../base/stylesheets/mixins"
+@use "../../shared/vars.css.sass" as vars
+
 .warning
-  background-color: $light-pink
+  background-color: vars.$light-pink
   padding: 0.75em
   position: relative
-  +max-width($small)
+  +mixins.max-width(vars.$small)
     margin: 2em 1em 1em
 
   &.full-width
     margin: 2em 0
 
   > *:first-child::before
-    content: $fa-var-warning
+    content: vars.$fa-var-warning
     font-family: FontAwesome, sans-serif
-    color: $red
+    color: vars.$red
     display: inline-block
     height: 1.2em
     left: 0.75em

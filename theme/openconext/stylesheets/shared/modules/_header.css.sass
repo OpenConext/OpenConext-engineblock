@@ -1,29 +1,32 @@
+@use "../../../../base/stylesheets/mixins"
+@use "../vars.css.sass" as vars
+
 .mod-header
-  +clearfix
+  +mixins.clearfix
   padding: 1rem 1rem
   background: #fff
-  box-shadow: 1px 1px $br rgba(black,.2)
-  border-bottom: 2px solid $blue
+  box-shadow: 1px 1px vars.$br rgba(black,.2)
+  border-bottom: 2px solid vars.$blue
   line-height: 30px
   display: flex
   align-items: center
 
-  +min-width($medium)
+  +mixins.min-width(vars.$medium)
     padding: 1rem 2rem
     margin-bottom: 3rem
 
   // Main app title
   .title
-    color: $medium-grey
+    color: vars.$medium-grey
     text-overflow: ellipsis
     overflow: hidden
     white-space: nowrap
     padding-right: 1rem
 
     strong
-      color: $blue
+      color: vars.$blue
 
-  +max-width($medium)
+  +mixins.max-width(vars.$medium)
     padding: 0.7rem 1rem
     .title
       line-height: 1.3rem
@@ -48,7 +51,7 @@
   .comp-links
     flex-wrap: nowrap
 
-  +max-width($medium)
+  +mixins.max-width(vars.$medium)
     .burger
       display: block
 

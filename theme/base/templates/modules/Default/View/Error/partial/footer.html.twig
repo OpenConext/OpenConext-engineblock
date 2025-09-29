@@ -5,7 +5,7 @@
             {% if hasBackToSpLink() %}
                 <div class="footer-button">
                     <button type="submit" class="footer-button__button" form="backToSPForm">
-                        <i class="footer-button__icon fa-arrow-left"></i><br/>
+                        <i class="footer-button__icon fas fa-arrow-left"></i><br/>
                         <span class="footer-button__text">{{ 'error_return-sp-link-text'|trans({'%spName%': getSpName()}) }}</span>
                     </button>
                 </div>
@@ -14,7 +14,7 @@
                 <div class="footer-button">
                     {# The template var is set in the individual error Twigs, that's te place where we can determine what template is loaded. #}
                     <a href="{{ getWikiLink(template) }}" target="_blank" rel="noreferrer noopener" class="footer-button__link" title="{{ 'error_wiki-link-text'|trans }}">
-                        <i class="footer-button__icon fa-w"></i>
+                        <i class="footer-button__icon fas fa-w"></i>
                         <p class="footer-button__text">{{ 'error_wiki-link-text'|trans }}</p>
                         <p class="footer-button__text footer-button__text--small">{{ 'error_wiki-link-text-short'|trans }}</p>
                     </a>
@@ -22,7 +22,7 @@
             {%  endif %}
             <div class="footer-button">
                 <a href="{{ 'error_help-desk-href'|trans }}" target="_blank" rel="noreferrer noopener" class="footer-button__link" title="{{ 'error_help-desk-link-text'|trans }}">
-                    <i class="footer-button__icon fa-graduation-cap"></i>
+                    <i class="footer-button__icon fas fa-graduation-cap"></i>
                     <p class="footer-button__text">{{ 'error_help-desk-link-text'|trans }}</p>
                     <p class="footer-button__text footer-button__text--small">{{ 'error_help-desk-link-text-short'|trans }}</p>
                 </a>
@@ -32,7 +32,7 @@
                 {% set supportMailLabel = getIdpContactShortLabel(template) %}
                 <div class="footer-button">
                     <a href="mailto:{{ supportMail }}" target="_blank" rel="noreferrer noopener" class="footer-button__link">
-                        <i class="footer-button__icon fa-paper-plane"></i>
+                        <i class="footer-button__icon fas fa-paper-plane"></i>
                         <p class="footer-button__text">{{ supportMail }}</p>
                         <p class="footer-button__text footer-button__text--small">{{ supportMailLabel }}</p>
                     </a>

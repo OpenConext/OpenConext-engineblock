@@ -1,59 +1,65 @@
+@use "../../breakpoints";
+@use "../../functions";
+@use "../../mixins";
+@use "../../variables";
+@use "../../../../skeune/stylesheets/mixins-skeune" as mixins-skeune;
+
 .idpRow {
-    @include display-grid;
-    @include grid-template-columns(10% 3% 48% 1% 37% 1%);
+    @include mixins.display-grid;
+    @include mixins.grid-template-columns(10% 3% 48% 1% 37% 1%);
     align-items: center;
-    background-color: $providerGray;
-    border-bottom: 1px solid $softBorderGray;
+    background-color: variables.$providerGray;
+    border-bottom: 1px solid variables.$softBorderGray;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
-    font-size: $f-small;
-    font-weight: $bolder;
+    font-size: variables.$f-small;
+    font-weight: variables.$bolder;
     line-height: 1.63;
     text-align: left;
 
-    @include screen('mobile') {
-        @include grid-template-columns(15% 6% 78% 1%);
-        @include grid-template-rows(min-content min-content);
+    @include breakpoints.screen('mobile') {
+        @include mixins.grid-template-columns(15% 6% 78% 1%);
+        @include mixins.grid-template-rows(min-content min-content);
         padding: 10px;
     }
 
     > * {
         padding: 1rem 0;
 
-        @include screen('mobile') {
+        @include breakpoints.screen('mobile') {
             padding: 0;
         }
     }
 
     > img {
-        @include grid-position(1, 2, 1, 2);
+        @include mixins.grid-position(1, 2, 1, 2);
         box-sizing: content-box;
         margin-left: 9px;
-        max-height: calculateRem(30px);
+        max-height: functions.calculateRem(30px);
         max-width: 100%;
         overflow: hidden;
     }
 
     label.modal {
-        color: $brownishGray;
+        color: variables.$brownishGray;
         padding: 10px 25px 10px 5px;
         text-align: right;
         text-decoration: underline;
         background-image: unset;
 
-        @include screen('mobile') {
+        @include breakpoints.screen('mobile') {
             text-align: left;
         }
     }
 
     > p {
-        @include grid-position(1, 2, 3, 4);
-        font-size: $f-small;
-        font-weight: $normal;
+        @include mixins.grid-position(1, 2, 3, 4);
+        font-size: variables.$f-small;
+        font-weight: variables.$normal;
         margin: 0;
         text-align: left;
 
-        @include screen('mobile') {
+        @include breakpoints.screen('mobile') {
             margin: 0 0 0 10px;
         }
 
@@ -63,7 +69,7 @@
 
         > .idpRow__providedBy-content {
             > strong {
-                font-weight: $bolder;
+                font-weight: variables.$bolder;
             }
         }
     }
@@ -71,10 +77,10 @@
     > input[type="checkbox"],
     > .ie11__label,
     > .ie11__link {
-        @include grid-position(1, 2, 5, 7);
+        @include mixins.grid-position(1, 2, 5, 7);
 
-        @include screen('mobile') {
-            @include grid-position(2, 3, 3, 5);
+        @include breakpoints.screen('mobile') {
+            @include mixins.grid-position(2, 3, 3, 5);
         }
     }
 
@@ -82,14 +88,14 @@
     > .ie11__link {
         text-align: right;
 
-        @include screen('mobile') {
+        @include breakpoints.screen('mobile') {
             margin: 0 0 0 10px;
             padding: 0;
             text-align: inherit;
         }
 
         > label.modal {
-            @include screen('mobile') {
+            @include breakpoints.screen('mobile') {
                 display: block;
                 background-position: right 18px center;
                 padding: 0 40px 0 0;
@@ -97,7 +103,7 @@
         }
 
         > a.idpRow__supportUrl {
-            color: $oceanBlue;
+            color: variables.$oceanBlue;
             padding: 10px 25px 10px 0;
             text-decoration: none;
 
@@ -108,8 +114,8 @@
     }
 
     > .modal__value {
-        @include start-display-animated;
-        @include grid-position(2, 3, 3, 7);
+        @include mixins.start-display-animated;
+        @include mixins.grid-position(2, 3, 3, 7);
         transition: max-height .6s ease-in;
 
         > .modal__content {
@@ -117,14 +123,14 @@
             padding-top: 0;
         }
 
-        @include screen('mobile') {
-            @include grid-position(3, 4, 1, 5);
+        @include breakpoints.screen('mobile') {
+            @include mixins.grid-position(3, 4, 1, 5);
         }
     }
 
     > input:checked ~ .ie11__label {
         > label.modal {
-            @include closeIdpRowLabel;
+            @include mixins-skeune.closeIdpRowLabel;
             background-position: right 23px top .5rem;
             display: inline-block;
             height: 25px;
@@ -134,7 +140,7 @@
                 display: none;
             }
 
-            @include screen('mobile') {
+            @include breakpoints.screen('mobile') {
                 display: none;
             }
         }
@@ -145,7 +151,7 @@
             display: none;
         }
 
-        @include screen('mobile') {
+        @include breakpoints.screen('mobile') {
             display: flex;
             justify-content: space-between;
 
@@ -155,7 +161,7 @@
             }
 
             > label.modal {
-                @include closeIdpRowLabel;
+                @include mixins-skeune.closeIdpRowLabel;
                 background-position: right 5px top .2rem;
                 display: inline-block;
                 height: 25px;
@@ -174,7 +180,7 @@
             padding-left: 0;
         }
 
-        @include screen('mobile') {
+        @include breakpoints.screen('mobile') {
             margin: 0;
 
             > .modal__content {
@@ -183,15 +189,15 @@
         }
     }
 
-    @include ie11Only('> input:checked ~ .ie11__label + .modal__value') {
+    @include mixins.ie11Only('> input:checked ~ .ie11__label + .modal__value') {
         max-height: 100vh;
     }
 }
 
-@include ie11Only('li.idpRow') {
+@include mixins.ie11Only('li.idpRow') {
     -ms-grid-columns: 85.68px 6.12px 246.6px 6.12px 160.36px 6.12px;
 }
 
-@include ie11Only('li.idpRow label.modal') {
+@include mixins.ie11Only('li.idpRow label.modal') {
     background: none;
 }
