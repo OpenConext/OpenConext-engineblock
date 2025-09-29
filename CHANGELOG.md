@@ -28,12 +28,12 @@ New feature:
   if enabled, specify the attributes to add to the AuthnRequest using `stepup.callout_user_attributes`.
   The default is to send `schacHomeOrganization` and `mail`.
 * Prevent double entries in the Discovery caused by duplicate `name:*` and DiscoveryName:*` entries in Manage (#1852)
-* (**pending**) Request PDP decision based on IdP-setting (#1857); in Manage (>=9.4) it is possible to set the
+* Request PDP decision based on IdP-setting (#1857); in Manage (>=9.4) it is possible to set the
   `coin:policy_enforcement_decision_required` flag for an IdP in addition to for an SP. Also policies no longer require an SP to
   be specified and can be applied to all logins from an IdP.
 
 Changes:
-* Set width of debug page to browser width (#1790)
+* Set width of the debug page to browser width (#1790)
 
 Bugfixes:
 * Correctly json-decode the `rememberchoice` cookie
