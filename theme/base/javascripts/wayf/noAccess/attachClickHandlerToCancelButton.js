@@ -1,7 +1,7 @@
 import {hideErrorMessage} from './hideErrorMessage';
 import {cancelButtonSelector} from '../../selectors';
 import {addClickHandlerOnce} from '../../utility/addClickHandlerOnce';
-import {cancelButtonClickHandler} from '../../handlers';
+import {cancelButtonClickHandlerCreator} from './cancelButtonClickHandler';
 
 /**
  * Ensure clicking the Cancel button shows the right behaviour:
@@ -13,6 +13,6 @@ import {cancelButtonClickHandler} from '../../handlers';
  * @param noAccess
  */
 export const attachClickHandlerToCancelButton = (parentSection, noAccess) => {
-  addClickHandlerOnce(cancelButtonSelector, cancelButtonClickHandler(parentSection, noAccess));
+  addClickHandlerOnce(cancelButtonSelector, cancelButtonClickHandlerCreator(parentSection, noAccess));
   hideErrorMessage(noAccess);
 };

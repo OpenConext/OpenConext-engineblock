@@ -10,7 +10,7 @@ import {
   idpDisabledClass, idpFormClass, idpLogoClass, idpSubmitClass, idpTitleClass, searchFieldClass,
   toggleButtonClass
 } from '../selectors';
-import {idpSubmitHandler} from '../handlers';
+import {submitForm} from './submitForm';
 
 /**
  * Behaviour expected to happen after a user presses the enter button.
@@ -41,7 +41,7 @@ export const handleEnter = (e) => {
       case idpSubmitClass:
       case idpFormClass:
       case idpLogoClass:
-        idpSubmitHandler(e); break;
+        submitForm(e); break;
       case searchFieldClass:
         selectFirstIdPAndSubmitForm(); break;
       case defaultIdpClass:

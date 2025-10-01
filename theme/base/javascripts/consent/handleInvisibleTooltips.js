@@ -1,4 +1,5 @@
-import {consentHideInvisibleTooltips, consentShowInvisibleTooltips} from '../handlers';
+import {hideInvisibleTooltips} from './hideInvisibleTooltips';
+import {showInvisibleTooltips} from './showInvisibleTooltips';
 import {
   firstInvisibleAttributeSelector,
   invisibleTooltipLabelsSelector,
@@ -18,12 +19,12 @@ export const handleInvisibleTooltips = () => {
   changeAriaPressed(showMoreCheckbox);
 
   if (isHidden) {
-    consentShowInvisibleTooltips();
+    showInvisibleTooltips();
     firstInvisibleAttribute.setAttribute('tabindex', "-1");
     firstInvisibleAttribute.focus({preventScroll: true});
     return;
   }
 
-  consentHideInvisibleTooltips();
+  hideInvisibleTooltips();
   document.querySelector(openToggleLabelSelector).focus({preventScroll: true});
 };

@@ -1,28 +1,26 @@
-import {enterHandler} from './consent/enterHandler';
-import {keyboardBehaviour} from './consent/keyboardBehaviour';
+import {consentKeyboardBehaviour} from './consent/keyboardBehaviour';
 import {keyboardBehaviour as wayfKeyboardBehaviour} from './wayf/keyboardBehaviour';
 import {animateInteractiveSections} from './utility/animateInteractiveSections';
-import {addAccessibilitySupport} from './consent/addA11ySupport';
-import {switchConsentSection} from './consent/switchConsentSection';
 import {addClickHandlerOnce} from './utility/addClickHandlerOnce';
 import {
   backButtonSelector,
-  firstRequestFieldId,
   nokButtonSelector,
   tooltipsAndModalLabels,
+  contentSectionSelector,
+  nokSectionSelector,
+  consentAnimatedElementSelectors,
+  nokCheckboxId,
+  openToggleLabelSelector,
 } from './selectors';
 import {handlePreviousSelectionVisible} from './wayf/handlePreviousSelectionVisible';
 import {mouseBehaviour} from './wayf/mouseBehaviour';
 import {searchBehaviour} from './wayf/searchBehaviour';
-import {submitForm} from './wayf/submitForm';
-import {cancelButtonClickHandlerCreator} from './wayf/noAccess/cancelButtonClickHandler';
-import {toggleFormFieldsAndButton} from './wayf/noAccess/toggleFormFieldsAndButton';
 import {addTooltipAndModalAriaHandlers} from './consent/addTooltipAndModalAriaHandlers';
 import {hideInvisibleTooltips} from './consent/hideInvisibleTooltips';
-import {showInvisibleTooltips} from './consent/showInvisibleTooltips';
 import {handleInvisibleTooltips} from './consent/handleInvisibleTooltips';
 import {toggleTooltipPressedStates} from './consent/toggleTooltipPressedStates';
 import {handleNokFocus} from './consent/handleNokFocus';
+import {toggleVisibility} from './utility/toggleVisibility';
 
 /***
  * CONSENT HANDLERS
@@ -32,24 +30,44 @@ export const consentCallbackAfterLoad = () => {
   addAccessibilitySupport();
 };
 export const consentHandleNokFocus = handleNokFocus;
-export const consentEnterHandler = (target) => enterHandler(target);
-export const consentKeyboardBehaviourHandler = keyboardBehaviour;
 export const consentAnimateInteractiveElements = (selector) => {
   animateInteractiveSections(selector);
   addTooltipAndModalAriaHandlers(tooltipsAndModalLabels);
 };
-export const consentHideInvisibleTooltips = hideInvisibleTooltips;
-export const consentShowInvisibleTooltips = showInvisibleTooltips;
-export const consentHandleInvisibleTooltips = handleInvisibleTooltips;
-export const consentToggleTooltipPressedState = toggleTooltipPressedStates;
+
+export const addAccessibilitySupport = () => {
+  consentKeyboardBehaviour();
+  consentAnimateInteractiveElements(consentAnimatedElementSelectors);
+  hideInvisibleTooltips();
+  addClickHandlerOnce(openToggleLabelSelector, handleInvisibleTooltips);
+  toggleTooltipPressedStates();
+  addClickHandlerOnce(nokButtonSelector, consentHandleNokFocus);
+  const el = document.getElementById(nokCheckboxId);
+  if (el && el.classList) {
+    el.classList.add('js');
+  }
+};
+
 export const consentNokHandler = (e) => {
-  switchConsentSection(e);
+  if (!!e) {
+    e.preventDefault();
+  }
+  const nokSection = document.querySelector(nokSectionSelector);
+  const contentSection = document.querySelector(contentSectionSelector);
+  toggleVisibility(nokSection);
+  toggleVisibility(contentSection);
   consentHandleNokFocus();
   addClickHandlerOnce(backButtonSelector, backButtonHandler());
 };
 export const backButtonHandler = () => {
   return (e) => {
-    switchConsentSection(e);
+    if (!!e) {
+      e.preventDefault();
+    }
+    const nokSection = document.querySelector(nokSectionSelector);
+    const contentSection = document.querySelector(contentSectionSelector);
+    toggleVisibility(nokSection);
+    toggleVisibility(contentSection);
     consentHandleNokFocus();
   };
 };
@@ -65,11 +83,4 @@ export const wayfCallbackAfterLoad = () => {
   mouseBehaviour();
   searchBehaviour();
 };
-export const idpSubmitHandler = (e) => {
-  submitForm(e);
-};
-export const cancelButtonClickHandler = (parentSection, noAccess) => cancelButtonClickHandlerCreator(parentSection, noAccess);
-export const requestButtonHandler = () => {
-  toggleFormFieldsAndButton();
-  document.getElementById(firstRequestFieldId).focus();
-};
+
