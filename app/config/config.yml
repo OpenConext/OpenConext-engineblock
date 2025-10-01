@@ -100,7 +100,7 @@ doctrine:
                 # when true, queries are logged to a 'doctrine' monolog channel
                 logging: '%kernel.debug%'
                 profiling: '%kernel.debug%'
-                server_version: '10.6.0-MariaDB'
+                server_version: '10.11.13-MariaDB'
                 mapping_types:
                     enum: string
         types:
