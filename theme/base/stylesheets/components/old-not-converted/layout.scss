@@ -1,14 +1,18 @@
+@use "../../variables";
+@use "../../breakpoints";
+@use "../../mixins";
+
 .l-container {
-  max-width: $containerWidth;
+  max-width: variables.$containerWidth;
   z-index: 0;
   padding: 1rem;
 
-  @include screen('tabletAndBigger') {
+  @include breakpoints.screen('tabletAndBigger') {
       margin: 0 auto 3rem;
       padding: 0 2rem;
   }
 
-  @include screen('mobile') {
+  @include breakpoints.screen('mobile') {
       padding: .5rem;
   }
 
@@ -19,6 +23,6 @@
 
 .l-overflow {
   overflow-x: auto;
-  @include scrollbar(8px, rgba(black,.4), 4px, rgba(black,.1), 4px);
+  @include mixins.scrollbar(8px, rgba(black,.4), 4px, rgba(black,.1), 4px);
 }
 

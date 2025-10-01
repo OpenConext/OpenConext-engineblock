@@ -1,18 +1,21 @@
+@use "../../../../base/stylesheets/mixins"
+@use "../../shared/vars.css.sass" as vars
+
 .mod-tabs
 
   a
     text-decoration: none
-    color: $medium-grey
+    color: vars.$medium-grey
     display: block
 
     &:hover,
     &.active
-      color: $blue
+      color: vars.$blue
 
-  +min-width($medium)
+  +mixins.min-width(vars.$medium)
     ul
       display: flex
-      border-bottom: 1px solid $border
+      border-bottom: 1px solid vars.$border
       padding: 0 1rem
 
     li
@@ -23,12 +26,12 @@
 
       &:hover,
       &.active
-        border-bottom: 1px solid $blue
+        border-bottom: 1px solid vars.$blue
         margin-bottom: -1px
 
-  +max-width($medium - 1px)
+  +mixins.max-width(vars.$medium - 1px)
     a
       display: block
       padding: 1rem 2rem
-      border-bottom: 1px solid $border
+      border-bottom: 1px solid vars.$border
 

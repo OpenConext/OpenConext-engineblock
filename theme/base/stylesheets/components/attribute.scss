@@ -1,5 +1,6 @@
 @import './attributeName';
 @import './attributeValue';
+@use "../../../skeune/stylesheets/mixins-skeune" as mixins-skeune;
 
 .consent__attribute {
     @include display-grid;
@@ -38,7 +39,7 @@
     }
 
     > input[type="checkbox"]:checked.tooltip ~ .attribute__name > label.tooltip {
-        @include closeTooltip;
+        @include mixins-skeune.closeTooltip;
         background-position: left 17px bottom 11px;
     }
 

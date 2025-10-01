@@ -1,7 +1,7 @@
-import {hideNoAccess} from '../../wayf/noAccess/hideNoAccess';
+import {hideNoAccess} from './hideNoAccess';
 import {isHiddenElement} from '../../utility/isHiddenElement';
 import {searchFieldSelector, showFormSelector} from '../../selectors';
-import {toggleFormFieldsAndButton} from '../../wayf/noAccess/toggleFormFieldsAndButton';
+import {toggleFormFieldsAndButton} from './toggleFormFieldsAndButton';
 
 /**
  * Creates the click handler for the cancel button.
