@@ -1,4 +1,4 @@
-import {consentEnterHandler} from '../handlers';
+import {enterHandler} from './enterHandler';
 import {fireClickEvent} from '../utility/fireClickEvent';
 import {getData} from '../utility/getData';
 
@@ -13,7 +13,7 @@ import {getData} from '../utility/getData';
  *
  * Note: many problems were solved with HTML & CSS.  JS should be a last resort, as not everyone has JS.  See https://kryogenix.org/code/browser/everyonehasjs.html as to why to avoid JS.
  */
-export const keyboardBehaviour = () => {
+export const consentKeyboardBehaviour = () => {
   const ENTER      = 13;
   const SPACE      = 32;
   const TAB        = 9;
@@ -22,7 +22,7 @@ export const keyboardBehaviour = () => {
     const classList = e.target.classList;
     switch (e.keyCode) {
       case ENTER:
-        consentEnterHandler(e.target);
+        enterHandler(e.target);
         break;
       case SPACE:
         classList.forEach(className => {
