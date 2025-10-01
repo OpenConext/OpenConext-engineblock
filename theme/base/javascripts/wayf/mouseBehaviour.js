@@ -10,7 +10,7 @@ import {
   selectedIdpsFirstIdp,
   toggleButtonSelector,
 } from '../selectors';
-import {idpSubmitHandler} from '../handlers';
+import {submitForm} from './submitForm';
 import {checkHover} from './idpFocus/checkHover';
 import {isVisibleElement} from '../utility/isVisibleElement';
 
@@ -24,7 +24,7 @@ export const mouseBehaviour = () => {
     if (!hasClickHandler) {
       list.addEventListener('click', (e) => {
         e.preventDefault();
-        idpSubmitHandler(e);
+        submitForm(e);
       });
       list.setAttribute('data-clickhandled', 'true');
     }
