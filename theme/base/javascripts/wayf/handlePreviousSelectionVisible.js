@@ -9,7 +9,7 @@ import {
   selectedIdpsListSelector
 } from '../selectors';
 import {addClickHandlerOnce} from '../utility/addClickHandlerOnce';
-import {idpSubmitHandler} from '../handlers';
+import {submitForm} from './submitForm';
 import {matchPreviouslySelectedWithCookie} from './matchPreviouslySelectedWithCookie';
 
 /**
@@ -42,5 +42,5 @@ const mouseHandlersHiddenIdps = () => {
   attachDeleteHandlers();
 
   // Attach event listener to previous selection idps-list
-  addClickHandlerOnce(selectedIdpsListSelector, idpSubmitHandler);
+  addClickHandlerOnce(selectedIdpsListSelector, submitForm);
 };
