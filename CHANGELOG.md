@@ -50,19 +50,20 @@ Maintenance:
 * Update nanoid to 3.3.6
 * Update elliptic to 6.6.1
 * Update Devconf installation and docs
-* Add qa tooling helper scripts and drop Ant build.xml (#1781)
 * Fix composer lock file (#1785)
 
 New Features:
 * Add configurable default RequestedAuthnContext
   By setting the Manage option `metadata:coin:defaultRAC` for an IdP, this value will be sent by
-  default if no other is set (either in the AuthnReqeust or form a fixed MFA rule).
+  default if no other is set (either in the AuthnRequest or form a fixed MFA rule).
 * Support additional WAYF entries per IdP Endpoint with dedicated name, logo, keywords (#1338);
   multiple WAYF-entries per IdP can be specified by filling the `DiscoveryName:[0-9]:<lang>`,
   `keywords:[0-9]:<lang>` and `logo:[0-9]:<lang>` fields.
   See also [OpenConext-manage#457](https://github.com/OpenConext/OpenConext-manage/issues/457)
-* Add configurable client timeout for AA and PDP (#1797)
-* Limited the number of outstanding AuthNRequests per session (#1345)
+* Add configurable client timeout for AA and PDP (#1777).
+  Add the setting `http_client.timeout` to `parameters.yml` to set the limit.
+* Limited the number of outstanding AuthNRequests per session (#1345).
+  Add the setting `maximum_authentications_per_session` to `parameters.yml` to set the limit.
 
 Changes:
 * Remove confusing key_id from stepup callout logging (#1343)
@@ -73,13 +74,12 @@ Changes:
 * Stricter regex for urn validation (#1339)
 * Improve validation of allowed values for eduPersonScopedAffiliation
 * Use assertion id for session index (#41)
-* Add configurable http client timeout (#1777)
-* Log to stderr by default (#1792)
+* Log to stderr by default (#1796)
 * Add explicit IdP signing key feedback (#1328)
 
 Bugfixes
 * Improve handling of PDP timeout error (#1285)
-* Validate numeric key in ARP settings on metadata push (#1285)
+* Validate numeric key in ARP settings on metadata push (#1336)
 * Set the correct database version in doctrine (#1811)
 
 ## 6.15.4
