@@ -134,25 +134,25 @@ abstract class AbstractRole
      * @var Logo
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'logo', type: \Doctrine\DBAL\Types\Types::OBJECT)]
+    #[ORM\Column(name: 'logo', type: 'engineblock_logo', nullable: true)]
     public $logo;
 
     /**
      * @var Organization
      */
-    #[ORM\Column(name: 'organization_nl_name', type: \Doctrine\DBAL\Types\Types::OBJECT, nullable: true, length: 65535)]
+    #[ORM\Column(name: 'organization_nl_name', type: 'engineblock_organization', nullable: true)]
     public $organizationNl;
 
     /**
      * @var Organization
      */
-    #[ORM\Column(name: 'organization_en_name', type: \Doctrine\DBAL\Types\Types::OBJECT, nullable: true, length: 65535)]
+    #[ORM\Column(name: 'organization_en_name', type: 'engineblock_organization', nullable: true)]
     public $organizationEn;
 
     /**
      * @var Organization
      */
-    #[ORM\Column(name: 'organization_pt_name', type: \Doctrine\DBAL\Types\Types::OBJECT, nullable: true, length: 65535)]
+    #[ORM\Column(name: 'organization_pt_name', type: 'engineblock_organization', nullable: true)]
     public $organizationPt;
 
     /**
@@ -179,7 +179,7 @@ abstract class AbstractRole
     /**
      * @var X509Certificate[]
      */
-    #[ORM\Column(name: 'certificates', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
+    #[ORM\Column(name: 'certificates', type: 'engineblock_certificate_array', nullable: true)]
     public $certificates = array();
 
     /**
@@ -191,7 +191,7 @@ abstract class AbstractRole
     /**
      * @var ContactPerson[]
      */
-    #[ORM\Column(name: 'contact_persons', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
+    #[ORM\Column(name: 'contact_persons', type: 'engineblock_contact_person_array')]
     public $contactPersons;
 
     /**
@@ -203,13 +203,13 @@ abstract class AbstractRole
     /**
      * @var string[]
      */
-    #[ORM\Column(name: 'name_id_formats', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
+    #[ORM\Column(name: 'name_id_formats', type: 'json', length: 65535)]
     public $supportedNameIdFormats;
 
     /**
      * @var Service
      */
-    #[ORM\Column(name: 'single_logout_service', type: \Doctrine\DBAL\Types\Types::OBJECT, nullable: true, length: 65535)]
+    #[ORM\Column(name: 'single_logout_service', type: 'engineblock_service', nullable: true)]
     public $singleLogoutService;
 
     /**
