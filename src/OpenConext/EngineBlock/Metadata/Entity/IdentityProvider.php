@@ -32,6 +32,7 @@ use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
+use OpenConext\EngineBlockBundle\Doctrine\Type\SerializedArrayType;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 
@@ -71,7 +72,7 @@ class IdentityProvider extends AbstractRole
     /**
      * @var Service[]
      */
-    #[ORM\Column(name: 'single_sign_on_services', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
+    #[ORM\Column(name: 'single_sign_on_services', type: SerializedArrayType::NAME, length: 65535)]
     public $singleSignOnServices = array();
 
     /**
@@ -83,7 +84,7 @@ class IdentityProvider extends AbstractRole
     /**
      * @var ShibMdScope[]
      */
-    #[ORM\Column(name: 'shib_md_scopes', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
+    #[ORM\Column(name: 'shib_md_scopes', type: SerializedArrayType::NAME, length: 65535)]
     public $shibMdScopes = array();
 
     /**

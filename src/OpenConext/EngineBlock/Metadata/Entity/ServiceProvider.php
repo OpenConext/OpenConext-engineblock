@@ -29,6 +29,7 @@ use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Service;
+use OpenConext\EngineBlockBundle\Doctrine\Type\SerializedArrayType;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 
@@ -48,19 +49,19 @@ class ServiceProvider extends AbstractRole
     /**
      * @var null|AttributeReleasePolicy
      */
-    #[ORM\Column(name: 'attribute_release_policy', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
+    #[ORM\Column(name: 'attribute_release_policy', type: SerializedArrayType::NAME, length: 65535)]
     public $attributeReleasePolicy;
 
     /**
      * @var IndexedService[]
      */
-    #[ORM\Column(name: 'assertion_consumer_services', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
+    #[ORM\Column(name: 'assertion_consumer_services', type: SerializedArrayType::NAME, length: 65535)]
     public $assertionConsumerServices;
 
     /**
      * @var string[]
      */
-    #[ORM\Column(name: 'allowed_idp_entity_ids', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 6777215)]
+    #[ORM\Column(name: 'allowed_idp_entity_ids', type: SerializedArrayType::NAME, length: 6777215)]
     public $allowedIdpEntityIds;
 
     /**
@@ -72,7 +73,7 @@ class ServiceProvider extends AbstractRole
     /**
      * @var null|RequestedAttribute[]
      */
-    #[ORM\Column(name: 'requested_attributes', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
+    #[ORM\Column(name: 'requested_attributes', type: SerializedArrayType::NAME, length: 65535)]
     public $requestedAttributes;
 
     /**
