@@ -19,7 +19,7 @@ class ServiceType extends Type
     {
         if ($value === null) { return null; }
         if (!$value instanceof Service) {
-            throw ConversionException::conversionFailedInvalidType($value, $this->getName(), [Service::class,'null']);
+            throw new ConversionException(sprintf('Invalid value for %s expected %s got %s', $this->getName(), Service::class, is_object($value)? get_class($value): gettype($value)));
         }
         return json_encode(['location' => $value->location, 'binding' => $value->binding]);
     }
@@ -29,7 +29,7 @@ class ServiceType extends Type
         if ($value === null || $value === '') { return null; }
         $decoded = json_decode($value, true);
         if (!is_array($decoded) || !isset($decoded['location'], $decoded['binding'])) {
-            throw ConversionException::conversionFailedFormat($value, $this->getName(), 'json object with location,binding');
+            throw new ConversionException(sprintf('Invalid format for %s expected json object with location,binding got: %s', $this->getName(), substr((string)$value,0,120)));
         }
         return new Service($decoded['location'], $decoded['binding']);
     }
@@ -37,4 +37,3 @@ class ServiceType extends Type
     public function getName(): string { return self::NAME; }
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool { return true; }
 }
-

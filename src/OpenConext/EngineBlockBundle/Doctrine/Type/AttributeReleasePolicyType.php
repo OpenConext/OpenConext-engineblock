@@ -1,4 +1,3 @@
-
 <?php
 namespace OpenConext\EngineBlockBundle\Doctrine\Type;
 
@@ -25,7 +24,12 @@ class AttributeReleasePolicyType extends Type
             return null;
         }
         if (!$value instanceof AttributeReleasePolicy) {
-            throw ConversionException::conversionFailedInvalidType($value, $this->getName(), [AttributeReleasePolicy::class, 'null']);
+            throw new ConversionException(sprintf(
+                'Invalid value for %s expected %s got %s',
+                $this->getName(),
+                AttributeReleasePolicy::class,
+                is_object($value)? get_class($value): gettype($value)
+            ));
         }
         return json_encode($value->getAttributeRules());
     }
@@ -42,7 +46,11 @@ class AttributeReleasePolicyType extends Type
             }
             return new AttributeReleasePolicy($decoded);
         } catch (InvalidArgumentException | TypeError $e) {
-            throw ConversionException::conversionFailedFormat($value, $this->getName(), AttributeReleasePolicy::class);
+            throw new ConversionException(sprintf(
+                'Invalid format for %s expected JSON attribute rules array, error: %s',
+                $this->getName(),
+                $e->getMessage()
+            ), 0, $e);
         }
     }
 
@@ -56,4 +64,3 @@ class AttributeReleasePolicyType extends Type
         return true;
     }
 }
-

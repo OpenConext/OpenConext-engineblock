@@ -71,4 +71,9 @@ class X509CertificateLazyProxy
     {
         return array('certData', 'factory');
     }
+
+    public function toCertData(): string
+    {
+        return $this->certData;
+    }
 }

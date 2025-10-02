@@ -23,18 +23,16 @@ class CertificateArrayType extends Type
             return null;
         }
         if (!is_array($value)) {
-            throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['array','null']);
+            throw new ConversionException(sprintf('Invalid value for %s expected array got %s', $this->getName(), gettype($value)));
         }
         $out = [];
         foreach ($value as $cert) {
             if (!$cert instanceof X509CertificateLazyProxy) {
-                throw ConversionException::conversionFailedInvalidType($cert, $this->getName(), [X509CertificateLazyProxy::class]);
+                throw new ConversionException(sprintf('Invalid certificate element for %s expected %s got %s', $this->getName(), X509CertificateLazyProxy::class, is_object($cert)? get_class($cert): gettype($cert)));
             }
-            // There is a toCertData method in lazy proxy returning original data
-            $ref = new \ReflectionClass($cert);
-            $prop = $ref->getProperty('certData');
-            $prop->setAccessible(true);
-            $out[] = $prop->getValue($cert);
+            if (method_exists($cert, 'toCertData')) {
+                $out[] = $cert->toCertData();
+            }
         }
         return json_encode($out);
     }
@@ -46,7 +44,24 @@ class CertificateArrayType extends Type
         }
         $decoded = json_decode($value, true);
         if (!is_array($decoded)) {
-            throw ConversionException::conversionFailedFormat($value, $this->getName(), 'json array');
+            // Legacy fallback: serialized PHP array
+            if (is_string($value) && preg_match('/^[aOs]:/i', $value)) {
+                $legacy = @unserialize($value, ['allowed_classes' => true]);
+                if (is_array($legacy)) {
+                    // Assume elements expose certData or toCertData
+                    $factory = new X509CertificateFactory();
+                    $certs = [];
+                    foreach ($legacy as $legacyCert) {
+                        if (is_object($legacyCert) && method_exists($legacyCert, 'toCertData')) {
+                            $certs[] = new X509CertificateLazyProxy($factory, $legacyCert->toCertData());
+                        } elseif (is_string($legacyCert)) {
+                            $certs[] = new X509CertificateLazyProxy($factory, $legacyCert);
+                        }
+                    }
+                    return $certs;
+                }
+            }
+            throw new ConversionException(sprintf('Invalid format for %s expected json array got: %s', $this->getName(), substr((string)$value,0,120)));
         }
         $factory = new X509CertificateFactory();
         $certs = [];
@@ -66,4 +81,3 @@ class CertificateArrayType extends Type
         return true;
     }
 }
-
