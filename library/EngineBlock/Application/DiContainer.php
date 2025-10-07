@@ -28,8 +28,12 @@ use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Twig\Environment;
 
+/**
+ * This DiContainer relies on fetching services from the Symfony service container. This is no longer the way to go.
+ * Instead, going forward, inject new dependencies into \OpenConext\EngineBlockBundle\Bridge\DiContainerRuntime
+ * This way we no longer need to worry about Symfony purging services and Symfony can properly optimize it's service container.
+ */
 class EngineBlock_Application_DiContainer extends \Pimple\Container
 {
     const ATTRIBUTE_METADATA                    = 'attributeMetadata';
@@ -403,14 +407,6 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
     public function getEncryptionKeysConfiguration()
     {
         return $this->container->getParameter('encryption_keys');
-    }
-
-    /**
-     * @return Environment
-     */
-    public function getTwigEnvironment()
-    {
-        return $this->container->get('twig');
     }
 
     /**

@@ -19,6 +19,7 @@
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlockBundle\Bridge\DiContainerRuntime;
 use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
 use SAML2\Assertion\Validation\ConstraintValidator\NotBefore;
@@ -48,6 +49,10 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
                 new EngineBlock_X509_PrivateKey(__DIR__.'/test.pem.key')
             )
         );
+
+        $engineBlock = \EngineBlock_ApplicationSingleton::getInstance();
+        $engineBlock->setDiContainerRuntime(new DiContainerRuntime(Phake::mock(Twig\Environment::class)));
+
         $this->bindings = new EngineBlock_Corto_Module_Bindings($proxyServer);
     }
 
