@@ -38,6 +38,7 @@ Changes:
 Bugfixes:
 * Correctly json-decode the `rememberchoice` cookie
 * Engine ARP must not apply to user atrributes sent to stepup callout (#1849)
+* Make sure the javascript assets are versioned (#1869)
 
 ## 6.17.0 (not released)
 
