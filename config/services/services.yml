@@ -2,6 +2,12 @@ services:
     _defaults:
         public: true
 
+    OpenConext\EngineBlockBundle\Bridge\EngineBlockBootstrapper:
+        autowire: true
+        autoconfigure: true
+        tags:
+            - { name: kernel.event_subscriber }
+
     OpenConext\EngineBlock\Xml\:
         resource: '../../src/OpenConext/EngineBlock/Xml'
         exclude: '../../src/OpenConext/EngineBlock/Xml/ValueObjects'
