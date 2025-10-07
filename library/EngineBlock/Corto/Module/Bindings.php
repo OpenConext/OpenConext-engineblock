@@ -116,7 +116,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $diContainer                       = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
         $this->_featureConfiguration = $diContainer->getFeatureConfiguration();
         $this->_logger = EngineBlock_ApplicationSingleton::getLog();
-        $this->twig = $diContainer->getTwigEnvironment();
+        $this->twig = EngineBlock_ApplicationSingleton::getInstance()->getDiContainerRuntime()->twig;
         $this->acsLocationSchemeValidator = $diContainer->getAcsLocationSchemeValidator();
         $this->stepupIdentityProvider = $diContainer->getStepupIdentityProvider($this->_server);
     }
