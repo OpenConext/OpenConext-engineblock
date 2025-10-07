@@ -75,6 +75,7 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
     private function factoryService($className, EngineBlock_Corto_ProxyServer $server)
     {
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $diContainerRuntime = EngineBlock_ApplicationSingleton::getInstance()->getDiContainerRuntime();
 
         switch($className) {
             case EngineBlock_Corto_Module_Service_ProvideConsent::class :
@@ -84,7 +85,7 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer->getConsentFactory(),
                     $diContainer->getConsentService(),
                     $diContainer->getAuthenticationStateHelper(),
-                    $diContainer->getTwigEnvironment(),
+                    $diContainerRuntime->twig,
                     $diContainer->getProcessingStateHelper(),
                     $diContainer->getDiscoverySelectionService()
                 );
@@ -128,7 +129,7 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                 return new EngineBlock_Corto_Module_Service_SingleSignOn(
                     $server,
                     $diContainer->getXmlConverter(),
-                    $diContainer->getTwigEnvironment(),
+                    $diContainerRuntime->twig,
                     $diContainer->getServiceProviderFactory(),
                     $diContainer->getDiscoverySelectionService()
                 );
@@ -136,11 +137,11 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                 return new EngineBlock_Corto_Module_Service_ContinueToIdp(
                     $server,
                     $diContainer->getXmlConverter(),
-                    $diContainer->getTwigEnvironment(),
+                    $diContainerRuntime->twig,
                     $diContainer->getServiceProviderFactory()
                 );
             default :
-                return new $className($server, $diContainer->getXmlConverter(), $diContainer->getTwigEnvironment());
+                return new $className($server, $diContainer->getXmlConverter(), $diContainerRuntime->twig);
         }
     }
 }
