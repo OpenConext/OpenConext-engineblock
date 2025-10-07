@@ -13,9 +13,32 @@ Before upgrading to 6.18, first upgrade the following components:
     - Stepup-Gateway to version 5.1.0
     - Stepup-AzureMFA to version 2.2.0
 
+### Database migration
+A new database column was added to the Engineblock database. After upgradign the code, you need to run the following migration:
+```
+./app/console doctrine:migrations:migrate --env=prod --no-interaction
+
+                    OpenConext EngineBlock Migrations
+
+
+Migrating up to 20250206095609 from 20230824090020
+
+  ++ migrating 20250206095609
+
+     -> ALTER TABLE sso_provider_roles_eb5 ADD idp_discoveries LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)'
+
+  ++ migrated (0.06s)
+
+  ------------------------
+
+  ++ finished in 0.06s
+  ++ 1 migrations executed
+  ++ 1 sql queries
+```
+
 ### Changes
 
-To use the new GSSP faalback feature of Setup, you need to add the following keys to parameters.yml:
+To use the new GSSP fallback feature of Setup, you need to add the following keys to parameters.yml:
 ```
 feature_stepup_send_user_attributes: true
 stepup.callout_user_attributes:
