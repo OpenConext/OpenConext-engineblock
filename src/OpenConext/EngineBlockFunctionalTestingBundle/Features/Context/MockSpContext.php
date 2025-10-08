@@ -603,7 +603,7 @@ class MockSpContext extends AbstractSubContext
         $sp = $this->anUnregisteredServiceProviderNamed($spName);
 
         $this->serviceRegistryFixture
-            ->spRequiresPolicyEnforcementDecisionForSp($sp->entityId())
+            ->requiresPolicyEnforcementDecisionForSp($sp->entityId())
             ->save();
     }
 

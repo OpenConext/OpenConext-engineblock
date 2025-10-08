@@ -19,6 +19,7 @@ tests/e2e/node_modules
 coverage.xml
 
 .idea
+.DS_Store
 
 ###> symfony/framework-bundle ###
 /.env.local

@@ -76,7 +76,8 @@ class Coins
         $additionalLogging,
         $signatureMethod,
         $mfaEntities,
-        $defaultRAC
+        $defaultRAC,
+        $policyEnforcementDecisionRequired
     ) {
         return new self([
             'guestQualifier' => $guestQualifier,
@@ -88,6 +89,7 @@ class Coins
             'stepupConnections' => $stepupConnections,
             'mfaEntities' => $mfaEntities,
             'defaultRAC' => $defaultRAC,
+            'policyEnforcementDecisionRequired' => $policyEnforcementDecisionRequired,
         ]);
     }
 

@@ -267,6 +267,7 @@ parameters:
     ## The name of the SAML attributes to send to Stepup with the GSSP SAML extension
     stepup.callout_user_attributes:
       - urn:mace:dir:attribute-def:mail
+      - urn:mace:terena.org:attribute-def:schacHomeOrganization
 
     ##########################################################################################
     ## THEME SETTINGS

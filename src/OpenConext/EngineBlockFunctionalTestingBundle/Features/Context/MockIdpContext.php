@@ -100,6 +100,8 @@ class MockIdpContext extends AbstractSubContext
         $discoveries = [];
         if ($discoveryName !== null) {
             $discoveries[] = Discovery::create(['en' => $discoveryName], [], null);
+        } else {
+            $discoveries[] = Discovery::create(['en' => $name], [], null);
         }
 
         $mockIdp = $this->mockIdpFactory->createNew($name);
@@ -112,6 +114,19 @@ class MockIdpContext extends AbstractSubContext
             $mockIdp->publicKeyCertData(),
             $discoveries
         )->save();
+    }
+
+    /**
+     * @Given /^IDP "([^"]*)" requires a policy enforcement decision$/
+     * @param string $idpName
+     */
+    public function idpRequiresAPolicyEnforcementDecision($idpName)
+    {
+        $idp = $this->mockIdpRegistry->get($idpName);
+
+        $this->serviceRegistryFixture
+            ->requiresPolicyEnforcementDecisionForIdp($idp->entityId())
+            ->save();
     }
 
     /**
