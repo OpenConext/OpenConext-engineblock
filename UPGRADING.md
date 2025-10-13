@@ -39,7 +39,7 @@ Migrating up to 20250206095609 from 20230824090020
 ### Manage Push
 
 Make sure that after deploying a new Engine and updating the database, you **FIRST** need to push metadata from Manage to the **NEW** Engineblock version.  Until you do that, Engineblock will not work and you will not be able to log in.  
-Note in particular that until you repush the meatdata from Manage to Engine, _you_wil_not_be_able_to_login_to_Manage_itself_.  Please take measures against locking yourself out, for example by having a non-federated way to login to Manage, by triggering the push in another way, of by using blue/green deployments (the old Engineblock will work work with the updated database, so it's safe to deploy to green, update the database, login to manage using blue, let Manage push to green, than switch authentication to green).
+Note in particular that until you repush the metadata from Manage to Engine, _you_wil_not_be_able_to_login_to_Manage_itself_.  Please take measures against locking yourself out, for example by having a non-federated way to login to Manage, by triggering the push in another way, of by using blue/green deployments (the old Engineblock will work work with the updated database, so it's safe to deploy to green, update the database, login to manage using blue, let Manage push to green, than switch authentication to green).
 
 ### Changes
 
