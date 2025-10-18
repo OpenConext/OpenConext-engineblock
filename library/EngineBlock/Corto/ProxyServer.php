@@ -826,7 +826,7 @@ class EngineBlock_Corto_ProxyServer
 
         if ($protocolBinding !== Constants::BINDING_HTTP_POST) {
             $this->_server->getLogger()->notice(
-                "ProtocolBinding '{$protocolBinding}' requested is not supported, ignoring..."
+                "ProtocolBinding '{$protocolBinding}' requested by Issuer '{$serviceProvider->entityId}' is not supported, ignoring..."
             );
             return false;
         }
