@@ -347,7 +347,6 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
             '_serializableSspMessageXml',
             '_serializableRelayState',
             'SRAMInterruptNonce',
-            'SRAMInterrupt',
         ];
     }
 

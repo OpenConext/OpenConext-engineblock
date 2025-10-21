@@ -49,7 +49,7 @@ class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_C
             $this->_serviceProvider,
             $this->_request,
             $this->_server->getRepository(),
-            $this->logger
+            $log,
         );
 
         if (!$serviceProvider) {

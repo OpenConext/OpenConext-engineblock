@@ -20,12 +20,12 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Controllers;
 
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\SbsClientStateManager;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class SbsController extends Controller
+class SbsController extends AbstractController
 {
 
     /**

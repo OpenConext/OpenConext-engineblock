@@ -37,6 +37,12 @@ final class AuthzResponse
      */
     public $attributes;
 
+    public ?string $message;
+
+    private function __construct()
+    {
+    }
+
     public static function fromData(array $jsonData) : AuthzResponse
     {
         if (!isset($jsonData['msg'])) {
@@ -64,7 +70,7 @@ final class AuthzResponse
         $response->nonce = $jsonData['nonce'] ?? null;
         $response->message = $jsonData['message'] ?? null;
 
-        if (is_array($jsonData['attributes'])) {
+        if (isset($jsonData['attributes']) && is_array($jsonData['attributes'])) {
             $response->attributes = $jsonData['attributes'];
         } else {
             $response->attributes = [];

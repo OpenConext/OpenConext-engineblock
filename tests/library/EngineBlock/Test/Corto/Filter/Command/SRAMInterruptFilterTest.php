@@ -61,7 +61,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
         $request = $this->mockRequest();
         $sramFilter->setRequest($request);
 
-        $this->mockFeatureConfiguration(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => new Feature('eb.feature_enable_sram_interrupt', false)]));
+        $this->mockFeatureConfiguration(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => false]));
 
         $sramFilter->execute();
         $this->assertEmpty($sramFilter->getResponseAttributes());
@@ -80,7 +80,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
         $request = $this->mockRequest();
         $sramFilter->setRequest($request);
 
-        $this->mockFeatureConfiguration(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => new Feature('eb.feature_enable_sram_interrupt', true)]));
+        $this->mockFeatureConfiguration(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => true]));
 
         /** @var \Mockery\Mock $sbsClient */
         $sbsClient = $this->mockSbsClient();
@@ -114,17 +114,18 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
 
         $sramFilter->setResponse(new EngineBlock_Saml2_ResponseAnnotationDecorator(new Response()));
 
-        $this->mockFeatureConfiguration(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => new Feature('eb.feature_enable_sram_interrupt', true)]));
+        $this->mockFeatureConfiguration(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => true]));
 
         /** @var \Mockery\Mock $sbsClient */
         $sbsClient = $this->mockSbsClient();
 
-        $response = new AuthzResponse();
-        $response->msg = 'interrupt';
-        $response->nonce = 'hash123';
-        $response->attributes = [
-            'dummy' => 'attributes',
-        ];
+        $response = AuthzResponse::fromData([
+            'msg' => 'interrupt',
+            'nonce' => 'hash123',
+            'attributes' => [
+                'dummy' => 'attributes',
+            ]
+        ]);
 
         $expectedRequest = new AuthzRequest();
         $expectedRequest->userId = '';
@@ -177,18 +178,19 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
 
         $sramFilter->setResponse(new EngineBlock_Saml2_ResponseAnnotationDecorator(new Response()));
 
-        $this->mockFeatureConfiguration(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => new Feature('eb.feature_enable_sram_interrupt', true)]));
+        $this->mockFeatureConfiguration(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => true]));
 
         /** @var \Mockery\Mock $sbsClient */
         $sbsClient = $this->mockSbsClient();
 
-        $response = new AuthzResponse();
-        $response->msg = 'authorized';
-        $response->nonce = 'hash123';
-        $response->attributes = [
-            'urn:mace:dir:attribute-def:uid' => ['userIdValue'],
-            'urn:mace:dir:attribute-def:eduPersonEntitlement' => 'attributes',
-        ];
+        $response = AuthzResponse::fromData([
+            'msg' => 'authorized',
+            'nonce' => 'hash123',
+            'attributes' => [
+                'urn:mace:dir:attribute-def:uid' => ['userIdValue'],
+                'urn:mace:dir:attribute-def:eduPersonEntitlement' => 'attributes',
+            ],
+        ]);
 
         $expectedRequest = new AuthzRequest();
         $expectedRequest->userId = '';
@@ -253,7 +255,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
 
         $sramFilter->setResponse(new EngineBlock_Saml2_ResponseAnnotationDecorator(new Response()));
 
-        $this->mockFeatureConfiguration(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => new Feature('eb.feature_enable_sram_interrupt', true)]));
+        $this->mockFeatureConfiguration(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => true]));
 
         /** @var \Mockery\Mock|ServiceProvider $sp */
         $sp = $this->mockServiceProvider('spEntityId');
