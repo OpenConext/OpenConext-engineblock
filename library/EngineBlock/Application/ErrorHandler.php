@@ -62,7 +62,6 @@ class EngineBlock_Application_ErrorHandler
         foreach ($this->_exitHandlers as $exitHandler) {
             $exitHandler($e);
         }
-        throw $e;
 
         $this->_application->reportError($e);
 
