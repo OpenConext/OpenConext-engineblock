@@ -23,6 +23,8 @@ use ReflectionClass;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use RuntimeException;
 use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
+use SAML2\Response as SAMLResponse;
 use SAML2\XML\md\IDPSSODescriptor;
 
 /**
@@ -346,5 +348,63 @@ class MockIdentityProvider extends AbstractMockEntityRole
     protected function getRoleClass()
     {
         return IDPSSODescriptor::class;
+    }
+
+    /**
+     * Handle serialization of the MockIdentityProvider.
+     * Convert the SAMLResponse (which contains non-serializable DOMDocument) to XML string.
+     *
+     * @return array
+     */
+    public function __sleep()
+    {
+        $role = $this->getSsoRole();
+        $extensions = $role->getExtensions();
+
+        // Convert SAMLResponse to XML if it exists
+        if (isset($extensions['SAMLResponse']) && $extensions['SAMLResponse'] instanceof SAMLResponse) {
+            $samlResponse = $extensions['SAMLResponse'];
+            $xml = $samlResponse->toUnsignedXML()->ownerDocument->saveXML();
+
+            // Store the XML temporarily in the extensions
+            $extensions['_SAMLResponseXML'] = $xml;
+            unset($extensions['SAMLResponse']);
+            $role->setExtensions($extensions);
+        }
+
+        return ['name', 'descriptor', 'sendAssertions', 'turnBackTime', 'fromTheFuture'];
+    }
+
+    /**
+     * Handle deserialization of the MockIdentityProvider.
+     * Reconstruct the SAMLResponse from the stored XML string.
+     */
+    public function __wakeup()
+    {
+        $role = $this->getSsoRole();
+        $extensions = $role->getExtensions();
+
+        // Reconstruct SAMLResponse from XML if it was serialized
+        if (isset($extensions['_SAMLResponseXML'])) {
+            $xml = $extensions['_SAMLResponseXML'];
+
+            // Parse the XML to get the DOMElement
+            $document = DOMDocumentFactory::fromString($xml);
+            $messageDomElement = $document->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:protocol', 'Response')->item(0);
+
+            if ($messageDomElement) {
+                // Create a custom Response instance by passing the DOMElement to the constructor
+                // This properly initializes all the parent class properties
+                $samlResponse = new Response($messageDomElement);
+
+                // DO NOT set the XML string - let the Response object generate signed XML dynamically
+                // when toXml() is called with the signature keys that will be set by ResponseFactory
+
+                // Restore it to the extensions
+                unset($extensions['_SAMLResponseXML']);
+                $extensions['SAMLResponse'] = $samlResponse;
+                $role->setExtensions($extensions);
+            }
+        }
     }
 }

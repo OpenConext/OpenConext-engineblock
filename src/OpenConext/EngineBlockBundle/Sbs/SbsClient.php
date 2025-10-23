@@ -83,7 +83,7 @@ final class SbsClient implements SbsClientInterface
     {
         $jsonData = $this->httpClient->post(
             json_encode($request),
-            $this->authzLocation,
+            $this->buildUrl($this->authzLocation),
             [],
             $this->requestHeaders(),
             $this->verifyPeer
@@ -101,7 +101,7 @@ final class SbsClient implements SbsClientInterface
     {
         $jsonData = $this->httpClient->post(
             json_encode($request),
-            $this->attributesLocation,
+            $this->buildUrl($this->attributesLocation),
             [],
             $this->requestHeaders(),
             $this->verifyPeer
@@ -125,6 +125,13 @@ final class SbsClient implements SbsClientInterface
 
     public function getInterruptLocationLink(string $nonce): string
     {
-        return $this->sbsBaseUrl . $this->interruptLocation . "?nonce=$nonce";
+        return $this->buildUrl($this->interruptLocation) . "?nonce=$nonce";
+    }
+
+    private function buildUrl(string $path): string
+    {
+        $baseUrl = rtrim($this->sbsBaseUrl, '/');
+        $path = '/' . ltrim($path, '/');
+        return $baseUrl . $path;
     }
 }
