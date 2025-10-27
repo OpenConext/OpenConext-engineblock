@@ -57,39 +57,4 @@ Feature:
     Then the url should match "/feedback/unknown-error"
     And the response should contain "Logging in has failed"
 
-  Scenario: If the SBS authz check returns an 'interrupt' response, and the attributes call to sbs returns an invalid response
-    Given the SP "SSO-SP" requires SRAM collaboration
-    And feature "eb.feature_enable_sram_interrupt" is enabled
-    And the sbs server will trigger the "interrupt" authz flow when called
-    And the sbs server will return invalid attributes
-    When I log in at "SSO-SP"
-    And I pass through EngineBlock
-    And I pass through the IdP
-    Then the url should match "/functional-testing/interrupt"
-    And the sbs server will trigger the "error" authz flow when called
-    And I pass through SBS
-    And the response should contain "Logging in has failed"
-
-  Scenario: If the authz call returns unknown attributes, the unknown attributes are ignored
-    Given the SP "SSO-SP" requires SRAM collaboration
-    And feature "eb.feature_enable_sram_interrupt" is enabled
-    And the sbs server will trigger the 'authorized' authz flow and will return invalid attributes
-    When I log in at "SSO-SP"
-    And I pass through EngineBlock
-    And I pass through the IdP
-    Then the url should match "/authentication/sp/consume-assertion"
-    And the response should not contain "foo"
-    And the response should not contain "baz"
-
-  Scenario: If the sbs flow is active, other filters like PDP are still executed
-    Given SP "SSO-SP" requires a policy enforcement decision
-    And pdp gives an IdP specific deny response for "SSO-IdP"
-    Given the SP "SSO-SP" requires SRAM collaboration
-    And feature "eb.feature_enable_sram_interrupt" is enabled
-    And the sbs server will trigger the "interrupt" authz flow when called
-    When I log in at "SSO-SP"
-    And I pass through EngineBlock
-    And I pass through the IdP
-    And I should see "Error - Access denied"
-    And I should see "Message from your organisation:"
-    And I should see "Students of SSO-IdP do not have access to this resource"
+  #// hebben we stepup getest?

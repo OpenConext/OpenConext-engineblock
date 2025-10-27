@@ -39,8 +39,17 @@ final class AuthzResponse
 
     public ?string $message;
 
-    private function __construct()
+    private function __construct(array $jsonData)
     {
+        $this->msg = $jsonData['msg'];
+        $this->nonce = $jsonData['nonce'] ?? null;
+        $this->message = $jsonData['message'] ?? null;
+
+        if (isset($jsonData['attributes']) && is_array($jsonData['attributes'])) {
+            $this->attributes = $jsonData['attributes'];
+        } else {
+            $this->attributes = [];
+        }
     }
 
     public static function fromData(array $jsonData) : AuthzResponse
@@ -62,20 +71,10 @@ final class AuthzResponse
         }
 
         if (($jsonData['msg'] === SbsClientInterface::ERROR)) {
-            throw new InvalidSbsResponseException('SBS returned an error: '  . $jsonData['message']);
+            $error = $jsonData['message'] ?? 'unknown message';
+            throw new InvalidSbsResponseException('SBS returned an error: ' . $error);
         }
 
-        $response = new self;
-        $response->msg = $jsonData['msg'];
-        $response->nonce = $jsonData['nonce'] ?? null;
-        $response->message = $jsonData['message'] ?? null;
-
-        if (isset($jsonData['attributes']) && is_array($jsonData['attributes'])) {
-            $response->attributes = $jsonData['attributes'];
-        } else {
-            $response->attributes = [];
-        }
-
-        return $response;
+        return new self($jsonData);
     }
 }

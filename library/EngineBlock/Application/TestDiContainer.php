@@ -20,6 +20,7 @@ use OpenConext\EngineBlock\Stepup\StepupEndpoint;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Pdp\PdpClientInterface;
 use OpenConext\EngineBlockBundle\Sbs\SbsClientInterface;
+use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
 
 /**
  * Creates mocked versions of dependencies for unit testing
@@ -40,6 +41,11 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
      * @var FeatureConfigurationInterface|null
      */
     private $featureConfiguration;
+
+    /**
+     * @var SbsAttributeMerger|null
+     */
+    private $sbsAttributeMerger;
 
     public function getXmlConverter(): EngineBlock_Corto_XmlToArray
     {
@@ -70,6 +76,16 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
     {
         $this->sbsClient = $sbsClient;
     }
+    public function setSbsAttributeMerger(?SbsAttributeMerger $sbsAttributeMerger)
+    {
+        $this->sbsAttributeMerger = $sbsAttributeMerger;
+    }
+
+    public function getSbsAttributeMerger(): SbsAttributeMerger
+    {
+        return $this->sbsAttributeMerger ?? parent::getSbsAttributeMerger();
+    }
+
 
     public function getSbsClient(): SbsClientInterface
     {

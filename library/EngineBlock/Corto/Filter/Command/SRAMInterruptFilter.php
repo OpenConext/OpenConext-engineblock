@@ -72,6 +72,7 @@ class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_C
                 $log->info("SBS interrupt reason: " . $interruptResponse->message);
                 $this->_response->setSRAMInterruptNonce($interruptResponse->nonce);
             } elseif ($interruptResponse->msg === 'authorized' && !empty($interruptResponse->attributes)) {
+                // @TODO JOHAN hier ook types? Nee?
                 $this->_responseAttributes = $this->getSbsAttributeMerger()->mergeAttributes($this->_responseAttributes, $interruptResponse->attributes);
             } else {
                 throw new InvalidSbsResponseException(sprintf('Invalid SBS response received: %s', $interruptResponse->msg));

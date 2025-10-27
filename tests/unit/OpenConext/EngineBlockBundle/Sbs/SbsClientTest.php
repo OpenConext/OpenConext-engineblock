@@ -40,7 +40,7 @@ class SbsClientTest extends TestCase
 
         $this->sbsClient = new SbsClient(
             $this->httpClient,
-            'https://sbs.example.com',
+            'https://sbs.example.com/',
             '/authz',
             '/authz',
             '/interrupt',
@@ -58,7 +58,7 @@ class SbsClientTest extends TestCase
             ->method('post')
             ->with(
                 $this->anything(),
-                '/authz',
+                'https://sbs.example.com/authz',
                 [],
                 [
                     'Content-Type' => 'application/json',
@@ -85,7 +85,7 @@ class SbsClientTest extends TestCase
             ->method('post')
             ->with(
                 $this->anything(),
-                '/authz',
+                'https://sbs.example.com/authz',
                 [],
                 [
                     'Content-Type' => 'application/json',

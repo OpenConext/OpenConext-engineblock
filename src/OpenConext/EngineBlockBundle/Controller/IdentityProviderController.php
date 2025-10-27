@@ -216,7 +216,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
      * @return Response
      * @throws \EngineBlock_Exception
      *
-     * @Route("/authentication/idp/requestAccess", name="authentication_idp_request_access", methods={"GET"})
+     * @Route("/authentication/idp/process-sraminterrupt", name="authentication_idp_process_sraminterrupt", methods={"GET"})
      */
     public function processSRAMInterrupt(Request $request)
     {
@@ -230,6 +230,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
      * @param Request $request
      * @return Response
      * @throws \EngineBlock_Exception
+     * @Route("/authentication/idp/requestAccess", name="authentication_idp_request_access", methods={"GET"})
      */
     public function requestAccessAction(Request $request)
     {

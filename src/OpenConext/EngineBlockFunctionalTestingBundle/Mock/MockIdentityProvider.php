@@ -29,6 +29,7 @@ use SAML2\XML\md\IDPSSODescriptor;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Allows for better control
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class MockIdentityProvider extends AbstractMockEntityRole
 {

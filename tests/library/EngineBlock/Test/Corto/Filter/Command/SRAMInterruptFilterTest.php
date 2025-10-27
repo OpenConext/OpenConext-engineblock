@@ -26,6 +26,7 @@ use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
 use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
 use OpenConext\EngineBlockBundle\Sbs\AuthzResponse;
 use OpenConext\EngineBlockBundle\Sbs\SbsClientInterface;
+use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
 use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
@@ -178,6 +179,12 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
 
         $sramFilter->setResponse(new EngineBlock_Saml2_ResponseAnnotationDecorator(new Response()));
 
+
+        // Mock the SbsAttributeMerger with allowed attributes
+        $this->mockSbsAttributeMerger([
+            'urn:mace:dir:attribute-def:uid' => 'xs:string',
+            'urn:mace:dir:attribute-def:eduPersonEntitlement' => 'xs:string',
+        ]);
         $this->mockFeatureConfiguration(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => true]));
 
         /** @var \Mockery\Mock $sbsClient */
@@ -204,7 +211,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
 
                 return $args->userId === $expectedRequest->userId
                     && $args->eduPersonPrincipalName === $expectedRequest->eduPersonPrincipalName
-                    && strpos($args->continueUrl, $expectedRequest->continueUrl) === 0
+                    && str_starts_with($args->continueUrl, $expectedRequest->continueUrl)
                     && $args->serviceId === $expectedRequest->serviceId
                     && $args->issuerId === $expectedRequest->issuerId;
             })
@@ -305,11 +312,23 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
         return $sbsClient;
     }
 
+    private function mockSbsAttributeMerger(array $allowedAttributeTypes)
+    {
+        $sbsAttributeMerger = new SbsAttributeMerger($allowedAttributeTypes);
+
+        /** @var EngineBlock_Application_TestDiContainer $container */
+        $container = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $container->setSbsAttributeMerger($sbsAttributeMerger);
+    }
+
     private function mockFeatureConfiguration(FeatureConfiguration $featureConfiguration)
     {
         /** @var EngineBlock_Application_TestDiContainer $container */
         $container = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
         $container->setFeatureConfiguration($featureConfiguration);
+
+        $container = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $container->setSbsAttributeMerger(null);
     }
 
     protected function tearDown(): void
@@ -319,6 +338,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
 
         $container = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
         $container->setFeatureConfiguration(null);
+        $container->setSbsAttributeMerger(null);
 
         parent::tearDown();
     }
