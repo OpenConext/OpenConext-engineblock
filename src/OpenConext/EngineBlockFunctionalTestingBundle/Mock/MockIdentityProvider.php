@@ -367,8 +367,9 @@ class MockIdentityProvider extends AbstractMockEntityRole
             $samlResponse = $extensions['SAMLResponse'];
             $xml = $samlResponse->toUnsignedXML()->ownerDocument->saveXML();
 
-            // Store the XML temporarily in the extensions
+            // Store the XML and RelayState temporarily in the extensions
             $extensions['_SAMLResponseXML'] = $xml;
+            $extensions['_SAMLResponseRelayState'] = $samlResponse->getRelayState();
             unset($extensions['SAMLResponse']);
             $role->setExtensions($extensions);
         }
@@ -398,11 +399,16 @@ class MockIdentityProvider extends AbstractMockEntityRole
                 // This properly initializes all the parent class properties
                 $samlResponse = new Response($messageDomElement);
 
+                // Restore RelayState if it was stored
+                if (isset($extensions['_SAMLResponseRelayState']) && $extensions['_SAMLResponseRelayState'] !== null) {
+                    $samlResponse->setRelayState($extensions['_SAMLResponseRelayState']);
+                }
+
                 // DO NOT set the XML string - let the Response object generate signed XML dynamically
                 // when toXml() is called with the signature keys that will be set by ResponseFactory
 
                 // Restore it to the extensions
-                unset($extensions['_SAMLResponseXML']);
+                unset($extensions['_SAMLResponseXML'], $extensions['_SAMLResponseRelayState']);
                 $extensions['SAMLResponse'] = $samlResponse;
                 $role->setExtensions($extensions);
             }

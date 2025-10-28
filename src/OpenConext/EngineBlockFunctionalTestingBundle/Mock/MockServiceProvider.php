@@ -197,8 +197,9 @@ class MockServiceProvider extends AbstractMockEntityRole
             $samlRequest = $extensions['SAMLRequest'];
             $xml = $samlRequest->toUnsignedXML()->ownerDocument->saveXML();
 
-            // Store the XML temporarily in the extensions
+            // Store the XML and RelayState temporarily in the extensions
             $extensions['_SAMLRequestXML'] = $xml;
+            $extensions['_SAMLRequestRelayState'] = $samlRequest->getRelayState();
             unset($extensions['SAMLRequest']);
             $this->descriptor->setExtensions($extensions);
         }
@@ -227,11 +228,16 @@ class MockServiceProvider extends AbstractMockEntityRole
                 // This properly initializes all the parent class properties
                 $samlRequest = new AuthnRequest($messageDomElement);
 
+                // Restore RelayState if it was stored
+                if (isset($extensions['_SAMLRequestRelayState']) && $extensions['_SAMLRequestRelayState'] !== null) {
+                    $samlRequest->setRelayState($extensions['_SAMLRequestRelayState']);
+                }
+
                 // DO NOT set the XML string - let the AuthnRequest object generate signed XML dynamically
                 // when toXml() is called with the signature keys if signing is configured
 
                 // Restore it to the extensions
-                unset($extensions['_SAMLRequestXML']);
+                unset($extensions['_SAMLRequestXML'], $extensions['_SAMLRequestRelayState']);
                 $extensions['SAMLRequest'] = $samlRequest;
                 $this->descriptor->setExtensions($extensions);
             }
