@@ -482,7 +482,7 @@ class EngineBlock_Corto_ProxyServer
         NameID $nameId,
         bool $isForceAuthn,
         Assertion $originalAssertion
-    ) {
+    ): void {
         $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
             $spRequest,
             $identityProvider,
@@ -569,34 +569,32 @@ class EngineBlock_Corto_ProxyServer
         $this->redirect($redirect_url, '');
     }
 
-    function handleSRAMInterruptCallout(
-        $receivedResponse,
-        $receivedRequest
-    ) {
-        $logger = $this->getLogger();
-        $logger->info('Handle SRAM interrupt callout');
-
-        if ($receivedResponse->getSRAMInterruptNonce() !== '') {
-
-            // Add the SRAM step
-            $this->_diContainer->getProcessingStateHelper()->addStep(
-                $receivedRequest->getId(),
-                ProcessingStateHelperInterface::STEP_SRAM,
-                $this->getEngineSpRole(),
-                $receivedResponse
-            );
-
-            // Redirect to SRAM
-            $this->sendSRAMInterruptRequest($receivedResponse);
-
-            return true;
-        }
-
-        return false;
+    public function shouldPerformSramCallout(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
+    ): bool
+    {
+        return $receivedResponse->getSRAMInterruptNonce() !== '';
     }
-    function handleStepupAuthenticationCallout(
-        $receivedResponse,
-        $receivedRequest,
+
+    public function handleSRAMInterruptCallout(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest,
+    ): void {
+        // Add the SRAM step
+        $this->_diContainer->getProcessingStateHelper()->addStep(
+            $receivedRequest->getId(),
+            ProcessingStateHelperInterface::STEP_SRAM,
+            $this->getEngineSpRole(),
+            $receivedResponse
+        );
+
+        // Redirect to SRAM
+        $this->sendSRAMInterruptRequest($receivedResponse);
+    }
+
+    public function handleStepupAuthenticationCallout(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest,
         $originalAssertion,
     ): void {
         $logger = $this->getLogger();
@@ -644,11 +642,7 @@ class EngineBlock_Corto_ProxyServer
         );
     }
 
-    /**
-     * @return ServiceProvider
-     * // @TODO: JOHAN
-     */
-    public function getEngineSpRole()
+    public function getEngineSpRole(): ServiceProvider
     {
         $keyId = $this->getKeyId();
         if (!$keyId) {
@@ -659,23 +653,11 @@ class EngineBlock_Corto_ProxyServer
         return ServiceProvider::fromServiceProviderEntity($serviceProvider);
     }
 
-    // @TODO: JOHAN
-    function handleConsentAuthenticationCallout(
-        $receivedResponse,
-        $receivedRequest
-        // $currentProcessStep
-    ) {
-        $logger = $this->getLogger();
-        $logger->info('Handle Consent authentication callout');
-
-        // Add the consent step
-        $currentProcessStep = $this->_diContainer->getProcessingStateHelper()->addStep(
-            $receivedRequest->getId(),
-            ProcessingStateHelperInterface::STEP_CONSENT,
-            $this->getEngineSpRole(),
-            $receivedResponse
-        );
-
+    public function shouldUseStepup(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest,
+    ): bool
+    {
         $issuer = $receivedResponse->getIssuer() ? $receivedResponse->getIssuer()->getValue() : '';
         $idp = $this->getRepository()->fetchIdentityProviderByEntityId($issuer);
 
@@ -696,16 +678,37 @@ class EngineBlock_Corto_ProxyServer
         $loaRepository = $this->_diContainer->getLoaRepository();
         $authnRequestLoas = $receivedRequest->getStepupObligations($loaRepository->getStepUpLoas());
 
-        $shouldUseStepup = $this->_diContainer->getStepupGatewayCallOutHelper()->shouldUseStepup($idp, $sp, $authnRequestLoas, $pdpLoas);
+        return $this->_diContainer->getStepupGatewayCallOutHelper()->shouldUseStepup($idp, $sp, $authnRequestLoas, $pdpLoas);
+    }
 
-        // Goto consent if no Stepup authentication is needed
-        if (!$shouldUseStepup) {
-            $this->sendConsentAuthenticationRequest($receivedResponse, $receivedRequest, $currentProcessStep->getRole(), $this->_diContainer->getAuthenticationStateHelper()->getAuthenticationState());
-            return true;
-        }
+    public function handleConsentAuthenticationCallout(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest
+    ): void {
+        $logger = $this->getLogger();
+        $logger->info('Handle Consent authentication callout');
 
-        //
-        return false;
+
+        $this->sendConsentAuthenticationRequest(
+            $receivedResponse,
+            $receivedRequest,
+            $this->getEngineSpRole(),
+            $this->_diContainer->getAuthenticationStateHelper()->getAuthenticationState(),
+        );
+    }
+
+    public function addConsentProcessStep(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest,
+    )
+    {
+        // Add the consent step
+        $this->_diContainer->getProcessingStateHelper()->addStep(
+            $receivedRequest->getId(),
+            ProcessingStateHelperInterface::STEP_CONSENT,
+            $this->getEngineSpRole(),
+            $receivedResponse
+        );
     }
 
     function sendConsentAuthenticationRequest(

@@ -91,6 +91,10 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $log = $application->getLogInstance();
 
+        if(!$receivedRequest instanceof EngineBlock_Saml2_AuthnRequestAnnotationDecorator){
+            throw new RuntimeException('Request cannot be empty at this stage');
+        }
+
         if ($receivedResponse->isTransparentErrorResponse()) {
             $log->info('Response contains an error response status code, SP is configured with transparent_authn_context.');
             $response = $this->_server->createTransparentErrorResponse($receivedRequest, $receivedResponse);
@@ -172,17 +176,22 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         $this->_server->filterInputAssertionAttributes($receivedResponse, $receivedRequest);
 
 
-        if ($this->_server->handleSRAMInterruptCallout($receivedResponse, $receivedRequest)) {
+        $log->info('Handle SRAM interrupt callout');
+        if($this->_server->shouldPerformSramCallout($receivedResponse) === true){
+            $this->_server->handleSRAMInterruptCallout($receivedResponse, $receivedRequest);
+
             return;
         }
 
-        // Handle Consent authentication callout
-        if ($this->_server->handleConsentAuthenticationCallout($receivedResponse, $receivedRequest)) {
+        $this->_server->addConsentProcessStep($receivedResponse, $receivedRequest);
+
+        if($this->_server->shouldUseStepup($receivedResponse, $receivedRequest)){
+            $this->_server->handleStepupAuthenticationCallout($receivedResponse, $receivedRequest, $originalAssertions);
+
             return;
         }
 
-        // Handle Stepup authentication callout
-        $this->_server->handleStepupAuthenticationCallout($receivedResponse, $receivedRequest, $originalAssertions);
+        $this->_server->handleConsentAuthenticationCallout($receivedResponse, $receivedRequest);
     }
 
     /**

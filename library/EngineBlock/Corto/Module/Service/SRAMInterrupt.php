@@ -16,9 +16,7 @@
  * limitations under the License.
  */
 
-use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
-use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
 use OpenConext\EngineBlockBundle\Sbs\Dto\AttributesRequest;
 use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,59 +24,30 @@ use Symfony\Component\HttpFoundation\Request;
 class EngineBlock_Corto_Module_Service_SRAMInterrupt
     implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
-    /**
-     * @var EngineBlock_Corto_ProxyServer
-     */
-    protected $_server;
+    private EngineBlock_Corto_ProxyServer $_server;
 
-    /**
-     * @var AuthenticationStateHelperInterface
-     */
-    private $_authenticationStateHelper;
+    private ProcessingStateHelperInterface $_processingStateHelper;
 
-    /**
-     * @var ProcessingStateHelperInterface
-     */
-    private $_processingStateHelper;
-
-    /**
-     * @var StepupGatewayCallOutHelper
-     */
-    private $_stepupGatewayCallOutHelper;
-
-    /**
-     * @var SbsAttributeMerger
-     */
-    private $_sbsAttributeMerger;
+    private SbsAttributeMerger $_sbsAttributeMerger;
 
 
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
-        AuthenticationStateHelperInterface $stateHelper,
         ProcessingStateHelperInterface $processingStateHelper,
-        StepupGatewayCallOutHelper $stepupGatewayCallOutHelper,
         SbsAttributeMerger $sbsAttributeMerger,
     )
     {
         $this->_server = $server;
-        $this->_authenticationStateHelper = $stateHelper;
         $this->_processingStateHelper = $processingStateHelper;
-        $this->_stepupGatewayCallOutHelper = $stepupGatewayCallOutHelper;
         $this->_sbsAttributeMerger = $sbsAttributeMerger;
     }
 
     /**
      * route that receives the user when they get back from their SBS interrupt,
      * and resumes the AuthN flow.
-     *
-     * @param $serviceName
-     * @param Request $httpRequest
      */
-    public function serve($serviceName, Request $httpRequest)
+    public function serve($serviceName, Request $httpRequest): void
     {
-        $application = EngineBlock_ApplicationSingleton::getInstance();
-
-        // Get active request
         $id = $httpRequest->get('ID');
 
         $nextProcessStep = $this->_processingStateHelper->getStepByRequestId(
@@ -90,6 +59,10 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
         $originalAssertion = clone $receivedResponse->getAssertions()[0];
 
+        if(!$receivedRequest instanceof EngineBlock_Saml2_AuthnRequestAnnotationDecorator){
+            throw new RuntimeException('Request cannot be empty at this stage');
+        }
+
         $attributes = $receivedResponse->getAssertion()->getAttributes();
         $nonce = $receivedResponse->getSRAMInterruptNonce();
 
@@ -100,28 +73,24 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
             $attributes = $this->_sbsAttributeMerger->mergeAttributes($attributes, $interruptResponse->attributes);
             $receivedResponse->getAssertion()->setAttributes($attributes);
 
-            // Get the value types for the merged attributes and set them on the assertion
             $mergedAttributeTypes = $this->_sbsAttributeMerger->getMergedAttributeTypes();
             if (!empty($mergedAttributeTypes)) {
-                // Get existing attribute value types and merge with the new ones
                 $existingTypes = $receivedResponse->getAssertion()->getAttributesValueTypes();
                 $updatedTypes = array_merge($existingTypes, $mergedAttributeTypes);
                 $receivedResponse->getAssertion()->setAttributesValueTypes($updatedTypes);
             }
         }
 
-        /*
-         * Continue to Consent/StepUp
-         */
 
-        // @TODO JOHAN, HIER gaat het fout
-        // dit is andersom!
-        if ($this->_server->handleConsentAuthenticationCallout($receivedResponse, $receivedRequest)) {
+        $this->_server->addConsentProcessStep($receivedResponse, $receivedRequest);
+
+        if($this->_server->shouldUseStepup($receivedResponse, $receivedRequest)){
+            $this->_server->handleStepupAuthenticationCallout($receivedResponse, $receivedRequest, $originalAssertion);
+
             return;
         }
 
-        // @TODO JOHAN: Klopt de $originalAssertion hier?
-        $this->_server->handleStepupAuthenticationCallout($receivedResponse, $receivedRequest, $originalAssertion);
+        $this->_server->handleConsentAuthenticationCallout($receivedResponse, $receivedRequest);
     }
 
     private function getSbsClient()

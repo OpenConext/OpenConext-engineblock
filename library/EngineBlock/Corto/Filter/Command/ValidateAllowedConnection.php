@@ -49,7 +49,7 @@ class EngineBlock_Corto_Filter_Command_ValidateAllowedConnection extends EngineB
         }
     }
 
-    private function sbsFlowActive(ServiceProvider $sp)
+    private function sbsFlowActive(ServiceProvider $sp): bool
     {
         return $sp->getCoins()->collabEnabled();
     }
