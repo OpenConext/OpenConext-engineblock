@@ -18,15 +18,9 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
-use GuzzleHttp\ClientInterface;
-use OpenConext\EngineBlock\Http\HttpClient;
 use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
 use OpenConext\EngineBlockBundle\Sbs\AuthzResponse;
-use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
-use OpenConext\EngineBlockBundle\Sbs\Dto\AttributesRequest;
-use OpenConext\EngineBlockBundle\Sbs\AttributesResponse;
-use OpenConext\EngineBlockBundle\Sbs\SbsClient;
-use OpenConext\EngineBlockBundle\Sbs\SbsClientInterface;
+use OpenConext\EngineBlockBundle\Sbs\Msg;
 use PHPUnit\Framework\TestCase;
 
 class AuthzResponseTest extends TestCase
@@ -34,14 +28,13 @@ class AuthzResponseTest extends TestCase
     public function testFromDataValidAuthorizedResponse(): void
     {
         $jsonData = [
-            'msg' => SbsClientInterface::AUTHORIZED,
+            'msg' => Msg::Authorized->value,
             'attributes' => ['role' => 'admin']
         ];
 
         $response = AuthzResponse::fromData($jsonData);
 
-        $this->assertInstanceOf(AuthzResponse::class, $response);
-        $this->assertEquals(SbsClientInterface::AUTHORIZED, $response->msg);
+        $this->assertEquals(Msg::Authorized, $response->msg);
         $this->assertEquals(['role' => 'admin'], $response->attributes);
         $this->assertNull($response->nonce);
     }
@@ -49,14 +42,13 @@ class AuthzResponseTest extends TestCase
     public function testFromDataValidInterruptResponse(): void
     {
         $jsonData = [
-            'msg' => SbsClientInterface::INTERRUPT,
+            'msg' => Msg::Interrupt->value,
             'nonce' => 'random_nonce'
         ];
 
         $response = AuthzResponse::fromData($jsonData);
 
-        $this->assertInstanceOf(AuthzResponse::class, $response);
-        $this->assertEquals(SbsClientInterface::INTERRUPT, $response->msg);
+        $this->assertEquals(Msg::Interrupt, $response->msg);
         $this->assertEquals('random_nonce', $response->nonce);
         $this->assertEmpty($response->attributes);
     }
@@ -72,7 +64,7 @@ class AuthzResponseTest extends TestCase
     public function testFromDataInvalidMsgThrowsException(): void
     {
         $this->expectException(InvalidSbsResponseException::class);
-        $this->expectExceptionMessage('Msg: "INVALID" is not a valid message');
+        $this->expectExceptionMessage('"INVALID" is not a valid msg');
 
         AuthzResponse::fromData(['msg' => 'INVALID']);
     }
@@ -82,7 +74,7 @@ class AuthzResponseTest extends TestCase
         $this->expectException(InvalidSbsResponseException::class);
         $this->expectExceptionMessage('Key: "nonce" was not found in the SBS response');
 
-        AuthzResponse::fromData(['msg' => SbsClientInterface::INTERRUPT]);
+        AuthzResponse::fromData(['msg' => Msg::Interrupt->value]);
     }
 
     public function testFromDataAuthorizedWithoutAttributesThrowsException(): void
@@ -90,20 +82,19 @@ class AuthzResponseTest extends TestCase
         $this->expectException(InvalidSbsResponseException::class);
         $this->expectExceptionMessage('Key: "attributes" was not found in the SBS response');
 
-        AuthzResponse::fromData(['msg' => SbsClientInterface::AUTHORIZED]);
+        AuthzResponse::fromData(['msg' => Msg::Authorized->value]);
     }
 
     public function testFromDataAttributesNotArrayDefaultsToEmpty(): void
     {
         $jsonData = [
-            'msg' => SbsClientInterface::AUTHORIZED,
+            'msg' => Msg::Authorized->value,
             'attributes' => 'invalid_type'
         ];
 
         $response = AuthzResponse::fromData($jsonData);
 
-        $this->assertInstanceOf(AuthzResponse::class, $response);
-        $this->assertEquals(SbsClientInterface::AUTHORIZED, $response->msg);
+        $this->assertEquals(Msg::Authorized, $response->msg);
         $this->assertEmpty($response->attributes);
     }
 }

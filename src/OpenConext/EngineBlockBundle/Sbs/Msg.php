@@ -18,14 +18,21 @@
 
 namespace OpenConext\EngineBlockBundle\Sbs;
 
-use OpenConext\EngineBlockBundle\Sbs\Dto\AttributesRequest;
-use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
+use InvalidArgumentException;
 
-interface SbsClientInterface
+enum Msg: string
 {
-    public function authz(AuthzRequest $request) : AuthzResponse;
+    case Interrupt = 'interrupt';
+    case Authorized = 'authorized';
+    case Error = 'error';
 
-    public function requestAttributesFor(AttributesRequest $request) : AttributesResponse;
-
-    public function getInterruptLocationLink(string $nonce);
+    public static function fromString(string $string): self
+    {
+        return match ($string) {
+            'interrupt'     => self::Interrupt,
+            'authorized' => self::Authorized,
+            'error'     => self::Error,
+            default  => throw new InvalidArgumentException('Invalid SBS msg: ' . $string),
+        };
+    }
 }

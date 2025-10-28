@@ -23,52 +23,18 @@ use OpenConext\EngineBlock\Assert\Assertion;
 
 class AuthzRequest implements JsonSerializable
 {
-    /**
-     * @var string
-     */
-    public $userId;
-
-    /**
-     * @var string
-     */
-    public $eduPersonPrincipalName;
-
-    /**
-     * @var string
-     */
-    public $continueUrl;
-
-    /**
-     * @var string
-     */
-    public $serviceId;
-
-    /**
-     * @var string
-     */
-    public $issuerId;
-
-    public static function create(
-        string $userId,
-        string $eppn,
-        string $continueUrl,
-        string $serviceId,
-        string $issuerId
-    ) : AuthzRequest {
+    public function __construct(
+        public readonly string $userId,
+        public readonly string $eduPersonPrincipalName,
+        public readonly string $continueUrl,
+        public readonly string $serviceId,
+        public readonly string $issuerId
+    ) {
         Assertion::string($userId, 'The userId must be a string.');
-        Assertion::string($eppn, 'The eduPersonPrincipalName must be a string.');
+        Assertion::string($eduPersonPrincipalName, 'The eduPersonPrincipalName must be a string.');
         Assertion::string($continueUrl, 'The continueUrl must be a string.');
         Assertion::string($serviceId, 'The serviceId must be a string.');
         Assertion::string($issuerId, 'The issuerId must be a string.');
-
-        $request = new self();
-        $request->userId = $userId;
-        $request->eduPersonPrincipalName = $eppn;
-        $request->continueUrl = $continueUrl;
-        $request->serviceId = $serviceId;
-        $request->issuerId = $issuerId;
-
-        return $request;
     }
 
     public function jsonSerialize() : array

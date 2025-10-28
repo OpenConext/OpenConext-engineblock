@@ -16,11 +16,7 @@
  * limitations under the License.
  */
 
-use OpenConext\EngineBlock\Stepup\StepupEndpoint;
-use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Pdp\PdpClientInterface;
-use OpenConext\EngineBlockBundle\Sbs\SbsClientInterface;
-use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
 
 /**
  * Creates mocked versions of dependencies for unit testing
@@ -31,21 +27,6 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
      * @var PdpClientInterface|null
      */
     private $pdpClient;
-
-    /**
-     * @var SbsClientInterface|null
-     */
-    private $sbsClient;
-
-    /**
-     * @var FeatureConfigurationInterface|null
-     */
-    private $featureConfiguration;
-
-    /**
-     * @var SbsAttributeMerger|null
-     */
-    private $sbsAttributeMerger;
 
     public function getXmlConverter(): EngineBlock_Corto_XmlToArray
     {
@@ -70,36 +51,6 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
     public function setPdpClient(?PdpClientInterface $pdpClient)
     {
         $this->pdpClient = $pdpClient;
-    }
-
-    public function setSbsClient(?SbsClientInterface $sbsClient)
-    {
-        $this->sbsClient = $sbsClient;
-    }
-    public function setSbsAttributeMerger(?SbsAttributeMerger $sbsAttributeMerger)
-    {
-        $this->sbsAttributeMerger = $sbsAttributeMerger;
-    }
-
-    public function getSbsAttributeMerger(): SbsAttributeMerger
-    {
-        return $this->sbsAttributeMerger ?? parent::getSbsAttributeMerger();
-    }
-
-
-    public function getSbsClient(): SbsClientInterface
-    {
-        return $this->sbsClient ?? parent::getSbsClient();
-    }
-
-    public function setFeatureConfiguration(?FeatureConfigurationInterface $featureConfiguration)
-    {
-        $this->featureConfiguration = $featureConfiguration;
-    }
-
-    public function getFeatureConfiguration(): FeatureConfigurationInterface
-    {
-        return $this->featureConfiguration ?? parent::getFeatureConfiguration();
     }
 
     public function getConsentFactory(): EngineBlock_Corto_Model_Consent_Factory

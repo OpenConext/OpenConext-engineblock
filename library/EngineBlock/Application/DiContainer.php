@@ -311,9 +311,6 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
         return $this->container;
     }
 
-    /**
-     * @TODO Johan, can we use proper DI?
-     */
     public function getSbsAttributeMerger(): SbsAttributeMerger
     {
         return $this->container->get('engineblock.sbs.attribute_merger');

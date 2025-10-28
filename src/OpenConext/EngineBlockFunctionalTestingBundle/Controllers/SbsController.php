@@ -25,6 +25,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * SBS is a membership management portal.
+ * It allows user to define their own collaborations (rich groups), invite new users to those groups and give this collaboration access to services.
+ *
+ * This controller acts as an SBS mock.
+ */
 class SbsController extends AbstractController
 {
 
@@ -71,8 +77,8 @@ class SbsController extends AbstractController
     }
 
     /**
-     * The endpoint called by Engine to fetch the attributes after the browser has made a trip to the interrupt action
-     * and has returned to the continue_url
+     * The endpoint called by Engine to fetch the attributes from SBS, to be merged into the SAML request
+     * This gets called after the interrupt, or when the user is already authorized in SBS.
      */
     public function attributesAction()
     {

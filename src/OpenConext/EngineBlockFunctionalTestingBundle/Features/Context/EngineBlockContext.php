@@ -23,8 +23,7 @@ use Behat\Mink\Exception\ExpectationException;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
-use InvalidArgumentException;
-use OpenConext\EngineBlockBundle\Sbs\SbsClientInterface;
+use OpenConext\EngineBlockBundle\Sbs\Msg;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard;
@@ -769,16 +768,14 @@ class EngineBlockContext extends AbstractSubContext
     /**
      * @Given /^the sbs server will trigger the "([^"]*)" authz flow when called$/
     */
-    public function primeAuthzResponse(string $msg): void
+    public function primeAuthzResponse(string $msgString): void
     {
-        if ($msg === 'error') {
-            $this->sbsClientStateManager->prepareAuthzResponse('error');
+        $msg = Msg::fromString($msgString);
+        if ($msg === Msg::Error) {
+            $this->sbsClientStateManager->prepareAuthzResponse(Msg::Error);
             return;
         }
 
-        if (!in_array($msg, SbsClientInterface::VALID_MESSAGES)) {
-            throw  new InvalidArgumentException("$msg is not a valid message type");
-        }
         $this->sbsClientStateManager->prepareAuthzResponse($msg);
     }
 
@@ -787,7 +784,7 @@ class EngineBlockContext extends AbstractSubContext
     */
     public function authzWillReturnInvalidAttributes(): void
     {
-        $this->sbsClientStateManager->prepareAuthzResponse(SbsClientInterface::AUTHORIZED, ['attributes' => ['foo' => ['bar' => 'baz']]]);
+        $this->sbsClientStateManager->prepareAuthzResponse(Msg::Authorized, ['attributes' => ['foo' => ['bar' => 'baz']]]);
     }
 
     /**

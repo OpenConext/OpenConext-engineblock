@@ -92,7 +92,12 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
 
             // Check if we need to callout to SRAM to enforce AUP's
             // Add SRAM attributes if not
-            new EngineBlock_Corto_Filter_Command_SRAMInterruptFilter(),
+            new EngineBlock_Corto_Filter_Command_SRAMInterruptFilter(
+                $diContainer->getSbsClient(),
+                $diContainer->getFeatureConfiguration(),
+                $diContainer->getSbsAttributeMerger(),
+                $logger,
+            ),
 
             // Check if the Policy Decision Point needs to be consulted for this request
             new EngineBlock_Corto_Filter_Command_EnforcePolicy(),

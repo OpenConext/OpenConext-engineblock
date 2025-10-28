@@ -19,6 +19,8 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
 use InvalidArgumentException;
+use OpenConext\EngineBlockBundle\Sbs\AuthzResponse;
+use OpenConext\EngineBlockBundle\Sbs\Msg;
 use OpenConext\EngineBlockBundle\Sbs\SbsClientInterface;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 
@@ -45,24 +47,24 @@ class SbsClientStateManager
         $this->dataStore = $dataStore;
     }
 
-    public function prepareAuthzResponse(string $msg, ?array $attributes = null): void
+    public function prepareAuthzResponse(Msg $msg, ?array $attributes = null): void
     {
-        if ($msg === SbsClientInterface::INTERRUPT) {
+        if ($msg === Msg::Interrupt) {
             $this->authz = [
-                'msg' => SbsClientInterface::INTERRUPT,
+                'msg' => $msg->value,
                 'nonce' => 'my-nonce',
             ];
-        } elseif ($msg === SbsClientInterface::AUTHORIZED) {
+        } elseif ($msg === Msg::Authorized) {
             $this->authz = [
-                'msg' => SbsClientInterface::AUTHORIZED,
+                'msg' => $msg->value,
             ];
             $this->authz += $attributes ?? $this->getValidMockAttributes();
-        } elseif ($msg === SbsClientInterface::ERROR) {
+        } elseif ($msg === Msg::Error) {
             $this->authz = [
-                'msg' => SbsClientInterface::ERROR,
+                'msg' => $msg->value,
             ];
         } else {
-            throw new InvalidArgumentException(sprintf('"%s" is not a valid authz message.', $msg));
+            throw new InvalidArgumentException(sprintf('"%s" is not a valid authz message.', $msg->value));
         }
 
         $this->save();

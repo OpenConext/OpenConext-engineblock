@@ -1,10 +1,5 @@
 <?php
 
-use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
-use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
-use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
-use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
-
 /**
  * Copyright 2021 Stichting Kennisnet
  *
@@ -21,11 +16,30 @@ use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
  * limitations under the License.
  */
 
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
+use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
+use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
+use OpenConext\EngineBlockBundle\Sbs\Msg;
+use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
+use OpenConext\EngineBlockBundle\Sbs\SbsClientInterface;
+use Psr\Log\LoggerInterface;
+
 class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_Corto_Filter_Command_Abstract
     implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
 {
+
+    public function __construct(
+        private readonly SbsClientInterface $sbsClient,
+        private readonly FeatureConfigurationInterface $featureConfiguration,
+        private readonly SbsAttributeMerger $attributeMerger,
+        private readonly LoggerInterface $logger,
+    )
+    {
+    }
+
     /**
-     * {@inheritdoc}
+     * @return array|null
      */
     public function getResponseAttributes()
     {
@@ -39,9 +53,7 @@ class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_C
 
     public function execute(): void
     {
-        $log = EngineBlock_ApplicationSingleton::getLog();
-
-        if (!$this->getFeatureConfiguration()->isEnabled('eb.feature_enable_sram_interrupt')) {
+        if (!$this->featureConfiguration->isEnabled('eb.feature_enable_sram_interrupt')) {
             return;
         }
 
@@ -49,59 +61,49 @@ class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_C
             $this->_serviceProvider,
             $this->_request,
             $this->_server->getRepository(),
-            $log,
+            $this->logger,
         );
 
-        if (!$serviceProvider) {
+        if ($serviceProvider === null) {
             $serviceProvider = $this->_serviceProvider;
         }
 
         if ($serviceProvider->getCoins()->collabEnabled() === false) {
-            $log->notice("No SBS interrupt for serviceProvider: " . $serviceProvider->entityId);
+            $this->logger->notice("No SBS interrupt for serviceProvider: " . $serviceProvider->entityId);
+
             return;
         }
 
-        $log->notice("SBS interrupt for serviceProvider: " . $serviceProvider->entityId);
+        $this->logger->notice("SBS interrupt for serviceProvider: " . $serviceProvider->entityId);
 
         try {
             $request = $this->buildRequest($serviceProvider);
 
-            $interruptResponse = $this->getSbsClient()->authz($request);
+            $interruptResponse = $this->sbsClient->authz($request);
 
-            if ($interruptResponse->msg === 'interrupt') {
-                $log->info("SBS interrupt reason: " . $interruptResponse->message);
+            if ($interruptResponse->msg === Msg::Interrupt) {
+                $this->logger->info("SBS interrupt reason: " . $interruptResponse->message);
                 $this->_response->setSRAMInterruptNonce($interruptResponse->nonce);
-            } elseif ($interruptResponse->msg === 'authorized' && !empty($interruptResponse->attributes)) {
-                // @TODO JOHAN hier ook types? Nee?
-                $this->_responseAttributes = $this->getSbsAttributeMerger()->mergeAttributes($this->_responseAttributes, $interruptResponse->attributes);
-            } else {
-                throw new InvalidSbsResponseException(sprintf('Invalid SBS response received: %s', $interruptResponse->msg));
+
+                return;
             }
+
+            if ($interruptResponse->msg === Msg::Authorized && !empty($interruptResponse->attributes)) {
+                // @TODO JOHAN hier ook types? Nee?
+                $this->_responseAttributes = $this->attributeMerger->mergeAttributes($this->_responseAttributes, $interruptResponse->attributes);
+
+                return;
+            }
+
+            $this->logger->error(sprintf('SBS Authz returned error: %s', $interruptResponse->message));
+
+            throw new InvalidSbsResponseException('SBS Authz returned error.');
         } catch (Throwable $e){
             throw new EngineBlock_Exception_SbsCheckFailed('The SBS server could not be queried: ' . $e->getMessage());
         }
     }
 
-    private function getSbsClient()
-    {
-        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSbsClient();
-    }
-
-    private function getFeatureConfiguration(): FeatureConfigurationInterface
-    {
-        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getFeatureConfiguration();
-    }
-
-    private function getSbsAttributeMerger(): SbsAttributeMerger
-    {
-        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSbsAttributeMerger();
-    }
-
-    /**
-     * @return AuthzRequest
-     * @throws EngineBlock_Corto_ProxyServer_Exception
-     */
-    private function buildRequest($serviceProvider): AuthzRequest
+    private function buildRequest(ServiceProvider $serviceProvider): AuthzRequest
     {
         $attributes = $this->getResponseAttributes();
         $id = $this->_request->getId();
@@ -112,7 +114,8 @@ class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_C
         $service_id = $serviceProvider->entityId;
         $issuer_id = $this->_identityProvider->entityId;
 
-        return AuthzRequest::create(
+
+        return new AuthzRequest(
             $user_id,
             $eppn,
             $continue_url,

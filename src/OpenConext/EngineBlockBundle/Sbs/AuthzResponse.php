@@ -20,30 +20,18 @@ namespace OpenConext\EngineBlockBundle\Sbs;
 
 use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
 
-final class AuthzResponse
+final readonly class AuthzResponse
 {
-    /**
-     * @var string
-     */
-    public $msg;
+    public Msg $msg;
+    public string|null $nonce;
+    public array $attributes;
+    public string $message;
 
-    /**
-     * @var $nonce
-     */
-    public $nonce;
-
-    /**
-     * @var array
-     */
-    public $attributes;
-
-    public ?string $message;
-
-    private function __construct(array $jsonData)
+    private function __construct(Msg $msg, array $jsonData)
     {
-        $this->msg = $jsonData['msg'];
+        $this->msg = $msg;
         $this->nonce = $jsonData['nonce'] ?? null;
-        $this->message = $jsonData['message'] ?? null;
+        $this->message = $jsonData['message'] ?? '';
 
         if (isset($jsonData['attributes']) && is_array($jsonData['attributes'])) {
             $this->attributes = $jsonData['attributes'];
@@ -58,23 +46,20 @@ final class AuthzResponse
             throw new InvalidSbsResponseException('Key: "msg" was not found in the SBS response');
         }
 
-        if (!in_array($jsonData['msg'], SbsClientInterface::VALID_MESSAGES, true)) {
-            throw new InvalidSbsResponseException(sprintf('Msg: "%s" is not a valid message', $jsonData['msg']));
+        try {
+            $msg = Msg::from($jsonData['msg']);
+        } catch (\ValueError $e) {
+            throw new InvalidSbsResponseException(sprintf('"%s" is not a valid msg', $jsonData['msg']));
         }
 
-        if (($jsonData['msg'] === SbsClientInterface::INTERRUPT) && !isset($jsonData['nonce'])) {
+        if ($msg === Msg::Interrupt && !isset($jsonData['nonce'])) {
             throw new InvalidSbsResponseException('Key: "nonce" was not found in the SBS response');
         }
 
-        if (($jsonData['msg'] === SbsClientInterface::AUTHORIZED) && !isset($jsonData['attributes'])) {
+        if ($msg === Msg::Authorized && !isset($jsonData['attributes'])) {
             throw new InvalidSbsResponseException('Key: "attributes" was not found in the SBS response');
         }
 
-        if (($jsonData['msg'] === SbsClientInterface::ERROR)) {
-            $error = $jsonData['message'] ?? 'unknown message';
-            throw new InvalidSbsResponseException('SBS returned an error: ' . $error);
-        }
-
-        return new self($jsonData);
+        return new self($msg, $jsonData);
     }
 }

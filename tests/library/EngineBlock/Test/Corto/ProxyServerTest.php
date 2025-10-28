@@ -67,8 +67,6 @@ class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
             'AllowCreate',
             array_keys($nameIdPolicy),
             'The NameIDPolicy should contain the key "AllowCreate"',
-            false,
-            true
         );
     }
 
