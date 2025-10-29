@@ -93,7 +93,6 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
      */
     private ?string $_serializableRelayState = null;
 
-    /** @TODO JOHAN: Make nice */
     protected string $SRAMInterruptNonce = "";
 
     /**

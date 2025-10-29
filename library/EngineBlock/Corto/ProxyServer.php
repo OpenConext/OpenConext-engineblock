@@ -151,7 +151,7 @@ class EngineBlock_Corto_ProxyServer
     {
         $this->_server = $this;
         $this->twig = $twig;
-        // @TODO: JOHAN
+
         $this->_diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
     }
 
@@ -559,8 +559,7 @@ class EngineBlock_Corto_ProxyServer
         $this->getBindingsModule()->send($ebRequest, $identityProvider, true);
     }
 
-    // @TODO JOHAN: Heeft geen dependencies op ProxyServer, buiten redirect, Buiten Corto plaatsen?
-    function sendSRAMInterruptRequest($response): void
+    private function sendSRAMInterruptRequest($response): void
     {
         $nonce = $response->getSRAMInterruptNonce();
 
