@@ -19,42 +19,26 @@
 namespace OpenConext\EngineBlockBundle\Sbs;
 
 use EngineBlock_ApplicationSingleton;
+use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
 
 class SbsAttributeMerger
 {
 
     /**
-     * @var array Map of attribute names to their value types (e.g., 'name' => 'xs:string')
+     * @var array<string>
      */
-    private $allowedAttributeTypes;
+    private array $allowedAttributeNames;
 
-    /**
-     * @var array Tracks the value types of merged attributes
-     */
-    private $mergedAttributeTypes = [];
-
-    public function __construct(array $allowedAttributeTypes)
+    public function __construct(array $allowedAttributeNames)
     {
-        foreach ($allowedAttributeTypes as $key => $value) {
-            assert(is_string($key), 'All keys in allowedAttributeTypes must be strings');
-            assert(is_string($value), 'All values in allowedAttributeTypes must be strings');
-        }
-        $this->allowedAttributeTypes = $allowedAttributeTypes;
+        $this->allowedAttributeNames = $allowedAttributeNames;
     }
 
     public function mergeAttributes(array $samlAttributes, array $sbsAttributes): array
     {
-        // Reset merged attribute types for this merge operation
-        $this->mergedAttributeTypes = [];
-
         $validAttributes = $this->validSbsAttributes($sbsAttributes);
 
         foreach ($validAttributes as $key => $value) {
-            // Track the value type for this merged attribute
-            if (isset($this->allowedAttributeTypes[$key])) {
-                $this->mergedAttributeTypes[$key] = $this->allowedAttributeTypes[$key];
-            }
-
             if (!isset($samlAttributes[$key])) {
                 $samlAttributes[$key] = $value;
                 continue;
@@ -73,16 +57,6 @@ class SbsAttributeMerger
     }
 
     /**
-     * Get the value types for attributes that were merged in the last mergeAttributes() call
-     *
-     * @return array Map of attribute names to their value types
-     */
-    public function getMergedAttributeTypes(): array
-    {
-        return $this->mergedAttributeTypes;
-    }
-
-    /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable) $value is never used in the foreach
      */
     private function validSbsAttributes(array $sbsAttributes): array
@@ -91,7 +65,7 @@ class SbsAttributeMerger
         $invalidKeys = [];
 
         foreach ($sbsAttributes as $key => $value) {
-            if (array_key_exists($key, $this->allowedAttributeTypes)) {
+            if (in_array($key, $this->allowedAttributeNames, true)) {
                 $validAttributes[$key] = $value;
             } else {
                 $invalidKeys[] = $key;

@@ -170,8 +170,8 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
         $sbsClient = Mockery::mock(SbsClientInterface::class);
 
         $attributeMerger = new SbsAttributeMerger([
-            'urn:mace:dir:attribute-def:uid' => 'xs:string',
-            'urn:mace:dir:attribute-def:eduPersonEntitlement' => 'xs:string',
+            'urn:mace:dir:attribute-def:uid',
+            'urn:mace:dir:attribute-def:eduPersonEntitlement',
         ]);
 
         $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMInterruptFilter(

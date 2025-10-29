@@ -18,7 +18,6 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
-use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
 use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
 use PHPUnit\Framework\TestCase;
 
@@ -27,10 +26,10 @@ class SbsAttributeMergerTest extends TestCase
     public function testMergeAttributesSuccessfully(): void
     {
         $allowedAttributes = [
-            'eduPersonEntitlement' => 'xs:string',
-            'eduPersonPrincipalName' => 'xs:string',
-            'uuid' => 'xs:string',
-            'sshkey' => 'xs:string'
+            'eduPersonEntitlement',
+            'eduPersonPrincipalName',
+            'uuid',
+            'sshkey'
         ];
         $merger = new SbsAttributeMerger($allowedAttributes);
 
@@ -61,22 +60,13 @@ class SbsAttributeMergerTest extends TestCase
         ];
 
         $this->assertEquals($expectedResult, $merger->mergeAttributes($samlAttributes, $sbsAttributes));
-
-        // Verify that merged attribute types are tracked
-        $expectedTypes = [
-            'uuid' => 'xs:string',
-            'eduPersonEntitlement' => 'xs:string',
-            'eduPersonPrincipalName' => 'xs:string',
-            'sshkey' => 'xs:string'
-        ];
-        $this->assertEquals($expectedTypes, $merger->getMergedAttributeTypes());
     }
 
     public function testMergeAttributesWithInvalidKeysThrowsException(): void
     {
         $allowedAttributes = [
-            'email' => 'xs:string',
-            'name' => 'xs:string'
+            'email',
+            'name'
         ];
         $merger = new SbsAttributeMerger($allowedAttributes);
 
@@ -100,8 +90,8 @@ class SbsAttributeMergerTest extends TestCase
     public function testMergeAttributesWithEmptySbsAttributes(): void
     {
         $allowedAttributes = [
-            'email' => 'xs:string',
-            'name' => 'xs:string'
+            'email',
+            'name'
         ];
         $merger = new SbsAttributeMerger($allowedAttributes);
 

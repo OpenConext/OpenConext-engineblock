@@ -42,7 +42,7 @@ default:
                     mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
                     serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\TranslationContext:
-                   mockTranslator: '@engineblock.functional_testing.mock.translator'
+                    mockTranslator: '@engineblock.functional_testing.mock.translator'
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext:
         functional:
             mink_session: chrome

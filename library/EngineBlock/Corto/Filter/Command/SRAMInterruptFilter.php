@@ -26,7 +26,7 @@ use OpenConext\EngineBlockBundle\Sbs\SbsClientInterface;
 use Psr\Log\LoggerInterface;
 
 class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_Corto_Filter_Command_Abstract
-    implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
+    implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface, EngineBlock_Corto_Filter_Command_ResponseAttributeValueTypesModificationInterface
 {
 
     public function __construct(
@@ -89,7 +89,6 @@ class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_C
             }
 
             if ($interruptResponse->msg === Msg::Authorized && !empty($interruptResponse->attributes)) {
-                // @TODO JOHAN hier ook types? Nee?
                 $this->_responseAttributes = $this->attributeMerger->mergeAttributes($this->_responseAttributes, $interruptResponse->attributes);
 
                 return;
@@ -122,5 +121,14 @@ class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_C
             $service_id,
             $issuer_id
         );
+    }
+
+    public function getResponseAttributeValueTypes(): array
+    {
+        /**
+         * Since we do not know the types of the attributes received from SRAM, they are reset here, like in AttributeManipulations
+         */
+
+        return [];
     }
 }

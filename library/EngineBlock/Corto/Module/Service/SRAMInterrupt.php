@@ -73,14 +73,9 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
             $attributes = $this->_sbsAttributeMerger->mergeAttributes($attributes, $interruptResponse->attributes);
             $receivedResponse->getAssertion()->setAttributes($attributes);
 
-            $mergedAttributeTypes = $this->_sbsAttributeMerger->getMergedAttributeTypes();
-            if (!empty($mergedAttributeTypes)) {
-                $existingTypes = $receivedResponse->getAssertion()->getAttributesValueTypes();
-                $updatedTypes = array_merge($existingTypes, $mergedAttributeTypes);
-                $receivedResponse->getAssertion()->setAttributesValueTypes($updatedTypes);
-            }
+            // After updating the attributes, reset the types, so SAML2 will set them
+            $receivedResponse->getAssertion()->setAttributesValueTypes([]);
         }
-
 
         $this->_server->addConsentProcessStep($receivedResponse, $receivedRequest);
 
