@@ -17,12 +17,17 @@
  */
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 
 /**
  * Validate if the IDP sending this response is allowed to connect to the SP that made the request.
  **/
 class EngineBlock_Corto_Filter_Command_ValidateAllowedConnection extends EngineBlock_Corto_Filter_Command_Abstract
 {
+    public function __construct(private readonly FeatureConfigurationInterface $featureConfiguration)
+    {
+    }
+
     public function execute()
     {
         $sp = $this->_serviceProvider;
@@ -53,6 +58,10 @@ class EngineBlock_Corto_Filter_Command_ValidateAllowedConnection extends EngineB
 
     private function sbsFlowActive(ServiceProvider $sp): bool
     {
+        if ($this->featureConfiguration->isEnabled('eb.feature_enable_sram_interrupt') === false) {
+            return false;
+        }
+
         return $sp->getCoins()->collabEnabled();
     }
 }

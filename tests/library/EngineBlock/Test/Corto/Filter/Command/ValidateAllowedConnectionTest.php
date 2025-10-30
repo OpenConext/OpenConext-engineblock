@@ -22,6 +22,7 @@ use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
@@ -64,7 +65,7 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateAllowedConnectionTest extend
     {
         $this->expectNotToPerformAssertions();
 
-        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection();
+        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => false]));
         $verifier->setResponse($this->response);
         $sp = new ServiceProvider('FoobarSP');
         $sp->allowAll = true;
@@ -73,10 +74,21 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateAllowedConnectionTest extend
         $verifier->execute();
     }
 
+    public function testItShouldReturnNullIfSramIsEnabled()
+    {
+        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => true]));
+        $verifier->setResponse($this->response);
+        $sp = new ServiceProvider('FoobarSP');
+        $sp->allowAll = true;
+        $verifier->setIdentityProvider(new IdentityProvider('OpenConext'));
+        $verifier->setServiceProvider($sp);
+        $this->assertNull($verifier->execute());
+    }
+
     #[DoesNotPerformAssertions]
     public function testItShouldRunInNormalConditionsWithTrustedProxy()
     {
-        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection();
+        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => false]));
         $verifier->setResponse($this->response);
         $sp = m::mock(ServiceProvider::class);
         $sp->shouldReceive('isAllowed')->andReturn(true);
@@ -96,7 +108,7 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateAllowedConnectionTest extend
 
     public function testNotAllowed()
     {
-        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection();
+        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => false]));
         $verifier->setResponse($this->response);
         $sp = new ServiceProvider('FoobarSP');
         $sp->allowAll = false;
@@ -109,63 +121,12 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateAllowedConnectionTest extend
 
     public function testIsAllowedWhenCollabEnabledCoinIsTrueEvenWhenNotAllowed()
     {
-        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection();
+        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => true]));
         $verifier->setResponse($this->response);
 
-        /**
-         * @TODO Use PHP8 named parameters to pass collabEnabled: true, all other params are default.
-         */
         $sp = new ServiceProvider(
-            'FoobarSP',
-            null,
-            null,
-            null,
-            null,
-            null,
-            false,
-            [],
-            [],
-            '',
-            '',
-            '',
-            false,
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            null,
-            '',
-            '',
-            '',
-            null,
-            [],
-            false,
-            '',
-            '',
-            [],
-            false,
-            [],
-            false,
-            null,
-            true,
-            false,
-            false,
-            null,
-            false,
-            false,
-            false,
-            false,
-            '',
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            false,
-            true
+            entityId: 'FoobarSP',
+            collabEnabled: true
         );
         $sp->allowAll = false;
 
