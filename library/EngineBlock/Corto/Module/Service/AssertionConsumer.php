@@ -176,8 +176,8 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         $this->_server->filterInputAssertionAttributes($receivedResponse, $receivedRequest);
 
 
-        $log->info('Handle SRAM interrupt callout');
         if($this->_server->shouldPerformSramCallout($receivedResponse) === true){
+            $log->info('Handle SRAM interrupt callout');
             $this->_server->handleSRAMInterruptCallout($receivedResponse, $receivedRequest);
 
             return;

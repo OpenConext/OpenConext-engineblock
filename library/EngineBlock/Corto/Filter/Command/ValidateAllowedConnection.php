@@ -27,6 +27,8 @@ class EngineBlock_Corto_Filter_Command_ValidateAllowedConnection extends EngineB
     {
         $sp = $this->_serviceProvider;
 
+        // As part of the SBS integration, the Trusted proxy check should not be executed if the `collabEnabled` coin is enabled for the SP
+        // and the `feature_enable_sram_interrupt` is enabled.
         if ($this->sbsFlowActive($sp)) {
             return;
         }
