@@ -25,64 +25,22 @@ use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
 
 final class SbsClient implements SbsClientInterface
 {
-    /**
-     * @var HttpClient
-     */
-    private $httpClient;
-
-    /**
-     * @var string
-     */
-    private $interruptLocation;
-
-    /**
-     * @var string
-     */
-    private $apiToken;
-
-    /**
-     * @var string
-     */
-    private $sbsBaseUrl;
-
-    /**
-     * @var string
-     */
-    private $authzLocation;
-
-    /**
-     * @var string
-     */
-    private $attributesLocation;
-
-    /**
-     * @var bool
-     */
-    private $verifyPeer;
-
 
     public function __construct(
-        HttpClient $httpClient,
-        string $sbsBaseUrl,
-        string $authzLocation,
-        string $attributesLocation,
-        string $interruptLocation,
-        string $apiToken,
-        bool $verifyPeer
+        private readonly HttpClient $httpClient,
+        private readonly string $sbsBaseUrl,
+        private readonly string $authzLocation,
+        private readonly string $attributesLocation,
+        private readonly string $interruptLocation,
+        private readonly string $apiToken,
+        private readonly bool $verifyPeer
     ) {
-        $this->httpClient = $httpClient;
-        $this->sbsBaseUrl = $sbsBaseUrl;
-        $this->authzLocation = $authzLocation;
-        $this->attributesLocation = $attributesLocation;
-        $this->interruptLocation = $interruptLocation;
-        $this->apiToken = $apiToken;
-        $this->verifyPeer = $verifyPeer;
     }
 
     public function authz(AuthzRequest $request): AuthzResponse
     {
         $jsonData = $this->httpClient->post(
-            json_encode($request),
+            json_encode($request, JSON_THROW_ON_ERROR),
             $this->buildUrl($this->authzLocation),
             [],
             $this->requestHeaders(),
@@ -90,17 +48,16 @@ final class SbsClient implements SbsClientInterface
         );
 
         if (!is_array($jsonData)) {
-            throw new InvalidSbsResponseException('Received non-array from SBS server: ' . var_export($jsonData, true));
+            throw new InvalidSbsResponseException('Received non-array from SBS server: ' . get_debug_type($jsonData));
         }
 
         return AuthzResponse::fromData($jsonData);
     }
 
-    // Attributes use authzLocation !!
     public function requestAttributesFor(AttributesRequest $request): AttributesResponse
     {
         $jsonData = $this->httpClient->post(
-            json_encode($request),
+            json_encode($request, JSON_THROW_ON_ERROR),
             $this->buildUrl($this->attributesLocation),
             [],
             $this->requestHeaders(),
@@ -108,7 +65,7 @@ final class SbsClient implements SbsClientInterface
         );
 
         if (!is_array($jsonData)) {
-            throw new InvalidSbsResponseException('Received non-array from SBS server: ' . var_export($jsonData, true));
+            throw new InvalidSbsResponseException('Received non-array from SBS server: ' . get_debug_type($jsonData));
         }
 
         return AttributesResponse::fromData($jsonData);
@@ -125,7 +82,7 @@ final class SbsClient implements SbsClientInterface
 
     public function getInterruptLocationLink(string $nonce): string
     {
-        return $this->buildUrl($this->interruptLocation) . "?nonce=$nonce";
+        return $this->buildUrl($this->interruptLocation) . "?nonce=" . $nonce;
     }
 
     private function buildUrl(string $path): string

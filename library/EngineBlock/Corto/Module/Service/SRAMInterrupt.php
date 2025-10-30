@@ -66,7 +66,7 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
         $attributes = $receivedResponse->getAssertion()->getAttributes();
         $nonce = $receivedResponse->getSRAMInterruptNonce();
 
-        $request = AttributesRequest::create($nonce);
+        $request = new AttributesRequest($nonce);
         $interruptResponse = $this->getSbsClient()->requestAttributesFor($request);
 
         if (!empty($interruptResponse->attributes)) {

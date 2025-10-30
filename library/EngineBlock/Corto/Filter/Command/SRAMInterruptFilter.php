@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2021 Stichting Kennisnet
+ * Copyright 2025 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;

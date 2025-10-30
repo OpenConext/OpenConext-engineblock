@@ -23,23 +23,12 @@ use OpenConext\EngineBlock\Assert\Assertion;
 
 class AttributesRequest implements JsonSerializable
 {
-    /**
-     * @var string
-     */
-    public $nonce;
-
-    public static function create(
-        string $nonce
-    ) : AttributesRequest {
+    public function __construct(public readonly string $nonce)
+    {
         Assertion::string($nonce, 'The nonce must be a string.');
-
-        $request = new self();
-        $request->nonce = $nonce;
-
-        return $request;
     }
 
-    public function jsonSerialize() : array
+    public function jsonSerialize(): array
     {
         return [
             'nonce' => $this->nonce,
