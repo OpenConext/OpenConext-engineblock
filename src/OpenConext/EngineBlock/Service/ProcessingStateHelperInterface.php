@@ -54,6 +54,8 @@ interface ProcessingStateHelperInterface
      */
     public function getStepByRequestId($requestId, $name);
 
+    public function hasStepRequestById(string $requestId, string $name): bool;
+
     /**
      * @param $name
      * @param $requestId

@@ -559,15 +559,6 @@ class EngineBlock_Corto_ProxyServer
         $this->getBindingsModule()->send($ebRequest, $identityProvider, true);
     }
 
-    private function sendSramInterruptRequest($response): void
-    {
-        $nonce = $response->getSramInterruptNonce();
-
-        $sbsClient = $this->_diContainer->getSbsClient();
-        $redirect_url = $sbsClient->getInterruptLocationLink($nonce);
-        $this->redirect($redirect_url, '');
-    }
-
     public function shouldPerformSramCallout(
         EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
     ): bool
@@ -577,18 +568,13 @@ class EngineBlock_Corto_ProxyServer
 
     public function handleSramInterruptCallout(
         EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
-        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest,
     ): void {
-        // Add the SRAM step
-        $this->_diContainer->getProcessingStateHelper()->addStep(
-            $receivedRequest->getId(),
-            ProcessingStateHelperInterface::STEP_SRAM,
-            $this->getEngineSpRole(),
-            $receivedResponse
-        );
-
         // Redirect to SRAM
-        $this->sendSramInterruptRequest($receivedResponse);
+        $nonce = $receivedResponse->getSramInterruptNonce();
+
+        $sbsClient = $this->_diContainer->getSbsClient();
+        $redirect_url = $sbsClient->getInterruptLocationLink($nonce);
+        $this->redirect($redirect_url, '');
     }
 
     public function handleStepupAuthenticationCallout(
@@ -705,6 +691,19 @@ class EngineBlock_Corto_ProxyServer
         $this->_diContainer->getProcessingStateHelper()->addStep(
             $receivedRequest->getId(),
             ProcessingStateHelperInterface::STEP_CONSENT,
+            $this->getEngineSpRole(),
+            $receivedResponse
+        );
+    }
+
+    public function addSramStep(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest,
+    ): void {
+        // Add the SRAM step
+        $this->_diContainer->getProcessingStateHelper()->addStep(
+            $receivedRequest->getId(),
+            ProcessingStateHelperInterface::STEP_SRAM,
             $this->getEngineSpRole(),
             $receivedResponse
         );

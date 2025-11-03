@@ -88,10 +88,10 @@ Feature:
     When I log in at "SSO-SP"
     And I pass through EngineBlock
     And I pass through the IdP
+    And Stepup will successfully verify a user
     Then the url should match "/functional-testing/interrupt"
     And I pass through SBS
-    And Stepup will successfully verify a user
-    Then the url should match "/authentication/stepup/consume-assertion"
+    Then the url should match "/authentication/idp/process-sraminterrupt"
     And the response should contain "Review your information that will be shared."
     And the response should contain "test_user@test.sram.surf.nl"
     And the response should contain "ssh_key1"
@@ -102,6 +102,20 @@ Feature:
     Then the url should match "/functional-testing/SSO-SP/acs"
     And the response should contain "ssh_key1"
     And the response should contain "ssh_key2"
+
+  Scenario: If no suitable stepup can be given, sbs interrupt is not executed
+    Given the SP "SSO-SP" requires Stepup LoA "http://dev.openconext.local/assurance/loa2"
+    And the SP "SSO-SP" requires SRAM collaboration
+    And feature "eb.feature_enable_sram_interrupt" is enabled
+    And the sbs server will trigger the "interrupt" authz flow when called
+    And the sbs server will return valid attributes
+    When I log in at "SSO-SP"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    And Stepup will fail if the LoA can not be given
+    Then I should see "Error - No suitable token found"
+     And the url should match "/feedback/stepup-callout-unmet-loa"
+     And the response status code should be 400
 
   Scenario: SBS flow is skipped when feature is disabled
     Given the SP "SSO-SP" requires SRAM collaboration

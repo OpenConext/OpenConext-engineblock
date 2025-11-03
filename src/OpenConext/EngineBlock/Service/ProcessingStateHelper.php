@@ -90,6 +90,21 @@ class ProcessingStateHelper implements ProcessingStateHelperInterface
         return $processing[$requestId][$name];
     }
 
+    public function hasStepRequestById(string $requestId, string $name): bool
+    {
+        $processing = $this->session->get(self::SESSION_KEY);
+        if (empty($processing)) {
+            return false;
+        }
+        if (!isset($processing[$requestId])) {
+            return false;
+        }
+        if (!isset($processing[$requestId][$name])) {
+            return false;
+        }
+
+        return true;
+    }
 
     /**
      * @param string $name

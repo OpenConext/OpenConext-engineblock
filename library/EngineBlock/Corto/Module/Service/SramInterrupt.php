@@ -79,12 +79,6 @@ class EngineBlock_Corto_Module_Service_SramInterrupt
 
         $this->_server->addConsentProcessStep($receivedResponse, $receivedRequest);
 
-        if($this->_server->shouldUseStepup($receivedResponse, $receivedRequest)){
-            $this->_server->handleStepupAuthenticationCallout($receivedResponse, $receivedRequest, $originalAssertion);
-
-            return;
-        }
-
         $this->_server->handleConsentAuthenticationCallout($receivedResponse, $receivedRequest);
     }
 
