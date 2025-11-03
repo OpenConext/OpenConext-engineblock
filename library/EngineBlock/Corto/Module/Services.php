@@ -96,8 +96,8 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer->getAuthenticationStateHelper(),
                     $diContainer->getProcessingStateHelper()
                 );
-            case EngineBlock_Corto_Module_Service_SRAMInterrupt::class :
-                return new EngineBlock_Corto_Module_Service_SRAMInterrupt(
+            case EngineBlock_Corto_Module_Service_SramInterrupt::class :
+                return new EngineBlock_Corto_Module_Service_SramInterrupt(
                     $server,
                     $diContainer->getProcessingStateHelper(),
                     $diContainer->getSbsAttributeMerger()

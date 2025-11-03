@@ -218,10 +218,10 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
      *
      * @Route("/authentication/idp/process-sraminterrupt", name="authentication_idp_process_sraminterrupt", methods={"GET"})
      */
-    public function processSRAMInterrupt(Request $request)
+    public function processSramInterrupt(Request $request)
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
-        $proxyServer->processSRAMInterrupt();
+        $proxyServer->processSramInterrupt();
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }

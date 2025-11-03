@@ -59,7 +59,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
     {
         $sbsClient = Mockery::mock(SbsClientInterface::class);
 
-        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMInterruptFilter(
+        $sramFilter = new EngineBlock_Corto_Filter_Command_SramInterruptFilter(
             $sbsClient,
             new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => false]),
             new SbsAttributeMerger([]),
@@ -77,7 +77,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
     {
         $sbsClient = Mockery::mock(SbsClientInterface::class);
 
-        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMInterruptFilter(
+        $sramFilter = new EngineBlock_Corto_Filter_Command_SramInterruptFilter(
             $sbsClient,
             new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => true]),
             new SbsAttributeMerger([]),
@@ -108,7 +108,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
     {
         $sbsClient = Mockery::mock(SbsClientInterface::class);
 
-        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMInterruptFilter(
+        $sramFilter = new EngineBlock_Corto_Filter_Command_SramInterruptFilter(
             $sbsClient,
             new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => true]),
             new SbsAttributeMerger([]),
@@ -162,7 +162,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
 
         $sramFilter->execute();
         $this->assertSame($initialAttributes, $sramFilter->getResponseAttributes());
-        $this->assertSame('hash123', $sramFilter->getResponse()->getSRAMInterruptNonce());
+        $this->assertSame('hash123', $sramFilter->getResponse()->getSramInterruptNonce());
     }
 
     public function testItAddsSramAttributesOnStatusAuthorized(): void
@@ -174,7 +174,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
             'urn:mace:dir:attribute-def:eduPersonEntitlement',
         ]);
 
-        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMInterruptFilter(
+        $sramFilter = new EngineBlock_Corto_Filter_Command_SramInterruptFilter(
             $sbsClient,
             new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => true]),
             $attributeMerger,
@@ -236,7 +236,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
 
         $sramFilter->execute();
         $this->assertSame($expectedAttributes, $sramFilter->getResponseAttributes());
-        $this->assertSame('', $sramFilter->getResponse()->getSRAMInterruptNonce());
+        $this->assertSame('', $sramFilter->getResponse()->getSramInterruptNonce());
     }
 
     public function testThrowsEngineBlockExceptionIfPolicyCannotBeChecked()
@@ -247,7 +247,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
         $sbsClient = Mockery::mock(SbsClientInterface::class);
         $sbsClient->expects('authz')->andThrows(new InvalidSbsResponseException('Server could not be reached.'));
 
-        $sramFilter = new EngineBlock_Corto_Filter_Command_SRAMInterruptFilter(
+        $sramFilter = new EngineBlock_Corto_Filter_Command_SramInterruptFilter(
             $sbsClient,
             new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => true]),
             new SbsAttributeMerger([]),

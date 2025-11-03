@@ -21,7 +21,7 @@ use OpenConext\EngineBlockBundle\Sbs\Dto\AttributesRequest;
 use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
 use Symfony\Component\HttpFoundation\Request;
 
-class EngineBlock_Corto_Module_Service_SRAMInterrupt
+class EngineBlock_Corto_Module_Service_SramInterrupt
     implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
     private EngineBlock_Corto_ProxyServer $_server;
@@ -64,7 +64,7 @@ class EngineBlock_Corto_Module_Service_SRAMInterrupt
         }
 
         $attributes = $receivedResponse->getAssertion()->getAttributes();
-        $nonce = $receivedResponse->getSRAMInterruptNonce();
+        $nonce = $receivedResponse->getSramInterruptNonce();
 
         $request = new AttributesRequest($nonce);
         $interruptResponse = $this->getSbsClient()->requestAttributesFor($request);

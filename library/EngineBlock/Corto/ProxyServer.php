@@ -77,7 +77,7 @@ class EngineBlock_Corto_ProxyServer
         'spMetadataService'                 => '/authentication/sp/metadata',
         'stepupMetadataService'             => '/authentication/stepup/metadata',
         'singleLogoutService'               => '/logout',
-        'SRAMInterruptService'              => '/authentication/idp/process-sraminterrupt'
+        'SramInterruptService'              => '/authentication/idp/process-sraminterrupt'
     );
 
     // Todo: Make this mapping obsolete by updating all proxyserver getUrl callers. If they would reference the correct
@@ -97,7 +97,7 @@ class EngineBlock_Corto_ProxyServer
         'spMetadataService'                 => 'metadata_sp',
         'stepupMetadataService'             => 'metadata_stepup',
         'singleLogoutService'               => 'authentication_logout',
-        'SRAMInterruptService'              => 'authentication_idp_process_sraminterrupt'
+        'SramInterruptService'              => 'authentication_idp_process_sraminterrupt'
     );
 
     protected $_servicesNotNeedingSession = array(
@@ -559,11 +559,11 @@ class EngineBlock_Corto_ProxyServer
         $this->getBindingsModule()->send($ebRequest, $identityProvider, true);
     }
 
-    private function sendSRAMInterruptRequest($response): void
+    private function sendSramInterruptRequest($response): void
     {
-        $nonce = $response->getSRAMInterruptNonce();
+        $nonce = $response->getSramInterruptNonce();
 
-        $sbsClient = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSbsClient();
+        $sbsClient = $this->_diContainer->getSbsClient();
         $redirect_url = $sbsClient->getInterruptLocationLink($nonce);
         $this->redirect($redirect_url, '');
     }
@@ -572,10 +572,10 @@ class EngineBlock_Corto_ProxyServer
         EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
     ): bool
     {
-        return $receivedResponse->getSRAMInterruptNonce() !== '';
+        return $receivedResponse->getSramInterruptNonce() !== '';
     }
 
-    public function handleSRAMInterruptCallout(
+    public function handleSramInterruptCallout(
         EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest,
     ): void {
@@ -588,7 +588,7 @@ class EngineBlock_Corto_ProxyServer
         );
 
         // Redirect to SRAM
-        $this->sendSRAMInterruptRequest($receivedResponse);
+        $this->sendSramInterruptRequest($receivedResponse);
     }
 
     public function handleStepupAuthenticationCallout(

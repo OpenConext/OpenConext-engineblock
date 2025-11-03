@@ -26,7 +26,7 @@ use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
 use OpenConext\EngineBlockBundle\Sbs\SbsClientInterface;
 use Psr\Log\LoggerInterface;
 
-class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_Corto_Filter_Command_Abstract
+class EngineBlock_Corto_Filter_Command_SramInterruptFilter extends EngineBlock_Corto_Filter_Command_Abstract
     implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface, EngineBlock_Corto_Filter_Command_ResponseAttributeValueTypesModificationInterface
 {
 
@@ -84,7 +84,7 @@ class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_C
 
             if ($interruptResponse->msg === Msg::Interrupt) {
                 $this->logger->info("SBS interrupt reason: " . $interruptResponse->message);
-                $this->_response->setSRAMInterruptNonce($interruptResponse->nonce);
+                $this->_response->setSramInterruptNonce($interruptResponse->nonce);
 
                 return;
             }
@@ -110,7 +110,7 @@ class EngineBlock_Corto_Filter_Command_SRAMInterruptFilter extends EngineBlock_C
 
         $userId = $this->_collabPersonId ?? "";
         $eppn = $attributes['urn:mace:dir:attribute-def:eduPersonPrincipalName'][0] ?? "";
-        $continueUrl = $this->_server->getUrl('SRAMInterruptService', '') . "?ID=$id";
+        $continueUrl = $this->_server->getUrl('SramInterruptService', '') . "?ID=$id";
         $serviceId = $serviceProvider->entityId;
         $issuerId = $this->_identityProvider->entityId;
 

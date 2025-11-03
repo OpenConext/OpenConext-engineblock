@@ -20,7 +20,7 @@ namespace OpenConext\EngineBlock\Exception;
 
 use InvalidArgumentException as CoreInvalidArgumentException;
 
-class InvalidSRAMConfigurationException extends CoreInvalidArgumentException implements Exception
+class InvalidSramConfigurationException extends CoreInvalidArgumentException implements Exception
 {
 
 }
