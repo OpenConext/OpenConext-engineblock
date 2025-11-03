@@ -189,7 +189,6 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         }
 
         if($this->_server->shouldPerformSramCallout($receivedResponse) === true){
-            $log->info('Handle SRAM interrupt callout');
             $this->_server->handleSramInterruptCallout($receivedResponse);
 
             return;

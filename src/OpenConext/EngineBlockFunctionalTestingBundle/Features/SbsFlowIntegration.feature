@@ -1,5 +1,5 @@
 Feature:
-  In order to support SBS integration
+  In order to support SRAM integration
   As EngineBlock
   I want to support SBS checks and merge attributes
 

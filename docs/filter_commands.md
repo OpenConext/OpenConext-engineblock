@@ -344,8 +344,17 @@ Uses:
 - EngineBlock_Saml2_AuthnRequestAnnotationDecorator
 
 ### SRAM test filter
-When enabled and the SP has the collab_enabled coin, the SBS integration flow will be activated allowing SRAM integration.
+SRAM integration.
+In order to facilitate fine-grained access to SRAM, EB integrates with SRAM through the SBS service.
 
+This process is only enabled if both the `feature_enable_sram_interrupt` feature flag is enabled and the `collabEnabled` coin of the SP is true.
+
+If enabled, the SramInterruptFilter will call SBS with the sessionId.
+If the sessionId is known in SBS, EB will merge the attributes supplied by SBS into the Auth request.
+IF the sessionId is unknown, later in the Consume Assertion process, the browser will be redirected to SBS,
+which will redirect back to EB after a successful check. Then the attributes from SBS will be merged after all.
+
+See https://github.com/OpenConext/OpenConext-engineblock/issues/1804 for details.
 
 
 [input]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/library/EngineBlock/Corto/Filter/Input.php
