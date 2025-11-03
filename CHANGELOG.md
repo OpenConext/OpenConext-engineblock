@@ -15,7 +15,8 @@ the EngineBlock wiki.
 Breaking changes please see: [upgrading](UPGRADING.md#700)
 
 Maintenance:
-* upgrade to symfony 4.4
+* upgrade to Symfony 5.4
+* upgrade to PHP 8.2
 
 ### DB json_array
 Doctrine no longer supports `json_array` types.
