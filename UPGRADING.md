@@ -1,8 +1,9 @@
 # UPGRADE NOTES
 
 ## 7.0.0
-Upgraded Symfony from **version 3.3** to **version 4.4 (LTS)**.
-This update brings modernized architecture, performance improvements, enhanced developer experience, and long-term support till November 2023.
+Upgraded Symfony from **version 3.3** to **version 5.4 (LTS)**.
+This update brings modernized architecture, performance improvements, enhanced developer experience and security fixes till February 2029.
+Additionally, this version requires PHP 8.2.
 
 ### Directory Structure Overhaul - technical changes:
 - The `app/` directory has been replaced with `config/` and `src/`
@@ -78,7 +79,7 @@ Note:
 <br>
 See [apache2.conf](docker/ci/apache2.conf) and [docker-compose.yml](docker/docker-compose.yml) as an example.
 <br>
-See The changes in [https://github.com/OpenConext/OpenConext-devconf/compare/main...feature/sf_upgrade_44](https://github.com/OpenConext/OpenConext-devconf/compare/main...feature/sf_upgrade_44) as an example
+See The changes in [https://github.com/OpenConext/OpenConext-devconf/compare/c5b3fd51b2dbf9b1b153972bfa82595128cfc55b..00e1939dca0240e61f0cbee1e6d2ee766e48786f](https://github.com/OpenConext/OpenConext-devconf/compare/c5b3fd51b2dbf9b1b153972bfa82595128cfc55b..00e1939dca0240e61f0cbee1e6d2ee766e48786f) as an example
 
 
 ## 6.15 -> 6.18
@@ -119,7 +120,7 @@ Migrating up to 20250206095609 from 20230824090020
 
 ### Manage Push
 
-Make sure that after deploying a new Engine and updating the database, you **FIRST** need to push metadata from Manage to the **NEW** Engineblock version.  Until you do that, Engineblock will not work and you will not be able to log in.  
+Make sure that after deploying a new Engine and updating the database, you **FIRST** need to push metadata from Manage to the **NEW** Engineblock version.  Until you do that, Engineblock will not work and you will not be able to log in.
 Note in particular that until you repush the metadata from Manage to Engine, _you_wil_not_be_able_to_login_to_Manage_itself_.  Please take measures against locking yourself out, for example by having a non-federated way to login to Manage, by triggering the push in another way, of by using blue/green deployments (the old Engineblock will work work with the updated database, so it's safe to deploy to green, update the database, login to manage using blue, let Manage push to green, than switch authentication to green).
 
 ### Changes
