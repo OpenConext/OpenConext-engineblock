@@ -52,7 +52,7 @@
     "postcss-scss": "^4.0",
     "rimraf": "^5.0",
     "sass": "^1.66",
-    "socket.io": "^4.7",
+    "socket.io": "^4.8.1",
     "stylelint": "^15.10",
     "stylelint-config-recommended": "^13.0",
     "tinyify": "^4.0",
