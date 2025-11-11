@@ -20,8 +20,5 @@
     "cypress-terminal-report": "^5.3",
     "html-validate": "^8.3",
     "whatwg-fetch": "^3.6"
-  },
-  "resolutions": {
-    "@cypress/request": "3.0.0"
   }
 }
