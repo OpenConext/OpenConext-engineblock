@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "axe-core": "^4.7",
-    "cypress": "^13.1",
+    "cypress": "^13.17.0",
     "cypress-axe": "^1.4",
     "cypress-html-validate": "^6.1",
     "cypress-terminal-report": "^5.3",
