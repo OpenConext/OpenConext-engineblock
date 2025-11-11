@@ -17,6 +17,7 @@ Breaking changes please see: [upgrading](UPGRADING.md#700)
 Maintenance:
 * upgrade to Symfony 5.4
 * upgrade to PHP 8.2
+* upgrade npm moduleS: socket.io to 4.8.1, cypress to 3.17.0
 
 ### DB json_array
 Doctrine no longer supports `json_array` types.
