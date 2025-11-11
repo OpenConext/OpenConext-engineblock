@@ -9,7 +9,7 @@ Additionally, this version requires PHP 8.2.
 - The `app/` directory has been replaced with `config/` and `src/`
 - All configuration files now reside under [config/](config), organized by environment
 - Application configuration resides in [config/packages](config/packages)
-- The console has moved form `app/console` to [bin/console](bin/console)
+- The console has moved from `app/console` to [bin/console](bin/console)
 - Database migrations have moved to [migrations/](migrations)
 - `AppKernel` has been replaced with [Kernel](src/Kernel.php)
 - Logs has moved from `app/logs` to [var/log](var/log)
