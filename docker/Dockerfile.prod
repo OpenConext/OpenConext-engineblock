@@ -1,4 +1,4 @@
-FROM ghcr.io/openconext/openconext-basecontainers/php72-apache2:latest
+FROM ghcr.io/openconext/openconext-basecontainers/php82-apache2:latest
 ARG APP_VERSION
 ARG GIT_SHA
 ARG GIT_COMMIT_TIME
