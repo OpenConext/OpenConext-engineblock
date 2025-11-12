@@ -91,7 +91,7 @@ echo "Tag: ${TAG}" > ${PROJECT_DIR}/RELEASE &&
 echo "Commit: ${COMMITHASH}" >> ${PROJECT_DIR}/RELEASE &&
 
 echo "Updating asset_version in config" &&
-sed -i s,#ASSET_VERSION#,${TAG},g ${PROJECT_DIR}/app/config/config.yml &&
+sed -i s,#ASSET_VERSION#,${TAG},g ${PROJECT_DIR}/config/packages/framework.yaml &&
 
 echo "Cleaning build of dev files" &&
 rm -rf ${PROJECT_DIR}/.idea &&
