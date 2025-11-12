@@ -99,7 +99,7 @@
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
         ],
         "pre-archive-cmd": [
-            "bash -c 'if [ -z \"${ASSET_TAG}\" ]; then export ASSET_TAG=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 16); echo \"ASSET_TAG not set, using random value: ${ASSET_TAG}\"; fi; sed -i -e s,#ASSET_VERSION#,${ASSET_TAG},g ./app/config/config.yml'"
+            "bash -c 'if [ -z \"${ASSET_TAG}\" ]; then export ASSET_TAG=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 16); echo \"ASSET_TAG not set, using random value: ${ASSET_TAG}\"; fi; sed -i -e s,#ASSET_VERSION#,${ASSET_TAG},g ./config/packages/framework.yaml'"
         ]
     },
     "autoload": {

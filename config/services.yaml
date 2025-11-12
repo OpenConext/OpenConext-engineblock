@@ -1,8 +1,3 @@
-parameters:
-    locale: 'en'
-    container.autowiring.strict_mode: true
-    asset_version: "#ASSET_VERSION#"
-
 # Legacy way to import services
 imports:
     - { resource: services/services.yml }
