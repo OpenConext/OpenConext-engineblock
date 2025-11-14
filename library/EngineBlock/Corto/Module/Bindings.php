@@ -615,7 +615,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         EngineBlock_Saml2_MessageAnnotationDecorator $message,
         AbstractRole $remoteEntity,
         bool $useDefaultKey = false
-    ) {
+    ): void {
         $bindingUrn = $message->getDeliverByBinding();
         $sspMessage = $message->getSspMessage();
 

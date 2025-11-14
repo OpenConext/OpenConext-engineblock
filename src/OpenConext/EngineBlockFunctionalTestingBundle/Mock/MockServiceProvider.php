@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
 use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\AuthnRequest;
 use SAML2\AuthnRequest as SAMLAuthnRequest;
+use SAML2\DOMDocumentFactory;
 use SAML2\XML\md\SPSSODescriptor;
 
 /**
@@ -179,5 +180,67 @@ class MockServiceProvider extends AbstractMockEntityRole
                 ['AuthnContextClassRef' => $classRef]
             )
         );
+    }
+
+    /**
+     * Handle serialization of the MockServiceProvider.
+     * Convert the SAMLRequest (which contains non-serializable DOMDocument) to XML string.
+     *
+     * @return array
+     */
+    public function __sleep()
+    {
+        $extensions = $this->descriptor->getExtensions();
+
+        // Convert SAMLRequest to XML if it exists
+        if (isset($extensions['SAMLRequest']) && $extensions['SAMLRequest'] instanceof SAMLAuthnRequest) {
+            $samlRequest = $extensions['SAMLRequest'];
+            $xml = $samlRequest->toUnsignedXML()->ownerDocument->saveXML();
+
+            // Store the XML and RelayState temporarily in the extensions
+            $extensions['_SAMLRequestXML'] = $xml;
+            $extensions['_SAMLRequestRelayState'] = $samlRequest->getRelayState();
+            unset($extensions['SAMLRequest']);
+            $this->descriptor->setExtensions($extensions);
+        }
+
+        return ['name', 'descriptor'];
+    }
+
+    /**
+     * Handle deserialization of the MockServiceProvider.
+     * Reconstruct the SAMLRequest from the stored XML string.
+     */
+    public function __wakeup()
+    {
+        $extensions = $this->descriptor->getExtensions();
+
+        // Reconstruct SAMLRequest from XML if it was serialized
+        if (isset($extensions['_SAMLRequestXML'])) {
+            $xml = $extensions['_SAMLRequestXML'];
+
+            // Parse the XML to get the DOMElement
+            $document = DOMDocumentFactory::fromString($xml);
+            $messageDomElement = $document->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:protocol', 'AuthnRequest')->item(0);
+
+            if ($messageDomElement) {
+                // Create a custom AuthnRequest instance by passing the DOMElement to the constructor
+                // This properly initializes all the parent class properties
+                $samlRequest = new AuthnRequest($messageDomElement);
+
+                // Restore RelayState if it was stored
+                if (isset($extensions['_SAMLRequestRelayState']) && $extensions['_SAMLRequestRelayState'] !== null) {
+                    $samlRequest->setRelayState($extensions['_SAMLRequestRelayState']);
+                }
+
+                // DO NOT set the XML string - let the AuthnRequest object generate signed XML dynamically
+                // when toXml() is called with the signature keys if signing is configured
+
+                // Restore it to the extensions
+                unset($extensions['_SAMLRequestXML'], $extensions['_SAMLRequestRelayState']);
+                $extensions['SAMLRequest'] = $samlRequest;
+                $this->descriptor->setExtensions($extensions);
+            }
+        }
     }
 }

@@ -38,6 +38,11 @@ abstract class AbstractDataStore
         $this->filePath = basename($filePath);
         $adapter = new Local($directory);
         $this->fileSystem = new Filesystem($adapter);
+
+        if (!$this->fileSystem->fileExists($this->filePath)) {
+            $this->save([]);
+            $this->ensureWwwCanWrite($filePath);
+        }
     }
 
     /**
@@ -72,9 +77,26 @@ abstract class AbstractDataStore
     public function save($data)
     {
         $this->fileSystem->write($this->filePath, $this->encode($data));
+
+        // Because the serialization of IdP / SP mocks is destructive, use the restored data after saving.
+        // If this data is not used, the destructed object remains in memory.
+        $fileContents = $this->fileSystem->read($this->filePath);
+
+        return $this->decode($fileContents);
     }
 
     abstract protected function encode($data);
 
     abstract protected function decode($data);
+
+    /**
+     * The db is created during the behat process, which runs as root.
+     * But requests from the webserver should also be able to update the state.
+    */
+    private function ensureWwwCanWrite(string $absolutePath): void
+    {
+        chown($absolutePath, 'www-data');
+        chgrp($absolutePath, 'www-data');
+        chmod($absolutePath, 0664);
+    }
 }
