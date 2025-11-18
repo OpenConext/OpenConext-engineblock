@@ -33,4 +33,5 @@ return RectorConfig::configure()
         \Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector::class,
         \Rector\Php81\Rector\Property\ReadOnlyPropertyRector::class,
         \Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector::class,
+        \Rector\Php82\Rector\Class_\ReadOnlyClassRector::class,
     ]);

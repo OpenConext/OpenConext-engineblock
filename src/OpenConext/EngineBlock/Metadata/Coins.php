@@ -240,9 +240,9 @@ class Coins
         return $this->getValue('signatureMethod', XMLSecurityKey::RSA_SHA256);
     }
 
-    public function collabEnabled()
+    public function collabEnabled(): bool
     {
-        return $this->getValue('collabEnabled', false);
+        return $this->getValue('collabEnabled', false) === true;
     }
 
     public function mfaEntities(): MfaEntityCollection

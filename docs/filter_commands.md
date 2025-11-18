@@ -1,8 +1,8 @@
 # EngineBlock Input and Output Command Chains
 
 EngineBlock pre-processes incoming and outgoing SAML Responses using so-called Filters. These filters provide specific,
-critical functionality, by invoking a sequence of Filter Commands. However, it is not easily discoverable what these 
-Filters and Filter Commands exactly do and how they work. This document outlines how these Filters and Filter Commands 
+critical functionality, by invoking a sequence of Filter Commands. However, it is not easily discoverable what these
+Filters and Filter Commands exactly do and how they work. This document outlines how these Filters and Filter Commands
 work and what each filter command does.
 
 The chains are:
@@ -13,11 +13,11 @@ The specific commands can be found in the [`library\EngineBlock\Corto\Filter\Com
 
 ## Input and Output Filters
 
-These are called by [`ProxyServer`][ps], through [`filterOutputAssertionAttributes`][fOAA] and 
+These are called by [`ProxyServer`][ps], through [`filterOutputAssertionAttributes`][fOAA] and
 [`filterInputAssertionAttributes`][fIAA] calling [`callAttributeFilter`][cAF], which invokes the actual Filter Commands.
 
 Each Filter then executes Filter Commands in a specified order for Input (between receiving Assertion from IdP and
-Consent) and Output (after Consent, before sending Response to SP).  
+Consent) and Output (after Consent, before sending Response to SP).
 What the filter does is:
 ```
 Loop over given Filter Commands, for each Command:
@@ -30,7 +30,7 @@ Loop over given Filter Commands, for each Command:
     set the collabPersonId (either: string stored in session, string found in Response, string found in responseAttributes, string found in nameId response or null, in that order)
     execute the command
 ```
-During the loop, the Response, responseAttributes and collabPersonId are retrieved from the previous command and are 
+During the loop, the Response, responseAttributes and collabPersonId are retrieved from the previous command and are
 used by the commands that follows.
 
 A command can also stop filtering by calling `$this->stopFiltering();`
@@ -67,7 +67,7 @@ Uses:
 - EngineBlock_Saml2_ResponseAnnotationDecorator
 - responseAttributes
 
-### NormalizeAttributes 
+### NormalizeAttributes
 Convert all OID attributes to URN and remove the OID variant
 
 Depends on:
@@ -193,7 +193,7 @@ Modifies:
 See: [Engineblock Attribute Aggregation](attribute_aggregation.md) for more information.
 
 ### EnforcePolicy
-Makes a call to the external PolicyDecisionPoint service. This returns a response which details whether or not the 
+Makes a call to the external PolicyDecisionPoint service. This returns a response which details whether or not the
 current User is allowed access to the Service Provider. For more information see [the PDP repository README][pdp-repo]
 
 Depends On:
@@ -343,8 +343,18 @@ Uses:
 - OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
 - EngineBlock_Saml2_AuthnRequestAnnotationDecorator
 
+### SRAM test filter
+SRAM integration.
+In order to facilitate fine-grained access to SRAM, EB integrates with SRAM through the SBS service.
 
+This process is only enabled if both the `feature_enable_sram_interrupt` feature flag is enabled and the `collabEnabled` coin of the SP is true.
 
+If enabled, the SramInterruptFilter will call SBS with the sessionId.
+If the sessionId is known in SBS, EB will merge the attributes supplied by SBS into the Auth request.
+IF the sessionId is unknown, later in the Consume Assertion process, the browser will be redirected to SBS,
+which will redirect back to EB after a successful check. Then the attributes from SBS will be merged after all.
+
+See https://github.com/OpenConext/OpenConext-engineblock/issues/1804 for details.
 
 
 [input]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/library/EngineBlock/Corto/Filter/Input.php
