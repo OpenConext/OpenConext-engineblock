@@ -50,7 +50,6 @@ class TestFeatureConfiguration implements FeatureConfigurationInterface
         $this->setFeature(new Feature('eb.stepup.send_user_attributes', true));
         $this->setFeature(new Feature('eb.stepup.use_idp_response_loa', false));
     }
-    }
 
     public function setFeature(Feature $feature): void
     {
