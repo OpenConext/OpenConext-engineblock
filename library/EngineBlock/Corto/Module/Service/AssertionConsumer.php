@@ -191,7 +191,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
 
         $idpResponseLoa = null;
         // Determine the IdP response LoA if feature is enabled
-        if($application->getDiContainer()->getFeatureConfiguration()->isEnabled('eb.stepup_use_idp_response_loa')) {
+        if($application->getDiContainer()->getFeatureConfiguration()->isEnabled('eb.stepup.use_idp_response_loa')) {
             $idpResponseLoa = $originalAssertions->getAuthnContextClassRef();
         } 
 
