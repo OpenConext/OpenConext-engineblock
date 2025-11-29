@@ -173,16 +173,10 @@ class StepupDecision
      */
     private function checkIDPLoaIsSufficient($isLoaAsked): bool
     {
-        if ($this->idpResponseLoa) {
-            return false;
-        }
-
-        // If the IdP did not provide a LoA in the response, it cannot satisfy the requirement
         if (!$this->idpResponseLoa) {
             return false;
         }
 
-        // Check whether the IdP response LoA level meets or exceeds the requested LoA
         return $this->idpResponseLoa->levelIsHigherOrEqualTo($isLoaAsked);
     }
 
