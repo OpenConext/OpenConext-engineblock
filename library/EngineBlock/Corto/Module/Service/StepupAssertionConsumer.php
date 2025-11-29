@@ -298,7 +298,7 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
         $pdpLoas = $originalResponse->getPdpRequestedLoas();
         $authnRequestLoas = $receivedRequest->getStepupObligations($this->_loaRepository->getStepUpLoas());
 
-        $stepupDecision = new StepupDecision($idp, $sp, $authnRequestLoas, $pdpLoas, $this->_loaRepository, $log);
+        $stepupDecision = new StepupDecision($idp, $sp, $authnRequestLoas, $pdpLoas, null ,$this->_loaRepository, $log);
         $requiredLoa = $stepupDecision->getStepupLoa();
         $receivedLoa = $this->_stepupGatewayCallOutHelper->getEbLoa(
             $receivedResponse->getAssertion()->getAuthnContextClassRef()

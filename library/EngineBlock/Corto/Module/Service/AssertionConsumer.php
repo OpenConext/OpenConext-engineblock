@@ -188,8 +188,15 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         $pdpLoas = $receivedResponse->getPdpRequestedLoas();
         $loaRepository = $application->getDiContainer()->getLoaRepository();
         $authnRequestLoas = $receivedRequest->getStepupObligations($loaRepository->getStepUpLoas());
+
+        $idpResponseLoa = null;
+        // Determine the IdP response LoA if feature is enabled
+        if($application->getDiContainer()->getFeatureConfiguration()->isEnabled('eb.stepup_use_idp_response_loa')) {
+            $idpResponseLoa = $originalAssertions->getAuthnContextClassRef();
+        } 
+
         // Goto consent if no Stepup authentication is needed
-        if (!$this->_stepupGatewayCallOutHelper->shouldUseStepup($idp, $sp, $authnRequestLoas, $pdpLoas)) {
+        if (!$this->_stepupGatewayCallOutHelper->shouldUseStepup($idp, $sp, $authnRequestLoas, $pdpLoas, $idpResponseLoa)) {
             $this->_server->sendConsentAuthenticationRequest($receivedResponse, $receivedRequest, $currentProcessStep->getRole(), $this->getAuthenticationState());
             return;
         }
