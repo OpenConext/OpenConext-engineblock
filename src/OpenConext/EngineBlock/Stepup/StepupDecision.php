@@ -44,13 +44,12 @@ class StepupDecision
      */
     private $pdpLoas = [];
     /**
-     * @var bool
-     */
-    /**
      * @var string|null
      */
     private $idpResponseLoa = null;
-
+    /**
+     * @var bool
+     */
     private $spNoToken;
 
     private $logger;
