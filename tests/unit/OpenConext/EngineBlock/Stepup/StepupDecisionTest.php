@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlock\Stepup;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Exception\InvalidStepupConfigurationException;
+use OpenConext\EngineBlock\Exception\LoaNotFoundException;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Loa;
@@ -251,7 +252,7 @@ class StepupDecisionTest extends TestCase
         // SP expects loa30
         $repo->shouldReceive('getByIdentifier')->with('loa30')->andReturn(Loa::create(30, 'loa30'));
         // The idp response contains an unknown LoA
-        $repo->shouldReceive('getByIdentifier')->with('bad-loa')->andThrow(new \OpenConext\EngineBlock\Exception\LoaNotFoundException('not found'));
+        $repo->shouldReceive('getByIdentifier')->with('bad-loa')->andThrow(new LoaNotFoundException('not found'));
 
         $logger = m::mock(LoggerInterface::class)->shouldIgnoreMissing();
 
