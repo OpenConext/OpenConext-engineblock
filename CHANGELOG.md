@@ -11,6 +11,14 @@ More information about our release strategy can be found in
 the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on
 the EngineBlock wiki.
 
+## 6.18.1
+Bugfixes:
+* Add fix for [CVE-2025-64500](https://nvd.nist.gov/vuln/detail/cve-2025-64500).
+  See https://github.com/symfony/symfony/security/advisories/GHSA-3rg7-wf37-54rm
+
+  We do not think this vulnerability can be exploited in Engineblock, but if
+  you are running EB in production, it might be wise to upgrade to this version anyway.
+
 ## 6.18.0
 
 Dependencies:
