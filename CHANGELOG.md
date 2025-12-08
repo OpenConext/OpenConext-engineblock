@@ -18,6 +18,7 @@ Bugfixes:
 
   We do not think this vulnerability can be exploited in Engineblock, but if
   you are running EB in production, it might be wise to upgrade to this version anyway.
+* Update xmlseclibs dependency to fix canonicalization bypass error
 
 ## 6.18.0
 
