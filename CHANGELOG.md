@@ -5,6 +5,17 @@ We will continue to post relevant release notes on the GitHub release page. More
 
 More information about our release strategy can be found in the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on the EngineBlock wiki.
 
+## 6.15.5
+Maintenance:
+  * Update xmlseclibs dependency to fix canonicalization bypass error
+
+## 6.15.4
+Maintenance:
+  * Fix composer lockfile (#1785)
+  * Add qa tooling helper scripts and drop Ant build.xml (#1781)
+  * Update Devconf installation and docs (#1781)
+  * Remove confusing key_id from stepup callout logging
+
 ## 6.15.3
 Maintenance:
   * Upgrade saml2 library
