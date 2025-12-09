@@ -1,8 +1,6 @@
---- a/vendor/symfony/http-foundation/Request.php
-+++ b/vendor/symfony/http-foundation/Request.php
-@@ -1984,9 +1984,9 @@ class Request
-         }
-
+--- a/vendor/symfony/symfony/src/Symfony/Component/HttpFoundation/Request.php
++++ b/vendor/symfony/symfony/src/Symfony/Component/HttpFoundation/Request.php
+@@ -2012,7 +2012,7 @@ class Request
          $pathInfo = substr($requestUri, \strlen($baseUrl));
 -        if (false === $pathInfo || '' === $pathInfo) {
 +        if (false === $pathInfo || '' === $pathInfo || '/' !== $pathInfo[0]) {
@@ -10,6 +8,3 @@
 -            return '/';
 +            return '/'.$pathInfo;
          }
-
-         return $pathInfo;
-
