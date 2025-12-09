@@ -133,7 +133,7 @@
             }
         ],
         "patches": {
-            "symfony/http-foundation": {
+            "symfony/symfony": {
                 "CVE fix for PATH_INFO vulnerability": "patches/symfony-http-foundation-path-info-cve.patch"
             }
         }
