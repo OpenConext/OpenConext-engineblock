@@ -67,7 +67,7 @@ class KeyPairFactory
     {
         $pairs = [];
 
-        foreach ($this->keyPairConfiguration as $keyId => $x) {
+        foreach (array_keys($this->keyPairConfiguration) as $keyId) {
             $pairs[] = $this->buildFromIdentifier((string)$keyId);
         }
 
