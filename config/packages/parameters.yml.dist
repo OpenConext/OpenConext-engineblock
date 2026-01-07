@@ -223,6 +223,7 @@ parameters:
     feature_enable_idp_initiated_flow: true
     feature_stepup_sfo_override_engine_entityid: false
     feature_stepup_send_user_attributes: false
+    feature_use_idp_loa_in_stepup_decision: false
 
     ##########################################################################################
     ## PROFILE SETTINGS

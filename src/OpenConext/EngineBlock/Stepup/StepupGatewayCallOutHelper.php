@@ -53,13 +53,15 @@ final class StepupGatewayCallOutHelper
         IdentityProvider $identityProvider,
         ServiceProvider $serviceProvider,
         array $authnRequestLoas,
-        array $pdpLoas
+        array $pdpLoas,
+        string|null $idpResponseLoa
     ) : bool {
         $stepupDecision = new StepupDecision(
             $identityProvider,
             $serviceProvider,
             $authnRequestLoas,
             $pdpLoas,
+            $idpResponseLoa,
             $this->loaRepository,
             $this->logger
         );
@@ -77,6 +79,7 @@ final class StepupGatewayCallOutHelper
             $serviceProvider,
             $authnRequestLoas,
             $pdpLoas,
+            null,
             $this->loaRepository,
             $this->logger
         );
@@ -100,7 +103,7 @@ final class StepupGatewayCallOutHelper
 
     public function allowNoToken(IdentityProvider $identityProvider, ServiceProvider $serviceProvider) : bool
     {
-        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider, [], [], $this->loaRepository, $this->logger);
+        $stepupDecision = new StepupDecision($identityProvider, $serviceProvider, [], [], null, $this->loaRepository, $this->logger);
         return $stepupDecision->allowNoToken();
     }
 }

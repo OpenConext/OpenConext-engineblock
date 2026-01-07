@@ -44,6 +44,10 @@ class StepupDecision
      */
     private $pdpLoas = [];
     /**
+     * @var string|null
+     */
+    private $idpResponseLoa = null;
+    /**
      * @var bool
      */
     private $spNoToken;
@@ -58,6 +62,7 @@ class StepupDecision
         ServiceProvider $sp,
         array $authnRequestLoas,
         array $pdpLoas,
+        string|null $idpResponseLoa,
         LoaRepository $loaRepository,
         LoggerInterface $logger
     ) {
@@ -78,6 +83,16 @@ class StepupDecision
 
         $this->spNoToken = $sp->getCoins()->stepupAllowNoToken();
 
+        // Only set idpResponseLoa if provided and valid. Use getByIdentifier and ignore when not found.
+        if ($idpResponseLoa) {
+            try {
+                $this->idpResponseLoa = $loaRepository->getByIdentifier($idpResponseLoa);
+            } catch (\Exception $e) {
+                // The repository will throw when identifier is not known; log and ignore invalid response LoA
+                $this->logger->debug(sprintf('StepupDecision: IdP Response LoA "%s" is invalid and will be ignored', $idpResponseLoa));
+            }
+        }
+
         foreach ($pdpLoas as $loaId) {
             $this->pdpLoas[] = $loaRepository->getByIdentifier($loaId);
         }
@@ -91,6 +106,11 @@ class StepupDecision
         // If the highest level is 1, no step up callout is required.
         $isLoaAsked = $this->getStepupLoa();
         if ($isLoaAsked && $isLoaAsked->getLevel() === Loa::LOA_1) {
+            return false;
+        }
+        // If the Loa is reached by the IDP, no stepup callout is required.
+        if ($this->checkIDPLoaIsSufficient($isLoaAsked)) {
+            $this->logger->info('StepupDecision: IdP Response LoA is sufficient, no Stepup required');
             return false;
         }
         return $isLoaAsked instanceof Loa;
@@ -146,6 +166,19 @@ class StepupDecision
         $this->logger->info(sprintf('StepupDecision: requiring LoA %s', $highestLevel->getIdentifier()), $logData);
         return $highestLevel;
     }
+
+    /**
+     * Check if the IDP response LoA is sufficient for the requested LoA.
+     */
+    private function checkIDPLoaIsSufficient($isLoaAsked): bool
+    {
+        if (!$this->idpResponseLoa) {
+            return false;
+        }
+
+        return $this->idpResponseLoa->levelIsHigherOrEqualTo($isLoaAsked);
+    }
+
 
     public function allowNoToken(): bool
     {
