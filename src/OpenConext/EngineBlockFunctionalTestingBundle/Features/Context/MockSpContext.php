@@ -188,7 +188,7 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^SP "([^"]*)" is set with acs location "([^"]*)"$/
+     * @Given /^SP "([^"]*)" is set with ACS location "([^"]*)"$/
      */
     public function spConfiguredWithAcsLocation($spName, $acsLocation)
     {
