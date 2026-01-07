@@ -21,6 +21,7 @@ use EngineBlock_Attributes_Metadata as AttributesMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
+use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
@@ -32,13 +33,15 @@ use SAML2\Constants;
 class EngineBlockServiceProvider extends AbstractServiceProvider
 {
     /**
-     * @var X509KeyPair
+     * @var array<X509KeyPair>
      */
-    private $keyPair;
+    private array $keyPairs;
+
     /**
      * @var AttributesMetadata
      */
     private $attributes;
+
     /**
      * @var UrlProvider
      */
@@ -46,13 +49,13 @@ class EngineBlockServiceProvider extends AbstractServiceProvider
 
     public function __construct(
         ServiceProviderEntityInterface $entity,
-        X509KeyPair $keyPair,
+        array $keyPairs,
         AttributesMetadata $attributes,
         UrlProvider $urlProvider
     ) {
         parent::__construct($entity);
 
-        $this->keyPair = $keyPair;
+        $this->keyPairs = $keyPairs;
         $this->attributes = $attributes;
         $this->urlProvider = $urlProvider;
     }
@@ -60,7 +63,12 @@ class EngineBlockServiceProvider extends AbstractServiceProvider
 
     public function getCertificates(): array
     {
-        return [$this->keyPair->getCertificate()];
+        $certificates = [];
+        foreach ($this->keyPairs as $keyPair) {
+            $certificates[] = $keyPair->getCertificate();
+        }
+
+        return $certificates;
     }
 
     /**
