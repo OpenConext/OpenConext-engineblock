@@ -67,3 +67,7 @@ services:
 
     OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext:
         tags: ['fob.context']
+
+    OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\SbsClientStateManager:
+        arguments:
+            - "@engineblock.functional_testing.data_store.sbs_client_state_mananger"

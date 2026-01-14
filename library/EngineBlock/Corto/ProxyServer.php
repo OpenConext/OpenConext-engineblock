@@ -27,8 +27,10 @@ use OpenConext\EngineBlock\Metadata\MfaEntity;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\TransparentMfaEntity;
 use OpenConext\EngineBlock\Stepup\StepupGsspUserAttributeExtension;
+use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\EngineBlockBundle\Exception\UnknownKeyIdException;
+use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
@@ -43,6 +45,7 @@ use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\saml\SubjectConfirmationData;
 use Twig\Environment;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class EngineBlock_Corto_ProxyServer
 {
@@ -73,7 +76,8 @@ class EngineBlock_Corto_ProxyServer
         'idpMetadataService'                => '/authentication/idp/metadata',
         'spMetadataService'                 => '/authentication/sp/metadata',
         'stepupMetadataService'             => '/authentication/stepup/metadata',
-        'singleLogoutService'               => '/logout'
+        'singleLogoutService'               => '/logout',
+        'SramInterruptService'              => '/authentication/idp/process-sraminterrupt'
     );
 
     // Todo: Make this mapping obsolete by updating all proxyserver getUrl callers. If they would reference the correct
@@ -92,7 +96,8 @@ class EngineBlock_Corto_ProxyServer
         'idpMetadataService'                => 'metadata_idp',
         'spMetadataService'                 => 'metadata_sp',
         'stepupMetadataService'             => 'metadata_stepup',
-        'singleLogoutService'               => 'authentication_logout'
+        'singleLogoutService'               => 'authentication_logout',
+        'SramInterruptService'              => 'authentication_idp_process_sraminterrupt'
     );
 
     protected $_servicesNotNeedingSession = array(
@@ -140,11 +145,14 @@ class EngineBlock_Corto_ProxyServer
      * @var Environment
      */
     private $twig;
+    private EngineBlock_Application_DiContainer $_diContainer;
 
     public function __construct(Environment $twig)
     {
         $this->_server = $this;
         $this->twig = $twig;
+
+        $this->_diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
     }
 
 //////// GETTERS / SETTERS /////////
@@ -474,7 +482,7 @@ class EngineBlock_Corto_ProxyServer
         NameID $nameId,
         bool $isForceAuthn,
         Assertion $originalAssertion
-    ) {
+    ): void {
         $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
             $spRequest,
             $identityProvider,
@@ -549,6 +557,156 @@ class EngineBlock_Corto_ProxyServer
         $authnRequestRepository->link($ebRequest, $spRequest);
 
         $this->getBindingsModule()->send($ebRequest, $identityProvider, true);
+    }
+
+    public function shouldPerformSramCallout(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
+    ): bool
+    {
+        return $receivedResponse->getSramInterruptNonce() !== '';
+    }
+
+    public function handleSramInterruptCallout(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
+    ): void {
+        $this->getLogger()->info('Handle SRAM interrupt callout');
+        $nonce = $receivedResponse->getSramInterruptNonce();
+
+        $sbsClient = $this->_diContainer->getSbsClient();
+        $redirect_url = $sbsClient->getInterruptLocationLink($nonce);
+        $this->redirect($redirect_url, '');
+    }
+
+    public function handleStepupAuthenticationCallout(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest,
+        $originalAssertion,
+    ): void {
+        $logger = $this->getLogger();
+        $logger->info('Handle Stepup authentication callout');
+
+        // Add Stepup authentication step
+        $currentProcessStep = $this->_diContainer->getProcessingStateHelper()->addStep(
+            $receivedRequest->getId(),
+            ProcessingStateHelperInterface::STEP_STEPUP,
+            $this->_diContainer->getStepupIdentityProvider($this),
+            $receivedResponse
+        );
+
+        if ($receivedRequest->isDebugRequest()) {
+            $sp = $this->getEngineSpRole();
+        } else {
+            $issuer = $receivedRequest->getIssuer() ? $receivedRequest->getIssuer()->getValue() : '';
+            $sp = $this->getRepository()->fetchServiceProviderByEntityId($issuer);
+        }
+
+        $issuer = $receivedResponse->getIssuer() ? $receivedResponse->getIssuer()->getValue() : '';
+        $idp = $this->getRepository()->fetchIdentityProviderByEntityId($issuer);
+
+        // When dealing with an SP that acts as a trusted proxy, we should use the proxying SP and not the proxy itself.
+        if ($sp->getCoins()->isTrustedProxy()) {
+            // Overwrite the trusted proxy SP instance with that of the SP that uses the trusted proxy.
+            $sp = $this->findOriginalServiceProvider($receivedRequest, $logger);
+        }
+
+        $pdpLoas = $receivedResponse->getPdpRequestedLoas();
+        $loaRepository = $this->_diContainer->getLoaRepository();
+        $authnRequestLoas = $receivedRequest->getStepupObligations($loaRepository->getStepUpLoas());
+
+        // Get mapped AuthnClassRef and get NameId
+        $nameId = clone $receivedResponse->getNameId();
+        $authnClassRef = $this->_diContainer->getStepupGatewayCallOutHelper()->getStepupLoa($idp, $sp, $authnRequestLoas, $pdpLoas);
+
+        $this->sendStepupAuthenticationRequest(
+            $receivedRequest,
+            $currentProcessStep->getRole(),
+            $authnClassRef,
+            $nameId,
+            $sp->getCoins()->isStepupForceAuthn(),
+            $originalAssertion,
+        );
+    }
+
+    public function getEngineSpRole(): ServiceProvider
+    {
+        $keyId = $this->getKeyId();
+        if (!$keyId) {
+            $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
+        }
+
+        $serviceProvider = $this->_diContainer->getServiceProviderFactory()->createEngineBlockEntityFrom($keyId);
+        return ServiceProvider::fromServiceProviderEntity($serviceProvider);
+    }
+
+    public function shouldUseStepup(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest,
+    ): bool
+    {
+        $issuer = $receivedResponse->getIssuer() ? $receivedResponse->getIssuer()->getValue() : '';
+        $idp = $this->getRepository()->fetchIdentityProviderByEntityId($issuer);
+
+        if ($receivedRequest->isDebugRequest()) {
+            $sp = $this->getEngineSpRole();
+        } else {
+            $issuer = $receivedRequest->getIssuer() ? $receivedRequest->getIssuer()->getValue() : '';
+            $sp = $this->getRepository()->fetchServiceProviderByEntityId($issuer);
+        }
+
+        // When dealing with an SP that acts as a trusted proxy, we should use the proxying SP and not the proxy itself.
+        if ($sp->getCoins()->isTrustedProxy()) {
+            // Overwrite the trusted proxy SP instance with that of the SP that uses the trusted proxy.
+            $sp = $this->_server->findOriginalServiceProvider($receivedRequest, $this->getLogger());
+        }
+
+        $pdpLoas = $receivedResponse->getPdpRequestedLoas();
+        $loaRepository = $this->_diContainer->getLoaRepository();
+        $authnRequestLoas = $receivedRequest->getStepupObligations($loaRepository->getStepUpLoas());
+
+        return $this->_diContainer->getStepupGatewayCallOutHelper()->shouldUseStepup($idp, $sp, $authnRequestLoas, $pdpLoas);
+    }
+
+    public function handleConsentAuthenticationCallout(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest
+    ): void {
+        $logger = $this->getLogger();
+        $logger->info('Handle Consent authentication callout');
+
+
+        $this->sendConsentAuthenticationRequest(
+            $receivedResponse,
+            $receivedRequest,
+            $this->getEngineSpRole(),
+            $this->_diContainer->getAuthenticationStateHelper()->getAuthenticationState(),
+        );
+    }
+
+    public function addConsentProcessStep(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest,
+    )
+    {
+        // Add the consent step
+        $this->_diContainer->getProcessingStateHelper()->addStep(
+            $receivedRequest->getId(),
+            ProcessingStateHelperInterface::STEP_CONSENT,
+            $this->getEngineSpRole(),
+            $receivedResponse
+        );
+    }
+
+    public function addSramStep(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest,
+    ): void {
+        // Add the SRAM step
+        $this->_diContainer->getProcessingStateHelper()->addStep(
+            $receivedRequest->getId(),
+            ProcessingStateHelperInterface::STEP_SRAM,
+            $this->getEngineSpRole(),
+            $receivedResponse
+        );
     }
 
     function sendConsentAuthenticationRequest(

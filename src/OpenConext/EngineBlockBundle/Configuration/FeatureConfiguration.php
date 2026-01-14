@@ -29,7 +29,7 @@ class FeatureConfiguration implements FeatureConfigurationInterface
     private $features;
 
     /**
-     * @param Feature[] $features indexed by feature key
+     * @param array<string,bool> $features indexed by feature key
      */
     public function __construct(array $features)
     {

@@ -223,6 +223,7 @@ parameters:
     feature_enable_idp_initiated_flow: true
     feature_stepup_sfo_override_engine_entityid: false
     feature_stepup_send_user_attributes: false
+    feature_enable_sram_interrupt: false
 
     ##########################################################################################
     ## PROFILE SETTINGS
@@ -307,3 +308,20 @@ parameters:
     # used in the authentication log record. The attributeName will be searched in the response attributes and if present
     # the log data will be enriched. The values of the response attributes are the final values after ARP and Attribute Manipulation.
     auth.log.attributes: []
+
+    ##########################################################################################
+    ## SRAM Settings
+    ##########################################################################################
+    ## Config for connecting with SBS server
+    ## base_url must end with /. Locations must not start with /.
+    sram.api_token: xxx
+    sram.base_url: 'https://engine.dev.openconext.local/functional-testing/'
+    sram.authz_location: authz
+    sram.attributes_location: attributes
+    sram.interrupt_location: interrupt
+    sram.verify_peer: false
+    sram.allowed_attributes:
+        - 'urn:mace:dir:attribute-def:eduPersonEntitlement'
+        - 'urn:mace:dir:attribute-def:eduPersonPrincipalName'
+        - 'urn:mace:dir:attribute-def:uid'
+        - 'urn:oid:1.3.6.1.4.1.24552.500.1.1.1.13'

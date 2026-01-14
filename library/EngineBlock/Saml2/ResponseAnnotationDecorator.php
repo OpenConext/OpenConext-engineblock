@@ -93,6 +93,8 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
      */
     private ?string $_serializableRelayState = null;
 
+    protected string $SramInterruptNonce = "";
+
     /**
      * @param Response $response
      */
@@ -343,6 +345,7 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
             'isTransparentErrorResponse',
             '_serializableSspMessageXml',
             '_serializableRelayState',
+            'SramInterruptNonce',
         ];
     }
 
@@ -366,4 +369,15 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
             unset($this->_serializableSspMessageXml);
         }
     }
+
+    public function setSramInterruptNonce(string $SramInterruptNonce): void
+    {
+        $this->SramInterruptNonce = $SramInterruptNonce;
+    }
+
+    public function getSramInterruptNonce(): string
+    {
+        return $this->SramInterruptNonce;
+    }
+
 }

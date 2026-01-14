@@ -160,6 +160,18 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^the SP "([^"]*)" requires SRAM collaboration$/
+     * @param string $spName
+     */
+    public function theSpRequiresSbsCollaboration(string $spName)
+    {
+        $sp = $this->mockSpRegistry->get($spName);
+
+        $this->serviceRegistryFixture->setSpCollabEnabled($sp->entityId());
+        $this->serviceRegistryFixture->save();
+    }
+
+    /**
      * @When /^I log in at "([^"]*)"$/
      */
     public function iLogInAt($spName)
