@@ -1,10 +1,16 @@
 FROM ghcr.io/openconext/openconext-basecontainers/php82-apache2:latest
+
 ARG APP_VERSION
 ARG GIT_SHA
 ARG GIT_COMMIT_TIME
+
 ENV OPENCONEXT_APP_VERSION=${APP_VERSION}
 ENV OPENCONEXT_GIT_SHA=${GIT_SHA}
 ENV OPENCONEXT_COMMIT_DATE=${GIT_COMMIT_TIME}
+
+ENV APP_ENV=dev
+ENV APP_SECRET=changeme
+ENV APP_DEBUG=0
 
 WORKDIR /var/www/html
 COPY *.tar.bz2 /tmp/
@@ -14,7 +20,7 @@ RUN tar -xvjf /tmp/*.tar.bz2 -C /var/www/html/ && \
 RUN rm -rf /etc/apache2/sites-enabled/*
 COPY ./docker/conf/engine.conf /etc/apache2/sites-enabled/engine.conf
 # Instantiate devconf config
-RUN cp config/packages/parameters.yml.dist config/packages/parameters.yml
+RUN cp config/packages/parameters.yml.dist config/packages/dev/parameters.yml
 
 # Set the default workdir
 EXPOSE 80
