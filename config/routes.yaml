@@ -18,5 +18,4 @@ engineblock_api_controllers:
 
 open_conext_monitor:
     resource: "@OpenConextMonitorBundle/Resources/config/routing.yml"
-    host: "engine.{domain}"
-    prefix: "/"
+    prefix: /
