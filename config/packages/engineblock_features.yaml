@@ -15,3 +15,4 @@ parameters:
         eb.feature_enable_idp_initiated_flow: "%feature_enable_idp_initiated_flow%"
         eb.stepup.sfo.override_engine_entityid: "%feature_stepup_sfo_override_engine_entityid%"
         eb.stepup.send_user_attributes: "%feature_stepup_send_user_attributes%"
+        eb.stepup.use_idp_response_loa: "%feature_use_idp_loa_in_stepup_decision%"
