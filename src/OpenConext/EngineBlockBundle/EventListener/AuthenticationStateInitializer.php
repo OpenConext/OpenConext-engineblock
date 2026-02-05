@@ -23,7 +23,7 @@ use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\EngineBlockBundle\Controller\AuthenticationLoopThrottlingController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 final class AuthenticationStateInitializer
 {
@@ -37,9 +37,14 @@ final class AuthenticationStateInitializer
         $this->session = $requestStack->getSession();
     }
 
-    public function onKernelController(\Symfony\Component\HttpKernel\Event\ControllerEvent $event)
+    public function onKernelController(ControllerEvent $event): void
     {
-        if (!$event->getController()[0] instanceof AuthenticationLoopThrottlingController) {
+        $controller = $event->getController();
+        if (is_array($controller)) {
+            $controller = $controller[0];
+        }
+
+        if (!$controller instanceof AuthenticationLoopThrottlingController) {
             return;
         }
 
