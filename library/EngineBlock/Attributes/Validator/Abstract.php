@@ -40,11 +40,20 @@ abstract class EngineBlock_Attributes_Validator_Abstract implements EngineBlock_
      */
     protected $_messages = array();
 
+    protected $_identityProvider;
+
     public function __construct($attributeName, $options)
     {
         $this->_attributeName = $attributeName;
         $this->_options = $options;
     }
+
+    public function setIdentityProvider($identityProvider)
+    {
+        $this->_identityProvider = $identityProvider;
+        return $this;
+    }
+
 
     public function setAttributeAlias($aliasName)
     {

@@ -48,15 +48,18 @@ class EngineBlock_Attributes_Validator
      */
     private $errors;
 
+    private $identityProvider;
+
     public function __construct(array $definitions, EngineBlock_Attributes_Validator_Factory $validatorFactory)
     {
         $this->definitions = $definitions;
         $this->validatorFactory = $validatorFactory;
     }
 
-    public function validate(array $attributes, $excluded = array())
+    public function validate(array $attributes, $excluded = array(), $identityProvider = null)
     {
         $this->attributes = $attributes;
+        $this->identityProvider = $identityProvider;
         $this->validAttributes = array();
         $this->warnings = array();
         $this->errors = array();
@@ -158,6 +161,7 @@ class EngineBlock_Attributes_Validator
             if (isset($definition['__original__'])) {
                 $validator->setAttributeAlias($definition['__original__']);
             }
+            $validator->setIdentityProvider($this->identityProvider);
 
             $validationResult = $validator->validate($this->attributes);
 
@@ -193,6 +197,7 @@ class EngineBlock_Attributes_Validator
             if (isset($definition['__original__'])) {
                 $validator->setAttributeAlias($definition['__original__']);
             }
+            $validator->setIdentityProvider($this->identityProvider);
 
             $validationResult = $validator->validate($this->attributes);
 

@@ -124,7 +124,7 @@ class RedirectToFeedbackPageExceptionListener
             $message         = 'Invalid ACS location';
             $redirectToRoute = 'authentication_feedback_invalid_acs_location';
         } elseif ($exception instanceof EngineBlock_Corto_Exception_MissingRequiredFields) {
-            $message         = 'Missing Required Fields';
+            $message         = 'Attribute Validation Error';
             $redirectToRoute = 'authentication_feedback_missing_required_fields';
         } elseif ($exception instanceof EngineBlock_Corto_Exception_AuthnContextClassRefBlacklisted) {
             $message = $exception->getMessage();

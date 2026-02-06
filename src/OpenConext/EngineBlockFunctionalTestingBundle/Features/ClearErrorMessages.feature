@@ -172,7 +172,7 @@ Feature:
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Missing required fields"
+     Then I should see "Error validating attribute values"
       And I should see "UID"
       And I should see "UR ID:"
       And I should see "IP:"
@@ -186,7 +186,7 @@ Feature:
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Missing required fields"
+     Then I should see "Error validating attribute values"
       And I should see "schacHomeOrganization"
       And I should see "UR ID:"
       And I should see "IP:"
