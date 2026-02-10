@@ -19,6 +19,7 @@ default:
                     pdpClient: '@engineblock.functional_testing.fixture.pdp_client'
                     authenticationLoopGuard: '@engineblock.functional_testing.fixture.authentication_loop_guard'
                     attributeAggregationClient: '@engineblock.functional_testing.fixture.attribute_aggregation_client'
+                    sbsClientStateManager: '@engineblock.functional_testing.fixture.sbs_client_state_manager'
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MockIdpContext:
                     serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
                     engineBlock: '@engineblock.functional_testing.service.engine_block'
@@ -41,8 +42,8 @@ default:
                     mockIdpRegistry: '@engineblock.mock_entities.idp_registry'
                     serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\TranslationContext:
-                   mockTranslator: '@engineblock.functional_testing.mock.translator'
-                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext
+                    mockTranslator: '@engineblock.functional_testing.mock.translator'
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext:
         functional:
             mink_session: chrome
             mink_javascript_session: chrome

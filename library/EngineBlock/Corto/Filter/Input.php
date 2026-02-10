@@ -71,7 +71,7 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
             new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSubjectId($logger, $blockUsersOnViolation),
 
             // Check whether this IdP is allowed to send a response to the destination SP
-            new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection(),
+            new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection($featureConfiguration),
 
             // Require valid UID and SchacHomeOrganization
             new EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes(),
@@ -88,6 +88,15 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
             new EngineBlock_Corto_Filter_Command_AttributeAggregator(
                 $logger,
                 $diContainer->getAttributeAggregationClient()
+            ),
+
+            // Check if we need to callout to SRAM to enforce AUP's
+            // Add SRAM attributes if not
+            new EngineBlock_Corto_Filter_Command_SramInterruptFilter(
+                $diContainer->getSbsClient(),
+                $featureConfiguration,
+                $diContainer->getSbsAttributeMerger(),
+                $logger,
             ),
 
             // Check if the Policy Decision Point needs to be consulted for this request

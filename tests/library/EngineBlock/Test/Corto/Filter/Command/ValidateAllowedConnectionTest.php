@@ -22,6 +22,7 @@ use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
@@ -64,7 +65,7 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateAllowedConnectionTest extend
     {
         $this->expectNotToPerformAssertions();
 
-        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection();
+        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => false]));
         $verifier->setResponse($this->response);
         $sp = new ServiceProvider('FoobarSP');
         $sp->allowAll = true;
@@ -73,10 +74,21 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateAllowedConnectionTest extend
         $verifier->execute();
     }
 
+    public function testItShouldReturnNullIfSramIsEnabled()
+    {
+        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => true]));
+        $verifier->setResponse($this->response);
+        $sp = new ServiceProvider('FoobarSP');
+        $sp->allowAll = true;
+        $verifier->setIdentityProvider(new IdentityProvider('OpenConext'));
+        $verifier->setServiceProvider($sp);
+        $this->assertNull($verifier->execute());
+    }
+
     #[DoesNotPerformAssertions]
     public function testItShouldRunInNormalConditionsWithTrustedProxy()
     {
-        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection();
+        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => false]));
         $verifier->setResponse($this->response);
         $sp = m::mock(ServiceProvider::class);
         $sp->shouldReceive('isAllowed')->andReturn(true);
@@ -86,6 +98,7 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateAllowedConnectionTest extend
         $verifier->setProxyServer($server);
         $verifier->setRequest(m::mock(EngineBlock_Saml2_AuthnRequestAnnotationDecorator::class));
         $sp->shouldReceive('getCoins->isTrustedProxy')->andReturn(true);
+        $sp->shouldReceive('getCoins->collabEnabled')->andReturn(false);
         $server->shouldReceive('findOriginalServiceProvider')->andReturn($sp);
         $server->shouldReceive('getLogger')->andReturn($logger);
         $verifier->setIdentityProvider(new IdentityProvider('OpenConext'));
@@ -95,7 +108,7 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateAllowedConnectionTest extend
 
     public function testNotAllowed()
     {
-        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection();
+        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => false]));
         $verifier->setResponse($this->response);
         $sp = new ServiceProvider('FoobarSP');
         $sp->allowAll = false;
@@ -104,5 +117,22 @@ class EngineBlock_Test_Corto_Filter_Command_ValidateAllowedConnectionTest extend
         self::expectException(EngineBlock_Corto_Exception_InvalidConnection::class);
         self::expectExceptionMessage('Disallowed response by SP configuration. Response from IdP "OpenConext" to SP "FoobarSP"');
         $verifier->execute();
+    }
+
+    public function testIsAllowedWhenCollabEnabledCoinIsTrueEvenWhenNotAllowed()
+    {
+        $verifier = new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection(new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => true]));
+        $verifier->setResponse($this->response);
+
+        $sp = new ServiceProvider(
+            entityId: 'FoobarSP',
+            collabEnabled: true
+        );
+        $sp->allowAll = false;
+
+        $verifier->setIdentityProvider(new IdentityProvider('OpenConext'));
+        $verifier->setServiceProvider($sp);
+        $verifier->execute();
+        $this->expectNotToPerformAssertions();
     }
 }

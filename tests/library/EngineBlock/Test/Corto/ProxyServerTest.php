@@ -48,6 +48,28 @@ class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
         $this->assertSame(['AllowCreate' => true], $nameIdPolicy);
     }
 
+    public function testAllowCreateIsSet()
+    {
+        $proxyServer = $this->factoryProxyServer();
+
+        $originalRequest = $this->factoryOriginalRequest();
+        $identityProvider = $proxyServer->getRepository()->fetchIdentityProviderByEntityId('testIdp');
+        /** @var AuthnRequest $enhancedRequest */
+        $enhancedRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
+            $originalRequest,
+            $identityProvider,
+            $proxyServer
+        );
+
+        $nameIdPolicy = $enhancedRequest->getNameIdPolicy();
+
+        $this->assertContains(
+            'AllowCreate',
+            array_keys($nameIdPolicy),
+            'The NameIDPolicy should contain the key "AllowCreate"',
+        );
+    }
+
     public function testNameIDFormatIsSetFromRemoteMetaData()
     {
         $proxyServer = $this->factoryProxyServer();

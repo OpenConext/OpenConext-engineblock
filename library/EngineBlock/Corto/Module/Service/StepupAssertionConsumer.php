@@ -87,6 +87,10 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
             $receivedResponse = $this->_server->getBindingsModule()->receiveResponse($serviceEntityId, $expectedDestination);
             $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
 
+            if(!$receivedRequest instanceof EngineBlock_Saml2_AuthnRequestAnnotationDecorator){
+                throw new RuntimeException('Request cannot be empty at this stage');
+            }
+
             $this->verifyReceivedLoa($receivedRequest, $receivedResponse, $log);
 
             // Update the AuthnContextClassRef to the loa returned
@@ -136,15 +140,18 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
             $this->verifyReceivedNameID($originalReceivedResponse, $receivedResponse);
         }
 
+        if ($this->_processingStateHelper->hasStepRequestById($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_SRAM) === true) {
+            $this->_server->handleSramInterruptCallout($receivedResponse);
+
+            return;
+        }
+
         $nextProcessStep = $this->_processingStateHelper->getStepByRequestId(
             $receivedRequest->getId(),
             ProcessingStateHelperInterface::STEP_CONSENT
         );
 
-
         $this->_server->sendConsentAuthenticationRequest($originalReceivedResponse, $receivedRequest, $nextProcessStep->getRole(), $this->getAuthenticationState());
-
-        return;
     }
 
     /**

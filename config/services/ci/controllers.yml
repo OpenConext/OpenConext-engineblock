@@ -50,3 +50,9 @@ services:
             - '@OpenConext\EngineBlock\Validator\UnsolicitedSsoRequestValidator'
             - '@OpenConext\EngineBlock\Service\AuthenticationStateHelper'
             - '@engineblock.functional_testing.fixture.features'
+
+    engineblock.functional_test.controller.sbs:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\SbsController
+        arguments:
+            - '@engineblock.functional_testing.fixture.sbs_client_state_manager'
+            - '@engineblock.functional_testing.data_store.sbs_server_state'

@@ -30,6 +30,7 @@ interface ProcessingStateHelperInterface
 {
     const STEP_CONSENT = 'consent';
     const STEP_STEPUP = 'stepup';
+    const STEP_SRAM = 'sram';
 
     /**
      * @param string $requestId
@@ -52,6 +53,8 @@ interface ProcessingStateHelperInterface
      * @throws EngineBlock_Corto_Module_Services_SessionLostException
      */
     public function getStepByRequestId($requestId, $name);
+
+    public function hasStepRequestById(string $requestId, string $name): bool;
 
     /**
      * @param $name

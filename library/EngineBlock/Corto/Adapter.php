@@ -127,6 +127,11 @@ class EngineBlock_Corto_Adapter
         $this->_callCortoServiceUri('continueToIdp');
     }
 
+    public function processSramInterrupt()
+    {
+        $this->_callCortoServiceUri('SramInterruptService');
+    }
+
     public function processConsent()
     {
         $this->_callCortoServiceUri('processConsentService');
