@@ -48,19 +48,19 @@ class ServiceProvider extends AbstractRole
     /**
      * @var null|AttributeReleasePolicy
      */
-    #[ORM\Column(name: 'attribute_release_policy', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
+    #[ORM\Column(name: 'attribute_release_policy', type: 'array', nullable: true)]
     public $attributeReleasePolicy;
 
     /**
      * @var IndexedService[]
      */
-    #[ORM\Column(name: 'assertion_consumer_services', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
+    #[ORM\Column(name: 'assertion_consumer_services', type: 'array', nullable: true)]
     public $assertionConsumerServices;
 
     /**
      * @var string[]
      */
-    #[ORM\Column(name: 'allowed_idp_entity_ids', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 6777215)]
+    #[ORM\Column(name: 'allowed_idp_entity_ids', type: 'array', length: 16777215, nullable: true)]
     public $allowedIdpEntityIds;
 
     /**
@@ -72,7 +72,7 @@ class ServiceProvider extends AbstractRole
     /**
      * @var null|RequestedAttribute[]
      */
-    #[ORM\Column(name: 'requested_attributes', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
+    #[ORM\Column(name: 'requested_attributes', type: 'array', nullable: true)]
     public $requestedAttributes;
 
     /**

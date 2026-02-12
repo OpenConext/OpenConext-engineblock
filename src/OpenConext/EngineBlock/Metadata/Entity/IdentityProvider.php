@@ -71,7 +71,7 @@ class IdentityProvider extends AbstractRole
     /**
      * @var Service[]
      */
-    #[ORM\Column(name: 'single_sign_on_services', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
+    #[ORM\Column(name: 'single_sign_on_services', type: 'array', nullable: true)]
     public $singleSignOnServices = array();
 
     /**
@@ -83,7 +83,7 @@ class IdentityProvider extends AbstractRole
     /**
      * @var ShibMdScope[]
      */
-    #[ORM\Column(name: 'shib_md_scopes', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
+    #[ORM\Column(name: 'shib_md_scopes', type: 'array', nullable: true)]
     public $shibMdScopes = array();
 
     /**
