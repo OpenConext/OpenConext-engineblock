@@ -53,7 +53,7 @@ class SerializedArrayType extends Type
             return null;
         }
 
-        $val = unserialize($value, ['allowed_classes' => false]);
+        $val = unserialize($value, );
 
         if ($val === false && $value !== serialize(false)) {
             throw new ConversionException(sprintf(

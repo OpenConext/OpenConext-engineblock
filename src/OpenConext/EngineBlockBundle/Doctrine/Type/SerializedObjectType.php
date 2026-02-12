@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2025 SURFnet B.V.
+ * Copyright 2026 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +21,20 @@ namespace OpenConext\EngineBlockBundle\Doctrine\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
-use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 
-class RequestedAttributeArrayType extends Type
+/**
+ * This type replaces the deprecated Doctrine 'object' type (which used PHP serialization).
+ * It is named SerializedObjectType to avoid confusion with Doctrine's SimpleArrayType (comma-separated).
+ */
+class SerializedObjectType extends Type
 {
-    public const NAME = 'engineblock_requested_attribute_array';
+    public const NAME = 'object';
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        $column['length'] = 65535;
+        if (!isset($column['length'])) {
+            $column['length'] = 65535;
+        }
         return $platform->getClobTypeDeclarationSQL($column);
     }
 
@@ -38,23 +43,7 @@ class RequestedAttributeArrayType extends Type
         if ($value === null) {
             return null;
         }
-        if (!is_array($value)) {
-            throw new ConversionException(
-                sprintf('Invalid value for %s expected array got %s', $this->getName(), gettype($value))
-            );
-        }
-        foreach ($value as $attr) {
-            if (!$attr instanceof RequestedAttribute) {
-                throw new ConversionException(
-                    sprintf(
-                        'Invalid element for %s expected %s got %s',
-                        $this->getName(),
-                        RequestedAttribute::class,
-                        get_debug_type($attr)
-                    )
-                );
-            }
-        }
+
         return serialize($value);
     }
 
@@ -64,24 +53,22 @@ class RequestedAttributeArrayType extends Type
             return null;
         }
 
-        $unserialized = unserialize($value, ['allowed_classes' => [RequestedAttribute::class]]);
-        if (is_array($unserialized)) {
-            return $unserialized;
+        $val = unserialize($value, );
+
+        if ($val === false && $value !== serialize(false)) {
+            throw new ConversionException(sprintf(
+                'Could not convert database value "%s" to Doctrine Type %s',
+                $value,
+                $this->getName()
+            ));
         }
 
-        throw new ConversionException(sprintf(
-            'Invalid format for %s expected serialized array, got: %s',
-            $this->getName(),
-            substr((string)$value, 0, 120)
-        ));
+        return $val;
     }
 
     public function getName(): string
     {
         return self::NAME;
     }
-    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
-    {
-        return true;
-    }
+
 }

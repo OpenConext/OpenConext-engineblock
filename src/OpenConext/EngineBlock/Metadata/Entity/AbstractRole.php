@@ -134,25 +134,25 @@ abstract class AbstractRole
      * @var Logo
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'logo', type: 'engineblock_logo', nullable: true)]
+    #[ORM\Column(name: 'logo', type: 'object', nullable: true)]
     public $logo;
 
     /**
      * @var Organization
      */
-    #[ORM\Column(name: 'organization_nl_name', type: 'engineblock_organization', nullable: true)]
+    #[ORM\Column(name: 'organization_nl_name', type: 'object', nullable: true)]
     public $organizationNl;
 
     /**
      * @var Organization
      */
-    #[ORM\Column(name: 'organization_en_name', type: 'engineblock_organization', nullable: true)]
+    #[ORM\Column(name: 'organization_en_name', type: 'object', nullable: true)]
     public $organizationEn;
 
     /**
      * @var Organization
      */
-    #[ORM\Column(name: 'organization_pt_name', type: 'engineblock_organization', nullable: true)]
+    #[ORM\Column(name: 'organization_pt_name', type: 'object', nullable: true)]
     public $organizationPt;
 
     /**
@@ -179,7 +179,7 @@ abstract class AbstractRole
     /**
      * @var X509Certificate[]
      */
-    #[ORM\Column(name: 'certificates', type: 'engineblock_certificate_array', nullable: true)]
+    #[ORM\Column(name: 'certificates', type: 'array', nullable: true)]
     public $certificates = array();
 
     /**
@@ -191,7 +191,7 @@ abstract class AbstractRole
     /**
      * @var ContactPerson[]
      */
-    #[ORM\Column(name: 'contact_persons', type: 'engineblock_contact_person_array')]
+    #[ORM\Column(name: 'contact_persons', type: 'array')]
     public $contactPersons;
 
     /**
@@ -209,7 +209,7 @@ abstract class AbstractRole
     /**
      * @var Service
      */
-    #[ORM\Column(name: 'single_logout_service', type: 'engineblock_service', nullable: true)]
+    #[ORM\Column(name: 'single_logout_service', type: 'object', nullable: true)]
     public $singleLogoutService;
 
     /**

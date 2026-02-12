@@ -71,7 +71,7 @@ class IdentityProvider extends AbstractRole
     /**
      * @var Service[]
      */
-    #[ORM\Column(name: 'single_sign_on_services', type: 'engineblock_service_array', nullable: true)]
+    #[ORM\Column(name: 'single_sign_on_services', type: 'array', nullable: true)]
     public $singleSignOnServices = array();
 
     /**
@@ -83,7 +83,7 @@ class IdentityProvider extends AbstractRole
     /**
      * @var ShibMdScope[]
      */
-    #[ORM\Column(name: 'shib_md_scopes', type: 'engineblock_shib_md_scope_array', nullable: true)]
+    #[ORM\Column(name: 'shib_md_scopes', type: 'array', nullable: true)]
     public $shibMdScopes = array();
 
     /**
