@@ -60,7 +60,7 @@ class ServiceProvider extends AbstractRole
     /**
      * @var string[]
      */
-    #[ORM\Column(name: 'allowed_idp_entity_ids', type: 'engineblock_simple_array', length: 16777215, nullable: true)]
+    #[ORM\Column(name: 'allowed_idp_entity_ids', type: 'array', length: 16777215, nullable: true)]
     public $allowedIdpEntityIds;
 
     /**

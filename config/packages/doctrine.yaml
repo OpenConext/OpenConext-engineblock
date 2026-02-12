@@ -34,7 +34,7 @@ doctrine:
             engineblock_requested_attribute_array: OpenConext\EngineBlockBundle\Doctrine\Type\RequestedAttributeArrayType
             engineblock_shib_md_scope_array: OpenConext\EngineBlockBundle\Doctrine\Type\ShibMdScopeArrayType
             engineblock_attribute_release_policy: OpenConext\EngineBlockBundle\Doctrine\Type\AttributeReleasePolicyType
-            engineblock_simple_array: OpenConext\EngineBlockBundle\Doctrine\Type\SimpleArrayType
+            array: OpenConext\EngineBlockBundle\Doctrine\Type\SerializedArrayType
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'

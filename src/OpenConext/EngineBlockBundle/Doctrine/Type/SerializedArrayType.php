@@ -22,9 +22,13 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 
-class SimpleArrayType extends Type
+/**
+ * This type replaces the deprecated Doctrine 'array' type (which used PHP serialization).
+ * It is named SerializedArrayType to avoid confusion with Doctrine's SimpleArrayType (comma-separated).
+ */
+class SerializedArrayType extends Type
 {
-    public const NAME = 'engineblock_simple_array';
+    public const NAME = 'array';
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
@@ -67,8 +71,4 @@ class SimpleArrayType extends Type
         return self::NAME;
     }
 
-    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
-    {
-        return true;
-    }
 }

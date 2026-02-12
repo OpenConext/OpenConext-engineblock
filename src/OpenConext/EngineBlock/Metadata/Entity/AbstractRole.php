@@ -203,7 +203,7 @@ abstract class AbstractRole
     /**
      * @var string[]
      */
-    #[ORM\Column(name: 'name_id_formats', type: 'engineblock_simple_array', length: 65535)]
+    #[ORM\Column(name: 'name_id_formats', type: 'array', length: 65535)]
     public $supportedNameIdFormats;
 
     /**
