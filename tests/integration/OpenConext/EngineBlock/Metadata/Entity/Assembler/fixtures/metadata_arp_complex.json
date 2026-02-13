@@ -1,0 +1,35 @@
+{
+    "sp1": {
+        "allow_all_entities": true,
+        "allowed_connections": [],
+        "arp_attributes": {
+            "urn:mace:dir:attribute-def:mail": [
+                {
+                    "value": "*",
+                    "source": "idp",
+                    "motivation": "Email is required for user identification"
+                }
+            ],
+            "urn:mace:dir:attribute-def:eduPersonPrincipalName": [
+                {
+                    "value": "*",
+                    "source": "voot",
+                    "release_as": "urn:mace:dir:attribute-def:uid",
+                    "use_as_nameid": true,
+                    "motivation": "ePPN is used as NameID"
+                }
+            ]
+        },
+        "metadata": {
+            "AssertionConsumerService": [{
+                "Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+                "Location": "https://sp1.example.com/acs"
+            }],
+            "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+            "name": {"en": "SP1"}
+        },
+        "name": "http://sp1.example.com",
+        "state": "prodaccepted",
+        "type": "saml20-sp"
+    }
+}
