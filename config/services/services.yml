@@ -8,7 +8,8 @@ services:
         autowire: true
         autoconfigure: true
 
-    OpenConext\EngineBlockBundle\HealthCheck\DoctrineConnectionHealthCheck:
+    openconext.monitor.database_health_check:
+        class: OpenConext\EngineBlockBundle\HealthCheck\DoctrineConnectionHealthCheck
         arguments:
             - '%monitor_database_health_check_query%'
         calls:
