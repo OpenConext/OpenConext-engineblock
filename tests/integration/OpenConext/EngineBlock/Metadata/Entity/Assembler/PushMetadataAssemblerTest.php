@@ -607,71 +607,16 @@ class PushMetadataAssemblerTest extends TestCase
         $this->assertFalse($sp->allowAll);
     }
 
-    /**
-     * Test 4: IdP allowed_connections filters out SPs bidirectionally
-     *
-     * Scenario: IdP whitelist blocks SP even when SP whitelists the IdP
-     *
-     * TODO: This test needs further investigation. The bidirectional filtering logic
-     * may work differently than expected. Requires deeper analysis of the assembler's
-     * interaction between SP and IdP allowed_connections to fix properly.
-     */
-    public function _disabled_test_idp_allowed_connections_filters_out_sps_bidirectionally()
+    public function test_idp_allowed_connections_filters_out_sps_bidirectionally()
     {
-        // ARRANGE - Create JSON with 2 SPs (both whitelist IdP1) + 1 IdP (whitelists only SP1)
-        $connection = '{
-            "sp1": {
-                "allowed_connections": [],
-                "metadata": {
-                    "AssertionConsumerService": [{
-                        "Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
-                        "Location": "https://sp1.example.com/acs"
-                    }],
-                    "NameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
-                    "name": {"en": "SP1"}
-                },
-                "name": "http://sp1.example.com",
-                "state": "prodaccepted",
-                "type": "saml20-sp"
-            },
-            "idp1": {
-                "allow_all_entities": true,
-                "allowed_connections": [],
-                "metadata": {
-                    "SingleSignOnService": [{
-                        "Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
-                        "Location": "https://idp1.example.com/sso"
-                    }],
-                    "certData": "MIIDEzCCAfugAwIBAgIJAKoK/heBjcOYMA0GCSqGSIb3DQEBBQUAMCAxHjAcBgNVBAoMFU9yZ2FuaXphdGlvbiwgQ049T0lEQzAeFw0xNTExMTExMDEyMTVaFw0yNTExMTAxMDEyMTVaMCAxHjAcBgNVBAoMFU9yZ2FuaXphdGlvbiwgQ049T0lEQzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANBGwJ/qpTQNiSgUglSE2UzEkUow+wS8r67etxoEhlzJZfgK/k5TfG1wICDqapHAxEVgUM10aBHRctNocA5wmlHtxdidhzRZroqHwpKy2BmsKX5Z2oK25RLpsyusB1KroemgA/CjUnI6rIL1xxFn3KyOFh1ZBLUQtKNQeMS7HFGgSDAp+sXuTFujz12LFDugX0T0KB5a1+0l8y0PEa0yGa1oi6seONx849ZHxM0PRvUunWkuTM+foZ0jZpFapXe02yWMqhc/2iYMieE/3GvOguJchJt6R+cut8VBb6ubKUIGK7pmoq/TB6DVXpvsHqsDJXechxcicu4pdKVDHSec850CAwEAAaNQME4wHQYDVR0OBBYEFK7RqjoodSYVXGTVEdLf3kJflP/sMB8GA1UdIwQYMBaAFK7RqjoodSYVXGTVEdLf3kJflP/sMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADggEBADNZkxlFXh4F45muCbnQd+WmaXlGvb9tkUyAIxVL8AIu8J18F420vpnGpoUAE+Hy3evBmp2nkrFAgmr055fAjpHeZFgDZBAPCwYd3TNMDeSyMta3Ka+oS7GRFDePkMEm+kH4/rITNKUF1sOvWBTSowk9TudEDyFqgGntcdu/l/zRxvx33y3LMG5USD0x4X4IKjRrRN1BbcKgi8dq10C3jdqNancTuPoqT3WWzRvVtB/q34B7F74/6JzgEoOCEHufBMp4ZFu54P0yEGtWfTwTzuoZobrChVVBt4w/XZagrRtUCDNwRpHNbpjxYudbqLqpi1MQpV9oht/BpTHVJG2i0ro=",
-                    "name": {"en": "IdP1"}
-                },
-                "name": "http://idp1.example.com",
-                "state": "prodaccepted",
-                "type": "saml20-idp"
-            },
-            "idp2": {
-                "allow_all_entities": true,
-                "allowed_connections": [],
-                "metadata": {
-                    "SingleSignOnService": [{
-                        "Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
-                        "Location": "https://idp2.example.com/sso"
-                    }],
-                    "certData": "MIIDEzCCAfugAwIBAgIJAKoK/heBjcOYMA0GCSqGSIb3DQEBBQUAMCAxHjAcBgNVBAoMFU9yZ2FuaXphdGlvbiwgQ049T0lEQzAeFw0xNTExMTExMDEyMTVaFw0yNTExMTAxMDEyMTVaMCAxHjAcBgNVBAoMFU9yZ2FuaXphdGlvbiwgQ049T0lEQzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANBGwJ/qpTQNiSgUglSE2UzEkUow+wS8r67etxoEhlzJZfgK/k5TfG1wICDqapHAxEVgUM10aBHRctNocA5wmlHtxdidhzRZroqHwpKy2BmsKX5Z2oK25RLpsyusB1KroemgA/CjUnI6rIL1xxFn3KyOFh1ZBLUQtKNQeMS7HFGgSDAp+sXuTFujz12LFDugX0T0KB5a1+0l8y0PEa0yGa1oi6seONx849ZHxM0PRvUunWkuTM+foZ0jZpFapXe02yWMqhc/2iYMieE/3GvOguJchJt6R+cut8VBb6ubKUIGK7pmoq/TB6DVXpvsHqsDJXechxcicu4pdKVDHSec850CAwEAAaNQME4wHQYDVR0OBBYEFK7RqjoodSYVXGTVEdLf3kJflP/sMB8GA1UdIwQYMBaAFK7RqjoodSYVXGTVEdLf3kJflP/sMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADggEBADNZkxlFXh4F45muCbnQd+WmaXlGvb9tkUyAIxVL8AIu8J18F420vpnGpoUAE+Hy3evBmp2nkrFAgmr055fAjpHeZFgDZBAPCwYd3TNMDeSyMta3Ka+oS7GRFDePkMEm+kH4/rITNKUF1sOvWBTSowk9TudEDyFqgGntcdu/l/zRxvx33y3LMG5USD0x4X4IKjRrRN1BbcKgi8dq10C3jdqNancTuPoqT3WWzRvVtB/q34B7F74/6JzgEoOCEHufBMp4ZFu54P0yEGtWfTwTzuoZobrChVVBt4w/XZagrRtUCDNwRpHNbpjxYudbqLqpi1MQpV9oht/BpTHVJG2i0ro=",
-                    "name": {"en": "IdP2"}
-                },
-                "name": "http://idp2.example.com",
-                "state": "prodaccepted",
-                "type": "saml20-idp"
-            }
-        }';
-
-        $input = json_decode($connection);
+        // SP1 has empty allowed_connections (explicitly whitelists nothing)
+        // IdP1 and IdP2 both have allow_all_entities = true
+        $input = $this->readFixture('metadata_idp_bidirectional.json');
 
         // ACT - Assemble metadata
         $roles = $this->assembler->assemble($input);
 
-        // ASSERT - SP should have empty allowedIdpEntityIds array
+        // Even though IdPs have allow_all, the SP explicitly whitelists nothing
         /** @var ServiceProvider $sp */
         $sp = $roles[0];
         $this->assertInstanceOf(ServiceProvider::class, $sp);
@@ -680,17 +625,14 @@ class PushMetadataAssemblerTest extends TestCase
         $this->assertFalse($sp->allowAll);
     }
 
-    /**
-     * Test 5: Complex bidirectional filtering with multiple entities
-     *
-     * Scenario: Complex multi-entity scenario with cross-filtering
-     *
-     * TODO: This test depends on the bidirectional filtering logic from test 4.
-     * Re-enable after test 4 is fixed and working correctly.
-     */
-    public function _disabled_test_complex_bidirectional_filtering_with_multiple_entities()
+    public function test_complex_bidirectional_filtering_with_multiple_entities()
     {
-        // ARRANGE - Load complex fixture with multiple SPs and IdPs
+        // SP1 whitelists: IdP1, IdP2
+        // SP2 has allow_all_entities
+        // SP3 whitelists: IdP2, IdP3
+        // IdP1 has allow_all_entities
+        // IdP2 whitelists: SP1, SP3 (blocks SP2)
+        // IdP3 whitelists: SP2 (blocks SP1 and SP3)
         $input = $this->readFixture('metadata_connection_whitelisting.json');
 
         // ACT - Assemble metadata
@@ -701,6 +643,7 @@ class PushMetadataAssemblerTest extends TestCase
         $sp1 = $roles[0];
         $this->assertInstanceOf(ServiceProvider::class, $sp1);
         $this->assertSame('http://sp1.example.com', $sp1->entityId);
+        // SP1 whitelists IdP1 and IdP2, both allow SP1
         $this->assertCount(2, $sp1->allowedIdpEntityIds);
         $this->assertContains('http://idp1.example.com', $sp1->allowedIdpEntityIds);
         $this->assertContains('http://idp2.example.com', $sp1->allowedIdpEntityIds);
@@ -709,19 +652,22 @@ class PushMetadataAssemblerTest extends TestCase
         $sp2 = $roles[1];
         $this->assertInstanceOf(ServiceProvider::class, $sp2);
         $this->assertSame('http://sp2.example.com', $sp2->entityId);
-        // SP2 has allow_all but IdP2 blocks SP2, IdP3 allows SP2
+        // SP2 has allow_all, but IdP2 blocks SP2 (only allows SP1, SP3)
+        // Result: IdP1 (allow_all) and IdP3 (allows SP2) only
         $this->assertCount(2, $sp2->allowedIdpEntityIds);
         $this->assertContains('http://idp1.example.com', $sp2->allowedIdpEntityIds);
         $this->assertContains('http://idp3.example.com', $sp2->allowedIdpEntityIds);
+        $this->assertNotContains('http://idp2.example.com', $sp2->allowedIdpEntityIds);
 
         /** @var ServiceProvider $sp3 */
         $sp3 = $roles[2];
         $this->assertInstanceOf(ServiceProvider::class, $sp3);
         $this->assertSame('http://sp3.example.com', $sp3->entityId);
-        // SP3 whitelists IdP2 and IdP3, but IdP3 blocks SP3
-        $this->assertCount(2, $sp3->allowedIdpEntityIds);
-        $this->assertContains('http://idp1.example.com', $sp3->allowedIdpEntityIds);
+        // SP3 whitelists IdP2 and IdP3, but IdP3 blocks SP3 (only allows SP2)
+        // Result: Only IdP2 remains
+        $this->assertCount(1, $sp3->allowedIdpEntityIds);
         $this->assertContains('http://idp2.example.com', $sp3->allowedIdpEntityIds);
+        $this->assertNotContains('http://idp3.example.com', $sp3->allowedIdpEntityIds);
     }
 
     public function test_default_no_configuration_results_in_no_explicit_connections()
