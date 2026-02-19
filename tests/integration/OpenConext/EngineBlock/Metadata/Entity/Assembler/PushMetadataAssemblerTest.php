@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlock\Tests;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\Entity\Assembler\PushMetadataAssembler;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
@@ -562,5 +563,195 @@ class PushMetadataAssemblerTest extends TestCase
     private function readFixture(string $file): object
     {
         return json_decode(file_get_contents(__DIR__ . '/fixtures/'. basename($file)), false);
+    }
+
+    public function test_sp_with_allowed_connections_filters_idps()
+    {
+        $input = $this->readFixture('metadata_sp_with_allowed_connections.json');
+
+        $roles = $this->assembler->assemble($input);
+
+        /** @var ServiceProvider $sp */
+        $sp = $roles[0];
+        $this->assertInstanceOf(ServiceProvider::class, $sp);
+        $this->assertCount(2, $sp->allowedIdpEntityIds);
+        $this->assertContains('http://idp1.example.com', $sp->allowedIdpEntityIds);
+        $this->assertContains('http://idp2.example.com', $sp->allowedIdpEntityIds);
+        $this->assertNotContains('http://idp3.example.com', $sp->allowedIdpEntityIds);
+        $this->assertFalse($sp->allowAll);
+    }
+
+    public function test_sp_with_allow_all_entities_allows_all_idps()
+    {
+        $input = $this->readFixture('metadata_sp_allow_all.json');
+
+        $roles = $this->assembler->assemble($input);
+
+        /** @var ServiceProvider $sp */
+        $sp = $roles[0];
+        $this->assertInstanceOf(ServiceProvider::class, $sp);
+        $this->assertTrue($sp->allowAll);
+    }
+
+    public function test_sp_with_empty_whitelist_has_no_allowed_idps()
+    {
+        $input = $this->readFixture('metadata_sp_empty_whitelist.json');
+
+        $roles = $this->assembler->assemble($input);
+
+        /** @var ServiceProvider $sp */
+        $sp = $roles[0];
+        $this->assertInstanceOf(ServiceProvider::class, $sp);
+        $this->assertIsArray($sp->allowedIdpEntityIds);
+        $this->assertCount(0, $sp->allowedIdpEntityIds);
+        $this->assertFalse($sp->allowAll);
+    }
+
+    public function test_idp_allowed_connections_filters_out_sps_bidirectionally()
+    {
+        // SP1 has empty allowed_connections (explicitly whitelists nothing)
+        // IdP1 and IdP2 both have allow_all_entities = true
+        $input = $this->readFixture('metadata_idp_bidirectional.json');
+
+        // ACT - Assemble metadata
+        $roles = $this->assembler->assemble($input);
+
+        // Even though IdPs have allow_all, the SP explicitly whitelists nothing
+        /** @var ServiceProvider $sp */
+        $sp = $roles[0];
+        $this->assertInstanceOf(ServiceProvider::class, $sp);
+        $this->assertIsArray($sp->allowedIdpEntityIds);
+        $this->assertCount(0, $sp->allowedIdpEntityIds);
+        $this->assertFalse($sp->allowAll);
+    }
+
+    public function test_complex_bidirectional_filtering_with_multiple_entities()
+    {
+        // SP1 whitelists: IdP1, IdP2
+        // SP2 has allow_all_entities
+        // SP3 whitelists: IdP2, IdP3
+        // IdP1 has allow_all_entities
+        // IdP2 whitelists: SP1, SP3 (blocks SP2)
+        // IdP3 whitelists: SP2 (blocks SP1 and SP3)
+        $input = $this->readFixture('metadata_connection_whitelisting.json');
+
+        // ACT - Assemble metadata
+        $roles = $this->assembler->assemble($input);
+
+        // ASSERT - Verify complex bidirectional filtering
+        /** @var ServiceProvider $sp1 */
+        $sp1 = $roles[0];
+        $this->assertInstanceOf(ServiceProvider::class, $sp1);
+        $this->assertSame('http://sp1.example.com', $sp1->entityId);
+        // SP1 whitelists IdP1 and IdP2, both allow SP1
+        $this->assertCount(2, $sp1->allowedIdpEntityIds);
+        $this->assertContains('http://idp1.example.com', $sp1->allowedIdpEntityIds);
+        $this->assertContains('http://idp2.example.com', $sp1->allowedIdpEntityIds);
+
+        /** @var ServiceProvider $sp2 */
+        $sp2 = $roles[1];
+        $this->assertInstanceOf(ServiceProvider::class, $sp2);
+        $this->assertSame('http://sp2.example.com', $sp2->entityId);
+        // SP2 has allow_all, but IdP2 blocks SP2 (only allows SP1, SP3)
+        // Result: IdP1 (allow_all) and IdP3 (allows SP2) only
+        $this->assertCount(2, $sp2->allowedIdpEntityIds);
+        $this->assertContains('http://idp1.example.com', $sp2->allowedIdpEntityIds);
+        $this->assertContains('http://idp3.example.com', $sp2->allowedIdpEntityIds);
+        $this->assertNotContains('http://idp2.example.com', $sp2->allowedIdpEntityIds);
+
+        /** @var ServiceProvider $sp3 */
+        $sp3 = $roles[2];
+        $this->assertInstanceOf(ServiceProvider::class, $sp3);
+        $this->assertSame('http://sp3.example.com', $sp3->entityId);
+        // SP3 whitelists IdP2 and IdP3, but IdP3 blocks SP3 (only allows SP2)
+        // Result: Only IdP2 remains
+        $this->assertCount(1, $sp3->allowedIdpEntityIds);
+        $this->assertContains('http://idp2.example.com', $sp3->allowedIdpEntityIds);
+        $this->assertNotContains('http://idp3.example.com', $sp3->allowedIdpEntityIds);
+    }
+
+    public function test_default_no_configuration_results_in_no_explicit_connections()
+    {
+        $input = $this->readFixture('metadata_no_connection_config.json');
+
+        $roles = $this->assembler->assemble($input);
+
+        /** @var ServiceProvider $sp */
+        $sp = $roles[0];
+        $this->assertInstanceOf(ServiceProvider::class, $sp);
+        // When no configuration is provided, allowedIdpEntityIds should be null
+        $this->assertNull($sp->allowedIdpEntityIds);
+    }
+
+    public function test_it_assembles_arp_with_simple_string_rules()
+    {
+        $input = $this->readFixture('metadata_arp_simple.json');
+
+        $roles = $this->assembler->assemble($input);
+
+        /** @var ServiceProvider $sp */
+        $sp = $roles[0];
+        $this->assertInstanceOf(ServiceProvider::class, $sp);
+        $this->assertNotNull($sp->attributeReleasePolicy);
+        $this->assertInstanceOf(AttributeReleasePolicy::class, $sp->attributeReleasePolicy);
+        $this->assertTrue($sp->attributeReleasePolicy->hasAttribute('urn:mace:dir:attribute-def:mail'));
+        $this->assertTrue($sp->attributeReleasePolicy->hasAttribute('urn:mace:dir:attribute-def:eduPersonPrincipalName'));
+        $this->assertFalse($sp->attributeReleasePolicy->hasAttribute('urn:mace:dir:attribute-def:cn'));
+    }
+
+    public function test_it_assembles_arp_with_complex_object_rules()
+    {
+        $input = $this->readFixture('metadata_arp_complex.json');
+
+        $roles = $this->assembler->assemble($input);
+
+        /** @var ServiceProvider $sp */
+        $sp = $roles[0];
+        $this->assertInstanceOf(ServiceProvider::class, $sp);
+        $this->assertNotNull($sp->attributeReleasePolicy);
+        $this->assertInstanceOf(\OpenConext\EngineBlock\Metadata\AttributeReleasePolicy::class, $sp->attributeReleasePolicy);
+
+        // Check attributes exist
+        $this->assertTrue($sp->attributeReleasePolicy->hasAttribute('urn:mace:dir:attribute-def:mail'));
+        $this->assertTrue($sp->attributeReleasePolicy->hasAttribute('urn:mace:dir:attribute-def:eduPersonPrincipalName'));
+
+        // Check source
+        $this->assertSame('idp', $sp->attributeReleasePolicy->getSource('urn:mace:dir:attribute-def:mail'));
+        $this->assertSame('voot', $sp->attributeReleasePolicy->getSource('urn:mace:dir:attribute-def:eduPersonPrincipalName'));
+
+        // Check motivation
+        $this->assertSame('Email is required for user identification', $sp->attributeReleasePolicy->getMotivation('urn:mace:dir:attribute-def:mail'));
+        $this->assertSame('ePPN is used as NameID', $sp->attributeReleasePolicy->getMotivation('urn:mace:dir:attribute-def:eduPersonPrincipalName'));
+
+        // Check NameID substitute (release_as with use_as_nameid)
+        $this->assertSame('urn:mace:dir:attribute-def:uid', $sp->attributeReleasePolicy->findNameIdSubstitute());
+    }
+
+    public function test_arp_attributes_missing_returns_no_policy()
+    {
+        $input = $this->readFixture('metadata_no_arp.json');
+
+        $roles = $this->assembler->assemble($input);
+
+        /** @var ServiceProvider $sp */
+        $sp = $roles[0];
+        $this->assertInstanceOf(ServiceProvider::class, $sp);
+        $this->assertNull($sp->attributeReleasePolicy);
+    }
+
+    public function test_it_assembles_multiple_certificates()
+    {
+        $input = $this->readFixture('metadata_multiple_certificates.json');
+
+        $roles = $this->assembler->assemble($input);
+
+        /** @var IdentityProvider $idp */
+        $idp = $roles[0];
+        $this->assertInstanceOf(IdentityProvider::class, $idp);
+        $this->assertIsArray($idp->certificates);
+        $this->assertCount(3, $idp->certificates);
+        foreach ($idp->certificates as $certificate) {
+            $this->assertInstanceOf(\OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy::class, $certificate);
+        }
     }
 }

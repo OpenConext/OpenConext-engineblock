@@ -1,0 +1,16 @@
+#!/bin/bash
+
+CONTAINER_NAME="core-engine-1"
+
+TARGET=${TARGET_CONTAINER:-$CONTAINER_NAME}
+
+# Check if the user actually provided a command to run
+if [ -z "$1" ]; then
+    echo "Usage: ./docker <command>"
+    echo "Example: ./docker ls -la"
+    exit 1
+fi
+
+# 3. Execute the command inside the container
+# "$@" captures all arguments passed to the script
+docker exec -it "$TARGET" "$@"

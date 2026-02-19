@@ -168,7 +168,8 @@
             "!/theme",
             "/theme/node_modules",
             "!/vendor",
-            "!/web"
+            "!/web",
+            "bin/dev"
         ]
     }
 }
