@@ -70,6 +70,6 @@ class Consent
      * @var DateTime
      */
     #[ORM\Id]
-    #[ORM\Column(name: 'deleted_at', type: Types::DATETIME_MUTABLE, nullable: true, options: ['default' => null])]
+    #[ORM\Column(name: 'deleted_at', type: Types::DATETIME_MUTABLE, nullable: false, options: ['default' => '0000-00-00 00:00:00'])]
     public ?DateTimeInterface $deletedAt = null;
 }
