@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Authentication\Entity;
 
 use DateTime;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,39 +36,39 @@ class Consent
     /**
      * @var DateTime
      */
-    #[ORM\Column(name: 'consent_date', type: \Doctrine\DBAL\Types\Types::DATETIME_MUTABLE, nullable: false)]
+    #[ORM\Column(name: 'consent_date', type: Types::DATETIME_MUTABLE, nullable: false)]
     public \DateTimeInterface $date;
 
     /**
      * @var string
      */
     #[ORM\Id]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 80)]
+    #[ORM\Column(type: Types::STRING, length: 80)]
     public ?string $hashedUserId = null;
 
     /**
      * @var string
      */
     #[ORM\Id]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(type: Types::STRING)]
     public ?string $serviceId = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 80)]
+    #[ORM\Column(type: Types::STRING, length: 80)]
     public ?string $attribute = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'consent_type', type: \Doctrine\DBAL\Types\Types::STRING, nullable: true, length: 20, options: ['default' => 'explicit'])]
+    #[ORM\Column(name: 'consent_type', type: Types::STRING, nullable: true, length: 20, options: ['default' => 'explicit'])]
     public ?string $type = null;
 
     /**
      * @var DateTime
      */
     #[ORM\Id]
-    #[ORM\Column(name: 'deleted_at', type: \Doctrine\DBAL\Types\Types::DATETIME_MUTABLE, nullable: true, options: ['default' => null])]
+    #[ORM\Column(name: 'deleted_at', type: Types::DATETIME_MUTABLE, nullable: false, options: ['default' => '0000-00-00 00:00:00'])]
     public ?\DateTimeInterface $deletedAt = null;
 }
