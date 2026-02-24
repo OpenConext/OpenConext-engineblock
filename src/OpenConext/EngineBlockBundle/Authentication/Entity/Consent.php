@@ -30,7 +30,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Index(name: 'hashed_user_id', columns: ['hashed_user_id'])]
 #[ORM\Index(name: 'service_id', columns: ['service_id'])]
-#[ORM\Index(name: 'deleted_at', columns: ['deleted_at'])]
 class Consent
 {
     /**
