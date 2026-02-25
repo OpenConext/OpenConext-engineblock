@@ -66,6 +66,18 @@ class Consent
 
     /**
      * @var DateTime
+     *
+     * Soft-delete sentinel using MariaDB's special zero-date ('0000-00-00 00:00:00') as the "not deleted" value.
+     *
+     * Active (non-deleted) records have deleted_at = '0000-00-00 00:00:00'.
+     * Soft-deleted records have deleted_at = NOW()
+     *
+     * Queries use `deleted_at IS NULL` to select active records. This works because MariaDB defines that
+     * expressions involving a zero-date evaluate to NULL at the database level (see MariaDB DATETIME docs).
+     *
+     * IMPORTANT deleted_at cannot be made nullable because it is part of the composite primary key (hashed_user_id,
+     * service_id, deleted_at). Primary key columns cannot be nullable in MySQL/MariaDB.
+     *
      */
     #[ORM\Id]
     #[ORM\Column(name: 'deleted_at', type: Types::DATETIME_MUTABLE, nullable: false, options: ['default' => '0000-00-00 00:00:00'])]

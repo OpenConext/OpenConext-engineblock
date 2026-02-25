@@ -1,11 +1,26 @@
 <?php
 
+/**
+ * Copyright 2026 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 declare(strict_types=1);
 
 namespace OpenConext\EngineBlock\Doctrine\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\Migrations\AbstractMigration;
 
 /**
  * Baseline migration - Creates initial database schema based on production state (6.18) as of feb 2026
@@ -14,7 +29,7 @@ use Doctrine\Migrations\AbstractMigration;
  * It creates all required tables from scratch for new installations, and gracefully skips
  * execution on existing databases where tables are already present.
  */
-final class Version20260210000000 extends AbstractMigration
+final class Version20260210000000 extends AbstractEngineBlockMigration
 {
     public function getDescription(): string
     {
@@ -23,6 +38,8 @@ final class Version20260210000000 extends AbstractMigration
 
     public function preUp(Schema $schema): void
     {
+        parent::preUp($schema);
+
         $tables = $this->sm->listTableNames();
         $this->skipIf(
             in_array('sso_provider_roles_eb5', $tables, true),
