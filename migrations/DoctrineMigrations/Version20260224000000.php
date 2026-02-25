@@ -1,11 +1,26 @@
 <?php
 
+/**
+ * Copyright 2026 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 declare(strict_types=1);
 
 namespace OpenConext\EngineBlock\Doctrine\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\Migrations\AbstractMigration;
 
 /**
  * Patch/repair migration - Removes the deleted_at index from the consent table if present.
@@ -13,7 +28,7 @@ use Doctrine\Migrations\AbstractMigration;
  * On existing databases where the index is already absent this migration is marked as done
  * without executing any SQL. On databases where the index still exists it will be dropped.
  */
-final class Version20260224000000 extends AbstractMigration
+final class Version20260224000000 extends AbstractEngineBlockMigration
 {
     public function getDescription(): string
     {
@@ -22,6 +37,8 @@ final class Version20260224000000 extends AbstractMigration
 
     public function preUp(Schema $schema): void
     {
+        parent::preUp($schema);
+
         $indexes = $this->connection->createSchemaManager()->listTableIndexes('consent');
         $this->skipIf(
             !isset($indexes['deleted_at']),
