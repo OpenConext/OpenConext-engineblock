@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Authentication\Entity;
 
 use DateTime;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -29,45 +30,56 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Index(name: 'hashed_user_id', columns: ['hashed_user_id'])]
 #[ORM\Index(name: 'service_id', columns: ['service_id'])]
-#[ORM\Index(name: 'deleted_at', columns: ['deleted_at'])]
 class Consent
 {
     /**
      * @var DateTime
      */
-    #[ORM\Column(name: 'consent_date', type: \Doctrine\DBAL\Types\Types::DATETIME_MUTABLE, nullable: false)]
+    #[ORM\Column(name: 'consent_date', type: Types::DATETIME_MUTABLE, nullable: false)]
     public \DateTimeInterface $date;
 
     /**
      * @var string
      */
     #[ORM\Id]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 80)]
+    #[ORM\Column(type: Types::STRING, length: 80)]
     public ?string $hashedUserId = null;
 
     /**
      * @var string
      */
     #[ORM\Id]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(type: Types::STRING)]
     public ?string $serviceId = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 80)]
+    #[ORM\Column(type: Types::STRING, length: 80)]
     public ?string $attribute = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'consent_type', type: \Doctrine\DBAL\Types\Types::STRING, nullable: true, length: 20, options: ['default' => 'explicit'])]
+    #[ORM\Column(name: 'consent_type', type: Types::STRING, nullable: true, length: 20, options: ['default' => 'explicit'])]
     public ?string $type = null;
 
     /**
      * @var DateTime
+     *
+     * Soft-delete sentinel using MariaDB's special zero-date ('0000-00-00 00:00:00') as the "not deleted" value.
+     *
+     * Active (non-deleted) records have deleted_at = '0000-00-00 00:00:00'.
+     * Soft-deleted records have deleted_at = NOW()
+     *
+     * Queries use `deleted_at IS NULL` to select active records. This works because MariaDB defines that
+     * expressions involving a zero-date evaluate to NULL at the database level (see MariaDB DATETIME docs).
+     *
+     * IMPORTANT deleted_at cannot be made nullable because it is part of the composite primary key (hashed_user_id,
+     * service_id, deleted_at). Primary key columns cannot be nullable in MySQL/MariaDB.
+     *
      */
     #[ORM\Id]
-    #[ORM\Column(name: 'deleted_at', type: \Doctrine\DBAL\Types\Types::DATETIME_MUTABLE, nullable: true, options: ['default' => null])]
+    #[ORM\Column(name: 'deleted_at', type: Types::DATETIME_MUTABLE, nullable: false, options: ['default' => '0000-00-00 00:00:00'])]
     public ?\DateTimeInterface $deletedAt = null;
 }

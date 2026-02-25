@@ -76,6 +76,17 @@ class IdentityProvider extends AbstractRole
 
     /**
      * @var ConsentSettings
+     *
+     * NOTE: The consent_settings and idp_discoveries columns are physically stored as LONGTEXT in the database.
+     * This predates native JSON column support and is intentional. Running `doctrine:schema:update` will suggest:
+     *
+     *   ALTER TABLE sso_provider_roles_eb5
+     *     CHANGE consent_settings consent_settings JSON DEFAULT NULL,
+     *     CHANGE idp_discoveries idp_discoveries JSON DEFAULT NULL;
+     *
+     * Do not apply this migration. Switching to native MySQL/MariaDB JSON columns requires a careful migration to work
+     * with green/blue deployment strategies.
+     *
      */
     #[ORM\Column(name: 'consent_settings', type: \Doctrine\DBAL\Types\Types::JSON, length: 16777215)]
     private $consentSettings;
