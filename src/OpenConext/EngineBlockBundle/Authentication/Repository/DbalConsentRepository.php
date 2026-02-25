@@ -62,6 +62,8 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
      */
     public function findAllFor($userId)
     {
+        // deleted_at IS NULL matches active records whose deleted_at is '0000-00-00 00:00:00'.
+        // See Consent::$deletedAt for full context.
         $sql       = '
             SELECT
                 service_id
@@ -126,6 +128,7 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
      */
     public function deleteOneFor(string $userId, string $serviceProviderEntityId): bool
     {
+        // deleted_at IS NULL matches active records. See Consent::$deletedAt for full context.
         $sql = '
             UPDATE
                 consent
