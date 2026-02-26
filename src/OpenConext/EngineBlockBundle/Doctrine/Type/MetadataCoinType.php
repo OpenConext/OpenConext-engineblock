@@ -30,10 +30,8 @@ class MetadataCoinType extends Type
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        // We want a `TEXT` field declaration in our column, the `LONGTEXT` default causes issues when running the
-        // DBMS in strict mode.
-        $column['length'] = 65535;
-        return $platform->getJsonTypeDeclarationSQL($column);
+        $column['length'] = null; // Ensure a longtext, this is currently on prod.
+        return $platform->getClobTypeDeclarationSQL($column);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed

@@ -26,6 +26,7 @@ doctrine:
 
             array: OpenConext\EngineBlockBundle\Doctrine\Type\SerializedArrayType
             object: OpenConext\EngineBlockBundle\Doctrine\Type\SerializedObjectType
+            legacy_json: OpenConext\EngineBlockBundle\Doctrine\Type\LegacyJsonType
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
