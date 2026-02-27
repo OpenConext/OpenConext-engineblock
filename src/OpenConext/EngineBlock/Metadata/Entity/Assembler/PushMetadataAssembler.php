@@ -647,7 +647,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
 
     private function validateManipulationCode(string $entityId, string $code): void
     {
-        if ($code === '') {
+        if (trim($code) === '') {
             return;
         }
 

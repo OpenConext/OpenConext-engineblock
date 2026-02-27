@@ -11,6 +11,11 @@ More information about our release strategy can be found in
 the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on
 the EngineBlock wiki.
 
+## Unreleased
+
+Bugfixes:
+* Metadata push will now reject all metadata if any service contains invalid PHP syntax in its attribute manipulations (#1778)
+
 ## 7.0.0
 Breaking changes please see: [upgrading](UPGRADING.md#700)
 
