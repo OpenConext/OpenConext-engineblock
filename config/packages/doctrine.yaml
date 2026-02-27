@@ -12,6 +12,8 @@ doctrine:
                 user:     "%database.user%"
                 password: "%database.password%"
                 charset:  UTF8
+                options:
+                    !php/const PDO::ATTR_EMULATE_PREPARES: false
                 # when true, queries are logged to a 'doctrine' monolog channel
                 logging: '%kernel.debug%'
                 profiling: '%kernel.debug%'

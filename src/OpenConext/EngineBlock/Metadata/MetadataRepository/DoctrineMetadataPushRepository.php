@@ -20,7 +20,6 @@ namespace OpenConext\EngineBlock\Metadata\MetadataRepository;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Doctrine\DBAL\Statement;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
@@ -145,28 +144,31 @@ class DoctrineMetadataPushRepository
         return $result;
     }
 
-    private function insertRole(AbstractRole $role, ClassMetadata $metadata)
+    private function insertRole(AbstractRole $role, ClassMetadata $metadata): void
     {
-        $query = $this->connection->createQueryBuilder()
-            ->insert(self::ROLES_TABLE_NAME);
+        $query = $this->connection->createQueryBuilder()->insert(self::ROLES_TABLE_NAME);
 
-        $normalized = $this->addInsertQueryParameters($role, $query, $metadata);
+        foreach ($this->normalizeData($role, $metadata) as $columnName => $fieldData) {
+            $query->setValue($columnName, ':' . $columnName)
+                ->setParameter($columnName, $fieldData[self::FIELD_VALUE], $fieldData[self::FIELD_TYPE]);
+        }
 
-        $stmt = $this->connection->prepare($query->getSQL());
-        $this->bindParameters($normalized, $stmt);
-        $stmt->executeQuery();
+        $query->executeStatement();
     }
 
-    private function updateRole(AbstractRole $role, ClassMetadata $metadata)
+    private function updateRole(AbstractRole $role, ClassMetadata $metadata): void
     {
-        $query = $this->connection->createQueryBuilder()
-            ->update(self::ROLES_TABLE_NAME);
+        $query = $this->connection->createQueryBuilder()->update(self::ROLES_TABLE_NAME);
 
-        $normalized = $this->addUpdateQueryParameters($role, $query, $metadata);
+        foreach ($this->normalizeData($role, $metadata) as $columnName => $fieldData) {
+            $query->set($columnName, ':' . $columnName)
+                ->setParameter($columnName, $fieldData[self::FIELD_VALUE], $fieldData[self::FIELD_TYPE]);
+        }
 
-        $stmt = $this->connection->prepare($query->getSQL());
-        $this->bindParameters($normalized, $stmt);
-        $stmt->executeQuery();
+        $query->where('entity_id = :entity_id');
+        $this->addDiscriminatorQuery($query, $metadata);
+
+        $query->executeStatement();
     }
 
     private function deleteRolesByIds(array $roles, ClassMetadata $metadata)
@@ -199,35 +201,6 @@ class DoctrineMetadataPushRepository
         }
 
         return $results;
-    }
-
-    private function addInsertQueryParameters(AbstractRole $role, QueryBuilder $query, ClassMetadata $metadata)
-    {
-        $normalized = $this->normalizeData($role, $metadata);
-        foreach (array_keys($normalized) as $id) {
-            $query->setValue($id, ":$id");
-        }
-        return $normalized;
-    }
-
-    private function addUpdateQueryParameters(AbstractRole $role, QueryBuilder $query, ClassMetadata $metadata)
-    {
-        $normalized = $this->normalizeData($role, $metadata);
-        foreach (array_keys($normalized) as $id) {
-            $query->set($id, ":$id");
-        }
-        $query->where('entity_id = :entity_id');
-
-        $this->addDiscriminatorQuery($query, $metadata);
-
-        return $normalized;
-    }
-
-    private function bindParameters($normalized, Statement $statement)
-    {
-        foreach ($normalized as $id => $value) {
-            $statement->bindValue($id, $value[self::FIELD_VALUE], $value[self::FIELD_TYPE]);
-        }
     }
 
     private function addDiscriminatorQuery(QueryBuilder $queryBuilder, ClassMetadata $metadata)
