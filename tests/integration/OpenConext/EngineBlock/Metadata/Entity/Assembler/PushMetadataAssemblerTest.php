@@ -29,11 +29,13 @@ use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MfaEntityCollection;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlock\Metadata\TransparentMfaEntity;
+use OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Psr\Log\LoggerInterface;
+use stdClass;
 
 class PushMetadataAssemblerTest extends TestCase
 {
@@ -751,7 +753,114 @@ class PushMetadataAssemblerTest extends TestCase
         $this->assertIsArray($idp->certificates);
         $this->assertCount(3, $idp->certificates);
         foreach ($idp->certificates as $certificate) {
-            $this->assertInstanceOf(\OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy::class, $certificate);
+            $this->assertInstanceOf(X509CertificateLazyProxy::class, $certificate);
         }
+    }
+
+    public function test_it_accepts_valid_manipulation_code()
+    {
+        $input = $this->buildConnectionInput('http://sp.example.com', 'saml20-sp', '$attributes["foo"] = ["bar"];');
+
+        $roles = $this->assembler->assemble($input);
+
+        $this->assertCount(1, $roles);
+        $this->assertInstanceOf(ServiceProvider::class, $roles[0]);
+    }
+
+    public function test_it_accepts_complex_valid_manipulation_code()
+    {
+        $code = <<<'PHP'
+if (isset($attributes['urn:mace:dir:attribute-def:mail'])) {
+    $mail = $attributes['urn:mace:dir:attribute-def:mail'][0] ?? '';
+    if (str_ends_with($mail, '@example.com')) {
+        $attributes['urn:mace:dir:attribute-def:isMemberOf'][] = 'urn:example:group:staff';
+    }
+}
+
+foreach ($attributes as $name => $values) {
+    $attributes[$name] = array_values(
+        array_unique(array_filter($values, fn(string $v): bool => $v !== ''))
+    );
+}
+
+$attributes['custom:generated'] = [hash('sha256', $attributes['urn:mace:dir:attribute-def:uid'][0] ?? '')];
+PHP;
+
+        $input = $this->buildConnectionInput('http://sp.example.com', 'saml20-sp', $code);
+
+        $roles = $this->assembler->assemble($input);
+
+        $this->assertCount(1, $roles);
+        $this->assertInstanceOf(ServiceProvider::class, $roles[0]);
+    }
+
+    public function test_it_accepts_empty_string_manipulation_code()
+    {
+        $input = $this->buildConnectionInput('http://sp.example.com', 'saml20-sp', '');
+
+        $roles = $this->assembler->assemble($input);
+
+        $this->assertCount(1, $roles);
+        $this->assertInstanceOf(ServiceProvider::class, $roles[0]);
+    }
+
+    public function test_it_accepts_missing_manipulation_code()
+    {
+        $input = $this->buildConnectionInput('http://sp.example.com', 'saml20-sp', '');
+        $entityId = 'http://sp.example.com';
+        unset($input->$entityId->manipulation_code);
+
+        $roles = $this->assembler->assemble($input);
+
+        $this->assertCount(1, $roles);
+        $this->assertInstanceOf(ServiceProvider::class, $roles[0]);
+    }
+
+    public function test_it_rejects_manipulation_code_with_syntax_error()
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessageMatches('/Attribute manipulation code for entity "http:\/\/sp\.example\.com" contains a syntax error/');
+
+        $input = $this->buildConnectionInput('http://sp.example.com', 'saml20-sp', '$attributes["foo"] = ["bar"');
+
+        $this->assembler->assemble($input);
+    }
+
+    public function test_it_rejects_idp_manipulation_code_with_syntax_error()
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessageMatches('/Attribute manipulation code for entity "http:\/\/idp\.example\.com" contains a syntax error/');
+
+        $input = $this->buildConnectionInput('http://idp.example.com', 'saml20-idp', 'if ($foo {');
+
+        $this->assembler->assemble($input);
+    }
+
+    private function buildConnectionInput(string $entityId, string $type, string $manipulationCode): stdClass
+    {
+        $connection = new stdClass();
+        $entity = new stdClass();
+        $entity->allow_all_entities = true;
+        $entity->allowed_connections = [];
+        $entity->metadata = new stdClass();
+        $entity->name = $entityId;
+        $entity->state = 'prodaccepted';
+        $entity->type = $type;
+        $entity->manipulation_code = $manipulationCode;
+
+        if ($type === 'saml20-sp') {
+            $acs = new stdClass();
+            $acs->Binding = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST';
+            $acs->Location = 'https://sp.example.com/acs';
+            $entity->metadata->AssertionConsumerService = [$acs];
+        } else {
+            $sso = new stdClass();
+            $sso->Binding = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST';
+            $sso->Location = 'https://idp.example.com/sso';
+            $entity->metadata->SingleSignOnService = [$sso];
+        }
+
+        $connection->{$entityId} = $entity;
+        return $connection;
     }
 }

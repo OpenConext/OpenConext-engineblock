@@ -43,6 +43,7 @@ use OpenConext\EngineBlock\Metadata\X509\X509CertificateFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy;
 use OpenConext\EngineBlock\Validator\ValidatorInterface;
 use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
+use ParseError;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use stdClass;
@@ -317,6 +318,11 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:coin:signature_method'), 'signatureMethod');
         $properties += $this->setPathFromObjectBool(array($connection, 'metadata:redirect:sign'), 'requestsMustBeSigned');
         $properties += $this->setPathFromObjectString(array($connection, 'manipulation_code'), 'manipulation');
+
+        if (is_string($properties['manipulation']) && $properties['manipulation'] !== '') {
+            $this->validateManipulationCode((string)$connection->name, $properties['manipulation']);
+        }
+
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:url:en'), 'supportUrlEn');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:url:nl'), 'supportUrlNl');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:url:pt'), 'supportUrlPt');
@@ -637,5 +643,28 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         return [
             'mfaEntities' => MfaEntityCollection::fromMetadataPush($entities)
         ];
+    }
+
+    private function validateManipulationCode(string $entityId, string $code): void
+    {
+        if (trim($code) === '') {
+            return;
+        }
+
+        // token_get_all() is primarily a tokeniser, but passing TOKEN_PARSE makes PHP run a
+        // full parse pass and throw a ParseError on any syntax error — without executing the
+        // code. Using eval() would also surface syntax errors, but it would also execute valid
+        // code in an empty context, causing unpredictable side-effects or secondary errors.
+        try {
+            token_get_all('<?php ' . $code, TOKEN_PARSE);
+        } catch (ParseError $e) {
+            throw new RuntimeException(
+                sprintf(
+                    'Attribute manipulation code for entity "%s" contains a syntax error: %s',
+                    $entityId,
+                    $e->getMessage()
+                )
+            );
+        }
     }
 }
