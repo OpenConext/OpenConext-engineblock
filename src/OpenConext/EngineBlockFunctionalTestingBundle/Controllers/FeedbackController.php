@@ -114,7 +114,7 @@ class FeedbackController extends AbstractController
         $feedbackInfo = $request->get('feedback-info', $default);
 
         $feedbackInfo = json_decode($feedbackInfo, true);
-        if ($feedbackInfo['IdentityProvider'] || $feedbackInfo['IdP']) {
+        if (!empty($feedbackInfo['IdentityProvider']) || !empty($feedbackInfo['IdP'])) {
             $feedbackInfo['identityProviderName'] = 'OpenConext Identities Inc';
         }
 

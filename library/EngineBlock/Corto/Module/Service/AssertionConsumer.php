@@ -120,6 +120,14 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($issuer);
         }
 
+        // Store real and proxy SP in session so error screens display the correct SP name
+        if ($sp->getCoins()->isTrustedProxy()) {
+            $proxySp = $sp;
+            $sp = $this->_server->findOriginalServiceProvider($receivedRequest, $log);
+            $_SESSION['currentServiceProvider'] = $sp->entityId;
+            $_SESSION['proxyServiceProvider'] = $proxySp->entityId;
+        }
+
         // Verify the SP requester chain.
         EngineBlock_SamlHelper::getSpRequesterChain(
             $sp,
