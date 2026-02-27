@@ -33,6 +33,12 @@ services:
         depends_on:
             mariadb:
                 condition: service_healthy
+        # Ensure this container resolves engine.dev.openconext.local to itself.
+        # Without this, the OpenConext-devconf HAProxy on the same Docker network
+        # intercepts the hostname and routes Behat requests to the devconf engine
+        # instead of the engine under test.
+        extra_hosts:
+          - "engine.dev.openconext.local:127.0.0.1"
         environment:
           APP_ENV: ci
           APP_SECRET: secret
