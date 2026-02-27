@@ -10,6 +10,8 @@ doctrine:
                 port:     "%database.test.port%"
                 user:     "%database.test.user%"
                 password: "%database.test.password%"
+                options:
+                    !php/const PDO::ATTR_EMULATE_PREPARES: false
 #
 #parameters:
 #    database.test.host: 127.0.0.1

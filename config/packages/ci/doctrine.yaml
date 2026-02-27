@@ -10,6 +10,8 @@ doctrine:
                 port:     "%database.port%"
                 user:     "%database.user%"
                 password: "%database.password%"
+                options:
+                    !php/const PDO::ATTR_EMULATE_PREPARES: false
             engineblock_test:
                 driver:   pdo_mysql         # This must be PDO until all database interaction runs through doctrine
                 server_version: '10.6.0-MariaDB'
@@ -18,3 +20,5 @@ doctrine:
                 port:     "%database.test.port%"
                 user:     "%database.test.user%"
                 password: "%database.test.password%"
+                options:
+                    !php/const PDO::ATTR_EMULATE_PREPARES: false
