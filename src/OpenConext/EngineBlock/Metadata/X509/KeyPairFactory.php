@@ -26,7 +26,7 @@ class KeyPairFactory
 {
     const DEFAULT_KEY_PAIR_IDENTIFIER = 'default';
 
-    private $keyPairConfiguration = [];
+    private array $keyPairConfiguration = [];
 
     /**
      * @param array $keyPairConfiguration
@@ -42,7 +42,7 @@ class KeyPairFactory
      *
      * @throws RuntimeException
      */
-    public function buildFromIdentifier(?string $identifier) : X509KeyPair
+    public function buildFromIdentifier(?string $identifier): X509KeyPair
     {
         if ($identifier === null) {
             $identifier = self::DEFAULT_KEY_PAIR_IDENTIFIER;
@@ -56,5 +56,21 @@ class KeyPairFactory
             return new X509KeyPair($publicKey, $privateKey);
         }
         throw new UnknownKeyIdException($identifier);
+    }
+
+    /**
+     * @return array<X509KeyPair>
+     *
+     * @throws RuntimeException
+     */
+    public function buildAll(): array
+    {
+        $pairs = [];
+
+        foreach (array_keys($this->keyPairConfiguration) as $keyId) {
+            $pairs[] = $this->buildFromIdentifier((string)$keyId);
+        }
+
+        return $pairs;
     }
 }
