@@ -350,6 +350,55 @@ class ConnectionsControllerTest extends WebTestCase
         }
     }
 
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Connections')]
+    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function pushing_entity_with_invalid_manipulation_code_returns_bad_request()
+    {
+        $client = $this->createAuthorizedClient();
+
+        $payload = '{"connections":{"sp1":{
+            "allow_all_entities":true,
+            "allowed_connections":[],
+            "metadata":{"name":{"en":"Test SP"}},
+            "name":"https://sp.example.com",
+            "state":"prodaccepted",
+            "type":"saml20-sp",
+            "manipulation_code":"$attributes[\"foo\"] = [\"bar\""
+        }}}';
+
+        $client->request('POST', 'https://engine-api.dev.openconext.local/api/connections', [], [], [], $payload);
+
+        $this->assertStatusCode(Response::HTTP_BAD_REQUEST, $client);
+        $this->assertJson($client->getResponse()->getContent());
+        $message = json_decode($client->getResponse()->getContent());
+        $this->assertStringContainsString('https://sp.example.com', $message);
+    }
+
+    #[\PHPUnit\Framework\Attributes\Group('Api')]
+    #[\PHPUnit\Framework\Attributes\Group('Connections')]
+    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function pushing_entity_with_valid_manipulation_code_succeeds()
+    {
+        $client = $this->createAuthorizedClient();
+
+        $payload = '{"connections":{"sp1":{
+            "allow_all_entities":true,
+            "allowed_connections":[],
+            "metadata":{"name":{"en":"Test SP"}},
+            "name":"https://sp.example.com",
+            "state":"prodaccepted",
+            "type":"saml20-sp",
+            "manipulation_code":"$attributes[\"foo\"] = [\"bar\"];"
+        }}}';
+
+        $client->request('POST', 'https://engine-api.dev.openconext.local/api/connections', [], [], [], $payload);
+
+        $this->assertStatusCode(Response::HTTP_OK, $client);
+    }
+
     public static function invalidHttpMethodProvider()
     {
         return [
