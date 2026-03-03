@@ -103,8 +103,8 @@ class EngineBlock_Test_Corto_Module_Service_AssertionConsumerTest extends TestCa
 
         $this->assertSame(
             self::REAL_SP_ENTITY_ID,
-            $_SESSION['currentServiceProvider'],
-            'currentServiceProvider must be set to the real SP entity ID behind the trusted proxy'
+            $_SESSION['originalServiceProvider'],
+            'originalServiceProvider must be set to the real SP entity ID behind the trusted proxy'
         );
         $this->assertSame(
             self::PROXY_SP_ENTITY_ID,
@@ -128,9 +128,9 @@ class EngineBlock_Test_Corto_Module_Service_AssertionConsumerTest extends TestCa
         $this->runServe();
 
         $this->assertArrayNotHasKey(
-            'currentServiceProvider',
+            'originalServiceProvider',
             $_SESSION,
-            'currentServiceProvider must NOT be written when the SP is not a trusted proxy'
+            'originalServiceProvider must NOT be written when the SP is not a trusted proxy'
         );
         $this->assertArrayNotHasKey(
             'proxyServiceProvider',

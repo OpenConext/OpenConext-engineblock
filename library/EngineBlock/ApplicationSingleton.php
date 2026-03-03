@@ -249,9 +249,9 @@ class EngineBlock_ApplicationSingleton
 
         // @todo  reset this when login is succesful
         // Find the current identity provider
-        if (isset($_SESSION['currentServiceProvider'])) {
-            $feedbackInfo['serviceProvider'] = $_SESSION['currentServiceProvider'];
-            $spEntityId = $_SESSION['currentServiceProvider'];
+        $spEntityId = $_SESSION['originalServiceProvider'] ?? $_SESSION['currentServiceProvider'] ?? null;
+        if ($spEntityId !== null) {
+            $feedbackInfo['serviceProvider'] = $spEntityId;
             $feedbackInfo['serviceProviderName'] = $this->getServiceProviderName($spEntityId);
         }
 
