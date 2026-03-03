@@ -18,7 +18,6 @@
 
 namespace OpenConext\EngineBlock\Metadata\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
@@ -28,11 +27,16 @@ use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
+use OpenConext\EngineBlockBundle\Doctrine\Type\SerializedArrayType;
+use OpenConext\EngineBlockBundle\Doctrine\Type\SerializedObjectType;
 use RuntimeException;
 use SAML2\Constants;
 
 /**
  * Abstract base class for configuration entities.
+ *
+ * Note: This baseclass is extended by IdentityProvider and ServiceProvider. Both entities are stored in a single table.
+ * This means all columns defined in both subclasses are nullable by default, even if you pass 'nullable: false'.
  *
  * @package OpenConext\EngineBlock\Metadata\Entity
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -134,25 +138,25 @@ abstract class AbstractRole
      * @var Logo
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'logo', type: \Doctrine\DBAL\Types\Types::OBJECT)]
+    #[ORM\Column(name: 'logo', type: SerializedObjectType::NAME)]
     public $logo;
 
     /**
      * @var Organization
      */
-    #[ORM\Column(name: 'organization_nl_name', type: \Doctrine\DBAL\Types\Types::OBJECT, nullable: true, length: 65535)]
+    #[ORM\Column(name: 'organization_nl_name', type: SerializedObjectType::NAME, length: 65535, nullable: true)]
     public $organizationNl;
 
     /**
      * @var Organization
      */
-    #[ORM\Column(name: 'organization_en_name', type: \Doctrine\DBAL\Types\Types::OBJECT, nullable: true, length: 65535)]
+    #[ORM\Column(name: 'organization_en_name', type: SerializedObjectType::NAME, length: 65535, nullable: true)]
     public $organizationEn;
 
     /**
      * @var Organization
      */
-    #[ORM\Column(name: 'organization_pt_name', type: \Doctrine\DBAL\Types\Types::OBJECT, nullable: true, length: 65535)]
+    #[ORM\Column(name: 'organization_pt_name', type: SerializedObjectType::NAME, length: 65535, nullable: true)]
     public $organizationPt;
 
     /**
@@ -179,7 +183,7 @@ abstract class AbstractRole
     /**
      * @var X509Certificate[]
      */
-    #[ORM\Column(name: 'certificates', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
+    #[ORM\Column(name: 'certificates', type: SerializedArrayType::NAME, length: 65535)]
     public $certificates = array();
 
     /**
@@ -191,7 +195,7 @@ abstract class AbstractRole
     /**
      * @var ContactPerson[]
      */
-    #[ORM\Column(name: 'contact_persons', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
+    #[ORM\Column(name: 'contact_persons', type: SerializedArrayType::NAME, length: 65535)]
     public $contactPersons;
 
     /**
@@ -203,13 +207,13 @@ abstract class AbstractRole
     /**
      * @var string[]
      */
-    #[ORM\Column(name: 'name_id_formats', type: \Doctrine\DBAL\Types\Types::ARRAY, length: 65535)]
+    #[ORM\Column(name: 'name_id_formats', type: SerializedArrayType::NAME, length: 65535)]
     public $supportedNameIdFormats;
 
     /**
      * @var Service
      */
-    #[ORM\Column(name: 'single_logout_service', type: \Doctrine\DBAL\Types\Types::OBJECT, nullable: true, length: 65535)]
+    #[ORM\Column(name: 'single_logout_service', type: SerializedObjectType::NAME, length: 65535, nullable: true)]
     public $singleLogoutService;
 
     /**
