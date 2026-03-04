@@ -29,7 +29,6 @@ use OpenConext\EngineBlockBundle\Http\Response\JsonHelper;
 use OpenConext\Value\Exception\InvalidArgumentException;
 use OpenConext\Value\Saml\EntityId;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
@@ -72,9 +71,7 @@ final class MetadataController
         $this->metadataService      = $metadataService;
     }
 
-    /**
-     * @Route("/metadata/idp", name="api_metadata_idp", defaults={"_format"="json"})
-     */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/metadata/idp', name: 'api_metadata_idp', defaults: ['_format' => 'json'])]
     public function idpAction(Request $request)
     {
         if (!$request->isMethod(Request::METHOD_GET)) {
