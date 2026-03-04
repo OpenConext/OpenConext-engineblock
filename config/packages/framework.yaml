@@ -19,7 +19,7 @@ framework:
             - '%kernel.project_dir%/theme/%theme.name%/translations'
     form: ~
     csrf_protection: ~
-    validation: { enable_annotations: true }
+    validation: { enable_attributes: true }
     default_locale: "%locale%"
     trusted_hosts: ~
 

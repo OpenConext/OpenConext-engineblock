@@ -1,6 +1,6 @@
 engineblock_controllers:
     resource: '../src/OpenConext/EngineBlockBundle/Controller/'
-    type: annotation
+    type: attribute
     host: "engine.{domain}"
     requirements:
         domain: ".*"
@@ -9,7 +9,7 @@ engineblock_controllers:
 
 engineblock_api_controllers:
     resource: '../src/OpenConext/EngineBlockBundle/Controller/Api'
-    type: annotation
+    type: attribute
     host: "engine-api.{domain}"
     requirements:
         domain: ".*"

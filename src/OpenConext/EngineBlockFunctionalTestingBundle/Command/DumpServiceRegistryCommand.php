@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Command;
 
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -27,14 +28,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Dump the contents of the (fake) Service Registry
  */
+#[AsCommand(name: 'engineblock:dump:sr', description: 'Find all sessions from log output on STDIN or for a given file', aliases: ['dump:sr'])]
 class DumpServiceRegistryCommand extends Command
 {
     protected function configure()
     {
         $this
-            ->setName('engineblock:dump:sr')
-            ->setAliases(['dump:sr'])
-            ->setDescription('Find all sessions from log output on STDIN or for a given file')
             ->addArgument('file', InputArgument::OPTIONAL, 'File to get sessions from.');
     }
 

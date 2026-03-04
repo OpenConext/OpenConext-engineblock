@@ -21,7 +21,6 @@ namespace OpenConext\EngineBlockBundle\Controller;
 use OpenConext\EngineBlock\Service\SsoSessionService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
 /**
@@ -49,9 +48,8 @@ class LogoutController
      * Keep in mind that SF is set to be stateless. The EngineBlock application
      * manages the sessions (for now). Therefore we destroy these the same way
      * as is being done in EB4
-     *
-     * @Route("/logout", name="authentication_logout", methods={"GET", "POST"})
      */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/logout', name: 'authentication_logout', methods: ['GET', 'POST'])]
     public function logoutAction(Request $request)
     {
         $response = new Response($this->twig->render('@theme/Logout/View/Index/index.html.twig'));
