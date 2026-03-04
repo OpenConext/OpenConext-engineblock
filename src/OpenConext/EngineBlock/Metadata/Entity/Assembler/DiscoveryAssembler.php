@@ -65,7 +65,7 @@ class DiscoveryAssembler
             }
         }
 
-        return array_filter(array_map('trim', $fields));
+        return array_filter(array_map(trim(...), $fields));
     }
 
     private function assembleLogo(stdClass $discovery): ?Logo
