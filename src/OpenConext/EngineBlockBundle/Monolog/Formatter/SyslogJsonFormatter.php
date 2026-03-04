@@ -31,9 +31,7 @@ class SyslogJsonFormatter extends JsonFormatter
     {
         return parent::formatBatch(
             array_map(
-                function (array $record) {
-                    return $this->mapRecord($record);
-                },
+                $this->mapRecord(...),
                 $records
             )
         );

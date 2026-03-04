@@ -52,26 +52,26 @@ class Metadata extends AbstractExtension
         return [
             new TwigFunction(
                 'sortByDisplayOrder',
-                [$this, 'sortByDisplayOrder'],
+                $this->sortByDisplayOrder(...),
                 ['is_safe' => ['html']]
             ),
             new TwigFunction(
                 'attributeSourceLogoUrl',
-                [$this, 'getAttributeSourceLogoUrl']
+                $this->getAttributeSourceLogoUrl(...)
             ),
             new TwigFunction(
                 'attributeSourceDisplayName',
-                [$this, 'getAttributeSourceDisplayName'],
+                $this->getAttributeSourceDisplayName(...),
                 ['is_safe' => ['html']]
             ),
             new TwigFunction(
                 'attributeShortName',
-                [$this, 'getAttributeShortName'],
+                $this->getAttributeShortName(...),
                 ['is_safe' => ['html']]
             ),
             new TwigFunction(
                 'attributeName',
-                [$this, 'getAttributeName'],
+                $this->getAttributeName(...),
                 ['is_safe' => ['html']]
             ),
         ];

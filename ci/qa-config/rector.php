@@ -29,7 +29,6 @@ return RectorConfig::configure()
         \Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector::class,
         \Rector\Php80\Rector\Switch_\ChangeSwitchToMatchRector::class,
         \Rector\Php80\Rector\FuncCall\ClassOnObjectRector::class,
-        \Rector\Php81\Rector\Array_\FirstClassCallableRector::class,
         \Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector::class,
         \Rector\Php81\Rector\Property\ReadOnlyPropertyRector::class,
         \Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector::class,

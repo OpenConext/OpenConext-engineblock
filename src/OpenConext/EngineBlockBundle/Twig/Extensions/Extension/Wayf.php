@@ -53,15 +53,15 @@ class Wayf extends AbstractExtension
         return [
             new TwigFunction(
                 'wayfConfig',
-                [$this, 'getWayfJsonConfig']
+                $this->getWayfJsonConfig(...)
             ),
             new TwigFunction(
                 'connectedIdps',
-                [$this, 'getConnectedIdps']
+                $this->getConnectedIdps(...)
             ),
             new TwigFunction(
                 'idpDiscoveryHash',
-                [$this, 'idpDiscoveryHash']
+                $this->idpDiscoveryHash(...)
             ),
 
         ];
@@ -127,9 +127,7 @@ class Wayf extends AbstractExtension
     private function formatIdpList(array $idpList): array
     {
         return array_map(
-            function (array $idp) {
-                return $this->formatIdpEntry($idp);
-            },
+            $this->formatIdpEntry(...),
             $idpList
         );
     }
