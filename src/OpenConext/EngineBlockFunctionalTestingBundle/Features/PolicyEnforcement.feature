@@ -80,6 +80,19 @@ Feature:
     And I should see "Error - Access denied"
     And I should see "Message from your organisation:"
 
+  Scenario: Error page shows the end-SP name, not the trusted proxy name
+    Given SP "Stepup SelfService" requires a policy enforcement decision
+    And SP "Stepup Gateway" is authenticating for SP "Stepup SelfService"
+    And SP "Stepup Gateway" is a trusted proxy
+    And SP "Stepup Gateway" signs its requests
+    And pdp gives a deny response
+    When I log in at "Stepup Gateway"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then I should see "Error - Access denied"
+    And I should see "Stepup SelfService"
+    And I should not see "Stepup Gateway"
+
   Scenario: Access is denied because of an Indeterminate policy, End-SP behind Trusted Proxy
     Given SP "Stepup SelfService" requires a policy enforcement decision
     And SP "Stepup Gateway" is authenticating for SP "Stepup SelfService"
