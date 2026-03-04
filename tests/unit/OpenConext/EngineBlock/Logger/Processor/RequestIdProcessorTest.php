@@ -20,6 +20,8 @@ namespace OpenConext\EngineBlock\Logger\Processor;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use Monolog\Level;
+use Monolog\LogRecord;
 use OpenConext\EngineBlock\Request\RequestId;
 use PHPUnit\Framework\TestCase;
 
@@ -43,10 +45,17 @@ class RequestIdProcessorTest extends TestCase
         $requestId = new RequestId($requestIdGenerator);
 
         $requestIdProcessor = new RequestIdProcessor($requestId);
-        $record = ['extra' => []];
+        $record = new LogRecord(
+            datetime: new \DateTimeImmutable(),
+            channel: 'test',
+            level: Level::Debug,
+            message: 'test message',
+            context: [],
+            extra: [],
+        );
 
-        $processedRecord = $requestIdProcessor->processRecord($record);
+        $processedRecord = ($requestIdProcessor)($record);
 
-        $this->assertEquals($requestIdValue, $processedRecord['extra']['request_id']);
+        $this->assertEquals($requestIdValue, $processedRecord->extra['request_id']);
     }
 }

@@ -11,7 +11,7 @@ return RectorConfig::configure()
     ])
     ->withPhpSets()
     ->withComposerBased(doctrine: true, phpunit: true, symfony: true)
-    ->withAttributesSets(symfony: false, doctrine: true, phpunit: true)
+    ->withAttributesSets(symfony: true, doctrine: true, phpunit: true)
     ->withSkip([
         \Rector\Php53\Rector\Ternary\TernaryToElvisRector::class,
         \Rector\Php54\Rector\Array_\LongArrayToShortArrayRector::class,

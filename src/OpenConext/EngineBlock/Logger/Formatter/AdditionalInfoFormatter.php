@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlock\Logger\Formatter;
 
 use EngineBlock_Exception;
 use Monolog\Formatter\FormatterInterface;
+use Monolog\LogRecord;
 use OpenConext\EngineBlock\Logger\Message\AdditionalInfo;
 
 final class AdditionalInfoFormatter implements FormatterInterface
@@ -34,7 +35,7 @@ final class AdditionalInfoFormatter implements FormatterInterface
         $this->formatter = $formatter;
     }
 
-    public function format(array $record): mixed
+    public function format(LogRecord $record): mixed
     {
         return $this->formatter->format($this->addAdditionalInfoForEngineBlockExceptions($record));
     }
@@ -49,10 +50,10 @@ final class AdditionalInfoFormatter implements FormatterInterface
     }
 
     /**
-     * @param array $record
-     * @return array
+     * @param LogRecord $record
+     * @return LogRecord
      */
-    private function addAdditionalInfoForEngineBlockExceptions(array $record)
+    private function addAdditionalInfoForEngineBlockExceptions(LogRecord $record): LogRecord
     {
         if (!isset($record['context']['exception'])) {
             return $record;
@@ -63,8 +64,9 @@ final class AdditionalInfoFormatter implements FormatterInterface
             return $record;
         }
 
-        $record['context']['exception'] = AdditionalInfo::createFromException($exception)->toArray();
+        $context = $record->context;
+        $context['exception'] = AdditionalInfo::createFromException($exception)->toArray();
 
-        return $record;
+        return $record->with(context: $context);
     }
 }
