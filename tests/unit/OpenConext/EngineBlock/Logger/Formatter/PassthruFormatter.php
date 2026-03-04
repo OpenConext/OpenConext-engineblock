@@ -19,10 +19,11 @@
 namespace OpenConext\EngineBlock\Logger\Formatter;
 
 use Monolog\Formatter\FormatterInterface;
+use Monolog\LogRecord;
 
 class PassthruFormatter implements FormatterInterface
 {
-    public function format(array $record)
+    public function format(LogRecord $record): mixed
     {
         return $record;
     }

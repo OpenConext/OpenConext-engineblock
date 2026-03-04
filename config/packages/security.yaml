@@ -14,7 +14,7 @@ security:
                         roles: 'ROLE_API_USER_DEPROVISION'
 
     password_hashers:
-        Symfony\Component\Security\Core\User\User: plaintext
+        Symfony\Component\Security\Core\User\InMemoryUser: plaintext
 
     firewalls:
         dev:

@@ -21,6 +21,8 @@ namespace OpenConext\EngineBlock\Logger\Formatter;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use EngineBlock_Exception;
 use Exception;
+use Monolog\Level;
+use Monolog\LogRecord;
 use PHPUnit\Framework\TestCase;
 
 class AdditionalInfoFormatterTest extends TestCase
@@ -35,7 +37,13 @@ class AdditionalInfoFormatterTest extends TestCase
         $exception = new EngineBlock_Exception('message', EngineBlock_Exception::CODE_EMERGENCY);
 
         $formatter = new AdditionalInfoFormatter(new PassthruFormatter());
-        $formatted = $formatter->format(['context' => ['exception' => $exception]]);
+        $formatted = $formatter->format(new LogRecord(
+            datetime: new \DateTimeImmutable(),
+            channel: 'test',
+            level: Level::Emergency,
+            message: 'test',
+            context: ['exception' => $exception],
+        ));
 
         $this->assertTrue(
             is_array($formatted['context']['exception']),
@@ -56,7 +64,13 @@ class AdditionalInfoFormatterTest extends TestCase
         $exception = new EngineBlock_Exception('message');
 
         $formatter = new AdditionalInfoFormatter(new PassthruFormatter());
-        $formatted = $formatter->formatBatch([['context' => ['exception' => $exception]]]);
+        $formatted = $formatter->formatBatch([new LogRecord(
+            datetime: new \DateTimeImmutable(),
+            channel: 'test',
+            level: Level::Error,
+            message: 'test',
+            context: ['exception' => $exception],
+        )]);
 
         $this->assertTrue(
             is_array($formatted[0]['context']['exception']),
@@ -77,7 +91,13 @@ class AdditionalInfoFormatterTest extends TestCase
         $exception = new Exception('message');
 
         $formatter = new AdditionalInfoFormatter(new PassthruFormatter());
-        $formatted = $formatter->format(['context' => ['exception' => $exception]]);
+        $formatted = $formatter->format(new LogRecord(
+            datetime: new \DateTimeImmutable(),
+            channel: 'test',
+            level: Level::Error,
+            message: 'test',
+            context: ['exception' => $exception],
+        ));
 
         $this->assertEquals($exception, $formatted['context']['exception']);
     }

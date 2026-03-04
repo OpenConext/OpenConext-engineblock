@@ -18,15 +18,14 @@
 
 namespace OpenConext\EngineBlock\Logger\Processor;
 
-final class SessionIdProcessor
+use Monolog\LogRecord;
+use Monolog\Processor\ProcessorInterface;
+
+final class SessionIdProcessor implements ProcessorInterface
 {
-    /**
-     * @param array $record
-     * @return array
-     */
-    public function processRecord(array $record)
+    public function __invoke(LogRecord $record): LogRecord
     {
-        $record['extra']['session_id'] = session_id() ?: null;
+        $record->extra['session_id'] = session_id() ?: null;
 
         return $record;
     }
