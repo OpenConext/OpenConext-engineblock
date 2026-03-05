@@ -22,7 +22,7 @@ class EngineBlock_Corto_Filter_Command_NormalizeAttributes extends EngineBlock_C
     /**
      * {@inheritdoc}
      */
-    public function getResponseAttributes()
+    public function getResponseAttributes(): array
     {
         return $this->_responseAttributes;
     }

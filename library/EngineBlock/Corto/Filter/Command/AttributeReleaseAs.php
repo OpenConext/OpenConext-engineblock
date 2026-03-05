@@ -19,7 +19,7 @@
 class EngineBlock_Corto_Filter_Command_AttributeReleaseAs extends EngineBlock_Corto_Filter_Command_Abstract implements
     EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
 {
-    public function getResponseAttributes()
+    public function getResponseAttributes(): array
     {
         return $this->_responseAttributes;
     }

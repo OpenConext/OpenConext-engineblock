@@ -53,7 +53,7 @@ class EngineBlock_Corto_Filter_Command_AddIdentityAttributes extends EngineBlock
     /**
      * {@inheritdoc}
      */
-    public function getResponseAttributes()
+    public function getResponseAttributes(): array
     {
         return $this->_responseAttributes;
     }
