@@ -197,7 +197,6 @@ class EngineBlockContext extends AbstractSubContext
     public function iPassThroughEngineblock()
     {
         $mink = $this->getMinkContext();
-
         $mink->pressButton('Submit');
     }
 

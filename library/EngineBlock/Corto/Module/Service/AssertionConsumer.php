@@ -120,6 +120,16 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($issuer);
         }
 
+        // When the SP is a trusted proxy (e.g. stepup-gateway), we look up the original SP on whose behalf the proxy
+        // is acting. We overwrite $sp so that downstream processing (attribute release, policy, consent) applies to
+        // the original SP, and we store both entity IDs in the session so error pages display the correct SP name.
+        if ($sp->getCoins()->isTrustedProxy()) {
+            $proxySp = $sp;
+            $sp = $this->_server->findOriginalServiceProvider($receivedRequest, $log);
+            $_SESSION['originalServiceProvider'] = $sp->entityId;
+            $_SESSION['proxyServiceProvider'] = $proxySp->entityId;
+        }
+
         // Verify the SP requester chain.
         EngineBlock_SamlHelper::getSpRequesterChain(
             $sp,

@@ -19,6 +19,7 @@
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use Psr\Log\LoggerInterface;
 
 class EngineBlock_SamlHelper
 {
@@ -90,7 +91,7 @@ class EngineBlock_SamlHelper
         ServiceProvider $serviceProvider,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
         MetadataRepositoryInterface $repository,
-        \Psr\Log\LoggerInterface $logger = null
+        LoggerInterface $logger = null
     ) {
         if (!$serviceProvider->getCoins()->isTrustedProxy()) {
             return null;
@@ -119,7 +120,7 @@ class EngineBlock_SamlHelper
         // The filters will log any additional information that is available.
         $lastRequesterEntity = $repository->findServiceProviderByEntityId($lastRequesterEntityId, $logger);
         if (!$lastRequesterEntity) {
-            $_SESSION['currentServiceProvider'] = $lastRequesterEntityId;
+            $_SESSION['originalServiceProvider'] = $lastRequesterEntityId;
             $_SESSION['proxyServiceProvider'] = $serviceProvider->entityId;
             throw new EngineBlock_Exception_UnknownServiceProvider(
                 'Invalid RequesterID specified',

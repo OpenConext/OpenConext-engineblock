@@ -176,10 +176,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
 
         // 0 IdPs found! Throw an exception.
         if (count($candidateIDPs) === 0) {
-            // When a trusted proxy is used, the currentServiceProvider is set to the entityId of the original issuing
+            // When a trusted proxy is used, the originalServiceProvider is set to the entityId of the original issuing
             // SP. This prevents the display of the Proxy in the feedback information.
             if (isset($proxySp) && $proxySp->getCoins()->isTrustedProxy()) {
-                $_SESSION['currentServiceProvider'] = $sp->entityId;
+                $_SESSION['originalServiceProvider'] = $sp->entityId;
                 $_SESSION['proxyServiceProvider'] = $proxySp->entityId;
             }
             throw new EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException('No candidate IdPs found');
