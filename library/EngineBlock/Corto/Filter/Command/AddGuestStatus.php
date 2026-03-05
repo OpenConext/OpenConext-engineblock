@@ -30,7 +30,7 @@ class EngineBlock_Corto_Filter_Command_AddGuestStatus extends EngineBlock_Corto_
     /**
      * {@inheritdoc}
      */
-    public function getResponseAttributes()
+    public function getResponseAttributes(): array
     {
         return $this->_responseAttributes;
     }

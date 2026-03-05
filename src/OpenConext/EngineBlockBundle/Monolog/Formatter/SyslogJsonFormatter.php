@@ -19,34 +19,18 @@
 namespace OpenConext\EngineBlockBundle\Monolog\Formatter;
 
 use Monolog\Formatter\JsonFormatter;
+use Monolog\LogRecord;
 
 class SyslogJsonFormatter extends JsonFormatter
 {
-    public function format(array $record): string
-    {
-        return parent::format($this->mapRecord($record));
-    }
-
-    public function formatBatch(array $records): string
-    {
-        return parent::formatBatch(
-            array_map(
-                function (array $record) {
-                    return $this->mapRecord($record);
-                },
-                $records
-            )
-        );
-    }
-
-    private function mapRecord(array $record)
+    protected function normalizeRecord(LogRecord $record): array
     {
         return [
-            'channel' => $record['channel'],
-            'level'   => $record['level_name'],
-            'message' => $record['message'],
-            'context' => $record['context'],
-            'extra'   => $record['extra'],
+            'channel' => $record->channel,
+            'level'   => $record->level->getName(),
+            'message' => $record->message,
+            'context' => $record->context,
+            'extra'   => $record->extra,
         ];
     }
 }

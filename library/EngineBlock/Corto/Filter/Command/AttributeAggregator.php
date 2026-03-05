@@ -70,9 +70,9 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
     /**
      * {@inhericdoc}
      */
-    public function getResponseAttributes()
+    public function getResponseAttributes(): array
     {
-        return (array) $this->_responseAttributes;
+        return $this->_responseAttributes;
     }
 
     /**

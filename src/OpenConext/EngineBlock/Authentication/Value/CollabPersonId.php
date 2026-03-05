@@ -32,10 +32,7 @@ final class CollabPersonId
      */
     const MAX_LENGTH = 255;
 
-    /**
-     * @var string
-     */
-    private $collabPersonId;
+    private string $collabPersonId;
 
     /**
      * This method provides compatibility between EB versions and existing SPs.
@@ -82,10 +79,7 @@ final class CollabPersonId
         $this->collabPersonId = $collabPersonId;
     }
 
-    /**
-     * @return string
-     */
-    public function getCollabPersonId()
+    public function getCollabPersonId(): string
     {
         return $this->collabPersonId;
     }

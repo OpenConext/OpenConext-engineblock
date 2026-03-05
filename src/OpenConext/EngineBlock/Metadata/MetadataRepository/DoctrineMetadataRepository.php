@@ -90,7 +90,7 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
 
         $this->compositeFilter->toQueryBuilder($queryBuilder, $this->idpRepository->getClassName());
 
-        return array_map('current', $queryBuilder->getQuery()->execute(null, AbstractQuery::HYDRATE_ARRAY));
+        return array_map(current(...), $queryBuilder->getQuery()->execute(null, AbstractQuery::HYDRATE_ARRAY));
     }
 
     /**

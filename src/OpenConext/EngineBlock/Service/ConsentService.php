@@ -72,7 +72,7 @@ final class ConsentService implements ConsentServiceInterface
             );
         }
 
-        return new ConsentList(array_filter(array_map([$this, 'createConsentDtoFromConsentEntity'], $consents)));
+        return new ConsentList(array_filter(array_map($this->createConsentDtoFromConsentEntity(...), $consents)));
     }
 
     /**

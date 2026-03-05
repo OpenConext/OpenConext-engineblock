@@ -26,7 +26,6 @@ use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Routing\Annotation\Route;
 
 class DebugController implements AuthenticationLoopThrottlingController
 {
@@ -48,9 +47,7 @@ class DebugController implements AuthenticationLoopThrottlingController
         $this->session = $requestStack->getSession();
     }
 
-    /**
-     * @Route("/authentication/sp/debug", name="authentication_sp_debug", methods={"GET","POST"})
-     */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/authentication/sp/debug', name: 'authentication_sp_debug', methods: ['GET', 'POST'])]
     public function debugSpConnectionAction()
     {
         $proxyServer = new EngineBlock_Corto_Adapter();

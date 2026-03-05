@@ -11,7 +11,7 @@ return RectorConfig::configure()
     ])
     ->withPhpSets()
     ->withComposerBased(doctrine: true, phpunit: true, symfony: true)
-    ->withAttributesSets(symfony: false, doctrine: true, phpunit: true)
+    ->withAttributesSets(symfony: true, doctrine: true, phpunit: true)
     ->withSkip([
         \Rector\Php53\Rector\Ternary\TernaryToElvisRector::class,
         \Rector\Php54\Rector\Array_\LongArrayToShortArrayRector::class,
@@ -29,7 +29,6 @@ return RectorConfig::configure()
         \Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector::class,
         \Rector\Php80\Rector\Switch_\ChangeSwitchToMatchRector::class,
         \Rector\Php80\Rector\FuncCall\ClassOnObjectRector::class,
-        \Rector\Php81\Rector\Array_\FirstClassCallableRector::class,
         \Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector::class,
         \Rector\Php81\Rector\Property\ReadOnlyPropertyRector::class,
         \Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector::class,

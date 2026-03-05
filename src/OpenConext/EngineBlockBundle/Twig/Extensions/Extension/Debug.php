@@ -29,8 +29,8 @@ class Debug extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('var_export', [$this, 'varExport']),
-            new TwigFunction('print_r', [$this, 'printHumanReadable']),
+            new TwigFunction('var_export', $this->varExport(...)),
+            new TwigFunction('print_r', $this->printHumanReadable(...)),
         ];
     }
 

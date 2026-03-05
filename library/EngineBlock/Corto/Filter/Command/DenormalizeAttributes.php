@@ -22,7 +22,7 @@ class EngineBlock_Corto_Filter_Command_DenormalizeAttributes extends EngineBlock
     /**
      * {@inheritdoc}
      */
-    public function getResponseAttributes()
+    public function getResponseAttributes(): array
     {
         return $this->_responseAttributes;
     }

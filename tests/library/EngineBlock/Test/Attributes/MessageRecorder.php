@@ -23,7 +23,7 @@ class EngineBlock_Test_Attributes_MessageRecorder extends Psr\Log\AbstractLogger
      */
     public $messages = array();
 
-    public function log($level, $message, array $context = array())
+    public function log($level, string|\Stringable $message, array $context = []): void
     {
         $this->messages[] = array(
             'level'   => $level,

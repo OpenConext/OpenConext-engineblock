@@ -37,8 +37,8 @@ class I18n extends AbstractExtension
     public function getFilters()
     {
         return [
-            new TwigFilter('trans', [$this, 'translateSingular']),
-            new TwigFilter('transchoice', [$this, 'translatePlural']),
+            new TwigFilter('trans', $this->translateSingular(...)),
+            new TwigFilter('transchoice', $this->translatePlural(...)),
         ];
     }
 

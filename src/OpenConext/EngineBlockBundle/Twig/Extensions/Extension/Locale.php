@@ -54,10 +54,10 @@ class Locale extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('locale', [$this, 'getLocale']),
-            new TwigFunction('postData', [$this, 'getPostData']),
-            new TwigFunction('queryStringFor', [$this, 'getQueryStringFor']),
-            new TwigFunction('supportedLocales', [$this, 'getSupportedLocales']),
+            new TwigFunction('locale', $this->getLocale(...)),
+            new TwigFunction('postData', $this->getPostData(...)),
+            new TwigFunction('queryStringFor', $this->getQueryStringFor(...)),
+            new TwigFunction('supportedLocales', $this->getSupportedLocales(...)),
 
         ];
     }

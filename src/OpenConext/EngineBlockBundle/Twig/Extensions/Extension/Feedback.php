@@ -68,17 +68,17 @@ class Feedback extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('feedbackInfo', [$this, 'getFeedbackInfo']),
-            new TwigFunction('flushLog', [$this, 'flushLog']),
-            new TwigFunction('hasBackToSpLink', [$this, 'hasBackToSpLink']),
-            new TwigFunction('hasWikiLink', [$this, 'hasWikiLink']),
-            new TwigFunction('getWikiLink', [$this, 'getWikiLink']),
-            new TwigFunction('hasIdPContactMailLink', [$this, 'hasIdPContactMailLink']),
-            new TwigFunction('getIdPContactMailLink', [$this, 'getIdPContactMailLink']),
-            new TwigFunction('getIdpContactShortLabel', [$this, 'getIdpContactShortLabel']),
-            new TwigFunction('getSpName', [$this, 'getSpName']),
-            new TwigFunction('getAcu', [$this, 'getAcu']),
-            new TwigFunction('getSamlFailedResponse', [$this, 'getSamlFailedResponse']),
+            new TwigFunction('feedbackInfo', $this->getFeedbackInfo(...)),
+            new TwigFunction('flushLog', $this->flushLog(...)),
+            new TwigFunction('hasBackToSpLink', $this->hasBackToSpLink(...)),
+            new TwigFunction('hasWikiLink', $this->hasWikiLink(...)),
+            new TwigFunction('getWikiLink', $this->getWikiLink(...)),
+            new TwigFunction('hasIdPContactMailLink', $this->hasIdPContactMailLink(...)),
+            new TwigFunction('getIdPContactMailLink', $this->getIdPContactMailLink(...)),
+            new TwigFunction('getIdpContactShortLabel', $this->getIdpContactShortLabel(...)),
+            new TwigFunction('getSpName', $this->getSpName(...)),
+            new TwigFunction('getAcu', $this->getAcu(...)),
+            new TwigFunction('getSamlFailedResponse', $this->getSamlFailedResponse(...)),
         ];
     }
 

@@ -25,7 +25,7 @@
     <!-- legacy code style support -->
     <rule ref="PSR2">
         <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
-        <exclude name="Squiz.Classes.ValidClassName.NotCamelCaps"/>
+        <exclude name="Squiz.Classes.ValidClassName.NotPascalCase"/>
         <exclude name="PSR2.Classes.PropertyDeclaration.Underscore"/>
         <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
         <exclude name="Generic.Files.LineLength.TooLong"/>
