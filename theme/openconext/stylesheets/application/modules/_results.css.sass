@@ -1,3 +1,7 @@
+@use "../../../../base/stylesheets/mixins"
+@use "../../shared/vars.css.sass" as vars
+@use "../../shared/utilities/placeholders.css.sass"
+
 .idp-picker
   &.hidden
     display: none
@@ -7,14 +11,14 @@
   overflow: hidden
   margin-bottom: 2rem
 
-  +max-width($medium)
+  +mixins.max-width(vars.$medium)
     margin-bottom: 1rem
 
   header
-    background: rgba($border,.5)
+    background: rgba(vars.$border,.5)
     padding: .75rem 1.25rem
-    color: $medium-grey
-    border-bottom: 1px solid $border
+    color: vars.$medium-grey
+    border-bottom: 1px solid vars.$border
 
     a
       float: right
@@ -25,24 +29,24 @@
     padding: .75rem 1.25rem
     align-items: center
     text-decoration: none
-    border-bottom: 1px solid $border
+    border-bottom: 1px solid vars.$border
 
     *
       pointer-events: none
 
     &.focussed
       outline: none
-      background: $blue
+      background: vars.$blue
       color: #fff
-      border-bottom: 1px solid $blue
+      border-bottom: 1px solid vars.$blue
 
     // Display buttons under text
-    +max-width($medium)
+    +mixins.max-width(vars.$medium)
       flex-direction: column
       align-items: flex-start
 
     // Display buttonon focus
-    +min-width($medium)
+    +mixins.min-width(vars.$medium)
       &.focus,
       &.focussed
         .action
@@ -52,8 +56,8 @@
     display: flex
     padding: 0.75rem 1.25rem
     align-items: center
-    color: $medium-grey
-    border-bottom: 1px solid $border
+    color: vars.$medium-grey
+    border-bottom: 1px solid vars.$border
 
     img
       max-width: 1.5rem !important
@@ -79,15 +83,15 @@
       border-radius: 1.5rem
       margin: auto
 
-    +max-width($medium)
+    +mixins.max-width(vars.$medium)
       display: none
 
   .fa
-    color: $darkest-blue
+    color: vars.$darkest-blue
 
   // Default displaying for the button
   .action
-    +max-width($medium)
+    +mixins.max-width(vars.$medium)
       display: none
     margin-left: auto
 
@@ -102,7 +106,7 @@
   // Styling for remove list
   .remove-list
     .result
-      +max-width($medium)
+      +mixins.max-width(vars.$medium)
         flex-direction: row
         align-items: center
 

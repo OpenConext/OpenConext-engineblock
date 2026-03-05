@@ -11,10 +11,10 @@
     You also need to import these at the start of each file that uses a variable/mixin/general class.
  ******************************************************************/
 
-@import 'normalize';
-@import 'breakpoints';
-@import 'classes';
-@import 'fonts';
-@import 'functions';
-@import 'mixins';
-@import 'variables';
+@use 'normalize';
+@use 'breakpoints';
+@use 'classes';
+@use 'fonts';
+@use 'functions';
+@use 'mixins';
+@use 'variables';

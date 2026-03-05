@@ -17,12 +17,11 @@
  */
 
 use OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy;
-use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\EntityNotFoundException;
 use OpenConext\EngineBlock\Request\RequestId;
+use OpenConext\EngineBlockBundle\Bridge\DiContainerRuntime;
 use OpenConext\EngineBlockBundle\Exception\Art;
 use Psr\Log\LoggerInterface;
-use SAML2\XML\saml\Issuer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 define('ENGINEBLOCK_FOLDER_ROOT'       , realpath(__DIR__ . '/../../') . '/');
@@ -80,6 +79,8 @@ class EngineBlock_ApplicationSingleton
      */
     protected $_diContainer;
 
+    protected ?DiContainerRuntime $_diContainerRuntime = null;
+
     /**
      * @var ManualOrDecoratedActivationStrategy
      */
@@ -107,6 +108,20 @@ class EngineBlock_ApplicationSingleton
         }
 
         return self::$s_instance;
+    }
+
+    public function setDiContainerRuntime(DiContainerRuntime $diContainerRuntime): void
+    {
+        $this->_diContainerRuntime = $diContainerRuntime;
+    }
+
+    public function getDiContainerRuntime(): DiContainerRuntime
+    {
+        if ($this->_diContainerRuntime === null) {
+            throw new RuntimeException('The DiContainerRuntime is not ready yet!');
+        }
+
+        return $this->_diContainerRuntime;
     }
 
     /**

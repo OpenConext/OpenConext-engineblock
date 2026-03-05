@@ -1,0 +1,11 @@
+{
+  "compress": {
+    "passes": 2,
+    "inline": 1,
+    "dead_code": true,
+    "unused": false,
+    "reduce_funcs": false,
+    "reduce_vars": false
+  },
+  "mangle": true
+}

@@ -2,11 +2,11 @@
     CSS specific to the WAYF page
  ******************************************************************/
 
-@import '../helpers';
-@import './wayf/backLink';
-@import './wayf/content';
-@import './wayf/idpList';
-@import './wayf/noAccess';
-@import './wayf/noResults';
-@import './wayf/previousSelection';
-@import './wayf/remainingIdps';
+@use '../helpers';
+@use 'wayf/backLink';
+@use 'wayf/content';
+@use 'wayf/idpList';
+@use 'wayf/noAccess';
+@use 'wayf/noResults';
+@use 'wayf/previousSelection';
+@use 'wayf/remainingIdps';

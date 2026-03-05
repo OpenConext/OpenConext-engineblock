@@ -1,18 +1,21 @@
+@use "../../../variables" as vars;
+@use "../../../breakpoints" as breakpoints;
+
 .error-title {
     text-align: center;
     width: 100%;
 
     &__heading {
-        color: $contrastBlue2;
-        font-size: $f-xxl;
+        color: vars.$contrastBlue2;
+        font-size: vars.$f-xxl;
         font-weight: bold;
-        line-height: $f-xxl + 5;
+        line-height: vars.$f-xxl + 5;
         word-break: break-word;
     }
 
     &__error-message {
-        color: $darkGrey;
-        font-size: $f-large;
+        color: vars.$darkGrey;
+        font-size: vars.$f-large;
         font-weight: bold;
         line-height: 1.5em;
         text-align: left;
@@ -27,7 +30,7 @@
     h2 {
         line-height: 3em;
 
-        @include screen('mobile') {
+        @include breakpoints.screen('mobile') {
             line-height: 1.5em;
         }
     }

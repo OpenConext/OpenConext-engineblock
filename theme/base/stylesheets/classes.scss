@@ -2,18 +2,18 @@
     Generic reusable classes.
     Page-specific classes do not belong here.
  ******************************************************************/
-@import 'variables';
-@import 'breakpoints';
-@import 'mixins';
+@use 'variables';
+@use 'breakpoints';
+@use 'mixins';
 
 .visually-hidden {
-    @include visually-hidden;
+    @include mixins.visually-hidden;
 }
 
 .container {
     width: 40rem;
 
-    @include screen('mobile') {
+    @include breakpoints.screen('mobile') {
         width: 100%;
     }
 }
@@ -28,7 +28,7 @@
 
     .modal__content {
         background-color: inherit;
-        font-weight: $normal;
+        font-weight: variables.$normal;
         padding: 1rem;
 
         > h3 {

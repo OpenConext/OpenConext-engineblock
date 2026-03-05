@@ -1,3 +1,7 @@
+@use "../../../../base/stylesheets/mixins"
+@use "../../shared/vars.css.sass" as vars
+@use "../../shared/utilities/placeholders.css.sass"
+
 .mod-search
   position: relative
   margin-bottom: 2rem
@@ -5,7 +9,7 @@
   &.hidden
     display: none
 
-  +max-width($medium)
+  +mixins.max-width(vars.$medium)
     margin-bottom: 1rem
 
   fieldset
@@ -18,7 +22,7 @@
     @extend %box
     display: block
     border: 0
-    border-radius: $br
+    border-radius: vars.$br
     width: 100%
     padding: 0.75rem 3.5rem 0.75rem 1rem
     line-height: 2rem
@@ -29,9 +33,9 @@
     &.mod-search-input
       min-height: 56px
 
-    +hocus
+    +mixins.hocus
       outline: none
-      box-shadow: 0 1px $br rgba(black,.4)
+      box-shadow: 0 1px vars.$br rgba(black,.4)
 
     // fallback login button for non-javascript
     &.c-button
@@ -52,4 +56,3 @@
 
   .search-institutions
     display: none
-

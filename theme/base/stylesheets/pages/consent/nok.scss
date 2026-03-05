@@ -1,21 +1,25 @@
+@use "../../breakpoints";
+@use "../../variables";
+@use "../../../../skeune/stylesheets/mixins-skeune" as mixins-skeune;
+
 .consent__nok {
     > .consent__nok-title {
-        @include focus;
+        @include mixins-skeune.focus;
     }
 
     > .consent__nok-body {
         padding: 0 2rem 2.5rem;
 
-        @include screen('mobile') {
+        @include breakpoints.screen('mobile') {
             padding: 0 .5rem 2.5rem;
         }
 
         > .consent__nok-back {
-            @include button-secondary($gray);
+            @include mixins-skeune.button-secondary(variables.$gray);
             margin-top: 4rem;
             width: 35%;
 
-            @include screen('mobile') {
+            @include breakpoints.screen('mobile') {
                 width: 100%;
             }
         }

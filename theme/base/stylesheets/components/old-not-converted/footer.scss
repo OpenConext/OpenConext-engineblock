@@ -1,10 +1,13 @@
+@use "../../variables";
+@use "../../breakpoints";
+
 .mod-footer {
-    border-top: 1px solid $borderDark;
+    border-top: 1px solid variables.$borderDark;
     margin: 0 auto;
     padding: 2rem 0;
     text-align: center;
 
-    @include screen('mobile') {
+    @include breakpoints.screen('mobile') {
         padding: 2rem .5rem;
     }
 
@@ -20,37 +23,37 @@
         padding-left: 0;
         width: 100%;
 
-        @include screen('tabletAndBigger') {
+        @include breakpoints.screen('tabletAndBigger') {
             align-items: center;
             display: flex;
             justify-content: space-between;
         }
 
         a {
-            color: $darkContrastBlue;
+            color: variables.$darkContrastBlue;
         }
 
         li.nav-row {
             display: block;
 
-            @include screen('tabletAndBigger') {
+            @include breakpoints.screen('tabletAndBigger') {
                 width: 20%;
             }
 
             &.left, &.right {
-                @include screen('tabletAndBigger') {
+                @include breakpoints.screen('tabletAndBigger') {
                     width: 40%;
                 }
             }
 
             &.left {
-                @include screen('tabletAndBigger') {
+                @include breakpoints.screen('tabletAndBigger') {
                     text-align: left;
                 }
             }
 
             &.right {
-                @include screen('tabletAndBigger') {
+                @include breakpoints.screen('tabletAndBigger') {
                     text-align: right;
                 }
             }
@@ -77,7 +80,7 @@
     padding: 0;
 
     .help {
-        background: $blue;
+        background: variables.$blue;
         border-radius: 50%;
         box-sizing: border-box;
         color: #FFFFFF;

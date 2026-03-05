@@ -1,10 +1,13 @@
+@use "../../variables";
+@use "../../breakpoints";
+
 body {
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: none;
-  font-size: $f-normal;
-  background: $lightGrey;
-  color: $darkGrey;
-  font-family: $font;
+  font-size: variables.$f-normal;
+  background: variables.$lightGrey;
+  color: variables.$darkGrey;
+  font-family: variables.$font;
   line-height: 20px;
   margin: 0;
   overflow-wrap: break-word;
@@ -19,7 +22,7 @@ h1, h2, h3 {
 }
 
 h1 {
-  font-weight: $normal;
+  font-weight: variables.$normal;
   font-size: calculateRem(24px);
 }
 
@@ -40,7 +43,7 @@ blockquote {
 }
 
 a {
-  color: $contrastBlue;
+  color: variables.$contrastBlue;
 
   &:hover{
     text-decoration: underline;

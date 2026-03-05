@@ -1,17 +1,19 @@
+@use "../vars.css.sass" as vars
+
 %box,
 .box
   background: #fff
-  border-radius: $br
-  box-shadow: 0 1px $br rgba(black,.2)
+  border-radius: vars.$br
+  box-shadow: 0 1px vars.$br rgba(black,.2)
 
 // Z2 = z index 2, giving it a larger shadow
 %z2,
 .z2
-  box-shadow: 0 1px $br*2 rgba(black,.4)
+  box-shadow: 0 1px vars.$br*2 rgba(black,.4)
 
 %padding,
 .padding
-  padding: $padding
+  padding: vars.$padding
 
 %v-center,
 .v-center

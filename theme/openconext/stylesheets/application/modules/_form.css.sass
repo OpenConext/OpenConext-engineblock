@@ -1,3 +1,8 @@
+@use "sass:color"
+@use "../../../../base/stylesheets/mixins"
+@use "../../shared/vars.css.sass" as vars
+@use "../../shared/base/type.css.sass" as *
+
 .mod-form
   padding: 1rem
 
@@ -37,18 +42,18 @@
       font-size: 0.8em
       display: block
 
-  +input
+  +mixins.input
     display: block
     width: 100%
     padding: 0.5rem 0.75rem
     font-size: 1rem
-    font-family: $font
-    border-radius: $br
-    border: 1px solid $border
-    +hocus
+    font-family: vars.$font
+    border-radius: vars.$br
+    border: 1px solid vars.$border
+    +mixins.hocus
       outline: none
-      border-color: mix(white,$blue)
-      box-shadow: 0 0 4px rgba($blue,.5)
+      border-color: color.mix(white,vars.$blue)
+      box-shadow: 0 0 4px rgba(vars.$blue,.5)
 
   // All divs
   .input,
@@ -74,7 +79,7 @@
   fieldset
     padding-top: 1.5rem
     margin-top: 1.5rem
-    border-top: 1px solid $border
+    border-top: 1px solid vars.$border
 
   .actions
     .c-button + .c-button
@@ -84,19 +89,18 @@
 
   // Errors
   .errors
-    background: $red-light
+    background: vars.$red-light
     padding: 1rem 1.5rem
-    border-radius: $br
-    color: $red
+    border-radius: vars.$br
+    color: vars.$red
 
     ul
       margin-bottom: 0
 
   .has-error
     > label
-      color: $red
-    +input
-      border-color: $red
-      +hocus
-        box-shadow: 0 0 4px rgba($red,.5)
-
+      color: vars.$red
+    +mixins.input
+      border-color: vars.$red
+      +mixins.hocus
+        box-shadow: 0 0 4px rgba(vars.$red,.5)

@@ -1,3 +1,4 @@
+@use "sass:color"
 
 // Colors
 $blue: #4DB3CF
@@ -6,12 +7,12 @@ $medium-blue: #CAECF4
 $dark-blue: #017499
 $darkest-blue: #19282D
 $red: #dd3939
-$red-light: mix(lighten($red,30),white)
+$red-light: color.mix(color.adjust($red,$lightness: 30%),white)
 $green: #95b926
 $bright-green: #008000
 $orange: #ec9a0a
 $yellow: #ffcc00
-$light-grey: lighten(black,95)
+$light-grey: color.adjust(black,$lightness: 95%)
 $medium-grey: #a2a2a2
 $lighter-dark-grey: #a9a9a9
 $dark-grey: #2b3f44
@@ -20,7 +21,7 @@ $link-grey: #6f6f6f
 $light-pink: #fbdddb
 
 // borders
-$border: lighten(black,90)
+$border: color.adjust(black,$lightness: 90%)
 $border-light: rgba(white, .1)
 $border-dark: rgba(black, .1)
 
@@ -37,6 +38,12 @@ $container-width: 50rem
 
 // Fonts
 $fa-font-path: "../fonts/"
+$fa-var-warning: "\f071"
+$fa-var-circle-question: "\f059"
+$fa-var-external-link: "\f08e"
+$fa-var-chevron-down: "\f078"
+$fa-var-chevron-up: "\f077"
+$fa-var-times: "\f00d"
 
 $font: Helvetica, sans-serif
 $f-small: 13px

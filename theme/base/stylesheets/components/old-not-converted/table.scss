@@ -1,5 +1,8 @@
+@use "sass:color";
+@use "../../variables";
+
 .comp-table {
-    border: 1px solid $border;
+    border: 1px solid variables.$border;
     border-collapse: collapse;
     border-radius: 4px;
     margin-bottom: 2rem;
@@ -7,7 +10,7 @@
 
     th,
     td {
-        border-bottom: 1px solid $border;
+        border-bottom: 1px solid variables.$border;
         padding: .75rem 1rem;
         white-space: nowrap;
     }
@@ -17,15 +20,15 @@
     }
 
     td.green {
-        color: $green;
+        color: variables.$green;
     }
 
     thead {
         th,
         td {
-            border-bottom: 1px solid $border;
-            color: $mediumGrey;
-            font-size: $f-normal;
+            border-bottom: 1px solid variables.$border;
+            color: variables.$mediumGrey;
+            font-size: variables.$f-normal;
             line-height: 25px;
         }
     }
@@ -38,7 +41,7 @@
 }
 
 .comp-small-table {
-    font-size: $f-small;
+    font-size: variables.$f-small;
 
     tr:last-child {
       th,
@@ -49,8 +52,8 @@
 
     th,
     td {
-        background: mix($border, $white);
-        border-bottom: 1px solid $white;
+        background: color.mix(variables.$border, variables.$white);
+        border-bottom: 1px solid variables.$white;
         padding: .5rem 1rem;
     }
 }
@@ -62,8 +65,8 @@
 
     td {
       button.grey {
-          background: $lighterDarkGrey;
-          color: $lightGrey;
+          background: variables.$lighterDarkGrey;
+          color: variables.$lightGrey;
       }
     }
 

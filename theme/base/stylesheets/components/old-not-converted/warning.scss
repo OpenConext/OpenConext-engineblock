@@ -1,10 +1,14 @@
+@use "../../variables";
+@use "../../breakpoints";
+
+
 .notification__warning {
-    background-color: $lightPinkOld;
+    background-color: variables.$lightPinkOld;
     margin: 2rem 0;
     padding: 0.75rem;
     position: relative;
 
-    @include screen('mobile') {
+    @include breakpoints.screen('mobile') {
         margin: 2rem 0;
     }
 
@@ -13,8 +17,8 @@
     }
 
     > *:first-child::before{
-        color: $red;
-        content: $fa-var-warning;
+        color: variables.$red;
+        content: variables.$fa-var-warning;
         display: inline-block;
         font-family: FontAwesome, sans-serif;
         height: 1.2em;
