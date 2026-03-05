@@ -32,7 +32,7 @@ framework:
         storage_factory_id: session.storage.factory.native
 
     fragments: false
-    http_method_override: true
+    http_method_override: false
     assets: ~
     php_errors:
         log: true
