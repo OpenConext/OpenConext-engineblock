@@ -35,5 +35,3 @@ security:
 
         main:
             stateless:  true
-
-    enable_authenticator_manager: true
