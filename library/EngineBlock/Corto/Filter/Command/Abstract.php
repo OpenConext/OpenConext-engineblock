@@ -36,10 +36,7 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
      */
     protected $_response;
 
-    /**
-     * @var array
-     */
-    protected $_responseAttributes;
+    protected array $_responseAttributes = [];
 
     /**
      * @var array

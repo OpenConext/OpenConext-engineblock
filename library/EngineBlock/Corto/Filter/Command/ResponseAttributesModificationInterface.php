@@ -23,5 +23,5 @@ interface EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterfa
      *
      * @return array
      */
-    public function getResponseAttributes();
+    public function getResponseAttributes(): array;
 }
