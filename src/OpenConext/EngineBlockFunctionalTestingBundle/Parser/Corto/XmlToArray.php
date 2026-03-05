@@ -169,29 +169,30 @@ class XmlToArray
      * @param array $attributes
      * @return array
      */
-    public function attributesToArray(array $attributes) {
+    public function attributesToArray(array $attributes)
+    {
         $res = [];
-        foreach($attributes as $attribute) {
-            if(!isset($attribute['_Name'])) {
+        foreach ($attributes as $attribute) {
+            if (!isset($attribute['_Name'])) {
                 throw new \RuntimeException('Missing attribute name');
             }
 
             $res[$attribute['_Name']] = [];
-            if(!isset($attribute['saml:AttributeValue'])) {
+            if (!isset($attribute['saml:AttributeValue'])) {
                 continue;
             }
 
-            if(!is_array($attribute['saml:AttributeValue'])) {
+            if (!is_array($attribute['saml:AttributeValue'])) {
                 throw new \RuntimeException('AttributeValue collection is not an array');
             }
 
             // Add each value of the collection to the result
             foreach ($attribute['saml:AttributeValue'] as $value) {
-                if(!is_array($value)) {
+                if (!is_array($value)) {
                     throw new \RuntimeException('AttributeValue is not an array');
                 }
 
-                if(!isset($value[self::VALUE_PFX])) {
+                if (!isset($value[self::VALUE_PFX])) {
                     continue;
                 }
 
@@ -251,7 +252,7 @@ class XmlToArray
     {
         $newElement = [];
 
-        while(isset($elements[self::$counter])) {
+        while (isset($elements[self::$counter])) {
             $value = $elements[self::$counter];
             self::$counter++;
 
@@ -264,7 +265,7 @@ class XmlToArray
             $hashedAttributes = [];
             $tagName = $value['tag'];
             if (isset($value['attributes']) && $attributes = $value['attributes']) {
-                foreach($attributes as $attributeKey => $attributeValue) {
+                foreach ($attributes as $attributeKey => $attributeValue) {
                     unset($attributes[$attributeKey]);
                     $hashedAttributes[self::ATTRIBUTE_PFX . $attributeKey] = $attributeValue;
                 }
@@ -283,7 +284,7 @@ class XmlToArray
             }
             if ($value['type'] == 'open') {
                 $cs = self::xml2arrayRecursive($elements, $level + 1, $namespaceMapping);
-                foreach($cs as $c) {
+                foreach ($cs as $c) {
                     $tagName = $c[self::TAG_NAME_PFX];
                     unset($c[self::TAG_NAME_PFX]);
 
@@ -315,7 +316,7 @@ class XmlToArray
             // search _namespaces for namespace_prefix
             if (isset(self::$_namespaces[$fullNamespace])) {
                 // prefix is found, replaces tagName with prefix:elementName
-                $tagName =  self::$_namespaces[$fullNamespace] . ":" . substr($tagName, strrpos($tagName, ':') +1 );
+                $tagName =  self::$_namespaces[$fullNamespace] . ":" . substr($tagName, strrpos($tagName, ':') +1);
             }
         }
 
@@ -335,7 +336,7 @@ class XmlToArray
      * @param string $elementName Specific element to convert, if empty then the top level element is used
      * @return string XML from array
      */
-    public static function array2xml(array $hash, $elementName = "", $useIndentation=false)
+    public static function array2xml(array $hash, $elementName = "", $useIndentation = false)
     {
         $writer = new \XMLWriter();
         $writer->openMemory();
@@ -346,8 +347,7 @@ class XmlToArray
         if (!$elementName) {
             if (isset($hash[self::TAG_NAME_PFX])) {
                 $elementName = $hash[self::TAG_NAME_PFX];
-            }
-            else {
+            } else {
                 throw new \RuntimeException("No top level tag provided or defined in hash!");
             }
         }
@@ -381,24 +381,19 @@ class XmlToArray
             $writer->startElement($elementName);
         }
 
-        foreach((array)$hash as $key => $value) {
+        foreach ((array)$hash as $key => $value) {
             if (is_int($key)) {
                 // Normal numeric index, value is probably a hash structure, recurse...
                 self::array2xmlRecursive($value, $elementName, $writer, $level + 1);
-
             } elseif ($key === self::VALUE_PFX) {
                 $writer->text($value);
-
             } elseif (strpos($key, self::PRIVATE_PFX) === 0) {
                 # [__][<x>] is used for private attributes for internal consumption
-
             } elseif (strpos($key, self::ATTRIBUTE_PFX) === 0) {
                 $writer->writeAttribute(substr($key, 1), $value);
-
             } elseif (is_array($value) || $value === self::PLACEHOLDER_VALUE) {
                 self::array2xmlRecursive($value, $key, $writer, $level + 1);
-            }
-            else {
+            } else {
                 throw new \RuntimeException(
                     sprintf(
                         'Value for key "%s" unrecognized (key naming error?)! Value: "%s"',
@@ -417,7 +412,7 @@ class XmlToArray
     public static function array2attributes($attributes)
     {
         $res = [];
-        foreach((array)$attributes as $name => $attribute) {
+        foreach ((array)$attributes as $name => $attribute) {
             // Name must be a uri
             // Uri checking is hard, so at least check for a scheme.
             assert((bool) preg_match("|(\\w+)\\:.+|", $name));
@@ -428,8 +423,7 @@ class XmlToArray
             foreach ((array)$attribute as $value) {
                 if (is_array($value)) {
                     $newAttribute['saml:AttributeValue'][] = $value;
-                }
-                else {
+                } else {
                     $newAttribute['saml:AttributeValue'][] = [
                         self::VALUE_PFX  => $value,
                     ];
@@ -463,7 +457,6 @@ class XmlToArray
 
         // scan each line and adjust indent based on opening/closing tags
         while ($token !== false) :
-
             // test for the various tag states
 
             // 1. open and closing tags on same line - no change
