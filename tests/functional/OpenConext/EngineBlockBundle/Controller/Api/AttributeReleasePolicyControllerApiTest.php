@@ -22,15 +22,14 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class AttributeReleasePolicyControllerApiTest extends WebTestCase
+class AttributeReleasePolicyControllerApiTest extends FunctionalWebTestCase
 {
     public function tearDown(): void
     {
         $this->clearMetadataFixtures();
-        parent::tearDown(); // Ensure the kernel is properly shutdown to avoid state pollution between tests.
+        parent::tearDown();
     }
 
     #[\PHPUnit\Framework\Attributes\Group('Api')]

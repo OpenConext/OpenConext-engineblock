@@ -17,36 +17,35 @@
          failOnRisky="true"
 >
     <testsuites>
-        <testsuite name="unit">
-            <directory suffix="Test.php">unit</directory>
-        </testsuite>
-        <testsuite name="integration">
-            <directory suffix="Test.php">integration</directory>
-        </testsuite>
-        <testsuite name="eb4">
-            <directory suffix="Test.php">library</directory>
-        </testsuite>
-        <testsuite name="functional">
-            <directory suffix="Test.php">functional</directory>
-        </testsuite>
-    </testsuites>
-
-    <!-- Configure coverage reports -->
-    <coverage includeUncoveredFiles="true">
-        <report>
-            <html outputDirectory="../var/log/phpunit/coverage/html"/>
-        </report>
-    </coverage>
-    <source restrictDeprecations="true" restrictNotices="true" restrictWarnings="true" ignoreSuppressionOfDeprecations="true">
-        <include>
-            <directory>src</directory>
-            <directory>library</directory>
-        </include>
-    </source>
-    <php>
-        <server name="KERNEL_CLASS" value="App\Kernel"/>
-        <server name="DOCTRINE_DEPRECATIONS" value="trigger"/>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[total]=0"/>
-        <ini name="memory_limit" value="512M"/>
-    </php>
+    <testsuite name="unit">
+      <directory suffix="Test.php">unit</directory>
+    </testsuite>
+    <testsuite name="integration">
+      <directory suffix="Test.php">integration</directory>
+    </testsuite>
+    <testsuite name="eb4">
+      <directory suffix="Test.php">library</directory>
+    </testsuite>
+    <testsuite name="functional">
+      <directory suffix="Test.php">functional</directory>
+    </testsuite>
+  </testsuites>
+  <!-- Configure coverage reports -->
+  <coverage includeUncoveredFiles="true">
+    <report>
+      <html outputDirectory="../var/log/phpunit/coverage/html"/>
+    </report>
+  </coverage>
+  <source restrictNotices="true" restrictWarnings="true" ignoreSuppressionOfDeprecations="true" ignoreIndirectDeprecations="true">
+    <include>
+      <directory>src</directory>
+      <directory>library</directory>
+    </include>
+  </source>
+  <php>
+    <server name="KERNEL_CLASS" value="App\Kernel"/>
+    <server name="DOCTRINE_DEPRECATIONS" value="trigger"/>
+    <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[total]=0"/>
+    <ini name="memory_limit" value="512M"/>
+  </php>
 </phpunit>

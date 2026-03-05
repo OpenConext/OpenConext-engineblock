@@ -28,12 +28,9 @@ use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\Value\Saml\NameIdFormat;
 use PDOStatement;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
-use function json_decode;
-use function json_encode;
 
-final class ConsentControllerTest extends WebTestCase
+final class ConsentControllerTest extends FunctionalWebTestCase
 {
     public function tearDown(): void
     {
