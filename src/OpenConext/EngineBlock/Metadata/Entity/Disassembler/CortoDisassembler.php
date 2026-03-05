@@ -203,21 +203,21 @@ class CortoDisassembler
     {
         // @codingStandardsIgnoreStart
         if ($entity->organizationEn) {
-            $this->mapMultilang($entity->organizationEn->name       , $cortoEntity, 'Organization', 'Name'       , 'en');
+            $this->mapMultilang($entity->organizationEn->name, $cortoEntity, 'Organization', 'Name', 'en');
             $this->mapMultilang($entity->organizationEn->displayName, $cortoEntity, 'Organization', 'DisplayName', 'en');
-            $this->mapMultilang($entity->organizationEn->url        , $cortoEntity, 'Organization', 'URL'        , 'en');
+            $this->mapMultilang($entity->organizationEn->url, $cortoEntity, 'Organization', 'URL', 'en');
         }
 
         if ($entity->organizationNl) {
-            $this->mapMultilang($entity->organizationNl->name       , $cortoEntity, 'Organization', 'Name'       , 'nl');
+            $this->mapMultilang($entity->organizationNl->name, $cortoEntity, 'Organization', 'Name', 'nl');
             $this->mapMultilang($entity->organizationNl->displayName, $cortoEntity, 'Organization', 'DisplayName', 'nl');
-            $this->mapMultilang($entity->organizationNl->url        , $cortoEntity, 'Organization', 'URL'        , 'nl');
+            $this->mapMultilang($entity->organizationNl->url, $cortoEntity, 'Organization', 'URL', 'nl');
         }
 
         if ($entity->organizationPt) {
-            $this->mapMultilang($entity->organizationPt->name       , $cortoEntity, 'Organization', 'Name'       , 'pt');
+            $this->mapMultilang($entity->organizationPt->name, $cortoEntity, 'Organization', 'Name', 'pt');
             $this->mapMultilang($entity->organizationPt->displayName, $cortoEntity, 'Organization', 'DisplayName', 'pt');
-            $this->mapMultilang($entity->organizationPt->url        , $cortoEntity, 'Organization', 'URL'        , 'pt');
+            $this->mapMultilang($entity->organizationPt->url, $cortoEntity, 'Organization', 'URL', 'pt');
         }
         // @codingStandardsIgnoreEnd
         return $cortoEntity;
