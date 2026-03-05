@@ -11,10 +11,15 @@ More information about our release strategy can be found in
 the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on
 the EngineBlock wiki.
 
-## Unreleased
+## UNRELEASED 7.2.0? / 8.0.0?
+Upgrade to Symfony 6.4?
+Upgrade to `doctrine/dbal` 4
 
 Bugfixes:
 * Metadata push will now reject all metadata if any service contains invalid PHP syntax in its attribute manipulations (#1778)
+
+## 7.1.0
+SRAM integration
 
 ## 7.0.0
 Breaking changes please see: [upgrading](UPGRADING.md#700)
