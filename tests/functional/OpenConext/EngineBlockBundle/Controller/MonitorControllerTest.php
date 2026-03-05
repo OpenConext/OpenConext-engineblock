@@ -20,10 +20,9 @@ namespace OpenConext\EngineBlockBundle\Tests;
 
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-final class MonitorControllerTest extends WebTestCase
+final class MonitorControllerTest extends FunctionalWebTestCase
 {
     #[Test]
     #[Group('Monitor')]

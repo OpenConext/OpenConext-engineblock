@@ -20,10 +20,9 @@ namespace OpenConext\EngineBlockBundle\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-final class HeartbeatControllerTest extends WebTestCase
+final class HeartbeatControllerTest extends FunctionalWebTestCase
 {
     #[\PHPUnit\Framework\Attributes\Group('Api')]
     #[\PHPUnit\Framework\Attributes\Test]

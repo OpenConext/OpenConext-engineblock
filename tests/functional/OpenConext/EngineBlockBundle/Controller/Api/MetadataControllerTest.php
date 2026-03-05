@@ -22,10 +22,9 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-final class MetadataControllerTest extends WebTestCase
+final class MetadataControllerTest extends FunctionalWebTestCase
 {
     public function tearDown(): void
     {

@@ -69,7 +69,7 @@
         "mockery/mockery": "^1.6.12",
         "phake/phake": "^4.6.1",
         "phpmd/phpmd": "^2.15",
-        "phpunit/phpunit": "^10.5.58",
+        "phpunit/phpunit": "^11",
         "rector/rector": "^2.2.7",
         "squizlabs/php_codesniffer": "^4.0",
         "symfony/debug-bundle": "6.4.*",
