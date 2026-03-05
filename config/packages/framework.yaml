@@ -19,9 +19,13 @@ framework:
             - '%kernel.project_dir%/theme/%theme.name%/translations'
     form: ~
     csrf_protection: ~
-    validation: { enable_attributes: true }
+    validation: {
+        enable_attributes: true,
+        email_validation_mode: html5
+    }
     default_locale: "%locale%"
     trusted_hosts: ~
+    handle_all_throwables: true
 
     # Enables session support. Note that the session will ONLY be started if you read or write from it.
     # Remove or comment this section to explicitly disable session support.
@@ -30,6 +34,8 @@ framework:
         # NULL means that Symfony uses PHP default session mechanism
         handler_id: null
         storage_factory_id: session.storage.factory.native
+        cookie_secure: true
+        cookie_samesite: 'none'
 
     fragments: false
     http_method_override: false
