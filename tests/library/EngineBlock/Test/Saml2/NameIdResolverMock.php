@@ -21,17 +21,9 @@ class EngineBlock_Test_Saml2_NameIdResolverMock extends EngineBlock_Saml2_NameId
     private $_serviceProviderUuids = array();
     private $_persistentIds = array();
 
-    protected function _getUserDirectory()
+    protected function _getUserUuid($collabPersonId)
     {
-        $mock = new EngineBlock_Test_UserDirectoryMock();
-        $mock->setUser(
-            'urn:collab:person:example.edu:mock1',
-            array(
-                'collabpersonid' => 'urn:collab:person:example.edu:mock1',
-                'collabpersonuuid' => '',
-            )
-        );
-        return $mock;
+        return sha1($collabPersonId);
     }
 
     protected function _fetchPersistentId($serviceProviderUuid, $userUuid)

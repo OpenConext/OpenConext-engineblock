@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlock\Service\Consent;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use PHPUnit\Framework\TestCase;
 use SAML2\XML\saml\NameID;
 
@@ -36,7 +37,8 @@ class ConsentHashServiceTest extends TestCase
     public function setUp(): void
     {
         $mockConsentHashRepository = m::mock(ConsentRepository::class);
-        $this->chs = new ConsentHashService($mockConsentHashRepository);
+        $featureConfig = new FeatureConfiguration(['eb.stable_consent_hash_migration' => false]);
+        $this->chs = new ConsentHashService($mockConsentHashRepository, $featureConfig);
     }
 
     public function test_stable_attribute_hash_switched_order_associative_array()
@@ -381,7 +383,12 @@ class ConsentHashServiceTest extends TestCase
             'urn:collab:org:vm.openconext.org',
             'urn:collab:org:vm.openconext.org',
         ];
-        // two sequential arrays with the same amount of attributes will yield the exact same hash if no values must be stored.  todo: check if we want this?
+        // Known limitation: when mustStoreValues=false the hash is built from attribute *names* only.
+        // For sequential (numerically-indexed) arrays the "names" are just integer indices [0, 1, 2, …],
+        // so two sequential arrays with the same count but completely different values produce the same hash.
+        // This is accepted because in practice all SAML attributes are keyed by URN strings
+        // (e.g. 'urn:mace:dir:attribute-def:displayName'), not by integer indices, making this
+        // collision path unreachable in production.
         $this->assertEquals($this->chs->getStableAttributesHash($attributes, false), $this->chs->getStableAttributesHash($differentAttributes, false));
         $this->assertNotEquals($this->chs->getStableAttributesHash($attributes, true), $this->chs->getStableAttributesHash($differentAttributes, true));
     }
@@ -473,5 +480,183 @@ class ConsentHashServiceTest extends TestCase
 
         $hash = $this->chs->getStableAttributesHash($attributes, false);
         $this->assertTrue(is_string($hash));
+    }
+
+    public function test_stable_attribute_hash_attribute_name_casing_normalized()
+    {
+        // Issue requirement: "Case normalize all attribute names"
+        // Attribute names (keys) differing only in casing must yield the same hash
+        $lowercase = [
+            'urn:mace:dir:attribute-def:displayname' => ['John Doe'],
+            'urn:mace:dir:attribute-def:uid'         => ['joe-f12'],
+        ];
+        $mixed = [
+            'urn:mace:dir:attribute-def:displayName' => ['John Doe'],
+            'URN:MACE:DIR:ATTRIBUTE-DEF:UID'         => ['joe-f12'],
+        ];
+
+        $this->assertEquals(
+            $this->chs->getStableAttributesHash($lowercase, true),
+            $this->chs->getStableAttributesHash($mixed, true)
+        );
+        $this->assertEquals(
+            $this->chs->getStableAttributesHash($lowercase, false),
+            $this->chs->getStableAttributesHash($mixed, false)
+        );
+    }
+
+    public function test_stable_attribute_hash_attribute_name_ordering_normalized()
+    {
+        // Issue requirement: "Sort all attribute names"
+        $alphabetical = [
+            'urn:attribute:a' => ['value1'],
+            'urn:attribute:b' => ['value2'],
+            'urn:attribute:c' => ['value3'],
+        ];
+        $reversed = [
+            'urn:attribute:c' => ['value3'],
+            'urn:attribute:b' => ['value2'],
+            'urn:attribute:a' => ['value1'],
+        ];
+
+        $this->assertEquals(
+            $this->chs->getStableAttributesHash($alphabetical, true),
+            $this->chs->getStableAttributesHash($reversed, true)
+        );
+        $this->assertEquals(
+            $this->chs->getStableAttributesHash($alphabetical, false),
+            $this->chs->getStableAttributesHash($reversed, false)
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    // Unstable hash algorithm — getUnstableAttributesHash
+    // -------------------------------------------------------------------------
+
+    public function test_unstable_attribute_hash_mustStoreValues_false_uses_keys_only()
+    {
+        // When mustStoreValues=false the hash is based on attribute names only.
+        // Two arrays with the same keys but different values must yield the same hash.
+        $attributes     = ['urn:attr:a' => ['Alice'], 'urn:attr:b' => ['Bob']];
+        $differentValues = ['urn:attr:a' => ['Charlie'], 'urn:attr:b' => ['Dave']];
+
+        $this->assertEquals(
+            $this->chs->getUnstableAttributesHash($attributes, false),
+            $this->chs->getUnstableAttributesHash($differentValues, false)
+        );
+    }
+
+    public function test_unstable_attribute_hash_mustStoreValues_true_includes_values()
+    {
+        // When mustStoreValues=true, attribute values are part of the hash.
+        // Two arrays with the same keys but different values must yield a different hash.
+        $attributes     = ['urn:attr:a' => ['Alice'], 'urn:attr:b' => ['Bob']];
+        $differentValues = ['urn:attr:a' => ['Charlie'], 'urn:attr:b' => ['Dave']];
+
+        $this->assertNotEquals(
+            $this->chs->getUnstableAttributesHash($attributes, true),
+            $this->chs->getUnstableAttributesHash($differentValues, true)
+        );
+    }
+
+    public function test_unstable_attribute_hash_key_order_normalized_in_names_only_mode()
+    {
+        // When mustStoreValues=false the implementation sorts attribute names,
+        // so reversed key order must produce the same hash.
+        $attributes = ['urn:attr:a' => ['Alice'], 'urn:attr:b' => ['Bob']];
+        $reversed   = ['urn:attr:b' => ['Bob'], 'urn:attr:a' => ['Alice']];
+
+        $this->assertEquals(
+            $this->chs->getUnstableAttributesHash($attributes, false),
+            $this->chs->getUnstableAttributesHash($reversed, false)
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    // isBlank / removeEmptyAttributes edge cases
+    // -------------------------------------------------------------------------
+
+    public function test_stable_attribute_hash_empty_array_produces_consistent_hash()
+    {
+        // An empty attribute array must not throw and must be idempotent.
+        $hashWithValues    = $this->chs->getStableAttributesHash([], true);
+        $hashWithoutValues = $this->chs->getStableAttributesHash([], false);
+
+        $this->assertIsString($hashWithValues);
+        $this->assertSame($hashWithValues, $this->chs->getStableAttributesHash([], true));
+        $this->assertIsString($hashWithoutValues);
+        $this->assertSame($hashWithoutValues, $this->chs->getStableAttributesHash([], false));
+    }
+
+    public function test_stable_attribute_hash_zero_string_not_removed_as_empty()
+    {
+        // "0" is truthy via is_numeric(), so it must NOT be removed by removeEmptyAttributes.
+        // An attribute with value "0" must produce a different hash than an empty attribute set.
+        $withZeroString = ['urn:attr:count' => '0'];
+        $withoutAttr    = [];
+
+        $this->assertNotEquals(
+            $this->chs->getStableAttributesHash($withZeroString, true),
+            $this->chs->getStableAttributesHash($withoutAttr, true)
+        );
+    }
+
+    public function test_stable_attribute_hash_zero_float_not_removed_as_empty()
+    {
+        // 0.0 is numeric, so it must NOT be removed by removeEmptyAttributes.
+        // An attribute with value 0.0 must produce a stable, non-empty hash.
+        $withZeroFloat = ['urn:attr:count' => 0.0];
+
+        $hash = $this->chs->getStableAttributesHash($withZeroFloat, true);
+
+        $this->assertIsString($hash);
+        $this->assertNotEmpty($hash);
+        // Must be idempotent
+        $this->assertSame($hash, $this->chs->getStableAttributesHash($withZeroFloat, true));
+    }
+
+    public function test_stable_attribute_hash_handles_multibyte_utf8_values(): void
+    {
+        // Arabic, Chinese, accented names — all common in European SAML federations
+        $attributes = [
+            'urn:mace:dir:attribute-def:sn' => ['Müller'],
+            'urn:mace:dir:attribute-def:cn' => ['محمد'],
+            'urn:mace:dir:attribute-def:displayName' => ['王芳'],
+        ];
+        $hash = $this->chs->getStableAttributesHash($attributes, true);
+        $this->assertIsString($hash);
+        $this->assertEquals(40, strlen($hash), 'SHA1 hash must be 40 hex chars; a false return from unserialize produces a wrong hash');
+    }
+
+    public function test_stable_hash_is_case_insensitive_for_multibyte_strings(): void
+    {
+        $lower = ['urn:mace:dir:attribute-def:sn' => ['müller']];
+        $upper = ['urn:mace:dir:attribute-def:sn' => ['Müller']];
+        $this->assertEquals(
+            $this->chs->getStableAttributesHash($lower, true),
+            $this->chs->getStableAttributesHash($upper, true),
+            'Stable hash must be case-insensitive for multi-byte characters'
+        );
+    }
+
+    public function test_stable_attribute_hash_does_not_mutate_input(): void
+    {
+        $attributes = [
+            'urn:mace:dir:attribute-def:DisplayName' => ['John Doe'],
+            'urn:mace:dir:attribute-def:UID'         => ['joe-f12'],
+            'urn:mace:dir:attribute-def:isMemberOf'  => [
+                2 => 'urn:collab:org:vm.openconext.ORG',
+                0 => 'urn:collab:org:vm.openconext.org',
+            ],
+            'urn:mace:dir:attribute-def:empty'       => [],
+        ];
+
+        $snapshot = $attributes;
+
+        $this->chs->getStableAttributesHash($attributes, true);
+        $this->assertSame($snapshot, $attributes, 'getStableAttributesHash(mustStoreValues=true) must not mutate the input array');
+
+        $this->chs->getStableAttributesHash($attributes, false);
+        $this->assertSame($snapshot, $attributes, 'getStableAttributesHash(mustStoreValues=false) must not mutate the input array');
     }
 }

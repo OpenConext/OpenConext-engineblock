@@ -34,7 +34,7 @@ interface ConsentHashServiceInterface
 
     public function updateConsentHash(ConsentUpdateParameters $parameters): bool;
 
-    public function countTotalConsent($consentUid): int;
+    public function countTotalConsent(string $consentUid): int;
 
     public function getUnstableAttributesHash(array $attributes, bool $mustStoreValues): string;
 

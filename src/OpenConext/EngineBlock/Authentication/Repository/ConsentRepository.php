@@ -58,5 +58,5 @@ interface ConsentRepository
      */
     public function updateConsentHash(ConsentUpdateParameters $parameters): bool;
 
-    public function countTotalConsent($consentUid): int;
+    public function countTotalConsent(string $consentUid): int;
 }

@@ -226,17 +226,33 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
      */
     public function storeConsentHash(ConsentStoreParameters $parameters): bool
     {
-        $query = "INSERT INTO consent (hashed_user_id, service_id, attribute_stable, consent_type, consent_date, deleted_at)
-                  VALUES (?, ?, ?, ?, NOW(), '0000-00-00 00:00:00')
-                  ON DUPLICATE KEY UPDATE attribute_stable=VALUES(attribute_stable), consent_type=VALUES(consent_type), consent_date=NOW()";
-
-        try {
-            $this->connection->executeStatement($query, [
+        if ($parameters->attributeHash !== null) {
+            $query = "INSERT INTO consent (hashed_user_id, service_id, attribute, attribute_stable, consent_type, consent_date, deleted_at)
+                      VALUES (?, ?, ?, ?, ?, NOW(), '0000-00-00 00:00:00')
+                      ON DUPLICATE KEY UPDATE attribute=VALUES(attribute), attribute_stable=VALUES(attribute_stable),
+                      consent_type=VALUES(consent_type), consent_date=NOW(), deleted_at='0000-00-00 00:00:00'";
+            $bindings = [
+                $parameters->hashedUserId,
+                $parameters->serviceId,
+                $parameters->attributeHash,
+                $parameters->attributeStableHash,
+                $parameters->consentType,
+            ];
+        } else {
+            $query = "INSERT INTO consent (hashed_user_id, service_id, attribute_stable, consent_type, consent_date, deleted_at)
+                      VALUES (?, ?, ?, ?, NOW(), '0000-00-00 00:00:00')
+                      ON DUPLICATE KEY UPDATE attribute_stable=VALUES(attribute_stable),
+                      consent_type=VALUES(consent_type), consent_date=NOW(), deleted_at='0000-00-00 00:00:00'";
+            $bindings = [
                 $parameters->hashedUserId,
                 $parameters->serviceId,
                 $parameters->attributeStableHash,
                 $parameters->consentType,
-            ]);
+            ];
+        }
+
+        try {
+            $this->connection->executeStatement($query, $bindings);
         } catch (Exception $e) {
             throw new RuntimeException(
                 sprintf('Error storing consent: "%s"', $e->getMessage())
@@ -251,7 +267,26 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
      */
     public function updateConsentHash(ConsentUpdateParameters $parameters): bool
     {
-        $query = "
+        if ($parameters->clearLegacyHash) {
+            $query = "
+                UPDATE
+                    consent
+                SET
+                    attribute_stable = ?,
+                    attribute = NULL
+                WHERE
+                    attribute = ?
+                AND
+                    hashed_user_id = ?
+                AND
+                    service_id = ?
+                AND
+                    consent_type = ?
+                AND
+                    deleted_at IS NULL
+            ";
+        } else {
+            $query = "
                 UPDATE
                     consent
                 SET
@@ -266,7 +301,8 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
                     consent_type = ?
                 AND
                     deleted_at IS NULL
-        ";
+            ";
+        }
 
         try {
             $affected = $this->connection->executeStatement($query, [
@@ -300,7 +336,7 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
     /**
      * @throws RuntimeException
      */
-    public function countTotalConsent($consentUid): int
+    public function countTotalConsent(string $consentUid): int
     {
         $query = "SELECT COUNT(*) FROM consent where hashed_user_id = ? AND deleted_at IS NULL";
         $parameters = [sha1($consentUid)];

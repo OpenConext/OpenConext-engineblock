@@ -19,11 +19,16 @@
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Mockery\MockInterface;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
+use OpenConext\EngineBlock\Authentication\Value\ConsentHashQuery;
+use OpenConext\EngineBlock\Authentication\Value\ConsentStoreParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
+use OpenConext\EngineBlock\Authentication\Value\ConsentUpdateParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\Consent\ConsentHashService;
 use OpenConext\EngineBlockBundle\Authentication\Repository\DbalConsentRepository;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ConsentIntegrationTest extends TestCase
@@ -46,10 +51,26 @@ class ConsentIntegrationTest extends TestCase
 
     public function setup(): void
     {
+        Mockery::getConfiguration()->setDefaultMatcher(ConsentHashQuery::class, \Mockery\Matcher\IsEqual::class);
+        Mockery::getConfiguration()->setDefaultMatcher(ConsentStoreParameters::class, \Mockery\Matcher\IsEqual::class);
+        Mockery::getConfiguration()->setDefaultMatcher(ConsentUpdateParameters::class, \Mockery\Matcher\IsEqual::class);
+
         $this->response = Mockery::mock(EngineBlock_Saml2_ResponseAnnotationDecorator::class);
         $this->consentRepository = Mockery::mock(ConsentRepository::class);
-        $this->consentService = new ConsentHashService($this->consentRepository);
 
+        $this->buildConsentAndService(migrationEnabled: true);
+    }
+
+    /**
+     * Rebuilds $this->consentService and $this->consent with the given toggle state.
+     * Call this in tests that need a specific toggle setting different from setUp's default.
+     */
+    private function buildConsentAndService(bool $migrationEnabled): void
+    {
+        $featureConfig = new FeatureConfiguration([
+            'eb.stable_consent_hash_migration' => $migrationEnabled,
+        ]);
+        $this->consentService = new ConsentHashService($this->consentRepository, $featureConfig);
         $this->consent = new EngineBlock_Corto_Model_Consent(
             "consent",
             true,
@@ -61,9 +82,7 @@ class ConsentIntegrationTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider consentTypeProvider
-     */
+    #[DataProvider('consentTypeProvider')]
     public function test_no_previous_consent_given($consentType)
     {
         $serviceProvider = new ServiceProvider("service-provider-entity-id");
@@ -77,17 +96,15 @@ class ConsentIntegrationTest extends TestCase
             ->andReturn(ConsentVersion::notGiven());
         switch ($consentType) {
             case ConsentType::TYPE_EXPLICIT:
-                $this->assertFalse($this->consent->explicitConsentWasGivenFor($serviceProvider));
+                $this->assertFalse($this->consent->explicitConsentWasGivenFor($serviceProvider)->given());
                 break;
             case ConsentType::TYPE_IMPLICIT:
-                $this->assertFalse($this->consent->implicitConsentWasGivenFor($serviceProvider));
+                $this->assertFalse($this->consent->implicitConsentWasGivenFor($serviceProvider)->given());
                 break;
         }
     }
 
-    /**
-     * @dataProvider consentTypeProvider
-     */
+    #[DataProvider('consentTypeProvider')]
     public function test_unstable_previous_consent_given($consentType)
     {
         $serviceProvider = new ServiceProvider("service-provider-entity-id");
@@ -97,23 +114,27 @@ class ConsentIntegrationTest extends TestCase
         // Stable consent is not yet stored
         $this->consentRepository
             ->shouldReceive('hasConsentHash')
-            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
+            ->with(new ConsentHashQuery(
+                hashedUserId: '0e54805079c56c2b1c1197a760af86ac337b7bac',
+                serviceId: 'service-provider-entity-id',
+                attributeHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
+                attributeStableHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
+                consentType: $consentType,
+            ))
             ->once()
             ->andReturn(ConsentVersion::unstable());
 
         switch ($consentType) {
             case ConsentType::TYPE_EXPLICIT:
-                $this->assertTrue($this->consent->explicitConsentWasGivenFor($serviceProvider));
+                $this->assertTrue($this->consent->explicitConsentWasGivenFor($serviceProvider)->given());
                 break;
             case ConsentType::TYPE_IMPLICIT:
-                $this->assertTrue($this->consent->implicitConsentWasGivenFor($serviceProvider));
+                $this->assertTrue($this->consent->implicitConsentWasGivenFor($serviceProvider)->given());
                 break;
         }
     }
 
-    /**
-     * @dataProvider consentTypeProvider
-     */
+    #[DataProvider('consentTypeProvider')]
     public function test_stable_consent_given($consentType)
     {
         $serviceProvider = new ServiceProvider("service-provider-entity-id");
@@ -123,34 +144,49 @@ class ConsentIntegrationTest extends TestCase
         // Stable consent is not yet stored
         $this->consentRepository
             ->shouldReceive('hasConsentHash')
-            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
+            ->with(new ConsentHashQuery(
+                hashedUserId: '0e54805079c56c2b1c1197a760af86ac337b7bac',
+                serviceId: 'service-provider-entity-id',
+                attributeHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
+                attributeStableHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
+                consentType: $consentType,
+            ))
             ->once()
             ->andReturn(ConsentVersion::stable());
 
         switch ($consentType) {
             case ConsentType::TYPE_EXPLICIT:
-                $this->assertTrue($this->consent->explicitConsentWasGivenFor($serviceProvider));
+                $this->assertTrue($this->consent->explicitConsentWasGivenFor($serviceProvider)->given());
                 break;
             case ConsentType::TYPE_IMPLICIT:
-                $this->assertTrue($this->consent->implicitConsentWasGivenFor($serviceProvider));
+                $this->assertTrue($this->consent->implicitConsentWasGivenFor($serviceProvider)->given());
                 break;
         }
     }
 
     /**
-     * @dataProvider consentTypeProvider
+     * Toggle ON (migration enabled): new consent stores only the stable hash.
+     * The legacy attribute column must be left NULL so fully-migrated deployments
+     * don't accumulate unnecessary data in the old column.
      */
-    public function test_give_consent_no_unstable_consent_given($consentType)
+    #[DataProvider('consentTypeProvider')]
+    public function test_give_consent_toggle_on_stores_only_stable_hash($consentType)
     {
+        // setUp already builds with migrationEnabled=true
         $serviceProvider = new ServiceProvider("service-provider-entity-id");
         $this->response->shouldReceive('getNameIdValue')
             ->once()
             ->andReturn('collab:person:id:org-a:joe-a');
-        // Now assert that the new stable consent hash is going to be set
         $this->consentRepository
             ->shouldReceive('storeConsentHash')
             ->once()
-            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
+            ->with(new ConsentStoreParameters(
+                hashedUserId: '0e54805079c56c2b1c1197a760af86ac337b7bac',
+                serviceId: 'service-provider-entity-id',
+                attributeStableHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
+                consentType: $consentType,
+                attributeHash: null,
+            ))
             ->andReturn(true);
 
         switch ($consentType) {
@@ -164,19 +200,28 @@ class ConsentIntegrationTest extends TestCase
     }
 
     /**
-     * @dataProvider consentTypeProvider
+     * Toggle OFF (migration disabled): new consent stores BOTH hashes so that
+     * old EB instances (still reading only the `attribute` column) can still
+     * find the consent record during a rolling deploy.
      */
-    public function test_give_consent_unstable_consent_given($consentType)
+    #[DataProvider('consentTypeProvider')]
+    public function test_give_consent_toggle_off_stores_both_hashes($consentType)
     {
+        $this->buildConsentAndService(migrationEnabled: false);
         $serviceProvider = new ServiceProvider("service-provider-entity-id");
         $this->response->shouldReceive('getNameIdValue')
             ->once()
             ->andReturn('collab:person:id:org-a:joe-a');
-        // Now assert that the new stable consent hash is going to be set
         $this->consentRepository
             ->shouldReceive('storeConsentHash')
             ->once()
-            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
+            ->with(new ConsentStoreParameters(
+                hashedUserId: '0e54805079c56c2b1c1197a760af86ac337b7bac',
+                serviceId: 'service-provider-entity-id',
+                attributeStableHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
+                consentType: $consentType,
+                attributeHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
+            ))
             ->andReturn(true);
 
         switch ($consentType) {
@@ -190,49 +235,121 @@ class ConsentIntegrationTest extends TestCase
     }
 
     /**
-     * @dataProvider consentTypeProvider
+     * Toggle OFF (migration disabled): upgrading an old unstable consent leaves
+     * the legacy `attribute` column intact so old instances keep working.
      */
-    public function test_upgrade_to_stable_consent($consentType)
+    #[DataProvider('consentTypeProvider')]
+    public function test_upgrade_toggle_off_preserves_legacy_hash($consentType)
     {
+        $this->buildConsentAndService(migrationEnabled: false);
         $serviceProvider = new ServiceProvider("service-provider-entity-id");
         $this->response->shouldReceive('getNameIdValue')
-            ->twice()
-            ->andReturn('collab:person:id:org-a:joe-a');
-        // Old-style (unstable) consent was given previously
-        $this->consentRepository
-            ->shouldReceive('hasConsentHash')
-            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
             ->once()
-            ->andReturn(ConsentVersion::unstable());
-        // Now assert that the new stable consent hash is going to be set
+            ->andReturn('collab:person:id:org-a:joe-a');
         $this->consentRepository
             ->shouldReceive('updateConsentHash')
             ->once()
-            ->with(['8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', '0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', $consentType])
+            ->with(new ConsentUpdateParameters(
+                attributeStableHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
+                attributeHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
+                hashedUserId: '0e54805079c56c2b1c1197a760af86ac337b7bac',
+                serviceId: 'service-provider-entity-id',
+                consentType: $consentType,
+                clearLegacyHash: false,
+            ))
             ->andReturn(true);
 
-        $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType));
+        $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType, ConsentVersion::unstable()));
     }
 
     /**
-     * @dataProvider consentTypeProvider
+     * Toggle ON (migration enabled): upgrading an old unstable consent nulls the
+     * legacy `attribute` column so the old column is cleaned up over time.
      */
+    #[DataProvider('consentTypeProvider')]
+    public function test_upgrade_toggle_on_clears_legacy_hash($consentType)
+    {
+        // setUp already builds with migrationEnabled=true
+        $serviceProvider = new ServiceProvider("service-provider-entity-id");
+        $this->response->shouldReceive('getNameIdValue')
+            ->once()
+            ->andReturn('collab:person:id:org-a:joe-a');
+        $this->consentRepository
+            ->shouldReceive('updateConsentHash')
+            ->once()
+            ->with(new ConsentUpdateParameters(
+                attributeStableHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
+                attributeHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
+                hashedUserId: '0e54805079c56c2b1c1197a760af86ac337b7bac',
+                serviceId: 'service-provider-entity-id',
+                consentType: $consentType,
+                clearLegacyHash: true,
+            ))
+            ->andReturn(true);
+
+        $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType, ConsentVersion::unstable()));
+    }
+
+    #[DataProvider('consentTypeProvider')]
     public function test_upgrade_to_stable_consent_not_applied_when_stable($consentType)
+    {
+        $serviceProvider = new ServiceProvider("service-provider-entity-id");
+        // No DB calls expected — stable consent does not trigger an update
+        $this->consentRepository->shouldNotReceive('hasConsentHash');
+        $this->consentRepository->shouldNotReceive('storeConsentHash');
+        $this->consentRepository->shouldNotReceive('updateConsentHash');
+
+        // Pass the pre-fetched ConsentVersion (stable) — no second DB query is made, no update triggered
+        $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType, ConsentVersion::stable()));
+    }
+
+    #[DataProvider('consentTypeProvider')]
+    public function test_upgrade_not_applied_when_no_consent_given($consentType)
+    {
+        $serviceProvider = new ServiceProvider("service-provider-entity-id");
+        // No DB calls expected — no consent means nothing to upgrade
+        $this->consentRepository->shouldNotReceive('hasConsentHash');
+        $this->consentRepository->shouldNotReceive('updateConsentHash');
+
+        // Pass the pre-fetched ConsentVersion (notGiven) — no update should be triggered
+        $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType, ConsentVersion::notGiven()));
+    }
+
+    #[DataProvider('consentTypeProvider')]
+    public function test_upgrade_continues_gracefully_when_attributes_changed($consentType)
     {
         $serviceProvider = new ServiceProvider("service-provider-entity-id");
         $this->response->shouldReceive('getNameIdValue')
             ->once()
             ->andReturn('collab:person:id:org-a:joe-a');
-        // Stable consent is stored
+        // But the UPDATE matches 0 rows (attributes changed since consent was given)
         $this->consentRepository
-            ->shouldReceive('hasConsentHash')
-            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
+            ->shouldReceive('updateConsentHash')
             ->once()
-            ->andReturn(ConsentVersion::stable());
-        // Now assert that the new stable consent hash is NOT going to be set
-        $this->consentRepository
-            ->shouldNotReceive('storeConsentHash');
-        $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType));
+            ->andReturn(false);
+
+        // Must not throw; the warning is logged inside the repository
+        // Pass the pre-fetched ConsentVersion (unstable) — no second DB query is made
+        $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType, ConsentVersion::unstable()));
+    }
+
+    public function test_store_consent_hash_sql_resets_deleted_at_on_duplicate(): void
+    {
+        // The storeConsentHash SQL must reset deleted_at='0000-00-00 00:00:00' in the
+        // ON DUPLICATE KEY UPDATE clause so soft-deleted rows become active again.
+        // We verify this by checking the SQL string directly.
+        new \ReflectionClass(DbalConsentRepository::class);
+
+        // Read the SQL from the source to verify it contains the deleted_at reset
+        // This is a documentation test — if the SQL is refactored, update it here too.
+        $source = file_get_contents(
+            __DIR__ . '/../../../../../../src/OpenConext/EngineBlockBundle/Authentication/Repository/DbalConsentRepository.php'
+        );
+        $this->assertStringContainsString(
+            "deleted_at='0000-00-00 00:00:00'",
+            $source,
+            'ON DUPLICATE KEY UPDATE must reset deleted_at so soft-deleted re-consent rows become active'
+        );
     }
 
     public static function consentTypeProvider(): iterable

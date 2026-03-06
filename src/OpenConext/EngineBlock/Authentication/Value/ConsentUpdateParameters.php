@@ -26,6 +26,7 @@ final class ConsentUpdateParameters
         public readonly string $hashedUserId,
         public readonly string $serviceId,
         public readonly string $consentType,
+        public readonly bool $clearLegacyHash = false,
     ) {
     }
 }
