@@ -17,6 +17,7 @@
  */
 
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\Consent\ConsentHashServiceInterface;
@@ -70,6 +71,17 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         $this->consentDisabled->implicitConsentWasGivenFor($serviceProvider);
         $this->consentDisabled->giveExplicitConsentFor($serviceProvider);
         $this->consentDisabled->giveImplicitConsentFor($serviceProvider);
+    }
+
+    public function testUpgradeAttributeHashSkippedWhenConsentDisabled()
+    {
+        $serviceProvider = new ServiceProvider("service-provider-entity-id");
+
+        $this->consentService->shouldNotReceive('retrieveConsentHash');
+        $this->consentService->shouldNotReceive('updateConsentHash');
+
+        $this->consentDisabled->upgradeAttributeHashFor($serviceProvider, ConsentType::TYPE_EXPLICIT);
+        $this->consentDisabled->upgradeAttributeHashFor($serviceProvider, ConsentType::TYPE_IMPLICIT);
     }
 
     public function testConsentWriteToDatabase()

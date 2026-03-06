@@ -98,6 +98,9 @@ class EngineBlock_Corto_Model_Consent
      */
     public function upgradeAttributeHashFor(ServiceProvider $serviceProvider, string $consentType): void
     {
+        if (!$this->_consentEnabled) {
+            return;
+        }
         $consentVersion = $this->_hasStoredConsent($serviceProvider, $consentType);
         if ($consentVersion->isUnstable()) {
             $this->_updateConsent($serviceProvider, $consentType);

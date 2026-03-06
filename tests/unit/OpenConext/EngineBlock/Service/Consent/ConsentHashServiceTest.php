@@ -33,7 +33,7 @@ class ConsentHashServiceTest extends TestCase
      */
     private $chs;
 
-    public function setUp()
+    public function setUp(): void
     {
         $mockConsentHashRepository = m::mock(ConsentRepository::class);
         $this->chs = new ConsentHashService($mockConsentHashRepository);

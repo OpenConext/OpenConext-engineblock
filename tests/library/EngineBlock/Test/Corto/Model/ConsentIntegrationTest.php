@@ -44,7 +44,7 @@ class EngineBlock_Corto_Model_Consent_Integration_Test extends TestCase
      */
     private $response;
 
-    public function setup()
+    public function setup(): void
     {
         $this->response = Mockery::mock(EngineBlock_Saml2_ResponseAnnotationDecorator::class);
         $this->consentRepository = Mockery::mock(ConsentRepository::class);
