@@ -19,14 +19,11 @@
 namespace OpenConext\EngineBlock\Authentication\Tests\Value;
 
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
-use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 class ConsentTypeTest extends TestCase
 {
     /**
-     *
-     *
      * @param mixed $invalid
      */
     #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notStringOrEmptyString')]
@@ -36,9 +33,20 @@ class ConsentTypeTest extends TestCase
     #[\PHPUnit\Framework\Attributes\Test]
     public function cannot_be_other_than_implicit_or_explicit($invalid)
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\Throwable::class);
 
-        new ConsentType($invalid);
+        ConsentType::from($invalid);
+    }
+
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Group('Value')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invalid_string_is_rejected()
+    {
+        $this->expectException(\ValueError::class);
+
+        ConsentType::from('not-a-valid-consent-type');
     }
 
     #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
@@ -47,11 +55,7 @@ class ConsentTypeTest extends TestCase
     #[\PHPUnit\Framework\Attributes\Test]
     public function different_consent_types_are_not_equal()
     {
-        $explicit = ConsentType::explicit();
-        $implicit = ConsentType::implicit();
-
-        $this->assertFalse($explicit->equals($implicit));
-        $this->assertFalse($implicit->equals($explicit));
+        $this->assertNotSame(ConsentType::Explicit, ConsentType::Implicit);
     }
 
     #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
@@ -60,10 +64,17 @@ class ConsentTypeTest extends TestCase
     #[\PHPUnit\Framework\Attributes\Test]
     public function same_type_of_consent_types_are_equal()
     {
-        $explicit = ConsentType::explicit();
-        $implicit = ConsentType::implicit();
+        $this->assertSame(ConsentType::Explicit, ConsentType::Explicit);
+        $this->assertSame(ConsentType::Implicit, ConsentType::Implicit);
+    }
 
-        $this->assertTrue($explicit->equals(ConsentType::explicit()));
-        $this->assertTrue($implicit->equals(ConsentType::implicit()));
+    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
+    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
+    #[\PHPUnit\Framework\Attributes\Group('Value')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function can_be_created_from_string()
+    {
+        $this->assertSame(ConsentType::Explicit, ConsentType::from('explicit'));
+        $this->assertSame(ConsentType::Implicit, ConsentType::from('implicit'));
     }
 }

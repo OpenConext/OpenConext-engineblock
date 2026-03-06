@@ -76,10 +76,10 @@ class EngineBlock_Corto_Model_Consent_Integration_Test extends TestCase
             ->once()
             ->andReturn(ConsentVersion::notGiven());
         switch ($consentType) {
-            case ConsentType::TYPE_EXPLICIT:
+            case ConsentType::Explicit:
                 $this->assertFalse($this->consent->explicitConsentWasGivenFor($serviceProvider));
                 break;
-            case ConsentType::TYPE_IMPLICIT:
+            case ConsentType::Implicit:
                 $this->assertFalse($this->consent->implicitConsentWasGivenFor($serviceProvider));
                 break;
         }
@@ -97,15 +97,15 @@ class EngineBlock_Corto_Model_Consent_Integration_Test extends TestCase
         // Stable consent is not yet stored
         $this->consentRepository
             ->shouldReceive('hasConsentHash')
-            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
+            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType->value])
             ->once()
             ->andReturn(ConsentVersion::unstable());
 
         switch ($consentType) {
-            case ConsentType::TYPE_EXPLICIT:
+            case ConsentType::Explicit:
                 $this->assertTrue($this->consent->explicitConsentWasGivenFor($serviceProvider));
                 break;
-            case ConsentType::TYPE_IMPLICIT:
+            case ConsentType::Implicit:
                 $this->assertTrue($this->consent->implicitConsentWasGivenFor($serviceProvider));
                 break;
         }
@@ -123,15 +123,15 @@ class EngineBlock_Corto_Model_Consent_Integration_Test extends TestCase
         // Stable consent is not yet stored
         $this->consentRepository
             ->shouldReceive('hasConsentHash')
-            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
+            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType->value])
             ->once()
             ->andReturn(ConsentVersion::stable());
 
         switch ($consentType) {
-            case ConsentType::TYPE_EXPLICIT:
+            case ConsentType::Explicit:
                 $this->assertTrue($this->consent->explicitConsentWasGivenFor($serviceProvider));
                 break;
-            case ConsentType::TYPE_IMPLICIT:
+            case ConsentType::Implicit:
                 $this->assertTrue($this->consent->implicitConsentWasGivenFor($serviceProvider));
                 break;
         }
@@ -150,14 +150,14 @@ class EngineBlock_Corto_Model_Consent_Integration_Test extends TestCase
         $this->consentRepository
             ->shouldReceive('storeConsentHash')
             ->once()
-            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
+            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType->value])
             ->andReturn(true);
 
         switch ($consentType) {
-            case ConsentType::TYPE_EXPLICIT:
+            case ConsentType::Explicit:
                 $this->assertTrue($this->consent->giveExplicitConsentFor($serviceProvider));
                 break;
-            case ConsentType::TYPE_IMPLICIT:
+            case ConsentType::Implicit:
                 $this->assertTrue($this->consent->giveImplicitConsentFor($serviceProvider));
                 break;
         }
@@ -176,14 +176,14 @@ class EngineBlock_Corto_Model_Consent_Integration_Test extends TestCase
         $this->consentRepository
             ->shouldReceive('storeConsentHash')
             ->once()
-            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
+            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType->value])
             ->andReturn(true);
 
         switch ($consentType) {
-            case ConsentType::TYPE_EXPLICIT:
+            case ConsentType::Explicit:
                 $this->assertTrue($this->consent->giveExplicitConsentFor($serviceProvider));
                 break;
-            case ConsentType::TYPE_IMPLICIT:
+            case ConsentType::Implicit:
                 $this->assertTrue($this->consent->giveImplicitConsentFor($serviceProvider));
                 break;
         }
@@ -201,14 +201,14 @@ class EngineBlock_Corto_Model_Consent_Integration_Test extends TestCase
         // Old-style (unstable) consent was given previously
         $this->consentRepository
             ->shouldReceive('hasConsentHash')
-            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
+            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType->value])
             ->once()
             ->andReturn(ConsentVersion::unstable());
         // Now assert that the new stable consent hash is going to be set
         $this->consentRepository
             ->shouldReceive('updateConsentHash')
             ->once()
-            ->with(['8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', '0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', $consentType])
+            ->with(['8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', '0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', $consentType->value])
             ->andReturn(true);
 
         $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType));
@@ -226,7 +226,7 @@ class EngineBlock_Corto_Model_Consent_Integration_Test extends TestCase
         // Stable consent is stored
         $this->consentRepository
             ->shouldReceive('hasConsentHash')
-            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType])
+            ->with(['0e54805079c56c2b1c1197a760af86ac337b7bac', 'service-provider-entity-id', '8739602554c7f3241958e3cc9b57fdecb474d508', '8739602554c7f3241958e3cc9b57fdecb474d508', $consentType->value])
             ->once()
             ->andReturn(ConsentVersion::stable());
         // Now assert that the new stable consent hash is NOT going to be set
@@ -235,9 +235,9 @@ class EngineBlock_Corto_Model_Consent_Integration_Test extends TestCase
         $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType));
     }
 
-    public function consentTypeProvider()
+    public function consentTypeProvider(): iterable
     {
-        yield [ConsentType::TYPE_IMPLICIT];
-        yield [ConsentType::TYPE_EXPLICIT];
+        yield [ConsentType::Implicit];
+        yield [ConsentType::Explicit];
     }
 }

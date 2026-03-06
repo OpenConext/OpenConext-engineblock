@@ -103,7 +103,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         if (!$consentRepository->explicitConsentWasGivenFor($serviceProvider)) {
             $consentRepository->giveExplicitConsentFor($destinationMetadata);
         }
-        $consentRepository->upgradeAttributeHashFor($destinationMetadata, ConsentType::TYPE_EXPLICIT);
+        $consentRepository->upgradeAttributeHashFor($destinationMetadata, ConsentType::Explicit);
 
         $response->setConsent(Constants::CONSENT_OBTAINED);
         $response->setDestination($response->getReturn());

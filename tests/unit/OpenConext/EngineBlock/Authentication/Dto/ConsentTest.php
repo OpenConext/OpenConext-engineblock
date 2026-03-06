@@ -87,7 +87,7 @@ class ConsentTest extends TestCase
     {
         $serviceProvider = $this->createServiceProvider();
         $consentGivenOn = new DateTime('20080624 10:00:00');
-        $consentType = ConsentType::explicit();
+        $consentType = ConsentType::Explicit;
 
         $consent = new Consent(
             new ConsentModel(
@@ -131,7 +131,7 @@ class ConsentTest extends TestCase
     ) {
         $serviceProvider = $this->createServiceProvider($organizations);
         $consentGivenOn = new DateTime('20080624 10:00:00');
-        $consentType = ConsentType::explicit();
+        $consentType = ConsentType::Explicit;
 
         $consent = new Consent(
             new ConsentModel(
@@ -161,7 +161,7 @@ class ConsentTest extends TestCase
         $serviceProvider->nameNl = 'Name NL';
 
         $consentGivenOn = new DateTime();
-        $consentType = ConsentType::explicit();
+        $consentType = ConsentType::Explicit;
 
         $consent = new Consent(
             new ConsentModel(
@@ -192,7 +192,7 @@ class ConsentTest extends TestCase
         $serviceProvider->nameNl = '';
 
         $consentGivenOn = new DateTime();
-        $consentType = ConsentType::explicit();
+        $consentType = ConsentType::Explicit;
 
         $consent = new Consent(
             new ConsentModel(
