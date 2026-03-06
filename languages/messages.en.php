@@ -55,6 +55,8 @@ return $overrides + [
     'ipAddress'             => 'IP',
     'statusCode'            => 'Status Code',
     'artCode'               => 'EC',
+    'datetime'              => 'Time',
+    'requestUrl'            => 'Request URL',
     'statusMessage'         => 'Status Message',
     'attributeName'         => 'Attribute Name',
     'attributeValue'        => 'Attribute Value',

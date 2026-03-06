@@ -25,24 +25,25 @@
         font-weight: bold;
     }
 
-    &--identityprovider,
-    &--idp-hash,
-    &--serviceprovider,
-    &--serviceprovidername,
-    &--proxyserviceprovider {
-        @include breakpoints.screen('tabletAndBigger') {
-            grid-column-end: span 2;
-            order: -1;
-        }
-    }
+    @include breakpoints.screen('tabletAndBigger') {
+        &--identityprovider    { order: 1; }
+        &--artcode             { order: 2; }
+        &--serviceprovider     { order: 3; }
+        &--ipaddress           { order: 4; }
+        &--serviceprovidername { order: 5; }
+        &--requestid           { order: 6; }
+        &--requesturl          { order: 7; }
+        &--datetime            { order: 8; }
 
-    &--destination,
-    &--entityid,
-    &--statuscode,
-    &--statusmessage {
-        @include breakpoints.screen('tabletAndBigger') {
-            grid-column-end: span 3;
-            order: -1;
+        &--identityprovidername,
+        &--idp-hash,
+        &--proxyserviceprovider,
+        &--destination,
+        &--entityid,
+        &--statuscode,
+        &--statusmessage {
+            grid-column-end: span 2;
+            order: 9;
         }
     }
 }
