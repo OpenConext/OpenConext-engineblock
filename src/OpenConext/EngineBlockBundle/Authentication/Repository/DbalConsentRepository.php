@@ -25,11 +25,12 @@ use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use OpenConext\EngineBlock\Authentication\Model\Consent;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
+use OpenConext\EngineBlock\Authentication\Value\ConsentHashQuery;
+use OpenConext\EngineBlock\Authentication\Value\ConsentStoreParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
+use OpenConext\EngineBlock\Authentication\Value\ConsentUpdateParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 use OpenConext\EngineBlock\Exception\RuntimeException;
-use PDO;
-use PDOException;
 use Psr\Log\LoggerInterface;
 use function sha1;
 
@@ -73,6 +74,7 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
             ,   consent_date
             ,   consent_type
             ,   attribute
+            ,   attribute_stable
             FROM
                 consent
             WHERE
@@ -95,7 +97,7 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
                     $row['service_id'],
                     new DateTime($row['consent_date']),
                     new ConsentType($row['consent_type']),
-                    $row['attribute']
+                    $row['attribute_stable'] ?? $row['attribute']
                 );
             },
             $rows
@@ -178,11 +180,11 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
     /**
      * @throws RuntimeException
      */
-    public function hasConsentHash(array $parameters): ConsentVersion
+    public function hasConsentHash(ConsentHashQuery $query): ConsentVersion
     {
         try {
-            $query = " SELECT
-                            *
+            $sql = " SELECT
+                            attribute_stable
                         FROM
                             consent
                         WHERE
@@ -197,20 +199,24 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
                             deleted_at IS NULL
             ";
 
-            $statement = $this->connection->prepare($query);
-            $statement->execute($parameters);
-            $rows = $statement->fetchAll();
+            $rows = $this->connection->executeQuery($sql, [
+                $query->hashedUserId,
+                $query->serviceId,
+                $query->attributeHash,
+                $query->attributeStableHash,
+                $query->consentType,
+            ])->fetchAllAssociative();
 
             if (count($rows) < 1) {
                 // No stored consent found
                 return ConsentVersion::notGiven();
             }
 
-            if ($rows[0]['attribute_stable'] !== '') {
+            if (!empty($rows[0]['attribute_stable'])) {
                 return ConsentVersion::stable();
             }
             return ConsentVersion::unstable();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             throw new RuntimeException(sprintf('Consent retrieval failed! Error: "%s"', $e->getMessage()));
         }
     }
@@ -218,19 +224,22 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
     /**
      * @throws RuntimeException
      */
-    public function storeConsentHash(array $parameters): bool
+    public function storeConsentHash(ConsentStoreParameters $parameters): bool
     {
         $query = "INSERT INTO consent (hashed_user_id, service_id, attribute_stable, consent_type, consent_date, deleted_at)
                   VALUES (?, ?, ?, ?, NOW(), '0000-00-00 00:00:00')
                   ON DUPLICATE KEY UPDATE attribute_stable=VALUES(attribute_stable), consent_type=VALUES(consent_type), consent_date=NOW()";
-        $statement = $this->connection->prepare($query);
-        if (!$statement) {
-            throw new RuntimeException("Unable to create a prepared statement to insert consent?!");
-        }
 
-        if (!$statement->execute($parameters)) {
+        try {
+            $this->connection->executeStatement($query, [
+                $parameters->hashedUserId,
+                $parameters->serviceId,
+                $parameters->attributeStableHash,
+                $parameters->consentType,
+            ]);
+        } catch (Exception $e) {
             throw new RuntimeException(
-                sprintf('Error storing consent: "%s"', var_export($statement->errorInfo(), true))
+                sprintf('Error storing consent: "%s"', $e->getMessage())
             );
         }
 
@@ -240,7 +249,7 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
     /**
      * @throws RuntimeException
      */
-    public function updateConsentHash(array $parameters): bool
+    public function updateConsentHash(ConsentUpdateParameters $parameters): bool
     {
         $query = "
                 UPDATE
@@ -258,15 +267,31 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
                 AND
                     deleted_at IS NULL
         ";
-        $statement = $this->connection->prepare($query);
-        if (!$statement) {
-            throw new RuntimeException("Unable to create a prepared statement to update consent?!");
+
+        try {
+            $affected = $this->connection->executeStatement($query, [
+                $parameters->attributeStableHash,
+                $parameters->attributeHash,
+                $parameters->hashedUserId,
+                $parameters->serviceId,
+                $parameters->consentType,
+            ]);
+        } catch (Exception $e) {
+            throw new RuntimeException(
+                sprintf('Error storing updated consent: "%s"', $e->getMessage())
+            );
         }
 
-        if (!$statement->execute($parameters)) {
-            throw new RuntimeException(
-                sprintf('Error storing updated consent: "%s"', var_export($statement->errorInfo(), true))
+        if ($affected === 0) {
+            $this->logger->warning(
+                sprintf(
+                    'Could not upgrade unstable consent hash for user "%s" and service "%s": no matching row found. ' .
+                    'The user\'s attributes may have changed since consent was given.',
+                    $parameters->hashedUserId,
+                    $parameters->serviceId
+                )
             );
+            return false;
         }
 
         return true;
@@ -278,12 +303,14 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
     public function countTotalConsent($consentUid): int
     {
         $query = "SELECT COUNT(*) FROM consent where hashed_user_id = ? AND deleted_at IS NULL";
-        $parameters = array(sha1($consentUid));
-        $statement = $this->connection->prepare($query);
-        if (!$statement) {
-            throw new RuntimeException("Unable to create a prepared statement to count consent?!");
+        $parameters = [sha1($consentUid)];
+
+        try {
+            return (int) $this->connection->executeQuery($query, $parameters)->fetchOne();
+        } catch (Exception $e) {
+            throw new RuntimeException(
+                sprintf('Error counting consent: "%s"', $e->getMessage())
+            );
         }
-        $statement->execute($parameters);
-        return (int)$statement->fetchColumn();
     }
 }

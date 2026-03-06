@@ -26,7 +26,7 @@ use OpenConext\EngineBlock\Service\Consent\ConsentHashService;
 use OpenConext\EngineBlockBundle\Authentication\Repository\DbalConsentRepository;
 use PHPUnit\Framework\TestCase;
 
-class EngineBlock_Corto_Model_Consent_Integration_Test extends TestCase
+class ConsentIntegrationTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
@@ -44,7 +44,7 @@ class EngineBlock_Corto_Model_Consent_Integration_Test extends TestCase
      */
     private $response;
 
-    public function setup()
+    public function setup(): void
     {
         $this->response = Mockery::mock(EngineBlock_Saml2_ResponseAnnotationDecorator::class);
         $this->consentRepository = Mockery::mock(ConsentRepository::class);
@@ -235,7 +235,7 @@ class EngineBlock_Corto_Model_Consent_Integration_Test extends TestCase
         $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType));
     }
 
-    public function consentTypeProvider()
+    public static function consentTypeProvider(): iterable
     {
         yield [ConsentType::TYPE_IMPLICIT];
         yield [ConsentType::TYPE_EXPLICIT];

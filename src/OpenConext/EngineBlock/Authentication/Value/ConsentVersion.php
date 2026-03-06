@@ -74,4 +74,9 @@ final class ConsentVersion
     {
         return $this->consentVersion === self::UNSTABLE;
     }
+
+    public function isStable(): bool
+    {
+        return $this->consentVersion === self::STABLE;
+    }
 }

@@ -16,6 +16,9 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlock\Authentication\Value\ConsentHashQuery;
+use OpenConext\EngineBlock\Authentication\Value\ConsentStoreParameters;
+use OpenConext\EngineBlock\Authentication\Value\ConsentUpdateParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
@@ -98,6 +101,9 @@ class EngineBlock_Corto_Model_Consent
      */
     public function upgradeAttributeHashFor(ServiceProvider $serviceProvider, string $consentType): void
     {
+        if (!$this->_consentEnabled) {
+            return;
+        }
         $consentVersion = $this->_hasStoredConsent($serviceProvider, $consentType);
         if ($consentVersion->isUnstable()) {
             $this->_updateConsent($serviceProvider, $consentType);
@@ -157,11 +163,11 @@ class EngineBlock_Corto_Model_Consent
             return false;
         }
 
-        $parameters = array(
-            sha1($consentUuid),
-            $serviceProvider->entityId,
-            $this->_getStableAttributesHash($this->_responseAttributes),
-            $consentType,
+        $parameters = new ConsentStoreParameters(
+            hashedUserId: sha1($consentUuid),
+            serviceId: $serviceProvider->entityId,
+            attributeStableHash: $this->_getStableAttributesHash($this->_responseAttributes),
+            consentType: $consentType,
         );
 
         return $this->_hashService->storeConsentHash($parameters);
@@ -169,12 +175,17 @@ class EngineBlock_Corto_Model_Consent
 
     private function _updateConsent(ServiceProvider $serviceProvider, $consentType): bool
     {
-        $parameters = array(
-            $this->_getStableAttributesHash($this->_responseAttributes),
-            $this->_getAttributesHash($this->_responseAttributes),
-            sha1($this->_getConsentUid()),
-            $serviceProvider->entityId,
-            $consentType,
+        $consentUid = $this->_getConsentUid();
+        if (!is_string($consentUid)) {
+            return false;
+        }
+
+        $parameters = new ConsentUpdateParameters(
+            attributeStableHash: $this->_getStableAttributesHash($this->_responseAttributes),
+            attributeHash: $this->_getAttributesHash($this->_responseAttributes),
+            hashedUserId: sha1($consentUid),
+            serviceId: $serviceProvider->entityId,
+            consentType: $consentType,
         );
 
         return $this->_hashService->updateConsentHash($parameters);
@@ -182,14 +193,18 @@ class EngineBlock_Corto_Model_Consent
 
     private function _hasStoredConsent(ServiceProvider $serviceProvider, $consentType): ConsentVersion
     {
-        $consentUuid = sha1($this->_getConsentUid());
-        $parameters = [
-            $consentUuid,
-            $serviceProvider->entityId,
-            $this->_getAttributesHash($this->_responseAttributes),
-            $this->_getStableAttributesHash($this->_responseAttributes),
-            $consentType,
-        ];
-        return $this->_hashService->retrieveConsentHash($parameters);
+        $consentUid = $this->_getConsentUid();
+        if (!is_string($consentUid)) {
+            return ConsentVersion::notGiven();
+        }
+
+        $query = new ConsentHashQuery(
+            hashedUserId: sha1($consentUid),
+            serviceId: $serviceProvider->entityId,
+            attributeHash: $this->_getAttributesHash($this->_responseAttributes),
+            attributeStableHash: $this->_getStableAttributesHash($this->_responseAttributes),
+            consentType: $consentType,
+        );
+        return $this->_hashService->retrieveConsentHash($query);
     }
 }
