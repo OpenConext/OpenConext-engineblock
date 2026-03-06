@@ -78,8 +78,10 @@ services:
     engineblock.service.consent.ConsentHashService:
         class: OpenConext\EngineBlock\Service\Consent\ConsentHashService
         public: false
+        arguments:
+            - '@OpenConext\EngineBlockBundle\Authentication\Repository\DbalConsentRepository'
 
-    OpenConext\EngineBlock\Service\ConsentService:
+    OpenConext\EngineBlock\Service\Consent\ConsentService:
         arguments:
             - '@OpenConext\EngineBlockBundle\Authentication\Repository\DbalConsentRepository'
             - '@OpenConext\EngineBlock\Service\MetadataService'

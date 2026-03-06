@@ -165,7 +165,7 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
      */
     public function getConsentService()
     {
-        return $this->container->get(\OpenConext\EngineBlock\Service\ConsentService::class);
+        return $this->container->get(\OpenConext\EngineBlock\Service\Consent\ConsentService::class);
     }
 
     /**
