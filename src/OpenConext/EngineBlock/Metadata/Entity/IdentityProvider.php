@@ -32,6 +32,7 @@ use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
+use OpenConext\EngineBlockBundle\Doctrine\Type\LegacyJsonType;
 use OpenConext\EngineBlockBundle\Doctrine\Type\SerializedArrayType;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
@@ -78,7 +79,7 @@ class IdentityProvider extends AbstractRole
     /**
      * @var ConsentSettings
      */
-    #[ORM\Column(name: 'consent_settings', type: \Doctrine\DBAL\Types\Types::JSON, length: 16777215)]
+    #[ORM\Column(name: 'consent_settings', type: LegacyJsonType::NAME)]
     private $consentSettings;
 
     /**
@@ -90,7 +91,7 @@ class IdentityProvider extends AbstractRole
     /**
      * @var array<int, Discovery>
      */
-    #[ORM\Column(name: 'idp_discoveries', type: \Doctrine\DBAL\Types\Types::JSON)]
+    #[ORM\Column(name: 'idp_discoveries', type: LegacyJsonType::NAME)]
     private $discoveries;
 
     /**
