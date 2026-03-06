@@ -75,7 +75,13 @@ services:
             - '@OpenConext\EngineBlock\Metadata\LoaRepository'
             - '@logger'
 
-    OpenConext\EngineBlock\Service\ConsentService:
+    engineblock.service.consent.ConsentHashService:
+        class: OpenConext\EngineBlock\Service\Consent\ConsentHashService
+        public: false
+        arguments:
+            - '@OpenConext\EngineBlockBundle\Authentication\Repository\DbalConsentRepository'
+
+    OpenConext\EngineBlock\Service\Consent\ConsentService:
         arguments:
             - '@OpenConext\EngineBlockBundle\Authentication\Repository\DbalConsentRepository'
             - '@OpenConext\EngineBlock\Service\MetadataService'
