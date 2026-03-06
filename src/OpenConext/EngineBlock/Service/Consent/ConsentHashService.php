@@ -19,6 +19,9 @@
 namespace OpenConext\EngineBlock\Service\Consent;
 
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
+use OpenConext\EngineBlock\Authentication\Value\ConsentHashQuery;
+use OpenConext\EngineBlock\Authentication\Value\ConsentStoreParameters;
+use OpenConext\EngineBlock\Authentication\Value\ConsentUpdateParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 use OpenConext\UserLifecycle\Domain\ValueObject\Client\Name;
 use SAML2\XML\saml\NameID;
@@ -49,17 +52,17 @@ final class ConsentHashService implements ConsentHashServiceInterface
         $this->consentRepository = $consentHashRepository;
     }
 
-    public function retrieveConsentHash(array $parameters): ConsentVersion
+    public function retrieveConsentHash(ConsentHashQuery $query): ConsentVersion
     {
-        return $this->consentRepository->hasConsentHash($parameters);
+        return $this->consentRepository->hasConsentHash($query);
     }
 
-    public function storeConsentHash(array $parameters): bool
+    public function storeConsentHash(ConsentStoreParameters $parameters): bool
     {
         return $this->consentRepository->storeConsentHash($parameters);
     }
 
-    public function updateConsentHash(array $parameters): bool
+    public function updateConsentHash(ConsentUpdateParameters $parameters): bool
     {
         return $this->consentRepository->updateConsentHash($parameters);
     }
@@ -138,7 +141,6 @@ final class ConsentHashService implements ConsentHashServiceInterface
         $sortFunction($copy);
         foreach ($copy as $key => $value) {
             if (is_array($value)) {
-                $sortFunction($value);
                 $copy[$key] = $this->sortArray($value);
             }
         }

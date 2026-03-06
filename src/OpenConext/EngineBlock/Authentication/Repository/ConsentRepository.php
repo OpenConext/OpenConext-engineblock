@@ -19,6 +19,9 @@
 namespace OpenConext\EngineBlock\Authentication\Repository;
 
 use OpenConext\EngineBlock\Authentication\Model\Consent;
+use OpenConext\EngineBlock\Authentication\Value\ConsentHashQuery;
+use OpenConext\EngineBlock\Authentication\Value\ConsentStoreParameters;
+use OpenConext\EngineBlock\Authentication\Value\ConsentUpdateParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 
 interface ConsentRepository
@@ -42,18 +45,18 @@ interface ConsentRepository
     /**
      * Test if the consent row is set with an attribute hash either stable or unstable
      */
-    public function hasConsentHash(array $parameters): ConsentVersion;
+    public function hasConsentHash(ConsentHashQuery $query): ConsentVersion;
 
     /**
      * By default stores the stable consent hash. The legacy consent hash is left.
      */
-    public function storeConsentHash(array $parameters): bool;
+    public function storeConsentHash(ConsentStoreParameters $parameters): bool;
 
     /**
      * When a deprecated unstable consent hash is encoutered, we upgrade it to the new format using this
      * update consent hash method.
      */
-    public function updateConsentHash(array $parameters): bool;
+    public function updateConsentHash(ConsentUpdateParameters $parameters): bool;
 
     public function countTotalConsent($consentUid): int;
 }

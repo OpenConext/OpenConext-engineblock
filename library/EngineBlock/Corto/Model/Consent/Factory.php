@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-use OpenConext\EngineBlock\Service\Consent\ConsentHashService;
+use OpenConext\EngineBlock\Service\Consent\ConsentHashServiceInterface;
 
 /**
  * @todo write a test
@@ -27,7 +27,7 @@ class EngineBlock_Corto_Model_Consent_Factory
     private $_filterCommandFactory;
 
     /**
-     * @var ConsentHashService
+     * @var ConsentHashServiceInterface
      */
     private $_hashService;
 
@@ -36,7 +36,7 @@ class EngineBlock_Corto_Model_Consent_Factory
       */
     public function __construct(
         EngineBlock_Corto_Filter_Command_Factory $filterCommandFactory,
-        ConsentHashService $hashService
+        ConsentHashServiceInterface $hashService
     ) {
         $this->_filterCommandFactory = $filterCommandFactory;
         $this->_hashService = $hashService;

@@ -7,7 +7,7 @@ use Doctrine\Migrations\AbstractMigration;
 
 /**
  * Change to the consent schema
- * 1. Added the `attribute_stable` column, string(80), not null
+ * 1. Added the `attribute_stable` column, string(80), nullable
  * 2. Changed the `attribute` column, has been made nullable
  */
 final class Version20220503092351 extends AbstractMigration
@@ -17,7 +17,7 @@ final class Version20220503092351 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE consent ADD attribute_stable VARCHAR(80) NOT NULL, CHANGE attribute attribute VARCHAR(80) DEFAULT NULL');
+        $this->addSql('ALTER TABLE consent ADD attribute_stable VARCHAR(80) DEFAULT NULL, CHANGE attribute attribute VARCHAR(80) DEFAULT NULL');
     }
 
     public function down(Schema $schema) : void

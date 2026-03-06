@@ -83,16 +83,14 @@ final class ConsentService implements ConsentServiceInterface
     public function countAllFor($userId)
     {
         try {
-            $consents = $this->consentRepository->findAllFor($userId);
+            return $this->consentRepository->countTotalConsent($userId);
         } catch (Exception $e) {
             throw new RuntimeException(
-                sprintf('An exception occurred while fetching consents the user has given ("%s")', $e->getMessage()),
+                sprintf('An exception occurred while counting consents the user has given ("%s")', $e->getMessage()),
                 0,
                 $e
             );
         }
-
-        return count($consents);
     }
 
     public function deleteOneConsentFor(CollabPersonId $id, string $serviceProviderEntityId): bool

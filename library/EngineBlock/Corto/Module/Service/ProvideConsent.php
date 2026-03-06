@@ -149,8 +149,9 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         if ($this->isConsentDisabled($spMetadataChain, $identityProvider)) {
             if (!$consentRepository->implicitConsentWasGivenFor($serviceProviderMetadata)) {
                 $consentRepository->giveImplicitConsentFor($serviceProviderMetadata);
+            } else {
+                $consentRepository->upgradeAttributeHashFor($serviceProviderMetadata, ConsentType::TYPE_IMPLICIT);
             }
-            $consentRepository->upgradeAttributeHashFor($serviceProviderMetadata, ConsentType::TYPE_IMPLICIT);
 
             $response->setConsent(Constants::CONSENT_INAPPLICABLE);
             $response->setDestination($response->getReturn());

@@ -18,6 +18,9 @@
 
 namespace OpenConext\EngineBlock\Service\Consent;
 
+use OpenConext\EngineBlock\Authentication\Value\ConsentHashQuery;
+use OpenConext\EngineBlock\Authentication\Value\ConsentStoreParameters;
+use OpenConext\EngineBlock\Authentication\Value\ConsentUpdateParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 
 interface ConsentHashServiceInterface
@@ -25,11 +28,11 @@ interface ConsentHashServiceInterface
     /**
      * Retrieve the consent hash
      */
-    public function retrieveConsentHash(array $parameters): ConsentVersion;
+    public function retrieveConsentHash(ConsentHashQuery $query): ConsentVersion;
 
-    public function storeConsentHash(array $parameters): bool;
+    public function storeConsentHash(ConsentStoreParameters $parameters): bool;
 
-    public function updateConsentHash(array $parameters): bool;
+    public function updateConsentHash(ConsentUpdateParameters $parameters): bool;
 
     public function countTotalConsent($consentUid): int;
 
