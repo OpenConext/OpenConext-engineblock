@@ -90,7 +90,7 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
                     $userId,
                     $row['service_id'],
                     new DateTime($row['consent_date']),
-                    new ConsentType($row['consent_type']),
+                    ConsentType::from($row['consent_type']),
                     $row['attribute']
                 );
             },

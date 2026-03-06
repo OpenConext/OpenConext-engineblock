@@ -80,8 +80,8 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         $this->consentService->shouldNotReceive('retrieveConsentHash');
         $this->consentService->shouldNotReceive('updateConsentHash');
 
-        $this->consentDisabled->upgradeAttributeHashFor($serviceProvider, ConsentType::TYPE_EXPLICIT);
-        $this->consentDisabled->upgradeAttributeHashFor($serviceProvider, ConsentType::TYPE_IMPLICIT);
+        $this->consentDisabled->upgradeAttributeHashFor($serviceProvider, ConsentType::Explicit);
+        $this->consentDisabled->upgradeAttributeHashFor($serviceProvider, ConsentType::Implicit);
     }
 
     public function testConsentWriteToDatabase()

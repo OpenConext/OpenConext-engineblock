@@ -150,7 +150,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             if (!$consentRepository->implicitConsentWasGivenFor($serviceProviderMetadata)) {
                 $consentRepository->giveImplicitConsentFor($serviceProviderMetadata);
             }
-            $consentRepository->upgradeAttributeHashFor($serviceProviderMetadata, ConsentType::TYPE_IMPLICIT);
+            $consentRepository->upgradeAttributeHashFor($serviceProviderMetadata, ConsentType::Implicit);
 
             $response->setConsent(Constants::CONSENT_INAPPLICABLE);
             $response->setDestination($response->getReturn());
@@ -168,7 +168,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
 
         $priorConsent = $consentRepository->explicitConsentWasGivenFor($serviceProviderMetadata);
         if ($priorConsent) {
-            $consentRepository->upgradeAttributeHashFor($serviceProviderMetadata, ConsentType::TYPE_EXPLICIT);
+            $consentRepository->upgradeAttributeHashFor($serviceProviderMetadata, ConsentType::Explicit);
 
             $response->setConsent(Constants::CONSENT_PRIOR);
 
