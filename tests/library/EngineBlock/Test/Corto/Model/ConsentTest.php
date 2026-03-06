@@ -34,6 +34,7 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
     public function setUp(): void
     {
         $mockedResponse = Phake::mock('EngineBlock_Saml2_ResponseAnnotationDecorator');
+        Phake::when($mockedResponse)->getNameIdValue()->thenReturn('urn:collab:person:example.org:user1');
 
         $this->consentService = Mockery::mock(ConsentHashServiceInterface::class);
 
@@ -62,15 +63,14 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
     {
         $serviceProvider = new ServiceProvider("service-provider-entity-id");
 
-        $this->consentService->shouldReceive('getUnstableAttributesHash');
-        $this->consentService->shouldReceive('getStableAttributesHash');
-        $this->consentService->shouldReceive('retrieveStableConsentHash');
-        $this->consentService->shouldReceive('retrieveConsentHash');
-        $this->consentService->shouldReceive('storeConsentHash');
-        $this->consentDisabled->explicitConsentWasGivenFor($serviceProvider);
-        $this->consentDisabled->implicitConsentWasGivenFor($serviceProvider);
-        $this->consentDisabled->giveExplicitConsentFor($serviceProvider);
-        $this->consentDisabled->giveImplicitConsentFor($serviceProvider);
+        $this->consentService->shouldNotReceive('storeConsentHash');
+        $this->consentService->shouldNotReceive('retrieveConsentHash');
+        $this->consentService->shouldNotReceive('updateConsentHash');
+
+        $this->assertTrue($this->consentDisabled->explicitConsentWasGivenFor($serviceProvider));
+        $this->assertTrue($this->consentDisabled->implicitConsentWasGivenFor($serviceProvider));
+        $this->assertTrue($this->consentDisabled->giveExplicitConsentFor($serviceProvider));
+        $this->assertTrue($this->consentDisabled->giveImplicitConsentFor($serviceProvider));
     }
 
     public function testUpgradeAttributeHashSkippedWhenConsentDisabled()
@@ -87,16 +87,15 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
     public function testConsentWriteToDatabase()
     {
         $serviceProvider = new ServiceProvider("service-provider-entity-id");
-        $this->consentService->shouldReceive('getStableAttributesHash');
+
         $this->consentService->shouldReceive('getUnstableAttributesHash')->andReturn(sha1('unstable'));
-        $this->consentService->shouldReceive('retrieveConsentHash')->andReturn(ConsentVersion::stable());
-        $this->consent->explicitConsentWasGivenFor($serviceProvider);
-
         $this->consentService->shouldReceive('getStableAttributesHash')->andReturn(sha1('stable'));
-        $this->consent->implicitConsentWasGivenFor($serviceProvider);
-
+        $this->consentService->shouldReceive('retrieveConsentHash')->andReturn(ConsentVersion::stable());
         $this->consentService->shouldReceive('storeConsentHash')->andReturn(true);
-        $this->consent->giveExplicitConsentFor($serviceProvider);
-        $this->consent->giveImplicitConsentFor($serviceProvider);
+
+        $this->assertTrue($this->consent->explicitConsentWasGivenFor($serviceProvider));
+        $this->assertTrue($this->consent->implicitConsentWasGivenFor($serviceProvider));
+        $this->assertTrue($this->consent->giveExplicitConsentFor($serviceProvider));
+        $this->assertTrue($this->consent->giveImplicitConsentFor($serviceProvider));
     }
 }

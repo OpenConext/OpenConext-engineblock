@@ -172,10 +172,15 @@ class EngineBlock_Corto_Model_Consent
 
     private function _updateConsent(ServiceProvider $serviceProvider, $consentType): bool
     {
+        $consentUid = $this->_getConsentUid();
+        if (!is_string($consentUid)) {
+            return false;
+        }
+
         $parameters = array(
             $this->_getStableAttributesHash($this->_responseAttributes),
             $this->_getAttributesHash($this->_responseAttributes),
-            sha1($this->_getConsentUid()),
+            sha1($consentUid),
             $serviceProvider->entityId,
             $consentType,
         );
@@ -185,7 +190,12 @@ class EngineBlock_Corto_Model_Consent
 
     private function _hasStoredConsent(ServiceProvider $serviceProvider, $consentType): ConsentVersion
     {
-        $consentUuid = sha1($this->_getConsentUid());
+        $consentUid = $this->_getConsentUid();
+        if (!is_string($consentUid)) {
+            return ConsentVersion::notGiven();
+        }
+
+        $consentUuid = sha1($consentUid);
         $parameters = [
             $consentUuid,
             $serviceProvider->entityId,
