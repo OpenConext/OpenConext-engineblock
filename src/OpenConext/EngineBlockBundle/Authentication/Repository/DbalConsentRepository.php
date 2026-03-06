@@ -252,7 +252,8 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
                 UPDATE
                     consent
                 SET
-                    attribute_stable = ?
+                    attribute_stable = ?,
+                    attribute = NULL
                 WHERE
                     attribute = ?
                 AND
