@@ -16,24 +16,16 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Service;
+namespace OpenConext\EngineBlock\Authentication\Value;
 
-use OpenConext\EngineBlock\Authentication\Dto\ConsentList;
-use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
-
-interface ConsentServiceInterface
+final class ConsentHashQuery
 {
-    /**
-     * @param string $userId
-     * @return ConsentList
-     */
-    public function findAllFor($userId);
-
-    /**
-     * @param string $userId
-     * @return int
-     */
-    public function countAllFor($userId);
-
-    public function deleteOneConsentFor(CollabPersonId $id, string $serviceProviderEntityId): bool;
+    public function __construct(
+        public readonly string $hashedUserId,
+        public readonly string $serviceId,
+        public readonly string $attributeHash,
+        public readonly string $attributeStableHash,
+        public readonly string $consentType,
+    ) {
+    }
 }

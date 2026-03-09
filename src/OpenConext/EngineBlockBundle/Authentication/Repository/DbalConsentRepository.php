@@ -21,10 +21,15 @@ namespace OpenConext\EngineBlockBundle\Authentication\Repository;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Connection as DbalConnection;
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use OpenConext\EngineBlock\Authentication\Model\Consent;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
+use OpenConext\EngineBlock\Authentication\Value\ConsentHashQuery;
+use OpenConext\EngineBlock\Authentication\Value\ConsentStoreParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
+use OpenConext\EngineBlock\Authentication\Value\ConsentUpdateParameters;
+use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 use OpenConext\EngineBlock\Exception\RuntimeException;
 use Psr\Log\LoggerInterface;
 use function sha1;
@@ -61,12 +66,13 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
      */
     public function findAllFor($userId)
     {
-        $sql       = '
+        $sql = '
             SELECT
                 service_id
             ,   consent_date
             ,   consent_type
             ,   attribute
+            ,   attribute_stable
             FROM
                 consent
             WHERE
@@ -78,7 +84,7 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
         try {
             $statement = $this->connection->executeQuery($sql, ['hashed_user_id' => sha1($userId)]);
             $rows = $statement->fetchAllAssociative();
-        } catch (\Doctrine\DBAL\Exception $exception) {
+        } catch (Exception $exception) {
             throw new RuntimeException('Could not fetch user consents from the database', 0, $exception);
         }
 
@@ -89,7 +95,7 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
                     $row['service_id'],
                     new DateTime($row['consent_date']),
                     new ConsentType($row['consent_type']),
-                    $row['attribute']
+                    $row['attribute_stable'] ?? $row['attribute']
                 );
             },
             $rows
@@ -108,7 +114,7 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
         try {
             $this->connection->executeQuery($sql, ['hashed_user_id' => sha1($userId)]);
             $this->logger->notice(sprintf('Removed consent for hashed user id %s (%s)', sha1($userId), $userId));
-        } catch (\Doctrine\DBAL\Exception $exception) {
+        } catch (Exception $exception) {
             throw new RuntimeException(
                 sprintf(
                     'Could not delete user consents from the database for user %s',
@@ -134,7 +140,8 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
                 hashed_user_id = :hashed_user_id
             AND
                 service_id = :service_id
-            AND deleted_at IS NULL
+            AND
+                deleted_at IS NULL
         ';
         try {
             $result = $this->connection->executeQuery(
@@ -154,7 +161,7 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
             );
 
             return $result->rowCount() > 0;
-        } catch (\Doctrine\DBAL\Exception $exception) {
+        } catch (Exception $exception) {
             throw new RuntimeException(
                 sprintf(
                     'Could not delete user %s consent from the database for a specific SP %s',
@@ -163,6 +170,144 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
                 ),
                 0,
                 $exception
+            );
+        }
+    }
+
+    /**
+     * @throws RuntimeException
+     */
+    public function hasConsentHash(ConsentHashQuery $query): ConsentVersion
+    {
+        try {
+            $sql = " SELECT
+                            attribute_stable
+                        FROM
+                            consent
+                        WHERE
+                            hashed_user_id = ?
+                        AND
+                            service_id = ?
+                        AND
+                            (attribute = ? OR attribute_stable = ?)
+                        AND
+                            consent_type = ?
+                        AND
+                            deleted_at IS NULL
+            ";
+
+            $rows = $this->connection->executeQuery($sql, [
+                $query->hashedUserId,
+                $query->serviceId,
+                $query->attributeHash,
+                $query->attributeStableHash,
+                $query->consentType,
+            ])->fetchAllAssociative();
+
+            if (count($rows) < 1) {
+                // No stored consent found
+                return ConsentVersion::notGiven();
+            }
+
+            if (!empty($rows[0]['attribute_stable'])) {
+                return ConsentVersion::stable();
+            }
+            return ConsentVersion::unstable();
+        } catch (Exception $e) {
+            throw new RuntimeException(sprintf('Consent retrieval failed! Error: "%s"', $e->getMessage()));
+        }
+    }
+
+    /**
+     * @throws RuntimeException
+     */
+    public function storeConsentHash(ConsentStoreParameters $parameters): bool
+    {
+        $query = "INSERT INTO consent (hashed_user_id, service_id, attribute_stable, consent_type, consent_date, deleted_at)
+                  VALUES (?, ?, ?, ?, NOW(), '0000-00-00 00:00:00')
+                  ON DUPLICATE KEY UPDATE attribute_stable=VALUES(attribute_stable), consent_type=VALUES(consent_type), consent_date=NOW()";
+
+        try {
+            $this->connection->executeStatement($query, [
+                $parameters->hashedUserId,
+                $parameters->serviceId,
+                $parameters->attributeStableHash,
+                $parameters->consentType,
+            ]);
+        } catch (Exception $e) {
+            throw new RuntimeException(
+                sprintf('Error storing consent: "%s"', $e->getMessage())
+            );
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws RuntimeException
+     */
+    public function updateConsentHash(ConsentUpdateParameters $parameters): bool
+    {
+        $query = "
+                UPDATE
+                    consent
+                SET
+                    attribute_stable = ?,
+                    attribute = NULL
+                WHERE
+                    attribute = ?
+                AND
+                    hashed_user_id = ?
+                AND
+                    service_id = ?
+                AND
+                    consent_type = ?
+                AND
+                    deleted_at IS NULL
+        ";
+
+        try {
+            $affected = $this->connection->executeStatement($query, [
+                $parameters->attributeStableHash,
+                $parameters->attributeHash,
+                $parameters->hashedUserId,
+                $parameters->serviceId,
+                $parameters->consentType,
+            ]);
+        } catch (Exception $e) {
+            throw new RuntimeException(
+                sprintf('Error storing updated consent: "%s"', $e->getMessage())
+            );
+        }
+
+        if ($affected === 0) {
+            $this->logger->warning(
+                sprintf(
+                    'Could not upgrade unstable consent hash for user "%s" and service "%s": no matching row found. ' .
+                    'The user\'s attributes may have changed since consent was given.',
+                    $parameters->hashedUserId,
+                    $parameters->serviceId
+                )
+            );
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws RuntimeException
+     */
+    public function countTotalConsent($consentUid): int
+    {
+        $query = "SELECT COUNT(*) FROM consent where hashed_user_id = ? AND deleted_at IS NULL";
+        $parameters = [sha1($consentUid)];
+
+        try {
+            return (int) $this->connection->executeQuery($query, $parameters)->fetchOne();
+        } catch (Exception $e) {
+            throw new RuntimeException(
+                sprintf('Error counting consent: "%s"', $e->getMessage())
             );
         }
     }

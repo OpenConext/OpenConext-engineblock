@@ -55,8 +55,14 @@ class Consent
     /**
      * @var string
      */
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 80)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 80, nullable: true)]
     public ?string $attribute = null;
+
+    /**
+     * @var string
+     */
+    #[ORM\Column(name: 'attribute_stable', type: \Doctrine\DBAL\Types\Types::STRING, length: 80, nullable: true)]
+    public ?string $attributeStable = null;
 
     /**
      * @var string
