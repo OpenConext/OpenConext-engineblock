@@ -55,6 +55,8 @@ return $overrides + [
     'ipAddress'             => 'IP',
     'statusCode'            => 'Statuscode',
     'artCode'               => 'EC',
+    'datetime'              => 'Tijd',
+    'requestUrl'            => 'Aanvraag-URL',
     'statusMessage'         => 'Statusbericht',
     'attributeName'         => 'Attribuutnaam',
     'attributeValue'        => 'Attribuutwaarde',
