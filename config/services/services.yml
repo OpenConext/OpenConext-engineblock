@@ -24,8 +24,7 @@ services:
             - { name: openconext.monitor.health_check }
 
     OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Spaceless:
-        tags:
-             - { name: 'twig.extension' }
+        autoconfigure: true
 
     OpenConext\EngineBlockBundle\Value\ExecutionTime:
         factory: [ OpenConext\EngineBlockBundle\Value\ExecutionTime, 'of' ]
@@ -296,53 +295,46 @@ services:
             - '@OpenConext\EngineBlock\Metadata\MetadataRepository\CachedDoctrineMetadataRepository'
 
     OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Debug:
-        tags:
-             - { name: 'twig.extension' }
+        autoconfigure: true
 
     OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Feedback:
+        autoconfigure: true
         arguments:
             - '@engineblock.compat.application'
             - '@OpenConext\EngineBlockBundle\Configuration\ErrorFeedbackConfiguration'
             - '@engineblock.compat.repository.metadata'
             - '@OpenConext\EngineBlockBundle\Authentication\Service\SamlResponseHelper'
-        tags:
-             - { name: 'twig.extension' }
 
     OpenConext\EngineBlockBundle\Twig\Extensions\Extension\GlobalSiteNotice:
+        autoconfigure: true
         arguments:
             - '%global.site_notice.show%'
             - '%global.site_notice.allowed.tags%'
             - '@translator'
-        tags:
-             - { name: 'twig.extension' }
 
     OpenConext\EngineBlockBundle\Twig\Extensions\Extension\I18n:
+        autoconfigure: true
         arguments:
             - '@translator'
-        tags:
-             - { name: 'twig.extension' }
 
     OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Locale:
+        autoconfigure: true
         arguments:
             - '@request_stack'
             - '@OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider'
             - '%locale%'
-        tags:
-             - { name: 'twig.extension' }
 
     OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Metadata:
+        autoconfigure: true
         arguments:
             - '@engineblock.compat.metadata.definitions'
             - '@translator'
-        tags:
-             - { name: 'twig.extension' }
 
     OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Wayf:
+        autoconfigure: true
         arguments:
             - '@request_stack'
             - '@translator'
-        tags:
-             - { name: 'twig.extension' }
 
     OpenConext\EngineBlockBundle\Service\DiscoverySelectionService:
 

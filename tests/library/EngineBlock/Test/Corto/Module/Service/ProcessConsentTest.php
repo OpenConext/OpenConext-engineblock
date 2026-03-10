@@ -291,8 +291,7 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends TestCase
 
         $request = new Request();
         $request->setSession(new Session($this->sessionMock));
-        $stack = new RequestStack();
-        $stack->push($request);
+        $stack = new RequestStack([$request]);
 
         return new ProcessingStateHelper($stack);
     }

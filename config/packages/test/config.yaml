@@ -6,11 +6,10 @@ services:
 
     engineblock.twig.extension.global_site_notice:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\FunctionalTestingGlobalSiteNotice
+        autoconfigure: true
         arguments:
             - "@request_stack"
             - "%global.site_notice.allowed.tags%"
-        tags:
-            - { name: 'twig.extension' }
 
 web_profiler:
     toolbar: false

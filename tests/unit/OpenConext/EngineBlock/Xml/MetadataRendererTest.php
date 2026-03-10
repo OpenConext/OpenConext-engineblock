@@ -54,6 +54,7 @@ use SAML2\XML\md\EntityDescriptor;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
+use Twig\Extension\AttributeExtension;
 use Twig\Loader\FilesystemLoader;
 
 class MetadataRendererTest extends TestCase
@@ -320,7 +321,7 @@ class MetadataRendererTest extends TestCase
         $translatorExtension = new TranslationExtension($translator);
         $environment->addExtension($translatorExtension);
 
-        $environment->addExtension(new Spaceless());
+        $environment->addExtension(new AttributeExtension(Spaceless::class));
 
         $keyPairFactory = $this->createMock(KeyPairFactory::class);
         $keyPairFactory
