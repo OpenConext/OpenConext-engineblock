@@ -64,12 +64,6 @@ final class MockTranslator implements TranslatorInterface
         return $this->translator->trans($id, $parameters, $domain, $locale);
     }
 
-    public function transChoice($id, $number, array $parameters = [], $domain = null, $locale = null)
-    {
-        $this->translator->getCatalogue($locale)->add($this->translations);
-        return $this->translator->transChoice($id, $number, $parameters, $domain, $locale);
-    }
-
     public function setLocale(string $locale): void
     {
         $this->translator->setLocale($locale);
