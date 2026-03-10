@@ -26,7 +26,7 @@ use Phake;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Symfony\Bridge\Monolog\Logger;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class SsoNotificationServiceTest extends TestCase
@@ -46,7 +46,7 @@ class SsoNotificationServiceTest extends TestCase
     private $request;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $loggerMock;
 
@@ -67,7 +67,7 @@ class SsoNotificationServiceTest extends TestCase
 
     public function setUp(): void
     {
-        $this->loggerMock = Phake::mock(Logger::class);
+        $this->loggerMock = Phake::mock(LoggerInterface::class);
         $this->proxyServerMock = Phake::mock(EngineBlock_Corto_ProxyServer::class);
         $this->requestMock = Phake::mock(EngineBlock_Saml2_AuthnRequestAnnotationDecorator::class);
         $this->ssoNotificationService = new SsoNotificationService(
