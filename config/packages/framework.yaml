@@ -17,7 +17,6 @@ framework:
             - '%kernel.project_dir%/languages'
             - '%kernel.project_dir%/theme/base/translations'
             - '%kernel.project_dir%/theme/%theme.name%/translations'
-    form: ~
     csrf_protection: ~
     validation: {
         enable_attributes: true,
