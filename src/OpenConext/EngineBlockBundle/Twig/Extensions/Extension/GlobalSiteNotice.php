@@ -19,10 +19,9 @@
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use Twig\Attribute\AsTwigFunction;
 
-class GlobalSiteNotice extends AbstractExtension
+class GlobalSiteNotice
 {
     /**
      * @var bool
@@ -49,25 +48,19 @@ class GlobalSiteNotice extends AbstractExtension
         $this->translator = $translator;
     }
 
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction('shouldDisplayGlobalSiteNotice', $this->shouldDisplayGlobalSiteNotice(...)),
-            new TwigFunction('getGlobalSiteNotice', $this->getGlobalSiteNotice(...)),
-            new TwigFunction('getAllowedHtmlForNotice', $this->getAllowedHtmlForNotice(...)),
-        ];
-    }
-
+    #[AsTwigFunction(name: 'shouldDisplayGlobalSiteNotice')]
     public function shouldDisplayGlobalSiteNotice() : bool
     {
         return $this->shouldDisplayGlobalSiteNotice;
     }
 
+    #[AsTwigFunction(name: 'getGlobalSiteNotice')]
     public function getGlobalSiteNotice(): string
     {
         return $this->translator->trans('site_notice');
     }
 
+    #[AsTwigFunction(name: 'getAllowedHtmlForNotice')]
     public function getAllowedHtmlForNotice(): string
     {
         return $this->allowedHtml;
