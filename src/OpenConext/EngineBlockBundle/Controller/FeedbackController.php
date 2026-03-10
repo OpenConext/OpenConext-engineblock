@@ -129,7 +129,7 @@ class FeedbackController
                 ->render(
                     '@theme/Authentication/View/Feedback/unsupported-signature-method.html.twig',
                     [
-                        'signatureMethod' => $request->get('signature-method')
+                        'signatureMethod' => $request->query->get('signature-method')
                     ]
                 ),
             400
@@ -156,7 +156,7 @@ class FeedbackController
     #[Route(path: '/authentication/feedback/unknown-service-provider', name: 'authentication_feedback_unknown_service_provider', methods: ['GET'])]
     public function unknownServiceProviderAction(Request $request)
     {
-        $entityId = $request->get('entity-id');
+        $entityId = $request->query->get('entity-id');
 
         // Add feedback info from url
         $customFeedbackInfo = ['EntityID' => $entityId];
@@ -177,8 +177,8 @@ class FeedbackController
     {
         // Add feedback info from url
         $customFeedbackInfo = [
-            'EntityID' => $request->get('entity-id'),
-            'Destination' => $request->get('destination'),
+            'EntityID' => $request->query->get('entity-id'),
+            'Destination' => $request->query->get('destination'),
         ];
 
         $this->setFeedbackInformationOnSession($request->getSession(), $customFeedbackInfo);
@@ -406,7 +406,7 @@ class FeedbackController
     {
         // Add feedback info from url
         $customFeedbackInfo = [
-            'Idp Hash' => $request->get('idp-hash'),
+            'Idp Hash' => $request->query->get('idp-hash'),
         ];
         $this->setFeedbackInformationOnSession($request->getSession(), $customFeedbackInfo);
 
@@ -421,7 +421,7 @@ class FeedbackController
     {
         // Add feedback info from url
         $customFeedbackInfo = [
-            'Key ID' => $request->get('keyid'),
+            'Key ID' => $request->query->get('keyid'),
         ];
         $this->setFeedbackInformationOnSession($request->getSession(), $customFeedbackInfo);
 

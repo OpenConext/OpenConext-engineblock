@@ -22,10 +22,9 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlockBundle\Service\IdpHistoryService;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use Twig\Attribute\AsTwigFunction;
 
-class Wayf extends AbstractExtension
+class Wayf
 {
     const PREVIOUS_SELECTION_COOKIE_NAME = 'selectedidps';
     const REMEMBER_CHOICE_COOKIE_NAME = 'rememberchoice';
@@ -48,30 +47,12 @@ class Wayf extends AbstractExtension
         $this->translator = $translator;
     }
 
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction(
-                'wayfConfig',
-                $this->getWayfJsonConfig(...)
-            ),
-            new TwigFunction(
-                'connectedIdps',
-                $this->getConnectedIdps(...)
-            ),
-            new TwigFunction(
-                'idpDiscoveryHash',
-                $this->idpDiscoveryHash(...)
-            ),
-
-        ];
-    }
-
     /**
      * @param array $idpList
      *
      * @return ConnectedIdps
      */
+    #[AsTwigFunction(name: 'connectedIdps')]
     public function getConnectedIdps(array $idpList): ConnectedIdps
     {
         $previousSelectionIndex = $this->indexPreviousSelection();
@@ -165,6 +146,7 @@ class Wayf extends AbstractExtension
      *
      * @return string Returns a json encoded config string. Used by the JavaScript of the Wayf to behave as intended.
      */
+    #[AsTwigFunction(name: 'wayfConfig')]
     public function getWayfJsonConfig(
         ConnectedIdps $connectedIdPs,
         ServiceProvider $serviceProvider,
@@ -230,6 +212,7 @@ class Wayf extends AbstractExtension
         return $previousSelectionIndexed;
     }
 
+    #[AsTwigFunction(name: 'idpDiscoveryHash')]
     public function idpDiscoveryHash(string $entityId, ?string $discoveryHash = null): string
     {
         return (new IdpHistoryService())->makeIdpDiscoveryHash($entityId, $discoveryHash);

@@ -32,13 +32,18 @@ class ProcessingStateHelper implements ProcessingStateHelperInterface
     const SESSION_KEY = 'Processing';
 
     /**
-     * @var SessionInterface
+     * @var RequestStack
      */
-    private $session;
+    private $requestStack;
 
     public function __construct(RequestStack $requestStack)
     {
-        $this->session = $requestStack->getSession();
+        $this->requestStack = $requestStack;
+    }
+
+    private function session(): SessionInterface
+    {
+        return $this->requestStack->getSession();
     }
 
     /**
@@ -56,9 +61,9 @@ class ProcessingStateHelper implements ProcessingStateHelperInterface
     ) {
         // Add the additional checks to the session
         $processingStep = new ProcessingStateStep($response, $role);
-        $processing = $this->session->get(self::SESSION_KEY);
+        $processing = $this->session()->get(self::SESSION_KEY);
         $processing[$requestId][$name] = $processingStep;
-        $this->session->set(self::SESSION_KEY, $processing);
+        $this->session()->set(self::SESSION_KEY, $processing);
 
         return $processingStep;
     }
@@ -72,7 +77,7 @@ class ProcessingStateHelper implements ProcessingStateHelperInterface
      */
     public function getStepByRequestId($requestId, $name)
     {
-        $processing = $this->session->get(self::SESSION_KEY);
+        $processing = $this->session()->get(self::SESSION_KEY);
         if (empty($processing)) {
             throw new EngineBlock_Corto_Module_Services_SessionLostException('Session lost');
         }
@@ -92,7 +97,7 @@ class ProcessingStateHelper implements ProcessingStateHelperInterface
 
     public function hasStepRequestById(string $requestId, string $name): bool
     {
-        $processing = $this->session->get(self::SESSION_KEY);
+        $processing = $this->session()->get(self::SESSION_KEY);
         if (empty($processing)) {
             return false;
         }
@@ -119,11 +124,11 @@ class ProcessingStateHelper implements ProcessingStateHelperInterface
         $name,
         EngineBlock_Saml2_ResponseAnnotationDecorator $response
     ) {
-        $processing = $this->session->get(self::SESSION_KEY);
+        $processing = $this->session()->get(self::SESSION_KEY);
         $processingStep = $this->getStepByRequestId($requestId, $name);
         $updatedProcessingStep = new ProcessingStateStep($response, $processingStep->getRole());
         $processing[$requestId][$name] = $updatedProcessingStep;
-        $this->session->set(self::SESSION_KEY, $processing);
+        $this->session()->set(self::SESSION_KEY, $processing);
 
         return $updatedProcessingStep;
     }
@@ -135,7 +140,7 @@ class ProcessingStateHelper implements ProcessingStateHelperInterface
      */
     public function clearStepByRequestId($requestId)
     {
-        $processing = $this->session->get(self::SESSION_KEY);
+        $processing = $this->session()->get(self::SESSION_KEY);
         if (empty($processing)) {
             throw new EngineBlock_Corto_Module_Services_SessionLostException('Session lost after consent');
         }
@@ -147,6 +152,6 @@ class ProcessingStateHelper implements ProcessingStateHelperInterface
 
         unset($processing[$requestId]);
 
-        $this->session->set(self::SESSION_KEY, $processing);
+        $this->session()->set(self::SESSION_KEY, $processing);
     }
 }

@@ -40,21 +40,19 @@ class WayfController extends AbstractController
 
     public function wayfAction(Request $request)
     {
-        $currentLocale = $request->get('lang', 'en');
+        $currentLocale = $request->query->getString('lang', 'en');
         $request->cookies->set('lang', $currentLocale);
-        $backLink = (bool) $request->get('backLink', false);
-        $displayUnconnectedIdpsWayf = (bool) $request->get('displayUnconnectedIdpsWayf', false);
-        $addDiscoveries = (bool) $request->get('addDiscoveries', true);
-        $rememberChoiceFeature = (bool) $request->get('rememberChoiceFeature', false);
-        $cutoffPointForShowingUnfilteredIdps = $request->get('cutoffPointForShowingUnfilteredIdps', 100);
-        $showIdPBanner = $request->get('showIdPBanner', true);
-        $defaultIdpEntityId = $request->get('defaultIdpEntityId', null);
-        // Casting a string 'true' or 'false' using filter_var (bool) does not work here
-        $showIdPBanner = filter_var($showIdPBanner, FILTER_VALIDATE_BOOLEAN);
+        $backLink = $request->query->getBoolean('backLink');
+        $displayUnconnectedIdpsWayf = $request->query->getBoolean('displayUnconnectedIdpsWayf');
+        $addDiscoveries = $request->query->getBoolean('addDiscoveries', true);
+        $rememberChoiceFeature = $request->query->getBoolean('rememberChoiceFeature');
+        $cutoffPointForShowingUnfilteredIdps = $request->query->getInt('cutoffPointForShowingUnfilteredIdps', 100);
+        $showIdPBanner = $request->query->getBoolean('showIdPBanner', true);
+        $defaultIdpEntityId = $request->query->get('defaultIdpEntityId');
 
-        $connectedIdps = (int) $request->get('connectedIdps', 5);
-        $unconnectedIdps = (int) $request->get('unconnectedIdps', 0);
-        $randomIdps = (int) $request->get('randomIdps', 0);
+        $connectedIdps = $request->query->getInt('connectedIdps', 5);
+        $unconnectedIdps = $request->query->getInt('unconnectedIdps');
+        $randomIdps = $request->query->getInt('randomIdps');
 
         $idpList = $randomIdps === 0
             ? TestEntitySeeder::buildIdps($connectedIdps, $unconnectedIdps, $currentLocale, $defaultIdpEntityId, $addDiscoveries)

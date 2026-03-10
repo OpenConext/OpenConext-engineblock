@@ -23,6 +23,7 @@ use OpenConext\EngineBlockBundle\Bridge\DiContainerRuntime;
 use OpenConext\EngineBlockBundle\Exception\Art;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 
 define('ENGINEBLOCK_FOLDER_ROOT'       , realpath(__DIR__ . '/../../') . '/');
 define('ENGINEBLOCK_FOLDER_LIBRARY'    , ENGINEBLOCK_FOLDER_ROOT . 'library/');
@@ -235,8 +236,12 @@ class EngineBlock_ApplicationSingleton
         $log->log($severity, $message, $logContext);
 
         // Store some valuable debug info in session so it can be displayed on feedback pages
-        @session_start();
-        $this->getSession()->set('feedbackInfo', $this->collectFeedbackInfo($exception));
+        try {
+            @session_start();
+            $this->getSession()->set('feedbackInfo', $this->collectFeedbackInfo($exception));
+        } catch (SessionNotFoundException $e) {
+            // No active session (e.g. CLI context or recursive error during boot); skip session write
+        }
 
         // flush all messages in queue, something went wrong!
         $this->flushLog('An error was caught');
@@ -350,7 +355,11 @@ class EngineBlock_ApplicationSingleton
     {
         $messageSuffix = '-> Redirecting to feedback page';
         $this->reportError($exception, $messageSuffix);
-        $this->getSession()->set('feedbackInfo', array_merge($feedbackInfo, $this->getSession()->get('feedbackInfo', [])));
+        try {
+            $this->getSession()->set('feedbackInfo', array_merge($feedbackInfo, $this->getSession()->get('feedbackInfo', [])));
+        } catch (SessionNotFoundException $e) {
+            // No active session (e.g. CLI or recursive error); skip session merge
+        }
         $this->getHttpResponse()->setRedirectUrl($feedbackUrl);
     }
 

@@ -23,7 +23,6 @@ use OpenConext\EngineBlockBundle\Twig\Extensions\Extension\ConnectedIdps;
 use OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Wayf;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -105,12 +104,11 @@ class WayfTest extends TestCase
     public function testGetConnectedIdpsWithPreviousSelection(string $storedCookieValue, string $expectedName)
     {
         // Create a mock request with cookie
-        $request = $this->createMock(Request::class);
-        $request->cookies = $this->createMock(ParameterBag::class);
-        $request->cookies->method('get')
-            ->willReturn(json_encode([
+        $request = Request::create('/', 'GET', [], [
+            'selectedidps' => json_encode([
                 ['idp' => $storedCookieValue, 'time' => 12345]
-            ]));
+            ])
+        ]);
 
         $requestStack = $this->createMock(RequestStack::class);
         $requestStack->method('getCurrentRequest')

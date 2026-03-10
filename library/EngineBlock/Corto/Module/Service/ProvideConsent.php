@@ -139,9 +139,6 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $authenticationState = $this->_authenticationStateHelper->getAuthenticationState();
 
         $session = $httpRequest->getSession();
-        if($session === null){
-            throw new EngineBlock_Exception('Discovery override failure: No session available.');
-        }
         $idpDiscovery = $this->discoverySelectionService->getDiscoveryFromRequest($session, $identityProvider);
 
 

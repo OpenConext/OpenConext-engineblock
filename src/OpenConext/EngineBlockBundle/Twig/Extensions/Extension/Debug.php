@@ -18,27 +18,19 @@
 
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use Twig\Attribute\AsTwigFunction;
 
 /**
  * The debug extension is used to provide var_dump, var_export and print_r functions for usage in Twig templates.
  */
-class Debug extends AbstractExtension
+class Debug
 {
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction('var_export', $this->varExport(...)),
-            new TwigFunction('print_r', $this->printHumanReadable(...)),
-        ];
-    }
-
     /**
      * Provide var export functionality for use in Twig templates
      * @param mixed $expression
      * @return string
      */
+    #[AsTwigFunction(name: 'var_export')]
     public function varExport($expression)
     {
         return var_export($expression, true);
@@ -49,6 +41,7 @@ class Debug extends AbstractExtension
      * @param mixed $expression
      * @return string
      */
+    #[AsTwigFunction(name: 'print_r')]
     public function printHumanReadable($expression)
     {
         return print_r($expression, true);

@@ -11,8 +11,8 @@ More information about our release strategy can be found in
 the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on
 the EngineBlock wiki.
 
-## UNRELEASED 7.2.0? / 8.0.0?
-Upgrade to Symfony 6.4?
+## UNRELEASED 7.2.0
+Upgrade to Symfony 7.4
 Upgrade to `doctrine/dbal` 4
 
 Bugfixes:

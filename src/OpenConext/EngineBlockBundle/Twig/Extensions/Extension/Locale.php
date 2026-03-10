@@ -21,14 +21,13 @@ namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use Twig\Attribute\AsTwigFunction;
 
 /**
  * The Locale extension can be used to retrieve the currently active locale. By default returns the locale that
  * can be found in the RequestStack. If none can be found in the request stack, the default locale is returned.
  */
-class Locale extends AbstractExtension
+class Locale
 {
     /**
      * @var string
@@ -51,17 +50,7 @@ class Locale extends AbstractExtension
         $this->languageSupportProvider = $languageSupportProvider;
     }
 
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction('locale', $this->getLocale(...)),
-            new TwigFunction('postData', $this->getPostData(...)),
-            new TwigFunction('queryStringFor', $this->getQueryStringFor(...)),
-            new TwigFunction('supportedLocales', $this->getSupportedLocales(...)),
-
-        ];
-    }
-
+    #[AsTwigFunction(name: 'postData')]
     public function getPostData()
     {
         $postArray = [];
@@ -76,6 +65,7 @@ class Locale extends AbstractExtension
      * @param $locale
      * @return string
      */
+    #[AsTwigFunction(name: 'queryStringFor')]
     public function getQueryStringFor($locale)
     {
         $params = ['lang' => $locale];
@@ -94,11 +84,13 @@ class Locale extends AbstractExtension
         return $query;
     }
 
+    #[AsTwigFunction(name: 'locale')]
     public function getLocale()
     {
         return $this->locale;
     }
 
+    #[AsTwigFunction(name: 'supportedLocales')]
     public function getSupportedLocales()
     {
         return $this->languageSupportProvider->getSupportedLanguages();

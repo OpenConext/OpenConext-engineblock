@@ -22,14 +22,13 @@ use EngineBlock_Attributes_Metadata;
 use OpenConext\Value\Saml\NameIdFormat;
 use SAML2\XML\saml\NameID;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use Twig\Attribute\AsTwigFunction;
 
 /**
  * Used to perform certain view related operations on metadata. For example this extension provides a function that
  * can sort metadata by display order.
  */
-class Metadata extends AbstractExtension
+class Metadata
 {
     /**
      * @var string
@@ -47,36 +46,6 @@ class Metadata extends AbstractExtension
         $this->translator = $translator;
     }
 
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction(
-                'sortByDisplayOrder',
-                $this->sortByDisplayOrder(...),
-                ['is_safe' => ['html']]
-            ),
-            new TwigFunction(
-                'attributeSourceLogoUrl',
-                $this->getAttributeSourceLogoUrl(...)
-            ),
-            new TwigFunction(
-                'attributeSourceDisplayName',
-                $this->getAttributeSourceDisplayName(...),
-                ['is_safe' => ['html']]
-            ),
-            new TwigFunction(
-                'attributeShortName',
-                $this->getAttributeShortName(...),
-                ['is_safe' => ['html']]
-            ),
-            new TwigFunction(
-                'attributeName',
-                $this->getAttributeName(...),
-                ['is_safe' => ['html']]
-            ),
-        ];
-    }
-
     /**
      * Sort, group and normalize attributes for display on the consent page.
      *
@@ -88,6 +57,7 @@ class Metadata extends AbstractExtension
      * @param NaneID|null $nameId
      * @return array
      */
+    #[AsTwigFunction(name: 'sortByDisplayOrder', isSafe: ['html'])]
     public function sortByDisplayOrder($attributes, array $attributeSources = null, NameID $nameId = null)
     {
         $sortedAttributes = $this->attributeMetadata->sortByDisplayOrder($attributes);
@@ -106,6 +76,7 @@ class Metadata extends AbstractExtension
      * @param string $source Source identifier (e.g. "voot")
      * @return string URL
      */
+    #[AsTwigFunction(name: 'attributeSourceLogoUrl')]
     public function getAttributeSourceLogoUrl($source)
     {
         return $this->translator->trans('consent_attribute_source_logo_url_' . strtolower($source));
@@ -117,6 +88,7 @@ class Metadata extends AbstractExtension
      * @param string $source Source identifier (e.g. "voot")
      * @return string
      */
+    #[AsTwigFunction(name: 'attributeSourceDisplayName', isSafe: ['html'])]
     public function getAttributeSourceDisplayName($source)
     {
         return $this->translator->trans('consent_attribute_source_' . strtolower($source));
@@ -130,6 +102,7 @@ class Metadata extends AbstractExtension
      * @param string $preferecLocale
      * @return mixed
      */
+    #[AsTwigFunction(name: 'attributeShortName', isSafe: ['html'])]
     public function getAttributeShortName($attributeId, $preferecLocale = 'en')
     {
         $attributeShortName = $this->getAttributeName($attributeId, $preferecLocale);
@@ -145,6 +118,7 @@ class Metadata extends AbstractExtension
      * @param string $preferedLocale
      * @return string
      */
+    #[AsTwigFunction(name: 'attributeName', isSafe: ['html'])]
     public function getAttributeName($attributeId, $preferedLocale = 'en')
     {
         return $this->attributeMetadata->getName($attributeId, $preferedLocale);
