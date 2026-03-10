@@ -144,7 +144,7 @@ class ServiceProviderController extends AbstractController
             throw new RuntimeException(sprintf('Unrecognized message type received: "%s"', get_class($message)));
         }
 
-        $xml = base64_decode($request->get('SAMLResponse'));
+        $xml = base64_decode($request->request->getString('SAMLResponse') ?: $request->query->getString('SAMLResponse'));
 
         // Format the XML
         $doc = new DomDocument('1.0');

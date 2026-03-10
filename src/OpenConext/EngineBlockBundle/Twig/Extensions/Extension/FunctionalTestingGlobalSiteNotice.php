@@ -41,7 +41,7 @@ class FunctionalTestingGlobalSiteNotice implements GlobalSiteNoticeInterface
     #[AsTwigFunction(name: 'shouldDisplayGlobalSiteNotice')]
     public function shouldDisplayGlobalSiteNotice() : bool
     {
-        return (bool) $this->request->get('showGlobalSiteNotice', false);
+        return (bool) $this->request->query->get('showGlobalSiteNotice', false);
     }
 
     #[AsTwigFunction(name: 'getGlobalSiteNotice')]
@@ -62,7 +62,7 @@ class FunctionalTestingGlobalSiteNotice implements GlobalSiteNoticeInterface
     You are about to experience the awe and mystery which reaches from the inner mind to... The Outer Limits.
 </p>
 MSG;
-        return (string) $this->request->get('globalSiteNotice', $message);
+        return (string) $this->request->query->get('globalSiteNotice', $message);
     }
 
     #[AsTwigFunction(name: 'getAllowedHtmlForNotice')]
