@@ -18,7 +18,6 @@
 
 namespace OpenConext\EngineBlockBridge\Logger;
 
-use EngineBlock_UserDirectory;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
@@ -27,21 +26,22 @@ use OpenConext\EngineBlock\Logger\AuthenticationLogger;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use OpenConext\EngineBlock\Metadata\Loa;
 use OpenConext\Mockery\Matcher\ValueObjectEqualsMatcher;
 use OpenConext\Mockery\Matcher\ValueObjectListEqualsMatcher;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class AuthenticationLoggerAdapterTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBridge')]
-    #[\PHPUnit\Framework\Attributes\Group('Logger')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlockBridge')]
+    #[Group('Logger')]
+    #[Test]
     public function arguments_are_converted_correctly()
     {
         $serviceProviderEntityId  = 'SpEntityId';
@@ -99,9 +99,9 @@ class AuthenticationLoggerAdapterTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBridge')]
-    #[\PHPUnit\Framework\Attributes\Group('Logger')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlockBridge')]
+    #[Group('Logger')]
+    #[Test]
     public function arguments_with_log_attributes_are_converted_correctly()
     {
         $serviceProviderEntityId  = 'SpEntityId';

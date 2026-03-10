@@ -17,9 +17,9 @@
 
 namespace OpenConext\EngineBlock\Stepup;
 
+use Assert\AssertionFailedException;
 use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlock\Exception\InvalidStepupConfigurationException;
-use Assert\AssertionFailedException;
 
 class StepupEndpoint
 {

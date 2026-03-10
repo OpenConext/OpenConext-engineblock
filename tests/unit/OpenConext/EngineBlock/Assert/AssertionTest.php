@@ -19,13 +19,18 @@
 namespace OpenConext\EngineBlock\Assert;
 
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
+use OpenConext\TestDataProvider;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class AssertionTest extends TestCase
 {
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Assertion')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Assertion')]
+    #[Test]
     public function non_empty_strings_are_valid()
     {
         $this->expectNotToPerformAssertions();
@@ -39,10 +44,10 @@ class AssertionTest extends TestCase
      *
      * @param mixed $value
      */
-    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notStringOrEmptyString')]
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Assertion')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProviderExternal(TestDataProvider::class, 'notStringOrEmptyString')]
+    #[Group('EngineBlock')]
+    #[Group('Assertion')]
+    #[Test]
     public function not_strings_or_empty_strings_are_invalid($value)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -50,9 +55,9 @@ class AssertionTest extends TestCase
         Assertion::nonEmptyString($value, 'value');
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Assertion')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Assertion')]
+    #[Test]
     public function a_missing_key_makes_the_assertion_fail()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -63,9 +68,9 @@ class AssertionTest extends TestCase
         Assertion::keysExist($actualData, $requiredKeys);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Assertion')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Assertion')]
+    #[Test]
     public function keys_exists_assertion_succeeds_if_all_required_keys_are_present_()
     {
         $requiredKeys = ['a', 'b', 'c'];
@@ -83,10 +88,10 @@ class AssertionTest extends TestCase
         $this->assertFalse($exceptionCaught, 'When all required keys are present, no exception should be thrown');
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notStringOrEmptyString')]
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Assertion')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProviderExternal(TestDataProvider::class, 'notStringOrEmptyString')]
+    #[Group('EngineBlock')]
+    #[Group('Assertion')]
+    #[Test]
     public function valid_hashing_algorithm_only_accepts_non_empty_strings($notStringOrEmptyString)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -94,9 +99,9 @@ class AssertionTest extends TestCase
         Assertion::validHashingAlgorithm($notStringOrEmptyString);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Assertion')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Assertion')]
+    #[Test]
     public function an_invalid_hashing_algorithm_causes_the_assertion_to_throw_an_exception()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -104,10 +109,10 @@ class AssertionTest extends TestCase
         Assertion::validHashingAlgorithm('invalid');
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('validHashingAlgorithmProvider')]
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Assertion')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProvider('validHashingAlgorithmProvider')]
+    #[Group('EngineBlock')]
+    #[Group('Assertion')]
+    #[Test]
     public function existing_hashing_algorithms_are_considered_valid($validHashingAlgorithm)
     {
         $exceptionCaught = false;

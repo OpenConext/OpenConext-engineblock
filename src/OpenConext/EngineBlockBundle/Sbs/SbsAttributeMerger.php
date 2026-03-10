@@ -19,7 +19,6 @@
 namespace OpenConext\EngineBlockBundle\Sbs;
 
 use EngineBlock_ApplicationSingleton;
-use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
 
 class SbsAttributeMerger
 {

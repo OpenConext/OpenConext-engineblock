@@ -21,7 +21,6 @@ namespace OpenConext\EngineBlock\Metadata;
 use InvalidArgumentException;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_Error;
 
 class AttributeReleasePolicyTest extends TestCase
 {

@@ -18,9 +18,9 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore;
 
+use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\Local\LocalFilesystemAdapter as Local;
-use League\Flysystem\Filesystem;
 use RuntimeException;
 
 abstract class AbstractDataStore

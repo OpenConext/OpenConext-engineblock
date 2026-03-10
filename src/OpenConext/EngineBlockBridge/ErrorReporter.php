@@ -19,8 +19,8 @@
 namespace OpenConext\EngineBlockBridge;
 
 use EngineBlock_ApplicationSingleton;
-use EngineBlock_Corto_Exception_PEPNoAccess;
 use EngineBlock_Corto_Exception_HasFeedbackInfoInterface;
+use EngineBlock_Corto_Exception_PEPNoAccess;
 use EngineBlock_Exception;
 use Exception;
 use Psr\Log\LoggerInterface;

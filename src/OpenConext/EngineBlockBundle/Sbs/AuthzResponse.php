@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Sbs;
 
 use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
+use ValueError;
 
 final readonly class AuthzResponse
 {
@@ -48,7 +49,7 @@ final readonly class AuthzResponse
 
         try {
             $msg = Msg::from($jsonData['msg']);
-        } catch (\ValueError $e) {
+        } catch (ValueError $e) {
             throw new InvalidSbsResponseException(sprintf('"%s" is not a valid msg', $jsonData['msg']));
         }
 

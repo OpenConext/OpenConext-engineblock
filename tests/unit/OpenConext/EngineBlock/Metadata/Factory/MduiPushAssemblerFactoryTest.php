@@ -21,10 +21,8 @@ namespace OpenConext\EngineBlock\Metadata\Factory;
 use OpenConext\EngineBlock\Metadata\EmptyMduiElement;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Mdui;
-use OpenConext\EngineBlock\Metadata\MduiElement;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use function is_string;
 
 class MduiPushAssemblerFactoryTest extends TestCase
 {

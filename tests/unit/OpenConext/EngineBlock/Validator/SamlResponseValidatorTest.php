@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlock\Validator;
 
 use DOMDocument;
 use OpenConext\EngineBlock\Exception\InvalidSamlResponseException;
+use PHPUnit\Framework\Attributes\BackupGlobals;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -40,7 +41,7 @@ class SamlResponseValidatorTest extends TestCase
         $_SERVER = [];
     }
 
-    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
+    #[BackupGlobals(true)]
     public function test_happy_flow()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
@@ -56,7 +57,7 @@ class SamlResponseValidatorTest extends TestCase
      * A SAML response without Assertion is not validated, and will be investigated in greater detail when processing
      * the response.
      */
-    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
+    #[BackupGlobals(true)]
     public function test_assertion_less_saml_responses_are_passsed()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
@@ -72,7 +73,7 @@ class SamlResponseValidatorTest extends TestCase
      * A SAML response without Assertion is not validated, and will be investigated in greater detail when processing
      * the response.
      */
-    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
+    #[BackupGlobals(true)]
     public function test_encrypted_assertion_saml_responses_are_passsed()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
@@ -95,7 +96,7 @@ class SamlResponseValidatorTest extends TestCase
      *
      * See the audit report for more details, but review the h01_response.xml to see how this was exploitable.
      */
-    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
+    #[BackupGlobals(true)]
     public function test_tampering_with_saml_response_is_rejected()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
@@ -111,7 +112,7 @@ class SamlResponseValidatorTest extends TestCase
     /**
      * EngineBlock currently only allows SAMLResponses with one assertion.
      */
-    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
+    #[BackupGlobals(true)]
     public function test_two_assertions_are_disallowed()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
@@ -127,7 +128,7 @@ class SamlResponseValidatorTest extends TestCase
     /**
      * The SignedInfo element should be the first child of the Signature element.
      */
-    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
+    #[BackupGlobals(true)]
     public function test_the_signed_info_element_must_be_first_child_of_signature()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
@@ -143,7 +144,7 @@ class SamlResponseValidatorTest extends TestCase
     /**
      * The Reference element URI attribute should refer to the Assertion ID it is part of.
      */
-    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
+    #[BackupGlobals(true)]
     public function test_the_reference_uri_should_match_assertion_id()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
@@ -161,7 +162,7 @@ class SamlResponseValidatorTest extends TestCase
     /**
      * The second child of the signature element should be the signature value element
      */
-    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
+    #[BackupGlobals(true)]
     public function test_signed_value_should_be_signatures_second_child()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
@@ -177,7 +178,7 @@ class SamlResponseValidatorTest extends TestCase
     /**
      * Using multiple SignedInfo elements in a Signature is not allowed
      */
-    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
+    #[BackupGlobals(true)]
     public function test_only_one_signed_info_element_should_be_permitted()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
@@ -193,7 +194,7 @@ class SamlResponseValidatorTest extends TestCase
     /**
      * Only the SAMLResponse POST parameter is used to receive a SAMLResponse
      */
-    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
+    #[BackupGlobals(true)]
     public function test_reads_saml_response_from_post()
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
@@ -210,7 +211,7 @@ class SamlResponseValidatorTest extends TestCase
      * Other input validators should have already picked this up.
      * HTTP Redirect binding is not allowed.
      */
-    #[\PHPUnit\Framework\Attributes\BackupGlobals(true)]
+    #[BackupGlobals(true)]
     public function test_reads_saml_response_from_post_http_binding_not_processed()
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';

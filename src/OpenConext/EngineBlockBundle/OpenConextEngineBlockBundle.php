@@ -19,6 +19,8 @@
 namespace OpenConext\EngineBlockBundle;
 
 use EngineBlock_ApplicationSingleton;
+use OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy;
+use OpenConext\EngineBlock\Request\RequestId;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class OpenConextEngineBlockBundle extends Bundle
@@ -28,8 +30,8 @@ class OpenConextEngineBlockBundle extends Bundle
         $engineBlockApplicationSingleton = EngineBlock_ApplicationSingleton::getInstance();
         $engineBlockApplicationSingleton->bootstrap(
             $this->container->get('monolog.logger.public'),
-            $this->container->get(\OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy::class),
-            $this->container->get(\OpenConext\EngineBlock\Request\RequestId::class),
+            $this->container->get(ManualOrDecoratedActivationStrategy::class),
+            $this->container->get(RequestId::class),
             $this->container
         );
     }

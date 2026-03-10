@@ -75,7 +75,7 @@ class RemoveDisallowedIdentityProvidersFilter extends AbstractFilter
      */
     public function toQueryBuilder(QueryBuilder $queryBuilder, $repositoryClassName)
     {
-        if ($repositoryClassName !== \OpenConext\EngineBlock\Metadata\Entity\IdentityProvider::class) {
+        if ($repositoryClassName !== IdentityProvider::class) {
             return null;
         }
 

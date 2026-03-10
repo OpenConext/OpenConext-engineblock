@@ -26,6 +26,7 @@ use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProxiedIdentityProvider extends AbstractEntity
 {
@@ -99,27 +100,27 @@ class ProxiedIdentityProvider extends AbstractEntity
 
     private function createConfiguration(): EngineBlockConfiguration
     {
-        $translator = $this->createMock(\Symfony\Contracts\Translation\TranslatorInterface::class);
+        $translator = $this->createMock(TranslatorInterface::class);
         $matcher = $this->exactly(4);
         $translator->expects($matcher)
             ->method('trans')->willReturnCallback(function (...$parameters) use ($matcher) {
-            if ($matcher->numberOfInvocations() === 1) {
-                $this->assertSame('suite_name', $parameters[0]);
-                return 'test-suite';
-            }
-            if ($matcher->numberOfInvocations() === 2) {
-                $this->assertSame('metadata_organization_name', $parameters[0]);
-                return 'configuredOrganizationName';
-            }
-            if ($matcher->numberOfInvocations() === 3) {
-                $this->assertSame('metadata_organization_displayname', $parameters[0]);
-                return 'configuredOrganizationDisplayName';
-            }
-            if ($matcher->numberOfInvocations() === 4) {
-                $this->assertSame('metadata_organization_url', $parameters[0]);
-                return 'configuredOrganizationUrl';
-            }
-        });
+                if ($matcher->numberOfInvocations() === 1) {
+                    $this->assertSame('suite_name', $parameters[0]);
+                    return 'test-suite';
+                }
+                if ($matcher->numberOfInvocations() === 2) {
+                    $this->assertSame('metadata_organization_name', $parameters[0]);
+                    return 'configuredOrganizationName';
+                }
+                if ($matcher->numberOfInvocations() === 3) {
+                    $this->assertSame('metadata_organization_displayname', $parameters[0]);
+                    return 'configuredOrganizationDisplayName';
+                }
+                if ($matcher->numberOfInvocations() === 4) {
+                    $this->assertSame('metadata_organization_url', $parameters[0]);
+                    return 'configuredOrganizationUrl';
+                }
+            });
 
         $configuration = new EngineBlockConfiguration(
             $translator,
@@ -140,7 +141,7 @@ class ProxiedIdentityProvider extends AbstractEntity
         $this->urlProvider->expects($matcher)
             ->method('getUrl')
             ->willReturnCallback(
-            function (...$parameters) use ($matcher) {
+                function (...$parameters) use ($matcher) {
                     if ($matcher->numberOfInvocations() === 1) {
                         $this->assertSame('authentication_idp_sso', $parameters[0]);
                         $this->assertSame(false, $parameters[1]);

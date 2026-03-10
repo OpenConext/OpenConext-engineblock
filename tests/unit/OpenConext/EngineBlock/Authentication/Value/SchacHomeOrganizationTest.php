@@ -19,6 +19,10 @@
 namespace OpenConext\EngineBlock\Authentication\Value;
 
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
+use OpenConext\TestDataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class SchacHomeOrganizationTest extends TestCase
@@ -27,10 +31,10 @@ class SchacHomeOrganizationTest extends TestCase
      *
      * @param mixed $notStringOrEmptyString
      */
-    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notStringOrEmptyString')]
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProviderExternal(TestDataProvider::class, 'notStringOrEmptyString')]
+    #[Group('EngineBlock')]
+    #[Group('Authentication')]
+    #[Test]
     public function schac_home_organization_must_be_a_non_empty_string($notStringOrEmptyString)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -38,9 +42,9 @@ class SchacHomeOrganizationTest extends TestCase
         new SchacHomeOrganization($notStringOrEmptyString);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Authentication')]
+    #[Test]
     public function schac_home_organization_can_be_retrieved()
     {
         $schacHomeOrganizationValue = 'OpenConext.org';
@@ -50,9 +54,9 @@ class SchacHomeOrganizationTest extends TestCase
         $this->assertSame($schacHomeOrganizationValue, $schacHomeOrganization->getSchacHomeOrganization());
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Authentication')]
+    #[Test]
     public function schac_home_organization_equality_is_determined_based_on_value()
     {
         $base      = new SchacHomeOrganization('OpenConext.org');
@@ -63,9 +67,9 @@ class SchacHomeOrganizationTest extends TestCase
         $this->assertFalse($base->equals($different));
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Authentication')]
+    #[Test]
     public function a_schac_home_organization_can_be_cast_to_string()
     {
         $schacHomeOrganization = new SchacHomeOrganization('OpenConext.org');

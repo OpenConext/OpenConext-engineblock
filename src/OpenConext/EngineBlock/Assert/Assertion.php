@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlock\Assert;
 
 use Assert\Assertion as BaseAssertion;
+use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 
 /**
  * @method static void nullOrNonEmptyString($value, $message = null, $propertyPath = null)
@@ -29,7 +30,7 @@ class Assertion extends BaseAssertion
     const INVALID_NON_EMPTY_STRING  = 1001;
     const INVALID_HASHING_ALGORITHM = 1002;
 
-    protected static $exceptionClass = \OpenConext\EngineBlock\Exception\InvalidArgumentException::class;
+    protected static $exceptionClass = InvalidArgumentException::class;
 
     /**
      * @param string $value

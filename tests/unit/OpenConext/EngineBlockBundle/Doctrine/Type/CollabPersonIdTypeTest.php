@@ -26,6 +26,9 @@ use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlock\Authentication\Value\SchacHomeOrganization;
 use OpenConext\EngineBlock\Authentication\Value\Uid;
 use OpenConext\TestDataProvider;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class CollabPersonIdTypeTest extends TestCase
@@ -52,9 +55,9 @@ class CollabPersonIdTypeTest extends TestCase
         $this->platform = new MySQLPlatform();
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
-    #[\PHPUnit\Framework\Attributes\Group('Doctrine')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlockBundle')]
+    #[Group('Doctrine')]
+    #[Test]
     public function a_null_value_remains_null_in_to_sql_conversion()
     {
         $collabPersonIdType = Type::getType(CollabPersonIdType::NAME);
@@ -64,9 +67,9 @@ class CollabPersonIdTypeTest extends TestCase
         $this->assertNull($value);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
-    #[\PHPUnit\Framework\Attributes\Group('Doctrine')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlockBundle')]
+    #[Group('Doctrine')]
+    #[Test]
     public function a_collab_person_id_value_is_converted_to_the_correct_database_format()
     {
         $collabPersonIdType = Type::getType(CollabPersonIdType::NAME);
@@ -79,10 +82,10 @@ class CollabPersonIdTypeTest extends TestCase
         $this->assertEquals($collabPersonId, $output);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('invalidPhpValueProvider')]
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
-    #[\PHPUnit\Framework\Attributes\Group('Doctrine')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProvider('invalidPhpValueProvider')]
+    #[Group('EngineBlockBundle')]
+    #[Group('Doctrine')]
+    #[Test]
     public function an_invalid_value_causes_an_exception_upon_conversion_to_database_value($invalidValue)
     {
         $collabPersonIdType = Type::getType(CollabPersonIdType::NAME);
@@ -104,9 +107,9 @@ class CollabPersonIdTypeTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
-    #[\PHPUnit\Framework\Attributes\Group('Doctrine')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlockBundle')]
+    #[Group('Doctrine')]
+    #[Test]
     public function a_null_value_remains_null_when_converting_from_db_to_php_value()
     {
         $collabPersonIdType = Type::getType(CollabPersonIdType::NAME);
@@ -116,9 +119,9 @@ class CollabPersonIdTypeTest extends TestCase
         $this->assertNull($value);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
-    #[\PHPUnit\Framework\Attributes\Group('Doctrine')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlockBundle')]
+    #[Group('Doctrine')]
+    #[Test]
     public function a_non_null_value_is_converted_to_a_collab_person_id()
     {
         $collabPersonIdType = Type::getType(CollabPersonIdType::NAME);
@@ -130,9 +133,9 @@ class CollabPersonIdTypeTest extends TestCase
         $this->assertEquals(new CollabPersonId($input), $output);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
-    #[\PHPUnit\Framework\Attributes\Group('Doctrine')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlockBundle')]
+    #[Group('Doctrine')]
+    #[Test]
     public function an_invalid_database_value_causes_an_exception_upon_conversion()
     {
         $collabPersonIdType = Type::getType(CollabPersonIdType::NAME);

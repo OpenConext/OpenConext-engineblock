@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockBundle\Authentication\Repository;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Connection as DbalConnection;
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use OpenConext\EngineBlock\Authentication\Model\Consent;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
@@ -78,7 +79,7 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
         try {
             $statement = $this->connection->executeQuery($sql, ['hashed_user_id' => sha1($userId)]);
             $rows = $statement->fetchAllAssociative();
-        } catch (\Doctrine\DBAL\Exception $exception) {
+        } catch (Exception $exception) {
             throw new RuntimeException('Could not fetch user consents from the database', 0, $exception);
         }
 
@@ -108,7 +109,7 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
         try {
             $this->connection->executeQuery($sql, ['hashed_user_id' => sha1($userId)]);
             $this->logger->notice(sprintf('Removed consent for hashed user id %s (%s)', sha1($userId), $userId));
-        } catch (\Doctrine\DBAL\Exception $exception) {
+        } catch (Exception $exception) {
             throw new RuntimeException(
                 sprintf(
                     'Could not delete user consents from the database for user %s',
@@ -154,7 +155,7 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
             );
 
             return $result->rowCount() > 0;
-        } catch (\Doctrine\DBAL\Exception $exception) {
+        } catch (Exception $exception) {
             throw new RuntimeException(
                 sprintf(
                     'Could not delete user %s consent from the database for a specific SP %s',

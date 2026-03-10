@@ -30,6 +30,8 @@ use OpenConext\EngineBlockBundle\Authentication\Entity\ServiceProviderUuid;
 use OpenConext\EngineBlockBundle\Authentication\Repository\SamlPersistentIdRepository;
 use OpenConext\EngineBlockBundle\Authentication\Repository\ServiceProviderUuidRepository;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class DeprovisionServiceTest extends TestCase
@@ -74,9 +76,9 @@ class DeprovisionServiceTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Deprovision')]
+    #[Test]
     public function read_returns_all_user_data()
     {
         $this->userDirectory->shouldReceive('findUserBy')
@@ -136,9 +138,9 @@ class DeprovisionServiceTest extends TestCase
         $this->assertEquals(['data' => 'consent3'], $result[2]['value'][2]);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Deprovision')]
+    #[Test]
     public function read_returns_empty_result_for_unknown_user()
     {
         $this->userDirectory->shouldReceive('findUserBy')
@@ -159,9 +161,9 @@ class DeprovisionServiceTest extends TestCase
         $this->assertEmpty($result);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Deprovision')]
+    #[Test]
     public function read_returns_user_data_without_consent_or_persistent_id()
     {
         $this->userDirectory->shouldReceive('findUserBy')
@@ -201,9 +203,9 @@ class DeprovisionServiceTest extends TestCase
         $this->assertEmpty($result[2]['value']);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Deprovision')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Deprovision')]
+    #[Test]
     #[DoesNotPerformAssertions]
     public function delete_deprovisions_all_user_data()
     {

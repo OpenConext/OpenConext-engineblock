@@ -20,6 +20,10 @@ namespace OpenConext\EngineBlock\Authentication\Tests\Value;
 
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
+use OpenConext\TestDataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class ConsentTypeTest extends TestCase
@@ -29,11 +33,11 @@ class ConsentTypeTest extends TestCase
      *
      * @param mixed $invalid
      */
-    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notStringOrEmptyString')]
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Group('Value')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProviderExternal(TestDataProvider::class, 'notStringOrEmptyString')]
+    #[Group('EngineBlock')]
+    #[Group('Authentication')]
+    #[Group('Value')]
+    #[Test]
     public function cannot_be_other_than_implicit_or_explicit($invalid)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -41,10 +45,10 @@ class ConsentTypeTest extends TestCase
         new ConsentType($invalid);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Group('Value')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Authentication')]
+    #[Group('Value')]
+    #[Test]
     public function different_consent_types_are_not_equal()
     {
         $explicit = ConsentType::explicit();
@@ -54,10 +58,10 @@ class ConsentTypeTest extends TestCase
         $this->assertFalse($implicit->equals($explicit));
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Group('Value')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Authentication')]
+    #[Group('Value')]
+    #[Test]
     public function same_type_of_consent_types_are_equal()
     {
         $explicit = ConsentType::explicit();

@@ -18,13 +18,11 @@
 
 namespace OpenConext\EngineBlock\Xml;
 
-use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockServiceProviderMetadata;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\IdentityProviderFactory;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\IdpsMetadataRepository;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlockBundle\Exception\EntityCanNotBeFoundException;
-use OpenConext\EngineBlock\Stepup\StepupEndpoint;
 
 class MetadataProvider
 {

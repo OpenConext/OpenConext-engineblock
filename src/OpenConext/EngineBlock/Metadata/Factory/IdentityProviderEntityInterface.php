@@ -17,7 +17,6 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory;
 
-use DateTime;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\ContactPerson;

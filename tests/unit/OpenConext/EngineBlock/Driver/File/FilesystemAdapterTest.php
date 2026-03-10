@@ -23,7 +23,13 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use OpenConext\EngineBlock\Exception\RuntimeException;
+use OpenConext\TestDataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem;
 
 class FilesystemAdapterTest extends TestCase
 {
@@ -34,13 +40,13 @@ class FilesystemAdapterTest extends TestCase
      *
      * @param mixed $nonString
      */
-    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notString')]
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Driver')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProviderExternal(TestDataProvider::class, 'notString')]
+    #[Group('EngineBlock')]
+    #[Group('Driver')]
+    #[Test]
     public function data_to_write_to_file_must_be_a_string($nonString)
     {
-        $filesystemAdapter = new FilesystemAdapter(m::mock(\Symfony\Component\Filesystem\Filesystem::class));
+        $filesystemAdapter = new FilesystemAdapter(m::mock(Filesystem::class));
 
         $this->expectException(InvalidArgumentException::class);
         $filesystemAdapter->writeTo($nonString, '/some/path');
@@ -51,42 +57,42 @@ class FilesystemAdapterTest extends TestCase
      *
      * @param mixed $nonStringOrEmtpyString
      */
-    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notStringOrEmptyString')]
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Driver')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProviderExternal(TestDataProvider::class, 'notStringOrEmptyString')]
+    #[Group('EngineBlock')]
+    #[Group('Driver')]
+    #[Test]
     public function in_order_to_write_given_filepath_must_be_a_string($nonStringOrEmtpyString)
     {
-        $filesystemAdapter = new FilesystemAdapter(m::mock(\Symfony\Component\Filesystem\Filesystem::class));
+        $filesystemAdapter = new FilesystemAdapter(m::mock(Filesystem::class));
 
         $this->expectException(InvalidArgumentException::class);
         $filesystemAdapter->writeTo('data-to-write', $nonStringOrEmtpyString);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Driver')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Driver')]
+    #[Test]
     public function an_exception_thrown_by_filesystem_when_writing_is_converted_to_an_engineblock_exception()
     {
-        $filesystemMock = m::mock(\Symfony\Component\Filesystem\Filesystem::class);
-        $filesystemMock->shouldReceive('dumpFile')->andThrow(\Symfony\Component\Filesystem\Exception\IOException::class);
+        $filesystemMock = m::mock(Filesystem::class);
+        $filesystemMock->shouldReceive('dumpFile')->andThrow(IOException::class);
 
         $filesystemAdapter = new FilesystemAdapter($filesystemMock);
 
         try {
             $filesystemAdapter->writeTo('data-to-write', '/some/path');
         } catch (Exception $exception) {
-            $this->assertInstanceOf(\OpenConext\EngineBlock\Exception\RuntimeException::class, $exception);
-            $this->assertInstanceOf(\Symfony\Component\Filesystem\Exception\IOException::class, $exception->getPrevious());
+            $this->assertInstanceOf(RuntimeException::class, $exception);
+            $this->assertInstanceOf(IOException::class, $exception->getPrevious());
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Driver')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Driver')]
+    #[Test]
     public function attempting_to_read_data_from_a_non_existent_file_fails()
     {
-        $filesystemMock = m::mock(\Symfony\Component\Filesystem\Filesystem::class);
+        $filesystemMock = m::mock(Filesystem::class);
         $filesystemMock->shouldReceive('exists')->andReturn(false);
 
         $filesystemAdapter = new FilesystemAdapter($filesystemMock);
@@ -95,12 +101,12 @@ class FilesystemAdapterTest extends TestCase
         $filesystemAdapter->readFrom('/does/not/exist');
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Driver')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Driver')]
+    #[Test]
     public function attempting_to_read_data_from_a_file_that_is_not_readable_fails()
     {
-        $filesystemMock = m::mock(\Symfony\Component\Filesystem\Filesystem::class);
+        $filesystemMock = m::mock(Filesystem::class);
         $filesystemMock->shouldReceive('exists')->andReturn(true);
 
         $filesystemAdapter = new FilesystemAdapter($filesystemMock);

@@ -20,10 +20,10 @@ namespace OpenConext\EngineBlockBundle\Tests;
 
 use GuzzleHttp\ClientInterface;
 use OpenConext\EngineBlock\Http\HttpClient;
-use OpenConext\EngineBlockBundle\Sbs\AuthzResponse;
-use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
-use OpenConext\EngineBlockBundle\Sbs\Dto\AttributesRequest;
 use OpenConext\EngineBlockBundle\Sbs\AttributesResponse;
+use OpenConext\EngineBlockBundle\Sbs\AuthzResponse;
+use OpenConext\EngineBlockBundle\Sbs\Dto\AttributesRequest;
+use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
 use OpenConext\EngineBlockBundle\Sbs\SbsClient;
 use PHPUnit\Framework\TestCase;
 

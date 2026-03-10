@@ -19,14 +19,14 @@
 namespace Tests\OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlockBundle\Twig\Extensions\Extension\ConnectedIdps;
 use OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Wayf;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Translation\TranslatorInterface;
-use OpenConext\EngineBlockBundle\Twig\Extensions\Extension\ConnectedIdps;
-
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class WayfTest extends TestCase
 {
@@ -37,7 +37,7 @@ class WayfTest extends TestCase
     protected function setUp(): void
     {
         $this->requestStack = $this->createMock(RequestStack::class);
-        $this->translator = $this->createMock(\Symfony\Contracts\Translation\TranslatorInterface::class);
+        $this->translator = $this->createMock(TranslatorInterface::class);
         $this->wayf = new Wayf($this->requestStack, $this->translator);
     }
 
@@ -101,7 +101,7 @@ class WayfTest extends TestCase
         ];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('previousSelectionProvider')]
+    #[DataProvider('previousSelectionProvider')]
     public function testGetConnectedIdpsWithPreviousSelection(string $storedCookieValue, string $expectedName)
     {
         // Create a mock request with cookie

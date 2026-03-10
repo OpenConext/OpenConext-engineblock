@@ -18,7 +18,6 @@
 
 namespace OpenConext\EngineBlockBundle\Pdp;
 
-use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlock\Http\HttpClient;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response;

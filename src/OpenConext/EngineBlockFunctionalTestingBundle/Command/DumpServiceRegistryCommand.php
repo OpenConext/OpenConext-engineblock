@@ -42,6 +42,6 @@ class DumpServiceRegistryCommand extends Command
         /** @var JsonDataStore $jsonDataStore */
         $jsonDataStore = $this->getContainer()->get('engineblock.functional_testing.data_store.service_registry');
         $output->write(print_r($jsonDataStore->load(), true));
-        return \Symfony\Component\Console\Command\Command::SUCCESS;
+        return Command::SUCCESS;
     }
 }

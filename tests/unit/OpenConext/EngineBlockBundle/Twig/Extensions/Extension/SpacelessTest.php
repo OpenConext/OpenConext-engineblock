@@ -47,4 +47,3 @@ class SpacelessTest extends TestCase
         $this->assertSame($expected, $this->extension->spaceless($input));
     }
 }
-

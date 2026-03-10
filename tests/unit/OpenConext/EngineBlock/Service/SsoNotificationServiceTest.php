@@ -23,6 +23,8 @@ use EngineBlock_Saml2_AuthnRequestAnnotationDecorator;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
 use Phake;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\HttpFoundation\Request;
@@ -85,19 +87,18 @@ class SsoNotificationServiceTest extends TestCase
             ));
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('SsoNotification')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('SsoNotification')]
+    #[Test]
     public function test_get_sso_cookie()
     {
         $this->request->cookies->add([ 'ssonot' => $this->cookieValue ]);
 
         $response = $this->ssoNotificationService->getSsoCookie($this->request->cookies);
         $this->assertEquals($this->cookieValue, $response);
-
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('SsoNotification')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('SsoNotification')]
+    #[Test]
     public function test_handle_sso_notification()
     {
         $this->request->cookies->add([ 'ssonot' => $this->cookieValue ]);
@@ -107,8 +108,8 @@ class SsoNotificationServiceTest extends TestCase
         $this->assertEquals($this->idpEntityId, $entityId);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('SsoNotification')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('SsoNotification')]
+    #[Test]
     public function test_handle_unknown_idp()
     {
         $this->request->cookies->add([ 'ssonot' => $this->getStandardCookieValue($this->idpEntityId . "test") ]);
@@ -118,8 +119,8 @@ class SsoNotificationServiceTest extends TestCase
         Phake::verify($this->loggerMock)->warning(Phake::anyParameters());
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('SsoNotification')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('SsoNotification')]
+    #[Test]
     public function test_invalid_encryption_key()
     {
         $ssoNotificationService = new SsoNotificationService(
@@ -136,8 +137,8 @@ class SsoNotificationServiceTest extends TestCase
         Phake::verify($this->loggerMock)->warning(Phake::anyParameters());
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('SsoNotification')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('SsoNotification')]
+    #[Test]
     public function test_invalid_json()
     {
         $data = "{\"url\":\"$this->idpUrl\"}";
@@ -160,5 +161,4 @@ class SsoNotificationServiceTest extends TestCase
         $encrypted = openssl_encrypt($data, $this->encryptionMethod, $key, OPENSSL_RAW_DATA, $this->iv);
         return base64_encode($this->iv . $encrypted);
     }
-
 }

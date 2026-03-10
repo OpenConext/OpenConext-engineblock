@@ -71,6 +71,7 @@
         "phpmd/phpmd": "^2.15",
         "phpunit/phpunit": "^11",
         "rector/rector": "^2.2.7",
+        "slevomat/coding-standard": "^8.28",
         "squizlabs/php_codesniffer": "^4.0",
         "symfony/debug-bundle": "6.4.*",
         "symfony/http-client": "6.4.*",
@@ -131,6 +132,7 @@
         },
         "sort-packages": true,
         "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
             "endroid/installer": false,
             "symfony/flex": true
         }

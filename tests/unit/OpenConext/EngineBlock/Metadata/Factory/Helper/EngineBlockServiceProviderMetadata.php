@@ -17,10 +17,10 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory\Helper;
 
+use Mockery;
 use OpenConext\EngineBlock\Metadata\Factory\AbstractEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\ServiceProviderEntity;
 use OpenConext\EngineBlock\Metadata\IndexedService;
-use Mockery;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
@@ -70,7 +70,7 @@ class EngineBlockServiceProviderMetadata extends AbstractEntity
 
         $cert1 = Mockery::mock(X509Certificate::class);
         $cert1->shouldReceive('toCertData')->andReturn('pem1-abc');
-        $cert2 = Mockery::mock( X509Certificate::class);
+        $cert2 = Mockery::mock(X509Certificate::class);
         $cert2->shouldReceive('toCertData')->andReturn('pem2-abc');
 
         $adapter = Mockery::mock(ServiceProviderEntity::class);
@@ -79,8 +79,8 @@ class EngineBlockServiceProviderMetadata extends AbstractEntity
         $adapter->shouldReceive('getOrganization')->with('nl')->andReturn($organizationNl);
         $adapter->shouldReceive('getOrganization')->with('pt')->andReturn($organizationPt);
         $adapter->shouldReceive('getAssertionConsumerServices')->andReturn([
-            new IndexedService('location1','binding1', 0),
-            new IndexedService('location2','binding2', 1),
+            new IndexedService('location1', 'binding1', 0),
+            new IndexedService('location2', 'binding2', 1),
         ]);
         $adapter->shouldReceive('getDisplayName')->with('en')->andReturn('metadata-display-name-en');
         $adapter->shouldReceive('getDisplayName')->with('nl')->andReturn('metadata-display-name-nl');
@@ -97,7 +97,7 @@ class EngineBlockServiceProviderMetadata extends AbstractEntity
         $this->assertEquals('metadata-organization-url-en', $decorator->getOrganizationUrl('en'));
         $this->assertEquals('metadata-organization-url-nl', $decorator->getOrganizationUrl('nl'));
         $this->assertEquals('metadata-organization-url-pt', $decorator->getOrganizationUrl('pt'));
-        $this->assertEquals( new IndexedService('location1','binding1', 0), $decorator->getAssertionConsumerService());
+        $this->assertEquals(new IndexedService('location1', 'binding1', 0), $decorator->getAssertionConsumerService());
         $this->assertEquals(true, $decorator->hasUiInfo());
         $this->assertEquals(true, $decorator->hasOrganizationInfo());
         $this->assertEquals(['pem1-abc' => 'pem1-abc', 'pem2-abc' => 'pem2-abc'], $decorator->getPublicKeys());

@@ -25,14 +25,16 @@ use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedureMap;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class AuthenticationProcedureMapTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('AuthenticationState')]
+    #[Test]
     public function a_new_map_is_returned_when_an_authentication_procedure_is_added_to_an_authentication_procedures_map()
     {
         $someServiceProvider  = new Entity(new EntityId('some.serviceprovider.example'), EntityType::SP());
@@ -65,8 +67,8 @@ class AuthenticationProcedureMapTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('AuthenticationState')]
+    #[Test]
     public function an_authentication_procedure_map_can_be_filtered_by_authentications_on_behalf_of_a_given_service_provider_returning_a_new_map()
     {
         $someServiceProvider  = new Entity(new EntityId('some.serviceprovider.example'), EntityType::SP());
@@ -92,8 +94,8 @@ class AuthenticationProcedureMapTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('AuthenticationState')]
+    #[Test]
     public function an_authentication_procedure_map_can_be_filtered_by_completed_procedures_since_a_given_time_returning_a_new_map()
     {
         $someServiceProvider  = new Entity(new EntityId('some.serviceprovider.example'), EntityType::SP());

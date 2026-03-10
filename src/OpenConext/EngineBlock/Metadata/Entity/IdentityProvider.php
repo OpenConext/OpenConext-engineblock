@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlock\Metadata\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 use OpenConext\EngineBlock\Exception\InvalidDiscoveryException;
@@ -29,8 +30,8 @@ use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\MfaEntityCollection;
 use OpenConext\EngineBlock\Metadata\Organization;
-use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\Service;
+use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlockBundle\Doctrine\Type\SerializedArrayType;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
@@ -66,7 +67,7 @@ class IdentityProvider extends AbstractRole
     /**
      * @var bool
      */
-    #[ORM\Column(name: 'enabled_in_wayf', type: \Doctrine\DBAL\Types\Types::BOOLEAN)]
+    #[ORM\Column(name: 'enabled_in_wayf', type: Types::BOOLEAN)]
     public ?bool $enabledInWayf = true;
 
     /**
@@ -78,7 +79,7 @@ class IdentityProvider extends AbstractRole
     /**
      * @var ConsentSettings
      */
-    #[ORM\Column(name: 'consent_settings', type: \Doctrine\DBAL\Types\Types::JSON, length: 16777215)]
+    #[ORM\Column(name: 'consent_settings', type: Types::JSON, length: 16777215)]
     private $consentSettings;
 
     /**
@@ -90,7 +91,7 @@ class IdentityProvider extends AbstractRole
     /**
      * @var array<int, Discovery>
      */
-    #[ORM\Column(name: 'idp_discoveries', type: \Doctrine\DBAL\Types\Types::JSON)]
+    #[ORM\Column(name: 'idp_discoveries', type: Types::JSON)]
     private $discoveries;
 
     /**

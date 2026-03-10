@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlock\Metadata\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
@@ -64,74 +65,74 @@ abstract class AbstractRole
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(name: 'id', type: \Doctrine\DBAL\Types\Types::INTEGER)]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     public ?int $id = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'entity_id', type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(name: 'entity_id', type: Types::STRING)]
     public ?string $entityId = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'name_nl', type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(name: 'name_nl', type: Types::STRING)]
     public ?string $nameNl = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'name_en', type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(name: 'name_en', type: Types::STRING)]
     public ?string $nameEn = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'name_pt', type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(name: 'name_pt', type: Types::STRING)]
     public ?string $namePt = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'description_nl', type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(name: 'description_nl', type: Types::STRING)]
     public ?string $descriptionNl = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'description_en', type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(name: 'description_en', type: Types::STRING)]
     public ?string $descriptionEn = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'description_pt', type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(name: 'description_pt', type: Types::STRING)]
     public ?string $descriptionPt = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'display_name_nl', type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(name: 'display_name_nl', type: Types::STRING)]
     public ?string $displayNameNl = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'display_name_en', type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(name: 'display_name_en', type: Types::STRING)]
     public ?string $displayNameEn = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'display_name_pt', type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(name: 'display_name_pt', type: Types::STRING)]
     public ?string $displayNamePt = null;
 
     /**
@@ -163,21 +164,21 @@ abstract class AbstractRole
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'keywords_nl', type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(name: 'keywords_nl', type: Types::STRING)]
     public ?string $keywordsNl = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'keywords_en', type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(name: 'keywords_en', type: Types::STRING)]
     public ?string $keywordsEn = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'keywords_pt', type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(name: 'keywords_pt', type: Types::STRING)]
     public ?string $keywordsPt = null;
 
     /**
@@ -189,7 +190,7 @@ abstract class AbstractRole
     /**
      * @var string
      */
-    #[ORM\Column(name: 'workflow_state', type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(name: 'workflow_state', type: Types::STRING)]
     public ?string $workflowState = self::WORKFLOW_STATE_DEFAULT;
 
     /**
@@ -201,7 +202,7 @@ abstract class AbstractRole
     /**
      * @var string
      */
-    #[ORM\Column(name: 'name_id_format', type: \Doctrine\DBAL\Types\Types::STRING, nullable: true)]
+    #[ORM\Column(name: 'name_id_format', type: Types::STRING, nullable: true)]
     public ?string $nameIdFormat = null;
 
     /**
@@ -219,13 +220,13 @@ abstract class AbstractRole
     /**
      * @var bool
      */
-    #[ORM\Column(name: 'requests_must_be_signed', type: \Doctrine\DBAL\Types\Types::BOOLEAN)]
+    #[ORM\Column(name: 'requests_must_be_signed', type: Types::BOOLEAN)]
     public ?bool $requestsMustBeSigned = false;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'manipulation', type: \Doctrine\DBAL\Types\Types::TEXT, length: 65535)]
+    #[ORM\Column(name: 'manipulation', type: Types::TEXT, length: 65535)]
     public ?string $manipulation = null;
 
     /**

@@ -21,14 +21,16 @@ namespace OpenConext\EngineBlockBundle\Tests;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Attribute;
 use OpenConext\Value\Saml\NameIdFormat;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class AttributeTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Pdp')]
+    #[Test]
     public function an_attribute_without_a_datatype_is_serialized_correctly()
     {
         $attribute = new Attribute;
@@ -47,8 +49,8 @@ JSON;
         $this->assertEquals($expectedSerializedAttribute, $actualSerializedAttribute);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Pdp')]
+    #[Test]
     public function an_attribute_with_a_datatype_is_serialized_correctly()
     {
         $attribute = new Attribute;

@@ -6,10 +6,8 @@
     </description>
 
     <exclude-pattern>src/*/*Bundle/Resources</exclude-pattern>
-    <exclude-pattern>src/*/*Bundle/Tests</exclude-pattern>
     <exclude-pattern>src/*/Bundle/*Bundle/Resources</exclude-pattern>
-    <exclude-pattern>src/*/Bundle/*Bundle/Tests</exclude-pattern>
-    <exclude-pattern>*/Tests/*</exclude-pattern>
+    <exclude-pattern>tests/library</exclude-pattern>
 
     <!-- This is the rule we inherit from. If you want to exlude some specific rules, see the docs on how to do that -->
     <rule ref="PSR2"/>
@@ -20,5 +18,18 @@
             <property name="lineLimit" value="120"/>
             <property name="absoluteLineLimit" value="150"/>
         </properties>
+        <exclude-pattern>tests/</exclude-pattern>
     </rule>
+
+    <rule ref="PSR1.Methods.CamelCapsMethodName">
+        <exclude-pattern>tests/</exclude-pattern>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly"/>
+    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
+        <properties>
+            <property name="searchAnnotations" type="bool" value="true"/>
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses"/>
 </ruleset>

@@ -19,11 +19,13 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Controllers;
 
 use DOMDocument;
+use Exception;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\AuthnRequestFactory;
 use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Compat\Container;
 use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
+use RuntimeException;
 use SAML2\HTTPPost;
 use SAML2\HTTPRedirect;
 use SAML2\Response as SAMLResponse;
@@ -129,17 +131,17 @@ class ServiceProviderController extends AbstractController
         try {
             $httpPostBinding = new HTTPPost();
             $message = $httpPostBinding->receive();
-        } catch (\Exception $e1) {
+        } catch (Exception $e1) {
             try {
                 $httpRedirectBinding = new HTTPRedirect();
                 $message = $httpRedirectBinding->receive();
-            } catch (\Exception $e2) {
-                throw new \RuntimeException('Unable to retrieve SAML message?', 1, $e1);
+            } catch (Exception $e2) {
+                throw new RuntimeException('Unable to retrieve SAML message?', 1, $e1);
             }
         }
 
         if (!$message instanceof SAMLResponse) {
-            throw new \RuntimeException(sprintf('Unrecognized message type received: "%s"', get_class($message)));
+            throw new RuntimeException(sprintf('Unrecognized message type received: "%s"', get_class($message)));
         }
 
         $xml = base64_decode($request->get('SAMLResponse'));

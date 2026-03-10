@@ -21,7 +21,7 @@ namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 use EngineBlock_Attributes_Metadata;
 use OpenConext\Value\Saml\NameIdFormat;
 use SAML2\XML\saml\NameID;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -41,7 +41,7 @@ class Metadata extends AbstractExtension
      */
     private $translator;
 
-    public function __construct(EngineBlock_Attributes_Metadata $attributesMetadata, \Symfony\Contracts\Translation\TranslatorInterface $translator)
+    public function __construct(EngineBlock_Attributes_Metadata $attributesMetadata, TranslatorInterface $translator)
     {
         $this->attributeMetadata = $attributesMetadata;
         $this->translator = $translator;

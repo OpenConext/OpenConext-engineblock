@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlock\Service;
 
 use Mockery as m;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -38,7 +39,7 @@ class ReleaseAsEnforcerTest extends TestCase
         m::close();
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('enforceDataProvider')]
+    #[DataProvider('enforceDataProvider')]
     public function testEnforce($attributes, $releaseAsOverrides, $expectedResult, $expectedLogMessages)
     {
         foreach ($expectedLogMessages as $message) {
@@ -55,7 +56,7 @@ class ReleaseAsEnforcerTest extends TestCase
     }
 
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('enforceDataProviderWarnings')]
+    #[DataProvider('enforceDataProviderWarnings')]
     public function testEnforceImpossible($attributes, $releaseAsOverrides, $expectedResult, $expectedLogMessage)
     {
         $this->logger->shouldReceive('warning')->with($expectedLogMessage);

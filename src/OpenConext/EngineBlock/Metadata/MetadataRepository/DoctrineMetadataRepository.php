@@ -21,12 +21,10 @@ namespace OpenConext\EngineBlock\Metadata\MetadataRepository;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Webmozart\Assert\Assert;
 
 /**
  * Class DoctrineMetadataRepository

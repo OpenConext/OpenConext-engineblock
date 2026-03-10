@@ -20,20 +20,23 @@ namespace OpenConext\EngineBlock\Request;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use OpenConext\EngineBlock\Request\RequestIdGenerator;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class RequestIdTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Request')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Request')]
+    #[Test]
     public function request_id_is_unchanged_after_first_retrieval()
     {
         $generatedId = 'generated_id';
 
-        $requestIdGenerator = m::mock(\OpenConext\EngineBlock\Request\RequestIdGenerator::class);
+        $requestIdGenerator = m::mock(RequestIdGenerator::class);
         $requestIdGenerator->shouldReceive('generateRequestId')
             ->once()
             ->andReturn($generatedId);

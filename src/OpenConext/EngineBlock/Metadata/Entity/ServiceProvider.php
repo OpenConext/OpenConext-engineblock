@@ -18,16 +18,17 @@
 
 namespace OpenConext\EngineBlock\Metadata\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
+use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
-use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlockBundle\Doctrine\Type\SerializedArrayType;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
@@ -67,7 +68,7 @@ class ServiceProvider extends AbstractRole
     /**
      * @var bool
      */
-    #[ORM\Column(name: 'allow_all', type: \Doctrine\DBAL\Types\Types::BOOLEAN)]
+    #[ORM\Column(name: 'allow_all', type: Types::BOOLEAN)]
     public ?bool $allowAll = null;
 
     /**
@@ -79,19 +80,19 @@ class ServiceProvider extends AbstractRole
     /**
      * @var null|string
      */
-    #[ORM\Column(name: 'support_url_en', type: \Doctrine\DBAL\Types\Types::STRING, nullable: true)]
+    #[ORM\Column(name: 'support_url_en', type: Types::STRING, nullable: true)]
     public ?string $supportUrlEn = null;
 
     /**
      * @var null|string
      */
-    #[ORM\Column(name: 'support_url_nl', type: \Doctrine\DBAL\Types\Types::STRING, nullable: true)]
+    #[ORM\Column(name: 'support_url_nl', type: Types::STRING, nullable: true)]
     public ?string $supportUrlNl = null;
 
     /**
      * @var null|string
      */
-    #[ORM\Column(name: 'support_url_pt', type: \Doctrine\DBAL\Types\Types::STRING, nullable: true)]
+    #[ORM\Column(name: 'support_url_pt', type: Types::STRING, nullable: true)]
     public ?string $supportUrlPt = null;
 
     /**

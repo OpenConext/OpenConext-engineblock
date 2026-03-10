@@ -28,6 +28,8 @@ use OpenConext\EngineBlock\Service\MetadataService;
 use OpenConext\EngineBlockBundle\Controller\Api\AttributeReleasePolicyController;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -40,9 +42,9 @@ class AttributeReleasePolicyControllerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    #[\PHPUnit\Framework\Attributes\Group('AttributeReleasePolicy')]
-    #[\PHPUnit\Framework\Attributes\Group('AuthorizationChecker')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('AttributeReleasePolicy')]
+    #[Group('AuthorizationChecker')]
+    #[Test]
     public function access_is_denied_for_unauthorized_requests()
     {
         $this->expectException(ApiAccessDeniedHttpException::class);
@@ -65,9 +67,9 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $arpController->applyArpAction($request);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('AttributeReleasePolicy')]
-    #[\PHPUnit\Framework\Attributes\Group('Json')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('AttributeReleasePolicy')]
+    #[Group('Json')]
+    #[Test]
     public function a_request_that_cannot_be_decoded_as_an_array_is_invalid()
     {
         $this->expectException(BadApiRequestHttpException::class);
@@ -84,9 +86,9 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $arpController->applyArpAction($request);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('AttributeReleasePolicy')]
-    #[\PHPUnit\Framework\Attributes\Group('Json')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('AttributeReleasePolicy')]
+    #[Group('Json')]
+    #[Test]
     public function a_request_that_does_not_contain_the_entity_ids_key_is_invalid()
     {
         $this->expectException(BadApiRequestHttpException::class);
@@ -103,9 +105,9 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $arpController->applyArpAction($request);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('AttributeReleasePolicy')]
-    #[\PHPUnit\Framework\Attributes\Group('Json')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('AttributeReleasePolicy')]
+    #[Group('Json')]
+    #[Test]
     public function a_request_that_does_not_have_an_array_of_entity_ids_is_invalid()
     {
         $this->expectException(BadApiRequestHttpException::class);
@@ -122,9 +124,9 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $arpController->applyArpAction($request);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('AttributeReleasePolicy')]
-    #[\PHPUnit\Framework\Attributes\Group('Json')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('AttributeReleasePolicy')]
+    #[Group('Json')]
+    #[Test]
     public function a_request_that_does_not_contain_any_entity_ids_is_invalid()
     {
         $this->expectException(BadApiRequestHttpException::class);
@@ -141,9 +143,9 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $arpController->applyArpAction($request);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('AttributeReleasePolicy')]
-    #[\PHPUnit\Framework\Attributes\Group('Json')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('AttributeReleasePolicy')]
+    #[Group('Json')]
+    #[Test]
     public function a_request_that_does_not_contain_the_attributes_key_is_invalid()
     {
         $this->expectException(BadApiRequestHttpException::class);
@@ -160,9 +162,9 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $arpController->applyArpAction($request);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('AttributeReleasePolicy')]
-    #[\PHPUnit\Framework\Attributes\Group('Json')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('AttributeReleasePolicy')]
+    #[Group('Json')]
+    #[Test]
     public function a_request_that_does_not_have_a_json_object_of_attributes_is_invalid()
     {
         $this->expectException(BadApiRequestHttpException::class);
@@ -179,9 +181,9 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $arpController->applyArpAction($request);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('AttributeReleasePolicy')]
-    #[\PHPUnit\Framework\Attributes\Group('Json')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('AttributeReleasePolicy')]
+    #[Group('Json')]
+    #[Test]
     public function attributes_should_have_strings_as_keys()
     {
         $this->expectException(BadApiRequestHttpException::class);
@@ -200,9 +202,9 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $arpController->applyArpAction($request);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('AttributeReleasePolicy')]
-    #[\PHPUnit\Framework\Attributes\Group('Json')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('AttributeReleasePolicy')]
+    #[Group('Json')]
+    #[Test]
     public function attributes_should_have_an_array_of_values()
     {
         $this->expectException(BadApiRequestHttpException::class);
@@ -221,8 +223,8 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $arpController->applyArpAction($request);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('AttributeReleasePolicy')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('AttributeReleasePolicy')]
+    #[Test]
     public function the_same_attributes_are_returned_as_given_if_no_service_provider_is_found()
     {
         $serializedJsonRequest = json_encode([
@@ -256,8 +258,8 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $this->assertSame($expectedResponse, $response->getContent());
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('AttributeReleasePolicy')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('AttributeReleasePolicy')]
+    #[Test]
     public function the_same_attributes_are_returned_as_given_if_no_arp_is_found()
     {
         $someEntityId    = 'some-entity-id';
@@ -302,8 +304,8 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $this->assertSame($expectedResponse, $response->getContent());
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('AttributeReleasePolicy')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('AttributeReleasePolicy')]
+    #[Test]
     public function only_attributes_specified_in_arp_are_released()
     {
         $someEntityId                 = 'some-entity-id';

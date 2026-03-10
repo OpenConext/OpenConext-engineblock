@@ -24,19 +24,13 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
-use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard;
-use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\EngineBlockBundle\Authentication\Service\SamlResponseHelper;
-use OpenConext\EngineBlockBundle\Exception\LogicException;
 use OpenConext\EngineBlockBundle\Exception\RuntimeException;
-use OpenConext\Value\Saml\Entity;
-use OpenConext\Value\Saml\EntityId;
-use OpenConext\Value\Saml\EntityType;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\XML\saml\Issuer;
 use SimpleXMLElement;
-use Symfony\Component\Form\Tests\Extension\Validator\ViolationMapper\Fixtures\Issue;
 
 class SamlResponseHelperTest extends TestCase
 {
@@ -205,7 +199,7 @@ class SamlResponseHelperTest extends TestCase
         self::assertEquals($responseSubCode['Value'], 'testSubCode');
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideAcuData')]
+    #[DataProvider('provideAcuData')]
     public function test_get_acu(array $inputAcus, string $expectedAcu): void
     {
         $spEntityId = 'https://existing.example.org';

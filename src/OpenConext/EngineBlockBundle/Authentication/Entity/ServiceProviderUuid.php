@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Authentication\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenConext\EngineBlockBundle\Authentication\Repository\ServiceProviderUuidRepository;
 
@@ -29,12 +30,12 @@ class ServiceProviderUuid
      * @var string
      */
     #[ORM\Id]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 36, options: ['fixed' => true])]
+    #[ORM\Column(type: Types::STRING, length: 36, options: ['fixed' => true])]
     public ?string $uuid = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 1024)]
+    #[ORM\Column(type: Types::STRING, length: 1024)]
     public ?string $serviceProviderEntityId = null;
 }

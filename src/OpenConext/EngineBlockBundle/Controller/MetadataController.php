@@ -18,12 +18,12 @@
 
 namespace OpenConext\EngineBlockBundle\Controller;
 
+use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Xml\MetadataProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use Symfony\Component\Routing\Attribute\Route;
 
 class MetadataController

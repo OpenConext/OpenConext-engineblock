@@ -20,6 +20,8 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Controllers;
 
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
+use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Compat\Container;
+use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\ResponseFactory;
 use RuntimeException;
 use SAML2\AuthnRequest;
 use SAML2\HTTPPost;
@@ -29,8 +31,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\ResponseFactory;
-use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Compat\Container;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) just does a lot of manual lifting :(

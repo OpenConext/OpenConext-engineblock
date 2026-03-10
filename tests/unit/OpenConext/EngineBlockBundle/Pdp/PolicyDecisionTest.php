@@ -19,10 +19,14 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response\AttributeAssignment;
 use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class PolicyDecisionTest extends TestCase
@@ -33,9 +37,9 @@ class PolicyDecisionTest extends TestCase
      * @param $responseName
      * @param $expectedPermission
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('pdpResponseAndExpectedPermissionProvider')]
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProvider('pdpResponseAndExpectedPermissionProvider')]
+    #[Group('Pdp')]
+    #[Test]
     public function the_correct_policy_decision_should_be_made_based_on_a_pdp_response(
         $responseName,
         $expectedPermission
@@ -48,8 +52,8 @@ class PolicyDecisionTest extends TestCase
         $this->assertEquals($expectedPermission, $decision->permitsAccess());
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Pdp')]
+    #[Test]
     public function a_deny_policys_localized_messages_are_parsed_correctly()
     {
         $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_deny.json'), true);
@@ -67,8 +71,8 @@ class PolicyDecisionTest extends TestCase
         $this->assertEquals($expectedDenyMessageNl, $denyMessageNl);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Pdp')]
+    #[Test]
     public function a_deny_policys_localized_deny_message_correctly_falls_back_to_the_default_locale_if_the_given_locale_was_not_found()
     {
         $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_deny.json'), true);
@@ -82,11 +86,10 @@ class PolicyDecisionTest extends TestCase
 
         $this->assertEquals($expectedFallbackDenyMessage, $fallbackDenyMessage);
         $this->assertNull($decision->getIdpLogo());
-
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Pdp')]
+    #[Test]
     public function a_deny_policy_with_idp_specific_message_is_parsed_correctly()
     {
         $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_deny_idp_specific.json'), true);
@@ -107,11 +110,10 @@ class PolicyDecisionTest extends TestCase
         $this->assertEquals($expectedDenyMessageNl, $denyMessageNl);
 
         $this->assertEquals($logo, $decision->getIdpLogo());
-
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Pdp')]
+    #[Test]
     public function an_indeterminate_policys_status_message_is_acquired_correctly()
     {
         $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_indeterminate.json'), true);
@@ -129,11 +131,11 @@ class PolicyDecisionTest extends TestCase
         $this->assertEquals($expectedStatusMessage, $statusMessage);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Pdp')]
+    #[Test]
     public function a_status_message_cannot_be_acquired_from_a_policy_that_has_none()
     {
-        $this->expectException(\OpenConext\EngineBlock\Exception\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No status message found');
 
         $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_deny.json'), true);
@@ -143,8 +145,8 @@ class PolicyDecisionTest extends TestCase
         $decision->getStatusMessage();
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Pdp')]
+    #[Test]
     public function a_localized_deny_message_cannot_be_acquired_if_the_chosen_and_the_default_locale_are_not_present()
     {
         $nonPresentLocale = 'de';
@@ -164,8 +166,8 @@ class PolicyDecisionTest extends TestCase
         $decision->getLocalizedDenyMessage($nonPresentLocale, $nonPresentDefaultLocale);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Pdp')]
+    #[Test]
     public function a_localized_deny_message_cannot_be_acquired_from_a_policy_decision_that_does_not_have_one()
     {
         $this->expectException('RuntimeException');
@@ -178,8 +180,8 @@ class PolicyDecisionTest extends TestCase
         $decision->getLocalizedDenyMessage('en');
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Pdp')]
+    #[Test]
     public function a_response_without_obligations_has_no_obligations()
     {
         $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_permit.json'), true);
@@ -188,8 +190,8 @@ class PolicyDecisionTest extends TestCase
         $this->assertNull($response->obligations);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Pdp')]
+    #[Test]
     public function a_response_with_obligation_has_obligations()
     {
         $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_permit_obligation.json'), true);
@@ -210,8 +212,8 @@ class PolicyDecisionTest extends TestCase
         $this->assertEquals($expected_attributeAssignment, $response->obligations[0]->attributeAssignments[0]);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Pdp')]
+    #[Test]
     public function a_response_with_multiple_obligations_has_obligations()
     {
         $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_permit_obligations.json'), true);
@@ -237,9 +239,9 @@ class PolicyDecisionTest extends TestCase
      * @param $responseName
      * @param $expectedLoa
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('pdpResponseAndExpectedLoaProvider')]
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProvider('pdpResponseAndExpectedLoaProvider')]
+    #[Group('Pdp')]
+    #[Test]
     public function the_correct_loa_obligations_should_be_given_based_on_a_pdp_response(
         $responseName,
         $expectedLoa

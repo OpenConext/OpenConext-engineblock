@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockBundle\Controller;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 use Twig\Environment;
 
 class IndexController extends AbstractController
@@ -41,7 +42,7 @@ class IndexController extends AbstractController
         $this->keyPairs = $keyPairs;
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/', name: 'open_conext_engine_block_authentication_homepage')]
+    #[Route(path: '/', name: 'open_conext_engine_block_authentication_homepage')]
     public function indexAction()
     {
         $keyPairIds = [];

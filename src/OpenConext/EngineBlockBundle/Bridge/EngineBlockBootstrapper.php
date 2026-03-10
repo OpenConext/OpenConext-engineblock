@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Bridge;
 
+use EngineBlock_ApplicationSingleton;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Twig\Environment;
@@ -34,7 +35,7 @@ class EngineBlockBootstrapper implements EventSubscriberInterface
 
     public function onKernelRequest(): void
     {
-        $engineBlock = \EngineBlock_ApplicationSingleton::getInstance();
+        $engineBlock = EngineBlock_ApplicationSingleton::getInstance();
         $engineBlock->setDiContainerRuntime($this->diContainerRuntime);
     }
 

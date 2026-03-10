@@ -18,27 +18,30 @@
 
 namespace OpenConext\EngineBlock\Logger\Formatter;
 
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use DateTimeImmutable;
 use EngineBlock_Exception;
 use Exception;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Monolog\Level;
 use Monolog\LogRecord;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class AdditionalInfoFormatterTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Logger')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Logger')]
+    #[Test]
     public function additional_info_is_added_for_an_engineblock_exception()
     {
         $exception = new EngineBlock_Exception('message', EngineBlock_Exception::CODE_EMERGENCY);
 
         $formatter = new AdditionalInfoFormatter(new PassthruFormatter());
         $formatted = $formatter->format(new LogRecord(
-            datetime: new \DateTimeImmutable(),
+            datetime: new DateTimeImmutable(),
             channel: 'test',
             level: Level::Emergency,
             message: 'test',
@@ -56,16 +59,16 @@ class AdditionalInfoFormatterTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Logger')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Logger')]
+    #[Test]
     public function additional_info_is_added_for_engineblock_exception_when_batch_formatting()
     {
         $exception = new EngineBlock_Exception('message');
 
         $formatter = new AdditionalInfoFormatter(new PassthruFormatter());
         $formatted = $formatter->formatBatch([new LogRecord(
-            datetime: new \DateTimeImmutable(),
+            datetime: new DateTimeImmutable(),
             channel: 'test',
             level: Level::Error,
             message: 'test',
@@ -83,16 +86,16 @@ class AdditionalInfoFormatterTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Logger')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Logger')]
+    #[Test]
     public function additional_info_is_not_added_for_non_engineblock_exceptions()
     {
         $exception = new Exception('message');
 
         $formatter = new AdditionalInfoFormatter(new PassthruFormatter());
         $formatted = $formatter->format(new LogRecord(
-            datetime: new \DateTimeImmutable(),
+            datetime: new DateTimeImmutable(),
             channel: 'test',
             level: Level::Error,
             message: 'test',

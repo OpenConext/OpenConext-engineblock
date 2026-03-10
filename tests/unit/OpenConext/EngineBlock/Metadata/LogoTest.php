@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlock\Metadata;
 
 use JsonSerializable;
 use OpenConext\EngineBlock\Exception\MduiRuntimeException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class LogoTest extends TestCase
@@ -27,7 +28,7 @@ class LogoTest extends TestCase
     /**
      * @param string $json
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideCorrectJson')]
+    #[DataProvider('provideCorrectJson')]
     public function test_create_logo_from_json_happy_flow(string $json): void
     {
         $jsonData = json_decode($json, true);
@@ -49,7 +50,7 @@ class LogoTest extends TestCase
     /**
      * @param string $json
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideUrlMissingJson')]
+    #[DataProvider('provideUrlMissingJson')]
     public function test_create_logo_from_json_requires_url(string $json): void
     {
         self::expectException(MduiRuntimeException::class);
@@ -72,7 +73,6 @@ class LogoTest extends TestCase
         $logo = Logo::fromJson(['url' => 'https://foobar.example.com']);
         $lang = $logo->getConfiguredLanguages();
         self::assertEquals(['en'], $lang);
-
     }
 
     public static function provideCorrectJson()

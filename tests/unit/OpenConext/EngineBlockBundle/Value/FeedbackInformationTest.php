@@ -20,13 +20,14 @@ namespace OpenConext\EngineBlockBundle\Tests;
 
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlockBundle\Value\FeedbackInformation;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class FeedbackInformationTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('attributePredictions')]
+    #[DataProvider('attributePredictions')]
     public function test_attr_safe_key_is_returned($identifier, $input, $expectation)
     {
         $feedbackInfo = new FeedbackInformation($input, 'Test value');

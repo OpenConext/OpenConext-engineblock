@@ -166,5 +166,4 @@ class TestDataProvider
             'nullbyte'        => [chr(0)],
         ];
     }
-
 }

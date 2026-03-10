@@ -19,10 +19,10 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
 use InvalidArgumentException;
+use OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClientInterface;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\AttributeRule;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Request;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Response;
-use OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClientInterface;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 
 final class FunctionalTestingAttributeAggregationClient implements AttributeAggregationClientInterface

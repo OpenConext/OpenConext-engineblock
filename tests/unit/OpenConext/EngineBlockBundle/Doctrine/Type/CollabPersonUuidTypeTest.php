@@ -24,6 +24,9 @@ use Doctrine\DBAL\Types\Type;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonUuid;
 use OpenConext\TestDataProvider;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
@@ -51,9 +54,9 @@ class CollabPersonUuidTypeTest extends TestCase
         $this->platform = new MySQLPlatform();
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
-    #[\PHPUnit\Framework\Attributes\Group('Doctrine')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlockBundle')]
+    #[Group('Doctrine')]
+    #[Test]
     public function a_null_value_remains_null_in_to_sql_conversion()
     {
         $collabPersonUuidType = Type::getType(CollabPersonUuidType::NAME);
@@ -63,9 +66,9 @@ class CollabPersonUuidTypeTest extends TestCase
         $this->assertNull($value);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
-    #[\PHPUnit\Framework\Attributes\Group('Doctrine')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlockBundle')]
+    #[Group('Doctrine')]
+    #[Test]
     public function a_collab_person_uuid_value_is_converted_to_the_correct_format()
     {
         $collabPersonUuidType = Type::getType(CollabPersonUuidType::NAME);
@@ -78,10 +81,10 @@ class CollabPersonUuidTypeTest extends TestCase
         $this->assertEquals($uuid, $output);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('invalidPhpValueProvider')]
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
-    #[\PHPUnit\Framework\Attributes\Group('Doctrine')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProvider('invalidPhpValueProvider')]
+    #[Group('EngineBlockBundle')]
+    #[Group('Doctrine')]
+    #[Test]
     public function an_invalid_value_causes_an_exception_upon_conversion_to_database_value($invalidValue)
     {
         $collabPersonUuidType = Type::getType(CollabPersonUuidType::NAME);
@@ -104,9 +107,9 @@ class CollabPersonUuidTypeTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
-    #[\PHPUnit\Framework\Attributes\Group('Doctrine')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlockBundle')]
+    #[Group('Doctrine')]
+    #[Test]
     public function a_null_value_remains_null_when_converting_from_db_to_php_value()
     {
         $collabPersonUuidType = Type::getType(CollabPersonUuidType::NAME);
@@ -116,9 +119,9 @@ class CollabPersonUuidTypeTest extends TestCase
         $this->assertNull($value);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
-    #[\PHPUnit\Framework\Attributes\Group('Doctrine')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlockBundle')]
+    #[Group('Doctrine')]
+    #[Test]
     public function a_non_null_value_is_converted_to_a_collab_person_uuid()
     {
         $collabPersonUuidType = Type::getType(CollabPersonUuidType::NAME);
@@ -130,9 +133,9 @@ class CollabPersonUuidTypeTest extends TestCase
         $this->assertTrue((new CollabPersonUuid($uuid))->equals($output));
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
-    #[\PHPUnit\Framework\Attributes\Group('Doctrine')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlockBundle')]
+    #[Group('Doctrine')]
+    #[Test]
     public function an_invalid_database_value_causes_an_exception_upon_conversion()
     {
         $collabPersonUuidType = Type::getType(CollabPersonUuidType::NAME);

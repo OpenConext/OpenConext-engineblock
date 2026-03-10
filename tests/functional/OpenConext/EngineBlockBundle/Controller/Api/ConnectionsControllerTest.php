@@ -18,13 +18,15 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
-use App\Kernel;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Exception;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
-use Symfony\Bundle\FrameworkBundle\Client;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -37,26 +39,26 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
     }
 
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Connections')]
-    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Connections')]
+    #[Group('MetadataPush')]
+    #[Test]
     public function authentication_is_required_for_pushing_metadata()
     {
         $unauthenticatedClient = static::createClient();
         $unauthenticatedClient->request('POST', 'https://engine-api.dev.openconext.local/api/connections');
-        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
+        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED, $unauthenticatedClient);
     }
 
     /**
      *
      * @param string $invalidHttpMethod
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('invalidHttpMethodProvider')]
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Connections')]
-    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProvider('invalidHttpMethodProvider')]
+    #[Group('Api')]
+    #[Group('Connections')]
+    #[Group('MetadataPush')]
+    #[Test]
     public function only_post_requests_are_allowed_when_pushing_metadata($invalidHttpMethod)
     {
         $client = $this->createAuthorizedClient();
@@ -68,11 +70,11 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Connections')]
-    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
-    #[\PHPUnit\Framework\Attributes\Group('FeatureToggle')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Connections')]
+    #[Group('MetadataPush')]
+    #[Group('FeatureToggle')]
+    #[Test]
     public function cannot_push_metadata_if_feature_is_disabled()
     {
         $client = $this->createAuthorizedClient();
@@ -86,10 +88,10 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Connections')]
-    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Connections')]
+    #[Group('MetadataPush')]
+    #[Test]
     public function cannot_push_metadata_if_user_does_not_have_manage_role()
     {
         $client = static::createClient();
@@ -109,11 +111,11 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
      *
      * @param string $invalidJsonPayload
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('invalidJsonPayloadProvider')]
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Connections')]
-    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProvider('invalidJsonPayloadProvider')]
+    #[Group('Api')]
+    #[Group('Connections')]
+    #[Group('MetadataPush')]
+    #[Test]
     public function cannot_push_invalid_content_to_the_metadata_push_api($invalidJsonPayload)
     {
         $client = $this->createAuthorizedClient();
@@ -132,16 +134,15 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Connections')]
-    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Connections')]
+    #[Group('MetadataPush')]
+    #[Test]
     public function pushing_data_to_engineblock_should_succeed()
     {
         $client = $this->createAuthorizedClient();
 
         foreach ($this->validConnectionsData() as $step) {
-
             $payload = $this->createJsonData($step);
 
             $client->request(
@@ -174,7 +175,7 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
                 $this->assertSame($role['entityId'], $data->entityId);
                 $this->assertSame($role['name'], $data->nameEn);
 
-                switch($role['type']) {
+                switch ($role['type']) {
                     case 'saml20-idp':
                         $this->assertInstanceOf(IdentityProvider::class, $data);
                         break;
@@ -182,7 +183,7 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
                         $this->assertInstanceOf(ServiceProvider::class, $data);
                         break;
                     default:
-                        throw new \Exception('Unknown role type encountered');
+                        throw new Exception('Unknown role type encountered');
                 }
 
                 unset($metadata[$role['entityId']]);
@@ -193,16 +194,15 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
     }
 
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Connections')]
-    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Connections')]
+    #[Group('MetadataPush')]
+    #[Test]
     public function pushing_data_with_coins_to_engineblock_should_succeed()
     {
         $client = $this->createAuthorizedClient();
 
         foreach ($this->validConnectionsWithCoinsData() as $connection) {
-
             $payload = $this->createJsonData([$connection]);
 
             $client->request(
@@ -239,10 +239,10 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Connections')]
-    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Connections')]
+    #[Group('MetadataPush')]
+    #[Test]
     public function pushing_manage_sfo_data_should_succeed()
     {
         $client = $this->createAuthorizedClient();
@@ -321,10 +321,10 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
     }
 
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Connections')]
-    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Connections')]
+    #[Group('MetadataPush')]
+    #[Test]
     public function pushing_data_to_engineblock_can_fail()
     {
         $client = $this->createAuthorizedClient();
@@ -332,7 +332,6 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
         // The second 'step' will overwrite the entity id for the one entry. It only changes some case, resulting in
         // a sql error in Engine. That exception results in a 500 JSON response
         foreach ($this->failingConnectionsData() as $expectedHttpCode => $step) {
-
             $payload = $this->createJsonData($step);
 
             $client->request(
@@ -345,14 +344,13 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
             );
             $this->assertStatusCode($expectedHttpCode, $client);
             $this->assertJson($client->getResponse()->getContent());
-
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Connections')]
-    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Connections')]
+    #[Group('MetadataPush')]
+    #[Test]
     public function pushing_entity_with_invalid_manipulation_code_returns_bad_request()
     {
         $client = $this->createAuthorizedClient();
@@ -375,10 +373,10 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
         $this->assertStringContainsString('https://sp.example.com', $message);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Connections')]
-    #[\PHPUnit\Framework\Attributes\Group('MetadataPush')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Connections')]
+    #[Group('MetadataPush')]
+    #[Test]
     public function pushing_entity_with_valid_manipulation_code_succeeds()
     {
         $client = $this->createAuthorizedClient();
@@ -432,7 +430,7 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
         $mock = new FeatureConfiguration([
             'api.metadata_push' => false,
         ]);
-        $client->getContainer()->set(\OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration::class, $mock);
+        $client->getContainer()->set(FeatureConfiguration::class, $mock);
     }
 
     private function clearMetadataFixtures()
@@ -486,7 +484,8 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
             $coinsJson = '"coin": ' . json_encode($coins) . ',';
         }
 
-        return sprintf('"%1$s":{
+        return sprintf(
+            '"%1$s":{
             "allow_all_entities":true,
             "allowed_connections":[],
             "metadata":{
@@ -503,7 +502,8 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
             $entityId,
             $name,
             $type,
-            $coinsJson);
+            $coinsJson
+        );
     }
 
     private function validConnectionsData()

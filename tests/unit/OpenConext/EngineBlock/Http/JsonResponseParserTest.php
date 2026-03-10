@@ -21,16 +21,20 @@ namespace OpenConext\EngineBlock\Http;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use OpenConext\EngineBlock\Exception\InvalidJsonException;
+use OpenConext\TestDataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class JsonResponseParserTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notString')]
-    #[\PHPUnit\Framework\Attributes\Group('Http')]
-    #[\PHPUnit\Framework\Attributes\Group('Json')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProviderExternal(TestDataProvider::class, 'notString')]
+    #[Group('Http')]
+    #[Group('Json')]
+    #[Test]
     public function json_response_to_parse_must_be_a_string($nonString)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -39,9 +43,9 @@ class JsonResponseParserTest extends TestCase
         JsonResponseParser::parse($nonString);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Http')]
-    #[\PHPUnit\Framework\Attributes\Group('Json')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Http')]
+    #[Group('Json')]
+    #[Test]
     public function an_exception_is_thrown_if_the_json_is_malformed()
     {
         $this->expectException(InvalidJsonException::class);

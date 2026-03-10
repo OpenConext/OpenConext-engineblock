@@ -20,6 +20,10 @@ namespace OpenConext\EngineBlock\Http;
 
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
+use OpenConext\TestDataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class ResourcePathFormatterTest extends TestCase
@@ -30,10 +34,10 @@ class ResourcePathFormatterTest extends TestCase
      *
      * @param $nonString
      */
-    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notString')]
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Http')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProviderExternal(TestDataProvider::class, 'notString')]
+    #[Group('EngineBlock')]
+    #[Group('Http')]
+    #[Test]
     public function resource_path_formats_can_only_be_strings($nonString)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -42,9 +46,9 @@ class ResourcePathFormatterTest extends TestCase
         ResourcePathFormatter::format($nonString, []);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Http')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Http')]
+    #[Test]
     public function resource_parameters_are_formatted_correctly()
     {
         $resourcePathFormat = 'resource/%s/%d';

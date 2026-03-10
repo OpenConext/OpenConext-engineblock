@@ -19,10 +19,10 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Helper;
 
 use OpenConext\EngineBlock\Exception\LogicException;
+use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Logo;
-use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlockBundle\Service\DiscoverySelectionService;
 use Webmozart\Assert\Assert;
 

@@ -19,9 +19,7 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
 use InvalidArgumentException;
-use OpenConext\EngineBlockBundle\Sbs\AuthzResponse;
 use OpenConext\EngineBlockBundle\Sbs\Msg;
-use OpenConext\EngineBlockBundle\Sbs\SbsClientInterface;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 
 class SbsClientStateManager

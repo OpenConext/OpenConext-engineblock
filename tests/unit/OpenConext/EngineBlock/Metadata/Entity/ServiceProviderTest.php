@@ -25,6 +25,7 @@ use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\MduiElement;
 use OpenConext\EngineBlock\Metadata\MultilingualValue;
 use OpenConext\EngineBlock\Metadata\Organization;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ServiceProviderTest extends TestCase
@@ -46,7 +47,7 @@ class ServiceProviderTest extends TestCase
      * 4. name in english
      * 5. entityID (should never happen)
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('displayNameProvider')]
+    #[DataProvider('displayNameProvider')]
     public function testGetDisplayName(string $entityId, ?string $displayNameEn, ?string $nameEn, ?string $displayNameLocale, ?string $nameLocale, string $locale, $outcome)
     {
         $sp = $this->createServiceProvider(
@@ -70,7 +71,7 @@ class ServiceProviderTest extends TestCase
      * 4. english organization name
      * 5. empty string (will be set to the locale-specific variant of 'unknown' in the template)
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('organizationNameProvider')]
+    #[DataProvider('organizationNameProvider')]
     public function testGetOrganizationName(string $entityId, ?string $orgDisplayNameEn, ?string $orgNameEn, ?string $orgDisplayNameNl, ?string $orgNameNl, string $locale, $outcome)
     {
         $orgEn = new Organization($orgNameEn, $orgDisplayNameEn, $entityId);
