@@ -335,25 +335,6 @@ class EngineBlock_ApplicationSingleton
         throw new EngineBlock_Exception('Unable to determine IP address!');
     }
 
-    /**
-     * Logs exception and redirects user to feedback page
-     *
-     * @param Exception $exception
-     * @param string $feedbackUrl Url to which the user will be redirected
-     * @param array $feedbackInfo Optional feedback info in name/value format which will be shown on feedback page
-     */
-    public function handleExceptionWithFeedback(
-        Exception $exception,
-        $feedbackUrl,
-        $feedbackInfo = array()
-    )
-    {
-        $messageSuffix = '-> Redirecting to feedback page';
-        $this->reportError($exception, $messageSuffix);
-        $this->getSession()->set('feedbackInfo', array_merge($feedbackInfo, $this->getSession()->get('feedbackInfo', [])));
-        $this->getHttpResponse()->setRedirectUrl($feedbackUrl);
-    }
-
     //////////// HTTP COMMUNICATION
 
     /**

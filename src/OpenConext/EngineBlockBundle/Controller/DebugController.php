@@ -25,7 +25,6 @@ use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class DebugController implements AuthenticationLoopThrottlingController
@@ -36,16 +35,16 @@ class DebugController implements AuthenticationLoopThrottlingController
     private $engineBlockApplicationSingleton;
 
     /**
-     * @var SessionInterface
+     * @var RequestStack
      */
-    private $session;
+    private $requestStack;
 
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
         RequestStack $requestStack,
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
-        $this->session = $requestStack->getSession();
+        $this->requestStack = $requestStack;
     }
 
     #[Route(path: '/authentication/sp/debug', name: 'authentication_sp_debug', methods: ['GET', 'POST'])]
@@ -57,7 +56,7 @@ class DebugController implements AuthenticationLoopThrottlingController
 
         // Authentication state needs to be registered here as the debug flow differs from the regular flow,
         // yet the procedures for both are completed when consuming the assertion in the ServiceProviderController
-        $authenticationState = $this->session->get('authentication_state');
+        $authenticationState = $this->requestStack->getSession()->get('authentication_state');
 
         $requestId = '_00000000-0000-0000-0000-000000000000';
         $authenticationState->startAuthenticationOnBehalfOf(
