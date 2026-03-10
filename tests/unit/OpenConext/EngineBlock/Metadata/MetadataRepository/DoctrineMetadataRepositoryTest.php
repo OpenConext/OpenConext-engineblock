@@ -18,10 +18,12 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
-use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\DisableDisallowedEntitiesInWayfVisitor;
 use PHPUnit\Framework\TestCase;
 
@@ -31,21 +33,21 @@ class DoctrineMetadataRepositoryTest extends TestCase
 
     public function testFindIdentityProviders()
     {
-        $mockQueryBuilder = Mockery::mock(\Doctrine\ORM\QueryBuilder::class);
+        $mockQueryBuilder = Mockery::mock(QueryBuilder::class);
         $mockQueryBuilder
             ->shouldReceive('getQuery->execute')
             ->andReturn([new IdentityProvider('https://idp.entity.com')]);
 
-        $mockSpRepository = Mockery::mock(\Doctrine\ORM\EntityRepository::class);
-        $mockIdpRepository = Mockery::mock(\Doctrine\ORM\EntityRepository::class);
+        $mockSpRepository = Mockery::mock(EntityRepository::class);
+        $mockIdpRepository = Mockery::mock(EntityRepository::class);
         $mockIdpRepository
             ->shouldReceive('getClassName')
-            ->andReturn(\OpenConext\EngineBlock\Metadata\Entity\IdentityProvider::class)
+            ->andReturn(IdentityProvider::class)
             ->shouldReceive('createQueryBuilder')
             ->andReturn($mockQueryBuilder);
 
         $repository = new DoctrineMetadataRepository(
-            Mockery::mock(\Doctrine\ORM\EntityManager::class),
+            Mockery::mock(EntityManager::class),
             $mockSpRepository,
             $mockIdpRepository
         );
@@ -55,7 +57,7 @@ class DoctrineMetadataRepositoryTest extends TestCase
 
     public function testFindIdentityProvidersVisitor()
     {
-        $mockQueryBuilder = Mockery::mock(\Doctrine\ORM\QueryBuilder::class);
+        $mockQueryBuilder = Mockery::mock(QueryBuilder::class);
         $mockQueryBuilder
             ->shouldReceive('getQuery->execute')
             ->andReturn([
@@ -63,16 +65,16 @@ class DoctrineMetadataRepositoryTest extends TestCase
                 new IdentityProvider('https://unconnected.entity.com')
             ]);
 
-        $mockSpRepository = Mockery::mock(\Doctrine\ORM\EntityRepository::class);
-        $mockIdpRepository = Mockery::mock(\Doctrine\ORM\EntityRepository::class);
+        $mockSpRepository = Mockery::mock(EntityRepository::class);
+        $mockIdpRepository = Mockery::mock(EntityRepository::class);
         $mockIdpRepository
             ->shouldReceive('getClassName')
-            ->andReturn(\OpenConext\EngineBlock\Metadata\Entity\IdentityProvider::class)
+            ->andReturn(IdentityProvider::class)
             ->shouldReceive('createQueryBuilder')
             ->andReturn($mockQueryBuilder);
 
         $repository = new DoctrineMetadataRepository(
-            Mockery::mock(\Doctrine\ORM\EntityManager::class),
+            Mockery::mock(EntityManager::class),
             $mockSpRepository,
             $mockIdpRepository
         );
@@ -85,7 +87,7 @@ class DoctrineMetadataRepositoryTest extends TestCase
             'https://unconnected.entity.com' => false,
         ];
 
-        foreach ($identityProviders as $identityProvider){
+        foreach ($identityProviders as $identityProvider) {
             $this->assertEquals($expectedWayfVisibility[$identityProvider->entityId], $identityProvider->enabledInWayf);
         }
 

@@ -18,7 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -42,7 +42,7 @@ class GlobalSiteNotice extends AbstractExtension
     public function __construct(
         bool $shouldDisplayGlobalSiteNotice,
         string $allowedHtml,
-        \Symfony\Contracts\Translation\TranslatorInterface $translator
+        TranslatorInterface $translator
     ) {
         $this->shouldDisplayGlobalSiteNotice = $shouldDisplayGlobalSiteNotice;
         $this->allowedHtml = $allowedHtml;

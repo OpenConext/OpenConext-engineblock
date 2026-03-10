@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Controllers;
 
+use EngineBlock_Corto_ProxyServer;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,7 +57,7 @@ class FeedbackController extends AbstractController
         $this->logger = $logger;
 
         // we have to start the old session in order to be able to retrieve the feedback info
-        $server = new \EngineBlock_Corto_ProxyServer($twig);
+        $server = new EngineBlock_Corto_ProxyServer($twig);
         $server->startSession();
     }
 

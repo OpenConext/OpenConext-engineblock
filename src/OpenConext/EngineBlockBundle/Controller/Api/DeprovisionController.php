@@ -18,10 +18,10 @@
 
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
+use OpenConext\EngineBlock\Service\DeprovisionService;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Factory\CollabPersonIdFactory;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
-use OpenConext\EngineBlock\Service\DeprovisionService;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;

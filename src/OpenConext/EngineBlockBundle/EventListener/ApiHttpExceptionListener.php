@@ -18,8 +18,8 @@
 
 namespace OpenConext\EngineBlockBundle\EventListener;
 
-use OpenConext\EngineBlockBundle\Http\Exception\ApiHttpException;
 use OpenConext\EngineBlockBridge\ErrorReporter;
+use OpenConext\EngineBlockBundle\Http\Exception\ApiHttpException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;

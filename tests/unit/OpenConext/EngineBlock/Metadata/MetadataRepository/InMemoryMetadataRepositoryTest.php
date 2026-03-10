@@ -22,8 +22,9 @@ use Exception;
 use Mockery;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\Utils;
-use PHPUnit_Framework_Error;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -108,7 +109,7 @@ class InMemoryMetadataRepositoryTest extends TestCase
         $repository = $this->getFilledRepository();
 
         $mockFilter = Mockery::mock(
-            \OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface::class
+            FilterInterface::class
         );
         $mockFilter->shouldReceive('filterRole')->andReturnNull();
         $repository->appendFilter($mockFilter);
@@ -132,7 +133,7 @@ class InMemoryMetadataRepositoryTest extends TestCase
         $repository = $this->getFilledRepository();
 
         $visitor = Mockery::mock(
-            \OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface::class
+            VisitorInterface::class
         );
         $visitor->shouldReceive('visitIdentityProvider')->andReturnUsing(
             function (IdentityProvider $idp) {
@@ -160,7 +161,7 @@ class InMemoryMetadataRepositoryTest extends TestCase
         $repository = new InMemoryMetadataRepository(
             array(
                 Utils::instantiate(
-                    \OpenConext\EngineBlock\Metadata\Entity\IdentityProvider::class,
+                    IdentityProvider::class,
                     array(
                         'entityId' => 'https://idp1.example.edu',
                         'schacHomeOrganization'=> 'idp1.example.edu'

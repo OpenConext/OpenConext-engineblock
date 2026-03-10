@@ -18,8 +18,8 @@
 
 namespace OpenConext\EngineBlock\Service;
 
-use EngineBlock_Corto_Module_Services_SessionLostException;
 use EngineBlock_Corto_Module_Services_Exception;
+use EngineBlock_Corto_Module_Services_SessionLostException;
 use EngineBlock_Saml2_ResponseAnnotationDecorator;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Service\Dto\ProcessingStateStep;

@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlock\Metadata;
 
 use OpenConext\EngineBlock\Exception\InvalidDiscoveryException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DiscoveryTest extends TestCase
@@ -29,7 +30,7 @@ class DiscoveryTest extends TestCase
         $this->assertNotNull($discovery);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('localeValueArrayProvider')]
+    #[DataProvider('localeValueArrayProvider')]
     public function test_validates_localized_names(array $names, string $expectedExceptionMessage = null): void
     {
         $this->expectException(InvalidDiscoveryException::class);
@@ -38,7 +39,7 @@ class DiscoveryTest extends TestCase
         Discovery::create($names, [], null);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('localeValueArrayProvider')]
+    #[DataProvider('localeValueArrayProvider')]
     public function test_validates_localized_keywords(array $keywords, string $expectedExceptionMessage): void
     {
         $this->expectException(InvalidDiscoveryException::class);
@@ -72,6 +73,4 @@ class DiscoveryTest extends TestCase
             ]
         ];
     }
-
-
 }

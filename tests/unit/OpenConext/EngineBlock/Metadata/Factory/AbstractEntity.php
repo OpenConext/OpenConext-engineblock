@@ -17,10 +17,12 @@
 
 namespace OpenConext\EngineBlock\Metadata\Factory;
 
+use Exception;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
+use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
@@ -32,7 +34,6 @@ use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
-use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -73,39 +74,105 @@ abstract class AbstractEntity extends TestCase
         $implemented = $this->getIdentityProviderValues(IdentityProviderEntityInterface::class);
 
         $assertions = [
-            'id' => function(IdentityProviderEntityInterface $entity) { return $entity->getId(); },
-            'entityId' => function(IdentityProviderEntityInterface $entity) { return $entity->getEntityId(); },
-            'mdui' => function(IdentityProviderEntityInterface $entity) { return $entity->getMdui(); },
-            'nameNl' => function(IdentityProviderEntityInterface $entity) { return  $entity->getName('nl'); },
-            'nameEn' => function(IdentityProviderEntityInterface $entity) { return  $entity->getName('en'); },
-            'namePt' => function(IdentityProviderEntityInterface $entity) { return  $entity->getName('pt'); },
-            'descriptionNl' => function(IdentityProviderEntityInterface $entity) { return  $entity->getDescription('nl'); },
-            'descriptionEn' => function(IdentityProviderEntityInterface $entity) { return  $entity->getDescription('en'); },
-            'descriptionPt' => function(IdentityProviderEntityInterface $entity) { return  $entity->getDescription('pt'); },
-            'displayNameNl' => function(IdentityProviderEntityInterface $entity) { return  $entity->getDisplayName('nl'); },
-            'displayNameEn' => function(IdentityProviderEntityInterface $entity) { return  $entity->getDisplayName('en'); },
-            'displayNamePt' => function(IdentityProviderEntityInterface $entity) { return  $entity->getDisplayName('pt'); },
-            'logo' => function(IdentityProviderEntityInterface $entity) { return  $entity->getLogo(); },
-            'organizationNl' => function(IdentityProviderEntityInterface $entity) { return  $entity->getOrganization('nl'); },
-            'organizationEn' => function(IdentityProviderEntityInterface $entity) { return  $entity->getOrganization('en'); },
-            'organizationPt' => function(IdentityProviderEntityInterface $entity) { return  $entity->getOrganization('pt'); },
-            'keywordsNl' => function(IdentityProviderEntityInterface $entity) { return  $entity->getKeywords('nl'); },
-            'keywordsEn' => function(IdentityProviderEntityInterface $entity) { return  $entity->getKeywords('en'); },
-            'keywordsPt' => function(IdentityProviderEntityInterface $entity) { return  $entity->getKeywords('pt'); },
-            'certificates' => function(IdentityProviderEntityInterface $entity) { return  $entity->getCertificates(); },
-            'workflowState' => function(IdentityProviderEntityInterface $entity) { return  $entity->getWorkflowState(); },
-            'contactPersons' => function(IdentityProviderEntityInterface $entity) { return  $entity->getContactPersons(); },
-            'nameIdFormat' => function(IdentityProviderEntityInterface $entity) { return  $entity->getNameIdFormat(); },
-            'supportedNameIdFormats' => function(IdentityProviderEntityInterface $entity) { return  $entity->getSupportedNameIdFormats(); },
-            'singleLogoutService' => function(IdentityProviderEntityInterface $entity) { return  $entity->getSingleLogoutService(); },
-            'requestsMustBeSigned' => function(IdentityProviderEntityInterface $entity) { return  $entity->isRequestsMustBeSigned(); },
-            'manipulation' => function(IdentityProviderEntityInterface $entity) { return  $entity->getManipulation(); },
-            'coins' => function(IdentityProviderEntityInterface $entity) { return  $entity->getCoins(); },
-            'enabledInWayf' => function(IdentityProviderEntityInterface $entity) { return  $entity->isEnabledInWayf(); },
-            'singleSignOnServices' => function(IdentityProviderEntityInterface $entity) { return  $entity->getSingleSignOnServices(); },
-            'consentSettings' => function(IdentityProviderEntityInterface $entity) { return  $entity->getConsentSettings(); },
-            'shibMdScopes' => function(IdentityProviderEntityInterface $entity) { return  $entity->getShibMdScopes(); },
-            'discoveries' => function(IdentityProviderEntityInterface $entity) { return  $entity->getDiscoveries(); },
+            'id' => function (IdentityProviderEntityInterface $entity) {
+                return $entity->getId();
+            },
+            'entityId' => function (IdentityProviderEntityInterface $entity) {
+                return $entity->getEntityId();
+            },
+            'mdui' => function (IdentityProviderEntityInterface $entity) {
+                return $entity->getMdui();
+            },
+            'nameNl' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getName('nl');
+            },
+            'nameEn' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getName('en');
+            },
+            'namePt' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getName('pt');
+            },
+            'descriptionNl' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getDescription('nl');
+            },
+            'descriptionEn' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getDescription('en');
+            },
+            'descriptionPt' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getDescription('pt');
+            },
+            'displayNameNl' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getDisplayName('nl');
+            },
+            'displayNameEn' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getDisplayName('en');
+            },
+            'displayNamePt' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getDisplayName('pt');
+            },
+            'logo' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getLogo();
+            },
+            'organizationNl' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getOrganization('nl');
+            },
+            'organizationEn' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getOrganization('en');
+            },
+            'organizationPt' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getOrganization('pt');
+            },
+            'keywordsNl' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getKeywords('nl');
+            },
+            'keywordsEn' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getKeywords('en');
+            },
+            'keywordsPt' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getKeywords('pt');
+            },
+            'certificates' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getCertificates();
+            },
+            'workflowState' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getWorkflowState();
+            },
+            'contactPersons' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getContactPersons();
+            },
+            'nameIdFormat' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getNameIdFormat();
+            },
+            'supportedNameIdFormats' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getSupportedNameIdFormats();
+            },
+            'singleLogoutService' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getSingleLogoutService();
+            },
+            'requestsMustBeSigned' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->isRequestsMustBeSigned();
+            },
+            'manipulation' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getManipulation();
+            },
+            'coins' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getCoins();
+            },
+            'enabledInWayf' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->isEnabledInWayf();
+            },
+            'singleSignOnServices' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getSingleSignOnServices();
+            },
+            'consentSettings' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getConsentSettings();
+            },
+            'shibMdScopes' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getShibMdScopes();
+            },
+            'discoveries' => function (IdentityProviderEntityInterface $entity) {
+                return  $entity->getDiscoveries();
+            },
         ];
 
         $missing = array_diff_key($implemented, $assertions);
@@ -130,45 +197,121 @@ abstract class AbstractEntity extends TestCase
         $implemented = $this->getServiceProviderValues(ServiceProviderEntityInterface::class);
 
         $assertions = [
-            'id' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getId(); },
-            'entityId' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getEntityId(); },
-            'mdui' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getMdui(); },
-            'nameNl' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getName('nl'); },
-            'nameEn' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getName('en'); },
-            'namePt' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getName('pt'); },
-            'descriptionNl' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getDescription('nl'); },
-            'descriptionEn' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getDescription('en'); },
-            'descriptionPt' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getDescription('pt'); },
-            'displayNameNl' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getDisplayName('nl'); },
-            'displayNameEn' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getDisplayName('en'); },
-            'displayNamePt' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getDisplayName('pt'); },
-            'logo' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getLogo(); },
-            'organizationNl' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getOrganization('nl'); },
-            'organizationEn' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getOrganization('en'); },
-            'organizationPt' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getOrganization('pt'); },
-            'keywordsNl' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getKeywords('nl'); },
-            'keywordsEn' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getKeywords('en'); },
-            'keywordsPt' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getKeywords('pt'); },
-            'certificates' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getCertificates(); },
-            'workflowState' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getWorkflowState(); },
-            'contactPersons' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getContactPersons(); },
-            'nameIdFormat' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getNameIdFormat(); },
-            'supportedNameIdFormats' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getSupportedNameIdFormats(); },
-            'singleLogoutService' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getSingleLogoutService(); },
-            'requestsMustBeSigned' => function(ServiceProviderEntityInterface $decorator) { return $decorator->isRequestsMustBeSigned(); },
-            'manipulation' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getManipulation(); },
-            'coins' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getCoins(); },
-            'attributeReleasePolicy' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getAttributeReleasePolicy(); },
-            'assertionConsumerServices' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getAssertionConsumerServices(); },
-            'allowedIdpEntityIds' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getAllowedIdpEntityIds(); },
-            'allowAll' => function(ServiceProviderEntityInterface $decorator) { return $decorator->isAllowAll(); },
-            'requestedAttributes' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getRequestedAttributes(); },
-            'supportUrlEn' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getSupportUrl('en'); },
-            'supportUrlNl' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getSupportUrl('nl'); },
-            'supportUrlPt' => function(ServiceProviderEntityInterface $decorator) { return $decorator->getSupportUrl('pt'); },
+            'id' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getId();
+            },
+            'entityId' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getEntityId();
+            },
+            'mdui' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getMdui();
+            },
+            'nameNl' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getName('nl');
+            },
+            'nameEn' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getName('en');
+            },
+            'namePt' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getName('pt');
+            },
+            'descriptionNl' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getDescription('nl');
+            },
+            'descriptionEn' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getDescription('en');
+            },
+            'descriptionPt' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getDescription('pt');
+            },
+            'displayNameNl' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getDisplayName('nl');
+            },
+            'displayNameEn' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getDisplayName('en');
+            },
+            'displayNamePt' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getDisplayName('pt');
+            },
+            'logo' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getLogo();
+            },
+            'organizationNl' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getOrganization('nl');
+            },
+            'organizationEn' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getOrganization('en');
+            },
+            'organizationPt' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getOrganization('pt');
+            },
+            'keywordsNl' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getKeywords('nl');
+            },
+            'keywordsEn' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getKeywords('en');
+            },
+            'keywordsPt' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getKeywords('pt');
+            },
+            'certificates' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getCertificates();
+            },
+            'workflowState' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getWorkflowState();
+            },
+            'contactPersons' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getContactPersons();
+            },
+            'nameIdFormat' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getNameIdFormat();
+            },
+            'supportedNameIdFormats' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getSupportedNameIdFormats();
+            },
+            'singleLogoutService' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getSingleLogoutService();
+            },
+            'requestsMustBeSigned' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->isRequestsMustBeSigned();
+            },
+            'manipulation' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getManipulation();
+            },
+            'coins' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getCoins();
+            },
+            'attributeReleasePolicy' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getAttributeReleasePolicy();
+            },
+            'assertionConsumerServices' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getAssertionConsumerServices();
+            },
+            'allowedIdpEntityIds' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getAllowedIdpEntityIds();
+            },
+            'allowAll' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->isAllowAll();
+            },
+            'requestedAttributes' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getRequestedAttributes();
+            },
+            'supportUrlEn' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getSupportUrl('en');
+            },
+            'supportUrlNl' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getSupportUrl('nl');
+            },
+            'supportUrlPt' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->getSupportUrl('pt');
+            },
 
-            'allowed' => function(ServiceProviderEntityInterface $decorator, $entityId = 'entity-id-2') { return $decorator->isAllowed('entity-id-2'); },
-            'attributeAggregationRequired' => function(ServiceProviderEntityInterface $decorator) { return $decorator->isAttributeAggregationRequired(); },
+            'allowed' => function (ServiceProviderEntityInterface $decorator, $entityId = 'entity-id-2') {
+                return $decorator->isAllowed('entity-id-2');
+            },
+            'attributeAggregationRequired' => function (ServiceProviderEntityInterface $decorator) {
+                return $decorator->isAttributeAggregationRequired();
+            },
         ];
 
         $missing = array_diff_key($implemented, $assertions);
@@ -347,7 +490,7 @@ abstract class AbstractEntity extends TestCase
 
         $reflection = new ReflectionClass(IdentityProvider::class);
 
-        foreach($values as $key => $value){
+        foreach ($values as $key => $value) {
             $reflectionProperty = $reflection->getProperty($key);
             $reflectionProperty->setValue($entity, $value);
         }
@@ -364,7 +507,7 @@ abstract class AbstractEntity extends TestCase
 
         $reflection = new ReflectionClass(ServiceProvider::class);
 
-        foreach($values as $key => $value){
+        foreach ($values as $key => $value) {
             $reflectionProperty = $reflection->getProperty($key);
             $reflectionProperty->setValue($entity, $value);
         }
@@ -556,10 +699,10 @@ abstract class AbstractEntity extends TestCase
         foreach ($methodNames as $name => $type) {
             if (substr($name, 0, 3) == 'get') {
                 $name = lcfirst(substr($name, 3));
-            } else if (substr($name, 0, 2) == 'is') {
+            } elseif (substr($name, 0, 2) == 'is') {
                 $name = lcfirst(substr($name, 2));
             } else {
-                throw new \Exception('INVALID: '. $name);
+                throw new Exception('INVALID: '. $name);
             }
 
             $results[$name] = $type;

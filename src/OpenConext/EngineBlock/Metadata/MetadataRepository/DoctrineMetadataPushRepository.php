@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository;
 
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Statement;
@@ -174,7 +175,7 @@ class DoctrineMetadataPushRepository
         $query = $this->connection->createQueryBuilder()
             ->delete(self::ROLES_TABLE_NAME)
             ->where('id IN (:ids)')
-            ->setParameter('ids', $roles, \Doctrine\DBAL\ArrayParameterType::INTEGER);
+            ->setParameter('ids', $roles, ArrayParameterType::INTEGER);
 
         $this->addDiscriminatorQuery($query, $metadata);
 

@@ -30,7 +30,7 @@ use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
 use SAML2\Constants;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class IdentityProviderFactory extends AbstractEntity
 {
@@ -62,7 +62,7 @@ class IdentityProviderFactory extends AbstractEntity
         $this->keyPairFactory = $this->createMock(KeyPairFactory::class);
         $this->configuration = $this->createMock(EngineBlockConfiguration::class);
         $this->urlProvider = $this->createMock(UrlProvider::class);
-        $this->translator = $this->createMock(\Symfony\Contracts\Translation\TranslatorInterface::class);
+        $this->translator = $this->createMock(TranslatorInterface::class);
 
         $this->factory = new IdentityProviderFactory($this->keyPairFactory, $this->configuration, $this->urlProvider);
     }
@@ -91,23 +91,23 @@ class IdentityProviderFactory extends AbstractEntity
         // Replaced deprecated $this->at(n) expectations with a single batched expectation
         $this->translator->expects($matcher)
             ->method('trans')->willReturnCallback(function (...$parameters) use ($matcher) {
-            if ($matcher->numberOfInvocations() === 1) {
-                $this->assertSame('suite_name', $parameters[0]);
-                return 'test-suite';
-            }
-            if ($matcher->numberOfInvocations() === 2) {
-                $this->assertSame('metadata_organization_name', $parameters[0]);
-                return 'configuredOrganizationName';
-            }
-            if ($matcher->numberOfInvocations() === 3) {
-                $this->assertSame('metadata_organization_displayname', $parameters[0]);
-                return 'configuredOrganizationDisplayName';
-            }
-            if ($matcher->numberOfInvocations() === 4) {
-                $this->assertSame('metadata_organization_url', $parameters[0]);
-                return 'configuredOrganizationUrl';
-            }
-        });
+                if ($matcher->numberOfInvocations() === 1) {
+                    $this->assertSame('suite_name', $parameters[0]);
+                    return 'test-suite';
+                }
+                if ($matcher->numberOfInvocations() === 2) {
+                    $this->assertSame('metadata_organization_name', $parameters[0]);
+                    return 'configuredOrganizationName';
+                }
+                if ($matcher->numberOfInvocations() === 3) {
+                    $this->assertSame('metadata_organization_displayname', $parameters[0]);
+                    return 'configuredOrganizationDisplayName';
+                }
+                if ($matcher->numberOfInvocations() === 4) {
+                    $this->assertSame('metadata_organization_url', $parameters[0]);
+                    return 'configuredOrganizationUrl';
+                }
+            });
 
         $this->configuration = new EngineBlockConfiguration(
             $this->translator,
@@ -145,7 +145,7 @@ class IdentityProviderFactory extends AbstractEntity
         $this->urlProvider->expects($matcher)
             ->method('getUrl')
             ->willReturnCallback(
-            function (...$parameters) use ($matcher) {
+                function (...$parameters) use ($matcher) {
                     if ($matcher->numberOfInvocations() === 1) {
                         $this->assertSame('authentication_idp_sso', $parameters[0]);
                         $this->assertSame(false, $parameters[1]);

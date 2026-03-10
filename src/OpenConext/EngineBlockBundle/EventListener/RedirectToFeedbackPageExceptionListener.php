@@ -22,6 +22,7 @@ use EngineBlock_ApplicationSingleton;
 use EngineBlock_Attributes_Manipulator_CustomException;
 use EngineBlock_Corto_Exception_AuthnContextClassRefBlacklisted;
 use EngineBlock_Corto_Exception_InvalidAcsLocation;
+use EngineBlock_Corto_Exception_InvalidAttributeValue;
 use EngineBlock_Corto_Exception_InvalidMfaAuthnContextClassRef;
 use EngineBlock_Corto_Exception_InvalidStepupCalloutResponse;
 use EngineBlock_Corto_Exception_InvalidStepupLoaLevel;
@@ -30,8 +31,8 @@ use EngineBlock_Corto_Exception_PEPNoAccess;
 use EngineBlock_Corto_Exception_ReceivedErrorStatusCode;
 use EngineBlock_Corto_Exception_UnknownIdentityProviderSigningKey;
 use EngineBlock_Corto_Exception_UnknownPreselectedIdp;
-use EngineBlock_Corto_Exception_InvalidAttributeValue;
 use EngineBlock_Corto_Exception_UserCancelledStepupCallout;
+use EngineBlock_Corto_Module_Bindings_ClockIssueException;
 use EngineBlock_Corto_Module_Bindings_SignatureVerificationException;
 use EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException;
 use EngineBlock_Corto_Module_Bindings_UnsupportedAcsLocationSchemeException;
@@ -41,8 +42,8 @@ use EngineBlock_Corto_Module_Bindings_VerificationException;
 use EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException;
 use EngineBlock_Corto_Module_Services_SessionLostException;
 use EngineBlock_Corto_Module_Services_SessionNotStartedException;
-use EngineBlock_Exception_UnknownRequesterIdInAuthnRequest;
 use EngineBlock_Exception_UnknownIdentityProvider;
+use EngineBlock_Exception_UnknownRequesterIdInAuthnRequest;
 use EngineBlock_Exception_UnknownServiceProvider;
 use OpenConext\EngineBlock\Exception\InvalidBindingException;
 use OpenConext\EngineBlock\Exception\InvalidRequestMethodException;
@@ -55,7 +56,6 @@ use OpenConext\EngineBlockBundle\Exception\UnknownKeyIdException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -208,7 +208,7 @@ class RedirectToFeedbackPageExceptionListener
             $message = $exception->getMessage();
             $event->getRequest()->getSession()->set('feedback_custom', $exception->getMessage());
             $redirectToRoute = 'authentication_feedback_no_authentication_request_received';
-        } elseif ($exception instanceof \EngineBlock_Corto_Module_Bindings_ClockIssueException) {
+        } elseif ($exception instanceof EngineBlock_Corto_Module_Bindings_ClockIssueException) {
             $message = $exception->getMessage();
             $redirectToRoute = 'authentication_feedback_response_clock_issue';
         } elseif ($exception instanceof EngineBlock_Corto_Exception_UserCancelledStepupCallout) {

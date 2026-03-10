@@ -18,14 +18,15 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
-use Symfony\Bundle\FrameworkBundle\Client;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 
 final class HeartbeatControllerTest extends FunctionalWebTestCase
 {
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Test]
     public function engineblock_has_a_heartbeat()
     {
         $client = self::createClient();

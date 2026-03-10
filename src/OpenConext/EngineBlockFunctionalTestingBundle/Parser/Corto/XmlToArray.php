@@ -26,6 +26,9 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Parser\Corto;
 
+use RuntimeException;
+use XMLWriter;
+
 /**
  * Class XmlToArray
  * @package OpenConext\EngineBlockFunctionalTestingBundle\Parser\Corto
@@ -174,7 +177,7 @@ class XmlToArray
         $res = [];
         foreach ($attributes as $attribute) {
             if (!isset($attribute['_Name'])) {
-                throw new \RuntimeException('Missing attribute name');
+                throw new RuntimeException('Missing attribute name');
             }
 
             $res[$attribute['_Name']] = [];
@@ -183,13 +186,13 @@ class XmlToArray
             }
 
             if (!is_array($attribute['saml:AttributeValue'])) {
-                throw new \RuntimeException('AttributeValue collection is not an array');
+                throw new RuntimeException('AttributeValue collection is not an array');
             }
 
             // Add each value of the collection to the result
             foreach ($attribute['saml:AttributeValue'] as $value) {
                 if (!is_array($value)) {
-                    throw new \RuntimeException('AttributeValue is not an array');
+                    throw new RuntimeException('AttributeValue is not an array');
                 }
 
                 if (!isset($value[self::VALUE_PFX])) {
@@ -207,7 +210,7 @@ class XmlToArray
         $parser = xml_parser_create_ns();
         $foldingOptionSet = xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         if (!$foldingOptionSet) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Unable to set XML_OPTION_CASE_FOLDING on parser object? Error message: "%s"',
                     xml_error_string(xml_get_error_code($parser))
@@ -218,7 +221,7 @@ class XmlToArray
         $values = [];
         $parserResultStatus = xml_parse_into_struct($parser, $xml, $values);
         if ($parserResultStatus !== 1) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Error parsing incoming XML. '.PHP_EOL.
                     'Error code: "%s"'.PHP_EOL.
@@ -338,7 +341,7 @@ class XmlToArray
      */
     public static function array2xml(array $hash, $elementName = "", $useIndentation = false)
     {
-        $writer = new \XMLWriter();
+        $writer = new XMLWriter();
         $writer->openMemory();
         $writer->startDocument('1.0', 'UTF-8');
         $writer->setIndent($useIndentation);
@@ -348,7 +351,7 @@ class XmlToArray
             if (isset($hash[self::TAG_NAME_PFX])) {
                 $elementName = $hash[self::TAG_NAME_PFX];
             } else {
-                throw new \RuntimeException("No top level tag provided or defined in hash!");
+                throw new RuntimeException("No top level tag provided or defined in hash!");
             }
         }
 
@@ -358,14 +361,14 @@ class XmlToArray
         return $writer->outputMemory();
     }
 
-    protected static function array2xmlRecursive($hash, $elementName, \XMLWriter $writer, $level = 0)
+    protected static function array2xmlRecursive($hash, $elementName, XMLWriter $writer, $level = 0)
     {
         if (is_array($hash) && array_key_exists(self::COMMENT_PFX, $hash)) {
             $writer->writeComment($hash[self::COMMENT_PFX]);
         }
 
         if ($level > self::MAX_RECURSION_LEVEL) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'Recursion threshold exceed on element: "%s" for hashvalue: "%s"',
                     $elementName,
@@ -394,7 +397,7 @@ class XmlToArray
             } elseif (is_array($value) || $value === self::PLACEHOLDER_VALUE) {
                 self::array2xmlRecursive($value, $key, $writer, $level + 1);
             } else {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     sprintf(
                         'Value for key "%s" unrecognized (key naming error?)! Value: "%s"',
                         $key,

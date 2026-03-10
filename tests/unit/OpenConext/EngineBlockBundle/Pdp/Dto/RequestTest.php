@@ -24,7 +24,11 @@ use OpenConext\EngineBlockBundle\Pdp\Dto\Attribute;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Request\AccessSubject;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Request\Resource;
+use OpenConext\TestDataProvider;
 use OpenConext\Value\Saml\NameIdFormat;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class RequestTest extends TestCase
@@ -50,8 +54,8 @@ class RequestTest extends TestCase
         $this->validRemoteIp    = '2001:610:0:8010::213';
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Pdp')]
+    #[Test]
     public function a_pdp_requests_response_attribute_keys_must_be_strings()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -72,9 +76,9 @@ class RequestTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notArray')]
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProviderExternal(TestDataProvider::class, 'notArray')]
+    #[Group('Pdp')]
+    #[Test]
     public function a_pdp_requests_response_attribute_values_must_be_arrays($nonArray)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -94,8 +98,8 @@ class RequestTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Pdp')]
+    #[Test]
     public function a_pdp_request_is_built_correctly()
     {
         $resourceAttributeValues = [
@@ -123,8 +127,8 @@ class RequestTest extends TestCase
         $this->assertEquals($expectedRequest, $actualRequest);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Pdp')]
+    #[Test]
     public function a_pdp_request_is_serialized_correctly()
     {
         $fixturePath = __DIR__.'/../fixture/request.json';
@@ -132,7 +136,8 @@ class RequestTest extends TestCase
         $expectedJson = json_encode(
             json_decode(
                 file_get_contents($fixturePath)
-            ), JSON_PRETTY_PRINT
+            ),
+            JSON_PRETTY_PRINT
         );
 
         $resourceAttributeValues = [

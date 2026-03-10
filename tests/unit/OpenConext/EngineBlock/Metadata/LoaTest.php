@@ -19,12 +19,14 @@
 namespace OpenConext\EngineBlock\Metadata;
 
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use TypeError;
 
 class LoaTest extends TestCase
 {
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideValidLoaParameters')]
+    #[DataProvider('provideValidLoaParameters')]
     public function test_loa_happy_flow(int $level, string $identifier, $expectationDescription)
     {
         $loa = Loa::create($level, $identifier);
@@ -33,14 +35,14 @@ class LoaTest extends TestCase
         $this->assertEquals($identifier, $loa->getIdentifier(), $expectationDescription);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideInvalidLoaParameters')]
+    #[DataProvider('provideInvalidLoaParameters')]
     public function test_loa_sad_flow($level, $identifier, $expectedException)
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedException);
         Loa::create($level, $identifier);
     }
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideErrorneousLoaParameters')]
+    #[DataProvider('provideErrorneousLoaParameters')]
     public function test_loa_errors($level, $identifier)
     {
         $this->expectException(TypeError::class);
@@ -97,7 +99,7 @@ class LoaTest extends TestCase
     {
         return [
             [9999999999999999999999999999, 'https://vm.openconext.nl/loa1', 'The LoA level must be an integer value'],
-            [new \stdClass(), 'https://vm.openconext.nl/loa1', 'The LoA level must be an integer value'],
+            [new stdClass(), 'https://vm.openconext.nl/loa1', 'The LoA level must be an integer value'],
             [10, ['https://vm.openconext.nl/loa1'], 'The LoA identifier must be of type string, and can not be empty'],
         ];
     }

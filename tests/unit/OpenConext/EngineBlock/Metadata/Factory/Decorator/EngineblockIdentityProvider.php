@@ -69,21 +69,21 @@ class EngineblockIdentityProvider extends AbstractEntity
 
         $this->urlProvider->expects($matcher)
             ->method('getUrl')->willReturnCallback(function (...$parameters) use ($matcher) {
-            if ($matcher->numberOfInvocations() === 1) {
-                $this->assertSame('authentication_logout', $parameters[0]);
-                $this->assertSame(false, $parameters[1]);
-                $this->assertSame(null, $parameters[2]);
-                $this->assertSame(null, $parameters[3]);
-                return 'sloLocation';
-            }
-            if ($matcher->numberOfInvocations() === 2) {
-                $this->assertSame('authentication_idp_sso', $parameters[0]);
-                $this->assertSame(false, $parameters[1]);
-                $this->assertSame('default', $parameters[2]);
-                $this->assertSame(null, $parameters[3]);
-                return 'ssoLocation';
-            }
-        });
+                if ($matcher->numberOfInvocations() === 1) {
+                    $this->assertSame('authentication_logout', $parameters[0]);
+                    $this->assertSame(false, $parameters[1]);
+                    $this->assertSame(null, $parameters[2]);
+                    $this->assertSame(null, $parameters[3]);
+                    return 'sloLocation';
+                }
+                if ($matcher->numberOfInvocations() === 2) {
+                    $this->assertSame('authentication_idp_sso', $parameters[0]);
+                    $this->assertSame(false, $parameters[1]);
+                    $this->assertSame('default', $parameters[2]);
+                    $this->assertSame(null, $parameters[3]);
+                    return 'ssoLocation';
+                }
+            });
 
         $decorator = new EngineBlockIdentityProvider($this->adapter, 'default', $this->keyPairMock, $this->urlProvider);
 

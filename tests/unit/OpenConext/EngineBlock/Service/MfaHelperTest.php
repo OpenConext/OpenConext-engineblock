@@ -25,6 +25,8 @@ use OpenConext\EngineBlock\Metadata\MetadataRepository\CachedDoctrineMetadataRep
 use OpenConext\EngineBlock\Metadata\MfaEntity;
 use OpenConext\EngineBlock\Metadata\MfaEntityCollection;
 use OpenConext\EngineBlock\Metadata\TransparentMfaEntity;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -44,8 +46,8 @@ class MfaHelperTest extends TestCase
         $this->mfaHelper = new MfaHelper($logger, $this->repo);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Test]
     public function happy_flow()
     {
         $spEntityId = 'arbitrarySpEntityId';
@@ -55,8 +57,8 @@ class MfaHelperTest extends TestCase
         self::assertTrue($isTransparent);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Test]
     public function not_transparent_mfa_entity()
     {
         $spEntityId = 'arbitrarySpEntityId';
@@ -66,8 +68,8 @@ class MfaHelperTest extends TestCase
         self::assertFalse($isTransparent);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Test]
     public function not_an_mfa_entity()
     {
         $spEntityId = 'arbitrarySpEntityId';
@@ -77,8 +79,8 @@ class MfaHelperTest extends TestCase
         self::assertFalse($isTransparent);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Test]
     public function idp_not_found()
     {
         $spEntityId = 'arbitrarySpEntityId';

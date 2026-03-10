@@ -24,7 +24,7 @@ use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EngineBlockConfigurationTest extends TestCase
 {
@@ -37,7 +37,7 @@ class EngineBlockConfigurationTest extends TestCase
         $orgName = 'OpenestConext Company';
         $orgDisplayName = 'OpenestConext Company Inc.';
 
-        $translator = m::mock(\Symfony\Contracts\Translation\TranslatorInterface::class);
+        $translator = m::mock(TranslatorInterface::class);
         $translator
             ->shouldReceive('trans')
             ->with('suite_name')->once()

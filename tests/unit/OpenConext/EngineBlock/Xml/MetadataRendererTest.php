@@ -17,16 +17,18 @@
 
 namespace OpenConext\EngineBlock\Xml;
 
+use DOMDocument;
 use EngineBlock_Saml2_IdGenerator;
+use Exception;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\IdentityProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Adapter\ServiceProviderEntity;
 use OpenConext\EngineBlock\Metadata\Factory\Collection\IdentityProviderEntityCollection;
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\EngineBlockIdentityProvider;
-use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
@@ -40,6 +42,8 @@ use OpenConext\EngineBlock\Metadata\X509\X509PrivateKey;
 use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
 use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 use OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Spaceless;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
@@ -48,7 +52,7 @@ use SAML2\DOMDocumentFactory;
 use SAML2\XML\md\EntitiesDescriptor;
 use SAML2\XML\md\EntityDescriptor;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -68,8 +72,8 @@ class MetadataRendererTest extends TestCase
         parent::setUp();
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Metadata')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Metadata')]
+    #[Test]
     public function the_metadata_factory_should_return_valid_signed_xml_for_idp()
     {
         $ssoLocation = 'https://example.com/sso';
@@ -107,8 +111,8 @@ class MetadataRendererTest extends TestCase
         $this->validateSchema($xml);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Metadata')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Metadata')]
+    #[Test]
     public function the_metadata_factory_should_return_valid_signed_xml_for_sp()
     {
         $assertionConsumerServices[] = new IndexedService(
@@ -158,8 +162,8 @@ class MetadataRendererTest extends TestCase
         $this->validateSchema($xml);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Metadata')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Metadata')]
+    #[Test]
     public function the_metadata_factory_should_return_valid_signed_xml_for_idps_of_sp()
     {
         $ssoLocation = 'https://example.com/sso';
@@ -219,8 +223,8 @@ class MetadataRendererTest extends TestCase
         $this->validateSchema($xml);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Metadata')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Metadata')]
+    #[Test]
     public function modified_metadata_should_not_pass_signature_validation()
     {
         $assertionConsumerServices[] = new IndexedService(
@@ -245,13 +249,13 @@ class MetadataRendererTest extends TestCase
         $xml = str_replace('https://example.com/acs', 'https://example.org/acs', $xml);
 
         // Validate signature and digest
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('validation failed');
         $this->assertFalse($this->validateXml($xml));
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Metadata')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Metadata')]
+    #[Test]
     public function metadata_add_all_requested_attributes()
     {
         $xml = $this->metadataRenderer->fromServiceProviderEntity($this->buildSp(), 'default');
@@ -262,8 +266,8 @@ class MetadataRendererTest extends TestCase
         $this->assertStringContainsString($this->getRequestedAttributeXml('attribute3', false), $xml);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Metadata')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Metadata')]
+    #[Test]
     public function metadata_add_required_requested_attributes()
     {
         $this->metadataRenderer = $this->buildMetadataRenderer('required');
@@ -276,8 +280,8 @@ class MetadataRendererTest extends TestCase
         $this->assertStringNotContainsString($this->getRequestedAttributeXml('attribute3', false), $xml);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Metadata')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Metadata')]
+    #[Test]
     public function metadata_add_no_requested_attributes()
     {
         $this->metadataRenderer = $this->buildMetadataRenderer('none');
@@ -306,10 +310,10 @@ class MetadataRendererTest extends TestCase
         $twigLoader->addPath($basePath . '/theme/openconext/templates/modules', 'theme');
         $environment = new Environment($twigLoader);
 
-        $translator = m::mock(\Symfony\Contracts\Translation\TranslatorInterface::class);
+        $translator = m::mock(TranslatorInterface::class);
         $translator
             ->shouldReceive('trans')
-            ->andReturnUsing(function($key) {
+            ->andReturnUsing(function ($key) {
                 return 'trans-'.$key;
             });
 
@@ -381,7 +385,7 @@ class MetadataRendererTest extends TestCase
 
     private function validateXml($xml)
     {
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $doc->loadXML($xml);
 
         $objXMLSecDSig = new XMLSecurityDSig();
@@ -389,19 +393,19 @@ class MetadataRendererTest extends TestCase
 
         $objDSig = $objXMLSecDSig->locateSignature($doc);
         if (!$objDSig) {
-            throw new \Exception('Unable to find signature');
+            throw new Exception('Unable to find signature');
         }
         $objXMLSecDSig->canonicalizeSignedInfo();
 
         if (!$objXMLSecDSig->validateReference()) {
-            throw new \Exception('Reference validation failed');
+            throw new Exception('Reference validation failed');
         }
 
         $objKey = $objXMLSecDSig->locateKey();
         $objKeyInfo = XMLSecEnc::staticLocateKeyInfo($objKey, $objDSig);
 
         if (!$objXMLSecDSig->verify($objKey)) {
-            throw new \Exception('Signature validation failed');
+            throw new Exception('Signature validation failed');
         }
 
         return true;
@@ -416,15 +420,14 @@ class MetadataRendererTest extends TestCase
         //the end user.
         libxml_clear_errors();
 
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $doc->loadXml($xml);
 
         if (!$doc->schemaValidate(__DIR__ . '/schema/surf.xsd')) {
             $errors = libxml_get_errors();
             libxml_clear_errors();
 
-            throw new \Exception(json_encode($errors));
+            throw new Exception(json_encode($errors));
         }
     }
-
 }

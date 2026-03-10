@@ -182,5 +182,4 @@ class DiscoverySelectionServiceTest extends TestCase
 
         $this->assertEquals($expectedHash, $result);
     }
-
 }

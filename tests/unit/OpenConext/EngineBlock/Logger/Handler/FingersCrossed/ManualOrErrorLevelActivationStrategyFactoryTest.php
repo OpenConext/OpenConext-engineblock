@@ -19,13 +19,16 @@
 namespace OpenConext\EngineBlock\Logger\Handler\FingersCrossed;
 
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class ManualOrErrorLevelActivationStrategyFactoryTest extends TestCase
 {
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Logger')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Logger')]
+    #[Test]
     public function factory_creates_a_manual_or_decorated_activation_strategy()
     {
         $this->expectNotToPerformAssertions();
@@ -37,10 +40,10 @@ class ManualOrErrorLevelActivationStrategyFactoryTest extends TestCase
      * @param array $config
      * @param string $expectedExceptionMessageContains
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('configurationDataProvider')]
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Logger')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProvider('configurationDataProvider')]
+    #[Group('EngineBlock')]
+    #[Group('Logger')]
+    #[Test]
     public function configuration_is_validated(array $config, $expectedExceptionMessageContains)
     {
         $this->expectException(InvalidArgumentException::class);

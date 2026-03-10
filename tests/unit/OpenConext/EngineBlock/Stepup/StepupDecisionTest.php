@@ -20,7 +20,6 @@ namespace OpenConext\EngineBlock\Stepup;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use OpenConext\EngineBlock\Exception\InvalidStepupConfigurationException;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Loa;
@@ -28,6 +27,9 @@ use OpenConext\EngineBlock\Metadata\LoaRepository;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlock\Metadata\Utils;
 use OpenConext\EngineBlock\Stepup\StepupDecision;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use function reset;
@@ -41,9 +43,9 @@ class StepupDecisionTest extends TestCase
      * @param array $input
      * @param array $expectedResult
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('stepupCoinsAndExpectedResultProvider')]
-    #[\PHPUnit\Framework\Attributes\Group('Stepup')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProvider('stepupCoinsAndExpectedResultProvider')]
+    #[Group('Stepup')]
+    #[Test]
     public function the_correct_stepup_decision_should_be_made_based_on_a_coin_data(
         $input,
         $expectedResult
@@ -93,7 +95,7 @@ class StepupDecisionTest extends TestCase
             $repo
                 ->shouldReceive('getByIdentifier')
                 ->with($input[1])
-                ->andReturn(Loa::create((int)substr($input[1],-2), $input[1]))
+                ->andReturn(Loa::create((int)substr($input[1], -2), $input[1]))
             ;
         }
 
@@ -102,16 +104,16 @@ class StepupDecisionTest extends TestCase
             $repo
                 ->shouldReceive('getByIdentifier')
                 ->with($input[0])
-                ->andReturn(Loa::create((int)substr($input[0],-2), $input[0]))
+                ->andReturn(Loa::create((int)substr($input[0], -2), $input[0]))
             ;
         }
 
         if (is_array($input[3]) && !empty($input[3])) {
-            foreach($input[3] as $loa) {
+            foreach ($input[3] as $loa) {
                 $repo
                     ->shouldReceive('getByIdentifier')
                     ->with($loa)
-                    ->andReturn(Loa::create((int)substr($loa,-2), $loa))
+                    ->andReturn(Loa::create((int)substr($loa, -2), $loa))
                  ;
             }
         }
@@ -149,7 +151,7 @@ class StepupDecisionTest extends TestCase
 
             'Use highest LoA from many options (allow no stepup)' => [['loa20', 'loa30', [], ['loa20', 'loa20', 'loa30'], true], [true, 'loa30', true]],
             'Use highest LoA from many different options (allow no stepup)' => [['loa30', 'loa20', [self::buildLoa('loa20'), self::buildLoa('loa20'), self::buildLoa('loa30')], [], true], [true, 'loa30', true]],
-       ];
+        ];
     }
 
     private static function buildLoa(string $loaLevel): Loa

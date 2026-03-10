@@ -28,7 +28,11 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Utils;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 use SAML2\Constants;
 
 class ConsentTest extends TestCase
@@ -79,10 +83,10 @@ class ConsentTest extends TestCase
         return $serviceProvider;
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Group('Dto')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Authentication')]
+    #[Group('Dto')]
+    #[Test]
     public function all_values_are_serialized_to_json()
     {
         $serviceProvider = $this->createServiceProvider();
@@ -123,7 +127,7 @@ class ConsentTest extends TestCase
         $this->assertEquals($serviceProvider->organizationPt->displayName, $json['organization_display_name']['pt']);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideOrganizations')]
+    #[DataProvider('provideOrganizations')]
     public function test_display_name_of_organizations_works_as_intended(
         array $organizations,
         array $expectations,
@@ -149,10 +153,10 @@ class ConsentTest extends TestCase
         $this->assertEquals($expectations['pt'], $json['pt'], $errorMessage);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Group('Dto')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Authentication')]
+    #[Group('Dto')]
+    #[Test]
     public function display_name_falls_back_to_name_if_display_name_is_empty()
     {
         $serviceProvider = $this->createServiceProvider([], false);
@@ -181,10 +185,10 @@ class ConsentTest extends TestCase
         $this->assertEquals($serviceProvider->nameNl, $json['service_provider']['display_name']['nl']);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Group('Dto')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Authentication')]
+    #[Group('Dto')]
+    #[Test]
     public function display_name_falls_back_to_entity_id_if_name_is_empty()
     {
         $serviceProvider = $this->createServiceProvider([], true);
@@ -288,7 +292,7 @@ class ConsentTest extends TestCase
 
         $coins = Coins::fromJson($jsonData);
 
-        $property = new \ReflectionProperty(ServiceProvider::class, 'coins');
+        $property = new ReflectionProperty(ServiceProvider::class, 'coins');
         $property->setValue(null, $coins);
     }
 }

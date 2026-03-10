@@ -19,7 +19,6 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
 use OpenConext\EngineBlockBundle\Configuration\Feature;
-use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Configuration\TestFeatureConfiguration;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;

@@ -19,7 +19,6 @@
 namespace OpenConext\EngineBlock\Logger;
 
 use DateTime;
-use EngineBlock_UserDirectory;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
@@ -28,7 +27,10 @@ use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class AuthenticationLoggerTest extends TestCase
 {
@@ -40,9 +42,9 @@ class AuthenticationLoggerTest extends TestCase
      * tools depend on the format and contents of the log. Therefor it is worth
      * to write such a test to ensure compatibility.
      */
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Logger')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Logger')]
+    #[Test]
     public function the_logged_context_contains_all_required_information()
     {
         // raw data so we can compare later on
@@ -78,7 +80,7 @@ class AuthenticationLoggerTest extends TestCase
             'engine_sso_endpoint_used' => $ssoEndpointUsed
         ];
 
-        $mockLogger = m::mock(\Psr\Log\LoggerInterface::class);
+        $mockLogger = m::mock(LoggerInterface::class);
         $mockLogger
             ->shouldReceive('info')
             ->withArgs([
@@ -122,9 +124,9 @@ class AuthenticationLoggerTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Logger')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Logger')]
+    #[Test]
     public function the_logged_context_contains_all_enriched_information()
     {
         // raw data so we can compare later on
@@ -162,7 +164,7 @@ class AuthenticationLoggerTest extends TestCase
             'response_attributes' => ['label' => 'attributeValue']
         ];
 
-        $mockLogger = m::mock(\Psr\Log\LoggerInterface::class);
+        $mockLogger = m::mock(LoggerInterface::class);
         $mockLogger
             ->shouldReceive('info')
             ->withArgs([

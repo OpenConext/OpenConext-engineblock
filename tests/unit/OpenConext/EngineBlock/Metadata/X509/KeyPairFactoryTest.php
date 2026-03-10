@@ -19,7 +19,6 @@
 namespace OpenConext\EngineBlock\Metadata\X509;
 
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
-use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\EngineBlockBundle\Exception\UnknownKeyIdException;
 use PHPUnit\Framework\TestCase;
 

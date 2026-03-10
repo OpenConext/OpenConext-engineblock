@@ -26,15 +26,18 @@ use OpenConext\EngineBlock\Http\HttpClient;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
 use OpenConext\EngineBlockBundle\Pdp\PdpClient;
 use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class PdpClientTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('pdpResponseNameProvider')]
-    #[\PHPUnit\Framework\Attributes\Group('Pdp')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProvider('pdpResponseNameProvider')]
+    #[Group('Pdp')]
+    #[Test]
     public function a_pdp_client_gives_policy_decisions_based_on_pdp_responses_to_pdp_requests($responseName)
     {
         $pdpRequest = Request::from('clientid', 'subject', 'idp', 'sp', [], '10.11.12.13');

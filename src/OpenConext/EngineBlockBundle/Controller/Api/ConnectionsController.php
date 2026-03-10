@@ -21,7 +21,6 @@ namespace OpenConext\EngineBlockBundle\Controller\Api;
 use Exception;
 use OpenConext\EngineBlock\Metadata\Entity\Assembler\MetadataAssemblerInterface;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataPushRepository;
-use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiInternalServerErrorHttpException;
@@ -31,6 +30,7 @@ use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
 use OpenConext\EngineBlockBundle\Http\Request\JsonRequestHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
@@ -97,7 +97,7 @@ class ConnectionsController
         $this->memoryLimit                     = $memoryLimit;
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/api/connections', name: 'api_connections', defaults: ['_format' => 'json'])]
+    #[Route(path: '/api/connections', name: 'api_connections', defaults: ['_format' => 'json'])]
     public function pushConnectionsAction(Request $request)
     {
         if (!$request->isMethod(Request::METHOD_POST)) {

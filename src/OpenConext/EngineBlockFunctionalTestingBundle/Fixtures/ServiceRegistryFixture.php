@@ -31,7 +31,6 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Mdui;
-use OpenConext\EngineBlock\Metadata\MduiElement;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository;
 use OpenConext\EngineBlock\Metadata\MfaEntityCollection;
 use OpenConext\EngineBlock\Metadata\MultilingualElement;

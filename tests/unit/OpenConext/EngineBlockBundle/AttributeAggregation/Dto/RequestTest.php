@@ -22,14 +22,16 @@ use InvalidArgumentException;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\AttributeRule;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Request;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\Group('AttributeAggregation')]
+#[Group('AttributeAggregation')]
 class RequestTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function request_serializes_to_aa_api_format()
     {
         $request = Request::from(
@@ -86,7 +88,7 @@ class RequestTest extends TestCase
         $this->assertEquals($expectedJson, $actualJson);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function request_serializes_to_aa_api_format_filters_non_string_values()
     {
         $request = Request::from(
@@ -139,28 +141,28 @@ class RequestTest extends TestCase
         $this->assertEquals($expectedJson, $actualJson);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function request_subject_must_be_set()
     {
         $this->expectException(InvalidArgumentException::class);
-        Request::from('sp-entity-id', 'idp-entity-id',NULL, [], []);
+        Request::from('sp-entity-id', 'idp-entity-id', null, [], []);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function request_sp_entity_id_must_be_set()
     {
         $this->expectException(InvalidArgumentException::class);
-        Request::from(NULL, 'idp-entity-id', 'subject-id', [], []);
+        Request::from(null, 'idp-entity-id', 'subject-id', [], []);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function request_idp_entity_id_must_be_set()
     {
         $this->expectException(InvalidArgumentException::class);
-        Request::from('sp-entity-id', NULL, 'subject-id', [], []);
+        Request::from('sp-entity-id', null, 'subject-id', [], []);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function request_attributes_must_be_of_type_dto()
     {
         $this->expectException(InvalidArgumentException::class);

@@ -19,7 +19,7 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Compat;
 
 use DOMDocument;
-use Psr;
+use DOMElement;
 use Psr\Log\LoggerInterface;
 use SAML2\Compat\AbstractContainer;
 use Symfony\Component\HttpFoundation\Response;
@@ -85,7 +85,7 @@ class Container extends AbstractContainer
      */
     public function debugMessage($message, $type): void
     {
-        if ($message instanceof \DOMElement) {
+        if ($message instanceof DOMElement) {
             $message = $message->ownerDocument->saveXML();
         }
         $this->lastDebugMessage[$type] = $message;

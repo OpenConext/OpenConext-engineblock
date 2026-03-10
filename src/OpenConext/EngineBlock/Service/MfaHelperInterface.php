@@ -18,8 +18,6 @@
 
 namespace OpenConext\EngineBlock\Service;
 
-use OpenConext\EngineBlockBundle\Authentication\AuthenticationStateInterface;
-
 interface MfaHelperInterface
 {
     /**

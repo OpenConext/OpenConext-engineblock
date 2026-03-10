@@ -18,9 +18,9 @@
 
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class I18n extends AbstractExtension
 {

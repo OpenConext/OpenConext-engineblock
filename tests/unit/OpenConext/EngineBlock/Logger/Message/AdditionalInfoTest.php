@@ -20,15 +20,17 @@ namespace OpenConext\EngineBlock\Logger\Message;
 
 use EngineBlock_Exception;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 final class AdditionalInfoTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Logger')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Logger')]
+    #[Test]
     public function message_has_correct_severity()
     {
         $exception = new EngineBlock_Exception('message', EngineBlock_Exception::CODE_ALERT);

@@ -22,6 +22,7 @@ use OpenConext\EngineBlock\Metadata\Factory\AbstractEntity;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EngineblockServiceProviderInformation extends AbstractEntity
 {
@@ -33,27 +34,27 @@ class EngineblockServiceProviderInformation extends AbstractEntity
     {
         $adapter = $this->createServiceProviderAdapter();
 
-        $translator = $this->createMock(\Symfony\Contracts\Translation\TranslatorInterface::class);
+        $translator = $this->createMock(TranslatorInterface::class);
         $matcher = $this->exactly(4);
         $translator->expects($matcher)
             ->method('trans')->willReturnCallback(function (...$parameters) use ($matcher) {
-            if ($matcher->numberOfInvocations() === 1) {
-                $this->assertSame('suite_name', $parameters[0]);
-                return 'test-suite';
-            }
-            if ($matcher->numberOfInvocations() === 2) {
-                $this->assertSame('metadata_organization_name', $parameters[0]);
-                return 'configuredOrganizationName';
-            }
-            if ($matcher->numberOfInvocations() === 3) {
-                $this->assertSame('metadata_organization_displayname', $parameters[0]);
-                return 'configuredOrganizationDisplayName';
-            }
-            if ($matcher->numberOfInvocations() === 4) {
-                $this->assertSame('metadata_organization_url', $parameters[0]);
-                return 'configuredOrganizationUrl';
-            }
-        });
+                if ($matcher->numberOfInvocations() === 1) {
+                    $this->assertSame('suite_name', $parameters[0]);
+                    return 'test-suite';
+                }
+                if ($matcher->numberOfInvocations() === 2) {
+                    $this->assertSame('metadata_organization_name', $parameters[0]);
+                    return 'configuredOrganizationName';
+                }
+                if ($matcher->numberOfInvocations() === 3) {
+                    $this->assertSame('metadata_organization_displayname', $parameters[0]);
+                    return 'configuredOrganizationDisplayName';
+                }
+                if ($matcher->numberOfInvocations() === 4) {
+                    $this->assertSame('metadata_organization_url', $parameters[0]);
+                    return 'configuredOrganizationUrl';
+                }
+            });
 
         $configuration = new EngineBlockConfiguration(
             $translator,

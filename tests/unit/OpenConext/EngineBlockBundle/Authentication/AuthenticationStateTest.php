@@ -25,14 +25,16 @@ use OpenConext\EngineBlockBundle\Exception\LogicException;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class AuthenticationStateTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Authentication')]
+    #[Test]
     public function an_authentication_procedure_cannot_be_authenticated_if_it_has_not_been_started()
     {
         $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30, 20);
@@ -47,8 +49,8 @@ class AuthenticationStateTest extends TestCase
         $authenticationState->authenticatedAt('_00000000-0000-0000-0000-000000000000', $identityProvider);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Authentication')]
+    #[Test]
     public function an_authentication_procedure_cannot_be_completed_if_it_has_not_been_started()
     {
         $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30, 20);
@@ -61,8 +63,8 @@ class AuthenticationStateTest extends TestCase
         $authenticationState->completeCurrentProcedure('_00000000-0000-0000-0000-000000000000');
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Authentication')]
+    #[Test]
     public function an_authentication_procedure_cannot_be_completed_if_it_has_not_been_authenticated()
     {
         $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30, 20);
@@ -78,8 +80,8 @@ class AuthenticationStateTest extends TestCase
         $authenticationState->completeCurrentProcedure($requestId);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Authentication')]
+    #[Test]
     public function an_authentication_procedure_can_be_completed_multiple_times()
     {
         $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30, 20);
@@ -98,8 +100,8 @@ class AuthenticationStateTest extends TestCase
         self::assertTrue($authenticationState->isAuthenticated());
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Authentication')]
+    #[Test]
     public function an_authentication_procedure_is_not_authenticated_before_consent()
     {
         $authenticationLoopGuard = new AuthenticationLoopGuard(5, 30, 20);

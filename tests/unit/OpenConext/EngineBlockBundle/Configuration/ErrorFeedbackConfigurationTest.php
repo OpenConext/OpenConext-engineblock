@@ -18,9 +18,11 @@
 
 namespace OpenConext\EngineBlockBundle\Configuration;
 
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use PHPUnit\Framework\TestCase;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ErrorFeedbackConfigurationTest extends TestCase
@@ -39,9 +41,9 @@ class ErrorFeedbackConfigurationTest extends TestCase
         $this->translator = m::mock(TranslatorInterface::class);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
-    #[\PHPUnit\Framework\Attributes\Group('Configuration')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlockBundle')]
+    #[Group('Configuration')]
+    #[Test]
     public function a_link_can_be_queried_for_presence()
     {
         $this->boostrapWikiTranslations([
@@ -57,9 +59,9 @@ class ErrorFeedbackConfigurationTest extends TestCase
         $this->assertFalse($errorFeedbackConfiguration->hasWikiLink('not-configured'));
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
-    #[\PHPUnit\Framework\Attributes\Group('Configuration')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlockBundle')]
+    #[Group('Configuration')]
+    #[Test]
     public function a_link_can_be_retrieved()
     {
         $this->boostrapWikiTranslations([
@@ -71,9 +73,9 @@ class ErrorFeedbackConfigurationTest extends TestCase
         $this->assertSame('https://support/no-session-found', $noSessionFound);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
-    #[\PHPUnit\Framework\Attributes\Group('Configuration')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlockBundle')]
+    #[Group('Configuration')]
+    #[Test]
     public function an_idp_empty_wiki_link_configuration_can_be_provided()
     {
         $this->boostrapWikiTranslations([
@@ -85,9 +87,9 @@ class ErrorFeedbackConfigurationTest extends TestCase
         $this->assertFalse($errorFeedbackConfiguration->hasWikiLink('clock-issue'));
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
-    #[\PHPUnit\Framework\Attributes\Group('Configuration')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlockBundle')]
+    #[Group('Configuration')]
+    #[Test]
     public function an_idp_contact_page_can_be_tested()
     {
         $this->boostrapIdpTranslations([
@@ -104,9 +106,9 @@ class ErrorFeedbackConfigurationTest extends TestCase
         $this->assertSame('', $errorFeedbackConfiguration->getIdpContactShortLabel('no-session-found'));
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlockBundle')]
-    #[\PHPUnit\Framework\Attributes\Group('Configuration')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlockBundle')]
+    #[Group('Configuration')]
+    #[Test]
     public function an_idp_empty_contact_page_configuration_can_provided()
     {
         $this->boostrapIdpTranslations([

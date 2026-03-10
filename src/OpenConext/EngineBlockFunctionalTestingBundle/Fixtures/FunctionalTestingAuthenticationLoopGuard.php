@@ -25,6 +25,7 @@ use OpenConext\EngineBlockBundle\Exception\AuthenticationSessionLimitExceededExc
 use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use OpenConext\Value\Saml\Entity;
+use Throwable;
 
 final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLoopGuardInterface
 {
@@ -52,7 +53,7 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
 
         try {
             $this->authenticationGuardFixture = $dataStore->load();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->authenticationGuardFixture = [];
         }
     }

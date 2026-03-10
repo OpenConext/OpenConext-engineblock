@@ -18,26 +18,30 @@
 
 namespace OpenConext\EngineBlock\Logger\Processor;
 
+use DateTimeImmutable;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Monolog\Level;
 use Monolog\LogRecord;
 use OpenConext\EngineBlock\Request\RequestId;
+use OpenConext\EngineBlock\Request\RequestIdGenerator;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class RequestIdProcessorTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Request')]
-    #[\PHPUnit\Framework\Attributes\Group('Logger')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Request')]
+    #[Group('Logger')]
+    #[Test]
     public function request_id_is_added_to_the_record()
     {
         $requestIdValue = 'some_request_id';
 
-        $requestIdGenerator = m::mock(\OpenConext\EngineBlock\Request\RequestIdGenerator::class);
+        $requestIdGenerator = m::mock(RequestIdGenerator::class);
         $requestIdGenerator->shouldReceive('generateRequestId')
             ->once()
             ->andReturn($requestIdValue);
@@ -46,7 +50,7 @@ class RequestIdProcessorTest extends TestCase
 
         $requestIdProcessor = new RequestIdProcessor($requestId);
         $record = new LogRecord(
-            datetime: new \DateTimeImmutable(),
+            datetime: new DateTimeImmutable(),
             channel: 'test',
             level: Level::Debug,
             message: 'test message',

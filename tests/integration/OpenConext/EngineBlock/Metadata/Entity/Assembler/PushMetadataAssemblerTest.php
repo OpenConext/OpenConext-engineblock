@@ -32,9 +32,10 @@ use OpenConext\EngineBlock\Metadata\TransparentMfaEntity;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy;
 use OpenConext\EngineBlock\Validator\AllowedSchemeValidator;
 use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use stdClass;
 
 class PushMetadataAssemblerTest extends TestCase
@@ -55,7 +56,7 @@ class PushMetadataAssemblerTest extends TestCase
 
     public function test_it_rejects_empty_push()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Received 0 connections, refusing to process');
 
         $connection = '{}';
@@ -64,10 +65,10 @@ class PushMetadataAssemblerTest extends TestCase
         $this->assembler->assemble($input);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('invalidAcsLocations')]
+    #[DataProvider('invalidAcsLocations')]
     public function test_it_rejects_invalid_acs_location_schemes($acsLocation)
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
 
         $connection = '{
             "2d96e27a-76cf-4ca2-ac70-ece5d4c49523": {
@@ -135,8 +136,9 @@ class PushMetadataAssemblerTest extends TestCase
      * @param string $type The type of coin data to run possible assertions against see the validCoinValues* helper
      *                     methods below which are used to assert the data after it went through the assembler.
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('validCoins')]
-    public function testCoins($coinName, $roleType, $parameter, $type) {
+    #[DataProvider('validCoins')]
+    public function testCoins($coinName, $roleType, $parameter, $type)
+    {
         $connection = '{
             "2d96e27a-76cf-4ca2-ac70-ece5d4c49523": {
                 "allow_all_entities": true,
@@ -156,22 +158,22 @@ class PushMetadataAssemblerTest extends TestCase
         $input->{"2d96e27a-76cf-4ca2-ac70-ece5d4c49523"}->type = $roleType;
 
         switch ($type) {
-            case 'bool';
+            case 'bool':
                 $values = $this->validCoinValuesBool();
                 break;
-            case 'bool-forceAuthn';
+            case 'bool-forceAuthn':
                 $values = $this->validCoinValuesBoolForceAuthn();
                 break;
-            case 'bool-negative';
+            case 'bool-negative':
                 $values = $this->validCoinValuesBoolNegative();
                 break;
-            case 'string';
+            case 'string':
                 $values = $this->validCoinValuesString();
                 break;
-            case 'string-signature-method';
+            case 'string-signature-method':
                 $values = $this->validCoinValuesStringSignatureMethod();
                 break;
-            case 'string-guest-qualifier';
+            case 'string-guest-qualifier':
                 $values = $this->validCoinValuesStringGuestQualifier();
                 break;
             default:
@@ -405,7 +407,8 @@ class PushMetadataAssemblerTest extends TestCase
      * The first option is the manage coin value, the second is the expected entity coin value after assembling
      * @return array
      */
-    private function validCoinValuesBool() {
+    private function validCoinValuesBool()
+    {
         return [
             [null, false],
             [true, true],
@@ -420,7 +423,8 @@ class PushMetadataAssemblerTest extends TestCase
      * The first option is the manage coin value, the second is the expected entity coin value after assembling
      * @return array
      */
-    private function validCoinValuesBoolNegative() {
+    private function validCoinValuesBoolNegative()
+    {
         return [
             [null, true],
             [true, false],
@@ -435,7 +439,8 @@ class PushMetadataAssemblerTest extends TestCase
      * The first option is the manage coin value, the second is the expected entity coin value after assembling
      * @return array
      */
-    private function validCoinValuesString() {
+    private function validCoinValuesString()
+    {
         return [
             [null, null],
             ["", ""],
@@ -447,7 +452,8 @@ class PushMetadataAssemblerTest extends TestCase
      * The first option is the manage coin value, the second is the expected entity coin value after assembling
      * @return array
      */
-    private function validCoinValuesStringSignatureMethod() {
+    private function validCoinValuesStringSignatureMethod()
+    {
         return [
             [null, "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"],
             ["", ""],
@@ -459,7 +465,8 @@ class PushMetadataAssemblerTest extends TestCase
      * The first option is the manage coin value, the second is the expected entity coin value after assembling
      * @return array
      */
-    private function validCoinValuesStringGuestQualifier() {
+    private function validCoinValuesStringGuestQualifier()
+    {
         return [
             [null, "All"],
             ["", ""],
@@ -711,7 +718,7 @@ class PushMetadataAssemblerTest extends TestCase
         $sp = $roles[0];
         $this->assertInstanceOf(ServiceProvider::class, $sp);
         $this->assertNotNull($sp->attributeReleasePolicy);
-        $this->assertInstanceOf(\OpenConext\EngineBlock\Metadata\AttributeReleasePolicy::class, $sp->attributeReleasePolicy);
+        $this->assertInstanceOf(AttributeReleasePolicy::class, $sp->attributeReleasePolicy);
 
         // Check attributes exist
         $this->assertTrue($sp->attributeReleasePolicy->hasAttribute('urn:mace:dir:attribute-def:mail'));

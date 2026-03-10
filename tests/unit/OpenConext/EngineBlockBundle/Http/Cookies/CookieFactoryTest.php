@@ -20,13 +20,14 @@ namespace OpenConext\EngineBlockBundle\Http\Cookies;
 
 use DateTimeImmutable;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class CookieFactoryTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function returns_the_cookie()
     {
         $now = new DateTimeImmutable();
@@ -43,7 +44,7 @@ class CookieFactoryTest extends TestCase
         $this->assertFalse($actual->isSecure());
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function sets_the_expiry_time()
     {
         $now = new DateTimeImmutable();

@@ -21,15 +21,19 @@ namespace OpenConext\EngineBlockBundle\Tests;
 use InvalidArgumentException;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlockBundle\Value\ExecutionTime;
+use OpenConext\TestDataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class ExecutionTimeTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notInteger')]
-    #[\PHPUnit\Framework\Attributes\Group('execution-time')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProviderExternal(TestDataProvider::class, 'notInteger')]
+    #[Group('execution-time')]
+    #[Test]
     public function execution_time_in_milliseconds_can_only_be_an_integer($notInteger)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -37,8 +41,8 @@ class ExecutionTimeTest extends TestCase
         ExecutionTime::of($notInteger);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('execution-time')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('execution-time')]
+    #[Test]
     public function execution_time_equals_a_given_other_execution_time()
     {
         $executionTime     = ExecutionTime::of(1);
@@ -49,8 +53,8 @@ class ExecutionTimeTest extends TestCase
         $this->assertTrue($areExecutionTimesTheSame);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('execution-time')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('execution-time')]
+    #[Test]
     public function execution_time_does_not_equal_a_given_other_execution_time()
     {
         $executionTime          = ExecutionTime::of(1);
@@ -61,8 +65,8 @@ class ExecutionTimeTest extends TestCase
         $this->assertFalse($areExecutionTimesTheSame);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('execution-time')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('execution-time')]
+    #[Test]
     public function execution_time_is_converted_to_microseconds()
     {
         $executionTime = ExecutionTime::of(1);

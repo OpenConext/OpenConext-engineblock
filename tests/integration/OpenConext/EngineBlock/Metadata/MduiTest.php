@@ -25,6 +25,7 @@ use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\MduiElement;
 use OpenConext\EngineBlock\Metadata\MultilingualElement;
 use OpenConext\EngineBlock\Metadata\MultilingualValue;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class MduiTest extends TestCase
@@ -94,7 +95,7 @@ class MduiTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('invalidJsonProvider')]
+    #[DataProvider('invalidJsonProvider')]
     public function test_creates_empty_mdui_from_json_invalid_json($invalidJson)
     {
         $mdui = Mdui::fromJson($invalidJson);

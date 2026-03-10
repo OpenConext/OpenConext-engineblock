@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 /**
@@ -50,7 +51,7 @@ class FeedbackController
     private $logger;
 
     public function __construct(
-        \Symfony\Contracts\Translation\TranslatorInterface $translator,
+        TranslatorInterface $translator,
         Environment $twig,
         LoggerInterface $logger
     ) {

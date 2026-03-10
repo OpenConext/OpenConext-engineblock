@@ -18,10 +18,12 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository;
 
+use RuntimeException;
+
 /**
  * Class EntityNotFoundException
  * @package OpenConext\EngineBlock\Metadata\MetadataRepository
  */
-class EntityNotFoundException extends \RuntimeException
+class EntityNotFoundException extends RuntimeException
 {
 }

@@ -18,6 +18,8 @@
 
 namespace OpenConext\EngineBlock\Metadata;
 
+use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class MfaEntityFactoryTest extends TestCase
@@ -39,10 +41,10 @@ class MfaEntityFactoryTest extends TestCase
         $this->assertInstanceOf(MfaEntity::class, MfaEntityFactory::fromJson($data));
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('provideInvalidJsonData')]
+    #[DataProvider('provideInvalidJsonData')]
     public function test_from_json_factory_method_performs_input_validation($data, $expectedMessage)
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedMessage);
         MfaEntityFactory::fromJson($data);
     }

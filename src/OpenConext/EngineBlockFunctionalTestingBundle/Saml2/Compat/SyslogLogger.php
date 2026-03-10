@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Compat;
 
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
+use Stringable;
 
 /**
  * Class SyslogLogger
@@ -34,7 +35,7 @@ class SyslogLogger extends AbstractLogger
      * @param string|\Stringable $message
      * @param array $context
      */
-    public function log($level, string|\Stringable $message, array $context = []): void
+    public function log($level, string|Stringable $message, array $context = []): void
     {
         $level = $this->logLevelToSyslogLevel($level);
         syslog($level, $message . empty($context) ? '' : ' ' . json_encode($context));

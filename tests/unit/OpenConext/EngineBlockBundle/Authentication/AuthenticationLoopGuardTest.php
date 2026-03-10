@@ -26,14 +26,16 @@ use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedureMap;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class AuthenticationLoopGuardTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('AuthenticationState')]
+    #[Test]
     public function authentication_loop_guard_determines_that_it_is_in_a_loop()
     {
         $maximumNumberOfAuthenticationProceduresAllowed = 1;
@@ -74,8 +76,8 @@ class AuthenticationLoopGuardTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('AuthenticationState')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('AuthenticationState')]
+    #[Test]
     public function authentication_loop_guard_determines_that_it_is_not_in_a_loop()
     {
         $maximumNumberOfAuthenticationProceduresAllowed = 2;

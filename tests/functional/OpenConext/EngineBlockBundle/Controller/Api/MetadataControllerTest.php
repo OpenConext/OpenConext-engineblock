@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockBundle\Tests;
 use Doctrine\DBAL\Query\QueryBuilder;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,7 +33,7 @@ final class MetadataControllerTest extends FunctionalWebTestCase
         parent::tearDown();
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function authentication_is_required_for_accessing_the_metadata_api()
     {
         $unauthenticatedClient = static::createClient();
@@ -40,7 +41,7 @@ final class MetadataControllerTest extends FunctionalWebTestCase
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED, $unauthenticatedClient);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function cannot_access_if_user_does_not_have_profile_role()
     {
         $client = static::createClient([], [
@@ -54,7 +55,7 @@ final class MetadataControllerTest extends FunctionalWebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function cannot_access_if_feature_disabled()
     {
         $client = $this->createAuthorizedProfileClient();
@@ -62,13 +63,13 @@ final class MetadataControllerTest extends FunctionalWebTestCase
         $mock = new FeatureConfiguration([
             'api.metadata_api' => false,
         ]);
-        $client->getContainer()->set(\OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration::class, $mock);
+        $client->getContainer()->set(FeatureConfiguration::class, $mock);
 
         $client->request('GET', 'https://engine-api.dev.openconext.local/metadata/idp?entity-id=urn:test');
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $client);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function returns_not_found_when_idp_missing()
     {
         $client = $this->createAuthorizedProfileClient();
@@ -77,7 +78,7 @@ final class MetadataControllerTest extends FunctionalWebTestCase
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $client);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function only_get_requests_are_allowed()
     {
         $client = $this->createAuthorizedProfileClient();

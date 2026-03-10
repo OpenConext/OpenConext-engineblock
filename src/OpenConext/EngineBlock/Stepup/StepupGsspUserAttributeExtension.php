@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlock\Stepup;
 
+use DOMElement;
 use SAML2\Assertion;
 use SAML2\DOMDocumentFactory;
 use SAML2\Message;
@@ -58,7 +59,7 @@ class StepupGsspUserAttributeExtension
     /**
      * @param string[] $values
      */
-    public static function addAttribute(\DOMElement $parent, string $name, string $format, array $values): void
+    public static function addAttribute(DOMElement $parent, string $name, string $format, array $values): void
     {
         $attrib = $parent->ownerDocument->createElementNS('urn:oasis:names:tc:SAML:2.0:assertion', 'saml:Attribute');
         $attrib->setAttribute('NameFormat', $format);

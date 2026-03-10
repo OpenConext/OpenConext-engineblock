@@ -19,7 +19,6 @@
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
 use OpenConext\EngineBlock\Exception\RuntimeException;
-use OpenConext\EngineBlock\Http\Exception\AccessDeniedException;
 use OpenConext\EngineBlock\Service\ConsentServiceInterface;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Factory\CollabPersonIdFactory;
@@ -30,10 +29,10 @@ use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
-
 use function array_key_exists;
 use function sprintf;
 
@@ -74,7 +73,7 @@ final class ConsentController
         $this->consentService       = $consentService;
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/consent/{userId}', name: 'api_consent_user', defaults: ['_format' => 'json'])]
+    #[Route(path: '/consent/{userId}', name: 'api_consent_user', defaults: ['_format' => 'json'])]
     public function userAction($userId, Request $request)
     {
         if (!$request->isMethod(Request::METHOD_GET)) {
@@ -107,7 +106,7 @@ final class ConsentController
         return new JsonResponse($consentList, Response::HTTP_OK);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/remove-consent', name: 'api_remove_consent_user', defaults: ['_format' => 'json'])]
+    #[Route(path: '/remove-consent', name: 'api_remove_consent_user', defaults: ['_format' => 'json'])]
     public function removeAction(Request $request): JsonResponse
     {
         if (!$request->isMethod(Request::METHOD_POST)) {

@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
+use EngineBlock_ApplicationSingleton;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProviderFactory;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
@@ -48,7 +49,7 @@ final class FunctionalTestingStepupGatewayMockConfiguration
     public function __construct(
         MockIdentityProviderFactory $mockIdentityProviderFactory,
         MockServiceProviderFactory $mockServiceProviderFactory,
-        \EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton
+        EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton
     ) {
         $this->mockIdentityProviderFactory = $mockIdentityProviderFactory;
         $this->mockServiceProviderFactory = $mockServiceProviderFactory;

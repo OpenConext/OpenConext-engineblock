@@ -20,7 +20,6 @@ namespace OpenConext\EngineBlockBridge\EventListener;
 
 use EngineBlock_ApplicationSingleton;
 use OpenConext\EngineBlockBundle\Localization\LocaleProvider;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * This listener depends on the LocaleListener in the EngineBlockBundle (which has to scope the LocaleProvider with the

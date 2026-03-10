@@ -18,7 +18,6 @@
 
 namespace OpenConext\EngineBlockBundle\Authentication\Service;
 
-use DateTime;
 use EngineBlock_Saml2_ResponseAnnotationDecorator;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlockBundle\Exception\RuntimeException;

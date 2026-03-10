@@ -18,8 +18,12 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository\Filter;
 
+use Doctrine\ORM\QueryBuilder;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface;
 use PHPUnit\Framework\TestCase;
 
 class FilterCollectionTest extends TestCase
@@ -29,14 +33,14 @@ class FilterCollectionTest extends TestCase
     public function testFilterRoleFailure()
     {
         $mockFilter = Mockery::mock(
-            \OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface::class
+            FilterInterface::class
         );
         $mockFilter->shouldReceive('filterRole')->andReturnNull();
         $mockFilter->shouldReceive('__toString')->andReturn('MockFilter');
 
 
         $mockRole = Mockery::mock(
-            \OpenConext\EngineBlock\Metadata\Entity\AbstractRole::class
+            AbstractRole::class
         );
 
         $collection = new CompositeFilter();
@@ -49,19 +53,19 @@ class FilterCollectionTest extends TestCase
     public function testFilterExport()
     {
         $mockFilter = Mockery::mock(
-            \OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface::class
+            FilterInterface::class
         );
         $mockFilter->shouldReceive('toQueryBuilder');
 
         $collection = new CompositeFilter();
         $collection->add($mockFilter);
 
-        $queryBuilderMock = Mockery::mock(\Doctrine\ORM\QueryBuilder::class);
+        $queryBuilderMock = Mockery::mock(QueryBuilder::class);
         $this->assertEquals(
             $queryBuilderMock,
             $collection->toQueryBuilder(
                 $queryBuilderMock,
-                \OpenConext\EngineBlock\Metadata\Entity\ServiceProvider::class
+                ServiceProvider::class
             )
         );
     }

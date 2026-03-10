@@ -18,11 +18,14 @@
 
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
+use EngineBlock_ApplicationSingleton;
 use EngineBlock_Attributes_Metadata;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MetadataTest extends TestCase
 {
@@ -47,8 +50,8 @@ class MetadataTest extends TestCase
     {
         // Note that this unit tests depends on a real EngingeBlock_EngineBlock_Attributes_Metadata instance from the
         // Di container.
-        $this->metadataDefinition = \EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAttributeMetadata();
-        $this->translator = m::mock(\Symfony\Contracts\Translation\TranslatorInterface::class);
+        $this->metadataDefinition = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAttributeMetadata();
+        $this->translator = m::mock(TranslatorInterface::class);
         $this->metadata = new Metadata($this->metadataDefinition, $this->translator);
     }
 
@@ -56,8 +59,8 @@ class MetadataTest extends TestCase
      * This test uses the tests/resources/config/attributes-fixture.json fixture
      * @see \EngineBlock_Application_TestDiContainer::getAttributeMetadata
      */
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Test]
     public function sort_by_display_order_favors_ordered_items_ungrouped()
     {
         // norEduPersonBirthDate is an unordered item, should be sorted at the bottom
@@ -80,8 +83,8 @@ class MetadataTest extends TestCase
         $this->assertEquals($expectedOrder, array_keys($ordered['idp']));
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Test]
     public function sort_by_display_order_favors_ordered_items_grouped()
     {
         // norEduPersonBirthDate is an unordered item, should be sorted at the bottom

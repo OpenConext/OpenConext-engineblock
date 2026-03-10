@@ -22,35 +22,37 @@ use InvalidArgumentException;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\AttributeRule;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\Group('AttributeAggregation')]
+#[Group('AttributeAggregation')]
 class AttributeRuleTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function rule_name_must_be_set()
     {
         $this->expectException(InvalidArgumentException::class);
         AttributeRule::from(null, 'value', 'source');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function rule_value_must_be_set()
     {
         $this->expectException(InvalidArgumentException::class);
         AttributeRule::from('name', null, 'source');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function rule_source_must_be_set()
     {
         $this->expectException(InvalidArgumentException::class);
         AttributeRule::from('name', 'value', null);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function rules_are_created_from_arp()
     {
         $rules = AttributeRule::fromArp(

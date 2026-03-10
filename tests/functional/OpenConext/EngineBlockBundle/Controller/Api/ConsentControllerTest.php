@@ -26,7 +26,9 @@ use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\Value\Saml\NameIdFormat;
-use PDOStatement;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -39,10 +41,10 @@ final class ConsentControllerTest extends FunctionalWebTestCase
         parent::tearDown();
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Consent')]
-    #[\PHPUnit\Framework\Attributes\Group('Profile')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Consent')]
+    #[Group('Profile')]
+    #[Test]
     public function authentication_is_required_for_accessing_the_consent_api()
     {
         $userId = 'my-name-id';
@@ -52,27 +54,26 @@ final class ConsentControllerTest extends FunctionalWebTestCase
         $this->assertStatusCode(Response::HTTP_UNAUTHORIZED, $unauthenticatedClient);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Consent')]
-    #[\PHPUnit\Framework\Attributes\Group('Profile')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Consent')]
+    #[Group('Profile')]
+    #[Test]
     public function authentication_is_required_for_accessing_the_remove_consent_api()
     {
         $unauthenticatedClient = static::createClient();
         $unauthenticatedClient->request('POST', 'https://engine-api.dev.openconext.local/remove-consent');
-        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED,  $unauthenticatedClient);
-
+        $this->assertStatusCode(Response::HTTP_UNAUTHORIZED, $unauthenticatedClient);
     }
 
     /**
      *
      * @param string $invalidHttpMethod
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('invalidHttpMethodProvider')]
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Consent')]
-    #[\PHPUnit\Framework\Attributes\Group('Profile')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProvider('invalidHttpMethodProvider')]
+    #[Group('Api')]
+    #[Group('Consent')]
+    #[Group('Profile')]
+    #[Test]
     public function only_get_requests_are_allowed_when_accessing_the_consent_api($invalidHttpMethod)
     {
         $userId = 'my-name-id';
@@ -86,11 +87,11 @@ final class ConsentControllerTest extends FunctionalWebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Consent')]
-    #[\PHPUnit\Framework\Attributes\Group('Profile')]
-    #[\PHPUnit\Framework\Attributes\Group('FeatureToggle')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Consent')]
+    #[Group('Profile')]
+    #[Group('FeatureToggle')]
+    #[Test]
     public function cannot_access_the_consent_api_if_the_feature_has_been_disabled()
     {
         $userId = 'my-name-id';
@@ -106,10 +107,10 @@ final class ConsentControllerTest extends FunctionalWebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Consent')]
-    #[\PHPUnit\Framework\Attributes\Group('Profile')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Consent')]
+    #[Group('Profile')]
+    #[Test]
     public function cannot_access_the_consent_api_if_user_does_not_have_profile_role()
     {
         $userId = 'my-name-id';
@@ -127,10 +128,10 @@ final class ConsentControllerTest extends FunctionalWebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Consent')]
-    #[\PHPUnit\Framework\Attributes\Group('Profile')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Consent')]
+    #[Group('Profile')]
+    #[Test]
     public function a_consent_listing_for_a_not_found_user_is_retrieved_as_an_empty_array_from_the_consent_api()
     {
         $userId = 'my-name-id';
@@ -149,10 +150,10 @@ final class ConsentControllerTest extends FunctionalWebTestCase
         $this->assertSame($expectedData, $responseData);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Consent')]
-    #[\PHPUnit\Framework\Attributes\Group('Profile')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Consent')]
+    #[Group('Profile')]
+    #[Test]
     public function a_consent_listing_for_a_given_user_is_retrieved_from_the_consent_api()
     {
         $userId = 'my-name-id';
@@ -228,10 +229,10 @@ final class ConsentControllerTest extends FunctionalWebTestCase
         $this->assertEquals($expectedData, $responseData);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Consent')]
-    #[\PHPUnit\Framework\Attributes\Group('Profile')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Consent')]
+    #[Group('Profile')]
+    #[Test]
     public function consent_is_soft_deleted_from_the_consent_api()
     {
         $userId = 'urn:collab:person:institution-a:my-name-id';
@@ -282,10 +283,10 @@ final class ConsentControllerTest extends FunctionalWebTestCase
         $this->assertNotNull($dbResults[0]['deleted_at']);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Consent')]
-    #[\PHPUnit\Framework\Attributes\Group('Profile')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Consent')]
+    #[Group('Profile')]
+    #[Test]
     public function consent_is_soft_deleted_from_the_consent_api_multiple_soft_deletions()
     {
         $userId = 'urn:collab:person:institution-a:my-name-id';
@@ -343,10 +344,10 @@ final class ConsentControllerTest extends FunctionalWebTestCase
         $this->assertEquals(3, $count['removed']);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Consent')]
-    #[\PHPUnit\Framework\Attributes\Group('FeatureToggle')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Consent')]
+    #[Group('FeatureToggle')]
+    #[Test]
     public function cannot_access_the_remove_consent_api_if_the_feature_has_been_disabled()
     {
         $collabPersonId = 'urn:collab:person:test';
@@ -368,12 +369,12 @@ final class ConsentControllerTest extends FunctionalWebTestCase
             'api.consent_remove' => false,
             'eb.feature_enable_consent' => true,
         ]);
-        $client->getContainer()->set(\OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration::class, $mock);
+        $client->getContainer()->set(FeatureConfiguration::class, $mock);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Consent')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Consent')]
+    #[Test]
     public function cannot_access_the_remove_consent_api_if_user_does_not_have_profile_role()
     {
         $collabPersonId = 'urn:collab:person:test';
@@ -390,9 +391,9 @@ final class ConsentControllerTest extends FunctionalWebTestCase
         $this->assertResponseIsJson($client);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Consent')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Consent')]
+    #[Test]
     public function no_consent_is_removed_if_request_parameters_are_missing_or_incorrect()
     {
         $client = $this->createAuthorizedProfileClient();
@@ -404,9 +405,9 @@ final class ConsentControllerTest extends FunctionalWebTestCase
         $this->assertResponseIsJson($client);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Consent')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Consent')]
+    #[Test]
     public function no_consent_is_removed_if_collab_person_id_is_unknown()
     {
         $client = $this->createAuthorizedProfileClient();
@@ -465,7 +466,7 @@ final class ConsentControllerTest extends FunctionalWebTestCase
             'eb.feature_enable_consent' => false,
         ]);
         //$client->disableReboot();
-        $client->getContainer()->set(\OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration::class, $mock);
+        $client->getContainer()->set(FeatureConfiguration::class, $mock);
     }
 
     private function disableEngineConsentFeatureFor(KernelBrowser $client)
@@ -474,14 +475,13 @@ final class ConsentControllerTest extends FunctionalWebTestCase
             'eb.feature_enable_consent' => false
         ]);
         //$client->disableReboot();
-        $client->getContainer()->set(\OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration::class, $mock);
-
+        $client->getContainer()->set(FeatureConfiguration::class, $mock);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Consent')]
-    #[\PHPUnit\Framework\Attributes\Group('FeatureToggle')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Consent')]
+    #[Group('FeatureToggle')]
+    #[Test]
     public function cannot_access_the_consent_post_api_if_the_engineblock_consent_feature_has_been_disabled()
     {
         $collabPersonId = 'urn:collab:person:test';
@@ -497,11 +497,11 @@ final class ConsentControllerTest extends FunctionalWebTestCase
         $this->assertResponseIsJson($client);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('Api')]
-    #[\PHPUnit\Framework\Attributes\Group('Consent')]
-    #[\PHPUnit\Framework\Attributes\Group('Profile')]
-    #[\PHPUnit\Framework\Attributes\Group('FeatureToggle')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('Api')]
+    #[Group('Consent')]
+    #[Group('Profile')]
+    #[Group('FeatureToggle')]
+    #[Test]
     public function cannot_access_the_consent_get_api_if_the_engineblock_consent_feature_has_been_disabled()
     {
         $userId = 'my-name-id';

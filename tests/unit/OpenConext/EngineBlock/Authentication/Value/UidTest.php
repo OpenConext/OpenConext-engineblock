@@ -19,6 +19,10 @@
 namespace OpenConext\EngineBlock\Authentication\Value;
 
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
+use OpenConext\TestDataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class UidTest extends TestCase
@@ -27,10 +31,10 @@ class UidTest extends TestCase
      *
      * @param mixed $notStringOrEmptyString
      */
-    #[\PHPUnit\Framework\Attributes\DataProviderExternal(\OpenConext\TestDataProvider::class, 'notStringOrEmptyString')]
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProviderExternal(TestDataProvider::class, 'notStringOrEmptyString')]
+    #[Group('EngineBlock')]
+    #[Group('Authentication')]
+    #[Test]
     public function uid_must_be_a_non_empty_string($notStringOrEmptyString)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -38,9 +42,9 @@ class UidTest extends TestCase
         new Uid($notStringOrEmptyString);
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Authentication')]
+    #[Test]
     public function uid_can_be_retrieved()
     {
         $uidValue = md5('foobar');
@@ -50,9 +54,9 @@ class UidTest extends TestCase
         $this->assertSame($uidValue, $uid->getUid());
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Authentication')]
+    #[Test]
     public function uid_equality_is_determined_based_on_value()
     {
         $base = new Uid('some:uid');
@@ -63,9 +67,9 @@ class UidTest extends TestCase
         $this->assertFalse($base->equals($different));
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('EngineBlock')]
-    #[\PHPUnit\Framework\Attributes\Group('Authentication')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('EngineBlock')]
+    #[Group('Authentication')]
+    #[Test]
     public function a_uid_can_be_cast_to_string()
     {
         $uid = new Uid('some:uid');

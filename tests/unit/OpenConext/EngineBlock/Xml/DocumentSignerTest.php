@@ -19,7 +19,6 @@
 namespace OpenConext\EngineBlock\Xml;
 
 use OpenConext\EngineBlock\Exception\RuntimeException;
-use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlock\Metadata\X509\X509PrivateKey;

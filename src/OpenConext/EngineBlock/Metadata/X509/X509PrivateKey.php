@@ -18,8 +18,8 @@
 
 namespace OpenConext\EngineBlock\Metadata\X509;
 
-use RuntimeException;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use RuntimeException;
 
 /**
  * X.509 private key representation.

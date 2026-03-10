@@ -21,7 +21,7 @@ namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlockBundle\Service\IdpHistoryService;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -42,7 +42,7 @@ class Wayf extends AbstractExtension
      */
     private $previousSelection;
 
-    public function __construct(RequestStack $requestStack, \Symfony\Contracts\Translation\TranslatorInterface $translator)
+    public function __construct(RequestStack $requestStack, TranslatorInterface $translator)
     {
         $this->previousSelection = $this->loadPreviousSelectionFromCookie($requestStack);
         $this->translator = $translator;

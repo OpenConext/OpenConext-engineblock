@@ -21,6 +21,9 @@ namespace OpenConext\EngineBlockBundle\Tests;
 use Exception;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlockBundle\Exception\Art;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -28,15 +31,15 @@ class ArtTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    #[\PHPUnit\Framework\Attributes\Group('art')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('art')]
+    #[Test]
     public function art_code_is_numeric()
     {
         $this->assertTrue(is_numeric(Art::forException(new Exception)), 'Expected numeric Art code');
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('art')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('art')]
+    #[Test]
     public function art_code_is_distinct_per_exception_type()
     {
         $art1 = new Exception();
@@ -45,8 +48,8 @@ class ArtTest extends TestCase
         $this->assertNotEquals($art1, $art2, 'Expected different art code for different exception type');
     }
 
-    #[\PHPUnit\Framework\Attributes\Group('art')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Group('art')]
+    #[Test]
     public function art_code_is_distinct_per_message()
     {
         $art1 = new Exception('one');
@@ -60,9 +63,9 @@ class ArtTest extends TestCase
      * @param Exception $exception
      * @param int $expectedArtCode
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('artCodeWithStrippedVariables')]
-    #[\PHPUnit\Framework\Attributes\Group('art')]
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[DataProvider('artCodeWithStrippedVariables')]
+    #[Group('art')]
+    #[Test]
     public function exception_translates_to_art_code_with_variables_stripped(Exception $exception, $expectedArtCode)
     {
         $this->assertEquals(

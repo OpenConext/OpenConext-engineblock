@@ -18,26 +18,19 @@
 
 namespace OpenConext\EngineBlock\Metadata\Entity\Assembler;
 
-use DateTime;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
-use OpenConext\EngineBlock\Metadata\EmptyMduiElement;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\MduiPushAssemblerFactory;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
-use OpenConext\EngineBlock\Metadata\Mdui;
-use OpenConext\EngineBlock\Metadata\MduiElement;
 use OpenConext\EngineBlock\Metadata\MfaEntityCollection;
-use OpenConext\EngineBlock\Metadata\MultilingualElement;
-use OpenConext\EngineBlock\Metadata\MultilingualValue;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
-use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\Utils;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy;
@@ -47,8 +40,6 @@ use ParseError;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use stdClass;
-
-use function array_key_exists;
 
 /**
  * @SuppressWarnings(PMD)
