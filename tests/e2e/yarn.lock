@@ -371,10 +371,10 @@ cypress-axe@^1.4:
   resolved "https://registry.yarnpkg.com/cypress-axe/-/cypress-axe-1.7.0.tgz#258c007db13c637eaffec1cf2765090b521c07a0"
   integrity sha512-zzJpvAAjauEB3GZl0KYXb8i3w6MztWAt2WM3czYTFyNVC30alDmqCm9E7GwZ4bgkldZJlmHakaVEyu73R5St4w==
 
-cypress-html-validate@^6.1:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/cypress-html-validate/-/cypress-html-validate-6.1.0.tgz#4e6d311a380b3fc9c503c489b261973dc424c757"
-  integrity sha512-IXVB1ZzdSHMzPM/QYZCXlG3yW2CdvSVY7bJtlijmk4kCRepfdHe0JLQ939h2Dj9ZsjyBockPQpun4omq1uRW6Q==
+cypress-html-validate@7.2.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/cypress-html-validate/-/cypress-html-validate-7.2.0.tgz#83e114fa3b70287d6dd682dfeef26904109f3926"
+  integrity sha512-mC+xKF81JElyi/VpvgNj1CvAbvyY788VxQo8rtw8SSRA+jVlDlMK4JbxWg8Z3YephVnznS5p/GnTNAuAQpN4Eg==
 
 cypress-terminal-report@^5.3:
   version "5.3.12"
@@ -769,7 +769,7 @@ hasown@^2.0.2:
   dependencies:
     function-bind "^1.1.2"
 
-html-validate@^8.3:
+html-validate@8.29.0:
   version "8.29.0"
   resolved "https://registry.yarnpkg.com/html-validate/-/html-validate-8.29.0.tgz#3c2b92a51ebb6c6b567adcc893276f28f4373751"
   integrity sha512-RFfFIWaUB9SN8iETL2GoPvjWEX1gcbz0+m+vao7xkPl0cnlgMDu9RcjdQz6T3n6LgT/LENPkvxHzVkqY/Qs3Tg==
