@@ -92,7 +92,7 @@ class FeedbackController extends AbstractController
      */
     private function getTemplate(Request $request)
     {
-        $key = $request->get('template');
+        $key = $request->query->getString('template');
         if (!$key) {
             $key = 'session-lost';
         }
@@ -112,7 +112,7 @@ class FeedbackController extends AbstractController
             "artCode":"31914"
         }';
 
-        $feedbackInfo = $request->get('feedback-info', $default);
+        $feedbackInfo = $request->query->getString('feedback-info', $default);
 
         $feedbackInfo = json_decode($feedbackInfo, true);
         if (!empty($feedbackInfo['IdentityProvider']) || !empty($feedbackInfo['IdP'])) {
@@ -130,7 +130,7 @@ class FeedbackController extends AbstractController
     {
         $default = '{}';
 
-        $parameters = $request->get('parameters', $default);
+        $parameters = $request->query->getString('parameters', $default);
 
         $parameters = json_decode($parameters, true);
 
