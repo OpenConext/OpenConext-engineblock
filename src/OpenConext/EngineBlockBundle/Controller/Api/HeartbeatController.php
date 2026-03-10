@@ -19,13 +19,10 @@
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 class HeartbeatController
 {
-    /**
-     * @Route("/", name="api_heartbeat", defaults={"_format"="json"})
-     */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/', name: 'api_heartbeat', defaults: ['_format' => 'json'])]
     public function itWorksAction()
     {
         return new Response();

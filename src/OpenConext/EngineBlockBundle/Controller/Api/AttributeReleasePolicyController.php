@@ -27,7 +27,7 @@ use OpenConext\EngineBlockBundle\Http\Request\JsonRequestHelper;
 use OpenConext\EngineBlockBundle\Http\Response\JsonResponse;
 use OpenConext\Value\Saml\EntityId;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
@@ -67,11 +67,11 @@ final class AttributeReleasePolicyController
     }
 
     /**
-     * @Route("/arp", name="api_apply_attribute_release_policy", defaults={"_format"="json"})
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity) Extensive request validation
      * @SuppressWarnings(PHPMD.NPathComplexity) Extensive request validation
      */
+    #[Route(path: '/arp', name: 'api_apply_attribute_release_policy', defaults: ['_format' => 'json'])]
     public function applyArpAction(Request $request)
     {
         if (!$request->isMethod(Request::METHOD_POST)) {
@@ -128,9 +128,7 @@ final class AttributeReleasePolicyController
         return new JsonResponse(json_encode($releasedAttributes));
     }
 
-    /**
-     * @Route("/read-arp", name="api_read_attribute_release_policy", defaults={"_format"="json"})
-     */
+    #[Route(path: '/read-arp', name: 'api_read_attribute_release_policy', defaults: ['_format' => 'json'])]
     public function readArpAction(Request $request)
     {
         if (!$request->isMethod(Request::METHOD_POST)) {

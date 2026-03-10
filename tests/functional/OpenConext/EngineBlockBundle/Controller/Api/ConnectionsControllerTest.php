@@ -26,10 +26,9 @@ use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class ConnectionsControllerTest extends WebTestCase
+class ConnectionsControllerTest extends FunctionalWebTestCase
 {
     protected function tearDown(): void
     {

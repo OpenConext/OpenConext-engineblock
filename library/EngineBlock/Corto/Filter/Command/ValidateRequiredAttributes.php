@@ -24,7 +24,7 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
     /**
      * {@inheritdoc}
      */
-    public function getResponseAttributes()
+    public function getResponseAttributes(): array
     {
         return $this->_responseAttributes;
     }

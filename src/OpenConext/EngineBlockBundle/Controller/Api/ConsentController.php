@@ -27,11 +27,9 @@ use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiInternalServerErrorHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
-use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
@@ -76,9 +74,7 @@ final class ConsentController
         $this->consentService       = $consentService;
     }
 
-    /**
-     * @Route("/consent/{userId}", name="api_consent_user", defaults={"_format"="json"})
-     */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/consent/{userId}', name: 'api_consent_user', defaults: ['_format' => 'json'])]
     public function userAction($userId, Request $request)
     {
         if (!$request->isMethod(Request::METHOD_GET)) {
@@ -111,9 +107,7 @@ final class ConsentController
         return new JsonResponse($consentList, Response::HTTP_OK);
     }
 
-    /**
-     * @Route("/remove-consent", name="api_remove_consent_user", defaults={"_format"="json"})
-     */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/remove-consent', name: 'api_remove_consent_user', defaults: ['_format' => 'json'])]
     public function removeAction(Request $request): JsonResponse
     {
         if (!$request->isMethod(Request::METHOD_POST)) {

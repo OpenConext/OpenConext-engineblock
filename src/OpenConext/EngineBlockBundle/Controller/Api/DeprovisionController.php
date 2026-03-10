@@ -21,14 +21,13 @@ namespace OpenConext\EngineBlockBundle\Controller\Api;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Factory\CollabPersonIdFactory;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
-use OpenConext\EngineBlockBundle\Factory\CollabPersonIdFactory as CollabFactory;
 use OpenConext\EngineBlock\Service\DeprovisionService;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
@@ -84,13 +83,7 @@ final class DeprovisionController
         $this->applicationName      = $applicationName;
     }
 
-    /**
-     * @Route(
-     *     "/deprovision/{collabPersonId}",
-     *     name="api_deprovision_get_user_data",
-     *     defaults={"_format"="json"}
-     * )
-     */
+    #[Route(path: '/deprovision/{collabPersonId}', name: 'api_deprovision_get_user_data', defaults: ['_format' => 'json'])]
     public function userDataAction(Request $request, $collabPersonId)
     {
         $this->assertRequestMethod($request, [Request::METHOD_GET, Request::METHOD_DELETE]);
@@ -108,13 +101,7 @@ final class DeprovisionController
         return $this->createResponse('OK', $userData);
     }
 
-    /**
-     * @Route(
-     *     "/deprovision/{collabPersonId}/dry-run",
-     *     name="api_deprovision_delete_user_data_dry_run",
-     *     defaults={"_format"="json"}
-     * )
-     */
+    #[Route(path: '/deprovision/{collabPersonId}/dry-run', name: 'api_deprovision_delete_user_data_dry_run', defaults: ['_format' => 'json'])]
     public function dryRunAction(Request $request, $collabPersonId)
     {
         $this->assertRequestMethod($request, [Request::METHOD_DELETE]);

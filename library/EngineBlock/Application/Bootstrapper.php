@@ -125,8 +125,8 @@ class EngineBlock_Application_Bootstrapper
     {
         $errorHandler = new EngineBlock_Application_ErrorHandler($this->_application);
         register_shutdown_function  (array($errorHandler, 'shutdown'));
-        set_error_handler           (array($errorHandler, 'error'));
-        set_exception_handler       (array($errorHandler, 'exception'));
+        set_error_handler           ($errorHandler->error(...));
+        set_exception_handler       ($errorHandler->exception(...));
 
         $this->_application->setErrorHandler($errorHandler);
     }

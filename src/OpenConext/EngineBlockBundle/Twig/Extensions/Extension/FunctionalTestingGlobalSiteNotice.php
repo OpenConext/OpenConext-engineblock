@@ -42,9 +42,9 @@ class FunctionalTestingGlobalSiteNotice extends AbstractExtension implements Glo
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('shouldDisplayGlobalSiteNotice', [$this, 'shouldDisplayGlobalSiteNotice']),
-            new TwigFunction('getGlobalSiteNotice', [$this, 'getGlobalSiteNotice']),
-            new TwigFunction('getAllowedHtmlForNotice', [$this, 'getAllowedHtmlForNotice']),
+            new TwigFunction('shouldDisplayGlobalSiteNotice', $this->shouldDisplayGlobalSiteNotice(...)),
+            new TwigFunction('getGlobalSiteNotice', $this->getGlobalSiteNotice(...)),
+            new TwigFunction('getAllowedHtmlForNotice', $this->getAllowedHtmlForNotice(...)),
         ];
     }
 

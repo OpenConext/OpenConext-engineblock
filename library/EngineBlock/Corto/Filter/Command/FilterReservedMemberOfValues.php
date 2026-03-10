@@ -28,7 +28,7 @@ class EngineBlock_Corto_Filter_Command_FilterReservedMemberOfValues extends Engi
     /**
      * {@inheritdoc}
      */
-    public function getResponseAttributes()
+    public function getResponseAttributes(): array
     {
         return $this->_responseAttributes;
     }

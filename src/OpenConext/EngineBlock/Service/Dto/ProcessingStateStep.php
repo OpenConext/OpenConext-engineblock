@@ -20,7 +20,6 @@ namespace OpenConext\EngineBlock\Service\Dto;
 
 use EngineBlock_Saml2_ResponseAnnotationDecorator;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class ProcessingStateStep
 {

@@ -39,10 +39,7 @@ class EngineBlock_Corto_Filter_Command_SramInterruptFilter extends EngineBlock_C
     {
     }
 
-    /**
-     * @return array|null
-     */
-    public function getResponseAttributes()
+    public function getResponseAttributes(): array
     {
         return $this->_responseAttributes;
     }

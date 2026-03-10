@@ -36,7 +36,7 @@ class Spaceless extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('spaceless', [$this, 'spaceless'], ['is_safe' => ['html']]),
+            new TwigFilter('spaceless', $this->spaceless(...), ['is_safe' => ['html']]),
         ];
     }
 

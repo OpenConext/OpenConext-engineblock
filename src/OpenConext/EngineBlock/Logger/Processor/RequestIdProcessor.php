@@ -18,9 +18,11 @@
 
 namespace OpenConext\EngineBlock\Logger\Processor;
 
+use Monolog\LogRecord;
+use Monolog\Processor\ProcessorInterface;
 use OpenConext\EngineBlock\Request\RequestId;
 
-final class RequestIdProcessor
+final class RequestIdProcessor implements ProcessorInterface
 {
     /**
      * @var RequestId
@@ -32,13 +34,9 @@ final class RequestIdProcessor
         $this->requestId = $requestId;
     }
 
-    /**
-     * @param array $record
-     * @return array
-     */
-    public function processRecord(array $record)
+    public function __invoke(LogRecord $record): LogRecord
     {
-        $record['extra']['request_id'] = $this->requestId->get();
+        $record->extra['request_id'] = $this->requestId->get();
 
         return $record;
     }

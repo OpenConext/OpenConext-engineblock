@@ -35,7 +35,7 @@ final class ResourcePathFormatter
         Assertion::string($resourcePathFormat, 'Resource path format "%s" expected to be string, type %s given');
 
         if (count($parameters) > 0) {
-            $resource = vsprintf($resourcePathFormat, array_map('urlencode', $parameters));
+            $resource = vsprintf($resourcePathFormat, array_map(urlencode(...), $parameters));
         } else {
             $resource = $resourcePathFormat;
         }

@@ -22,12 +22,9 @@ use DateTime;
 use Doctrine\DBAL\Query\QueryBuilder;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
-use function json_decode;
-use function trim;
 
-final class DeprovisionControllerTest extends WebTestCase
+final class DeprovisionControllerTest extends FunctionalWebTestCase
 {
     public function tearDown(): void
     {

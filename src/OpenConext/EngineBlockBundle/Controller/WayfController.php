@@ -25,10 +25,9 @@ use OpenConext\EngineBlock\Service\SsoSessionService;
 use OpenConext\EngineBlockBridge\ResponseFactory;
 use OpenConext\EngineBlockBundle\Service\DiscoverySelectionService;
 use Psr\Log\LoggerInterface;
-use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Twig\Environment;
 
 class WayfController
@@ -74,9 +73,7 @@ class WayfController
         $this->logger = $logger;
     }
 
-    /**
-     * @Route("/authentication/idp/process-wayf", name="authentication_wayf_process_wayf", methods={"GET", "POST"})
-     */
+    #[Route(path: '/authentication/idp/process-wayf', name: 'authentication_wayf_process_wayf', methods: ['GET', 'POST'])]
     public function processWayfAction(Request $request)
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
@@ -101,9 +98,7 @@ class WayfController
         return $response;
     }
 
-    /**
-     * @Route("/authentication/idp/help-discover", name="authentication_wayf_help_discover", methods={"GET"})
-     */
+    #[Route(path: '/authentication/idp/help-discover', name: 'authentication_wayf_help_discover', methods: ['GET'])]
     public function helpDiscoverAction()
     {
         return new Response($this->twig->render('@theme/Authentication/View/IdentityProvider/help-discover.html.twig'));
@@ -121,9 +116,7 @@ class WayfController
         return $cookies;
     }
 
-    /**
-     * @Route("/authentication/idp/remove-cookies", name="authentication_wayf_remove_cookie", methods={"GET", "POST"})
-     */
+    #[Route(path: '/authentication/idp/remove-cookies', name: 'authentication_wayf_remove_cookie', methods: ['GET', 'POST'])]
     public function cookieAction(Request $request)
     {
         $application = $this->engineBlockApplicationSingleton;

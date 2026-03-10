@@ -49,7 +49,7 @@ class EngineBlock_Corto_Filter_Command_ApplyTrustedProxyBehavior extends EngineB
         $this->_responseAttributes[self::ATTRIBUTE_NAME] = [$this->_collabPersonId];
     }
 
-    public function getResponseAttributes()
+    public function getResponseAttributes(): array
     {
         return $this->_responseAttributes;
     }

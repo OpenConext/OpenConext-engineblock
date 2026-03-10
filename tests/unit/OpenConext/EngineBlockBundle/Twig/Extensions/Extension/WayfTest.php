@@ -21,7 +21,7 @@ namespace Tests\OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Wayf;
 use PHPUnit\Framework\TestCase;
-use stdClass;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -106,9 +106,7 @@ class WayfTest extends TestCase
     {
         // Create a mock request with cookie
         $request = $this->createMock(Request::class);
-        $request->cookies = $this->getMockBuilder(stdClass::class)
-            ->addMethods(['get'])
-            ->getMock();
+        $request->cookies = $this->createMock(ParameterBag::class);
         $request->cookies->method('get')
             ->willReturn(json_encode([
                 ['idp' => $storedCookieValue, 'time' => 12345]

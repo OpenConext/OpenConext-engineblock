@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlock\Logger\Handler\FingersCrossed;
 
 use Monolog\Handler\FingersCrossed\ActivationStrategyInterface;
+use Monolog\LogRecord;
 
 final class ManualOrDecoratedActivationStrategy implements ActivationStrategyInterface
 {
@@ -42,7 +43,7 @@ final class ManualOrDecoratedActivationStrategy implements ActivationStrategyInt
         $this->wasManuallyActivated = true;
     }
 
-    public function isHandlerActivated(array $record): bool
+    public function isHandlerActivated(LogRecord $record): bool
     {
         return $this->wasManuallyActivated || $this->decoratedStrategy->isHandlerActivated($record);
     }
