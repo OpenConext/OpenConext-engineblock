@@ -136,6 +136,9 @@ EngineBlock requires database settings, without it doctrine migrate will not fun
 the application must use the production settings (`--env=prod`), this could be replaced with `dev` should you run a
 development version._
 
+_**Note**:
+The doctrine migrations shipped with engineblock are built against MariaDB. They should work on MySQL, if the version matches._
+
 ### Configure HTTP server
 
 Configure a single virtual host, this should point to the `public` directory:
