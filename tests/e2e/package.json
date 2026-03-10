@@ -17,7 +17,7 @@
     "cypress": "^13.17.0",
     "cypress-axe": "^1.4",
     "cypress-html-validate": "7.2.0",
-    "cypress-terminal-report": "^5.3",
+    "cypress-terminal-report": "^7.3.3",
     "html-validate": "8.29.0",
     "whatwg-fetch": "^3.6"
   }
