@@ -8,6 +8,7 @@ if (file_exists($overridesFile)) {
 
 return $overrides + [
     // General
+    'wayf_title'                => 'Log in with',
     'search'                    => 'Search for an %organisationNoun%...',
     'search_screenreader'       => 'Search',
     'log_in_to'                 => 'Select an %organisationNoun% to login to the service',
