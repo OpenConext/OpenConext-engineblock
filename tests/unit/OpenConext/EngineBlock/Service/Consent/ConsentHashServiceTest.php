@@ -612,4 +612,28 @@ class ConsentHashServiceTest extends TestCase
         // Must be idempotent
         $this->assertSame($hash, $this->chs->getStableAttributesHash($withZeroFloat, true));
     }
+
+    public function test_stable_attribute_hash_handles_multibyte_utf8_values(): void
+    {
+        // Arabic, Chinese, accented names — all common in European SAML federations
+        $attributes = [
+            'urn:mace:dir:attribute-def:sn' => ['Müller'],
+            'urn:mace:dir:attribute-def:cn' => ['محمد'],
+            'urn:mace:dir:attribute-def:displayName' => ['王芳'],
+        ];
+        $hash = $this->chs->getStableAttributesHash($attributes, true);
+        $this->assertIsString($hash);
+        $this->assertEquals(40, strlen($hash), 'SHA1 hash must be 40 hex chars; a false return from unserialize produces a wrong hash');
+    }
+
+    public function test_stable_hash_is_case_insensitive_for_multibyte_strings(): void
+    {
+        $lower = ['urn:mace:dir:attribute-def:sn' => ['müller']];
+        $upper = ['urn:mace:dir:attribute-def:sn' => ['Müller']];
+        $this->assertEquals(
+            $this->chs->getStableAttributesHash($lower, true),
+            $this->chs->getStableAttributesHash($upper, true),
+            'Stable hash must be case-insensitive for multi-byte characters'
+        );
+    }
 }

@@ -17,6 +17,7 @@
  */
 
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
@@ -148,6 +149,7 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends TestCase
     }
 
     public function testResponseIsSent() {
+        $this->mockConsent();
         $processConsentService = $this->factoryService();
 
         Phake::when($this->proxyServerMock)
@@ -221,7 +223,7 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends TestCase
         $consentMock = Phake::mock('EngineBlock_Corto_Model_Consent');
         Phake::when($consentMock)
             ->explicitConsentWasGivenFor(Phake::anyParameters())
-            ->thenReturn(false);
+            ->thenReturn(ConsentVersion::notGiven());
         Phake::when($this->consentFactoryMock)
             ->create(Phake::anyParameters())
             ->thenReturn($consentMock);

@@ -37,7 +37,7 @@
             <html outputDirectory="../var/log/phpunit/coverage/html"/>
         </report>
     </coverage>
-    <source restrictDeprecations="true" restrictNotices="true" restrictWarnings="true" ignoreSuppressionOfDeprecations="true">
+    <source restrictNotices="true" restrictWarnings="true" ignoreSuppressionOfDeprecations="true" ignoreIndirectDeprecations="true">
         <include>
             <directory>src</directory>
             <directory>library</directory>

@@ -23,7 +23,6 @@ use OpenConext\EngineBlock\Authentication\Value\ConsentHashQuery;
 use OpenConext\EngineBlock\Authentication\Value\ConsentStoreParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentUpdateParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
-use OpenConext\UserLifecycle\Domain\ValueObject\Client\Name;
 use SAML2\XML\saml\NameID;
 use function array_filter;
 use function array_keys;
@@ -33,11 +32,10 @@ use function implode;
 use function is_array;
 use function is_numeric;
 use function ksort;
+use function mb_strtolower;
 use function serialize;
 use function sha1;
 use function sort;
-use function str_replace;
-use function strtolower;
 use function unserialize;
 
 final class ConsentHashService implements ConsentHashServiceInterface
@@ -67,7 +65,7 @@ final class ConsentHashService implements ConsentHashServiceInterface
         return $this->consentRepository->updateConsentHash($parameters);
     }
 
-    public function countTotalConsent($consentUid): int
+    public function countTotalConsent(string $consentUid): int
     {
         return $this->consentRepository->countTotalConsent($consentUid);
     }
@@ -114,14 +112,27 @@ final class ConsentHashService implements ConsentHashServiceInterface
     }
 
     /**
-     * Lowercases all array keys and values.
+     * Lowercases all array keys and string values recursively using mb_strtolower
+     * to handle multi-byte UTF-8 characters (e.g. Ü→ü, Arabic, Chinese — common in SAML).
+     *
+     * The previous implementation used serialize/strtolower/unserialize which corrupted
+     * PHP's s:N: byte-length markers for multi-byte values, causing unserialize() to silently
+     * return false and producing wrong hashes for any user with a non-ASCII attribute value.
      */
     private function caseNormalizeStringArray(array $original): array
     {
-        $serialized = serialize($original);
-        $lowerCased = strtolower($serialized);
-        $unserialized = unserialize($lowerCased);
-        return $unserialized;
+        $result = [];
+        foreach ($original as $key => $value) {
+            $normalizedKey = is_string($key) ? mb_strtolower($key) : $key;
+            if (is_array($value)) {
+                $result[$normalizedKey] = $this->caseNormalizeStringArray($value);
+            } elseif (is_string($value)) {
+                $result[$normalizedKey] = mb_strtolower($value);
+            } else {
+                $result[$normalizedKey] = $value;
+            }
+        }
+        return $result;
     }
 
     /**

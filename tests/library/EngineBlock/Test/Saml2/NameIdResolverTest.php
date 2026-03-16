@@ -162,8 +162,6 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends TestCase
 
     public function testPersistent(): void
     {
-        $this->markTestSkipped('Fails when switching to other backend, test should not rely on having fixed backend');
-
         // Input
         $nameIdFormat = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
         $this->serviceProvider->nameIdFormat = $nameIdFormat;

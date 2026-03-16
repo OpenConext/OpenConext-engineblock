@@ -67,8 +67,8 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         $this->consentService->shouldNotReceive('retrieveConsentHash');
         $this->consentService->shouldNotReceive('updateConsentHash');
 
-        $this->assertTrue($this->consentDisabled->explicitConsentWasGivenFor($serviceProvider));
-        $this->assertTrue($this->consentDisabled->implicitConsentWasGivenFor($serviceProvider));
+        $this->assertTrue($this->consentDisabled->explicitConsentWasGivenFor($serviceProvider)->given());
+        $this->assertTrue($this->consentDisabled->implicitConsentWasGivenFor($serviceProvider)->given());
         $this->assertTrue($this->consentDisabled->giveExplicitConsentFor($serviceProvider));
         $this->assertTrue($this->consentDisabled->giveImplicitConsentFor($serviceProvider));
     }
@@ -80,8 +80,8 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         $this->consentService->shouldNotReceive('retrieveConsentHash');
         $this->consentService->shouldNotReceive('updateConsentHash');
 
-        $this->consentDisabled->upgradeAttributeHashFor($serviceProvider, ConsentType::TYPE_EXPLICIT);
-        $this->consentDisabled->upgradeAttributeHashFor($serviceProvider, ConsentType::TYPE_IMPLICIT);
+        $this->consentDisabled->upgradeAttributeHashFor($serviceProvider, ConsentType::TYPE_EXPLICIT, ConsentVersion::stable());
+        $this->consentDisabled->upgradeAttributeHashFor($serviceProvider, ConsentType::TYPE_IMPLICIT, ConsentVersion::stable());
     }
 
     public function testConsentWriteToDatabase()
@@ -93,8 +93,8 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         $this->consentService->shouldReceive('retrieveConsentHash')->andReturn(ConsentVersion::stable());
         $this->consentService->shouldReceive('storeConsentHash')->andReturn(true);
 
-        $this->assertTrue($this->consent->explicitConsentWasGivenFor($serviceProvider));
-        $this->assertTrue($this->consent->implicitConsentWasGivenFor($serviceProvider));
+        $this->assertTrue($this->consent->explicitConsentWasGivenFor($serviceProvider)->given());
+        $this->assertTrue($this->consent->implicitConsentWasGivenFor($serviceProvider)->given());
         $this->assertTrue($this->consent->giveExplicitConsentFor($serviceProvider));
         $this->assertTrue($this->consent->giveImplicitConsentFor($serviceProvider));
     }
@@ -141,7 +141,7 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         $result = $consentWithAmPrior->explicitConsentWasGivenFor($serviceProvider);
 
         // Assert: consent check succeeded and the AM-prior uid path was used
-        $this->assertTrue($result);
+        $this->assertTrue($result->given());
         Phake::verify($originalResponse)->getCollabPersonId();
         Phake::verify($mockedResponse, Phake::never())->getNameIdValue();
     }
@@ -169,12 +169,12 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         $this->consentService->shouldNotReceive('updateConsentHash');
 
         // _hasStoredConsent returns notGiven() when UID is null -> consent methods return false
-        $this->assertFalse($consentWithNullUid->explicitConsentWasGivenFor($serviceProvider));
-        $this->assertFalse($consentWithNullUid->implicitConsentWasGivenFor($serviceProvider));
+        $this->assertFalse($consentWithNullUid->explicitConsentWasGivenFor($serviceProvider)->given());
+        $this->assertFalse($consentWithNullUid->implicitConsentWasGivenFor($serviceProvider)->given());
         // giveConsent returns false when UID is null (_storeConsent returns early)
         $this->assertFalse($consentWithNullUid->giveExplicitConsentFor($serviceProvider));
         $this->assertFalse($consentWithNullUid->giveImplicitConsentFor($serviceProvider));
         // upgradeAttributeHashFor should not throw when UID is null
-        $consentWithNullUid->upgradeAttributeHashFor($serviceProvider, ConsentType::TYPE_EXPLICIT);
+        $consentWithNullUid->upgradeAttributeHashFor($serviceProvider, ConsentType::TYPE_EXPLICIT, ConsentVersion::notGiven());
     }
 }

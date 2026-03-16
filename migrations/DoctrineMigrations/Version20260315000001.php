@@ -12,7 +12,7 @@ use Doctrine\Migrations\AbstractMigration;
  * 1. Added the `attribute_stable` column, string(80), nullable
  * 2. Changed the `attribute` column, has been made nullable
  */
-final class Version20220503092351 extends AbstractMigration
+final class Version20260315000001 extends AbstractMigration
 {
     public function getDescription(): string
     {

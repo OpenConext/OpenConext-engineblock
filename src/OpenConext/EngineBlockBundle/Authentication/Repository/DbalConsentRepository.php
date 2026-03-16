@@ -228,7 +228,8 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
     {
         $query = "INSERT INTO consent (hashed_user_id, service_id, attribute_stable, consent_type, consent_date, deleted_at)
                   VALUES (?, ?, ?, ?, NOW(), '0000-00-00 00:00:00')
-                  ON DUPLICATE KEY UPDATE attribute_stable=VALUES(attribute_stable), consent_type=VALUES(consent_type), consent_date=NOW()";
+                  ON DUPLICATE KEY UPDATE attribute_stable=VALUES(attribute_stable),
+                  consent_type=VALUES(consent_type), consent_date=NOW(), deleted_at='0000-00-00 00:00:00'";
 
         try {
             $this->connection->executeStatement($query, [
@@ -301,7 +302,7 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
     /**
      * @throws RuntimeException
      */
-    public function countTotalConsent($consentUid): int
+    public function countTotalConsent(string $consentUid): int
     {
         $query = "SELECT COUNT(*) FROM consent where hashed_user_id = ? AND deleted_at IS NULL";
         $parameters = [sha1($consentUid)];

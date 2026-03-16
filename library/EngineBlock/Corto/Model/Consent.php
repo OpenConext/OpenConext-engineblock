@@ -85,38 +85,39 @@ class EngineBlock_Corto_Model_Consent
         $this->_consentEnabled = $consentEnabled;
     }
 
-    public function explicitConsentWasGivenFor(ServiceProvider $serviceProvider): bool
+    public function explicitConsentWasGivenFor(ServiceProvider $serviceProvider): ConsentVersion
     {
         if (!$this->_consentEnabled) {
-            return true;
+            // Consent disabled: treat as already given (stable — no upgrade needed)
+            return ConsentVersion::stable();
         }
-        $consent = $this->_hasStoredConsent($serviceProvider, ConsentType::TYPE_EXPLICIT);
-        return $consent->given();
+        return $this->_hasStoredConsent($serviceProvider, ConsentType::TYPE_EXPLICIT);
     }
 
     /**
      * Although the user has given consent previously we want to upgrade the deprecated unstable consent
      * to the new stable consent type.
      * https://www.pivotaltracker.com/story/show/176513931
+     *
+     * The caller must pass the ConsentVersion already retrieved by explicitConsentWasGivenFor or
+     * implicitConsentWasGivenFor to avoid a second identical DB query.
      */
-    public function upgradeAttributeHashFor(ServiceProvider $serviceProvider, string $consentType): void
+    public function upgradeAttributeHashFor(ServiceProvider $serviceProvider, string $consentType, ConsentVersion $consentVersion): void
     {
         if (!$this->_consentEnabled) {
             return;
         }
-        $consentVersion = $this->_hasStoredConsent($serviceProvider, $consentType);
         if ($consentVersion->isUnstable()) {
             $this->_updateConsent($serviceProvider, $consentType);
         }
     }
 
-    public function implicitConsentWasGivenFor(ServiceProvider $serviceProvider): bool
+    public function implicitConsentWasGivenFor(ServiceProvider $serviceProvider): ConsentVersion
     {
         if (!$this->_consentEnabled) {
-            return true;
+            return ConsentVersion::stable();
         }
-        $consent = $this->_hasStoredConsent($serviceProvider, ConsentType::TYPE_IMPLICIT);
-        return $consent->given();
+        return $this->_hasStoredConsent($serviceProvider, ConsentType::TYPE_IMPLICIT);
     }
 
     public function giveExplicitConsentFor(ServiceProvider $serviceProvider): bool
