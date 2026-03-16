@@ -53,8 +53,8 @@
     "rimraf": "^6.0.1",
     "sass": "^1.66",
     "socket.io": "^4.8.1",
-    "stylelint": "^16.24.0",
-    "stylelint-config-recommended": "^13.0",
+    "stylelint": "^17.4.0",
+    "stylelint-config-recommended": "^18.0.0",
     "terser": "^5.44.0",
     "watchify": "^4.0.0"
   },
