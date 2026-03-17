@@ -19,10 +19,9 @@
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
+use Twig\Attribute\AsTwigFilter;
 
-class I18n extends AbstractExtension
+class I18n
 {
     /**
      * @var TranslatorInterface
@@ -34,20 +33,14 @@ class I18n extends AbstractExtension
         $this->translator = $translator;
     }
 
-    public function getFilters()
-    {
-        return [
-            new TwigFilter('trans', $this->translateSingular(...)),
-            new TwigFilter('transchoice', $this->translatePlural(...)),
-        ];
-    }
-
+    #[AsTwigFilter(name: 'trans')]
     public function translateSingular($id, array $parameters = [], $domain = null, $locale = null)
     {
         $parameters = $this->addDefaultPlaceholders($parameters);
         return $this->translator->trans($id, $parameters, $domain, $locale);
     }
 
+    #[AsTwigFilter(name: 'transchoice')]
     public function translatePlural($id, $count, array $parameters = [], $domain = null, $locale = null)
     {
         $parameters = $this->addDefaultPlaceholders($parameters);

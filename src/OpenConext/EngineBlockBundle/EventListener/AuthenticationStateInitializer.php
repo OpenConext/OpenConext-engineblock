@@ -22,19 +22,18 @@ use EngineBlock_ApplicationSingleton;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\EngineBlockBundle\Controller\AuthenticationLoopThrottlingController;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 final class AuthenticationStateInitializer
 {
     /**
-     * @var Session
+     * @var RequestStack
      */
-    private $session;
+    private $requestStack;
 
     public function __construct(RequestStack $requestStack)
     {
-        $this->session = $requestStack->getSession();
+        $this->requestStack = $requestStack;
     }
 
     public function onKernelController(ControllerEvent $event): void
@@ -48,11 +47,12 @@ final class AuthenticationStateInitializer
             return;
         }
 
-        $authenticationState = $this->session->get('authentication_state');
+        $session = $this->requestStack->getSession();
+        $authenticationState = $session->get('authentication_state');
         if ($authenticationState === null) {
             $authenticationLoopGuard = $this->getAuthenticationLoopGuard();
 
-            $this->session->set('authentication_state', new AuthenticationState($authenticationLoopGuard));
+            $session->set('authentication_state', new AuthenticationState($authenticationLoopGuard));
         }
     }
 

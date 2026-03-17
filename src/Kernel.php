@@ -20,8 +20,8 @@ namespace App;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 use function dirname;
@@ -47,16 +47,14 @@ class Kernel extends BaseKernel
         return dirname(__DIR__);
     }
 
-    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
+    protected function configureContainer(ContainerConfigurator $container, LoaderInterface $loader, ContainerBuilder $builder): void
     {
-        $container->addResource(new FileResource($this->getProjectDir().'/config/bundles.php'));
-
         $confDir = $this->getProjectDir().'/config';
 
-        $loader->load($confDir.'/{packages}/*'.self::CONFIG_EXTS, 'glob');
-        $loader->load($confDir.'/{packages}/'.$this->environment.'/*'.self::CONFIG_EXTS, 'glob');
-        $loader->load($confDir.'/{services}'.self::CONFIG_EXTS, 'glob');
-        $loader->load($confDir.'/{services}_'.$this->environment.self::CONFIG_EXTS, 'glob');
+        $container->import($confDir.'/{packages}/*'.self::CONFIG_EXTS);
+        $container->import($confDir.'/{packages}/'.$this->environment.'/*'.self::CONFIG_EXTS);
+        $container->import($confDir.'/{services}'.self::CONFIG_EXTS);
+        $container->import($confDir.'/{services}_'.$this->environment.self::CONFIG_EXTS);
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void

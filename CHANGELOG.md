@@ -11,12 +11,15 @@ More information about our release strategy can be found in
 the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on
 the EngineBlock wiki.
 
-## UNRELEASED 7.2.0? / 8.0.0?
-Upgrade to Symfony 6.4?
+## UNRELEASED 7.2.0
+Upgrade to Symfony 7.4
 Upgrade to `doctrine/dbal` 4
 
 Bugfixes:
 * Metadata push will now reject all metadata if any service contains invalid PHP syntax in its attribute manipulations (#1778)
+
+Maintenance:
+* `symfony/monolog-bundle` upgraded to ^4.0; review your monolog configuration if you have customised it outside of the defaults.
 
 Changes:
 * The `consent.deleted_at` should be not nullable, and have a default value of `0000-00-00 00:00:00`.

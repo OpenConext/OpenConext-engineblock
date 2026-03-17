@@ -26,10 +26,9 @@ use OpenConext\EngineBlockBundle\Configuration\ErrorFeedbackConfigurationInterfa
 use OpenConext\EngineBlockBundle\Value\FeedbackInformation;
 use OpenConext\EngineBlockBundle\Value\FeedbackInformationMap;
 use SAML2\XML\saml\Issuer;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use Twig\Attribute\AsTwigFunction;
 
-class Feedback extends AbstractExtension
+class Feedback
 {
     /**
      * @var EngineBlock_ApplicationSingleton
@@ -63,23 +62,7 @@ class Feedback extends AbstractExtension
         $this->samlResponseHelper = $samlResponseHelper;
     }
 
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction('feedbackInfo', $this->getFeedbackInfo(...)),
-            new TwigFunction('flushLog', $this->flushLog(...)),
-            new TwigFunction('hasBackToSpLink', $this->hasBackToSpLink(...)),
-            new TwigFunction('hasWikiLink', $this->hasWikiLink(...)),
-            new TwigFunction('getWikiLink', $this->getWikiLink(...)),
-            new TwigFunction('hasIdPContactMailLink', $this->hasIdPContactMailLink(...)),
-            new TwigFunction('getIdPContactMailLink', $this->getIdPContactMailLink(...)),
-            new TwigFunction('getIdpContactShortLabel', $this->getIdpContactShortLabel(...)),
-            new TwigFunction('getSpName', $this->getSpName(...)),
-            new TwigFunction('getAcu', $this->getAcu(...)),
-            new TwigFunction('getSamlFailedResponse', $this->getSamlFailedResponse(...)),
-        ];
-    }
-
+    #[AsTwigFunction(name: 'flushLog')]
     public function flushLog($message)
     {
         // For now use the EngineBlock_ApplicationSingleton to flush the log
@@ -89,6 +72,7 @@ class Feedback extends AbstractExtension
     /**
      * @return FeedbackInformationMap
      */
+    #[AsTwigFunction(name: 'feedbackInfo')]
     public function getFeedbackInfo()
     {
         return $this->retrieveFeedbackInfo();
@@ -98,6 +82,7 @@ class Feedback extends AbstractExtension
      * @param string $templateName
      * @return bool
      */
+    #[AsTwigFunction(name: 'hasWikiLink')]
     public function hasWikiLink($templateName)
     {
         return $this->errorFeedbackConfiguration->hasWikiLink($templateName);
@@ -107,6 +92,7 @@ class Feedback extends AbstractExtension
      * @param string $templateName
      * @return string
      */
+    #[AsTwigFunction(name: 'getWikiLink')]
     public function getWikiLink($templateName)
     {
         return $this->errorFeedbackConfiguration->getWikiLink($templateName);
@@ -116,6 +102,7 @@ class Feedback extends AbstractExtension
      * @param string $templateName
      * @return bool
      */
+    #[AsTwigFunction(name: 'hasIdPContactMailLink')]
     public function hasIdPContactMailLink($templateName)
     {
         return $this->errorFeedbackConfiguration->isIdPContactPage($templateName) && $this->getIdPContactMailLink();
@@ -125,6 +112,7 @@ class Feedback extends AbstractExtension
      * @param string $templateName
      * @return string
      */
+    #[AsTwigFunction(name: 'getIdpContactShortLabel')]
     public function getIdpContactShortLabel($templateName)
     {
         return $this->errorFeedbackConfiguration->getIdpContactShortLabel($templateName);
@@ -133,6 +121,7 @@ class Feedback extends AbstractExtension
     /**
      * @return string
      */
+    #[AsTwigFunction(name: 'getIdPContactMailLink')]
     public function getIdPContactMailLink()
     {
         $feedbackInfo = $this->retrieveFeedbackInfo();
@@ -153,6 +142,7 @@ class Feedback extends AbstractExtension
         return '';
     }
 
+    #[AsTwigFunction(name: 'hasBackToSpLink')]
     public function hasBackToSpLink(): bool
     {
         $info = $this->retrieveFeedbackInfo();
@@ -165,17 +155,20 @@ class Feedback extends AbstractExtension
         return $response !== '';
     }
 
+    #[AsTwigFunction(name: 'getSpName')]
     public function getSpName(): ?string
     {
         return $this->getFeedbackInfo()->get('serviceProviderName') ?? $this->getFeedbackInfo()->get('serviceProvider');
     }
 
+    #[AsTwigFunction(name: 'getAcu')]
     public function getAcu(): string
     {
         $info = $this->retrieveFeedbackInfo();
         return $this->samlResponseHelper->getAcu($info->get('serviceProvider'));
     }
 
+    #[AsTwigFunction(name: 'getSamlFailedResponse')]
     public function getSamlFailedResponse(): string
     {
         $session = $this->application->getSession();

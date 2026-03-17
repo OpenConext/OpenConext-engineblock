@@ -25,7 +25,6 @@ use EngineBlock_Exception;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class ErrorReporter
 {
@@ -38,9 +37,9 @@ class ErrorReporter
      */
     private $engineBlockApplicationSingleton;
     /**
-     * @var SessionInterface
+     * @var RequestStack
      */
-    private $session;
+    private $requestStack;
 
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
@@ -49,63 +48,64 @@ class ErrorReporter
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->logger = $logger;
-        $this->session = $requestStack->getSession();
+        $this->requestStack = $requestStack;
     }
 
-    /**
-     * @param Exception $exception
-     * @param string    $messageSuffix
-     */
-    public function reportError(Exception $exception, $messageSuffix)
+    public function reportError(Exception $exception, string $messageSuffix): void
     {
-        $logContext = ['exception' => $exception];
+        $logContext = $this->buildLogContext($exception);
+        $severity   = $exception instanceof EngineBlock_Exception
+            ? $exception->getSeverity()
+            : EngineBlock_Exception::CODE_ERROR;
 
-        if ($exception instanceof EngineBlock_Exception) {
-            $severity = $exception->getSeverity();
-        } else {
-            $severity = EngineBlock_Exception::CODE_ERROR;
-        }
-
-        // unwrap the exception stack
-        $prevException = $exception;
-        while ($prevException = $prevException->getPrevious()) {
-            if (!isset($logContext['previous_exceptions'])) {
-                $logContext['previous_exceptions'] = [];
-            }
-
-            $logContext['previous_exceptions'][] = (string)$prevException;
-        }
-
-        // message building
-        $message = $exception->getMessage();
-        if (empty($message)) {
-            $message = 'Exception without message "' . get_class($exception) . '"';
-        }
-
+        $message = $exception->getMessage() ?: 'Exception without message "' . get_class($exception) . '"';
         if ($messageSuffix) {
             $message .= ' | ' . $messageSuffix;
         }
 
         $this->logger->log($severity, $message, $logContext);
 
-        // Store some valuable debug info in session so it can be displayed on feedback pages
-        $feedback = $this->session->get('feedbackInfo');
-        if (empty($feedback)) {
-            $feedback = [];
+        try {
+            $this->storeSessionFeedback($exception);
+        } finally {
+            // flush all messages in queue, something went wrong!
+            $this->engineBlockApplicationSingleton->flushLog('An error was caught');
         }
+    }
+
+    private function buildLogContext(Exception $exception): array
+    {
+        $logContext    = ['exception' => $exception];
+        $prevException = $exception;
+
+        // unwrap the exception stack
+        while ($prevException = $prevException->getPrevious()) {
+            $logContext['previous_exceptions'][] = (string) $prevException;
+        }
+
+        return $logContext;
+    }
+
+    private function storeSessionFeedback(Exception $exception): void
+    {
+        // Store some valuable debug info in session so it can be displayed on feedback pages.
+        // This is only applicable to web requests; skip entirely in CLI context or when there is no active request.
+        if ($this->requestStack->getCurrentRequest() === null) {
+            return;
+        }
+
+        $session  = $this->requestStack->getSession();
+        $feedback = $session->get('feedbackInfo') ?: [];
 
         if ($exception instanceof EngineBlock_Corto_Exception_HasFeedbackInfoInterface) {
             $feedback = array_merge($feedback, $exception->getFeedbackInfo());
         } elseif ($exception instanceof EngineBlock_Corto_Exception_PEPNoAccess) {
-            $this->session->set('error_authorization_policy_decision', $exception->getPolicyDecision());
+            $session->set('error_authorization_policy_decision', $exception->getPolicyDecision());
         }
 
-        $this->session->set('feedbackInfo', array_merge(
+        $session->set('feedbackInfo', array_merge(
             $feedback,
             $this->engineBlockApplicationSingleton->collectFeedbackInfo($exception)
         ));
-
-        // flush all messages in queue, something went wrong!
-        $this->engineBlockApplicationSingleton->flushLog('An error was caught');
     }
 }

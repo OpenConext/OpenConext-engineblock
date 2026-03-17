@@ -180,7 +180,7 @@ class MockStepupGateway
     private function parseRequest(Request $request, $fullRequestUri)
     {
         // the GET parameter is already urldecoded by Symfony, so we should not do it again.
-        $requestData = $request->get(self::PARAMETER_REQUEST);
+        $requestData = $request->query->getString(self::PARAMETER_REQUEST);
         $samlRequest = base64_decode($requestData, true);
         if ($samlRequest === false) {
             throw new BadRequestHttpException('Failed decoding the request, did not receive a valid base64 string');
@@ -241,9 +241,9 @@ class MockStepupGateway
 
         // The query string to validate needs to be urlencoded again because Symfony has already decoded this for us
         $query = self::PARAMETER_REQUEST . '=' . urlencode($requestData);
-        $query .= '&' . self::PARAMETER_SIGNATURE_ALGORITHM . '=' . urlencode($request->get(self::PARAMETER_SIGNATURE_ALGORITHM));
+        $query .= '&' . self::PARAMETER_SIGNATURE_ALGORITHM . '=' . urlencode($request->query->getString(self::PARAMETER_SIGNATURE_ALGORITHM));
 
-        $signature = base64_decode($request->get(self::PARAMETER_SIGNATURE));
+        $signature = base64_decode($request->query->getString(self::PARAMETER_SIGNATURE));
 
         if (!$key->verifySignature($query, $signature)) {
             throw new BadRequestHttpException(

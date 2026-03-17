@@ -18,8 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
+use Twig\Attribute\AsTwigFilter;
 
 /**
  * Custom replacement for the deprecated core Twig 'spaceless' filter (deprecated as of Twig 3.12).
@@ -31,20 +30,14 @@ use Twig\TwigFilter;
  * between a closing angle bracket and an opening angle bracket (">   <" => "><"). Whitespace inside
  * tags or textual content is preserved.
  */
-class Spaceless extends AbstractExtension
+class Spaceless
 {
-    public function getFilters(): array
-    {
-        return [
-            new TwigFilter('spaceless', $this->spaceless(...), ['is_safe' => ['html']]),
-        ];
-    }
-
     /**
      * Removes whitespaces between HTML/XML tags.
      * Mirrors the prior (now deprecated) Twig spaceless filter behavior.
      */
-    public function spaceless(?string $content): string
+    #[AsTwigFilter(name: 'spaceless', isSafe: ['html'])]
+    public static function spaceless(?string $content): string
     {
         if ($content === null) {
             return '';
