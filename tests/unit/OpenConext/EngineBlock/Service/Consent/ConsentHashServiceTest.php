@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlock\Service\Consent;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use PHPUnit\Framework\TestCase;
 use SAML2\XML\saml\NameID;
 
@@ -36,7 +37,8 @@ class ConsentHashServiceTest extends TestCase
     public function setUp(): void
     {
         $mockConsentHashRepository = m::mock(ConsentRepository::class);
-        $this->chs = new ConsentHashService($mockConsentHashRepository);
+        $featureConfig = new FeatureConfiguration(['eb.stable_consent_hash_migration' => false]);
+        $this->chs = new ConsentHashService($mockConsentHashRepository, $featureConfig);
     }
 
     public function test_stable_attribute_hash_switched_order_associative_array()

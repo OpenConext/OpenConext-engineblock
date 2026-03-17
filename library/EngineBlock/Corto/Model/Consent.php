@@ -169,6 +169,7 @@ class EngineBlock_Corto_Model_Consent
             serviceId: $serviceProvider->entityId,
             attributeStableHash: $this->_getStableAttributesHash($this->_responseAttributes),
             consentType: $consentType,
+            attributeHash: $this->_getAttributesHash($this->_responseAttributes),
         );
 
         return $this->_hashService->storeConsentHash($parameters);

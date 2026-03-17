@@ -25,6 +25,7 @@ final class ConsentStoreParameters
         public readonly string $serviceId,
         public readonly string $attributeStableHash,
         public readonly string $consentType,
+        public readonly ?string $attributeHash = null,
     ) {
     }
 }

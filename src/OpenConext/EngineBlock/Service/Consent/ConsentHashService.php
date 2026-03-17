@@ -23,6 +23,7 @@ use OpenConext\EngineBlock\Authentication\Value\ConsentHashQuery;
 use OpenConext\EngineBlock\Authentication\Value\ConsentStoreParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentUpdateParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use SAML2\XML\saml\NameID;
 use function array_filter;
 use function array_keys;
@@ -40,14 +41,22 @@ use function unserialize;
 
 final class ConsentHashService implements ConsentHashServiceInterface
 {
+    private const FEATURE_MIGRATION = 'eb.stable_consent_hash_migration';
+
     /**
      * @var ConsentRepository
      */
     private $consentRepository;
 
-    public function __construct(ConsentRepository $consentHashRepository)
+    /**
+     * @var FeatureConfigurationInterface
+     */
+    private $featureConfiguration;
+
+    public function __construct(ConsentRepository $consentHashRepository, FeatureConfigurationInterface $featureConfiguration)
     {
         $this->consentRepository = $consentHashRepository;
+        $this->featureConfiguration = $featureConfiguration;
     }
 
     public function retrieveConsentHash(ConsentHashQuery $query): ConsentVersion
@@ -57,11 +66,36 @@ final class ConsentHashService implements ConsentHashServiceInterface
 
     public function storeConsentHash(ConsentStoreParameters $parameters): bool
     {
+        $migrationEnabled = $this->featureConfiguration->isEnabled(self::FEATURE_MIGRATION);
+
+        if ($migrationEnabled) {
+            $parameters = new ConsentStoreParameters(
+                hashedUserId: $parameters->hashedUserId,
+                serviceId: $parameters->serviceId,
+                attributeStableHash: $parameters->attributeStableHash,
+                consentType: $parameters->consentType,
+                attributeHash: null,
+            );
+        }
+
         return $this->consentRepository->storeConsentHash($parameters);
     }
 
     public function updateConsentHash(ConsentUpdateParameters $parameters): bool
     {
+        $migrationEnabled = $this->featureConfiguration->isEnabled(self::FEATURE_MIGRATION);
+
+        if ($migrationEnabled) {
+            $parameters = new ConsentUpdateParameters(
+                attributeStableHash: $parameters->attributeStableHash,
+                attributeHash: $parameters->attributeHash,
+                hashedUserId: $parameters->hashedUserId,
+                serviceId: $parameters->serviceId,
+                consentType: $parameters->consentType,
+                clearLegacyHash: true,
+            );
+        }
+
         return $this->consentRepository->updateConsentHash($parameters);
     }
 
