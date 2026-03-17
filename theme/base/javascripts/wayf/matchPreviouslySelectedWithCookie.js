@@ -37,12 +37,12 @@ export const matchPreviouslySelectedWithCookie = () => {
           let hasDeleteDisabledButton = null;
 
           // not all Idps are always in the list
-          if (!!original) {
+          if (original) {
             clone = original.parentElement.cloneNode(true);
             hasDeleteDisabledButton = clone.querySelector(idpDeleteDisabledSelector);
           }
 
-          if (!!clone) {
+          if (clone) {
             clone.classList.remove('remaining');
             // disabled idps
             if (hasDeleteDisabledButton) {

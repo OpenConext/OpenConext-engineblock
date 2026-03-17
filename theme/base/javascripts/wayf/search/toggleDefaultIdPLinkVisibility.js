@@ -9,7 +9,7 @@ import {defaultIdpInformational} from '../../selectors';
  */
 export const toggleDefaultIdPLinkVisibility = (searchTerm) => {
   const idpLink = document.querySelector(defaultIdpInformational);
-  if (!!idpLink) {
+  if (idpLink) {
     if (searchTerm.length > 0 ) {
       hideElement(idpLink);
     } else {

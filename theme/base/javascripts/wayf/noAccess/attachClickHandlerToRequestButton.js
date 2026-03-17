@@ -24,7 +24,7 @@ const requestButtonHandler = () => {
 export const attachClickHandlerToRequestButton = (parentSection, noAccess, form) => {
   const requestButton = document.querySelector(showFormSelector);
 
-  if (!!requestButton) {
+  if (requestButton) {
     addClickHandlerOnce(showFormSelector, requestButtonHandler);
 
     // attach clickHandler for form

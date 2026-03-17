@@ -38,10 +38,11 @@ export const consentKeyboardBehaviour = () => {
       case TAB:
         classList.forEach(className => {
           switch (className) {
-            case 'tooltip__value':
+            case 'tooltip__value': {
               const dataFor = getData(e.target, 'for');
               document.querySelector(`[for=${dataFor}]`).focus();
               break;
+            }
           }
         });
         break;

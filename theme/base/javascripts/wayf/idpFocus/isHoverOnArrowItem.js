@@ -19,7 +19,7 @@ export const isHoverOnArrowItem = (element) => {
     }
 
     const closestElement = element.closest(`.${className}`);
-    if (!!closestElement) {
+    if (closestElement) {
       return closestElement;
     }
   }

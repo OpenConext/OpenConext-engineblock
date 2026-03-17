@@ -8,7 +8,7 @@ export const focusOnPreviousIdp = () => {
     previousSibling = previousSibling.previousElementSibling;
   }
 
-  if (!!previousSibling) {
+  if (previousSibling) {
     focusAndSmoothScroll(previousSibling.firstElementChild);
   }
 };

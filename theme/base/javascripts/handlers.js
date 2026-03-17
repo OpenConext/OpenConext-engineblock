@@ -49,7 +49,7 @@ export const addAccessibilitySupport = () => {
 };
 
 export const consentNokHandler = (e) => {
-  if (!!e) {
+  if (e) {
     e.preventDefault();
   }
   const nokSection = document.querySelector(nokSectionSelector);
@@ -61,7 +61,7 @@ export const consentNokHandler = (e) => {
 };
 export const backButtonHandler = () => {
   return (e) => {
-    if (!!e) {
+    if (e) {
       e.preventDefault();
     }
     const nokSection = document.querySelector(nokSectionSelector);
