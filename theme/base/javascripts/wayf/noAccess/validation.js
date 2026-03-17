@@ -34,14 +34,14 @@ export const valid = (formData) => {
 
   if (!isValid) {
     fieldsWithErrors.sort().reverse();
-    addAnnouncement(fieldsWithErrors);
+    addAnnouncement();
     document.querySelector(`[name="${fieldsWithErrors[0]}"]`).focus();
   }
 
   return isValid;
 };
 
-function addAnnouncement(fieldsWithErrors) {
+function addAnnouncement() {
   const requestFormAnnouncement = document.getElementById(requestFormAnnouncementId);
   requestFormAnnouncement.innerHTML = getData(requestFormAnnouncement, 'announcement');
 }

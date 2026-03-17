@@ -3,7 +3,7 @@ export const removeWeight = (element) => {
     element.removeAttribute('data-weight');
   } catch (e) {
     // We are now in IE11 territory
-    if (!!element) {
+    if (element) {
       element.setAttribute('data-weight', null);
     }
   }

@@ -53,7 +53,7 @@ function announceDeletedIdp(title) {
 function moveFocus(index) {
   const nextAccount = document.querySelector(`${selectedIdpsLiSelector}[data-index="${(index + 1)}"] ${idpDeleteDisabledSelector}`);
 
-  if (!!nextAccount) {
+  if (nextAccount) {
     nextAccount.focus();
     return;
   }

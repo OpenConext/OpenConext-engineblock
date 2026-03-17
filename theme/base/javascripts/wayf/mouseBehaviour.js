@@ -52,7 +52,7 @@ export const mouseBehaviour = () => {
   // handle clicking defaultIdp banner
   const defaultIdpLink = document.querySelector(defaultIdpSelector);
 
-  if (!! defaultIdpLink) {
+  if (defaultIdpLink) {
     defaultIdpLink.addEventListener('click', handleIdpBanner);
   }
 

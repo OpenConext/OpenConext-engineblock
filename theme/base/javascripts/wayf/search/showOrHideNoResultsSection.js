@@ -14,6 +14,7 @@ export const showOrHideNoResultsSection = (idpArray) => {
   const noMatches = document.querySelectorAll(noMatchSelector);
   if (noMatches.length === idpArray.length) {
     showElement(noResultsSection);
+    // eslint-disable-next-line no-self-assign -- Forces screen reader re-announcement via DOM mutation
     noResultsSection.innerHTML = noResultsSection.innerHTML;
     searchAnnouncementDiv.innerHTML = '';
   } else {

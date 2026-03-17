@@ -8,7 +8,7 @@ export const focusOnNextIdp = () => {
     nextSibling = nextSibling.nextElementSibling;
   }
 
-  if (!!nextSibling) {
+  if (nextSibling) {
     focusAndSmoothScroll(nextSibling.firstElementChild);
   }
 };

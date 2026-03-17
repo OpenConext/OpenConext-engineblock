@@ -10,7 +10,7 @@ import {isHoverOnArrowItem} from './isHoverOnArrowItem';
 export function checkHover(e) {
   const focusedElement = document.activeElement;
 
-  if (!!focusedElement) {
+  if (focusedElement) {
     const focusOnArrowItem = isFocusOnArrowItem(focusedElement);
     if (focusOnArrowItem) {
       return false;

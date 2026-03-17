@@ -15,7 +15,7 @@ export const addTooltipAndModalAriaHandlers = (elementSelectors
     const forValue = element.getAttribute('for');
     const alert = document.querySelector(`[data-for="${forValue}"]`);
 
-    if (!!alert) {
+    if (alert) {
       element.addEventListener('click', () => {
         changeAriaHiddenValue(alert);
       });

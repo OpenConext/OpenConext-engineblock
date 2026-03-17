@@ -6,7 +6,7 @@ import {searchingClass} from '../../selectors';
  * @param list    The ul element for the remaining idps.
  */
 export const hideIdpsWhenCutoffNoSearch = (list) => {
-  if (!!list) {
+  if (list) {
     list.classList.remove(searchingClass);
   }
 };

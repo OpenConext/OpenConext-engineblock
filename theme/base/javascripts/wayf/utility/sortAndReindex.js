@@ -17,6 +17,7 @@ const REMAINING = 'remaining';
  * @parameter sortBy  string    the attribute to sort by
  * @parameter focus   boolean   whether or not to focus the first item
  */
+// eslint-disable-next-line no-unused-vars
 export const sortAndReindex = (list = REMAINING, sortBy = 'title', focus = false) => {
   let idpListSelector = remainingIdpListSelector;
 

@@ -14,7 +14,7 @@ export const hasVisibleDisabledButtonAsTarget = (element) => {
   }
 
   const idpDisabled = element.querySelector(idpDisabledSelector);
-  if (!Boolean(idpDisabled)) {
+  if (!idpDisabled) {
     return false;
   }
 

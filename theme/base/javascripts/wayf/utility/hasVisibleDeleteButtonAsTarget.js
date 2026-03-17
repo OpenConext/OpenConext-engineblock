@@ -11,7 +11,7 @@ import {idpDeleteClass, idpDeleteDisabledClass, idpDeleteSelector} from '../../s
 export const hasVisibleDeleteButtonAsTarget = (element) => {
   if (element.classList.contains(idpDeleteDisabledClass)) {
     const idpDelete = element.querySelector(idpDeleteSelector);
-    if (!Boolean(idpDelete)) {
+    if (!idpDelete) {
       return false;
     }
 
