@@ -35,6 +35,7 @@ return $overrides + [
     'name_id_support_url' => 'https://example.org',
 
     // General
+    'wayf_title'            => 'Entrar com a',
     'value'                 => 'Valor',
     'post_data'             => 'POST Data',
     'processing'            => 'A estabelecer ligação ao serviço',
