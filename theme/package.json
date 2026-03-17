@@ -38,7 +38,6 @@
   "author": "",
   "devDependencies": {
     "@babel/core": "^7.22",
-    "@babel/polyfill": "^7.12",
     "@babel/preset-env": "^7.22",
     "@eslint/js": "^10.0.1",
     "autoprefixer": "^10.4",
