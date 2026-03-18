@@ -238,7 +238,6 @@ class EngineBlock_ApplicationSingleton
         // Store some valuable debug info in session so it can be displayed on feedback pages
         if($this->hasSession()) {
             // In CLI context, the session is not available
-            @session_start();
             $this->getSession()->set('feedbackInfo', $this->collectFeedbackInfo($exception));
         }
 
