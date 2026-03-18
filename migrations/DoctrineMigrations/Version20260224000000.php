@@ -20,6 +20,11 @@ declare(strict_types=1);
 
 namespace OpenConext\EngineBlock\Doctrine\Migrations;
 
+use Doctrine\DBAL\Schema\Index;
+use Doctrine\DBAL\Schema\Name\Identifier;
+use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
+use Doctrine\DBAL\Schema\Name\UnqualifiedName;
+use Doctrine\DBAL\Schema\Name\UnquotedIdentifierFolding;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
@@ -39,9 +44,17 @@ final class Version20260224000000 extends AbstractEngineBlockMigration
     {
         parent::preUp($schema);
 
-        $indexes = $this->connection->createSchemaManager()->listTableIndexes('consent');
+        $indexes = $this->connection->createSchemaManager()->introspectTableIndexes(new OptionallyQualifiedName(Identifier::unquoted('consent'), null));
+        $deletedAtIndex = array_filter(
+            $indexes,
+            static fn(Index $index) => $index->getObjectName()->equals(
+                UnqualifiedName::unquoted('deleted_at'),
+                UnquotedIdentifierFolding::NONE
+            )
+        );
+
         $this->skipIf(
-            !isset($indexes['deleted_at']),
+            count($deletedAtIndex) === 0,
             'Index deleted_at on consent table does not exist. Skipping.'
         );
     }

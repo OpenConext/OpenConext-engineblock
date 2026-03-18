@@ -109,7 +109,8 @@
             "Surfnet_": "library/"
         },
         "psr-4": {
-            "OpenConext\\": "src/OpenConext"
+            "OpenConext\\": "src/OpenConext",
+            "OpenConext\\EngineBlock\\Doctrine\\Migrations\\": "migrations/DoctrineMigrations"
         },
         "classmap": [
             "src/Kernel.php"
