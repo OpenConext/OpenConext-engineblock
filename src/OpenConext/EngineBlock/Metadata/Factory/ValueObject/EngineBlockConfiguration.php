@@ -107,9 +107,10 @@ class EngineBlockConfiguration
         $this->logo->height = $logoHeight;
 
         // Create the contact person data for the EB SP entity
-        $support = ContactPerson::from('support', $this->organizationName, 'Support', $this->supportMail);
-        $technical = ContactPerson::from('technical', $this->organizationName, 'Support', $this->supportMail);
-        $administrative = ContactPerson::from('administrative', $this->organizationName, 'Support', $this->supportMail);
+        $organizationName = $translator->trans('metadata_organization_name');
+        $support = ContactPerson::from('support', $organizationName, 'Support', $this->supportMail);
+        $technical = ContactPerson::from('technical', $organizationName, 'Support', $this->supportMail);
+        $administrative = ContactPerson::from('administrative', $organizationName, 'Support', $this->supportMail);
 
         $this->contactPersons = [$support, $technical, $administrative];
     }
