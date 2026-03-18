@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use SAML2\Constants;
@@ -99,8 +100,11 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         $attributes = $response->getAssertion()->getAttributes();
         $consentRepository = $this->_consentFactory->create($this->_server, $response, $attributes);
 
-        if (!$consentRepository->explicitConsentWasGivenFor($serviceProvider)) {
+        $explicitConsent = $consentRepository->explicitConsentWasGivenFor($serviceProvider);
+        if (!$explicitConsent->given()) {
             $consentRepository->giveExplicitConsentFor($destinationMetadata);
+        } else {
+            $consentRepository->upgradeAttributeHashFor($destinationMetadata, ConsentType::TYPE_EXPLICIT, $explicitConsent);
         }
 
         $response->setConsent(Constants::CONSENT_OBTAINED);

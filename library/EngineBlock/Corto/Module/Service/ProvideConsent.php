@@ -16,10 +16,11 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
-use OpenConext\EngineBlock\Service\ConsentServiceInterface;
+use OpenConext\EngineBlock\Service\Consent\ConsentServiceInterface;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlockBundle\Service\DiscoverySelectionService;
 use Psr\Log\LogLevel;
@@ -143,8 +144,11 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
 
 
         if ($this->isConsentDisabled($spMetadataChain, $identityProvider)) {
-            if (!$consentRepository->implicitConsentWasGivenFor($serviceProviderMetadata)) {
+            $implicitConsent = $consentRepository->implicitConsentWasGivenFor($serviceProviderMetadata);
+            if (!$implicitConsent->given()) {
                 $consentRepository->giveImplicitConsentFor($serviceProviderMetadata);
+            } else {
+                $consentRepository->upgradeAttributeHashFor($serviceProviderMetadata, ConsentType::TYPE_IMPLICIT, $implicitConsent);
             }
 
             $response->setConsent(Constants::CONSENT_INAPPLICABLE);
@@ -162,7 +166,9 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         }
 
         $priorConsent = $consentRepository->explicitConsentWasGivenFor($serviceProviderMetadata);
-        if ($priorConsent) {
+        if ($priorConsent->given()) {
+            $consentRepository->upgradeAttributeHashFor($serviceProviderMetadata, ConsentType::TYPE_EXPLICIT, $priorConsent);
+
             $response->setConsent(Constants::CONSENT_PRIOR);
 
             $response->setDestination($response->getReturn());
