@@ -16,10 +16,24 @@
  * limitations under the License.
  */
 
-class EngineBlock_Corto_Exception_MissingRequiredFields extends EngineBlock_Exception
+class EngineBlock_Corto_Exception_MissingRequiredFields extends EngineBlock_Exception implements EngineBlock_Corto_Exception_HasFeedbackInfoInterface
 {
-    public function __construct($message, $severity = self::CODE_NOTICE, Exception $previous = null)
+    /**
+     * @var array
+     */
+    private $feedback;
+
+    public function __construct($message, $errors, $severity = self::CODE_NOTICE, Exception $previous = null)
     {
+        $this->feedback = $errors;
         parent::__construct($message, $severity, $previous);
+    }
+
+    /**
+     * @return array
+     */
+    public function getFeedbackInfo()
+    {
+        return $this->feedback;
     }
 }

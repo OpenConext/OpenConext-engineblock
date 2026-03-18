@@ -46,15 +46,27 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
         $validationResult = EngineBlock_ApplicationSingleton::getInstance()
             ->getDiContainer()
             ->getAttributeValidator()
-            ->validate($this->_responseAttributes, $excluded);
+            ->validate($this->_responseAttributes, $excluded, $this->_identityProvider);
 
         if ($validationResult->hasErrors()) {
+            $errors = $validationResult->getErrors();
+
+            $messages = "";
+            foreach($errors as $attribute => $violations) {
+                $messages .= "$attribute: ";
+                foreach($violations as $violation) {
+                    $messages .= $violation[0].' "' .$violation[3].'"';
+                }
+                $messages .= "\n";
+            }
+
             throw new EngineBlock_Corto_Exception_MissingRequiredFields(
                 sprintf(
                     'Errors validating attributes errors: "%s" attributes: "%s"',
-                    print_r($validationResult->getErrors(), true),
+                    print_r($errors, true),
                     print_r($this->_responseAttributes, true)
-                )
+                ),
+                ['validationMessages' => $messages]
             );
         }
     }
