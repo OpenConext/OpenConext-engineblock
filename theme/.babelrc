@@ -1,27 +1,9 @@
 {
-  "env": {
-    "development": {
-      "presets": [
-        ["@babel/preset-env", {
-          "useBuiltIns": "usage",
-          "corejs": 3,
-          "debug": false,
-          "targets": {
-              "browsers": [ ">0.25%"]
-          }
-        }]
-      ]
-    },
-    "test": {
-      "presets":[
-        ["@babel/preset-env", {
-          "useBuiltIns": "usage",
-          "targets": {
-            "node": "current",
-            "browsers": [ ">0.25%"]
-          }
-        }]
-      ]
-    }
-  }
+  "presets": [
+    ["@babel/preset-env", {
+      "useBuiltIns": "usage",
+      "corejs": 3,
+      "debug": false
+    }]
+  ]
 }
