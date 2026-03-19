@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore;
 use Symfony\Component\Translation\DataCollectorTranslator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -28,39 +29,67 @@ final class MockTranslator implements TranslatorInterface
      * @var DataCollectorTranslator
      */
     private $translator;
+
     /**
      * @var AbstractDataStore
      */
     private $dataStore;
-    /**
-     * @var array
-     */
-    private $translations;
 
-    public function __construct(DataCollectorTranslator $translator, AbstractDataStore $dataStore)
-    {
+    /**
+     * @var string|null Path template with %s placeholder for locale, e.g. "/tmp/eb-fixtures/translator_mock_%s.json"
+     */
+    private $localeDataStoreTemplate;
+
+    /**
+     * @var JsonDataStore[] Keyed by locale, lazily instantiated
+     */
+    private $localeDataStores = [];
+
+    public function __construct(
+        DataCollectorTranslator $translator,
+        AbstractDataStore $dataStore,
+        string $localeDataStoreTemplate = null
+    ) {
         $this->translator = $translator;
         $this->dataStore = $dataStore;
-        $this->translations = $dataStore->load();
+        $this->localeDataStoreTemplate = $localeDataStoreTemplate;
     }
 
     // Helper methods
-    public function setTranslation($key, $value)
+    public function setTranslation(string $key, string $value, string $locale = null): void
     {
-        $translations = $this->dataStore->load();
-        $translations[$key] = $value;
-        $this->dataStore->save($translations);
+        if ($locale !== null) {
+            $store = $this->getLocaleDataStore($locale);
+            $translations = $store->load();
+            $translations[$key] = $value;
+            $store->save($translations);
+        } else {
+            $translations = $this->dataStore->load();
+            $translations[$key] = $value;
+            $this->dataStore->save($translations);
+        }
     }
 
-    public function clear()
+    public function clear(): void
     {
         $this->dataStore->save([]);
+        foreach ($this->localeDataStores as $store) {
+            $store->save([]);
+        }
+        $this->localeDataStores = [];
     }
 
     // Decorated methods
     public function trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
-        $this->translator->getCatalogue($locale)->add($this->translations);
+        $translations = $this->dataStore->load();
+
+        if ($locale !== null) {
+            $localeTranslations = $this->getLocaleDataStore($locale)->load();
+            $translations = array_merge($translations, $localeTranslations);
+        }
+
+        $this->translator->getCatalogue($locale)->add($translations);
         return $this->translator->trans($id, $parameters, $domain, $locale);
     }
 
@@ -72,5 +101,14 @@ final class MockTranslator implements TranslatorInterface
     public function getLocale(): string
     {
         return $this->translator->getLocale();
+    }
+
+    private function getLocaleDataStore(string $locale): JsonDataStore
+    {
+        if (!isset($this->localeDataStores[$locale])) {
+            $filePath = sprintf($this->localeDataStoreTemplate, $locale);
+            $this->localeDataStores[$locale] = new JsonDataStore($filePath);
+        }
+        return $this->localeDataStores[$locale];
     }
 }

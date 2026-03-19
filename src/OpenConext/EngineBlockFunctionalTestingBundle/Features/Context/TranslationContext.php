@@ -57,4 +57,14 @@ class TranslationContext extends AbstractSubContext
             $this->mockTranslator->setTranslation($translation['Key'], $translation['Value']);
         }
     }
+
+    /**
+     * @Then /^I have configured the following translations for locale "([^"]*)":$/
+     */
+    public function iHaveConfiguredTheFollowingTranslationsForLocale(string $locale, TableNode $translations)
+    {
+        foreach ($translations->getHash() as $translation) {
+            $this->mockTranslator->setTranslation($translation['Key'], $translation['Value'], $locale);
+        }
+    }
 }
