@@ -38,6 +38,18 @@ Feature:
       # Verify the used signing key is EB key
       And the response should match xpath '//ds:Signature//ds:X509Certificate[starts-with(.,"MIIDuDCCAqCgAwIBAgIJAPdqJ9JQKN6vMA0GCSqGSIb3DQEBBQUAMEYxDzANBgNVBAMT")]'
 
+  Scenario: The IdP metadata organization name is translated per locale without unresolved placeholders
+    Given I have configured the following translations:
+      | Key        | Value   |
+      | suite_name | SURFnet |
+    And I have configured the following translations for locale "nl":
+      | Key        | Value      |
+      | suite_name | SURFnet-NL |
+    When I go to Engineblock URL "/authentication/idp/metadata"
+    Then the response should match xpath '//md:OrganizationName[@xml:lang="en" and text()="SURFnet"]'
+      And the response should match xpath '//md:OrganizationName[@xml:lang="nl" and text()="SURFnet-NL"]'
+      And the response should not match xpath '//md:OrganizationName[contains(text(), "%suiteName%")]'
+
   Scenario: A user can request the EngineBlock stepup metadata
     When I go to Engineblock URL "/authentication/stepup/metadata"
     # Verify the entity id is correctly set in the metadata

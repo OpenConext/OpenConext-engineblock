@@ -7,6 +7,7 @@ parameters:
     engineblock.functional_testing.attribute_aggregation_data_store.file:     "/tmp/eb-fixtures/attribute_aggregation.json"
     engineblock.functional_testing.stepup_gateway_mock_data_store.file:       "/tmp/eb-fixtures/stepup_gateway_mock.json"
     engineblock.functional_testing.translator_mock_data_store.file:           "/tmp/eb-fixtures/translator_mock.json"
+    engineblock.functional_testing.translator_mock_data_store.locale_file:    "/tmp/eb-fixtures/translator_mock_%s.json"
     engineblock.functional_testing.sbs_client_state_manager_data_store.file:  "/tmp/eb-fixtures/sbs_client_state_manager.json"
     engineblock.functional_testing.sbs_controller_data_store.file:            "/tmp/eb-fixtures/sbs_server_state.json"
 
@@ -111,6 +112,7 @@ services:
         arguments:
             - '@translator'
             - '@engineblock.function_testing.data_store.translator_mock'
+            - '%engineblock.functional_testing.translator_mock_data_store.locale_file%'
 
     # test stand ins
     OpenConext\EngineBlockFunctionalTestingBundle\Validator\SsoRequestValidator:
