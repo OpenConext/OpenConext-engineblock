@@ -32,27 +32,53 @@ class EngineBlockConfigurationTest extends TestCase
 
     public function test_configuration_creation()
     {
-        $suitName = 'OpenestConext';
+        $suiteName = 'OpenestConext';
+        $supportUrl = 'https://www.example.org';
         $orgUrl = 'https://www.example.org';
         $orgName = 'OpenestConext Company';
         $orgDisplayName = 'OpenestConext Company Inc.';
 
         $translator = m::mock(TranslatorInterface::class);
+
+        // Called once at construction time to set $this->suiteName
         $translator
             ->shouldReceive('trans')
-            ->with('suite_name')->once()
-            ->andReturn($suitName);
+            ->with('suite_name')
+            ->once()
+            ->andReturn($suiteName);
+
+        // Called once at construction time for ContactPersons (with %suiteName% parameter)
         $translator
             ->shouldReceive('trans')
-            ->with('metadata_organization_name')->once()
+            ->with('metadata_organization_name', ['%suiteName%' => $suiteName])
+            ->once()
+            ->andReturn($orgName);
+
+        // Called by getOrganization(null) — called once below
+        $translator
+            ->shouldReceive('trans')
+            ->with('suite_name', [], null, null)
+            ->once()
+            ->andReturn($suiteName);
+        $translator
+            ->shouldReceive('trans')
+            ->with('openconext_support_url', [], null, null)
+            ->once()
+            ->andReturn($supportUrl);
+        $translator
+            ->shouldReceive('trans')
+            ->with('metadata_organization_name', ['%suiteName%' => $suiteName, '%supportUrl%' => $supportUrl], null, null)
+            ->once()
             ->andReturn($orgName);
         $translator
             ->shouldReceive('trans')
-            ->with('metadata_organization_displayname')->once()
+            ->with('metadata_organization_displayname', ['%suiteName%' => $suiteName, '%supportUrl%' => $supportUrl], null, null)
+            ->once()
             ->andReturn($orgDisplayName);
         $translator
             ->shouldReceive('trans')
-            ->with('metadata_organization_url')->once()
+            ->with('metadata_organization_url', ['%suiteName%' => $suiteName, '%supportUrl%' => $supportUrl], null, null)
+            ->once()
             ->andReturn($orgUrl);
 
         $mail = 'mail@example.org';
@@ -98,9 +124,10 @@ class EngineBlockConfigurationTest extends TestCase
         $this->assertEquals($width, $configuration->getLogo()->width);
         $this->assertEquals($height, $configuration->getLogo()->height);
 
-        $this->assertInstanceOf(Organization::class, $configuration->getOrganization());
-        $this->assertEquals($orgUrl, $configuration->getOrganization()->url);
-        $this->assertEquals($orgName, $configuration->getOrganization()->name);
-        $this->assertEquals($orgDisplayName, $configuration->getOrganization()->displayName);
+        $organization = $configuration->getOrganization();
+        $this->assertInstanceOf(Organization::class, $organization);
+        $this->assertEquals($orgUrl, $organization->url);
+        $this->assertEquals($orgName, $organization->name);
+        $this->assertEquals($orgDisplayName, $organization->displayName);
     }
 }

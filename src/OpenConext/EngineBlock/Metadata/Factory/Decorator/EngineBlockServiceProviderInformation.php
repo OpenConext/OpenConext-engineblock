@@ -62,7 +62,7 @@ class EngineBlockServiceProviderInformation extends AbstractServiceProvider
 
     public function getOrganization($locale): ?Organization
     {
-        return $this->engineBlockConfiguration->getOrganization();
+        return $this->engineBlockConfiguration->getOrganization($locale);
     }
 
     /**
