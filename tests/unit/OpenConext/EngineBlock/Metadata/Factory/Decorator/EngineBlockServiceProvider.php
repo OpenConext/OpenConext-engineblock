@@ -74,7 +74,7 @@ class EngineBlockServiceProvider extends AbstractEntity
         $attributesMock->method('getRequestedAttributes')
             ->willReturn($attributes);
 
-        $decorator = new EngineBlockServiceProvider($adapter, $keyPairMock, $attributesMock, $this->urlProvider);
+        $decorator = new EngineBlockServiceProvider($adapter, [$keyPairMock], $attributesMock, $this->urlProvider);
 
         $supportedNameIdFormats = [
             Constants::NAMEID_PERSISTENT,
