@@ -36,6 +36,9 @@ parameters:
     ## The Signing / Encryption keys used for the SAML2 authentication and metadata
     ## When EngineBlock signs responses (when it acts as an Idp)
     ## or requests (when it acts as an SP) it uses these X.509 certs.
+    ## During a key rollover, add the new key as 'rollover'. The default metadata will then
+    ## contain both keys, allowing IdPs to accept responses signed with either key.
+    ## Once all IdPs have updated their metadata, remove the old key or swap default/rollover.
     encryption_keys:
         default:
             publicFile: /config/engine/engineblock.crt
