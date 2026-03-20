@@ -16,6 +16,9 @@
  * limitations under the License.
  */
 
+use SimpleSAML\Assert\Assert;
+use SimpleSAML\Assert\AssertionFailedException;
+
 class EngineBlock_Attributes_Validator_Type extends EngineBlock_Attributes_Validator_Abstract
 {
     const ERROR_ATTRIBUTE_VALIDATOR_URI      = 'error_attribute_validator_type_uri';
@@ -75,7 +78,9 @@ class EngineBlock_Attributes_Validator_Type extends EngineBlock_Attributes_Valid
 
             case 'URL':
                 foreach ($attributeValues as $attributeValue) {
-                    if (filter_var($attributeValue, FILTER_VALIDATE_URL) === false) {
+                    try {
+                        Assert::validURL($attributeValue);
+                    } catch (AssertionFailedException $e) {
                         $this->_messages[] = array(
                             self::ERROR_ATTRIBUTE_VALIDATOR_URL,
                             $this->_attributeName,

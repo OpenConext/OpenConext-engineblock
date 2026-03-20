@@ -16,12 +16,14 @@
  * limitations under the License.
  */
 
+use SimpleSAML\Assert\Assert;
+use SimpleSAML\Assert\AssertionFailedException;
+
 /**
- * Validate URIs according to RFC-3986.
+ * Validate URIs using simplesamlphp/assert.
  *
- * See: http://www.rfc-editor.org/errata_search.php?rfc=3986
- *
- * Note that this is a VERY permissive regex
+ * The legacy regex is kept for the unused parse() helper so existing debug
+ * output shape remains available if it is ever reintroduced.
  */
 class EngineBlock_Validator_Uri
 {
@@ -33,7 +35,13 @@ class EngineBlock_Validator_Uri
      */
     public function validate($uri)
     {
-        return (bool) preg_match(self::REGEX, $uri);
+        try {
+            Assert::validURI($uri);
+        } catch (AssertionFailedException $e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

@@ -36,6 +36,7 @@
         "pimple/pimple": "^3.6",
         "ramsey/uuid": "^4.9.1",
         "robrichards/xmlseclibs": "^3.1.3",
+        "simplesamlphp/assert": "^1.9.1",
         "simplesamlphp/saml2": "^4.19",
         "symfony/asset": "^7.4",
         "symfony/console": "^7.4",
