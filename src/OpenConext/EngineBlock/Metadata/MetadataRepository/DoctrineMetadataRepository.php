@@ -92,26 +92,6 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
     }
 
     /**
-     * Find all SchacHomeOrganizations that are reserved by Identity Providers.
-     *
-     * @return string[]
-     */
-    public function findReservedSchacHomeOrganizations()
-    {
-        $queryBuilder = $this->idpRepository
-            ->createQueryBuilder('role')
-            ->select('role.schacHomeOrganization')
-            ->distinct()
-            ->orderBy('role.schacHomeOrganization');
-
-        $this->compositeFilter->toQueryBuilder($queryBuilder, $this->idpRepository->getClassName());
-
-        return $queryBuilder
-            ->getQuery()
-            ->execute();
-    }
-
-    /**
      * @param array $identityProviderIds
      * @return array|IdentityProvider[]
      * @throws EntityNotFoundException
