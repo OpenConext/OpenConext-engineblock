@@ -10,20 +10,25 @@ Feature:
 
   Scenario: The user can see all available metadata links
     When I go to Engineblock URL "/"
-    Then I should see 8 links on the front page
+    Then I should see 12 links on the front page
      And I should see text matching "The Public SAML Signing certificate of the OpenConext IdP"
      And I should see URL "/authentication/idp/certificate"
      # The default key should not get a separate URL next to the key-less url
      And I should not see URL "/authentication/idp/certificate/key:default"
+     # The rollover key should get its own URL
+     And I should see URL "/authentication/idp/certificate/key:rollover"
      And I should see text matching "The Public SAML metadata \(the entity descriptor\) of the OpenConext IdP Proxy"
      And I should see URL "/authentication/idp/metadata"
      And I should not see URL "/authentication/idp/metadata/key:default"
+     And I should see URL "/authentication/idp/metadata/key:rollover"
      And I should see text matching "The Public SAML metadata \(the entities descriptor\) for all the OpenConext IdPs"
      And I should see URL "/authentication/proxy/idps-metadata"
      And I should not see URL "/authentication/proxy/idps-metadata/key:default"
+     And I should see URL "/authentication/proxy/idps-metadata/key:rollover"
      And I should see text matching "The Public SAML metadata \(the entities descriptor\) of the OpenConext IdPs which"
      And I should see URL "/authentication/proxy/idps-metadata?sp-entity-id=urn:example.org"
      And I should not see URL "/authentication/proxy/idps-metadata/key:default?sp-entity-id=urn:example.org"
+     And I should see URL "/authentication/proxy/idps-metadata/key:rollover?sp-entity-id=urn:example.org"
      # The test debug link is present on the page
      And I should see text matching "Test authentication with an identity provider."
      And I should see URL "/authentication/sp/debug"
