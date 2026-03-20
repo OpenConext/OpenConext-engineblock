@@ -199,12 +199,4 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
     {
         return $this->invoke(__FUNCTION__, func_get_args());
     }
-
-    /**
-     * @return string[]
-     */
-    public function findReservedSchacHomeOrganizations()
-    {
-        return $this->invoke(__FUNCTION__, func_get_args());
-    }
 }

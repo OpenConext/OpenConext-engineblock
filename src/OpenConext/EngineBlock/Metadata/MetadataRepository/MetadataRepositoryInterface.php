@@ -90,9 +90,4 @@ interface MetadataRepositoryInterface
      * @return string[]
      */
     public function findAllIdentityProviderEntityIds(array $scope = []);
-
-    /**
-     * @return string[]
-     */
-    public function findReservedSchacHomeOrganizations();
 }

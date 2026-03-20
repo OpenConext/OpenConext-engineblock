@@ -252,7 +252,6 @@ HTML
     'error_attribute_validator_regex'               => '\'%arg3%\' voldoet niet aan de voorwaarden voor waardes van dit attribuut (%arg2%)',
     'error_attribute_validator_not_in_definitions'  => '%arg1% is niet bekend in het schema',
     'error_attribute_validator_allowed'             => '\'%arg3%\' is geen toegestane waarde voor dit attribuut',
-    'error_attribute_validator_availability'        => '\'%arg3%\' is a gereserveerde SchacHomeOrganization voor een andere Identity Provider',
     'allowed_scopes'                                => 'Toegestane scopes',
 
     'error_unknown_requesterid_in_authnrequest'         => 'Error - Deze dienst is niet geregistreerd bij %suiteName%.',

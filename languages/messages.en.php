@@ -254,7 +254,6 @@ Your %organisationNoun% does not provide the mandatory information. Therefore, y
     'error_attribute_validator_regex'               => '\'%arg3%\' does not match the expected format of this attribute (%arg2%)',
     'error_attribute_validator_not_in_definitions'  => '%arg1% is not known in the schema',
     'error_attribute_validator_allowed'             => '\'%arg3%\' is not an allowed value for this attribute',
-    'error_attribute_validator_availability'        => '\'%arg3%\' is a reserved schacHomeOrganization for another Identity Provider',
     'allowed_scopes'                                => 'Allowed scopes',
 
     'error_unknown_requesterid_in_authnrequest'         => 'Error - Unknown service',
