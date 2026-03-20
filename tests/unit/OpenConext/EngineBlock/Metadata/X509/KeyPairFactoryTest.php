@@ -55,6 +55,16 @@ class KeyPairFactoryTest extends TestCase
         $this->assertEquals('file://' . __DIR__ . '/test.pem.key', $defaultKeyPair->getPrivateKey()->getFilePath());
     }
 
+    public function test_build_all_returns_all_configured_key_pairs()
+    {
+        $keyPairs = $this->factory->buildAll();
+
+        $this->assertCount(2, $keyPairs);
+        $this->assertContainsOnlyInstancesOf(X509KeyPair::class, $keyPairs);
+        $this->assertEquals(file_get_contents('file://' . __DIR__ . '/test.pem.crt'), $keyPairs[0]->getCertificate()->toPem());
+        $this->assertEquals(file_get_contents('file://' . __DIR__ . '/test2.pem.crt'), $keyPairs[1]->getCertificate()->toPem());
+    }
+
     public function test_it_raises_exception_when_requesting_empty_key_pair_identifier()
     {
         $this->expectException(InvalidArgumentException::class);

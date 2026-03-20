@@ -85,7 +85,7 @@ class EngineblockIdentityProvider extends AbstractEntity
             }
         });
 
-        $decorator = new EngineBlockIdentityProvider($this->adapter, 'default', $this->keyPairMock, $this->urlProvider);
+        $decorator = new EngineBlockIdentityProvider($this->adapter, 'default', [$this->keyPairMock], $this->urlProvider);
 
         $supportedNameIdFormats = [
             Constants::NAMEID_PERSISTENT,
@@ -110,7 +110,7 @@ class EngineblockIdentityProvider extends AbstractEntity
             ->with('authentication_logout', false, null, null)
             ->willReturn('sloLocation');
 
-        $decorator = new EngineBlockIdentityProvider($this->adapter, 'default', $this->keyPairMock, $this->urlProvider);
+        $decorator = new EngineBlockIdentityProvider($this->adapter, 'default', [$this->keyPairMock], $this->urlProvider);
 
         $this->assertEquals($decorator->getSingleLogoutService(), new Service('sloLocation', Constants::BINDING_HTTP_REDIRECT));
     }
@@ -121,7 +121,7 @@ class EngineblockIdentityProvider extends AbstractEntity
             'singleLogoutService' => null,
         ]);
 
-        $decorator = new EngineBlockIdentityProvider($this->adapter, 'default', $this->keyPairMock, $this->urlProvider);
+        $decorator = new EngineBlockIdentityProvider($this->adapter, 'default', [$this->keyPairMock], $this->urlProvider);
 
         $this->assertEquals($decorator->getSingleLogoutService(), null);
     }
@@ -145,7 +145,7 @@ class EngineblockIdentityProvider extends AbstractEntity
                 }  // we would expect the fourth paremeter to be null and not 'entity-id' becasue we are EB
             );
 
-        $decorator = new EngineBlockIdentityProvider($this->adapter, 'default', $this->keyPairMock, $this->urlProvider);
+        $decorator = new EngineBlockIdentityProvider($this->adapter, 'default', [$this->keyPairMock], $this->urlProvider);
 
         $this->assertEquals([new Service('ssoLocation', Constants::BINDING_HTTP_REDIRECT)], $decorator->getSingleSignOnServices());
     }

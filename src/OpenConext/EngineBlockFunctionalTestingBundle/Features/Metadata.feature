@@ -200,6 +200,27 @@ Feature:
       # Verify the used signing key is EB key
       And the response should match xpath '//ds:Signature//ds:X509Certificate[starts-with(.,"MIIDuDCCAqCgAwIBAgIJAPdqJ9JQKN6vMA0GCSqGSIb3DQEBBQUAMEYxDzANBgNVBAMT")]'
 
+  Scenario: The default SP metadata contains all configured keys (rollover support)
+    When I go to Engineblock URL "/authentication/sp/metadata"
+    # Verify the default (current) signing key is present
+    Then the response should match xpath '//md:KeyDescriptor[@use="signing"]//ds:X509Certificate[starts-with(.,"MIIDuDCCAqCgAwIBAgIJAPdqJ9JQKN6vMA0GCSqGSIb3DQEBBQUAMEYxDzANBgNVBAMT")]'
+    # Verify the rollover signing key is also present
+    And the response should match xpath '//md:KeyDescriptor[@use="signing"]//ds:X509Certificate[starts-with(.,"MIIDhTCCAm2gAwIBAgIJALJlbT5u9cXzMA0GCSqGSIb3DQEBBQUAMFkxCzAJ")]'
+
+  Scenario: The default IdP metadata contains all configured keys (rollover support)
+    When I go to Engineblock URL "/authentication/idp/metadata"
+    # Verify the default (current) signing key is present
+    Then the response should match xpath '//md:KeyDescriptor[@use="signing"]//ds:X509Certificate[starts-with(.,"MIIDuDCCAqCgAwIBAgIJAPdqJ9JQKN6vMA0GCSqGSIb3DQEBBQUAMEYxDzANBgNVBAMT")]'
+    # Verify the rollover signing key is also present
+    And the response should match xpath '//md:KeyDescriptor[@use="signing"]//ds:X509Certificate[starts-with(.,"MIIDhTCCAm2gAwIBAgIJALJlbT5u9cXzMA0GCSqGSIb3DQEBBQUAMFkxCzAJ")]'
+
+  Scenario: Requesting metadata with a specific key id returns only that key
+    When I go to Engineblock URL "/authentication/sp/metadata/key:rollover"
+    # Verify only the rollover key is present
+    Then the response should match xpath '//md:KeyDescriptor[@use="signing"]//ds:X509Certificate[starts-with(.,"MIIDhTCCAm2gAwIBAgIJALJlbT5u9cXzMA0GCSqGSIb3DQEBBQUAMFkxCzAJ")]'
+    # Verify the default key is not present
+    And the response should not match xpath '//md:KeyDescriptor[@use="signing"]//ds:X509Certificate[starts-with(.,"MIIDuDCCAqCgAwIBAgIJAPdqJ9JQKN6vMA0GCSqGSIb3DQEBBQUAMEYxDzANBgNVBAMT")]'
+
   Scenario: A user can request the EngineBlock SP public certificate
     When I go to Engineblock URL "/authentication/sp/certificate"
     Then the response should contain '-----BEGIN CERTIFICATE-----'

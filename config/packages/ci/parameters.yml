@@ -1,0 +1,8 @@
+parameters:
+    encryption_keys:
+        default:
+            publicFile: /config/engine/engineblock.crt
+            privateFile: /config/engine/engineblock.pem
+        rollover:
+            publicFile: '%kernel.project_dir%/src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/keys/rolled-over.crt'
+            privateFile: '%kernel.project_dir%/src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/keys/rolled-over.key'
