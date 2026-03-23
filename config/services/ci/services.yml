@@ -124,6 +124,16 @@ services:
     OpenConext\EngineBlockBundle\Configuration\ErrorFeedbackConfiguration:
         arguments:
             - "@engineblock.functional_testing.mock.translator"
+    OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration:
+        public: false
+        arguments:
+            - '@engineblock.functional_testing.mock.translator'
+            - '%email_request_access_address%'
+            - '%view_default_header%'
+            - '%hostname%'
+            - '%view_default_logo%'
+            - '%view_default_logo_width%'
+            - '%view_default_logo_height%'
     OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory:
         arguments:
             - '@engineblock.compat.metadata.definitions'
