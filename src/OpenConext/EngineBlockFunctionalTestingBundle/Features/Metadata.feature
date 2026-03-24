@@ -38,6 +38,26 @@ Feature:
       # Verify the used signing key is EB key
       And the response should match xpath '//ds:Signature//ds:X509Certificate[starts-with(.,"MIIDuDCCAqCgAwIBAgIJAPdqJ9JQKN6vMA0GCSqGSIb3DQEBBQUAMEYxDzANBgNVBAMT")]'
 
+  Scenario: The IdP metadata organization fields are translated per locale without unresolved placeholders
+    Given I have configured the following translations:
+      | Key                    | Value                  |
+      | suite_name             | OpenConext-EN          |
+      | openconext_support_url | https://openconext.org |
+    And I have configured the following translations for locale "nl":
+      | Key                    | Value                     |
+      | suite_name             | OpenConext-NL             |
+      | openconext_support_url | https://openconext.org/nl |
+    When I go to Engineblock URL "/authentication/idp/metadata"
+    Then the response should match xpath '//md:OrganizationName[@xml:lang="en" and text()="OpenConext-EN"]'
+      And the response should match xpath '//md:OrganizationName[@xml:lang="nl" and text()="OpenConext-NL"]'
+      And the response should not match xpath '//md:OrganizationName[contains(text(), "%suiteName%")]'
+      And the response should match xpath '//md:OrganizationDisplayName[@xml:lang="en" and text()="OpenConext-EN"]'
+      And the response should match xpath '//md:OrganizationDisplayName[@xml:lang="nl" and text()="OpenConext-NL"]'
+      And the response should not match xpath '//md:OrganizationDisplayName[contains(text(), "%suiteName%")]'
+      And the response should match xpath '//md:OrganizationURL[@xml:lang="en" and text()="https://openconext.org"]'
+      And the response should match xpath '//md:OrganizationURL[@xml:lang="nl" and text()="https://openconext.org/nl"]'
+      And the response should not match xpath '//md:OrganizationURL[contains(text(), "%supportUrl%")]'
+
   Scenario: A user can request the EngineBlock stepup metadata
     When I go to Engineblock URL "/authentication/stepup/metadata"
     # Verify the entity id is correctly set in the metadata

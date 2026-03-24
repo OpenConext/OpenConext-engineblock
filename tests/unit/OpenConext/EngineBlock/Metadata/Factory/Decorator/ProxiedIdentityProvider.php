@@ -101,26 +101,16 @@ class ProxiedIdentityProvider extends AbstractEntity
     private function createConfiguration(): EngineBlockConfiguration
     {
         $translator = $this->createMock(TranslatorInterface::class);
-        $matcher = $this->exactly(4);
-        $translator->expects($matcher)
-            ->method('trans')->willReturnCallback(function (...$parameters) use ($matcher) {
-                if ($matcher->numberOfInvocations() === 1) {
-                    $this->assertSame('suite_name', $parameters[0]);
-                    return 'test-suite';
-                }
-                if ($matcher->numberOfInvocations() === 2) {
-                    $this->assertSame('metadata_organization_name', $parameters[0]);
-                    return 'configuredOrganizationName';
-                }
-                if ($matcher->numberOfInvocations() === 3) {
-                    $this->assertSame('metadata_organization_displayname', $parameters[0]);
-                    return 'configuredOrganizationDisplayName';
-                }
-                if ($matcher->numberOfInvocations() === 4) {
-                    $this->assertSame('metadata_organization_url', $parameters[0]);
-                    return 'configuredOrganizationUrl';
-                }
-            });
+        $translator->method('trans')->willReturnCallback(function (...$parameters) {
+            return match ($parameters[0]) {
+                'suite_name'                        => 'test-suite',
+                'openconext_support_url'            => 'https://example.org',
+                'metadata_organization_name'        => 'configuredOrganizationName',
+                'metadata_organization_displayname' => 'configuredOrganizationDisplayName',
+                'metadata_organization_url'         => 'configuredOrganizationUrl',
+                default => '',
+            };
+        });
 
         $configuration = new EngineBlockConfiguration(
             $translator,

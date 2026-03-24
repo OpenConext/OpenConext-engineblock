@@ -40,20 +40,13 @@ class EngineBlockConfiguration
      */
     private $engineHostName;
 
-    /**
-     * @var string
-     */
-    private $organizationName;
+    private string $organizationNameKey;
 
-    /**
-     * @var string
-     */
-    private $organizationDisplayName;
+    private string $organizationDisplayNameKey;
 
-    /**
-     * @var string
-     */
-    private $organizationUrl;
+    private string $organizationUrlKey;
+
+    private TranslatorInterface $translator;
 
     /**
      * @var Logo
@@ -84,11 +77,12 @@ class EngineBlockConfiguration
         int $logoWidth,
         int $logoHeight
     ) {
+        $this->translator = $translator;
         $this->suiteName = $translator->trans('suite_name');
         $this->engineHostName = $engineHostName;
-        $this->organizationName = $translator->trans('metadata_organization_name');
-        $this->organizationDisplayName = $translator->trans('metadata_organization_displayname');
-        $this->organizationUrl = $translator->trans('metadata_organization_url');
+        $this->organizationNameKey = 'metadata_organization_name';
+        $this->organizationDisplayNameKey = 'metadata_organization_displayname';
+        $this->organizationUrlKey = 'metadata_organization_url';
         $this->supportMail = $supportMail;
         $this->description = $description;
 
@@ -101,9 +95,12 @@ class EngineBlockConfiguration
         $this->logo->height = $logoHeight;
 
         // Create the contact person data for the EB SP entity
-        $support = ContactPerson::from('support', $this->organizationName, 'Support', $this->supportMail);
-        $technical = ContactPerson::from('technical', $this->organizationName, 'Support', $this->supportMail);
-        $administrative = ContactPerson::from('administrative', $this->organizationName, 'Support', $this->supportMail);
+        // ContactPerson elements have no locale support,
+        // so resolve the translation once at construction time using the default locale.
+        $organizationName = $translator->trans($this->organizationNameKey, ['%suiteName%' => $this->suiteName]);
+        $support = ContactPerson::from('support', $organizationName, 'Support', $this->supportMail);
+        $technical = ContactPerson::from('technical', $organizationName, 'Support', $this->supportMail);
+        $administrative = ContactPerson::from('administrative', $organizationName, 'Support', $this->supportMail);
 
         $this->contactPersons = [$support, $technical, $administrative];
     }
@@ -118,9 +115,16 @@ class EngineBlockConfiguration
         return $this->engineHostName;
     }
 
-    public function getOrganization() : Organization
+    public function getOrganization(?string $locale = null) : Organization
     {
-        return new Organization($this->organizationName, $this->organizationDisplayName, $this->organizationUrl);
+        $parameters = [
+            '%suiteName%'  => $this->translator->trans('suite_name', [], null, $locale),
+            '%supportUrl%' => $this->translator->trans('openconext_support_url', [], null, $locale),
+        ];
+        $organizationName        = $this->translator->trans($this->organizationNameKey, $parameters, null, $locale);
+        $organizationDisplayName = $this->translator->trans($this->organizationDisplayNameKey, $parameters, null, $locale);
+        $organizationUrl         = $this->translator->trans($this->organizationUrlKey, $parameters, null, $locale);
+        return new Organization($organizationName, $organizationDisplayName, $organizationUrl);
     }
 
     public function getLogo(): Logo

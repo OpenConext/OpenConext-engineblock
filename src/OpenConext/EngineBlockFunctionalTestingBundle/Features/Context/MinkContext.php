@@ -66,6 +66,7 @@ class MinkContext extends BaseMinkContext
 
         $xpathObj = new DOMXPath($document);
         $xpathObj->registerNamespace('ds', XMLSecurityDSig::XMLDSIGNS);
+        $xpathObj->registerNamespace('md', 'urn:oasis:names:tc:SAML:2.0:metadata');
         $xpathObj->registerNamespace('mdui', Common::NS);
         $xpathObj->registerNamespace('shibmd', Scope::NS);
         $nodeList = $xpathObj->query($xpath);
@@ -201,6 +202,7 @@ class MinkContext extends BaseMinkContext
 
         $xpathObj = new DOMXPath($document);
         $xpathObj->registerNamespace('ds', XMLSecurityDSig::XMLDSIGNS);
+        $xpathObj->registerNamespace('md', 'urn:oasis:names:tc:SAML:2.0:metadata');
         $xpathObj->registerNamespace('mdui', Common::NS);
         $nodeList = $xpathObj->query($xpath);
 
