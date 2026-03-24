@@ -40,6 +40,17 @@ class EngineBlock_X509_PrivateKey
         return $this->_filePath;
     }
 
+    /**
+     * Returns an XMLSecurityKey loaded with this private key.
+     *
+     * This is the designated bridge in legacy code between our key representation
+     * and the XMLSecurityKey type required by the SAML2 library (setSignatureKey).
+     * SAML2 v4 has no public factory API for signing keys, so direct instantiation
+     * here is intentional and necessary. Part of #1939.
+     *
+     * @param string $signatureMethod XMLSecurityKey algorithm constant (e.g. XMLSecurityKey::RSA_SHA256)
+     * @return \RobRichards\XMLSecLibs\XMLSecurityKey
+     */
     public function toXmlSecurityKey($signatureMethod)
     {
         $privateKeyObj = new XMLSecurityKey($signatureMethod, array('type' => 'private'));
