@@ -30,7 +30,9 @@ class DocumentSigner
     {
         // Load the XML to be signed
         $doc = new DOMDocument();
-        $doc->loadXML($source);
+        if ($doc->loadXML($source) === false) {
+            throw new RuntimeException('Could not parse XML source');
+        }
 
         // Find root element to sign. The firstChild is the TOS comment,
         // so need to skip over that.
