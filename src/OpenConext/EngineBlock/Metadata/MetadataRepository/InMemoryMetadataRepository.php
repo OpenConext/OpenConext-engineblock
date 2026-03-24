@@ -184,24 +184,6 @@ class InMemoryMetadataRepository extends AbstractMetadataRepository
     }
 
     /**
-     * @return string[]
-     */
-    public function findReservedSchacHomeOrganizations()
-    {
-        $schacHomeOrganizations = array();
-
-        $identityProviders = $this->findIdentityProviders();
-        foreach ($identityProviders as $identityProvider) {
-            if (!$identityProvider->getCoins()->schacHomeOrganization()) {
-                continue;
-            }
-
-            $schacHomeOrganizations[] = $identityProvider->getCoins()->schacHomeOrganization();
-        }
-        return $schacHomeOrganizations;
-    }
-
-    /**
      * @param array $identityProviderEntityIds
      * @return array|IdentityProvider[]
      * @throws EntityNotFoundException

@@ -40,7 +40,6 @@ class CachedDoctrineMetadataRepositoryTest extends TestCase
         $doctrineRepository->shouldReceive('findIdentityProviders');
         $doctrineRepository->shouldReceive('findIdentityProvidersByEntityId');
         $doctrineRepository->shouldReceive('findAllIdentityProviderEntityIds');
-        $doctrineRepository->shouldReceive('findReservedSchacHomeOrganizations');
 
         $repository = new CachedDoctrineMetadataRepository($doctrineRepository);
         $repository->findIdentityProviderByEntityId('test');
@@ -49,7 +48,6 @@ class CachedDoctrineMetadataRepositoryTest extends TestCase
         $repository->findIdentityProviders();
         $repository->findIdentityProvidersByEntityId(['test']);
         $repository->findAllIdentityProviderEntityIds();
-        $repository->findReservedSchacHomeOrganizations();
     }
 
     public function testFetchIdentityProviderThrowExceptions()

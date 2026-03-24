@@ -84,13 +84,6 @@ class InMemoryMetadataRepositoryTest extends TestCase
         $this->assertEquals($idp, $idps[$idp->entityId]);
     }
 
-    public function testFindReservedSchacHomeOrganizations()
-    {
-        $repository = $this->getFilledRepository();
-
-        $this->assertEquals(array('idp1.example.edu'), $repository->findReservedSchacHomeOrganizations());
-    }
-
     public function testRegisterEntities()
     {
         $repository = new InMemoryMetadataRepository(array(), array());
@@ -120,8 +113,6 @@ class InMemoryMetadataRepositoryTest extends TestCase
 
         $this->assertNull($repository->findIdentityProviderByEntityId('https://idp1.example.edu'));
         $this->assertNull($repository->findServiceProviderByEntityId('https://sp1.example.edu'));
-
-        $this->assertEmpty($repository->findReservedSchacHomeOrganizations());
 
         // Make sure the filter is also applied to entity roles added after the filter has been registered.
         $repository->registerIdentityProvider(new IdentityProvider('https://idp4.example.edu'));
