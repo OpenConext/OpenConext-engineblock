@@ -57,6 +57,13 @@ class X509PrivateKey
     }
 
     /**
+     * Returns an XMLSecurityKey loaded with this private key.
+     *
+     * This is the designated bridge between our X509PrivateKey representation and
+     * the XMLSecurityKey type required by the SAML2 library (e.g. Utils::insertSignature,
+     * setSignatureKey). This method is intentionally the single place in modern code
+     * that directly instantiates XMLSecurityKey.
+     *
      * @return XMLSecurityKey
      */
     public function toXmlSecurityKey()
