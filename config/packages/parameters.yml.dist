@@ -205,7 +205,7 @@ parameters:
         subject: 'IdP debug info from %%1$s'
 
     ## Symfony Mailer configuration
-    mailer_dsn: 'smtp://user:password@localhost:25'
+    mailer_dsn: 'smtp://mailcatcher:25'
 
     ##########################################################################################
     ## FEATURE SETTINGS
