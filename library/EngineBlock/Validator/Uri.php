@@ -21,14 +21,9 @@ use SimpleSAML\Assert\AssertionFailedException;
 
 /**
  * Validate URIs using simplesamlphp/assert.
- *
- * The legacy regex is kept for the unused parse() helper so existing debug
- * output shape remains available if it is ever reintroduced.
  */
 class EngineBlock_Validator_Uri
 {
-    const REGEX = '/^(([^:\/?#]+):)?(\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?/';
-
     /**
      * @param string $string
      * @return bool
@@ -42,30 +37,5 @@ class EngineBlock_Validator_Uri
         }
 
         return true;
-    }
-
-    /**
-     * Parses the given uri with the regex, this is useful for debugging
-     *
-     * @param string $uri
-     * @return array
-     */
-    public static function parse($uri)
-    {
-        preg_match(self::REGEX, $uri, $matches);
-
-        $keys = ['match'];
-        $keys[] = 'scheme+separator';
-        $keys[] = 'scheme';
-        $keys[] = 'host+separator';
-        $keys[] = 'host';
-        $keys[] = 'path';
-        $keys[] = 'query+separator';
-        $keys[] = 'query';
-        $keys[] = 'anchor+separator';
-        $keys[] = 'anchor';
-
-        $keysMatched = array_slice($keys, 0, count($matches));
-        return array_combine($keysMatched, $matches);
     }
 }
