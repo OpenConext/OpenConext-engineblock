@@ -42,8 +42,6 @@ class DocumentSigner
         /** @var DOMElement $rootNode */
         $rootNode = $doc->childNodes[1];
 
-        // Sign via SAML2\Utils which wraps xmlseclibs with wrapping-attack protection.
-        // Key type (RSA_SHA256) implicitly selects SHA-256 digest inside Utils::insertSignature.
         Utils::insertSignature(
             $signingKeyPair->getPrivateKey()->toXmlSecurityKey(),
             [$signingKeyPair->getCertificate()->toPem()],
