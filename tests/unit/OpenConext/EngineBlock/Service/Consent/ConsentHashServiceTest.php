@@ -638,4 +638,25 @@ class ConsentHashServiceTest extends TestCase
             'Stable hash must be case-insensitive for multi-byte characters'
         );
     }
+
+    public function test_stable_attribute_hash_does_not_mutate_input(): void
+    {
+        $attributes = [
+            'urn:mace:dir:attribute-def:DisplayName' => ['John Doe'],
+            'urn:mace:dir:attribute-def:UID'         => ['joe-f12'],
+            'urn:mace:dir:attribute-def:isMemberOf'  => [
+                2 => 'urn:collab:org:vm.openconext.ORG',
+                0 => 'urn:collab:org:vm.openconext.org',
+            ],
+            'urn:mace:dir:attribute-def:empty'       => [],
+        ];
+
+        $snapshot = $attributes;
+
+        $this->chs->getStableAttributesHash($attributes, true);
+        $this->assertSame($snapshot, $attributes, 'getStableAttributesHash(mustStoreValues=true) must not mutate the input array');
+
+        $this->chs->getStableAttributesHash($attributes, false);
+        $this->assertSame($snapshot, $attributes, 'getStableAttributesHash(mustStoreValues=false) must not mutate the input array');
+    }
 }

@@ -37,7 +37,6 @@ use function mb_strtolower;
 use function serialize;
 use function sha1;
 use function sort;
-use function unserialize;
 
 final class ConsentHashService implements ConsentHashServiceInterface
 {
@@ -135,13 +134,13 @@ final class ConsentHashService implements ConsentHashServiceInterface
 
     private function createHashBaseWithValues(array $lowerCasedAttributes): string
     {
-        return serialize($this->sortArray($lowerCasedAttributes));
+        return serialize($this->sortArrayRecursive($lowerCasedAttributes));
     }
 
     private function createHashBaseWithoutValues(array $lowerCasedAttributes): string
     {
         $noEmptyAttributes = $this->removeEmptyAttributes($lowerCasedAttributes);
-        $sortedAttributes = $this->sortArray(array_keys($noEmptyAttributes));
+        $sortedAttributes = $this->sortArrayRecursive(array_keys($noEmptyAttributes));
         return implode('|', $sortedAttributes);
     }
 
@@ -169,12 +168,9 @@ final class ConsentHashService implements ConsentHashServiceInterface
         return $result;
     }
 
-    /**
-     * Recursively sorts an array via the ksort function.  Performs the sort on a copy to avoid side-effects.
-     */
-    private function sortArray(array $sortMe): array
+    private function sortArrayRecursive(array $sortMe): array
     {
-        $copy = unserialize(serialize($sortMe));
+        $copy = $sortMe;
         $sortFunction = 'ksort';
         $copy = $this->removeEmptyAttributes($copy);
 
@@ -186,7 +182,7 @@ final class ConsentHashService implements ConsentHashServiceInterface
         $sortFunction($copy);
         foreach ($copy as $key => $value) {
             if (is_array($value)) {
-                $copy[$key] = $this->sortArray($value);
+                $copy[$key] = $this->sortArrayRecursive($value);
             }
         }
 
@@ -214,15 +210,13 @@ final class ConsentHashService implements ConsentHashServiceInterface
      */
     private function removeEmptyAttributes(array $array): array
     {
-        $copy = unserialize(serialize($array));
-
-        foreach ($copy as $key => $value) {
+        foreach ($array as $key => $value) {
             if ($this->isBlank($value)) {
-                unset($copy[$key]);
+                unset($array[$key]);
             }
         }
 
-        return $copy;
+        return $array;
     }
 
     /**
