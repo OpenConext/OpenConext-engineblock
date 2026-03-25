@@ -95,10 +95,10 @@ class ConsentIntegrationTest extends TestCase
             ->once()
             ->andReturn(ConsentVersion::notGiven());
         switch ($consentType) {
-            case ConsentType::TYPE_EXPLICIT:
+            case ConsentType::Explicit:
                 $this->assertFalse($this->consent->explicitConsentWasGivenFor($serviceProvider)->given());
                 break;
-            case ConsentType::TYPE_IMPLICIT:
+            case ConsentType::Implicit:
                 $this->assertFalse($this->consent->implicitConsentWasGivenFor($serviceProvider)->given());
                 break;
         }
@@ -119,16 +119,16 @@ class ConsentIntegrationTest extends TestCase
                 serviceId: 'service-provider-entity-id',
                 attributeHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
                 attributeStableHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
-                consentType: $consentType,
+                consentType: $consentType->value,
             ))
             ->once()
             ->andReturn(ConsentVersion::unstable());
 
         switch ($consentType) {
-            case ConsentType::TYPE_EXPLICIT:
+            case ConsentType::Explicit:
                 $this->assertTrue($this->consent->explicitConsentWasGivenFor($serviceProvider)->given());
                 break;
-            case ConsentType::TYPE_IMPLICIT:
+            case ConsentType::Implicit:
                 $this->assertTrue($this->consent->implicitConsentWasGivenFor($serviceProvider)->given());
                 break;
         }
@@ -149,16 +149,16 @@ class ConsentIntegrationTest extends TestCase
                 serviceId: 'service-provider-entity-id',
                 attributeHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
                 attributeStableHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
-                consentType: $consentType,
+                consentType: $consentType->value,
             ))
             ->once()
             ->andReturn(ConsentVersion::stable());
 
         switch ($consentType) {
-            case ConsentType::TYPE_EXPLICIT:
+            case ConsentType::Explicit:
                 $this->assertTrue($this->consent->explicitConsentWasGivenFor($serviceProvider)->given());
                 break;
-            case ConsentType::TYPE_IMPLICIT:
+            case ConsentType::Implicit:
                 $this->assertTrue($this->consent->implicitConsentWasGivenFor($serviceProvider)->given());
                 break;
         }
@@ -184,16 +184,16 @@ class ConsentIntegrationTest extends TestCase
                 hashedUserId: '0e54805079c56c2b1c1197a760af86ac337b7bac',
                 serviceId: 'service-provider-entity-id',
                 attributeStableHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
-                consentType: $consentType,
+                consentType: $consentType->value,
                 attributeHash: null,
             ))
             ->andReturn(true);
 
         switch ($consentType) {
-            case ConsentType::TYPE_EXPLICIT:
+            case ConsentType::Explicit:
                 $this->assertTrue($this->consent->giveExplicitConsentFor($serviceProvider));
                 break;
-            case ConsentType::TYPE_IMPLICIT:
+            case ConsentType::Implicit:
                 $this->assertTrue($this->consent->giveImplicitConsentFor($serviceProvider));
                 break;
         }
@@ -219,16 +219,16 @@ class ConsentIntegrationTest extends TestCase
                 hashedUserId: '0e54805079c56c2b1c1197a760af86ac337b7bac',
                 serviceId: 'service-provider-entity-id',
                 attributeStableHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
-                consentType: $consentType,
+                consentType: $consentType->value,
                 attributeHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
             ))
             ->andReturn(true);
 
         switch ($consentType) {
-            case ConsentType::TYPE_EXPLICIT:
+            case ConsentType::Explicit:
                 $this->assertTrue($this->consent->giveExplicitConsentFor($serviceProvider));
                 break;
-            case ConsentType::TYPE_IMPLICIT:
+            case ConsentType::Implicit:
                 $this->assertTrue($this->consent->giveImplicitConsentFor($serviceProvider));
                 break;
         }
@@ -254,7 +254,7 @@ class ConsentIntegrationTest extends TestCase
                 attributeHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
                 hashedUserId: '0e54805079c56c2b1c1197a760af86ac337b7bac',
                 serviceId: 'service-provider-entity-id',
-                consentType: $consentType,
+                consentType: $consentType->value,
                 clearLegacyHash: false,
             ))
             ->andReturn(true);
@@ -282,7 +282,7 @@ class ConsentIntegrationTest extends TestCase
                 attributeHash: '8739602554c7f3241958e3cc9b57fdecb474d508',
                 hashedUserId: '0e54805079c56c2b1c1197a760af86ac337b7bac',
                 serviceId: 'service-provider-entity-id',
-                consentType: $consentType,
+                consentType: $consentType->value,
                 clearLegacyHash: true,
             ))
             ->andReturn(true);
@@ -354,7 +354,7 @@ class ConsentIntegrationTest extends TestCase
 
     public static function consentTypeProvider(): iterable
     {
-        yield [ConsentType::TYPE_IMPLICIT];
-        yield [ConsentType::TYPE_EXPLICIT];
+        yield [ConsentType::Implicit];
+        yield [ConsentType::Explicit];
     }
 }
