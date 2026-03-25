@@ -80,8 +80,8 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         $this->consentService->shouldNotReceive('retrieveConsentHash');
         $this->consentService->shouldNotReceive('updateConsentHash');
 
-        $this->consentDisabled->upgradeAttributeHashFor($serviceProvider, ConsentType::TYPE_EXPLICIT, ConsentVersion::stable());
-        $this->consentDisabled->upgradeAttributeHashFor($serviceProvider, ConsentType::TYPE_IMPLICIT, ConsentVersion::stable());
+        $this->consentDisabled->upgradeAttributeHashFor($serviceProvider, ConsentType::Explicit, ConsentVersion::stable());
+        $this->consentDisabled->upgradeAttributeHashFor($serviceProvider, ConsentType::Implicit, ConsentVersion::stable());
     }
 
     public function testConsentWriteToDatabase()
@@ -175,6 +175,6 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         $this->assertFalse($consentWithNullUid->giveExplicitConsentFor($serviceProvider));
         $this->assertFalse($consentWithNullUid->giveImplicitConsentFor($serviceProvider));
         // upgradeAttributeHashFor should not throw when UID is null
-        $consentWithNullUid->upgradeAttributeHashFor($serviceProvider, ConsentType::TYPE_EXPLICIT, ConsentVersion::notGiven());
+        $consentWithNullUid->upgradeAttributeHashFor($serviceProvider, ConsentType::Explicit, ConsentVersion::notGiven());
     }
 }
