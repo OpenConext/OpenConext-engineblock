@@ -26,16 +26,12 @@ use RuntimeException;
  */
 class X509PrivateKey
 {
-    /**
-     * @var string
-     */
-    private $filePath;
+    private string $filePath;
 
     /**
-     * @param $filePath
      * @throws RuntimeException
      */
-    public function __construct($filePath)
+    public function __construct(string $filePath)
     {
         if (!file_exists($filePath)) {
             throw new RuntimeException(sprintf('Private key file "%s" does not exist.', $filePath));
@@ -48,27 +44,17 @@ class X509PrivateKey
         $this->filePath = $filePath;
     }
 
-    /**
-     * @return string
-     */
-    public function getFilePath()
+    public function getFilePath(): string
     {
         return $this->filePath;
     }
 
     /**
-     * Returns an XMLSecurityKey loaded with this private key.
-     *
-     * This is the designated bridge between our X509PrivateKey representation and
-     * the XMLSecurityKey type required by the SAML2 library (e.g. Utils::insertSignature,
-     * setSignatureKey). This method is intentionally the single place in modern code
-     * that directly instantiates XMLSecurityKey.
-     *
      * @return XMLSecurityKey
      */
-    public function toXmlSecurityKey()
+    public function toXmlSecurityKey(): XMLSecurityKey
     {
-        $privateKeyObj = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, array('type' => 'private'));
+        $privateKeyObj = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
         $privateKeyObj->loadKey($this->filePath, true);
         return $privateKeyObj;
     }
@@ -76,13 +62,10 @@ class X509PrivateKey
     /**
      * Sign some data with this private key.
      *
-     * Note how we never actually load the private key into memory, we let OpenSSL do this and afterwards immediately
-     * tell OpenSSL to forget the key to reduce chances of leakage.
-     *
      * @param string $data
      * @return string
      */
-    public function sign($data)
+    public function sign(string $data): string
     {
         $privateKeyResource = openssl_pkey_get_private('file://' . $this->filePath);
 
