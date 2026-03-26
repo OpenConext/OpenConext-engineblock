@@ -38,5 +38,5 @@ interface ConsentHashServiceInterface
 
     public function getUnstableAttributesHash(array $attributes, bool $mustStoreValues): string;
 
-    public function getStableAttributesHash(array $attributes, bool $mustStoreValues) : string;
+    public function getStableConsentHash(ConsentAttributes $attributes): string;
 }

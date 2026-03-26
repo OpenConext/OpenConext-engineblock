@@ -22,6 +22,7 @@ use OpenConext\EngineBlock\Authentication\Value\ConsentUpdateParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
+use OpenConext\EngineBlock\Service\Consent\ConsentAttributes;
 use OpenConext\EngineBlock\Service\Consent\ConsentHashServiceInterface;
 
 class EngineBlock_Corto_Model_Consent
@@ -147,7 +148,11 @@ class EngineBlock_Corto_Model_Consent
 
     protected function _getStableAttributesHash($attributes): string
     {
-        return $this->_hashService->getStableAttributesHash($attributes, $this->_mustStoreValues);
+        $consentAttributes = $this->_mustStoreValues
+            ? ConsentAttributes::withValues($attributes)
+            : ConsentAttributes::namesOnly($attributes);
+
+        return $this->_hashService->getStableConsentHash($consentAttributes);
     }
 
     private function _storeConsent(ServiceProvider $serviceProvider, ConsentType $consentType): bool

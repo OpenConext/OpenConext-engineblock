@@ -24,17 +24,9 @@ use OpenConext\EngineBlock\Authentication\Value\ConsentStoreParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentUpdateParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
-use SAML2\XML\saml\NameID;
-use function array_filter;
 use function array_keys;
-use function array_values;
-use function count;
 use function implode;
-use function is_array;
-use function is_numeric;
 use function ksort;
-use function mb_strtolower;
-use function serialize;
 use function sha1;
 use function sort;
 
@@ -103,6 +95,11 @@ final class ConsentHashService implements ConsentHashServiceInterface
         return $this->consentRepository->countTotalConsent($consentUid);
     }
 
+    public function getStableConsentHash(ConsentAttributes $attributes): string
+    {
+        return sha1($attributes->getCompareValue());
+    }
+
     /**
      * The old way of calculating the attribute hash, this is not stable as a change of the attribute order,
      * change of case, stray/empty attributes, and renumbered indexes can cause the hash to change. Leaving the
@@ -119,118 +116,5 @@ final class ConsentHashService implements ConsentHashServiceInterface
             $hashBase = implode('|', $names);
         }
         return sha1($hashBase);
-    }
-
-    public function getStableAttributesHash(array $attributes, bool $mustStoreValues) : string
-    {
-        $nameIdNormalizedAttributes = $this->nameIdNormalize($attributes);
-        $lowerCasedAttributes = $this->caseNormalizeStringArray($nameIdNormalizedAttributes);
-        $hashBase = $mustStoreValues
-            ? $this->createHashBaseWithValues($lowerCasedAttributes)
-            : $this->createHashBaseWithoutValues($lowerCasedAttributes);
-
-        return sha1($hashBase);
-    }
-
-    private function createHashBaseWithValues(array $lowerCasedAttributes): string
-    {
-        return serialize($this->sortRecursive($this->removeEmptyAttributes($lowerCasedAttributes)));
-    }
-
-    private function createHashBaseWithoutValues(array $lowerCasedAttributes): string
-    {
-        $sortedKeys = $this->sortRecursive(array_keys($this->removeEmptyAttributes($lowerCasedAttributes)));
-        return implode('|', $sortedKeys);
-    }
-
-    /**
-     * Lowercases all array keys and string values recursively using mb_strtolower
-     * to handle multi-byte UTF-8 characters (e.g. Ü→ü, Arabic, Chinese — common in SAML).
-     *
-     * The previous implementation used serialize/strtolower/unserialize which corrupted
-     * PHP's s:N: byte-length markers for multi-byte values, causing unserialize() to silently
-     * return false and producing wrong hashes for any user with a non-ASCII attribute value.
-     */
-    private function caseNormalizeStringArray(array $original): array
-    {
-        $result = [];
-        foreach ($original as $key => $value) {
-            $normalizedKey = is_string($key) ? mb_strtolower($key) : $key;
-            if (is_array($value)) {
-                $result[$normalizedKey] = $this->caseNormalizeStringArray($value);
-            } elseif (is_string($value)) {
-                $result[$normalizedKey] = mb_strtolower($value);
-            } else {
-                $result[$normalizedKey] = $value;
-            }
-        }
-        return $result;
-    }
-
-    private function sortRecursive(array $sortMe): array
-    {
-        $copy = $sortMe;
-        $sortFunction = 'ksort';
-
-        if ($this->isSequentialArray($copy)) {
-            $sortFunction = 'sort';
-            $copy = $this->renumberIndices($copy);
-        }
-
-        $sortFunction($copy);
-        foreach ($copy as $key => $value) {
-            if (is_array($value)) {
-                $copy[$key] = $this->sortRecursive($value);
-            }
-        }
-
-        return $copy;
-    }
-
-    /**
-     * Determines whether an array is sequential, by checking to see if there's at no string keys in it.
-     */
-    private function isSequentialArray(array $array): bool
-    {
-        return count(array_filter(array_keys($array), 'is_string')) === 0;
-    }
-
-    /**
-     * Reindexes the values of the array so that any skipped numeric indexes are removed.
-     */
-    private function renumberIndices(array $array): array
-    {
-        return array_values($array);
-    }
-
-    /**
-     * Iterate over an array and unset any empty values.
-     */
-    private function removeEmptyAttributes(array $array): array
-    {
-        foreach ($array as $key => $value) {
-            if ($value === null || $value === '' || $value === []) {
-                unset($array[$key]);
-            } elseif (is_array($value)) {
-                $array[$key] = $this->removeEmptyAttributes($value);
-            }
-        }
-
-        return $array;
-    }
-
-    /**
-     * NameId objects can not be serialized/unserialized after being lower cased
-     * Thats why the object is converted to a simple array representation where only the
-     * relevant NameID aspects are stored.
-     */
-    private function nameIdNormalize(array $attributes): array
-    {
-        array_walk_recursive($attributes, function (&$value) {
-            if ($value instanceof NameID) {
-                $value = ['value' => $value->getValue(), 'Format' => $value->getFormat()];
-            }
-        });
-        return $attributes;
     }
 }
