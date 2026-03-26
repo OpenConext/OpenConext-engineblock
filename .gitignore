@@ -1,3 +1,4 @@
+.worktrees/
 config/packages/parameters.yml
 
 var/cache/*

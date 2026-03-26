@@ -22,7 +22,7 @@ class EngineBlock_X509_PrivateKey
 {
     private $_filePath;
 
-    function __construct($filePath)
+    public function __construct($filePath)
     {
         if (!file_exists($filePath)) {
             throw new EngineBlock_Exception(sprintf('Private key file "%s" does not exist.', $filePath));
@@ -40,7 +40,10 @@ class EngineBlock_X509_PrivateKey
         return $this->_filePath;
     }
 
-    public function toXmlSecurityKey($signatureMethod)
+    /**
+     * @return XMLSecurityKey
+     */
+    public function toXmlSecurityKey(string $signatureMethod): XMLSecurityKey
     {
         $privateKeyObj = new XMLSecurityKey($signatureMethod, array('type' => 'private'));
         $privateKeyObj->loadKey($this->_filePath, true);
@@ -49,9 +52,6 @@ class EngineBlock_X509_PrivateKey
 
     /**
      * Sign some data with this private key.
-     *
-     * Note how we never actually load the private key into memory, we let OpenSSL do this and afterwards immediately
-     * tell OpenSSL to forget the key to reduce chances of leakage.
      *
      * @param string $data
      * @return string
@@ -62,8 +62,6 @@ class EngineBlock_X509_PrivateKey
 
         $signature = null;
         openssl_sign($data, $signature, $privateKeyResource);
-
-        openssl_free_key($privateKeyResource);
 
         return $signature;
     }
