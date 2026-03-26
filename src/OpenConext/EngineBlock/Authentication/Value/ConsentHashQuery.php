@@ -23,6 +23,7 @@ final class ConsentHashQuery
     public function __construct(
         public readonly string $hashedUserId,
         public readonly string $serviceId,
+        /** @deprecated Remove after stable consent hash is running in production */
         public readonly string $attributeHash,
         public readonly string $attributeStableHash,
         public readonly string $consentType,

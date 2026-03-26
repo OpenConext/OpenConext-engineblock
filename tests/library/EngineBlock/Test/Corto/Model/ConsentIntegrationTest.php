@@ -72,7 +72,6 @@ class ConsentIntegrationTest extends TestCase
         ]);
         $this->consentService = new ConsentHashService($this->consentRepository, $featureConfig);
         $this->consent = new EngineBlock_Corto_Model_Consent(
-            "consent",
             true,
             $this->response,
             [],

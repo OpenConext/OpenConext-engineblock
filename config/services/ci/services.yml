@@ -66,6 +66,12 @@ services:
         arguments:
             - "@engineblock.functional_testing.data_store.sbs_client_state_mananger"
 
+    engineblock.compat.corto_model_consent_factory:
+        class: EngineBlock_Corto_Model_Consent_Factory
+        arguments:
+            - "@engineblock.service.consent.ConsentHashService"
+            - "@engineblock.functional_testing.fixture.features"
+
     #endregion Fixtures
 
     #region Data Stores

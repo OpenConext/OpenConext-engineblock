@@ -39,7 +39,6 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         $this->consentService = Mockery::mock(ConsentHashServiceInterface::class);
 
         $this->consentDisabled = new EngineBlock_Corto_Model_Consent(
-            "consent",
             true,
             $mockedResponse,
             [],
@@ -49,7 +48,6 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         );
 
         $this->consent = new EngineBlock_Corto_Model_Consent(
-            "consent",
             true,
             $mockedResponse,
             [],
@@ -89,7 +87,7 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         $serviceProvider = new ServiceProvider("service-provider-entity-id");
 
         $this->consentService->shouldReceive('getUnstableAttributesHash')->andReturn(sha1('unstable'));
-        $this->consentService->shouldReceive('getStableAttributesHash')->andReturn(sha1('stable'));
+        $this->consentService->shouldReceive('getStableConsentHash')->andReturn(sha1('stable'));
         $this->consentService->shouldReceive('retrieveConsentHash')->andReturn(ConsentVersion::stable());
         $this->consentService->shouldReceive('storeConsentHash')->andReturn(true);
 
@@ -122,7 +120,6 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         Phake::when($mockedResponse)->getOriginalResponse()->thenReturn($originalResponse);
 
         $consentWithAmPrior = new EngineBlock_Corto_Model_Consent(
-            'consent',
             true,
             $mockedResponse,
             [],
@@ -134,7 +131,7 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         $serviceProvider = new ServiceProvider('service-provider-entity-id');
 
         $this->consentService->shouldReceive('getUnstableAttributesHash')->andReturn(sha1('unstable'));
-        $this->consentService->shouldReceive('getStableAttributesHash')->andReturn(sha1('stable'));
+        $this->consentService->shouldReceive('getStableConsentHash')->andReturn(sha1('stable'));
         $this->consentService->shouldReceive('retrieveConsentHash')->andReturn(ConsentVersion::stable());
 
         // Act: trigger a code path that calls _getConsentUid()
@@ -152,7 +149,6 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         Phake::when($mockedResponse)->getNameIdValue()->thenReturn(null);
 
         $consentWithNullUid = new EngineBlock_Corto_Model_Consent(
-            "consent",
             true,
             $mockedResponse,
             [],

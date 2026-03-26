@@ -22,15 +22,11 @@ use OpenConext\EngineBlock\Authentication\Value\ConsentUpdateParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
+use OpenConext\EngineBlock\Service\Consent\ConsentAttributes;
 use OpenConext\EngineBlock\Service\Consent\ConsentHashServiceInterface;
 
 class EngineBlock_Corto_Model_Consent
 {
-    /**
-     * @var string
-     */
-    private $_tableName;
-
     /**
      * @var bool
      */
@@ -68,7 +64,6 @@ class EngineBlock_Corto_Model_Consent
      * @param bool $amPriorToConsentEnabled Is the run_all_manipulations_prior_to_consent feature enabled or not
      */
     public function __construct(
-        string $tableName,
         bool $mustStoreValues,
         EngineBlock_Saml2_ResponseAnnotationDecorator $response,
         array $responseAttributes,
@@ -76,7 +71,6 @@ class EngineBlock_Corto_Model_Consent
         bool $consentEnabled,
         ConsentHashServiceInterface $hashService
     ) {
-        $this->_tableName = $tableName;
         $this->_mustStoreValues = $mustStoreValues;
         $this->_response = $response;
         $this->_responseAttributes = $responseAttributes;
@@ -101,6 +95,8 @@ class EngineBlock_Corto_Model_Consent
      *
      * The caller must pass the ConsentVersion already retrieved by explicitConsentWasGivenFor or
      * implicitConsentWasGivenFor to avoid a second identical DB query.
+     *
+     * @deprecated Remove after stable consent hash is running in production
      */
     public function upgradeAttributeHashFor(ServiceProvider $serviceProvider, ConsentType $consentType, ConsentVersion $consentVersion): void
     {
@@ -147,6 +143,7 @@ class EngineBlock_Corto_Model_Consent
         return $this->_response->getNameIdValue();
     }
 
+    /** @deprecated Remove after stable consent hash is running in production */
     protected function _getAttributesHash($attributes): string
     {
         return $this->_hashService->getUnstableAttributesHash($attributes, $this->_mustStoreValues);
@@ -154,7 +151,11 @@ class EngineBlock_Corto_Model_Consent
 
     protected function _getStableAttributesHash($attributes): string
     {
-        return $this->_hashService->getStableAttributesHash($attributes, $this->_mustStoreValues);
+        $consentAttributes = $this->_mustStoreValues
+            ? ConsentAttributes::withValues($attributes)
+            : ConsentAttributes::namesOnly($attributes);
+
+        return $this->_hashService->getStableConsentHash($consentAttributes);
     }
 
     private function _storeConsent(ServiceProvider $serviceProvider, ConsentType $consentType): bool
@@ -175,6 +176,7 @@ class EngineBlock_Corto_Model_Consent
         return $this->_hashService->storeConsentHash($parameters);
     }
 
+    /** @deprecated Remove after stable consent hash is running in production */
     private function _updateConsent(ServiceProvider $serviceProvider, ConsentType $consentType): bool
     {
         $consentUid = $this->_getConsentUid();

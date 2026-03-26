@@ -36,7 +36,8 @@ interface ConsentHashServiceInterface
 
     public function countTotalConsent(string $consentUid): int;
 
+    /** @deprecated Remove after stable consent hash is running in production */
     public function getUnstableAttributesHash(array $attributes, bool $mustStoreValues): string;
 
-    public function getStableAttributesHash(array $attributes, bool $mustStoreValues) : string;
+    public function getStableConsentHash(ConsentAttributes $attributes): string;
 }
