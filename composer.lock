@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "19eeea20ede2f61534eaf59f084f20b4",
+    "content-hash": "f6010857a879802cd455d14a4c376463",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2739,6 +2739,65 @@
                 "source": "https://github.com/robrichards/xmlseclibs/tree/3.1.5"
             },
             "time": "2026-03-13T10:31:56+00:00"
+        },
+        {
+            "name": "simplesamlphp/assert",
+            "version": "v1.9.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/simplesamlphp/assert.git",
+                "reference": "d0e7b9c12e4f613c6f32e1242cc08838cdeb39d3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/simplesamlphp/assert/zipball/d0e7b9c12e4f613c6f32e1242cc08838cdeb39d3",
+                "reference": "d0e7b9c12e4f613c6f32e1242cc08838cdeb39d3",
+                "shasum": ""
+            },
+            "require": {
+                "ext-date": "*",
+                "ext-filter": "*",
+                "ext-pcre": "*",
+                "ext-spl": "*",
+                "guzzlehttp/psr7": "~2.8.0",
+                "php": "^8.2",
+                "webmozart/assert": "~1.12.0"
+            },
+            "require-dev": {
+                "ext-intl": "*",
+                "simplesamlphp/simplesamlphp-test-framework": "~1.10.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "v1.10.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "SimpleSAML\\Assert\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Tim van Dijen",
+                    "email": "tvdijen@gmail.com"
+                },
+                {
+                    "name": "Jaime Perez Crespo",
+                    "email": "jaimepc@gmail.com"
+                }
+            ],
+            "description": "A wrapper around webmozart/assert to make it useful beyond checking method arguments",
+            "support": {
+                "issues": "https://github.com/simplesamlphp/assert/issues",
+                "source": "https://github.com/simplesamlphp/assert/tree/v1.9.1"
+            },
+            "time": "2025-10-20T22:29:33+00:00"
         },
         {
             "name": "simplesamlphp/saml2",

@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class EngineBlock_Test_TypeTest extends TestCase
@@ -26,11 +27,20 @@ class EngineBlock_Test_TypeTest extends TestCase
      * @param $options
      * @param $attributes
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('validAttributesProvider')]
+    #[DataProvider('validAttributesProvider')]
     public function testAttributeValidates($attributeName, $options, $attributes)
     {
         $validator = new EngineBlock_Attributes_Validator_Type($attributeName, $options);
         $this->assertTrue($validator->validate($attributes));
+    }
+
+    #[DataProvider('invalidAttributesProvider')]
+    public function testAttributeValidationFails($attributeName, $options, $attributes, $expectedMessage)
+    {
+        $validator = new EngineBlock_Attributes_Validator_Type($attributeName, $options);
+
+        $this->assertFalse($validator->validate($attributes));
+        $this->assertSame([$expectedMessage, $attributeName, $options, $attributes[$attributeName][0]], $validator->getMessages()[0]);
     }
 
     public static function validAttributesProvider()
@@ -59,7 +69,8 @@ class EngineBlock_Test_TypeTest extends TestCase
                 'options' => 'URI',
                 'attributes' => array(
                     'foo' => array(
-                        '?'
+                        '?',
+                        'urn:mace:dir:entitlement:common-lib-terms',
                     )
                 )
             ),
@@ -76,6 +87,22 @@ class EngineBlock_Test_TypeTest extends TestCase
                     )
                 )
             )
+        );
+    }
+
+    public static function invalidAttributesProvider()
+    {
+        return array(
+            array(
+                'attributeName' => 'foo',
+                'options' => 'URL',
+                'attributes' => array(
+                    'foo' => array(
+                        'mailto:test@example.org',
+                    )
+                ),
+                'expectedMessage' => EngineBlock_Attributes_Validator_Type::ERROR_ATTRIBUTE_VALIDATOR_URL,
+            ),
         );
     }
 }

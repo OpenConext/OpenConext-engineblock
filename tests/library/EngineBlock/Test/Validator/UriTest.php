@@ -19,9 +19,6 @@
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @todo write test which tests failing...this validator is so permissive it is VERY hard to let it fail
- */
 class EngineBlock_Test_Validator_UriTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
@@ -46,7 +43,8 @@ class EngineBlock_Test_Validator_UriTest extends TestCase
     {
         return array(
             array('http://example.com'), // Pretty standard http url
-            array('urn:mace:dir:entitlement:common-lib-terms') // Saml entitlement
+            array('urn:mace:dir:entitlement:common-lib-terms'), // Saml entitlement
+            array('?'),
         );
     }
 }
