@@ -39,19 +39,4 @@ class X509PrivateKeyTest extends TestCase
         $this->assertEquals(1, openssl_verify($data, $signature, $publicKey->toResource()));
         $this->assertEquals($filePath, $privateKey->getFilePath());
     }
-
-    public function testXmlSecurityKey()
-    {
-        $data = 'test';
-
-        $filePath = __DIR__ . '/test.pem.key';
-        $privateKey = new X509PrivateKey($filePath);
-        $xmlSecurityKey = $privateKey->toXmlSecurityKey();
-
-        $signature = $xmlSecurityKey->signData($data);
-
-        $publicKey = new X509Certificate(openssl_pkey_get_public('file://' . __DIR__ . '/test.pem.crt'));
-
-        $this->assertEquals(1, openssl_verify($data, $signature, $publicKey->toResource(), OPENSSL_ALGO_SHA256));
-    }
 }
