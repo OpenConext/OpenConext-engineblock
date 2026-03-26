@@ -134,14 +134,13 @@ final class ConsentHashService implements ConsentHashServiceInterface
 
     private function createHashBaseWithValues(array $lowerCasedAttributes): string
     {
-        return serialize($this->sortArrayRecursive($lowerCasedAttributes));
+        return serialize($this->sortRecursive($this->removeEmptyAttributes($lowerCasedAttributes)));
     }
 
     private function createHashBaseWithoutValues(array $lowerCasedAttributes): string
     {
-        $noEmptyAttributes = $this->removeEmptyAttributes($lowerCasedAttributes);
-        $sortedAttributes = $this->sortArrayRecursive(array_keys($noEmptyAttributes));
-        return implode('|', $sortedAttributes);
+        $sortedKeys = $this->sortRecursive(array_keys($this->removeEmptyAttributes($lowerCasedAttributes)));
+        return implode('|', $sortedKeys);
     }
 
     /**
@@ -168,11 +167,10 @@ final class ConsentHashService implements ConsentHashServiceInterface
         return $result;
     }
 
-    private function sortArrayRecursive(array $sortMe): array
+    private function sortRecursive(array $sortMe): array
     {
         $copy = $sortMe;
         $sortFunction = 'ksort';
-        $copy = $this->removeEmptyAttributes($copy);
 
         if ($this->isSequentialArray($copy)) {
             $sortFunction = 'sort';
@@ -182,7 +180,7 @@ final class ConsentHashService implements ConsentHashServiceInterface
         $sortFunction($copy);
         foreach ($copy as $key => $value) {
             if (is_array($value)) {
-                $copy[$key] = $this->sortArrayRecursive($value);
+                $copy[$key] = $this->sortRecursive($value);
             }
         }
 
@@ -211,24 +209,14 @@ final class ConsentHashService implements ConsentHashServiceInterface
     private function removeEmptyAttributes(array $array): array
     {
         foreach ($array as $key => $value) {
-            if ($this->isBlank($value)) {
+            if ($value === null || $value === '' || $value === []) {
                 unset($array[$key]);
+            } elseif (is_array($value)) {
+                $array[$key] = $this->removeEmptyAttributes($value);
             }
         }
 
         return $array;
-    }
-
-    /**
-     * Checks if a value is empty, but allowing 0 as an integer, float and string.  This means the following are allowed:
-     * - 0
-     * - 0.0
-     * - "0"
-     * @param $value array|string|integer|float
-     */
-    private function isBlank($value): bool
-    {
-        return empty($value) && !is_numeric($value);
     }
 
     /**

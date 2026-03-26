@@ -601,18 +601,26 @@ class ConsentHashServiceTest extends TestCase
         );
     }
 
+    public function test_stable_attribute_hash_zero_int_not_removed_as_empty()
+    {
+        $withZeroInt = ['urn:attr:count' => 0];
+        $withoutAttr = [];
+
+        $this->assertNotEquals(
+            $this->chs->getStableAttributesHash($withZeroInt, true),
+            $this->chs->getStableAttributesHash($withoutAttr, true)
+        );
+    }
+
     public function test_stable_attribute_hash_zero_float_not_removed_as_empty()
     {
-        // 0.0 is numeric, so it must NOT be removed by removeEmptyAttributes.
-        // An attribute with value 0.0 must produce a stable, non-empty hash.
         $withZeroFloat = ['urn:attr:count' => 0.0];
+        $withoutAttr   = [];
 
-        $hash = $this->chs->getStableAttributesHash($withZeroFloat, true);
-
-        $this->assertIsString($hash);
-        $this->assertNotEmpty($hash);
-        // Must be idempotent
-        $this->assertSame($hash, $this->chs->getStableAttributesHash($withZeroFloat, true));
+        $this->assertNotEquals(
+            $this->chs->getStableAttributesHash($withZeroFloat, true),
+            $this->chs->getStableAttributesHash($withoutAttr, true)
+        );
     }
 
     public function test_stable_attribute_hash_handles_multibyte_utf8_values(): void
@@ -636,6 +644,61 @@ class ConsentHashServiceTest extends TestCase
             $this->chs->getStableAttributesHash($lower, true),
             $this->chs->getStableAttributesHash($upper, true),
             'Stable hash must be case-insensitive for multi-byte characters'
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    // Empty-attribute stripping policy
+    // -------------------------------------------------------------------------
+
+    /**
+     * When an attribute that previously had a value is now empty (e.g. ['attr' => ['value']]
+     * becomes ['attr' => []]) the SP was previously receiving data and is no longer doing so.
+     * Re-consent must be required: the two inputs must produce different hashes.
+     */
+    public function test_stable_hash_attribute_becoming_empty_does_retrigger_consent_with_values(): void
+    {
+        $withValue = ['urn:mace:dir:attribute-def:displayName' => ['John Doe']];
+        $withEmpty = ['urn:mace:dir:attribute-def:displayName' => []];
+
+        $this->assertNotEquals(
+            $this->chs->getStableAttributesHash($withValue, true),
+            $this->chs->getStableAttributesHash($withEmpty, true),
+            'An attribute losing its value must trigger re-consent when mustStoreValues=true'
+        );
+    }
+
+    /**
+     * Same scenario, mustStoreValues=false. The hash is based on attribute names only,
+     * but an empty attribute is stripped entirely (the key disappears), so the SP was
+     * previously seeing that attribute name and now is not. Re-consent is still required.
+     */
+    public function test_stable_hash_attribute_becoming_empty_does_retrigger_consent_without_values(): void
+    {
+        $withValue = ['urn:mace:dir:attribute-def:displayName' => ['John Doe']];
+        $withEmpty = ['urn:mace:dir:attribute-def:displayName' => []];
+
+        $this->assertNotEquals(
+            $this->chs->getStableAttributesHash($withValue, false),
+            $this->chs->getStableAttributesHash($withEmpty, false),
+            'An attribute losing its value must trigger re-consent when mustStoreValues=false'
+        );
+    }
+
+    /**
+     * A stray empty sub-value (e.g. ['attr' => ['value', '']]) must be stripped so that
+     * it does not differ from ['attr' => ['value']]. The SP still receives the real value,
+     * so no spurious re-consent must occur.
+     */
+    public function test_stable_hash_nested_empty_values_are_stripped_with_values(): void
+    {
+        $withStray    = ['urn:mace:dir:attribute-def:displayName' => ['John Doe', '']];
+        $withoutStray = ['urn:mace:dir:attribute-def:displayName' => ['John Doe']];
+
+        $this->assertEquals(
+            $this->chs->getStableAttributesHash($withStray, true),
+            $this->chs->getStableAttributesHash($withoutStray, true),
+            'Stray empty sub-values must be stripped; they must not cause spurious re-consent'
         );
     }
 
