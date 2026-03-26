@@ -28,7 +28,7 @@ class DocumentSignerTest extends TestCase
 {
     public function test_signs_xml_documents()
     {
-        $signer = new DocumentSigner();
+        $signer = new DocumentSigner(new Saml2Bridge());
         $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- https://support.example.org/terms-en -->
@@ -94,7 +94,7 @@ XML;
 
     public function test_element_to_sign_must_be_second_child()
     {
-        $signer = new DocumentSigner();
+        $signer = new DocumentSigner(new Saml2Bridge());
         $xml = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="EB12345" validUntil="2019-10-16T12:41:12Z" cacheDuration="PT604800S" entityID="Test Entity">

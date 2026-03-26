@@ -26,6 +26,10 @@ use SAML2\Utils;
 
 class DocumentSigner
 {
+    public function __construct(private readonly Saml2Bridge $saml2Bridge)
+    {
+    }
+
     public function sign(string $source, X509KeyPair $signingKeyPair) : string
     {
         // Load the XML to be signed
@@ -43,7 +47,7 @@ class DocumentSigner
         $rootNode = $doc->childNodes[1];
 
         Utils::insertSignature(
-            $signingKeyPair->getPrivateKey()->toXmlSecurityKey(),
+            $this->saml2Bridge->createSigningKey($signingKeyPair->getPrivateKey()),
             [$signingKeyPair->getCertificate()->toPem()],
             $rootNode,
             $rootNode->firstChild
