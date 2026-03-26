@@ -95,6 +95,8 @@ class EngineBlock_Corto_Model_Consent
      *
      * The caller must pass the ConsentVersion already retrieved by explicitConsentWasGivenFor or
      * implicitConsentWasGivenFor to avoid a second identical DB query.
+     *
+     * @deprecated Remove after stable consent hash is running in production
      */
     public function upgradeAttributeHashFor(ServiceProvider $serviceProvider, ConsentType $consentType, ConsentVersion $consentVersion): void
     {
@@ -141,6 +143,7 @@ class EngineBlock_Corto_Model_Consent
         return $this->_response->getNameIdValue();
     }
 
+    /** @deprecated Remove after stable consent hash is running in production */
     protected function _getAttributesHash($attributes): string
     {
         return $this->_hashService->getUnstableAttributesHash($attributes, $this->_mustStoreValues);
@@ -173,6 +176,7 @@ class EngineBlock_Corto_Model_Consent
         return $this->_hashService->storeConsentHash($parameters);
     }
 
+    /** @deprecated Remove after stable consent hash is running in production */
     private function _updateConsent(ServiceProvider $serviceProvider, ConsentType $consentType): bool
     {
         $consentUid = $this->_getConsentUid();

@@ -23,6 +23,7 @@ use OpenConext\EngineBlock\Assert\Assertion;
 final class ConsentVersion
 {
     const STABLE = 'stable';
+    /** @deprecated Remove after stable consent hash is running in production */
     const UNSTABLE = 'unstable';
     const NOT_GIVEN = 'not-given';
 
@@ -36,6 +37,7 @@ final class ConsentVersion
         return new self(self::STABLE);
     }
 
+    /** @deprecated Remove after stable consent hash is running in production */
     public static function unstable(): ConsentVersion
     {
         return new self(self::UNSTABLE);
@@ -70,6 +72,7 @@ final class ConsentVersion
         return $this->consentVersion;
     }
 
+    /** @deprecated Remove after stable consent hash is running in production */
     public function isUnstable(): bool
     {
         return $this->consentVersion === self::UNSTABLE;

@@ -32,6 +32,7 @@ use function sort;
 
 final class ConsentHashService implements ConsentHashServiceInterface
 {
+    /** @deprecated Remove after stable consent hash is running in production */
     private const FEATURE_MIGRATION = 'eb.stable_consent_hash_migration';
 
     /**
@@ -101,6 +102,8 @@ final class ConsentHashService implements ConsentHashServiceInterface
     }
 
     /**
+     * @deprecated Remove after stable consent hash is running in production
+     *
      * The old way of calculating the attribute hash, this is not stable as a change of the attribute order,
      * change of case, stray/empty attributes, and renumbered indexes can cause the hash to change. Leaving the
      * user to give consent once again for a service she previously gave consent for.

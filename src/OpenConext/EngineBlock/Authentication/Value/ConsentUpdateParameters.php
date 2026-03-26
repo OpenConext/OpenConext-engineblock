@@ -22,10 +22,12 @@ final class ConsentUpdateParameters
 {
     public function __construct(
         public readonly string $attributeStableHash,
+        /** @deprecated Remove after stable consent hash is running in production */
         public readonly string $attributeHash,
         public readonly string $hashedUserId,
         public readonly string $serviceId,
         public readonly string $consentType,
+        /** @deprecated Remove after stable consent hash is running in production */
         public readonly bool $clearLegacyHash = false,
     ) {
     }
