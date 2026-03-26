@@ -32,7 +32,7 @@ use function serialize;
 use function sort;
 
 /**
- * A normalised, immutable representation of the SAML attributes used to compute a stable consent hash.
+ * A normalized, immutable representation of the SAML attributes used to compute a stable consent hash.
  *
  * Use the named constructors to select the comparison strategy:
  *   - ConsentAttributes::withValues()  — hash covers attribute names AND values (consent_store_values=true)
@@ -56,8 +56,8 @@ final class ConsentAttributes
      */
     public static function withValues(array $raw): self
     {
-        $normalised = self::normalise($raw);
-        return new self(serialize(self::sortRecursive(self::removeEmptyAttributes($normalised))));
+        $normalized = self::normalize($raw);
+        return new self(serialize(self::sortRecursive(self::removeEmptyAttributes($normalized))));
     }
 
     /**
@@ -66,8 +66,8 @@ final class ConsentAttributes
      */
     public static function namesOnly(array $raw): self
     {
-        $normalised = self::normalise($raw);
-        $sortedKeys = self::sortRecursive(array_keys(self::removeEmptyAttributes($normalised)));
+        $normalized = self::normalize($raw);
+        $sortedKeys = self::sortRecursive(array_keys(self::removeEmptyAttributes($normalized)));
         return new self(implode('|', $sortedKeys));
     }
 
@@ -79,7 +79,7 @@ final class ConsentAttributes
     /**
      * Applies all normalisation steps shared by both strategies.
      */
-    private static function normalise(array $raw): array
+    private static function normalize(array $raw): array
     {
         return self::caseNormalizeStringArray(self::nameIdNormalize($raw));
     }
@@ -100,10 +100,6 @@ final class ConsentAttributes
     /**
      * Lowercases all array keys and string values recursively using mb_strtolower
      * to handle multi-byte UTF-8 characters (e.g. Ü→ü, Arabic, Chinese — common in SAML).
-     *
-     * The previous implementation used serialize/strtolower/unserialize which corrupted
-     * PHP's s:N: byte-length markers for multi-byte values, causing unserialize() to silently
-     * return false and producing wrong hashes for any user with a non-ASCII attribute value.
      */
     private static function caseNormalizeStringArray(array $original): array
     {
@@ -145,14 +141,14 @@ final class ConsentAttributes
     private static function sortRecursive(array $sortMe): array
     {
         $copy = $sortMe;
-        $sortFunction = 'ksort';
 
         if (self::isSequentialArray($copy)) {
-            $sortFunction = 'sort';
             $copy = array_values($copy);
+            sort($copy);
+        } else {
+            ksort($copy);
         }
 
-        $sortFunction($copy);
         foreach ($copy as $key => $value) {
             if (is_array($value)) {
                 $copy[$key] = self::sortRecursive($value);

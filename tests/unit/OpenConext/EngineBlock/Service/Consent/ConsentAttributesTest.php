@@ -319,4 +319,155 @@ class ConsentAttributesTest extends TestCase
             ConsentAttributes::withValues($sparse)->getCompareValue()
         );
     }
+
+    // -------------------------------------------------------------------------
+    // namesOnly — values are irrelevant
+    // -------------------------------------------------------------------------
+
+    public function test_names_only_values_are_irrelevant(): void
+    {
+        // namesOnly hashes attribute names only; different values for the same
+        // keys must produce the same compare value.
+        $original = ['urn:attr:a' => ['Alice'], 'urn:attr:b' => ['Bob']];
+        $different = ['urn:attr:a' => ['Charlie'], 'urn:attr:b' => ['Dave']];
+
+        $this->assertSame(
+            ConsentAttributes::namesOnly($original)->getCompareValue(),
+            ConsentAttributes::namesOnly($different)->getCompareValue()
+        );
+    }
+
+    public function test_names_only_value_order_is_irrelevant(): void
+    {
+        // Reordering values within an attribute must not change the namesOnly compare value.
+        $forward  = ['urn:attr:a' => ['alice', 'bob', 'charlie']];
+        $reversed = ['urn:attr:a' => ['charlie', 'bob', 'alice']];
+
+        $this->assertSame(
+            ConsentAttributes::namesOnly($forward)->getCompareValue(),
+            ConsentAttributes::namesOnly($reversed)->getCompareValue()
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    // namesOnly — empty stripping and zero values
+    // -------------------------------------------------------------------------
+
+    public function test_names_only_strips_stray_empty_sub_value(): void
+    {
+        // A stray empty string inside an attribute's values must be stripped.
+        // The attribute key survives (it still has a real value), so no re-consent.
+        $withStray    = ['urn:attr:a' => ['real-value', '']];
+        $withoutStray = ['urn:attr:a' => ['real-value']];
+
+        $this->assertSame(
+            ConsentAttributes::namesOnly($withStray)->getCompareValue(),
+            ConsentAttributes::namesOnly($withoutStray)->getCompareValue(),
+            'Stray empty sub-values must be stripped in namesOnly mode without affecting the compare value'
+        );
+    }
+
+    public function test_names_only_zero_string_keeps_the_attribute_key(): void
+    {
+        // '0' is not empty; an attribute with value '0' must keep its key and
+        // therefore produce a different compare value than an empty attribute set.
+        $withZero    = ['urn:attr:count' => '0'];
+        $withoutAttr = [];
+
+        $this->assertNotSame(
+            ConsentAttributes::namesOnly($withZero)->getCompareValue(),
+            ConsentAttributes::namesOnly($withoutAttr)->getCompareValue()
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    // Multibyte key case normalisation
+    // -------------------------------------------------------------------------
+
+    public function test_with_values_multibyte_key_case_normalised(): void
+    {
+        // mb_strtolower is applied to keys as well as values; a key that differs
+        // only in multibyte casing must produce the same compare value.
+        $lower = ['ärzte' => ['value']];
+        $upper = ['Ärzte' => ['value']];
+
+        $this->assertSame(
+            ConsentAttributes::withValues($lower)->getCompareValue(),
+            ConsentAttributes::withValues($upper)->getCompareValue(),
+            'Multibyte attribute key casing must be normalised in withValues mode'
+        );
+    }
+
+    public function test_names_only_multibyte_key_case_normalised(): void
+    {
+        $lower = ['ärzte' => ['value']];
+        $upper = ['Ärzte' => ['value']];
+
+        $this->assertSame(
+            ConsentAttributes::namesOnly($lower)->getCompareValue(),
+            ConsentAttributes::namesOnly($upper)->getCompareValue(),
+            'Multibyte attribute key casing must be normalised in namesOnly mode'
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    // NameID handling — namesOnly
+    // -------------------------------------------------------------------------
+
+    public function test_names_only_handles_nameid_objects(): void
+    {
+        // Under namesOnly the NameID object is still normalised (to avoid errors
+        // in the normalise pipeline), but only the outer attribute key is used.
+        $nameId = new NameID();
+        $nameId->setValue('83aa0a79363edcf872c966b0d6eaf3f5e26a6a77');
+        $nameId->setFormat('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent');
+
+        $attributes = [
+            'urn:mace:dir:attribute-def:uid'                 => ['joe-f12'],
+            'urn:mace:dir:attribute-def:eduPersonTargetedID' => [$nameId],
+        ];
+
+        $compareValue = ConsentAttributes::namesOnly($attributes)->getCompareValue();
+        $this->assertNotEmpty($compareValue);
+    }
+
+    // -------------------------------------------------------------------------
+    // Empty input
+    // -------------------------------------------------------------------------
+
+    public function test_with_values_empty_input_is_stable(): void
+    {
+        $first  = ConsentAttributes::withValues([])->getCompareValue();
+        $second = ConsentAttributes::withValues([])->getCompareValue();
+
+        $this->assertIsString($first);
+        $this->assertSame($first, $second, 'withValues([]) must be idempotent');
+    }
+
+    public function test_names_only_empty_input_is_stable(): void
+    {
+        $first  = ConsentAttributes::namesOnly([])->getCompareValue();
+        $second = ConsentAttributes::namesOnly([])->getCompareValue();
+
+        $this->assertIsString($first);
+        $this->assertSame($first, $second, 'namesOnly([]) must be idempotent');
+    }
+
+    // -------------------------------------------------------------------------
+    // Null attribute value stripped
+    // -------------------------------------------------------------------------
+
+    public function test_with_values_null_attribute_value_is_stripped(): void
+    {
+        // A null value is treated as absent; the attribute must be removed entirely,
+        // producing the same compare value as an empty input.
+        $withNull    = ['urn:attr:a' => null];
+        $withoutAttr = [];
+
+        $this->assertSame(
+            ConsentAttributes::withValues($withNull)->getCompareValue(),
+            ConsentAttributes::withValues($withoutAttr)->getCompareValue(),
+            'A null attribute value must be stripped, equivalent to the attribute being absent'
+        );
+    }
 }

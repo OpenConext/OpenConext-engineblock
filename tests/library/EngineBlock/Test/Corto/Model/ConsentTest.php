@@ -87,7 +87,7 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         $serviceProvider = new ServiceProvider("service-provider-entity-id");
 
         $this->consentService->shouldReceive('getUnstableAttributesHash')->andReturn(sha1('unstable'));
-        $this->consentService->shouldReceive('getStableAttributesHash')->andReturn(sha1('stable'));
+        $this->consentService->shouldReceive('getStableConsentHash')->andReturn(sha1('stable'));
         $this->consentService->shouldReceive('retrieveConsentHash')->andReturn(ConsentVersion::stable());
         $this->consentService->shouldReceive('storeConsentHash')->andReturn(true);
 
@@ -131,7 +131,7 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         $serviceProvider = new ServiceProvider('service-provider-entity-id');
 
         $this->consentService->shouldReceive('getUnstableAttributesHash')->andReturn(sha1('unstable'));
-        $this->consentService->shouldReceive('getStableAttributesHash')->andReturn(sha1('stable'));
+        $this->consentService->shouldReceive('getStableConsentHash')->andReturn(sha1('stable'));
         $this->consentService->shouldReceive('retrieveConsentHash')->andReturn(ConsentVersion::stable());
 
         // Act: trigger a code path that calls _getConsentUid()
