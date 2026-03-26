@@ -39,7 +39,6 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         $this->consentService = Mockery::mock(ConsentHashServiceInterface::class);
 
         $this->consentDisabled = new EngineBlock_Corto_Model_Consent(
-            "consent",
             true,
             $mockedResponse,
             [],
@@ -49,7 +48,6 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         );
 
         $this->consent = new EngineBlock_Corto_Model_Consent(
-            "consent",
             true,
             $mockedResponse,
             [],
@@ -122,7 +120,6 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         Phake::when($mockedResponse)->getOriginalResponse()->thenReturn($originalResponse);
 
         $consentWithAmPrior = new EngineBlock_Corto_Model_Consent(
-            'consent',
             true,
             $mockedResponse,
             [],
@@ -152,7 +149,6 @@ class EngineBlock_Corto_Model_ConsentTest extends TestCase
         Phake::when($mockedResponse)->getNameIdValue()->thenReturn(null);
 
         $consentWithNullUid = new EngineBlock_Corto_Model_Consent(
-            "consent",
             true,
             $mockedResponse,
             [],

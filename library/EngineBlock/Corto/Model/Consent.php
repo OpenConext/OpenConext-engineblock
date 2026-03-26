@@ -27,11 +27,6 @@ use OpenConext\EngineBlock\Service\Consent\ConsentHashServiceInterface;
 class EngineBlock_Corto_Model_Consent
 {
     /**
-     * @var string
-     */
-    private $_tableName;
-
-    /**
      * @var bool
      */
     private $_mustStoreValues;
@@ -68,7 +63,6 @@ class EngineBlock_Corto_Model_Consent
      * @param bool $amPriorToConsentEnabled Is the run_all_manipulations_prior_to_consent feature enabled or not
      */
     public function __construct(
-        string $tableName,
         bool $mustStoreValues,
         EngineBlock_Saml2_ResponseAnnotationDecorator $response,
         array $responseAttributes,
@@ -76,7 +70,6 @@ class EngineBlock_Corto_Model_Consent
         bool $consentEnabled,
         ConsentHashServiceInterface $hashService
     ) {
-        $this->_tableName = $tableName;
         $this->_mustStoreValues = $mustStoreValues;
         $this->_response = $response;
         $this->_responseAttributes = $responseAttributes;

@@ -49,7 +49,6 @@ services:
     engineblock.compat.corto_model_consent_factory:
         class: EngineBlock_Corto_Model_Consent_Factory
         arguments:
-            - "@engineblock.compat.corto_filter_command_factory"
             - "@engineblock.service.consent.ConsentHashService"
 
     engineblock.compat.saml2_id_generator:
