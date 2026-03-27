@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlock\Metadata\Entity\Assembler;
 
+use OpenConext\EngineBlock\Exception\InvalidDiscoveryException;
 use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
@@ -47,9 +48,13 @@ class DiscoveryAssembler
             $keywords = $this->extractLocalizedFields($discovery, 'keywords');
             $logo = $this->assembleLogo($discovery);
 
-            if (isset($names['en'])) {
-                $discoveries[] = Discovery::create($names, $keywords, $logo);
+            if (!isset($names['en'])) {
+                throw new InvalidDiscoveryException(
+                    'A discovery entry is missing a required English name (name_en). ' .
+                    'Refusing to process metadata push.'
+                );
             }
+            $discoveries[] = Discovery::create($names, $keywords, $logo);
         }
 
         return empty($discoveries) ? [] : ['discoveries' => $discoveries];
