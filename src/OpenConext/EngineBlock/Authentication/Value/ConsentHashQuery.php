@@ -18,15 +18,15 @@
 
 namespace OpenConext\EngineBlock\Authentication\Value;
 
-use JsonSerializable;
-
-enum ConsentType: string implements JsonSerializable
+final class ConsentHashQuery
 {
-    case Explicit = 'explicit';
-    case Implicit = 'implicit';
-
-    public function jsonSerialize(): string
-    {
-        return $this->value;
+    public function __construct(
+        public readonly string $hashedUserId,
+        public readonly string $serviceId,
+        /** @deprecated Remove after stable consent hash is running in production */
+        public readonly string $attributeHash,
+        public readonly string $attributeStableHash,
+        public readonly string $consentType,
+    ) {
     }
 }

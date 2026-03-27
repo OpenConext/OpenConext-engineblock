@@ -227,6 +227,7 @@ parameters:
     feature_stepup_sfo_override_engine_entityid: false
     feature_stepup_send_user_attributes: false
     feature_enable_sram_interrupt: false
+    feature_stable_consent_hash_migration: false
 
     ##########################################################################################
     ## PROFILE SETTINGS

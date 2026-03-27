@@ -27,6 +27,12 @@ Changes:
   * The `0000-00-00 00:00:00` is added for clarity/consistency, as this is probably the default behaviour of your database already.
 * Removed unused index `consent.deleted_at`. Delete this from your production database if it's there.
 
+* Stabilized consent checks
+  * In order to make the consent hashes more robust, a more consistent way of hashing the user attributes has been introduced
+  * This feature automatically migrates from the old hashes to the new hashes, cleaning up the old hash.
+  * However, if blue/green deployments are used or if you want to keep the option open to roll back the EB release, keep the `feature_stable_consent_hash_migration` set to false in order to preserve the old consent hashes.
+  * Once the new release is fully rolled out, set `feature_stable_consent_hash_migration` to true. This will clean up the old consent hashes upon login. In the next EB release, the old consent hash column will be deleted.
+
 ## 7.1.0
 SRAM integration
 

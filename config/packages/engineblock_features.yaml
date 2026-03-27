@@ -16,3 +16,4 @@ parameters:
         eb.stepup.sfo.override_engine_entityid: "%feature_stepup_sfo_override_engine_entityid%"
         eb.stepup.send_user_attributes: "%feature_stepup_send_user_attributes%"
         eb.feature_enable_sram_interrupt: "%feature_enable_sram_interrupt%"
+        eb.stable_consent_hash_migration: "%feature_stable_consent_hash_migration%"
