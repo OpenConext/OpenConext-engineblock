@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlock\Tests;
 
+use OpenConext\EngineBlock\Exception\InvalidDiscoveryException;
 use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\Entity\Assembler\DiscoveryAssembler;
 use OpenConext\EngineBlock\Metadata\Logo;
@@ -84,8 +85,11 @@ class DiscoveryAssemblerTest extends TestCase
         $this->assertEquals(100, $discovery->getLogo()->height);
     }
 
-    public function testAssembleDiscoveriesSkipsDiscoveryWithoutEnglishName(): void
+    public function testAssembleDiscoveriesThrowsWhenDiscoveryMissingEnglishName(): void
     {
+        $this->expectException(InvalidDiscoveryException::class);
+        $this->expectExceptionMessage('missing a required English name');
+
         $connection = new stdClass();
         $connection->metadata = new stdClass();
         $connection->metadata->discoveries = [
@@ -95,9 +99,7 @@ class DiscoveryAssemblerTest extends TestCase
             ])
         ];
 
-        $result = $this->discoveryAssembler->assembleDiscoveries($connection);
-
-        $this->assertEquals([], $result);
+        $this->discoveryAssembler->assembleDiscoveries($connection);
     }
 
     public function testAssembleDiscoveriesWithTrimmedValues(): void
