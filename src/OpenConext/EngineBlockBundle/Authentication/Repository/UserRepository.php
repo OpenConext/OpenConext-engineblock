@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockBundle\Authentication\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
+use OpenConext\EngineBlock\Authentication\Value\CollabPersonUuid;
 use OpenConext\EngineBlockBundle\Authentication\Entity\User;
 
 /**
@@ -73,5 +74,19 @@ class UserRepository extends ServiceEntityRepository
             ->execute();
 
         $this->getEntityManager()->flush();
+    }
+
+    /**
+     * @param CollabPersonUuid $uuid
+     * @return null|User
+     */
+    public function findByCollabPersonUuid(CollabPersonUuid $uuid): ?User
+    {
+        return $this
+            ->createQueryBuilder('u')
+            ->where('u.collabPersonUuid = :uuid')
+            ->setParameter('uuid', $uuid->getUuid())
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

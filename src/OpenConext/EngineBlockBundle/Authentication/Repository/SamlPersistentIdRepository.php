@@ -57,4 +57,17 @@ class SamlPersistentIdRepository extends ServiceEntityRepository
             ->getQuery()
             ->execute();
     }
+
+    /**
+     * @param string $userUuid
+     * @param string $serviceProviderUuid
+     * @return SamlPersistentId|null
+     */
+    public function findByUserAndSpUuid(string $userUuid, string $serviceProviderUuid): ?SamlPersistentId
+    {
+        return $this->findOneBy([
+            'userUuid' => $userUuid,
+            'serviceProviderUuid' => $serviceProviderUuid,
+        ]);
+    }
 }

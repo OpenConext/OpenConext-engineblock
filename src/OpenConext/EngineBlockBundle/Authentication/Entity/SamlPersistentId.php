@@ -30,7 +30,7 @@ class SamlPersistentId
      * @var string
      */
     #[ORM\Id]
-    #[ORM\Column(type: Types::STRING, length: 40, options: ['fixed' => true, 'comment' => 'SHA1 of service_provider_uuid + user_uuid'])]
+    #[ORM\Column(type: Types::STRING, length: 40, options: ['fixed' => true, 'comment' => 'SHA1 of COIN: + user_uuid + service_provider_uuid'])]
     public ?string $persistentId = null;
 
     /**

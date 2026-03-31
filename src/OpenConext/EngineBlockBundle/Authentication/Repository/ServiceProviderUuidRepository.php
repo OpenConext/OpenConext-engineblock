@@ -32,11 +32,7 @@ class ServiceProviderUuidRepository extends ServiceEntityRepository
         parent::__construct($registry, ServiceProviderUuid::class);
     }
 
-    /**
-     * @param string $uuid
-     * @return string|null
-     */
-    public function findEntityIdByUuid($uuid)
+    public function findEntityIdByUuid(string $uuid): ?string
     {
         $entry = $this->findOneBy([
             'uuid' => $uuid,
@@ -45,5 +41,24 @@ class ServiceProviderUuidRepository extends ServiceEntityRepository
         if ($entry instanceof ServiceProviderUuid) {
             return $entry->serviceProviderEntityId;
         }
+
+        return null;
+    }
+
+    /**
+     * @param string $entityId
+     * @return string|null  UUID string, or null if SP is not yet known
+     */
+    public function findUuidByEntityId(string $entityId): ?string
+    {
+        $entry = $this->findOneBy([
+            'serviceProviderEntityId' => $entityId,
+        ]);
+
+        if ($entry instanceof ServiceProviderUuid) {
+            return $entry->uuid;
+        }
+
+        return null;
     }
 }

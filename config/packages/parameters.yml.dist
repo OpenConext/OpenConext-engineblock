@@ -77,6 +77,8 @@ parameters:
     api.users.profile.password: secret
     api.users.deprovision.username: lifecycle
     api.users.deprovision.password: secret
+    api.users.nameIdLookup.username: nameid
+    api.users.nameIdLookup.password: secret
 
     ##########################################################################################
     ## CLIENT SETTINGS
@@ -220,6 +222,8 @@ parameters:
     feature_api_consent_remove: true
     feature_api_metadata_api: true
     feature_api_deprovision: true
+    feature_api_users_nameid: true
+    feature_api_users_id: true
     feature_run_all_manipulations_prior_to_consent: false
     feature_block_user_on_violation: false
     feature_enable_consent: true
