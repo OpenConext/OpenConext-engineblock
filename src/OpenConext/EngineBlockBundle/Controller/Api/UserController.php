@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2010 SURFnet B.V.
+ * Copyright 2026 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ final class UserController
         return $this->tokenStorage->getToken()?->getUserIdentifier() ?? 'unknown';
     }
 
-    #[Route(path: '/info/users/nameid', name: 'api_users_nameid', methods: ['POST'], defaults: ['_format' => 'json'])]
+    #[Route(path: '/info/users/nameid', name: 'api_users_nameid', defaults: ['_format' => 'json'], methods: ['POST'])]
     public function nameIdAction(Request $request): JsonResponse
     {
         if (!$this->featureConfiguration->isEnabled('api.users_nameid')) {
@@ -80,7 +80,7 @@ final class UserController
         return new JsonResponse($results, Response::HTTP_OK);
     }
 
-    #[Route(path: '/info/users/id', name: 'api_users_id', methods: ['POST'], defaults: ['_format' => 'json'])]
+    #[Route(path: '/info/users/id', name: 'api_users_id', defaults: ['_format' => 'json'], methods: ['POST'])]
     public function userIdentityAction(Request $request): JsonResponse
     {
         if (!$this->featureConfiguration->isEnabled('api.users_id')) {
@@ -101,11 +101,13 @@ final class UserController
             if (!is_string($nameId)) {
                 throw new BadApiRequestHttpException('Each entry in the request must be a string NameID');
             }
+
             if (!preg_match('/^[0-9a-f]{40}$/i', $nameId)) {
                 throw new BadApiRequestHttpException(
                     sprintf('Invalid NameID format "%s": must be a 40-character hexadecimal SHA1 string', $nameId)
                 );
             }
+
             $results[] = $this->nameIdLookupService->resolveUserIdentity($nameId);
         }
 
