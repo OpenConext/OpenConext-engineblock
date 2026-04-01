@@ -1,4 +1,4 @@
 services:
     engine.dev.openconext.local:
         build:
-            dockerfile: docker/ci/Dockerfile-php82
+            dockerfile: docker/ci/Dockerfile-php85
