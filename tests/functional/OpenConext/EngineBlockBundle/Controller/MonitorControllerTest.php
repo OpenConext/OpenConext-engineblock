@@ -50,4 +50,19 @@ final class MonitorControllerTest extends FunctionalWebTestCase
         $json = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $this->assertSame(['status' => 'UP'], $json);
     }
+
+    #[Test]
+    #[Group('Monitor')]
+    public function health_returns_json(): void
+    {
+        $client = self::createClient();
+        $client->request('GET', 'https://engine.dev.openconext.local/health');
+
+        $response = $client->getResponse();
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertJson($response->getContent());
+
+        $json = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $this->assertSame(['status' => 'UP'], $json);
+    }
 }
