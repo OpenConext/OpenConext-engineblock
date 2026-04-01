@@ -28,7 +28,7 @@ Changes:
 * Removed unused index `consent.deleted_at`. Delete this from your production database if it's there.
 
 ## 7.1.0
-SRAM integration
+[SBS](https://github.com/SURFscz/SBS) integration
 
 ## 7.0.0
 Breaking changes please see: [upgrading](UPGRADING.md#700)
