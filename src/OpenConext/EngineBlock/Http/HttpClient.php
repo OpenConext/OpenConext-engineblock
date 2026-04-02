@@ -53,7 +53,7 @@ class HttpClient
     {
         $resource = ResourcePathFormatter::format($path, $parameters);
         $response = $this->httpClient->request('GET', $resource, [
-            'exceptions' => false,
+            'http_errors' => false,
             'headers' => $headers
         ]);
         $statusCode = $response->getStatusCode();
@@ -93,7 +93,7 @@ class HttpClient
     {
         $resource = ResourcePathFormatter::format($path, $parameters);
         $response = $this->httpClient->request('POST', $resource, [
-            'exceptions' => false,
+            'http_errors' => false,
             'body' => $data,
             'headers' => $headers,
             'verify' => $verify,
