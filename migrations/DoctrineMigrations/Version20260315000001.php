@@ -46,7 +46,8 @@ final class Version20260315000001 extends AbstractEngineBlockMigration
 
     public function down(Schema $schema): void
     {
-        $this->addSql('UPDATE consent SET attribute = attribute_stable WHERE attribute IS NULL AND attribute_stable IS NOT NULL');
+        $this->warnIf(true, 'This migration is not reversible without deleting all migrated consent hashes.' .
+        ' Manually run `DELETE FROM consent WHERE attribute IS NOT NULL` to delete all migrated consent hashes.');
         $this->addSql('ALTER TABLE consent CHANGE attribute attribute VARCHAR(80) NOT NULL');
         $this->addSql('ALTER TABLE consent DROP attribute_stable');
     }
