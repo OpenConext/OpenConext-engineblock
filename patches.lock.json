@@ -1,0 +1,17 @@
+{
+    "_hash": "268a5480203a1aef594360e2c320692e61cdf751f46a3dcc4b1f9dee068a7363",
+    "patches": {
+        "phrity/websocket": [
+            {
+                "package": "phrity/websocket",
+                "description": "PHP 8.5: fix implicit nullable param in ConnectionException",
+                "url": "patches/phrity-websocket-php85-nullable.patch",
+                "sha256": "2e80641229b81e1b3755ace6592c085c8632bf6e84c0d946e570603e36325201",
+                "depth": 1,
+                "extra": {
+                    "provenance": "root"
+                }
+            }
+        ]
+    }
+}

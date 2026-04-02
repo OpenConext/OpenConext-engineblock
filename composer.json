@@ -58,6 +58,7 @@
         "behat/behat": "^3.26",
         "behat/mink": "^1.12",
         "behat/mink-browserkit-driver": "^2.2",
+        "cweagans/composer-patches": "^1.7",
         "dmore/behat-chrome-extension": "^1.4",
         "dmore/chrome-mink-driver": "2.9.3",
         "friends-of-behat/mink-extension": "^2.7.5",
@@ -133,12 +134,19 @@
         },
         "sort-packages": true,
         "allow-plugins": {
+            "cweagans/composer-patches": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "endroid/installer": false,
             "symfony/flex": true
         }
     },
     "extra": {
+        "composer-exit-on-patch-failure": true,
+        "patches": {
+            "phrity/websocket": {
+                "PHP 8.5: fix implicit nullable param in ConnectionException": "patches/phrity-websocket-php85-nullable.patch"
+            }
+        },
         "symfony": {
             "allow-contrib": false,
             "require": "7.4.*"
