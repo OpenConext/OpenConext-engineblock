@@ -48,7 +48,7 @@ class MetadataController
 
     #[Route(path: '/authentication/idp/metadata', name: 'metadata_idp', methods: ['GET'])]
     #[Route(path: '/authentication/idp/metadata/key:{keyId}', name: 'metadata_idp_key', methods: ['GET'])]
-    public function idpMetadataAction(string $keyId = null): Response
+    public function idpMetadataAction(?string $keyId = null): Response
     {
         $metadataXml = $this->metadataService->metadataForIdp($keyId);
 
@@ -76,7 +76,7 @@ class MetadataController
 
     #[Route(path: '/authentication/proxy/idps-metadata', name: 'metadata_all_idps', methods: ['GET'])]
     #[Route(path: '/authentication/proxy/idps-metadata/key:{keyId}', name: 'metadata_all_idps_key', methods: ['GET'])]
-    public function allIdpsMetadataAction(Request $request, string $keyId = null): Response
+    public function allIdpsMetadataAction(Request $request, ?string $keyId = null): Response
     {
         $spEntityId = $request->query->get('sp-entity-id', null);
 
@@ -91,7 +91,7 @@ class MetadataController
 
     #[Route(path: '/authentication/stepup/metadata', name: 'metadata_stepup', methods: ['GET'])]
     #[Route(path: '/authentication/stepup/metadata/key:{keyId}', name: 'metadata_stepup_key', methods: ['GET'])]
-    public function stepupMetadataAction(string $keyId = null): Response
+    public function stepupMetadataAction(?string $keyId = null): Response
     {
         if (empty($keyId)) {
             $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;
@@ -112,7 +112,7 @@ class MetadataController
     #[Route(path: '/authentication/idp/certificate/key:{keyId}', name: 'certificate_idp_key', methods: ['GET'])]
     #[Route(path: '/authentication/sp/certificate', name: 'certificate_sp', methods: ['GET'])]
     #[Route(path: '/authentication/sp/certificate/key:{keyId}', name: 'certificate_sp_key', methods: ['GET'])]
-    public function signingCertificateAction(string $keyId = null): Response
+    public function signingCertificateAction(?string $keyId = null): Response
     {
         if (empty($keyId)) {
             $keyId = KeyPairFactory::DEFAULT_KEY_PAIR_IDENTIFIER;

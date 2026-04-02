@@ -92,7 +92,7 @@ final class EngineBlock_Saml2_Container extends AbstractContainer
         );
     }
 
-    public function writeFile(string $filename, string $data, int $mode = null): void
+    public function writeFile(string $filename, string $data, ?int $mode = null): void
     {
         throw new BadMethodCallException(
             sprintf(

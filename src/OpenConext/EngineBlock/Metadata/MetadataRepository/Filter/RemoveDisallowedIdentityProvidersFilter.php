@@ -53,7 +53,7 @@ class RemoveDisallowedIdentityProvidersFilter extends AbstractFilter
     /**
      * {@inheritdoc}
      */
-    public function filterRole(AbstractRole $role, LoggerInterface $logger = null)
+    public function filterRole(AbstractRole $role, ?LoggerInterface $logger = null)
     {
         if (!$role instanceof IdentityProvider) {
             return $role;

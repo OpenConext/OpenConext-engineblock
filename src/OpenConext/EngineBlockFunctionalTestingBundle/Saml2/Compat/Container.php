@@ -182,7 +182,7 @@ HTML
         throw new NotImplementedException(sprintf('getTempDir not implemented!'));
     }
 
-    public function writeFile(string $filename, string $data, int $mode = null): void
+    public function writeFile(string $filename, string $data, ?int $mode = null): void
     {
         throw new NotImplementedException(sprintf('writeFile not implemented!'));
     }

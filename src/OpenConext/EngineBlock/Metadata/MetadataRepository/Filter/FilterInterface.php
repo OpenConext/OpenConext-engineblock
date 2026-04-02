@@ -33,7 +33,7 @@ interface FilterInterface
      * @param LoggerInterface|null $logger
      * @return null|AbstractRole
      */
-    public function filterRole(AbstractRole $role, LoggerInterface $logger = null);
+    public function filterRole(AbstractRole $role, ?LoggerInterface $logger = null);
 
     /**
      * @param string $repositoryClassName

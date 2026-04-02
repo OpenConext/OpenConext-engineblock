@@ -22,7 +22,7 @@ use Exception;
 
 class AccessDeniedException extends HttpException
 {
-    public function __construct($resource, $code = 0, Exception $previous = null)
+    public function __construct($resource, $code = 0, ?Exception $previous = null)
     {
         $message = sprintf('Access denied to resource "%s": are you properly authorized?', $resource);
 

@@ -48,7 +48,7 @@ final class MockTranslator implements TranslatorInterface
     public function __construct(
         DataCollectorTranslator $translator,
         AbstractDataStore $dataStore,
-        string $localeDataStoreTemplate = null
+        ?string $localeDataStoreTemplate = null
     ) {
         $this->translator = $translator;
         $this->dataStore = $dataStore;
@@ -56,7 +56,7 @@ final class MockTranslator implements TranslatorInterface
     }
 
     // Helper methods
-    public function setTranslation(string $key, string $value, string $locale = null): void
+    public function setTranslation(string $key, string $value, ?string $locale = null): void
     {
         if ($locale !== null) {
             $store = $this->getLocaleDataStore($locale);

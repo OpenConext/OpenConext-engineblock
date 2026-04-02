@@ -60,7 +60,7 @@ class RemoveOtherWorkflowStatesFilter extends AbstractFilter
     /**
      * {@inheritdoc}
      */
-    public function filterRole(AbstractRole $role, LoggerInterface $logger = null)
+    public function filterRole(AbstractRole $role, ?LoggerInterface $logger = null)
     {
         // EngineBlock itself should always work regardless of the workflow state.
         if (($role instanceof ServiceProvider && $role->entityId === $this->spEntityId) ||

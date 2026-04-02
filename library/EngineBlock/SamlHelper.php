@@ -91,7 +91,7 @@ class EngineBlock_SamlHelper
         ServiceProvider $serviceProvider,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
         MetadataRepositoryInterface $repository,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         if (!$serviceProvider->getCoins()->isTrustedProxy()) {
             return null;

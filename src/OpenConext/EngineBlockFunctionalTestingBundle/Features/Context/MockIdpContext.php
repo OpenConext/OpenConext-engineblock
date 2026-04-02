@@ -95,7 +95,7 @@ class MockIdpContext extends AbstractSubContext
      * @Given /^an Identity Provider named "([^"]*)"$/
      * @Given /^an Identity Provider named "([^"]*)" with discovery "([^"]*)"$/
      */
-    public function anIdentityProviderNamed($name, string $discoveryName = null)
+    public function anIdentityProviderNamed($name, ?string $discoveryName = null)
     {
         $discoveries = [];
         if ($discoveryName !== null) {

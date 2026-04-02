@@ -55,7 +55,7 @@ class AuthenticationLogger
         ?string $authnContextClassRef,
         ?string $engineSsoEndpointUsed,
         ?array $requestedIdPlist,
-        KeyId $keyId = null,
+        ?KeyId $keyId = null,
         array $logAttributes = []
     ) {
         $proxiedServiceProviderEntityIds = array_map(

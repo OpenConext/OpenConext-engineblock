@@ -25,7 +25,7 @@ class EngineBlock_Corto_Exception_InvalidAttributeValue extends EngineBlock_Exce
     private $attributeName;
     private $attributeValue;
 
-    public function __construct($message, $attributeName, $attributeValue, $severity = self::CODE_NOTICE, Exception $previous = null)
+    public function __construct($message, $attributeName, $attributeValue, $severity = self::CODE_NOTICE, ?Exception $previous = null)
     {
         parent::__construct($message, $severity, $previous);
         $this->attributeName = $attributeName;

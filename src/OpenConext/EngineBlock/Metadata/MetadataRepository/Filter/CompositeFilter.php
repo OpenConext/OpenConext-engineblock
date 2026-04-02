@@ -60,7 +60,7 @@ class CompositeFilter implements FilterInterface
     /**
      * {@inheritdoc}
      */
-    public function filterRole(AbstractRole $role, LoggerInterface $logger = null)
+    public function filterRole(AbstractRole $role, ?LoggerInterface $logger = null)
     {
         foreach ($this->filters as $filter) {
             $role = $filter->filterRole($role, $logger);

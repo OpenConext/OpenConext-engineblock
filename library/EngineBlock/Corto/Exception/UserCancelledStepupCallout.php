@@ -23,7 +23,7 @@ class EngineBlock_Corto_Exception_UserCancelledStepupCallout extends EngineBlock
      */
     private $feedback;
 
-    public function __construct($message, EngineBlock_Corto_Exception_ReceivedErrorStatusCode $exception, $severity = self::CODE_NOTICE, Exception $previous = null)
+    public function __construct($message, EngineBlock_Corto_Exception_ReceivedErrorStatusCode $exception, $severity = self::CODE_NOTICE, ?Exception $previous = null)
     {
         $this->feedback = $exception->getFeedbackInfo();
         parent::__construct($message, $severity, $previous);

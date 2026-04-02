@@ -39,8 +39,8 @@ class X509KeyPair
      * @param X509PrivateKey $private
      */
     public function __construct(
-        X509Certificate $certificate = null,
-        X509PrivateKey $private = null
+        ?X509Certificate $certificate = null,
+        ?X509PrivateKey $private = null
     ) {
         $this->certificate = $certificate;
         $this->private = $private;
