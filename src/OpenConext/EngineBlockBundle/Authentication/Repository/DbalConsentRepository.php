@@ -209,13 +209,13 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
 
             if (count($rows) < 1) {
                 // No stored consent found
-                return ConsentVersion::notGiven();
+                return ConsentVersion::NotGiven;
             }
 
             if (!empty($rows[0]['attribute_stable'])) {
-                return ConsentVersion::stable();
+                return ConsentVersion::Stable;
             }
-            return ConsentVersion::unstable();
+            return ConsentVersion::Unstable;
         } catch (Exception $e) {
             throw new RuntimeException(sprintf('Consent retrieval failed! Error: "%s"', $e->getMessage()));
         }

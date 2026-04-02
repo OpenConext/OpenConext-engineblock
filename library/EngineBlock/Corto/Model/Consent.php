@@ -83,7 +83,7 @@ class EngineBlock_Corto_Model_Consent
     {
         if (!$this->_consentEnabled) {
             // Consent disabled: treat as already given (stable — no upgrade needed)
-            return ConsentVersion::stable();
+            return ConsentVersion::Stable;
         }
         return $this->_hasStoredConsent($serviceProvider, ConsentType::Explicit);
     }
@@ -111,7 +111,7 @@ class EngineBlock_Corto_Model_Consent
     public function implicitConsentWasGivenFor(ServiceProvider $serviceProvider): ConsentVersion
     {
         if (!$this->_consentEnabled) {
-            return ConsentVersion::stable();
+            return ConsentVersion::Stable;
         }
         return $this->_hasStoredConsent($serviceProvider, ConsentType::Implicit);
     }
@@ -199,7 +199,7 @@ class EngineBlock_Corto_Model_Consent
     {
         $consentUid = $this->_getConsentUid();
         if (!is_string($consentUid)) {
-            return ConsentVersion::notGiven();
+            return ConsentVersion::NotGiven;
         }
 
         $query = new ConsentHashQuery(

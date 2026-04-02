@@ -18,68 +18,26 @@
 
 namespace OpenConext\EngineBlock\Authentication\Value;
 
-use OpenConext\EngineBlock\Assert\Assertion;
-
-final class ConsentVersion
+enum ConsentVersion: string
 {
-    const STABLE = 'stable';
+    case Stable   = 'stable';
     /** @deprecated Remove after stable consent hash is running in production */
-    const UNSTABLE = 'unstable';
-    const NOT_GIVEN = 'not-given';
-
-    /**
-     * @var string
-     */
-    private $consentVersion;
-
-    public static function stable(): ConsentVersion
-    {
-        return new self(self::STABLE);
-    }
-
-    /** @deprecated Remove after stable consent hash is running in production */
-    public static function unstable(): ConsentVersion
-    {
-        return new self(self::UNSTABLE);
-    }
-
-    public static function notGiven(): ConsentVersion
-    {
-        return new self(self::NOT_GIVEN);
-    }
-
-    public function __construct(string $consentVersion)
-    {
-        Assertion::choice(
-            $consentVersion,
-            [self::UNSTABLE, self::STABLE, self::NOT_GIVEN],
-            'ConsentVersion must be one of ConsentVersion::STABLE, ConsentVersion::NOT_GIVEN or ConsentVersion::UNSTABLE'
-        );
-
-        $this->consentVersion = $consentVersion;
-    }
+    case Unstable = 'unstable';
+    case NotGiven = 'not-given';
 
     public function given(): bool
     {
-        return $this->consentVersion !== self::NOT_GIVEN;
+        return $this !== self::NotGiven;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function isStable(): bool
     {
-        return $this->consentVersion;
+        return $this === self::Stable;
     }
 
     /** @deprecated Remove after stable consent hash is running in production */
     public function isUnstable(): bool
     {
-        return $this->consentVersion === self::UNSTABLE;
-    }
-
-    public function isStable(): bool
-    {
-        return $this->consentVersion === self::STABLE;
+        return $this === self::Unstable;
     }
 }

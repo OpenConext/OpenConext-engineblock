@@ -92,7 +92,7 @@ class ConsentIntegrationTest extends TestCase
         $this->consentRepository
             ->shouldReceive('hasConsentHash')
             ->once()
-            ->andReturn(ConsentVersion::notGiven());
+            ->andReturn(ConsentVersion::NotGiven);
         switch ($consentType) {
             case ConsentType::Explicit:
                 $this->assertFalse($this->consent->explicitConsentWasGivenFor($serviceProvider)->given());
@@ -121,7 +121,7 @@ class ConsentIntegrationTest extends TestCase
                 consentType: $consentType->value,
             ))
             ->once()
-            ->andReturn(ConsentVersion::unstable());
+            ->andReturn(ConsentVersion::Unstable);
 
         switch ($consentType) {
             case ConsentType::Explicit:
@@ -151,7 +151,7 @@ class ConsentIntegrationTest extends TestCase
                 consentType: $consentType->value,
             ))
             ->once()
-            ->andReturn(ConsentVersion::stable());
+            ->andReturn(ConsentVersion::Stable);
 
         switch ($consentType) {
             case ConsentType::Explicit:
@@ -258,7 +258,7 @@ class ConsentIntegrationTest extends TestCase
             ))
             ->andReturn(true);
 
-        $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType, ConsentVersion::unstable()));
+        $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType, ConsentVersion::Unstable));
     }
 
     /**
@@ -286,7 +286,7 @@ class ConsentIntegrationTest extends TestCase
             ))
             ->andReturn(true);
 
-        $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType, ConsentVersion::unstable()));
+        $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType, ConsentVersion::Unstable));
     }
 
     #[DataProvider('consentTypeProvider')]
@@ -299,7 +299,7 @@ class ConsentIntegrationTest extends TestCase
         $this->consentRepository->shouldNotReceive('updateConsentHash');
 
         // Pass the pre-fetched ConsentVersion (stable) — no second DB query is made, no update triggered
-        $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType, ConsentVersion::stable()));
+        $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType, ConsentVersion::Stable));
     }
 
     #[DataProvider('consentTypeProvider')]
@@ -311,7 +311,7 @@ class ConsentIntegrationTest extends TestCase
         $this->consentRepository->shouldNotReceive('updateConsentHash');
 
         // Pass the pre-fetched ConsentVersion (notGiven) — no update should be triggered
-        $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType, ConsentVersion::notGiven()));
+        $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType, ConsentVersion::NotGiven));
     }
 
     #[DataProvider('consentTypeProvider')]
@@ -329,7 +329,7 @@ class ConsentIntegrationTest extends TestCase
 
         // Must not throw; the warning is logged inside the repository
         // Pass the pre-fetched ConsentVersion (unstable) — no second DB query is made
-        $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType, ConsentVersion::unstable()));
+        $this->assertNull($this->consent->upgradeAttributeHashFor($serviceProvider, $consentType, ConsentVersion::Unstable));
     }
 
     public function test_store_consent_hash_sql_resets_deleted_at_on_duplicate(): void

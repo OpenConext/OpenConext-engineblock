@@ -124,7 +124,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
 
         Phake::when($this->consentMock)
             ->explicitConsentWasGivenFor(Phake::anyParameters())
-            ->thenReturn(ConsentVersion::stable());
+            ->thenReturn(ConsentVersion::Stable);
 
         $provideConsentService->serve(null, $this->httpRequestMock);
 
@@ -280,10 +280,10 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
         $consentMock = Phake::mock('EngineBlock_Corto_Model_Consent');
         Phake::when($consentMock)
             ->explicitConsentWasGivenFor(Phake::anyParameters())
-            ->thenReturn(ConsentVersion::notGiven());
+            ->thenReturn(ConsentVersion::NotGiven);
         Phake::when($consentMock)
             ->implicitConsentWasGivenFor(Phake::anyParameters())
-            ->thenReturn(ConsentVersion::notGiven());
+            ->thenReturn(ConsentVersion::NotGiven);
         Phake::when($this->consentFactoryMock)
             ->create(Phake::anyParameters())
             ->thenReturn($consentMock);

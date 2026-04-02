@@ -19,44 +19,44 @@
 namespace OpenConext\EngineBlock\Authentication\Tests\Value;
 
 use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
-use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use ValueError;
 
 class ConsentVersionTest extends TestCase
 {
     public function testStableIsGiven(): void
     {
-        $version = ConsentVersion::stable();
+        $version = ConsentVersion::Stable;
 
         $this->assertTrue($version->given());
         $this->assertTrue($version->isStable());
         $this->assertFalse($version->isUnstable());
-        $this->assertSame('stable', (string) $version);
+        $this->assertSame('stable', $version->value);
     }
 
     public function testUnstableIsGiven(): void
     {
-        $version = ConsentVersion::unstable();
+        $version = ConsentVersion::Unstable;
 
         $this->assertTrue($version->given());
         $this->assertFalse($version->isStable());
         $this->assertTrue($version->isUnstable());
-        $this->assertSame('unstable', (string) $version);
+        $this->assertSame('unstable', $version->value);
     }
 
     public function testNotGivenIsNotGiven(): void
     {
-        $version = ConsentVersion::notGiven();
+        $version = ConsentVersion::NotGiven;
 
         $this->assertFalse($version->given());
         $this->assertFalse($version->isStable());
         $this->assertFalse($version->isUnstable());
-        $this->assertSame('not-given', (string) $version);
+        $this->assertSame('not-given', $version->value);
     }
 
     public function testInvalidVersionThrows(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        new ConsentVersion('invalid');
+        $this->expectException(ValueError::class);
+        ConsentVersion::from('invalid');
     }
 }

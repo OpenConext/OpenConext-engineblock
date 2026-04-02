@@ -223,7 +223,7 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends TestCase
         $consentMock = Phake::mock('EngineBlock_Corto_Model_Consent');
         Phake::when($consentMock)
             ->explicitConsentWasGivenFor(Phake::anyParameters())
-            ->thenReturn(ConsentVersion::notGiven());
+            ->thenReturn(ConsentVersion::NotGiven);
         Phake::when($this->consentFactoryMock)
             ->create(Phake::anyParameters())
             ->thenReturn($consentMock);
