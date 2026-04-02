@@ -71,7 +71,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         'INTERNAL'                                                  => 'sendInternal',
         'JSON-Redirect'                                             => '_sendHTTPRedirect',
         'JSON-POST'                                                 => '_sendHTTPPost',
-        null                                                        => '_sendHTTPRedirect'
+        ''                                                          => '_sendHTTPRedirect'
     );
 
     /**
