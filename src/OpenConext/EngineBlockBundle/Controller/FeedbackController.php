@@ -78,6 +78,19 @@ class FeedbackController
         );
     }
 
+    #[Route(
+        path: '/authentication/feedback/unsolicited-response',
+        name: 'authentication_feedback_unsolicited_response',
+        methods: ['GET']
+    )]
+    public function unsolicitedResponseAction(): Response
+    {
+        return new Response(
+            $this->twig->render('@theme/Authentication/View/Feedback/unsolicited-response.html.twig'),
+            400
+        );
+    }
+
     #[Route(path: '/feedback/unknown-error', name: 'feedback_unknown_error', methods: ['GET'])]
     public function unknownErrorAction()
     {

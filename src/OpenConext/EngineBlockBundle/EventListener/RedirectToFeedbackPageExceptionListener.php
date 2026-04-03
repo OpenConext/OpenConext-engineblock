@@ -35,6 +35,7 @@ use EngineBlock_Corto_Exception_UserCancelledStepupCallout;
 use EngineBlock_Corto_Module_Bindings_ClockIssueException;
 use EngineBlock_Corto_Module_Bindings_SignatureVerificationException;
 use EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException;
+use EngineBlock_Corto_Module_Bindings_UnsolicitedAssertionException;
 use EngineBlock_Corto_Module_Bindings_UnsupportedAcsLocationSchemeException;
 use EngineBlock_Corto_Module_Bindings_UnsupportedBindingException;
 use EngineBlock_Corto_Module_Bindings_UnsupportedSignatureMethodException;
@@ -111,6 +112,9 @@ class RedirectToFeedbackPageExceptionListener
         if ($exception instanceof EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException) {
             $message         = 'Unable to receive message';
             $redirectToRoute = 'authentication_feedback_unable_to_receive_message';
+        } elseif ($exception instanceof EngineBlock_Corto_Module_Bindings_UnsolicitedAssertionException) {
+            $message         = 'Unsolicited assertion (IdP-initiated SSO) not supported';
+            $redirectToRoute = 'authentication_feedback_unsolicited_response';
         } elseif ($exception instanceof EngineBlock_Corto_Module_Services_SessionLostException) {
             $message         = 'Session lost';
             $redirectToRoute = 'authentication_feedback_session_lost';
