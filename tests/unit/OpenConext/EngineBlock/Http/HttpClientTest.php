@@ -40,10 +40,12 @@ namespace OpenConext\EngineBlock\Http;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Http\Exception\AccessDeniedException;
 use OpenConext\EngineBlock\Http\Exception\MalformedResponseException;
+use OpenConext\EngineBlock\Http\Exception\UnreadableResourceException;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -195,5 +197,37 @@ class HttpClientTest extends TestCase
         $this->expectException(AccessDeniedException::class);
 
         $client->post('post-and-give-me/403', 'Post body');
+    }
+
+    #[Group('EngineBlock')]
+    #[Group('Http')]
+    #[Test]
+    public function an_unreadable_resource_exception_is_thrown_if_the_response_status_code_is_400_when_reading()
+    {
+        $mockHandler = new MockHandler([
+            new Response(400, [], '{"error":"Bad Request"}')
+        ]);
+        $guzzle = new Client(['handler' => HandlerStack::create($mockHandler)]);
+        $client = new HttpClient($guzzle);
+
+        $this->expectException(UnreadableResourceException::class);
+
+        $client->read('/some-resource');
+    }
+
+    #[Group('EngineBlock')]
+    #[Group('Http')]
+    #[Test]
+    public function an_unreadable_resource_exception_is_thrown_if_the_response_status_code_is_400_when_posting()
+    {
+        $mockHandler = new MockHandler([
+            new Response(400, [], '{"error":"Bad Request"}')
+        ]);
+        $guzzle = new Client(['handler' => HandlerStack::create($mockHandler)]);
+        $client = new HttpClient($guzzle);
+
+        $this->expectException(UnreadableResourceException::class);
+
+        $client->post('{"id":1}', '/some-resource');
     }
 }
