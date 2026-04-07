@@ -161,11 +161,11 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
     }
 
     /**
-     * @return OpenConext\EngineBlock\Service\ConsentService
+     * @return OpenConext\EngineBlock\Service\Consent\ConsentService
      */
     public function getConsentService()
     {
-        return $this->container->get(\OpenConext\EngineBlock\Service\ConsentService::class);
+        return $this->container->get(\OpenConext\EngineBlock\Service\Consent\ConsentService::class);
     }
 
     /**

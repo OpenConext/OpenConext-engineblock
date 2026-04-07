@@ -18,15 +18,26 @@
 
 namespace OpenConext\EngineBlock\Authentication\Value;
 
-use JsonSerializable;
-
-enum ConsentType: string implements JsonSerializable
+enum ConsentVersion: string
 {
-    case Explicit = 'explicit';
-    case Implicit = 'implicit';
+    case Stable   = 'stable';
+    /** @deprecated Remove after stable consent hash is running in production */
+    case Unstable = 'unstable';
+    case NotGiven = 'not-given';
 
-    public function jsonSerialize(): string
+    public function given(): bool
     {
-        return $this->value;
+        return $this !== self::NotGiven;
+    }
+
+    public function isStable(): bool
+    {
+        return $this === self::Stable;
+    }
+
+    /** @deprecated Remove after stable consent hash is running in production */
+    public function isUnstable(): bool
+    {
+        return $this === self::Unstable;
     }
 }

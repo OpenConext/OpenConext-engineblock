@@ -17,13 +17,14 @@
  */
 
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 use OpenConext\EngineBlock\Metadata\Coins;
 use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
-use OpenConext\EngineBlock\Service\ConsentServiceInterface;
+use OpenConext\EngineBlock\Service\Consent\ConsentServiceInterface;
 use OpenConext\EngineBlock\Service\Dto\ProcessingStateStep;
 use OpenConext\EngineBlock\Service\ProcessingStateHelper;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
@@ -123,7 +124,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
 
         Phake::when($this->consentMock)
             ->explicitConsentWasGivenFor(Phake::anyParameters())
-            ->thenReturn(true);
+            ->thenReturn(ConsentVersion::Stable);
 
         $provideConsentService->serve(null, $this->httpRequestMock);
 
@@ -279,7 +280,10 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
         $consentMock = Phake::mock('EngineBlock_Corto_Model_Consent');
         Phake::when($consentMock)
             ->explicitConsentWasGivenFor(Phake::anyParameters())
-            ->thenReturn(false);
+            ->thenReturn(ConsentVersion::NotGiven);
+        Phake::when($consentMock)
+            ->implicitConsentWasGivenFor(Phake::anyParameters())
+            ->thenReturn(ConsentVersion::NotGiven);
         Phake::when($this->consentFactoryMock)
             ->create(Phake::anyParameters())
             ->thenReturn($consentMock);

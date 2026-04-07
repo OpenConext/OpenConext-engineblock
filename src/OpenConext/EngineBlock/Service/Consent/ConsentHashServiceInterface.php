@@ -16,47 +16,28 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Authentication\Repository;
+namespace OpenConext\EngineBlock\Service\Consent;
 
-use OpenConext\EngineBlock\Authentication\Model\Consent;
 use OpenConext\EngineBlock\Authentication\Value\ConsentHashQuery;
 use OpenConext\EngineBlock\Authentication\Value\ConsentStoreParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentUpdateParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 
-interface ConsentRepository
+interface ConsentHashServiceInterface
 {
     /**
-     * @param string $userId
-     *
-     * @return Consent[]
+     * Retrieve the consent hash
      */
-    public function findAllFor($userId);
+    public function retrieveConsentHash(ConsentHashQuery $query): ConsentVersion;
 
-    /**
-     * @param string $userId
-     *
-     * @return Consent[]
-     */
-    public function deleteAllFor($userId);
-
-    public function deleteOneFor(string $userId, string $serviceProviderEntityId): bool;
-
-    /**
-     * Test if the consent row is set with an attribute hash either stable or unstable
-     */
-    public function hasConsentHash(ConsentHashQuery $query): ConsentVersion;
-
-    /**
-     * By default stores the stable consent hash. The legacy consent hash is left.
-     */
     public function storeConsentHash(ConsentStoreParameters $parameters): bool;
 
-    /**
-     * When a deprecated unstable consent hash is encoutered, we upgrade it to the new format using this
-     * update consent hash method.
-     */
     public function updateConsentHash(ConsentUpdateParameters $parameters): bool;
 
     public function countTotalConsent(string $consentUid): int;
+
+    /** @deprecated Remove after stable consent hash is running in production */
+    public function getUnstableAttributesHash(array $attributes, bool $mustStoreValues): string;
+
+    public function getStableConsentHash(ConsentAttributes $attributes): string;
 }

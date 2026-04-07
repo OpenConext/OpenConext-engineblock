@@ -16,7 +16,7 @@ services:
             - '@security.token_storage'
             - '@security.access.decision_manager'
             - '@OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration'
-            - '@OpenConext\EngineBlock\Service\ConsentService'
+            - '@OpenConext\EngineBlock\Service\Consent\ConsentService'
 
     OpenConext\EngineBlockBundle\Controller\Api\DeprovisionController:
         arguments:
