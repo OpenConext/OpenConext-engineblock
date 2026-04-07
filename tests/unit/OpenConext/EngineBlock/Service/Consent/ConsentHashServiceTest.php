@@ -82,4 +82,31 @@ class ConsentHashServiceTest extends TestCase
             $this->chs->getUnstableAttributesHash($reversed, false)
         );
     }
+
+    /**
+     * Ensure the 'old' consent hash produces a manually verified hash
+     * (if the old hash algorithm is accidentally changed, this test fails)
+     */
+    public function test_unstable_hash_golden_values_must_never_change(): void
+    {
+        $attributes = [
+            'urn:mace:dir:attribute-def:uid'         => ['joe-f12'],
+            'urn:mace:dir:attribute-def:displayName' => ['John Doe'],
+            'urn:mace:dir:attribute-def:mail'        => ['joe@example.org'],
+        ];
+
+        // Algorithm: sort(array_keys($attributes)), sha1(implode('|', ...))
+        $this->assertSame(
+            '65d6f8f1f7064a70921882e3840e807e1d14e535',
+            $this->chs->getUnstableAttributesHash($attributes, false),
+            'Unstable names-only hash must never change — existing DB rows depend on it'
+        );
+
+        // Algorithm: ksort($attributes), sha1(serialize(...))
+        $this->assertSame(
+            'c4861f8908bd9311ea8e11df579a8ecb14c7ac66',
+            $this->chs->getUnstableAttributesHash($attributes, true),
+            'Unstable with-values hash must never change — existing DB rows depend on it'
+        );
+    }
 }
