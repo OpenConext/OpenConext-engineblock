@@ -302,6 +302,18 @@ class MockIdpContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^the IdP omits InResponseTo from its response$/
+     */
+    public function theIdpOmitsInResponseToFromItsResponse(): void
+    {
+        $idp = $this->mockIdpRegistry->getOnly();
+
+        $idp->omitInResponseTo();
+
+        $this->mockIdpRegistry->save();
+    }
+
+    /**
      * @Given /^the IdP "([^"]*)" sends attribute "([^"]*)" with value "([^"]*)"$/
      * @param string $idpName
      * @param string $attributeName

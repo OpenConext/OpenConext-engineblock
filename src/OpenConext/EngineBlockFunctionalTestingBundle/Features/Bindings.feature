@@ -110,3 +110,11 @@ Feature:
      Then no RelayState should be present
       And I pass through EngineBlock
      Then the url should match "functional-testing/Dummy%20SP/acs"
+
+  Scenario: EngineBlock rejects a SAMLResponse without InResponseTo (IdP-initiated SSO)
+    Given the IdP omits InResponseTo from its response
+     When I log in at "Dummy SP"
+      And I pass through EngineBlock
+      And I pass through the IdP
+     Then the url should match "authentication/feedback/unsolicited-response"
+      And I should see "Error - Sign-in could not be completed"

@@ -39,6 +39,8 @@ class MockIdentityProvider extends AbstractMockEntityRole
 
     private $fromTheFuture = false;
 
+    private $omitInResponseTo = false;
+
     public function singleSignOnLocation()
     {
         return $this->getSsoRole()->getSingleSignOnService()[0]->getLocation();
@@ -341,6 +343,18 @@ class MockIdentityProvider extends AbstractMockEntityRole
         return $this;
     }
 
+    public function omitInResponseTo(): self
+    {
+        $this->omitInResponseTo = true;
+
+        return $this;
+    }
+
+    public function shouldOmitInResponseTo(): bool
+    {
+        return $this->omitInResponseTo;
+    }
+
     public function shouldNotSendAssertions()
     {
         return $this->sendAssertions === false;
@@ -374,7 +388,7 @@ class MockIdentityProvider extends AbstractMockEntityRole
             $role->setExtensions($extensions);
         }
 
-        return ['name', 'descriptor', 'sendAssertions', 'turnBackTime', 'fromTheFuture'];
+        return ['name', 'descriptor', 'sendAssertions', 'turnBackTime', 'fromTheFuture', 'omitInResponseTo'];
     }
 
     /**
