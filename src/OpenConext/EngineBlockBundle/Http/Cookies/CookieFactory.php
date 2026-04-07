@@ -64,7 +64,7 @@ final class CookieFactory
      * @param DateTimeImmutable|null $now
      * @throws \Assert\AssertionFailedException
      */
-    public function __construct($name, $domain, $expiryInSeconds = null, $httpOnly = false, $secure = false, DateTimeImmutable $now = null)
+    public function __construct($name, $domain, $expiryInSeconds = null, $httpOnly = false, $secure = false, ?DateTimeImmutable $now = null)
     {
         Assertion::boolean($httpOnly);
         Assertion::boolean($secure);

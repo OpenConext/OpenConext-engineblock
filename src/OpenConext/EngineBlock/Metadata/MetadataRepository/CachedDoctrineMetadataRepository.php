@@ -169,7 +169,7 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
      * @param LoggerInterface|null $logger
      * @return null|ServiceProvider
      */
-    public function findServiceProviderByEntityId(string $entityId, LoggerInterface $logger = null)
+    public function findServiceProviderByEntityId(string $entityId, ?LoggerInterface $logger = null)
     {
         return $this->invoke(__FUNCTION__, func_get_args());
     }

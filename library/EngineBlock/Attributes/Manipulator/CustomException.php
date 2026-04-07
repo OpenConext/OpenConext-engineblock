@@ -20,12 +20,12 @@ class EngineBlock_Attributes_Manipulator_CustomException extends EngineBlock_Exc
 {
     private $_feedback = array();
 
-    public function create($message, $severity = self::CODE_NOTICE, Exception $previous = null)
+    public function create($message, $severity = self::CODE_NOTICE, ?Exception $previous = null)
     {
         return new self($message, $severity, $previous);
     }
 
-    public function __construct($message, $severity = self::CODE_NOTICE, Exception $previous = null)
+    public function __construct($message, $severity = self::CODE_NOTICE, ?Exception $previous = null)
     {
         parent::__construct($message, $severity, $previous);
     }

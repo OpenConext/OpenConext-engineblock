@@ -84,7 +84,7 @@ class EngineBlock_Exception extends Exception
     public $idpEntityId;
     public $description;
 
-    public function __construct($message, $severity = self::CODE_ERROR, Exception $previous = null)
+    public function __construct($message, $severity = self::CODE_ERROR, ?Exception $previous = null)
     {
         parent::__construct($message, 0, $previous);
         $this->_severity = $severity;

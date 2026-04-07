@@ -39,7 +39,7 @@ class JsonBasicAuthenticationEntryPoint implements AuthenticationEntryPointInter
     /**
      * {@inheritdoc}
      */
-    public function start(Request $request, AuthenticationException $authException = null): Response
+    public function start(Request $request, ?AuthenticationException $authException = null): Response
     {
         $authExceptionMessage = $authException ? $authException->getMessage() : '';
         $error                = sprintf(

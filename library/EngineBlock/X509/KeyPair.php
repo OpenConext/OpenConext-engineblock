@@ -29,8 +29,8 @@ class EngineBlock_X509_KeyPair
     private $private;
 
     public function __construct(
-        EngineBlock_X509_Certificate $certificate = null,
-        EngineBlock_X509_PrivateKey $private = null
+        ?EngineBlock_X509_Certificate $certificate = null,
+        ?EngineBlock_X509_PrivateKey $private = null
     ) {
         $this->certificate = $certificate;
         $this->private = $private;

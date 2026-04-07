@@ -136,13 +136,15 @@ class EngineBlock_Saml2_NameIdResolver
 
     protected function _getTransientNameIdFromSession($spId, $idpId)
     {
+        $spId = (string) $spId;
+        $idpId = (string) $idpId;
         return isset($_SESSION[$spId][$idpId]) ? $_SESSION[$spId][$idpId] : false;
     }
 
     protected function _storeTransientNameIdToSession($nameId, $spId, $idpId)
     {
         // store to session
-        $_SESSION[$spId][$idpId] = $nameId;
+        $_SESSION[(string) $spId][(string) $idpId] = $nameId;
     }
 
     protected function _getNameIdFormat(

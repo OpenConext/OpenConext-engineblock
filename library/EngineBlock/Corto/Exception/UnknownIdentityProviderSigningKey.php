@@ -23,7 +23,7 @@ class EngineBlock_Corto_Exception_UnknownIdentityProviderSigningKey extends Engi
      */
     private $entityId;
 
-    public function __construct($message, string $entityId, $severity = self::CODE_NOTICE, Exception $previous = null)
+    public function __construct($message, string $entityId, $severity = self::CODE_NOTICE, ?Exception $previous = null)
     {
         $this->entityId = $entityId;
         parent::__construct($message, $severity, $previous);

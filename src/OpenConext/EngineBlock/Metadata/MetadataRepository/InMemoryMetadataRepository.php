@@ -116,7 +116,7 @@ class InMemoryMetadataRepository extends AbstractMetadataRepository
      * @param LoggerInterface|null $logger
      * @return null|ServiceProvider
      */
-    public function findServiceProviderByEntityId(string $entityId, LoggerInterface $logger = null)
+    public function findServiceProviderByEntityId(string $entityId, ?LoggerInterface $logger = null)
     {
         $roles = $this->findServiceProviders();
 

@@ -31,7 +31,7 @@ class DiscoveryTest extends TestCase
     }
 
     #[DataProvider('localeValueArrayProvider')]
-    public function test_validates_localized_names(array $names, string $expectedExceptionMessage = null): void
+    public function test_validates_localized_names(array $names, ?string $expectedExceptionMessage = null): void
     {
         $this->expectException(InvalidDiscoveryException::class);
         $this->expectExceptionMessage($expectedExceptionMessage);

@@ -16,9 +16,9 @@ jobs:
         timeout-minutes: 30
         strategy:
             matrix:
-                php: [ php82 ]
+                php: [ php85 ]
         env:
-            PROD_PHP: php82
+            PROD_PHP: php85
             DOCKER_COMPOSE: docker compose -f docker-compose.yml -f docker-compose-${{matrix.php}}.yml
         steps:
             -   name: Checkout

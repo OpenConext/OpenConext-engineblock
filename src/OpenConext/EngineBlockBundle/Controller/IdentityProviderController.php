@@ -120,7 +120,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
     #[Route(path: '/authentication/idp/single-sign-on/key:{keyId}/{idpHash}', name: 'authentication_idp_sso_keyid_idphash', methods: ['GET', 'POST'])]
     #[Route(path: '/authentication/idp/single-sign-on/key:{keyId}', name: 'authentication_idp_sso_keyid', methods: ['GET', 'POST'])]
     #[Route(path: '/authentication/idp/single-sign-on/{idpHash}', name: 'authentication_idp_sso_idphash', methods: ['GET', 'POST'])]
-    public function singleSignOnAction(Request $request, string $keyId = null, string $idpHash = null)
+    public function singleSignOnAction(Request $request, ?string $keyId = null, ?string $idpHash = null)
     {
         $this->requestValidator->isValid($request);
         $this->bindingValidator->isValid($request);
@@ -149,7 +149,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
     ]
     #[Route(path: '/authentication/idp/unsolicited-single-sign-on/key:{keyId}', name: 'authentication_idp_unsolicited_sso_keyid', methods: ['GET'])]
     #[Route(path: '/authentication/idp/unsolicited-single-sign-on/{idpHash}', name: 'authentication_idp_unsolicited_sso_idphash', methods: ['GET'])]
-    public function unsolicitedSingleSignOnAction(Request $request, string $keyId = null, string $idpHash = null)
+    public function unsolicitedSingleSignOnAction(Request $request, ?string $keyId = null, ?string $idpHash = null)
     {
         if (!$this->featureConfiguration->isEnabled('eb.feature_enable_idp_initiated_flow')) {
             throw new NotFoundHttpException();

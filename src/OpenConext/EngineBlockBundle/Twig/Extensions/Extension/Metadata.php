@@ -58,7 +58,7 @@ class Metadata
      * @return array
      */
     #[AsTwigFunction(name: 'sortByDisplayOrder', isSafe: ['html'])]
-    public function sortByDisplayOrder($attributes, array $attributeSources = null, NameID $nameId = null)
+    public function sortByDisplayOrder($attributes, ?array $attributeSources = null, ?NameID $nameId = null)
     {
         $sortedAttributes = $this->attributeMetadata->sortByDisplayOrder($attributes);
         $normalizedAttributes = $this->attributeMetadata->normalizeEptiAttributeValue($sortedAttributes);
@@ -124,7 +124,7 @@ class Metadata
         return $this->attributeMetadata->getName($attributeId, $preferedLocale);
     }
 
-    private function groupAttributesBySource($attributes, array $attributeSources = array(), NameID $nameID = null)
+    private function groupAttributesBySource($attributes, array $attributeSources = array(), ?NameID $nameID = null)
     {
         $groupedAttributes = array(
             'idp' => array(),
