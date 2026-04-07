@@ -26,6 +26,7 @@ Changes:
   * Because `deleted_at` is part of the PK, no migration is provided. The database engine should not allow this to be null in the first place, so it is probably not nullable already on your db.
   * The `0000-00-00 00:00:00` is added for clarity/consistency, as this is probably the default behaviour of your database already.
 * Removed unused index `consent.deleted_at`. Delete this from your production database if it's there.
+* Added a specific error page for unsolicited SAML responses (IdP-initiated SSO without a prior AuthnRequest).
 
 ## 7.1.0
 [SBS](https://github.com/SURFscz/SBS) integration
