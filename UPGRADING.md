@@ -1,5 +1,24 @@
 # UPGRADE NOTES
 
+## 7.1.0
+This version adds support for [SBS](https://github.com/SURFscz/SBS)-based authorization and attribute aggregation.
+
+The following configuration option should be added to `parameters.yml`
+  - `feature_enable_sram_interrupt` (bool): feature flag to enable SBS support and callout.  Set to `false` if you don't use
+     SBS, in which case all other SBS-related configuration options are ignored (but still need to be present!).
+  - `sram.api_token` (string): SBS API token for authorization of SBS requests.
+  - `sram.base_url` (url): URL of the SBS engine.  Set to `https://sbs.dev.openconext.org/` for the devconf environment.
+  - `sram.authz_location` (string): path to the authorization endpoint at SBS.  Set to `authz_eb` for default SBS value.
+  - `sram.attributes_location` (string): path to the attributes endpoint at SBS.  Set to `attributes_eb` for default SBS value.
+  - `sram.interrupt_location` (string): path to the interrupt endpoint at SBS.
+  - `sram.verify_peer`: (bool): wether or not to verify the TLS certificate of the SBS engine.  Set to `true`.
+  - `sram.allowed_attributes` (list of strings): list of atttributes that SBS is allowed
+    to replace in the SAML response.  Recommended value for SBS:
+    `['urn:mace:dir:attribute-def:eduPersonEntitlement', 'urn:mace:dir:attribute-def:eduPersonPrincipalName', 'urn:mace:dir:attribute-def:uid', 'urn:oid:1.3.6.1.4.1.24552.500.1.1.1.13']`
+
+To use SBS integration, the minimum required version of SBS is v69.
+
+
 ## 7.0.0
 Upgraded Symfony from **version 3.3** to **version 5.4 (LTS)**.
 This update brings modernized architecture, performance improvements, enhanced developer experience and security fixes till February 2029.
