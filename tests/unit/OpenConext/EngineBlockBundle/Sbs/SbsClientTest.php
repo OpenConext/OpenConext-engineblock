@@ -45,7 +45,6 @@ class SbsClientTest extends TestCase
             '/authz',
             '/interrupt',
             'Bearer test_token',
-            true
         );
     }
 

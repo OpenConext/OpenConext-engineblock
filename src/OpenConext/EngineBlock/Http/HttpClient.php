@@ -89,14 +89,13 @@ class HttpClient
      * @param array $headers
      * @return mixed
      */
-    public function post($data, $path, $parameters = [], array $headers = [], bool $verify = true)
+    public function post($data, $path, $parameters = [], array $headers = [])
     {
         $resource = ResourcePathFormatter::format($path, $parameters);
         $response = $this->httpClient->request('POST', $resource, [
             'http_errors' => false,
             'body' => $data,
             'headers' => $headers,
-            'verify' => $verify,
         ]);
         $statusCode = $response->getStatusCode();
 

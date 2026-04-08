@@ -33,7 +33,6 @@ final class SbsClient implements SbsClientInterface
         private readonly string $attributesLocation,
         private readonly string $interruptLocation,
         private readonly string $apiToken,
-        private readonly bool $verifyPeer
     ) {
     }
 
@@ -44,7 +43,6 @@ final class SbsClient implements SbsClientInterface
             $this->buildUrl($this->authzLocation),
             [],
             $this->requestHeaders(),
-            $this->verifyPeer
         );
 
         if (!is_array($jsonData)) {
@@ -61,7 +59,6 @@ final class SbsClient implements SbsClientInterface
             $this->buildUrl($this->attributesLocation),
             [],
             $this->requestHeaders(),
-            $this->verifyPeer
         );
 
         if (!is_array($jsonData)) {

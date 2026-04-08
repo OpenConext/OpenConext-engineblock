@@ -323,7 +323,6 @@ parameters:
     sram.authz_location: authz
     sram.attributes_location: attributes
     sram.interrupt_location: interrupt
-    sram.verify_peer: false
     sram.allowed_attributes:
         - 'urn:mace:dir:attribute-def:eduPersonEntitlement'
         - 'urn:mace:dir:attribute-def:eduPersonPrincipalName'
