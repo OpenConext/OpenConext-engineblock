@@ -80,7 +80,7 @@ class FallbackExceptionListener
         $path = $event->getRequest()->getPathInfo();
         if (in_array($path, ['/health', '/internal/health', '/info', '/internal/info'], true)) {
             $event->setResponse(new JsonResponse(
-                ['status' => 'DOWN', 'message' => $exception->getMessage()],
+                ['status' => 'DOWN'],
                 JsonResponse::HTTP_SERVICE_UNAVAILABLE
             ));
             return;
