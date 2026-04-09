@@ -58,7 +58,7 @@ the built-in metadata much more flexible than it is now.
 * Every document starts with a terms of use comment. This value can be configured in the `openconext.termsOfUse` ini
   setting.
 * The Metadata documents are signed.
-* The Metadata documents are deemed valid for a period of 86400 seconds (1 day).
+* The Metadata documents are deemed valid for a configurable period (default: 86400 seconds / 1 day), controlled via the `metadata_expiration_time` parameter in `parameters.yml`.
 * The EngineBlock UIInfo elements are generated from the `parameters.yml` config and are translated to English and
 Dutch when possible. Mainly English UI Info will be published.
 * The logo can be specified using the following `parameters.yml` settings

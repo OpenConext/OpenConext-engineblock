@@ -55,7 +55,7 @@ parameters:
     ## Add RequestedAttributes to the AttributeConsumingService of the SP Proxy metadata of Engineblock, default is all
     ## Options are 'all' (optional and required attributes), 'required' (only required attributes) or 'none'
     metadata_add_requested_attributes: all
-    ## The number of seconds a Metadata document is deemed valid (default 24h)
+    ## The number of seconds a Metadata document is deemed valid (default 24h). Must be a positive integer.
     metadata_expiration_time: 86400
 
     ##########################################################################################

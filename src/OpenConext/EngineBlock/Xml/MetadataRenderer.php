@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlock\Xml;
 
 use EngineBlock_Saml2_IdGenerator;
+use InvalidArgumentException;
 use OpenConext\EngineBlock\Metadata\Factory\Collection\IdentityProviderEntityCollection;
 use OpenConext\EngineBlock\Metadata\Factory\Helper\IdentityProviderMetadataHelper;
 use OpenConext\EngineBlock\Metadata\Factory\Helper\ServiceProviderMetadataHelper;
@@ -30,6 +31,9 @@ use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
 use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 use Twig\Environment;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MetadataRenderer
 {
     const ID_PREFIX = 'EB';
@@ -37,7 +41,7 @@ class MetadataRenderer
     /**
      * The number of seconds a Metadata document is deemed valid
      */
-    private $metadataExpirationTime;
+    private int $metadataExpirationTime;
 
     /**
      * @var Environment
@@ -86,6 +90,13 @@ class MetadataRenderer
         string $addRequestedAttributes,
         int $metadataExpirationTime
     ) {
+        if ($metadataExpirationTime <= 0) {
+            throw new InvalidArgumentException(sprintf(
+                'metadataExpirationTime must be a positive integer, %d given',
+                $metadataExpirationTime
+            ));
+        }
+
         $this->languageSupportProvider = $languageSupportProvider;
         $this->twig = $twig;
         $this->samlIdGenerator = $samlIdGenerator;
