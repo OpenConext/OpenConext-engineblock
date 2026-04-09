@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlock\Xml;
 use DOMDocument;
 use EngineBlock_Saml2_IdGenerator;
 use Exception;
+use InvalidArgumentException;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
@@ -295,8 +296,48 @@ class MetadataRendererTest extends TestCase
         $this->assertStringNotContainsString($this->getRequestedAttributeXml('attribute3', false), $xml);
     }
 
-    private function buildMetadataRenderer(string $addRequestedAttributes)
+    #[Group('Metadata')]
+    #[Test]
+    public function a_negative_metadata_expiration_time_throws_an_invalid_argument_exception()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->buildMetadataRenderer('all', -1);
+    }
+
+    #[Group('Metadata')]
+    #[Test]
+    public function a_zero_metadata_expiration_time_throws_an_invalid_argument_exception()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->buildMetadataRenderer('all', 0);
+    }
+
+    #[Group('Metadata')]
+    #[Test]
+    public function the_configured_metadata_expiration_time_is_reflected_in_the_valid_until_attribute()
+    {
+        $fixedTime = mktime(0, 0, 0, 1, 1, 2026);
+        $expirationTime = 3600;
+
+        $timeProvider = $this->createMock(TimeProvider::class);
+        $timeProvider->method('timestamp')
+            ->willReturnCallback(function ($deltaSeconds) use ($fixedTime) {
+                return gmdate(TimeProvider::TIMESTAMP_FORMAT, $fixedTime + $deltaSeconds);
+            });
+
+        $renderer = $this->buildMetadataRenderer('all', $expirationTime, $timeProvider);
+
+        $expectedValidUntil = gmdate(TimeProvider::TIMESTAMP_FORMAT, $fixedTime + $expirationTime);
+
+        $spXml = $renderer->fromServiceProviderEntity($this->buildSp(), 'default');
+        $this->assertStringContainsString('validUntil="' . $expectedValidUntil . '"', $spXml);
+    }
+
+    private function buildMetadataRenderer(
+        string $addRequestedAttributes,
+        int $metadataExpirationTime = 86400,
+        ?TimeProvider $timeProvider = null
+    ) {
         $basePath = realpath(__DIR__ . '/../../../../../');
 
         $privateKey = new X509PrivateKey($basePath . '/tests/resources/key/engineblock.pem');
@@ -339,8 +380,9 @@ class MetadataRendererTest extends TestCase
             $samlIdGenerator,
             $keyPairFactory,
             $documentSigner,
-            new TimeProvider(),
-            $addRequestedAttributes
+            $timeProvider ?? new TimeProvider(),
+            $addRequestedAttributes,
+            $metadataExpirationTime
         );
     }
 
