@@ -79,7 +79,6 @@ services:
         public: false
         arguments:
             - '@OpenConext\EngineBlockBundle\Authentication\Repository\DbalConsentRepository'
-            - '@OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration'
 
     OpenConext\EngineBlock\Service\Consent\ConsentService:
         arguments:
