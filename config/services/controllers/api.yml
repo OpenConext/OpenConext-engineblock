@@ -26,6 +26,14 @@ services:
             - '@OpenConext\EngineBlock\Service\DeprovisionService'
             - 'EngineBlock'
 
+    OpenConext\EngineBlockBundle\Controller\Api\UserController:
+        arguments:
+            - '@security.token_storage'
+            - '@security.access.decision_manager'
+            - '@OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration'
+            - '@OpenConext\EngineBlock\Service\NameIdLookupService'
+            - '@logger'
+
     OpenConext\EngineBlockBundle\Controller\Api\HeartbeatController:
 
     OpenConext\EngineBlockBundle\Controller\Api\MetadataController:

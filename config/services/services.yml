@@ -94,6 +94,13 @@ services:
             - '@OpenConext\EngineBlockBundle\Authentication\Repository\SamlPersistentIdRepository'
             - '@OpenConext\EngineBlockBundle\Authentication\Repository\ServiceProviderUuidRepository'
 
+    OpenConext\EngineBlock\Service\NameIdLookupService:
+        arguments:
+            - '@OpenConext\EngineBlockBundle\Authentication\Repository\UserRepository'
+            - '@OpenConext\EngineBlockBundle\Authentication\Repository\ServiceProviderUuidRepository'
+            - '@OpenConext\EngineBlockBundle\Authentication\Repository\SamlPersistentIdRepository'
+            - '@logger'
+
     OpenConext\EngineBlock\Service\MetadataService:
         arguments:
             - '@engineblock.compat.repository.metadata'

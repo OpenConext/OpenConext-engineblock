@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlock\Authentication\Value;
 
 use OpenConext\EngineBlock\Assert\Assertion;
+use RuntimeException;
 
 final class CollabPersonId
 {
@@ -82,6 +83,34 @@ final class CollabPersonId
     public function getCollabPersonId(): string
     {
         return $this->collabPersonId;
+    }
+
+    public function getSchacHomeOrganization(): string
+    {
+        $parts = explode(':', $this->collabPersonId, 5);
+        if (!isset($parts[3])) {
+            throw new RuntimeException(sprintf(
+                'Cannot extract schacHomeOrganization from CollabPersonId "%s"',
+                $this->collabPersonId
+            ));
+        }
+        return $parts[3];
+    }
+
+    /**
+     * Returns the uid as stored in the CollabPersonId. Note: if the original uid contained an
+     * @-sign, it will have been replaced by an underscore (legacy LDAP module behaviour).
+     */
+    public function getStoredUid(): string
+    {
+        $parts = explode(':', $this->collabPersonId, 5);
+        if (!isset($parts[4])) {
+            throw new RuntimeException(sprintf(
+                'Cannot extract uid from CollabPersonId "%s"',
+                $this->collabPersonId
+            ));
+        }
+        return $parts[4];
     }
 
     /**
