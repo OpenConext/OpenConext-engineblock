@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockBundle\EventListener;
 use EngineBlock_Exception;
 use OpenConext\EngineBlockBridge\ErrorReporter;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -75,6 +76,15 @@ class FallbackExceptionListener
             get_class($exception),
             $exception->getMessage()
         ));
+
+        $path = $event->getRequest()->getPathInfo();
+        if (in_array($path, ['/health', '/internal/health', '/info', '/internal/info'], true)) {
+            $event->setResponse(new JsonResponse(
+                ['status' => 'DOWN'],
+                JsonResponse::HTTP_SERVICE_UNAVAILABLE
+            ));
+            return;
+        }
 
         if ($exception instanceof EngineBlock_Exception) {
             $this->errorReporter->reportError($exception, 'Caught Unhandled EngineBlock_Exception');
