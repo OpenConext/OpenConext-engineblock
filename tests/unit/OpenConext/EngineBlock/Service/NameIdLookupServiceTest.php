@@ -23,6 +23,8 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonUuid;
 use OpenConext\EngineBlock\Service\NameIdLookupService;
+use OpenConext\EngineBlock\Service\NameIdResult;
+use OpenConext\EngineBlock\Service\UserIdentityResult;
 use OpenConext\EngineBlockBundle\Authentication\Entity\SamlPersistentId;
 use OpenConext\EngineBlockBundle\Authentication\Entity\User;
 use OpenConext\EngineBlockBundle\Authentication\Repository\SamlPersistentIdRepository;
@@ -128,9 +130,9 @@ final class NameIdLookupServiceTest extends TestCase
 
         $result = $this->service->resolveNameId('example.edu', 'student001', 'https://sp.example.com/');
 
-        $this->assertNotNull($result);
-        $this->assertSame($persistentId, $result['nameid']);
-        $this->assertTrue($result['stored']);
+        $this->assertInstanceOf(NameIdResult::class, $result);
+        $this->assertSame($persistentId, $result->nameId);
+        $this->assertTrue($result->stored);
     }
 
     #[Group('NameIdLookup')]
@@ -158,9 +160,9 @@ final class NameIdLookupServiceTest extends TestCase
 
         $result = $this->service->resolveNameId('example.edu', 'student001', 'https://sp.example.com/');
 
-        $this->assertNotNull($result);
-        $this->assertSame(sha1('COIN:' . $userUuid . $spUuid), $result['nameid']);
-        $this->assertFalse($result['stored']);
+        $this->assertInstanceOf(NameIdResult::class, $result);
+        $this->assertSame(sha1('COIN:' . $userUuid . $spUuid), $result->nameId);
+        $this->assertFalse($result->stored);
     }
 
     #[Group('NameIdLookup')]
@@ -225,10 +227,10 @@ final class NameIdLookupServiceTest extends TestCase
 
         $result = $this->service->resolveUserIdentity($persistentId);
 
-        $this->assertNotNull($result);
-        $this->assertSame('example.edu', $result['schacHomeOrganization']);
-        $this->assertSame('student001', $result['uid']);
-        $this->assertSame('https://sp.example.com/', $result['sp_entityid']);
+        $this->assertInstanceOf(UserIdentityResult::class, $result);
+        $this->assertSame('example.edu', $result->schacHomeOrganization);
+        $this->assertSame('student001', $result->uid);
+        $this->assertSame('https://sp.example.com/', $result->spEntityId);
     }
 
     #[Group('NameIdLookup')]

@@ -20,6 +20,9 @@ namespace OpenConext\EngineBlock\Service;
 
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonUuid;
+use OpenConext\EngineBlock\Authentication\Value\SchacHomeOrganization;
+use OpenConext\EngineBlock\Authentication\Value\Uid;
+use OpenConext\EngineBlockBundle\Authentication\Entity\SamlPersistentId;
 use OpenConext\EngineBlockBundle\Authentication\Repository\SamlPersistentIdRepository;
 use OpenConext\EngineBlockBundle\Authentication\Repository\ServiceProviderUuidRepository;
 use OpenConext\EngineBlockBundle\Authentication\Repository\UserRepository;
@@ -27,8 +30,6 @@ use Psr\Log\LoggerInterface;
 
 final class NameIdLookupService
 {
-    private const PERSISTENT_NAMEID_SALT = 'COIN:';
-
     public function __construct(
         private readonly UserRepository $userRepository,
         private readonly ServiceProviderUuidRepository $spUuidRepository,
@@ -37,14 +38,12 @@ final class NameIdLookupService
     ) {
     }
 
-    public function resolveNameId(string $schacHomeOrganization, string $uid, string $spEntityId): ?array
+    public function resolveNameId(string $schacHomeOrganization, string $uid, string $spEntityId): ?NameIdResult
     {
-        $collabPersonId = new CollabPersonId(sprintf(
-            '%s:%s:%s',
-            CollabPersonId::URN_NAMESPACE,
-            $schacHomeOrganization,
-            str_replace('@', '_', $uid)
-        ));
+        $collabPersonId = CollabPersonId::generateWithReplacedAtSignFrom(
+            new Uid($uid),
+            new SchacHomeOrganization($schacHomeOrganization)
+        );
 
         $user = $this->userRepository->findByCollabPersonId($collabPersonId);
         if ($user === null) {
@@ -64,14 +63,13 @@ final class NameIdLookupService
         $stored = $this->persistentIdRepository->findByUserAndSpUuid($userUuid, $spUuid);
 
         if ($stored !== null) {
-            return ['nameid' => $stored->persistentId, 'stored' => true];
+            return new NameIdResult($stored->persistentId, true);
         }
 
-        $calculatedNameId = sha1(self::PERSISTENT_NAMEID_SALT . $userUuid . $spUuid);
-        return ['nameid' => $calculatedNameId, 'stored' => false];
+        return new NameIdResult(SamlPersistentId::generate($userUuid, $spUuid)->persistentId, false);
     }
 
-    public function resolveUserIdentity(string $persistentId): ?array
+    public function resolveUserIdentity(string $persistentId): ?UserIdentityResult
     {
         $entry = $this->persistentIdRepository->find($persistentId);
         if ($entry === null) {
@@ -96,14 +94,10 @@ final class NameIdLookupService
             return null;
         }
 
-        $parts = explode(':', $user->collabPersonId->getCollabPersonId(), 5);
-        $schacHomeOrganization = $parts[3] ?? '';
-        $uid = $parts[4] ?? '';
-
-        return [
-            'schacHomeOrganization' => $schacHomeOrganization,
-            'uid' => $uid,
-            'sp_entityid' => $spEntityId,
-        ];
+        return new UserIdentityResult(
+            $user->collabPersonId->getSchacHomeOrganization(),
+            $user->collabPersonId->getStoredUid(),
+            $spEntityId,
+        );
     }
 }
