@@ -1,0 +1,24 @@
+{
+    "2d96e27a-76cf-4ca2-ac70-ece5d4c49525": {
+        "name": "https:\/\/serviceregistry.dev.openconext.local\/simplesaml\/module.php\/saml\/sp\/metadata.php\/default-idp",
+        "state": "prodaccepted",
+        "type": "saml20-idp",
+        "metadata": {
+            "discoveries": [
+                {
+                    "name_nl": "Ontbrekend Engels"
+                }
+            ],
+            "SingleSignOnService": [
+                {
+                    "Binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+                    "Location": "https:\/\/mujina-idp.dev.openConext.local\/SingleSignOnService"
+                }
+            ],
+            "name": {
+                "en": "Dummy IdP",
+                "nl": "Dummy IdP nl"
+            }
+        }
+    }
+}
