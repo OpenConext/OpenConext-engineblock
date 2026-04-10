@@ -335,7 +335,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         // Make sure it has a InResponseTo (Unsolicited is not supported) but don't actually check that what it's
         // in response to is actually a message we sent quite yet.
         if ($sspResponse->getInResponseTo() === null) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
+            throw new EngineBlock_Corto_Module_Bindings_UnsolicitedAssertionException(
                 'Unsolicited assertion (no InResponseTo in message) not supported!'
             );
         }

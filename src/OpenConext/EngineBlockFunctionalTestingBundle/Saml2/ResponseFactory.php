@@ -34,7 +34,11 @@ class ResponseFactory
         // Note that we expect the Mock IdP to always have a 'template' Response.
         $response = $mockIdp->getResponse();
 
-        $this->setResponseReferencesToRequest($request, $response);
+        if ($mockIdp->shouldOmitInResponseTo()) {
+            $response->setInResponseTo(null);
+        } else {
+            $this->setResponseReferencesToRequest($request, $response);
+        }
 
         $this->setResponseStatus($mockIdp, $response);
 
