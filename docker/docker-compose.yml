@@ -49,7 +49,7 @@ services:
 
 #   Remove commands for local X11 debugging
     cypress:
-        image: "cypress/included:13.1.0"
+        image: "cypress/included:14.5.4"
         environment:
             - CYPRESS_baseUrl=https://engine.dev.openconext.local
 #            - DISPLAY=${DISPLAY}
