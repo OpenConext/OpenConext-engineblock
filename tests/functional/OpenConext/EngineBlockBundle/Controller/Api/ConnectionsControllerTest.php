@@ -396,6 +396,39 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
         $this->assertStatusCode(Response::HTTP_OK, $client);
     }
 
+    #[Group('Api')]
+    #[Group('Connections')]
+    #[Group('MetadataPush')]
+    #[Test]
+    public function pushing_idp_with_discovery_missing_english_name_returns_bad_request(): void
+    {
+        $client = $this->createAuthorizedClient();
+
+        $payload = '{"connections":{"idp1":{
+            "allow_all_entities":true,
+            "allowed_connections":[],
+            "metadata":{
+                "name":{"en":"Test IdP","nl":"Test IdP nl"},
+                "discoveries":[{"name_nl":"Ontbrekend Engels"}],
+                "SingleSignOnService":[{
+                    "Binding":"urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+                    "Location":"https://idp.example.com/sso"
+                }]
+            },
+            "name":"https://idp.example.com",
+            "state":"prodaccepted",
+            "type":"saml20-idp"
+        }}}';
+
+        $client->request('POST', 'https://engine-api.dev.openconext.local/api/connections', [], [], [], $payload);
+
+        $this->assertStatusCode(Response::HTTP_BAD_REQUEST, $client);
+        $this->assertJson($client->getResponse()->getContent());
+        $isContentTypeJson = $client->getResponse()->headers->contains('Content-Type', 'application/json');
+        $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
+        $this->assertStringContainsString('name_en', $client->getResponse()->getContent());
+    }
+
     public static function invalidHttpMethodProvider()
     {
         return [

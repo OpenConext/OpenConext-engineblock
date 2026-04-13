@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlock\Metadata\Entity\Assembler;
 
+use OpenConext\EngineBlock\Exception\InvalidDiscoveryException;
 use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
@@ -41,15 +42,24 @@ class DiscoveryAssembler
             return [];
         }
 
+        $entityId = $connection->name ?? 'unknown';
         $discoveries = [];
-        foreach ($connection->metadata->discoveries as $discovery) {
+        foreach ($connection->metadata->discoveries as $index => $discovery) {
             $names = $this->extractLocalizedFields($discovery, 'name');
             $keywords = $this->extractLocalizedFields($discovery, 'keywords');
             $logo = $this->assembleLogo($discovery);
 
-            if (isset($names['en'])) {
-                $discoveries[] = Discovery::create($names, $keywords, $logo);
+            if (!isset($names['en'])) {
+                throw new InvalidDiscoveryException(
+                    sprintf(
+                        'Discovery entry #%d for entity "%s" is missing a required English name (name_en). ' .
+                        'Refusing to process metadata push.',
+                        $index,
+                        $entityId
+                    )
+                );
             }
+            $discoveries[] = Discovery::create($names, $keywords, $logo);
         }
 
         return empty($discoveries) ? [] : ['discoveries' => $discoveries];

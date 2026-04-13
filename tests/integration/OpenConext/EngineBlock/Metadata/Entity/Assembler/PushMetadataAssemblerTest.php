@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlock\Tests;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use OpenConext\EngineBlock\Exception\InvalidDiscoveryException;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\Entity\Assembler\PushMetadataAssembler;
@@ -567,6 +568,15 @@ class PushMetadataAssemblerTest extends TestCase
         $this->assertSame('Dummy IdP', $idp->nameEn);
         $this->assertSame('idp keywords', $idp->getMdui()->getKeywords('en'));
         $this->assertSame('https://engine.dev.openconext.local/images/logo.png?v=dev', $idp->logo->url);
+    }
+
+    public function test_it_rejects_idp_with_discovery_missing_english_name(): void
+    {
+        $this->expectException(InvalidDiscoveryException::class);
+        $this->expectExceptionMessage('missing a required English name');
+
+        $input = $this->readFixture('metadata_idp_discovery_missing_english.json');
+        $this->assembler->assemble($input);
     }
 
     private function readFixture(string $file): object
