@@ -1,0 +1,12 @@
+{% extends '@themeLayouts/scripts/default.html.twig' %}
+
+{% block title %}{{ parent() }} - {{ 'help_header'|trans }}{% endblock %}
+
+{% block content %}
+<main class="box">
+    <div class="mod-content">
+        <h1>{{ 'help_header'|trans }}</h1>
+        {{ 'help_page_content'|trans|raw }}
+    </div>
+</main>
+{% endblock %}
