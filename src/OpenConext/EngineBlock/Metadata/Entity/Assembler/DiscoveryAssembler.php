@@ -42,16 +42,21 @@ class DiscoveryAssembler
             return [];
         }
 
+        $entityId = $connection->name ?? 'unknown';
         $discoveries = [];
-        foreach ($connection->metadata->discoveries as $discovery) {
+        foreach ($connection->metadata->discoveries as $index => $discovery) {
             $names = $this->extractLocalizedFields($discovery, 'name');
             $keywords = $this->extractLocalizedFields($discovery, 'keywords');
             $logo = $this->assembleLogo($discovery);
 
             if (!isset($names['en'])) {
                 throw new InvalidDiscoveryException(
-                    'A discovery entry is missing a required English name (name_en). ' .
-                    'Refusing to process metadata push.'
+                    sprintf(
+                        'Discovery entry #%d for entity "%s" is missing a required English name (name_en). ' .
+                        'Refusing to process metadata push.',
+                        $index,
+                        $entityId
+                    )
                 );
             }
             $discoveries[] = Discovery::create($names, $keywords, $logo);
