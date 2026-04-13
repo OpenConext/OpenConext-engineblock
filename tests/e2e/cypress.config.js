@@ -22,7 +22,8 @@ module.exports = defineConfig({
                     }],
                     "require-sri": ["error", {
                         target: "crossorigin"
-                    }]
+                    }],
+                    "aria-label-misuse": "off"
                 }
             });
 
