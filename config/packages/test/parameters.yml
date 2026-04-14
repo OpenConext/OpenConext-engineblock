@@ -1,5 +1,4 @@
 parameters:
     api.users.nameIdLookup.username: nameid
     api.users.nameIdLookup.password: secret
-    feature_api_users_nameid: true
-    feature_api_users_id: true
+    feature_api_users_nameid_lookup: true

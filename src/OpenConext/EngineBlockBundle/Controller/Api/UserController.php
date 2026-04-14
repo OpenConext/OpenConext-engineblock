@@ -54,7 +54,7 @@ final class UserController
     #[Route(path: '/info/users/nameid', name: 'api_users_nameid', defaults: ['_format' => 'json'], methods: ['POST'])]
     public function nameIdAction(Request $request): JsonResponse
     {
-        if (!$this->featureConfiguration->isEnabled('api.users_nameid')) {
+        if (!$this->featureConfiguration->isEnabled('api.users_nameid_lookup')) {
             throw new ApiNotFoundHttpException('NameID lookup API is disabled');
         }
 
@@ -83,8 +83,8 @@ final class UserController
     #[Route(path: '/info/users/id', name: 'api_users_id', defaults: ['_format' => 'json'], methods: ['POST'])]
     public function userIdentityAction(Request $request): JsonResponse
     {
-        if (!$this->featureConfiguration->isEnabled('api.users_id')) {
-            throw new ApiNotFoundHttpException('User identity lookup API is disabled');
+        if (!$this->featureConfiguration->isEnabled('api.users_nameid_lookup')) {
+            throw new ApiNotFoundHttpException('NameID lookup API is disabled');
         }
 
         $this->assertAuthorized();
