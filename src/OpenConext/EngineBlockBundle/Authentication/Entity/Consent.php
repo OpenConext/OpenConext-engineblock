@@ -56,7 +56,7 @@ class Consent
     /**
      * @var string
      */
-    #[ORM\Column(type: Types::STRING, length: 80, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 80, nullable: false)]
     public ?string $attribute = null;
 
     /**
