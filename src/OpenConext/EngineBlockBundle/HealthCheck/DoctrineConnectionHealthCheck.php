@@ -24,6 +24,7 @@ use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\MonitorBundle\HealthCheck\HealthCheckInterface;
 use OpenConext\MonitorBundle\HealthCheck\HealthReportInterface;
 use OpenConext\MonitorBundle\Value\HealthReport;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test if there is a working database connection.
@@ -40,7 +41,7 @@ class DoctrineConnectionHealthCheck implements HealthCheckInterface
      */
     private $query;
 
-    public function __construct($query)
+    public function __construct(string $query, private readonly LoggerInterface $logger)
     {
         Assertion::nonEmptyString($query, 'health check query');
         $this->query = $query;
@@ -59,6 +60,10 @@ class DoctrineConnectionHealthCheck implements HealthCheckInterface
             try {
                 $this->entityManager->getConnection()->executeQuery($this->query);
             } catch (Exception $e) {
+                $this->logger->error(
+                    'Unable to execute a query on the database.',
+                    ['exception' => $e]
+                );
                 return HealthReport::buildStatusDown('Unable to execute a query on the database.');
             }
         }
