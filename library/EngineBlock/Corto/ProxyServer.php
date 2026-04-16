@@ -830,8 +830,7 @@ class EngineBlock_Corto_ProxyServer
         $subjectConfirmation->setSubjectConfirmationData($subjectConfirmationData);
 
         // Confirm where we are sending it.
-        $acs = $this->getRequestAssertionConsumer($request);
-        $subjectConfirmationData->setRecipient($acs->location);
+        $subjectConfirmationData->setRecipient($newResponse->getDestination());
 
         // Confirm that this is in response to their AuthnRequest (unless, you know, it isn't).
         if (!$request->isUnsolicited()) {
@@ -964,7 +963,7 @@ class EngineBlock_Corto_ProxyServer
      *
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
      * @param ServiceProvider $serviceProvider
-     * @return null|\OpenConext\EngineBlock\Metadata\IndexedService
+     * @return null|\OpenConext\EngineBlock\Metadata\IndexedService|false
      */
     public function getCustomAssertionConsumer(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
@@ -983,9 +982,6 @@ class EngineBlock_Corto_ProxyServer
         }
 
         if ($protocolBinding !== Constants::BINDING_HTTP_POST) {
-            $this->_server->getLogger()->notice(
-                "ProtocolBinding '{$protocolBinding}' requested by Issuer '{$serviceProvider->entityId}' is not supported, ignoring..."
-            );
             return false;
         }
 
