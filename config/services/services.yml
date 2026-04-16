@@ -157,6 +157,7 @@ services:
             - '@OpenConext\EngineBlock\Xml\DocumentSigner'
             - '@OpenConext\EngineBlock\Service\TimeProvider\TimeProvider'
             - '%metadata_add_requested_attributes%'
+            - "%metadata_expiration_time%"
 
     OpenConext\EngineBlock\Xml\MetadataProvider:
         arguments:

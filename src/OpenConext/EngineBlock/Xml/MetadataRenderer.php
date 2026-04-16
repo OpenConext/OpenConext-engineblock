@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlock\Xml;
 
 use EngineBlock_Saml2_IdGenerator;
+use InvalidArgumentException;
 use OpenConext\EngineBlock\Metadata\Factory\Collection\IdentityProviderEntityCollection;
 use OpenConext\EngineBlock\Metadata\Factory\Helper\IdentityProviderMetadataHelper;
 use OpenConext\EngineBlock\Metadata\Factory\Helper\ServiceProviderMetadataHelper;
@@ -30,6 +31,9 @@ use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
 use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 use Twig\Environment;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MetadataRenderer
 {
     const ID_PREFIX = 'EB';
@@ -37,7 +41,7 @@ class MetadataRenderer
     /**
      * The number of seconds a Metadata document is deemed valid
      */
-    const METADATA_EXPIRATION_TIME = 86400;
+    private int $metadataExpirationTime;
 
     /**
      * @var Environment
@@ -83,8 +87,16 @@ class MetadataRenderer
         KeyPairFactory $keyPairFactory,
         DocumentSigner $documentSigner,
         TimeProvider $timeProvider,
-        string $addRequestedAttributes
+        string $addRequestedAttributes,
+        int $metadataExpirationTime
     ) {
+        if ($metadataExpirationTime <= 0) {
+            throw new InvalidArgumentException(sprintf(
+                'metadataExpirationTime must be a positive integer, %d given',
+                $metadataExpirationTime
+            ));
+        }
+
         $this->languageSupportProvider = $languageSupportProvider;
         $this->twig = $twig;
         $this->samlIdGenerator = $samlIdGenerator;
@@ -92,6 +104,7 @@ class MetadataRenderer
         $this->documentSigner = $documentSigner;
         $this->timeProvider = $timeProvider;
         $this->addRequestedAttributes = $addRequestedAttributes;
+        $this->metadataExpirationTime = $metadataExpirationTime;
     }
 
     public function fromServiceProviderEntity(ServiceProviderEntityInterface $sp, string $keyId) : string
@@ -190,6 +203,6 @@ class MetadataRenderer
 
     private function getValidUntil(): string
     {
-        return $this->timeProvider->timestamp(self::METADATA_EXPIRATION_TIME);
+        return $this->timeProvider->timestamp($this->metadataExpirationTime);
     }
 }
