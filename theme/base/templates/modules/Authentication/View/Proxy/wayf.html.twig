@@ -6,11 +6,60 @@
 {% set organisationNoun = 'organisation_noun'|trans %}
 {% set pageTitle = 'log_in_to'|trans({'%arg1%': spName, '%organisationNoun%': organisationNoun}) %}
 
-{# Data object containing the formatted IdP's #}
-{% set connectedIdps = connectedIdps(idpList) %}
-
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
 
 {% block content %}
-    {% include '@theme/Authentication/View/Proxy/wayf_content.html.twig' %}
+    {% include '@theme/Default/Partials/LoginBar.html.twig' with { loginName: 'suite_name'|trans } only %}
+    <main class="wayf" id="top">
+        {% include '@theme/Authentication/View/Proxy/Partials/Shared/header.html.twig' with { pageTitle: pageTitle } only %}
+        {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noScript.html.twig' only %}
+
+        {% block wayf_content %}
+            <div class="wayf__content" id="idp-picker">
+                {% include '@theme/Authentication/View/Proxy/Partials/Shared/site-notice.html.twig' only %}
+                {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noAccess/successMessage.html.twig' only %}
+                {% include '@theme/Authentication/View/Proxy/Partials/WAYF/preselection.html.twig' with {
+                    connectedIdps: connectedIdps,
+                    action: action,
+                    requestId: requestId,
+                    showRequestAccess: showRequestAccess,
+                    cutoffPointForShowingUnfilteredIdps: cutoffPointForShowingUnfilteredIdps,
+                } only %}
+                {% if showPreferredIdps %}
+                    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/preferredIdps.html.twig' with {
+                        connectedIdps: connectedIdps,
+                        preferredConnectedIdps: preferredConnectedIdps,
+                        action: action,
+                        requestId: requestId,
+                    } only %}
+                {% endif %}
+                {% include '@theme/Authentication/View/Proxy/Partials/WAYF/remainingIdps.html.twig' with {
+                    connectedIdps: connectedIdps,
+                    regularConnectedIdps: regularConnectedIdps,
+                    showIdPBanner: showIdPBanner,
+                    showPreferredIdps: showPreferredIdps,
+                    action: action,
+                    requestId: requestId,
+                    rememberChoiceFeature: rememberChoiceFeature,
+                    cutoffPointForShowingUnfilteredIdps: cutoffPointForShowingUnfilteredIdps,
+                    showRequestAccess: showRequestAccess,
+                } only %}
+                {% include '@theme/Authentication/View/Proxy/Partials/WAYF/backLink.html.twig' with {
+                    backLink: backLink,
+                } only %}
+                {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noAccess/noAccess.html.twig' with {
+                    serviceProvider: serviceProvider,
+                } only %}
+                {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noResults.html.twig' only %}
+            </div>
+        {% endblock %}
+    </main>
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/scriptConfig.html.twig' with {
+        connectedIdps: connectedIdps,
+        serviceProvider: serviceProvider,
+        showRequestAccess: showRequestAccess,
+        rememberChoiceFeature: rememberChoiceFeature,
+        cutoffPointForShowingUnfilteredIdps: cutoffPointForShowingUnfilteredIdps,
+    } only %}
+    {% include '@theme/Default/Partials/footer.html.twig' with { helpLink: helpLink } only %}
 {% endblock %}

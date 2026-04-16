@@ -18,6 +18,8 @@
 
 namespace OpenConext\EngineBlockBundle\Bridge;
 
+use OpenConext\EngineBlock\Service\Wayf\IdpSplitter;
+use OpenConext\EngineBlockBundle\Service\WayfViewModelFactory;
 use Twig\Environment;
 
 /**
@@ -29,7 +31,16 @@ use Twig\Environment;
 final readonly class DiContainerRuntime
 {
 
-    public function __construct(public Environment $twig)
+    public function __construct(
+        public Environment $twig,
+        public IdpSplitter $idpSplitter,
+        public WayfViewModelFactory $wayfViewModelFactory,
+        private array $preferredIdpEntityIds = [],
+    ) {
+    }
+
+    public function getPreferredIdpEntityIds(): array
     {
+        return $this->preferredIdpEntityIds;
     }
 }

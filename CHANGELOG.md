@@ -33,7 +33,10 @@ Changes:
   * The `0000-00-00 00:00:00` is added for clarity/consistency, as this is probably the default behaviour of your database already.
 * Removed unused index `consent.deleted_at`. Delete this from your production database if it's there.
 * Added a specific error page for unsolicited SAML responses (IdP-initiated SSO without a prior AuthnRequest).
+* A new parameter `wayf.preferred_idp_entity_ids` must be added to `parameters.yml`. To display a set of IdPs prominent at the top of the WAYF, add the entityId's of those IdPs to this parameter.
+  * To keep the old behaviour, set the value to `[]`
 
+**Default behaviour (no change):** when the parameter is absent or empty, the WAYF behaves exactly as before.
 * Stabilized consent checks
   * In order to make the consent hashes more robust, a more consistent way of hashing the user attributes has been introduced
   * This feature automatically migrates from the old hashes to the new hashes upon login.
