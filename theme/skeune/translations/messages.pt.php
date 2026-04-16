@@ -59,6 +59,7 @@ return $overrides + [
     'wayf_noaccess_form_announcement_screenreader' => 'Some required fields are not filled in, or not correctly filled in.',
     'wayf_defaultIdp_start'     => 'If your %organisation_noun% is not listed,',
     'wayf_defaultIdp_linkText'  => '%defaultIdpName% is available as an alternative.',
+    'wayf_remaining_idps_search_label' => 'Ou procure uma instituição neerlandesa na lista',
     'wayf_idp_title_screenreader' => 'Login with ',
     'wayf_idp_title_noaccess_screenreader'  => 'No access with',
 

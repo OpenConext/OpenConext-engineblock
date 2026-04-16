@@ -1,9 +1,9 @@
-{% if backLink is defined and backLink == true %}
+{% if backLink %}
     <div class="buttonLink--secondary" tabindex="0">
         {% include '@theme/Default/Partials/buttonLink.html.twig' with {
             buttonUrl: 'javascript:window.history.back(-2)',
             className: 'wayf__backLink',
             text: 'return_to_sp'|trans
-        } %}
+        } only %}
     </div>
 {% endif %}

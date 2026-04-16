@@ -2,9 +2,17 @@ services:
     _defaults:
         public: true
 
+    OpenConext\EngineBlock\Service\Wayf\IdpSplitter:
+
+    OpenConext\EngineBlockBundle\Service\WayfViewModelFactory:
+        arguments:
+            $wayfExtension: '@OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Wayf'
+
     OpenConext\EngineBlockBundle\Bridge\EngineBlockBootstrapper:
         autowire: true
         autoconfigure: true
+        arguments:
+            $preferredIdpEntityIds: '%wayf.preferred_idp_entity_ids%'
         tags:
             - { name: kernel.event_subscriber }
 

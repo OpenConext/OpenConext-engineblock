@@ -462,8 +462,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
 
         $currentLocale = $container->getLocaleProvider()->getLocale();
 
-        $cookies = $container->getSymfonyRequest()->cookies->all();
-
         if ($request->isDebugRequest()) {
             $serviceProvider = $this->getEngineSpRole($this->_server);
         } else {
@@ -478,27 +476,39 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         );
 
         $defaultIdPInIdPList = $this->isDefaultIdPPresent($idpList);
-        $showDefaultIdpBanner = (bool) $container->shouldDisplayDefaultIdpBannerOnWayf() && $defaultIdPInIdPList;
+
+        $diContainerRuntime = $application->getDiContainerRuntime();
+        $preferredIdpEntityIds = $diContainerRuntime->getPreferredIdpEntityIds();
+        $split = $diContainerRuntime->idpSplitter->split($idpList, $preferredIdpEntityIds);
+        $showPreferredIdps = !empty($split['preferred']);
+        $isDefaultIdpPreferred = in_array($container->getDefaultIdPEntityId(), $preferredIdpEntityIds, true);
+        $showDefaultIdpBanner = (bool) $container->shouldDisplayDefaultIdpBannerOnWayf()
+            && $defaultIdPInIdPList
+            && (!$showPreferredIdps || !$isDefaultIdpPreferred);
 
         $rememberChoiceFeature = $container->getRememberChoice();
 
+        $viewModel = $diContainerRuntime->wayfViewModelFactory->create(
+            idpList: $idpList,
+            regularIdpList: $split['regular'],
+            preferredIdpList: $split['preferred'],
+            showPreferredIdps: $showPreferredIdps,
+            action: $action,
+            greenHeader: $serviceProvider->getDisplayName($currentLocale),
+            helpLink: '/authentication/idp/help-discover?lang=' . $currentLocale,
+            backLink: $container->isUiOptionReturnToSpActive(),
+            cutoffPointForShowingUnfilteredIdps: $container->getCutoffPointForShowingUnfilteredIdps(),
+            showIdPBanner: $showDefaultIdpBanner,
+            rememberChoiceFeature: $rememberChoiceFeature,
+            showRequestAccess: $serviceProvider->getCoins()->displayUnconnectedIdpsWayf(),
+            requestId: $request->getId(),
+            serviceProvider: $serviceProvider,
+            showRequestAccessContainer: true,
+        );
+
         $output = $this->twig->render(
             '@theme/Authentication/View/Proxy/wayf.html.twig',
-            [
-                'action' => $action,
-                'greenHeader' => $serviceProvider->getDisplayName($currentLocale),
-                'helpLink' => '/authentication/idp/help-discover?lang=' . $currentLocale,
-                'backLink' => $container->isUiOptionReturnToSpActive(),
-                'cutoffPointForShowingUnfilteredIdps' => $container->getCutoffPointForShowingUnfilteredIdps(),
-                'showIdPBanner' => $showDefaultIdpBanner,
-                'rememberChoiceFeature' => $rememberChoiceFeature,
-                'showRequestAccess' => $serviceProvider->getCoins()->displayUnconnectedIdpsWayf(),
-                'requestId' => $request->getId(),
-                'serviceProvider' => $serviceProvider,
-                'idpList' => $idpList,
-                'cookies' => $cookies,
-                'showRequestAccessContainer' => true,
-            ]
+            $viewModel->toArray()
         );
         $this->_server->sendOutput($output);
     }
