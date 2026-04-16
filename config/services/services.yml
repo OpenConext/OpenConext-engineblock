@@ -18,6 +18,7 @@ services:
         class: OpenConext\EngineBlockBundle\HealthCheck\DoctrineConnectionHealthCheck
         arguments:
             - '%monitor_database_health_check_query%'
+            - '@logger'
         calls:
             - [ setEntityManager, ['@?doctrine.orm.entity_manager']]
         tags:
