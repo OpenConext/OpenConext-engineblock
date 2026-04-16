@@ -133,6 +133,11 @@ class MockServiceProvider extends AbstractMockEntityRole
         $this->descriptor->getExtensions()['SAMLRequest']->setProxyCount($proxyCount);
     }
 
+    public function setRequestedProtocolBinding(string $binding)
+    {
+        $this->descriptor->getExtensions()['SAMLRequest']->setProtocolBinding($binding);
+    }
+
     public function setAuthnRequestToPassive()
     {
         $this->descriptor->getExtensions()['SAMLRequest']->setIsPassive(true);

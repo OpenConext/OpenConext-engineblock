@@ -333,6 +333,18 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^the SP requests ProtocolBinding "([^"]*)"$/
+     */
+    public function theSpRequestsProtocolBinding($binding)
+    {
+        $sp = $this->mockSpRegistry->getOnly();
+
+        $sp->setRequestedProtocolBinding($binding);
+
+        $this->mockSpRegistry->save();
+    }
+
+    /**
      * @Given /^no registered SPs/
      */
     public function noRegisteredServiceProviders()

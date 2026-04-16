@@ -16,15 +16,13 @@
  * limitations under the License.
  */
 
-use OpenConext\EngineBlock\Logger\Message\AdditionalInfo;
-use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
-use OpenConext\EngineBlockBundle\Exception\InvalidArgumentException as EngineBlockBundleInvalidArgumentException;
 use OpenConext\EngineBlockBundle\Service\DiscoverySelectionService;
 use SAML2\AuthnRequest;
+use SAML2\Constants;
 use SAML2\Response;
 use SAML2\XML\saml\Issuer;
 use Symfony\Component\HttpFoundation\Request;
@@ -103,6 +101,14 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
 
         // Exposing entityId to be used when tracking the start of an authentication procedure
         $application->authenticationStateSpEntityId = $sp->entityId;
+
+        // EB will fall back to HTTP-POST
+        $protocolBinding = $request->getProtocolBinding();
+        if (!empty($protocolBinding) && $protocolBinding !== Constants::BINDING_HTTP_POST) {
+            $log->notice(
+                "ProtocolBinding '{$protocolBinding}' requested by Issuer '{$sp->entityId}' is not supported, ignoring..."
+            );
+        }
 
         // Flush log if an SP in the requester chain has additional logging enabled
         $log->info("Determining whether service provider in chain requires additional logging");
