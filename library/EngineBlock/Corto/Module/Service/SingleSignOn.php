@@ -237,6 +237,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($log);
         $authnRequestRepository->store($request);
 
+        $correlationIdRepository = $application->getDiContainer()->getCorrelationIdRepository();
+        $correlationIdRepository->mint($request->getId());
+        $correlationIdRepository->resolve($request->getId());
+
         // Show WAYF
         $log->info("Multiple candidate IdPs: redirecting to WAYF");
         $this->_showWayf($request, $candidateIDPs);

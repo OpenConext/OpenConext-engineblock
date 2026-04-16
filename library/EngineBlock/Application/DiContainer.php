@@ -613,4 +613,12 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
     {
         return new EngineBlock_Arp_NameIdSubstituteResolver($this->container->get('engineblock.compat.logger'));
     }
+
+    /**
+     * @return \OpenConext\EngineBlock\Request\CorrelationIdRepository
+     */
+    public function getCorrelationIdRepository(): \OpenConext\EngineBlock\Request\CorrelationIdRepository
+    {
+        return $this->container->get(\OpenConext\EngineBlock\Request\CorrelationIdRepository::class);
+    }
 }
