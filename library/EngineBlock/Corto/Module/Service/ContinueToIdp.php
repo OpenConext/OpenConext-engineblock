@@ -94,6 +94,15 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
             );
         }
 
+        // Resolve here so log entries emitted during this leg (e.g. the debug
+        // block below) carry the correlation ID. ProxyServer::sendAuthenticationRequest
+        // will also call resolve() when it links the IdP request ID — that is
+        // idempotent and sets the same value.
+        $correlationIdRepository = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getCorrelationIdRepository();
+        $correlationIdRepository->resolve($id);
+
         // Flush log if SP or IdP has additional logging enabled
         if ($request->isDebugRequest()) {
             $sp = $this->getEngineSpRole($this->_server);

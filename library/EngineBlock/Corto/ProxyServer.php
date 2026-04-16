@@ -471,6 +471,12 @@ class EngineBlock_Corto_ProxyServer
         $authnRequestRepository->store($spRequest);
         $authnRequestRepository->link($ebRequest, $spRequest);
 
+        $correlationIdRepository = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getCorrelationIdRepository();
+        $correlationIdRepository->mint($spRequest->getId());
+        $correlationIdRepository->link($ebRequest->getId(), $spRequest->getId());
+        $correlationIdRepository->resolve($spRequest->getId());
 
         $this->getBindingsModule()->send($ebRequest, $identityProvider);
     }
@@ -555,6 +561,13 @@ class EngineBlock_Corto_ProxyServer
         $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_logger);
         $authnRequestRepository->store($spRequest);
         $authnRequestRepository->link($ebRequest, $spRequest);
+
+        $correlationIdRepository = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getCorrelationIdRepository();
+        $correlationIdRepository->mint($spRequest->getId());
+        $correlationIdRepository->link($ebRequest->getId(), $spRequest->getId());
+        $correlationIdRepository->resolve($spRequest->getId());
 
         $this->getBindingsModule()->send($ebRequest, $identityProvider, true);
     }

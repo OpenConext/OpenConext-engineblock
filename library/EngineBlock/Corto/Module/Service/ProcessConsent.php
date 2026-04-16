@@ -85,6 +85,12 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         $response = $processStep->getResponse();
 
         $request = $this->_server->getReceivedRequestFromResponse($response);
+
+        $correlationIdRepository = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getCorrelationIdRepository();
+        $correlationIdRepository->resolve($request->getId());
+
         $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer()->getValue());
 
         $destinationMetadata = EngineBlock_SamlHelper::getDestinationSpMetadata(

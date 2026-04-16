@@ -91,6 +91,7 @@ class EngineBlock_Saml2_AuthnRequestSessionRepository
     ) {
         // Store the original Request
         $this->requestStorage[$spRequest->getId()] = $spRequest;
+
         return $this;
     }
 
@@ -105,6 +106,8 @@ class EngineBlock_Saml2_AuthnRequestSessionRepository
     ) {
         // Store the mapping from the new request ID to the original request ID
         $this->linkStorage[$fromRequest->getId()] = $toRequest->getId();
+
         return $this;
     }
+
 }

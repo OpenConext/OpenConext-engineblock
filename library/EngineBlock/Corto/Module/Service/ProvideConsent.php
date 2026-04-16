@@ -100,6 +100,11 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
 
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($response);
 
+        $correlationIdRepository = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getCorrelationIdRepository();
+        $correlationIdRepository->resolve($receivedRequest->getId());
+
         // update previous response with current response
         $this->_processingStateHelper->updateStepResponseByRequestId(
             $receivedRequest->getId(),
