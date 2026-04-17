@@ -1,6 +1,6 @@
 parameters:
-    api.users.nameIdLookup.username: nameid
-    api.users.nameIdLookup.password: secret
+    api.users.nameidlookup.username: nameid
+    api.users.nameidlookup.password: secret
     feature_api_users_nameid_lookup: true
     encryption_keys:
         default:

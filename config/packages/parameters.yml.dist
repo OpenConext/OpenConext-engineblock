@@ -77,8 +77,8 @@ parameters:
     api.users.profile.password: secret
     api.users.deprovision.username: lifecycle
     api.users.deprovision.password: secret
-    api.users.nameIdLookup.username: nameid
-    api.users.nameIdLookup.password: secret
+    api.users.nameidlookup.username: nameid
+    api.users.nameidlookup.password: secret
 
     ##########################################################################################
     ## CLIENT SETTINGS

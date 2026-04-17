@@ -12,8 +12,8 @@ security:
                     "%api.users.deprovision.username%":
                         password: "%api.users.deprovision.password%"
                         roles: 'ROLE_API_USER_DEPROVISION'
-                    "%api.users.nameIdLookup.username%":
-                        password: "%api.users.nameIdLookup.password%"
+                    "%api.users.nameidlookup.username%":
+                        password: "%api.users.nameidlookup.password%"
                         roles: 'ROLE_API_USER_NAMEID_LOOKUP'
 
     password_hashers:
