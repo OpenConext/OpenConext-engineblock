@@ -16,23 +16,24 @@
  * limitations under the License.
  */
 
-use Mockery as m;
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use SAML2\AuthnRequest;
+use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 class EngineBlock_Test_Saml2_AuthnRequestSessionRepositoryTest extends TestCase
 {
-    use MockeryPHPUnitIntegration;
+    private Session $session;
+    private EngineBlock_Saml2_AuthnRequestSessionRepository $repo;
 
     protected function setUp(): void
     {
-        $_SESSION = [];
-    }
-
-    protected function tearDown(): void
-    {
-        $_SESSION = [];
+        $this->session = new Session(new MockArraySessionStorage());
+        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack->method('getSession')->willReturn($this->session);
+        $this->repo = new EngineBlock_Saml2_AuthnRequestSessionRepository($requestStack);
     }
 
     private function makeRequest(string $id): EngineBlock_Saml2_AuthnRequestAnnotationDecorator
@@ -42,33 +43,101 @@ class EngineBlock_Test_Saml2_AuthnRequestSessionRepositoryTest extends TestCase
         return new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($authnRequest);
     }
 
-    private function makeRepository(): EngineBlock_Saml2_AuthnRequestSessionRepository
+    public function test_store_saves_request(): void
     {
-        $logger = m::mock(Psr\Log\LoggerInterface::class);
-        return new EngineBlock_Saml2_AuthnRequestSessionRepository($logger);
-    }
-
-    public function test_store_saves_request()
-    {
-        $repository = $this->makeRepository();
         $request = $this->makeRequest('_sp-request-A');
 
-        $repository->store($request);
+        $this->repo->store($request);
 
-        $storedRequest = $repository->findRequestById('_sp-request-A');
-        $this->assertSame($request, $storedRequest);
+        $this->assertSame($request, $this->repo->findRequestById('_sp-request-A'));
     }
 
-    public function test_link_stores_request_mapping()
+    public function test_find_request_by_id_returns_null_for_unknown_id(): void
     {
-        $repository = $this->makeRepository();
-        $spRequest = $this->makeRequest('_sp-request-A');
+        $this->assertNull($this->repo->findRequestById('_unknown'));
+    }
+
+    public function test_link_stores_request_mapping(): void
+    {
+        $spRequest  = $this->makeRequest('_sp-request-A');
         $idpRequest = $this->makeRequest('_idp-request-B');
 
-        $repository->store($spRequest);
-        $repository->link($idpRequest, $spRequest);
+        $this->repo->store($spRequest);
+        $this->repo->link($idpRequest, $spRequest);
 
-        $linkedRequestId = $repository->findLinkedRequestId('_idp-request-B');
-        $this->assertSame('_sp-request-A', $linkedRequestId);
+        $this->assertSame('_sp-request-A', $this->repo->findLinkedRequestId('_idp-request-B'));
+    }
+
+    public function test_find_linked_request_id_returns_null_for_unknown_id(): void
+    {
+        $this->assertNull($this->repo->findLinkedRequestId('_unknown'));
+    }
+
+    public function test_find_linked_request_id_returns_null_for_null_input(): void
+    {
+        $this->assertNull($this->repo->findLinkedRequestId(null));
+    }
+
+    public function test_store_and_find_multiple_requests(): void
+    {
+        $req1 = $this->makeRequest('_req-1');
+        $req2 = $this->makeRequest('_req-2');
+
+        $this->repo->store($req1);
+        $this->repo->store($req2);
+
+        $this->assertSame($req1, $this->repo->findRequestById('_req-1'));
+        $this->assertSame($req2, $this->repo->findRequestById('_req-2'));
+    }
+
+    public function test_store_is_noop_when_no_session_available(): void
+    {
+        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack->method('getSession')
+            ->willThrowException(new SessionNotFoundException());
+
+        $repo = new EngineBlock_Saml2_AuthnRequestSessionRepository($requestStack);
+        $request = $this->makeRequest('_req-A');
+
+        $repo->store($request); // must not throw
+
+        $this->assertNull($repo->findRequestById('_req-A'));
+    }
+
+    public function test_link_is_noop_when_no_session_available(): void
+    {
+        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack->method('getSession')
+            ->willThrowException(new SessionNotFoundException());
+
+        $repo = new EngineBlock_Saml2_AuthnRequestSessionRepository($requestStack);
+        $spRequest  = $this->makeRequest('_sp-A');
+        $idpRequest = $this->makeRequest('_idp-B');
+
+        $repo->link($idpRequest, $spRequest); // must not throw
+
+        $this->assertNull($repo->findLinkedRequestId('_idp-B'));
+    }
+
+    public function test_find_request_is_noop_when_no_session_available(): void
+    {
+        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack->method('getSession')
+            ->willThrowException(new SessionNotFoundException());
+
+        $repo = new EngineBlock_Saml2_AuthnRequestSessionRepository($requestStack);
+
+        $this->assertNull($repo->findRequestById('_req-A'));
+    }
+
+    public function test_find_linked_is_noop_when_no_session_available(): void
+    {
+        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack->method('getSession')
+            ->willThrowException(new SessionNotFoundException());
+
+        $repo = new EngineBlock_Saml2_AuthnRequestSessionRepository($requestStack);
+
+        $this->assertNull($repo->findLinkedRequestId('_req-A'));
     }
 }

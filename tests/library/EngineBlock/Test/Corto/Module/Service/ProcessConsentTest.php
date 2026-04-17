@@ -80,16 +80,21 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends TestCase
      */
     private $sessionMock;
 
+    /**
+     * @var EngineBlock_Saml2_AuthnRequestAnnotationDecorator
+     */
+    private $spRequest;
+
 
     public function setUp(): void
     {
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
 
+        $this->sspResponseMock = $this->mockSspResponse();  // sets $this->spRequest first
         $this->proxyServerMock    = $this->mockProxyServer();
         $this->xmlConverterMock   = $this->mockXmlConverter($diContainer->getXmlConverter());
         $this->consentFactoryMock = $diContainer->getConsentFactory();
         $this->authnStateHelperMock = $this->mockAuthnStateHelper();
-        $this->sspResponseMock = $this->mockSspResponse();
         $this->processingStateHelperMock = $this->mockProcessingStateHelper();
         $this->httpRequestMock = $this->mockHttpRequest();
     }
@@ -184,6 +189,11 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends TestCase
             ))
             ->setBindingsModule($this->mockBindingsModule());
 
+        // Mock findRequestFromRequestId so no session lookup is needed
+        Phake::when($proxyServerMock)
+            ->findRequestFromRequestId('EBREQUEST')
+            ->thenReturn($this->spRequest);
+
         return $proxyServerMock;
     }
 
@@ -255,17 +265,7 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends TestCase
         $issuer = new Issuer();
         $issuer->setValue('https://sp.example.edu');
         $spRequest->setIssuer($issuer);
-        $spRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($spRequest);
-
-        $ebRequest = new AuthnRequest();
-        $ebRequest->setId('EBREQUEST');
-        $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($ebRequest);
-
-        $dummySessionLog = new Psr\Log\NullLogger();
-        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($dummySessionLog);
-        $authnRequestRepository->store($spRequest);
-        $authnRequestRepository->store($ebRequest);
-        $authnRequestRepository->link($ebRequest, $spRequest);
+        $this->spRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($spRequest);
 
         $sspResponse = new Response();
         $sspResponse->setInResponseTo('EBREQUEST');
