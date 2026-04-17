@@ -194,11 +194,11 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         }
 
         // Multiple IdPs found...
-
+        $container = $application->getDiContainer();
         // Auto-select IdP when 'feature_enable_sso_notification' is enabled and send AuthenticationRequest on success
-        if ($application->getDiContainer()->getFeatureConfiguration()->isEnabled("eb.enable_sso_notification")) {
-            $idpEntityId = $application->getDiContainer()->getSsoNotificationService()->
-                handleSsoNotification($application->getDiContainer()->getSymfonyRequest()->cookies, $this->_server);
+        if ($container->getFeatureConfiguration()->isEnabled("eb.enable_sso_notification")) {
+            $idpEntityId = $container->getSsoNotificationService()
+                ->handleSsoNotification($container->getSymfonyRequest()->cookies, $this->_server);
 
             if (!empty($idpEntityId)) {
                 try {
@@ -214,8 +214,8 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         }
 
         // Auto-select IdP when 'wayf.rememberChoice' feature is enabled and is allowed for the current request
-        if (($application->getDiContainer()->getRememberChoice() === true) && !($request->getForceAuthn() || $request->isDebugRequest())) {
-            $cookies = $application->getDiContainer()->getSymfonyRequest()->cookies->all();
+        if (($container->getRememberChoice() === true) && !($request->getForceAuthn() || $request->isDebugRequest())) {
+            $cookies = $container->getSymfonyRequest()->cookies->all();
             if (array_key_exists('rememberchoice', $cookies)) {
                 $remembered = json_decode($cookies['rememberchoice']);
                 if (array_search($remembered, $candidateIDPs) !== false) {
@@ -234,10 +234,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             return;
         }
 
-        $authnRequestRepository = $application->getDiContainer()->getAuthnRequestSessionRepository();
+        $authnRequestRepository = $container->getAuthnRequestSessionRepository();
         $authnRequestRepository->store($request);
 
-        $correlationIdRepository = $application->getDiContainer()->getCorrelationIdRepository();
+        $correlationIdRepository = $container->getCorrelationIdRepository();
         $correlationIdRepository->mint($request->getId());
         $correlationIdRepository->resolve($request->getId());
 
