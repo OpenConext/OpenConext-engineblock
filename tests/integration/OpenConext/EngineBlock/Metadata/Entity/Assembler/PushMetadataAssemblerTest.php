@@ -396,6 +396,7 @@ class PushMetadataAssemblerTest extends TestCase
             ['schachomeorganization', 'saml20-idp', 'schacHomeOrganization', 'string'],
             ['policy_enforcement_decision_required', 'saml20-idp', 'policyEnforcementDecisionRequired', 'bool'],
             ['hidden', 'saml20-idp', 'hidden', 'bool'],
+            ['azure_domain_hint', 'saml20-idp', 'azureDomainHint', 'string'],
 
             // Abstract
             ['disable_scoping', 'saml20-idp', 'disableScoping', 'bool'],

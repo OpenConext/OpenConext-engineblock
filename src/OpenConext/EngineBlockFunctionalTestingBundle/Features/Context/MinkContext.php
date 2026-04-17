@@ -30,6 +30,7 @@ use function count;
 
 /**
  * Mink-enabled context.
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class MinkContext extends BaseMinkContext
 {
@@ -213,6 +214,38 @@ class MinkContext extends BaseMinkContext
                 $nodeList->length
             );
             throw new ExpectationException($message, $this->getSession());
+        }
+    }
+
+    /**
+     * Checks the full URL (including query string) against a regex pattern.
+     * The built-in "url should match" step strips the query string; use this step
+     * when the pattern targets query parameters (e.g. "whr=domain.nl").
+     *
+     * @Then /^the full url should match (?P<pattern>"(?:[^"]|\\")*")$/
+     */
+    public function assertFullUrlRegExp($pattern)
+    {
+        $url = $this->getSession()->getCurrentUrl();
+        if (!preg_match($this->fixStepArgument($pattern), $url)) {
+            throw new ExpectationException(
+                sprintf('Current page "%s" does not match the regex "%s".', $url, $pattern),
+                $this->getSession()
+            );
+        }
+    }
+
+    /**
+     * @Then /^the (?i)url(?-i) should not match (?P<pattern>"(?:[^"]|\\")*")$/
+     */
+    public function assertUrlNotRegExp($pattern)
+    {
+        $url = $this->getSession()->getCurrentUrl();
+        if (preg_match($this->fixStepArgument($pattern), $url)) {
+            throw new ExpectationException(
+                sprintf('URL "%s" matched pattern "%s", but it should not.', $url, $pattern),
+                $this->getSession()
+            );
         }
     }
 

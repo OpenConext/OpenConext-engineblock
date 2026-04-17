@@ -77,7 +77,8 @@ class Coins
         $signatureMethod,
         $mfaEntities,
         $defaultRAC,
-        $policyEnforcementDecisionRequired
+        bool $policyEnforcementDecisionRequired,
+        ?string $azureDomainHint = null
     ) {
         return new self([
             'guestQualifier' => $guestQualifier,
@@ -90,6 +91,7 @@ class Coins
             'mfaEntities' => $mfaEntities,
             'defaultRAC' => $defaultRAC,
             'policyEnforcementDecisionRequired' => $policyEnforcementDecisionRequired,
+            'azureDomainHint' => $azureDomainHint,
         ]);
     }
 
@@ -248,6 +250,11 @@ class Coins
     public function mfaEntities(): MfaEntityCollection
     {
         return $this->getValue('mfaEntities', MfaEntityCollection::fromCoin([]));
+    }
+
+    public function azureDomainHint(): ?string
+    {
+        return $this->getValue('azureDomainHint');
     }
 
     private function getValue($key, $default = null)

@@ -62,7 +62,6 @@ class ServiceRegistryFixture
      */
     private $entityManager;
 
-
     public function __construct(DoctrineMetadataRepository $repository, EntityManager $em)
     {
         $this->repository = $repository;
@@ -338,6 +337,42 @@ QUERY;
         assert($idp instanceof IdentityProvider);
 
         $this->setCoin($idp, 'policyEnforcementDecisionRequired', true);
+
+        return $this;
+    }
+
+    public function setAzureDomainHintForIdp($entityId, string $domainHint): self
+    {
+        $idp = $this->getIdentityProvider($entityId);
+        assert($idp instanceof IdentityProvider);
+
+        $this->setCoin($idp, 'azureDomainHint', $domainHint);
+
+        return $this;
+    }
+
+    public function preferHttpRedirectBindingForIdp($entityId): self
+    {
+        $idp = $this->getIdentityProvider($entityId);
+        assert($idp instanceof IdentityProvider);
+
+        $redirectServices = array_values(array_filter(
+            $idp->singleSignOnServices,
+            static fn(Service $s) => $s->binding === Constants::BINDING_HTTP_REDIRECT
+        ));
+
+        assert(
+            count($redirectServices) > 0,
+            'IdP has no HTTP-Redirect SSO binding; domain hint test would be meaningless'
+        );
+
+        $idp->singleSignOnServices = $redirectServices;
+
+        // Force Doctrine to recognise the property change under DEFERRED_EXPLICIT change tracking.
+        $this->entityManager->getUnitOfWork()->recomputeSingleEntityChangeSet(
+            $this->entityManager->getClassMetadata(IdentityProvider::class),
+            $idp
+        );
 
         return $this;
     }

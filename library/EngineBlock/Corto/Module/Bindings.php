@@ -710,6 +710,14 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             }
 
             $url = $sspBinding->getRedirectURL($sspMessage);
+
+            if ($remoteEntity instanceof IdentityProvider) {
+                $domainHint = $remoteEntity->getCoins()->azureDomainHint();
+                if (!empty($domainHint)) {
+                    $url .= '&whr=' . rawurlencode($domainHint);
+                }
+            }
+
             $this->_server->redirect($url, $message);
         }
         else {
