@@ -85,7 +85,9 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
             );
         }
 
-        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_server->getLogger());
+        $authnRequestRepository = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAuthnRequestSessionRepository();
         $request = $authnRequestRepository->findRequestById($id);
 
         if (!$request) {

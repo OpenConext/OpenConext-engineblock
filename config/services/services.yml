@@ -18,6 +18,7 @@ services:
         class: OpenConext\EngineBlockBundle\HealthCheck\DoctrineConnectionHealthCheck
         arguments:
             - '%monitor_database_health_check_query%'
+            - '@logger'
         calls:
             - [ setEntityManager, ['@?doctrine.orm.entity_manager']]
         tags:
@@ -386,3 +387,9 @@ services:
         class: OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger
         arguments:
             - "%sram.allowed_attributes%"
+
+    EngineBlock_Saml2_AuthnRequestSessionRepository:
+        class: EngineBlock_Saml2_AuthnRequestSessionRepository
+        public: true
+        arguments:
+            - '@request_stack'

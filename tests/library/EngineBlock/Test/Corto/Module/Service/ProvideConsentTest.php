@@ -184,8 +184,13 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
             array(new ServiceProvider('testSp'))
         ));
 
-        $bindingsModuleMock = $this->mockBindingsModule();
+        [$bindingsModuleMock, $spRequest] = $this->mockBindingsModule();
         $proxyServerMock->setBindingsModule($bindingsModuleMock);
+
+        // Mock findRequestFromRequestId so no session lookup is needed
+        Phake::when($proxyServerMock)
+            ->findRequestFromRequestId('EBREQUEST')
+            ->thenReturn($spRequest);
 
         Phake::when($proxyServerMock)
             ->renderTemplate(Phake::anyParameters())
@@ -199,9 +204,9 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
     }
 
     /**
-     * @return EngineBlock_Corto_Module_Bindings
+     * @return array{0: EngineBlock_Corto_Module_Bindings, 1: EngineBlock_Saml2_AuthnRequestAnnotationDecorator}
      */
-    private function mockBindingsModule()
+    private function mockBindingsModule(): array
     {
         $spRequest = new AuthnRequest();
         $spRequest->setId('SPREQUEST');
@@ -209,16 +214,6 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
         $issuer->setValue('testSp');
         $spRequest->setIssuer($issuer);
         $spRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($spRequest);
-
-        $ebRequest = new AuthnRequest();
-        $ebRequest->setId('EBREQUEST');
-        $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($ebRequest);
-
-        $dummyLog = new Psr\Log\NullLogger();
-        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($dummyLog);
-        $authnRequestRepository->store($spRequest);
-        $authnRequestRepository->store($ebRequest);
-        $authnRequestRepository->link($ebRequest, $spRequest);
 
         $assertion = new Assertion();
         $assertion->setAttributes(array(
@@ -246,7 +241,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
             ->receiveResponse(Phake::anyParameters())
             ->thenReturn($responseFixture);
 
-        return $bindingsModuleMock;
+        return [$bindingsModuleMock, $spRequest];
     }
 
     /**
