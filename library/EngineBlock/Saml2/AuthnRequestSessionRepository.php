@@ -16,81 +16,76 @@
  * limitations under the License.
  */
 
+use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
+use Symfony\Component\HttpFoundation\RequestStack;
+
 /**
  * Session storage for Authentication Requests. Store AuthnRequests and link requests together.
  */
 class EngineBlock_Saml2_AuthnRequestSessionRepository
 {
-    /**
-     * @var Psr\Log\LoggerInterface
-     */
-    private $sessionLog;
+    private const SESSION_KEY_REQUESTS = 'SAMLRequest';
+    private const SESSION_KEY_LINKS    = 'SAMLRequestLinks';
 
     /**
-     * @var
+     * @var RequestStack
      */
-    private $requestStorage;
+    private $requestStack;
 
-    /**
-     * @var array
-     */
-    private $linkStorage;
-
-    /**
-     * @param Psr\Log\LoggerInterface $sessionLog
-     */
-    public function __construct(Psr\Log\LoggerInterface $sessionLog)
+    public function __construct(RequestStack $requestStack)
     {
-        if (!isset($_SESSION['SAMLRequest'])) {
-            $_SESSION['SAMLRequest'] = array();
-        }
-        $this->requestStorage = &$_SESSION['SAMLRequest'];
-
-        if (!isset($_SESSION['SAMLRequestLinks'])) {
-            $_SESSION['SAMLRequestLinks'] = array();
-        }
-        $this->linkStorage    = &$_SESSION['SAMLRequestLinks'];
-
-        $this->sessionLog = $sessionLog;
+        $this->requestStack = $requestStack;
     }
 
     /**
      * @param string $requestId
-     * @return EngineBlock_Saml2_AuthnRequestAnnotationDecorator
+     * @return EngineBlock_Saml2_AuthnRequestAnnotationDecorator|null
      */
     public function findRequestById($requestId)
     {
-        if (!isset($this->requestStorage[$requestId])) {
+        try {
+            $session = $this->requestStack->getSession();
+        } catch (SessionNotFoundException $e) {
             return null;
         }
 
-        return $this->requestStorage[$requestId];
+        return $session->get(self::SESSION_KEY_REQUESTS, [])[$requestId] ?? null;
     }
 
     /**
-     * @param $requestId
+     * @param string|null $requestId
      * @return string|null
      */
     public function findLinkedRequestId($requestId)
     {
-        // Check the session for a AuthnRequest with the given ID
-        // Expect to get back an AuthnRequest issued by EngineBlock and destined for the IdP
-        if (!$requestId || !isset($this->linkStorage[$requestId])) {
+        if (!$requestId) {
             return null;
         }
 
-        return $this->linkStorage[$requestId];
+        try {
+            $session = $this->requestStack->getSession();
+        } catch (SessionNotFoundException $e) {
+            return null;
+        }
+
+        return $session->get(self::SESSION_KEY_LINKS, [])[$requestId] ?? null;
     }
 
     /**
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $spRequest
      * @return $this
      */
-    public function store(
-        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $spRequest
-    ) {
-        // Store the original Request
-        $this->requestStorage[$spRequest->getId()] = $spRequest;
+    public function store(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $spRequest)
+    {
+        try {
+            $session = $this->requestStack->getSession();
+        } catch (SessionNotFoundException $e) {
+            return $this;
+        }
+
+        $requests = $session->get(self::SESSION_KEY_REQUESTS, []);
+        $requests[$spRequest->getId()] = $spRequest;
+        $session->set(self::SESSION_KEY_REQUESTS, $requests);
 
         return $this;
     }
@@ -104,8 +99,15 @@ class EngineBlock_Saml2_AuthnRequestSessionRepository
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $fromRequest,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $toRequest
     ) {
-        // Store the mapping from the new request ID to the original request ID
-        $this->linkStorage[$fromRequest->getId()] = $toRequest->getId();
+        try {
+            $session = $this->requestStack->getSession();
+        } catch (SessionNotFoundException $e) {
+            return $this;
+        }
+
+        $links = $session->get(self::SESSION_KEY_LINKS, []);
+        $links[$fromRequest->getId()] = $toRequest->getId();
+        $session->set(self::SESSION_KEY_LINKS, $links);
 
         return $this;
     }

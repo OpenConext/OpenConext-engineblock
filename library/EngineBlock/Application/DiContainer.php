@@ -621,4 +621,12 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
     {
         return $this->container->get(\OpenConext\EngineBlock\Request\CorrelationIdRepository::class);
     }
+
+    /**
+     * @return EngineBlock_Saml2_AuthnRequestSessionRepository
+     */
+    public function getAuthnRequestSessionRepository(): EngineBlock_Saml2_AuthnRequestSessionRepository
+    {
+        return $this->container->get(EngineBlock_Saml2_AuthnRequestSessionRepository::class);
+    }
 }
