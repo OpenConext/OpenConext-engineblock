@@ -234,7 +234,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             return;
         }
 
-        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($log);
+        $authnRequestRepository = $application->getDiContainer()->getAuthnRequestSessionRepository();
         $authnRequestRepository->store($request);
 
         $correlationIdRepository = $application->getDiContainer()->getCorrelationIdRepository();
