@@ -70,7 +70,7 @@
         "mockery/mockery": "^1.6.12",
         "phake/phake": "^4.6.1",
         "phpmd/phpmd": "^2.15",
-        "phpunit/phpunit": "^11",
+        "phpunit/phpunit": "^12",
         "rector/rector": "^2.4",
         "slevomat/coding-standard": "^8.28",
         "squizlabs/php_codesniffer": "^4.0",
