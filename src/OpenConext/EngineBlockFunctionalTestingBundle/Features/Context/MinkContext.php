@@ -236,6 +236,9 @@ class MinkContext extends BaseMinkContext
     }
 
     /**
+     * Checks that the full URL (path + query string) does NOT match the given regex.
+     * Unlike the base "url should match" step, this operates on the complete URL including query parameters.
+     *
      * @Then /^the (?i)url(?-i) should not match (?P<pattern>"(?:[^"]|\\")*")$/
      */
     public function assertUrlNotRegExp($pattern)

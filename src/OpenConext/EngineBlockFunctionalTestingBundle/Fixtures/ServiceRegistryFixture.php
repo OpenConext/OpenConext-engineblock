@@ -351,7 +351,7 @@ QUERY;
         return $this;
     }
 
-    public function preferHttpRedirectBindingForIdp($entityId): self
+    public function preferHttpRedirectBindingForIdp(string $entityId): self
     {
         $idp = $this->getIdentityProvider($entityId);
         assert($idp instanceof IdentityProvider);

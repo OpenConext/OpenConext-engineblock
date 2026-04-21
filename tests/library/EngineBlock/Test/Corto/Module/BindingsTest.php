@@ -175,7 +175,11 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
             Phake::capture($capturedMessage)
         );
 
-        $this->assertStringContainsString('whr=hartingcollege.nl', $redirectUrl);
+        $parsed = parse_url($redirectUrl);
+        $this->assertArrayHasKey('query', $parsed, 'Redirect URL must have a query string');
+        parse_str($parsed['query'], $params);
+        $this->assertArrayHasKey('whr', $params, 'whr query parameter must be present');
+        $this->assertSame('hartingcollege.nl', $params['whr']);
     }
 
     /**
