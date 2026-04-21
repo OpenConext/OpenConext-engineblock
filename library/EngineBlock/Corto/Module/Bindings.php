@@ -715,7 +715,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 $domainHint = $remoteEntity->getCoins()->azureDomainHint();
                 if (!empty($domainHint)) {
                     $separator = str_contains($url, '?') ? '&' : '?';
-                    $url .= $separator . 'whr=' . rawurlencode($domainHint);
+                    $url .= $separator . http_build_query(['whr' => $domainHint]);
                 }
             }
 

@@ -218,10 +218,6 @@ class MinkContext extends BaseMinkContext
     }
 
     /**
-     * Checks the full URL (including query string) against a regex pattern.
-     * The built-in "url should match" step strips the query string; use this step
-     * when the pattern targets query parameters (e.g. "whr=domain.nl").
-     *
      * @Then /^the full url should match (?P<pattern>"(?:[^"]|\\")*")$/
      */
     public function assertFullUrlRegExp($pattern)
@@ -236,9 +232,6 @@ class MinkContext extends BaseMinkContext
     }
 
     /**
-     * Checks that the full URL (path + query string) does NOT match the given regex.
-     * Unlike the base "url should match" step, this operates on the complete URL including query parameters.
-     *
      * @Then /^the (?i)url(?-i) should not match (?P<pattern>"(?:[^"]|\\")*")$/
      */
     public function assertUrlNotRegExp($pattern)

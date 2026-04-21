@@ -151,10 +151,6 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
         return array_merge_recursive($responseFiles, $certificateFiles);
     }
 
-    /**
-     * When an IdP has coin:azure_domain_hint set, the whr query parameter must be
-     * appended to the HTTP-Redirect URL sent to the IdP.
-     */
     public function testAzureDomainHintIsAppendedToRedirectUrl()
     {
         $authnRequest = new AuthnRequest();
@@ -182,9 +178,6 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
         $this->assertSame('hartingcollege.nl', $params['whr']);
     }
 
-    /**
-     * When an IdP has no coin:azure_domain_hint, the whr parameter must NOT be added.
-     */
     public function testAzureDomainHintIsNotAddedWhenNotConfigured()
     {
         $authnRequest = new AuthnRequest();
@@ -205,11 +198,6 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
         $this->assertStringNotContainsString('whr=', $redirectUrl);
     }
 
-    /**
-     * The whr query parameter must be correctly appended and URL-decoded
-     * from the redirect URL. Validates using parse_url + parse_str to avoid
-     * false positives from partial string matches.
-     */
     public function testAzureDomainHintWhrParamIsCorrectlyUrlEncoded()
     {
         $authnRequest = new AuthnRequest();
@@ -230,7 +218,6 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
             Phake::capture($capturedMessage)
         );
 
-        // The URL must be parseable and the whr param must appear in the query string.
         $parsed = parse_url($redirectUrl);
         $this->assertArrayHasKey('query', $parsed, 'Redirect URL must have a query string');
         parse_str($parsed['query'], $params);
