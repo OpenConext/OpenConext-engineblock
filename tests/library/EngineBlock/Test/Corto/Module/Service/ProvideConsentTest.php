@@ -187,6 +187,19 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
         $bindingsModuleMock = $this->mockBindingsModule();
         $proxyServerMock->setBindingsModule($bindingsModuleMock);
 
+        // Stub getReceivedRequestFromResponse so tests do not depend on DI-wired
+        // AuthnRequestSessionRepository being populated during the test.
+        $spRequest = new AuthnRequest();
+        $spRequest->setId('SPREQUEST');
+        $issuer = new Issuer();
+        $issuer->setValue('testSp');
+        $spRequest->setIssuer($issuer);
+        $decoratedSpRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($spRequest);
+
+        Phake::when($proxyServerMock)
+            ->getReceivedRequestFromResponse(Phake::anyParameters())
+            ->thenReturn($decoratedSpRequest);
+
         Phake::when($proxyServerMock)
             ->renderTemplate(Phake::anyParameters())
             ->thenReturn(null);
@@ -214,8 +227,10 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
         $ebRequest->setId('EBREQUEST');
         $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($ebRequest);
 
-        $dummyLog = new Psr\Log\NullLogger();
-        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($dummyLog);
+        $authnRequest = new \Symfony\Component\HttpFoundation\Request();
+        $authnRequest->setSession(new Session(new MockArraySessionStorage()));
+        $testStack = new RequestStack([$authnRequest]);
+        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($testStack);
         $authnRequestRepository->store($spRequest);
         $authnRequestRepository->store($ebRequest);
         $authnRequestRepository->link($ebRequest, $spRequest);

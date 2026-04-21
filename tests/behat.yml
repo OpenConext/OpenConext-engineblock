@@ -43,6 +43,8 @@ default:
                     serviceRegistryFixture: '@engineblock.functional_testing.fixture.service_registry'
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\TranslationContext:
                     mockTranslator: '@engineblock.functional_testing.mock.translator'
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\LoggingContext:
+                    logHandler: '@OpenConext\EngineBlockFunctionalTestingBundle\Log\TestLogHandler'
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext:
         functional:
             mink_session: chrome
