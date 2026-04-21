@@ -12,3 +12,6 @@ monolog:
             type:   stream
             path:   "%kernel.logs_dir%/%kernel.environment%.log"
             level:  DEBUG
+        test_log_handler:
+            type: service
+            id: OpenConext\EngineBlockFunctionalTestingBundle\Log\TestLogHandler

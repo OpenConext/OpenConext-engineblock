@@ -30,6 +30,12 @@ services:
         tags:
             - { name: monolog.processor }
 
+    OpenConext\EngineBlock\Logger\Processor\CorrelationIdProcessor:
+        arguments:
+            - '@OpenConext\EngineBlock\Request\CurrentCorrelationId'
+        tags:
+            - { name: monolog.processor }
+
     OpenConext\EngineBlock\Logger\Processor\SessionIdProcessor:
         tags:
             - { name: monolog.processor }

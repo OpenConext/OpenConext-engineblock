@@ -29,7 +29,6 @@ services:
         class: OpenConext\EngineBlockBundle\HealthCheck\DoctrineConnectionHealthCheck
         arguments:
             - '%monitor_database_health_check_query%'
-            - '@logger'
         calls:
             - [ setEntityManager, ['@?doctrine.orm.entity_manager']]
         tags:
@@ -67,6 +66,20 @@ services:
         arguments:
             - '@OpenConext\EngineBlock\Request\UniqidGenerator'
         public: true
+
+    OpenConext\EngineBlock\Request\CurrentCorrelationId:
+        public: true
+
+    OpenConext\EngineBlock\Request\CorrelationIdRepository:
+        public: true
+        arguments:
+            - '@request_stack'
+
+    OpenConext\EngineBlock\Request\CorrelationIdService:
+        public: true
+        arguments:
+            - '@OpenConext\EngineBlock\Request\CorrelationIdRepository'
+            - '@OpenConext\EngineBlock\Request\CurrentCorrelationId'
 
     OpenConext\EngineBlockBundle\Security\Http\EntryPoint\JsonBasicAuthenticationEntryPoint:
         arguments:
@@ -194,7 +207,6 @@ services:
             - '@OpenConext\EngineBlock\Xml\DocumentSigner'
             - '@OpenConext\EngineBlock\Service\TimeProvider\TimeProvider'
             - '%metadata_add_requested_attributes%'
-            - "%metadata_expiration_time%"
 
     OpenConext\EngineBlock\Xml\MetadataProvider:
         arguments:
@@ -416,3 +428,12 @@ services:
         class: OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger
         arguments:
             - "%sram.allowed_attributes%"
+
+    EngineBlock_Saml2_AuthnRequestSessionRepository:
+        class: EngineBlock_Saml2_AuthnRequestSessionRepository
+        public: true
+        arguments:
+            - '@request_stack'
+
+    OpenConext\EngineBlockFunctionalTestingBundle\Log\TestLogHandler:
+        public: true

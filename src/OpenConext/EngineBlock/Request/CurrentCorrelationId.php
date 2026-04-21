@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * Copyright 2010 SURFnet B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+namespace OpenConext\EngineBlock\Request;
+
+/**
+ * Mutable DI singleton that holds the active correlation ID for the current
+ * HTTP request. Set once per request by CorrelationIdService::resolve().
+ * Read by CorrelationIdProcessor to stamp every log entry.
+ */
+final class CurrentCorrelationId
+{
+    private ?string $correlationId = null;
+
+    public function set(string $correlationId): void
+    {
+        $this->correlationId = $correlationId;
+    }
+
+    public function get(): ?string
+    {
+        return $this->correlationId;
+    }
+}
