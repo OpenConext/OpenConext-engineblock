@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2010 SURFnet B.V.
+ * Copyright 2026 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,6 @@ namespace OpenConext\EngineBlock\Request;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-/**
- * Session-only CRUD for correlation IDs.
- *
- * Stores and retrieves raw correlation ID strings keyed by SAML request ID.
- * Has no knowledge of which correlation ID is currently "active" — that is
- * the responsibility of CorrelationIdService + CurrentCorrelationId.
- */
 final class CorrelationIdRepository
 {
     private const SESSION_KEY = 'CorrelationIds';
@@ -36,15 +29,6 @@ final class CorrelationIdRepository
     {
     }
 
-    /**
-     * Persists a correlation ID for the given request ID.
-     * No-op when no session is available.
-     *
-     * Note: this method unconditionally overwrites any existing entry.
-     * Callers (e.g. CorrelationIdService::mint()) are responsible for the
-     * back-button idempotency guard: call find() first and skip store() if
-     * a value already exists.
-     */
     public function store(string $requestId, CorrelationId $correlationId): void
     {
         try {
@@ -58,10 +42,6 @@ final class CorrelationIdRepository
         $session->set(self::SESSION_KEY, $ids);
     }
 
-    /**
-     * Copies the correlation ID from $sourceRequestId to $targetRequestId.
-     * No-op when source is not found or no session is available.
-     */
     public function link(string $targetRequestId, string $sourceRequestId): void
     {
         try {
@@ -80,10 +60,6 @@ final class CorrelationIdRepository
         $session->set(self::SESSION_KEY, $ids);
     }
 
-    /**
-     * Returns the CorrelationId for $requestId, or null when not found.
-     * Returns null when no session is available.
-     */
     public function find(string $requestId): ?CorrelationId
     {
         try {

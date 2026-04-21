@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2010 SURFnet B.V.
+ * Copyright 2026 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,6 @@ use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Level;
 use Monolog\LogRecord;
 
-/**
- * In-memory Monolog handler for Behat log assertions.
- *
- * Collects every log record that passes through it so Behat steps
- * can assert on the presence (or absence) of structured log fields.
- */
 final class TestLogHandler extends AbstractProcessingHandler
 {
     /** @var LogRecord[] */
@@ -43,19 +37,11 @@ final class TestLogHandler extends AbstractProcessingHandler
         $this->records[] = $record;
     }
 
-    /**
-     * Returns all captured log records since the last reset.
-     *
-     * @return LogRecord[]
-     */
     public function getRecords(): array
     {
         return $this->records;
     }
 
-    /**
-     * Clears all captured log records.
-     */
     public function reset(): void
     {
         $this->records = [];

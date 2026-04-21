@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2010 SURFnet B.V.
+ * Copyright 2026 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,6 @@
 
 namespace OpenConext\EngineBlock\Request;
 
-/**
- * Immutable value object representing a correlation ID for a SAML authentication flow.
- */
 final class CorrelationId
 {
     public function __construct(public readonly string $correlationId)
