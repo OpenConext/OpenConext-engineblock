@@ -18,6 +18,7 @@ services:
         class: OpenConext\EngineBlockBundle\HealthCheck\DoctrineConnectionHealthCheck
         arguments:
             - '%monitor_database_health_check_query%'
+            - '@logger'
         calls:
             - [ setEntityManager, ['@?doctrine.orm.entity_manager']]
         tags:
@@ -171,6 +172,7 @@ services:
             - '@OpenConext\EngineBlock\Xml\DocumentSigner'
             - '@OpenConext\EngineBlock\Service\TimeProvider\TimeProvider'
             - '%metadata_add_requested_attributes%'
+            - "%metadata_expiration_time%"
 
     OpenConext\EngineBlock\Xml\MetadataProvider:
         arguments:
