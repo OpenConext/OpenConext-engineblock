@@ -475,40 +475,21 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             $container->getDefaultIdPEntityId()
         );
 
-        $defaultIdPInIdPList = $this->isDefaultIdPPresent($idpList);
-
         $diContainerRuntime = $application->getDiContainerRuntime();
-        $preferredIdpEntityIds = $diContainerRuntime->getPreferredIdpEntityIds();
-        $split = $diContainerRuntime->idpSplitter->split($idpList, $preferredIdpEntityIds);
-        $showPreferredIdps = !empty($split['preferred']);
-        $isDefaultIdpPreferred = in_array($container->getDefaultIdPEntityId(), $preferredIdpEntityIds, true);
-        $showDefaultIdpBanner = (bool) $container->shouldDisplayDefaultIdpBannerOnWayf()
-            && $defaultIdPInIdPList
-            && (!$showPreferredIdps || !$isDefaultIdpPreferred);
 
-        $rememberChoiceFeature = $container->getRememberChoice();
-
-        $viewModel = $diContainerRuntime->wayfViewModelFactory->create(
+        $output = $diContainerRuntime->wayfRenderer->render(
             idpList: $idpList,
-            regularIdpList: $split['regular'],
-            preferredIdpList: $split['preferred'],
-            showPreferredIdps: $showPreferredIdps,
+            preferredIdpEntityIds: $diContainerRuntime->getPreferredIdpEntityIds(),
             action: $action,
-            greenHeader: $serviceProvider->getDisplayName($currentLocale),
-            helpLink: '/authentication/idp/help-discover?lang=' . $currentLocale,
+            currentLocale: $currentLocale,
+            defaultIdpEntityId: $container->getDefaultIdPEntityId(),
+            shouldDisplayBanner: (bool) $container->shouldDisplayDefaultIdpBannerOnWayf(),
             backLink: $container->isUiOptionReturnToSpActive(),
-            cutoffPointForShowingUnfilteredIdps: $container->getCutoffPointForShowingUnfilteredIdps(),
-            showIdPBanner: $showDefaultIdpBanner,
-            rememberChoiceFeature: $rememberChoiceFeature,
+            cutoffPoint: $container->getCutoffPointForShowingUnfilteredIdps(),
+            rememberChoice: $container->getRememberChoice(),
             showRequestAccess: $serviceProvider->getCoins()->displayUnconnectedIdpsWayf(),
             requestId: $request->getId(),
             serviceProvider: $serviceProvider,
-            showRequestAccessContainer: true,
-        );
-
-        $output = $this->twig->render(
-            '@theme/Authentication/View/Proxy/wayf.html.twig',
-            $viewModel->toArray()
         );
         $this->_server->sendOutput($output);
     }
@@ -684,15 +665,5 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
 
         $serviceProvider = $this->_serviceProviderFactory->createEngineBlockEntityFrom($keyId);
         return ServiceProvider::fromServiceProviderEntity($serviceProvider);
-    }
-
-    private function isDefaultIdPPresent(array $idpList): bool
-    {
-        foreach ($idpList as $idp) {
-            if ($idp[self::IS_DEFAULT_IDP_KEY] === true) {
-                return true;
-            }
-        }
-        return false;
     }
 }

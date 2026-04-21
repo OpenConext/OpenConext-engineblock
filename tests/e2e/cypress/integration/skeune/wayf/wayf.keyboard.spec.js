@@ -63,7 +63,7 @@ context('WAYF when using the keyboard', () => {
   // todo if html spec is changed, or cypress fixes bug 6207, get rid of the manual focus on search.  See https://github.com/cypress-io/cypress/issues/6207
   describe('Should be able to traverse the remaining idp section with arrow keys', () => {
     it('check if pressing down works as expected', () => {
-      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?showIdpBanner=1');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?showIdpBanner=1&defaultIdpEntityId=https://example.com/entityId/1');
       cy.get(searchFieldSelector).focus();
       cy.pressArrowOnIdpList('down', searchFieldClass);
       cy.pressArrowOnIdpList('down', defaultIdpClass);
@@ -78,7 +78,7 @@ context('WAYF when using the keyboard', () => {
     });
 
     it('check if pressing up works as expected', () => {
-      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?showIdpBanner=1');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?showIdpBanner=1&defaultIdpEntityId=https://example.com/entityId/1');
       cy.get(searchFieldSelector).focus();
       cy.pressArrowOnIdpList('up', searchFieldClass);
       cy.pressArrowOnIdpList('up', idpClass, '7');
@@ -183,7 +183,7 @@ context('WAYF when using the keyboard', () => {
 
   describe('Should have a working default Idp Banner', () => {
     it('Should have a default Idp banner visible', () => {
-      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?showIdpBanner=1');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?showIdpBanner=1&defaultIdpEntityId=https://example.com/entityId/1');
       cy.beVisible(defaultIdpSelector);
     });
 
