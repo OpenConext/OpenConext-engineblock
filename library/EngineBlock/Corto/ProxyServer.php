@@ -467,10 +467,18 @@ class EngineBlock_Corto_ProxyServer
         $authenticationState->startAuthenticationOnBehalfOf($ebRequest->getId(), $serviceProvider);
 
         // Store the original Request
-        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_logger);
+        $authnRequestRepository = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAuthnRequestSessionRepository();
         $authnRequestRepository->store($spRequest);
         $authnRequestRepository->link($ebRequest, $spRequest);
 
+        $correlationIdService = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getCorrelationIdService();
+        $correlationIdService->mint($spRequest->getId());
+        $correlationIdService->link($ebRequest->getId(), $spRequest->getId());
+        $correlationIdService->resolve($spRequest->getId());
 
         $this->getBindingsModule()->send($ebRequest, $identityProvider);
     }
@@ -552,9 +560,18 @@ class EngineBlock_Corto_ProxyServer
 
 
         // Link with the original Request
-        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_logger);
+        $authnRequestRepository = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAuthnRequestSessionRepository();
         $authnRequestRepository->store($spRequest);
         $authnRequestRepository->link($ebRequest, $spRequest);
+
+        $correlationIdService = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getCorrelationIdService();
+        $correlationIdService->mint($spRequest->getId());
+        $correlationIdService->link($ebRequest->getId(), $spRequest->getId());
+        $correlationIdService->resolve($spRequest->getId());
 
         $this->getBindingsModule()->send($ebRequest, $identityProvider, true);
     }
@@ -1097,7 +1114,9 @@ class EngineBlock_Corto_ProxyServer
 
     public function findRequestFromRequestId(string $requestId): ?EngineBlock_Saml2_AuthnRequestAnnotationDecorator
     {
-        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->getLogger());
+        $authnRequestRepository = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAuthnRequestSessionRepository();
 
         $spRequestId = $authnRequestRepository->findLinkedRequestId($requestId);
         if ($spRequestId === null) {

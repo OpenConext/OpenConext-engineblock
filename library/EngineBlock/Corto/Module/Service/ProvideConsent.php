@@ -100,6 +100,11 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
 
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($response);
 
+        $correlationIdService = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getCorrelationIdService();
+        $correlationIdService->resolve($receivedRequest->getId());
+
         // update previous response with current response
         $this->_processingStateHelper->updateStepResponseByRequestId(
             $receivedRequest->getId(),
@@ -107,7 +112,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             $response
         );
 
-        $request = $this->_server->getReceivedRequestFromResponse($response);
+        $request = $receivedRequest;
         $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer()->getValue());
         $spMetadataChain = EngineBlock_SamlHelper::getSpRequesterChain(
             $serviceProvider,

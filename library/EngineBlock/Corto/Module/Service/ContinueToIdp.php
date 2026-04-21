@@ -85,7 +85,9 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
             );
         }
 
-        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_server->getLogger());
+        $authnRequestRepository = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAuthnRequestSessionRepository();
         $request = $authnRequestRepository->findRequestById($id);
 
         if (!$request) {
@@ -93,6 +95,15 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
                 'Session lost after WAYF'
             );
         }
+
+        // Resolve here so log entries emitted during this leg carry the correlation ID.
+        // ProxyServer::sendAuthenticationRequest will also call mint()+link()+resolve()
+        // on the SP request ID — that is idempotent and sets the same value.
+        // The IdP request ID is only resolvable in AssertionConsumer (Leg 3).
+        $correlationIdService = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getCorrelationIdService();
+        $correlationIdService->resolve($id);
 
         // Flush log if SP or IdP has additional logging enabled
         if ($request->isDebugRequest()) {
