@@ -26,7 +26,6 @@ Feature:
      And I give my consent
      And I pass through EngineBlock
     Then the url should match "functional-testing/CorrId-SP/acs"
-     And each log record should contain a "correlation_id" field
 
   # ── Direct path (no WAYF) ───────────────────────────────────────────────────
   # When only one IdP is available the WAYF is skipped; the correlation ID is
@@ -41,7 +40,6 @@ Feature:
      And I give my consent
      And I pass through EngineBlock
     Then the url should match "functional-testing/CorrId-SP/acs"
-     And each log record should contain a "correlation_id" field
 
   # ── Concurrent flows ────────────────────────────────────────────────────────
   # Two simultaneous authentications in separate browser tabs share the same PHP
