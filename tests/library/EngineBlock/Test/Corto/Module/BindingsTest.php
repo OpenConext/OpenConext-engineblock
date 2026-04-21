@@ -200,4 +200,37 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
 
         $this->assertStringNotContainsString('whr=', $redirectUrl);
     }
+
+    /**
+     * The whr query parameter must be correctly appended and URL-decoded
+     * from the redirect URL. Validates using parse_url + parse_str to avoid
+     * false positives from partial string matches.
+     */
+    public function testAzureDomainHintWhrParamIsCorrectlyUrlEncoded()
+    {
+        $authnRequest = new AuthnRequest();
+        $authnRequest->setDestination('https://login.microsoftonline.com/tenant-id/saml2');
+
+        $request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($authnRequest);
+        $request->setDeliverByBinding(Constants::BINDING_HTTP_REDIRECT);
+
+        $idp = new IdentityProvider(
+            entityId: 'https://idp.example.com',
+            azureDomainHint: 'example.nl'
+        );
+
+        $this->bindings->send($request, $idp);
+
+        Phake::verify($this->proxyServer)->redirect(
+            Phake::capture($redirectUrl),
+            Phake::capture($capturedMessage)
+        );
+
+        // The URL must be parseable and the whr param must appear in the query string.
+        $parsed = parse_url($redirectUrl);
+        $this->assertArrayHasKey('query', $parsed, 'Redirect URL must have a query string');
+        parse_str($parsed['query'], $params);
+        $this->assertArrayHasKey('whr', $params, 'whr query parameter must be present');
+        $this->assertSame('example.nl', $params['whr']);
+    }
 }

@@ -714,7 +714,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             if ($remoteEntity instanceof IdentityProvider) {
                 $domainHint = $remoteEntity->getCoins()->azureDomainHint();
                 if (!empty($domainHint)) {
-                    $url .= '&whr=' . rawurlencode($domainHint);
+                    $separator = str_contains($url, '?') ? '&' : '?';
+                    $url .= $separator . 'whr=' . rawurlencode($domainHint);
                 }
             }
 
