@@ -1,0 +1,5 @@
+monolog:
+    handlers:
+        test_log_handler:
+            type: service
+            id: OpenConext\EngineBlockFunctionalTestingBundle\Log\TestLogHandler
