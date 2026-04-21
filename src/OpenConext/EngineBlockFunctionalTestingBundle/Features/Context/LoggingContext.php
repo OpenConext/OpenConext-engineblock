@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2010 SURFnet B.V.
+ * Copyright 2026 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,6 @@ use Behat\Behat\Context\Context;
 use OpenConext\EngineBlockFunctionalTestingBundle\Log\TestLogHandler;
 use PHPUnit\Framework\Assert;
 
-/**
- * Behat context for asserting on structured log output.
- *
- * Injects the in-memory TestLogHandler so scenarios can verify that
- * log records carry the expected structured fields (e.g. correlation_id).
- *
- * Does not extend AbstractSubContext because it performs no browser interactions
- * and has no need for MinkContext.
- */
 class LoggingContext implements Context
 {
     public function __construct(private readonly TestLogHandler $logHandler)
