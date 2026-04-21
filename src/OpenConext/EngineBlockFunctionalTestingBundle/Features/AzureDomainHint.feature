@@ -21,8 +21,8 @@ Feature: Azure / EntraID domain hint
      Then the url should match "functional-testing/Dummy%20SP/acs"
 
   Scenario: EngineBlock does not append whr query parameter when coin:azure_domain_hint is not configured
+    Given IDP "Azure IdP" prefers HTTP Redirect binding
      When I log in at "Dummy SP"
-      And I pass through EngineBlock
      Then the url should not match "whr="
       And I pass through the IdP
       And I give my consent

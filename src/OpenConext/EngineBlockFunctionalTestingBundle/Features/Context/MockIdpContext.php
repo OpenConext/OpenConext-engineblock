@@ -145,6 +145,19 @@ class MockIdpContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^IDP "([^"]*)" prefers HTTP Redirect binding$/
+     * @param string $idpName
+     */
+    public function idpPrefersHttpRedirectBinding($idpName)
+    {
+        $idp = $this->mockIdpRegistry->get($idpName);
+
+        $this->serviceRegistryFixture
+            ->preferHttpRedirectBindingForIdp($idp->entityId())
+            ->save();
+    }
+
+    /**
      * @Given /^an Identity Provider named "([^"]*)" with logo "([^"]*)"$/
      */
     public function anIdentityProviderNamedWithLogo($name, $logo)
