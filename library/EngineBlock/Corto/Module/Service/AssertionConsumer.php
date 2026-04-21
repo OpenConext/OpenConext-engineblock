@@ -89,6 +89,9 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
 
         $application = EngineBlock_ApplicationSingleton::getInstance();
+
+        $correlationIdService = $application->getDiContainer()->getCorrelationIdService();
+        $correlationIdService->resolve($receivedResponse->getInResponseTo());
         $log = $application->getLogInstance();
 
         if(!$receivedRequest instanceof EngineBlock_Saml2_AuthnRequestAnnotationDecorator){
