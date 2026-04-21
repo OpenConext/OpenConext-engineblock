@@ -79,7 +79,7 @@ describe('Preferred IdPs with previous selection', () => {
 
 describe('Three display scenarios', () => {
     it('scenario 1: no preferred IdPs: banner visible, preferred section absent', () => {
-        cy.visit(`${WAYF}?showIdPBanner=1`);
+        cy.visit(`${WAYF}?showIdPBanner=1&defaultIdpEntityId=${encodeURIComponent(ENTITY_1)}`);
         cy.get(defaultIdpInformational).should('be.visible');
         cy.get(preferredIdpsSectionSelector).should('not.exist');
     });

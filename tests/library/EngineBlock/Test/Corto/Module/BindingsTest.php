@@ -19,9 +19,8 @@
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use OpenConext\EngineBlock\Service\Wayf\IdpSplitter;
 use OpenConext\EngineBlockBundle\Bridge\DiContainerRuntime;
-use OpenConext\EngineBlockBundle\Service\WayfViewModelFactory;
+use OpenConext\EngineBlockBundle\Service\WayfRenderer;
 use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
 use SAML2\Assertion\Validation\ConstraintValidator\NotBefore;
@@ -53,7 +52,7 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
         );
 
         $engineBlock = \EngineBlock_ApplicationSingleton::getInstance();
-        $engineBlock->setDiContainerRuntime(new DiContainerRuntime(Phake::mock(Twig\Environment::class), new IdpSplitter(), Phake::mock(WayfViewModelFactory::class)));
+        $engineBlock->setDiContainerRuntime(new DiContainerRuntime(Phake::mock(Twig\Environment::class), Phake::mock(WayfRenderer::class)));
 
         $this->bindings = new EngineBlock_Corto_Module_Bindings($proxyServer);
     }

@@ -8,6 +8,9 @@ services:
         arguments:
             $wayfExtension: '@OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Wayf'
 
+    OpenConext\EngineBlockBundle\Service\WayfRenderer:
+        autowire: true
+
     OpenConext\EngineBlockBundle\Bridge\EngineBlockBootstrapper:
         autowire: true
         autoconfigure: true

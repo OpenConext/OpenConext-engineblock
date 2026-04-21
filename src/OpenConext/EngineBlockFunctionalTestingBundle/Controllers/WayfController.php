@@ -18,14 +18,12 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Controllers;
 
-use OpenConext\EngineBlock\Service\Wayf\IdpSplitter;
-use OpenConext\EngineBlockBundle\Service\WayfViewModelFactory;
+use OpenConext\EngineBlockBundle\Service\WayfRenderer;
 use OpenConext\EngineBlockFunctionalTestingBundle\Helper\TestEntitySeeder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Twig\Environment;
 
 /**
  * @package OpenConext\EngineBlockFunctionalTestingBundle\Controllers
@@ -34,9 +32,7 @@ use Twig\Environment;
 class WayfController extends AbstractController
 {
     public function __construct(
-        private readonly Environment $twig,
-        private readonly IdpSplitter $idpSplitter,
-        private readonly WayfViewModelFactory $wayfViewModelFactory,
+        private readonly WayfRenderer $wayfRenderer,
     ) {
     }
 
@@ -50,7 +46,7 @@ class WayfController extends AbstractController
         $rememberChoiceFeature = $request->query->getBoolean('rememberChoiceFeature');
         $cutoffPointForShowingUnfilteredIdps = $request->query->getInt('cutoffPointForShowingUnfilteredIdps', 100);
         $showIdPBanner = $request->query->getBoolean('showIdPBanner', true);
-        $defaultIdpEntityId = $request->query->get('defaultIdpEntityId');
+        $defaultIdpEntityId = $request->query->get('defaultIdpEntityId', '');
         $preferredIdpEntityIds = $request->query->all('preferredIdpEntityIds');
 
         $connectedIdps = $request->query->getInt('connectedIdps', 5);
@@ -61,36 +57,22 @@ class WayfController extends AbstractController
             ? TestEntitySeeder::buildIdps($connectedIdps, $unconnectedIdps, $currentLocale, $defaultIdpEntityId, $addDiscoveries)
             : TestEntitySeeder::buildRandomIdps($randomIdps, $currentLocale, $defaultIdpEntityId);
 
-        $split = $this->idpSplitter->split($idpList, $preferredIdpEntityIds);
-        $preferredIdpList = $split['preferred'];
-        $regularIdpList = $split['regular'];
-        $showPreferredIdps = !empty($preferredIdpList);
-
-        $isDefaultIdpPreferred = in_array($defaultIdpEntityId, $preferredIdpEntityIds, true);
-        $showIdPBanner = $showIdPBanner && (!$showPreferredIdps || !$isDefaultIdpPreferred);
-
-        $viewModel = $this->wayfViewModelFactory->create(
+        $output = $this->wayfRenderer->render(
             idpList: $idpList,
-            regularIdpList: $regularIdpList,
-            preferredIdpList: $preferredIdpList,
-            showPreferredIdps: $showPreferredIdps,
+            preferredIdpEntityIds: $preferredIdpEntityIds,
             action: $this->generateUrl('functional_testing_handle_wayf'),
-            greenHeader: $currentLocale,
-            helpLink: '/authentication/idp/help-discover?lang=' . $currentLocale,
+            currentLocale: $currentLocale,
+            defaultIdpEntityId: $defaultIdpEntityId,
+            shouldDisplayBanner: $showIdPBanner,
             backLink: $backLink,
-            cutoffPointForShowingUnfilteredIdps: $cutoffPointForShowingUnfilteredIdps,
-            showIdPBanner: $showIdPBanner,
-            rememberChoiceFeature: $rememberChoiceFeature,
+            cutoffPoint: $cutoffPointForShowingUnfilteredIdps,
+            rememberChoice: $rememberChoiceFeature,
             showRequestAccess: $displayUnconnectedIdpsWayf,
             requestId: 'bogus-request-id',
             serviceProvider: TestEntitySeeder::buildSp(),
-            showRequestAccessContainer: true,
         );
 
-        return new Response($this->twig->render(
-            '@theme/Authentication/View/Proxy/wayf.html.twig',
-            $viewModel->toArray()
-        ));
+        return new Response($output);
     }
 
     public function handleWayfAction(Request $request)

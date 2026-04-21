@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2025 SURFnet B.V.
+ * Copyright 2026 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,8 @@
 
 namespace Tests\OpenConext\EngineBlockBundle;
 
-use OpenConext\EngineBlock\Service\Wayf\IdpSplitter;
 use OpenConext\EngineBlockBundle\Bridge\DiContainerRuntime;
-use OpenConext\EngineBlockBundle\Service\WayfViewModelFactory;
+use OpenConext\EngineBlockBundle\Service\WayfRenderer;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 
@@ -30,8 +29,7 @@ class DiContainerRuntimeTest extends TestCase
     {
         $runtime = new DiContainerRuntime(
             $this->createStub(Environment::class),
-            new IdpSplitter(),
-            $this->createStub(WayfViewModelFactory::class),
+            $this->createStub(WayfRenderer::class),
         );
 
         $this->assertSame([], $runtime->getPreferredIdpEntityIds());
@@ -43,8 +41,7 @@ class DiContainerRuntimeTest extends TestCase
 
         $runtime = new DiContainerRuntime(
             $this->createStub(Environment::class),
-            new IdpSplitter(),
-            $this->createStub(WayfViewModelFactory::class),
+            $this->createStub(WayfRenderer::class),
             $entityIds,
         );
 
