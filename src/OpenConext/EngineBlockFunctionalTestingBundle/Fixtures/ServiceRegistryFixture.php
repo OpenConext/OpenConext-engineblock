@@ -341,7 +341,7 @@ QUERY;
         return $this;
     }
 
-    public function setAzureDomainHintForIdp($entityId, string $domainHint): self
+    public function setAzureDomainHintForIdp(string $entityId, string $domainHint): self
     {
         $idp = $this->getIdentityProvider($entityId);
         assert($idp instanceof IdentityProvider);
