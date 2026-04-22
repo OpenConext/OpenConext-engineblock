@@ -77,13 +77,13 @@ class CorrelationIdFlowTest extends TestCase
         // Leg 1 — SSO: mint the correlation ID.
         $this->service->mint($spRequestId);
         $this->service->resolve($spRequestId);
-        $mintedCx = $this->current->get();
+        $mintedCx = $this->current->correlationId;
         $this->assertNotNull($mintedCx, 'SSO must mint a correlation ID');
 
         // Leg 2 — ContinueToIdp: resolves SP request ID A.
         $leg2Current = new CurrentCorrelationId();
         $this->newServiceWithCurrent($leg2Current)->resolve($spRequestId);
-        $this->assertSame($mintedCx, $leg2Current->get(), 'ContinueToIdp must see the same correlation ID');
+        $this->assertSame($mintedCx, $leg2Current->correlationId, 'ContinueToIdp must see the same correlation ID');
 
         // ProxyServer links the IdP request ID to the SP request ID.
         $this->service->link($idpRequestId, $spRequestId);
@@ -91,12 +91,12 @@ class CorrelationIdFlowTest extends TestCase
         // Leg 3 — ACS: IdP response InResponseTo=B, resolves via B.
         $leg3Current = new CurrentCorrelationId();
         $this->newServiceWithCurrent($leg3Current)->resolve($idpRequestId);
-        $this->assertSame($mintedCx, $leg3Current->get(), 'ACS must see the same correlation ID');
+        $this->assertSame($mintedCx, $leg3Current->correlationId, 'ACS must see the same correlation ID');
 
         // Leg 4 — Consent: resolves SP request ID A again.
         $leg4Current = new CurrentCorrelationId();
         $this->newServiceWithCurrent($leg4Current)->resolve($spRequestId);
-        $this->assertSame($mintedCx, $leg4Current->get(), 'Consent must see the same correlation ID');
+        $this->assertSame($mintedCx, $leg4Current->correlationId, 'Consent must see the same correlation ID');
     }
 
     // ── Direct path (no WAYF) ─────────────────────────────────────────────────
@@ -109,7 +109,7 @@ class CorrelationIdFlowTest extends TestCase
         $this->service->mint($spRequestId);
         $this->service->link($idpRequestId, $spRequestId);
         $this->service->resolve($spRequestId);
-        $mintedCx = $this->current->get();
+        $mintedCx = $this->current->correlationId;
         $this->assertNotNull($mintedCx);
 
         $ids = $this->session->get('CorrelationIds');
@@ -157,6 +157,6 @@ class CorrelationIdFlowTest extends TestCase
     public function test_unknown_request_id_does_not_set_correlation_id(): void
     {
         $this->service->resolve('_unknown-id');
-        $this->assertNull($this->current->get(), 'Correlation ID must remain null for unknown request IDs');
+        $this->assertNull($this->current->correlationId, 'Correlation ID must remain null for unknown request IDs');
     }
 }

@@ -47,7 +47,7 @@ final class CorrelationIdService
         $cid = $this->repository->find($requestId);
 
         if ($cid !== null) {
-            $this->current->set($cid->correlationId);
+            $this->current->correlationId = $cid->correlationId;
         }
     }
 }

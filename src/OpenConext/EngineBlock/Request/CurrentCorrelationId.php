@@ -20,15 +20,5 @@ namespace OpenConext\EngineBlock\Request;
 
 final class CurrentCorrelationId
 {
-    private ?string $correlationId = null;
-
-    public function set(string $correlationId): void
-    {
-        $this->correlationId = $correlationId;
-    }
-
-    public function get(): ?string
-    {
-        return $this->correlationId;
-    }
+    public ?string $correlationId = null;
 }

@@ -75,21 +75,21 @@ class CorrelationIdServiceTest extends TestCase
 
         $this->service->resolve('_req-A');
 
-        $this->assertSame('cx-abc123', $this->current->get());
+        $this->assertSame('cx-abc123', $this->current->correlationId);
     }
 
     public function test_resolve_does_not_change_current_when_not_found(): void
     {
         $this->service->resolve('_unknown');
 
-        $this->assertNull($this->current->get());
+        $this->assertNull($this->current->correlationId);
     }
 
     public function test_resolve_with_null_is_a_noop(): void
     {
         $this->service->resolve(null);
 
-        $this->assertNull($this->current->get());
+        $this->assertNull($this->current->correlationId);
     }
 
     public function test_mint_then_resolve_sets_current_correlation_id(): void
@@ -97,7 +97,7 @@ class CorrelationIdServiceTest extends TestCase
         $this->service->mint('_req-A');
         $this->service->resolve('_req-A');
 
-        $this->assertNotNull($this->current->get());
-        $this->assertNotEmpty($this->current->get());
+        $this->assertNotNull($this->current->correlationId);
+        $this->assertNotEmpty($this->current->correlationId);
     }
 }

@@ -30,7 +30,7 @@ final class CorrelationIdProcessor implements ProcessorInterface
 
     public function __invoke(LogRecord $record): LogRecord
     {
-        $record->extra['correlation_id'] = $this->correlationId->get();
+        $record->extra['correlation_id'] = $this->correlationId->correlationId;
 
         return $record;
     }

@@ -34,7 +34,7 @@ class CorrelationIdProcessorTest extends TestCase
     public function correlation_id_is_added_to_the_record(): void
     {
         $correlationId = new CurrentCorrelationId();
-        $correlationId->set('test-correlation-id');
+        $correlationId->correlationId = 'test-correlation-id';
 
         $processor = new CorrelationIdProcessor($correlationId);
         $record = new LogRecord(

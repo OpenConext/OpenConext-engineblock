@@ -26,6 +26,6 @@ final class CorrelationId
 
     public static function mint(): self
     {
-        return new self(bin2hex(random_bytes(16)));
+        return new self(bin2hex(random_bytes(8)));
     }
 }
