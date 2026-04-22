@@ -437,6 +437,11 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
         return (array) $this->container->getParameter('forbidden_signature_methods');
     }
 
+    public function getMaxIssueInstantAge(): int
+    {
+        return (int) $this->container->getParameter('max_issue_instant_age');
+    }
+
     /**
      * @return AllowedSchemeValidator
      */
