@@ -5,6 +5,8 @@
             {# placeholder for the idp without access #}
         </li>
     </ul>
-    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noAccess/helpdesk.html.twig' %}
-    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noAccess/requestForm.html.twig' %}
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noAccess/helpdesk.html.twig' only %}
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/noAccess/requestForm.html.twig' with {
+        serviceProvider: serviceProvider,
+    } only %}
 </section>

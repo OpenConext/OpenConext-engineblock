@@ -203,7 +203,8 @@ class WayfTest extends TestCase
         $this->translator->method('trans')
             ->willReturnMap([
                 ['more_idp_results', [], null, null, 'More results'],
-                ['request_access', [], null, null, 'Request Access']
+                ['request_access', [], null, null, 'Request Access'],
+                ['wayf_remaining_idps_search_label', [], null, null, 'Or search for a Dutch institution from the list'],
             ]);
 
         // Test with showRequestAccess = true

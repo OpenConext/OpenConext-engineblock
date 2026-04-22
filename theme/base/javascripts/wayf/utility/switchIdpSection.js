@@ -1,6 +1,6 @@
 import {toggleVisibility} from '../../utility/toggleVisibility';
 import {focusOn} from "../../utility/focusOn";
-import {noAccessSectionSelector, noResultSectionSelector, remainingIdpSectionSelector, searchFieldSelector, selectedIdpsSectionSelector} from '../../selectors';
+import {noAccessSectionSelector, noResultSectionSelector, preferredIdpsSectionSelector, remainingIdpSectionSelector, searchFieldSelector, selectedIdpsSectionSelector} from '../../selectors';
 import {isVisibleElement} from '../../utility/isVisibleElement';
 
 export const switchIdpSection = () => {
@@ -8,10 +8,14 @@ export const switchIdpSection = () => {
   const previousIdps = document.querySelector(selectedIdpsSectionSelector);
   const noResults = document.querySelector(noResultSectionSelector);
   const noAccess = document.querySelector(noAccessSectionSelector);
+  const preferredIdps = document.querySelector(preferredIdpsSectionSelector);
   const ariaHidden = 'aria-hidden';
 
   toggleVisibility(previousIdps);
   toggleVisibility(remainingIdps);
+  if (preferredIdps) {
+    toggleVisibility(preferredIdps);
+  }
 
   remainingIdps.removeAttribute(ariaHidden);
 

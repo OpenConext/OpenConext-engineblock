@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Bridge;
 
 use EngineBlock_ApplicationSingleton;
+use OpenConext\EngineBlockBundle\Service\WayfRenderer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Twig\Environment;
@@ -29,8 +30,10 @@ class EngineBlockBootstrapper implements EventSubscriberInterface
 
     public function __construct(
         Environment $twig,
+        WayfRenderer $wayfRenderer,
+        array $preferredIdpEntityIds = [],
     ) {
-        $this->diContainerRuntime = new DiContainerRuntime($twig);
+        $this->diContainerRuntime = new DiContainerRuntime($twig, $wayfRenderer, $preferredIdpEntityIds);
     }
 
     public function onKernelRequest(): void
