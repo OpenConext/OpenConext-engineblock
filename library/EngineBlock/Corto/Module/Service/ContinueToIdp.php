@@ -85,9 +85,9 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
             );
         }
 
-        $authnRequestRepository = EngineBlock_ApplicationSingleton::getInstance()
-            ->getDiContainer()
-            ->getAuthnRequestSessionRepository();
+        $container = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+
+        $authnRequestRepository = $container->getAuthnRequestSessionRepository();
         $request = $authnRequestRepository->findRequestById($id);
 
         if (!$request) {
@@ -96,13 +96,7 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
             );
         }
 
-        // Resolve here so log entries emitted during this leg carry the correlation ID.
-        // ProxyServer::sendAuthenticationRequest will also call mint()+link()+resolve()
-        // on the SP request ID — that is idempotent and sets the same value.
-        // The IdP request ID is only resolvable in AssertionConsumer (Leg 3).
-        $correlationIdService = EngineBlock_ApplicationSingleton::getInstance()
-            ->getDiContainer()
-            ->getCorrelationIdService();
+        $correlationIdService = $container->getCorrelationIdService();
         $correlationIdService->resolve($id);
 
         // Flush log if SP or IdP has additional logging enabled
