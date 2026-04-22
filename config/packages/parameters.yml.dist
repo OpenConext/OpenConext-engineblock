@@ -57,6 +57,9 @@ parameters:
     metadata_add_requested_attributes: all
     ## The number of seconds a Metadata document is deemed valid (default 24h). Must be a positive integer.
     metadata_expiration_time: 86400
+    ## The maximum age (in seconds) of the IssueInstant in incoming SAMLRequests before a warning is logged.
+    ## Default is 24h (86400)
+    max_issue_instant_age: 86400
 
     ##########################################################################################
     ## PHP SETTINGS
