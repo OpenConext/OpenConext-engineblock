@@ -109,6 +109,7 @@ class IdentityProvider extends AbstractRole
     /**
      * WARNING: Please don't use this entity directly but use the dedicated factory instead.
      * @see \OpenConext\EngineBlock\Metadata\Factory\Factory\IdentityProviderFactory
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function __construct(
         $entityId,
@@ -154,7 +155,8 @@ class IdentityProvider extends AbstractRole
         ?MfaEntityCollection $mfaEntities = null,
         array $discoveries = [],
         ?string $defaultRAC = null,
-        bool $policyEnforcementDecisionRequired = false
+        bool $policyEnforcementDecisionRequired = false,
+        ?string $azureDomainHint = null
     ) {
         if (is_null($mdui)) {
             $mdui = Mdui::emptyMdui();
@@ -203,7 +205,8 @@ class IdentityProvider extends AbstractRole
             $signatureMethod,
             $mfaEntities,
             $defaultRAC,
-            $policyEnforcementDecisionRequired
+            $policyEnforcementDecisionRequired,
+            $azureDomainHint
         );
 
         $this->assertAllDiscoveries($discoveries);

@@ -130,6 +130,34 @@ class MockIdpContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^IDP "([^"]*)" has Azure domain hint "([^"]*)"$/
+     * @param string $idpName
+     * @param string $domainHint
+     */
+    public function idpHasAzureDomainHint($idpName, $domainHint)
+    {
+        $idp = $this->mockIdpRegistry->get($idpName);
+
+        $this->serviceRegistryFixture
+            ->setAzureDomainHintForIdp($idp->entityId(), $domainHint)
+            ->preferHttpRedirectBindingForIdp($idp->entityId())
+            ->save();
+    }
+
+    /**
+     * @Given /^IDP "([^"]*)" prefers HTTP Redirect binding$/
+     * @param string $idpName
+     */
+    public function idpPrefersHttpRedirectBinding($idpName)
+    {
+        $idp = $this->mockIdpRegistry->get($idpName);
+
+        $this->serviceRegistryFixture
+            ->preferHttpRedirectBindingForIdp($idp->entityId())
+            ->save();
+    }
+
+    /**
      * @Given /^an Identity Provider named "([^"]*)" with logo "([^"]*)"$/
      */
     public function anIdentityProviderNamedWithLogo($name, $logo)

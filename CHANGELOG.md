@@ -11,6 +11,10 @@ More information about our release strategy can be found in
 the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on
 the EngineBlock wiki.
 
+## UNRELEASED
+Features:
+* Added `coin:azure_domain_hint` configuration option for IdPs. When set, EngineBlock appends a `whr=<domain>` query parameter to the HTTP-Redirect AuthnRequest sent to the IdP, allowing Microsoft Azure / EntraID to skip the account picker (#1864).
+
 ## UNRELEASED 7.2.0
 Upgrade to Symfony 7.4
 Upgrade to `doctrine/dbal` 4

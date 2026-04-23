@@ -18,6 +18,7 @@
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlockBundle\Bridge\DiContainerRuntime;
 use PHPUnit\Framework\TestCase;
@@ -25,6 +26,7 @@ use SAML2\Assertion;
 use SAML2\Assertion\Validation\ConstraintValidator\NotBefore;
 use SAML2\Assertion\Validation\ConstraintValidator\NotOnOrAfter;
 use SAML2\Assertion\Validation\Result;
+use SAML2\AuthnRequest;
 use SAML2\Constants;
 use SAML2\Response;
 
@@ -40,20 +42,26 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
      */
     private $bindings;
 
+    /**
+     * @var EngineBlock_Corto_ProxyServer
+     */
+    private $proxyServer;
+
     public function setUp(): void
     {
-        $proxyServer = Phake::mock('EngineBlock_Corto_ProxyServer');
-        Phake::when($proxyServer)->getSigningCertificates(false)->thenReturn(
+        $this->proxyServer = Phake::mock('EngineBlock_Corto_ProxyServer');
+        Phake::when($this->proxyServer)->getSigningCertificates(false)->thenReturn(
             new EngineBlock_X509_KeyPair(
                 new EngineBlock_X509_Certificate(openssl_x509_read(file_get_contents(__DIR__.'/test.pem.crt'))),
                 new EngineBlock_X509_PrivateKey(__DIR__.'/test.pem.key')
             )
         );
+        Phake::when($this->proxyServer)->getConfig('WantsAuthnRequestsSigned')->thenReturn(false);
 
         $engineBlock = \EngineBlock_ApplicationSingleton::getInstance();
         $engineBlock->setDiContainerRuntime(new DiContainerRuntime(Phake::mock(Twig\Environment::class)));
 
-        $this->bindings = new EngineBlock_Corto_Module_Bindings($proxyServer);
+        $this->bindings = new EngineBlock_Corto_Module_Bindings($this->proxyServer);
     }
 
     public function testResponseRedirectIsNotSupported()
@@ -141,5 +149,79 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
         }
 
         return array_merge_recursive($responseFiles, $certificateFiles);
+    }
+
+    public function testAzureDomainHintIsAppendedToRedirectUrl()
+    {
+        $authnRequest = new AuthnRequest();
+        $authnRequest->setDestination('https://login.microsoftonline.com/tenant-id/saml2');
+
+        $request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($authnRequest);
+        $request->setDeliverByBinding(Constants::BINDING_HTTP_REDIRECT);
+
+        $idp = new IdentityProvider(
+            entityId: 'https://idp.example.com',
+            azureDomainHint: 'hartingcollege.nl'
+        );
+
+        $this->bindings->send($request, $idp);
+
+        Phake::verify($this->proxyServer)->redirect(
+            Phake::capture($redirectUrl),
+            Phake::capture($capturedMessage)
+        );
+
+        $parsed = parse_url($redirectUrl);
+        $this->assertArrayHasKey('query', $parsed, 'Redirect URL must have a query string');
+        parse_str($parsed['query'], $params);
+        $this->assertArrayHasKey('whr', $params, 'whr query parameter must be present');
+        $this->assertSame('hartingcollege.nl', $params['whr']);
+    }
+
+    public function testAzureDomainHintIsNotAddedWhenNotConfigured()
+    {
+        $authnRequest = new AuthnRequest();
+        $authnRequest->setDestination('https://idp.example.com/sso');
+
+        $request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($authnRequest);
+        $request->setDeliverByBinding(Constants::BINDING_HTTP_REDIRECT);
+
+        $idp = new IdentityProvider('https://idp.example.com');
+
+        $this->bindings->send($request, $idp);
+
+        Phake::verify($this->proxyServer)->redirect(
+            Phake::capture($redirectUrl),
+            Phake::capture($capturedMessage)
+        );
+
+        $this->assertStringNotContainsString('whr=', $redirectUrl);
+    }
+
+    public function testAzureDomainHintWhrParamIsCorrectlyUrlEncoded()
+    {
+        $authnRequest = new AuthnRequest();
+        $authnRequest->setDestination('https://login.microsoftonline.com/tenant-id/saml2');
+
+        $request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($authnRequest);
+        $request->setDeliverByBinding(Constants::BINDING_HTTP_REDIRECT);
+
+        $idp = new IdentityProvider(
+            entityId: 'https://idp.example.com',
+            azureDomainHint: 'example.nl'
+        );
+
+        $this->bindings->send($request, $idp);
+
+        Phake::verify($this->proxyServer)->redirect(
+            Phake::capture($redirectUrl),
+            Phake::capture($capturedMessage)
+        );
+
+        $parsed = parse_url($redirectUrl);
+        $this->assertArrayHasKey('query', $parsed, 'Redirect URL must have a query string');
+        parse_str($parsed['query'], $params);
+        $this->assertArrayHasKey('whr', $params, 'whr query parameter must be present');
+        $this->assertSame('example.nl', $params['whr']);
     }
 }

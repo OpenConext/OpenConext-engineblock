@@ -269,6 +269,11 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
             'policyEnforcementDecisionRequired'
         );
 
+        $properties += $this->setPathFromObjectString(
+            [$connection, 'metadata:coin:azure_domain_hint'],
+            'azureDomainHint'
+        );
+
         return Utils::instantiate(
             IdentityProvider::class,
             $properties
