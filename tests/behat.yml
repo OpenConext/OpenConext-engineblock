@@ -44,7 +44,7 @@ default:
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\TranslationContext:
                     mockTranslator: '@engineblock.functional_testing.mock.translator'
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\LoggingContext:
-                    logHandler: '@OpenConext\EngineBlockFunctionalTestingBundle\Log\TestLogHandler'
+                    logFile: '/tmp/eb-fixtures/log-records.ndjson'
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext:
         functional:
             mink_session: chrome

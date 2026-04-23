@@ -5,63 +5,118 @@ Feature:
 
   Background:
     Given an EngineBlock instance on "dev.openconext.local"
-      And no registered SPs
-      And no registered Idps
-      And a Service Provider named "CorrId-SP"
+    And no registered SPs
+    And no registered Idps
+    And a Service Provider named "CorrId-SP"
 
-  # ── WAYF path ──────────────────────────────────────────────────────────────
-  # Two IdPs are registered, so the WAYF is shown after the initial SSO request.
-  # The correlation ID is minted in SingleSignOn.serve(), propagated to
-  # ContinueToIdp (user picks an IdP), then forwarded to the IdP request via
-  # link(), and finally picked up in AssertionConsumer and ProvideConsent/
-  # ProcessConsent.  A complete round-trip through all four HTTP legs must
-  # succeed without error.
   Scenario: A user authenticating via the WAYF completes the full four-leg flow
     Given an Identity Provider named "CorrId-IdP-A"
-      And an Identity Provider named "CorrId-IdP-B"
+    And an Identity Provider named "CorrId-IdP-B"
     When I log in at "CorrId-SP"
-     And I select "CorrId-IdP-A" on the WAYF
-     And I pass through EngineBlock
-     And I pass through the IdP
-     And I give my consent
-     And I pass through EngineBlock
+    And I select "CorrId-IdP-A" on the WAYF
+    And I pass through EngineBlock
+    And I pass through the IdP
+    And I give my consent
+    And I pass through EngineBlock
     Then the url should match "functional-testing/CorrId-SP/acs"
+    #And I dump the log records
+    And the following log messages should have a correlation_id:
+      | message                                                                                                   |
+      | Multiple candidate IdPs: redirecting to WAYF                                                              |
+      | Done calling service 'singleSignOnService'                                                                |
+      | Done calling service 'continueToIdp'                                                                      |
+      | /Received Assertion from Issuer .*/                                                                       |
+      | /SP is not configured for MFA for IdP, or for transparant AuthnContext, skipping validation .*/           |
+      | Verifying if schacHomeOrganization is allowed by configured IdP shibmd:scopes                             |
+      | No shibmd:scope found in the IdP metadata, not verifying schacHomeOrganization                            |
+      | Verifying if eduPersonPrincipalName is allowed by configured IdP shibmd:scopes                            |
+      | No shibmd:scope found in the IdP metadata, not verifying eduPersonPrincipalName                           |
+      | Verifying if subject-id is allowed by configured IdP shibmd:scopes                                        |
+      | No shibmd:scope found in the IdP metadata, not verifying subject-id                                       |
+      | /No Attribute Aggregation for .*/                                                                         |
+      | /No SBS interrupt for serviceProvider.*/                                                                  |
+      | StepupDecision: determine highest LoA                                                                     |
+      | StepupDecision: no level set, no Stepup required                                                          |
+      | Handle Consent authentication callout                                                                     |
+      | Using internal binding for destination /authentication/idp/provide-consent                                |
+      | Calling service 'provideConsentService'                                                                   |
+      | Done calling service 'provideConsentService'                                                              |
+      | Done calling service 'assertionConsumerService'                                                           |
+      | /Using internal binding for destination https:\/\/engine.dev.openconext.local\/authenticati.*/            |
+      | Calling service 'processedAssertionConsumerService'                                                       |
+      | /No ARP available for https:\/\/engine.dev.openconext.local\/functional-testing\/CorrId-SP\/metadata. .*/ |
+      | Executing the ApplyTrustedProxyBehavior output filter                                                     |
+      | Executing the AddIdentityAttributes output filter                                                         |
+      | Resolving a persistent nameId                                                                             |
+      | Setting the NameId on the Assertion                                                                       |
+      | Adding the EduPersonTargetedId on the Assertion                                                           |
+      | /Attribute Denormalization: Adding alias 'urn:oid:0.9.2342.19200300.100.1.1' .*/                          |
+      | /Attribute Denormalization: Adding alias 'urn:oid:1.3.6.1.4.1.25178.1.2.9' for .*/                        |
+      | /Attribute Denormalization: Adding alias 'urn:oid:1.3.6.1.4.1.5923.1.1.1.10' for .*/                      |
+      | HTTP-Post: Sending Message                                                                                |
+      | Done calling service 'processedAssertionConsumerService'                                                  |
+      | Done calling service 'processConsentService'                                                              |
 
-  # ── Direct path (no WAYF) ───────────────────────────────────────────────────
-  # When only one IdP is available the WAYF is skipped; the correlation ID is
-  # minted inside ProxyServer.sendAuthenticationRequest() and linked to the IdP
-  # request.  AssertionConsumer and consent legs must resolve it from the IdP
-  # request ID stored in InResponseTo.
   Scenario: A user authenticating without the WAYF completes the full flow
     Given an Identity Provider named "CorrId-IdP-Only"
     When I log in at "CorrId-SP"
-     And I pass through EngineBlock
-     And I pass through the IdP
-     And I give my consent
-     And I pass through EngineBlock
+    And I pass through EngineBlock
+    And I pass through the IdP
+    And I give my consent
+    And I pass through EngineBlock
     Then the url should match "functional-testing/CorrId-SP/acs"
+    And I dump the log records
+    And the following log messages should have a correlation_id:
+      | message                                                                                              |
+      | HTTP-Post: Sending Message                                                                           |
+      | Done calling service 'singleSignOnService'                                                           |
+      | /SP is not configured for MFA for IdP, or for transparant AuthnContext, skipping validation of .*/   |
+      | Verifying if schacHomeOrganization is allowed by configured IdP shibmd:scopes                        |
+      | No shibmd:scope found in the IdP metadata, not verifying schacHomeOrganization                       |
+      | Verifying if eduPersonPrincipalName is allowed by configured IdP shibmd:scopes                       |
+      | No shibmd:scope found in the IdP metadata, not verifying eduPersonPrincipalName                      |
+      | Verifying if subject-id is allowed by configured IdP shibmd:scopes                                   |
+      | No shibmd:scope found in the IdP metadata, not verifying subject-id                                  |
+      | /No Attribute Aggregation for https:\/\/engine.dev.openconext.local\/functional-testing\/CorrId-S.*/ |
+      | /No SBS interrupt for serviceProvider: https:\/\/engine.dev.openconext.local\/functional-testin.*/   |
+      | StepupDecision: determine highest LoA                                                                |
+      | StepupDecision: no level set, no Stepup required                                                     |
+      | Handle Consent authentication callout                                                                |
+      | Using internal binding for destination /authentication/idp/provide-consent                           |
+      | Calling service 'provideConsentService'                                                              |
+      | Done calling service 'provideConsentService'                                                         |
+      | Done calling service 'assertionConsumerService'                                                      |
+      | /Using internal binding for destination.*/                                                           |
+      | Calling service 'processedAssertionConsumerService'                                                  |
+      | /No ARP available for https:\/\/engine.dev.openconext.local\/functional-testing\/CorrId-SP\/metadata. */  |
+      | Executing the ApplyTrustedProxyBehavior output filter                                                |
+      | Executing the AddIdentityAttributes output filter                                                    |
+      | Resolving a persistent nameId                                                                        |
+      | Setting the NameId on the Assertion                                                                  |
+      | Adding the EduPersonTargetedId on the Assertion                                                      |
+      | /Attribute Denormalization: Adding alias 'urn:oid:0.9.2342.19200300.100.1.1'*/                       |
+      | /Attribute Denormalization: Adding alias 'urn:oid:1.3.6.1.4.1.25178.1.2.9' f*/                       |
+      | /Attribute Denormalization: Adding alias 'urn:oid:1.3.6.1.4.1.5923.1.1.1.10' */                      |
+      | login granted                                                                                        |
+      | HTTP-Post: Sending Message                                                                           |
+      | Done calling service 'processedAssertionConsumerService'                                             |
+      | Done calling service 'processConsentService'                                                         |
 
-  # ── Concurrent flows ────────────────────────────────────────────────────────
-  # Two simultaneous authentications in separate browser tabs share the same PHP
-  # session.  Each flow must mint its own correlation ID and the two IDs must
-  # not bleed into each other.  Both flows must complete successfully and land
-  # on the correct SP ACS URL.
-  # Requires the @functional tag to use the Chrome driver (browser tabs need JS).
   @functional
   Scenario: Two concurrent authentication flows each complete independently
     Given an Identity Provider named "CorrId-IdP-A"
-      And an Identity Provider named "CorrId-IdP-B"
+    And an Identity Provider named "CorrId-IdP-B"
     When I open 2 browser tabs identified by "Tab-A, Tab-B"
-      And I switch to "Tab-A"
-      And I log in at "CorrId-SP"
-      And I select "CorrId-IdP-A" on the WAYF
-      And I switch to "Tab-B"
-      And I log in at "CorrId-SP"
-      And I select "CorrId-IdP-B" on the WAYF
-      And I pass through the IdP
-      And I give my consent
+    And I switch to "Tab-A"
+    And I log in at "CorrId-SP"
+    And I select "CorrId-IdP-A" on the WAYF
+    And I switch to "Tab-B"
+    And I log in at "CorrId-SP"
+    And I select "CorrId-IdP-B" on the WAYF
+    And I pass through the IdP
+    And I give my consent
     Then the url should match "functional-testing/CorrId-SP/acs"
-      And I switch to "Tab-A"
-      And I pass through the IdP
-      And I give my consent
+    And I switch to "Tab-A"
+    And I pass through the IdP
+    And I give my consent
     Then the url should match "functional-testing/CorrId-SP/acs"

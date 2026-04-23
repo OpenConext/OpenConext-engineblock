@@ -3,3 +3,8 @@ monolog:
         test_log_handler:
             type: service
             id: OpenConext\EngineBlockFunctionalTestingBundle\Log\TestLogHandler
+        test_log_file:
+            type: stream
+            path: '/tmp/eb-fixtures/log-records.ndjson'
+            level: debug
+            formatter: monolog.formatter.json
