@@ -20,6 +20,7 @@ use Doctrine\ORM\EntityManager;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\LoaRepository;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Request\CorrelationIdService;
 use OpenConext\EngineBlock\Service\MfaHelperInterface;
 use OpenConext\EngineBlock\Service\ReleaseAsEnforcer;
 use OpenConext\EngineBlock\Service\TimeProvider\TimeProviderInterface;
@@ -612,5 +613,21 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
     public function getNameIdSubstituteResolver()
     {
         return new EngineBlock_Arp_NameIdSubstituteResolver($this->container->get('engineblock.compat.logger'));
+    }
+
+    /**
+     * @return CorrelationIdService
+     */
+    public function getCorrelationIdService(): CorrelationIdService
+    {
+        return $this->container->get(CorrelationIdService::class);
+    }
+
+    /**
+     * @return EngineBlock_Saml2_AuthnRequestSessionRepository
+     */
+    public function getAuthnRequestSessionRepository(): EngineBlock_Saml2_AuthnRequestSessionRepository
+    {
+        return $this->container->get(EngineBlock_Saml2_AuthnRequestSessionRepository::class);
     }
 }

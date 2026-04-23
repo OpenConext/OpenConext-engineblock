@@ -57,6 +57,20 @@ services:
             - '@OpenConext\EngineBlock\Request\UniqidGenerator'
         public: true
 
+    OpenConext\EngineBlock\Request\CurrentCorrelationId:
+        public: true
+
+    OpenConext\EngineBlock\Request\CorrelationIdRepository:
+        public: true
+        arguments:
+            - '@request_stack'
+
+    OpenConext\EngineBlock\Request\CorrelationIdService:
+        public: true
+        arguments:
+            - '@OpenConext\EngineBlock\Request\CorrelationIdRepository'
+            - '@OpenConext\EngineBlock\Request\CurrentCorrelationId'
+
     OpenConext\EngineBlockBundle\Security\Http\EntryPoint\JsonBasicAuthenticationEntryPoint:
         arguments:
             - 'engine-api.%domain%'
@@ -386,3 +400,12 @@ services:
         class: OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger
         arguments:
             - "%sram.allowed_attributes%"
+
+    EngineBlock_Saml2_AuthnRequestSessionRepository:
+        class: EngineBlock_Saml2_AuthnRequestSessionRepository
+        public: true
+        arguments:
+            - '@request_stack'
+
+    OpenConext\EngineBlockFunctionalTestingBundle\Log\TestLogHandler:
+        public: true
