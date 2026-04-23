@@ -26,6 +26,7 @@ use OpenConext\EngineBlock\Validator\RequestValidator;
 use OpenConext\EngineBlockBridge\ResponseFactory;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -122,8 +123,15 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
     #[Route(path: '/authentication/idp/single-sign-on/{idpHash}', name: 'authentication_idp_sso_idphash', methods: ['GET', 'POST'])]
     public function singleSignOnAction(Request $request, ?string $keyId = null, ?string $idpHash = null)
     {
+        $storedRequest = $this->getStoredSessionRequest($request);
+        if ($storedRequest !== null) {
+            return new RedirectResponse($storedRequest);
+        }
+
         $this->requestValidator->isValid($request);
         $this->bindingValidator->isValid($request);
+
+        $this->storeRequestToSession($request);
 
         $cortoAdapter = new EngineBlock_Corto_Adapter();
 
@@ -134,6 +142,20 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
         $cortoAdapter->singleSignOn($idpHash);
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
+    }
+
+    private function storeRequestToSession(Request $request): void
+    {
+        $request->getSession()->set('eb_last_sso_request_url', $request->getUri());
+    }
+
+    private function getStoredSessionRequest(Request $request): ?string
+    {
+        if (!$request->isMethod('GET') || $request->query->has('SAMLRequest')) {
+            return null;
+        }
+
+        return $request->getSession()->remove('eb_last_sso_request_url');
     }
 
     /**
