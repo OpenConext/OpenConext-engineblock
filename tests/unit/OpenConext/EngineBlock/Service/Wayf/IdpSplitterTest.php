@@ -20,6 +20,7 @@ namespace Tests\OpenConext\EngineBlock\Service\Wayf;
 
 use OpenConext\EngineBlock\Service\Wayf\IdpSplitter;
 use OpenConext\EngineBlock\Service\Wayf\WayfIdp;
+use OpenConext\EngineBlock\Service\Wayf\WayfSplitResult;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -32,7 +33,7 @@ class IdpSplitterTest extends TestCase
         $this->splitter = new IdpSplitter();
     }
 
-    private function split(array $idpList, array $preferredEntityIds): array
+    private function split(array $idpList, array $preferredEntityIds): WayfSplitResult
     {
         return $this->splitter->split($idpList, $preferredEntityIds);
     }
@@ -57,8 +58,8 @@ class IdpSplitterTest extends TestCase
 
         $result = $this->split($idpList, []);
 
-        $this->assertSame([], $result['preferred']);
-        $this->assertSame($idpList, $result['regular']);
+        $this->assertSame([], $result->preferred);
+        $this->assertSame($idpList, $result->regular);
     }
 
     public function testPreferredIdpIsMovedOutOfRegularList(): void
@@ -68,10 +69,10 @@ class IdpSplitterTest extends TestCase
 
         $result = $this->split([$idp1, $idp2], ['https://idp1.example.org']);
 
-        $this->assertCount(1, $result['preferred']);
-        $this->assertSame('https://idp1.example.org', $result['preferred'][0]->entityId);
-        $this->assertCount(1, $result['regular']);
-        $this->assertSame('https://idp2.example.org', $result['regular'][0]->entityId);
+        $this->assertCount(1, $result->preferred);
+        $this->assertSame('https://idp1.example.org', $result->preferred[0]->entityId);
+        $this->assertCount(1, $result->regular);
+        $this->assertSame('https://idp2.example.org', $result->regular[0]->entityId);
     }
 
     public function testConfiguredOrderIsPreservedInPreferredList(): void
@@ -85,11 +86,11 @@ class IdpSplitterTest extends TestCase
             ['https://idp3.example.org', 'https://idp1.example.org']
         );
 
-        $this->assertCount(2, $result['preferred']);
-        $this->assertSame('https://idp3.example.org', $result['preferred'][0]->entityId);
-        $this->assertSame('https://idp1.example.org', $result['preferred'][1]->entityId);
-        $this->assertCount(1, $result['regular']);
-        $this->assertSame('https://idp2.example.org', $result['regular'][0]->entityId);
+        $this->assertCount(2, $result->preferred);
+        $this->assertSame('https://idp3.example.org', $result->preferred[0]->entityId);
+        $this->assertSame('https://idp1.example.org', $result->preferred[1]->entityId);
+        $this->assertCount(1, $result->regular);
+        $this->assertSame('https://idp2.example.org', $result->regular[0]->entityId);
     }
 
     public function testDisconnectedPreferredIdpIsExcludedFromBothLists(): void
@@ -102,10 +103,10 @@ class IdpSplitterTest extends TestCase
             ['https://idp2.example.org']
         );
 
-        $this->assertSame([], $result['preferred']);
+        $this->assertSame([], $result->preferred);
         // idp1 is not preferred so it stays in regular; idp2 is preferred but disconnected > excluded from both
-        $this->assertCount(1, $result['regular']);
-        $this->assertSame('https://idp1.example.org', $result['regular'][0]->entityId);
+        $this->assertCount(1, $result->regular);
+        $this->assertSame('https://idp1.example.org', $result->regular[0]->entityId);
     }
 
     public function testMultipleDiscoveryEntriesForSameEntityIdAreGroupedInOrder(): void
@@ -119,11 +120,11 @@ class IdpSplitterTest extends TestCase
             ['https://idp1.example.org']
         );
 
-        $this->assertCount(2, $result['preferred']);
-        $this->assertSame('https://idp1.example.org', $result['preferred'][0]->entityId);
-        $this->assertSame('https://idp1.example.org', $result['preferred'][1]->entityId);
-        $this->assertCount(1, $result['regular']);
-        $this->assertSame('https://idp2.example.org', $result['regular'][0]->entityId);
+        $this->assertCount(2, $result->preferred);
+        $this->assertSame('https://idp1.example.org', $result->preferred[0]->entityId);
+        $this->assertSame('https://idp1.example.org', $result->preferred[1]->entityId);
+        $this->assertCount(1, $result->regular);
+        $this->assertSame('https://idp2.example.org', $result->regular[0]->entityId);
     }
 
     public function testPreferredEntityIdNotInIdpListIsIgnored(): void
@@ -132,8 +133,8 @@ class IdpSplitterTest extends TestCase
 
         $result = $this->split([$idp1], ['https://nonexistent.example.org']);
 
-        $this->assertSame([], $result['preferred']);
-        $this->assertCount(1, $result['regular']);
+        $this->assertSame([], $result->preferred);
+        $this->assertCount(1, $result->regular);
     }
 
     public static function fiveScenarioProvider(): array
@@ -162,8 +163,8 @@ class IdpSplitterTest extends TestCase
 
         $split = $this->split($idpList, $preferredEntityIds);
 
-        $showPreferred      = !empty($split['preferred']);
-        $isDefaultPreferred = in_array($defaultIdpEntityId, $preferredEntityIds, true);
+        $showPreferred      = $split->hasPreferred();
+        $isDefaultPreferred = $split->containsInPreferred($defaultIdpEntityId);
         $showBanner         = $defaultIdpConnected && (!$showPreferred || !$isDefaultPreferred);
 
         $this->assertSame($expectShowPreferred, $showPreferred, 'showPreferredIdps mismatch');

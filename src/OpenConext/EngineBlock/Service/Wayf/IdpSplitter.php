@@ -26,12 +26,11 @@ final class IdpSplitter
      *
      * @param WayfIdp[] $idpList           Full transformed IdP list
      * @param array     $preferredEntityIds Ordered list of entity IDs to feature at the top
-     * @return array{preferred: WayfIdp[], regular: WayfIdp[]}
      */
-    public function split(array $idpList, array $preferredEntityIds): array
+    public function split(array $idpList, array $preferredEntityIds): WayfSplitResult
     {
         if (empty($preferredEntityIds)) {
-            return ['preferred' => [], 'regular' => $idpList];
+            return new WayfSplitResult(preferred: [], regular: $idpList);
         }
 
         $orderMap = array_flip($preferredEntityIds);
@@ -53,6 +52,6 @@ final class IdpSplitter
         $mergeArgs = array_values(array_filter($preferredBuckets));
         $preferred = empty($mergeArgs) ? [] : array_merge(...$mergeArgs);
 
-        return ['preferred' => $preferred, 'regular' => $regular];
+        return new WayfSplitResult(preferred: $preferred, regular: $regular);
     }
 }

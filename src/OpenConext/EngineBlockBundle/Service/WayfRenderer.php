@@ -52,9 +52,8 @@ class WayfRenderer
         ServiceProvider $serviceProvider,
     ): string {
         $split = $this->splitter->split($idpList, $preferredIdpEntityIds);
-        $showPreferredIdps = !empty($split['preferred']);
-        $preferredEntityIdsShown = array_map(static fn(WayfIdp $idp) => $idp->entityId, $split['preferred']);
-        $isDefaultIdpPreferred = in_array($defaultIdpEntityId, $preferredEntityIdsShown, true);
+        $showPreferredIdps = $split->hasPreferred();
+        $isDefaultIdpPreferred = $split->containsInPreferred($defaultIdpEntityId);
 
         $showIdPBanner = $shouldDisplayBanner
             && $this->isDefaultIdpPresent($idpList)
@@ -62,8 +61,8 @@ class WayfRenderer
 
         $viewModel = $this->factory->create(
             idpList: $idpList,
-            regularIdpList: $split['regular'],
-            preferredIdpList: $split['preferred'],
+            regularIdpList: $split->regular,
+            preferredIdpList: $split->preferred,
             showPreferredIdps: $showPreferredIdps,
             action: $action,
             greenHeader: $serviceProvider->getDisplayName($currentLocale),
