@@ -75,13 +75,9 @@ class Locale
             $params
         );
 
-        $query = '';
-        foreach ($params as $key => $value) {
-            $query .= (strlen($query) == 0) ? '?' : '&' ;
-            $query .= $key. '=' .urlencode($value);
-        }
+        $query = http_build_query($params);
 
-        return $query;
+        return strlen($query) > 0 ? '?' . $query : '';
     }
 
     #[AsTwigFunction(name: 'locale')]

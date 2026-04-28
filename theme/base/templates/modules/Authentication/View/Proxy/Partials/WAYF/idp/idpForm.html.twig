@@ -2,8 +2,8 @@
     <input type="hidden" name="ID" value="{{ requestId }}">
     <input type="hidden" name="idp" value="{{ idp['entityId'] }}">
     <input type="hidden" name="discovery" value="{{ idp['discoveryHash'] }}">
-    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpSubmitButton.html.twig' with { hidden: true } %}
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpSubmitButton.html.twig' with { hidden: true } only %}
     <noscript>
-        {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpSubmitButton.html.twig' %}
+        {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpSubmitButton.html.twig' only %}
     </noscript>
 </form>
