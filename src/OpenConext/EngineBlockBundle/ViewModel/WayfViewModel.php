@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace OpenConext\EngineBlockBundle\ViewModel;
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Service\Wayf\WayfIdp;
 use OpenConext\EngineBlockBundle\Twig\Extensions\Extension\ConnectedIdps;
 
 final readonly class WayfViewModel
@@ -44,16 +45,23 @@ final readonly class WayfViewModel
         public ConnectedIdps $regularConnectedIdps,
         public ConnectedIdps $preferredConnectedIdps,
         public bool $showPreferredIdps,
-        // These Raw arrays kept for backward compatibility with custom theme overrides.
+        // These WayfIdp arrays kept for backward compatibility with custom theme overrides.
         // The base / skeune theme do not use them, but potentially downstream themes may rely on them so we keep them in.
+        /** @var WayfIdp[] */
         public array $idpList,
+        /** @var WayfIdp[] */
         public array $regularIdpList,
+        /** @var WayfIdp[] */
         public array $preferredIdpList,
     ) {
     }
 
     public function toArray(): array
     {
-        return get_object_vars($this);
+        $vars = get_object_vars($this);
+        $vars['idpList'] = array_map(static fn(WayfIdp $idp) => $idp->toArray(), $this->idpList);
+        $vars['regularIdpList'] = array_map(static fn(WayfIdp $idp) => $idp->toArray(), $this->regularIdpList);
+        $vars['preferredIdpList'] = array_map(static fn(WayfIdp $idp) => $idp->toArray(), $this->preferredIdpList);
+        return $vars;
     }
 }

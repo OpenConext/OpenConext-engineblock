@@ -22,6 +22,7 @@ namespace OpenConext\EngineBlockBundle\Service;
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\Wayf\IdpSplitter;
+use OpenConext\EngineBlock\Service\Wayf\WayfIdp;
 use Twig\Environment;
 
 class WayfRenderer
@@ -81,6 +82,6 @@ class WayfRenderer
 
     private function isDefaultIdpPresent(array $idpList): bool
     {
-        return array_any($idpList, fn($idp) => ($idp['isDefaultIdp'] ?? false) === true);
+        return array_any($idpList, fn(WayfIdp $idp) => $idp->isDefaultIdp);
     }
 }

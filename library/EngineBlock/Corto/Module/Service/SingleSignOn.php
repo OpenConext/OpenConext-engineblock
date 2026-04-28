@@ -20,6 +20,7 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
+use OpenConext\EngineBlock\Service\Wayf\WayfIdp;
 use OpenConext\EngineBlockBundle\Service\DiscoverySelectionService;
 use SAML2\AuthnRequest;
 use SAML2\Constants;
@@ -537,21 +538,21 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
     private function buildIdp(
         ?string $name,
         string $logo,
-        $keywords,
+        array $keywords,
         string $entityId,
         bool $isAccessible,
         bool $isDefaultIdP,
         ?string $discoveryHash
-    ): array {
-        return array(
-            'Name' => $name,
-            'Logo' => $logo,
-            'Keywords' => $keywords,
-            'Access' => $isAccessible ? '1' : '0',
-            'ID' => md5($entityId),
-            'EntityID' => $entityId,
-            self::IS_DEFAULT_IDP_KEY => $isDefaultIdP,
-            'DiscoveryHash' => $discoveryHash,
+    ): WayfIdp {
+        return new WayfIdp(
+            name: $name,
+            logo: $logo,
+            keywords: $keywords,
+            accessible: $isAccessible,
+            id: md5($entityId),
+            entityId: $entityId,
+            isDefaultIdp: $isDefaultIdP,
+            discoveryHash: $discoveryHash,
         );
     }
     /**

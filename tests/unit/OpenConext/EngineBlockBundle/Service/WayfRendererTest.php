@@ -22,6 +22,7 @@ namespace Tests\OpenConext\EngineBlockBundle\Service;
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\Wayf\IdpSplitter;
+use OpenConext\EngineBlock\Service\Wayf\WayfIdp;
 use OpenConext\EngineBlockBundle\Service\WayfRenderer;
 use OpenConext\EngineBlockBundle\Service\WayfViewModelFactory;
 use OpenConext\EngineBlockBundle\Twig\Extensions\Extension\ConnectedIdps;
@@ -86,8 +87,8 @@ class WayfRendererTest extends TestCase
         bool $expectedShowBanner,
     ): void {
         $idpList = $defaultIdpInList
-            ? [['EntityID' => $defaultIdpEntityId, 'isDefaultIdp' => true, 'Access' => '1']]
-            : [['EntityID' => 'https://other.example.org', 'isDefaultIdp' => false, 'Access' => '1']];
+            ? [new WayfIdp(name: null, logo: '', keywords: [], accessible: true, id: md5($defaultIdpEntityId), entityId: $defaultIdpEntityId, isDefaultIdp: true, discoveryHash: null)]
+            : [new WayfIdp(name: null, logo: '', keywords: [], accessible: true, id: md5('other'), entityId: 'https://other.example.org', isDefaultIdp: false, discoveryHash: null)];
 
         $capturedShowIdPBanner = null;
 
@@ -142,8 +143,8 @@ class WayfRendererTest extends TestCase
         $regularId = 'https://regular.example.org';
 
         $idpList = [
-            ['EntityID' => $preferredId, 'isDefaultIdp' => false, 'Access' => '1'],
-            ['EntityID' => $regularId, 'isDefaultIdp' => false, 'Access' => '1'],
+            new WayfIdp(name: null, logo: '', keywords: [], accessible: true, id: md5($preferredId), entityId: $preferredId, isDefaultIdp: false, discoveryHash: null),
+            new WayfIdp(name: null, logo: '', keywords: [], accessible: true, id: md5($regularId), entityId: $regularId, isDefaultIdp: false, discoveryHash: null),
         ];
 
         $capturedRegular = null;
@@ -185,9 +186,9 @@ class WayfRendererTest extends TestCase
         );
 
         $this->assertCount(1, $capturedPreferred);
-        $this->assertSame($preferredId, $capturedPreferred[0]['EntityID']);
+        $this->assertSame($preferredId, $capturedPreferred[0]->entityId);
         $this->assertCount(1, $capturedRegular);
-        $this->assertSame($regularId, $capturedRegular[0]['EntityID']);
+        $this->assertSame($regularId, $capturedRegular[0]->entityId);
     }
 
     public function testReturnsRenderedHtml(): void

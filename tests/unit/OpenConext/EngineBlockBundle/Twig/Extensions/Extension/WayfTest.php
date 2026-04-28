@@ -19,6 +19,7 @@
 namespace Tests\OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Service\Wayf\WayfIdp;
 use OpenConext\EngineBlockBundle\Twig\Extensions\Extension\ConnectedIdps;
 use OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Wayf;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -43,24 +44,26 @@ class WayfTest extends TestCase
     public function testGetConnectedIdpsWithEmptyPreviousSelection()
     {
         $idpList = [
-            [
-                'EntityID' => 'https://idp1.example.org',
-                'Access' => '1',
-                'Name' => 'IDP One',
-                'Keywords' => ['university', 'education'],
-                'Logo' => 'logo1.png',
-                'isDefaultIdp' => false,
-                'DiscoveryHash' => 'hash1'
-            ],
-            [
-                'EntityID' => 'https://idp2.example.org',
-                'Access' => '0',
-                'Name' => 'IDP Two',
-                'Keywords' => 'Undefined',
-                'Logo' => 'logo2.png',
-                'isDefaultIdp' => true,
-                'DiscoveryHash' => 'hash2'
-            ]
+            new WayfIdp(
+                name: 'IDP One',
+                logo: 'logo1.png',
+                keywords: ['university', 'education'],
+                accessible: true,
+                id: md5('https://idp1.example.org'),
+                entityId: 'https://idp1.example.org',
+                isDefaultIdp: false,
+                discoveryHash: 'hash1',
+            ),
+            new WayfIdp(
+                name: 'IDP Two',
+                logo: 'logo2.png',
+                keywords: [],
+                accessible: false,
+                id: md5('https://idp2.example.org'),
+                entityId: 'https://idp2.example.org',
+                isDefaultIdp: true,
+                discoveryHash: 'hash2',
+            ),
         ];
 
         $result = $this->wayf->getConnectedIdps($idpList);
@@ -118,24 +121,26 @@ class WayfTest extends TestCase
         $wayf = new Wayf($requestStack, $this->translator);
 
         $idpList = [
-            [
-                'EntityID' => 'https://idp1.example.org',
-                'Access' => '1',
-                'Name' => 'IDP One',
-                'Keywords' => ['university', 'education'],
-                'Logo' => 'logo1.png',
-                'isDefaultIdp' => false,
-                'DiscoveryHash' => ''
-            ],
-            [
-                'EntityID' => 'https://idp1.example.org',
-                'Access' => '1',
-                'Name' => 'IDP One Discovery',
-                'Keywords' => [],
-                'Logo' => 'logo2.png',
-                'isDefaultIdp' => false,
-                'DiscoveryHash' => 'hash1'
-            ]
+            new WayfIdp(
+                name: 'IDP One',
+                logo: 'logo1.png',
+                keywords: ['university', 'education'],
+                accessible: true,
+                id: md5('https://idp1.example.org'),
+                entityId: 'https://idp1.example.org',
+                isDefaultIdp: false,
+                discoveryHash: null,
+            ),
+            new WayfIdp(
+                name: 'IDP One Discovery',
+                logo: 'logo2.png',
+                keywords: [],
+                accessible: true,
+                id: md5('https://idp1.example.org'),
+                entityId: 'https://idp1.example.org',
+                isDefaultIdp: false,
+                discoveryHash: 'hash1',
+            ),
         ];
 
         $result = $wayf->getConnectedIdps($idpList);

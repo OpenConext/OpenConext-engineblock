@@ -24,9 +24,9 @@ final class IdpSplitter
      * Splits the full IdP list into preferred (connected, in configured order) and regular (everything else).
      * Preferred IdPs that are not connected are excluded from both sections.
      *
-     * @param array  $idpList           Full transformed IdP list
-     * @param array  $preferredEntityIds Ordered list of entity IDs to feature at the top
-     * @return array{preferred: array, regular: array}
+     * @param WayfIdp[] $idpList           Full transformed IdP list
+     * @param array     $preferredEntityIds Ordered list of entity IDs to feature at the top
+     * @return array{preferred: WayfIdp[], regular: WayfIdp[]}
      */
     public function split(array $idpList, array $preferredEntityIds): array
     {
@@ -39,9 +39,9 @@ final class IdpSplitter
         $regular = [];
 
         foreach ($idpList as $idp) {
-            $entityId = $idp['EntityID'];
+            $entityId = $idp->entityId;
             if (isset($orderMap[$entityId])) {
-                if ($idp['Access'] === '1') {
+                if ($idp->accessible) {
                     $preferredBuckets[$orderMap[$entityId]][] = $idp;
                 }
                 // Unconnected preferred IdPs are excluded from both sections.

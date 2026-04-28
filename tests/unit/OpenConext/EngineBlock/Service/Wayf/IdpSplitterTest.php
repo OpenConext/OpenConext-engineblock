@@ -19,6 +19,7 @@
 namespace Tests\OpenConext\EngineBlock\Service\Wayf;
 
 use OpenConext\EngineBlock\Service\Wayf\IdpSplitter;
+use OpenConext\EngineBlock\Service\Wayf\WayfIdp;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -36,17 +37,18 @@ class IdpSplitterTest extends TestCase
         return $this->splitter->split($idpList, $preferredEntityIds);
     }
 
-    private function idp(string $entityId, string $access = '1', string $discoveryHash = ''): array
+    private function idp(string $entityId, string $access = '1', string $discoveryHash = ''): WayfIdp
     {
-        return [
-            'EntityID'      => $entityId,
-            'Access'        => $access,
-            'Name'          => $entityId,
-            'Keywords'      => [],
-            'Logo'          => '',
-            'isDefaultIdp'  => false,
-            'DiscoveryHash' => $discoveryHash,
-        ];
+        return new WayfIdp(
+            name: $entityId,
+            logo: '',
+            keywords: [],
+            accessible: $access === '1',
+            id: md5($entityId),
+            entityId: $entityId,
+            isDefaultIdp: false,
+            discoveryHash: $discoveryHash !== '' ? $discoveryHash : null,
+        );
     }
 
     public function testEmptyPreferredEntityIdsReturnsFullListAsRegular(): void
@@ -67,9 +69,9 @@ class IdpSplitterTest extends TestCase
         $result = $this->split([$idp1, $idp2], ['https://idp1.example.org']);
 
         $this->assertCount(1, $result['preferred']);
-        $this->assertSame('https://idp1.example.org', $result['preferred'][0]['EntityID']);
+        $this->assertSame('https://idp1.example.org', $result['preferred'][0]->entityId);
         $this->assertCount(1, $result['regular']);
-        $this->assertSame('https://idp2.example.org', $result['regular'][0]['EntityID']);
+        $this->assertSame('https://idp2.example.org', $result['regular'][0]->entityId);
     }
 
     public function testConfiguredOrderIsPreservedInPreferredList(): void
@@ -84,10 +86,10 @@ class IdpSplitterTest extends TestCase
         );
 
         $this->assertCount(2, $result['preferred']);
-        $this->assertSame('https://idp3.example.org', $result['preferred'][0]['EntityID']);
-        $this->assertSame('https://idp1.example.org', $result['preferred'][1]['EntityID']);
+        $this->assertSame('https://idp3.example.org', $result['preferred'][0]->entityId);
+        $this->assertSame('https://idp1.example.org', $result['preferred'][1]->entityId);
         $this->assertCount(1, $result['regular']);
-        $this->assertSame('https://idp2.example.org', $result['regular'][0]['EntityID']);
+        $this->assertSame('https://idp2.example.org', $result['regular'][0]->entityId);
     }
 
     public function testDisconnectedPreferredIdpIsExcludedFromBothLists(): void
@@ -103,7 +105,7 @@ class IdpSplitterTest extends TestCase
         $this->assertSame([], $result['preferred']);
         // idp1 is not preferred so it stays in regular; idp2 is preferred but disconnected > excluded from both
         $this->assertCount(1, $result['regular']);
-        $this->assertSame('https://idp1.example.org', $result['regular'][0]['EntityID']);
+        $this->assertSame('https://idp1.example.org', $result['regular'][0]->entityId);
     }
 
     public function testMultipleDiscoveryEntriesForSameEntityIdAreGroupedInOrder(): void
@@ -118,10 +120,10 @@ class IdpSplitterTest extends TestCase
         );
 
         $this->assertCount(2, $result['preferred']);
-        $this->assertSame('https://idp1.example.org', $result['preferred'][0]['EntityID']);
-        $this->assertSame('https://idp1.example.org', $result['preferred'][1]['EntityID']);
+        $this->assertSame('https://idp1.example.org', $result['preferred'][0]->entityId);
+        $this->assertSame('https://idp1.example.org', $result['preferred'][1]->entityId);
         $this->assertCount(1, $result['regular']);
-        $this->assertSame('https://idp2.example.org', $result['regular'][0]['EntityID']);
+        $this->assertSame('https://idp2.example.org', $result['regular'][0]->entityId);
     }
 
     public function testPreferredEntityIdNotInIdpListIsIgnored(): void
