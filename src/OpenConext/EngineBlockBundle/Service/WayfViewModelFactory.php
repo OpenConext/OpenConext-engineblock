@@ -49,7 +49,6 @@ class WayfViewModelFactory
         bool $showRequestAccess,
         string $requestId,
         ServiceProvider $serviceProvider,
-        bool $showRequestAccessContainer,
     ): WayfViewModel {
         return new WayfViewModel(
             action: $action,
@@ -60,7 +59,6 @@ class WayfViewModelFactory
             showIdPBanner: $showIdPBanner,
             rememberChoiceFeature: $rememberChoiceFeature,
             showRequestAccess: $showRequestAccess,
-            showRequestAccessContainer: $showRequestAccessContainer,
             requestId: $requestId,
             serviceProvider: $serviceProvider,
             connectedIdps: $this->wayfExtension->getConnectedIdps($idpList),

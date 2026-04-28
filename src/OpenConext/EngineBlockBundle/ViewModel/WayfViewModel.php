@@ -38,7 +38,6 @@ final readonly class WayfViewModel
         public bool $showIdPBanner,
         public bool $rememberChoiceFeature,
         public bool $showRequestAccess,
-        public bool $showRequestAccessContainer,
         public string $requestId,
         public ServiceProvider $serviceProvider,
         public ConnectedIdps $connectedIdps,

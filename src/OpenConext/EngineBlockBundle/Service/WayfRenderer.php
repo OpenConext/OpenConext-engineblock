@@ -74,7 +74,6 @@ class WayfRenderer
             showRequestAccess: $showRequestAccess,
             requestId: $requestId,
             serviceProvider: $serviceProvider,
-            showRequestAccessContainer: true,
         );
 
         return $this->twig->render('@theme/Authentication/View/Proxy/wayf.html.twig', $viewModel->toArray());

@@ -65,7 +65,6 @@ class WayfRendererTest extends TestCase
             showIdPBanner: $showIdPBanner,
             rememberChoiceFeature: false,
             showRequestAccess: false,
-            showRequestAccessContainer: true,
             requestId: 'req-1',
             serviceProvider: $sp,
             connectedIdps: $emptyIdps,
@@ -181,7 +180,7 @@ class WayfRendererTest extends TestCase
         $this->assertTrue($capturedShowIdPBanner, 'Banner should show: default IdP was in preferred config but dropped by splitter, so it is not visible anywhere');
     }
 
-    
+
     public function testSplitsIdpListBeforePassingToFactory(): void
     {
         $preferredId = 'https://preferred.example.org';
