@@ -137,6 +137,51 @@ class WayfRendererTest extends TestCase
         ];
     }
 
+    public function testBannerShownWhenDefaultIdpIsInPreferredConfigButDroppedBySpitter(): void
+    {
+        $defaultId = 'https://default.example.org';
+        $otherId = 'https://other.example.org';
+
+        // Default IdP is unconnected (splitter will drop it); other preferred IdP is connected.
+        $idpList = [
+            new WayfIdp(name: null, logo: '', keywords: [], accessible: false, id: md5($defaultId), entityId: $defaultId, isDefaultIdp: true, discoveryHash: null),
+            new WayfIdp(name: null, logo: '', keywords: [], accessible: true, id: md5($otherId), entityId: $otherId, isDefaultIdp: false, discoveryHash: null),
+        ];
+
+        $capturedShowIdPBanner = null;
+
+        $this->factory->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(function () use (&$capturedShowIdPBanner): WayfViewModel {
+                $namedArgs = func_get_args();
+                $capturedShowIdPBanner = $namedArgs[9];
+                return $this->buildViewModel($namedArgs[9]);
+            });
+
+        $this->twig->method('render')->willReturn('<html>');
+
+        $sp = $this->createStub(ServiceProvider::class);
+        $sp->method('getDisplayName')->willReturn('Test SP');
+
+        $this->renderer()->render(
+            idpList: $idpList,
+            preferredIdpEntityIds: [$defaultId, $otherId],
+            action: '/sso',
+            currentLocale: 'en',
+            defaultIdpEntityId: $defaultId,
+            shouldDisplayBanner: true,
+            backLink: false,
+            cutoffPoint: 100,
+            rememberChoice: false,
+            showRequestAccess: false,
+            requestId: 'req-1',
+            serviceProvider: $sp,
+        );
+
+        $this->assertTrue($capturedShowIdPBanner, 'Banner should show: default IdP was in preferred config but dropped by splitter, so it is not visible anywhere');
+    }
+
+    
     public function testSplitsIdpListBeforePassingToFactory(): void
     {
         $preferredId = 'https://preferred.example.org';

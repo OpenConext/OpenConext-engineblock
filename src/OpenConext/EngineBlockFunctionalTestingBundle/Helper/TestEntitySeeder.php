@@ -198,6 +198,13 @@ class TestEntitySeeder
 
         $wayfIdps = [];
         foreach ($identityProviders as $identityProvider) {
+            $isDefaultIdp = $idpEntityIds[$identityProvider->entityId]['isDefaultIdp'];
+
+            // Mirror the production guard: do not show the default IdP in the disconnected section.
+            if (!$identityProvider->enabledInWayf && $isDefaultIdp) {
+                continue;
+            }
+
             $name = 'name' . ucfirst($currentLocale);
             $wayfIdps[] = new WayfIdp(
                 name: $identityProvider->$name,
@@ -206,7 +213,7 @@ class TestEntitySeeder
                 accessible: $identityProvider->enabledInWayf,
                 id: md5($identityProvider->entityId),
                 entityId: $identityProvider->entityId,
-                isDefaultIdp: $idpEntityIds[$identityProvider->entityId]['isDefaultIdp'],
+                isDefaultIdp: $isDefaultIdp,
                 discoveryHash: null,
             );
 
@@ -218,7 +225,7 @@ class TestEntitySeeder
                     accessible: $identityProvider->enabledInWayf,
                     id: md5($identityProvider->entityId),
                     entityId: $identityProvider->entityId,
-                    isDefaultIdp: $idpEntityIds[$identityProvider->entityId]['isDefaultIdp'],
+                    isDefaultIdp: $isDefaultIdp,
                     discoveryHash: $discoveryService->hash($discovery),
                 );
             }

@@ -53,7 +53,8 @@ class WayfRenderer
     ): string {
         $split = $this->splitter->split($idpList, $preferredIdpEntityIds);
         $showPreferredIdps = !empty($split['preferred']);
-        $isDefaultIdpPreferred = in_array($defaultIdpEntityId, $preferredIdpEntityIds, true);
+        $preferredEntityIdsShown = array_map(static fn(WayfIdp $idp) => $idp->entityId, $split['preferred']);
+        $isDefaultIdpPreferred = in_array($defaultIdpEntityId, $preferredEntityIdsShown, true);
 
         $showIdPBanner = $shouldDisplayBanner
             && $this->isDefaultIdpPresent($idpList)
