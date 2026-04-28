@@ -22,6 +22,7 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlockBundle\Bridge\DiContainerRuntime;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use SAML2\Assertion;
 use SAML2\Assertion\Validation\ConstraintValidator\NotBefore;
 use SAML2\Assertion\Validation\ConstraintValidator\NotOnOrAfter;
@@ -115,6 +116,72 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
             'Received an assertion that has expired. Check clock synchronization on IdP and SP.',
             $result->getErrors()[1]
         );
+    }
+
+    public function test_checkIssueInstant_logs_warning_when_request_exceeds_max_age(): void
+    {
+        $maxAge = 86400;
+        $issueInstant = time() - $maxAge - 1;
+
+        $logger = m::mock(LoggerInterface::class);
+        $logger->shouldReceive('notice')->once(); // clock-drift notice still fires (delta > 30 s)
+        $logger->shouldReceive('warning')->once()->withArgs(function (string $message) use ($maxAge): bool {
+            return str_contains($message, 'bookmarked or replayed URL')
+                && str_contains($message, (string)$maxAge);
+        });
+
+        $proxyServer = Phake::mock('EngineBlock_Corto_ProxyServer');
+        Phake::when($proxyServer)->getConfig('maxIssueInstantAge', 86400)->thenReturn($maxAge);
+
+        $bindings = new EngineBlock_Corto_Module_Bindings($proxyServer);
+        $this->injectLogger($bindings, $logger);
+
+        $method = new ReflectionMethod(EngineBlock_Corto_Module_Bindings::class, '_checkIssueInstant');
+        $method->invoke($bindings, $issueInstant, 'SP', 'https://sp.example.edu');
+    }
+
+    public function test_checkIssueInstant_does_not_warn_when_request_is_within_max_age(): void
+    {
+        $maxAge = 86400;
+        $issueInstant = time() - $maxAge + 5;
+
+        $logger = m::mock(LoggerInterface::class);
+        $logger->shouldReceive('notice')->once(); // clock-drift notice fires (delta > 30 s)
+        $logger->shouldNotReceive('warning');
+
+        $proxyServer = Phake::mock('EngineBlock_Corto_ProxyServer');
+        Phake::when($proxyServer)->getConfig('maxIssueInstantAge', 86400)->thenReturn($maxAge);
+
+        $bindings = new EngineBlock_Corto_Module_Bindings($proxyServer);
+        $this->injectLogger($bindings, $logger);
+
+        $method = new ReflectionMethod(EngineBlock_Corto_Module_Bindings::class, '_checkIssueInstant');
+        $method->invoke($bindings, $issueInstant, 'SP', 'https://sp.example.edu');
+    }
+
+    public function test_checkIssueInstant_does_not_warn_when_request_is_in_the_future(): void
+    {
+        $maxAge = 86400;
+        $issueInstant = time() + 100;
+
+        $logger = m::mock(LoggerInterface::class);
+        $logger->shouldReceive('notice')->once(); // clock-drift notice fires (delta > 30 s)
+        $logger->shouldNotReceive('warning');
+
+        $proxyServer = Phake::mock('EngineBlock_Corto_ProxyServer');
+        Phake::when($proxyServer)->getConfig('maxIssueInstantAge', 86400)->thenReturn($maxAge);
+
+        $bindings = new EngineBlock_Corto_Module_Bindings($proxyServer);
+        $this->injectLogger($bindings, $logger);
+
+        $method = new ReflectionMethod(EngineBlock_Corto_Module_Bindings::class, '_checkIssueInstant');
+        $method->invoke($bindings, $issueInstant, 'SP', 'https://sp.example.edu');
+    }
+
+    private function injectLogger(EngineBlock_Corto_Module_Bindings $bindings, LoggerInterface $logger): void
+    {
+        $property = new ReflectionProperty(EngineBlock_Corto_Module_Bindings::class, '_logger');
+        $property->setValue($bindings, $logger);
     }
 
     /**

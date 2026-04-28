@@ -587,7 +587,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     }
 
     /**
-     * Check if the IssueInstant of the message is too far out of sync
+     * Check if the IssueInstant of the message is too far out of sync or too old
      * @param integer $issueInstant
      * @param string $type
      * @param string $entityid
@@ -606,6 +606,20 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                     $entityid,
                     abs($timeDelta),
                     $timeDelta>0 ? "past" : "future"
+                )
+            );
+        }
+
+        $maxAge = $this->_server->getConfig('maxIssueInstantAge', 86400);
+        if ($timeDelta > $maxAge) {
+            $this->_logger->warning(
+                sprintf(
+                    'IssueInstant of SAML message from %s "%s" is %d seconds old (threshold: %d seconds); '
+                    . 'request may originate from a bookmarked or replayed URL',
+                    $type,
+                    $entityid,
+                    $timeDelta,
+                    $maxAge
                 )
             );
         }

@@ -33,6 +33,7 @@ Changes:
   * The `0000-00-00 00:00:00` is added for clarity/consistency, as this is probably the default behaviour of your database already.
 * Removed unused index `consent.deleted_at`. Delete this from your production database if it's there.
 * Added a specific error page for unsolicited SAML responses (IdP-initiated SSO without a prior AuthnRequest).
+* Added `max_issue_instant_age` to parameters.yml to configure the logging mechanism. EB will write log entries if it receives requests that are older than this value.
 
 * Stabilized consent checks
   * In order to make the consent hashes more robust, a more consistent way of hashing the user attributes has been introduced
