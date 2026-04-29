@@ -19,7 +19,7 @@ Feature:
     And I pass through EngineBlock
     And I pass through the IdP
     And I should see "Error - Access denied"
-    And I should see "Message from your organisation:"
+    And I should see "Message from Dummy IdP:"
     And I should see "Students of MyIdP do not have access to this resource"
     And the response should contain "idp-logo.jpg"
 
@@ -30,7 +30,7 @@ Feature:
     And I pass through EngineBlock
     And I pass through the IdP
     And I should see "Error - Access denied"
-    And I should see "Message from your organisation:"
+    And I should see "Message from Dummy IdP:"
     And I should see "Students of MyIdP do not have access to this resource"
     And the response should contain "idp-logo.jpg"
 
@@ -41,7 +41,7 @@ Feature:
       And I pass through EngineBlock
       And I pass through the IdP
       And I should see "Error - Access denied"
-      And I should see "Message from your organisation:"
+      And I should see "Message from Dummy IdP:"
 
   Scenario: Access is denied because of an Indeterminate policy
     Given SP "Dummy SP" requires a policy enforcement decision
@@ -50,7 +50,7 @@ Feature:
       And I pass through EngineBlock
       And I pass through the IdP
       And I should see "Error - Access denied"
-      And I should see "Message from your organisation:"
+      And I should see "Message from Dummy IdP:"
 
   Scenario: Access is permitted because of a Permit policy
     Given SP "Dummy SP" requires a policy enforcement decision
@@ -78,7 +78,7 @@ Feature:
     And I pass through EngineBlock
     And I pass through the IdP
     And I should see "Error - Access denied"
-    And I should see "Message from your organisation:"
+    And I should see "Message from Dummy IdP:"
 
   Scenario: Error page shows the end-SP name, not the trusted proxy name
     Given SP "Stepup SelfService" requires a policy enforcement decision
@@ -103,7 +103,7 @@ Feature:
     And I pass through EngineBlock
     And I pass through the IdP
     And I should see "Error - Access denied"
-    And I should see "Message from your organisation:"
+    And I should see "Message from Dummy IdP:"
 
   Scenario: Access is permitted because of a Permit policy, End-SP behind Trusted Proxy
     Given SP "Stepup SelfService" requires a policy enforcement decision

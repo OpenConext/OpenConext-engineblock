@@ -214,7 +214,7 @@ Feature:
     And I pass through the IdP
     And I give my consent
   Then I should see "Attribute value not allowed"
-    And I should see "Your organisation sends a value for attribute schacHomeOrganization (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
+    And I should see "Dummy Idp sends a value for attribute schacHomeOrganization (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
     And I should see "UR ID:"
     And I should see "IP:"
     And I should see "EC:"
@@ -243,7 +243,7 @@ Feature:
       And I pass through the IdP
       And I give my consent
     Then I should see "Attribute value not allowed"
-      And I should see "Your organisation sends a value for attribute eduPersonPrincipalName (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
+      And I should see "Dummy Idp sends a value for attribute eduPersonPrincipalName (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
       And I should see "UR ID:"
       And I should see "IP:"
       And I should see "EC:"
@@ -273,7 +273,7 @@ Feature:
       And I pass through the IdP
       And I give my consent
     Then I should see "Attribute value not allowed"
-      And I should see "Your organisation sends a value for attribute subject-id (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
+      And I should see "Dummy Idp sends a value for attribute subject-id (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
       And I should see "UR ID:"
       And I should see "IP:"
       And I should see "EC:"
@@ -289,7 +289,7 @@ Feature:
       And I pass through the IdP
       And I give my consent
     Then I should see "Attribute value not allowed"
-      And I should see "Your organisation sends a value for attribute subject-id (\"not exactly one value\") which is not allowed for this organisation. Therefore you cannot log in."
+      And I should see "Dummy Idp sends a value for attribute subject-id (\"not exactly one value\") which is not allowed for this organisation. Therefore you cannot log in."
 
   Scenario: I log in at my Identity Provider, and have a subject-id attribute without a scope.
     Given the IdP "Dummy Idp" sends attribute "urn:mace:terena.org:attribute-def:schacHomeOrganization" with value "test"
@@ -300,7 +300,7 @@ Feature:
       And I pass through the IdP
       And I give my consent
     Then I should see "Attribute value not allowed"
-      And I should see "Your organisation sends a value for attribute subject-id (\"missing @ in value\") which is not allowed for this organisation. Therefore you cannot log in."
+      And I should see "Dummy Idp sends a value for attribute subject-id (\"missing @ in value\") which is not allowed for this organisation. Therefore you cannot log in."
 
   Scenario: I log in at my Identity Provider, that has the 'block_user_on_violation' feature activated, and has a valid subject-id attribute.
     Given feature "eb.block_user_on_violation" is enabled

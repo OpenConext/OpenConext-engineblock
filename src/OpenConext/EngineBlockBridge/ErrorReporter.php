@@ -23,32 +23,31 @@ use EngineBlock_Corto_Exception_HasFeedbackInfoInterface;
 use EngineBlock_Corto_Exception_PEPNoAccess;
 use EngineBlock_Exception;
 use Exception;
+use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
+use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class ErrorReporter
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-    /**
-     * @var EngineBlock_ApplicationSingleton
-     */
-    private $engineBlockApplicationSingleton;
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private LoggerInterface $logger;
+    private EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton;
+    private RequestStack $requestStack;
+    private FeedbackStateHelperInterface $feedbackStateHelper;
+    private FeedbackInfoCollectorInterface $feedbackInfoCollector;
 
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
         LoggerInterface $logger,
         RequestStack $requestStack,
+        FeedbackStateHelperInterface $feedbackStateHelper,
+        FeedbackInfoCollectorInterface $feedbackInfoCollector,
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->logger = $logger;
         $this->requestStack = $requestStack;
+        $this->feedbackStateHelper = $feedbackStateHelper;
+        $this->feedbackInfoCollector = $feedbackInfoCollector;
     }
 
     public function reportError(Exception $exception, string $messageSuffix): void
@@ -94,18 +93,18 @@ class ErrorReporter
             return;
         }
 
-        $session  = $this->requestStack->getSession();
-        $feedback = $session->get('feedbackInfo') ?: [];
+        $session = $this->requestStack->getSession();
 
-        if ($exception instanceof EngineBlock_Corto_Exception_HasFeedbackInfoInterface) {
-            $feedback = array_merge($feedback, $exception->getFeedbackInfo());
-        } elseif ($exception instanceof EngineBlock_Corto_Exception_PEPNoAccess) {
+        if ($exception instanceof EngineBlock_Corto_Exception_PEPNoAccess) {
             $session->set('error_authorization_policy_decision', $exception->getPolicyDecision());
         }
 
-        $session->set('feedbackInfo', array_merge(
-            $feedback,
-            $this->engineBlockApplicationSingleton->collectFeedbackInfo($exception)
-        ));
+        $feedback = $this->feedbackInfoCollector->collect($exception);
+
+        if ($exception instanceof EngineBlock_Corto_Exception_HasFeedbackInfoInterface) {
+            $feedback = array_merge($feedback, $exception->getFeedbackInfo());
+        }
+
+        $this->feedbackStateHelper->storeFeedbackInfo($feedback);
     }
 }

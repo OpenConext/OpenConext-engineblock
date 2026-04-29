@@ -18,12 +18,10 @@
 
 namespace OpenConext\EngineBlockBundle\Controller;
 
-use EngineBlock_Corto_ProxyServer;
+use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -35,33 +33,20 @@ use Twig\Environment;
  */
 class FeedbackController
 {
-    /**
-     * @var \Symfony\Contracts\Translation\TranslatorInterface
-     */
-    private $translator;
+    private TranslatorInterface $translator;
 
-    /**
-     * @var Environment
-     */
-    private $twig;
+    private Environment $twig;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private FeedbackStateHelperInterface $feedbackStateHelper;
 
     public function __construct(
         TranslatorInterface $translator,
         Environment $twig,
-        LoggerInterface $logger
+        FeedbackStateHelperInterface $feedbackStateHelper
     ) {
         $this->translator = $translator;
         $this->twig = $twig;
-        $this->logger = $logger;
-
-        // we have to start the old session in order to be able to retrieve the feedback info
-        $server = new EngineBlock_Corto_ProxyServer($twig);
-        $server->startSession();
+        $this->feedbackStateHelper = $feedbackStateHelper;
     }
 
     #[Route(
@@ -173,7 +158,7 @@ class FeedbackController
 
         // Add feedback info from url
         $customFeedbackInfo = ['EntityID' => $entityId];
-        $this->setFeedbackInformationOnSession($request->getSession(), $customFeedbackInfo);
+        $this->setFeedbackInformationOnSession($customFeedbackInfo);
 
         $body = $this->twig->render(
             '@theme/Authentication/View/Feedback/unknown-service-provider.html.twig',
@@ -194,7 +179,7 @@ class FeedbackController
             'Destination' => $request->query->get('destination'),
         ];
 
-        $this->setFeedbackInformationOnSession($request->getSession(), $customFeedbackInfo);
+        $this->setFeedbackInformationOnSession($customFeedbackInfo);
 
         $body = $this->twig->render('@theme/Authentication/View/Feedback/unknown-identity-provider.html.twig');
 
@@ -250,12 +235,12 @@ class FeedbackController
 
 
     #[Route(path: '/authentication/feedback/invalid-attribute-value', name: 'authentication_feedback_invalid_attribute_value', methods: ['GET'])]
-    public function invalidAttributeValueAction(Request $request)
+    public function invalidAttributeValueAction()
     {
-        $feedbackInfo = $request->getSession()->get('feedbackInfo');
+        $feedbackInfo = $this->feedbackStateHelper->getFeedbackInfo();
 
-        $attributeName = $feedbackInfo['attributeName'];
-        $attributeValue = $feedbackInfo['attributeValue'];
+        $attributeName  = $feedbackInfo['attributeName'] ?? '';
+        $attributeValue = $feedbackInfo['attributeValue'] ?? '';
 
         return new Response(
             $this->twig->render(
@@ -421,7 +406,7 @@ class FeedbackController
         $customFeedbackInfo = [
             'Idp Hash' => $request->query->get('idp-hash'),
         ];
-        $this->setFeedbackInformationOnSession($request->getSession(), $customFeedbackInfo);
+        $this->setFeedbackInformationOnSession($customFeedbackInfo);
 
         return new Response(
             $this->twig->render('@theme/Authentication/View/Feedback/unknown-preselected-idp.html.twig'),
@@ -436,7 +421,7 @@ class FeedbackController
         $customFeedbackInfo = [
             'Key ID' => $request->query->get('keyid'),
         ];
-        $this->setFeedbackInformationOnSession($request->getSession(), $customFeedbackInfo);
+        $this->setFeedbackInformationOnSession($customFeedbackInfo);
 
         return new Response(
             $this->twig->render('@theme/Authentication/View/Feedback/unknown-keyid.html.twig'),
@@ -539,13 +524,8 @@ class FeedbackController
         );
     }
 
-    /**
-     * @param SessionInterface $session
-     * @param array $customFeedbackInfo
-     */
-    private function setFeedbackInformationOnSession(SessionInterface $session, array $customFeedbackInfo)
+    private function setFeedbackInformationOnSession(array $customFeedbackInfo): void
     {
-        $feedbackInfo = $session->get('feedbackInfo', []);
-        $session->set('feedbackInfo', array_merge($customFeedbackInfo, $feedbackInfo));
+        $this->feedbackStateHelper->mergeFeedbackInfo($customFeedbackInfo);
     }
 }

@@ -18,6 +18,8 @@
 
 namespace OpenConext\EngineBlockBundle\Bridge;
 
+use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
+use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use OpenConext\EngineBlockBundle\Service\WayfRenderer;
 use Twig\Environment;
 
@@ -33,6 +35,8 @@ final readonly class DiContainerRuntime
     public function __construct(
         public Environment $twig,
         public WayfRenderer $wayfRenderer,
+        public FeedbackStateHelperInterface $feedbackStateHelper,
+        public FeedbackInfoCollectorInterface $feedbackInfoCollector,
         private array $preferredIdpEntityIds = [],
     ) {
     }

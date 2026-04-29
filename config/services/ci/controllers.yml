@@ -27,6 +27,7 @@ services:
             - '@translator'
             - '@twig'
             - '@engineblock.compat.logger'
+            - '@OpenConext\EngineBlock\Service\FeedbackStateHelper'
 
     engineblock.functional_test.controller.consent:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\ConsentController
