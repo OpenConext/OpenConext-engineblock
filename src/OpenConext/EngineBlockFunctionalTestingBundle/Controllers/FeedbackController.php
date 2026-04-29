@@ -18,12 +18,10 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Controllers;
 
-use EngineBlock_Corto_ProxyServer;
-use Psr\Log\LoggerInterface;
+use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 /**
@@ -32,33 +30,17 @@ use Twig\Environment;
  */
 class FeedbackController extends AbstractController
 {
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
 
-    /**
-     * @var Environment
-     */
-    private $twig;
+    private Environment $twig;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private FeedbackStateHelperInterface $feedbackStateHelper;
 
     public function __construct(
-        TranslatorInterface $translator,
         Environment $twig,
-        LoggerInterface $logger
+        FeedbackStateHelperInterface $feedbackStateHelper
     ) {
-        $this->translator = $translator;
         $this->twig = $twig;
-        $this->logger = $logger;
-
-        // we have to start the old session in order to be able to retrieve the feedback info
-        $server = new EngineBlock_Corto_ProxyServer($twig);
-        $server->startSession();
+        $this->feedbackStateHelper = $feedbackStateHelper;
     }
 
     /**
@@ -74,14 +56,12 @@ class FeedbackController extends AbstractController
         $feedbackInfo = $this->getFeedbackInfo($request);
         $parameters = $this->getTemplateParameters($request);
 
-        $session = $request->getSession();
-
         $template = sprintf(
             '@theme/Authentication/View/Feedback/%s.html.twig',
             $key
         );
 
-        $session->set('feedbackInfo', $feedbackInfo);
+        $this->feedbackStateHelper->storeFeedbackInfo($feedbackInfo);
 
         return new Response($this->twig->render($template, $parameters), 200);
     }

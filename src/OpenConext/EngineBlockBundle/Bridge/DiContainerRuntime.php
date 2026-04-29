@@ -18,6 +18,8 @@
 
 namespace OpenConext\EngineBlockBundle\Bridge;
 
+use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
+use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use Twig\Environment;
 
 /**
@@ -29,7 +31,10 @@ use Twig\Environment;
 final readonly class DiContainerRuntime
 {
 
-    public function __construct(public Environment $twig)
-    {
+    public function __construct(
+        public Environment $twig,
+        public FeedbackStateHelperInterface $feedbackStateHelper,
+        public FeedbackInfoCollectorInterface $feedbackInfoCollector,
+    ) {
     }
 }

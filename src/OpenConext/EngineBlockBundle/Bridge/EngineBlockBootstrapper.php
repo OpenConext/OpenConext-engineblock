@@ -19,6 +19,8 @@
 namespace OpenConext\EngineBlockBundle\Bridge;
 
 use EngineBlock_ApplicationSingleton;
+use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
+use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Twig\Environment;
@@ -29,8 +31,10 @@ class EngineBlockBootstrapper implements EventSubscriberInterface
 
     public function __construct(
         Environment $twig,
+        FeedbackStateHelperInterface $feedbackStateHelper,
+        FeedbackInfoCollectorInterface $feedbackInfoCollector,
     ) {
-        $this->diContainerRuntime = new DiContainerRuntime($twig);
+        $this->diContainerRuntime = new DiContainerRuntime($twig, $feedbackStateHelper, $feedbackInfoCollector);
     }
 
     public function onKernelRequest(): void

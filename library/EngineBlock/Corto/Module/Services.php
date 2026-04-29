@@ -110,12 +110,14 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer->getSession(),
                     $diContainer->getProcessingStateHelper(),
                     $diContainer->getStepupGatewayCallOutHelper(),
-                    $diContainer->getServiceProviderFactory()
+                    $diContainer->getServiceProviderFactory(),
+                    $diContainerRuntime->feedbackStateHelper
                 );
             case EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer::class :
                 return new EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer(
                     $server,
-                    $diContainer->getProcessingStateHelper()
+                    $diContainer->getProcessingStateHelper(),
+                    $diContainerRuntime->feedbackStateHelper
                 );
             case EngineBlock_Corto_Module_Service_StepupAssertionConsumer::class :
                 return new EngineBlock_Corto_Module_Service_StepupAssertionConsumer(

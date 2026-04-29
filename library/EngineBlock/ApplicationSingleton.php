@@ -17,10 +17,8 @@
  */
 
 use OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy;
-use OpenConext\EngineBlock\Metadata\MetadataRepository\EntityNotFoundException;
 use OpenConext\EngineBlock\Request\RequestId;
 use OpenConext\EngineBlockBundle\Bridge\DiContainerRuntime;
-use OpenConext\EngineBlockBundle\Exception\Art;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
@@ -238,58 +236,16 @@ class EngineBlock_ApplicationSingleton
         // Store some valuable debug info in session so it can be displayed on feedback pages
         if($this->hasSession()) {
             // In CLI context, the session is not available
-            $this->getSession()->set('feedbackInfo', $this->collectFeedbackInfo($exception));
+            $feedbackHelper = $this->getDiContainerRuntime()->feedbackStateHelper;
+            $feedbackHelper->storeFeedbackInfo(
+                $this->getDiContainerRuntime()->feedbackInfoCollector->collect($exception)
+            );
         }
 
         // flush all messages in queue, something went wrong!
         $this->flushLog('An error was caught');
 
         return true;
-    }
-
-    /**
-     * @param Exception $exception
-     * @return array
-     */
-    public function collectFeedbackInfo(Throwable $exception)
-    {
-        $logRequestId = $this->getLogRequestId();
-        if ($logRequestId === null) {
-            $logRequestId = 'N/A - application not yet bootstrapped';
-        } else {
-            $logRequestId = $logRequestId->get();
-        }
-
-        $request = $this->getDiContainer()->getSymfonyRequest();
-
-        $feedbackInfo = array();
-        $feedbackInfo['datetime'] = (new DateTime())->format(DateTimeInterface::ATOM);
-        $feedbackInfo['requestUrl'] = sprintf('%s%s', $request->getSchemeAndHttpHost(), $request->getPathInfo());
-        $feedbackInfo['requestId'] = $logRequestId;
-        $feedbackInfo['ipAddress'] = $this->getClientIpAddress();
-        $feedbackInfo['artCode'] = Art::forException($exception);
-
-        // @todo  reset this when login is succesful
-        // Find the current identity provider
-        $spEntityId = $_SESSION['originalServiceProvider'] ?? $_SESSION['currentServiceProvider'] ?? null;
-        if ($spEntityId !== null) {
-            $feedbackInfo['serviceProvider'] = $spEntityId;
-            $feedbackInfo['serviceProviderName'] = $this->getServiceProviderName($spEntityId);
-        }
-
-        if (isset($_SESSION['proxyServiceProvider'])) {
-            $feedbackInfo['proxyServiceProvider'] = $_SESSION['proxyServiceProvider'];
-        }
-
-        // @todo  reset this when login is succesful
-        // Find the current identity provider
-        if (isset($_SESSION['currentIdentityProvider'])) {
-            $idpEntityId = $_SESSION['currentIdentityProvider'];
-            $feedbackInfo['identityProvider'] = $idpEntityId;
-            $feedbackInfo['identityProviderName'] = $this->getidentityProviderName($idpEntityId);
-        }
-
-        return $feedbackInfo;
     }
 
     /**
@@ -441,26 +397,4 @@ class EngineBlock_ApplicationSingleton
         return $this->_diContainer;
     }
 
-    /**
-     * @param string $serviceProviderId
-     * @return string
-     */
-    private function getServiceProviderName(string $serviceProviderId){
-        try {
-            $serviceProvider = $this->getDiContainer()->getMetadataRepository()->fetchServiceProviderByEntityId($serviceProviderId);
-            return $serviceProvider->getDisplayName($this->getDiContainer()->getLocaleProvider()->getLocale());
-        } catch (EntityNotFoundException $e) {}
-
-        return '';
-    }
-
-    private function getIdentityProviderName(string $identityProviderId): string
-    {
-        try {
-            $identityProvider = $this->getDiContainer()->getMetadataRepository()->fetchIdentityProviderByEntityId($identityProviderId);
-            return $identityProvider->getDisplayName($this->getDiContainer()->getLocaleProvider()->getLocale());
-        } catch (EntityNotFoundException $e) {}
-
-        return '';
-    }
 }

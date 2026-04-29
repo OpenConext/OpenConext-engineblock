@@ -21,8 +21,8 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
-use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
 use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
 use SAML2\Constants;
@@ -51,9 +51,15 @@ class EngineBlock_Test_Corto_Module_Service_AssertionConsumerTest extends TestCa
     /** @var EngineBlock_Saml2_AuthnRequestAnnotationDecorator */
     private $requestMock;
 
+    /** @var Session */
+    private Session $session;
+
+    private FeedbackStateHelperInterface $feedbackStateHelperMock;
+
     public function setUp(): void
     {
-        $_SERVER['HTTP_HOST'] = 'engine.example.com';
+        $this->session = new Session(new MockArraySessionStorage());
+        $this->feedbackStateHelperMock = Phake::mock(FeedbackStateHelperInterface::class);
 
         $this->bindingsModuleMock = Phake::mock('EngineBlock_Corto_Module_Bindings');
         $this->proxyServerMock    = $this->mockProxyServer();
@@ -101,15 +107,9 @@ class EngineBlock_Test_Corto_Module_Service_AssertionConsumerTest extends TestCa
 
         $this->runServe();
 
-        $this->assertSame(
+        Phake::verify($this->feedbackStateHelperMock)->setProxyContext(
             self::REAL_SP_ENTITY_ID,
-            $_SESSION['originalServiceProvider'],
-            'originalServiceProvider must be set to the real SP entity ID behind the trusted proxy'
-        );
-        $this->assertSame(
-            self::PROXY_SP_ENTITY_ID,
-            $_SESSION['proxyServiceProvider'],
-            'proxyServiceProvider must be set to the trusted proxy SP entity ID'
+            self::PROXY_SP_ENTITY_ID
         );
     }
 
@@ -127,15 +127,8 @@ class EngineBlock_Test_Corto_Module_Service_AssertionConsumerTest extends TestCa
 
         $this->runServe();
 
-        $this->assertArrayNotHasKey(
-            'originalServiceProvider',
-            $_SESSION,
-            'originalServiceProvider must NOT be written when the SP is not a trusted proxy'
-        );
-        $this->assertArrayNotHasKey(
-            'proxyServiceProvider',
-            $_SESSION,
-            'proxyServiceProvider must NOT be written when the SP is not a trusted proxy'
+        Phake::verify($this->feedbackStateHelperMock, Phake::never())->setProxyContext(
+            Phake::anyParameters()
         );
     }
 
@@ -148,12 +141,13 @@ class EngineBlock_Test_Corto_Module_Service_AssertionConsumerTest extends TestCa
         $service = new EngineBlock_Corto_Module_Service_AssertionConsumer(
             $this->proxyServerMock,
             Phake::mock('EngineBlock_Corto_XmlToArray'),
-            new Session(new MockArraySessionStorage()),
+            $this->session,
             Phake::mock(ProcessingStateHelperInterface::class),
             // StepupGatewayCallOutHelper is declared final and cannot be Phake-mocked;
             // use the real instance from the DI container (never called in this code path).
             EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getStepupGatewayCallOutHelper(),
-            Phake::mock(ServiceProviderFactory::class)
+            Phake::mock(ServiceProviderFactory::class),
+            $this->feedbackStateHelperMock
         );
 
         try {
