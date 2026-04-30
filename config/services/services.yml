@@ -69,6 +69,24 @@ services:
         arguments:
             - '@request_stack'
 
+    OpenConext\EngineBlock\Service\FeedbackStateHelper:
+        arguments:
+            - '@request_stack'
+
+    OpenConext\EngineBlock\Service\FeedbackStateHelperInterface:
+        alias: OpenConext\EngineBlock\Service\FeedbackStateHelper
+
+    OpenConext\EngineBlock\Service\FeedbackInfoCollector:
+        arguments:
+            - '@request_stack'
+            - '@OpenConext\EngineBlock\Request\RequestId'
+            - '@OpenConext\EngineBlock\Metadata\MetadataRepository\CachedDoctrineMetadataRepository'
+            - '@OpenConext\EngineBlockBundle\Localization\LocaleProvider'
+            - '@OpenConext\EngineBlock\Service\FeedbackStateHelper'
+
+    OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface:
+        alias: OpenConext\EngineBlock\Service\FeedbackInfoCollector
+
     OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper:
         arguments:
             - '@OpenConext\EngineBlock\Stepup\StepupGatewayLoaMapping'
@@ -319,6 +337,7 @@ services:
             - '@OpenConext\EngineBlockBundle\Configuration\ErrorFeedbackConfiguration'
             - '@engineblock.compat.repository.metadata'
             - '@OpenConext\EngineBlockBundle\Authentication\Service\SamlResponseHelper'
+            - '@OpenConext\EngineBlock\Service\FeedbackStateHelper'
 
     OpenConext\EngineBlockBundle\Twig\Extensions\Extension\GlobalSiteNotice:
         autoconfigure: true

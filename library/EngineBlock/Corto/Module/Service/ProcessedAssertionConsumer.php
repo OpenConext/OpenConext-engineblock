@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -31,12 +32,19 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer implements Eng
      */
     private $_processingStateHelper;
 
+    /**
+     * @var FeedbackStateHelperInterface
+     */
+    private $_feedbackStateHelper;
+
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
-        ProcessingStateHelperInterface $processingStateHelper
+        ProcessingStateHelperInterface $processingStateHelper,
+        FeedbackStateHelperInterface $feedbackStateHelper
     ) {
         $this->_server = $server;
         $this->_processingStateHelper = $processingStateHelper;
+        $this->_feedbackStateHelper = $feedbackStateHelper;
     }
 
     /**
@@ -84,6 +92,8 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer implements Eng
 
         $sentResponse = $this->_server->createEnhancedResponse($receivedRequest, $response);
         $this->_server->sendResponseToRequestIssuer($receivedRequest, $sentResponse);
+
+        $this->_feedbackStateHelper->clearFlowContext();
         return;
     }
 }

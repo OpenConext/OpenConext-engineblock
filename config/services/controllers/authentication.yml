@@ -32,7 +32,7 @@ services:
         arguments:
             - '@translator'
             - '@twig'
-            - '@engineblock.compat.logger'
+            - '@OpenConext\EngineBlock\Service\FeedbackStateHelper'
 
     OpenConext\EngineBlockBundle\Controller\MetadataController:
         arguments:

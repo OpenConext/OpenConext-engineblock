@@ -20,6 +20,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
+use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use OpenConext\EngineBlockBundle\Bridge\DiContainerRuntime;
 use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
@@ -59,7 +61,11 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
         Phake::when($this->proxyServer)->getConfig('WantsAuthnRequestsSigned')->thenReturn(false);
 
         $engineBlock = \EngineBlock_ApplicationSingleton::getInstance();
-        $engineBlock->setDiContainerRuntime(new DiContainerRuntime(Phake::mock(Twig\Environment::class)));
+        $engineBlock->setDiContainerRuntime(new DiContainerRuntime(
+            Phake::mock(Twig\Environment::class),
+            m::mock(FeedbackStateHelperInterface::class),
+            m::mock(FeedbackInfoCollectorInterface::class),
+        ));
 
         $this->bindings = new EngineBlock_Corto_Module_Bindings($this->proxyServer);
     }
