@@ -24,9 +24,7 @@ services:
     engineblock.functional_test.controller.feedback:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\FeedbackController
         arguments:
-            - '@translator'
             - '@twig'
-            - '@engineblock.compat.logger'
             - '@OpenConext\EngineBlock\Service\FeedbackStateHelper'
 
     engineblock.functional_test.controller.consent:
