@@ -1,8 +1,9 @@
 {% extends '@theme/Default/View/Error/error.html.twig' %}
 
-{% set pageTitle = 'error_session_not_started'|trans %}
+{% set _key = 'error_' ~ pageIdentifier|replace({'-': '_'}) %}
+{% set pageTitle = (_key)|trans %}
 {% block pageTitle %}{{ pageTitle }}{% endblock %}
 {% block title %}{{ parent() }}{% endblock %}
 {% block pageHeading %}{{ pageTitle }}{% endblock %}
 
-{% block errorMessage %}{{ 'error_session_not_started_desc'|trans }}{% endblock %}
+{% block errorMessage %}{{ (_key ~ '_desc')|trans }}{% endblock %}

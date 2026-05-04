@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Controllers;
 
 use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
+use OpenConext\EngineBlockBundle\Controller\FeedbackController as RealFeedbackController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,12 +36,16 @@ class FeedbackController extends AbstractController
 
     private FeedbackStateHelperInterface $feedbackStateHelper;
 
+    private RealFeedbackController $feedbackController;
+
     public function __construct(
         Environment $twig,
-        FeedbackStateHelperInterface $feedbackStateHelper
+        FeedbackStateHelperInterface $feedbackStateHelper,
+        RealFeedbackController $feedbackController
     ) {
         $this->twig = $twig;
         $this->feedbackStateHelper = $feedbackStateHelper;
+        $this->feedbackController = $feedbackController;
     }
 
     /**
@@ -56,12 +61,16 @@ class FeedbackController extends AbstractController
         $feedbackInfo = $this->getFeedbackInfo($request);
         $parameters = $this->getTemplateParameters($request);
 
+        $this->feedbackStateHelper->storeFeedbackInfo($feedbackInfo);
+
         $template = sprintf(
             '@theme/Authentication/View/Feedback/%s.html.twig',
             $key
         );
 
-        $this->feedbackStateHelper->storeFeedbackInfo($feedbackInfo);
+        if (!$this->twig->getLoader()->exists($template)) {
+            return $this->feedbackController->feedbackAction($key, 200);
+        }
 
         return new Response($this->twig->render($template, $parameters), 200);
     }
@@ -106,14 +115,12 @@ class FeedbackController extends AbstractController
      * @param Request $request
      * @return mixed|string
      */
-    private function getTemplateParameters(Request $request)
+    private function getTemplateParameters(Request $request): array
     {
         $default = '{}';
 
         $parameters = $request->query->getString('parameters', $default);
 
-        $parameters = json_decode($parameters, true);
-
-        return $parameters;
+        return json_decode($parameters, true);
     }
 }

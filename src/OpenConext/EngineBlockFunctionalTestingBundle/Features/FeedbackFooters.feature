@@ -49,6 +49,10 @@ Feature:
     When I go to Engineblock URL "/functional-testing/feedback?template=session-lost&feedback-info=%7B%22requestId%22%3A%22test-abc%22%2C%22ipAddress%22%3A%221.2.3.4%22%2C%22artCode%22%3A%2231914%22%7D"
     Then I should see "your session was lost"
 
+  Scenario: The session-lost feedback route renders correctly
+    When I go to Engineblock URL "/authentication/feedback/session-lost"
+    Then I should see "your session was lost"
+
   Scenario: When a IdP specific error page is shown and a translation is not configured the support emailaddress of the IdP should be hidden
     Given The clock on the IdP "Dummy Idp" is ahead
     And I have configured the following translations:
