@@ -25,6 +25,17 @@ Feature:
     And I give my consent
     And I pass through EngineBlock
     Then the url should match "functional-testing/Dummy%20SP/acs"
+    And the response should match xpath '//ds:X509Certificate[starts-with(.,"MIIDuDCCAqCgAwIBAgIJAPdqJ9JQKN6vMA0GCSqGSIb3DQEBBQUAMEYxDzANBgNVBAMT")]'
+
+  Scenario: An IdP initiates a login with the rollover signing key
+    When An IdP initiated Single Sign on for SP "Dummy SP" is triggered by IdP "Dummy IdP" and specifies the "rollover" signing key
+    And I pass through EngineBlock
+    And I pass through the IdP
+    And I give my consent
+    And I pass through EngineBlock
+    Then the url should match "functional-testing/Dummy%20SP/acs"
+    # See src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/keys/rolled-over.crt
+    And the response should match xpath '//ds:X509Certificate[starts-with(.,"MIIDhTCCAm2gAwIBAgIJALJlbT5u9cXzMA0GCSqG")]'
 
   # Should result in a generic 500 error, the logs specify the problem in greater detail.
   Scenario: An IdP initiates a login with an SP identity id query parameter

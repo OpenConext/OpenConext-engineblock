@@ -47,6 +47,7 @@ use SAML2\DOMDocumentFactory;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to all integration specific features
  * @SuppressWarnings(PHPMD.ExcessivePublicCount) Both set up and tasks can be a lot...
  * @SuppressWarnings(PHPMD.TooManyFields) Both set up and tasks can be a lot...
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength) Both set up and tasks can be a lot...
  */
 class EngineBlockContext extends AbstractSubContext
 {
@@ -320,6 +321,20 @@ class EngineBlockContext extends AbstractSubContext
         $mink = $this->getMinkContext();
         $mink->visit(
             $this->engineBlock->unsolicitedLocation($mockIdP->entityId(), $mockSp->entityId(), 'does-not-exist')
+        );
+    }
+
+    /**
+     * @Given /^An IdP initiated Single Sign on for SP "([^"]*)" is triggered by IdP "([^"]*)" and specifies the "([^"]*)" signing key$/
+     */
+    public function anIdpInitiatedSingleSignOnForSpIsTriggeredByIdPWithNamedSigningKey($spName, $idpName, $keyId)
+    {
+        $mockSp = $this->mockSpRegistry->get($spName);
+        $mockIdP = $this->mockIdpRegistry->get($idpName);
+
+        $mink = $this->getMinkContext();
+        $mink->visit(
+            $this->engineBlock->unsolicitedLocation($mockIdP->entityId(), $mockSp->entityId(), $keyId)
         );
     }
 
