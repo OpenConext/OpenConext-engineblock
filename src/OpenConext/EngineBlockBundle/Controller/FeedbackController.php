@@ -52,17 +52,12 @@ class FeedbackController
     #[Route(
         path: '/authentication/feedback/unable-to-receive-message',
         name: 'authentication_feedback_unable_to_receive_message',
+        defaults: [
+            'pageIdentifier' => 'unable-to-receive-message',
+            'statusCode' => 400
+        ],
         methods: ['GET']
-    )
-    ]
-    public function unableToReceiveMessageAction()
-    {
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/unable-to-receive-message.html.twig'),
-            400
-        );
-    }
-
+    )]
     #[Route(
         path: '/authentication/feedback/unsolicited-response',
         name: 'authentication_feedback_unsolicited_response',
@@ -123,6 +118,24 @@ class FeedbackController
         defaults: [
             'pageIdentifier' => 'authentication-limit-exceeded',
             'statusCode' => 429
+        ],
+        methods: ['GET']
+    )]
+    #[Route(
+        path: '/authentication/feedback/stepup-callout-unknown',
+        name: 'authentication_feedback_stepup_callout_unknown',
+        defaults: [
+            'pageIdentifier' => 'stepup-callout-unknown',
+            'statusCode' => 400
+        ],
+        methods: ['GET']
+    )]
+    #[Route(
+        path: '/authentication/feedback/stepup-callout-user-cancelled',
+        name: 'authentication_feedback_stepup_callout_user_cancelled',
+        defaults: [
+            'pageIdentifier' => 'stepup-callout-user-cancelled',
+            'statusCode' => 400
         ],
         methods: ['GET']
     )]
@@ -493,33 +506,11 @@ class FeedbackController
         );
     }
 
-    #[Route(
-        path: '/authentication/feedback/stepup-callout-user-cancelled',
-        name: 'authentication_feedback_stepup_callout_user_cancelled',
-        methods: ['GET']
-    )]
-    public function stepupCalloutUserCancelledAction(Request $request)
-    {
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/stepup-callout-user-cancelled.html.twig'),
-            400
-        );
-    }
-
     #[Route(path: '/authentication/feedback/stepup-callout-unmet-loa', name: 'authentication_feedback_stepup_callout_unmet_loa', methods: ['GET'])]
     public function stepupCalloutUnmetLoaAction(Request $request)
     {
         return new Response(
             $this->twig->render('@theme/Authentication/View/Feedback/stepup-callout-unmet-loa.html.twig'),
-            400
-        );
-    }
-
-    #[Route(path: '/authentication/feedback/stepup-callout-unknown', name: 'authentication_feedback_stepup_callout_unknown', methods: ['GET'])]
-    public function stepupCalloutUnknownAction(Request $request)
-    {
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/stepup-callout-unknown.html.twig'),
             400
         );
     }

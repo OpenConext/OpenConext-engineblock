@@ -1,5 +1,11 @@
 {% extends '@theme/Default/View/Error/error.html.twig' %}
 
+{#
+ # Possible translation keys: error_session_lost, error_session_not_started, error_unsolicited_response,
+ #   error_invalid_acs_binding, error_received_error_status_code, error_unable_to_receive_message,
+ #   error_unknown_requesterid_in_authnrequest, error_authentication_limit_exceeded,
+ #   error_stepup_callout_unknown, error_stepup_callout_user_cancelled
+ #}
 {% set _key = 'error_' ~ pageIdentifier|replace({'-': '_'}) %}
 {% set pageTitle = (_key)|trans %}
 {% block pageTitle %}{{ pageTitle }}{% endblock %}

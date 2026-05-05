@@ -53,6 +53,18 @@ Feature:
     When I go to Engineblock URL "/authentication/feedback/session-lost"
     Then I should see "your session was lost"
 
+  Scenario: The unable-to-receive-message feedback route renders correctly
+    When I go to Engineblock URL "/authentication/feedback/unable-to-receive-message"
+    Then I should see "No message received"
+
+  Scenario: The stepup-callout-unknown feedback route renders correctly
+    When I go to Engineblock URL "/authentication/feedback/stepup-callout-unknown"
+    Then I should see "Unknown strong authentication failure"
+
+  Scenario: The stepup-callout-user-cancelled feedback route renders correctly
+    When I go to Engineblock URL "/authentication/feedback/stepup-callout-user-cancelled"
+    Then I should see "Logging in cancelled"
+
   Scenario: When a IdP specific error page is shown and a translation is not configured the support emailaddress of the IdP should be hidden
     Given The clock on the IdP "Dummy Idp" is ahead
     And I have configured the following translations:
