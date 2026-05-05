@@ -15,6 +15,46 @@ the EngineBlock wiki.
 Features:
 * Added `coin:azure_domain_hint` configuration option for IdPs. When set, EngineBlock appends a `whr=<domain>` query parameter to the HTTP-Redirect AuthnRequest sent to the IdP, allowing Microsoft Azure / EntraID to skip the account picker (#1864).
 
+### Translation key changes
+
+The following translation keys have been renamed. If you have overridden any of these in your theme translations (`theme/{name}/translations/messages.*.php`), update the key names accordingly.
+
+| Old key                                     | New key                                |
+|---------------------------------------------|----------------------------------------|
+| `error_no_message`                          | `error_unable_to_receive_message`      |
+| `error_no_message_desc`                     | `error_unable_to_receive_message_desc` |
+| `error_stepup_callout_unknown_title`        | `error_stepup_callout_unknown`         |
+| `error_stepup_callout_user_cancelled_title` | `error_stepup_callout_user_cancelled`  |
+
+#### `error_invalid_acs_location`
+
+The `error_invalid_acs_location` translation key has changed meaning. Previously it held the **error description** text. It now holds the **page title**.
+
+If you have overridden this key in your theme translations (`theme/{name}/translations/messages.*.php`), rename it to `error_invalid_acs_location_desc` and add a new `error_invalid_acs_location` entry for the page title.
+
+**Before:**
+```php
+'error_invalid_acs_location' => 'Your custom description text.',
+```
+
+**After:**
+```php
+'error_invalid_acs_location'      => 'Error - Invalid ACS location',
+'error_invalid_acs_location_desc' => 'Your custom description text.',
+```
+
+See https://github.com/OpenConext/OpenConext-engineblock/issues/1758
+
+### HTTP status code changes
+
+The following feedback pages previously returned HTTP **200 OK** and now return HTTP **400 Bad Request**.
+
+| URL                                                   | Before | After |
+|-------------------------------------------------------|--------|-------|
+| `/authentication/feedback/invalid-acs-binding`        | 200    | 400   |
+| `/authentication/feedback/received-error-status-code` | 200    | 400   |
+
+
 ## UNRELEASED 7.2.0
 Upgrade to Symfony 7.4
 Upgrade to `doctrine/dbal` 4

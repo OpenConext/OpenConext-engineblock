@@ -65,6 +65,10 @@ Feature:
     When I go to Engineblock URL "/authentication/feedback/stepup-callout-user-cancelled"
     Then I should see "Logging in cancelled"
 
+  Scenario: The invalid-acs-location feedback route renders correctly
+    When I go to Engineblock URL "/authentication/feedback/invalidAcsLocation"
+    Then I should see "Invalid ACS location"
+
   Scenario: When a IdP specific error page is shown and a translation is not configured the support emailaddress of the IdP should be hidden
     Given The clock on the IdP "Dummy Idp" is ahead
     And I have configured the following translations:

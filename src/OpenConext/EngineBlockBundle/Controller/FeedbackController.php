@@ -139,6 +139,15 @@ class FeedbackController
         ],
         methods: ['GET']
     )]
+    #[Route(
+        path: '/authentication/feedback/invalidAcsLocation',
+        name: 'authentication_feedback_invalid_acs_location',
+        defaults: [
+            'pageIdentifier' => 'invalid-acs-location',
+            'statusCode' => 400
+        ],
+        methods: ['GET']
+    )]
     public function feedbackAction(string $pageIdentifier, int $statusCode): Response
     {
         return new Response(
@@ -166,14 +175,6 @@ class FeedbackController
         return new Response($this->twig->render('@theme/Authentication/View/Feedback/no-idps.html.twig'));
     }
 
-    #[Route(path: '/authentication/feedback/invalidAcsLocation', name: 'authentication_feedback_invalid_acs_location', methods: ['GET'])]
-    public function invalidAcsLocationAction()
-    {
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/invalid-acs-location.html.twig'),
-            400
-        );
-    }
 
     #[Route(
         path: '/authentication/feedback/unsupportedSignatureMethod',
