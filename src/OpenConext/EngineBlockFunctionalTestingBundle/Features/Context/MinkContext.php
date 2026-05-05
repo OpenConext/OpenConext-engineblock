@@ -70,6 +70,8 @@ class MinkContext extends BaseMinkContext
         $xpathObj->registerNamespace('md', 'urn:oasis:names:tc:SAML:2.0:metadata');
         $xpathObj->registerNamespace('mdui', Common::NS);
         $xpathObj->registerNamespace('shibmd', Scope::NS);
+        $xpathObj->registerNamespace('samlp', 'urn:oasis:names:tc:SAML:2.0:protocol');
+        $xpathObj->registerNamespace('saml', 'urn:oasis:names:tc:SAML:2.0:assertion');
         $nodeList = $xpathObj->query($xpath);
 
         if (!$nodeList || $nodeList->length === 0) {
@@ -205,6 +207,8 @@ class MinkContext extends BaseMinkContext
         $xpathObj->registerNamespace('ds', XMLSecurityDSig::XMLDSIGNS);
         $xpathObj->registerNamespace('md', 'urn:oasis:names:tc:SAML:2.0:metadata');
         $xpathObj->registerNamespace('mdui', Common::NS);
+        $xpathObj->registerNamespace('samlp', 'urn:oasis:names:tc:SAML:2.0:protocol');
+        $xpathObj->registerNamespace('saml', 'urn:oasis:names:tc:SAML:2.0:assertion');
         $nodeList = $xpathObj->query($xpath);
 
         if ($nodeList && $nodeList->length > 0) {

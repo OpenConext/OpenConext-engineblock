@@ -79,6 +79,10 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
                 'publicFile' => '/config/engine/engineblock.crt',
                 'privateFile' => $basePath . '/ci/qa-config/files/engineblock.pem',
             ],
+            'rollover' => [
+                'publicFile' => $basePath . '/src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/keys/rolled-over.crt',
+                'privateFile' => $basePath . '/src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/keys/rolled-over.key',
+            ],
         ];
     }
 }
