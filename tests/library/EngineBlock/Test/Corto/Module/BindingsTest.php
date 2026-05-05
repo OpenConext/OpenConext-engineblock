@@ -21,6 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlockBundle\Bridge\DiContainerRuntime;
+use OpenConext\EngineBlockBundle\Service\WayfRenderer;
 use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
 use SAML2\Assertion\Validation\ConstraintValidator\NotBefore;
@@ -59,7 +60,7 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
         Phake::when($this->proxyServer)->getConfig('WantsAuthnRequestsSigned')->thenReturn(false);
 
         $engineBlock = \EngineBlock_ApplicationSingleton::getInstance();
-        $engineBlock->setDiContainerRuntime(new DiContainerRuntime(Phake::mock(Twig\Environment::class)));
+        $engineBlock->setDiContainerRuntime(new DiContainerRuntime(Phake::mock(Twig\Environment::class), Phake::mock(WayfRenderer::class)));
 
         $this->bindings = new EngineBlock_Corto_Module_Bindings($this->proxyServer);
     }

@@ -1,0 +1,7 @@
+<section class="wayf__preferredIdps {% if connectedIdps.formattedPreviousSelectionList is not empty %}hidden{% endif %}">
+    <ul class="wayf__idpList wayf__idpList--preferred">
+        {% for idp in preferredConnectedIdps.formattedIdpList %}
+            {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpItem.html.twig' with { idp: idp, delete: false, listName: 'preferred', loop: loop, action: action, requestId: requestId } only %}
+        {% endfor %}
+    </ul>
+</section>

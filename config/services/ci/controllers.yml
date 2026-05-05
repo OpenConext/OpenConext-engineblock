@@ -19,7 +19,7 @@ services:
     engineblock.functional_test.controller.wayf:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\WayfController
         arguments:
-            - '@twig'
+            - '@OpenConext\EngineBlockBundle\Service\WayfRenderer'
 
     engineblock.functional_test.controller.feedback:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\FeedbackController

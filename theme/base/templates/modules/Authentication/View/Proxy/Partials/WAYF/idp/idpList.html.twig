@@ -10,15 +10,27 @@
     {# First show all connected Idps #}
     {% for idp in idpList %}
         {% if idp['connected'] is defined and idp['connected'] %}
-            {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpItem.html.twig' with { idp: idp }
-                %}
+            {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpItem.html.twig' with {
+                idp: idp,
+                loop: loop,
+                delete: delete,
+                listName: listName,
+                action: action,
+                requestId: requestId,
+            } only %}
         {% endif %}
     {% endfor %}
-    {# Next show all unconnnected Idps #}
+    {# Next show all unconnected Idps #}
     {% for idp in idpList %}
         {% if showRequestAccess and idp['connected'] is defined and not idp['connected'] %}
-            {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpItem.html.twig' with { idp: idp }
-                %}
+            {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpItem.html.twig' with {
+                idp: idp,
+                loop: loop,
+                delete: delete,
+                listName: listName,
+                action: action,
+                requestId: requestId,
+            } only %}
         {% endif %}
     {% endfor %}
 </ul>

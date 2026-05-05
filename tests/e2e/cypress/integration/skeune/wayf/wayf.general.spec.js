@@ -202,6 +202,13 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
     });
   });
 
+  describe('Preferred IdPs section heading', () => {
+    it('Should show the preferred IdPs section with the correct heading when preferred IdPs are configured', () => {
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?preferredIdpEntityIds%5B%5D=https%3A%2F%2Fexample.com%2FentityId%2F1');
+      cy.get('.wayf__preferredIdps').should('be.visible');
+    });
+  });
+
   describe('Should show the return to service link when configured', () => {
       it('Load the page & check if the page is there', () => {
         cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=5&backLink=true');

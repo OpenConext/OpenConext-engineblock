@@ -187,6 +187,11 @@ parameters:
     wayf.display_default_idp_banner_on_wayf: true
     wayf.default_idp_entity_id: https://default-idp.dev.openconext.local
 
+    ## Ordered list of IdP entity IDs to feature prominently at the top of the WAYF.
+    ## These IdPs appear above the search field and are excluded from the regular searchable list.
+    ## An empty list means no behaviour change.
+    wayf.preferred_idp_entity_ids: []
+
     ## Toggle display & content of global site notice
     global.site_notice.show: false
     global.site_notice.allowed.tags: '<a><u><i><br><wbr><strong><em><blink><marquee><p><ul><ol><dl><li><dd><dt><div><span><blockquote><hr><h2></h2><h3><h4><h5><h6>'

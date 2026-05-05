@@ -30,9 +30,16 @@
             id="idp__title{{ listName }}{{ loop.index }}"
             class="idp__title"
         ><span class="visually-hidden">{{ 'wayf_idp_title_screenreader'|trans }}</span>{{ idp['displayTitle'] }}</h3>
-        {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpForm.html.twig' %}
+        {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpForm.html.twig' with {
+            idp: idp,
+            action: action,
+            requestId: requestId,
+        } only %}
         {% if idp['connected'] is defined and not idp['connected'] or delete %}
-            {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpDeleteDisable.html.twig' %}
+            {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpDeleteDisable.html.twig' with {
+                idp: idp,
+                delete: delete,
+            } only %}
         {% endif %}
     </div>
 </div>

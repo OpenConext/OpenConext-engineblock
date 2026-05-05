@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Service\Wayf\WayfIdp;
 use OpenConext\EngineBlockBundle\Service\IdpHistoryService;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -28,8 +29,6 @@ class Wayf
 {
     const PREVIOUS_SELECTION_COOKIE_NAME = 'selectedidps';
     const REMEMBER_CHOICE_COOKIE_NAME = 'rememberchoice';
-
-    private const ACCESS_ENABLED = '1';
 
     /**
      * @var \Symfony\Contracts\Translation\TranslatorInterface
@@ -80,35 +79,26 @@ class Wayf
         return array_column($this->previousSelection, null, 'idp');
     }
 
-    private function formatIdpEntry(array $idp): array
+    private function formatIdpEntry(WayfIdp $idp): array
     {
-        $keywords = $idp['Keywords'] === 'Undefined'
-            ? []
-            : array_values((array)$idp['Keywords']);
+        $keywords = $idp->keywords;
 
-        $connected = false;
-        if (isset($idp['Access']) && $idp['Access'] === self::ACCESS_ENABLED) {
-            $connected = true;
-        }
-
-        // In SingleSignOn.php, the IDP is transformed into an array for the frontend
-        // Then, here, the array is transformed into another array for the frontend which is actually used in twig
         return [
-            'entityId' => $idp['EntityID'] ?? null,
-            'connected' => $connected,
-            'displayTitle' => $idp['Name'] ?? null,
-            'title' => strtolower($idp['Name'] ?? ''),
-            'keywords' => strtolower(implode('|', $keywords)),
-            'logo' => $idp['Logo'] ?? null,
-            'isDefaultIdp' => (bool) ($idp['isDefaultIdp'] ?? null),
-            'discoveryHash' => $idp['DiscoveryHash'] ?? null,
+            'entityId'      => $idp->entityId,
+            'connected'     => $idp->accessible,
+            'displayTitle'  => $idp->name,
+            'title'         => strtolower($idp->name ?? ''),
+            'keywords'      => strtolower(implode('|', $keywords)),
+            'logo'          => $idp->logo,
+            'isDefaultIdp'  => $idp->isDefaultIdp,
+            'discoveryHash' => $idp->discoveryHash,
         ];
     }
 
     private function formatIdpList(array $idpList): array
     {
         return array_map(
-            $this->formatIdpEntry(...),
+            fn(WayfIdp $idp) => $this->formatIdpEntry($idp),
             $idpList
         );
     }

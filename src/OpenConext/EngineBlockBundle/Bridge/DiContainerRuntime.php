@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Bridge;
 
+use OpenConext\EngineBlockBundle\Service\WayfRenderer;
 use Twig\Environment;
 
 /**
@@ -29,7 +30,15 @@ use Twig\Environment;
 final readonly class DiContainerRuntime
 {
 
-    public function __construct(public Environment $twig)
+    public function __construct(
+        public Environment $twig,
+        public WayfRenderer $wayfRenderer,
+        private array $preferredIdpEntityIds = [],
+    ) {
+    }
+
+    public function getPreferredIdpEntityIds(): array
     {
+        return $this->preferredIdpEntityIds;
     }
 }

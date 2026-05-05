@@ -18,12 +18,12 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Controllers;
 
+use OpenConext\EngineBlockBundle\Service\WayfRenderer;
 use OpenConext\EngineBlockFunctionalTestingBundle\Helper\TestEntitySeeder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Twig\Environment;
 
 /**
  * @package OpenConext\EngineBlockFunctionalTestingBundle\Controllers
@@ -31,11 +31,9 @@ use Twig\Environment;
  */
 class WayfController extends AbstractController
 {
-    private $twig;
-
-    public function __construct(Environment $twig)
-    {
-        $this->twig = $twig;
+    public function __construct(
+        private readonly WayfRenderer $wayfRenderer,
+    ) {
     }
 
     public function wayfAction(Request $request)
@@ -48,7 +46,8 @@ class WayfController extends AbstractController
         $rememberChoiceFeature = $request->query->getBoolean('rememberChoiceFeature');
         $cutoffPointForShowingUnfilteredIdps = $request->query->getInt('cutoffPointForShowingUnfilteredIdps', 100);
         $showIdPBanner = $request->query->getBoolean('showIdPBanner', true);
-        $defaultIdpEntityId = $request->query->get('defaultIdpEntityId');
+        $defaultIdpEntityId = $request->query->get('defaultIdpEntityId', '');
+        $preferredIdpEntityIds = $request->query->all('preferredIdpEntityIds');
 
         $connectedIdps = $request->query->getInt('connectedIdps', 5);
         $unconnectedIdps = $request->query->getInt('unconnectedIdps');
@@ -58,23 +57,22 @@ class WayfController extends AbstractController
             ? TestEntitySeeder::buildIdps($connectedIdps, $unconnectedIdps, $currentLocale, $defaultIdpEntityId, $addDiscoveries)
             : TestEntitySeeder::buildRandomIdps($randomIdps, $currentLocale, $defaultIdpEntityId);
 
-        return new Response($this->twig->render(
-            '@theme/Authentication/View/Proxy/wayf.html.twig',
-            [
-                'action' => $this->generateUrl('functional_testing_handle_wayf'),
-                'greenHeader' => $currentLocale,
-                'helpLink' => '/authentication/idp/help-discover?lang='.$currentLocale,
-                'backLink' => $backLink,
-                'cutoffPointForShowingUnfilteredIdps' => $cutoffPointForShowingUnfilteredIdps,
-                'showIdPBanner' => $showIdPBanner,
-                'rememberChoiceFeature' => $rememberChoiceFeature,
-                'showRequestAccess' => $displayUnconnectedIdpsWayf,
-                'requestId' => 'bogus-request-id',
-                'serviceProvider' => TestEntitySeeder::buildSp(),
-                'idpList' => $idpList,
-                'showRequestAccessContainer' => true,
-            ]
-        ));
+        $output = $this->wayfRenderer->render(
+            idpList: $idpList,
+            preferredIdpEntityIds: $preferredIdpEntityIds,
+            action: $this->generateUrl('functional_testing_handle_wayf'),
+            currentLocale: $currentLocale,
+            defaultIdpEntityId: $defaultIdpEntityId,
+            shouldDisplayBanner: $showIdPBanner,
+            backLink: $backLink,
+            cutoffPoint: $cutoffPointForShowingUnfilteredIdps,
+            rememberChoice: $rememberChoiceFeature,
+            showRequestAccess: $displayUnconnectedIdpsWayf,
+            requestId: 'bogus-request-id',
+            serviceProvider: TestEntitySeeder::buildSp(),
+        );
+
+        return new Response($output);
     }
 
     public function handleWayfAction(Request $request)

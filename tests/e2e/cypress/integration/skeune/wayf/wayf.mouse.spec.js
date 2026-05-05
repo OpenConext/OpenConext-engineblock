@@ -85,7 +85,7 @@ context('WAYF when using the mouse', () => {
 
   describe('Should have a working default Idp Banner', () => {
     it('Should have a default Idp banner visible', () => {
-      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?showIdpBanner=1');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?showIdpBanner=1&defaultIdpEntityId=https://example.com/entityId/1');
       cy.get(defaultIdpSelector).should('be.visible');
     });
 

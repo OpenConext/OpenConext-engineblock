@@ -23,6 +23,7 @@ use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Logo;
+use OpenConext\EngineBlock\Service\Wayf\WayfIdp;
 use OpenConext\EngineBlockBundle\Service\DiscoverySelectionService;
 use Webmozart\Assert\Assert;
 
@@ -188,47 +189,49 @@ class TestEntitySeeder
     /**
      * @param array $idpEntityIds
      * @param string $currentLocale
-     * @return array[]
+     * @return WayfIdp[]
      */
     private static function transformIdpsForWayf(array $idpEntityIds, $currentLocale)
     {
         $discoveryService = new DiscoverySelectionService();
         $identityProviders = self::findIdentityProvidersByEntityId($idpEntityIds);
 
-        $wayfIdps = array();
+        $wayfIdps = [];
         foreach ($identityProviders as $identityProvider) {
+            $isDefaultIdp = $idpEntityIds[$identityProvider->entityId]['isDefaultIdp'];
+
+            // Mirror the production guard: do not show the default IdP in the disconnected section.
+            if (!$identityProvider->enabledInWayf && $isDefaultIdp) {
+                continue;
+            }
+
             $name = 'name' . ucfirst($currentLocale);
-            $wayfIdp = array(
-                'Name' => $identityProvider->$name,
-                'Logo' => $identityProvider->logo ? $identityProvider->logo->url : '/images/placeholder.png',
-                'Keywords' => $identityProvider->keywordsEn,
-                'Access' => ($identityProvider->enabledInWayf) ? '1' : '0',
-                'ID' => md5($identityProvider->entityId),
-                'EntityID' => $identityProvider->entityId,
-                'isDefaultIdp' => $idpEntityIds[$identityProvider->entityId]['isDefaultIdp'],
+            $wayfIdps[] = new WayfIdp(
+                name: $identityProvider->$name,
+                logo: $identityProvider->logo ? $identityProvider->logo->url : '/images/placeholder.png',
+                keywords: (array) $identityProvider->keywordsEn,
+                accessible: $identityProvider->enabledInWayf,
+                id: md5($identityProvider->entityId),
+                entityId: $identityProvider->entityId,
+                isDefaultIdp: $isDefaultIdp,
+                discoveryHash: null,
             );
-            $wayfIdps[] = $wayfIdp;
 
             foreach ($identityProvider->getDiscoveries() as $discovery) {
-                $wayfIdps[] = array(
-                    'Name' => $discovery->getName($currentLocale),
-                    'Logo' => $discovery->getLogo() ? $discovery->getLogo()->url : '/images/placeholder.png',
-                    'Keywords' => $discovery->getKeywords('en'),
-                    'Access' => ($identityProvider->enabledInWayf) ? '1' : '0',
-                    'ID' => md5($identityProvider->entityId),
-                    'EntityID' => $identityProvider->entityId,
-                    'isDefaultIdp' => $idpEntityIds[$identityProvider->entityId]['isDefaultIdp'],
-                    'DiscoveryHash' => $discoveryService->hash($discovery),
+                $wayfIdps[] = new WayfIdp(
+                    name: $discovery->getName($currentLocale),
+                    logo: $discovery->getLogo() ? $discovery->getLogo()->url : '/images/placeholder.png',
+                    keywords: $discovery->getKeywordsArray($currentLocale),
+                    accessible: $identityProvider->enabledInWayf,
+                    id: md5($identityProvider->entityId),
+                    entityId: $identityProvider->entityId,
+                    isDefaultIdp: $isDefaultIdp,
+                    discoveryHash: $discoveryService->hash($discovery),
                 );
             }
         }
 
-        $nameSort = static function ($a, $b) {
-            return strcmp(strtolower($a['Name']), strtolower($b['Name']));
-        };
-
-        // Sort the IdP entries by name
-        usort($wayfIdps, $nameSort);
+        usort($wayfIdps, static fn(WayfIdp $a, WayfIdp $b) => strcmp(strtolower($a->name ?? ''), strtolower($b->name ?? '')));
 
         return $wayfIdps;
     }

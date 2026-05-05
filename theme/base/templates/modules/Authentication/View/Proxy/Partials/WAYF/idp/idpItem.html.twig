@@ -22,5 +22,12 @@
     data-connectable="{{ connectable }}"
     data-url="{{ logoUrl }}"
 >
-    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idp.html.twig' with { idp: idp } %}
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idp.html.twig' with {
+        idp: idp,
+        loop: loop,
+        listName: listName,
+        delete: delete,
+        action: action,
+        requestId: requestId,
+    } only %}
 </li>

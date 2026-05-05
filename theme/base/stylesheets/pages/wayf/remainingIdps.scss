@@ -68,6 +68,10 @@
         }
     }
 
+    > .remainingIdps__searchLabel + .wayf__search {
+        margin-top: 0.5rem;
+    }
+
     > .remainingIdps__defaultIdp {
         @include mixins-skeune.informational;
         margin: 1.25rem 0 1.25rem;

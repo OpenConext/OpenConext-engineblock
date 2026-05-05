@@ -1,0 +1,14 @@
+@use "../../variables";
+
+.wayf__preferredIdps {
+    margin-bottom: 0;
+    margin-top: 2rem;
+}
+
+.remainingIdps__searchLabel {
+    color: variables.$brownishGray;
+    font-family: Nunito, sans-serif;
+    font-size: variables.$f-xl;
+    font-weight: variables.$bolder;
+    margin: 2rem 0 0;
+}
