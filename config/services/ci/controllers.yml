@@ -25,10 +25,6 @@ services:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\FeedbackController
         arguments:
             - '@twig'
-<<<<<<< HEAD
-=======
-            - '@engineblock.compat.logger'
->>>>>>> 41926c2bd (Fix feedbackInfo session bleed-through between auth flows (#1795))
             - '@OpenConext\EngineBlock\Service\FeedbackStateHelper'
             - '@OpenConext\EngineBlockBundle\Controller\FeedbackController'
 

@@ -45,9 +45,11 @@ Feature:
 
 
 
-  Scenario: The functional-testing feedback page renders correctly with feedback-info
+  Scenario: The functional-testing feedback page renders feedback details
     When I go to Engineblock URL "/functional-testing/feedback?template=session-lost&feedback-info=%7B%22requestId%22%3A%22test-abc%22%2C%22ipAddress%22%3A%221.2.3.4%22%2C%22artCode%22%3A%2231914%22%7D"
     Then I should see "your session was lost"
+     And I should see "test-abc"
+     And I should see "1.2.3.4"
 
   Scenario: The session-lost feedback route renders correctly
     When I go to Engineblock URL "/authentication/feedback/session-lost"

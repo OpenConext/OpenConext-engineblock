@@ -58,10 +58,9 @@ class FeedbackController extends AbstractController
     public function feedbackAction(Request $request)
     {
         $key = $this->getTemplate($request);
-        $feedbackInfo = $this->getFeedbackInfo($request);
         $parameters = $this->getTemplateParameters($request);
 
-        $this->feedbackStateHelper->storeFeedbackInfo($feedbackInfo);
+        $this->feedbackStateHelper->storeFeedbackInfo($this->getFeedbackInfo($request));
 
         $template = sprintf(
             '@theme/Authentication/View/Feedback/%s.html.twig',
@@ -91,19 +90,14 @@ class FeedbackController extends AbstractController
 
     /**
      * @param Request $request
-     * @return mixed|string
+     * @return array
      */
-    private function getFeedbackInfo(Request $request)
+    private function getFeedbackInfo(Request $request): array
     {
-        $default = '{
-            "requestId":"5cb4bd3879b49",
-            "ipAddress":"192.168.66.98",
-            "artCode":"31914"
-        }';
+        $default = '{"requestId":"5cb4bd3879b49","ipAddress":"192.168.66.98","artCode":"31914"}';
 
-        $feedbackInfo = $request->query->getString('feedback-info', $default);
+        $feedbackInfo = json_decode($request->query->getString('feedback-info', $default), true);
 
-        $feedbackInfo = json_decode($feedbackInfo, true);
         if (!empty($feedbackInfo['IdentityProvider']) || !empty($feedbackInfo['IdP'])) {
             $feedbackInfo['identityProviderName'] = 'OpenConext Identities Inc';
         }

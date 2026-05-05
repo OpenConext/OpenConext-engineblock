@@ -63,16 +63,10 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
 
         $engineBlock = \EngineBlock_ApplicationSingleton::getInstance();
         $engineBlock->setDiContainerRuntime(new DiContainerRuntime(
-<<<<<<< HEAD
             $this->createStub(Twig\Environment::class),
             $this->createStub(WayfRenderer::class),
             $this->createStub(FeedbackStateHelperInterface::class),
             $this->createStub(FeedbackInfoCollectorInterface::class),
-=======
-            Phake::mock(Twig\Environment::class),
-            m::mock(FeedbackStateHelperInterface::class),
-            m::mock(FeedbackInfoCollectorInterface::class),
->>>>>>> 41926c2bd (Fix feedbackInfo session bleed-through between auth flows (#1795))
         ));
 
         $this->bindings = new EngineBlock_Corto_Module_Bindings($this->proxyServer);

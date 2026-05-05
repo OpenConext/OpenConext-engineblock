@@ -20,10 +20,7 @@ namespace OpenConext\EngineBlockBundle\Bridge;
 
 use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
 use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
-<<<<<<< HEAD
 use OpenConext\EngineBlockBundle\Service\WayfRenderer;
-=======
->>>>>>> 41926c2bd (Fix feedbackInfo session bleed-through between auth flows (#1795))
 use Twig\Environment;
 
 /**
@@ -37,7 +34,6 @@ final readonly class DiContainerRuntime
 
     public function __construct(
         public Environment $twig,
-<<<<<<< HEAD
         public WayfRenderer $wayfRenderer,
         public FeedbackStateHelperInterface $feedbackStateHelper,
         public FeedbackInfoCollectorInterface $feedbackInfoCollector,
@@ -48,10 +44,5 @@ final readonly class DiContainerRuntime
     public function getPreferredIdpEntityIds(): array
     {
         return $this->preferredIdpEntityIds;
-=======
-        public FeedbackStateHelperInterface $feedbackStateHelper,
-        public FeedbackInfoCollectorInterface $feedbackInfoCollector,
-    ) {
->>>>>>> 41926c2bd (Fix feedbackInfo session bleed-through between auth flows (#1795))
     }
 }
