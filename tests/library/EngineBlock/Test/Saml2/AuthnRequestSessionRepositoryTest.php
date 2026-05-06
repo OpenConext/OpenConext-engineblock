@@ -90,8 +90,6 @@ class EngineBlock_Test_Saml2_AuthnRequestSessionRepositoryTest extends TestCase
         $this->assertSame($req2, $this->repo->findRequestById('_req-2'));
     }
 
-    // ── SessionNotFoundException safety ──────────────────────────────────────
-
     public function test_store_is_noop_when_no_session_available(): void
     {
         $requestStack = $this->createMock(RequestStack::class);

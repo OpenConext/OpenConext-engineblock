@@ -19,7 +19,7 @@ Feature:
     And I give my consent
     And I pass through EngineBlock
     Then the url should match "functional-testing/CorrId-SP/acs"
-    #And I dump the log records
+    And the log should contain multiple distinct request_ids
     And the following log messages should have a correlation_id:
       | message                                                                                                   |
       | Multiple candidate IdPs: redirecting to WAYF                                                              |

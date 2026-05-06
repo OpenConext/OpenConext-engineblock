@@ -90,6 +90,26 @@ class LoggingContext implements Context
     }
 
     /**
+     * @Then the log should contain multiple distinct request_ids
+     */
+    public function theLogShouldContainMultipleDistinctRequestIds(): void
+    {
+        $records = $this->readRecords();
+
+        $requestIds = array_column($records, 'extra')
+                |> (static fn($x) => array_column($x, 'request_id',))
+                |> array_unique(...);
+
+        if (count($requestIds) < 2) {
+            throw new RuntimeException(sprintf(
+                'Expected multiple distinct request_ids in the log, but found only %d: %s.',
+                count($requestIds),
+                implode(', ', $requestIds),
+            ));
+        }
+    }
+
+    /**
      * @Then I dump the log records
      */
     public function iDumpTheLogRecords(): void

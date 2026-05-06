@@ -24,15 +24,16 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 /**
- * Integration test: simulates the complete 4-leg SAML authentication flow and
- * verifies that a single correlation ID flows through every leg via
- * CorrelationIdService.
+ * Integration test: simulates the complete 4-leg SAML authentication flow and verifies that a single
+ * correlation ID flows through every leg via CorrelationIdService.
  *
- *   Leg 1  SSO            SP AuthnRequest  ID = A  → mint → correlation_id = CX
- *   Leg 2  ContinueToIdp  ID = A (POST)            → resolve(A) → CX
- *                         EB AuthnRequest  ID = B  → link(B, A) → B also maps to CX
- *   Leg 3  ACS            IdP Response InResponseTo=B → resolve(B) → CX
- *   Leg 4  Consent        SP request ID = A        → resolve(A) → CX
+ *   Leg 1  SSO            SP AuthnRequest  ID = A  > mint > correlation_id = CX
+ *
+ *   Leg 2  ContinueToIdp  ID = A (POST) > resolve(A) → CX
+ *                         EB AuthnRequest  ID = B  > link(B, A) > B also maps to CX
+ *
+ *   Leg 3  ACS            IdP Response InResponseTo=B > resolve(B) > CX
+ *   Leg 4  Consent        SP request ID = A        > resolve(A) > CX
  */
 class CorrelationIdFlowTest extends TestCase
 {
@@ -67,8 +68,6 @@ class CorrelationIdFlowTest extends TestCase
         return new CorrelationIdService($repository, $current);
     }
 
-    // ── WAYF path ────────────────────────────────────────────────────────────
-
     public function test_wayf_flow_all_four_legs_share_the_same_correlation_id(): void
     {
         $spRequestId  = '_sp-request-A';
@@ -99,8 +98,6 @@ class CorrelationIdFlowTest extends TestCase
         $this->assertSame($mintedCx, $leg4Current->correlationId, 'Consent must see the same correlation ID');
     }
 
-    // ── Direct path (no WAYF) ─────────────────────────────────────────────────
-
     public function test_direct_flow_acs_and_consent_share_the_correlation_id_minted_at_sso(): void
     {
         $spRequestId  = '_sp-direct-A';
@@ -116,8 +113,6 @@ class CorrelationIdFlowTest extends TestCase
         $this->assertSame($mintedCx, $ids[$idpRequestId], 'ACS resolves via IdP request ID');
         $this->assertSame($mintedCx, $ids[$spRequestId], 'Consent resolves via SP request ID');
     }
-
-    // ── Concurrent flows ──────────────────────────────────────────────────────
 
     public function test_two_concurrent_flows_have_independent_correlation_ids(): void
     {
@@ -138,8 +133,6 @@ class CorrelationIdFlowTest extends TestCase
         $this->assertSame($cx2, $ids['_idp-B2']);
     }
 
-    // ── Back-button replay guard ───────────────────────────────────────────────
-
     public function test_replaying_an_sso_request_does_not_change_the_correlation_id(): void
     {
         $spRequestId = '_sp-replay-A';
@@ -151,8 +144,6 @@ class CorrelationIdFlowTest extends TestCase
 
         $this->assertSame($cx, $this->session->get('CorrelationIds')[$spRequestId], 'Back-button replay must not change the correlation ID');
     }
-
-    // ── Null safety ───────────────────────────────────────────────────────────
 
     public function test_unknown_request_id_does_not_set_correlation_id(): void
     {
