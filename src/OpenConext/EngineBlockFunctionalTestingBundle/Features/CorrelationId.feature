@@ -65,7 +65,7 @@ Feature:
     And I give my consent
     And I pass through EngineBlock
     Then the url should match "functional-testing/CorrId-SP/acs"
-    And I dump the log records
+#    And I dump the log records
     And the following log messages should have a correlation_id:
       | message                                                                                              |
       | HTTP-Post: Sending Message                                                                           |
@@ -101,6 +101,41 @@ Feature:
       | HTTP-Post: Sending Message                                                                           |
       | Done calling service 'processedAssertionConsumerService'                                             |
       | Done calling service 'processConsentService'                                                         |
+
+  Scenario: A user completing a Stepup flow has a single correlation_id across all log entries
+    Given the SP "CorrId-SP" requires Stepup LoA "http://dev.openconext.local/assurance/loa2"
+    And an Identity Provider named "CorrId-IdP"
+    When I log in at "CorrId-SP"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    And Stepup will successfully verify a user
+    And I give my consent
+    And I pass through EngineBlock
+    Then the url should match "functional-testing/CorrId-SP/acs"
+    And the log should contain multiple distinct request_ids
+    And the following log messages should have a correlation_id:
+      | message                                            |
+      | Handle Stepup authentication callout               |
+      | Handled Stepup authentication callout successfully |
+
+  Scenario: A user completing an SRAM interrupt flow has a single correlation_id across all log entries
+    Given the SP "CorrId-SP" requires SRAM collaboration
+    And feature "eb.feature_enable_sram_interrupt" is enabled
+    And the sbs server will trigger the "interrupt" authz flow when called
+    And the sbs server will return valid attributes
+    And an Identity Provider named "CorrId-IdP-SRAM"
+    When I log in at "CorrId-SP"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    And I pass through SBS
+    And I give my consent
+    And I pass through EngineBlock
+    Then the url should match "functional-testing/CorrId-SP/acs"
+    And the log should contain multiple distinct request_ids
+    And the following log messages should have a correlation_id:
+      | message                                     |
+      | Handle SRAM interrupt callout               |
+      | Done calling service 'SramInterruptService' |
 
   @functional
   Scenario: Two concurrent authentication flows each complete independently

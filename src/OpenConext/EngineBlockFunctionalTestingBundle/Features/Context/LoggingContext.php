@@ -96,10 +96,10 @@ class LoggingContext implements Context
     {
         $records = $this->readRecords();
 
-        $requestIds = array_column($records, 'extra')
-                |> (static fn($x) => array_column($x, 'request_id',))
-                |> array_unique(...);
-
+        $requestIds = array_unique(array_column(
+            array_column($records, 'extra'),
+            'request_id',
+        ));
         if (count($requestIds) < 2) {
             throw new RuntimeException(sprintf(
                 'Expected multiple distinct request_ids in the log, but found only %d: %s.',
