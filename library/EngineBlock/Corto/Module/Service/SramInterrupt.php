@@ -50,7 +50,7 @@ class EngineBlock_Corto_Module_Service_SramInterrupt
     {
         $id = $httpRequest->get('ID');
 
-        EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getCorrelationIdService()->resolve($id);
+        EngineBlock_ApplicationSingleton::getInstance()->getDiContainerRuntime()->correlationIdService->resolve($id);
 
         $nextProcessStep = $this->_processingStateHelper->getStepByRequestId(
             $id,

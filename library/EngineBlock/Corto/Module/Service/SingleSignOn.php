@@ -241,10 +241,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             return;
         }
 
-        $authnRequestRepository = $container->getAuthnRequestSessionRepository();
+        $authnRequestRepository = $application->getDiContainer()->getAuthnRequestSessionRepository();
         $authnRequestRepository->store($request);
 
-        $correlationIdService = $container->getCorrelationIdService();
+        $correlationIdService = $application->getDiContainerRuntime()->correlationIdService;
         $correlationIdService->mint($request->getId());
         $correlationIdService->resolve($request->getId());
 

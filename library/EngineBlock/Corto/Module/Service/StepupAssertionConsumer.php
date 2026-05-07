@@ -115,7 +115,7 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
             $log->warning('After failed Stepup authentication set LoA to Loa1', ['result' => $mappedLoa]);
         }
 
-        $application->getDiContainer()->getCorrelationIdService()->resolve($receivedRequest->getId());
+        $application->getDiContainerRuntime()->correlationIdService->resolve($receivedRequest->getId());
 
         if ($checkResponseSignature) {
             $this->_server->checkResponseSignatureMethods($receivedResponse);

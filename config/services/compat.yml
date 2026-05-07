@@ -59,3 +59,9 @@ services:
     engineblock.compat.attribute_release_policy_enforcer:
         public: false
         class: EngineBlock_Arp_AttributeReleasePolicyEnforcer
+
+    EngineBlock_Saml2_AuthnRequestSessionRepository:
+        class: EngineBlock_Saml2_AuthnRequestSessionRepository
+        public: true
+        arguments:
+            - '@request_stack'

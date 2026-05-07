@@ -23,6 +23,7 @@ use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
+use OpenConext\EngineBlock\Request\CorrelationIdServiceInterface;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\Consent\ConsentServiceInterface;
 use OpenConext\EngineBlock\Service\Dto\ProcessingStateStep;
@@ -92,6 +93,9 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
      */
     private $discoverySelectionService;
 
+    /** @var CorrelationIdServiceInterface */
+    private $correlationIdServiceMock;
+
     public function setUp(): void
     {
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
@@ -107,6 +111,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
         $this->processingStateHelperMock = $this->mockProcessingStateHelper();
         $this->httpRequestMock = $this->mockHttpRequest();
         $this->discoverySelectionService = Phake::mock(DiscoverySelectionService::class);
+        $this->correlationIdServiceMock = Phake::mock(CorrelationIdServiceInterface::class);
     }
 
     public function testConsentRequested()
@@ -356,7 +361,8 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
             $this->authStateHelperMock,
             $this->twig,
             $this->processingStateHelperMock,
-            $this->discoverySelectionService
+            $this->discoverySelectionService,
+            $this->correlationIdServiceMock
         );
     }
 

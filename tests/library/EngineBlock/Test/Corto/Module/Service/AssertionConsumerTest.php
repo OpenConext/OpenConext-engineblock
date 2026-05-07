@@ -21,6 +21,7 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Request\CorrelationIdServiceInterface;
 use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use PHPUnit\Framework\TestCase;
@@ -147,6 +148,7 @@ class EngineBlock_Test_Corto_Module_Service_AssertionConsumerTest extends TestCa
             // use the real instance from the DI container (never called in this code path).
             EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getStepupGatewayCallOutHelper(),
             Phake::mock(ServiceProviderFactory::class),
+            Phake::mock(CorrelationIdServiceInterface::class),
             $this->feedbackStateHelperMock
         );
 

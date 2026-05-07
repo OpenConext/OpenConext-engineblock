@@ -20,6 +20,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Request\CorrelationIdServiceInterface;
+use OpenConext\EngineBlock\Request\CurrentCorrelationId;
 use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
 use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use OpenConext\EngineBlockBundle\Bridge\DiContainerRuntime;
@@ -65,6 +67,8 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
         $engineBlock->setDiContainerRuntime(new DiContainerRuntime(
             $this->createStub(Twig\Environment::class),
             $this->createStub(WayfRenderer::class),
+            $this->createStub(CorrelationIdServiceInterface::class),
+            new CurrentCorrelationId(),
             $this->createStub(FeedbackStateHelperInterface::class),
             $this->createStub(FeedbackInfoCollectorInterface::class),
         ));

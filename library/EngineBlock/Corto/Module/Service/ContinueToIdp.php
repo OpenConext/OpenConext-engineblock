@@ -85,9 +85,8 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
             );
         }
 
-        $container = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
 
-        $authnRequestRepository = $container->getAuthnRequestSessionRepository();
+        $authnRequestRepository =  EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAuthnRequestSessionRepository();
         $request = $authnRequestRepository->findRequestById($id);
 
         if (!$request) {
@@ -96,7 +95,7 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
             );
         }
 
-        $correlationIdService = $container->getCorrelationIdService();
+        $correlationIdService = EngineBlock_ApplicationSingleton::getInstance()->getDiContainerRuntime()->correlationIdService;
         $correlationIdService->resolve($id);
 
         // Flush log if SP or IdP has additional logging enabled

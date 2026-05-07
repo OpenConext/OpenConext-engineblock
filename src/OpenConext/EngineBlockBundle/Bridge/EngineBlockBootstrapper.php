@@ -19,6 +19,8 @@
 namespace OpenConext\EngineBlockBundle\Bridge;
 
 use EngineBlock_ApplicationSingleton;
+use OpenConext\EngineBlock\Request\CorrelationIdService;
+use OpenConext\EngineBlock\Request\CurrentCorrelationId;
 use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
 use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use OpenConext\EngineBlockBundle\Service\WayfRenderer;
@@ -33,6 +35,8 @@ class EngineBlockBootstrapper implements EventSubscriberInterface
     public function __construct(
         Environment $twig,
         WayfRenderer $wayfRenderer,
+        CorrelationIdService $correlationIdService,
+        CurrentCorrelationId $currentCorrelationId,
         FeedbackStateHelperInterface $feedbackStateHelper,
         FeedbackInfoCollectorInterface $feedbackInfoCollector,
         array $preferredIdpEntityIds = [],
@@ -40,6 +44,8 @@ class EngineBlockBootstrapper implements EventSubscriberInterface
         $this->diContainerRuntime = new DiContainerRuntime(
             $twig,
             $wayfRenderer,
+            $correlationIdService,
+            $currentCorrelationId,
             $feedbackStateHelper,
             $feedbackInfoCollector,
             $preferredIdpEntityIds,

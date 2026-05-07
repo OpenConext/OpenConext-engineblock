@@ -19,6 +19,7 @@
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Request\CorrelationIdServiceInterface;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\Consent\ConsentServiceInterface;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
@@ -67,6 +68,8 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
 
     private DiscoverySelectionService $discoverySelectionService;
 
+    private CorrelationIdServiceInterface $_correlationIdService;
+
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
@@ -75,7 +78,8 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         AuthenticationStateHelperInterface $authStateHelper,
         Environment $twig,
         ProcessingStateHelperInterface $processingStateHelper,
-        DiscoverySelectionService $discoverySelectionService
+        DiscoverySelectionService $discoverySelectionService,
+        CorrelationIdServiceInterface $correlationIdService
     )
     {
         $this->_server = $server;
@@ -87,6 +91,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $this->_processingStateHelper = $processingStateHelper;
         $this->logger = EngineBlock_ApplicationSingleton::getLog();
         $this->discoverySelectionService = $discoverySelectionService;
+        $this->_correlationIdService = $correlationIdService;
     }
 
     /**
@@ -100,9 +105,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
 
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($response);
 
-        $correlationIdService = EngineBlock_ApplicationSingleton::getInstance()
-            ->getDiContainer()
-            ->getCorrelationIdService();
+        $correlationIdService = $this->_correlationIdService;
         $correlationIdService->resolve($receivedRequest->getId());
 
         // update previous response with current response

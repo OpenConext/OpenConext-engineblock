@@ -430,12 +430,3 @@ services:
         class: OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger
         arguments:
             - "%sram.allowed_attributes%"
-
-    EngineBlock_Saml2_AuthnRequestSessionRepository:
-        class: EngineBlock_Saml2_AuthnRequestSessionRepository
-        public: true
-        arguments:
-            - '@request_stack'
-
-    OpenConext\EngineBlockFunctionalTestingBundle\Log\TestLogHandler:
-        public: true

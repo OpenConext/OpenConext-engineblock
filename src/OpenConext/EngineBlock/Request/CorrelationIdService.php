@@ -18,7 +18,7 @@
 
 namespace OpenConext\EngineBlock\Request;
 
-final class CorrelationIdService
+final class CorrelationIdService implements CorrelationIdServiceInterface
 {
     public function __construct(
         private readonly CorrelationIdRepository $repository,

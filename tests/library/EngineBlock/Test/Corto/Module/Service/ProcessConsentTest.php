@@ -20,6 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Authentication\Value\ConsentVersion;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
+use OpenConext\EngineBlock\Request\CorrelationIdServiceInterface;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\Dto\ProcessingStateStep;
 use OpenConext\EngineBlock\Service\ProcessingStateHelper;
@@ -80,6 +81,11 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends TestCase
      */
     private $sessionMock;
 
+    /**
+     * @var CorrelationIdServiceInterface
+     */
+    private $correlationIdServiceMock;
+
 
     public function setUp(): void
     {
@@ -92,6 +98,7 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends TestCase
         $this->sspResponseMock = $this->mockSspResponse();
         $this->processingStateHelperMock = $this->mockProcessingStateHelper();
         $this->httpRequestMock = $this->mockHttpRequest();
+        $this->correlationIdServiceMock = Phake::mock(CorrelationIdServiceInterface::class);
     }
 
     public function testSessionLostExceptionIfNoSession()
@@ -354,7 +361,8 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends TestCase
             $this->xmlConverterMock,
             $this->consentFactoryMock,
             $this->authnStateHelperMock,
-            $this->processingStateHelperMock
+            $this->processingStateHelperMock,
+            $this->correlationIdServiceMock
         );
     }
 }

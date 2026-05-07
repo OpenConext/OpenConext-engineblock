@@ -33,6 +33,7 @@ services:
             - '@translator'
             - '@twig'
             - '@OpenConext\EngineBlock\Service\FeedbackStateHelper'
+            - '@OpenConext\EngineBlock\Request\CurrentCorrelationId'
 
     OpenConext\EngineBlockBundle\Controller\MetadataController:
         arguments:

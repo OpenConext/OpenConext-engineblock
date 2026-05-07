@@ -19,6 +19,7 @@
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
+use OpenConext\EngineBlock\Request\CorrelationIdServiceInterface;
 use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
@@ -46,6 +47,11 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
 
     private FeedbackStateHelperInterface $_feedbackStateHelper;
 
+    /**
+     * @var CorrelationIdServiceInterface
+     */
+    private $_correlationIdService;
+
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
@@ -53,6 +59,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         ProcessingStateHelperInterface $processingStateHelper,
         StepupGatewayCallOutHelper $stepupGatewayCallOutHelper,
         ServiceProviderFactory $serviceProviderFactory,
+        CorrelationIdServiceInterface $correlationIdService,
         FeedbackStateHelperInterface $feedbackStateHelper
     )
     {
@@ -62,6 +69,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         $this->_processingStateHelper = $processingStateHelper;
         $this->_stepupGatewayCallOutHelper = $stepupGatewayCallOutHelper;
         $this->_serviceProviderFactory = $serviceProviderFactory;
+        $this->_correlationIdService = $correlationIdService;
         $this->_feedbackStateHelper = $feedbackStateHelper;
     }
 
@@ -79,7 +87,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
 
         $application = EngineBlock_ApplicationSingleton::getInstance();
 
-        $correlationIdService = $application->getDiContainer()->getCorrelationIdService();
+        $correlationIdService = $this->_correlationIdService;
         $correlationIdService->resolve($receivedResponse->getInResponseTo());
         $log = $application->getLogInstance();
 

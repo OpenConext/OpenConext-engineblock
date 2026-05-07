@@ -461,17 +461,18 @@ class EngineBlock_Corto_ProxyServer
             }
         }
 
-        $container =  EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $diContainerRuntime = EngineBlock_ApplicationSingleton::getInstance()->getDiContainerRuntime();
 
-        $authenticationState = $container->getAuthenticationStateHelper()->getAuthenticationState();
+        $authenticationState = $diContainer->getAuthenticationStateHelper()->getAuthenticationState();
         $authenticationState->startAuthenticationOnBehalfOf($ebRequest->getId(), $serviceProvider);
 
         // Store the original Request
-        $authnRequestRepository = $container->getAuthnRequestSessionRepository();
+        $authnRequestRepository = $diContainer->getAuthnRequestSessionRepository();
         $authnRequestRepository->store($spRequest);
         $authnRequestRepository->link($ebRequest, $spRequest);
 
-        $correlationIdService = $container->getCorrelationIdService();
+        $correlationIdService = $diContainerRuntime->correlationIdService;
         $correlationIdService->mint($spRequest->getId());
         $correlationIdService->link($ebRequest->getId(), $spRequest->getId());
         $correlationIdService->resolve($spRequest->getId());
@@ -556,12 +557,12 @@ class EngineBlock_Corto_ProxyServer
 
 
         // Link with the original Request
-        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
-        $authnRequestRepository = $diContainer->getAuthnRequestSessionRepository();
+        $diContainerRuntime = EngineBlock_ApplicationSingleton::getInstance()->getDiContainerRuntime();
+        $authnRequestRepository = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAuthnRequestSessionRepository();
         $authnRequestRepository->store($spRequest);
         $authnRequestRepository->link($ebRequest, $spRequest);
 
-        $correlationIdService = $diContainer->getCorrelationIdService();
+        $correlationIdService = $diContainerRuntime->correlationIdService;
         $correlationIdService->mint($spRequest->getId());
         $correlationIdService->link($ebRequest->getId(), $spRequest->getId());
         $correlationIdService->resolve($spRequest->getId());
@@ -1108,8 +1109,7 @@ class EngineBlock_Corto_ProxyServer
     public function findRequestFromRequestId(string $requestId): ?EngineBlock_Saml2_AuthnRequestAnnotationDecorator
     {
         $authnRequestRepository = EngineBlock_ApplicationSingleton::getInstance()
-            ->getDiContainer()
-            ->getAuthnRequestSessionRepository();
+            ->getDiContainer()->getAuthnRequestSessionRepository();
 
         $spRequestId = $authnRequestRepository->findLinkedRequestId($requestId);
         if ($spRequestId === null) {
