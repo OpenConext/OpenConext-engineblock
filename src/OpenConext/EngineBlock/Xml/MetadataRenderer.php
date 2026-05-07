@@ -18,7 +18,6 @@
 
 namespace OpenConext\EngineBlock\Xml;
 
-use EngineBlock_Saml2_IdGenerator;
 use InvalidArgumentException;
 use OpenConext\EngineBlock\Metadata\Factory\Collection\IdentityProviderEntityCollection;
 use OpenConext\EngineBlock\Metadata\Factory\Helper\IdentityProviderMetadataHelper;
@@ -27,6 +26,7 @@ use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
+use OpenConext\EngineBlock\Saml2\IdGenerator as SamlIdGenerator;
 use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
 use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 use Twig\Environment;
@@ -49,7 +49,7 @@ class MetadataRenderer
     private $twig;
 
     /**
-     * @var EngineBlock_Saml2_IdGenerator
+     * @var SamlIdGenerator
      */
     private $samlIdGenerator;
 
@@ -83,7 +83,7 @@ class MetadataRenderer
     public function __construct(
         LanguageSupportProvider $languageSupportProvider,
         Environment $twig,
-        EngineBlock_Saml2_IdGenerator $samlIdGenerator,
+        SamlIdGenerator $samlIdGenerator,
         KeyPairFactory $keyPairFactory,
         DocumentSigner $documentSigner,
         TimeProvider $timeProvider,
@@ -160,7 +160,7 @@ class MetadataRenderer
         }
 
         $params = [
-            'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
+            'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, SamlIdGenerator::ID_USAGE_SAML2_METADATA),
             'validUntil' => $this->getValidUntil(),
             'metadata' => $metadata,
             'locales' => $this->languageSupportProvider->getSupportedLanguages(),
@@ -175,7 +175,7 @@ class MetadataRenderer
         $metadata = new IdentityProviderMetadataHelper($idp, $this->languageSupportProvider);
 
         $params = [
-            'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
+            'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, SamlIdGenerator::ID_USAGE_SAML2_METADATA),
             'validUntil' => $this->getValidUntil(),
             'metadata' => $metadata,
             'locales' => $this->languageSupportProvider->getSupportedLanguages(),
@@ -192,7 +192,7 @@ class MetadataRenderer
         }
 
         $params = [
-            'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
+            'id' => $this->samlIdGenerator->generate(self::ID_PREFIX, SamlIdGenerator::ID_USAGE_SAML2_METADATA),
             'validUntil' => $this->getValidUntil(),
             'metadataCollection' => $metadataCollection,
             'locales' => $this->languageSupportProvider->getSupportedLanguages(),
