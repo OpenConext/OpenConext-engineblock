@@ -354,7 +354,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         $relayState  = !empty($_GET['RelayState'])   ? $_GET['RelayState']  : null;
 
         $sspRequest = new AuthnRequest();
-        $sspRequest->setId($this->_server->getNewId(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_REQUEST));
+        $sspRequest->setId($this->_server->getNewId(\OpenConext\EngineBlock\Saml2\IdGenerator::ID_USAGE_SAML2_REQUEST));
         $issuer = new Issuer();
         $issuer->setValue($entityId);
         $sspRequest->setIssuer($issuer);
@@ -389,7 +389,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
     protected function _createDebugRequest()
     {
         $sspRequest = new AuthnRequest();
-        $sspRequest->setId($this->_server->getNewId(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_REQUEST));
+        $sspRequest->setId($this->_server->getNewId(\OpenConext\EngineBlock\Saml2\IdGenerator::ID_USAGE_SAML2_REQUEST));
         $issuer = new Issuer();
         $issuer->setValue($this->_server->getUrl('spMetadataService'));
         $sspRequest->setIssuer($issuer);
