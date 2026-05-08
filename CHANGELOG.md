@@ -54,6 +54,8 @@ The following feedback pages previously returned HTTP **200 OK** and now return 
 | `/authentication/feedback/invalid-acs-binding`        | 200    | 400   |
 | `/authentication/feedback/received-error-status-code` | 200    | 400   |
 
+Maintenance:
+* Removed the `openconext` theme. The `skeune` theme is now the only supported theme and the default. (#1980)
 
 ## UNRELEASED 7.2.0
 Upgrade to Symfony 7.4
