@@ -93,7 +93,7 @@ jobs:
                 run: |
                     cd docker && docker compose exec -T engine.dev.openconext.local cat /var/www/html/var/log/application.log
             -   name: Send notification on production build nightly build failure
-                uses: sonots/slack-notice-action@v3
+                uses: sonots/slack-notice-action@v4
                 with:
                     status: ${{ job.status }}
                 env:
