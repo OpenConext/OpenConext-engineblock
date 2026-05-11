@@ -19,6 +19,8 @@
 namespace OpenConext\EngineBlockBundle\Bridge;
 
 use EngineBlock_ApplicationSingleton;
+use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
+use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use OpenConext\EngineBlockBundle\Service\WayfRenderer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -31,9 +33,17 @@ class EngineBlockBootstrapper implements EventSubscriberInterface
     public function __construct(
         Environment $twig,
         WayfRenderer $wayfRenderer,
+        FeedbackStateHelperInterface $feedbackStateHelper,
+        FeedbackInfoCollectorInterface $feedbackInfoCollector,
         array $preferredIdpEntityIds = [],
     ) {
-        $this->diContainerRuntime = new DiContainerRuntime($twig, $wayfRenderer, $preferredIdpEntityIds);
+        $this->diContainerRuntime = new DiContainerRuntime(
+            $twig,
+            $wayfRenderer,
+            $feedbackStateHelper,
+            $feedbackInfoCollector,
+            $preferredIdpEntityIds,
+        );
     }
 
     public function onKernelRequest(): void

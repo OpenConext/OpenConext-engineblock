@@ -180,8 +180,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 'Missing <saml:Issuer> in message delivered to AssertionConsumerService.'
             );
         }
-        // Remember sp for debugging
-        $_SESSION['currentServiceProvider'] = $ebRequest->getIssuer()->getValue();
+
+        EngineBlock_ApplicationSingleton::getInstance()->getDiContainerRuntime()->feedbackStateHelper->startNewFlow(
+            $ebRequest->getId(),
+            $ebRequest->getIssuer()->getValue()
+        );
 
         // Verify that we know this SP and have metadata for it.
         $serviceProvider = $this->_verifyKnownSP($spEntityId->getValue());
@@ -324,7 +327,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         }
 
         // Remember idp for debugging
-        $_SESSION['currentIdentityProvider'] = $idpEntityId;
+        EngineBlock_ApplicationSingleton::getInstance()->getDiContainerRuntime()->feedbackStateHelper->setCurrentIdentityProvider($idpEntityId->getValue());
 
         // Verify that we know this IdP and have metadata for it.
         $cortoIdpMetadata = $this->_verifyKnownIdP(

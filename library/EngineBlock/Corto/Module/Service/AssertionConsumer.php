@@ -19,6 +19,7 @@
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
+use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use OpenConext\EngineBlock\Stepup\StepupGatewayCallOutHelper;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
@@ -31,33 +32,19 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
-    /**
-     * @var EngineBlock_Corto_ProxyServer
-     */
-    private $_server;
+    private EngineBlock_Corto_ProxyServer $_server;
 
-    /**
-     * @var EngineBlock_Corto_XmlToArray
-     */
-    private $_xmlConverter;
+    private EngineBlock_Corto_XmlToArray $_xmlConverter;
 
-    /**
-     * @var Session
-     */
-    private $_session;
+    private Session $_session;
 
-    /**
-     * @var ProcessingStateHelperInterface
-     */
-    private $_processingStateHelper;
-    /**
-     * @var StepupGatewayCallOutHelper
-     */
-    private $_stepupGatewayCallOutHelper;
-    /**
-     * @var ServiceProviderFactory
-     */
-    private $_serviceProviderFactory;
+    private ProcessingStateHelperInterface $_processingStateHelper;
+
+    private StepupGatewayCallOutHelper $_stepupGatewayCallOutHelper;
+
+    private ServiceProviderFactory $_serviceProviderFactory;
+
+    private FeedbackStateHelperInterface $_feedbackStateHelper;
 
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
@@ -65,7 +52,8 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         Session $session,
         ProcessingStateHelperInterface $processingStateHelper,
         StepupGatewayCallOutHelper $stepupGatewayCallOutHelper,
-        ServiceProviderFactory $serviceProviderFactory
+        ServiceProviderFactory $serviceProviderFactory,
+        FeedbackStateHelperInterface $feedbackStateHelper
     )
     {
         $this->_server = $server;
@@ -74,6 +62,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         $this->_processingStateHelper = $processingStateHelper;
         $this->_stepupGatewayCallOutHelper = $stepupGatewayCallOutHelper;
         $this->_serviceProviderFactory = $serviceProviderFactory;
+        $this->_feedbackStateHelper = $feedbackStateHelper;
     }
 
     /**
@@ -126,8 +115,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         if ($sp->getCoins()->isTrustedProxy()) {
             $proxySp = $sp;
             $sp = $this->_server->findOriginalServiceProvider($receivedRequest, $log);
-            $_SESSION['originalServiceProvider'] = $sp->entityId;
-            $_SESSION['proxyServiceProvider'] = $proxySp->entityId;
+            $this->_feedbackStateHelper->setProxyContext($sp->entityId, $proxySp->entityId);
         }
 
         // Verify the SP requester chain.

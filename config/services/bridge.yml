@@ -7,6 +7,8 @@ services:
             - '@engineblock.compat.application'
             - '@logger'
             - '@request_stack'
+            - '@OpenConext\EngineBlock\Service\FeedbackStateHelper'
+            - '@OpenConext\EngineBlock\Service\FeedbackInfoCollector'
 
     OpenConext\EngineBlockBridge\Logger\AuthenticationLoggerAdapter:
         arguments:

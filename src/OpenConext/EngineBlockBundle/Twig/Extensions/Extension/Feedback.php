@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 use EngineBlock_ApplicationSingleton;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use OpenConext\EngineBlockBundle\Authentication\Service\SamlResponseHelper;
 use OpenConext\EngineBlockBundle\Configuration\ErrorFeedbackConfigurationInterface;
 use OpenConext\EngineBlockBundle\Value\FeedbackInformation;
@@ -50,16 +51,23 @@ class Feedback
      */
     private $samlResponseHelper;
 
+    /**
+     * @var FeedbackStateHelperInterface
+     */
+    private $feedbackStateHelper;
+
     public function __construct(
         EngineBlock_ApplicationSingleton $application,
         ErrorFeedbackConfigurationInterface $errorFeedbackConfiguration,
         MetadataRepositoryInterface $metadataRepository,
-        SamlResponseHelper $samlResponseHelper
+        SamlResponseHelper $samlResponseHelper,
+        FeedbackStateHelperInterface $feedbackStateHelper
     ) {
         $this->application = $application;
         $this->errorFeedbackConfiguration = $errorFeedbackConfiguration;
         $this->metadataRepository = $metadataRepository;
         $this->samlResponseHelper = $samlResponseHelper;
+        $this->feedbackStateHelper = $feedbackStateHelper;
     }
 
     #[AsTwigFunction(name: 'flushLog')]
@@ -171,8 +179,7 @@ class Feedback
     #[AsTwigFunction(name: 'getSamlFailedResponse')]
     public function getSamlFailedResponse(): string
     {
-        $session = $this->application->getSession();
-        $feedbackInfo = $session->get('feedbackInfo');
+        $feedbackInfo = $this->feedbackStateHelper->getFeedbackInfo();
         // If AuthnFailedResponse is not set, we are unable to render a createAuthnFailedResponse
         $sspResponse = $feedbackInfo['AuthnFailedResponse'] ?? null;
         $value = '';
@@ -196,8 +203,7 @@ class Feedback
      */
     private function retrieveFeedbackInfo()
     {
-        $session = $this->application->getSession();
-        $feedbackInfo = $session->get('feedbackInfo');
+        $feedbackInfo = $this->feedbackStateHelper->getFeedbackInfo();
         $feedbackInfoMap = new FeedbackInformationMap();
 
         // Remove the empty valued feedback info entries.

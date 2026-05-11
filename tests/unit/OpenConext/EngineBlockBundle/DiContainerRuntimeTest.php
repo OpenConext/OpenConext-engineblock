@@ -18,6 +18,8 @@
 
 namespace Tests\OpenConext\EngineBlockBundle;
 
+use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
+use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use OpenConext\EngineBlockBundle\Bridge\DiContainerRuntime;
 use OpenConext\EngineBlockBundle\Service\WayfRenderer;
 use PHPUnit\Framework\TestCase;
@@ -30,6 +32,8 @@ class DiContainerRuntimeTest extends TestCase
         $runtime = new DiContainerRuntime(
             $this->createStub(Environment::class),
             $this->createStub(WayfRenderer::class),
+            $this->createStub(FeedbackStateHelperInterface::class),
+            $this->createStub(FeedbackInfoCollectorInterface::class),
         );
 
         $this->assertSame([], $runtime->getPreferredIdpEntityIds());
@@ -42,6 +46,8 @@ class DiContainerRuntimeTest extends TestCase
         $runtime = new DiContainerRuntime(
             $this->createStub(Environment::class),
             $this->createStub(WayfRenderer::class),
+            $this->createStub(FeedbackStateHelperInterface::class),
+            $this->createStub(FeedbackInfoCollectorInterface::class),
             $entityIds,
         );
 

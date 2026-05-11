@@ -120,8 +120,7 @@ class EngineBlock_SamlHelper
         // The filters will log any additional information that is available.
         $lastRequesterEntity = $repository->findServiceProviderByEntityId($lastRequesterEntityId, $logger);
         if (!$lastRequesterEntity) {
-            $_SESSION['originalServiceProvider'] = $lastRequesterEntityId;
-            $_SESSION['proxyServiceProvider'] = $serviceProvider->entityId;
+            EngineBlock_ApplicationSingleton::getInstance()->getDiContainerRuntime()->feedbackStateHelper->setProxyContext($lastRequesterEntityId, $serviceProvider->entityId);
             throw new EngineBlock_Exception_UnknownServiceProvider(
                 'Invalid RequesterID specified',
                 $lastRequesterEntityId,

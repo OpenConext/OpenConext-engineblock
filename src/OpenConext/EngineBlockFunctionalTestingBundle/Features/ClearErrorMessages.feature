@@ -214,7 +214,7 @@ Feature:
     And I pass through the IdP
     And I give my consent
   Then I should see "Attribute value not allowed"
-    And I should see "Your organisation sends a value for attribute schacHomeOrganization (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
+    And I should see "Dummy Idp sends a value for attribute schacHomeOrganization (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
     And I should see "UR ID:"
     And I should see "IP:"
     And I should see "EC:"
@@ -243,7 +243,7 @@ Feature:
       And I pass through the IdP
       And I give my consent
     Then I should see "Attribute value not allowed"
-      And I should see "Your organisation sends a value for attribute eduPersonPrincipalName (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
+      And I should see "Dummy Idp sends a value for attribute eduPersonPrincipalName (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
       And I should see "UR ID:"
       And I should see "IP:"
       And I should see "EC:"
@@ -273,7 +273,7 @@ Feature:
       And I pass through the IdP
       And I give my consent
     Then I should see "Attribute value not allowed"
-      And I should see "Your organisation sends a value for attribute subject-id (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
+      And I should see "Dummy Idp sends a value for attribute subject-id (\"out-of-scope\") which is not allowed for this organisation. Therefore you cannot log in."
       And I should see "UR ID:"
       And I should see "IP:"
       And I should see "EC:"
@@ -289,7 +289,7 @@ Feature:
       And I pass through the IdP
       And I give my consent
     Then I should see "Attribute value not allowed"
-      And I should see "Your organisation sends a value for attribute subject-id (\"not exactly one value\") which is not allowed for this organisation. Therefore you cannot log in."
+      And I should see "Dummy Idp sends a value for attribute subject-id (\"not exactly one value\") which is not allowed for this organisation. Therefore you cannot log in."
 
   Scenario: I log in at my Identity Provider, and have a subject-id attribute without a scope.
     Given the IdP "Dummy Idp" sends attribute "urn:mace:terena.org:attribute-def:schacHomeOrganization" with value "test"
@@ -300,7 +300,7 @@ Feature:
       And I pass through the IdP
       And I give my consent
     Then I should see "Attribute value not allowed"
-      And I should see "Your organisation sends a value for attribute subject-id (\"missing @ in value\") which is not allowed for this organisation. Therefore you cannot log in."
+      And I should see "Dummy Idp sends a value for attribute subject-id (\"missing @ in value\") which is not allowed for this organisation. Therefore you cannot log in."
 
   Scenario: I log in at my Identity Provider, that has the 'block_user_on_violation' feature activated, and has a valid subject-id attribute.
     Given feature "eb.block_user_on_violation" is enabled
@@ -418,6 +418,49 @@ Feature:
     When I go to Engineblock URL "/authentication/proxy/idps-metadata/key:does-not-exist"
     Then I should see "Unknown key id"
      And I should see "Key ID: does-not-exist"
+
+  Scenario: feedbackInfo from a previous failed authentication should not bleed into a subsequent unrelated error
+    # First auth: causes an error that writes IdP info into feedbackInfo in the session.
+    Given the IdP is configured to always return Responses with StatusCode Responder/RequestDenied
+     When I log in at "Dummy SP"
+      And I pass through EngineBlock
+      And I pass through the IdP
+     Then I should see "Identity Provider error"
+      And I should see "IdP:"
+    # Second auth: causes an error that has no IdP context.
+    # The stale IdP info from the previous error must NOT appear on this error page.
+     When I log in at "Unconnected SP"
+     Then I should see "No organisations found"
+      And I should not see "IdP:"
+
+  Scenario: Global session context from a completed login should not appear in a subsequent unrelated error
+    When I log in at "Dummy SP"
+     And I pass through EngineBlock
+     And I pass through the IdP
+     And I give my consent
+     And I pass through EngineBlock
+    # Auth is now complete. An early error (before any SAML request is parsed) must not show
+    # SP/IdP context that leaked from the completed auth into the session.
+    When I post data "{}" to Engineblock URL "/authentication/idp/single-sign-on"
+    Then I should see "The parameter \"SAMLRequest\" is missing on the SAML SSO request"
+     And I should not see "IdP:"
+     And I should not see "SP:"
+
+  Scenario: A previous failed auth's feedback context survives a subsequent successful login
+    # Flow A: an error that has SP context but no IdP context.
+    When I log in at "Unconnected SP"
+    Then I should see "No organisations found"
+     And I should see "SP:"
+    # Flow B: a completely different, successful auth.
+    When I log in at "Dummy SP"
+     And I pass through EngineBlock
+     And I pass through the IdP
+     And I give my consent
+     And I pass through EngineBlock
+    # Navigate back to flow A's error page (as if via back button or bookmarked URL).
+    # Flow A's SP context must still be readable from the session.
+    When I go to Engineblock URL "/authentication/feedback/no-idps"
+    Then I should see "SP:"
 
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a location
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a binding
