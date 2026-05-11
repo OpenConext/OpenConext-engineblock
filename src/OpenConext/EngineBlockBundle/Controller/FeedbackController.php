@@ -52,27 +52,109 @@ class FeedbackController
     #[Route(
         path: '/authentication/feedback/unable-to-receive-message',
         name: 'authentication_feedback_unable_to_receive_message',
+        defaults: [
+            'pageIdentifier' => 'unable-to-receive-message',
+            'statusCode' => 400
+        ],
         methods: ['GET']
-    )
-    ]
-    public function unableToReceiveMessageAction()
-    {
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/unable-to-receive-message.html.twig'),
-            400
-        );
-    }
-
+    )]
     #[Route(
         path: '/authentication/feedback/unsolicited-response',
         name: 'authentication_feedback_unsolicited_response',
+        defaults: [
+            'pageIdentifier' => 'unsolicited-response',
+            'statusCode' => 400
+        ],
         methods: ['GET']
     )]
-    public function unsolicitedResponseAction(): Response
+    #[Route(
+        path: '/authentication/feedback/session-lost',
+        name: 'authentication_feedback_session_lost',
+        defaults: [
+            'pageIdentifier' => 'session-lost',
+            'statusCode' => 400
+        ],
+        methods: ['GET']
+    )]
+    #[Route(
+        path: '/authentication/feedback/session-not-started',
+        name: 'authentication_feedback_session_not_started',
+        defaults: [
+            'pageIdentifier' => 'session-not-started',
+            'statusCode' => 400
+        ],
+        methods: ['GET']
+    )]
+    #[Route(
+        path: '/authentication/feedback/invalid-acs-binding',
+        name: 'authentication_feedback_invalid_acs_binding',
+        defaults: [
+            'pageIdentifier' => 'invalid-acs-binding',
+            'statusCode' => 400
+        ],
+        methods: ['GET']
+    )]
+    #[Route(
+        path: '/authentication/feedback/received-error-status-code',
+        name: 'authentication_feedback_received_error_status_code',
+        defaults: [
+            'pageIdentifier' => 'received-error-status-code',
+            'statusCode' => 400
+        ],
+        methods: ['GET']
+    )]
+    #[Route(
+        path: '/authentication/feedback/unknown_requesterid_in_authnrequest',
+        name: 'authentication_feedback_unknown_requesterid_in_authnrequest',
+        defaults: [
+            'pageIdentifier' => 'unknown-requesterid-in-authnrequest',
+            'statusCode' => 400
+        ],
+        methods: ['GET']
+    )]
+    #[Route(
+        path: '/authentication/feedback/authentication-limit-exceeded',
+        name: 'authentication_feedback_authentication_limit_exceeded',
+        defaults: [
+            'pageIdentifier' => 'authentication-limit-exceeded',
+            'statusCode' => 429
+        ],
+        methods: ['GET']
+    )]
+    #[Route(
+        path: '/authentication/feedback/stepup-callout-unknown',
+        name: 'authentication_feedback_stepup_callout_unknown',
+        defaults: [
+            'pageIdentifier' => 'stepup-callout-unknown',
+            'statusCode' => 400
+        ],
+        methods: ['GET']
+    )]
+    #[Route(
+        path: '/authentication/feedback/stepup-callout-user-cancelled',
+        name: 'authentication_feedback_stepup_callout_user_cancelled',
+        defaults: [
+            'pageIdentifier' => 'stepup-callout-user-cancelled',
+            'statusCode' => 400
+        ],
+        methods: ['GET']
+    )]
+    #[Route(
+        path: '/authentication/feedback/invalidAcsLocation',
+        name: 'authentication_feedback_invalid_acs_location',
+        defaults: [
+            'pageIdentifier' => 'invalid-acs-location',
+            'statusCode' => 400
+        ],
+        methods: ['GET']
+    )]
+    public function feedbackAction(string $pageIdentifier, int $statusCode): Response
     {
         return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/unsolicited-response.html.twig'),
-            400
+            $this->twig->render('@theme/Authentication/View/Feedback/generic-error.html.twig', [
+                'pageIdentifier' => $pageIdentifier,
+            ]),
+            $statusCode
         );
     }
 
@@ -85,19 +167,6 @@ class FeedbackController
         );
     }
 
-
-    #[Route(path: '/authentication/feedback/session-lost', name: 'authentication_feedback_session_lost', methods: ['GET'])]
-    public function sessionLostAction()
-    {
-        return new Response($this->twig->render('@theme/Authentication/View/Feedback/session-lost.html.twig'), 400);
-    }
-
-    #[Route(path: '/authentication/feedback/session-not-started', name: 'authentication_feedback_session_not_started', methods: ['GET'])]
-    public function sessionNotStartedAction()
-    {
-        return new Response($this->twig->render('@theme/Authentication/View/Feedback/session-not-started.html.twig'), 400);
-    }
-
     #[Route(path: '/authentication/feedback/no-idps', name: 'authentication_feedback_no_idps', methods: ['GET'])]
     public function noIdpsAction()
     {
@@ -106,14 +175,6 @@ class FeedbackController
         return new Response($this->twig->render('@theme/Authentication/View/Feedback/no-idps.html.twig'));
     }
 
-    #[Route(path: '/authentication/feedback/invalidAcsLocation', name: 'authentication_feedback_invalid_acs_location', methods: ['GET'])]
-    public function invalidAcsLocationAction()
-    {
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/invalid-acs-location.html.twig'),
-            400
-        );
-    }
 
     #[Route(
         path: '/authentication/feedback/unsupportedSignatureMethod',
@@ -310,26 +371,6 @@ class FeedbackController
         );
     }
 
-    #[Route(path: '/authentication/feedback/invalid-acs-binding', name: 'authentication_feedback_invalid_acs_binding', methods: ['GET'])]
-    public function invalidAcsBindingAction()
-    {
-        // @todo Send 4xx or 5xx header depending on invalid binding came from request or configured metadata
-        return new Response($this->twig->render('@theme/Authentication/View/Feedback/invalid-acs-binding.html.twig'));
-    }
-
-    #[Route(
-        path: '/authentication/feedback/received-error-status-code',
-        name: 'authentication_feedback_received_error_status_code',
-        methods: ['GET']
-    )]
-    public function receivedErrorStatusCodeAction()
-    {
-        // @todo Send 4xx or 5xx header?
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/received-error-status-code.html.twig')
-        );
-    }
-
     #[Route(
         path: '/authentication/feedback/received-invalid-signed-response',
         name: 'authentication_feedback_signature_verification_failed',
@@ -351,20 +392,6 @@ class FeedbackController
             $this->twig->render('@theme/Authentication/View/Feedback/received-invalid-response.html.twig')
         );
     }
-
-    #[Route(
-        path: '/authentication/feedback/unknown_requesterid_in_authnrequest',
-        name: 'authentication_feedback_unknown_requesterid_in_authnrequest',
-        methods: ['GET']
-    )]
-    public function unknownRequesterIdInAuthnRequestAction()
-    {
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/unknown-requesterid-in-authnrequest.html.twig'),
-            400
-        );
-    }
-
 
     #[Route(path: '/authentication/feedback/authorization-policy-violation', name: 'authentication_feedback_pep_violation', methods: ['GET'])]
     public function authorizationPolicyViolationAction(Request $request)
@@ -443,19 +470,6 @@ class FeedbackController
     }
 
     #[Route(
-        path: '/authentication/feedback/authentication-limit-exceeded',
-        name: 'authentication_feedback_authentication_limit_exceeded',
-        methods: ['GET']
-    )]
-    public function authenticationLimitExceededAction()
-    {
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/authentication-limit-exceeded.html.twig'),
-            429
-        );
-    }
-
-    #[Route(
         path: '/authentication/feedback/invalid-request-method-on-sso',
         name: 'authentication_feedback_no_authentication_request_received',
         methods: ['GET']
@@ -493,33 +507,11 @@ class FeedbackController
         );
     }
 
-    #[Route(
-        path: '/authentication/feedback/stepup-callout-user-cancelled',
-        name: 'authentication_feedback_stepup_callout_user_cancelled',
-        methods: ['GET']
-    )]
-    public function stepupCalloutUserCancelledAction(Request $request)
-    {
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/stepup-callout-user-cancelled.html.twig'),
-            400
-        );
-    }
-
     #[Route(path: '/authentication/feedback/stepup-callout-unmet-loa', name: 'authentication_feedback_stepup_callout_unmet_loa', methods: ['GET'])]
     public function stepupCalloutUnmetLoaAction(Request $request)
     {
         return new Response(
             $this->twig->render('@theme/Authentication/View/Feedback/stepup-callout-unmet-loa.html.twig'),
-            400
-        );
-    }
-
-    #[Route(path: '/authentication/feedback/stepup-callout-unknown', name: 'authentication_feedback_stepup_callout_unknown', methods: ['GET'])]
-    public function stepupCalloutUnknownAction(Request $request)
-    {
-        return new Response(
-            $this->twig->render('@theme/Authentication/View/Feedback/stepup-callout-unknown.html.twig'),
             400
         );
     }

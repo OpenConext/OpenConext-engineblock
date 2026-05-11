@@ -18,7 +18,7 @@ XDEBUG_MODE=coverage ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --
 echo -e "\nPHPUnit unit tests\n"
 XDEBUG_MODE=coverage ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=unit --coverage-clover coverage.xml
 
-echo -e "\nPHPUnit API acceptance tests\n"
+echo -e "\nPHPUnit acceptance tests\n"
 ./bin/console cache:clear --env=test --no-warmup
 APP_ENV=test XDEBUG_MODE=coverage ./vendor/bin/phpunit --configuration=./tests/phpunit.xml --testsuite=functional --coverage-clover coverage.xml
 

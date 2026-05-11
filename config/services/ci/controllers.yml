@@ -26,6 +26,7 @@ services:
         arguments:
             - '@twig'
             - '@OpenConext\EngineBlock\Service\FeedbackStateHelper'
+            - '@OpenConext\EngineBlockBundle\Controller\FeedbackController'
 
     engineblock.functional_test.controller.consent:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\ConsentController
