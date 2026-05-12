@@ -5,12 +5,14 @@
       true,
       {
         "ignoreFunctions": [
+          "calculateRem",
           "darken",
           "lighten",
           "mix"
         ]
       }
     ],
+    "nesting-selector-no-missing-scoping-root": null,
     "at-rule-no-unknown": [
       true,
       {
@@ -18,14 +20,17 @@
           "each",
           "else",
           "for",
+          "forward",
           "function",
           "if",
           "include",
           "mixin",
-          "return"
+          "return",
+          "use"
         ]
       }
     ],
+    "media-query-no-invalid": null,
     "no-descending-specificity": null,
     "no-empty-source": null
   },
