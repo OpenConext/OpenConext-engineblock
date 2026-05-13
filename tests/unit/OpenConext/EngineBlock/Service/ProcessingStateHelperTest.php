@@ -45,8 +45,7 @@ class ProcessingStateHelperTest extends TestCase
         $request = new Request();
         $request->setSession($this->session);
 
-        $requestStack = new RequestStack();
-        $requestStack->push($request);
+        $requestStack = new RequestStack([$request]);
 
         $this->helper = new ProcessingStateHelper($requestStack);
     }

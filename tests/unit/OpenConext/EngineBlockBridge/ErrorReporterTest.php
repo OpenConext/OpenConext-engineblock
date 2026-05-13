@@ -54,8 +54,7 @@ class ErrorReporterTest extends TestCase
         $request = new Request();
         $request->setSession($this->session);
 
-        $this->requestStack = new RequestStack();
-        $this->requestStack->push($request);
+        $this->requestStack = new RequestStack([$request]);
 
         $this->applicationSingleton = m::mock(EngineBlock_ApplicationSingleton::class);
         $this->applicationSingleton->shouldReceive('flushLog')->byDefault();

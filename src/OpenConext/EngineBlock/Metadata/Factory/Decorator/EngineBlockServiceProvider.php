@@ -23,6 +23,7 @@ use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
+use Override;
 use SAML2\Constants;
 
 /**
@@ -60,6 +61,7 @@ class EngineBlockServiceProvider extends AbstractServiceProvider
     }
 
 
+    #[Override]
     public function getCertificates(): array
     {
         $certificates = [];
@@ -73,6 +75,7 @@ class EngineBlockServiceProvider extends AbstractServiceProvider
     /**
      * @return string[]
      */
+    #[Override]
     public function getSupportedNameIdFormats(): array
     {
         return [
@@ -85,16 +88,19 @@ class EngineBlockServiceProvider extends AbstractServiceProvider
     /**
      * @return RequestedAttribute[]|null
      */
+    #[Override]
     public function getRequestedAttributes(): ?array
     {
         return $this->attributes->getRequestedAttributes();
     }
 
+    #[Override]
     public function isAllowAll(): bool
     {
         return true;
     }
 
+    #[Override]
     public function isAllowed(string $idpEntityId): bool
     {
         return true;
@@ -103,6 +109,7 @@ class EngineBlockServiceProvider extends AbstractServiceProvider
     /**
      * @return IndexedService[]
      */
+    #[Override]
     public function getAssertionConsumerServices(): array
     {
         $acsLocation = $this->urlProvider->getUrl('authentication_sp_consume_assertion', false, null, null);

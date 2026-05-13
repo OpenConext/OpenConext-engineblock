@@ -21,14 +21,13 @@ namespace OpenConext\EngineBlockBundle\Doctrine\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Doctrine\DBAL\Types\Type;
-
+use Override;
 use function is_resource;
 use function restore_error_handler;
 use function serialize;
 use function set_error_handler;
 use function stream_get_contents;
 use function unserialize;
-
 use const E_DEPRECATED;
 use const E_USER_DEPRECATED;
 
@@ -47,11 +46,13 @@ class SerializedObjectType extends Type
         return $platform->getClobTypeDeclarationSQL($column);
     }
 
+    #[Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): string
     {
         return serialize($value);
     }
 
+    #[Override]
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): mixed
     {
         if ($value === null) {

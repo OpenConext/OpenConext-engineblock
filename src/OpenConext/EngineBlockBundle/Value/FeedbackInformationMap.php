@@ -30,7 +30,7 @@ class FeedbackInformationMap
     public function add(FeedbackInformation $feedbackInformation)
     {
         $key = $feedbackInformation->getKey();
-        if (array_key_exists($key, $this->data)) {
+        if (array_key_exists((string) $key, $this->data)) {
             throw new RuntimeException(
                 sprintf('Feedback information with key "%s" is already mapped.', $key)
             );
@@ -51,7 +51,7 @@ class FeedbackInformationMap
 
     public function has($key)
     {
-        return array_key_exists($key, $this->data);
+        return array_key_exists((string) $key, $this->data);
     }
 
     public function get($key)

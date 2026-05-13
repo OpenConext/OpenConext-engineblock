@@ -27,6 +27,7 @@ use OpenConext\EngineBlock\Authentication\Value\SchacHomeOrganization;
 use OpenConext\EngineBlock\Authentication\Value\Uid;
 use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\EngineBlockBridge\Authentication\Repository\UserDirectoryAdapter;
+use Override;
 use Symfony\Component\Filesystem\Filesystem;
 
 class FakeUserDirectory extends UserDirectoryAdapter
@@ -79,6 +80,7 @@ class FakeUserDirectory extends UserDirectoryAdapter
         $this->users = $users;
     }
 
+    #[Override]
     public function identifyUser(array $attributes)
     {
         if (!isset($attributes[Uid::URN_MACE][0])) {
@@ -111,6 +113,7 @@ class FakeUserDirectory extends UserDirectoryAdapter
         return $user;
     }
 
+    #[Override]
     public function registerUser($uid, $schacHomeOrganization)
     {
         $collabPersonId = CollabPersonId::generateWithReplacedAtSignFrom(
@@ -126,6 +129,7 @@ class FakeUserDirectory extends UserDirectoryAdapter
         return $user;
     }
 
+    #[Override]
     public function findUserBy($collabPersonId)
     {
         if (!array_key_exists($collabPersonId, $this->users)) {
@@ -135,6 +139,7 @@ class FakeUserDirectory extends UserDirectoryAdapter
         return $this->users[$collabPersonId];
     }
 
+    #[Override]
     public function getUserBy($collabPersonId)
     {
         $user = $this->findUserBy($collabPersonId);
@@ -146,6 +151,7 @@ class FakeUserDirectory extends UserDirectoryAdapter
         return $user;
     }
 
+    #[Override]
     public function deleteUserWith($collabPersonId)
     {
         unset($this->users[$collabPersonId]);

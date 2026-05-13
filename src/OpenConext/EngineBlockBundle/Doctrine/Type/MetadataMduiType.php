@@ -23,6 +23,7 @@ use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use OpenConext\EngineBlock\Metadata\Mdui;
+use Override;
 
 class MetadataMduiType extends Type
 {
@@ -34,6 +35,7 @@ class MetadataMduiType extends Type
         return $platform->getClobTypeDeclarationSQL($column);
     }
 
+    #[Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if (is_null($value)) {
@@ -53,6 +55,7 @@ class MetadataMduiType extends Type
         return $value->toJson();
     }
 
+    #[Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         if (is_null($value)) {

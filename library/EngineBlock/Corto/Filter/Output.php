@@ -25,6 +25,7 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
  */
 class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
 {
+    #[\Override]
     public function filter(
         EngineBlock_Saml2_ResponseAnnotationDecorator &$response,
         array &$responseAttributes,

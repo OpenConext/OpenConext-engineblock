@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlock\Service\Consent;
 
+use Deprecated;
 use OpenConext\EngineBlock\Authentication\Value\ConsentHashQuery;
 use OpenConext\EngineBlock\Authentication\Value\ConsentStoreParameters;
 use OpenConext\EngineBlock\Authentication\Value\ConsentUpdateParameters;

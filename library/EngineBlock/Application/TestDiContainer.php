@@ -28,21 +28,25 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
      */
     private $pdpClient;
 
+    #[\Override]
     public function getXmlConverter(): EngineBlock_Corto_XmlToArray
     {
         return Phake::mock('EngineBlock_Corto_XmlToArray');
     }
 
+    #[\Override]
     public function getFilterCommandFactory(): EngineBlock_Corto_Filter_Command_Factory
     {
         return Phake::mock('EngineBlock_Corto_Filter_Command_Factory');
     }
 
+    #[\Override]
     public function getDatabaseConnectionFactory(): EngineBlock_Database_ConnectionFactory
     {
         return Phake::mock('EngineBlock_Database_ConnectionFactory');
     }
 
+    #[\Override]
     public function getPdpClient()
     {
         return $this->pdpClient ?? parent::getPdpClient();
@@ -53,6 +57,7 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
         $this->pdpClient = $pdpClient;
     }
 
+    #[\Override]
     public function getConsentFactory(): EngineBlock_Corto_Model_Consent_Factory
     {
         $consentFactoryMock = Phake::mock('EngineBlock_Corto_Model_Consent_Factory');
@@ -67,6 +72,7 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
     /**
      * @return EngineBlock_Attributes_Metadata
      */
+    #[\Override]
     public function getAttributeMetadata()
     {
         // returns a realistic representation of the attribute metadata
@@ -82,6 +88,7 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
      *
      * @return array
      */
+    #[\Override]
     public function getEncryptionKeysConfiguration()
     {
         $basePath = $this->container->getParameter('kernel.project_dir');

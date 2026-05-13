@@ -21,11 +21,13 @@ class EngineBlock_Test_Saml2_NameIdResolverMock extends EngineBlock_Saml2_NameId
     private $_serviceProviderUuids = array();
     private $_persistentIds = array();
 
+    #[\Override]
     protected function _getUserUuid($collabPersonId)
     {
         return sha1($collabPersonId);
     }
 
+    #[\Override]
     protected function _fetchPersistentId($serviceProviderUuid, $userUuid)
     {
         return empty($this->_persistentIds[$serviceProviderUuid][$userUuid]) ?
@@ -33,6 +35,7 @@ class EngineBlock_Test_Saml2_NameIdResolverMock extends EngineBlock_Saml2_NameId
             $this->_persistentIds[$serviceProviderUuid][$userUuid];
     }
 
+    #[\Override]
     protected function _storePersistentId($persistentId, $serviceProviderUuid, $userUuid)
     {
         if (!isset($this->_persistentIds[$serviceProviderUuid])) {
@@ -41,6 +44,7 @@ class EngineBlock_Test_Saml2_NameIdResolverMock extends EngineBlock_Saml2_NameId
         $this->_persistentIds[$serviceProviderUuid][$userUuid] = $persistentId;
     }
 
+    #[\Override]
     protected function _fetchServiceProviderUuid($spEntityId)
     {
         return empty($this->_serviceProviderUuids[$spEntityId]) ?
@@ -48,6 +52,7 @@ class EngineBlock_Test_Saml2_NameIdResolverMock extends EngineBlock_Saml2_NameId
             $this->_serviceProviderUuids[$spEntityId];
     }
 
+    #[\Override]
     protected function _storeServiceProviderUuid($spEntityId, $uuid)
     {
         $this->_serviceProviderUuids[$spEntityId] = $uuid;

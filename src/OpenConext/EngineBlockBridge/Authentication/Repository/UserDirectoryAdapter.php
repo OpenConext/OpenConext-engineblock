@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockBridge\Authentication\Repository;
 
+use Deprecated;
 use EngineBlock_Exception_MissingRequiredFields;
 use OpenConext\EngineBlock\Authentication\Model\User;
 use OpenConext\EngineBlock\Authentication\Repository\UserDirectory;
@@ -49,11 +50,8 @@ class UserDirectoryAdapter
      * @param array $attributes
      * @return null|User
      * @throws EngineBlock_Exception_MissingRequiredFields
-     *
-     * @deprecated This method is only introduced to allow for a graceful rollover of LDAP to database backed
-     *             UserDirectory. It contains Backwards Compatible code that should not be relied on (e.g. the throwing
-     *             of an EngineBlock_Exception)
      */
+    /** @deprecated Only for graceful LDAP-to-database rollover; contains backwards compatible code */
     public function identifyUser(array $attributes)
     {
         if (!isset($attributes[Uid::URN_MACE][0])) {

@@ -20,9 +20,11 @@ namespace OpenConext\EngineBlockBundle\Monolog\Formatter;
 
 use Monolog\Formatter\JsonFormatter;
 use Monolog\LogRecord;
+use Override;
 
 class SyslogJsonFormatter extends JsonFormatter
 {
+    #[Override]
     protected function normalizeRecord(LogRecord $record): array
     {
         return [

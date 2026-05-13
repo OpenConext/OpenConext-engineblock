@@ -33,4 +33,6 @@ return RectorConfig::configure()
         \Rector\Php81\Rector\Property\ReadOnlyPropertyRector::class,
         \Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector::class,
         \Rector\Php82\Rector\Class_\ReadOnlyClassRector::class,
+        \Rector\Php84\Rector\MethodCall\NewMethodCallWithoutParenthesesRector::class,
+        \Rector\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector::class,
     ]);

@@ -82,6 +82,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     /**
      * @var EngineBlock_Corto_ProxyServer
      */
+    #[\Override]
     protected $_server;
 
     /**
@@ -895,13 +896,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     private function hasEncryptedAssertion(Response $sspResponse)
     {
-        $hasEncryptedAssertion = false;
-        foreach ($sspResponse->getAssertions() as $assertion) {
-            if ($assertion instanceof EncryptedAssertion) {
-                $hasEncryptedAssertion = true;
-                break;
-            }
-        }
+        $hasEncryptedAssertion = array_any($sspResponse->getAssertions(), fn($assertion) => $assertion instanceof EncryptedAssertion);
         return $hasEncryptedAssertion;
     }
 

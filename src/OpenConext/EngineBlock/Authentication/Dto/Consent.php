@@ -25,7 +25,7 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 
 final class Consent
 {
-    const CONTACT_TYPE_SUPPORT = 'support';
+    const string CONTACT_TYPE_SUPPORT = 'support';
 
     /**
      * @var ConsentEntity

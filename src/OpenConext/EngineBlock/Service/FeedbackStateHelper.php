@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 class FeedbackStateHelper implements FeedbackStateHelperInterface
 {
-    private const EARLY_FEEDBACK_KEY = '_early';
+    private const string EARLY_FEEDBACK_KEY = '_early';
 
     public function __construct(
         private readonly RequestStack $requestStack,

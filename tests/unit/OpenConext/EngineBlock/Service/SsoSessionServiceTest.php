@@ -27,10 +27,10 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 class SsoSessionServiceTest extends TestCase
 {
-    private const SSO_SESSION_COOKIE_NAME = "sso_id";
-    private const SSO_SESSION_COOKIE_MAX_AGE = 0;
-    private const SSO_SESSION_COOKIE_DOMAIN = "test.domain";
-    private const SSO_SESSION_COOKIE_PATH = "/testpath";
+    private const string SSO_SESSION_COOKIE_NAME = "sso_id";
+    private const int SSO_SESSION_COOKIE_MAX_AGE = 0;
+    private const string SSO_SESSION_COOKIE_DOMAIN = "test.domain";
+    private const string SSO_SESSION_COOKIE_PATH = "/testpath";
 
     /**
      * @var SsoSessionService

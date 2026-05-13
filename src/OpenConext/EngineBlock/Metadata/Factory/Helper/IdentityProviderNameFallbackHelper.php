@@ -18,6 +18,7 @@
 namespace OpenConext\EngineBlock\Metadata\Factory\Helper;
 
 use OpenConext\EngineBlock\Metadata\Factory\Decorator\AbstractIdentityProvider;
+use Override;
 
 /**
  * Represents a a helper to facilitate name fallback rules.
@@ -33,6 +34,7 @@ class IdentityProviderNameFallbackHelper extends AbstractIdentityProvider
      * @param $locale string
      * @return string
      */
+    #[Override]
     public function getDisplayName($locale): string
     {
         if (empty($this->entity->getDisplayName($locale))) {

@@ -95,9 +95,8 @@ class EngineBlock_Corto_Model_Consent
      *
      * The caller must pass the ConsentVersion already retrieved by explicitConsentWasGivenFor or
      * implicitConsentWasGivenFor to avoid a second identical DB query.
-     *
-     * @deprecated Remove after stable consent hash is running in production
      */
+    /** @deprecated Remove after stable consent hash is running in production */
     public function upgradeAttributeHashFor(ServiceProvider $serviceProvider, ConsentType $consentType, ConsentVersion $consentVersion): void
     {
         if (!$this->_consentEnabled) {

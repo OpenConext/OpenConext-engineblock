@@ -57,7 +57,7 @@ class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter
         $logAttributes = [];
         if (!empty($this->configuredLogAttributes)) {
             foreach ($this->configuredLogAttributes as $attributeLabel => $responseAttributeKey) {
-                if (array_key_exists($responseAttributeKey, $this->_responseAttributes)) {
+                if (array_key_exists((string) $responseAttributeKey, $this->_responseAttributes)) {
                     $attributeValues = implode(',', $this->_responseAttributes[$responseAttributeKey]);
                     $logAttributes[$attributeLabel] = $attributeValues;
                 }

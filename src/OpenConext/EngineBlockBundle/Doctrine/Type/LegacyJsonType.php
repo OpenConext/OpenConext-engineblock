@@ -23,12 +23,11 @@ use Doctrine\DBAL\Types\Exception\SerializationFailed;
 use Doctrine\DBAL\Types\Exception\ValueNotConvertible;
 use Doctrine\DBAL\Types\Type;
 use JsonException;
-
+use Override;
 use function is_resource;
 use function json_decode;
 use function json_encode;
 use function stream_get_contents;
-
 use const JSON_PRESERVE_ZERO_FRACTION;
 use const JSON_THROW_ON_ERROR;
 
@@ -53,6 +52,7 @@ class LegacyJsonType extends Type
         );
     }
 
+    #[Override]
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
     {
         if ($value === null) {
@@ -66,6 +66,7 @@ class LegacyJsonType extends Type
         }
     }
 
+    #[Override]
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): mixed
     {
         if ($value === null || $value === '') {

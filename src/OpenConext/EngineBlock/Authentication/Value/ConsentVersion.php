@@ -18,6 +18,8 @@
 
 namespace OpenConext\EngineBlock\Authentication\Value;
 
+use Deprecated;
+
 enum ConsentVersion: string
 {
     case Stable   = 'stable';
