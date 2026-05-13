@@ -25,30 +25,27 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * The AcsRequestValidator verifies valid saml binding
  *
- * Valid requests method / binding combinations for SSO are:
+ * Valid requests method / binding combinations for ACS are:
  *
  *  | Request method | Parameter name  |
  *  | -------------- | --------------- |
- *  | GET            | SAMLResponse    |
  *  | POST           | SAMLResponse    |
  */
 class AcsRequestValidator implements RequestValidator
 {
-    private $supportedRequestMethods = [Request::METHOD_GET, Request::METHOD_POST];
+    private $supportedRequestMethods = [Request::METHOD_POST];
 
     public function isValid(Request $request)
     {
         $requestMethod = $request->getMethod();
-        // Defense in depth; anything other than POST and GET are probably already rejected at routing time.
+        // Defense in depth; anything other than POST is already rejected at routing time.
         if (!in_array($requestMethod, $this->supportedRequestMethods)) {
-            // Only Redirect binding is supported for Single Sign On
             throw new InvalidRequestMethodException(
                 sprintf('The HTTP request method "%s" is not supported on this SAML ACS endpoint', $requestMethod)
             );
         }
 
-        if (($requestMethod ===  Request::METHOD_POST && !$request->request->has('SAMLResponse')) ||
-            ($requestMethod ===  Request::METHOD_GET && !$request->query->has('SAMLResponse'))) {
+        if ($requestMethod === Request::METHOD_POST && !$request->request->has('SAMLResponse')) {
             throw new MissingParameterException(
                 sprintf('The parameter "SAMLResponse" is missing on the SAML ACS request')
             );
