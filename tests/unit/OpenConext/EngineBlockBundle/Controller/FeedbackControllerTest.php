@@ -21,10 +21,10 @@ namespace OpenConext\EngineBlockBundle\Tests;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Request\CurrentCorrelationId;
+use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use OpenConext\EngineBlockBundle\Controller\FeedbackController;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -41,14 +41,14 @@ class FeedbackControllerTest extends TestCase
         $currentCorrelationId = new CurrentCorrelationId();
         $currentCorrelationId->correlationId = 'test-correlation-id-abc123';
 
-        $controller = $this->buildController($currentCorrelationId);
-        $request = $this->buildRequestWithSession();
+        $feedbackStateHelper = Mockery::mock(FeedbackStateHelperInterface::class);
+        $feedbackStateHelper->shouldReceive('mergeFeedbackInfo')
+            ->once()
+            ->with(Mockery::on(fn(array $info) => isset($info['correlationId']) && $info['correlationId'] === 'test-correlation-id-abc123'));
 
-        $controller->unknownServiceProviderAction($request);
+        $controller = $this->buildController($currentCorrelationId, $feedbackStateHelper);
 
-        $feedbackInfo = $request->getSession()->get('feedbackInfo');
-        $this->assertArrayHasKey('correlationId', $feedbackInfo);
-        $this->assertSame('test-correlation-id-abc123', $feedbackInfo['correlationId']);
+        $controller->unknownServiceProviderAction($this->buildRequestWithSession());
     }
 
     #[Test]
@@ -57,23 +57,23 @@ class FeedbackControllerTest extends TestCase
         $currentCorrelationId = new CurrentCorrelationId();
         $currentCorrelationId->correlationId = null;
 
-        $controller = $this->buildController($currentCorrelationId);
-        $request = $this->buildRequestWithSession();
+        $feedbackStateHelper = Mockery::mock(FeedbackStateHelperInterface::class);
+        $feedbackStateHelper->shouldReceive('mergeFeedbackInfo')
+            ->once()
+            ->with(Mockery::on(fn(array $info) => !array_key_exists('correlationId', $info)));
 
-        $controller->unknownServiceProviderAction($request);
+        $controller = $this->buildController($currentCorrelationId, $feedbackStateHelper);
 
-        $feedbackInfo = $request->getSession()->get('feedbackInfo');
-        $this->assertArrayNotHasKey('correlationId', $feedbackInfo);
+        $controller->unknownServiceProviderAction($this->buildRequestWithSession());
     }
 
-    private function buildController(CurrentCorrelationId $currentCorrelationId): FeedbackController
+    private function buildController(CurrentCorrelationId $currentCorrelationId, FeedbackStateHelperInterface $feedbackStateHelper): FeedbackController
     {
         $translator = Mockery::mock(TranslatorInterface::class);
         $twig = Mockery::mock(Environment::class);
         $twig->allows('render')->andReturn('<html></html>');
-        $logger = Mockery::mock(LoggerInterface::class);
 
-        return new FeedbackController($translator, $twig, $logger, $currentCorrelationId);
+        return new FeedbackController($translator, $twig, $feedbackStateHelper, $currentCorrelationId);
     }
 
     private function buildRequestWithSession(): Request
