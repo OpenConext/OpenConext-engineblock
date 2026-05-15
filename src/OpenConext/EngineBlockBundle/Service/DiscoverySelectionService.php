@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class DiscoverySelectionService
 {
     private const string PREVIOUSLY_SELECTED_DISCOVERY_SESSION_NAME = 'discovery';
-    public const USED_DISCOVERY_HASH_PARAM = 'discovery';
+    public const string USED_DISCOVERY_HASH_PARAM = 'discovery';
 
     public function discoveryMatchesHash(Discovery $discovery, string $hash): bool
     {

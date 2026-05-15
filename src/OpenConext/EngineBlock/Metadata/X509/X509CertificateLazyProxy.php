@@ -71,4 +71,10 @@ class X509CertificateLazyProxy
     {
         return array('certData' => $this->certData, 'factory' => $this->factory);
     }
+
+    public function __unserialize(array $data): void
+    {
+        $this->certData = $data['certData'];
+        $this->factory  = $data['factory'];
+    }
 }

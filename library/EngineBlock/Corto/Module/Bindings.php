@@ -896,8 +896,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     private function hasEncryptedAssertion(Response $sspResponse)
     {
-        $hasEncryptedAssertion = array_any($sspResponse->getAssertions(), fn($assertion) => $assertion instanceof EncryptedAssertion);
-        return $hasEncryptedAssertion;
+        return array_any($sspResponse->getAssertions(), fn($assertion) => $assertion instanceof EncryptedAssertion);
     }
 
     /**
