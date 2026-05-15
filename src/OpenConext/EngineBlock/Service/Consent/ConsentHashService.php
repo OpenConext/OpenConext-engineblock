@@ -18,7 +18,6 @@
 
 namespace OpenConext\EngineBlock\Service\Consent;
 
-use Deprecated;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use OpenConext\EngineBlock\Authentication\Value\ConsentHashQuery;
 use OpenConext\EngineBlock\Authentication\Value\ConsentStoreParameters;
@@ -67,7 +66,13 @@ final class ConsentHashService implements ConsentHashServiceInterface
         return sha1($attributes->getCompareValue());
     }
 
-    /** @deprecated Remove after stable consent hash is running in production */
+    /**
+     * @deprecated Remove after stable consent hash is running in production
+     *
+     * The old way of calculating the attribute hash, this is not stable as a change of the attribute order,
+     * change of case, stray/empty attributes, and renumbered indexes can cause the hash to change. Leaving the
+     * user to give consent once again for a service she previously gave consent for.
+     */
     public function getUnstableAttributesHash(array $attributes, bool $mustStoreValues): string
     {
         if ($mustStoreValues) {

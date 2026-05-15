@@ -192,7 +192,9 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
         return $this->container->get('doctrine.orm.engineblock_entity_manager');
     }
 
-    /** @deprecated will be replaced with different (incompatible) system in the future */
+    /**
+     * @deprecated will be replaced with different (incompatible) system in the future
+     */
     private function registerDenormalizedAttributeDefinitions()
     {
         $this[self::ATTRIBUTE_DEFINITIONS_DENORMALIZED] = function() {
@@ -205,13 +207,17 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
         };
     }
 
-    /** @deprecated will be replaced with different (incompatible) system in the future */
+    /**
+     * @deprecated will be replaced with different (incompatible) system in the future
+     */
     public function getDenormalizedAttributeDefinitions()
     {
         return $this[self::ATTRIBUTE_DEFINITIONS_DENORMALIZED];
     }
 
-    /** @deprecated will be replaced with different (incompatible) system in the future */
+    /**
+     * @deprecated will be replaced with different (incompatible) system in the future
+     */
     private function registerAttributeMetadata()
     {
         $this[self::ATTRIBUTE_METADATA] = function(EngineBlock_Application_DiContainer $container) {
@@ -223,15 +229,17 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
     }
 
     /**
-     * @return EngineBlock_Attributes_Metadata
      * @deprecated will be replaced with different (incompatible) system in the future
+     * @return EngineBlock_Attributes_Metadata
      */
     public function getAttributeMetadata()
     {
         return $this[self::ATTRIBUTE_METADATA];
     }
 
-    /** @deprecated will be replaced with different (incompatible) system in the future */
+    /**
+     * @deprecated will be replaced with different (incompatible) system in the future
+     */
     public function registerAttributeValidator()
     {
         $this[self::ATTRIBUTE_VALIDATOR] = function(EngineBlock_Application_DiContainer $container) {
@@ -243,8 +251,8 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
     }
 
     /**
-     * @return EngineBlock_Attributes_Validator
      * @deprecated will be replaced with different (incompatible) system in the future
+     * @return EngineBlock_Attributes_Validator
      */
     public function getAttributeValidator()
     {
