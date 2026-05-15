@@ -82,7 +82,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     /**
      * @var EngineBlock_Corto_ProxyServer
      */
-    #[\Override]
+    #[Override]
     protected $_server;
 
     /**

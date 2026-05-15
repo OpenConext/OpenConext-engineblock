@@ -34,7 +34,7 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     /**
      * @var Response
      */
-    #[\Override]
+    #[Override]
     protected $sspMessage;
 
     /**

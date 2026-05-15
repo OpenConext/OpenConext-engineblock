@@ -31,7 +31,7 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     /**
      * @var AuthnRequest
      */
-    #[\Override]
+    #[Override]
     protected $sspMessage;
 
     /**

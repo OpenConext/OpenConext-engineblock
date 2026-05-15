@@ -25,31 +25,31 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Application_DiContainer
 {
-    #[\Override]
+    #[Override]
     public function getUserDirectory()
     {
         return new FakeUserDirectory(new Filesystem());
     }
 
-    #[\Override]
+    #[Override]
     public function getFeatureConfiguration()
     {
         return $this->getSymfonyContainer()->get('engineblock.functional_testing.fixture.features');
     }
 
-    #[\Override]
+    #[Override]
     public function getAuthenticationLoopGuard()
     {
         return $this->getSymfonyContainer()->get('engineblock.functional_testing.fixture.authentication_loop_guard');
     }
 
-    #[\Override]
+    #[Override]
     public function getPdpClient()
     {
         return $this->getFunctionalTestingPdpClient();
     }
 
-    #[\Override]
+    #[Override]
     public function getPdpClientId()
     {
         return 'Federation';
@@ -58,13 +58,13 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
     /**
      * @return \OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClientInterface
      */
-    #[\Override]
+    #[Override]
     public function getAttributeAggregationClient()
     {
         return $this->getSymfonyContainer()->get('engineblock.functional_testing.fixture.attribute_aggregation_client');
     }
 
-    #[\Override]
+    #[Override]
     public function getAuthnContextClassRefBlacklistRegex()
     {
         return '/invalid-authn-context-class-ref/';
@@ -78,7 +78,7 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
      *
      * @return array
      */
-    #[\Override]
+    #[Override]
     public function getEncryptionKeysConfiguration()
     {
         $basePath = $this->container->getParameter('kernel.project_dir');
