@@ -207,7 +207,15 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
             $this->_serializableRelayState = $this->sspMessage->getRelayState();
         }
 
-        return ['keyId' => $this->keyId, 'wasSigned' => $this->wasSigned, 'debug' => $this->debug, 'unsolicited' => $this->unsolicited, 'transparent' => $this->transparent, '_serializableSspMessageXml' => $this->_serializableSspMessageXml, '_serializableRelayState' => $this->_serializableRelayState];
+        return [
+            'keyId' => $this->keyId,
+            'wasSigned' => $this->wasSigned,
+            'debug' => $this->debug,
+            'unsolicited' => $this->unsolicited,
+            'transparent' => $this->transparent,
+            '_serializableSspMessageXml' => $this->_serializableSspMessageXml,
+            '_serializableRelayState' => $this->_serializableRelayState,
+        ];
     }
 
     public function __unserialize(array $data): void
