@@ -1,7 +1,7 @@
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 
-const theme = process.env.EB_THEME || 'openconext';
+const theme = process.env.EB_THEME || 'skeune';
 
 module.exports = (env, argv) => {
   const isProd = argv.mode === 'production';

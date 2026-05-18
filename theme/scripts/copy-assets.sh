@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-THEME=${EB_THEME:-openconext}
+THEME=${EB_THEME:-skeune}
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$SCRIPT_DIR/.."
 

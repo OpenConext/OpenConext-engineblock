@@ -64,7 +64,6 @@ For instructions on how to use it: see the file itself.
             - index.html.twig: modules > Authentication > View > Index
             - error.html.twig: modules > Default > View > Error
         - translations: translations specific to the theme.
-    - openconext: the theme formerly known as material.  This used to be the official theme.
     - scripts: node.js scripts to make our life easier.  These are called via the yarn commands.
     - skeune: the skeune theme
 
@@ -74,12 +73,6 @@ You can switch a theme by simply changing the `theme.name` parameter in `paramet
 
 ```yaml
     theme.name: 'skeune'
-```
-
-if however you prefer to use the openconext theme, it'd read like this:
-
-```yaml
-    theme.name: 'openconext'
 ```
 
 **Switching themes on CI**
