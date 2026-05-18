@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Controller;
 
+use OpenConext\EngineBlock\Request\CurrentCorrelationId;
 use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,14 +40,18 @@ class FeedbackController
 
     private FeedbackStateHelperInterface $feedbackStateHelper;
 
+    private CurrentCorrelationId $currentCorrelationId;
+
     public function __construct(
         TranslatorInterface $translator,
         Environment $twig,
-        FeedbackStateHelperInterface $feedbackStateHelper
+        FeedbackStateHelperInterface $feedbackStateHelper,
+        CurrentCorrelationId $currentCorrelationId
     ) {
         $this->translator = $translator;
         $this->twig = $twig;
         $this->feedbackStateHelper = $feedbackStateHelper;
+        $this->currentCorrelationId = $currentCorrelationId;
     }
 
     #[Route(
@@ -518,6 +523,9 @@ class FeedbackController
 
     private function setFeedbackInformationOnSession(array $customFeedbackInfo): void
     {
+        if ($this->currentCorrelationId->correlationId !== null) {
+            $customFeedbackInfo['correlationId'] = $this->currentCorrelationId->correlationId;
+        }
         $this->feedbackStateHelper->mergeFeedbackInfo($customFeedbackInfo);
     }
 }

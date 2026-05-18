@@ -18,6 +18,8 @@
 
 namespace OpenConext\EngineBlockBundle\Bridge;
 
+use OpenConext\EngineBlock\Request\CorrelationIdServiceInterface;
+use OpenConext\EngineBlock\Request\CurrentCorrelationId;
 use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
 use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use OpenConext\EngineBlockBundle\Service\WayfRenderer;
@@ -35,6 +37,8 @@ final readonly class DiContainerRuntime
     public function __construct(
         public Environment $twig,
         public WayfRenderer $wayfRenderer,
+        public CorrelationIdServiceInterface $correlationIdService,
+        public CurrentCorrelationId $currentCorrelationId,
         public FeedbackStateHelperInterface $feedbackStateHelper,
         public FeedbackInfoCollectorInterface $feedbackInfoCollector,
         private array $preferredIdpEntityIds = [],

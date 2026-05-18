@@ -87,7 +87,8 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer->getAuthenticationStateHelper(),
                     $diContainerRuntime->twig,
                     $diContainer->getProcessingStateHelper(),
-                    $diContainer->getDiscoverySelectionService()
+                    $diContainer->getDiscoverySelectionService(),
+                    $diContainerRuntime->correlationIdService,
                 );
             case EngineBlock_Corto_Module_Service_ProcessConsent::class :
                 return new EngineBlock_Corto_Module_Service_ProcessConsent(
@@ -95,7 +96,8 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer->getXmlConverter(),
                     $diContainer->getConsentFactory(),
                     $diContainer->getAuthenticationStateHelper(),
-                    $diContainer->getProcessingStateHelper()
+                    $diContainer->getProcessingStateHelper(),
+                    $diContainerRuntime->correlationIdService,
                 );
             case EngineBlock_Corto_Module_Service_SramInterrupt::class :
                 return new EngineBlock_Corto_Module_Service_SramInterrupt(
@@ -111,6 +113,7 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer->getProcessingStateHelper(),
                     $diContainer->getStepupGatewayCallOutHelper(),
                     $diContainer->getServiceProviderFactory(),
+                    $diContainerRuntime->correlationIdService,
                     $diContainerRuntime->feedbackStateHelper
                 );
             case EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer::class :

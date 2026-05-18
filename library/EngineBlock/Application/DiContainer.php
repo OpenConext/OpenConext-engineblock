@@ -613,4 +613,9 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
     {
         return new EngineBlock_Arp_NameIdSubstituteResolver($this->container->get('engineblock.compat.logger'));
     }
+
+    public function getAuthnRequestSessionRepository(): EngineBlock_Saml2_AuthnRequestSessionRepository
+    {
+        return $this->container->get(EngineBlock_Saml2_AuthnRequestSessionRepository::class);
+    }
 }

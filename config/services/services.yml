@@ -68,6 +68,20 @@ services:
             - '@OpenConext\EngineBlock\Request\UniqidGenerator'
         public: true
 
+    OpenConext\EngineBlock\Request\CurrentCorrelationId:
+        public: true
+
+    OpenConext\EngineBlock\Request\CorrelationIdRepository:
+        public: true
+        arguments:
+            - '@request_stack'
+
+    OpenConext\EngineBlock\Request\CorrelationIdService:
+        public: true
+        arguments:
+            - '@OpenConext\EngineBlock\Request\CorrelationIdRepository'
+            - '@OpenConext\EngineBlock\Request\CurrentCorrelationId'
+
     OpenConext\EngineBlockBundle\Security\Http\EntryPoint\JsonBasicAuthenticationEntryPoint:
         arguments:
             - 'engine-api.%domain%'

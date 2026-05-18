@@ -154,3 +154,4 @@ services:
         arguments:
             - "@request_stack"
             - "%global.site_notice.allowed.tags%"
+

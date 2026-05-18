@@ -23,6 +23,7 @@ use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
+use OpenConext\EngineBlock\Request\CorrelationIdServiceInterface;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\Consent\ConsentServiceInterface;
 use OpenConext\EngineBlock\Service\Dto\ProcessingStateStep;
@@ -92,6 +93,9 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
      */
     private $discoverySelectionService;
 
+    /** @var CorrelationIdServiceInterface */
+    private $correlationIdServiceMock;
+
     public function setUp(): void
     {
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
@@ -107,6 +111,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
         $this->processingStateHelperMock = $this->mockProcessingStateHelper();
         $this->httpRequestMock = $this->mockHttpRequest();
         $this->discoverySelectionService = Phake::mock(DiscoverySelectionService::class);
+        $this->correlationIdServiceMock = Phake::mock(CorrelationIdServiceInterface::class);
     }
 
     public function testConsentRequested()
@@ -187,6 +192,19 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
         $bindingsModuleMock = $this->mockBindingsModule();
         $proxyServerMock->setBindingsModule($bindingsModuleMock);
 
+        // Stub getReceivedRequestFromResponse so tests do not depend on DI-wired
+        // AuthnRequestSessionRepository being populated during the test.
+        $spRequest = new AuthnRequest();
+        $spRequest->setId('SPREQUEST');
+        $issuer = new Issuer();
+        $issuer->setValue('testSp');
+        $spRequest->setIssuer($issuer);
+        $decoratedSpRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($spRequest);
+
+        Phake::when($proxyServerMock)
+            ->getReceivedRequestFromResponse(Phake::anyParameters())
+            ->thenReturn($decoratedSpRequest);
+
         Phake::when($proxyServerMock)
             ->renderTemplate(Phake::anyParameters())
             ->thenReturn(null);
@@ -214,8 +232,10 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
         $ebRequest->setId('EBREQUEST');
         $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($ebRequest);
 
-        $dummyLog = new Psr\Log\NullLogger();
-        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($dummyLog);
+        $authnRequest = new \Symfony\Component\HttpFoundation\Request();
+        $authnRequest->setSession(new Session(new MockArraySessionStorage()));
+        $testStack = new RequestStack([$authnRequest]);
+        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($testStack);
         $authnRequestRepository->store($spRequest);
         $authnRequestRepository->store($ebRequest);
         $authnRequestRepository->link($ebRequest, $spRequest);
@@ -341,7 +361,8 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends TestCase
             $this->authStateHelperMock,
             $this->twig,
             $this->processingStateHelperMock,
-            $this->discoverySelectionService
+            $this->discoverySelectionService,
+            $this->correlationIdServiceMock
         );
     }
 

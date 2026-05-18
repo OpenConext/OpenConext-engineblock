@@ -49,6 +49,7 @@ return $overrides + [
 
         // Feedback
     'requestId'             => 'UR ID',
+    'correlationId'         => 'CID',
     'identityProvider'      => 'IdP',
     'serviceProvider'       => 'SP',
     'serviceProviderName'   => 'SP Name',

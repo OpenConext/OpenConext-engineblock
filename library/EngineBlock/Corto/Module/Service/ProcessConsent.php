@@ -17,6 +17,7 @@
  */
 
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
+use OpenConext\EngineBlock\Request\CorrelationIdServiceInterface;
 use OpenConext\EngineBlock\Service\AuthenticationStateHelperInterface;
 use OpenConext\EngineBlock\Service\ProcessingStateHelperInterface;
 use SAML2\Constants;
@@ -52,18 +53,25 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
     private $_processingStateHelper;
 
     /**
+     * @var CorrelationIdServiceInterface
+     */
+    private $_correlationIdService;
+
+    /**
      * @param EngineBlock_Corto_ProxyServer $server
      * @param EngineBlock_Corto_XmlToArray $xmlConverter
      * @param EngineBlock_Corto_Model_Consent_Factory $consentFactory
      * @param AuthenticationStateHelperInterface $stateHelper
      * @param ProcessingStateHelperInterface $processingStateHelper
+     * @param CorrelationIdServiceInterface $correlationIdService
      */
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
         EngineBlock_Corto_Model_Consent_Factory $consentFactory,
         AuthenticationStateHelperInterface $stateHelper,
-        ProcessingStateHelperInterface $processingStateHelper
+        ProcessingStateHelperInterface $processingStateHelper,
+        CorrelationIdServiceInterface $correlationIdService
     )
     {
         $this->_server = $server;
@@ -71,6 +79,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         $this->_consentFactory = $consentFactory;
         $this->_authenticationStateHelper = $stateHelper;
         $this->_processingStateHelper = $processingStateHelper;
+        $this->_correlationIdService = $correlationIdService;
     }
 
     /**
@@ -85,6 +94,9 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         $response = $processStep->getResponse();
 
         $request = $this->_server->getReceivedRequestFromResponse($response);
+
+        $this->_correlationIdService->resolve($request->getId());
+
         $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer()->getValue());
 
         $destinationMetadata = EngineBlock_SamlHelper::getDestinationSpMetadata(

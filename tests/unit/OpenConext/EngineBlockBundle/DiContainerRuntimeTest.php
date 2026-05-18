@@ -18,6 +18,8 @@
 
 namespace Tests\OpenConext\EngineBlockBundle;
 
+use OpenConext\EngineBlock\Request\CorrelationIdServiceInterface;
+use OpenConext\EngineBlock\Request\CurrentCorrelationId;
 use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
 use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use OpenConext\EngineBlockBundle\Bridge\DiContainerRuntime;
@@ -29,12 +31,7 @@ class DiContainerRuntimeTest extends TestCase
 {
     public function testGetPreferredIdpEntityIdsReturnsEmptyArrayByDefault(): void
     {
-        $runtime = new DiContainerRuntime(
-            $this->createStub(Environment::class),
-            $this->createStub(WayfRenderer::class),
-            $this->createStub(FeedbackStateHelperInterface::class),
-            $this->createStub(FeedbackInfoCollectorInterface::class),
-        );
+        $runtime = $this->runtimeFactory([]);
 
         $this->assertSame([], $runtime->getPreferredIdpEntityIds());
     }
@@ -43,14 +40,24 @@ class DiContainerRuntimeTest extends TestCase
     {
         $entityIds = ['https://idp1.example.org', 'https://idp2.example.org'];
 
-        $runtime = new DiContainerRuntime(
+        $runtime = $this->runtimeFactory($entityIds);
+
+        $this->assertSame($entityIds, $runtime->getPreferredIdpEntityIds());
+    }
+
+    /**
+     * @param array<string> $entityIds
+     */
+    private function runtimeFactory(array $entityIds): DiContainerRuntime
+    {
+        return new DiContainerRuntime(
             $this->createStub(Environment::class),
             $this->createStub(WayfRenderer::class),
+            $this->createStub(CorrelationIdServiceInterface::class),
+            new CurrentCorrelationId(),
             $this->createStub(FeedbackStateHelperInterface::class),
             $this->createStub(FeedbackInfoCollectorInterface::class),
             $entityIds,
         );
-
-        $this->assertSame($entityIds, $runtime->getPreferredIdpEntityIds());
     }
 }
