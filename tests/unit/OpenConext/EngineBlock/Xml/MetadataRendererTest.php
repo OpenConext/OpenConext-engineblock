@@ -18,7 +18,7 @@
 namespace OpenConext\EngineBlock\Xml;
 
 use DOMDocument;
-use EngineBlock_Saml2_IdGenerator;
+use OpenConext\EngineBlock\Saml2\IdGenerator as SamlIdGenerator;
 use Exception;
 use InvalidArgumentException;
 use Mockery as m;
@@ -344,7 +344,7 @@ class MetadataRendererTest extends TestCase
         $publicKey = new X509Certificate(openssl_x509_read(file_get_contents($basePath . '/tests/resources/key/engineblock.crt')));
         $keyPair = new X509KeyPair($publicKey, $privateKey);
 
-        $samlIdGenerator = $this->createMock(EngineBlock_Saml2_IdGenerator::class);
+        $samlIdGenerator = $this->createMock(SamlIdGenerator::class);
         $samlIdGenerator->method('generate')
             ->willReturn('EB_metadata');
 

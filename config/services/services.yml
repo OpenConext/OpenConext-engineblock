@@ -199,11 +199,17 @@ services:
             - '@OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration'
             - '@OpenConext\EngineBlockBundle\Url\UrlProvider'
 
+    OpenConext\EngineBlock\Saml2\DefaultIdGenerator: ~
+
+    OpenConext\EngineBlock\Saml2\IdGenerator:
+        alias: OpenConext\EngineBlock\Saml2\DefaultIdGenerator
+        public: true
+
     OpenConext\EngineBlock\Xml\MetadataRenderer:
         arguments:
             - '@OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider'
             - '@twig'
-            - '@engineblock.compat.saml2_id_generator'
+            - '@OpenConext\EngineBlock\Saml2\IdGenerator'
             - '@OpenConext\EngineBlock\Metadata\X509\KeyPairFactory'
             - '@OpenConext\EngineBlock\Xml\DocumentSigner'
             - '@OpenConext\EngineBlock\Service\TimeProvider\TimeProvider'

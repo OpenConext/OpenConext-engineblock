@@ -177,7 +177,7 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
     }
 
     /**
-     * @return EngineBlock_Saml2_IdGenerator
+     * @return \OpenConext\EngineBlock\Saml2\IdGenerator
      */
     public function getSaml2IdGenerator()
     {

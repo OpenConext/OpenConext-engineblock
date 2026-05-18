@@ -47,7 +47,7 @@ class EngineBlock_Saml2_AuthnRequestFactory
         /** @var AuthnRequest $originalRequest */
 
         $sspRequest = new AuthnRequest();
-        $sspRequest->setId($server->getNewId(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_REQUEST));
+        $sspRequest->setId($server->getNewId(\OpenConext\EngineBlock\Saml2\IdGenerator::ID_USAGE_SAML2_REQUEST));
         $sspRequest->setIssueInstant(time());
         $sspRequest->setDestination(isset($idpMetadata->singleSignOnServices[0]) ? $idpMetadata->singleSignOnServices[0]->location : null);
         $sspRequest->setForceAuthn($originalRequest->getForceAuthn());

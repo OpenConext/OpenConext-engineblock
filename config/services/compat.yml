@@ -54,7 +54,7 @@ services:
 
     engineblock.compat.saml2_id_generator:
         public: true
-        class: EngineBlock_Saml2_IdGenerator_Default
+        alias: OpenConext\EngineBlock\Saml2\IdGenerator
 
     engineblock.compat.attribute_release_policy_enforcer:
         public: false

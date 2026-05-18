@@ -811,7 +811,7 @@ class EngineBlock_Corto_ProxyServer
         // Create a new assertion by us.
         $newAssertion = new Assertion();
         $newResponse->setAssertions(array($newAssertion));
-        $newAssertion->setId($this->getNewId(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_ASSERTION));
+        $newAssertion->setId($this->getNewId(\OpenConext\EngineBlock\Saml2\IdGenerator::ID_USAGE_SAML2_ASSERTION));
         $newAssertion->setIssueInstant(time());
         $newAssertion->setIssuer($newResponse->getIssuer());
 
@@ -903,7 +903,7 @@ class EngineBlock_Corto_ProxyServer
         $response = new Response();
         /** @var AuthnRequest $request */
         $response->setRelayState($request->getRelayState());
-        $response->setId($this->getNewId(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_RESPONSE));
+        $response->setId($this->getNewId(\OpenConext\EngineBlock\Saml2\IdGenerator::ID_USAGE_SAML2_RESPONSE));
         $response->setIssueInstant(time());
         if (!$requestWasUnsolicited) {
             $response->setInResponseTo($request->getId());
@@ -1411,7 +1411,7 @@ class EngineBlock_Corto_ProxyServer
         return $provider->timestamp($deltaSeconds);
     }
 
-    public function getNewId($usage = EngineBlock_Saml2_IdGenerator::ID_USAGE_OTHER)
+    public function getNewId($usage = \OpenConext\EngineBlock\Saml2\IdGenerator::ID_USAGE_OTHER)
     {
         $generator = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSaml2IdGenerator();
         return $generator->generate(self::ID_PREFIX, $usage);

@@ -1,7 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
- * Copyright 2010 SURFnet B.V.
+ * Copyright 2026 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,15 @@
  * limitations under the License.
  */
 
-interface EngineBlock_Saml2_IdGenerator
-{
-    const ID_USAGE_SAML2_METADATA  = 'saml2-metadata';
-    const ID_USAGE_OTHER           = 'other';
-    const ID_USAGE_SAML2_RESPONSE  = 'saml2-response';
-    const ID_USAGE_SAML2_REQUEST   = 'saml2-request';
-    const ID_USAGE_SAML2_ASSERTION = 'saml2-assertion';
+namespace OpenConext\EngineBlock\Saml2;
 
-    public function generate($prefix = 'EB', $usage = self::ID_USAGE_OTHER);
+use function bin2hex;
+use function random_bytes;
+
+final class DefaultIdGenerator implements IdGenerator
+{
+    public function generate(string $prefix = 'EB', string $usage = self::ID_USAGE_OTHER): string
+    {
+        return $prefix . bin2hex(random_bytes(20));
+    }
 }
