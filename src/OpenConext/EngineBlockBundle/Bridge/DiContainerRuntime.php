@@ -22,6 +22,7 @@ use OpenConext\EngineBlock\Request\CorrelationIdServiceInterface;
 use OpenConext\EngineBlock\Request\CurrentCorrelationId;
 use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
 use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
+use OpenConext\EngineBlockBridge\Logger\LoginLogger;
 use OpenConext\EngineBlockBundle\Service\WayfRenderer;
 use Twig\Environment;
 
@@ -41,6 +42,7 @@ final readonly class DiContainerRuntime
         public CurrentCorrelationId $currentCorrelationId,
         public FeedbackStateHelperInterface $feedbackStateHelper,
         public FeedbackInfoCollectorInterface $feedbackInfoCollector,
+        public LoginLogger $loginLogger,
         private array $preferredIdpEntityIds = [],
     ) {
     }

@@ -24,6 +24,7 @@ use OpenConext\EngineBlock\Request\CorrelationIdServiceInterface;
 use OpenConext\EngineBlock\Request\CurrentCorrelationId;
 use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
 use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
+use OpenConext\EngineBlockBridge\Logger\LoginLogger;
 use OpenConext\EngineBlockBundle\Bridge\DiContainerRuntime;
 use OpenConext\EngineBlockBundle\Service\WayfRenderer;
 use PHPUnit\Framework\TestCase;
@@ -71,6 +72,7 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
             new CurrentCorrelationId(),
             $this->createStub(FeedbackStateHelperInterface::class),
             $this->createStub(FeedbackInfoCollectorInterface::class),
+            $this->createStub(LoginLogger::class),
         ));
 
         $this->bindings = new EngineBlock_Corto_Module_Bindings($this->proxyServer);

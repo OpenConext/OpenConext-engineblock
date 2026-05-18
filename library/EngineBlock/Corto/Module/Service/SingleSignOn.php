@@ -378,7 +378,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             $request->setKeyId($keyid);
         }
         if ($destination) {
-            // Set for logging purposes (LogLogin Command) note that only the REQUEST_URI (no hostname + protocol)
+            // Set for logging purposes, note that only the REQUEST_URI (no hostname + protocol)
             $sspRequest->setDestination($destination);
         }
 

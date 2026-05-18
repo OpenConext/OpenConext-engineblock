@@ -18,10 +18,11 @@
 
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 
 /**
- * Commands are run before consent if the feature run_all_manipulations_prior_to_consent is turned on
- * and after consent if the feature is turned off
+ * Output filter commands run after consent (when called via filter()) or before
+ * consent (when the Input filter merges them via getCommands()).
  */
 class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
 {
@@ -33,20 +34,33 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
         ServiceProvider $serviceProvider,
         IdentityProvider $identityProvider
     ) {
-        $featureConfiguration = EngineBlock_ApplicationSingleton::getInstance()
-            ->getDiContainer()
-            ->getFeatureConfiguration();
-
-        if ($featureConfiguration->isEnabled('eb.run_all_manipulations_prior_to_consent')) {
-            return;
+        if (!$this->resolveFeatureConfiguration()->isEnabled('eb.run_all_manipulations_prior_to_consent')) {
+            parent::filter(
+                $response,
+                $responseAttributes,
+                $request,
+                $serviceProvider,
+                $identityProvider
+            );
         }
 
-        parent::filter(
+        $sessionKey = $serviceProvider->entityId . '>' . $request->getId();
+        $collabPersonId = $_SESSION[$sessionKey]['collabPersonId']
+            ?? $response->getCollabPersonId();
+
+        if (!$collabPersonId) {
+            throw new EngineBlock_Corto_Filter_Command_Exception_PreconditionFailed('Missing collabPersonId');
+        }
+
+        $diContainerRuntime = EngineBlock_ApplicationSingleton::getInstance()->getDiContainerRuntime();
+        $diContainerRuntime->loginLogger->logLogin(
             $response,
-            $responseAttributes,
             $request,
             $serviceProvider,
-            $identityProvider
+            $identityProvider,
+            $this->_server->getRepository(),
+            $collabPersonId,
+            $responseAttributes,
         );
     }
 
@@ -54,7 +68,7 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
      * These commands will be evaluated in order.
      *
      * A command can throw an exception and halt SSO,
-     * it can manipulate the response or it's attributes or it can communicate with external systems.
+     * it can manipulate the response or its attributes or it can communicate with external systems.
      * One thing it can't do is communicate with the user.
      *
      * @return array
@@ -88,9 +102,13 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
 
             // Convert all attributes to their OID format (if known) and add these.
             new EngineBlock_Corto_Filter_Command_DenormalizeAttributes(),
-
-            // Log the login
-            new EngineBlock_Corto_Filter_Command_LogLogin($diContainer->getAuthenticationLogger(), $diContainer->getAuthLogAttributes()),
         );
+    }
+
+    protected function resolveFeatureConfiguration(): FeatureConfigurationInterface
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getFeatureConfiguration();
     }
 }

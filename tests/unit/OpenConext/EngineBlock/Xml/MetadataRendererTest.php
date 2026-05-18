@@ -18,7 +18,6 @@
 namespace OpenConext\EngineBlock\Xml;
 
 use DOMDocument;
-use OpenConext\EngineBlock\Saml2\IdGenerator as SamlIdGenerator;
 use Exception;
 use InvalidArgumentException;
 use Mockery as m;
@@ -40,6 +39,7 @@ use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlock\Metadata\X509\X509PrivateKey;
+use OpenConext\EngineBlock\Saml2\IdGenerator as SamlIdGenerator;
 use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
 use OpenConext\EngineBlockBundle\Localization\LanguageSupportProvider;
 use OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Spaceless;

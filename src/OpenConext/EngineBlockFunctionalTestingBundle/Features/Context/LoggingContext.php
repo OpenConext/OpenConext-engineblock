@@ -133,8 +133,43 @@ class LoggingContext implements Context
     }
 
     /**
-     * Reads all records from the log file, decodes each JSON line, and returns only
-     * records not belonging to the event channel (Symfony kernel internals).
+     * @Then the login grant log should contain response attribute :label with value :value
+     */
+    public function theLoginGrantLogShouldContainResponseAttribute(string $label, string $value): void
+    {
+        $records = $this->readRecords();
+
+        $loginGranted = array_filter(
+            $records,
+            static fn(array $r) => ($r['message'] ?? '') === 'login granted',
+        );
+
+        if (empty($loginGranted)) {
+            throw new RuntimeException('No "login granted" log record found.');
+        }
+
+        $record = reset($loginGranted);
+        $responseAttributes = $record['context']['response_attributes'] ?? [];
+
+        if (!array_key_exists($label, $responseAttributes)) {
+            throw new RuntimeException(sprintf(
+                'Login grant log has no response_attribute "%s". Available: %s',
+                $label,
+                implode(', ', array_keys($responseAttributes)),
+            ));
+        }
+
+        if ($responseAttributes[$label] !== $value) {
+            throw new RuntimeException(sprintf(
+                'Login grant log response_attribute "%s" expected "%s" but got "%s".',
+                $label,
+                $value,
+                $responseAttributes[$label],
+            ));
+        }
+    }
+
+    /**
      *
      * @return array<int, array<string, mixed>>
      */
