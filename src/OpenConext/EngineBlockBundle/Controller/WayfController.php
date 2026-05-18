@@ -129,7 +129,7 @@ class WayfController
             $all = false;
             if (array_key_exists('remove_all', $postData)) {
                 foreach ($cookies as $cookie) {
-                    if (array_key_exists($cookie, $cookiesSet)) {
+                    if (array_key_exists((string) $cookie, $cookiesSet)) {
                         unset($cookiesSet[$cookie]);
                         $response->headers->clearCookie($cookie);
                     }

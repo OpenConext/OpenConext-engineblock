@@ -70,13 +70,7 @@ final class FunctionalTestingAttributeAggregationClient implements AttributeAggr
      */
     private function hasRuleForAttribute(array $rules, $name, $source)
     {
-        foreach ($rules as $rule) {
-            if ($this->ruleMatchesAttribute($rule, $name, $source)) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($rules, fn($rule) => $this->ruleMatchesAttribute($rule, $name, $source));
     }
 
     /**

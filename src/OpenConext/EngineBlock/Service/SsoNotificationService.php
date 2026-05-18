@@ -26,11 +26,11 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 class SsoNotificationService
 {
-    private const SSO_NOT_COOKIE_NAME = "ssonot";
-    private const FIELD_ENTITY_ID = "entityId";
-    private const IV_SIZE = 16;
-    private const KEY_SIZE = 256;
-    private const ITERATION_COUNT = 1000;
+    private const string SSO_NOT_COOKIE_NAME = "ssonot";
+    private const string FIELD_ENTITY_ID = "entityId";
+    private const int IV_SIZE = 16;
+    private const int KEY_SIZE = 256;
+    private const int ITERATION_COUNT = 1000;
 
     /**
      * @var string

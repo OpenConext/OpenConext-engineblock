@@ -27,8 +27,8 @@ use function array_key_exists;
  */
 class LoaRepository
 {
-    private const EB = 'eb';
-    private const GW = 'gw';
+    private const string EB = 'eb';
+    private const string GW = 'gw';
     /**
      * @var array
      */
@@ -66,12 +66,12 @@ class LoaRepository
      */
     public function getByIdentifier($identifier)
     {
-        if (!array_key_exists($identifier, $this->store[self::EB]) &&
-            !array_key_exists($identifier, $this->store[self::GW])
+        if (!array_key_exists((string) $identifier, $this->store[self::EB]) &&
+            !array_key_exists((string) $identifier, $this->store[self::GW])
         ) {
             throw new LoaNotFoundException(sprintf('Unable to find LoA with identifier "%s"', $identifier));
         }
-        if (array_key_exists($identifier, $this->store[self::EB])) {
+        if (array_key_exists((string) $identifier, $this->store[self::EB])) {
             return $this->store[self::EB][$identifier];
         }
         return $this->store[self::GW][$identifier];

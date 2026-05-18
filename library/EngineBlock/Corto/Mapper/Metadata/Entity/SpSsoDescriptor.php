@@ -24,6 +24,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor extends EngineBlo
     /**
      * @var AbstractRole
      */
+    #[Override]
     protected $_entity;
 
     public function __construct(AbstractRole $entity)

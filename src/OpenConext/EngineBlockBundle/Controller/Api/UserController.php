@@ -151,7 +151,7 @@ final class UserController
         }
 
         foreach ($requiredFields as $field) {
-            if (!array_key_exists($field, $entry)) {
+            if (!array_key_exists((string) $field, $entry)) {
                 throw new BadApiRequestHttpException(
                     sprintf('Missing required field "%s" in request entry', $field)
                 );

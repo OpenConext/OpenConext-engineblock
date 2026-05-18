@@ -19,11 +19,13 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Validator;
 
 use OpenConext\EngineBlock\Validator\SsoRequestValidator as BaseSsoRequestValidator;
+use Override;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 
 class SsoRequestValidator extends BaseSsoRequestValidator
 {
+    #[Override]
     public function isValid(Request $request)
     {
         // This service is overloaded in order to allow us to throw a custom exception from behat

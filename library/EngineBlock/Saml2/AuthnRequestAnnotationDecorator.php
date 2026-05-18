@@ -31,6 +31,7 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     /**
      * @var AuthnRequest
      */
+    #[Override]
     protected $sspMessage;
 
     /**
@@ -199,30 +200,45 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     /**
      * @return array
      */
-    public function __sleep()
+    public function __serialize(): array
     {
         if ($this->sspMessage instanceof AuthnRequest) {
             $this->_serializableSspMessageXml = $this->sspMessage->toUnsignedXML()->ownerDocument->saveXML();
             $this->_serializableRelayState = $this->sspMessage->getRelayState();
         }
 
-        return ['keyId', 'wasSigned', 'debug', 'unsolicited', 'transparent', '_serializableSspMessageXml', '_serializableRelayState'];
+        return [
+            'keyId' => $this->keyId,
+            'wasSigned' => $this->wasSigned,
+            'debug' => $this->debug,
+            'unsolicited' => $this->unsolicited,
+            'transparent' => $this->transparent,
+            '_serializableSspMessageXml' => $this->_serializableSspMessageXml,
+            '_serializableRelayState' => $this->_serializableRelayState,
+        ];
     }
 
-    public function __wakeup()
+    public function __unserialize(array $data): void
     {
-        if (isset($this->_serializableSspMessageXml)) {
+        foreach ($data as $property => $value) {
+            if (property_exists($this, $property)) {
+                $this->{$property} = $value;
+            }
+        }
+
+        if ($this->_serializableSspMessageXml !== null) {
             $document = DOMDocumentFactory::fromString($this->_serializableSspMessageXml);
             $messageDomElement = $document->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:protocol', 'AuthnRequest')->item(0);
 
             if ($messageDomElement) {
                 $this->sspMessage = AuthnRequest::fromXML($messageDomElement);
-                if (isset($this->_serializableRelayState) && $this->_serializableRelayState !== null) {
+                if ($this->_serializableRelayState !== null) {
                     $this->sspMessage->setRelayState($this->_serializableRelayState);
                 }
             }
 
-            unset($this->_serializableSspMessageXml, $this->_serializableRelayState);
+            $this->_serializableSspMessageXml = null;
+            $this->_serializableRelayState = null;
         }
     }
 }

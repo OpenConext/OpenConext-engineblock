@@ -26,12 +26,12 @@ final class CollabPersonId
     /**
      * Required namespace prefix
      */
-    const URN_NAMESPACE = 'urn:collab:person';
+    const string URN_NAMESPACE = 'urn:collab:person';
 
     /**
      * Max length of the CollabPersonId.
      */
-    const MAX_LENGTH = 255;
+    const int MAX_LENGTH = 255;
 
     private string $collabPersonId;
 

@@ -35,10 +35,10 @@ use Twig\Environment;
 
 class EngineBlock_Test_Corto_Module_Service_AssertionConsumerTest extends TestCase
 {
-    private const PROXY_SP_ENTITY_ID = 'https://proxy.example.com';
-    private const REAL_SP_ENTITY_ID  = 'https://realsp.example.com';
-    private const IDP_ENTITY_ID      = 'https://idp.example.com';
-    private const ENGINE_URL         = 'https://engine.example.com/some-service';
+    private const string PROXY_SP_ENTITY_ID = 'https://proxy.example.com';
+    private const string REAL_SP_ENTITY_ID  = 'https://realsp.example.com';
+    private const string IDP_ENTITY_ID      = 'https://idp.example.com';
+    private const string ENGINE_URL         = 'https://engine.example.com/some-service';
 
     /** @var EngineBlock_Corto_ProxyServer */
     private $proxyServerMock;

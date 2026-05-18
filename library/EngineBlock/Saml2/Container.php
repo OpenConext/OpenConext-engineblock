@@ -24,7 +24,7 @@ final class EngineBlock_Saml2_Container extends AbstractContainer
     /**
      * The fixed length of random identifiers.
      */
-    const ID_LENGTH = 43;
+    const int ID_LENGTH = 43;
 
     /**
      * @var LoggerInterface

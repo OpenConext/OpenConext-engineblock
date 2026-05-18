@@ -497,7 +497,7 @@ QUERY;
         ];
         // It could be the rule was already added (for example to set the release_as directive)
         // in that case, load the existing rule and add the 'use_as_nameid'
-        if (array_key_exists($attributeName, $rules)) {
+        if (array_key_exists((string) $attributeName, $rules)) {
             $arpRule = $rules[$attributeName][0];
             $arpRule['use_as_nameid'] = true;
         }

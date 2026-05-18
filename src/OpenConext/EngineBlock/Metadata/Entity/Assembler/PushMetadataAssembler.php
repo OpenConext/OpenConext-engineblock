@@ -64,7 +64,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
     /**
      * Maximum length that will fit in certain string type fields.
      */
-    private const FIELDS_MAX_LENGTH = 255;
+    private const int FIELDS_MAX_LENGTH = 255;
 
     public function __construct(
         ValidatorInterface $allowedAcsLocations,

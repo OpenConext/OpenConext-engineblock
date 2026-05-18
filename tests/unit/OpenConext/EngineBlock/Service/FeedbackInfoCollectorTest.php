@@ -45,8 +45,7 @@ class FeedbackInfoCollectorTest extends TestCase
     protected function setUp(): void
     {
         $request = new Request();
-        $requestStack = new RequestStack();
-        $requestStack->push($request);
+        $requestStack = new RequestStack([$request]);
 
         $requestId = new RequestId(new class implements RequestIdGenerator {
             public function generateRequestId(): string

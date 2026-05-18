@@ -22,6 +22,7 @@ use Doctrine\ORM\QueryBuilder;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use Override;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -89,6 +90,7 @@ class RemoveOtherWorkflowStatesFilter extends AbstractFilter
     /**
      * {@inheritdoc}
      */
+    #[Override]
     public function __toString()
     {
         return parent::__toString() . ' -> ' . $this->workflowState;

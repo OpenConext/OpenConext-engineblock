@@ -23,6 +23,7 @@ use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
+use Override;
 use SAML2\Constants;
 
 /**
@@ -66,6 +67,7 @@ class ProxiedIdentityProvider extends AbstractIdentityProvider
         $this->urlProvider = $urlProvider;
     }
 
+    #[Override]
     public function getSingleLogoutService(): ?Service
     {
         if (is_null($this->entity->getSingleLogoutService())) {
@@ -75,6 +77,7 @@ class ProxiedIdentityProvider extends AbstractIdentityProvider
         return new Service($sloService->location, $sloService->binding);
     }
 
+    #[Override]
     public function getCertificates(): array
     {
         return [
@@ -82,6 +85,7 @@ class ProxiedIdentityProvider extends AbstractIdentityProvider
         ];
     }
 
+    #[Override]
     public function getSupportedNameIdFormats(): array
     {
         return [
@@ -95,11 +99,13 @@ class ProxiedIdentityProvider extends AbstractIdentityProvider
      * The configured EB contact persons are displayed for IdP entities that EngineBlock proxies.
      * @return ContactPerson[]
      */
+    #[Override]
     public function getContactPersons(): array
     {
         return $this->engineBlockConfiguration->getContactPersons();
     }
 
+    #[Override]
     public function getSingleSignOnServices(): array
     {
         $ssoLocation = $this->urlProvider->getUrl(

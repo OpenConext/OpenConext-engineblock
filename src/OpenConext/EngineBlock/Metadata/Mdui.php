@@ -43,7 +43,7 @@ use function array_key_exists;
  */
 class Mdui
 {
-    private const ALLOWED_ELEMENT_NAMES = [
+    private const array ALLOWED_ELEMENT_NAMES = [
         'DisplayName',
         'Description',
         'Keywords',

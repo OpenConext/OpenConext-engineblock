@@ -26,7 +26,7 @@ use OpenConext\EngineBlockBundle\Authentication\Repository\SamlPersistentIdRepos
 #[ORM\Index(columns: ['user_uuid', 'service_provider_uuid'], name: 'user_uuid')]
 class SamlPersistentId
 {
-    private const PERSISTENT_ID_SALT = 'COIN:';
+    private const string PERSISTENT_ID_SALT = 'COIN:';
 
     public static function generate(string $userUuid, string $spUuid): self
     {

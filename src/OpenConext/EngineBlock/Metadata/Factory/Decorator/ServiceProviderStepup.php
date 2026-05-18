@@ -21,6 +21,7 @@ use OpenConext\EngineBlock\Metadata\Factory\ServiceProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
+use Override;
 use SAML2\Constants;
 
 /**
@@ -49,6 +50,7 @@ class ServiceProviderStepup extends AbstractServiceProvider
         $this->urlProvider = $urlProvider;
     }
 
+    #[Override]
     public function getCertificates(): array
     {
         return [$this->keyPair->getCertificate()];
@@ -57,6 +59,7 @@ class ServiceProviderStepup extends AbstractServiceProvider
     /**
      * @return string[]
      */
+    #[Override]
     public function getSupportedNameIdFormats(): array
     {
         return [];
@@ -65,6 +68,7 @@ class ServiceProviderStepup extends AbstractServiceProvider
     /**
      * @return IndexedService[]
      */
+    #[Override]
     public function getAssertionConsumerServices(): array
     {
         $acsLocation = $this->urlProvider->getUrl('authentication_stepup_consume_assertion', false, null, null);

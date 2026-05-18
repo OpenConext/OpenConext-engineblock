@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlock\Metadata\MetadataRepository\Filter;
 use Doctrine\ORM\QueryBuilder;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use Override;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -93,6 +94,7 @@ class RemoveDisallowedIdentityProvidersFilter extends AbstractFilter
     /**
      * {@inheritdoc}
      */
+    #[Override]
     public function __toString()
     {
         return parent::__toString() . ' -> ' . $this->serviceProviderEntityId;

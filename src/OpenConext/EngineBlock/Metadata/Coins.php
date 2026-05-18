@@ -259,7 +259,7 @@ class Coins
 
     private function getValue($key, $default = null)
     {
-        if (!array_key_exists($key, $this->values)) {
+        if (!array_key_exists((string) $key, $this->values)) {
             return $default;
         }
         return $this->values[$key];
