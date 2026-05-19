@@ -92,10 +92,12 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "bin/extractVersion.sh > public/version.json"
         ],
         "post-update-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "bin/extractVersion.sh > public/version.json"
         ],
         "pre-archive-cmd": [
             "bash -c 'if [ -z \"${ASSET_TAG}\" ]; then export ASSET_TAG=$(head -c16 /dev/urandom | od --format=x1 --address-radix=none | tr -d \" \"); echo \"ASSET_TAG not set, using random value: ${ASSET_TAG}\"; fi; sed -i -e \"s,#ASSET_VERSION#,${ASSET_TAG},g\" ./config/packages/framework.yaml'"

@@ -57,6 +57,36 @@ The following feedback pages previously returned HTTP **200 OK** and now return 
 Maintenance:
 * Removed the `openconext` theme. The `skeune` theme is now the only supported theme and the default. (#1980)
 
+### Actuator
+There are now two additional endpoints available to retrieve information about the running software;
+`/version.json` and `/actuator/info`. Ensure that those endpoints are restricted for only administrator access.
+
+example /version.json:
+```json
+{
+    "name": "openconext/engineblock",
+    "description": "OpenConext SAML proxy",
+    "version": "7.0.0-dev",
+    "time": "2026-05-19T12:06:37.581Z"
+}
+```
+
+example /actuator/info:
+```json
+{
+  "build": {
+    "name": "openconext/engineblock",
+    "description": "OpenConext SAML proxy",
+    "version": "7.0.0-dev",
+    "time": "2026-05-18T11:59:07.992Z"
+  },
+  "days_since_release": 1
+}
+```
+
+The time is set during composer install and thus is latest build time of the software. Using this you can ensure that you are running
+the correct version of the software.
+
 ## UNRELEASED 7.2.0
 Upgrade to Symfony 7.4
 Upgrade to `doctrine/dbal` 4
