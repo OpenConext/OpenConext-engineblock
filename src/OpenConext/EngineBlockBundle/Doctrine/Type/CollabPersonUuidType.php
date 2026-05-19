@@ -23,6 +23,7 @@ use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonUuid;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
+use Override;
 
 class CollabPersonUuidType extends Type
 {
@@ -33,6 +34,7 @@ class CollabPersonUuidType extends Type
         return $platform->getGuidTypeDeclarationSQL($column);
     }
 
+    #[Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if (is_null($value)) {
@@ -53,6 +55,7 @@ class CollabPersonUuidType extends Type
         return $value->getUuid();
     }
 
+    #[Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         if (is_null($value)) {

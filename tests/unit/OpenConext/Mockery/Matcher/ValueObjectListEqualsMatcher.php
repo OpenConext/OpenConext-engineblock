@@ -35,7 +35,7 @@ final class ValueObjectListEqualsMatcher extends MatcherAbstract
             __METHOD__
         );
 
-        $first = array_values($valueObjects)[0];
+        $first = array_first($valueObjects);
 
         if (!is_object($first) || !method_exists($first, 'equals')) {
             throw new InvalidArgumentException($message);

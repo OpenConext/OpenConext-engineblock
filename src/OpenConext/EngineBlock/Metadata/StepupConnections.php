@@ -59,7 +59,7 @@ class StepupConnections implements JsonSerializable
      */
     public function getLoa($entityId)
     {
-        if (!array_key_exists($entityId, $this->connections)) {
+        if (!array_key_exists((string) $entityId, $this->connections)) {
             return null;
         }
         return $this->connections[$entityId];

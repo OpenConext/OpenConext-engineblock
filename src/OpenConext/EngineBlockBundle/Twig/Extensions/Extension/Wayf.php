@@ -98,7 +98,7 @@ class Wayf
     private function formatIdpList(array $idpList): array
     {
         return array_map(
-            fn(WayfIdp $idp) => $this->formatIdpEntry($idp),
+            $this->formatIdpEntry(...),
             $idpList
         );
     }

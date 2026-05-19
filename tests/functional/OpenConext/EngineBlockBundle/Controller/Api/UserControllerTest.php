@@ -27,9 +27,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class UserControllerTest extends FunctionalWebTestCase
 {
-    private const SHO = 'example.edu';
-    private const UID = 'student001';
-    private const SP_ENTITY_ID = 'https://sp.example.com/';
+    private const string SHO = 'example.edu';
+    private const string UID = 'student001';
+    private const string SP_ENTITY_ID = 'https://sp.example.com/';
 
     public function tearDown(): void
     {

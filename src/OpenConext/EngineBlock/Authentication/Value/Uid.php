@@ -26,7 +26,7 @@ use OpenConext\EngineBlock\Assert\Assertion;
  */
 final class Uid
 {
-    const URN_MACE = 'urn:mace:dir:attribute-def:uid';
+    const string URN_MACE = 'urn:mace:dir:attribute-def:uid';
 
     /**
      * @var string

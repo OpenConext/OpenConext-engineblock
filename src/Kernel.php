@@ -18,6 +18,7 @@
 
 namespace App;
 
+use Override;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -30,7 +31,7 @@ class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
 
-    private const CONFIG_EXTS = '.{yaml,yml}';
+    private const string CONFIG_EXTS = '.{yaml,yml}';
 
     public function registerBundles(): iterable
     {
@@ -42,6 +43,7 @@ class Kernel extends BaseKernel
         }
     }
 
+    #[Override]
     public function getProjectDir(): string
     {
         return dirname(__DIR__);

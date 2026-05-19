@@ -23,6 +23,7 @@ use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Factory\ValueObject\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\Organization;
+use Override;
 
 /**
  * This decoration is used to add non functional and strictly informational data to an entity
@@ -40,26 +41,31 @@ class EngineBlockIdentityProviderInformation extends AbstractIdentityProvider
         $this->engineBlockConfiguration = $engineBlockConfiguration;
     }
 
+    #[Override]
     public function getName($locale): string
     {
         return $this->engineBlockConfiguration->getName();
     }
 
+    #[Override]
     public function getDisplayName($locale): string
     {
         return $this->engineBlockConfiguration->getName();
     }
 
+    #[Override]
     public function getDescription($locale): string
     {
         return $this->engineBlockConfiguration->getDescription();
     }
 
+    #[Override]
     public function getLogo(): ?Logo
     {
         return $this->engineBlockConfiguration->getLogo();
     }
 
+    #[Override]
     public function getOrganization(string $locale): ?Organization
     {
         return $this->engineBlockConfiguration->getOrganization($locale);
@@ -68,6 +74,7 @@ class EngineBlockIdentityProviderInformation extends AbstractIdentityProvider
     /**
      * @return ContactPerson[]
      */
+    #[Override]
     public function getContactPersons(): array
     {
         return $this->engineBlockConfiguration->getContactPersons();

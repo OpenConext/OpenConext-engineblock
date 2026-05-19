@@ -21,6 +21,7 @@ use OpenConext\EngineBlock\Metadata\Factory\IdentityProviderEntityInterface;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509KeyPair;
 use OpenConext\EngineBlockBundle\Url\UrlProvider;
+use Override;
 use SAML2\Constants;
 
 /**
@@ -56,6 +57,7 @@ class EngineBlockIdentityProvider extends AbstractIdentityProvider
         $this->urlProvider = $urlProvider;
     }
 
+    #[Override]
     public function getCertificates(): array
     {
         $certificates = [];
@@ -66,6 +68,7 @@ class EngineBlockIdentityProvider extends AbstractIdentityProvider
         return $certificates;
     }
 
+    #[Override]
     public function getSupportedNameIdFormats(): array
     {
         return [
@@ -75,6 +78,7 @@ class EngineBlockIdentityProvider extends AbstractIdentityProvider
         ];
     }
 
+    #[Override]
     public function getSingleLogoutService(): ?Service
     {
         if (is_null($this->entity->getSingleLogoutService())) {
@@ -91,6 +95,7 @@ class EngineBlockIdentityProvider extends AbstractIdentityProvider
      *
      * @return Service[]
      */
+    #[Override]
     public function getSingleSignOnServices(): array
     {
         $ssoLocation = $this->urlProvider->getUrl('authentication_idp_sso', false, $this->keyId, null);

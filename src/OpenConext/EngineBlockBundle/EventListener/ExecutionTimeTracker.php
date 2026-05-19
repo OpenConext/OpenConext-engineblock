@@ -23,7 +23,7 @@ use Symfony\Component\Stopwatch\Stopwatch;
 
 final class ExecutionTimeTracker
 {
-    const SECTION_NAME = 'execution-time';
+    const string SECTION_NAME = 'execution-time';
 
     /**
      * @var Stopwatch

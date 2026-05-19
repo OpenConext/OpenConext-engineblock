@@ -231,8 +231,6 @@ class XmlToArray
                 )
             );
         }
-
-        xml_parser_free($parser);
         self::$_singulars = array_fill_keys(self::$_singulars, 1);
         $return = self::xml2arrayRecursive($values);
         self::$_singulars = array_keys(self::$_singulars);

@@ -34,6 +34,7 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     /**
      * @var Response
      */
+    #[Override]
     protected $sspMessage;
 
     /**
@@ -325,7 +326,7 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     /**
      * @return array
      */
-    public function __sleep()
+    public function __serialize(): array
     {
         if ($this->sspMessage instanceof Response) {
             $this->_serializableSspMessageXml = $this->sspMessage->toUnsignedXML()->ownerDocument->saveXML();
@@ -333,28 +334,34 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
         }
 
         return [
-            'return',
-            'originalIssuer',
-            'originalNameId',
-            'originalBinding',
-            'originalResponse',
-            'collabPersonId',
-            'customNameId',
-            'intendedNameId',
-            'pdpRequestedLoas',
-            'isTransparentErrorResponse',
-            '_serializableSspMessageXml',
-            '_serializableRelayState',
-            'SramInterruptNonce',
+            'return' => $this->return,
+            'originalIssuer' => $this->originalIssuer,
+            'originalNameId' => $this->originalNameId,
+            'originalBinding' => $this->originalBinding,
+            'originalResponse' => $this->originalResponse,
+            'collabPersonId' => $this->collabPersonId,
+            'customNameId' => $this->customNameId,
+            'intendedNameId' => $this->intendedNameId,
+            'pdpRequestedLoas' => $this->pdpRequestedLoas,
+            'isTransparentErrorResponse' => $this->isTransparentErrorResponse,
+            '_serializableSspMessageXml' => $this->_serializableSspMessageXml,
+            '_serializableRelayState' => $this->_serializableRelayState,
+            'SramInterruptNonce' => $this->SramInterruptNonce,
         ];
     }
 
     /**
      * Custom deserialization to recreate $sspMessage from XML string
      */
-    public function __wakeup()
+    public function __unserialize(array $data): void
     {
-        if (isset($this->_serializableSspMessageXml)) {
+        foreach ($data as $property => $value) {
+            if (property_exists($this, $property)) {
+                $this->{$property} = $value;
+            }
+        }
+
+        if ($this->_serializableSspMessageXml !== null) {
             $document = DOMDocumentFactory::fromString($this->_serializableSspMessageXml);
             $messageDomElement = $document->getElementsByTagNameNS('urn:oasis:names:tc:SAML:2.0:protocol', 'Response')->item(0);
 
@@ -362,11 +369,11 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
                 $this->sspMessage = \OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Response::fromXML($messageDomElement);
             }
 
-            if (isset($this->_serializableRelayState) && $this->_serializableRelayState !== null) {
+            if ($this->_serializableRelayState !== null) {
                 $this->sspMessage->setRelayState($this->_serializableRelayState);
             }
 
-            unset($this->_serializableSspMessageXml);
+            $this->_serializableSspMessageXml = null;
         }
     }
 

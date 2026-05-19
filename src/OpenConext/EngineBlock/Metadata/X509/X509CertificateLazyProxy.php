@@ -67,8 +67,14 @@ class X509CertificateLazyProxy
     /**
      * Take care not to serialize the openSSL resource ($this->certificate).
      */
-    public function __sleep()
+    public function __serialize(): array
     {
-        return array('certData', 'factory');
+        return array('certData' => $this->certData, 'factory' => $this->factory);
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->certData = $data['certData'];
+        $this->factory  = $data['factory'];
     }
 }

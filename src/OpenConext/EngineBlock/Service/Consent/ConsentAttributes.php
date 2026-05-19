@@ -165,6 +165,6 @@ final class ConsentAttributes
 
     private static function isSequentialArray(array $array): bool
     {
-        return count(array_filter(array_keys($array), 'is_string')) === 0;
+        return count(array_filter(array_keys($array), is_string(...))) === 0;
     }
 }

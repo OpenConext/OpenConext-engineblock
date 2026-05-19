@@ -190,4 +190,16 @@ class ServiceProviderTest extends TestCase
             $nameLocale
         );
     }
+
+    public function test_entityId_survives_serialization_roundtrip()
+    {
+        $entityId = 'https://sp.example.edu';
+        $sp = new ServiceProvider($entityId);
+        $sp->allowAll = true;
+
+        $restored = unserialize(serialize($sp));
+
+        $this->assertEquals($entityId, $restored->entityId);
+        $this->assertTrue($restored->allowAll);
+    }
 }

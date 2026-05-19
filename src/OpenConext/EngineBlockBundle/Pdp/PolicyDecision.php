@@ -25,10 +25,10 @@ use OpenConext\EngineBlockBundle\Pdp\Dto\Response\AttributeAssignment;
 
 final class PolicyDecision
 {
-    const DECISION_DENY = 'Deny';
-    const DECISION_INDETERMINATE = 'Indeterminate';
-    const DECISION_NOT_APPLICABLE = 'NotApplicable';
-    const DECISION_PERMIT = 'Permit';
+    const string DECISION_DENY = 'Deny';
+    const string DECISION_INDETERMINATE = 'Indeterminate';
+    const string DECISION_NOT_APPLICABLE = 'NotApplicable';
+    const string DECISION_PERMIT = 'Permit';
 
     /**
      * @var string

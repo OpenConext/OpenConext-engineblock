@@ -31,4 +31,16 @@ class IdentityProviderTest extends TestCase
         $idp = new IdentityProvider($entityId);
         $this->assertEquals($entityId, $idp->entityId);
     }
+
+    public function test_entityId_survives_serialization_roundtrip()
+    {
+        $entityId = 'https://idp.example.edu';
+        $idp = new IdentityProvider($entityId);
+        $idp->enabledInWayf = true;
+
+        $restored = unserialize(serialize($idp));
+
+        $this->assertEquals($entityId, $restored->entityId);
+        $this->assertTrue($restored->enabledInWayf);
+    }
 }
