@@ -223,7 +223,6 @@ parameters:
     ## FEATURE SETTINGS
     ##########################################################################################
     feature_eb_encrypted_assertions: true
-    feature_eb_encrypted_assertions_require_outer_signature: true
     feature_api_metadata_push: true
     feature_api_consent_listing: true
     feature_api_consent_remove: true
