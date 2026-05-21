@@ -39,9 +39,8 @@ class ActuatorController extends AbstractController
 
     public function __construct(
         LoggerInterface $logger,
-        string          $projectDir
-    )
-    {
+        string $projectDir
+    ) {
         $this->logger = $logger;
         $this->projectDir = $projectDir;
     }
