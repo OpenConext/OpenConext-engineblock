@@ -36,7 +36,7 @@ class Spaceless
      * Removes whitespaces between HTML/XML tags.
      * Mirrors the prior (now deprecated) Twig spaceless filter behavior.
      */
-    #[AsTwigFilter(name: 'spaceless', isSafe: ['html'])]
+    #[AsTwigFilter(name: 'spaceless', preEscape: 'html', isSafe: ['html'])]
     public static function spaceless(?string $content): string
     {
         if ($content === null) {

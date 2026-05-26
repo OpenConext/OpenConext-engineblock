@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 final class CorrelationIdRepository
 {
-    private const SESSION_KEY = 'CorrelationIds';
+    private const string SESSION_KEY = 'CorrelationIds';
 
     public function __construct(private readonly RequestStack $requestStack)
     {
