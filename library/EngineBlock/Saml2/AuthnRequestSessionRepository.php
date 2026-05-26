@@ -30,8 +30,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class EngineBlock_Saml2_AuthnRequestSessionRepository
 {
-    private const SESSION_KEY_REQUESTS = 'SAMLRequest';
-    private const SESSION_KEY_LINKS    = 'SAMLRequestLinks';
+    private const string SESSION_KEY_REQUESTS = 'SAMLRequest';
+    private const string SESSION_KEY_LINKS    = 'SAMLRequestLinks';
 
     /**
      * @var RequestStack
