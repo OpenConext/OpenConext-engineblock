@@ -8,7 +8,7 @@ Feature:
      And no registered SPs
      And no registered Idps
      And an Identity Provider named "Dummy Idp"
-     And an application named "Dummy SP"
+     And a Service Provider named "Dummy SP"
 
   Scenario: Proxying exceeds the allowed ProxyCount in the AuthnRequest
     Given SP "Dummy SP" is configured to generate a AuthnRequest with a ProxyCount of 0

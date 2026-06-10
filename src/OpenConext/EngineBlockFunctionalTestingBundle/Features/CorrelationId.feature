@@ -7,7 +7,7 @@ Feature:
     Given an EngineBlock instance on "dev.openconext.local"
     And no registered SPs
     And no registered Idps
-    And an application named "CorrId-SP"
+    And a Service Provider named "CorrId-SP"
 
   Scenario: A user authenticating via the WAYF completes the full four-leg flow
     Given an Identity Provider named "CorrId-IdP-A"

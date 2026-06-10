@@ -7,7 +7,7 @@ Feature:
     Given an EngineBlock instance on "dev.openconext.local"
       And an Identity Provider named "Dummy-IdP" with discovery "Dummy Discovery"
       And an Identity Provider named "Second IdP to trigger wayf"
-      And an application named "Dummy-SP"
+      And a Service Provider named "Dummy-SP"
       And SP "Dummy-SP" allows the following attributes:
 
         | Name                                                    | Value | Source | Motivation                 |

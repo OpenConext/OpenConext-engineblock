@@ -8,7 +8,7 @@ Feature:
     And no registered SPs
     And no registered Idps
     And an Identity Provider named "IDP-AA"
-    And an application named "SP-AA"
+    And a Service Provider named "SP-AA"
     And SP "SP-AA" requires attribute aggregation
     And feature "eb.run_all_manipulations_prior_to_consent" is disabled
 

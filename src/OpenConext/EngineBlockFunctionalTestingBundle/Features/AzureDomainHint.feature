@@ -9,7 +9,7 @@ Feature: Azure / EntraID domain hint
       And no registered SPs
       And no registered Idps
       And an Identity Provider named "Azure IdP"
-      And an application named "Dummy SP"
+      And a Service Provider named "Dummy SP"
 
   Scenario: EngineBlock appends whr query parameter when coin:azure_domain_hint is configured
     Given IDP "Azure IdP" has Azure domain hint "hartingcollege.nl"

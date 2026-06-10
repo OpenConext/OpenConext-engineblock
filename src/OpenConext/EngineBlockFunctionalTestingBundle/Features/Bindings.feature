@@ -8,7 +8,7 @@ Feature:
       And no registered SPs
       And no registered Idps
       And an Identity Provider named "Dummy Idp"
-      And an application named "Dummy SP"
+      And a Service Provider named "Dummy SP"
 
   Scenario: EngineBlock accepts AuthnRequests using HTTP-POST binding
     Given the SP uses the HTTP POST Binding

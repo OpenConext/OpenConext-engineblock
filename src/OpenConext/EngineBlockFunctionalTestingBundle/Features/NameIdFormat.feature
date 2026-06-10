@@ -8,7 +8,7 @@ Feature:
     And no registered SPs
     And no registered Idps
     And an Identity Provider named "SSO-IdP"
-    And an application named "SSO-SP"
+    And a Service Provider named "SSO-SP"
 
   Scenario: EngineBlock should not update the Unspecified NameIdFormat when no ARP filters are applied
     Given SP "SSO-SP" uses the Unspecified NameID format
