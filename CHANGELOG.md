@@ -56,6 +56,15 @@ The following feedback pages previously returned HTTP **200 OK** and now return 
 
 Maintenance:
 * Removed the `openconext` theme. The `skeune` theme is now the only supported theme and the default. (#1980)
+* The non-unique index `idx_user_uuid` on the `user` table has been replaced by a unique index `uq_user_uuid`. Run the following on your production database (#1974):
+  ```sql
+  SET SESSION innodb_sort_buffer_size = 268435456;
+  ALTER TABLE `user`
+      ADD UNIQUE INDEX `uq_user_uuid` (`uuid`),
+      DROP INDEX `idx_user_uuid`,
+      ALGORITHM=INPLACE,
+      LOCK=NONE;
+  ```
 
 ## UNRELEASED 7.2.0
 Upgrade to Symfony 7.4
