@@ -8,7 +8,7 @@ Feature:
     And no registered SPs
     And no registered Idps
     And an Identity Provider named "SSO-IdP"
-    And a Service Provider named "SSO-SP"
+    And an application named "SSO-SP"
 
   Scenario: If the SBS authz check returns 'interrupt', the browser is redirected to SBS
     Given the SP "SSO-SP" requires SRAM collaboration
@@ -149,8 +149,8 @@ Feature:
 
   Scenario: SBS 'authorized' flow works with trusted proxy
     Given an Identity Provider named "Trusted-IdP"
-    And a Service Provider named "Proxy-SP"
-    And a Service Provider named "End-SP"
+    And an application named "Proxy-SP"
+    And an application named "End-SP"
     And the SP "End-SP" requires SRAM collaboration
     And feature "eb.feature_enable_sram_interrupt" is enabled
     And the sbs server will trigger the "authorized" authz flow when called

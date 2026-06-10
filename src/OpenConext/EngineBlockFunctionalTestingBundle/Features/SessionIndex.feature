@@ -8,7 +8,7 @@ Feature:
     And no registered SPs
     And no registered Idps
     And an Identity Provider named "IP"
-    And a Service Provider named "SP"
+    And an application named "SP"
 
   Scenario: User logs in to SP, in that case the session index should be the assertion id
     And SP "SP" does not require consent

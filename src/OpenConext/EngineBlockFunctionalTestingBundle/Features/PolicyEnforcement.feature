@@ -8,9 +8,9 @@ Feature:
       And no registered SPs
       And no registered Idps
       And an Identity Provider named "Dummy IdP" with logo "idp-logo.jpg"
-      And a Service Provider named "Dummy SP"
-      And a Service Provider named "Stepup Gateway"
-      And a Service Provider named "Stepup SelfService"
+      And an application named "Dummy SP"
+      And an application named "Stepup Gateway"
+      And an application named "Stepup SelfService"
 
   Scenario: Access is denied because of an IdP specific Deny policy a logo is shown
     Given SP "Dummy SP" requires a policy enforcement decision
