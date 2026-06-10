@@ -41,7 +41,6 @@ class TestFeatureConfiguration implements FeatureConfigurationInterface
         $this->setFeature(new Feature('eb.run_all_manipulations_prior_to_consent', false));
         $this->setFeature(new Feature('eb.block_user_on_violation', true));
         $this->setFeature(new Feature('eb.encrypted_assertions', true));
-        $this->setFeature(new Feature('eb.encrypted_assertions_require_outer_signature', true));
         $this->setFeature(new Feature('eb.enable_sso_notification', false));
         $this->setFeature(new Feature('eb.feature_enable_consent', true));
         $this->setFeature(new Feature('eb.enable_sso_session_cookie', true));

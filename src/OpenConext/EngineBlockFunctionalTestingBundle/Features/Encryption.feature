@@ -25,7 +25,6 @@ Feature:
   Scenario: EngineBlock rejects invalid RSA Encrypted Responses
     Given the SP uses the HTTP POST Binding
       And feature "eb.encrypted_assertions" is enabled
-      And feature "eb.encrypted_assertions_require_outer_signature" is enabled
       And the IdP encrypts its assertions with the public key in "src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/keys/rolled-over.crt"
      When I log in at "Dummy SP"
       And I pass through the SP
@@ -54,10 +53,9 @@ Feature:
      Then the url should match "authentication/feedback/received-invalid-response"
       And I should see "Invalid organisation SAML response"
 
-  Scenario: EngineBlock rejects encrypted responses without outer signature if the feature "eb.encrypted_assertions_require_outer_signatures" is enabled
+  Scenario: EngineBlock rejects encrypted responses without outer signature
     Given the SP uses the HTTP POST Binding
       And feature "eb.encrypted_assertions" is enabled
-      And feature "eb.encrypted_assertions_require_outer_signature" is enabled
       And the IdP encrypts its assertions with the public key in "tests/resources/key/engineblock.crt"
       And the IdP does not sign its responses
      When I log in at "Dummy SP"
@@ -66,23 +64,6 @@ Feature:
       And I pass through the IdP
      Then the url should match "authentication/feedback/received-invalid-response"
       And I should see "Invalid organisation SAML response"
-
-  # This scenario is currently not supported by EngineBlock,
-  # see https://www.pivotaltracker.com/story/show/155703943
-  @SKIP
-  Scenario: EngineBlock accepts encrypted responses without an outer signature if the feature "eb.encrypted_assertions_require_outer_signatures" is disabled
-    Given the SP uses the HTTP POST Binding
-      And feature "eb.encrypted_assertions" is enabled
-      And feature "eb.encrypted_assertions_require_outer_signature" is disabled
-     When I log in at "Dummy SP"
-      And the IdP encrypts its assertions with the public key in "tests/resources/key/engineblock.crt"
-      And the IdP does not sign its responses
-      And I pass through the SP
-      And I pass through EngineBlock
-      And I pass through the IdP
-      And I give my consent
-      And I pass through EngineBlock
-     Then the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
 
   Scenario: EngineBlock supports not signed responses
     Given the SP uses the HTTP POST Binding
