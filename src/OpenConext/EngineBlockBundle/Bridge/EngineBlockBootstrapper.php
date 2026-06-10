@@ -23,6 +23,7 @@ use OpenConext\EngineBlock\Request\CorrelationIdService;
 use OpenConext\EngineBlock\Request\CurrentCorrelationId;
 use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
 use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
+use OpenConext\EngineBlockBridge\Logger\LoginLogger;
 use OpenConext\EngineBlockBundle\Service\WayfRenderer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -39,6 +40,7 @@ class EngineBlockBootstrapper implements EventSubscriberInterface
         CurrentCorrelationId $currentCorrelationId,
         FeedbackStateHelperInterface $feedbackStateHelper,
         FeedbackInfoCollectorInterface $feedbackInfoCollector,
+        LoginLogger $loginLogger,
         array $preferredIdpEntityIds = [],
     ) {
         $this->diContainerRuntime = new DiContainerRuntime(
@@ -48,6 +50,7 @@ class EngineBlockBootstrapper implements EventSubscriberInterface
             $currentCorrelationId,
             $feedbackStateHelper,
             $feedbackInfoCollector,
+            $loginLogger,
             $preferredIdpEntityIds,
         );
     }

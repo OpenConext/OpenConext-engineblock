@@ -16,6 +16,8 @@
  * limitations under the License.
  */
 
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
+
 /**
  * Called by Corto before consent, right after it receives an Assertion with attributes from an Identity Provider.
  */
@@ -33,7 +35,7 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
     public function getCommands()
     {
         $diContainer          = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
-        $featureConfiguration = $diContainer->getFeatureConfiguration();
+        $featureConfiguration = $this->resolveFeatureConfiguration();
         $logger               = EngineBlock_ApplicationSingleton::getLog();
 
         $blockUsersOnViolation = $featureConfiguration->isEnabled('eb.block_user_on_violation');
@@ -113,5 +115,12 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
         $outputFilter = new EngineBlock_Corto_Filter_Output($this->_server);
 
         return array_merge($commands, $outputFilter->getCommands());
+    }
+
+    protected function resolveFeatureConfiguration(): FeatureConfigurationInterface
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getFeatureConfiguration();
     }
 }

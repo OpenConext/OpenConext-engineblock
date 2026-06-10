@@ -156,5 +156,19 @@ Feature:
     And the response should not match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" and text()="NOOT"]'
     And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"]'
 
+  Scenario: The login audit log records the post-manipulation attribute value
+    Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
+      """
+      $attributes['urn:mace:dir:attribute-def:uid'] = array("manipulated-uid-value");
+      """
+    When I log in at "SP-with-Attribute-Manipulations"
+    And I select "Dummy-IdP" on the WAYF
+    And I pass through EngineBlock
+    And I pass through the IdP
+    And I give my consent
+    And I pass through EngineBlock
+    Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
+    And the login grant log should contain response attribute "uid" with value "manipulated-uid-value"
+
 #
 #  Scenario: Sp and IdP attribute manipulations
