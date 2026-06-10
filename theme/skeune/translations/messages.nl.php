@@ -39,6 +39,7 @@ return $overrides + [
     'wayf_deleted_account_screenreader'      => ' werd verwijderd uit uw accounts',
     'wayf_remaining_idps_title_screenreader' => 'Login met een account uit de onderstaande lijst',
     'wayf_select_account_screenreader'       => 'Selecteer een account uit de onderstaande lijst',
+    'wayf_title'                => 'Log in met',
     'wayf_search_placeholder'   => 'Zoeken...',
     'wayf_search_screenreader'          => 'Zoek naar een %organisationNoun%',
     'wayf_search_reset_screenreader'    => 'Wis de tekst in het zoekveld',
