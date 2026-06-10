@@ -31,21 +31,11 @@ final class Version20260602000000 extends AbstractEngineBlockMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('SET SESSION innodb_sort_buffer_size = 268435456');
-        $this->addSql(
-            'ALTER TABLE `user` ADD UNIQUE INDEX `uq_user_uuid` (`uuid`), DROP INDEX `idx_user_uuid`, ALGORITHM=INPLACE, LOCK=NONE'
-        );
+        $this->addSql('ALTER TABLE `user` ADD UNIQUE INDEX `uq_user_uuid` (`uuid`), DROP INDEX `idx_user_uuid`');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql(
-            'ALTER TABLE `user` ADD INDEX `idx_user_uuid` (`uuid`), DROP INDEX `uq_user_uuid`'
-        );
-    }
-
-    public function isTransactional(): bool
-    {
-        return false;
+        $this->addSql('ALTER TABLE `user` ADD INDEX `idx_user_uuid` (`uuid`), DROP INDEX `uq_user_uuid`');
     }
 }
