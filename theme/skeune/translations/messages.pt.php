@@ -19,7 +19,7 @@ return $overrides + [
     'language_switcher'     => 'Language switcher',
 
     // FOOTER
-    'log_in_to'     => 'Select an %organisationNoun% to login to %arg1%',
+    'log_in_to'     => 'Select an %organisationNoun% to log in to %arg1%',
     'helpLink'       => 'https://support.surfconext.nl/wayf-en',
     'footer_navigation_screenreader'    => 'Footer navigation',
 
@@ -38,7 +38,7 @@ return $overrides + [
     'wayf_noscript_warning_end'     => 'You can, off course, still log in.',
     'wayf_delete_account_screenreader'       => 'Delete %idpTitle% from your accounts',
     'wayf_deleted_account_screenreader'      => ' was deleted from your accounts',
-    'wayf_remaining_idps_title_screenreader' => 'Login with an account from the list below',
+    'wayf_remaining_idps_title_screenreader' => 'Log in with an account from the list below',
     'wayf_select_account_screenreader'       => 'Select an account from the list below',
     'wayf_search_placeholder'   => 'Search...',
     'wayf_search_screenreader'          => 'Search for an %organisationNoun%',
@@ -60,7 +60,7 @@ return $overrides + [
     'wayf_defaultIdp_start'     => 'If your %organisation_noun% is not listed,',
     'wayf_defaultIdp_linkText'  => '%defaultIdpName% is available as an alternative.',
     'wayf_remaining_idps_search_label' => 'Ou procure uma instituição neerlandesa na lista',
-    'wayf_idp_title_screenreader' => 'Login with ',
+    'wayf_idp_title_screenreader' => 'Log in with ',
     'wayf_idp_title_noaccess_screenreader'  => 'No access with',
 
     // Consent
@@ -78,9 +78,9 @@ return $overrides + [
     'consent_disclaimer_privacy_policy'  => 'privacy policy',
     'consent_disclaimer_secure' => 'is being used by your %orgNoun% to securely send your information to %spName% (read more about',
     'consent_reject_text_skeune_header'    => "You don't want to share your data with the service",
-    'consent_reject_text_skeune_body'    => "The service you're logging into requires your data to function properly. If you prefer not to share your data, you cannot use this service. By closing your browser or just this tab you prevent your information from being shared with the service. If you change your mind later, please login to the service again and this screen will reappear.",
+    'consent_reject_text_skeune_body'    => "The service you're logging in to requires your data to function properly. If you prefer not to share your data, you cannot use this service. By closing your browser or just this tab you prevent your information from being shared with the service. If you change your mind later, please log in to the service again and this screen will reappear.",
     'consent_nok_title'     => "You don't want to share your data with the service",
-    'consent_nok_text'      => "The service you're logging into requires your data to function properly. If you prefer not to share your data, you cannot use this service. By closing your browser or just this tab you prevent your information from being shared with the service. If you change your mind later, please login to the service again and this screen will reappear.",
+    'consent_nok_text'      => "The service you're logging into requires your data to function properly. If you prefer not to share your data, you cannot use this service. By closing your browser or just this tab you prevent your information from being shared with the service. If you change your mind later, please log in to the service again and this screen will reappear.",
     'consent_groupmembership_show_more'     => 'Show more',
     'consent_groupmembership_show_less'     => 'Show less',
     'consent_warning_allowed_html'      => '<a><u><i><br><wbr><strong><em><blink><marquee>',

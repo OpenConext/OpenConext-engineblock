@@ -19,7 +19,7 @@ return $overrides + [
     'language_switcher'     => 'Language switcher',
 
     // FOOTER
-    'log_in_to'     => 'Select an account to login to %arg1%',
+    'log_in_to'     => 'Select an account to log in to %arg1%',
     'helpLink'       => 'https://support.surfconext.nl/wayf-en',
     'footer_navigation_screenreader'    => 'Footer navigation',
 
@@ -38,7 +38,7 @@ return $overrides + [
     'wayf_noscript_warning_end'     => 'You can, off course, still log in.',
     'wayf_delete_account_screenreader'       => 'Delete %idpTitle% from your accounts',
     'wayf_deleted_account_screenreader'      => ' was deleted from your accounts',
-    'wayf_remaining_idps_title_screenreader' => 'Login with an account from the list below',
+    'wayf_remaining_idps_title_screenreader' => 'Log in with an account from the list below',
     'wayf_select_account_screenreader'       => 'Select an account from the list below',
     'wayf_search_placeholder'   => 'Search...',
     'wayf_search_screenreader'          => 'Search for an %organisationNoun%',
@@ -60,7 +60,7 @@ return $overrides + [
     'wayf_defaultIdp_start'     => 'If your %organisation_noun% is not listed,',
     'wayf_defaultIdp_linkText'  => '%defaultIdpName% is available as an alternative.',
     'wayf_remaining_idps_search_label' => 'Or search for a Dutch institution from the list',
-    'wayf_idp_title_screenreader' => 'Login with ',
+    'wayf_idp_title_screenreader' => 'Log in with ',
     'wayf_idp_title_noaccess_screenreader'  => 'No access with',
 
     // Consent
