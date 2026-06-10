@@ -38,7 +38,7 @@ final class FeedbackControllerTest extends FunctionalWebTestCase
     #[Test]
     public function unsolicited_response_returns_400_with_expected_content(): void
     {
-        $this->assertFeedbackPage('/authentication/feedback/unsolicited-response', Response::HTTP_BAD_REQUEST, 'Sign-in could not be completed');
+        $this->assertFeedbackPage('/authentication/feedback/unsolicited-response', Response::HTTP_BAD_REQUEST, 'Login could not be completed');
     }
 
     #[Test]
