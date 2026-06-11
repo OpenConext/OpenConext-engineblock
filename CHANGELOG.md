@@ -60,7 +60,7 @@ Maintenance:
   ```sql
   SET SESSION innodb_sort_buffer_size = 268435456;
   ALTER TABLE `user`
-      CHANGE `uuid` `uuid` CHAR(36) NOT NULL COMMENT '(DC2Type:engineblock_collab_person_uuid)',
+      CHANGE `uuid` `uuid` CHAR(36) NOT NULL,
       ADD UNIQUE INDEX `uq_user_uuid` (`uuid`),
       DROP INDEX `idx_user_uuid`,
       ALGORITHM=INPLACE,
