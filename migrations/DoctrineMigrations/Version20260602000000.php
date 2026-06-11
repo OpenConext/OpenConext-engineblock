@@ -26,16 +26,16 @@ final class Version20260602000000 extends AbstractEngineBlockMigration
 {
     public function getDescription(): string
     {
-        return 'Replace non-unique idx_user_uuid with unique index uq_user_uuid on user.uuid';
+        return 'Replace non-unique idx_user_uuid with unique index uq_user_uuid on user.uuid and enforce NOT NULL';
     }
 
     public function up(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE `user` ADD UNIQUE INDEX `uq_user_uuid` (`uuid`), DROP INDEX `idx_user_uuid`');
+        $this->addSql('ALTER TABLE `user` CHANGE `uuid` `uuid` CHAR(36) NOT NULL COMMENT \'(DC2Type:engineblock_collab_person_uuid)\', ADD UNIQUE INDEX `uq_user_uuid` (`uuid`), DROP INDEX `idx_user_uuid`');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE `user` ADD INDEX `idx_user_uuid` (`uuid`), DROP INDEX `uq_user_uuid`');
+        $this->addSql('ALTER TABLE `user` CHANGE `uuid` `uuid` CHAR(36) DEFAULT NULL COMMENT \'(DC2Type:engineblock_collab_person_uuid)\', ADD INDEX `idx_user_uuid` (`uuid`), DROP INDEX `uq_user_uuid`');
     }
 }
