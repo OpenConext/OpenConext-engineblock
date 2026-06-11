@@ -23,7 +23,7 @@ use OpenConext\EngineBlock\Authentication\Value\CollabPersonUuid;
 use OpenConext\EngineBlockBundle\Authentication\Repository\UserRepository;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Index(name: 'idx_user_uuid', columns: ['uuid'])]
+#[ORM\UniqueConstraint(name: 'uq_user_uuid', columns: ['uuid'])]
 class User
 {
     /**
