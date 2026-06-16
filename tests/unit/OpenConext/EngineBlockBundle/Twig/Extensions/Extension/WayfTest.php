@@ -20,6 +20,7 @@ namespace Tests\OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\Wayf\WayfIdp;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Twig\Extensions\Extension\ConnectedIdps;
 use OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Wayf;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -33,12 +34,15 @@ class WayfTest extends TestCase
     private $requestStack;
     private $translator;
     private $wayf;
+    private FeatureConfigurationInterface $featureConfiguration;
 
     protected function setUp(): void
     {
         $this->requestStack = $this->createMock(RequestStack::class);
         $this->translator = $this->createMock(TranslatorInterface::class);
-        $this->wayf = new Wayf($this->requestStack, $this->translator);
+        $this->featureConfiguration = $this->createMock(FeatureConfigurationInterface::class);
+        $this->featureConfiguration->method('isEnabled')->willReturn(false);
+        $this->wayf = new Wayf($this->requestStack, $this->translator, $this->featureConfiguration);
     }
 
     public function testGetConnectedIdpsWithEmptyPreviousSelection()
@@ -118,7 +122,7 @@ class WayfTest extends TestCase
             ->willReturn($request);
 
         // Create new wayf instance with the mocked request
-        $wayf = new Wayf($requestStack, $this->translator);
+        $wayf = new Wayf($requestStack, $this->translator, $this->featureConfiguration);
 
         $idpList = [
             new WayfIdp(
@@ -231,6 +235,7 @@ class WayfTest extends TestCase
         $this->assertEquals(5, $config['cutoffPointForShowingUnfilteredIdps']);
         $this->assertEquals(Wayf::REMEMBER_CHOICE_COOKIE_NAME, $config['rememberChoiceCookieName']);
         $this->assertTrue($config['rememberChoiceFeature']);
+        $this->assertFalse($config['hideBookmarkableUrl']);
         $this->assertEquals('More results', $config['messages']['moreIdpResults']);
         $this->assertEquals('Request Access', $config['messages']['requestAccess']);
         $this->assertStringContainsString('/authentication/idp/requestAccess', $config['requestAccessUrl']);
@@ -247,5 +252,30 @@ class WayfTest extends TestCase
 
         $config = json_decode($jsonConfig, true);
         $this->assertEmpty($config['unconnectedIdps']);
+    }
+
+    public function testGetWayfJsonConfigIncludesHideBookmarkableUrlWhenFlagEnabled()
+    {
+        $featureConfiguration = $this->createMock(FeatureConfigurationInterface::class);
+        $featureConfiguration->method('isEnabled')
+            ->with('eb.hide_bookmarkable_url')
+            ->willReturn(true);
+
+        $wayf = new Wayf($this->requestStack, $this->translator, $featureConfiguration);
+
+        $connectedIdps = $this->createMock(ConnectedIdps::class);
+        $connectedIdps->method('getFormattedPreviousSelectionList')->willReturn([]);
+        $connectedIdps->method('getConnectedIdps')->willReturn([]);
+        $connectedIdps->method('getFormattedIdpList')->willReturn([]);
+
+        $serviceProvider = $this->createMock(ServiceProvider::class);
+        $serviceProvider->entityId = 'https://sp.example.org';
+        $serviceProvider->method('getDisplayName')->willReturn('Test SP');
+
+        $this->translator->method('trans')->willReturn('');
+
+        $config = json_decode($wayf->getWayfJsonConfig($connectedIdps, $serviceProvider, 'en', false, false, 5), true);
+
+        $this->assertTrue($config['hideBookmarkableUrl']);
     }
 }

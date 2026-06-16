@@ -29,7 +29,7 @@ use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Controller\IdentityProviderController;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -39,16 +39,14 @@ class IdentityProviderControllerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    private IdentityProviderController $controller;
-
-    protected function setUp(): void
+    private function buildController(?RequestValidator $requestValidator = null): IdentityProviderController
     {
-        $this->controller = new IdentityProviderController(
+        return new IdentityProviderController(
             Mockery::mock(EngineBlock_ApplicationSingleton::class),
             Mockery::mock(Environment::class),
-            Mockery::mock(\Psr\Log\LoggerInterface::class),
+            Mockery::mock(LoggerInterface::class),
             Mockery::mock(RequestAccessMailer::class),
-            Mockery::mock(RequestValidator::class),
+            $requestValidator ?? Mockery::mock(RequestValidator::class),
             Mockery::mock(RequestValidator::class),
             Mockery::mock(RequestValidator::class),
             Mockery::mock(AuthenticationStateHelperInterface::class),
@@ -57,61 +55,17 @@ class IdentityProviderControllerTest extends TestCase
     }
 
     #[Test]
-    public function a_get_without_saml_request_redirects_to_the_stored_session_url(): void
-    {
-        $session = new Session(new MockArraySessionStorage());
-        $session->set('eb_last_sso_request_url', 'https://engine.example.com/authentication/idp/single-sign-on?SAMLRequest=abc');
-
-        $request = Request::create('https://engine.example.com/authentication/idp/single-sign-on');
-        $request->setSession($session);
-
-        $response = $this->controller->singleSignOnAction($request);
-
-        $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertSame(
-            'https://engine.example.com/authentication/idp/single-sign-on?SAMLRequest=abc',
-            $response->getTargetUrl()
-        );
-    }
-
-    #[Test]
-    public function the_stored_session_url_is_consumed_on_redirect_so_it_cannot_be_reused(): void
-    {
-        $session = new Session(new MockArraySessionStorage());
-        $session->set('eb_last_sso_request_url', 'https://engine.example.com/authentication/idp/single-sign-on?SAMLRequest=abc');
-
-        $request = Request::create('https://engine.example.com/authentication/idp/single-sign-on');
-        $request->setSession($session);
-
-        $this->controller->singleSignOnAction($request);
-
-        $this->assertNull($session->get('eb_last_sso_request_url'));
-    }
-
-    #[Test]
-    public function a_get_without_saml_request_and_no_stored_session_url_throws_missing_parameter_exception(): void
+    public function a_get_without_saml_request_throws_missing_parameter_exception(): void
     {
         $this->expectException(MissingParameterException::class);
 
         $requestValidator = Mockery::mock(RequestValidator::class);
         $requestValidator->shouldReceive('isValid')->andThrow(new MissingParameterException('The parameter "SAMLRequest" is missing'));
 
-        $controller = new IdentityProviderController(
-            Mockery::mock(EngineBlock_ApplicationSingleton::class),
-            Mockery::mock(Environment::class),
-            Mockery::mock(\Psr\Log\LoggerInterface::class),
-            Mockery::mock(RequestAccessMailer::class),
-            $requestValidator,
-            Mockery::mock(RequestValidator::class),
-            Mockery::mock(RequestValidator::class),
-            Mockery::mock(AuthenticationStateHelperInterface::class),
-            Mockery::mock(FeatureConfigurationInterface::class)
-        );
-
         $session = new Session(new MockArraySessionStorage());
         $request = Request::create('https://engine.example.com/authentication/idp/single-sign-on');
         $request->setSession($session);
 
-        $controller->singleSignOnAction($request);
+        $this->buildController($requestValidator)->singleSignOnAction($request);
     }
 }

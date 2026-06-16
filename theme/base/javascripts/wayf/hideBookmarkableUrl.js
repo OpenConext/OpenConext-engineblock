@@ -1,7 +1,14 @@
-/**
- * Replace SAML query parameters in the URL bar with ?feedback=bookmark to prevent broken bookmarks
- */
 export const hideBookmarkableUrl = () => {
+  const configEl = document.getElementById('wayf-configuration');
+  if (!configEl) {
+    return;
+  }
+
+  const config = JSON.parse(configEl.innerHTML);
+  if (!config.hideBookmarkableUrl) {
+    return;
+  }
+
   if (!window.history || !window.history.replaceState) {
     return;
   }

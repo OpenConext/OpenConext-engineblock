@@ -400,6 +400,7 @@ services:
         arguments:
             - '@request_stack'
             - '@translator'
+            - '@OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration'
 
     OpenConext\EngineBlockBundle\Service\DiscoverySelectionService:
 
