@@ -19,9 +19,12 @@ RUN tar -xvjf /tmp/*.tar.bz2 -C /var/www/html/ && \
 # Add the config files for Apache2
 RUN rm -rf /etc/apache2/sites-enabled/*
 COPY ./docker/conf/engine.conf /etc/apache2/sites-enabled/engine.conf
+
 # Instantiate devconf config
 RUN cp config/packages/parameters.yml.dist config/packages/dev/parameters.yml
 
-# Set the default workdir
+HEALTHCHECK --start-period=60s --interval=10s --timeout=1s --retries=20 \
+    CMD curl --fail -s http://localhost/internal/health | grep -q '"status":"UP"'
+
 EXPOSE 80
 CMD ["apache2-foreground"]
