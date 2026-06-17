@@ -16,6 +16,7 @@ SBS integration:
 * Add support for [SBS](https://github.com/SURFscz/SBS)/[SRAM](https://sram.surf.nl/):
   * Allows autorization based on SBS collaborations/services
   * Allows adding [AARC-G002](https://aarc-community.org/guidelines/aarc-g002/) group/collaboration attributes
+* Add logging why consent is skipped if additional logging is enabled
 
 This version of Engineblock requested [SBS](https://github.com/SURFscz/SBS) v69 (if SBS integration is enabled) and has been
 tested with [Manage](https://github.com/OpenConext/OpenConext-manage/) 9.6.
