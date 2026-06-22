@@ -58,7 +58,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.0.1",
     "js-cookie": "^3.0",
-    "js-yaml": "^4.1",
+    "js-yaml": "^4.2",
     "tippy.js": "^6.3"
   }
 }
