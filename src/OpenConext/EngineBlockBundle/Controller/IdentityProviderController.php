@@ -40,6 +40,8 @@ use Twig\Environment;
  */
 class IdentityProviderController implements AuthenticationLoopThrottlingController
 {
+    private const FEEDBACK_BOOKMARK = 'bookmark';
+
     /**
      * @var EngineBlock_ApplicationSingleton
      */
@@ -132,7 +134,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
     #[Route(path: '/authentication/idp/single-sign-on/{idpHash}', name: 'authentication_idp_sso_idphash', methods: ['GET', 'POST'])]
     public function singleSignOnAction(Request $request, ?string $keyId = null, ?string $idpHash = null)
     {
-        if ($request->query->get('feedback') === 'bookmark') {
+        if ($request->query->get('feedback') === self::FEEDBACK_BOOKMARK) {
             return new RedirectResponse(
                 $this->urlGenerator->generate('authentication_feedback_bookmarked_page', [], UrlGeneratorInterface::ABSOLUTE_PATH)
             );
