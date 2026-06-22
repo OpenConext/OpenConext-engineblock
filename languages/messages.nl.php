@@ -231,6 +231,8 @@ HTML
     'error_authentication_limit_exceeded' => 'Fout - teveel onafgeronde authenticaties tegelijkertijd.',
     'error_authentication_limit_exceeded_desc' => 'Teveel onafgeronde authenticaties tegelijkertijd.',
     'error_no_authentication_request_received' => 'Fout - Geen authenticatie-aanvraag ontvangen.',
+    'error_bookmarked_page'      => 'Fout - Deze pagina bestaat niet meer',
+    'error_bookmarked_page_desc' => 'De pagina die je probeert te bezoeken bestaat niet meer. Waarschijnlijk heb je de pagina als bladwijzer opgeslagen, maar dat werkt helaas niet. Zoek de juiste link naar de applicatie waarop je wilt inloggen om toegang te krijgen.',
     'error_authn_context_class_ref_blacklisted' => 'Fout - Waarde van AuthnContextClassRef is niet toegestaan',
     'error_authn_context_class_ref_blacklisted_desc' => 'Je kunt niet inloggen omdat %idpName% een waarde stuurde voor AuthnContextClassRef die niet is toegestaan. Neem contact op met de helpdesk van %idpName% om dit op te lossen.',
     'error_authn_context_class_ref_blacklisted_desc_no_idp_name' => 'Je kunt niet inloggen omdat je %organisationNoun% een waarde stuurde voor AuthnContextClassRef die niet is toegestaan. Neem contact op met de helpdesk van je %organisationNoun% om dit op te lossen.',

@@ -26,14 +26,17 @@ use OpenConext\EngineBlock\Validator\RequestValidator;
 use OpenConext\EngineBlockBridge\ResponseFactory;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to the compatibility requirements
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList) Due to the compatibility requirements
  */
 class IdentityProviderController implements AuthenticationLoopThrottlingController
 {
@@ -82,6 +85,11 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
      */
     private $featureConfiguration;
 
+    /**
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
+
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
         Environment $twig,
@@ -91,7 +99,8 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
         RequestValidator $bindingValidator,
         RequestValidator $unsolicitedRequestValidator,
         AuthenticationStateHelperInterface $authenticationStateHelper,
-        FeatureConfigurationInterface $featureConfiguration
+        FeatureConfigurationInterface $featureConfiguration,
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->twig = $twig;
@@ -102,6 +111,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
         $this->unsolicitedRequestValidator = $unsolicitedRequestValidator;
         $this->authenticationStateHelper = $authenticationStateHelper;
         $this->featureConfiguration = $featureConfiguration;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -122,6 +132,12 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
     #[Route(path: '/authentication/idp/single-sign-on/{idpHash}', name: 'authentication_idp_sso_idphash', methods: ['GET', 'POST'])]
     public function singleSignOnAction(Request $request, ?string $keyId = null, ?string $idpHash = null)
     {
+        if ($request->query->get('feedback') === 'bookmark') {
+            return new RedirectResponse(
+                $this->urlGenerator->generate('authentication_feedback_bookmarked_page', [], UrlGeneratorInterface::ABSOLUTE_PATH)
+            );
+        }
+
         $this->requestValidator->isValid($request);
         $this->bindingValidator->isValid($request);
 
