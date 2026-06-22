@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\Wayf\WayfIdp;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Service\IdpHistoryService;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -40,10 +41,16 @@ class Wayf
      */
     private $previousSelection;
 
-    public function __construct(RequestStack $requestStack, TranslatorInterface $translator)
-    {
+    private FeatureConfigurationInterface $featureConfiguration;
+
+    public function __construct(
+        RequestStack $requestStack,
+        TranslatorInterface $translator,
+        FeatureConfigurationInterface $featureConfiguration
+    ) {
         $this->previousSelection = $this->loadPreviousSelectionFromCookie($requestStack);
         $this->translator = $translator;
+        $this->featureConfiguration = $featureConfiguration;
     }
 
     /**
@@ -166,6 +173,7 @@ class Wayf
                 'cutoffPointForShowingUnfilteredIdps' => $cutoffPointForShowingUnfilteredIdps,
                 'rememberChoiceCookieName' => self::REMEMBER_CHOICE_COOKIE_NAME,
                 'rememberChoiceFeature' => $rememberChoiceFeature,
+                'hideBookmarkableUrl' => $this->featureConfiguration->isEnabled('eb.hide_bookmarkable_url'),
                 'messages' => [
                     'moreIdpResults' => $this->translator->trans('more_idp_results'),
                     'requestAccess' => $this->translator->trans('request_access'),
