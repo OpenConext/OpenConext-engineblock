@@ -47,6 +47,7 @@ class TestFeatureConfiguration implements FeatureConfigurationInterface
         $this->setFeature(new Feature('eb.stepup.sfo.override_engine_entityid', false));
         $this->setFeature(new Feature('eb.feature_enable_idp_initiated_flow', true));
         $this->setFeature(new Feature('eb.stepup.send_user_attributes', true));
+        $this->setFeature(new Feature('eb.stepup.send_service_name', false));
         $this->setFeature(new Feature('eb.feature_enable_sram_interrupt', true));
         $this->setFeature(new Feature('eb.hide_bookmarkable_url', false));
     }

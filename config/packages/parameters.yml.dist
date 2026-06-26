@@ -235,6 +235,7 @@ parameters:
     feature_enable_idp_initiated_flow: true
     feature_stepup_sfo_override_engine_entityid: false
     feature_stepup_send_user_attributes: false
+    feature_stepup_send_service_name: false
     feature_enable_sram_interrupt: false
     feature_hide_bookmarkable_url: false
 

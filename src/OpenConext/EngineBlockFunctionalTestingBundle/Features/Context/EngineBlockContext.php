@@ -688,6 +688,7 @@ class EngineBlockContext extends AbstractSubContext
 
         $xpathObject = new DOMXPath($authnRequest);
         $xpathObject->registerNamespace('gssp', 'urn:mace:surf.nl:stepup:gssp-extensions');
+        $xpathObject->registerNamespace('mdui', 'urn:oasis:names:tc:SAML:metadata:ui');
         $nodeList = $xpathObject->query($xpath);
 
         if (!$nodeList || $nodeList->length === 0) {
