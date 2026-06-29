@@ -152,6 +152,10 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
 
 
         if ($this->isConsentDisabled($spMetadataChain, $identityProvider)) {
+            if ($requireAdditionalLogging) {
+                $this->logger->info('Consent is disabled, skipping consent screen');
+            }
+
             $implicitConsent = $consentRepository->implicitConsentWasGivenFor($serviceProviderMetadata);
             if (!$implicitConsent->given()) {
                 $consentRepository->giveImplicitConsentFor($serviceProviderMetadata);
@@ -175,6 +179,10 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
 
         $priorConsent = $consentRepository->explicitConsentWasGivenFor($serviceProviderMetadata);
         if ($priorConsent->given()) {
+            if ($requireAdditionalLogging) {
+                 $this->logger->info('Prior consent was found, skipping consent screen');
+             }
+
             $consentRepository->upgradeAttributeHashFor($serviceProviderMetadata, ConsentType::Explicit, $priorConsent);
 
             $response->setConsent(Constants::CONSENT_PRIOR);
@@ -258,6 +266,10 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'hideFooter' => true,
             ]
         );
+
+        if ($requireAdditionalLogging) {
+            $this->logger->info('Showing consent screen');
+        }
 
         $this->_server->sendOutput($html);
     }

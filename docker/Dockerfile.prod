@@ -19,6 +19,7 @@ RUN tar -xvjf /tmp/*.tar.bz2 -C /var/www/html/ && \
 # Add the config files for Apache2
 RUN rm -rf /etc/apache2/sites-enabled/*
 COPY ./docker/conf/engine.conf /etc/apache2/sites-enabled/engine.conf
+
 # Instantiate devconf config
 RUN cp config/packages/parameters.yml.dist config/packages/dev/parameters.yml
 
