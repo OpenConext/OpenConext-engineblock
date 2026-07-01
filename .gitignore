@@ -10,6 +10,7 @@ public/fonts
 public/images
 public/javascripts
 public/stylesheets
+public/version.json
 
 theme/node_modules
 vendor

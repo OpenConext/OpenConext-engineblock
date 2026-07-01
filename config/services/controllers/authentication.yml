@@ -77,3 +77,8 @@ services:
         arguments:
             - '@symfony.mailer'
             - '%email_request_access_address%'
+
+    OpenConext\EngineBlockBundle\Controller\ActuatorController:
+        arguments:
+            - '@engineblock.compat.logger'
+            - '%kernel.project_dir%'
