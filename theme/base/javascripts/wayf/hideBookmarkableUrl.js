@@ -1,10 +1,18 @@
+import {configurationId} from '../selectors';
+
 export const hideBookmarkableUrl = () => {
-  const configEl = document.getElementById('wayf-configuration');
+  const configEl = document.getElementById(configurationId);
   if (!configEl) {
     return;
   }
 
-  const config = JSON.parse(configEl.innerHTML);
+  let config;
+  try {
+    config = JSON.parse(configEl.innerHTML);
+  } catch (e) {
+    return;
+  }
+
   if (!config.hideBookmarkableUrl) {
     return;
   }

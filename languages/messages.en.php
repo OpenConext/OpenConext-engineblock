@@ -234,6 +234,8 @@ Your %organisationNoun% does not provide the mandatory information. Therefore, y
     'error_authentication_limit_exceeded' => 'Error - too many authentications in progress',
     'error_authentication_limit_exceeded_desc' => 'Too many authentications in progress',
     'error_no_authentication_request_received' => 'Error - No authentication request received.',
+    'error_bookmarked_page'      => 'Error - This page no longer exists',
+    'error_bookmarked_page_desc' => 'The page you are trying to visit no longer exists. You probably saved a bookmark, but unfortunately that doesn\'t work. Search for the correct link to the application you want to log in to in order to gain access.',
     'error_authn_context_class_ref_blacklisted'                     => 'Error - AuthnContextClassRef value is not allowed',
     'error_authn_context_class_ref_blacklisted_desc'                => 'You cannot login because %idpName% sent a value for AuthnContextClassRef that is not allowed. Please contact the service desk of %idpName% to solve this.',
     'error_authn_context_class_ref_blacklisted_desc_no_idp_name'                => 'You cannot login because your %organisationNoun% sent a value for AuthnContextClassRef that is not allowed. Please contact the service desk of your %organisationNoun% to solve this.',

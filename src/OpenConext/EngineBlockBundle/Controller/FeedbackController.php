@@ -153,6 +153,15 @@ class FeedbackController
         ],
         methods: ['GET']
     )]
+    #[Route(
+        path: '/authentication/feedback/bookmarked-page',
+        name: 'authentication_feedback_bookmarked_page',
+        defaults: [
+            'pageIdentifier' => 'bookmarked-page',
+            'statusCode' => 400
+        ],
+        methods: ['GET']
+    )]
     public function feedbackAction(string $pageIdentifier, int $statusCode): Response
     {
         return new Response(
