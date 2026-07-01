@@ -6,7 +6,7 @@ import {firstRemainingIdp, firstSelectedIdpDeleteDisable, selectedIdpDataIndex1}
  */
 context('WAYF when using the mouse', () => {
   describe('Test logging in', () => {
-    it('Should login when selecting an idp', () => {
+    it('Should log in when selecting an idp', () => {
       cy.visit('https://engine.dev.openconext.local/functional-testing/wayf');
       cy.get(remainingIdpSelector)
         .eq(1)

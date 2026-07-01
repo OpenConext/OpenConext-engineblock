@@ -17,12 +17,12 @@
       "AttributeAssignment" : [ {
         "Category" : "urn:oasis:names:tc:xacml:3.0:attribute-category:resource",
         "AttributeId" : "DenyMessage:en",
-        "Value" : "Students do not have access to this resource",
+        "Value" : "Students do not have access to this application",
         "DataType" : "http://www.w3.org/2001/XMLSchema#string"
       }, {
         "Category" : "urn:oasis:names:tc:xacml:3.0:attribute-category:resource",
         "AttributeId" : "DenyMessage:nl",
-        "Value" : "Studenten hebben geen toegang tot deze dienst",
+        "Value" : "Studenten hebben geen toegang tot deze applicatie",
         "DataType" : "http://www.w3.org/2001/XMLSchema#string"
       } ],
       "Id" : "urn:surfconext:xacml:policy:id:openconext_pdp_test_deny_policy_xml"

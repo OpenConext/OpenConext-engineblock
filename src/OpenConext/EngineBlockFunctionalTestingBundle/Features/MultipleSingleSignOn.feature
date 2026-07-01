@@ -11,6 +11,7 @@ Feature:
         And an Identity Provider named "SSO-IdP"
         And a Service Provider named "SSO-SP"
         And a Service Provider named "SSO-Two"
+        And I open 2 browser tabs identified by "Browser tab 1, Browser tab 2"
 
     Scenario: Two solicited authentication requests sequential
       When I open 2 browser tabs identified by "Browser tab 1, Browser tab 2"

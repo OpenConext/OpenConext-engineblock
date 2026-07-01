@@ -1,9 +1,0 @@
-{% extends '@theme/Default/View/Error/error.html.twig' %}
-
-{% set _key = 'error_' ~ pageIdentifier|replace({'-': '_'}) %}
-{% set pageTitle = (_key)|trans %}
-{% block pageTitle %}{{ pageTitle }}{% endblock %}
-{% block title %}{{ parent() }}{% endblock %}
-{% block pageHeading %}{{ pageTitle }}{% endblock %}
-
-{% block errorMessage %}{{ (_key ~ '_desc')|trans }}{% endblock %}
