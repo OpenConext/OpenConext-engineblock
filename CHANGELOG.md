@@ -1,62 +1,64 @@
 # CHANGELOG
 
 All release notes between version 4.7.5 and 5.8.0 can be found
-on [GitHub](https://github.com/OpenConext/OpenConext-engineblock/releases). Release notes for version <= 4.7.5 are in the
-repository under `docs/release_notes`.
+on [GitHub](https://github.com/OpenConext/OpenConext-engineblock/releases). Release notes for version <= 4.7.5 are in
+the repository under `docs/release_notes`.
 
-We will continue to post relevant release notes on the GitHub release page.
-More detailed release notes should be placed in this document.
+We will continue to post relevant release notes on the GitHub release page. More detailed release notes should be placed
+in this document.
 
 More information about our release strategy can be found in
-the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on
-the EngineBlock wiki.
+the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes)
+on the EngineBlock wiki.
 
-## UNRELEASED
-Features:
-* Added `coin:azure_domain_hint` configuration option for IdPs. When set, EngineBlock appends a `whr=<domain>` query parameter to the HTTP-Redirect AuthnRequest sent to the IdP, allowing Microsoft Azure / EntraID to skip the account picker (#1864).
+## 7.2-beta
 
-### Translation key changes
+Upgrade to Symfony 7.4 Upgrade to `doctrine/dbal` 4
 
-The following translation keys have been renamed. If you have overridden any of these in your theme translations (`theme/{name}/translations/messages.*.php`), update the key names accordingly.
+Bugfixes:
 
-| Old key                                     | New key                                |
-|---------------------------------------------|----------------------------------------|
-| `error_no_message`                          | `error_unable_to_receive_message`      |
-| `error_no_message_desc`                     | `error_unable_to_receive_message_desc` |
-| `error_stepup_callout_unknown_title`        | `error_stepup_callout_unknown`         |
-| `error_stepup_callout_user_cancelled_title` | `error_stepup_callout_user_cancelled`  |
-
-#### `error_invalid_acs_location`
-
-The `error_invalid_acs_location` translation key has changed meaning. Previously it held the **error description** text. It now holds the **page title**.
-
-If you have overridden this key in your theme translations (`theme/{name}/translations/messages.*.php`), rename it to `error_invalid_acs_location_desc` and add a new `error_invalid_acs_location` entry for the page title.
-
-**Before:**
-```php
-'error_invalid_acs_location' => 'Your custom description text.',
-```
-
-**After:**
-```php
-'error_invalid_acs_location'      => 'Error - Invalid ACS location',
-'error_invalid_acs_location_desc' => 'Your custom description text.',
-```
-
-See https://github.com/OpenConext/OpenConext-engineblock/issues/1758
-
-### HTTP status code changes
-
-The following feedback pages previously returned HTTP **200 OK** and now return HTTP **400 Bad Request**.
-
-| URL                                                   | Before | After |
-|-------------------------------------------------------|--------|-------|
-| `/authentication/feedback/invalid-acs-binding`        | 200    | 400   |
-| `/authentication/feedback/received-error-status-code` | 200    | 400   |
+* Metadata push will now reject all metadata if any service contains invalid PHP syntax in its attribute manipulations
+  (#1778)
 
 Maintenance:
+
+* `symfony/monolog-bundle` upgraded to ^4.0; review your monolog configuration if you have customised it outside of the
+  defaults.
 * Removed the `openconext` theme. The `skeune` theme is now the only supported theme and the default. (#1980)
-* The non-unique index `idx_user_uuid` on the `user` table has been replaced by a unique index `uq_user_uuid`, and the `uuid` column is now enforced as `NOT NULL`. Before running the migration, ensure no rows have a `NULL` uuid (there should be none in a healthy database). Run the following on your production database (#1974):
+
+Features:
+
+* Added `coin:azure_domain_hint` configuration option for IdPs. When set, EngineBlock appends a `whr=<domain>` query
+  parameter to the HTTP-Redirect AuthnRequest sent to the IdP, allowing Microsoft Azure / EntraID to skip the account
+  picker (#1864). The metadata option is available in Manage starting from version 9.7.4.
+
+Changes:
+
+* The metadata expiration time (`validUntil` attribute) is now configurable via the `metadata_expiration_time` parameter
+  in `parameters.yml`.
+    * Action required: Add `metadata_expiration_time` to `parameters.yaml`, suggested value: `86400`. This is the old
+      behaviour in which metadata is cached for 24 hours.
+* The `consent.deleted_at` should be not nullable, and have a default value of `0000-00-00 00:00:00`.
+    * Because `deleted_at` is part of the PK, no migration is provided. The database engine should not allow this to be
+      null in the first place, so it is probably not nullable already on your db.
+    * The `0000-00-00 00:00:00` is added for clarity/consistency, as this is probably the default behaviour of your
+      database already.
+* Removed unused index `consent.deleted_at`. Delete this from your production database if it's there.
+* Added a specific error page for unsolicited SAML responses (IdP-initiated SSO without a prior AuthnRequest).
+* A new parameter `wayf.preferred_idp_entity_ids` must be added to `parameters.yml`. To display a set of IdPs prominent
+  at the top of the WAYF, add the entityId's of those IdPs to this parameter.
+    * To keep the old behaviour, set the value to `[]`
+
+* Stabilized consent checks
+    * In order to make the consent hashes more robust, a more consistent way of hashing the user attributes has been
+      introduced
+    * This feature automatically migrates from the old hashes to the new hashes upon login.
+
+### Database changes
+
+* The non-unique index `idx_user_uuid` on the `user` table has been replaced by a unique index `uq_user_uuid`, and the
+  `uuid` column is now enforced as `NOT NULL`. Before running the migration, ensure no rows have a `NULL` uuid (there
+  should be none in a healthy database). Run the following on your production database (#1974):
   ```sql
   SET SESSION innodb_sort_buffer_size = 268435456;
   ALTER TABLE `user`
@@ -67,30 +69,49 @@ Maintenance:
       LOCK=NONE;
   ```
 
-## UNRELEASED 7.2.0
-Upgrade to Symfony 7.4
-Upgrade to `doctrine/dbal` 4
+### HTTP status code changes
 
-Bugfixes:
-* Metadata push will now reject all metadata if any service contains invalid PHP syntax in its attribute manipulations (#1778)
+The following feedback pages previously returned HTTP **200 OK** and now return HTTP **400 Bad Request**.
 
-Maintenance:
-* `symfony/monolog-bundle` upgraded to ^4.0; review your monolog configuration if you have customised it outside of the defaults.
+| URL                                                   | Before | After |
+|-------------------------------------------------------|--------|-------|
+| `/authentication/feedback/invalid-acs-binding`        | 200    | 400   |
+| `/authentication/feedback/received-error-status-code` | 200    | 400   |
 
-Changes:
-* The metadata expiration time (`validUntil` attribute) is now configurable via the `metadata_expiration_time` parameter in `parameters.yml`.
-  * Action required: Add `metadata_expiration_time` to `parameters.yaml`, suggested value: `86400`. This is the old behaviour in which metadata is cached for 24 hours.
-* The `consent.deleted_at` should be not nullable, and have a default value of `0000-00-00 00:00:00`.
-  * Because `deleted_at` is part of the PK, no migration is provided. The database engine should not allow this to be null in the first place, so it is probably not nullable already on your db.
-  * The `0000-00-00 00:00:00` is added for clarity/consistency, as this is probably the default behaviour of your database already.
-* Removed unused index `consent.deleted_at`. Delete this from your production database if it's there.
-* Added a specific error page for unsolicited SAML responses (IdP-initiated SSO without a prior AuthnRequest).
-* A new parameter `wayf.preferred_idp_entity_ids` must be added to `parameters.yml`. To display a set of IdPs prominent at the top of the WAYF, add the entityId's of those IdPs to this parameter.
-  * To keep the old behaviour, set the value to `[]`
+### Translation key changes
 
-* Stabilized consent checks
-  * In order to make the consent hashes more robust, a more consistent way of hashing the user attributes has been introduced
-  * This feature automatically migrates from the old hashes to the new hashes upon login.
+The following translation keys have been renamed. If you have overridden any of these in your theme translations
+(`theme/{name}/translations/messages.*.php`), update the key names accordingly.
+
+| Old key                                     | New key                                |
+|---------------------------------------------|----------------------------------------|
+| `error_no_message`                          | `error_unable_to_receive_message`      |
+| `error_no_message_desc`                     | `error_unable_to_receive_message_desc` |
+| `error_stepup_callout_unknown_title`        | `error_stepup_callout_unknown`         |
+| `error_stepup_callout_user_cancelled_title` | `error_stepup_callout_user_cancelled`  |
+
+#### `error_invalid_acs_location`
+
+The `error_invalid_acs_location` translation key has changed meaning. Previously it held the **error description** text.
+It now holds the **page title**.
+
+If you have overridden this key in your theme translations (`theme/{name}/translations/messages.*.php`), rename it to
+`error_invalid_acs_location_desc` and add a new `error_invalid_acs_location` entry for the page title.
+
+**Before:**
+
+```php
+'error_invalid_acs_location' => 'Your custom description text.',
+```
+
+**After:**
+
+```php
+'error_invalid_acs_location'      => 'Error - Invalid ACS location',
+'error_invalid_acs_location_desc' => 'Your custom description text.',
+```
+
+See https://github.com/OpenConext/OpenConext-engineblock/issues/1758
 
 ## 7.1.0
 SBS integration:
