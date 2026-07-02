@@ -12,6 +12,10 @@ the [Development Guidelines](https://github.com/OpenConext/OpenConext-enginebloc
 the EngineBlock wiki.
 
 ## UNRELEASED
+
+Fixes:
+* Fix Dotenv never loading `.env.{ENV}` overrides.
+
 Features:
 * Added `coin:azure_domain_hint` configuration option for IdPs. When set, EngineBlock appends a `whr=<domain>` query parameter to the HTTP-Redirect AuthnRequest sent to the IdP, allowing Microsoft Azure / EntraID to skip the account picker (#1864).
 
