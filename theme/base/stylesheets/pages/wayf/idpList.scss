@@ -44,10 +44,10 @@
             > .idp__logo {
                 align-self: center;
                 display: flex;
-                height: 5.05rem;
-                width: 5.67rem;
+                height: 5.15rem;
+                width: 5.15rem;
                 justify-self: center;
-                padding: .5rem;
+                padding: .3rem;
 
                 @include breakpoints.screen('mobile') {
                     margin: 0;
@@ -60,6 +60,7 @@
                     margin: auto 0;
                     max-height: 100%;
                     width: 100%;
+                    object-fit: contain;
                 }
             }
 
