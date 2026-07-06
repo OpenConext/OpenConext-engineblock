@@ -15,6 +15,7 @@ the EngineBlock wiki.
 
 Fixes:
 * Fix Dotenv never loading `.env.{ENV}` overrides.
+* Fix login failing with `ValueNotConvertible: ... Undefined array key "certData"` when reading `certificates` metadata written by EngineBlock < 7.2 (#2044). The PHP 8.5 Rector upgrade changed `X509CertificateLazyProxy` serialization from `__sleep()` to `__serialize()`, which silently changed the serialized key format stored in `sso_provider_roles_eb5`. The serialized format is restored to the legacy `__sleep()` format so old and new versions can read each other's data (red/green safe); no metadata re-push or migration is needed.
 
 Features:
 * Added `coin:azure_domain_hint` configuration option for IdPs. When set, EngineBlock appends a `whr=<domain>` query parameter to the HTTP-Redirect AuthnRequest sent to the IdP, allowing Microsoft Azure / EntraID to skip the account picker (#1864).
