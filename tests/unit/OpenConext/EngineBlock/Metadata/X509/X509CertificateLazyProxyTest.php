@@ -91,4 +91,78 @@ CQMxagfNC59w22w2ULC/J7au/oP8ylusuxncxizdR/+5UazzAlOWtkjzaABzzBWM
 
         $this->assertEquals($pemBefore, $restored->toPem(), 'Certificate data survives serialization roundtrip');
     }
+
+    public function test_unserializes_legacy_sleep_format()
+    {
+        $certData = $this->validCertData();
+        $expectedPem = (new X509CertificateLazyProxy(new X509CertificateFactory(), $certData))->toPem();
+
+        $restored = unserialize($this->legacySerializedPayload($certData));
+
+        $this->assertEquals(
+            $expectedPem,
+            $restored->toPem(),
+            'Rows serialized by the pre-__serialize() code (mangled private property keys) must still unserialize'
+        );
+    }
+
+    public function test_unserializes_plain_key_format()
+    {
+        $certData = $this->validCertData();
+        $expectedPem = (new X509CertificateLazyProxy(new X509CertificateFactory(), $certData))->toPem();
+
+        $proxyClass = X509CertificateLazyProxy::class;
+        $factoryClass = X509CertificateFactory::class;
+        $payload = sprintf(
+            'O:%d:"%s":2:{%s%ss:7:"factory";O:%d:"%s":0:{}}',
+            strlen($proxyClass),
+            $proxyClass,
+            serialize('certData'),
+            serialize($certData),
+            strlen($factoryClass),
+            $factoryClass
+        );
+
+        $restored = unserialize($payload);
+
+        $this->assertEquals(
+            $expectedPem,
+            $restored->toPem(),
+            'Rows serialized with plain __serialize() keys must also unserialize'
+        );
+    }
+
+    public function test_serializes_to_legacy_sleep_format()
+    {
+        $certData = $this->validCertData();
+        $proxy = new X509CertificateLazyProxy(new X509CertificateFactory(), $certData);
+
+        $this->assertSame(
+            $this->legacySerializedPayload($certData),
+            serialize($proxy),
+            'Serialized format must stay identical to the legacy __sleep() format so older EngineBlock versions can read it'
+        );
+    }
+
+    private function legacySerializedPayload(string $certData): string
+    {
+        $proxyClass = X509CertificateLazyProxy::class;
+        $factoryClass = X509CertificateFactory::class;
+
+        return sprintf(
+            'O:%d:"%s":2:{%s%s%sO:%d:"%s":0:{}}',
+            strlen($proxyClass),
+            $proxyClass,
+            serialize("\0" . $proxyClass . "\0certData"),
+            serialize($certData),
+            serialize("\0" . $proxyClass . "\0factory"),
+            strlen($factoryClass),
+            $factoryClass
+        );
+    }
+
+    private function validCertData(): string
+    {
+        return "MIIDXzCCAkegAwIBAgIJAM4CwNsdIhJ3MA0GCSqGSIb3DQEBBQUAMEYxDzANBgNVBAMMBkVuZ2luZTERMA8GA1UECwwIU2VydmljZXMxEzARBgNVBAoMCk9wZW5Db25leHQxCzAJBgNVBAYTAk5MMB4XDTE0MDUxMjEzMjIxNloXDTI0MDUxMTEzMjIxNlowRjEPMA0GA1UEAwwGRW5naW5lMREwDwYDVQQLDAhTZXJ2aWNlczETMBEGA1UECgwKT3BlbkNvbmV4dDELMAkGA1UEBhMCTkwwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC2aQ9OYsAASWR/aN5NB2mQqFsBc13uN0nSbjkk1Um8VouGo7OmSM0eiur5my8UvPYth1DXQM6u2wiFq19RtfVZWJOmrzAfVHc9VRj9Xj4T+MVpR4bDWctvxVT1OPm9L23KQKvaqDmUo7uSPsBD36EIH7dFOBydDtSXfZTW0ien+lZr6C4nPuxzDbHJ+Jlo2brieimUBQNetX/ettnAglJ9536sJDkhsa120mkYPhVnvepbOtxPyU5ZDUpDNmMQR2/SORCBJcfvLSVZ4It4O67l6/EJnkFRLerIqOpk/W8jY3USQaLM2WM7sWBGxEFKDVcTFgrOH50Z94K2M/KweY2bAgMBAAGjUDBOMB0GA1UdDgQWBBSewI9OzfzbIxnl6XMkaQkYY1hHPjAfBgNVHSMEGDAWgBSewI9OzfzbIxnl6XMkaQkYY1hHPjAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4IBAQAFfYPZbsYPHz4ypV/aO59do7CtHPnAMWr0NcQt4h9IW8gjihaNHt12V30QtHrVaXejXybB/LaGbPPyA64+l/SeC7ksrRxlitCwFqnws6ISXJaYU0iEFHGUD/cAj1iGloIsOm5IOdb3sdG/SsBv49G8es2wG0rDd0/s2fBVvXd4qUoXzKJAjYk1MFQxnGHomlt67SBrr2QLh+m2VHg+mkdi6yrdm9B9ylF8V55Vl82pPZXxphIRgqdos5YWeALS7dr5dSw9s5smFBxyy8IfCQMxagfNC59w22w2ULC/J7au/oP8ylusuxncxizdR/+5UazzAlOWtkjzaABzzBWM4hEK";
+    }
 }

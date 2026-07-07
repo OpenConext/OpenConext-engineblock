@@ -26,6 +26,14 @@ Maintenance:
   defaults.
 * Removed the `openconext` theme. The `skeune` theme is now the only supported theme and the default. (#1980)
 
+Fixes:
+* Fix login failing with `ValueNotConvertible: ... Undefined array key "certData"` when reading `certificates` metadata
+  written by EngineBlock < 7.2 (#2044). The PHP 8.5 Rector upgrade changed `X509CertificateLazyProxy` serialization from
+  `__sleep()` to `__serialize()`, which silently changed the serialized key format stored in `sso_provider_roles_eb5`.
+  The serialized format is restored to the legacy `__sleep()` format so old and new versions can read each other's data
+  (red/green safe); no metadata re-push or migration is needed.
+* The CSS of the dsivery page was adjusted to correctly scale square logos
+
 Features:
 
 * Added `coin:azure_domain_hint` configuration option for IdPs. When set, EngineBlock appends a `whr=<domain>` query
@@ -48,7 +56,6 @@ Changes:
 * A new parameter `wayf.preferred_idp_entity_ids` must be added to `parameters.yml`. To display a set of IdPs prominent
   at the top of the WAYF, add the entityId's of those IdPs to this parameter.
     * To keep the old behaviour, set the value to `[]`
-
 * Stabilized consent checks
     * In order to make the consent hashes more robust, a more consistent way of hashing the user attributes has been
       introduced
