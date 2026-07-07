@@ -117,7 +117,7 @@ Feature:
       And I pass through EngineBlock
       And I pass through the IdP
      Then the url should match "authentication/feedback/unsolicited-response"
-      And I should see "Error - Sign-in could not be completed"
+      And I should see "Error - Login could not be completed"
 
   Scenario: EngineBlock falls back to HTTP-POST when an unsupported ProtocolBinding is requested
     Given the SP requests ProtocolBinding "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"

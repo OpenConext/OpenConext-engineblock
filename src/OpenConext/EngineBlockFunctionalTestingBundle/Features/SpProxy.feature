@@ -92,7 +92,7 @@ Feature:
       And SP "Step Up" is a trusted proxy
       And SP "Step Up" signs its requests
      When I log in at "Step Up"
-     Then I should see "Select an account to login to Loa SP"
+     Then I should see "Select an account to log in to Loa SP"
       And I select "AlwaysAuth" on the WAYF
       And I pass through EngineBlock
       And I pass through the IdP
@@ -261,7 +261,7 @@ Feature:
          # Bug report: https://www.pivotaltracker.com/story/show/164069793
     Then I should not see "Error - No organisations found"
          # The WAYF should be visible
-     And I should see "Select an account to login to"
+     And I should see "Select an account to log in to"
 
   Scenario: Trusted proxy not signing requests results in an error
     Given SP "Step Up" is authenticating for SP "Loa SP"
