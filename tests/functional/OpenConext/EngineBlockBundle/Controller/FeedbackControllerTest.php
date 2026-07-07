@@ -62,7 +62,7 @@ final class FeedbackControllerTest extends FunctionalWebTestCase
     #[Test]
     public function unknown_requesterid_in_authnrequest_returns_400_with_expected_content(): void
     {
-        $this->assertFeedbackPage('/authentication/feedback/unknown_requesterid_in_authnrequest', Response::HTTP_BAD_REQUEST, 'Unknown service');
+        $this->assertFeedbackPage('/authentication/feedback/unknown_requesterid_in_authnrequest', Response::HTTP_BAD_REQUEST, 'Unknown application');
     }
 
     #[Test]
