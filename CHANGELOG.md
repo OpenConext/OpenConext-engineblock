@@ -38,9 +38,9 @@ Changes:
   in `parameters.yml`.
     * Action required: Add `metadata_expiration_time` to `parameters.yaml`, suggested value: `86400`. This is the old
       behaviour in which metadata is cached for 24 hours.
-* The `consent.deleted_at` should be not nullable, and have a default value of `0000-00-00 00:00:00`.
-    * Because `deleted_at` is part of the PK, no migration is provided. The database engine should not allow this to be
-      null in the first place, so it is probably not nullable already on your db.
+* The `consent.deleted_at` should be not nullable and have a default value of `0000-00-00 00:00:00`.
+    * Because `deleted_at` is part of the primary key, no migration is provided. The database engine should not allow
+      this to be null in the first place, so it is probably not nullable already on your db.
     * The `0000-00-00 00:00:00` is added for clarity/consistency, as this is probably the default behaviour of your
       database already.
 * Removed unused index `consent.deleted_at`. Delete this from your production database if it's there.
@@ -68,6 +68,7 @@ Changes:
       ALGORITHM=INPLACE,
       LOCK=NONE;
   ```
+  Note that this could impact database availability.
 
 ### HTTP status code changes
 

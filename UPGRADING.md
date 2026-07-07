@@ -1,5 +1,34 @@
 # UPGRADE NOTES
 
+## 7.2.0
+This release brings a number of features and changes.
+
+- Monolog has been updated from verison 2 to 3; review your monolog configuration if you have customised it outside of
+  the defaults.
+- Add `metadata_expiration_time` to `parameters.yaml`, suggested value: `86400`. This is the old
+  behaviour in which metadata is cached for 24 hours.
+
+### Database changes
+The following database changes need to be made:
+
+ - The `consent.deleted_at` should be not nullable and have a default value of `0000-00-00 00:00:00`. No explicit migratie is provided.
+  Run the following to check if the column is nullable:
+  ```sql
+  SELECT column_name, is_nullable FROM information_schema.columns WHERE table_name = 'consent' AND column_name = 'deleted_at';
+  ```
+  If the column is nullable, you need to run the following migration:
+  ```sql
+  ALTER TABLE consent ALTER COLUMN deleted_at SET NOT NULL;
+  ALTER TABLE consent ALTER COLUMN deleted_at SET DEFAULT '0000-00-00 00:00:00';
+  ```
+  Note this will block databse updates and writes during the migration (which can take several hours).  Depending on your databse product and version, an online method might be avaible.
+
+- Removed unused index `consent.deleted_at`. Delete this from your production database if it's there:
+  ```sql
+  DROP INDEX IF EXISTS consent.deleted_at;
+  ```
+
+
 ## 7.1.0
 This version adds support for [SBS](https://github.com/SURFscz/SBS)-based authorization and attribute aggregation.
 
