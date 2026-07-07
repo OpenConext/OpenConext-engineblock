@@ -66,15 +66,23 @@ class X509CertificateLazyProxy
 
     /**
      * Take care not to serialize the openSSL resource ($this->certificate).
+     *
+     * Keys use the mangled private-property format that __sleep() produced, so the
+     * serialized representation stored in the database stays readable by older
+     * EngineBlock versions (red/green deployments).
      */
     public function __serialize(): array
     {
-        return array('certData' => $this->certData, 'factory' => $this->factory);
+        $prefix = "\0" . self::class . "\0";
+
+        return array($prefix . 'certData' => $this->certData, $prefix . 'factory' => $this->factory);
     }
 
     public function __unserialize(array $data): void
     {
-        $this->certData = $data['certData'];
-        $this->factory  = $data['factory'];
+        $prefix = "\0" . self::class . "\0";
+
+        $this->certData = $data[$prefix . 'certData'] ?? $data['certData'];
+        $this->factory  = $data[$prefix . 'factory'] ?? $data['factory'];
     }
 }
