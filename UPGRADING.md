@@ -7,6 +7,7 @@ This release brings a number of features and changes.
   the defaults.
 - Add `metadata_expiration_time` to `parameters.yaml`, suggested value: `86400`. This is the old
   behaviour in which metadata is cached for 24 hours.
+- Reading of environment variables from `.env` and `.env.<env_name>` files has bene restored.  Please check that
 
 ### Database changes
 The following database changes need to be made:
