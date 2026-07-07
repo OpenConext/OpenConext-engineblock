@@ -15,11 +15,6 @@ on the EngineBlock wiki.
 
 Upgrade to Symfony 7.4 Upgrade to `doctrine/dbal` 4
 
-Bugfixes:
-
-* Metadata push will now reject all metadata if any service contains invalid PHP syntax in its attribute manipulations
-  (#1778)
-
 Maintenance:
 
 * `symfony/monolog-bundle` upgraded to ^4.0; review your monolog configuration if you have customised it outside of the
@@ -27,12 +22,13 @@ Maintenance:
 * Removed the `openconext` theme. The `skeune` theme is now the only supported theme and the default. (#1980)
 
 Fixes:
+* Fix console never loading `.env` files
+* Fix Dotenv never loading `.env.{ENV}` overrides.
 * Fix login failing with `ValueNotConvertible: ... Undefined array key "certData"` when reading `certificates` metadata
   written by EngineBlock < 7.2 (#2044). The PHP 8.5 Rector upgrade changed `X509CertificateLazyProxy` serialization from
   `__sleep()` to `__serialize()`, which silently changed the serialized key format stored in `sso_provider_roles_eb5`.
   The serialized format is restored to the legacy `__sleep()` format so old and new versions can read each other's data
   (red/green safe); no metadata re-push or migration is needed.
-* The CSS of the dsivery page was adjusted to correctly scale square logos
 
 Features:
 
@@ -42,6 +38,8 @@ Features:
 
 Changes:
 
+* Metadata push will now reject all metadata if any service contains invalid PHP syntax in its attribute manipulations
+  (#1778)
 * The metadata expiration time (`validUntil` attribute) is now configurable via the `metadata_expiration_time` parameter
   in `parameters.yml`.
     * Action required: Add `metadata_expiration_time` to `parameters.yaml`, suggested value: `86400`. This is the old
@@ -60,6 +58,7 @@ Changes:
     * In order to make the consent hashes more robust, a more consistent way of hashing the user attributes has been
       introduced
     * This feature automatically migrates from the old hashes to the new hashes upon login.
+* The CSS of the discovery page was adjusted to correctly scale square logos
 
 ### Database changes
 
