@@ -1,33 +1,81 @@
 # UPGRADE NOTES
 
 ## 7.2.0
+
 This release brings a number of features and changes.
 
 - Monolog has been updated from verison 2 to 3; review your monolog configuration if you have customised it outside of
   the defaults.
-- Add `metadata_expiration_time` to `parameters.yaml`, suggested value: `86400`. This is the old
-  behaviour in which metadata is cached for 24 hours.
-- Reading of environment variables from `.env` and `.env.<env_name>` files has bene restored.  Please check that
+- Add `metadata_expiration_time` to `parameters.yaml`, suggested value: `86400`. This is the old behaviour in which
+  metadata is cached for 24 hours.
+- Reading of environment variables from `.env` and `.env.<env_name>` files has been restored. Please check that
 
 ### Database changes
-The following database changes need to be made:
 
- - The `consent.deleted_at` should be not nullable and have a default value of `0000-00-00 00:00:00`. No explicit migratie is provided.
-  Run the following to check if the column is nullable:
+A number of database updates are required. All should be backwards-compatible, but the updates themselves could take a
+long time while blocking the database. Do not run the migrations on a production database before reading the notes
+below!
+
+All previous migration have been rolled into a new "initial migration".  If you are upgrading from version 7.0 or 7.1, please run the following query manually to set the new starting point for migrations:
+```sql
+INSERT INTO migration_versions values ("OpenConext\\EngineBlock\\Doctrine\\Migrations\\Version20260210000000",NOW(),42);
+```
+
+- The `consent.deleted_at` should be not nullable and have a default value of `0000-00-00 00:00:00`. No explicit
+  migratie is provided. Run the following to check if the column is nullable:
   ```sql
   SELECT column_name, is_nullable FROM information_schema.columns WHERE table_name = 'consent' AND column_name = 'deleted_at';
   ```
   If the column is nullable, you need to run the following migration:
   ```sql
-  ALTER TABLE consent ALTER COLUMN deleted_at SET NOT NULL;
-  ALTER TABLE consent ALTER COLUMN deleted_at SET DEFAULT '0000-00-00 00:00:00';
+  ALTER TABLE consent MODIFY COLUMN deleted_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
   ```
-  Note this will block databse updates and writes during the migration (which can take several hours).  Depending on your databse product and version, an online method might be avaible.
+  Note this will block database updates and writes during the migration (which can take several hours). Depending on
+  your database product and version, an online method might be available.
 
 - Removed unused index `consent.deleted_at`. Delete this from your production database if it's there:
   ```sql
-  DROP INDEX IF EXISTS consent.deleted_at;
+  DROP INDEX IF EXISTS deleted_at ON consent;
   ```
+  This is included in Doctrine migration `Version20260224000000`
+
+- Added a new column `attributes_stable` to the `consent` table to support the updated consent handling. Run the
+  following SQL:
+  ```sql
+  ALTER TABLE consent ADD attribute_stable VARCHAR(80) DEFAULT NULL;
+  ```
+  This is included in Doctrine migration `Version20260315000001`
+
+- The column `saml_persistent_id.persistent_id` should not be NULLable. Check if you have any NULL values:
+  ```sql
+  SELECT COUNT(*) FROM saml_persistent_id WHERE persistent_id IS NULL;
+  ```
+  If you have NULL values, you need to fix them before running the migration:
+  ```sql
+  ALTER TABLE `saml_persistent_id` MODIFY COLUMN `persistent_id` CHAR(40) NOT NULL COMMENT 'SHA1 of COIN: + user_uuid + service_provider_uuid';
+  ```
+  This is included in Doctrine migration `Version20260331000000`
+
+- The non-unique index `idx_user_uuid` on the `user` table has been replaced by a unique index `uq_user_uuid`, and the
+  `uuid` column is now enforced as `NOT NULL`. Before running the migration, ensure no rows have a `NULL` uuid (there
+  should be none in a healthy database). Check for NULL values with:
+  ```sql
+  SELECT COUNT(*) FROM user WHERE uuid IS NULL;
+  ```
+  Then check if the uniqueness can be enforced:
+  ```sql
+  SELECT `uuid`, COUNT(*) c FROM `user` GROUP BY `uuid` HAVING c > 1;
+  ```
+  should return no results.
+  Run the following on your production database (#1974):
+  ```sql
+  ALTER TABLE `user` CHANGE `uuid` `uuid` CHAR(36) NOT NULL;
+  ALTER TABLE `user`
+      ADD UNIQUE INDEX `uq_user_uuid` (`uuid`),
+      DROP INDEX `idx_user_uuid`;
+  ```
+  Note that this could impact database availability (query can take a long time while blocking database access). This is
+  included in Doctrine migration `Version20260602000000`
 
 ### Translation key changes
 
@@ -64,32 +112,35 @@ If you have overridden this key in your theme translations (`theme/{name}/transl
 
 See https://github.com/OpenConext/OpenConext-engineblock/issues/1758
 
-
 ## 7.1.0
+
 This version adds support for [SBS](https://github.com/SURFscz/SBS)-based authorization and attribute aggregation.
 
 The following configuration option should be added to `parameters.yml`
-  - `feature_enable_sram_interrupt` (bool): feature flag to enable SBS support and callout.  Set to `false` if you don't use
-     SBS, in which case all other SBS-related configuration options are ignored (but still need to be present!).
-  - `sram.api_token` (string): SBS API token for authorization of SBS requests.
-  - `sram.base_url` (url): URL of the SBS engine.  Set to `https://sbs.dev.openconext.org/` for the devconf environment.
-  - `sram.authz_location` (string): path to the authorization endpoint at SBS.  Set to `authz_eb` for default SBS value.
-  - `sram.attributes_location` (string): path to the attributes endpoint at SBS.  Set to `attributes_eb` for default SBS value.
-  - `sram.interrupt_location` (string): path to the interrupt endpoint at SBS.
-  - `sram.verify_peer`: (bool): wether or not to verify the TLS certificate of the SBS engine.  Set to `true`.
-  - `sram.allowed_attributes` (list of strings): list of atttributes that SBS is allowed
-    to replace in the SAML response.  Recommended value for SBS:
-    `['urn:mace:dir:attribute-def:eduPersonEntitlement', 'urn:mace:dir:attribute-def:eduPersonPrincipalName', 'urn:mace:dir:attribute-def:uid', 'urn:oid:1.3.6.1.4.1.24552.500.1.1.1.13']`
+
+- `feature_enable_sram_interrupt` (bool): feature flag to enable SBS support and callout. Set to `false` if you don't
+  use SBS, in which case all other SBS-related configuration options are ignored (but still need to be present!).
+- `sram.api_token` (string): SBS API token for authorization of SBS requests.
+- `sram.base_url` (url): URL of the SBS engine. Set to `https://sbs.dev.openconext.org/` for the devconf environment.
+- `sram.authz_location` (string): path to the authorization endpoint at SBS. Set to `authz_eb` for default SBS value.
+- `sram.attributes_location` (string): path to the attributes endpoint at SBS. Set to `attributes_eb` for default SBS
+  value.
+- `sram.interrupt_location` (string): path to the interrupt endpoint at SBS.
+- `sram.verify_peer`: (bool): wether or not to verify the TLS certificate of the SBS engine. Set to `true`.
+- `sram.allowed_attributes` (list of strings): list of atttributes that SBS is allowed to replace in the SAML response.
+  Recommended value for SBS:
+  `['urn:mace:dir:attribute-def:eduPersonEntitlement', 'urn:mace:dir:attribute-def:eduPersonPrincipalName', 'urn:mace:dir:attribute-def:uid', 'urn:oid:1.3.6.1.4.1.24552.500.1.1.1.13']`
 
 To use SBS integration, the minimum required version of SBS is v69.
 
-
 ## 7.0.0
-Upgraded Symfony from **version 3.3** to **version 5.4 (LTS)**.
-This update brings modernized architecture, performance improvements, enhanced developer experience and security fixes till February 2029.
-Additionally, this version requires PHP 8.2.
+
+Upgraded Symfony from **version 3.3** to **version 5.4 (LTS)**. This update brings modernized architecture, performance
+improvements, enhanced developer experience and security fixes till February 2029. Additionally, this version requires
+PHP 8.2.
 
 ### Directory Structure Overhaul - technical changes:
+
 - The `app/` directory has been replaced with `config/` and `src/`
 - All configuration files now reside under [config/](config), organized by environment
 - Application configuration resides in [config/packages](config/packages)
@@ -101,13 +152,16 @@ Additionally, this version requires PHP 8.2.
 - The public access folder has changed from `web/` to [public/](public)
 - The entry point has changed from `app.php` to [index.php](public/index.php)
 - Some environment variables have changed.
-- [index.php](public/index.php) has been updated to load based on environment variables and has some additional environment variables checks.
+- [index.php](public/index.php) has been updated to load based on environment variables and has some additional
+  environment variables checks.
 - All configurations injections from inside `src/` has been moved to `config/`
 
 ### ⚠️ Breaking Changes - Configurational adjustments required:
 
 #### New public folder
-Replace `web/` with `public/`. Ensure the folder `public/` is accessible and your php webservice is pointing to `public/index.php`. In apache this would mean:
+
+Replace `web/` with `public/`. Ensure the folder `public/` is accessible and your php webservice is pointing to
+`public/index.php`. In apache this would mean:
 
 ```shell
 DocumentRoot /var/www/html/public
@@ -122,13 +176,17 @@ DocumentRoot /var/www/html/public
 ```
 
 #### Configuration
-1. **Any** configuration parameters should be mapped to a different folder location inside `config/`.
-   Most likely the only change will be `app/config/parameters.yml` to `config/packages/[env]/parameters.yml`
-2. Overwriting the `config/packages/parameters.yml` will still work however, using the correct environment package is encouraged.
-3. The value 'secret' in the parameters.yml is no longer used. Instead you should set `APP_SECRET` as an
-   environment variable:
+
+1. **Any** configuration parameters should be mapped to a different folder location inside `config/`. Most likely the
+   only change will be `app/config/parameters.yml` to `config/packages/[env]/parameters.yml`
+2. Overwriting the `config/packages/parameters.yml` will still work however, using the correct environment package is
+   encouraged.
+3. The value 'secret' in the parameters.yml is no longer used. Instead you should set `APP_SECRET` as an environment
+   variable:
    <br>
-   Length: While Symfony doesn’t enforce a strict length, at least 32 bytes (64 hex characters) is recommended for strong security. Uniqueness: Each application instance should have its own unique secret. Reusing secrets across projects or environments is discouraged
+   Length: While Symfony doesn’t enforce a strict length, at least 32 bytes (64 hex characters) is recommended for
+   strong security. Uniqueness: Each application instance should have its own unique secret. Reusing secrets across
+   projects or environments is discouraged
 4. Remove the following environment variables:
     - `ENGINEBLOCK_ENV`
     - `SYMFONY_ENV`
@@ -138,6 +196,7 @@ DocumentRoot /var/www/html/public
     - `APP_DEBUG` set to true to enable debug mode.
 
 Example `.env`
+
 ```shell
 APP_ENV=prod
 APP_DEBUG=false
@@ -145,8 +204,8 @@ APP_SECRET=04d8ec52d3fd4eb9a8f5d4c69d82cfaec39f764af74b223c44e1ba9574b4b3d6
 ```
 
 **Swiftmailer > Symfony Mail**
-In parameters.yml, the Swiftmailer smtp configuration has been replaced with a SMTP dsn for Symfony Mailer.
-Replace:
+In parameters.yml, the Swiftmailer smtp configuration has been replaced with a SMTP dsn for Symfony Mailer. Replace:
+
 ```dotenv
 mailer_transport: 'smtp'
 mailer_host: 'localhost'
@@ -154,6 +213,7 @@ mailer_port: '25'
 mailer_user: ''
 mailer_password: ''
 ```
+
 with:
 `mailer_dsn: 'smtp://user:password@localhost:25'`
 
@@ -163,14 +223,16 @@ Note:
 <br>
 See [apache2.conf](docker/ci/apache2.conf) and [docker-compose.yml](docker/docker-compose.yml) as an example.
 <br>
-See The changes in [https://github.com/OpenConext/OpenConext-devconf/compare/c5b3fd51b2dbf9b1b153972bfa82595128cfc55b..00e1939dca0240e61f0cbee1e6d2ee766e48786f](https://github.com/OpenConext/OpenConext-devconf/compare/c5b3fd51b2dbf9b1b153972bfa82595128cfc55b..00e1939dca0240e61f0cbee1e6d2ee766e48786f) as an example
-
+See The changes
+in [https://github.com/OpenConext/OpenConext-devconf/compare/c5b3fd51b2dbf9b1b153972bfa82595128cfc55b..00e1939dca0240e61f0cbee1e6d2ee766e48786f](https://github.com/OpenConext/OpenConext-devconf/compare/c5b3fd51b2dbf9b1b153972bfa82595128cfc55b..00e1939dca0240e61f0cbee1e6d2ee766e48786f)
+as an example
 
 ## 6.15 -> 6.18
 
 ### Dependencies
 
 Before upgrading to 6.18, first upgrade the following components:
+
 - Manage to version 9.4.0
 - PDP to version 7.2.0
 - if using Stepup:
@@ -180,7 +242,10 @@ Before upgrading to 6.18, first upgrade the following components:
     - Stepup-AzureMFA to version 2.2.0
 
 ### Database migration
-A new database column was added to the Engineblock database. After upgradign the code, you need to run the following migration:
+
+A new database column was added to the Engineblock database. After upgradign the code, you need to run the following
+migration:
+
 ```
 ./app/console doctrine:migrations:migrate --env=prod --no-interaction
 
@@ -204,58 +269,69 @@ Migrating up to 20250206095609 from 20230824090020
 
 ### Manage Push
 
-Make sure that after deploying a new Engine and updating the database, you **FIRST** need to push metadata from Manage to the **NEW** Engineblock version.  Until you do that, Engineblock will not work and you will not be able to log in.
-Note in particular that until you repush the metadata from Manage to Engine, _you_wil_not_be_able_to_login_to_Manage_itself_.  Please take measures against locking yourself out, for example by having a non-federated way to login to Manage, by triggering the push in another way, of by using blue/green deployments (the old Engineblock will work work with the updated database, so it's safe to deploy to green, update the database, login to manage using blue, let Manage push to green, than switch authentication to green).
+Make sure that after deploying a new Engine and updating the database, you **FIRST** need to push metadata from Manage
+to the **NEW** Engineblock version. Until you do that, Engineblock will not work and you will not be able to log in.
+Note in particular that until you repush the metadata from Manage to Engine,
+_you_wil_not_be_able_to_login_to_Manage_itself_. Please take measures against locking yourself out, for example by
+having a non-federated way to login to Manage, by triggering the push in another way, of by using blue/green deployments
+(the old Engineblock will work work with the updated database, so it's safe to deploy to green, update the database,
+login to manage using blue, let Manage push to green, than switch authentication to green).
 
 ### Changes
 
 To use the new GSSP fallback feature of Setup, you need to add the following keys to parameters.yml:
+
 ```
 feature_stepup_send_user_attributes: true
 stepup.callout_user_attributes:
     - urn:mace:dir:attribute-def:mail
     - urn:mace:terena.org:attribute-def:schacHomeOrganization
 ```
+
 If you do not use this feature, set `feature_stepup_send_user_attributes` to `false`.
 
 A new configurable client timeout for Attribute Aggregation (AA) and Policy Decision Point (PDP) has been added:
 Add this to your parameters.yml
+
 ```
 http_client:
   timeout: 30  # seconds
 ```
 
-To prevent resource exhaustion, you can now limit the number of outstanding (concurrent) AuthNRequests per session. If a user
-has more than this number of outstanding (still valid) AuthNRequests in a single session, Engineblock will return a 429 error.
-Add this to your parameters.yml
+To prevent resource exhaustion, you can now limit the number of outstanding (concurrent) AuthNRequests per session. If a
+user has more than this number of outstanding (still valid) AuthNRequests in a single session, Engineblock will return a
+429 error. Add this to your parameters.yml
+
 ```
 maximum_authentications_per_session: 20
 ```
 
 Logging is now sent to stderr by default. The following key in parameters.yml has become obsolete:
+
 ```
 logger.syslog.ident
 ```
+
 See docs/logging.md for more information, inclusing how to configure logging to syslog.
 
 ## 6.13 -> 6.14
 
-Previously the SAML EntityID of the EngineBlock SP that was used to do Stepup (SFO) authentications to the Stepup-Gateway
-always was https://<engineblock.sever.domain.name>/authentication/stepup/metadata. For these authentication the default
-EngineBlock key is always used for signing.
+Previously the SAML EntityID of the EngineBlock SP that was used to do Stepup (SFO) authentications to the
+Stepup-Gateway always was https://<engineblock.sever.domain.name>/authentication/stepup/metadata. For these
+authentication the default EngineBlock key is always used for signing.
 
-If you'd like to key-rollover the StepUp entity (baked into EngineBlock).
-The key used to sign the SAML AuthnRequests from this SP is the engineblock default key.
+If you'd like to key-rollover the StepUp entity (baked into EngineBlock). The key used to sign the SAML AuthnRequests
+from this SP is the engineblock default key.
 
-To facilitate a rolling configuration update I want the SP entityID that is used for Stepup to be configurable so that at the
-same time that the engineblock default key is updated, this entityID can be changed. This then allows two entities, with two
-different keys, to be configured in the Stepup-Gateway.
+To facilitate a rolling configuration update I want the SP entityID that is used for Stepup to be configurable so that
+at the same time that the engineblock default key is updated, this entityID can be changed. This then allows two
+entities, with two different keys, to be configured in the Stepup-Gateway.
 
 There are two new parameters that configure this behavior.
 
 1. `feature_stepup_sfo_override_engine_entityid` [bool] enables/disables the feature. Default: disabled
-2. `stepup.sfo.override_engine_entityid` [string] should be set with the Entity ID you'd like to use for the stepup EntityId.
-   Default: ''
+2. `stepup.sfo.override_engine_entityid` [string] should be set with the Entity ID you'd like to use for the stepup
+   EntityId. Default: ''
 
 The feature flag was added mainly to aid our test suite to easily test this feature.
 
@@ -263,19 +339,18 @@ By default this feature is disabled and the default Entity Id is used for the St
 
 ## 6.12 -> 6.13
 
-Some translatable strings have been changed and "raw" use of HTML in
-translations mostly reduced.
+Some translatable strings have been changed and "raw" use of HTML in translations mostly reduced.
 
-If you override translation strings, the following strings have been
-replaced:
+If you override translation strings, the following strings have been replaced:
 
 * `serviceprovider_link`, `terms_of_service_link` and `logout_information_link`. They are now replaced by separate
-  `serviceprovider_link_text` (the words) and `serviceprovider_link_target` (the URL to link to), same for the other variants.
+  `serviceprovider_link_text` (the words) and `serviceprovider_link_target` (the URL to link to), same for the other
+  variants.
 * `request_access_instructions` is split into `request_access_instructions_head` (the heading line) and
   `request_access_instructions_text` (the body text).
 
-If you've overridden other translatable strings, note that use of HTML may not be possible
-anymore where it was before, and you would need to remove it.
+If you've overridden other translatable strings, note that use of HTML may not be possible anymore where it was before,
+and you would need to remove it.
 
 ## 6.7 -> 6.8
 
@@ -283,7 +358,7 @@ The consent removal feature was introduced in release 6.8. This means that conse
 application will result in the soft deletion of the consent row for that person, for the service they requested the
 consent removal of.
 
-In order to work with this feature, the latest database migration must be installed on your database(s) containing the
+In order to work with this feature, the latest database migration must be installed on your database (s) containing the
 `consent` table. This should be as simple as running `bin/console doctrine:migrations:migrate`. Or executing
 `Version20220425090852` manually.
 
@@ -308,21 +383,24 @@ The following alias can be added back (or review the git history):
 
 # Remove legacy application.ini configuration
 
-The legacy application.ini configuration support is removed in favour of the Symfony configuration.
-From now on the `application/configs/application.ini` and the `/etc/openconext/engineblock.ini` are not being evaluated anymore.
-The legacy configuration (`app/config/ini_parameters.yml`) which was generated from those files is now merged into the
+The legacy application.ini configuration support is removed in favour of the Symfony configuration. From now on the
+`application/configs/application.ini` and the `/etc/openconext/engineblock.ini` are not being evaluated anymore. The
+legacy configuration (`app/config/ini_parameters.yml`) which was generated from those files is now merged into the
 `parameters.yml`.
 
-If you're using OpenConext-Deploy, Ansible is configured to do this for you and will generate a `parameters.yml` for you.
+If you're using OpenConext-Deploy, Ansible is configured to do this for you and will generate a `parameters.yml` for
+you.
 
-If you don't use OpenConext-Deploy you should manually add the `ini_parameters.yml` variables to the`parameters.yml` and you're
-good to go.
+If you don't use OpenConext-Deploy you should manually add the `ini_parameters.yml` variables to the`parameters.yml` and
+you're good to go.
 
-In version 6.2 the unused `response_processing_service_binding` column is removed from the `sso_provider_roles_eb5` table.
+In version 6.2 the unused `response_processing_service_binding` column is removed from the `sso_provider_roles_eb5`
+table.
 
 # Remove Symfony bootstrap cache
 
 Among the cleanup tasks some unused scripts have been removed from the project.
+
 1. The bootstrap.cache.php file, previously used by Symfony was removed
 2. config/cli-config.php (once used to run Doctrine interactions) was removed
 
@@ -330,28 +408,30 @@ If you happen to use these files please migrate your scripts to using the new st
 
 ## 6.0 > 6.1
 
-In version 6.1 the special EngineBlock entities in the roles table aren't used anymore in favor of static entities.
-You could now remove the entities below from manage and then execute a metadata push.
+In version 6.1 the special EngineBlock entities in the roles table aren't used anymore in favor of static entities. You
+could now remove the entities below from manage and then execute a metadata push.
+
 * engine.{{ base_domain}./authentication/sp/metadata
 * engine.{{ base_domain}//authentication/idp/metadata
 
 ## 5.x > 6.0
 
-In version 6 EngineBlock dropped PHP 5.6 support. The amount of backwards breaking changes was kept to a minimum. For example we
-did not yet upgrade to Symfony 4. But we did use some PHP 7.2 features like the Throwable interface.
+In version 6 EngineBlock dropped PHP 5.6 support. The amount of backwards breaking changes was kept to a minimum. For
+example we did not yet upgrade to Symfony 4. But we did use some PHP 7.2 features like the Throwable interface.
 
 Expect more significant upgrades from a PHP 7 standpoint in the near future.
 
 ### For OpenConext-deploy users
 
 Use an OpenConext-deploy release
-containing [this revision](https://github.com/OpenConext/OpenConext-deploy/commit/21e75357b1802f346aea0077b8081393865c6112). No
-release has been tagged after adding the PHP 7.2 support.
+containing [this revision](https://github.com/OpenConext/OpenConext-deploy/commit/21e75357b1802f346aea0077b8081393865c6112).
+No release has been tagged after adding the PHP 7.2 support.
 
 ### For non-OpenConext-deploy users
 
-In order to upgrade your EngineBlock instance, simply upgrade your PHP version to 7.2 and install the following PHP extensions
-for that version:
+In order to upgrade your EngineBlock instance, simply upgrade your PHP version to 7.2 and install the following PHP
+extensions for that version:
+
 - fpm (if you are using php-fpm)
 - cli
 - pecl-apcu
@@ -369,11 +449,14 @@ Upgrade your webserver to use PHP 7.2 for your EngineBlock application.
 ### Changed Stepup LoA Configuration
 
 In engineblock.ini, change this form:
+
 ```ini
 stepup.loa.mapping[http://example.org/assurance/loa2] = "https://gateway.tld/authentication/loa2"
 stepup.loa.mapping[http://example.org/assurance/loa3] = "https://gateway.tld/authentication/loa3"
 ```
+
 to this form:
+
 ```ini
 stepup.loa.mapping.1.engineblock = "http://example.org/assurance/loa1"
 stepup.loa.mapping.1.gateway = "https://gateway.tld/authentication/loa1"
@@ -387,15 +470,16 @@ stepup.loa.mapping.3.gateway = "https://gateway.tld/authentication/loa3"
 
 ### Serialised column cleanup
 
-In version 5.12.0 multiple `coin` columns are serialised into a single column with serialised data.
-This change will allow easier maintenance because then no migrations are needed when adding or removing a `coin`.
-There is no migration to populate the old `coin` columns to the new serialised column while this is needed to let EB function
-properly with the new changes.
-Therefore you should push the data from Manage after you have updated the codebase and ran the `Version20190703235333`.
+In version 5.12.0 multiple `coin` columns are serialised into a single column with serialised data. This change will
+allow easier maintenance because then no migrations are needed when adding or removing a `coin`. There is no migration
+to populate the old `coin` columns to the new serialised column while this is needed to let EB function properly with
+the new changes. Therefore you should push the data from Manage after you have updated the codebase and ran the
+`Version20190703235333`.
 
 Be aware that you need to be logged in into manage to push the data after updating the codebase and database schema.
 
 In order to let this work you need to do the following:
+
 1. Login into manage
 1. Update codebase
 1. Run migrations
@@ -405,9 +489,9 @@ In order to let this work you need to do the following:
 
 ### Improved error feedback
 
-The 5.11 release solely improves the error pages. Some new features have been made available to improve the error pages. Most
-notable, and requiring changes to the parameters.yml, is the possibility to provide custom Wiki links for specific error pages.
-You are now also able to display an IdP support button, for IdP related error pages.
+The 5.11 release solely improves the error pages. Some new features have been made available to improve the error pages.
+Most notable, and requiring changes to the parameters.yml, is the possibility to provide custom Wiki links for specific
+error pages. You are now also able to display an IdP support button, for IdP related error pages.
 
 The parameters.yml.dist file goes into more detail on how to configure this.
 
@@ -415,30 +499,30 @@ The parameters.yml.dist file goes into more detail on how to configure this.
 
 ### Add the possibility to sign a SAML response
 
-According to saml2int 0.2, the assertion element must be directly signed, which we do. This suffices for most SP's. However,
-some SP's require the outer Response element to be signed directly. If configured to do so for that SP, Engineblock will sign
-the outer response element in addition to the signed Assertion element.
+According to saml2int 0.2, the assertion element must be directly signed, which we do. This suffices for most SP's.
+However, some SP's require the outer Response element to be signed directly. If configured to do so for that SP,
+Engineblock will sign the outer response element in addition to the signed Assertion element.
 
 Therefore if the option `metadata:coin:sign_response` on the SP is set the response will be signed. Also a migration
 `Version20190425205743` is added to add the required column.
 
-To support rolling-updates this migration needs to be executed before updating the code and before the rolling update column
-cleanup migrations as described below.
+To support rolling-updates this migration needs to be executed before updating the code and before the rolling update
+column cleanup migrations as described below.
 
 ### Metadata push memory configurable
 
-The memory used in php for the metadata push is now configurable with the `engineblock.metadata_push_memory_limit` configuration
-option.
+The memory used in php for the metadata push is now configurable with the `engineblock.metadata_push_memory_limit`
+configuration option.
 
 ### Rolling update column cleanup
 
-The features from 5.8.3 to support rolling updates have been dropped as they are no longer used.
-Running the migrations `Version20180910134145` and `Version20180910175453` will take care of this.
-Be aware that the logic used to update the columns are also dropped in this release. So you first have to update the
-code and after that you should run the migrations to drop the columns.
+The features from 5.8.3 to support rolling updates have been dropped as they are no longer used. Running the migrations
+`Version20180910134145` and `Version20180910175453` will take care of this. Be aware that the logic used to update the
+columns are also dropped in this release. So you first have to update the code and after that you should run the
+migrations to drop the columns.
 
-The features were introduced in 5.8 but were partially reverted to support rolling updates in 5.8.3 because in
-these features table columns were dropped. To be able to role back to a version before 5.8.3 while maintaining database
+The features were introduced in 5.8 but were partially reverted to support rolling updates in 5.8.3 because in these
+features table columns were dropped. To be able to role back to a version before 5.8.3 while maintaining database
 integrity both version were kept. Currently the columns aren't used anymore so therefore the old implementations could
 be dropped completely.
 
@@ -447,9 +531,8 @@ be dropped completely.
 ### Stored metadata incompatibility
 
 Metadata pushed to EngineBlock in earlier versions (EB<5.8) is not compatible with this version. A metadata push is
-required after upgrading to EB 5.8.
-In order to upgrade from 5.7 to 5.8 you need to go to 5.8.3 to prevent backwards compatibility
-breaking changes. From version 5.8.3 rolling updates are supported.
+required after upgrading to EB 5.8. In order to upgrade from 5.7 to 5.8 you need to go to 5.8.3 to prevent backwards
+compatibility breaking changes. From version 5.8.3 rolling updates are supported.
 
 ### New user data deprovision API
 
@@ -466,10 +549,10 @@ Please note that these settings for now are mandatory! For Engine to work correc
 The consent screen can now show an IdP provided message. To render this information correctly two new configuration
 parameters where introduced:
 
-1. `defaults.logo` The logo of the suite engine block is configured for. This logo isrendered in the NameID section on the
-   consent screen but might be used in other situations.
-2. `openconext.supportUrlNameId` A link to the support page giving more information on the NameID strategies available in the
-   OpenConext platform.
+1. `defaults.logo` The logo of the suite engine block is configured for. This logo isrendered in the NameID section on
+   the consent screen but might be used in other situations.
+2. `openconext.supportUrlNameId` A link to the support page giving more information on the NameID strategies available
+   in the OpenConext platform.
 
 ### Who's Janus?
 
@@ -493,13 +576,14 @@ The attribute aggregation was enabled/disabled explicitly in previous releases o
 feature flag set in the metadata repository (Manage). This is no longer required as we can distill whether or not this
 feature should be enabled based on the existence (or lack of) source indications on the attribute values.
 
-This changes means that a column was dropped from the `sso_provider_roles_eb5` schema. Running the `Version20180724175453`
+This changes means that a column was dropped from the `sso_provider_roles_eb5` schema. Running the
+`Version20180724175453`
 migration takes care of this. Leaving the column in the database should not prove problematic for the time being.
 
 ### RequesterId required setting
 
-The use of a RequesterId can now be enforced on a trusted proxy. To do so, a new metadata flag can be set in the metadata
-repository (Manage).
+The use of a RequesterId can now be enforced on a trusted proxy. To do so, a new metadata flag can be set in the
+metadata repository (Manage).
 
 This change means that a column was added from the `sso_provider_roles_eb5` schema. Running the `Version20180804090135`
 migration takes care of this.
@@ -633,31 +717,30 @@ folder. For SURFconext, on deployment the two files will have to be added contai
 ### Consent API
 
 Engineblock's Consent API, which is used by [OpenConext-Profile][op-pro]
-no longer exposes the most recent date of consent given (last use on).
-Instead, it offers only the first consent given (consent given on).
+no longer exposes the most recent date of consent given (last use on). Instead, it offers only the first consent given
+(consent given on).
 
 ## 4.x -> 5.0
 
 ### General
 
 The bulk of the changes between the 4.x and 5.x releases are non-functional. A start has been made to migrate the
-application from the custom framework to [Symfony][sf]. This means that the 4.x application is wrapped within a
-new symfony based application that will eventually replace the current application, while keeping functionality
-intact.
+application from the custom framework to [Symfony][sf]. This means that the 4.x application is wrapped within a new
+symfony based application that will eventually replace the current application, while keeping functionality intact.
 
 ### Backwards Compatibility Breaks
 
 #### Profile extracted to OpenConext-Profile
 
 The Profile component has been replaced by a new application, [OpenConext-Profile][op-pro]. This can be deployed using
-the [OpenConext-Deploy][op-dep] repository (at the moment of writing, using the `engineblock5-centos7` branch).
-The profile functionality has been completely removed from EngineBlock.
+the [OpenConext-Deploy][op-dep] repository (at the moment of writing, using the `engineblock5-centos7` branch). The
+profile functionality has been completely removed from EngineBlock.
 
 #### Different Entrypoint
 
 In the 4.x range, the entrypoint for the EngineBlock application was the `www` folder, with per component (`api`,
-`authentication` and `profile` a different folder containing an `index.php`. In the new setup, with Profile removed,
-a single entrypoint is used: `web/app.php` (in development `web/app_dev.php`). Please ensure that the virtual hosts or
+`authentication` and `profile` a different folder containing an `index.php`. In the new setup, with Profile removed, a
+single entrypoint is used: `web/app.php` (in development `web/app_dev.php`). Please ensure that the virtual hosts or
 server blocks are updated accordingly. An example can be found [here][eb-vhost].
 
 #### PHP Versions
@@ -674,35 +757,39 @@ please replace this with `\Ramsey\Uuid\Uuid`.
 #### Configuration File Location
 
 Configuration file location was moved from `/etc/surfconext/engineblock.ini` to `/etc/openconext/engineblock.ini`
-All other references to `surfconext` have been replaced with `openconext`. Using [OpenConext-Deploy][op-dep] should
-help with any issues that could possibly stem from this change.
+All other references to `surfconext` have been replaced with `openconext`. Using [OpenConext-Deploy][op-dep] should help
+with any issues that could possibly stem from this change.
 
 #### Configuration
 
-Part of the configuration is now also used in `.yml` configuration. In order to have access to the required
-parameters when booting, `app/config/ini_parameter.yml` must be present. This file is created automatically
-by composer during installation, but can be recreated manually using `bin/composer/dump-required-ini-params.sh`.
-Also, please ensure that after unpacking a release, before using the installation, `composer prepare-env --env=prod`
+Part of the configuration is now also used in `.yml` configuration. In order to have access to the required parameters
+when booting, `app/config/ini_parameter.yml` must be present. This file is created automatically by composer during
+installation, but can be recreated manually using `bin/composer/dump-required-ini-params.sh`. Also, please ensure that
+after unpacking a release, before using the installation, `composer prepare-env --env=prod`
 is run so that all requirements for a fully functioning application are met (correct configuration, a warmed cache, etc)
 
 ##### Removed Configuration
 
 - `subjectIdAttribute` Due to the migration from LDAP to database storage for registered users, the configuration
-  `subjectIdAttribute` has been removed. The equivalent of the `collabpersonid` configuration value will now always be used.
+  `subjectIdAttribute` has been removed. The equivalent of the `collabpersonid` configuration value will now always be
+  used.
 
 ##### Added Configuration
 
 Several feature toggles have been added, and several users can now be configured.
 
 - `engineblock.feature.ldap_integration` see below for more information
-- `engineApi.features.metadataPush` controls the availability of the metadata push api. Setting this to `1` will enable it.
-  Only available for the user with the role `ROLE_API_USER_JANUS` - can be configured through the `api.users.janus.username`
+- `engineApi.features.metadataPush` controls the availability of the metadata push api. Setting this to `1` will enable
+  it. Only available for the user with the role `ROLE_API_USER_JANUS` - can be configured through the
+  `api.users.janus.username`
   and `api.users.janus.password` settings, which must authenticate using [HTTP Basic Authentication][basic-auth]
-- `engineApi.features.consentListing` controls the availability of the consent listing API. Setting this to `1` will enable it.
-  Only available for the user with the role `ROLE_API_USER_PROFILE` - can be configured through the `api.users.profile.username`
+- `engineApi.features.consentListing` controls the availability of the consent listing API. Setting this to `1` will
+  enable it. Only available for the user with the role `ROLE_API_USER_PROFILE` - can be configured through the
+  `api.users.profile.username`
   and `api.users.profile.password` settings, which must authenticate using [HTTP Basic Authentication][basic-auth]
-- `engineApi.features.metadatApi` controls the availability of the metadata read API. Setting this to `1` will enable it.
-  Only available for the user with the role `ROLE_API_USER_PROFILE` - can be configured through the `api.users.profile.username`
+- `engineApi.features.metadatApi` controls the availability of the metadata read API. Setting this to `1` will enable
+  it. Only available for the user with the role `ROLE_API_USER_PROFILE` - can be configured through the
+  `api.users.profile.username`
   and `api.users.profile.password` settings, which must authenticate using [HTTP Basic Authentication][basic-auth]
 
 For [Attribute Aggregation][op-aag] usage, which can be enabled per service provider by setting the
@@ -715,8 +802,10 @@ configuration value to true, the following configuration has been added:
 
 ##### Database Configuration
 
-The Database configuration changed from master/slave to single host to allow for multi-master clustering. This means the `.ini`
+The Database configuration changed from master/slave to single host to allow for multi-master clustering. This means the
+`.ini`
 configuration has changed from (**this will be ignored now**):
+
 ```ini
 database.master1.dsn = "mysql:host=123.456.78.90;port=3307;dbname=engineblock"
 database.master1.password = password
@@ -729,6 +818,7 @@ database.slaves[] = slave1
 ```
 
 To:
+
 ```ini
 database.host = 123.456.78.90
 database.port = 3307
@@ -739,27 +829,29 @@ database.dbname = engineblock
 
 When a master/slave setup is still required, this can be configured by creating a `config_local.yml` in `app/config`.
 This file will be loaded automatically if present and will allow overriding any configuration present. Do note that in
-order to be able to load the file `bin/console cache:clear --env={current_env_as_in_vhost}` must be executed once.
-More information on how to configure Doctrine can be found in [the bundle documentation][doct1] and the [configuration
-reference documentation][doct2]. Before considering using a master/slave setup, please review [this documentation][doct3]
+order to be able to load the file `bin/console cache:clear --env={current_env_as_in_vhost}` must be executed once. More
+information on how to configure Doctrine can be found in [the bundle documentation][doct1] and
+the [configuration reference documentation][doct2]. Before considering using a master/slave setup, please
+review [this documentation][doct3]
 as to when a master or slave is used for a connection.
 
 #### Login Tracking
 
-EngineBlock 4.x tracks logins in the log_login table of the database. In EngineBlock 5.0 this has been
-replaced wih logging to syslog. This to reduce write load on the database. The log statements are written
-to syslog using the specific ident `EBAUTH` as can be seen in the `app/config/logging.yml` file.
+EngineBlock 4.x tracks logins in the log_login table of the database. In EngineBlock 5.0 this has been replaced wih
+logging to syslog. This to reduce write load on the database. The log statements are written to syslog using the
+specific ident `EBAUTH` as can be seen in the `app/config/logging.yml` file.
 
 For each login a message akin to the following is being logged:
+
 ```
 Apr  1 11:49:00 apps EBAUTH[4861]: {"channel":"authentication","level":"INFO","message":"login granted","context":{"login_stamp":"2016-04-01T11:49:00+02:00","user_id":"urn:collab:person:engine-test-stand.openconext.org:test145950413313365","sp_entity_id":"https:\/\/engine.vm.openconext.org\/functional-testing\/No%20ARP\/metadata","idp_entity_id":"https:\/\/engine.vm.openconext.org\/functional-testing\/TestIdp\/metadata","key_id":null},"extra":{"session_id":"8zxzInsnhMWUOLJpXyz9uxX2TCa","request_id":"56fe440bc31ea"}}
 ```
 
 #### User Storage
 
-The users are now stored in the database, and optionally also in the LDAP (to facilitate a graceful rollover).
-You are advised to perform a migration as soon as possible, as LDAP functionality is scheduled to be removed in the
-coming releases.
+The users are now stored in the database, and optionally also in the LDAP (to facilitate a graceful rollover). You are
+advised to perform a migration as soon as possible, as LDAP functionality is scheduled to be removed in the coming
+releases.
 
 [doct1]: http://symfony.com/doc/master/bundles/DoctrineBundle/index.html
 

@@ -61,20 +61,10 @@ Changes:
 * The CSS of the discovery page was adjusted to correctly scale square logos
 
 ### Database changes
+The database migrations have been cleaned up. We start with a new baseline migration, so your doctrine might warn about previously executed unregistered migrations.  These are all rolled up into [`Version20260210000000.php`](migrations/DoctrineMigrations/Version20260210000000.php).
 
-* The non-unique index `idx_user_uuid` on the `user` table has been replaced by a unique index `uq_user_uuid`, and the
-  `uuid` column is now enforced as `NOT NULL`. Before running the migration, ensure no rows have a `NULL` uuid (there
-  should be none in a healthy database). Run the following on your production database (#1974):
-  ```sql
-  SET SESSION innodb_sort_buffer_size = 268435456;
-  ALTER TABLE `user`
-      CHANGE `uuid` `uuid` CHAR(36) NOT NULL,
-      ADD UNIQUE INDEX `uq_user_uuid` (`uuid`),
-      DROP INDEX `idx_user_uuid`,
-      ALGORITHM=INPLACE,
-      LOCK=NONE;
-  ```
-  Note that this could impact database availability.
+A number of new migrations have also been provided. Read the instructions in [UPGRADING.md](UPGRADING.md) first.
+
 
 ### HTTP status code changes
 
