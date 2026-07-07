@@ -28,6 +28,41 @@ The following database changes need to be made:
   DROP INDEX IF EXISTS consent.deleted_at;
   ```
 
+### Translation key changes
+
+The following translation keys have been renamed. If you have overridden any of these in your theme translations
+(`theme/{name}/translations/messages.*.php`), update the key names accordingly.
+
+| Old key                                     | New key                                |
+|---------------------------------------------|----------------------------------------|
+| `error_no_message`                          | `error_unable_to_receive_message`      |
+| `error_no_message_desc`                     | `error_unable_to_receive_message_desc` |
+| `error_stepup_callout_unknown_title`        | `error_stepup_callout_unknown`         |
+| `error_stepup_callout_user_cancelled_title` | `error_stepup_callout_user_cancelled`  |
+
+#### `error_invalid_acs_location`
+
+The `error_invalid_acs_location` translation key has changed meaning. Previously it held the **error description** text.
+It now holds the **page title**.
+
+If you have overridden this key in your theme translations (`theme/{name}/translations/messages.*.php`), rename it to
+`error_invalid_acs_location_desc` and add a new `error_invalid_acs_location` entry for the page title.
+
+**Before:**
+
+```php
+'error_invalid_acs_location' => 'Your custom description text.',
+```
+
+**After:**
+
+```php
+'error_invalid_acs_location'      => 'Error - Invalid ACS location',
+'error_invalid_acs_location_desc' => 'Your custom description text.',
+```
+
+See https://github.com/OpenConext/OpenConext-engineblock/issues/1758
+
 
 ## 7.1.0
 This version adds support for [SBS](https://github.com/SURFscz/SBS)-based authorization and attribute aggregation.
