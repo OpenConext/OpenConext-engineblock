@@ -23,7 +23,7 @@ A number of database updates are required. All should be backwards-compatible, b
 long time while blocking the database. Do not run the migrations on a production database before reading the notes
 below!
 
-All previous migration have been rolled into a new "initial migration". If you are upgrading from version 7.0 or 7.1,
+All previous migrations have been rolled into a new "initial migration". If you are upgrading from version 7.0 or 7.1,
 please run the following query manually to set the new starting point for migrations:
 
 ```sql
