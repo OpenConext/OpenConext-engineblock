@@ -1,54 +1,101 @@
 # CHANGELOG
 
 All release notes between version 4.7.5 and 5.8.0 can be found
-on [GitHub](https://github.com/OpenConext/OpenConext-engineblock/releases). Release notes for version <= 4.7.5 are in the
-repository under `docs/release_notes`.
+on [GitHub](https://github.com/OpenConext/OpenConext-engineblock/releases). Release notes for version <= 4.7.5 are in
+the repository under `docs/release_notes`.
 
-We will continue to post relevant release notes on the GitHub release page.
-More detailed release notes should be placed in this document.
+We will continue to post relevant release notes on the GitHub release page. More detailed release notes should be placed
+in this document.
 
 More information about our release strategy can be found in
-the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on
-the EngineBlock wiki.
+the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes)
+on the EngineBlock wiki.
 
-## UNRELEASED
+## 7.2.0
+
+Maintenance:
+
+* Upgrade to Symfony 7.4.
+* Upgrade to `doctrine/dbal` 4
+* `symfony/monolog-bundle` upgraded to ^4.0; review your monolog configuration if you have customized it outside of the
+  defaults.
+* Removed the `openconext` theme. The `skeune` theme is now the only supported theme and the default. (#1980)
+* The feature flag `encrypted_assertions_require_outer_signature` has been removed. It haf been broken for a while; the
+  default `true` was always used, even if this was set to `false`.
 
 Fixes:
+
+* Fix console never loading `.env` files
 * Fix Dotenv never loading `.env.{ENV}` overrides.
-* Fix login failing with `ValueNotConvertible: ... Undefined array key "certData"` when reading `certificates` metadata written by EngineBlock < 7.2 (#2044). The PHP 8.5 Rector upgrade changed `X509CertificateLazyProxy` serialization from `__sleep()` to `__serialize()`, which silently changed the serialized key format stored in `sso_provider_roles_eb5`. The serialized format is restored to the legacy `__sleep()` format so old and new versions can read each other's data (red/green safe); no metadata re-push or migration is needed.
+* Fix login failing with `ValueNotConvertible: ... Undefined array key "certData"` when reading `certificates` metadata
+  written by EngineBlock < 7.2 (#2044). The PHP 8.5 Rector upgrade changed `X509CertificateLazyProxy` serialization from
+  `__sleep()` to `__serialize()`, which silently changed the serialized key format stored in `sso_provider_roles_eb5`.
+  The serialized format is restored to the legacy `__sleep()` format so old and new versions can read each other's data
+  (red/green safe); no metadata re-push or migration is needed.
+* Fix quadruple warning about invalid ProtocolBinding. The warning is not logged once per occurence (#1807)
+* Clear the feedbackinfo for new requests. This prevents feedbackendfo from old errors to bleed through to new
+  (unrelated) error messages.
 
 Features:
-* Added `coin:azure_domain_hint` configuration option for IdPs. When set, EngineBlock appends a `whr=<domain>` query parameter to the HTTP-Redirect AuthnRequest sent to the IdP, allowing Microsoft Azure / EntraID to skip the account picker (#1864).
 
-### Translation key changes
+* Added a new `correlation_id` to the logs. The correlation id is kept constant over the entire lifetime of a single
+  authentication event, including request handling, response handling, and possible callouts to Stepup and SBS.
+* Added `coin:azure_domain_hint` configuration option for IdPs. When set, EngineBlock appends a `whr=<domain>` query
+  parameter to the HTTP-Redirect AuthnRequest sent to the IdP, allowing Microsoft Azure / EntraID to skip the account
+  picker (#1864). The metadata option is available in Manage starting from version 9.7.4.
+* Stabilized consent checks
+    * In order to make the consent hashes more robust, a more consistent way of hashing the user attributes has been
+      introduced
+    * This feature automatically migrates from the old hashes to the new hashes upon login.
+* Added `feature_hide_bookmarkable_url` feature flag. If this is enabled, the SAMLRequest GET parameter will not be
+  shown in the url bar on the Discovery screen. This will prevent users from bookmarking this intermediate page. Set to
+  `false` to keep the previous behavior.
+* Add two new API endpoints that can be used to translate schacHomeOrganisation+uid to nameid and vice versa. For
+  example:
+  ```
+  ╰─▶ curl -s -u nameid:nameid_secret  --json '["46fca2f6d57f20ede110fed380d2081a5febc0fa"]' https://engine-api.openconext.dev/info/users/id
+  [{"schacHomeOrganization":"exmplebilbioharderwijk.nl","uid":"student21","sp_entityid":"playground_client"}]
 
-The following translation keys have been renamed. If you have overridden any of these in your theme translations (`theme/{name}/translations/messages.*.php`), update the key names accordingly.
+  ╰─▶ curl -s -u nameid:nameid_secret  --json '[{"schacHomeOrganization": "exmplebilbioharderwijk.nl", "uid": "student21", "sp_entityid": "playground_client"}]' https://engine-api.openconext.dev/info/users/nameid
+  [{"nameid":"46fca2f6d57f20ede110fed380d2081a5febc0fa","stored":true}]
+  ```
+  Add the following parameters to parameters.yaml:
+    - `feature_api_users_nameid_lookup`: enable the nameid lookup endpoint
+    - `api.users.nameidlookup.username`: username for basic auth at the nameid lookup endpoints
+    - `api.users.nameidlookup.password`: password for basic auth at the nameid lookup endpoints
 
-| Old key                                     | New key                                |
-|---------------------------------------------|----------------------------------------|
-| `error_no_message`                          | `error_unable_to_receive_message`      |
-| `error_no_message_desc`                     | `error_unable_to_receive_message_desc` |
-| `error_stepup_callout_unknown_title`        | `error_stepup_callout_unknown`         |
-| `error_stepup_callout_user_cancelled_title` | `error_stepup_callout_user_cancelled`  |
+Changes:
 
-#### `error_invalid_acs_location`
+* Metadata push will now reject all metadata if any service contains invalid PHP syntax in its attribute manipulations
+  (#1778)
+* The metadata expiration time (`validUntil` attribute) is now configurable via the `metadata_expiration_time` parameter
+  in
+  `parameters.yml`.
+    * Action required: Add `metadata_expiration_time` to `parameters.yaml`, suggested value: `86400`. This is the old
+      behaviour in which metadata is cached for 24 hours.
+* The `consent.deleted_at` should be not nullable and have a default value of `0000-00-00 00:00:00`.
+    * Because `deleted_at` is part of the primary key, no migration is provided. The database engine should not allow
+      this to be null in the first place, so it is probably not nullable already on your db.
+    * The `0000-00-00 00:00:00` is added for clarity/consistency, as this is probably the default behaviour of your
+      database already.
+* Removed unused index `consent.deleted_at`. Delete this from your production database if it's there.
+* Added a specific error page for unsolicited SAML responses (IdP-initiated SSO without a prior AuthnRequest).
+* A new parameter `wayf.preferred_idp_entity_ids` must be added to `parameters.yml`. To display a set of IdPs prominent
+  at the top of the WAYF, add the entityId's of those IdPs to this parameter.
+    * To keep the old behaviour, set the value to `[]`
+* The CSS of the discovery page was adjusted to correctly scale square logos
+* In the past, if `coin:schachomeorganization` was set for an IdP, this value was forbidden to be used by other IdP.
+  This check has been broken for a while and has now been removed. The remaining function of the
+  `coin:schachomeorganization` metadata attribute is to fix the value of the `schacHomeOrganisation` attribute for all
+  authentications from this IdP.
 
-The `error_invalid_acs_location` translation key has changed meaning. Previously it held the **error description** text. It now holds the **page title**.
+### Database changes
 
-If you have overridden this key in your theme translations (`theme/{name}/translations/messages.*.php`), rename it to `error_invalid_acs_location_desc` and add a new `error_invalid_acs_location` entry for the page title.
+The database migrations have been cleaned up. We start with a new baseline migration, so your doctrine might warn about
+previously executed unregistered migrations. These are all rolled up into [
+`Version20260210000000.php`](migrations/DoctrineMigrations/Version20260210000000.php).
 
-**Before:**
-```php
-'error_invalid_acs_location' => 'Your custom description text.',
-```
-
-**After:**
-```php
-'error_invalid_acs_location'      => 'Error - Invalid ACS location',
-'error_invalid_acs_location_desc' => 'Your custom description text.',
-```
-
-See https://github.com/OpenConext/OpenConext-engineblock/issues/1758
+A number of new migrations have also been provided. Read the instructions in [UPGRADING.md](UPGRADING.md) first.
 
 ### HTTP status code changes
 
@@ -59,76 +106,45 @@ The following feedback pages previously returned HTTP **200 OK** and now return 
 | `/authentication/feedback/invalid-acs-binding`        | 200    | 400   |
 | `/authentication/feedback/received-error-status-code` | 200    | 400   |
 
-Maintenance:
-* Removed the `openconext` theme. The `skeune` theme is now the only supported theme and the default. (#1980)
-* The non-unique index `idx_user_uuid` on the `user` table has been replaced by a unique index `uq_user_uuid`, and the `uuid` column is now enforced as `NOT NULL`. Before running the migration, ensure no rows have a `NULL` uuid (there should be none in a healthy database). Run the following on your production database (#1974):
-  ```sql
-  SET SESSION innodb_sort_buffer_size = 268435456;
-  ALTER TABLE `user`
-      CHANGE `uuid` `uuid` CHAR(36) NOT NULL,
-      ADD UNIQUE INDEX `uq_user_uuid` (`uuid`),
-      DROP INDEX `idx_user_uuid`,
-      ALGORITHM=INPLACE,
-      LOCK=NONE;
-  ```
-
-## UNRELEASED 7.2.0
-Upgrade to Symfony 7.4
-Upgrade to `doctrine/dbal` 4
-
-Bugfixes:
-* Metadata push will now reject all metadata if any service contains invalid PHP syntax in its attribute manipulations (#1778)
-
-Maintenance:
-* `symfony/monolog-bundle` upgraded to ^4.0; review your monolog configuration if you have customised it outside of the defaults.
-
-Changes:
-* The metadata expiration time (`validUntil` attribute) is now configurable via the `metadata_expiration_time` parameter in `parameters.yml`.
-  * Action required: Add `metadata_expiration_time` to `parameters.yaml`, suggested value: `86400`. This is the old behaviour in which metadata is cached for 24 hours.
-* The `consent.deleted_at` should be not nullable, and have a default value of `0000-00-00 00:00:00`.
-  * Because `deleted_at` is part of the PK, no migration is provided. The database engine should not allow this to be null in the first place, so it is probably not nullable already on your db.
-  * The `0000-00-00 00:00:00` is added for clarity/consistency, as this is probably the default behaviour of your database already.
-* Removed unused index `consent.deleted_at`. Delete this from your production database if it's there.
-* Added a specific error page for unsolicited SAML responses (IdP-initiated SSO without a prior AuthnRequest).
-* A new parameter `wayf.preferred_idp_entity_ids` must be added to `parameters.yml`. To display a set of IdPs prominent at the top of the WAYF, add the entityId's of those IdPs to this parameter.
-  * To keep the old behaviour, set the value to `[]`
-
-* Stabilized consent checks
-  * In order to make the consent hashes more robust, a more consistent way of hashing the user attributes has been introduced
-  * This feature automatically migrates from the old hashes to the new hashes upon login.
-
 ## 7.1.0
+
 SBS integration:
+
 * Add support for [SBS](https://github.com/SURFscz/SBS)/[SRAM](https://sram.surf.nl/):
-  * Allows autorization based on SBS collaborations/services
-  * Allows adding [AARC-G002](https://aarc-community.org/guidelines/aarc-g002/) group/collaboration attributes
+    * Allows autorization based on SBS collaborations/services
+    * Allows adding [AARC-G002](https://aarc-community.org/guidelines/aarc-g002/) group/collaboration attributes
 * Add logging why consent is skipped if additional logging is enabled
 
-This version of Engineblock requested [SBS](https://github.com/SURFscz/SBS) v69 (if SBS integration is enabled) and has been
-tested with [Manage](https://github.com/OpenConext/OpenConext-manage/) 9.6.
+This version of Engineblock requested [SBS](https://github.com/SURFscz/SBS) v69 (if SBS integration is enabled) and has
+been tested with [Manage](https://github.com/OpenConext/OpenConext-manage/) 9.6.
 
 See UPGRADING.md for more information.
 
-
 ## 7.0.1
+
 Maintenance:
+
 * base image upgrade
 
 ## 7.0.0
+
 Breaking changes please see: [upgrading](UPGRADING.md#700)
 
 Maintenance:
+
 * upgrade to Symfony 5.4
 * upgrade to PHP 8.2
 * upgrade npm moduleS: socket.io to 4.8.1, cypress to 3.17.0
 
 ### DB json_array
-Doctrine no longer supports `json_array` types.
-If the production database currently has columns with `COMMENT '(DC2Type:json_array)'`, they need to be changed to `COMMENT '(DC2Type:json)'`.
+
+Doctrine no longer supports `json_array` types. If the production database currently has columns with
+`COMMENT '(DC2Type:json_array)'`, they need to be changed to `COMMENT '(DC2Type:json)'`.
 
 This is not done in a Migration, as production is not in sync with the schema as defined in the migrations.
 
 Reference query as an example:
+
 ```mysql
 ALTER TABLE sso_provider_roles_eb5
     CHANGE consent_settings consent_settings MEDIUMTEXT DEFAULT NULL COMMENT '(DC2Type:json)';
@@ -137,28 +153,32 @@ ALTER TABLE sso_provider_roles_eb5
 ## 6.18.0
 
 Dependencies:
+
 * This release requires Manage >= 9.0.1; for the IdP-based PDP calls, Manage 9.4 is required.
 
 Maintenance:
+
 * Replace abandoned container-interop/container-interop
 * HTML templates: remove trailing slash on void elements
 * Update pbkdf2 from 3.1.2 to 3.1.3 in /theme
 
 New feature:
-* Support for adding UserAtributes in the SFO AuthnRequest to the Stepup-Gateway (#1826).
-  This is required for GSSP Fallback.
-  The `feature_stepup_send_user_attributes` setting is used to enable this feature;
-  if enabled, specify the attributes to add to the AuthnRequest using `stepup.callout_user_attributes`.
-  The default is to send `schacHomeOrganization` and `mail`.
+
+* Support for adding UserAtributes in the SFO AuthnRequest to the Stepup-Gateway (#1826). This is required for GSSP
+  Fallback. The `feature_stepup_send_user_attributes` setting is used to enable this feature; if enabled, specify the
+  attributes to add to the AuthnRequest using `stepup.callout_user_attributes`. The default is to send
+  `schacHomeOrganization` and `mail`.
 * Prevent double entries in the Discovery caused by duplicate `name:*` and DiscoveryName:*` entries in Manage (#1852)
 * Request PDP decision based on IdP-setting (#1857); in Manage (>=9.4) it is possible to set the
-  `coin:policy_enforcement_decision_required` flag for an IdP in addition to for an SP. Also policies no longer require an SP to
-  be specified and can be applied to all logins from an IdP.
+  `coin:policy_enforcement_decision_required` flag for an IdP in addition to for an SP. Also policies no longer require
+  an SP to be specified and can be applied to all logins from an IdP.
 
 Changes:
+
 * Set width of the debug page to browser width (#1790)
 
 Bugfixes:
+
 * Correctly json-decode the `rememberchoice` cookie
 * Engine ARP must not apply to user atrributes sent to stepup callout (#1849)
 * Make sure the javascript assets are versioned (#1869)
@@ -166,9 +186,11 @@ Bugfixes:
 ## 6.17.0 (not released)
 
 Dependencies:
+
 * This release requires Manage >= 9.0.1
 
 Maintenance:
+
 * Update database client version to MariaDB 10.6.0
 * Upgrade saml2 library to 4.17.0
 * Update nanoid to 3.3.6
@@ -177,22 +199,23 @@ Maintenance:
 * Fix composer lock file (#1785)
 
 New Features:
-* Add configurable default RequestedAuthnContext
-  By setting the Manage option `metadata:coin:defaultRAC` for an IdP, this value will be sent by
-  default if no other is set (either in the AuthnRequest or form a fixed MFA rule).
-* Support additional WAYF entries per IdP Endpoint with dedicated name, logo, keywords (#1338);
-  multiple WAYF-entries per IdP can be specified by filling the `DiscoveryName:[0-9]:<lang>`,
-  `keywords:[0-9]:<lang>` and `logo:[0-9]:<lang>` fields.
-  See also [OpenConext-manage#457](https://github.com/OpenConext/OpenConext-manage/issues/457)
-* Add configurable client timeout for AA and PDP (#1777).
-  Add the setting `http_client.timeout` to `parameters.yml` to set the limit.
-* Limited the number of outstanding AuthNRequests per session (#1345).
-  Add the setting `maximum_authentications_per_session` to `parameters.yml` to set the limit.
+
+* Add configurable default RequestedAuthnContext By setting the Manage option `metadata:coin:defaultRAC` for an IdP,
+  this value will be sent by default if no other is set (either in the AuthnRequest or form a fixed MFA rule).
+* Support additional WAYF entries per IdP Endpoint with dedicated name, logo, keywords (#1338); multiple WAYF-entries
+  per IdP can be specified by filling the `DiscoveryName:[0-9]:<lang>`,
+  `keywords:[0-9]:<lang>` and `logo:[0-9]:<lang>` fields. See
+  also [OpenConext-manage#457](https://github.com/OpenConext/OpenConext-manage/issues/457)
+* Add configurable client timeout for AA and PDP (#1777). Add the setting `http_client.timeout` to `parameters.yml` to
+  set the limit.
+* Limited the number of outstanding AuthNRequests per session (#1345). Add the setting
+  `maximum_authentications_per_session` to `parameters.yml` to set the limit.
 
 Changes:
+
 * Remove confusing key_id from stepup callout logging (#1343)
-* Read & store metadata coin:collab_enabled (#1818);
-  this setting does nothing for now but prepares for merging of SBS integration
+* Read & store metadata coin:collab_enabled (#1818); this setting does nothing for now but prepares for merging of SBS
+  integration
 * Make the consent container slightly wider (#1324)
 * Improve the formatting and readability of the IdP debug mail (#1330)
 * Stricter regex for urn validation (#1339)
@@ -202,6 +225,7 @@ Changes:
 * Add explicit IdP signing key feedback (#1328)
 
 Bugfixes
+
 * Improve handling of PDP timeout error (#1285)
 * Validate numeric key in ARP settings on metadata push (#1336)
 * Set the correct database version in doctrine (#1811)
@@ -209,6 +233,7 @@ Bugfixes
 ## 6.15.4
 
 Maintenance:
+
 * Fix composer lockfile (#1785)
 * Add qa tooling helper scripts and drop Ant build.xml (#1781)
 * Update Devconf installation and docs (#1781)
@@ -217,44 +242,52 @@ Maintenance:
 ## 6.15.3
 
 Maintenance:
+
 * Upgrade saml2 library
 
 ## 6.15.2
 
 Changed:
+
 * Docker: Change logging to json5
 
 Maintenance:
+
 * Upgrade elliptic
 
 ## 6.15.1
 
 Changed:
-* Stepup: add check that returned NameID matches the one we requested,
-  should never happen, added for defense-in-depth.
+
+* Stepup: add check that returned NameID matches the one we requested, should never happen, added for defense-in-depth.
 * Improved error message on fatal error.
 * Change the default for the feature block_user_on_violation to on.
 
 Maintenance:
+
 * Upgrade twig dependency
 
 ## 6.15.0
 
 New features:
+
 * Support and follow `release_as` and `use_as_nameid` when configured in ARP
     * Overwrite the NameID when specified in use_as_nameid ARP setting #1308
     * Create Corto input filter for the ARP directive release_as to be applied #1307 #1322
 * Added feature toggle to disable unsolicited SSO entirely
 
 Bugfix:
+
 * Ensure HTTP exception is thrown when API fails #1310
 
 ## 6.14.1
 
 New features:
+
 * Authentication logging additions
 
 Bugfix:
+
 * Locale is considered when providing keywords to WAYF
 * Re-add missing CSS class for PEP error screen
 * Update subject-id validation regexp
@@ -262,19 +295,20 @@ Bugfix:
 * When AM error occurs, accept any type of exception for logging
 
 Maintenance:
+
 * Remove unused Xml Validator class
 * Update an npm dependency
 
 ## 6.14.0
+
 * Support overriding StepUp EntityId #1279
 * Check for needed parameters before constructing an auth failed response. #1289
 
 ## 6.13.0
 
-* Move most HTML from translatable strings into Twig templates, where it
-  belongs. This makes the code more robust and predictable, and reduces
-  the chances of cross site scripting injections. Some translatable strings
-  were changed, see upgrade notes.
+* Move most HTML from translatable strings into Twig templates, where it belongs. This makes the code more robust and
+  predictable, and reduces the chances of cross site scripting injections. Some translatable strings were changed, see
+  upgrade notes.
 * Install a NPM package update.
 
 ## 6.12.2
@@ -285,56 +319,68 @@ Maintenance:
 * Install NPM package updates and switch to yarn as package manager.
 
 ## 6.12.1
+
 * Repaired tag-release blockage
 
 ## 6.12.0
 
 **Feature**
+
 * Inject the logger on StepupDecision #1254
 
 **Bugfix**
+
 * Improve MDUI Logo usage #1264
 
 **Improvement**
+
 * Documentation regarding the `metadata:coin:stepup:forceauthn` feature was added.
 * Specify data types of roles columns #1262
 
 **Maintenance**
+
 * Test integration Github Action utilizes base container
 * Test integration runs against PHP 7.2 and PHP 8.2 (removed PHP 5.6 test runs)
 
 ## 6.11.0
 
 **Feature**
+
 * Allow to set EB's metadata XML Organization fields via translation (overrides).
 * Refuse to process incoming metadata push with 0 connections in it.
 * Show an Unknown SP error page also when invoking the unsolicited endpoint with an unknown entity ID.
 * Update regular expression for URN validation.
 
 **Change**
+
 * Migrate storage of MDUI metadata elements to new value objects.
 
 **Bugfix**
+
 * Avoid generating PHP notices when calling metadata API for IdP without SLO endpoints.
 * Update log message for session lost to not mention irrelevant 'unsolicited'.
 
 ## 6.10.0
 
 **Feature**
+
 * Support setting forceAuthn flag on Stepup callout when enabled in Manage for the service.
 
 ## 6.9.2
 
 **Change**
+
 * Log IDPList contents (info) only when present. Also log any IDPList contents to log_logins.
 * Do not list redundant key:default metadata URL variants on front page.
 * Give an explict error message when an SP requests an unknown key ID.
 * Support MySQL strict mode by limiting some metadata fields on push to 255 characters.
 
 **Bugfix**
+
 * Fix certificate used for Stepup callout changing based on SP selected key ID.
 
 **Maintenance**
+
 * Move certificate serving code to Symfony.
 * Clean up or disable some unused bits.
 * Update NPM json5 dependency.
@@ -342,20 +388,24 @@ Maintenance:
 ## 6.9.1
 
 **Bugfix**
+
 * Change migration for consent table to work when running 6.9 in parallel with an earlier version (rolling upgrade).
 * Change loglevel for unknown entityID in RequesterID from warning to info.
 
 **Maintenance**
+
 * Remove broken and unused WAYF sorting code.
 * Add more integration tests for WAYF scoping.
 
 ## 6.9.0
 
 **Change**
-* Add support for OpenConext Stepup LoA 1.5. This requires renumbering the `stepup.loa.mapping` indices in parameters.yml from (
-  1,2,3) to (10,15,20,30).
+
+* Add support for OpenConext Stepup LoA 1.5. This requires renumbering the `stepup.loa.mapping` indices in
+  parameters.yml from (1,2,3) to (10,15,20,30).
 
 **Maintenance**
+
 * Fix call for rememberChoice in the WAYF.
 * Update Twig dependency.
 * Clean up some legacy code.
@@ -363,41 +413,51 @@ Maintenance:
 ## 6.8.1
 
 **Feature**
+
 * Several improvements to IdP debug page
 * Support subject-id attribute, also for scope checks
 * When consent feature flag is off, also disable the consent API
 
 **Maintenance**
+
 * Update various JavaScript dependencies
 
 ## 6.8.0
 
 **Feature**
+
 * Support removal (soft-delete) of consent by collabPersonID and SP entity id #1160
 
 **Maintenance**
+
 * Request Access JavaScript bugs have been addressed #1187 #1188
 
 ## 6.7.2
 
 **Feature**
-1. The consent API (used by Profile) now additionally returns the SP's organization name in the `organization_display_name` key.
+
+1. The consent API (used by Profile) now additionally returns the SP's organization name in the
+   `organization_display_name` key.
 
 **Maintenance**
+
 1. Upgrade some npm packages.
 
 ## 6.7.1
 
 **Feature**
-1. Introduce SSO Session Cookie support (feature flag defauls to _off_).
-   More information in [the feature documentation](./docs/sso_session_cookie.md).
+
+1. Introduce SSO Session Cookie support (feature flag defauls to _off_). More information
+   in [the feature documentation](./docs/sso_session_cookie.md).
 
 **Bugfixes**
+
 1. Fix the initial (pre-search) sorting of entities in the WAYF.
 1. In Consent, display NameID of the end-SP, not trusted proxy.
 1. Display correct information in error message for unknown proxied SP.
 
 **Maintenance**
+
 1. Improve test coverage for Trusted Proxy scenarios.
 1. Upgrade some npm packages.
 
@@ -405,8 +465,8 @@ Maintenance:
 
 **Feature**
 
-1. In 6.7.0 a new behaviour is introduced when dealing with trusted proxies. More information about these changes can
-   be found in the updated [trusted proxy documentation](./docs/trusted_proxy.md). You should be able to inform yourself
+1. In 6.7.0 a new behaviour is introduced when dealing with trusted proxies. More information about these changes can be
+   found in the updated [trusted proxy documentation](./docs/trusted_proxy.md). You should be able to inform yourself
    what changes are required, when you are working with a trusted proxy.
 
    The following work was done to get to this feature:
@@ -420,11 +480,13 @@ Maintenance:
 - Test release creation in CI/CD pipeline #888 (thanks for the groundwork @pablothedude!)
 
 **Maintenance**
+
 - Upgrade Twig to 2.x
 
 ## 6.6.6
 
 **Features**
+
 - Check if there is a valid authentication in the AuthenticationState
 - Add "consent disable" feature
 - Add behat test for consent enabled feature toggle
@@ -433,56 +495,68 @@ Maintenance:
 ## 6.6.5
 
 **Feature**
+
 - Upgrade the Monitor bundle, exposing opcache statistics to the info endpoint #1163
 
 ## 6.6.4
 
 **Features**
+
 - allow control over the RequestedAttribute list added to the proxy SP metadata
 
 **Bugfix**
+
 - reset attributeValueTypes after an attribute manipulation
 
 **Security**
+
 - upgrade a dependency
 
 ## 6.6.3
 
 **Features**
+
 - add ARP feature
 - the AuthnRequest is now available to Attribute Manipulations.
 - add ability to process SSO Notifications
 - unset the autogenerated id field so databases other than Mysql & MariaDB are supported as well.
 
 **Bugfixes**
+
 - a typo was fixed
 
 ## 6.6.2
 
 **Changes**
-- ARP is only applied once in the filter chain. This should only affect Attribute Manipulations (in being more permissive in
-  what is possible).
+
+- ARP is only applied once in the filter chain. This should only affect Attribute Manipulations (in being more
+  permissive in what is possible).
 
 **Bugfixes**
+
 - fix the spinner page in the excel built-in browser
 - minor change to privacy policy link on consent screen
 
 **Security**
+
 - upgrade several dependencies to fix security vulnerabilities #1146, #1149, #1151
 
 ## 6.6.1
 
 **Bugfixes**
+
 - style the no-attributes edge case #1144
 - temporarily disable back to sp link to allow time for a full fix #1143
 - ensure textual fallbacks in the error pages function correctly #1135
 
 **Security**
+
 - upgrade several dependencies to fix security vulnerabilities #1142, #1134, #1133, #1132
 
 ## 6.6.0
 
 **Features and bugfixes**
+
 - Add a global site notice #1128
 - Allow AuthnRequest based stepup requests #1105
 - Add a 'back to SP' button on the 'Stepup failed' error pages #1114
@@ -498,6 +572,7 @@ Maintenance:
 ## 6.5.1
 
 **Bugfix**
+
 - Remove forgotten debug statement #1107
 
 ## 6.5.0
@@ -505,6 +580,7 @@ Maintenance:
 A bit of everything release. Most notable changes are:
 
 **Features and bugfixes**
+
 - Support for Stepup LoA based on PDP decision #1088
 - The logout page was styled #1097
 - The IdP SSO endpoint URI used for EngineBlock authentications is now logged #1095
@@ -515,6 +591,7 @@ A bit of everything release. Most notable changes are:
 ## 6.4.7
 
 **Features and fixes**
+
 - Replaced the SURFnet favicon by the openconext one
 - Keep the WAYF operable when syncing cookies.
 - Add logging to ValidateMfaAuthnContextClassRef command.
@@ -527,11 +604,13 @@ A bit of everything release. Most notable changes are:
 - Prevent Idp-row logo from overlapping with text.
 
 **Security**
+
 - Replaced the composer dependency for the security checker (no longer working) with a local one.
 
 ## 6.4.6
 
 **Features and fixes**
+
 - Fixed disabled button being shown in the remaining section for non-disabled accounts on IE11
 - Added a check to see if there is a focused element before the check to see if the focus is on an arrow item.
 - Cleaned up forgotton debug code.
@@ -539,21 +618,25 @@ A bit of everything release. Most notable changes are:
 ## 6.4.5
 
 **Features and fixes**
+
 - Repaired search in IE
 - Fixed a visual regression with the previously selected section where the edit button was on it's own line.
 
 ## 6.4.4
 
 **Features and fixes**
+
 - Fixed overflow issue in IE11 for disclaimerlist.
 - Updated the text for the PEP page.
 
 ## 6.4.3
 
 **Security update**
+
 - Bumped socket.io version.
 
 **Features and fixes**
+
 - Ensured hitting the reset button on the WAYF shows the default IDP
 - Ensured that if you click the default idp, it prefills it in the search field, hides all other idps and focuses it.
 - Remove weird transition in safari.
@@ -569,26 +652,29 @@ A bit of everything release. Most notable changes are:
 ## 6.4.2
 
 **Security update**
+
 - Allowed connections where not checked against the correct SP when trusted proxy was used
 
 **Other**
+
 - Updated translations for new theme
 
 ## 6.4.1
 
 **Features and fixes**
-- The index, debug and cookie pages have been styled to prevent the mixed new and old style that happened. They now all look
-  like the previous OpenConext theme used to look.
+
+- The index, debug and cookie pages have been styled to prevent the mixed new and old style that happened. They now all
+  look like the previous OpenConext theme used to look.
 - Security and compatibility improvements have been applied.
 - The new theme is now the default theme
 
 ## 6.4.0 (RC 1)
 
-This release consists of the UI redesign of the WAYF, Consent and other user facing screens.
-The complete list of changes is excessive. Details can be found on GitHub under the `ui-redesign` tag. Some highlights
-include:
+This release consists of the UI redesign of the WAYF, Consent and other user facing screens. The complete list of
+changes is excessive. Details can be found on GitHub under the `ui-redesign` tag. Some highlights include:
 
 **Features**
+
 - Complete redesign of the WAYF
     - The WAYF now includes an optional default IdP banner, making advertising a default IdP possible (eduId)
     - The WAYF is optimized for keyboard navigation
@@ -601,58 +687,68 @@ include:
 
 ## 6.3.6
 
-After some testing, @tvdijen opened issue #920, identifying several issues with the 3.6.x releases. Those issues
-have been addressed in this release.
+After some testing, @tvdijen opened issue #920, identifying several issues with the 3.6.x releases. Those issues have
+been addressed in this release.
 
 **Bugfixes**
+
 * Allow responses without NameID #919
 * Add c14n method to the reference transforms in XML metadata. #921
 * Prevent undefined access in Assembler #923
 
 **Chore**
+
 * Remove the remaining eduGAIN metada fields #922
 
 ## 6.3.5
 
 **Bugfix**
+
 - Clean up unused usage of AuthnRequest destination #898
 
 ## 6.3.4
 
 **Bugfix**
+
 - Whether MFA AuthnContext must be added should be based on original SP #893 #894
 
 ## 6.3.3
 
 **Bugfixes:**
+
 - Move NoPassive response processing up in the ACS proces #890
 - Print the key-id in the SSO locations of the IdP metadata #891
 
 **Security**
+
 - Upgrade jpeg-js to v0.4.0 #892
 
 ## 6.3.2
 
 **Bugfix:**
+
 - Store entityId of issuer, not the value object #889
 
 **Features:**
+
 - Migrate existing JavaScript tests to Cypress #887
 
 ## 6.3.1
 
-As of this release the old non conforming Schac Home Organization synonym: urn:oid:1.3.6.1.4.1.1466.115.121.1.15 is no longer
-released as an attribute. This was achieved by removing it from the attributes.json. If you need it, please place it back in
-./application/configs/attributes.json. See UPGRADING.md for details.
+As of this release the old non conforming Schac Home Organization synonym: urn:oid:1.3.6.1.4.1.1466.115.121.1.15 is no
+longer released as an attribute. This was achieved by removing it from the attributes.json. If you need it, please place
+it back in ./application/configs/attributes.json. See UPGRADING.md for details.
 
-This release also includes the introduction of the Cypress test framework for JavaScript testing. The test framework does not
-yet run correctly on the GitHub Actions CI integration. This is corrected in the next release.
+This release also includes the introduction of the Cypress test framework for JavaScript testing. The test framework
+does not yet run correctly on the GitHub Actions CI integration. This is corrected in the next release.
 
 **Features:**
+
 - Remove non conforming SHO oid from config #877
 - Send NoPassive status response back to issuing SP #885
 
 **Improvements:**
+
 - Upgrade SAML2 library to version v4.1.9 #881
 - Show proxied SP and proxy in feedback info #875
 - Move metadata organization business rules away from metadata assembler #878
@@ -660,6 +756,7 @@ yet run correctly on the GitHub Actions CI integration. This is corrected in the
 - Migrated a JavaScript test to Cypress (POC) #884
 
 **Chores:**
+
 - Repair acceptance tests #880
 - Upgrade dot-prop to version 5.2.0 #886
 - Change symfony cache path to reflect deploy path #857
@@ -668,24 +765,27 @@ yet run correctly on the GitHub Actions CI integration. This is corrected in the
 
 ## 6.2.4
 
-This release is the finalization of the AuthnContextClassRef changes
-that where started in 6.2.1 (and rolled back in 6.2.2).
+This release is the finalization of the AuthnContextClassRef changes that where started in 6.2.1 (and rolled back in
+6.2.2).
 
 **Features**
+
 * Add AuthnContextClassRef config option for transparent RequestedAuthnContext #873
 
 **Other chores**
+
 * Final tweaks to Github Actions (termination of Travis) #867
 * Enable skipped API tests #874
 
 ## 6.2.3
 
-This change will add the possibility to configure authn contexts for IdP/SP combinations which will be verified when returning
-from the IdP
+This change will add the possibility to configure authn contexts for IdP/SP combinations which will be verified when
+returning from the IdP
 
 see: [documentation](docs/configurable_authncontextclassref.md)
 
 **Features**
+
 * Add custom MFA error page #866
 * Add MFA authncontext response validator #864
 * Test unsolicited presence of authcontextclassref #863
@@ -695,6 +795,7 @@ see: [documentation](docs/configurable_authncontextclassref.md)
 * Add dockerized actions testing #818
 
 **Improvements**
+
 * Pt translation fix #870 thanks @domgon!
 
 ## 6.2.2
@@ -706,32 +807,37 @@ This change will revert #848 to prevent breaking flows because of misconfigured 
 ## 6.2.1
 
 **Improvements**
+
 * Make support urls translatable #851
 * Allow empty sfo/stepup key and use JIT validation instead #853
 * If the SP provided a RequestedAuthnContext in the AuthnRequest, replicate this to the IdP #848
 
 **Bugfix**
+
 * Log AuthnContextClassRef and correct NameId on a successful login #854
 
 ## 6.2.0
 
-This release replaces the legacy configuration with Symfony configuration. So effectively the `application.ini` is removed from
-EB and replaced in favour of a `parameters.yml`.
-Also, EB now has Portuguese language support, and the allowed languages are configurable.
+This release replaces the legacy configuration with Symfony configuration. So effectively the `application.ini` is
+removed from EB and replaced in favour of a `parameters.yml`. Also, EB now has Portuguese language support, and the
+allowed languages are configurable.
 
 **Features**
+
 * Remove legacy application.ini from EB #838
 * Make the enabled languages configurable #842
 * Add Portuguese language support #841
 * Log original NameID and given LOA on successful login #845
 
 **Improvements**
+
 * Move footer translations to translations #844
 * Remove unused error pages #849
 * Cleanup unused `response_processing_service_binding` column from the database #782
 * Implement lazy loading of WAYF logos. #843
 
 **Chores**
+
 * Stop generating bootstrap.php.cache #837
 * Remove old (IE8 / IE9) browser support #846
 * Defense in depth SAML Response validation #806
@@ -766,15 +872,17 @@ Changes to make the metadata more aligned with the SAML metadata specification.
 
 The metadata endpoints of EngineBlock have been under heavy maintenance in this release. Some highlights include the
 move of all generation logic to the new Symfony EngineBlock application. But maybe more important, EngineBlock no longer
-relies on entity information from the `sso_provider_roles_eb5` table. All EngineBlock metadata is either loaded from
-ini config, or is hardcoded into the application. Because the Eb entities were purely an internal EB necessity you could
-now remove them by removing them from Manage and then execute a metadata push.
+relies on entity information from the `sso_provider_roles_eb5` table. All EngineBlock metadata is either loaded from ini
+config, or is hardcoded into the application. Because the Eb entities were purely an internal EB necessity you could now
+remove them by removing them from Manage and then execute a metadata push.
 
 The unused metadata entities are the following:
+
 * engine.{{ base_domain}./authentication/sp/metadata
 * engine.{{ base_domain}//authentication/idp/metadata
 
 **Features**
+
 * Twig is used as template engine #759
 * User friendly errors are displayed when metadata can not be created #770 (resolves issue #211)
 * Metadata is now generated in the Symfony EngineBlock application #765 #771 #772 #773 #776 #783 #784 #785 #791
@@ -783,10 +891,12 @@ The unused metadata entities are the following:
 * Remove unused metadatagetOrganizationUrlNl entities and logic #811
 
 **Improvements**
-* Test coverage was a high priority (unit and functional tests are provided for every important feature) #766 #779 #780 #794
-  #795
+
+* Test coverage was a high priority (unit and functional tests are provided for every important feature) #766 #779 #780
+  #794 #795
 
 **Other chores**
+
 * Third party dependencies: Doctrine ORM, PHPUnit, Phake and Mockery have been updated #764 #777
 * Update ChromeDriver to match Chrome version #793
 * The dev and test cache locations have been moved to a location outside the project directory #780
@@ -797,23 +907,25 @@ The unused metadata entities are the following:
 This is a hotfix to fix namespaces after a commit was cherry picked.
 
 **Bugfix**
+
 * Fix namespace after cherry picked bugfix #820
 
 ## 6.0.1
 
-This release is a bugfix release to prevent the 5.13 release from becoming broken after migrations running the migrations in the
-5.13 release.
-The migratoins dropped columns which still were in use by 5.13 and is needed to support the rolling updates.
+This release is a bugfix release to prevent the 5.13 release from becoming broken after migrations running the
+migrations in the 5.13 release. The migratoins dropped columns which still were in use by 5.13 and is needed to support
+the rolling updates.
 
 **Bugfix**
+
 * Remove migration to support 5.13 #817
 * Prevent invalid assertion when stepup LoA is set #819
 
 ## 6.0.0
 
-In this release, PHP 5.6 support was dropped in favour of PHP 7.2. We are not migrating to the latest PHP version for some
-reasons. Chief amongst which is that PHP 7.2 was best compatible with the current EngineBlock code base.
-An upgrade to 7.3 or even 7.4 would force us to upgrade many third party dependencies at the same time, making this release much
+In this release, PHP 5.6 support was dropped in favour of PHP 7.2. We are not migrating to the latest PHP version for
+some reasons. Chief amongst which is that PHP 7.2 was best compatible with the current EngineBlock code base. An upgrade
+to 7.3 or even 7.4 would force us to upgrade many third party dependencies at the same time, making this release much
 bigger.
 
 For installation instructions, see the UPGRADING.md entry for this version.
@@ -821,21 +933,25 @@ For installation instructions, see the UPGRADING.md entry for this version.
 The following changes where introduced in this release:
 
 **Improvements**
+
 * PHP 7.2 compatibility changes #713
 * Prevent WAYF button from floating left #760
 * Verify received LoA in StepUp ACS processing step #800
 * Added IDPentityID to the Attribute Aggregation request #799 (thanks @ohastra)
 
 **Bugfix**
+
 * Get termsOfServiceUrl from coins, not SP metadata entity #756
 
 **Other chores**
+
 * Cleanup old coin columns #755
 * Update Composer settings for improved PHP 7.2 support #763
 * Update testing tools (PHPUnit, Mockery & Phake) #777
 * Fixed typos #790 #809
 
 **Security**
+
 * Upgrade xmlseclibs to version 3.0.4 #802
 * Upgrade symfony/mime to v4.3.8 #805
 * Bump handlebars to version 4.3.1 #761
@@ -844,6 +960,7 @@ The following changes where introduced in this release:
 ## 5.13.3
 
 This is a security release that will harden the application against CVE 2019-3465
+
 * Implement countermeasures against CVE 2019-3465 #802
 
 ## 5.13.2
@@ -853,19 +970,21 @@ A missing feature was implemented
 * Add missing trusted proxy to stepup callout #778
 
 ## 5.13.1
+
 * Hotfix use of coins in consent template #756
 
 ## 5.13.0
 
-Add stepup authentication to EB to be able to reap the benefits of the SFO functionality of the strong authentication stack.
+Add stepup authentication to EB to be able to reap the benefits of the SFO functionality of the strong authentication
+stack.
 
 * Add stepup authentication #754
 
 ## 5.12.0
 
-We've changed the way how coin entity properties are stored in the database. As of now, they will be stored in a serialized
-manner, in a single column. This greatly simplifies adding or removing coins in the future, as this no longer requires database
-schema changes.
+We've changed the way how coin entity properties are stored in the database. As of now, they will be stored in a
+serialized manner, in a single column. This greatly simplifies adding or removing coins in the future, as this no longer
+requires database schema changes.
 
 * Store coin properties in a single column #752
 
@@ -896,17 +1015,18 @@ This release have all backported issues from release 5.10.2 and 5.10.3
 
 ## 5.11.0
 
-The error feedback pages have been overhauled in this release. In addition, the theming solution that was previously used has
-been revised.
+The error feedback pages have been overhauled in this release. In addition, the theming solution that was previously
+used has been revised.
 
 Be sure to read up on how to work with the new theming solution in the [README.md]()
 
 The most notable changes are:
+
 * Grunt is no longer used, npm run scripts are used instead. #672
 * Theming has changed, allowing for more easy theme overrides for JS and Sass
   resources. [Wiki](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#theme-development)
-* The error page styling has been updated, making it more user friendly by being focused on the important information instead of
-  overflowing the user with irrelevant information.
+* The error page styling has been updated, making it more user friendly by being focused on the important information
+  instead of overflowing the user with irrelevant information.
 * The error pages have been made mobile friendly #673
 * Minified front-end assets are no longer kept in version control #667
 * Visual regression tests have been added for the error pages #687
@@ -922,8 +1042,8 @@ See #704 for details.
 
 ## 5.10.3
 
-The unsolicited SSO endpoint received some TLC. In addition to adding request input validation, we also added additional test
-coverage and cleaned up some unused routes.
+The unsolicited SSO endpoint received some TLC. In addition to adding request input validation, we also added additional
+test coverage and cleaned up some unused routes.
 
 * Enrich unsolicited SSO test coverage #699
 * Unsolicited request validation #700
@@ -939,6 +1059,7 @@ Two regressions where fixed in this release:
 ## 5.10.1
 
 ### Features
+
 * Add the possibility to sign a SAML response #690
 
 ## 5.10.0
@@ -946,6 +1067,7 @@ Two regressions where fixed in this release:
 The 5.10 release focuses on making EngineBlock more robust. The biggest aim is to improve error reporting.
 
 ### Features
+
 * SSO and ACS mis-use is logged earlier in the process #641 #642
 * Show a repeatable error code on the custom error pages (ART) #645
 * Improved handling of HTTP 405 request errors #646 #647
@@ -962,6 +1084,7 @@ The 5.10 release focuses on making EngineBlock more robust. The biggest aim is t
 ## 5.9.4
 
 ### Bugfix
+
 * Prevent blurring the search bar #656
 * Make sure the mouse responds after removing previous IdP selection #661
 * Unconnected IdP mouse hover should also highlight the IdP #662
@@ -969,6 +1092,7 @@ The 5.10 release focuses on making EngineBlock more robust. The biggest aim is t
 ## 5.9.3
 
 ### Bugfix
+
 * Honor explicit keyid in unsolicited single sign on #653
 
 ## 5.9.2
@@ -985,6 +1109,7 @@ But also adds Jest unit and smoke tests for the WAYF
 ## 5.9.1
 
 ### Bugfix
+
 * Filter non string values from AA response #622 #636
 
 ## 5.9.0
@@ -992,11 +1117,13 @@ But also adds Jest unit and smoke tests for the WAYF
 Most effort for this release was invested in upgrading Symfony to version 3.4.
 
 ### Features
+
 * Portuguese language support and other language related work #615 #612 thanks @domgon and @tvdijen!
 * Allow selecting unconnected IdP's with keyboard #634
 * Stop releasing the SURFconextId attribute #631
 
 ### Improvements
+
 * Replace un needed polyfills #606 thanks @BackEndTea
 * Add an editorconfig #607 thanks @BackEndTea
 * Harden against hypothetical XXE vulnerability #621
@@ -1004,6 +1131,7 @@ Most effort for this release was invested in upgrading Symfony to version 3.4.
 * Symfony 3.4 upgrade (#617 #614)
 
 ### Bugfix
+
 * Fix displayName on WAYF #603 thanks @tvdijen!
 
 ## 5.8.6
@@ -1012,23 +1140,27 @@ Most effort for this release was invested in upgrading Symfony to version 3.4.
 
 ## 5.8.5
 
-Bugfix for a possible break after giving consent. This release is preventing a crash when the original issuer is null #604
+Bugfix for a possible break after giving consent. This release is preventing a crash when the original issuer is null
+#604
 
 ## 5.8.4
 
-A security patch, fixing a possible XSS vulnerability.
-Described in more detail in #598
+A security patch, fixing a possible XSS vulnerability. Described in more detail in #598
 
 ## 5.8.3
 
-This is a release mainly focused on the rolling updates. Be aware that 5.8 releases prior to 5.8.3 do have some
-breaking changes in migrations due to the rolling update implementation added in this release . In order to update you
-should skip releases <5.8.3.
+This is a release mainly focused on the rolling updates. Be aware that 5.8 releases prior to 5.8.3 do have some breaking
+changes in migrations due to the rolling update implementation added in this release . In order to update you should
+skip releases <
+5.8.3.
 
 ### Chores and other improvements
-* Symfony was upgrade from version 2.8 to 3.4. This required the upgrade of quite some other (mainly dev) dependencies. #590
+
+* Symfony was upgrade from version 2.8 to 3.4. This required the upgrade of quite some other (mainly dev) dependencies.
+  #590
 
 ### Features
+
 * A custom database health check is added for the Monitor bundle. #589
 * A feature toggle to disallow users on attribute violations is added. #591
 * Add Rolling update support #595
@@ -1039,9 +1171,11 @@ This is mainly a release that consists of fixes of technical debt, longer standi
 features.
 
 ### Features
+
 * Add CodeStyle fixer to the project #583
 
 ### Bugfixes
+
 * Optimize consent viewport on xs #573
 * Revert suggestion title on WAYF screen #571
 * Fix SP displayName regression #568 (thanks tvdijen)
@@ -1049,6 +1183,7 @@ features.
 * Prevent adding empty 'return' hidden input field #584
 
 ### Chores and other improvements
+
 * References to Janus have been removed #581
 * Remove attribute_aggregation_required metadata setting #572
 * Symfony was upgraded to 2.8.44 to harden against CVE-2018-14773 #582
