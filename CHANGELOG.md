@@ -11,7 +11,7 @@ More information about our release strategy can be found in
 the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes)
 on the EngineBlock wiki.
 
-## 7.2-beta
+## 7.2.0
 
 Maintenance:
 
