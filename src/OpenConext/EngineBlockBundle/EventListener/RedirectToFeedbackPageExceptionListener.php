@@ -207,7 +207,7 @@ class RedirectToFeedbackPageExceptionListener
             $redirectToRoute = 'authentication_feedback_authentication_limit_exceeded';
         } elseif ($exception instanceof InvalidRequestMethodException ||
             $exception instanceof InvalidBindingException ||
-            $exception instanceof  MissingParameterException
+            $exception instanceof MissingParameterException
         ) {
             $message = $exception->getMessage();
             $event->getRequest()->getSession()->set('feedback_custom', $exception->getMessage());

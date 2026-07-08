@@ -231,6 +231,8 @@ A sua %organisationNoun% negou-lhe acesso a este serviço. Terá de entrar em co
     'error_invalid_mfa_authn_context_class_ref_desc' => '<p>A %idpName% requer segurança adicional para este serviço, por meio de um segundo fator de autenticação (2FA). No entanto, o seu segundo fator de autenticação não pôde ser verificado. Entre em contato com o suporte da %idpName% para validar esta situação.</p>',
     'error_invalid_mfa_authn_context_class_ref_desc_no_idp_name' => '<p>A sua %organisationNoun% requer segurança adicional para este serviço, por meio de um segundo fator de autenticação (2FA). No entanto, o seu segundo fator de autenticação não pôde ser verificado. Entre em contato com o suporte da sua %organisationNoun% para validar esta situação.</p>',
     'error_no_authentication_request_received' => 'Não foi recebida nenhuma solicitação de autenticação.',
+    'error_bookmarked_page'      => 'Erro - Esta página já não existe',
+    'error_bookmarked_page_desc' => 'A página que está a tentar visitar já não existe. Provavelmente guardou um marcador, mas infelizmente isso não funciona. Procure o link correto para a aplicação em que pretende iniciar sessão para obter acesso.',
     /**
      * %1 AttributeName
      * %2 Options
