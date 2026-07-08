@@ -2,12 +2,19 @@
 
 ## 7.2.0
 
+Engineblock is now upgraded to Symfony 7.4 and requires PHP 8.5. Older PHP versions might work, but have not been tested.
+
 This release brings a number of features and changes.
 
-- Monolog has been updated from verison 2 to 3; review your monolog configuration if you have customised it outside of
+- Monolog has been updated from version 2 to 3; review your monolog configuration if you have customised it outside of
   the defaults.
 - Add `metadata_expiration_time` to `parameters.yaml`, suggested value: `86400`. This is the old behaviour in which
   metadata is cached for 24 hours.
+- Add `feature_hide_bookmarkable_url` to `parameters.yaml`, suggested value: `false`.
+- Add `feature_api_users_nameid_lookup`, `api.users.nameidlookup.username`, `api.users.nameidlookup.password` to
+  `parameters.yaml`
+- Remove `encrypted_assertions_require_outer_signature` from `parameters.yaml`.
+
 - Reading of environment variables from `.env` and `.env.<env_name>` files has been restored. Please check that
 
 ### Database changes
@@ -16,9 +23,12 @@ A number of database updates are required. All should be backwards-compatible, b
 long time while blocking the database. Do not run the migrations on a production database before reading the notes
 below!
 
-All previous migration have been rolled into a new "initial migration".  If you are upgrading from version 7.0 or 7.1, please run the following query manually to set the new starting point for migrations:
+All previous migration have been rolled into a new "initial migration". If you are upgrading from version 7.0 or 7.1,
+please run the following query manually to set the new starting point for migrations:
+
 ```sql
-INSERT INTO migration_versions values ("OpenConext\\EngineBlock\\Doctrine\\Migrations\\Version20260210000000",NOW(),42);
+INSERT INTO migration_versions
+values ("OpenConext\\EngineBlock\\Doctrine\\Migrations\\Version20260210000000", NOW(), 42);
 ```
 
 - The `consent.deleted_at` should be not nullable and have a default value of `0000-00-00 00:00:00`. No explicit
@@ -66,8 +76,7 @@ INSERT INTO migration_versions values ("OpenConext\\EngineBlock\\Doctrine\\Migra
   ```sql
   SELECT `uuid`, COUNT(*) c FROM `user` GROUP BY `uuid` HAVING c > 1;
   ```
-  should return no results.
-  Run the following on your production database (#1974):
+  should return no results. Run the following on your production database (#1974):
   ```sql
   ALTER TABLE `user` CHANGE `uuid` `uuid` CHAR(36) NOT NULL;
   ALTER TABLE `user`

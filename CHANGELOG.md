@@ -13,15 +13,18 @@ on the EngineBlock wiki.
 
 ## 7.2-beta
 
-Upgrade to Symfony 7.4 Upgrade to `doctrine/dbal` 4
-
 Maintenance:
 
-* `symfony/monolog-bundle` upgraded to ^4.0; review your monolog configuration if you have customised it outside of the
+* Upgrade to Symfony 7.4.
+* Upgrade to `doctrine/dbal` 4
+* `symfony/monolog-bundle` upgraded to ^4.0; review your monolog configuration if you have customized it outside of the
   defaults.
 * Removed the `openconext` theme. The `skeune` theme is now the only supported theme and the default. (#1980)
+* The feature flag `encrypted_assertions_require_outer_signature` has been removed. It haf been broken for a while; the
+  default `true` was always used, even if this was set to `false`.
 
 Fixes:
+
 * Fix console never loading `.env` files
 * Fix Dotenv never loading `.env.{ENV}` overrides.
 * Fix login failing with `ValueNotConvertible: ... Undefined array key "certData"` when reading `certificates` metadata
@@ -29,19 +32,45 @@ Fixes:
   `__sleep()` to `__serialize()`, which silently changed the serialized key format stored in `sso_provider_roles_eb5`.
   The serialized format is restored to the legacy `__sleep()` format so old and new versions can read each other's data
   (red/green safe); no metadata re-push or migration is needed.
+* Fix quadruple warning about invalid ProtocolBinding. The warning is not logged once per occurence (#1807)
+* Clear the feedbackinfo for new requests. This prevents feedbackendfo from old errors to bleed through to new
+  (unrelated) error messages.
 
 Features:
 
+* Added a new `correlation_id` to the logs. The correlation id is kept constant over the entire lifetime of a single
+  authentication event, including request handling, response handling, and possible callouts to Stepup and SBS.
 * Added `coin:azure_domain_hint` configuration option for IdPs. When set, EngineBlock appends a `whr=<domain>` query
   parameter to the HTTP-Redirect AuthnRequest sent to the IdP, allowing Microsoft Azure / EntraID to skip the account
   picker (#1864). The metadata option is available in Manage starting from version 9.7.4.
+* Stabilized consent checks
+    * In order to make the consent hashes more robust, a more consistent way of hashing the user attributes has been
+      introduced
+    * This feature automatically migrates from the old hashes to the new hashes upon login.
+* Added `feature_hide_bookmarkable_url` feature flag. If this is enabled, the SAMLRequest GET parameter will not be
+  shown in the url bar on the Discovery screen. This will prevent users from bookmarking this intermediate page. Set to
+  `false` to keep the previous behavior.
+* Add two new API endpoints that can be used to translate schacHomeOrganisation+uid to nameid and vice versa. For
+  example:
+  ```
+  ╰─▶ curl -s -u nameid:nameid_secret  --json '["46fca2f6d57f20ede110fed380d2081a5febc0fa"]' https://engine-api.openconext.dev/info/users/id
+  [{"schacHomeOrganization":"exmplebilbioharderwijk.nl","uid":"student21","sp_entityid":"playground_client"}]
+
+  ╰─▶ curl -s -u nameid:nameid_secret  --json '[{"schacHomeOrganization": "exmplebilbioharderwijk.nl", "uid": "student21", "sp_entityid": "playground_client"}]' https://engine-api.openconext.dev/info/users/nameid
+  [{"nameid":"46fca2f6d57f20ede110fed380d2081a5febc0fa","stored":true}]
+  ```
+  Add the following parameters to parameters.yaml:
+    - `feature_api_users_nameid_lookup`: enable the nameid lookup endpoint
+    - `api.users.nameidlookup.username`: username for basic auth at the nameid lookup endpoints
+    - `api.users.nameidlookup.password`: password for basic auth at the nameid lookup endpoints
 
 Changes:
 
 * Metadata push will now reject all metadata if any service contains invalid PHP syntax in its attribute manipulations
   (#1778)
 * The metadata expiration time (`validUntil` attribute) is now configurable via the `metadata_expiration_time` parameter
-  in `parameters.yml`.
+  in
+  `parameters.yml`.
     * Action required: Add `metadata_expiration_time` to `parameters.yaml`, suggested value: `86400`. This is the old
       behaviour in which metadata is cached for 24 hours.
 * The `consent.deleted_at` should be not nullable and have a default value of `0000-00-00 00:00:00`.
@@ -54,17 +83,19 @@ Changes:
 * A new parameter `wayf.preferred_idp_entity_ids` must be added to `parameters.yml`. To display a set of IdPs prominent
   at the top of the WAYF, add the entityId's of those IdPs to this parameter.
     * To keep the old behaviour, set the value to `[]`
-* Stabilized consent checks
-    * In order to make the consent hashes more robust, a more consistent way of hashing the user attributes has been
-      introduced
-    * This feature automatically migrates from the old hashes to the new hashes upon login.
 * The CSS of the discovery page was adjusted to correctly scale square logos
+* In the past, if `coin:schachomeorganization` was set for an IdP, this value was forbidden to be used by other IdP.
+  This check has been broken for a while and has now been removed. The remaining function of the
+  `coin:schachomeorganization` metadata attribute is to fix the value of the `schacHomeOrganisation` attribute for all
+  authentications from this IdP.
 
 ### Database changes
-The database migrations have been cleaned up. We start with a new baseline migration, so your doctrine might warn about previously executed unregistered migrations.  These are all rolled up into [`Version20260210000000.php`](migrations/DoctrineMigrations/Version20260210000000.php).
+
+The database migrations have been cleaned up. We start with a new baseline migration, so your doctrine might warn about
+previously executed unregistered migrations. These are all rolled up into [
+`Version20260210000000.php`](migrations/DoctrineMigrations/Version20260210000000.php).
 
 A number of new migrations have also been provided. Read the instructions in [UPGRADING.md](UPGRADING.md) first.
-
 
 ### HTTP status code changes
 
@@ -74,8 +105,6 @@ The following feedback pages previously returned HTTP **200 OK** and now return 
 |-------------------------------------------------------|--------|-------|
 | `/authentication/feedback/invalid-acs-binding`        | 200    | 400   |
 | `/authentication/feedback/received-error-status-code` | 200    | 400   |
-
-
 
 ## 7.1.0
 
@@ -1122,7 +1151,8 @@ A security patch, fixing a possible XSS vulnerability. Described in more detail 
 
 This is a release mainly focused on the rolling updates. Be aware that 5.8 releases prior to 5.8.3 do have some breaking
 changes in migrations due to the rolling update implementation added in this release . In order to update you should
-skip releases <5.8.3.
+skip releases <
+5.8.3.
 
 ### Chores and other improvements
 
