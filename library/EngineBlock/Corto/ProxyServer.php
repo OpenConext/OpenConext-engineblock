@@ -27,6 +27,7 @@ use OpenConext\EngineBlock\Metadata\MfaEntity;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\TransparentMfaEntity;
 use OpenConext\EngineBlock\Stepup\StepupGsspUserAttributeExtension;
+use OpenConext\EngineBlock\Stepup\StepupServiceNameExtension;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\EngineBlockBundle\Exception\UnknownKeyIdException;
@@ -486,7 +487,8 @@ class EngineBlock_Corto_ProxyServer
         Loa $authnContextClassRef,
         NameID $nameId,
         bool $isForceAuthn,
-        Assertion $originalAssertion
+        Assertion $originalAssertion,
+        ?ServiceProvider $sp = null,
     ): void {
         $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
             $spRequest,
@@ -555,6 +557,13 @@ class EngineBlock_Corto_ProxyServer
             }
         }
 
+        $isSendServiceNameConfigured = $features->hasFeature('eb.stepup.send_service_name');
+        $isSendServiceNameEnabled = $features->isEnabled('eb.stepup.send_service_name');
+
+        if ($isSendServiceNameConfigured && $isSendServiceNameEnabled && $sp !== null) {
+            $locale = $container->getLocaleProvider()->getLocale();
+            StepupServiceNameExtension::add($sspMessage, $sp, $locale);
+        }
 
         // Link with the original Request
         $diContainerRuntime = EngineBlock_ApplicationSingleton::getInstance()->getDiContainerRuntime();
@@ -635,6 +644,7 @@ class EngineBlock_Corto_ProxyServer
             $nameId,
             $sp->getCoins()->isStepupForceAuthn(),
             $originalAssertion,
+            $sp,
         );
     }
 
