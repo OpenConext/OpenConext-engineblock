@@ -252,7 +252,6 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties = $this->assembleCommon($connection);
 
         $properties += $this->assembleSingleSignOnServices($connection);
-        $properties += $this->setPathFromObjectString(array($connection, 'metadata:coin:guest_qualifier'), 'guestQualifier');
         $properties += $this->setPathFromObjectString(array($connection, 'metadata:coin:schachomeorganization'), 'schacHomeOrganization');
         $properties += $this->assembleConsentSettings($connection);
         $properties += $this->setPathFromObjectBool(array($connection, 'metadata:coin:hidden'), 'hidden');

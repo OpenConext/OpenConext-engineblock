@@ -79,15 +79,6 @@ Uses:
 Modifies:
 - responseAttributes
 
-### FilterReservedMemberOfValues
-Removes any attributes starting with `urn:collab:org` as these may only be set by EngineBlock
-
-Uses:
-- responseAttributes
-
-Modifies:
-- responseAttributes
-
 ### RunAttributeManipulations (for IdP)
 run possible custom attribute manipulations
 
@@ -141,19 +132,6 @@ validate that all required attributes are present in the received response
 
 Depends on:
 - AttributeValidator
-
-Uses:
-- OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
-
-Modifies:
-- responseAttributes
-
-### AddGuestStatus
-Add the 'urn:collab:org:surf.nl' value to the isMemberOf attribute in case a user is considered a 'full member' of the
-SURFfederation based on user and configuration
-
-Depends On:
-- Configuration
 
 Uses:
 - OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
