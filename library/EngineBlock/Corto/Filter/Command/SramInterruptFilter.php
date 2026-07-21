@@ -109,6 +109,7 @@ class EngineBlock_Corto_Filter_Command_SramInterruptFilter extends EngineBlock_C
         $eppn = $attributes['urn:mace:dir:attribute-def:eduPersonPrincipalName'][0] ?? "";
         $externalSubject = $attributes['urn:oasis:names:tc:SAML:attribute:subject-id'][0] ?? "";
         $email = $attributes['urn:mace:dir:attribute-def:mail'][0] ?? "";
+        $attributes = $attributes;
         $continueUrl = $this->_server->getUrl('SramInterruptService', '') . "?ID=$id";
         $serviceId = $serviceProvider->entityId;
         $issuerId = $this->_identityProvider->entityId;
@@ -121,7 +122,8 @@ class EngineBlock_Corto_Filter_Command_SramInterruptFilter extends EngineBlock_C
             $serviceId,
             $issuerId,
             $externalSubject,
-            $email
+            $email,
+            $attributes
         );
     }
 
