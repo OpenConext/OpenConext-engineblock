@@ -30,7 +30,7 @@ class AuthzRequest implements JsonSerializable
         public readonly string $serviceId,
         public readonly string $issuerId,
         public readonly string $externalSubject,
-        public readonly string $email,
+        public readonly array $email,
         public readonly array $attributes,
     ) {
         Assertion::string($userId, 'The userId must be a string.');
@@ -39,7 +39,7 @@ class AuthzRequest implements JsonSerializable
         Assertion::string($serviceId, 'The serviceId must be a string.');
         Assertion::string($issuerId, 'The issuerId must be a string.');
         Assertion::string($externalSubject, 'The externalSubject must be a string.');
-        Assertion::string($email, 'The email must be a string.');
+        Assertion::isArray($email, 'The email must be an array.');
         Assertion::isArray($attributes, 'The attributes must be an array.');
     }
 
