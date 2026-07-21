@@ -28,13 +28,17 @@ class AuthzRequest implements JsonSerializable
         public readonly string $eduPersonPrincipalName,
         public readonly string $continueUrl,
         public readonly string $serviceId,
-        public readonly string $issuerId
+        public readonly string $issuerId,
+        public readonly string $externalSubject,
+        public readonly string $email,
     ) {
         Assertion::string($userId, 'The userId must be a string.');
         Assertion::string($eduPersonPrincipalName, 'The eduPersonPrincipalName must be a string.');
         Assertion::string($continueUrl, 'The continueUrl must be a string.');
         Assertion::string($serviceId, 'The serviceId must be a string.');
         Assertion::string($issuerId, 'The issuerId must be a string.');
+        Assertion::string($externalSubject, 'The externalSubject must be a string.');
+        Assertion::string($email, 'The email must be a string.');
     }
 
     public function jsonSerialize() : array
@@ -44,7 +48,9 @@ class AuthzRequest implements JsonSerializable
             'eppn' => $this->eduPersonPrincipalName,
             'continue_url' => $this->continueUrl,
             'service_id' => $this->serviceId,
-            'issuer_id' => $this->issuerId
+            'issuer_id' => $this->issuerId,
+            'external_subject' => $this->externalSubject,
+            'email' => $this->email
         ];
     }
 }
