@@ -107,7 +107,7 @@ class EngineBlock_Corto_Filter_Command_SramInterruptFilter extends EngineBlock_C
 
         $userId = $this->_collabPersonId ?? "";
         $eppn = $attributes['urn:mace:dir:attribute-def:eduPersonPrincipalName'][0] ?? "";
-        $externalSubject = $attributes['urn:oasis:names:tc:SAML:attribute:subject-id'][0] ?? "";
+        $externalSubjectId = $attributes['urn:oasis:names:tc:SAML:attribute:subject-id'][0] ?? "";
         $email = $attributes['urn:mace:dir:attribute-def:mail'] ?? [];
         $attributes = $attributes;
         $continueUrl = $this->_server->getUrl('SramInterruptService', '') . "?ID=$id";
@@ -118,7 +118,7 @@ class EngineBlock_Corto_Filter_Command_SramInterruptFilter extends EngineBlock_C
         return new AuthzRequest(
             $userId,
             $eppn,
-            $externalSubject,
+            $externalSubjectId,
             $email,
             $continueUrl,
             $serviceId,

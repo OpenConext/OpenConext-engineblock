@@ -144,7 +144,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
             ->withArgs(function ($args) use ($expectedRequest) {
                 return $args->userId === $expectedRequest->userId
                     && $args->eduPersonPrincipalName === $expectedRequest->eduPersonPrincipalName
-                    && $args->externalSubject === $expectedRequest->externalSubject
+                    && $args->externalSubjectId === $expectedRequest->externalSubjectId
                     && $args->email === $expectedRequest->email
                     && strpos($args->continueUrl, $expectedRequest->continueUrl) === 0
                     && $args->serviceId === $expectedRequest->serviceId
@@ -215,7 +215,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
 
                 return $args->userId === $expectedRequest->userId
                     && $args->eduPersonPrincipalName === $expectedRequest->eduPersonPrincipalName
-                    && $args->externalSubject === $expectedRequest->externalSubject
+                    && $args->externalSubjectId === $expectedRequest->externalSubjectId
                     && $args->email === $expectedRequest->email
                     && str_starts_with($args->continueUrl, $expectedRequest->continueUrl)
                     && $args->serviceId === $expectedRequest->serviceId
