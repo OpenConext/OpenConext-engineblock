@@ -100,6 +100,19 @@ class EngineBlock_Corto_Filter_Command_SramInterruptFilter extends EngineBlock_C
         }
     }
 
+    // TODO: duplicated from EngineBlockBundle/AttributeAggregation/Dto/Request.php
+    private static function filterNonStringValuesFromAttributes($attributes)
+    {
+        return array_filter($attributes, function ($attributeValues) {
+            foreach ($attributeValues as $attributeValue) {
+                if (!is_string($attributeValue)) {
+                    return false;   // drop the whole attribute
+                }
+            }
+            return true;
+        });
+    }
+
     private function buildRequest(ServiceProvider $serviceProvider): AuthzRequest
     {
         $attributes = $this->getResponseAttributes();
@@ -121,7 +134,7 @@ class EngineBlock_Corto_Filter_Command_SramInterruptFilter extends EngineBlock_C
             continueUrl: $continueUrl,
             serviceId: $serviceId,
             issuerId: $issuerId,
-            attributes: $attributes
+            attributes: self::filterNonStringValuesFromAttributes($attributes)
         );
     }
 

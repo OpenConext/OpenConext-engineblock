@@ -26,6 +26,7 @@ use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
 use OpenConext\EngineBlockBundle\Sbs\AuthzResponse;
 use OpenConext\EngineBlockBundle\Sbs\SbsClientInterface;
 use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use SAML2\Assertion;
@@ -313,6 +314,48 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
         $sramFilter->setIdentityProvider($idp);
 
         $sramFilter->execute();
+    }
+
+    #[DataProvider('filterNonStringValuesProvider')]
+    public function testFilterNonStringValuesFromAttributes(array $input, array $expected): void
+    {
+        $method = new ReflectionMethod(
+            EngineBlock_Corto_Filter_Command_SramInterruptFilter::class,
+            'filterNonStringValuesFromAttributes'
+        );
+
+        $this->assertSame($expected, $method->invoke(null, $input));
+    }
+
+    public static function filterNonStringValuesProvider(): array
+    {
+        return [
+            // ---- happy paths: array of (possibly empty) arrays of strings ----
+            'empty attribute set'       => [[], []],
+            'single string value'       => [['a' => ['x']], ['a' => ['x']]],
+            'multiple string values'    => [['a' => ['x', 'y']], ['a' => ['x', 'y']]],
+            'empty inner array kept'    => [['a' => []], ['a' => []]],
+            'several string attributes' => [
+                ['a' => ['x'], 'b' => ['y', 'z'], 'c' => []],
+                ['a' => ['x'], 'b' => ['y', 'z'], 'c' => []],
+            ],
+
+            // ---- failure paths: offending attribute dropped ----
+            'inner has integer'         => [['a' => [1]], []],
+            'inner has float'           => [['a' => [1.5]], []],
+            'inner has bool'            => [['a' => [true]], []],
+            'inner has null'            => [['a' => [null]], []],
+            'inner has nested array'    => [['a' => [['nested']]], []],
+            'inner has object'          => [['a' => [new stdClass()]], []],
+            'inner mixed string + int'  => [['a' => ['x', 1]], []],
+            'inner mixed string + obj'  => [['a' => ['x', new stdClass()]], []],
+
+            // ---- mixed set: only offending attributes dropped, keys preserved ----
+            'keeps good drops bad'      => [
+                ['good' => ['x'], 'bad' => ['x', 2], 'empty' => []],
+                ['good' => ['x'], 'empty' => []],
+            ],
+        ];
     }
 
     private function mockServiceProvider(string $entityId): ServiceProvider
