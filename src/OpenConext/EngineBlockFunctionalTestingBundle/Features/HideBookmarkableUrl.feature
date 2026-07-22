@@ -14,3 +14,20 @@ Feature:
     When I log in at "Dummy SP"
      And I go to Engineblock URL "/authentication/idp/single-sign-on"
     Then I should see "The parameter \"SAMLRequest\" is missing on the SAML SSO request"
+
+  Scenario: Visiting a bookmarked WAYF URL shows the bookmark error page
+    When I log in at "Dummy SP"
+     And I go to Engineblock URL "/authentication/idp/single-sign-on?feedback=bookmark"
+    Then I should see "This page no longer exists"
+
+  Scenario: WAYF page includes hideBookmarkableUrl true in config when feature flag is enabled
+    Given feature "eb.hide_bookmarkable_url" is enabled
+      And an Identity Provider named "Second Idp"
+    When I log in at "Dummy SP"
+    Then the response should contain '"hideBookmarkableUrl": true'
+
+  Scenario: WAYF page includes hideBookmarkableUrl false in config when feature flag is disabled
+    Given feature "eb.hide_bookmarkable_url" is disabled
+      And an Identity Provider named "Second Idp"
+    When I log in at "Dummy SP"
+    Then the response should contain '"hideBookmarkableUrl": false'

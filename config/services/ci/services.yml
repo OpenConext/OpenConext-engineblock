@@ -149,6 +149,13 @@ services:
             - '@engineblock.functional_testing.fixture.features'
             - '%stepup.sfo.override_engine_entityid%'
 
+    OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Wayf:
+        autoconfigure: true
+        arguments:
+            - '@request_stack'
+            - '@translator'
+            - '@engineblock.functional_testing.fixture.features'
+
     OpenConext\EngineBlockBundle\Twig\Extensions\Extension\FunctionalTestingGlobalSiteNotice:
         autoconfigure: true
         arguments:

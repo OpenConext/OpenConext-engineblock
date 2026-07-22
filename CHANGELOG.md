@@ -32,8 +32,8 @@ Fixes:
   `__sleep()` to `__serialize()`, which silently changed the serialized key format stored in `sso_provider_roles_eb5`.
   The serialized format is restored to the legacy `__sleep()` format so old and new versions can read each other's data
   (red/green safe); no metadata re-push or migration is needed.
-* Fix quadruple warning about invalid ProtocolBinding. The warning is not logged once per occurrence (#1807)
-* Clear the feedbackinfo for new requests. This prevents feedbackendfo from old errors from bleeding through to new
+* Fix quadruple warning about invalid ProtocolBinding. The warning is not logged once per occurence (#1807)
+* Clear the feedbackinfo for new requests. This prevents feedbackendfo from old errors to bleed through to new
   (unrelated) error messages.
 
 Features:
