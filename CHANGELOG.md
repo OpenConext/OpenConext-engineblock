@@ -11,6 +11,12 @@ More information about our release strategy can be found in
 the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes)
 on the EngineBlock wiki.
 
+## Unreleased
+
+Removed:
+
+* Removed the guest_qualifier / isMemberOf guest-status feature (`AddGuestStatus`, `FilterReservedMemberOfValues`). Unused and confirmed safe to remove. (#1294)
+
 ## 7.2.0
 
 Maintenance:

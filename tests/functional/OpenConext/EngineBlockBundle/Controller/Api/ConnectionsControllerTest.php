@@ -637,7 +637,6 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
                 'name' => 'IDP1',
                 'type' => 'saml20-idp',
                 'coins' => [
-                    'guest_qualifier' => 'guest-qualifier',
                     'schachomeorganization' => 'schac-home-organization',
                     'hidden' => '0',
                     // abstract
@@ -646,7 +645,6 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
                     'signature_method' => 'signature-method',
                 ],
                 'expected-coins' => [
-                    'guestQualifier' => 'guest-qualifier',
                     'schacHomeOrganization' => 'schac-home-organization',
                     'hidden' => false,
                     // abstract

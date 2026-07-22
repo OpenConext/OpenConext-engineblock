@@ -174,9 +174,6 @@ class PushMetadataAssemblerTest extends TestCase
             case 'string-signature-method':
                 $values = $this->validCoinValuesStringSignatureMethod();
                 break;
-            case 'string-guest-qualifier':
-                $values = $this->validCoinValuesStringGuestQualifier();
-                break;
             default:
                 throw new RuntimeException('Unknown coin type');
         }
@@ -392,7 +389,6 @@ class PushMetadataAssemblerTest extends TestCase
             ['forceauthn', 'saml20-sp', 'isStepupForceAuthn', 'bool-forceAuthn'],
 
             // IDP
-            ['guest_qualifier', 'saml20-idp', 'guestQualifier', 'string-guest-qualifier'],
             ['schachomeorganization', 'saml20-idp', 'schacHomeOrganization', 'string'],
             ['policy_enforcement_decision_required', 'saml20-idp', 'policyEnforcementDecisionRequired', 'bool'],
             ['hidden', 'saml20-idp', 'hidden', 'bool'],
@@ -458,19 +454,6 @@ class PushMetadataAssemblerTest extends TestCase
     {
         return [
             [null, "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"],
-            ["", ""],
-            ["string", "string"],
-        ];
-    }
-
-    /**
-     * The first option is the manage coin value, the second is the expected entity coin value after assembling
-     * @return array
-     */
-    private function validCoinValuesStringGuestQualifier()
-    {
-        return [
-            [null, "All"],
             ["", ""],
             ["string", "string"],
         ];
