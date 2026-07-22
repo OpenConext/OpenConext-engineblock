@@ -115,7 +115,11 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
             new NullLogger(),
         );
 
-        $initialAttributes = ['urn:mace:dir:attribute-def:uid' => ['userIdValue']];
+        $initialAttributes = [
+            'urn:mace:dir:attribute-def:uid' => ['userIdValue'],
+            'urn:oasis:names:tc:SAML:attribute:subject-id' => ['subjectIdValue'],
+            'urn:mace:dir:attribute-def:mail' => ['user@example.org'],
+        ];
         $sramFilter->setResponseAttributes($initialAttributes);
 
         $server = Mockery::mock(EngineBlock_Corto_ProxyServer::class);
@@ -138,7 +142,16 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
             ]
         ]);
 
-        $expectedRequest = new AuthzRequest('', '', '', [], 'https://example.org?ID=', 'spEntityId', 'idpEntityId', $initialAttributes);
+        $expectedRequest = new AuthzRequest(
+            userId: '',
+            eduPersonPrincipalName: '',
+            externalSubjectId: 'subjectIdValue',
+            email: ['user@example.org'],
+            continueUrl: 'https://example.org?ID=',
+            serviceId: 'spEntityId',
+            issuerId: 'idpEntityId',
+            attributes: $initialAttributes,
+        );
 
         $sbsClient->shouldReceive('authz')
             ->withArgs(function ($args) use ($expectedRequest) {
@@ -183,7 +196,11 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
             new NullLogger()
         );
 
-        $initialAttributes = ['urn:mace:dir:attribute-def:uid' => ['userIdValue']];
+        $initialAttributes = [
+            'urn:mace:dir:attribute-def:uid' => ['userIdValue'],
+            'urn:oasis:names:tc:SAML:attribute:subject-id' => ['subjectIdValue'],
+            'urn:mace:dir:attribute-def:mail' => ['user@example.org'],
+        ];
         $sramFilter->setResponseAttributes($initialAttributes);
 
         $server = Mockery::mock(EngineBlock_Corto_ProxyServer::class);
@@ -208,7 +225,16 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
             ],
         ]);
 
-        $expectedRequest = new AuthzRequest('', '', '', [], 'https://example.org?ID=', 'spEntityId', 'idpEntityId', $initialAttributes);
+        $expectedRequest = new AuthzRequest(
+            userId: '',
+            eduPersonPrincipalName: '',
+            externalSubjectId: 'subjectIdValue',
+            email: ['user@example.org'],
+            continueUrl: 'https://example.org?ID=',
+            serviceId: 'spEntityId',
+            issuerId: 'idpEntityId',
+            attributes: $initialAttributes,
+        );
 
         $sbsClient->shouldReceive('authz')
             ->withArgs(function ($args) use ($expectedRequest) {
@@ -236,6 +262,8 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
 
         $expectedAttributes = [
             'urn:mace:dir:attribute-def:uid' => ['userIdValue'],
+            'urn:oasis:names:tc:SAML:attribute:subject-id' => ['subjectIdValue'],
+            'urn:mace:dir:attribute-def:mail' => ['user@example.org'],
             'urn:mace:dir:attribute-def:eduPersonEntitlement' => 'attributes',
         ];
 
