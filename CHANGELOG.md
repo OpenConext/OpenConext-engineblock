@@ -17,6 +17,10 @@ Features:
 
 * Added `external_subject_id`, `email` and `attributes` to `SramInterruptFilter` request
 
+Fixes:
+* Restore full output of exception data ([#2055](https://github.com/OpenConext/OpenConext-engineblock/issues/2055))
+* Restore http 400 status code on failed push ([#2051](https://github.com/OpenConext/OpenConext-engineblock/issues/2051))
+
 ## 7.2.0
 
 Maintenance:
