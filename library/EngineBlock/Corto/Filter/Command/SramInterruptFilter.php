@@ -118,11 +118,11 @@ class EngineBlock_Corto_Filter_Command_SramInterruptFilter extends EngineBlock_C
         return new AuthzRequest(
             $userId,
             $eppn,
+            $externalSubject,
+            $email,
             $continueUrl,
             $serviceId,
             $issuerId,
-            $externalSubject,
-            $email,
             $attributes
         );
     }

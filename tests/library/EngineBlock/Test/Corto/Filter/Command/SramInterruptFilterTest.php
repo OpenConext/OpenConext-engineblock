@@ -138,16 +138,18 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
             ]
         ]);
 
-        $expectedRequest = new AuthzRequest('', '', 'https://example.org?ID=', 'spEntityId', 'idpEntityId');
+        $expectedRequest = new AuthzRequest('', '', '', [], 'https://example.org?ID=', 'spEntityId', 'idpEntityId', $initialAttributes);
 
         $sbsClient->shouldReceive('authz')
             ->withArgs(function ($args) use ($expectedRequest) {
-
                 return $args->userId === $expectedRequest->userId
                     && $args->eduPersonPrincipalName === $expectedRequest->eduPersonPrincipalName
+                    && $args->externalSubject === $expectedRequest->externalSubject
+                    && $args->email === $expectedRequest->email
                     && strpos($args->continueUrl, $expectedRequest->continueUrl) === 0
                     && $args->serviceId === $expectedRequest->serviceId
-                    && $args->issuerId === $expectedRequest->issuerId;
+                    && $args->issuerId === $expectedRequest->issuerId
+                    && $args->attributes === $expectedRequest->attributes;
             })
             ->andReturn($response);
 
@@ -206,16 +208,19 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
             ],
         ]);
 
-        $expectedRequest = new AuthzRequest('', '', 'https://example.org?ID=', 'spEntityId', 'idpEntityId');
+        $expectedRequest = new AuthzRequest('', '', '', [], 'https://example.org?ID=', 'spEntityId', 'idpEntityId', $initialAttributes);
 
         $sbsClient->shouldReceive('authz')
             ->withArgs(function ($args) use ($expectedRequest) {
 
                 return $args->userId === $expectedRequest->userId
                     && $args->eduPersonPrincipalName === $expectedRequest->eduPersonPrincipalName
+                    && $args->externalSubject === $expectedRequest->externalSubject
+                    && $args->email === $expectedRequest->email
                     && str_starts_with($args->continueUrl, $expectedRequest->continueUrl)
                     && $args->serviceId === $expectedRequest->serviceId
-                    && $args->issuerId === $expectedRequest->issuerId;
+                    && $args->issuerId === $expectedRequest->issuerId
+                    && $args->attributes === $expectedRequest->attributes;
             })
             ->andReturn($response);
 
