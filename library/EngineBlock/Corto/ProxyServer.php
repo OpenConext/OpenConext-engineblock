@@ -561,8 +561,14 @@ class EngineBlock_Corto_ProxyServer
         $isSendServiceNameEnabled = $features->isEnabled('eb.stepup.send_service_name');
 
         if ($isSendServiceNameConfigured && $isSendServiceNameEnabled && $sp !== null) {
-            $locale = $container->getLocaleProvider()->getLocale();
-            StepupServiceNameExtension::add($sspMessage, $sp, $locale);
+            $localeProvider = $container->getLocaleProvider();
+            StepupServiceNameExtension::add(
+                $sspMessage,
+                $sp,
+                $localeProvider->getLocale(),
+                $localeProvider->getDefaultLocale(),
+                $localeProvider->getAvailableLocales(),
+            );
         }
 
         // Link with the original Request

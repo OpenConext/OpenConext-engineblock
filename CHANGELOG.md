@@ -11,6 +11,10 @@ More information about our release strategy can be found in
 the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes)
 on the EngineBlock wiki.
 
+## UNRELEASED
+Features:
+* Added `eb.stepup.send_service_name` feature flag. When enabled, EngineBlock adds an `mdui:UIInfo`/`DisplayName` extension with the SP's display name to the Stepup callout AuthnRequest (#2034).
+
 ## 7.2.0
 
 Maintenance:

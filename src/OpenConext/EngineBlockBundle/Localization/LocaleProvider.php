@@ -60,6 +60,22 @@ final class LocaleProvider
     /**
      * @return string
      */
+    public function getDefaultLocale()
+    {
+        return $this->defaultLocale;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAvailableLocales()
+    {
+        return $this->availableLocales;
+    }
+
+    /**
+     * @return string
+     */
     public function getLocale()
     {
         if (!$this->request) {

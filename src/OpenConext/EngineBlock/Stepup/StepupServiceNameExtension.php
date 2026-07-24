@@ -28,16 +28,23 @@ use SAML2\XML\Chunk;
 final class StepupServiceNameExtension
 {
     private const MDUI_NS = 'urn:oasis:names:tc:SAML:metadata:ui';
-    private const SUPPORTED_LOCALES = ['en', 'nl', 'pt'];
 
-    public static function add(Message $message, ServiceProvider $sp, string $locale): void
-    {
-        if (!in_array($locale, self::SUPPORTED_LOCALES, true)) {
-            $locale = 'en';
+    /**
+     * @param string[] $availableLocales
+     */
+    public static function add(
+        Message $message,
+        ServiceProvider $sp,
+        string $locale,
+        string $defaultLocale,
+        array $availableLocales,
+    ): void {
+        if (!in_array($locale, $availableLocales, true)) {
+            $locale = $defaultLocale;
         }
         $result = self::resolveName($sp, $locale);
-        if ($result === null && $locale !== 'en') {
-            $result = self::resolveName($sp, 'en');
+        if ($result === null && $locale !== $defaultLocale) {
+            $result = self::resolveName($sp, $defaultLocale);
         }
         if ($result === null) {
             return;
@@ -63,11 +70,21 @@ final class StepupServiceNameExtension
     {
         $name = $sp->getMdui()->getDisplayNameOrNull($locale);
         if (empty($name)) {
-            $name = $sp->{'name' . ucfirst($locale)};
+            $name = self::localizedName($sp, $locale);
         }
         if (empty($name)) {
             return null;
         }
         return [$locale, $name];
+    }
+
+    private static function localizedName(ServiceProvider $sp, string $locale): ?string
+    {
+        return match ($locale) {
+            'en' => $sp->nameEn,
+            'nl' => $sp->nameNl,
+            'pt' => $sp->namePt,
+            default => null,
+        };
     }
 }

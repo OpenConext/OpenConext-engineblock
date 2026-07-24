@@ -37,7 +37,7 @@ class StepupServiceNameExtensionTest extends TestCase
         $sp = $this->spWithNames('My Service EN', 'Mijn Service NL');
         $request = new AuthnRequest();
 
-        StepupServiceNameExtension::add($request, $sp, 'nl');
+        StepupServiceNameExtension::add($request, $sp, 'nl', 'en', ['en', 'nl', 'pt']);
 
         $nodes = $this->queryXpath($request, './/mdui:DisplayName[@xml:lang="nl"]');
         $this->assertSame(1, $nodes->length);
@@ -49,7 +49,7 @@ class StepupServiceNameExtensionTest extends TestCase
         $sp = $this->spWithNames('My Service EN');
         $request = new AuthnRequest();
 
-        StepupServiceNameExtension::add($request, $sp, 'nl');
+        StepupServiceNameExtension::add($request, $sp, 'nl', 'en', ['en', 'nl', 'pt']);
 
         $nodes = $this->queryXpath($request, './/mdui:DisplayName[@xml:lang="en"]');
         $this->assertSame(1, $nodes->length);
@@ -61,7 +61,7 @@ class StepupServiceNameExtensionTest extends TestCase
         $sp = $this->spWithNames();
         $request = new AuthnRequest();
 
-        StepupServiceNameExtension::add($request, $sp, 'nl');
+        StepupServiceNameExtension::add($request, $sp, 'nl', 'en', ['en', 'nl', 'pt']);
 
         $ext = $request->getExtensions();
         $this->assertArrayNotHasKey('mdui:UIInfo', $ext);
@@ -73,7 +73,7 @@ class StepupServiceNameExtensionTest extends TestCase
         $sp->nameEn = 'Flat Field Name';
         $request = new AuthnRequest();
 
-        StepupServiceNameExtension::add($request, $sp, 'en');
+        StepupServiceNameExtension::add($request, $sp, 'en', 'en', ['en', 'nl', 'pt']);
 
         $nodes = $this->queryXpath($request, './/mdui:DisplayName[@xml:lang="en"]');
         $this->assertSame(1, $nodes->length);
@@ -85,7 +85,7 @@ class StepupServiceNameExtensionTest extends TestCase
         $sp = $this->spWithNames('Only English Name');
         $request = new AuthnRequest();
 
-        StepupServiceNameExtension::add($request, $sp, 'nl');
+        StepupServiceNameExtension::add($request, $sp, 'nl', 'en', ['en', 'nl', 'pt']);
 
         $nlNodes = $this->queryXpath($request, './/mdui:DisplayName[@xml:lang="nl"]');
         $enNodes = $this->queryXpath($request, './/mdui:DisplayName[@xml:lang="en"]');
@@ -102,7 +102,7 @@ class StepupServiceNameExtensionTest extends TestCase
         $sp->nameEn = 'Flat Field Name';
         $request = new AuthnRequest();
 
-        StepupServiceNameExtension::add($request, $sp, 'en');
+        StepupServiceNameExtension::add($request, $sp, 'en', 'en', ['en', 'nl', 'pt']);
 
         $nodes = $this->queryXpath($request, './/mdui:DisplayName[@xml:lang="en"]');
         $this->assertSame(1, $nodes->length);
@@ -117,7 +117,7 @@ class StepupServiceNameExtensionTest extends TestCase
             (new DOMDocument())->createElement('existing:Extension')
         )]);
 
-        StepupServiceNameExtension::add($request, $sp, 'en');
+        StepupServiceNameExtension::add($request, $sp, 'en', 'en', ['en', 'nl', 'pt']);
 
         $ext = $request->getExtensions();
         $this->assertArrayHasKey('existing:Extension', $ext);
@@ -129,7 +129,7 @@ class StepupServiceNameExtensionTest extends TestCase
         $sp = $this->spWithNames('My Service EN', 'Mijn Service NL');
         $request = new AuthnRequest();
 
-        StepupServiceNameExtension::add($request, $sp, 'en/../evil');
+        StepupServiceNameExtension::add($request, $sp, 'en/../evil', 'en', ['en', 'nl', 'pt']);
 
         $nodes = $this->queryXpath($request, './/mdui:DisplayName[@xml:lang="en"]');
         $this->assertSame(1, $nodes->length);
