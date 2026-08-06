@@ -557,8 +557,7 @@ class EngineBlock_Corto_ProxyServer
             }
         }
 
-        if (
-            $features->hasFeature('eb.stepup.send_service_name')
+        if ($features->hasFeature('eb.stepup.send_service_name')
             && $features->isEnabled('eb.stepup.send_service_name')
         ) {
             $localeProvider = $container->getLocaleProvider();
