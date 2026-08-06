@@ -488,7 +488,7 @@ class EngineBlock_Corto_ProxyServer
         NameID $nameId,
         bool $isForceAuthn,
         Assertion $originalAssertion,
-        ?ServiceProvider $sp = null,
+        ServiceProvider $sp,
     ): void {
         $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
             $spRequest,
@@ -560,7 +560,6 @@ class EngineBlock_Corto_ProxyServer
         if (
             $features->hasFeature('eb.stepup.send_service_name')
             && $features->isEnabled('eb.stepup.send_service_name')
-            && $sp !== null
         ) {
             $localeProvider = $container->getLocaleProvider();
             StepupServiceNameExtension::add(
