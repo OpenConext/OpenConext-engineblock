@@ -291,3 +291,20 @@ Feature:
       And I pass through EngineBlock
       And I pass through the IdP
     Then the received AuthnRequest should match xpath '/samlp:AuthnRequest/samlp:Extensions/gssp:UserAttributes/saml:Attribute[@Name="urn:mace:dir:attribute-def:mail"]/saml:AttributeValue[text()="j.doe@institution-a.example.org"]'
+
+  Scenario: Stepup callout includes service name in mdui:UIInfo when feature is enabled
+    Given the SP "SSO-SP" requires Stepup LoA "http://dev.openconext.local/assurance/loa2"
+      And feature "eb.stepup.send_service_name" is enabled
+    When I log in at "SSO-SP"
+      And I select "SSO-IdP" on the WAYF
+      And I pass through EngineBlock
+      And I pass through the IdP
+    Then the received AuthnRequest should match xpath '/samlp:AuthnRequest/samlp:Extensions/mdui:UIInfo/mdui:DisplayName'
+
+  Scenario: Stepup callout does not include service name in mdui:UIInfo when feature is disabled
+    Given the SP "SSO-SP" requires Stepup LoA "http://dev.openconext.local/assurance/loa2"
+    When I log in at "SSO-SP"
+      And I select "SSO-IdP" on the WAYF
+      And I pass through EngineBlock
+      And I pass through the IdP
+    Then the received AuthnRequest should not match xpath '/samlp:AuthnRequest/samlp:Extensions/mdui:UIInfo/mdui:DisplayName'
