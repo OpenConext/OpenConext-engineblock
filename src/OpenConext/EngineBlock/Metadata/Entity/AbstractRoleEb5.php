@@ -28,13 +28,14 @@ use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
-use OpenConext\EngineBlockBundle\Doctrine\Type\CertificateArrayType;
 use OpenConext\EngineBlockBundle\Doctrine\Type\SerializedArrayType;
 use OpenConext\EngineBlockBundle\Doctrine\Type\SerializedObjectType;
 use RuntimeException;
 use SAML2\Constants;
 
 /**
+ * @Deprecated This entity is deprecated and will be removed in the future. Use the new IdentityProvider entity instead.
+ *
  * Abstract base class for configuration entities.
  *
  * Note: This baseclass is extended by IdentityProvider and ServiceProvider. Both entities are stored in a single table.
@@ -51,17 +52,17 @@ use SAML2\Constants;
 #[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
 #[ORM\InheritanceType('SINGLE_TABLE')]
 #[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
-#[ORM\DiscriminatorMap(['sp' => ServiceProvider::class, 'idp' => IdentityProvider::class])]
-#[ORM\Table(name: 'sso_provider_roles_eb6')]
+#[ORM\DiscriminatorMap(['sp' => ServiceProviderEb5::class, 'idp' => IdentityProviderEb5::class])]
+#[ORM\Table(name: 'sso_provider_roles_eb5')]
 #[ORM\Index(name: 'idx_sso_provider_roles_type', columns: ['type'])]
 #[ORM\Index(name: 'idx_sso_provider_roles_entity_id', columns: ['entity_id'])]
 #[ORM\UniqueConstraint(name: 'idx_sso_provider_roles_entity_id_type', columns: ['type', 'entity_id'])]
-abstract class AbstractRole
+abstract class AbstractRoleEb5
 {
-    const string TABLE_NAME = 'sso_provider_roles_eb6';
-    const string WORKFLOW_STATE_PROD = 'prodaccepted';
-    const string WORKFLOW_STATE_TEST = 'testaccepted';
-    const string WORKFLOW_STATE_DEFAULT = self::WORKFLOW_STATE_PROD;
+    const string TABLE_NAME = 'sso_provider_roles_eb5';
+    const WORKFLOW_STATE_PROD = 'prodaccepted';
+    const WORKFLOW_STATE_TEST = 'testaccepted';
+    const WORKFLOW_STATE_DEFAULT = self::WORKFLOW_STATE_PROD;
 
     /**
      * @var int
@@ -186,7 +187,7 @@ abstract class AbstractRole
     /**
      * @var X509Certificate[]
      */
-    #[ORM\Column(name: 'certificates', type: CertificateArrayType::NAME, length: 65535)]
+    #[ORM\Column(name: 'certificates', type: SerializedArrayType::NAME, length: 65535)]
     public $certificates = array();
 
     /**

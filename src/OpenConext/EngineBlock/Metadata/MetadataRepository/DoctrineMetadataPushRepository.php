@@ -24,9 +24,13 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Statement;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Monolog\Logger;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
+use OpenConext\EngineBlock\Metadata\Entity\AbstractRoleEb5;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProviderEb5;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProviderEb5;
 use RuntimeException;
 
 class DoctrineMetadataPushRepository
@@ -46,19 +50,32 @@ class DoctrineMetadataPushRepository
      */
     private $idpMetadata;
 
+    /**
+     * @Deprecated
+     * @var ClassMetadata
+     */
+    private $spMetadataDeprecated;
 
-    const ROLES_TABLE_NAME = 'sso_provider_roles_eb5';
+    /**
+     * @Deprecated
+     * @var ClassMetadata
+     */
+    private $idpMetadataDeprecated;
 
     const FIELD_VALUE = 0;
     const FIELD_TYPE = 1;
 
     public function __construct(
-        EntityManager $entityManager
+        EntityManager $entityManager,
     ) {
         $this->connection = $entityManager->getConnection();
 
         $this->spMetadata = $entityManager->getClassMetadata(ServiceProvider::class);
         $this->idpMetadata = $entityManager->getClassMetadata(IdentityProvider::class);
+
+        // TODO: Remove this code after sso_provider_roles_eb5 has been phased out
+        $this->spMetadataDeprecated = $entityManager->getClassMetadata(ServiceProviderEb5::class);
+        $this->idpMetadataDeprecated = $entityManager->getClassMetadata(IdentityProviderEb5::class);
     }
 
     /**
@@ -77,10 +94,73 @@ class DoctrineMetadataPushRepository
      * @return SynchronizationResult
      * @throws \Exception
      */
-    public function synchronize(array $roles)
+    public function synchronize(array $roles, array $rolesEb5): SynchronizationResult
     {
+        // TODO: Remove this code after sso_provider_roles_eb5 has been phased out
         $result = new SynchronizationResult();
+        $this->connection->transactional(function () use ($rolesEb5, $result): void {
+            $idpsToBeRemoved = $this->findAllRoleEntityIds($this->idpMetadataDeprecated);
+            $spsToBeRemoved = $this->findAllRoleEntityIds($this->spMetadataDeprecated);
 
+            foreach ($rolesEb5 as $roleKey => $role) {
+                if ($role instanceof IdentityProviderEb5) {
+                    // Does the IDP already exist in the database?
+                    $index = array_search($role->entityId, $idpsToBeRemoved);
+
+                    if ($index === false) {
+                        // The IDP is new: create it.
+                        $this->insertRole($role, $this->idpMetadataDeprecated);
+                        $result->createdIdentityProviders[] = $role->entityId;
+                    } else {
+                        // Remove from the list of entity ids so it won't get deleted later on.
+                        unset($idpsToBeRemoved[$index]);
+
+                        // The IDP already exists: update it.
+                        $role->id = $index;
+                        $this->updateRole($role, $this->idpMetadataDeprecated);
+                        $result->updatedIdentityProviders[] = $role->entityId;
+                    }
+                    unset($rolesEb5[$roleKey]);
+                    continue;
+                }
+
+                if ($role instanceof ServiceProviderEb5) {
+                    // Does the SP already exist in the database?
+                    $index = array_search($role->entityId, $spsToBeRemoved);
+                    if ($index === false) {
+                        // The SP is new: create it.
+                        $this->insertRole($role, $this->spMetadataDeprecated);
+                        $result->createdServiceProviders[] = $role->entityId;
+                    } else {
+                        // Remove from the list of entity ids so it won't get deleted later on.
+                        unset($spsToBeRemoved[$index]);
+
+                        // The SP already exists: update it.
+                        $role->id = $index;
+                        $this->updateRole($role, $this->spMetadataDeprecated);
+                        $result->updatedServiceProviders[] = $role->entityId;
+                    }
+                    unset($rolesEb5[$roleKey]);
+                    continue;
+                }
+
+                throw new RuntimeException(
+                    sprintf('Unsupported role provided to synchronization: "%s"', var_export($role, true))
+                );
+            }
+
+            if ($idpsToBeRemoved) {
+                $this->deleteRolesByIds(array_values($idpsToBeRemoved), $this->idpMetadataDeprecated);
+                $result->removedIdentityProviders = array_values($idpsToBeRemoved);
+            }
+
+            if ($spsToBeRemoved) {
+                $this->deleteRolesByIds(array_values($spsToBeRemoved), $this->spMetadataDeprecated);
+                $result->removedServiceProviders = array_values($spsToBeRemoved);
+            }
+        });
+
+        $result = new SynchronizationResult();
         $this->connection->transactional(function () use ($roles, $result): void {
             $idpsToBeRemoved = $this->findAllRoleEntityIds($this->idpMetadata);
             $spsToBeRemoved = $this->findAllRoleEntityIds($this->spMetadata);
@@ -146,23 +226,32 @@ class DoctrineMetadataPushRepository
         return $result;
     }
 
-    private function insertRole(AbstractRole $role, ClassMetadata $metadata)
+    private function insertRole(AbstractRole|AbstractRoleEb5 $role, ClassMetadata $metadata): void
     {
+        // TODO: Remove this code after sso_provider_roles_eb5 has been phased out
+        $tableName = AbstractRole::TABLE_NAME;
+        if ($metadata === $this->idpMetadataDeprecated || $metadata === $this->spMetadataDeprecated) {
+            $tableName = AbstractRoleEb5::TABLE_NAME;
+        }
         $query = $this->connection->createQueryBuilder()
-            ->insert(self::ROLES_TABLE_NAME);
+            ->insert($tableName);
 
         $normalized = $this->addInsertQueryParameters($role, $query, $metadata);
-
         $stmt = $this->connection->prepare($query->getSQL());
         $this->bindParameters($normalized, $stmt);
         $stmt->executeQuery();
     }
 
-    private function updateRole(AbstractRole $role, ClassMetadata $metadata)
+    private function updateRole(AbstractRole|AbstractRoleEb5 $role, ClassMetadata $metadata): void
     {
-        $query = $this->connection->createQueryBuilder()
-            ->update(self::ROLES_TABLE_NAME);
+        // TODO: Remove this code after sso_provider_roles_eb5 has been phased out
+        $tableName = AbstractRole::TABLE_NAME;
+        if ($metadata === $this->idpMetadataDeprecated || $metadata === $this->spMetadataDeprecated) {
+            $tableName = AbstractRoleEb5::TABLE_NAME;
+        }
 
+        $query = $this->connection->createQueryBuilder()
+            ->update($tableName);
         $normalized = $this->addUpdateQueryParameters($role, $query, $metadata);
 
         $stmt = $this->connection->prepare($query->getSQL());
@@ -170,10 +259,16 @@ class DoctrineMetadataPushRepository
         $stmt->executeQuery();
     }
 
-    private function deleteRolesByIds(array $roles, ClassMetadata $metadata)
+    private function deleteRolesByIds(array $roles, ClassMetadata $metadata): int|string
     {
+        // TODO: Remove this code after sso_provider_roles_eb5 has been phased out
+        $tableName = AbstractRole::TABLE_NAME;
+        if ($metadata === $this->idpMetadataDeprecated || $metadata === $this->spMetadataDeprecated) {
+            $tableName = AbstractRoleEb5::TABLE_NAME;
+        }
+
         $query = $this->connection->createQueryBuilder()
-            ->delete(self::ROLES_TABLE_NAME)
+            ->delete($tableName)
             ->where('id IN (:ids)')
             ->setParameter('ids', $roles, ArrayParameterType::INTEGER);
 
@@ -183,11 +278,17 @@ class DoctrineMetadataPushRepository
         return $result;
     }
 
-    private function findAllRoleEntityIds(ClassMetadata $metadata)
+    private function findAllRoleEntityIds(ClassMetadata $metadata): array|null
     {
+        // TODO: Remove this code after sso_provider_roles_eb5 has been phased out
+        $tableName = AbstractRole::TABLE_NAME;
+        if ($metadata === $this->idpMetadataDeprecated || $metadata === $this->spMetadataDeprecated) {
+            $tableName = AbstractRoleEb5::TABLE_NAME;
+        }
+
         $query = $this->connection->createQueryBuilder()
             ->select('id, entity_id')
-            ->from(self::ROLES_TABLE_NAME);
+            ->from($tableName);
 
         assert($query instanceof QueryBuilder);
         $this->addDiscriminatorQuery($query, $metadata);
@@ -202,7 +303,7 @@ class DoctrineMetadataPushRepository
         return $results;
     }
 
-    private function addInsertQueryParameters(AbstractRole $role, QueryBuilder $query, ClassMetadata $metadata)
+    private function addInsertQueryParameters(AbstractRole|AbstractRoleEb5 $role, QueryBuilder $query, ClassMetadata $metadata): array
     {
         $normalized = $this->normalizeData($role, $metadata);
         foreach (array_keys($normalized) as $id) {
@@ -211,7 +312,7 @@ class DoctrineMetadataPushRepository
         return $normalized;
     }
 
-    private function addUpdateQueryParameters(AbstractRole $role, QueryBuilder $query, ClassMetadata $metadata)
+    private function addUpdateQueryParameters(AbstractRole|AbstractRoleEb5 $role, QueryBuilder $query, ClassMetadata $metadata): array
     {
         $normalized = $this->normalizeData($role, $metadata);
         foreach (array_keys($normalized) as $id) {
@@ -224,20 +325,20 @@ class DoctrineMetadataPushRepository
         return $normalized;
     }
 
-    private function bindParameters($normalized, Statement $statement)
+    private function bindParameters($normalized, Statement $statement): void
     {
         foreach ($normalized as $id => $value) {
             $statement->bindValue($id, $value[self::FIELD_VALUE], $value[self::FIELD_TYPE]);
         }
     }
 
-    private function addDiscriminatorQuery(QueryBuilder $queryBuilder, ClassMetadata $metadata)
+    private function addDiscriminatorQuery(QueryBuilder $queryBuilder, ClassMetadata $metadata): void
     {
         $queryBuilder->andWhere(sprintf('%s = :%s', $metadata->discriminatorColumn->fieldName, $metadata->discriminatorColumn->name))
             ->setParameter($metadata->discriminatorColumn->name, $metadata->discriminatorValue, $metadata->discriminatorColumn->type);
     }
 
-    private function normalizeData(AbstractRole $role, ClassMetadata $metadata)
+    private function normalizeData(AbstractRole|AbstractRoleEb5 $role, ClassMetadata $metadata): array
     {
         $result = [];
         foreach ($metadata->fieldMappings as $id => $columnInfo) {
