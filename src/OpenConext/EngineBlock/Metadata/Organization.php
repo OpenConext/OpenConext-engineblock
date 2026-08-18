@@ -36,6 +36,10 @@ class Organization
      */
     public static function fromArray(array $organization): Organization
     {
-        return new self($organization["name"], $organization["displayName"], $organization["url"]);
+        return new self(
+            $organization['name'] ?? null,
+            $organization['displayName'] ?? null,
+            $organization['url'] ?? null
+        );
     }
 }

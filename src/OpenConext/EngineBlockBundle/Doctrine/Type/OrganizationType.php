@@ -54,7 +54,19 @@ class OrganizationType extends Type
             );
         }
 
-        return json_encode($value);
+        // Drop null properties regardless of what they're called
+        // This is done as many Organization(s) are potentially null or partially null
+        $data = array_filter(
+            get_object_vars($value),
+            static fn ($field) => $field !== null
+        );
+
+        // If every property was null, store NULL instead of "{}"
+        if ($data === []) {
+            return null;
+        }
+
+        return json_encode($data);
     }
 
     /**
@@ -63,7 +75,7 @@ class OrganizationType extends Type
     public function convertToPHPValue($value, AbstractPlatform $platform): ?Organization
     {
         if (is_null($value)) {
-            return null;
+            return new Organization(null, null, null);
         }
 
         try {
