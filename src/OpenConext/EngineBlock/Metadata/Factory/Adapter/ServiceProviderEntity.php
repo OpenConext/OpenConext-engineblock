@@ -40,37 +40,24 @@ use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
  */
 class ServiceProviderEntity implements ServiceProviderEntityInterface
 {
-    /**
-     * @var ServiceProvider
-     */
-    private $entity;
+    private ServiceProvider $entity;
 
     public function __construct(ServiceProvider $entity)
     {
         $this->entity = $entity;
     }
 
-    /**
-     * @return null|int
-     */
     public function getId(): ?int
     {
         return $this->entity->id;
     }
 
-    /**
-     * @return string
-     */
     public function getEntityId(): string
     {
         return $this->entity->entityId;
     }
 
-    /**
-     * @param $locale
-     * @return string
-     */
-    public function getName($locale): string
+    public function getName(string $locale): ?string
     {
         switch (true) {
             case ($locale == 'nl'):
@@ -84,11 +71,7 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
         return '';
     }
 
-    /**
-     * @param $locale
-     * @return string
-     */
-    public function getDescription($locale): string
+    public function getDescription(string $locale): string
     {
         if ($this->entity->getMdui()->hasDescription($locale)) {
             return $this->entity->getMdui()->getDescription($locale);
@@ -106,9 +89,6 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
         return '';
     }
 
-    /**
-     * @return Logo
-     */
     public function getLogo(): ?Logo
     {
         return $this->entity->getMdui()->getLogoOrNull();
@@ -127,10 +107,6 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
         return false;
     }
 
-    /**
-     * @param string $locale
-     * @return Organization
-     */
     public function getOrganization(string $locale): ?Organization
     {
         switch (true) {
@@ -145,11 +121,7 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
         return null;
     }
 
-    /**
-     * @param $locale
-     * @return string
-     */
-    public function getKeywords($locale): string
+    public function getKeywords(string $locale): string
     {
         if ($this->entity->getMdui()->hasKeywords($locale)) {
             return $this->entity->getMdui()->getKeywords($locale);
@@ -166,9 +138,6 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
         return $this->entity->certificates;
     }
 
-    /**
-     * @return string
-     */
     public function getWorkflowState(): string
     {
         return $this->entity->workflowState;
@@ -182,9 +151,6 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
         return $this->entity->contactPersons;
     }
 
-    /**
-     * @return null|string
-     */
     public function getNameIdFormat(): ?string
     {
         return $this->entity->nameIdFormat;
@@ -198,33 +164,21 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
         return $this->entity->supportedNameIdFormats;
     }
 
-    /**
-     * @return null|Service
-     */
     public function getSingleLogoutService(): ?Service
     {
         return $this->entity->singleLogoutService;
     }
 
-    /**
-     * @return bool
-     */
     public function isRequestsMustBeSigned(): bool
     {
         return $this->entity->requestsMustBeSigned;
     }
 
-    /**
-     * @return string
-     */
-    public function getManipulation(): string
+    public function getManipulation(): ?string
     {
         return $this->entity->manipulation;
     }
 
-    /**
-     * @return Coins
-     */
     public function getCoins(): Coins
     {
         return $this->entity->getCoins();
@@ -235,9 +189,6 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
         return $this->entity->getMdui();
     }
 
-    /**
-     * @return AttributeReleasePolicy|null
-     */
     public function getAttributeReleasePolicy(): ?AttributeReleasePolicy
     {
         return $this->entity->attributeReleasePolicy;
@@ -259,9 +210,6 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
         return $this->entity->allowedIdpEntityIds;
     }
 
-    /**
-     * @return bool
-     */
     public function isAllowAll(): bool
     {
         return $this->entity->allowAll;
@@ -275,11 +223,7 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
         return $this->entity->requestedAttributes;
     }
 
-    /**
-     * @param $locale
-     * @return string|null
-     */
-    public function getSupportUrl($locale): ?string
+    public function getSupportUrl(string $locale): ?string
     {
         switch (true) {
             case ($locale == 'nl'):
@@ -293,18 +237,11 @@ class ServiceProviderEntity implements ServiceProviderEntityInterface
         return '';
     }
 
-    /**
-     * @param string $idpEntityId
-     * @return bool
-     */
     public function isAllowed(string $idpEntityId): bool
     {
         return $this->entity->isAllowed($idpEntityId);
     }
 
-    /**
-     * @return bool
-     */
     public function isAttributeAggregationRequired(): bool
     {
         return $this->entity->isAttributeAggregationRequired();

@@ -34,7 +34,8 @@ use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlockBundle\Doctrine\Type\LegacyJsonType;
-use OpenConext\EngineBlockBundle\Doctrine\Type\SerializedArrayType;
+use OpenConext\EngineBlockBundle\Doctrine\Type\ServiceArrayType;
+use OpenConext\EngineBlockBundle\Doctrine\Type\ShibMdScopeArrayType;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 
@@ -68,13 +69,13 @@ class IdentityProvider extends AbstractRole
     /**
      * @var bool
      */
-    #[ORM\Column(name: 'enabled_in_wayf', type: Types::BOOLEAN)]
+    #[ORM\Column(name: 'enabled_in_wayf', type: Types::BOOLEAN, nullable: true)]
     public ?bool $enabledInWayf = true;
 
     /**
      * @var Service[]
      */
-    #[ORM\Column(name: 'single_sign_on_services', type: SerializedArrayType::NAME, length: 65535)]
+    #[ORM\Column(name: 'single_sign_on_services', type: ServiceArrayType::NAME, length: 65535, nullable: true)]
     public $singleSignOnServices = array();
 
     /**
@@ -91,19 +92,19 @@ class IdentityProvider extends AbstractRole
      * with green/blue deployment strategies.
      *
      */
-    #[ORM\Column(name: 'consent_settings', type: LegacyJsonType::NAME)]
+    #[ORM\Column(name: 'consent_settings', type: LegacyJsonType::NAME, nullable: true)]
     private $consentSettings;
 
     /**
      * @var ShibMdScope[]
      */
-    #[ORM\Column(name: 'shib_md_scopes', type: SerializedArrayType::NAME, length: 65535)]
+    #[ORM\Column(name: 'shib_md_scopes', type: ShibMdScopeArrayType::NAME, length: 65535, nullable: true)]
     public $shibMdScopes = array();
 
     /**
      * @var array<int, Discovery>
      */
-    #[ORM\Column(name: 'idp_discoveries', type: LegacyJsonType::NAME)]
+    #[ORM\Column(name: 'idp_discoveries', type: LegacyJsonType::NAME, nullable: true)]
     private $discoveries;
 
     /**
@@ -121,20 +122,20 @@ class IdentityProvider extends AbstractRole
         bool $additionalLogging = false,
         array $certificates = array(),
         array $contactPersons = array(),
-        string $descriptionEn = '',
-        string $descriptionNl = '',
-        string $descriptionPt = '',
+        ?string $descriptionEn = null,
+        ?string $descriptionNl = null,
+        ?string $descriptionPt = null,
         bool $disableScoping = false,
-        string $displayNameEn = '',
-        string $displayNameNl = '',
-        string $displayNamePt = '',
-        string $keywordsEn = '',
-        string $keywordsNl = '',
-        string $keywordsPt = '',
+        ?string $displayNameEn = null,
+        ?string $displayNameNl = null,
+        ?string $displayNamePt = null,
+        ?string $keywordsEn = null,
+        ?string $keywordsNl = null,
+        ?string $keywordsPt = null,
         ?Logo $logo = null,
-        string $nameEn = '',
-        string $nameNl = '',
-        string $namePt = '',
+        ?string $nameEn = null,
+        ?string $nameNl = null,
+        ?string $namePt = null,
         ?string $nameIdFormat = null,
         array $supportedNameIdFormats = array(
             Constants::NAMEID_TRANSIENT,
@@ -143,7 +144,7 @@ class IdentityProvider extends AbstractRole
         bool $requestsMustBeSigned = false,
         string $signatureMethod = XMLSecurityKey::RSA_SHA256,
         string $workflowState = self::WORKFLOW_STATE_DEFAULT,
-        string $manipulation = '',
+        ?string $manipulation = null,
         bool $enabledInWayf = true,
         string $guestQualifier = self::GUEST_QUALIFIER_ALL,
         bool $hidden = false,

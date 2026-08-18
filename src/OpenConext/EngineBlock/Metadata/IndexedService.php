@@ -24,29 +24,30 @@ namespace OpenConext\EngineBlock\Metadata;
  */
 class IndexedService extends Service
 {
-    /**
-     * @var int
-     */
-    public $serviceIndex;
+    public int $serviceIndex;
 
     /**
      * Note that null and false are NOT the same in this context.
-     *
-     * @var bool|null
      */
-    public $isDefault = null;
+    public ?bool $isDefault = null;
 
-    /**
-     * @param string $location
-     * @param string $binding
-     * @param $serviceIndex
-     * @param bool|null $isDefault
-     */
-    public function __construct($location, $binding, $serviceIndex, $isDefault = null)
+    public function __construct(string $location, string $binding, int $serviceIndex, ?bool $isDefault = null)
     {
         $this->isDefault    = $isDefault;
         $this->serviceIndex = $serviceIndex;
 
         parent::__construct($location, $binding);
+    }
+
+    /**
+     * A convenience static constructor for the IndexedService.
+     */
+    public static function indexedServiceFromArray(array $indexedService): IndexedService
+    {
+        return new self($indexedService["location"],
+            $indexedService["binding"],
+            $indexedService["serviceIndex"],
+            $indexedService["isDefault"]
+        );
     }
 }

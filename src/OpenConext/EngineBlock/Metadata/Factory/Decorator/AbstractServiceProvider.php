@@ -37,57 +37,38 @@ use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 abstract class AbstractServiceProvider implements ServiceProviderEntityInterface
 {
 
-    /**
-     * @var ServiceProviderEntityInterface
-     */
-    protected $entity;
+    protected ServiceProviderEntityInterface $entity;
 
-    /**
-     * @param ServiceProviderEntityInterface $entity
-     */
     public function __construct(ServiceProviderEntityInterface $entity)
     {
         $this->entity = $entity;
     }
 
-    /**
-     * @return null|int
-     */
     public function getId(): ?int
     {
         return $this->entity->getId();
     }
 
-    /**
-     * @return string
-     */
     public function getEntityId(): string
     {
         return $this->entity->getEntityId();
     }
 
-    /**
-     * @param $locale
-     * @return string
-     */
-    public function getName($locale): string
+    public function getName(string $locale): ?string
     {
         return $this->entity->getName($locale);
     }
 
-    public function getDescription(string $locale): string
+    public function getDescription(string $locale): ?string
     {
         return $this->entity->getDescription($locale);
     }
 
-    public function getDisplayName(string $locale): string
+    public function getDisplayName(string $locale): ?string
     {
         return $this->entity->getDisplayName($locale);
     }
 
-    /**
-     * @return Logo|null
-     */
     public function getLogo(): ?Logo
     {
         return $this->entity->getLogo();
@@ -106,20 +87,12 @@ abstract class AbstractServiceProvider implements ServiceProviderEntityInterface
         return false;
     }
 
-    /**
-     * @param string $locale
-     * @return Organization|null
-     */
     public function getOrganization(string $locale): ?Organization
     {
         return $this->entity->getOrganization($locale);
     }
 
-    /**
-     * @param $locale
-     * @return string
-     */
-    public function getKeywords($locale): string
+    public function getKeywords(string $locale): string
     {
         return $this->entity->getKeywords($locale);
     }
@@ -132,9 +105,6 @@ abstract class AbstractServiceProvider implements ServiceProviderEntityInterface
         return $this->entity->getCertificates();
     }
 
-    /**
-     * @return string
-     */
     public function getWorkflowState(): string
     {
         return $this->entity->getWorkflowState();
@@ -148,9 +118,6 @@ abstract class AbstractServiceProvider implements ServiceProviderEntityInterface
         return $this->entity->getContactPersons();
     }
 
-    /**
-     * @return null|string
-     */
     public function getNameIdFormat(): ?string
     {
         return $this->entity->getNameIdFormat();
@@ -164,41 +131,26 @@ abstract class AbstractServiceProvider implements ServiceProviderEntityInterface
         return $this->entity->getSupportedNameIdFormats();
     }
 
-    /**
-     * @return null|Service
-     */
     public function getSingleLogoutService(): ?Service
     {
         return $this->entity->getSingleLogoutService();
     }
 
-    /**
-     * @return bool
-     */
     public function isRequestsMustBeSigned(): bool
     {
         return $this->entity->isRequestsMustBeSigned();
     }
 
-    /**
-     * @return string
-     */
-    public function getManipulation(): string
+    public function getManipulation(): ?string
     {
         return $this->entity->getManipulation();
     }
 
-    /**
-     * @return Coins
-     */
     public function getCoins(): Coins
     {
         return $this->entity->getCoins();
     }
 
-    /**
-     * @return AttributeReleasePolicy|null
-     */
     public function getAttributeReleasePolicy(): ?AttributeReleasePolicy
     {
         return $this->entity->getAttributeReleasePolicy();
@@ -220,9 +172,6 @@ abstract class AbstractServiceProvider implements ServiceProviderEntityInterface
         return $this->entity->getAllowedIdpEntityIds();
     }
 
-    /**
-     * @return bool
-     */
     public function isAllowAll(): bool
     {
         return $this->entity->isAllowAll();
@@ -236,26 +185,16 @@ abstract class AbstractServiceProvider implements ServiceProviderEntityInterface
         return $this->entity->getRequestedAttributes();
     }
 
-    /**
-     * @return string|null
-     */
     public function getSupportUrl($locale): ?string
     {
         return $this->entity->getSupportUrl($locale);
     }
 
-    /**
-     * @param string $idpEntityId
-     * @return bool
-     */
     public function isAllowed(string $idpEntityId): bool
     {
         return $this->entity->isAllowed($idpEntityId);
     }
 
-    /**
-     * @return bool
-     */
     public function isAttributeAggregationRequired(): bool
     {
         return $this->entity->isAttributeAggregationRequired();
