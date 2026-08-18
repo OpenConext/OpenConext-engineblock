@@ -20,6 +20,7 @@ Features:
 Fixes:
 * Restore full output of exception data ([#2055](https://github.com/OpenConext/OpenConext-engineblock/issues/2055))
 * Restore http 400 status code on failed push ([#2051](https://github.com/OpenConext/OpenConext-engineblock/issues/2051))
+* Fix reading of `.env` files in non-containers installs ([#2037](https://github.com/OpenConext/OpenConext-engineblock/issues/2037), [#2054](https://github.com/OpenConext/OpenConext-engineblock/issues/2054))
 
 ## 7.2.0
 
