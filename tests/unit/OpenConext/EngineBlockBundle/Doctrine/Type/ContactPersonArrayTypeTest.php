@@ -18,7 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Doctrine\Type;
 
-use Doctrine\DBAL\Platforms\MySqlPlatform;
+use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
@@ -32,7 +32,7 @@ class ContactPersonArrayTypeTest extends TestCase
     use MockeryPHPUnitIntegration;
 
     /**
-     * @var MySqlPlatform
+     * @var MySQLPlatform
      */
     private $platform;
 
@@ -49,7 +49,7 @@ class ContactPersonArrayTypeTest extends TestCase
 
     public function setUp(): void
     {
-        $this->platform = new MySqlPlatform();
+        $this->platform = new MySQLPlatform();
     }
 
     #[Group('EngineBlockBundle')]

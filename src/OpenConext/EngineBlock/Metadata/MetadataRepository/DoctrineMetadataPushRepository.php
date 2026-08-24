@@ -24,7 +24,6 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Statement;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Monolog\Logger;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRoleEb5;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
@@ -33,6 +32,10 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProviderEb5;
 use RuntimeException;
 
+/**
+ * // TODO: Remove this code after sso_provider_roles_eb5 has been phased out
+ * @SuppressWarnings("CouplingBetweenObjects")
+ */
 class DoctrineMetadataPushRepository
 {
     /**
@@ -97,68 +100,7 @@ class DoctrineMetadataPushRepository
     public function synchronize(array $roles, array $rolesEb5): SynchronizationResult
     {
         // TODO: Remove this code after sso_provider_roles_eb5 has been phased out
-        $result = new SynchronizationResult();
-        $this->connection->transactional(function () use ($rolesEb5, $result): void {
-            $idpsToBeRemoved = $this->findAllRoleEntityIds($this->idpMetadataDeprecated);
-            $spsToBeRemoved = $this->findAllRoleEntityIds($this->spMetadataDeprecated);
-
-            foreach ($rolesEb5 as $roleKey => $role) {
-                if ($role instanceof IdentityProviderEb5) {
-                    // Does the IDP already exist in the database?
-                    $index = array_search($role->entityId, $idpsToBeRemoved);
-
-                    if ($index === false) {
-                        // The IDP is new: create it.
-                        $this->insertRole($role, $this->idpMetadataDeprecated);
-                        $result->createdIdentityProviders[] = $role->entityId;
-                    } else {
-                        // Remove from the list of entity ids so it won't get deleted later on.
-                        unset($idpsToBeRemoved[$index]);
-
-                        // The IDP already exists: update it.
-                        $role->id = $index;
-                        $this->updateRole($role, $this->idpMetadataDeprecated);
-                        $result->updatedIdentityProviders[] = $role->entityId;
-                    }
-                    unset($rolesEb5[$roleKey]);
-                    continue;
-                }
-
-                if ($role instanceof ServiceProviderEb5) {
-                    // Does the SP already exist in the database?
-                    $index = array_search($role->entityId, $spsToBeRemoved);
-                    if ($index === false) {
-                        // The SP is new: create it.
-                        $this->insertRole($role, $this->spMetadataDeprecated);
-                        $result->createdServiceProviders[] = $role->entityId;
-                    } else {
-                        // Remove from the list of entity ids so it won't get deleted later on.
-                        unset($spsToBeRemoved[$index]);
-
-                        // The SP already exists: update it.
-                        $role->id = $index;
-                        $this->updateRole($role, $this->spMetadataDeprecated);
-                        $result->updatedServiceProviders[] = $role->entityId;
-                    }
-                    unset($rolesEb5[$roleKey]);
-                    continue;
-                }
-
-                throw new RuntimeException(
-                    sprintf('Unsupported role provided to synchronization: "%s"', var_export($role, true))
-                );
-            }
-
-            if ($idpsToBeRemoved) {
-                $this->deleteRolesByIds(array_values($idpsToBeRemoved), $this->idpMetadataDeprecated);
-                $result->removedIdentityProviders = array_values($idpsToBeRemoved);
-            }
-
-            if ($spsToBeRemoved) {
-                $this->deleteRolesByIds(array_values($spsToBeRemoved), $this->spMetadataDeprecated);
-                $result->removedServiceProviders = array_values($spsToBeRemoved);
-            }
-        });
+        $result = $this->synchronizeOldTable($rolesEb5);
 
         $result = new SynchronizationResult();
         $this->connection->transactional(function () use ($roles, $result): void {
@@ -356,6 +298,80 @@ class DoctrineMetadataPushRepository
             self::FIELD_TYPE => $metadata->discriminatorColumn->type,
         ];
 
+        return $result;
+    }
+
+    /**
+     * TODO: Remove this code after sso_provider_roles_eb5 has been phased out
+     *
+     * @param array $rolesEb5
+     * @return SynchronizationResult
+     * @throws \Throwable
+     */
+    public function synchronizeOldTable(array $rolesEb5): SynchronizationResult
+    {
+        $result = new SynchronizationResult();
+        $this->connection->transactional(function () use ($rolesEb5, $result): void {
+            $idpsToBeRemoved = $this->findAllRoleEntityIds($this->idpMetadataDeprecated);
+            $spsToBeRemoved = $this->findAllRoleEntityIds($this->spMetadataDeprecated);
+
+            foreach ($rolesEb5 as $roleKey => $role) {
+                if ($role instanceof IdentityProviderEb5) {
+                    // Does the IDP already exist in the database?
+                    $index = array_search($role->entityId, $idpsToBeRemoved);
+
+                    if ($index === false) {
+                        // The IDP is new: create it.
+                        $this->insertRole($role, $this->idpMetadataDeprecated);
+                        $result->createdIdentityProviders[] = $role->entityId;
+                    } else {
+                        // Remove from the list of entity ids so it won't get deleted later on.
+                        unset($idpsToBeRemoved[$index]);
+
+                        // The IDP already exists: update it.
+                        $role->id = $index;
+                        $this->updateRole($role, $this->idpMetadataDeprecated);
+                        $result->updatedIdentityProviders[] = $role->entityId;
+                    }
+                    unset($rolesEb5[$roleKey]);
+                    continue;
+                }
+
+                if ($role instanceof ServiceProviderEb5) {
+                    // Does the SP already exist in the database?
+                    $index = array_search($role->entityId, $spsToBeRemoved);
+                    if ($index === false) {
+                        // The SP is new: create it.
+                        $this->insertRole($role, $this->spMetadataDeprecated);
+                        $result->createdServiceProviders[] = $role->entityId;
+                    } else {
+                        // Remove from the list of entity ids so it won't get deleted later on.
+                        unset($spsToBeRemoved[$index]);
+
+                        // The SP already exists: update it.
+                        $role->id = $index;
+                        $this->updateRole($role, $this->spMetadataDeprecated);
+                        $result->updatedServiceProviders[] = $role->entityId;
+                    }
+                    unset($rolesEb5[$roleKey]);
+                    continue;
+                }
+
+                throw new RuntimeException(
+                    sprintf('Unsupported role provided to synchronization: "%s"', var_export($role, true))
+                );
+            }
+
+            if ($idpsToBeRemoved) {
+                $this->deleteRolesByIds(array_values($idpsToBeRemoved), $this->idpMetadataDeprecated);
+                $result->removedIdentityProviders = array_values($idpsToBeRemoved);
+            }
+
+            if ($spsToBeRemoved) {
+                $this->deleteRolesByIds(array_values($spsToBeRemoved), $this->spMetadataDeprecated);
+                $result->removedServiceProviders = array_values($spsToBeRemoved);
+            }
+        });
         return $result;
     }
 }

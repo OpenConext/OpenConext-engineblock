@@ -81,10 +81,12 @@ class ContactPerson
      */
     public static function fromArray(array $contactPerson): ContactPerson
     {
-        return new self($contactPerson["contactType"],
+        return new self(
+            $contactPerson["contactType"],
             $contactPerson["emailAddress"],
             $contactPerson["telephoneNumber"],
             $contactPerson["givenName"],
-            $contactPerson["surName"]);
+            $contactPerson["surName"]
+        );
     }
 }

@@ -26,7 +26,6 @@ use Doctrine\DBAL\Types\Type;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateFactory;
 use OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy;
-use TypeError;
 
 class CertificateArrayType extends Type
 {

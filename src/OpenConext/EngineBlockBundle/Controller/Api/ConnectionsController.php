@@ -124,7 +124,6 @@ class ConnectionsController
             $roles = $this->pushMetadataAssembler->assemble($body->connections);
             // TODO: Remove this code after sso_provider_roles_eb5 has been phased out
             $rolesEb5 = $this->pushMetadataAssembler->assembleEb5($body->connections);
-
         } catch (Exception $exception) {
             throw new BadApiRequestHttpException(sprintf('Unable to assemble the pushed metadata: %s', $exception->getMessage()), $exception);
         }

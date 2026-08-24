@@ -44,7 +44,8 @@ class IndexedService extends Service
      */
     public static function indexedServiceFromArray(array $indexedService): IndexedService
     {
-        return new self($indexedService["location"],
+        return new self(
+            $indexedService["location"],
             $indexedService["binding"],
             $indexedService["serviceIndex"],
             $indexedService["isDefault"]
