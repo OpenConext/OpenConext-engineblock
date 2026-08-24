@@ -28,7 +28,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Base class for all EngineBlock Doctrine migrations.
  *
- * All migrations in this project target MariaDB exclusively. The generated DDL SQL is platform-specific
+ * All migrations in this project target MariaDbMigrations exclusively. The generated DDL SQL is platform-specific
  * and is not guaranteed to be compatible with MySQL or any other database engine.
  *
  */

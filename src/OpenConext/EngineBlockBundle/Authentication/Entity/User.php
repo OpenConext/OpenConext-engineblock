@@ -19,24 +19,22 @@
 namespace OpenConext\EngineBlockBundle\Authentication\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonUuid;
 use OpenConext\EngineBlockBundle\Authentication\Repository\UserRepository;
 
+/**
+ * User is a reserved word in PSQL and thus needs to be escaped; when adjusted, we should consider a different table name
+ */
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'uq_user_uuid', columns: ['uuid'])]
+#[ORM\Table(name: '`user`')]
 class User
 {
-    /**
-     * @var
-     */
     #[ORM\Id]
-    #[ORM\Column(type: 'engineblock_collab_person_id')]
-    public $collabPersonId;
+    #[ORM\Column(name: 'collab_person_id', type: 'engineblock_collab_person_id')]
+    public CollabPersonId $collabPersonId;
 
-    /**
-     * @var CollabPersonUuid
-     *
-     */
     #[ORM\Column(name: 'uuid', type: 'engineblock_collab_person_uuid')]
-    public $collabPersonUuid;
+    public CollabPersonUuid $collabPersonUuid;
 }
