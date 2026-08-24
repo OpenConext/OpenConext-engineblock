@@ -122,8 +122,6 @@ class ConnectionsController
 
         try {
             $roles = $this->pushMetadataAssembler->assemble($body->connections);
-            // TODO: Remove this code after sso_provider_roles_eb5 has been phased out
-            $rolesEb5 = $this->pushMetadataAssembler->assembleEb5($body->connections);
         } catch (Exception $exception) {
             throw new BadApiRequestHttpException(sprintf('Unable to assemble the pushed metadata: %s', $exception->getMessage()), $exception);
         }
@@ -131,7 +129,7 @@ class ConnectionsController
         unset($body);
 
         try {
-            $result = $this->repository->synchronize($roles, $rolesEb5);
+            $result = $this->repository->synchronize($roles);
         } catch (Exception $exception) {
             throw new ApiInternalServerErrorHttpException('Unable to synchronize the assembled roles to the repository', $exception);
         }

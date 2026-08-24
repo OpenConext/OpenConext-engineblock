@@ -165,10 +165,10 @@ class ServiceRegistryFixture
         // number of SP's should always be limited.
         $tableName = AbstractRole::TABLE_NAME;
         $idpEntityIDQuery = <<<QUERY
-        SELECT `entity_id`
-        FROM `$tableName`
-        WHERE `type` = 'idp'
-QUERY;
+            SELECT entity_id
+            FROM $tableName
+            WHERE type = 'idp'
+        QUERY;
         $query = $this->entityManager->getConnection()->prepare($idpEntityIDQuery);
         assert($query instanceof Statement);
         $result = $query->executeQuery();
@@ -203,10 +203,10 @@ QUERY;
         // number of SP's should always be limited.
         $tableName = AbstractRole::TABLE_NAME;
         $spEntityIDQuery = <<<QUERY
-        SELECT `entity_id`
-        FROM `$tableName`
-        WHERE `type` = 'sp'
-QUERY;
+            SELECT entity_id
+            FROM $tableName
+            WHERE type = 'sp'
+        QUERY;
         $query = $this->entityManager->getConnection()->prepare($spEntityIDQuery);
         assert($query instanceof Statement);
         $result = $query->executeQuery();

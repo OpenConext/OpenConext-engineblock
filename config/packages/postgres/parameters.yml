@@ -1,0 +1,15 @@
+parameters:
+    database.driver: pdo_pgsql
+    database.server_version: '17'
+    database.host: postgres
+    database.port: '5432'
+    database.user: ebrw
+    database.password: secret
+    database.dbname: eb
+    database.test.driver: pdo_pgsql
+    database.test.server_version: '17'
+    database.test.host: postgres
+    database.test.port: '5432'
+    database.test.user: eb_testrw
+    database.test.password: secret
+    database.test.dbname: eb_test

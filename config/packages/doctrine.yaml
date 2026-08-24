@@ -5,7 +5,7 @@ doctrine:
         connections:
             engineblock:
                 #                schema_filter: ~^(?!group_|virtual_|service_provider_|saml_persistent_id|sso_provider_roles|log_logins|db_changelog|consent)~
-                driver:   pdo_mysql         # This must be PDO until all database interaction runs through doctrine
+                driver:   "%database.driver%"
                 dbname:   "%database.dbname%"
                 host:     "%database.host%"
                 port:     "%database.port%"
@@ -15,7 +15,7 @@ doctrine:
                 # when true, queries are logged to a 'doctrine' monolog channel
                 logging: '%kernel.debug%'
                 profiling: '%kernel.debug%'
-                server_version: '10.11.13-MariaDB'
+                server_version: "%database.server_version%"
                 mapping_types:
                     enum: string
         types:

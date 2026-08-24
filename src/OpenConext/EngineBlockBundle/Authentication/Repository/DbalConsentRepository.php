@@ -226,6 +226,35 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
      */
     public function storeConsentHash(ConsentStoreParameters $parameters): bool
     {
+        $driver = $this->connection->getParams()['driver'] ?? null;
+
+        try {
+            switch ($driver) {
+                case 'pdo_mysql':
+                    return $this->storeConsentHashMariaDb($parameters);
+
+                case 'pdo_pgsql':
+                    return $this->storeConsentHashPostgres($parameters);
+
+                default:
+                    throw new RuntimeException(
+                        sprintf('Unsupported database driver: "%s"', $driver)
+                    );
+            }
+        } catch (Exception $e) {
+            throw new RuntimeException(
+                sprintf('Error storing consent: "%s"', $e->getMessage()),
+                0,
+                $e
+            );
+        }
+    }
+
+    /**
+     * @throws RuntimeException
+     */
+    public function storeConsentHashMariaDb(ConsentStoreParameters $parameters): bool
+    {
         $query = "INSERT INTO consent (hashed_user_id, service_id, attribute, attribute_stable, consent_type, consent_date, deleted_at)
                   VALUES (?, ?, ?, ?, ?, NOW(), '0000-00-00 00:00:00')
                   ON DUPLICATE KEY UPDATE attribute=VALUES(attribute), attribute_stable=VALUES(attribute_stable),
@@ -237,12 +266,56 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
             $parameters->attributeStableHash,
             $parameters->consentType,
         ];
+        $this->connection->executeStatement($query, $bindings);
 
-        try {
-            $this->connection->executeStatement($query, $bindings);
-        } catch (Exception $e) {
-            throw new RuntimeException(
-                sprintf('Error storing consent: "%s"', $e->getMessage())
+        return true;
+    }
+
+    /**
+     * See Consent.php for more information on the deleted_at column. However,
+     * since (by legacy?) consent has primary key on deleted_at it cannot be null
+     *
+     * @throws Exception
+     */
+    private function storeConsentHashPostgres(ConsentStoreParameters $parameters): bool
+    {
+        $conn = $this->connection;
+
+        $exists = $conn->fetchOne(
+            "SELECT 1
+                     FROM consent
+                     WHERE hashed_user_id = :hashedUserId
+                       AND service_id = :serviceId
+                       AND deleted_at = '1970-01-01 00:00:00'",
+            [
+                'hashedUserId' => $parameters->hashedUserId,
+                'serviceId' => $parameters->serviceId,
+            ]
+        );
+        if ($exists) {
+            $conn->executeStatement(
+                'UPDATE consent SET consent_date = NOW(), attribute = :attribute, attribute_stable = :attributeStable, consent_type = :consentType
+                        WHERE hashed_user_id = :hashedUserId AND service_id = :serviceId AND deleted_at = :deletedAt',
+                [
+                    'attribute' => $parameters->attributeHash,
+                    'attributeStable' => $parameters->attributeStableHash,
+                    'consentType' => $parameters->consentType,
+                    'hashedUserId' => $exists->hashedUserId,
+                    'serviceId' => $exists->serviceId,
+                    'deletedAt' => $exists->deleted_at,
+                ]
+            );
+        } else {
+            $conn->executeStatement(
+                "INSERT INTO consent (consent_date, hashed_user_id, service_id, attribute, attribute_stable, consent_type, deleted_at)
+                        VALUES (NOW(), :hashedUserId, :serviceId, :attribute, :attributeStable, :consentType, '1970-01-01 00:00:00')",
+                [
+                    'hashedUserId' => $parameters->hashedUserId,
+                    'serviceId' => $parameters->serviceId,
+                    'attribute' => $parameters->attributeHash,
+                    'attributeStable' => $parameters->attributeStableHash,
+                    'consentType' => $parameters->consentType,
+                ]
             );
         }
 
