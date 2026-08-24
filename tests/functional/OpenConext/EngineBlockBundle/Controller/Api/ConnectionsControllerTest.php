@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlockBundle\Tests;
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use Exception;
+use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
@@ -471,7 +472,7 @@ class ConnectionsControllerTest extends FunctionalWebTestCase
         $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         assert($queryBuilder instanceof QueryBuilder);
         $queryBuilder
-            ->delete('sso_provider_roles_eb5')
+            ->delete(AbstractRole::TABLE_NAME)
             ->executeStatement();
     }
 

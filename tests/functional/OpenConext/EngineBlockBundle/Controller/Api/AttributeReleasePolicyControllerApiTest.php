@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlockBundle\Tests;
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
+use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -449,7 +450,7 @@ class AttributeReleasePolicyControllerApiTest extends FunctionalWebTestCase
         $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         assert($queryBuilder instanceof QueryBuilder);
         $queryBuilder
-            ->delete('sso_provider_roles_eb5')
+            ->delete(AbstractRole::TABLE_NAME)
             ->executeStatement() ;
     }
 

@@ -28,15 +28,14 @@ use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
-use OpenConext\EngineBlockBundle\Doctrine\Type\CertificateArrayType;
-use OpenConext\EngineBlockBundle\Doctrine\Type\ContactPersonArrayType;
-use OpenConext\EngineBlockBundle\Doctrine\Type\LogoType;
-use OpenConext\EngineBlockBundle\Doctrine\Type\OrganizationType;
-use OpenConext\EngineBlockBundle\Doctrine\Type\ServiceType;
+use OpenConext\EngineBlockBundle\Doctrine\Type\SerializedArrayType;
+use OpenConext\EngineBlockBundle\Doctrine\Type\SerializedObjectType;
 use RuntimeException;
 use SAML2\Constants;
 
 /**
+ * @Deprecated This entity is deprecated and will be removed in the future. Use the new IdentityProvider entity instead.
+ *
  * Abstract base class for configuration entities.
  *
  * Note: This baseclass is extended by IdentityProvider and ServiceProvider. Both entities are stored in a single table.
@@ -53,17 +52,17 @@ use SAML2\Constants;
 #[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
 #[ORM\InheritanceType('SINGLE_TABLE')]
 #[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
-#[ORM\DiscriminatorMap(['sp' => ServiceProvider::class, 'idp' => IdentityProvider::class])]
-#[ORM\Table(name: 'sso_provider_roles_eb6')]
+#[ORM\DiscriminatorMap(['sp' => ServiceProviderEb5::class, 'idp' => IdentityProviderEb5::class])]
+#[ORM\Table(name: 'sso_provider_roles_eb5')]
 #[ORM\Index(name: 'idx_sso_provider_roles_type', columns: ['type'])]
 #[ORM\Index(name: 'idx_sso_provider_roles_entity_id', columns: ['entity_id'])]
 #[ORM\UniqueConstraint(name: 'idx_sso_provider_roles_entity_id_type', columns: ['type', 'entity_id'])]
-abstract class AbstractRole
+abstract class AbstractRoleEb5
 {
-    const string TABLE_NAME = 'sso_provider_roles_eb6';
-    const string WORKFLOW_STATE_PROD = 'prodaccepted';
-    const string WORKFLOW_STATE_TEST = 'testaccepted';
-    const string WORKFLOW_STATE_DEFAULT = self::WORKFLOW_STATE_PROD;
+    const string TABLE_NAME = 'sso_provider_roles_eb5';
+    const WORKFLOW_STATE_PROD = 'prodaccepted';
+    const WORKFLOW_STATE_TEST = 'testaccepted';
+    const WORKFLOW_STATE_DEFAULT = self::WORKFLOW_STATE_PROD;
 
     /**
      * @var int
@@ -82,126 +81,126 @@ abstract class AbstractRole
     /**
      * @var string
      */
-    #[ORM\Column(name: 'name_nl', type: Types::STRING, nullable: true)]
+    #[ORM\Column(name: 'name_nl', type: Types::STRING)]
     public ?string $nameNl = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'name_en', type: Types::STRING, nullable: true)]
+    #[ORM\Column(name: 'name_en', type: Types::STRING)]
     public ?string $nameEn = null;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'name_pt', type: Types::STRING, nullable: true)]
+    #[ORM\Column(name: 'name_pt', type: Types::STRING)]
     public ?string $namePt = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'description_nl', type: Types::STRING, nullable: true)]
+    #[ORM\Column(name: 'description_nl', type: Types::STRING)]
     public ?string $descriptionNl = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'description_en', type: Types::STRING, nullable: true)]
+    #[ORM\Column(name: 'description_en', type: Types::STRING)]
     public ?string $descriptionEn = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'description_pt', type: Types::STRING, nullable: true)]
+    #[ORM\Column(name: 'description_pt', type: Types::STRING)]
     public ?string $descriptionPt = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'display_name_nl', type: Types::STRING, nullable: true)]
+    #[ORM\Column(name: 'display_name_nl', type: Types::STRING)]
     public ?string $displayNameNl = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'display_name_en', type: Types::STRING, nullable: true)]
+    #[ORM\Column(name: 'display_name_en', type: Types::STRING)]
     public ?string $displayNameEn = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'display_name_pt', type: Types::STRING, nullable: true)]
+    #[ORM\Column(name: 'display_name_pt', type: Types::STRING)]
     public ?string $displayNamePt = null;
 
     /**
      * @var Logo
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'logo', type: LogoType::NAME, nullable: true)]
-    public ?Logo $logo;
+    #[ORM\Column(name: 'logo', type: SerializedObjectType::NAME)]
+    public $logo;
 
     /**
      * @var Organization
      */
-    #[ORM\Column(name: 'organization_nl_name', type: OrganizationType::NAME, length: 65535, nullable: true)]
-    public ?Organization $organizationNl;
+    #[ORM\Column(name: 'organization_nl_name', type: SerializedObjectType::NAME, length: 65535, nullable: true)]
+    public $organizationNl;
 
     /**
      * @var Organization
      */
-    #[ORM\Column(name: 'organization_en_name', type: OrganizationType::NAME, length: 65535, nullable: true)]
-    public ?Organization $organizationEn;
+    #[ORM\Column(name: 'organization_en_name', type: SerializedObjectType::NAME, length: 65535, nullable: true)]
+    public $organizationEn;
 
     /**
      * @var Organization
      */
-    #[ORM\Column(name: 'organization_pt_name', type: OrganizationType::NAME, length: 65535, nullable: true)]
-    public ?Organization $organizationPt;
+    #[ORM\Column(name: 'organization_pt_name', type: SerializedObjectType::NAME, length: 65535, nullable: true)]
+    public $organizationPt;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'keywords_nl', type: Types::STRING, nullable: true)]
+    #[ORM\Column(name: 'keywords_nl', type: Types::STRING)]
     public ?string $keywordsNl = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'keywords_en', type: Types::STRING, nullable: true)]
+    #[ORM\Column(name: 'keywords_en', type: Types::STRING)]
     public ?string $keywordsEn = null;
 
     /**
      * @var string
      * @deprecated Will be removed in favour of using the Mdui value object, use the getter for this field instead
      */
-    #[ORM\Column(name: 'keywords_pt', type: Types::STRING, nullable: true)]
+    #[ORM\Column(name: 'keywords_pt', type: Types::STRING)]
     public ?string $keywordsPt = null;
 
     /**
      * @var X509Certificate[]
      */
-    #[ORM\Column(name: 'certificates', type: CertificateArrayType::NAME, length: 65535, nullable: true)]
-    public array $certificates = array();
+    #[ORM\Column(name: 'certificates', type: SerializedArrayType::NAME, length: 65535)]
+    public $certificates = array();
 
     /**
      * @var string
      */
     #[ORM\Column(name: 'workflow_state', type: Types::STRING)]
-    public string $workflowState = self::WORKFLOW_STATE_DEFAULT;
+    public ?string $workflowState = self::WORKFLOW_STATE_DEFAULT;
 
     /**
      * @var ContactPerson[]
      */
-    #[ORM\Column(name: 'contact_persons', type: ContactPersonArrayType::NAME, length: 65535, nullable: true)]
-    public array $contactPersons = array();
+    #[ORM\Column(name: 'contact_persons', type: SerializedArrayType::NAME, length: 65535)]
+    public $contactPersons;
 
     /**
      * @var string
@@ -212,14 +211,14 @@ abstract class AbstractRole
     /**
      * @var string[]
      */
-    #[ORM\Column(name: 'name_id_formats', type: Types::JSON, length: 65535)]
-    public array $supportedNameIdFormats;
+    #[ORM\Column(name: 'name_id_formats', type: SerializedArrayType::NAME, length: 65535)]
+    public $supportedNameIdFormats;
 
     /**
      * @var Service
      */
-    #[ORM\Column(name: 'single_logout_service', type: ServiceType::NAME, length: 65535, nullable: true)]
-    public ?Service $singleLogoutService;
+    #[ORM\Column(name: 'single_logout_service', type: SerializedObjectType::NAME, length: 65535, nullable: true)]
+    public $singleLogoutService;
 
     /**
      * @var bool
@@ -230,20 +229,20 @@ abstract class AbstractRole
     /**
      * @var string
      */
-    #[ORM\Column(name: 'manipulation', type: Types::TEXT, length: 65535, nullable: true)]
+    #[ORM\Column(name: 'manipulation', type: Types::TEXT, length: 65535)]
     public ?string $manipulation = null;
 
     /**
      * @var Coins
      */
     #[ORM\Column(name: 'coins', type: 'engineblock_metadata_coins')]
-    protected Coins $coins;
+    protected $coins = array();
 
     /**
      * @var Mdui
      */
     #[ORM\Column(name: 'mdui', type: 'engineblock_metadata_mdui')]
-    protected Mdui $mdui;
+    protected $mdui;
 
     public function __construct(
         $entityId,
@@ -254,19 +253,19 @@ abstract class AbstractRole
         ?Service $singleLogoutService = null,
         array $certificates = array(),
         array $contactPersons = array(),
-        ?string $descriptionEn = null,
-        ?string $descriptionNl = null,
-        ?string $descriptionPt = null,
-        ?string $displayNameEn = null,
-        ?string $displayNameNl = null,
-        ?string $displayNamePt = null,
-        ?string $keywordsEn = null,
-        ?string $keywordsNl = null,
-        ?string $keywordsPt = null,
+        ?string $descriptionEn = '',
+        ?string $descriptionNl = '',
+        ?string $descriptionPt = '',
+        ?string $displayNameEn = '',
+        ?string $displayNameNl = '',
+        ?string $displayNamePt = '',
+        ?string $keywordsEn = '',
+        ?string $keywordsNl = '',
+        ?string $keywordsPt = '',
         ?Logo $logo = null,
-        ?string $nameEn = null,
-        ?string $nameNl = null,
-        ?string $namePt = null,
+        ?string $nameEn = '',
+        ?string $nameNl = '',
+        ?string $namePt = '',
         ?string $nameIdFormat = null,
         array $supportedNameIdFormats = array(
             Constants::NAMEID_TRANSIENT,
@@ -274,7 +273,7 @@ abstract class AbstractRole
         ),
         bool $requestsMustBeSigned = false,
         string $workflowState = self::WORKFLOW_STATE_DEFAULT,
-        ?string $manipulation = null
+        string $manipulation = ''
     ) {
         $this->mdui = $mdui;
         $this->certificates = $certificates;
@@ -310,7 +309,10 @@ abstract class AbstractRole
      */
     abstract public function accept(VisitorInterface $visitor);
 
-    public function getManipulation(): ?string
+    /**
+     * @return string
+     */
+    public function getManipulation()
     {
         return $this->manipulation;
     }
