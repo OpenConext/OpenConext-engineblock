@@ -79,6 +79,15 @@ Uses:
 Modifies:
 - responseAttributes
 
+### FilterReservedMemberOfValues
+Removes any attributes starting with `urn:collab:org` as these may only be set by EngineBlock
+
+Uses:
+- responseAttributes
+
+Modifies:
+- responseAttributes
+
 ### RunAttributeManipulations (for IdP)
 run possible custom attribute manipulations
 
