@@ -1,6 +1,80 @@
+---
 version: 2
 updates:
-    -   package-ecosystem: "github-actions"
-        directory: "/"
-        schedule:
-            interval: "weekly"
+  # Enable version updates for Docker
+  - package-ecosystem: "docker"
+    directories:
+      - "/docker/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 14
+    groups:
+      docker:
+        applies-to: "version-updates"
+        patterns:
+          - "*"
+
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 14
+    groups:
+      github-actions:
+        applies-to: "version-updates"
+        patterns:
+          - "*"
+
+  # Maintain dependencies for composer
+  - package-ecosystem: "composer"
+    directories:
+      - "/"
+    schedule:
+      interval: "daily"
+    cooldown:
+      default-days: 14
+    open-pull-requests-limit: 25
+    ignore:
+      - dependency-name: "symfony/*"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
+    groups:
+      php-prod:
+        applies-to: "version-updates"
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+      php-dev:
+        applies-to: "version-updates"
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # Maintain dependencies for npm
+  - package-ecosystem: "npm"
+    directories:
+      - "/theme/"
+    schedule:
+      interval: "daily"
+    cooldown:
+      default-days: 14
+    open-pull-requests-limit: 25
+    groups:
+      javascript-prod:
+        applies-to: "version-updates"
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+      javascript-dev:
+        applies-to: "version-updates"
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
