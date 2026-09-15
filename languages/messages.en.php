@@ -86,6 +86,11 @@ HTML
 
     // Remove cookies
     'remember_choice'           => 'Remember my choice',
+    'remember_choice_per_idp'   => 'Remember my choice for this service for %duration%',
+    'remember_choice_duration_days' => '%count% days',
+    'remember_choice_duration_minutes' => '%count% minutes',
+    'remember_choice_tooltip_screenreader' => 'Why do we remember your choice?',
+    'remember_choice_per_idp_tooltip' => 'If you enable this option, you won\'t need to choose how you want to log into this service for the next %duration%. The login screen will then be skipped. <strong>Please note</strong>: do you sometimes use a different account to log in? If so, please disable this option. You can reverse this setting later at <a href="http://profile.surfconext.nl/">profile.surfconext.nl</a>.',
     'cookie_removal_header'     => 'Remove cookies',
     'cookie_remove_button'      => 'Remove',
     'cookie_remove_all_button'  => 'Remove all',
