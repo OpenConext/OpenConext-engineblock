@@ -5,6 +5,9 @@ import {
   matchSelector,
   noResultSectionSelector,
   remainingIdpSelector,
+  rememberChoicePerIdpClass,
+  rememberChoiceTooltipToggleSelector,
+  rememberChoiceTooltipValueSelector,
   searchFieldSelector,
   searchResetSelector,
   searchSubmitSelector,
@@ -199,6 +202,30 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true');
       cy.notOnPage('Identity providers without access');
       cy.notOnPage('Return to service provideraccess');
+    });
+  });
+
+  describe('Should show the per-SP remember my choice option with a tooltip', () => {
+    it('Renders the per-SP checkbox with a tooltip toggle', () => {
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true&rememberChoicePerIdp=true');
+      cy.get(`.${rememberChoicePerIdpClass}`).should('exist');
+      cy.get(rememberChoiceTooltipToggleSelector).should('exist');
+    });
+
+    it('Hides the tooltip content until the toggle is activated', () => {
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true&rememberChoicePerIdp=true');
+      cy.get(rememberChoiceTooltipValueSelector).should('not.be.visible');
+      cy.get(rememberChoiceTooltipToggleSelector).click({force: true});
+      cy.get(rememberChoiceTooltipValueSelector).should('be.visible');
+      cy.get(rememberChoiceTooltipToggleSelector).click({force: true});
+      cy.get(rememberChoiceTooltipValueSelector).should('not.be.visible');
+    });
+
+    it('Does not show the tooltip toggle for the global (non per-SP) variant', () => {
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true&rememberChoicePerIdp=false');
+      cy.get(`.${rememberChoicePerIdpClass}`).should('not.exist');
+      cy.get(rememberChoiceTooltipToggleSelector).should('not.exist');
+      cy.onPage('Remember my choice');
     });
   });
 

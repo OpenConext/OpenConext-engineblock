@@ -44,6 +44,7 @@ class WayfController extends AbstractController
         $displayUnconnectedIdpsWayf = $request->query->getBoolean('displayUnconnectedIdpsWayf');
         $addDiscoveries = $request->query->getBoolean('addDiscoveries', true);
         $rememberChoiceFeature = $request->query->getBoolean('rememberChoiceFeature');
+        $rememberChoicePerIdp = $request->query->getBoolean('rememberChoicePerIdp');
         $cutoffPointForShowingUnfilteredIdps = $request->query->getInt('cutoffPointForShowingUnfilteredIdps', 100);
         $showIdPBanner = $request->query->getBoolean('showIdPBanner', true);
         $defaultIdpEntityId = $request->query->get('defaultIdpEntityId', '');
@@ -70,6 +71,7 @@ class WayfController extends AbstractController
             showRequestAccess: $displayUnconnectedIdpsWayf,
             requestId: 'bogus-request-id',
             serviceProvider: TestEntitySeeder::buildSp(),
+            rememberChoicePerIdp: $rememberChoicePerIdp,
         );
 
         return new Response($output);
