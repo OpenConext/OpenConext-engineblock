@@ -1,6 +1,14 @@
 {% if rememberChoiceFeature %}
-    <form method="post" action="{{ action }}" class="wayf__rememberChoice">
-        <label for="rememberChoice">{{ 'remember_choice'|trans }}</label>
+    <form method="post" action="{{ action }}" class="wayf__rememberChoice{% if rememberChoicePerIdp %} wayf__rememberChoice--perIdp{% endif %}">
         <input type="checkbox" name="rememberChoice" id="rememberChoice">
+        {% if rememberChoicePerIdp %}
+            <label for="rememberChoice">{{ 'remember_choice_per_idp'|trans({ '%duration%': rememberChoiceDuration }) }}</label>
+            <input type="checkbox" tabindex="-1" class="tooltip visually-hidden" aria-expanded="false" role="button" aria-pressed="false" id="rememberChoiceTooltip" name="rememberChoiceTooltip">
+            {% include '@theme/Authentication/View/Proxy/Partials/WAYF/rememberChoiceTooltip.html.twig' with {
+                rememberChoiceDuration: rememberChoiceDuration,
+            } only %}
+        {% else %}
+            <label for="rememberChoice">{{ 'remember_choice'|trans }}</label>
+        {% endif %}
     </form>
 {% endif %}

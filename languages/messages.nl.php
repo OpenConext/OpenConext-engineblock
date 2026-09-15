@@ -85,6 +85,11 @@ HTML
 
     // Remove cookies
     'remember_choice'           => 'Onthoud mijn keuze',
+    'remember_choice_per_idp'   => 'Onthoud mijn keuze voor deze dienst voor %duration%',
+    'remember_choice_duration_days' => '%count% dagen',
+    'remember_choice_duration_minutes' => '%count% minuten',
+    'remember_choice_tooltip_screenreader' => 'Waarom onthouden we jouw keuze?',
+    'remember_choice_per_idp_tooltip' => 'Als je deze optie aanzet, hoef je de komende %duration% voor deze dienst niet meer te kiezen hoe je wilt inloggen. Het inlogscherm wordt dan overgeslagen. <strong>Let op</strong>: gebruik je soms een ander account om in te loggen? Zet de optie dan uit. Je kunt de keuze later weer terugdraaien op <a href="http://profile.surfconext.nl/">profile.surfconext.nl</a>.',
     'cookie_removal_header'     => 'Cookies verwijderen',
     'cookie_remove_button'      => 'Verwijderen',
     'cookie_remove_all_button'  => 'Alles verwijderen',
