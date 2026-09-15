@@ -45,7 +45,8 @@ class Coins
         $additionalLogging,
         $signatureMethod,
         $stepupForceAuthn,
-        $collabEnabled
+        $collabEnabled,
+        bool $wayfRememberChoice = false
     ) {
         return new self([
             'isConsentRequired' => $isConsentRequired,
@@ -64,6 +65,7 @@ class Coins
             'stepupRequireLoa' => $stepupRequireLoa,
             'stepupForceAuthn' => $stepupForceAuthn,
             'collabEnabled' => $collabEnabled,
+            'wayfRememberChoice' => $wayfRememberChoice,
         ]);
     }
 
@@ -151,6 +153,11 @@ class Coins
     public function displayUnconnectedIdpsWayf()
     {
         return $this->getValue('displayUnconnectedIdpsWayf', false);
+    }
+
+    public function wayfRememberChoice(): bool
+    {
+        return $this->getValue('wayfRememberChoice', false) === true;
     }
 
     public function termsOfServiceUrl()

@@ -19,6 +19,7 @@
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
+use OpenConext\EngineBlock\Service\Wayf\RememberedIdpCookie;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
@@ -113,7 +114,60 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
             $log->info('Raw HTTP request', array('http_request' => (string) $application->getHttpRequest()));
         }
 
+        $this->_persistRememberedChoice($sp, $idp, $httpRequest->request->get('rememberChoice'));
+
         $this->_server->sendAuthenticationRequest($request, $selectedIdp);
+    }
+
+    /**
+     * Normalizes the 'rememberedidps' cookie and, when the checkbox was checked and the per-SP
+     * remember-choice feature is enabled for both EngineBlock and the SP, persists the (SP, IdP)
+     * choice in it.
+     *
+     * @param ServiceProvider $sp
+     * @param mixed $idp
+     * @param string|null $rememberChoice
+     */
+    private function _persistRememberedChoice(ServiceProvider $sp, $idp, $rememberChoice)
+    {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $container = $application->getDiContainer();
+        $runtime = $application->getDiContainerRuntime();
+        $log = $this->_server->getLogger();
+
+        $rememberedIdpCookie = $runtime->rememberedIdpCookie;
+
+        $raw = $container->getSymfonyRequest()->cookies->get(RememberedIdpCookie::NAME);
+        $entries = $rememberedIdpCookie->loadValidEntries($raw, $log);
+
+        if ($rememberChoice !== '1') {
+            return;
+        }
+
+        if (!RememberedIdpCookie::isEnabledForServiceProvider(
+            $container->getRememberChoice() === true,
+            $runtime->isRememberChoicePerIdpEnabled(),
+            $sp
+        )) {
+            return;
+        }
+
+        $result = $rememberedIdpCookie->add($entries, $sp->entityId, $idp->entityId);
+        $rememberedIdpCookie->write($result['entries'], $result['expires']);
+
+        $log->info(sprintf(
+            'WAYF-remember-my-choice set for SP %s and IdP %s and expiry %d',
+            $sp->entityId,
+            $idp->entityId,
+            $result['expires']
+        ));
+
+        if ($result['dropped'] > 0) {
+            $log->info(sprintf(
+                'WAYF-remember-my-choice %d entities dropped from cookie',
+                $result['dropped']
+            ));
+        }
     }
 
     /**
