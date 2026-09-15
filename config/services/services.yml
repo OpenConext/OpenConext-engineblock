@@ -15,6 +15,7 @@ services:
         autowire: true
         autoconfigure: true
         arguments:
+            $rememberChoicePerIdp: '%wayf.remember_choice_per_idp%'
             $preferredIdpEntityIds: '%wayf.preferred_idp_entity_ids%'
         tags:
             - { name: kernel.event_subscriber }
@@ -172,6 +173,15 @@ services:
             - '@engineblock.compat.logger'
 
     OpenConext\EngineBlock\Service\CookieService:
+
+    OpenConext\EngineBlock\Service\Wayf\RememberedIdpCookie:
+        autowire: true
+        arguments:
+            $lifetime: '%wayf.remember_choice_per_idp_lifetime%'
+            $maxEntries: '%wayf.remember_choice_per_idp_max%'
+            $cookieDomain: '%hostname%'
+            $cookiePath: '%cookie.path%'
+            $secure: '%cookie.secure%'
 
     OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory:
         arguments:

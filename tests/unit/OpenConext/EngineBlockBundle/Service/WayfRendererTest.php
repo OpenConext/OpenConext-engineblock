@@ -77,6 +77,77 @@ class WayfRendererTest extends TestCase
         );
     }
 
+    public function testRememberChoicePerIdpDefaultsToFalseForExistingCallers(): void
+    {
+        $capturedRememberChoicePerIdp = 'not-set';
+
+        $this->factory->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(function () use (&$capturedRememberChoicePerIdp): WayfViewModel {
+                $namedArgs = func_get_args();
+                $capturedRememberChoicePerIdp = $namedArgs[14] ?? 'missing';
+                return $this->buildViewModel();
+            });
+
+        $this->twig->method('render')->willReturn('<html>');
+
+        $sp = $this->createStub(ServiceProvider::class);
+        $sp->method('getDisplayName')->willReturn('SP');
+
+        $this->renderer()->render(
+            idpList: [],
+            preferredIdpEntityIds: [],
+            action: '/sso',
+            currentLocale: 'en',
+            defaultIdpEntityId: '',
+            shouldDisplayBanner: false,
+            backLink: false,
+            cutoffPoint: 100,
+            rememberChoice: false,
+            showRequestAccess: false,
+            requestId: 'req-1',
+            serviceProvider: $sp,
+        );
+
+        $this->assertFalse($capturedRememberChoicePerIdp);
+    }
+
+    public function testRememberChoicePerIdpIsPassedThroughToFactory(): void
+    {
+        $capturedRememberChoicePerIdp = 'not-set';
+
+        $this->factory->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(function () use (&$capturedRememberChoicePerIdp): WayfViewModel {
+                $namedArgs = func_get_args();
+                $capturedRememberChoicePerIdp = $namedArgs[14] ?? 'missing';
+                return $this->buildViewModel();
+            });
+
+        $this->twig->method('render')->willReturn('<html>');
+
+        $sp = $this->createStub(ServiceProvider::class);
+        $sp->method('getDisplayName')->willReturn('SP');
+
+        $this->renderer()->render(
+            idpList: [],
+            preferredIdpEntityIds: [],
+            action: '/sso',
+            currentLocale: 'en',
+            defaultIdpEntityId: '',
+            shouldDisplayBanner: false,
+            backLink: false,
+            cutoffPoint: 100,
+            rememberChoice: true,
+            showRequestAccess: false,
+            requestId: 'req-1',
+            serviceProvider: $sp,
+            rememberChoicePerIdp: true,
+        );
+
+        $this->assertTrue($capturedRememberChoicePerIdp);
+    }
+
     #[DataProvider('bannerConditionProvider')]
     public function testBannerConditionPassedToFactory(
         bool $shouldDisplayBanner,

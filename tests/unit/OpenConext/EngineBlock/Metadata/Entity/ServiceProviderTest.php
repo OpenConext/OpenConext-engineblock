@@ -39,6 +39,13 @@ class ServiceProviderTest extends TestCase
         $this->assertEquals($entityId, $sp->entityId);
     }
 
+    public function testWayfRememberChoiceIsDisabledByDefault(): void
+    {
+        $serviceProvider = new ServiceProvider('https://sp.example.org');
+
+        self::assertFalse($serviceProvider->getCoins()->wayfRememberChoice());
+    }
+
     /**
      * Expected behavior for display name retrieval is:
      * 1. display name in preferred locale
