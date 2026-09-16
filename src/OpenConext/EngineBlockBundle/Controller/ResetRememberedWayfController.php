@@ -30,10 +30,13 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ResetRememberedWayfController
 {
+    private const ALLOWED_REDIRECT_SCHEMES = ['http', 'https'];
+
     public function __construct(
         private readonly RememberedIdpCookie $rememberedIdpCookie,
         private readonly LoggerInterface $logger,
         private readonly string $redirectUrl,
+        private readonly array $allowedRedirectHosts = [],
     ) {
         if ($this->redirectUrl === '') {
             throw new InvalidArgumentException(
@@ -56,6 +59,39 @@ final class ResetRememberedWayfController
             ));
         }
 
-        return new RedirectResponse($this->redirectUrl, Response::HTTP_FOUND);
+        $target = $this->resolveRedirectTarget($request->query->get('redirect'));
+        $location = $this->appendQueryParameter($target, 'wayfReset', $raw !== null ? 'removed' : 'none');
+
+        return new RedirectResponse($location, Response::HTTP_FOUND);
+    }
+
+    private function resolveRedirectTarget(?string $redirect): string
+    {
+        if ($redirect === null || $redirect === '') {
+            return $this->redirectUrl;
+        }
+
+        $parts = parse_url($redirect);
+
+        if ($parts === false || !isset($parts['scheme'], $parts['host'])) {
+            return $this->redirectUrl;
+        }
+
+        if (!in_array($parts['scheme'], self::ALLOWED_REDIRECT_SCHEMES, true)) {
+            return $this->redirectUrl;
+        }
+
+        if (!in_array($parts['host'], $this->allowedRedirectHosts, true)) {
+            return $this->redirectUrl;
+        }
+
+        return $redirect;
+    }
+
+    private function appendQueryParameter(string $url, string $key, string $value): string
+    {
+        $separator = str_contains($url, '?') ? '&' : '?';
+
+        return $url . $separator . $key . '=' . rawurlencode($value);
     }
 }
