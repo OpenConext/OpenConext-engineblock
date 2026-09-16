@@ -49,6 +49,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
     const SAML_STATUS_MESSAGE_EMPTY = '(No message provided)';
 
+    const OLD_ISSUE_INSTANT_THRESHOLD_SECONDS = 86400; // 24 hours
+
     protected static $ASSERTION_SEQUENCE = array(
         'saml:Issuer',
         'ds:Signature',
@@ -598,10 +600,22 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     protected function _checkIssueInstant($issueInstant, $type, $entityid)
     {
-        // check the IssueInstant against our own time to see if the SP's clock is getting out of sync
-        // Ssp has a hard-coded limit of 60 seconds; use 30 here to catch an IdP's drifting clock early
         $time = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getTimeProvider()->time();
         $timeDelta = $time - $issueInstant;
+
+        if ($type === 'SP' && $timeDelta > self::OLD_ISSUE_INSTANT_THRESHOLD_SECONDS) {
+            $this->_logger->warning(
+                sprintf(
+                    'IssueInstant of SAMLRequest from SP "%s" is %d seconds (more than 24 hours) in the past; possible replay or severely out-of-sync SP clock',
+                    $entityid,
+                    $timeDelta
+                )
+            );
+            return;
+        }
+
+        // check the IssueInstant against our own time to see if the SP's clock is getting out of sync
+        // Ssp has a hard-coded limit of 60 seconds; use 30 here to catch an IdP's drifting clock early
         if (abs($timeDelta) > 30) {
             $this->_logger->notice(
                 sprintf(

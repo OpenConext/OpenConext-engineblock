@@ -31,8 +31,8 @@ class SyslogJsonFormatter extends JsonFormatter
             'channel' => $record->channel,
             'level'   => $record->level->getName(),
             'message' => $record->message,
-            'context' => $record->context,
-            'extra'   => $record->extra,
+            'context' => $this->normalize($record->context),
+            'extra'   => $this->normalize($record->extra),
         ];
     }
 }

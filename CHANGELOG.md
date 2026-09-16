@@ -15,7 +15,13 @@ on the EngineBlock wiki.
 
 Removed:
 
-* Removed the guest_qualifier / isMemberOf guest-status feature (`AddGuestStatus`, `FilterReservedMemberOfValues`). Unused and confirmed safe to remove. (#1294)
+* Removed the guest_qualifier / isMemberOf guest-status feature (`AddGuestStatus`). Unused and confirmed safe to remove. `FilterReservedMemberOfValues` is kept, as it also guards against IdPs spoofing reserved `urn:collab:org` group memberships. (#1294)
+
+## 7.2.1
+
+Features:
+
+* Added `external_subject_id`, `email` and `attributes` to `SramInterruptFilter` request
 
 ## 7.2.0
 

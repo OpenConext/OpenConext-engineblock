@@ -238,4 +238,56 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
         $this->assertArrayHasKey('whr', $params, 'whr query parameter must be present');
         $this->assertSame('example.nl', $params['whr']);
     }
+
+    public function testOldSpIssueInstantLogsWarningOnly()
+    {
+        $logger = $this->mockLogger();
+        $logger->shouldReceive('warning')->once()->with(m::pattern('/is \d+ seconds \(more than 24 hours\) in the past/'));
+        $logger->shouldNotReceive('notice');
+
+        $this->checkIssueInstant(time() - 90000, 'SP', 'https://sp.example.edu');
+    }
+
+    public function testRecentSpIssueInstantLogsNoticeOnly()
+    {
+        $logger = $this->mockLogger();
+        $logger->shouldReceive('notice')->once()->with(m::pattern('/clock synchronization issues/'));
+        $logger->shouldNotReceive('warning');
+
+        $this->checkIssueInstant(time() - 600, 'SP', 'https://sp.example.edu');
+    }
+
+    public function testOldIdpIssueInstantLogsGenericNoticeNotWarning()
+    {
+        $logger = $this->mockLogger();
+        $logger->shouldReceive('notice')->once()->with(m::pattern('/clock synchronization issues/'));
+        $logger->shouldNotReceive('warning');
+
+        $this->checkIssueInstant(time() - 90000, 'IdP', 'https://idp.example.edu');
+    }
+
+    public function testFreshSpIssueInstantLogsNothing()
+    {
+        $logger = $this->mockLogger();
+        $logger->shouldNotReceive('warning');
+        $logger->shouldNotReceive('notice');
+
+        $this->checkIssueInstant(time(), 'SP', 'https://sp.example.edu');
+    }
+
+    private function mockLogger()
+    {
+        $logger = m::mock();
+
+        $loggerProperty = new ReflectionProperty(EngineBlock_Corto_Module_Bindings::class, '_logger');
+        $loggerProperty->setValue($this->bindings, $logger);
+
+        return $logger;
+    }
+
+    private function checkIssueInstant($issueInstant, $type, $entityId)
+    {
+        $method = new ReflectionMethod(EngineBlock_Corto_Module_Bindings::class, '_checkIssueInstant');
+        $method->invoke($this->bindings, $issueInstant, $type, $entityId);
+    }
 }

@@ -142,4 +142,16 @@ class ErrorReporterTest extends TestCase
 
         self::assertSame($decision, $this->session->get('error_authorization_policy_decision'));
     }
+
+    #[Test]
+    public function it_does_not_propagate_exceptions_thrown_while_storing_feedback_in_the_session(): void
+    {
+        $this->feedbackInfoCollector
+            ->shouldReceive('collect')
+            ->andThrow(new Exception('Failed to start the session because headers have already been sent'));
+
+        $this->applicationSingleton->shouldReceive('flushLog')->with('An error was caught')->once();
+
+        $this->reporter->reportError(new Exception('test'), '');
+    }
 }

@@ -27,6 +27,7 @@ use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
 use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Throwable;
 
 class ErrorReporter
 {
@@ -66,6 +67,10 @@ class ErrorReporter
 
         try {
             $this->storeSessionFeedback($exception);
+        } catch (Throwable $sessionException) {
+            $this->logger->warning(
+                'Unable to store feedback info in session: ' . $sessionException->getMessage(),
+            );
         } finally {
             // flush all messages in queue, something went wrong!
             $this->engineBlockApplicationSingleton->flushLog('An error was caught');

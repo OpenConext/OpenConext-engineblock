@@ -100,6 +100,19 @@ class EngineBlock_Corto_Filter_Command_SramInterruptFilter extends EngineBlock_C
         }
     }
 
+    // TODO: duplicated from EngineBlockBundle/AttributeAggregation/Dto/Request.php
+    private static function filterNonStringValuesFromAttributes($attributes)
+    {
+        return array_filter($attributes, function ($attributeValues) {
+            foreach ($attributeValues as $attributeValue) {
+                if (!is_string($attributeValue)) {
+                    return false;   // drop the whole attribute
+                }
+            }
+            return true;
+        });
+    }
+
     private function buildRequest(ServiceProvider $serviceProvider): AuthzRequest
     {
         $attributes = $this->getResponseAttributes();
@@ -107,17 +120,21 @@ class EngineBlock_Corto_Filter_Command_SramInterruptFilter extends EngineBlock_C
 
         $userId = $this->_collabPersonId ?? "";
         $eppn = $attributes['urn:mace:dir:attribute-def:eduPersonPrincipalName'][0] ?? "";
+        $externalSubjectId = $attributes['urn:oasis:names:tc:SAML:attribute:subject-id'][0] ?? "";
+        $email = $attributes['urn:mace:dir:attribute-def:mail'] ?? [];
         $continueUrl = $this->_server->getUrl('SramInterruptService', '') . "?ID=$id";
         $serviceId = $serviceProvider->entityId;
         $issuerId = $this->_identityProvider->entityId;
 
-
         return new AuthzRequest(
-            $userId,
-            $eppn,
-            $continueUrl,
-            $serviceId,
-            $issuerId
+            userId: $userId,
+            eduPersonPrincipalName: $eppn,
+            externalSubjectId: $externalSubjectId,
+            email: $email,
+            continueUrl: $continueUrl,
+            serviceId: $serviceId,
+            issuerId: $issuerId,
+            attributes: self::filterNonStringValuesFromAttributes($attributes)
         );
     }
 
