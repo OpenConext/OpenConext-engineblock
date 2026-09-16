@@ -50,7 +50,7 @@ final class ResetRememberedWayfControllerTest extends FunctionalWebTestCase
         // constructor validation ever throws (e.g. due to a blank redirect URL), since the
         // app's global exception listener also turns uncaught exceptions into a 302 elsewhere.
         $this->assertSame(
-            self::getContainer()->getParameter('wayf.reset_choice_per_idp_redirect'),
+            self::getContainer()->getParameter('wayf.reset_choice_per_idp_redirect') . '?wayfReset=removed',
             $response->headers->get('Location')
         );
     }
@@ -65,7 +65,45 @@ final class ResetRememberedWayfControllerTest extends FunctionalWebTestCase
         $response = $client->getResponse();
         $this->assertSame(Response::HTTP_FOUND, $response->getStatusCode());
         $this->assertSame(
-            self::getContainer()->getParameter('wayf.reset_choice_per_idp_redirect'),
+            self::getContainer()->getParameter('wayf.reset_choice_per_idp_redirect') . '?wayfReset=none',
+            $response->headers->get('Location')
+        );
+    }
+
+    #[Test]
+    public function a_redirect_parameter_pointing_at_an_allowed_host_is_honoured(): void
+    {
+        $client = self::createClient();
+
+        $client->request(
+            'GET',
+            'https://engine.dev.openconext.local/reset-remember-wayf'
+            . '?redirect=' . urlencode('https://profile.dev.openconext.local/my-profile')
+        );
+
+        $response = $client->getResponse();
+        $this->assertSame(Response::HTTP_FOUND, $response->getStatusCode());
+        $this->assertSame(
+            'https://profile.dev.openconext.local/my-profile?wayfReset=none',
+            $response->headers->get('Location')
+        );
+    }
+
+    #[Test]
+    public function a_redirect_parameter_pointing_at_a_disallowed_host_falls_back_to_the_configured_redirect(): void
+    {
+        $client = self::createClient();
+
+        $client->request(
+            'GET',
+            'https://engine.dev.openconext.local/reset-remember-wayf'
+            . '?redirect=' . urlencode('https://evil.example.org/phishing')
+        );
+
+        $response = $client->getResponse();
+        $this->assertSame(Response::HTTP_FOUND, $response->getStatusCode());
+        $this->assertSame(
+            self::getContainer()->getParameter('wayf.reset_choice_per_idp_redirect') . '?wayfReset=none',
             $response->headers->get('Location')
         );
     }

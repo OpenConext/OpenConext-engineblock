@@ -79,6 +79,7 @@ services:
             $rememberedIdpCookie: '@OpenConext\EngineBlock\Service\Wayf\RememberedIdpCookie'
             $logger: '@engineblock.compat.logger'
             $redirectUrl: '%wayf.reset_choice_per_idp_redirect%'
+            $allowedRedirectHosts: '%wayf.reset_choice_allowed_redirect_hosts%'
 
     OpenConext\EngineBlock\Service\RequestAccessMailer:
         arguments:
