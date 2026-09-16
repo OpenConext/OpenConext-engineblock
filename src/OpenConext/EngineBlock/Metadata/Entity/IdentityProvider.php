@@ -50,21 +50,6 @@ use SAML2\Constants;
 #[ORM\Entity]
 class IdentityProvider extends AbstractRole
 {
-    const GUEST_QUALIFIER_ALL = 'All';
-    const GUEST_QUALIFIER_SOME = 'Some';
-    const GUEST_QUALIFIER_NONE = 'None';
-
-    /**
-     * In all-caps to indicate that though the language doesn't allow it, this should be an array constant.
-     *
-     * @var string[]
-     */
-    public static $GUEST_QUALIFIERS = array(
-        self::GUEST_QUALIFIER_ALL,
-        self::GUEST_QUALIFIER_SOME,
-        self::GUEST_QUALIFIER_NONE
-    );
-
     /**
      * @var bool
      */
@@ -145,7 +130,6 @@ class IdentityProvider extends AbstractRole
         string $workflowState = self::WORKFLOW_STATE_DEFAULT,
         string $manipulation = '',
         bool $enabledInWayf = true,
-        string $guestQualifier = self::GUEST_QUALIFIER_ALL,
         bool $hidden = false,
         ?string $schacHomeOrganization = null,
         array $shibMdScopes = array(),
@@ -196,7 +180,6 @@ class IdentityProvider extends AbstractRole
         $this->consentSettings = $consentSettings;
 
         $this->coins = Coins::createForIdentityProvider(
-            $guestQualifier,
             $schacHomeOrganization,
             $hidden,
             $stepupConnections,

@@ -490,14 +490,6 @@ class EngineBlock_Application_DiContainer extends \Pimple\Container
     /**
      * @return string
      */
-    public function getGuestStatusQualifier()
-    {
-        return (string) $this->container->getParameter('addgueststatus_guestqualifier');
-    }
-
-    /**
-     * @return string
-     */
     public function getCookiePath()
     {
         return (string) $this->container->getParameter('cookie.path');

@@ -78,9 +78,6 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
             // Require valid UID and SchacHomeOrganization
             new EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes(),
 
-            // Add guest status (isMemberOf)
-            new EngineBlock_Corto_Filter_Command_AddGuestStatus(),
-
             // Figure out the collabPersonId
             new EngineBlock_Corto_Filter_Command_ProvisionUser(
                 $diContainer->getUserDirectory()

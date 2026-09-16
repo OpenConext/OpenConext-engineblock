@@ -18,7 +18,6 @@
 
 namespace OpenConext\EngineBlock\Metadata;
 
-use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 
 /**
@@ -68,7 +67,6 @@ class Coins
     }
 
     public static function createForIdentityProvider(
-        $guestQualifier,
         $schacHomeOrganization,
         $hidden,
         $stepupConnections,
@@ -81,7 +79,6 @@ class Coins
         ?string $azureDomainHint = null
     ) {
         return new self([
-            'guestQualifier' => $guestQualifier,
             'schacHomeOrganization' => $schacHomeOrganization,
             'hidden' => $hidden,
             'disableScoping' => $disableScoping,
@@ -201,11 +198,6 @@ class Coins
     public function defaultRAC()
     {
         return $this->getValue('defaultRAC');
-    }
-
-    public function guestQualifier()
-    {
-        return $this->getValue('guestQualifier', IdentityProvider::GUEST_QUALIFIER_ALL);
     }
 
     public function schacHomeOrganization()

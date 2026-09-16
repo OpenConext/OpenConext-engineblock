@@ -144,8 +144,6 @@ parameters:
     engineblock.metadata_push_memory_limit: 256M
     ## Minimum execution time in milliseconds when a received response is deemed invalid (default: 5000 ms)
     minimum_execution_time_on_invalid_received_response: 5000
-    ## The value for guest qualifier. Can be overridden for specific environments
-    addgueststatus_guestqualifier: 'urn:collab:org:dev.openconext.local'
 
     ## Language cookie settings
     ## The value for the domain is also used for clearing SSO Notification cookies if the feature is enabled

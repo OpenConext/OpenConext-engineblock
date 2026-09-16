@@ -148,19 +148,6 @@ Uses:
 Modifies:
 - responseAttributes
 
-### AddGuestStatus
-Add the 'urn:collab:org:surf.nl' value to the isMemberOf attribute in case a user is considered a 'full member' of the
-SURFfederation based on user and configuration
-
-Depends On:
-- Configuration
-
-Uses:
-- OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
-
-Modifies:
-- responseAttributes
-
 ### ProvisionUser
 If a new user is encountered, provision the user in the UserDirectory, generating a CollabPersonId for new users. If
 an existing user is encountered, retrieve the stored CollabPersonId

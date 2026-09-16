@@ -104,8 +104,6 @@ class CortoDisassembler
             );
         }
 
-        $cortoEntity['GuestQualifier'] = $entity->getCoins()->guestQualifier();
-
         if ($entity->getCoins()->schacHomeOrganization()) {
             $cortoEntity['SchacHomeOrganization'] = $entity->getCoins()->schacHomeOrganization();
         }
