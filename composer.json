@@ -25,7 +25,7 @@
         "beberlei/assert": "^3.3.3",
         "composer/package-versions-deprecated": "^1.11",
         "doctrine/dbal": "^4.3.3",
-        "doctrine/doctrine-bundle": "^2.13.3",
+        "doctrine/doctrine-bundle": "^3.3.1",
         "doctrine/doctrine-migrations-bundle": "^3.6.0",
         "doctrine/orm": "^3.6",
         "guzzlehttp/guzzle": "^7.10",
