@@ -405,6 +405,13 @@ QUERY;
         return $this;
     }
 
+    public function allowWayfRememberChoiceForSp($entityId)
+    {
+        $this->setCoin($this->getServiceProvider($entityId), 'wayfRememberChoice', true);
+
+        return $this;
+    }
+
     public function disconnectSp($spEntityId, $idpEntityId)
     {
         $sp = $this->getServiceProvider($spEntityId);
