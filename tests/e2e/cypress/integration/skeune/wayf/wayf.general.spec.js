@@ -5,6 +5,7 @@ import {
   matchSelector,
   noResultSectionSelector,
   remainingIdpSelector,
+  rememberChoiceId,
   rememberChoicePerIdpClass,
   rememberChoiceTooltipToggleSelector,
   rememberChoiceTooltipValueSelector,
@@ -249,6 +250,27 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.get(`.${rememberChoicePerIdpClass}`).should('not.exist');
       cy.get(rememberChoiceTooltipToggleSelector).should('not.exist');
       cy.onPage('Remember my choice');
+    });
+
+    it('Sets the hidden rememberChoice field to 1 on the submitted IdP form when the checkbox is checked', () => {
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=1&addDiscoveries=0&rememberChoiceFeature=true&rememberChoicePerIdp=true');
+      cy.window().then((win) => {
+        cy.stub(win.HTMLFormElement.prototype, 'submit').as('formSubmit');
+      });
+      cy.get(`#${rememberChoiceId}`).check();
+      cy.get(idpSelector).first().click({force: true});
+      cy.get('@formSubmit').should('have.been.calledOnce');
+      cy.get(idpSelector).first().find('input[name="rememberChoice"]').should('have.value', '1');
+    });
+
+    it('Leaves the hidden rememberChoice field at 0 on the submitted IdP form when the checkbox is left unchecked', () => {
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=1&addDiscoveries=0&rememberChoiceFeature=true&rememberChoicePerIdp=true');
+      cy.window().then((win) => {
+        cy.stub(win.HTMLFormElement.prototype, 'submit').as('formSubmit');
+      });
+      cy.get(idpSelector).first().click({force: true});
+      cy.get('@formSubmit').should('have.been.calledOnce');
+      cy.get(idpSelector).first().find('input[name="rememberChoice"]').should('have.value', '0');
     });
   });
 
