@@ -552,6 +552,19 @@ class EngineBlockContext extends AbstractSubContext
         // set unknown session id to prevent session not found exception
         $session->setCookie(session_name(), '000000');
     }
+
+    /**
+     * @Given /^I start a new browser session$/
+     */
+    public function iStartANewBrowserSession()
+    {
+        // Unlike I lose my session (which restarts the whole client and wipes every
+        // cookie), this only clears the PHP session cookie. This simulates a real
+        // browser starting a fresh PHP session (e.g. after the session naturally
+        // expires) while still sending along any other persistent cookies, such as
+        // the "rememberedidps" cookie, exactly as a real browser would.
+        $this->getMinkContext()->getSession()->setCookie(session_name(), null);
+    }
     /**
      * @Given /^I lose my session and reload$/
      */
