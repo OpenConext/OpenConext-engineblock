@@ -23,6 +23,7 @@ use Behat\Mink\Exception\ExpectationException;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
+use OpenConext\EngineBlock\Service\Wayf\RememberedIdpCookie;
 use OpenConext\EngineBlockBundle\Sbs\Msg;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient;
@@ -393,6 +394,47 @@ class EngineBlockContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^I select "([^"]*)" on the WAYF and remember my choice$/
+     */
+    public function iSelectOnTheWAYFAndRememberMyChoice($idpName)
+    {
+        /** @var MockIdentityProvider $mockIdp */
+        $mockIdp = $this->mockIdpRegistry->get($idpName);
+
+        if (!$mockIdp) {
+            throw new RuntimeException(
+                sprintf('Unable to find idp with name "%s"', $idpName)
+            );
+        }
+
+        $page = $this->getMinkContext()->getSession()->getPage();
+        $selector = '[data-entityid="' . $mockIdp->entityId() . '"]';
+        $idpContainer = $page->find('css', $selector);
+
+        if (!$idpContainer) {
+            throw new RuntimeException(sprintf('Unable to find idp container with selector "%s"', $selector));
+        }
+
+        $rememberChoiceField = $idpContainer->find('css', 'input[name="rememberChoice"]');
+
+        if (!$rememberChoiceField) {
+            throw new RuntimeException(
+                sprintf('Unable to find hidden rememberChoice field within selector "%s"', $selector)
+            );
+        }
+
+        $rememberChoiceField->setValue('1');
+
+        $button = $idpContainer->find('css', 'button.idp__submit');
+
+        if (!$button) {
+            throw new RuntimeException(sprintf('Unable to find button with selector "%s button.idp__submit"', $selector));
+        }
+
+        $button->click();
+    }
+
+    /**
      * @Given /^I select IdP by label "([^"]*)" on the WAYF$/
      */
     public function iSelectByLabelOnTheWAYF($idpLabel)
@@ -721,6 +763,36 @@ class EngineBlockContext extends AbstractSubContext
         if ($cookie !== $locale) {
             throw new ExpectationException(
                 sprintf('The lang cookie should contain "%s", but contains "%s"', $locale, $cookie),
+                $this->getMinkContext()->getSession()->getDriver()
+            );
+        }
+    }
+
+    /**
+     * @Then /^the "rememberedidps" cookie should be set$/
+     */
+    public function theRememberedIdpsCookieShouldBeSet()
+    {
+        $cookie = $this->getMinkContext()->getSession()->getCookie(RememberedIdpCookie::NAME);
+
+        if ($cookie === null) {
+            throw new ExpectationException(
+                'The rememberedidps cookie has not been set',
+                $this->getMinkContext()->getSession()->getDriver()
+            );
+        }
+    }
+
+    /**
+     * @Then /^the "rememberedidps" cookie should not be set$/
+     */
+    public function theRememberedIdpsCookieShouldNotBeSet()
+    {
+        $cookie = $this->getMinkContext()->getSession()->getCookie(RememberedIdpCookie::NAME);
+
+        if ($cookie !== null) {
+            throw new ExpectationException(
+                'The rememberedidps cookie should not be set, but it is',
                 $this->getMinkContext()->getSession()->getDriver()
             );
         }
