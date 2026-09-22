@@ -179,6 +179,30 @@ class ResetRememberedWayfControllerTest extends TestCase
     }
 
     #[Test]
+    public function a_redirect_parameter_with_a_fragment_keeps_the_fragment_after_the_query_string(): void
+    {
+        $cookieService = Phake::mock(CookieService::class);
+        $rememberedIdpCookie = $this->buildRememberedIdpCookie($cookieService);
+
+        $logger = Mockery::mock(LoggerInterface::class);
+        $logger->shouldNotReceive('info');
+
+        $controller = new ResetRememberedWayfController(
+            $rememberedIdpCookie,
+            $logger,
+            self::REDIRECT_URL,
+            self::ALLOWED_REDIRECT_HOSTS,
+        );
+
+        $response = $controller($this->buildRequest(null, 'https://profile.example.org/my-profile#login-methods'));
+
+        $this->assertSame(
+            'https://profile.example.org/my-profile?wayfReset=none#login-methods',
+            $response->getTargetUrl()
+        );
+    }
+
+    #[Test]
     public function a_redirect_parameter_pointing_at_a_host_that_is_not_allowed_falls_back_to_the_configured_redirect(): void
     {
         $cookieService = Phake::mock(CookieService::class);
