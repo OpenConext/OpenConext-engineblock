@@ -62,7 +62,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
         .should('have.length', 1);
     });
 
-    it.only('Shows the global site notice', () => {
+    it('Shows the global site notice', () => {
       cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?showGlobalSiteNotice=1');
       cy.beVisible(siteNoticeSelector);
     });
@@ -219,6 +219,15 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.get(rememberChoiceTooltipValueSelector).should('be.visible');
       cy.get(rememberChoiceTooltipToggleSelector).click({force: true});
       cy.get(rememberChoiceTooltipValueSelector).should('not.be.visible');
+    });
+
+    it('Toggles aria-hidden and aria-expanded on the tooltip when the label is clicked', () => {
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true&rememberChoicePerIdp=true');
+      cy.get(rememberChoiceTooltipValueSelector).should('have.attr', 'aria-hidden', 'true');
+      cy.get(rememberChoiceTooltipToggleSelector).should('have.attr', 'aria-expanded', 'false');
+      cy.get('.wayf__rememberChoice label.tooltip').click();
+      cy.get(rememberChoiceTooltipValueSelector).should('not.have.attr', 'aria-hidden');
+      cy.get(rememberChoiceTooltipToggleSelector).should('have.attr', 'aria-expanded', 'true');
     });
 
     it('Does not show the tooltip toggle for the global (non per-SP) variant', () => {
