@@ -272,6 +272,18 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.get('@formSubmit').should('have.been.calledOnce');
       cy.get(idpSelector).first().find('input[name="rememberChoice"]').should('have.value', '0');
     });
+
+    it('Sets the legacy rememberchoice cookie when the checkbox is checked for the global variant', () => {
+      cy.clearCookie('rememberchoice');
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=1&addDiscoveries=0&rememberChoiceFeature=true&rememberChoicePerIdp=false');
+      cy.window().then((win) => {
+        cy.stub(win.HTMLFormElement.prototype, 'submit').as('formSubmit');
+      });
+      cy.get(`#${rememberChoiceId}`).check();
+      cy.get(idpSelector).first().click({force: true});
+      cy.get('@formSubmit').should('have.been.calledOnce');
+      cy.getCookie('rememberchoice').should('exist');
+    });
   });
 
   describe('Preferred IdPs section heading', () => {
