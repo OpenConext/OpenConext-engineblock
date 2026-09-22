@@ -25,8 +25,9 @@ Feature:
     And I start a new browser session
     When I log in at "Remembering-SP"
      And I pass through EngineBlock
-     And I pass through the IdP
     Then the url should not match "authentication/proxy/wayf"
+    And the url should match "Dummy-IdP/sso"
+    When I pass through the IdP
     When I pass through EngineBlock
     Then the url should match "functional-testing/Remembering-SP/acs"
 
