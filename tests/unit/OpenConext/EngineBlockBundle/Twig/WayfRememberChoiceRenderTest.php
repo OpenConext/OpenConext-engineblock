@@ -30,12 +30,6 @@ use Twig\Environment;
 use Twig\Extension\AttributeExtension;
 use Twig\Loader\FilesystemLoader;
 
-/**
- * Renders the real `rememberChoice.html.twig` (and the `rememberChoiceTooltip.html.twig` it includes
- * for per-SP mode) through an actual Twig Environment backed by the FilesystemLoader, using a real
- * TranslationExtension. This is the template that was previously unreachable for `rememberChoicePerIdp`
- * because `remainingIdps.html.twig` never forwarded that flag (or the duration) into it.
- */
 class WayfRememberChoiceRenderTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
