@@ -46,6 +46,8 @@ export const handleEnter = (e) => {
         selectFirstIdPAndSubmitForm(); break;
       case defaultIdpClass:
         handleIdpBanner(e); break;
+      case 'tooltip':
+        fireClickEvent(e.target); break;
     }
   });
 };

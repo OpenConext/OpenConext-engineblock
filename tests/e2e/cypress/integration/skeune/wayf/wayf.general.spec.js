@@ -230,6 +230,12 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.get(rememberChoiceTooltipToggleSelector).should('have.attr', 'aria-expanded', 'true');
     });
 
+    it('Opens the tooltip when the label is focused and Enter is pressed', () => {
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true&rememberChoicePerIdp=true');
+      cy.get('.wayf__rememberChoice label.tooltip').focus().type('{enter}');
+      cy.get(rememberChoiceTooltipValueSelector).should('not.have.attr', 'aria-hidden');
+    });
+
     it('Does not show the tooltip toggle for the global (non per-SP) variant', () => {
       cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true&rememberChoicePerIdp=false');
       cy.get(`.${rememberChoicePerIdpClass}`).should('not.exist');
