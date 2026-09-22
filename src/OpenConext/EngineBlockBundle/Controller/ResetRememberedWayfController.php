@@ -90,8 +90,16 @@ final class ResetRememberedWayfController
 
     private function appendQueryParameter(string $url, string $key, string $value): string
     {
+        $fragment = '';
+        $hashPosition = strpos($url, '#');
+
+        if ($hashPosition !== false) {
+            $fragment = substr($url, $hashPosition);
+            $url = substr($url, 0, $hashPosition);
+        }
+
         $separator = str_contains($url, '?') ? '&' : '?';
 
-        return $url . $separator . $key . '=' . rawurlencode($value);
+        return $url . $separator . $key . '=' . rawurlencode($value) . $fragment;
     }
 }
