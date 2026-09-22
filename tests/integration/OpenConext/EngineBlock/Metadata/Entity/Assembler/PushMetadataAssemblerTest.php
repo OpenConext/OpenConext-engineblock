@@ -160,7 +160,7 @@ class PushMetadataAssemblerTest extends TestCase
 
         switch ($type) {
             case 'bool':
-                $values = $coinName === 'wayf_remember_choice'
+                $values = $coinName === PushMetadataAssembler::COIN_WAYF_REMEMBER_CHOICE
                     ? $this->validCoinValuesBoolStrictTrueOnly()
                     : $this->validCoinValuesBool();
                 break;
