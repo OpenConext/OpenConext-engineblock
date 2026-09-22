@@ -153,7 +153,15 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
         }
 
         $result = $rememberedIdpCookie->add($entries, $sp->entityId, $idp->entityId);
-        $rememberedIdpCookie->write($result['entries'], $result['expires']);
+        if (!$rememberedIdpCookie->write($result['entries'], $result['expires'])) {
+            $log->error(sprintf(
+                'WAYF-remember-my-choice cookie write failed for SP %s and IdP %s',
+                $sp->entityId,
+                $idp->entityId
+            ));
+
+            return;
+        }
 
         $log->info(sprintf(
             'WAYF-remember-my-choice set for SP %s and IdP %s and expiry %d',
