@@ -45,10 +45,6 @@ final class ResetRememberedWayfControllerTest extends FunctionalWebTestCase
 
         $response = $client->getResponse();
         $this->assertSame(Response::HTTP_FOUND, $response->getStatusCode());
-        // Asserting the exact configured redirect target (rather than merely "some Location
-        // header") is deliberate: it's the only way this test would fail if the controller's
-        // constructor validation ever throws (e.g. due to a blank redirect URL), since the
-        // app's global exception listener also turns uncaught exceptions into a 302 elsewhere.
         $this->assertSame(
             self::getContainer()->getParameter('wayf.reset_choice_per_idp_redirect'),
             $response->headers->get('Location')
