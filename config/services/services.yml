@@ -179,7 +179,7 @@ services:
         arguments:
             $lifetime: '%wayf.remember_choice_per_idp_lifetime%'
             $maxEntries: '%wayf.remember_choice_per_idp_max%'
-            $cookieDomain: '%hostname%'
+            $cookieDomain: ''
             $cookiePath: '%cookie.path%'
             $secure: '%cookie.secure%'
 
