@@ -552,9 +552,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
 
         $diContainerRuntime = $application->getDiContainerRuntime();
 
-        // The per-SP remember-choice mode is only authoritative when the global feature, the
-        // EngineBlock-wide per-SP flag and the SP's own metadata coin are all enabled. Otherwise
-        // the legacy global 'rememberchoice' cookie behaviour (below) applies unchanged.
         $isRememberChoicePerIdpEnabled = $diContainerRuntime->isRememberChoicePerIdpEnabled();
         $rememberChoicePerIdp = RememberedIdpCookie::isEnabledForServiceProvider(
             $container->getRememberChoice() === true,
@@ -562,8 +559,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             $serviceProvider
         );
 
-        // While per-SP mode is active, an opted-out SP must not fall back to the legacy global
-        // cookie feature: rememberChoiceFeature mirrors rememberChoicePerIdp in that case.
         $rememberChoiceFeature = $isRememberChoicePerIdpEnabled
             ? $rememberChoicePerIdp
             : $container->getRememberChoice();

@@ -38,18 +38,6 @@ use Twig\Loader\ChainLoader;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
 
-/**
- * Renders the real `wayf.html.twig` (and the real `scriptConfig.html.twig` it includes) through an
- * actual Twig Environment backed by the FilesystemLoader, using the real `Wayf::getWayfJsonConfig()`
- * Twig function. This exercises the exact `{% include ... with { ... } only %}` context-passing line
- * in `wayf.html.twig` that previously dropped `rememberChoicePerIdp`, so the test fails whenever that
- * include omits the variable, without relying on a mocked `twig->render()` call.
- *
- * To keep the test focused, the `wayf_content` block (IdP list markup: preselection, preferredIdps,
- * remainingIdps, backLink, noAccess, noResults) is overridden to be empty. That markup is unrelated to
- * the script config wiring under test and would otherwise require substantial unrelated setup (IdP list
- * partials, site notice service, request-access forms, etc.) to render.
- */
 class WayfScriptConfigRenderTest extends TestCase
 {
     use MockeryPHPUnitIntegration;

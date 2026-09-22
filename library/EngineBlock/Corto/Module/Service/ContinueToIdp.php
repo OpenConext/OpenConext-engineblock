@@ -120,10 +120,6 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
     }
 
     /**
-     * Normalizes the 'rememberedidps' cookie and, when the checkbox was checked and the per-SP
-     * remember-choice feature is enabled for both EngineBlock and the SP, persists the (SP, IdP)
-     * choice in it.
-     *
      * @param ServiceProvider $sp
      * @param mixed $idp
      * @param string|null $rememberChoice

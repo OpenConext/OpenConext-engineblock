@@ -31,11 +31,6 @@ final class RememberedIdpCookie
 {
     public const NAME = 'rememberedidps';
 
-    /**
-     * Whether the per-SP remember-choice mode is authoritative for the given SP: this
-     * requires the global 'wayf.remember_choice' feature, the EngineBlock-wide per-SP
-     * flag and the SP's own metadata coin to all be enabled.
-     */
     public static function isEnabledForServiceProvider(
         bool $globalRememberChoiceEnabled,
         bool $rememberChoicePerIdpEnabled,
@@ -95,10 +90,6 @@ final class RememberedIdpCookie
     }
 
     /**
-     * Normalizes the raw cookie value, clearing it when invalid (after logging a warning)
-     * and rewriting or clearing it when normalization changed the entries, then returns
-     * the resulting valid entries.
-     *
      * @return array<string, array{idp: string, expires: int}>
      */
     public function loadValidEntries(?string $raw, LoggerInterface $logger): array
@@ -192,9 +183,6 @@ final class RememberedIdpCookie
      */
     public function write(array $entries, ?int $expires = null): bool
     {
-        // SameSite=None requires the Secure attribute or browsers silently drop the cookie; this
-        // is only safe because 'cookie.secure' defaults to (and, per SAML's HTTPS requirement,
-        // should always remain) true.
         return $this->cookieService->setCookieWithSameSite(
             self::NAME,
             $this->encode($entries),
@@ -209,7 +197,6 @@ final class RememberedIdpCookie
 
     public function clear(): bool
     {
-        // See the note on write() about the Secure/SameSite=None coupling.
         return $this->cookieService->clearCookieWithSameSite(
             self::NAME,
             $this->cookiePath,
