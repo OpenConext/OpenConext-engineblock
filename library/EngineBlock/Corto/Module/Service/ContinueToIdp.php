@@ -136,7 +136,7 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
         $raw = $container->getSymfonyRequest()->cookies->get(RememberedIdpCookie::NAME);
         $entries = $rememberedIdpCookie->loadValidEntries($raw, $log);
 
-        if ($rememberChoice !== '1') {
+        if (!$this->_isRememberChoiceChecked($rememberChoice)) {
             return;
         }
 
@@ -172,6 +172,15 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
                 $result['dropped']
             ));
         }
+    }
+
+    /**
+     * @param string|null $rememberChoice
+     * @return bool
+     */
+    private function _isRememberChoiceChecked($rememberChoice)
+    {
+        return $rememberChoice === '1';
     }
 
     /**
