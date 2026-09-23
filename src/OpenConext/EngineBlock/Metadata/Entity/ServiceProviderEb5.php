@@ -30,13 +30,13 @@ use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\Service;
-use OpenConext\EngineBlockBundle\Doctrine\Type\AttributeReleasePolicyType;
-use OpenConext\EngineBlockBundle\Doctrine\Type\IndexedServiceArrayType;
-use OpenConext\EngineBlockBundle\Doctrine\Type\RequestedAttributeArrayType;
+use OpenConext\EngineBlockBundle\Doctrine\Type\SerializedArrayType;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 
 /**
+ * @Deprecated This entity is deprecated and will be removed in the future. Use the new ServiceProvider entity instead.
+ *
  * @package OpenConext\EngineBlock\Metadata\Entity
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -47,36 +47,36 @@ use SAML2\Constants;
  * @see \OpenConext\EngineBlock\Factory\Factory\ServiceProviderFactory
  */
 #[ORM\Entity]
-class ServiceProvider extends AbstractRole
+class ServiceProviderEb5 extends AbstractRoleEb5
 {
     /**
      * @var null|AttributeReleasePolicy
      */
-    #[ORM\Column(name: 'attribute_release_policy', type: AttributeReleasePolicyType::NAME, length: 65535, nullable: true)]
+    #[ORM\Column(name: 'attribute_release_policy', type: SerializedArrayType::NAME, length: 65535)]
     public $attributeReleasePolicy;
 
     /**
      * @var IndexedService[]
      */
-    #[ORM\Column(name: 'assertion_consumer_services', type: IndexedServiceArrayType::NAME, length: 65535, nullable: true)]
+    #[ORM\Column(name: 'assertion_consumer_services', type: SerializedArrayType::NAME, length: 65535)]
     public $assertionConsumerServices;
 
     /**
      * @var string[]
      */
-    #[ORM\Column(name: 'allowed_idp_entity_ids', type: Types::JSON, length: 6777215, nullable: true)]
+    #[ORM\Column(name: 'allowed_idp_entity_ids', type: SerializedArrayType::NAME, length: 6777215)]
     public $allowedIdpEntityIds;
 
     /**
      * @var bool
      */
-    #[ORM\Column(name: 'allow_all', type: Types::BOOLEAN, nullable: true)]
+    #[ORM\Column(name: 'allow_all', type: Types::BOOLEAN)]
     public ?bool $allowAll = null;
 
     /**
      * @var null|RequestedAttribute[]
      */
-    #[ORM\Column(name: 'requested_attributes', type: RequestedAttributeArrayType::NAME, length: 65535, nullable: true)]
+    #[ORM\Column(name: 'requested_attributes', type: SerializedArrayType::NAME, length: 65535)]
     public $requestedAttributes;
 
     /**
@@ -111,20 +111,20 @@ class ServiceProvider extends AbstractRole
         bool $additionalLogging = false,
         array $certificates = array(),
         array $contactPersons = array(),
-        ?string $descriptionEn = null,
-        ?string $descriptionNl = null,
-        ?string $descriptionPt = null,
+        ?string $descriptionEn = '',
+        ?string $descriptionNl = '',
+        ?string $descriptionPt = '',
         bool $disableScoping = false,
-        ?string $displayNameEn = null,
-        ?string $displayNameNl = null,
-        ?string $displayNamePt = null,
-        ?string $keywordsEn = null,
-        ?string $keywordsNl = null,
-        ?string $keywordsPt = null,
+        ?string $displayNameEn = '',
+        ?string $displayNameNl = '',
+        ?string $displayNamePt = '',
+        ?string $keywordsEn = '',
+        ?string $keywordsNl = '',
+        ?string $keywordsPt = '',
         ?Logo $logo = null,
-        ?string $nameEn = null,
-        ?string $nameNl = null,
-        ?string $namePt = null,
+        ?string $nameEn = '',
+        ?string $nameNl = '',
+        ?string $namePt = '',
         ?string $nameIdFormat = null,
         array $supportedNameIdFormats = array(
             Constants::NAMEID_TRANSIENT,
@@ -146,7 +146,7 @@ class ServiceProvider extends AbstractRole
         bool $policyEnforcementDecisionRequired = false,
         bool $requesteridRequired = false,
         bool $signResponse = false,
-        ?string $manipulation = null,
+        string $manipulation = '',
         ?AttributeReleasePolicy $attributeReleasePolicy = null,
         ?string $supportUrlEn = null,
         ?string $supportUrlNl = null,
@@ -223,7 +223,7 @@ class ServiceProvider extends AbstractRole
      * @param ServiceProviderEntityInterface $serviceProvider
      * @return ServiceProvider
      */
-    public static function fromServiceProviderEntity(ServiceProviderEntityInterface $serviceProvider): ServiceProvider
+    public static function fromServiceProviderEntity(ServiceProviderEntityInterface $serviceProvider): ServiceProviderEb5
     {
         $entity = new self($serviceProvider->getEntityId(), $serviceProvider->getMdui());
         $entity->id = $serviceProvider->getId();

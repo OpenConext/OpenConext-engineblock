@@ -36,19 +36,14 @@ final class Version20260210000000 extends AbstractEngineBlockMigration
         return 'Baseline migration: Creates all database tables (consent, saml_persistent_id, service_provider_uuid, sso_provider_roles_eb5, user). Skips if tables already exist.';
     }
 
-    public function preUp(Schema $schema): void
-    {
-        parent::preUp($schema);
-
-        $tables = $this->sm->listTableNames();
-        $this->skipIf(
-            in_array('sso_provider_roles_eb5', $tables, true),
-            'Database schema already exists (found sso_provider_roles_eb5 table). Skipping baseline migration.'
-        );
-    }
-
     public function up(Schema $schema): void
     {
+        $tables = $this->sm->listTableNames();
+        // Database schema already exists (found sso_provider_roles_eb5 table). Skipping baseline migration
+        if (in_array('sso_provider_roles_eb5', $tables, true)) {
+            return;
+        }
+
         $this->addSql('CREATE TABLE `consent` (
             `consent_date` datetime NOT NULL,
             `hashed_user_id` varchar(80) NOT NULL,
