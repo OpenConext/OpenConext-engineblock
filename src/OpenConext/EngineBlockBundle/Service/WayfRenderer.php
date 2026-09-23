@@ -50,6 +50,7 @@ class WayfRenderer
         bool $showRequestAccess,
         string $requestId,
         ServiceProvider $serviceProvider,
+        bool $rememberChoicePerIdp = false,
     ): string {
         $split = $this->splitter->split($idpList, $preferredIdpEntityIds);
         $showPreferredIdps = $split->hasPreferred();
@@ -74,6 +75,7 @@ class WayfRenderer
             showRequestAccess: $showRequestAccess,
             requestId: $requestId,
             serviceProvider: $serviceProvider,
+            rememberChoicePerIdp: $rememberChoicePerIdp,
         );
 
         return $this->twig->render('@theme/Authentication/View/Proxy/wayf.html.twig', $viewModel->toArray());

@@ -47,6 +47,26 @@ class CookieService
         return setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
     }
 
+    public function setCookieWithSameSite(
+        string $name,
+        $value,
+        int    $expire,
+        string $path,
+        string $domain,
+        bool   $secure = true,
+        bool   $httpOnly = true,
+        string $sameSite = 'None'
+    ): bool {
+        return setcookie($name, $value, [
+            'expires' => $expire,
+            'path' => $path,
+            'domain' => $domain,
+            'secure' => $secure,
+            'httponly' => $httpOnly,
+            'samesite' => $sameSite,
+        ]);
+    }
+
     /**
      * Clears the cookie for the specified name, path and domain.
      *
@@ -65,5 +85,23 @@ class CookieService
         bool   $httpOnly = true
     ): bool {
         return setcookie($name, '', -1, $path, $domain, $secure, $httpOnly);
+    }
+
+    public function clearCookieWithSameSite(
+        string $name,
+        string $path,
+        string $domain,
+        bool   $secure = true,
+        bool   $httpOnly = true,
+        string $sameSite = 'None'
+    ): bool {
+        return setcookie($name, '', [
+            'expires' => -1,
+            'path' => $path,
+            'domain' => $domain,
+            'secure' => $secure,
+            'httponly' => $httpOnly,
+            'samesite' => $sameSite,
+        ]);
     }
 }

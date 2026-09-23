@@ -180,6 +180,12 @@ parameters:
 
     ## Allow users to save their selected IdP and then auto-select it on returning visits.
     wayf.remember_choice: false
+    ## Allow SPs to opt in to remembered IdP choices scoped per SP through Manage metadata.
+    wayf.remember_choice_per_idp: false
+    ## Lifetime for remembered IdP choices scoped per SP, in seconds.
+    wayf.remember_choice_per_idp_lifetime: 7776000
+    ## Maximum number of remembered IdP choice entries to retain per SP.
+    wayf.remember_choice_per_idp_max: 16
 
     ## Toggle the default IdP quick link banner on the WAYF.
     wayf.display_default_idp_banner_on_wayf: true

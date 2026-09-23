@@ -20,7 +20,9 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory;
 use OpenConext\EngineBlock\Metadata\Discovery;
 use OpenConext\EngineBlock\Metadata\X509\KeyPairFactory;
+use OpenConext\EngineBlock\Service\Wayf\RememberedIdpCookie;
 use OpenConext\EngineBlock\Service\Wayf\WayfIdp;
+use OpenConext\EngineBlockBundle\Bridge\DiContainerRuntime;
 use OpenConext\EngineBlockBundle\Service\DiscoverySelectionService;
 use SAML2\AuthnRequest;
 use SAML2\Constants;
@@ -221,7 +223,17 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         }
 
         // Auto-select IdP when 'wayf.rememberChoice' feature is enabled and is allowed for the current request
-        if (($container->getRememberChoice() === true) && !($request->getForceAuthn() || $request->isDebugRequest())) {
+        $runtime = $application->getDiContainerRuntime();
+        if ($this->_sendAuthenticationRequestForRememberedIdpPerServiceProvider($request, $sp, $candidateIDPs)) {
+            return;
+        }
+
+        // Auto-select IdP when 'wayf.rememberChoice' feature is enabled and is allowed for the current request,
+        // and the per-SP remembered-choice feature is not enabled.
+        if ($container->getRememberChoice() === true
+            && $runtime->isRememberChoicePerIdpEnabled() === false
+            && !($request->getForceAuthn() || $request->isDebugRequest())
+        ) {
             $cookies = $container->getSymfonyRequest()->cookies->all();
             if (array_key_exists('rememberchoice', $cookies)) {
                 $remembered = json_decode($cookies['rememberchoice']);
@@ -457,6 +469,64 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         return $scopedIdps;
     }
 
+    /**
+     * @param string[] $candidateIDPs
+     */
+    protected function _sendAuthenticationRequestForRememberedIdpPerServiceProvider(
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
+        ServiceProvider $sp,
+        array $candidateIDPs
+    ): bool {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $container = $application->getDiContainer();
+        $runtime = $application->getDiContainerRuntime();
+        $log = $this->_server->getLogger();
+
+        if (!RememberedIdpCookie::isEnabledForServiceProvider(
+            $container->getRememberChoice() === true,
+            $runtime->isRememberChoicePerIdpEnabled(),
+            $sp
+        )
+            || $request->getForceAuthn()
+            || $request->isDebugRequest()
+        ) {
+            return false;
+        }
+
+        $rememberedIdp = $this->_findRememberedIdpForServiceProvider($runtime, $sp->entityId, $candidateIDPs);
+        if ($rememberedIdp === null) {
+            return false;
+        }
+
+        $log->info(sprintf(
+            'WAYF-remember-my-choice  WAYF skipped for %s because of preselected %s',
+            $sp->entityId,
+            $rememberedIdp
+        ));
+        $this->_server->sendAuthenticationRequest($request, $rememberedIdp);
+
+        return true;
+    }
+
+    /**
+     * @param string[] $candidateIdpEntityIds
+     */
+    protected function _findRememberedIdpForServiceProvider(
+        DiContainerRuntime $runtime,
+        string $serviceProviderEntityId,
+        array $candidateIdpEntityIds
+    ): ?string {
+        $rememberedIdpCookie = $runtime->rememberedIdpCookie;
+        $log = $this->_server->getLogger();
+
+        $raw = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()
+            ->getSymfonyRequest()->cookies->get(RememberedIdpCookie::NAME);
+
+        $entries = $rememberedIdpCookie->loadValidEntries($raw, $log);
+
+        return $rememberedIdpCookie->find($entries, $serviceProviderEntityId, $candidateIdpEntityIds);
+    }
+
     protected function _showWayf(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request, array $candidateIdpEntityIds)
     {
         // Post to the 'continueToIdp' service
@@ -482,6 +552,17 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
 
         $diContainerRuntime = $application->getDiContainerRuntime();
 
+        $isRememberChoicePerIdpEnabled = $diContainerRuntime->isRememberChoicePerIdpEnabled();
+        $rememberChoicePerIdp = RememberedIdpCookie::isEnabledForServiceProvider(
+            $container->getRememberChoice() === true,
+            $isRememberChoicePerIdpEnabled,
+            $serviceProvider
+        );
+
+        $rememberChoiceFeature = $isRememberChoicePerIdpEnabled
+            ? $rememberChoicePerIdp
+            : $container->getRememberChoice();
+
         $output = $diContainerRuntime->wayfRenderer->render(
             idpList: $idpList,
             preferredIdpEntityIds: $diContainerRuntime->getPreferredIdpEntityIds(),
@@ -491,10 +572,11 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             shouldDisplayBanner: (bool) $container->shouldDisplayDefaultIdpBannerOnWayf(),
             backLink: $container->isUiOptionReturnToSpActive(),
             cutoffPoint: $container->getCutoffPointForShowingUnfilteredIdps(),
-            rememberChoice: $container->getRememberChoice(),
+            rememberChoice: $rememberChoiceFeature,
             showRequestAccess: $serviceProvider->getCoins()->displayUnconnectedIdpsWayf(),
             requestId: $request->getId(),
             serviceProvider: $serviceProvider,
+            rememberChoicePerIdp: $rememberChoicePerIdp,
         );
         $this->_server->sendOutput($output);
     }

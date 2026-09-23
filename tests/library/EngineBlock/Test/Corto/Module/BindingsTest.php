@@ -22,8 +22,11 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Request\CorrelationIdServiceInterface;
 use OpenConext\EngineBlock\Request\CurrentCorrelationId;
+use OpenConext\EngineBlock\Service\CookieService;
 use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
 use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
+use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
+use OpenConext\EngineBlock\Service\Wayf\RememberedIdpCookie;
 use OpenConext\EngineBlockBridge\Logger\LoginLogger;
 use OpenConext\EngineBlockBundle\Bridge\DiContainerRuntime;
 use OpenConext\EngineBlockBundle\Service\WayfRenderer;
@@ -73,6 +76,15 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
             $this->createStub(FeedbackStateHelperInterface::class),
             $this->createStub(FeedbackInfoCollectorInterface::class),
             $this->createStub(LoginLogger::class),
+            new RememberedIdpCookie(
+                $this->createStub(TimeProvider::class),
+                $this->createStub(CookieService::class),
+                7776000,
+                16,
+                'engine.example.org',
+                '/',
+                true,
+            ),
         ));
 
         $this->bindings = new EngineBlock_Corto_Module_Bindings($this->proxyServer);
