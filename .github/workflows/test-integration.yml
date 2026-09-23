@@ -78,6 +78,20 @@ jobs:
                         echo -e "\nBehat tests (with headless Chrome)\n" && \
                         ./vendor/bin/behat -c ./tests/behat.yml --suite functional -vv --format pretty --strict
                     '
+            -   name: Run acceptance tests - PostgreSQL
+                if: always()
+                run: |
+                    cd docker && docker compose exec -e APP_ENV=postgres -T --user www-data engine.dev.openconext.local bash -c '
+                        echo -e "\nInstalling database fixtures...\n" && \
+                        ./bin/console doctrine:schema:drop --force --env=postgres && \
+                        ./bin/console doctrine:migrations:migrate --env=postgres --no-interaction && \
+                        echo -e "\nPreparing frontend assets\n" && \
+                        EB_THEME=skeune ./theme/scripts/prepare-test.js > /dev/null && \
+                        echo -e "\nRun the Behat tests\n" && \
+                        ./vendor/bin/behat -c ./tests/behat.yml --suite default -vv --format pretty --strict && \
+                        echo -e "\nBehat tests (with headless Chrome)\n" && \
+                        ./vendor/bin/behat -c ./tests/behat.yml --suite functional -vv --format pretty --strict
+                    '
             -   name: Run linting tests
                 if: always()
                 run: |
