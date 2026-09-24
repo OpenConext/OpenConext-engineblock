@@ -64,7 +64,7 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
         .should('have.length', 1);
     });
 
-    it.only('Shows the global site notice', () => {
+    it('Shows the global site notice', () => {
       cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?showGlobalSiteNotice=1');
       cy.beVisible(siteNoticeSelector);
     });
