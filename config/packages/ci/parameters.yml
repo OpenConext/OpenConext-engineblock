@@ -3,6 +3,8 @@ parameters:
     api.users.nameidlookup.password: secret
     feature_api_users_nameid_lookup: true
     feature_hide_bookmarkable_url: true
+    wayf.remember_choice: true
+    wayf.remember_choice_per_idp: true
     auth.log.attributes:
         uid: 'urn:mace:dir:attribute-def:uid'
     encryption_keys:

@@ -698,6 +698,19 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^SP "([^"]*)" allows remembering the WAYF choice$/
+     * @param string $spName
+     */
+    public function spAllowsRememberingTheWayfChoice($spName)
+    {
+        $sp = $this->anUnregisteredServiceProviderNamed($spName);
+
+        $this->serviceRegistryFixture
+            ->allowWayfRememberChoiceForSp($sp->entityId())
+            ->save();
+    }
+
+    /**
      * @Given /^SP "([^"]*)" scopes its request to IDP "([^"]*)"$/
      */
     public function spAuthnRequestScopedToIdp($spName, $idpName)
