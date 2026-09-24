@@ -47,6 +47,7 @@ export const handleEnter = (e) => {
       case defaultIdpClass:
         handleIdpBanner(e); break;
       case 'tooltip':
+        e.preventDefault();
         fireClickEvent(e.target); break;
     }
   });

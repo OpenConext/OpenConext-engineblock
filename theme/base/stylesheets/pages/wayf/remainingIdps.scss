@@ -108,6 +108,10 @@
 
         > .ie11__label {
             margin-left: .5rem;
+
+            > label.tooltip {
+                display: inline-block;
+            }
         }
     }
 }
