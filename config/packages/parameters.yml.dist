@@ -193,6 +193,13 @@ parameters:
     ## real destination for their deployment; it must never be left empty, as the endpoint
     ## refuses to serve requests (failing fast at construction time) when it is blank.
     wayf.reset_choice_per_idp_redirect: 'https://engine.dev.openconext.local/'
+    ## Hostnames that the /reset-remember-wayf endpoint is allowed to redirect back to via
+    ## its `redirect` query parameter (e.g. so Profile can send the user back to the page
+    ## they came from). When the query parameter is missing, malformed, or points at a host
+    ## that is not in this list, the endpoint falls back to
+    ## `wayf.reset_choice_per_idp_redirect` instead.
+    wayf.reset_choice_allowed_redirect_hosts:
+        - profile.dev.openconext.local
 
     ## Toggle the default IdP quick link banner on the WAYF.
     wayf.display_default_idp_banner_on_wayf: true
