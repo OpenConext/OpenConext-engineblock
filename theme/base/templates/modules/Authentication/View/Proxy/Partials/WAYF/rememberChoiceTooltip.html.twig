@@ -1,0 +1,19 @@
+<div class="ie11__label">
+    {% include '@theme/Default/Partials/label.html.twig' with {
+        class: 'tooltip',
+        hideText: true,
+        ariaExpandable: true,
+        id: 'rememberChoiceTooltip',
+        text: 'remember_choice_tooltip_screenreader'|trans,
+    } only %}
+</div>
+{% apply spaceless %}
+<div
+    aria-hidden="true"
+    class="tooltip__value"
+    data-for="rememberChoiceTooltip"
+    tabindex="-1"
+>
+    {{ 'remember_choice_per_idp_tooltip'|trans({ '%duration%': rememberChoiceDuration })|raw }}
+</div>
+{% endapply %}

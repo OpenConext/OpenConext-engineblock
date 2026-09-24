@@ -82,5 +82,6 @@ export const wayfCallbackAfterLoad = () => {
   wayfKeyboardBehaviour();
   mouseBehaviour();
   searchBehaviour();
+  addTooltipAndModalAriaHandlers(tooltipsAndModalLabels);
+  toggleTooltipPressedStates();
 };
-

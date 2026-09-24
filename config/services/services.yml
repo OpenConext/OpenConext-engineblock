@@ -4,9 +4,15 @@ services:
 
     OpenConext\EngineBlock\Service\Wayf\IdpSplitter:
 
+    OpenConext\EngineBlockBundle\Service\RememberChoiceDurationFormatter:
+        autowire: true
+        arguments:
+            $lifetimeInSeconds: '%wayf.remember_choice_per_idp_lifetime%'
+
     OpenConext\EngineBlockBundle\Service\WayfViewModelFactory:
         arguments:
             $wayfExtension: '@OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Wayf'
+            $durationFormatter: '@OpenConext\EngineBlockBundle\Service\RememberChoiceDurationFormatter'
 
     OpenConext\EngineBlockBundle\Service\WayfRenderer:
         autowire: true
