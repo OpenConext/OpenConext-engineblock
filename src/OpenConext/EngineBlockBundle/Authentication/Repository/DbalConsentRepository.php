@@ -275,49 +275,30 @@ final class DbalConsentRepository extends ServiceEntityRepository implements Con
      * See Consent.php for more information on the deleted_at column. However,
      * since (by legacy?) consent has primary key on deleted_at it cannot be null
      *
-     * @throws Exception
+     * This function uses a ON CONFLICT which will only work as long as there is an index on (hashed_user_id, service_id, deleted_at).
+     * Currently, there is a primary key on it. But when this is changed this function should also be updated.
      */
     private function storeConsentHashPostgres(ConsentStoreParameters $parameters): bool
     {
-        $conn = $this->connection;
-
-        $exists = $conn->fetchOne(
-            "SELECT 1
-                     FROM consent
-                     WHERE hashed_user_id = :hashedUserId
-                       AND service_id = :serviceId
-                       AND deleted_at = '1970-01-01 00:00:00'",
+        $this->connection->executeStatement(
+            "INSERT INTO consent
+                     (consent_date, hashed_user_id, service_id, attribute, attribute_stable, consent_type, deleted_at)
+                 VALUES
+                     (NOW(), :hashedUserId, :serviceId, :attribute, :attributeStable, :consentType, '1970-01-01 00:00:00')
+                 ON CONFLICT (hashed_user_id, service_id, deleted_at)
+                 DO UPDATE SET
+                     consent_date     = NOW(),
+                     attribute        = EXCLUDED.attribute,
+                     attribute_stable = EXCLUDED.attribute_stable,
+                     consent_type     = EXCLUDED.consent_type",
             [
-                'hashedUserId' => $parameters->hashedUserId,
-                'serviceId' => $parameters->serviceId,
+                'hashedUserId'    => $parameters->hashedUserId,
+                'serviceId'       => $parameters->serviceId,
+                'attribute'       => $parameters->attributeHash,
+                'attributeStable' => $parameters->attributeStableHash,
+                'consentType'     => $parameters->consentType,
             ]
         );
-        if ($exists) {
-            $conn->executeStatement(
-                'UPDATE consent SET consent_date = NOW(), attribute = :attribute, attribute_stable = :attributeStable, consent_type = :consentType
-                        WHERE hashed_user_id = :hashedUserId AND service_id = :serviceId AND deleted_at = :deletedAt',
-                [
-                    'attribute' => $parameters->attributeHash,
-                    'attributeStable' => $parameters->attributeStableHash,
-                    'consentType' => $parameters->consentType,
-                    'hashedUserId' => $exists->hashedUserId,
-                    'serviceId' => $exists->serviceId,
-                    'deletedAt' => $exists->deleted_at,
-                ]
-            );
-        } else {
-            $conn->executeStatement(
-                "INSERT INTO consent (consent_date, hashed_user_id, service_id, attribute, attribute_stable, consent_type, deleted_at)
-                        VALUES (NOW(), :hashedUserId, :serviceId, :attribute, :attributeStable, :consentType, '1970-01-01 00:00:00')",
-                [
-                    'hashedUserId' => $parameters->hashedUserId,
-                    'serviceId' => $parameters->serviceId,
-                    'attribute' => $parameters->attributeHash,
-                    'attributeStable' => $parameters->attributeStableHash,
-                    'consentType' => $parameters->consentType,
-                ]
-            );
-        }
 
         return true;
     }
