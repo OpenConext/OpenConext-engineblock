@@ -49,6 +49,7 @@ Feature:
       And I pass through the IdP
       And I give my consent
      Then the RelayState should be "test-relay-state-post-binding"
+      And The process form should not have the "return" field
       And I pass through EngineBlock
      Then the url should match "functional-testing/Dummy%20SP/acs"
 
@@ -60,6 +61,7 @@ Feature:
       And I pass through the IdP
       And I give my consent
      Then the RelayState should be "test-relay-state-redirect-binding"
+      And The process form should not have the "return" field
       And I pass through EngineBlock
      Then the url should match "functional-testing/Dummy%20SP/acs"
 
@@ -72,6 +74,7 @@ Feature:
       And I pass through the IdP
       And I give my consent
      Then the RelayState should be "test+state=with&special%20chars"
+      And The process form should not have the "return" field
       And I pass through EngineBlock
      Then the url should match "functional-testing/Dummy%20SP/acs"
 
@@ -85,6 +88,7 @@ Feature:
       And I pass through the IdP
       And I give my consent
      Then the RelayState should be "signed-request-relay-state"
+      And The process form should not have the "return" field
       And I pass through EngineBlock
      Then the url should match "functional-testing/Dummy%20SP/acs"
 
@@ -97,6 +101,7 @@ Feature:
       And I pass through the IdP
       And I give my consent
      Then no RelayState should be present
+      And The process form should not have the "return" field
       And I pass through EngineBlock
      Then the url should match "functional-testing/Dummy%20SP/acs"
 
@@ -108,6 +113,7 @@ Feature:
       And I pass through the IdP
       And I give my consent
      Then no RelayState should be present
+      And The process form should not have the "return" field
       And I pass through EngineBlock
      Then the url should match "functional-testing/Dummy%20SP/acs"
 
