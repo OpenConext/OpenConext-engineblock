@@ -44,19 +44,19 @@ interface IdentityProviderEntityInterface
      * @param $locale
      * @return string
      */
-    public function getName($locale): string;
+    public function getName(string $locale): ?string;
 
     /**
      * @param $locale
      * @return string
      */
-    public function getDescription($locale): string;
+    public function getDescription(string $locale): ?string;
 
     /**
      * @param $locale
      * @return string
      */
-    public function getDisplayName($locale): string;
+    public function getDisplayName(string $locale): ?string;
 
     /**
      * @return Logo|null
@@ -79,7 +79,7 @@ interface IdentityProviderEntityInterface
      * @param $locale
      * @return string
      */
-    public function getKeywords($locale): string;
+    public function getKeywords(string $locale): ?string;
 
     /**
      * @return X509Certificate[]
@@ -119,7 +119,7 @@ interface IdentityProviderEntityInterface
     /**
      * @return string
      */
-    public function getManipulation(): string;
+    public function getManipulation(): ?string;
 
     /**
      * @return Coins

@@ -2,6 +2,10 @@ FROM ghcr.io/openconext/openconext-basecontainers/php85-apache2-node24:latest
 
 RUN a2enmod ssl
 
+# Add postgres driver
+RUN apt-get update
+RUN apt-get install -y libpq-dev
+RUN docker-php-ext-install pdo_pgsql
 
 COPY docker/ci/app.ini /usr/local/etc/php/conf.d/
 COPY docker/ci/apache2.conf /etc/apache2/sites-enabled/

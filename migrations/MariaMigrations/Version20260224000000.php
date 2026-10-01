@@ -40,11 +40,17 @@ final class Version20260224000000 extends AbstractEngineBlockMigration
         return 'Patch migration: Removes the deleted_at index from the consent table. Skips if the index does not exist.';
     }
 
-    public function preUp(Schema $schema): void
+    public function up(Schema $schema): void
     {
-        parent::preUp($schema);
+        $indexes = $this->connection
+            ->createSchemaManager()
+            ->introspectTableIndexes(
+                new OptionallyQualifiedName(
+                    Identifier::unquoted('consent'),
+                    null
+                )
+            );
 
-        $indexes = $this->connection->createSchemaManager()->introspectTableIndexes(new OptionallyQualifiedName(Identifier::unquoted('consent'), null));
         $deletedAtIndex = array_filter(
             $indexes,
             static fn(Index $index) => $index->getObjectName()->equals(
@@ -53,14 +59,11 @@ final class Version20260224000000 extends AbstractEngineBlockMigration
             )
         );
 
-        $this->skipIf(
-            count($deletedAtIndex) === 0,
-            'Index deleted_at on consent table does not exist. Skipping.'
-        );
-    }
+        // Index deleted_at on consent table does not exist. Skipping
+        if (count($deletedAtIndex) === 0) {
+            return;
+        }
 
-    public function up(Schema $schema): void
-    {
         $this->addSql('ALTER TABLE `consent` DROP INDEX `deleted_at`');
     }
 

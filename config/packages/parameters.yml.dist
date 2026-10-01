@@ -126,6 +126,8 @@ parameters:
     ##########################################################################################
     ## DATABASE SETTINGS
     ##########################################################################################
+    database.driver: pdo_mysql
+    database.server_version: '10.11.13-MariaDB'
     database.host: mariadb
     database.port: '3306'
     database.user: ebrw

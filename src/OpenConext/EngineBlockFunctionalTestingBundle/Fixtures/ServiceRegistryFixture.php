@@ -123,7 +123,7 @@ class ServiceRegistryFixture
     {
         $queryBuilder = $this->entityManager->getConnection()->createQueryBuilder();
         $queryBuilder
-            ->delete('sso_provider_roles_eb5')
+            ->delete(AbstractRole::TABLE_NAME)
             ->executeStatement();
 
         return $this;
@@ -133,7 +133,7 @@ class ServiceRegistryFixture
     {
         $queryBuilder = $this->entityManager->getConnection()->createQueryBuilder();
         $queryBuilder
-            ->delete('sso_provider_roles_eb5')
+            ->delete(AbstractRole::TABLE_NAME)
             ->where('roles.entity_id = :entityId')
             ->andWhere('roles.type = :type')
             ->setParameter('entityId', $entityId)
@@ -163,11 +163,12 @@ class ServiceRegistryFixture
 
         // The repository does not allow us to retrieve all SP's for good reason. In functional testing mode the total
         // number of SP's should always be limited.
+        $tableName = AbstractRole::TABLE_NAME;
         $idpEntityIDQuery = <<<QUERY
-        SELECT `entity_id`
-        FROM `sso_provider_roles_eb5`
-        WHERE `type` = 'idp'
-QUERY;
+            SELECT entity_id
+            FROM $tableName
+            WHERE type = 'idp'
+        QUERY;
         $query = $this->entityManager->getConnection()->prepare($idpEntityIDQuery);
         assert($query instanceof Statement);
         $result = $query->executeQuery();
@@ -200,11 +201,12 @@ QUERY;
 
         // The repository does not allow us to retrieve all SP's for good reason. In functional testing mode the total
         // number of SP's should always be limited.
+        $tableName = AbstractRole::TABLE_NAME;
         $spEntityIDQuery = <<<QUERY
-        SELECT `entity_id`
-        FROM `sso_provider_roles_eb5`
-        WHERE `type` = 'sp'
-QUERY;
+            SELECT entity_id
+            FROM $tableName
+            WHERE type = 'sp'
+        QUERY;
         $query = $this->entityManager->getConnection()->prepare($spEntityIDQuery);
         assert($query instanceof Statement);
         $result = $query->executeQuery();

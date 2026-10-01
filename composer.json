@@ -112,7 +112,7 @@
         },
         "psr-4": {
             "OpenConext\\": "src/OpenConext",
-            "OpenConext\\EngineBlock\\Doctrine\\Migrations\\": "migrations/DoctrineMigrations"
+            "OpenConext\\EngineBlock\\Doctrine\\Migrations\\": "migrations/MariaMigrations"
         },
         "classmap": [
             "src/Kernel.php"

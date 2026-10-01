@@ -3,16 +3,16 @@ doctrine:
         default_connection: engineblock_test
         connections:
             engineblock:
-                driver:   pdo_mysql         # This must be PDO until all database interaction runs through doctrine
-                server_version: '10.6.0-MariaDB'
+                driver:   "%database.test.driver%"
+                server_version: "%database.test.server_version%"
                 dbname:   "%database.dbname%"
                 host:     "%database.test.host%"
-                port:     "%database.port%"
-                user:     "%database.user%"
+                port: "%database.port%"
+                user: "%database.user%"
                 password: "%database.password%"
             engineblock_test:
-                driver:   pdo_mysql         # This must be PDO until all database interaction runs through doctrine
-                server_version: '10.6.0-MariaDB'
+                driver:   "%database.test.driver%"
+                server_version: "%database.test.server_version%"
                 dbname:   "%database.test.dbname%"
                 host:     "%database.test.host%"
                 port:     "%database.test.port%"
