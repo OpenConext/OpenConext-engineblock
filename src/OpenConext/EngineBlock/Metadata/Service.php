@@ -24,23 +24,20 @@ namespace OpenConext\EngineBlock\Metadata;
  */
 class Service
 {
-    /**
-     * @var string
-     */
-    public $binding;
+    public ?string $binding;
+    public ?string $location;
 
-    /**
-     * @var string
-     */
-    public $location;
-
-    /**
-     * @param string $location
-     * @param string $binding
-     */
-    public function __construct($location, $binding)
+    public function __construct(?string $location, ?string $binding)
     {
         $this->binding  = $binding;
         $this->location = $location;
+    }
+
+    /**
+     * A convenience static constructor for the Service.
+     */
+    public static function fromArray(array $service): Service
+    {
+        return new self($service["location"], $service["binding"]);
     }
 }

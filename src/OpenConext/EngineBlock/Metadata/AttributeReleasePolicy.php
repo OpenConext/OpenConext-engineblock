@@ -23,7 +23,7 @@ use function array_key_exists;
 
 class AttributeReleasePolicy
 {
-    const WILDCARD_CHARACTER = '*';
+    const string WILDCARD_CHARACTER = '*';
 
     /**
      * Holds attribute rule values with optional 'source'.
@@ -40,11 +40,8 @@ class AttributeReleasePolicy
      *
      * @var array
      */
-    private $attributeRules;
+    private array $attributeRules;
 
-    /**
-     * @param array $attributeRules
-     */
     public function __construct(array $attributeRules)
     {
         foreach ($attributeRules as $key => $rules) {
@@ -67,11 +64,9 @@ class AttributeReleasePolicy
     }
 
     /**
-     * @param string $key
-     * @param mixed $rule
      * @throws InvalidArgumentException
      */
-    private function validateRule($key, $rule)
+    private function validateRule(string $key, mixed $rule): void
     {
         if (is_array($rule)) {
             if (!isset($rule['value'])) {
@@ -110,8 +105,6 @@ class AttributeReleasePolicy
      * Return all attribute rules eligible for attribute aggregation.
      *
      * A rule is eligible for attribute aggregation if it contains a source.
-     *
-     * @return array
      */
     public function getRulesWithSourceSpecification(): array
     {
@@ -160,10 +153,7 @@ class AttributeReleasePolicy
         return null;
     }
 
-    /**
-     * @return array
-     */
-    public function getAttributeNames()
+    public function getAttributeNames(): array
     {
         return array_keys($this->attributeRules);
     }
@@ -172,7 +162,7 @@ class AttributeReleasePolicy
      * @param $attributeName
      * @return bool
      */
-    public function hasAttribute($attributeName)
+    public function hasAttribute($attributeName): bool
     {
         return isset($this->attributeRules[$attributeName]);
     }
@@ -182,7 +172,7 @@ class AttributeReleasePolicy
      * @param $attributeValue
      * @return bool
      */
-    public function isAllowed($attributeName, $attributeValue)
+    public function isAllowed($attributeName, $attributeValue): bool
     {
         if (!$this->hasAttribute($attributeName)) {
             return false;
@@ -224,7 +214,7 @@ class AttributeReleasePolicy
      * @param $rule
      * @return string
      */
-    private function getRuleValue($rule)
+    private function getRuleValue($rule): string
     {
         if (isset($rule['value'])) {
             return (string) $rule['value'];
@@ -237,16 +227,16 @@ class AttributeReleasePolicy
      * Loads the motivation text for an attribute.
      *
      * @param $attributeName
-     * @return string
+     * @return ?string
      */
-    public function getMotivation($attributeName)
+    public function getMotivation($attributeName): ?string
     {
         if (!$this->hasAttribute($attributeName)) {
-            return;
+            return null;
         }
 
         if (empty($this->attributeRules[$attributeName][0]['motivation'])) {
-            return;
+            return null;
         }
 
         return $this->attributeRules[$attributeName][0]['motivation'];
@@ -258,7 +248,7 @@ class AttributeReleasePolicy
      * @param $attributeName
      * @return string
      */
-    public function getSource($attributeName)
+    public function getSource($attributeName): string
     {
         if ($this->hasAttribute($attributeName) && isset($this->attributeRules[$attributeName][0]['source'])) {
             return $this->attributeRules[$attributeName][0]['source'];
@@ -266,11 +256,16 @@ class AttributeReleasePolicy
         return 'idp';
     }
 
-    /**
-     * @return array
-     */
-    public function getAttributeRules()
+    public function getAttributeRules(): array
     {
         return $this->attributeRules;
+    }
+
+    /**
+     * A convenience static constructor for the AttributeReleasePolicy.
+     */
+    public static function fromArray(array $attributeReleasePolicy): AttributeReleasePolicy
+    {
+        return new self($attributeReleasePolicy);
     }
 }

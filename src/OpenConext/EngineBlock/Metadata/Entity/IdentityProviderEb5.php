@@ -34,12 +34,13 @@ use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\StepupConnections;
 use OpenConext\EngineBlockBundle\Doctrine\Type\LegacyJsonType;
-use OpenConext\EngineBlockBundle\Doctrine\Type\ServiceArrayType;
-use OpenConext\EngineBlockBundle\Doctrine\Type\ShibMdScopeArrayType;
+use OpenConext\EngineBlockBundle\Doctrine\Type\SerializedArrayType;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 
 /**
+ * @Deprecated This entity is deprecated and will be removed in the future. Use the new IdentityProvider entity instead.
+ *
  * @package OpenConext\EngineBlock\Metadata\Entity
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -49,18 +50,33 @@ use SAML2\Constants;
  * @see \OpenConext\EngineBlock\Factory\Factory\IdentityProviderFactory
  */
 #[ORM\Entity]
-class IdentityProvider extends AbstractRole
+class IdentityProviderEb5 extends AbstractRoleEb5
 {
+    const GUEST_QUALIFIER_ALL = 'All';
+    const GUEST_QUALIFIER_SOME = 'Some';
+    const GUEST_QUALIFIER_NONE = 'None';
+
+    /**
+     * In all-caps to indicate that though the language doesn't allow it, this should be an array constant.
+     *
+     * @var string[]
+     */
+    public static $GUEST_QUALIFIERS = array(
+        self::GUEST_QUALIFIER_ALL,
+        self::GUEST_QUALIFIER_SOME,
+        self::GUEST_QUALIFIER_NONE
+    );
+
     /**
      * @var bool
      */
-    #[ORM\Column(name: 'enabled_in_wayf', type: Types::BOOLEAN, nullable: true)]
+    #[ORM\Column(name: 'enabled_in_wayf', type: Types::BOOLEAN)]
     public ?bool $enabledInWayf = true;
 
     /**
      * @var Service[]
      */
-    #[ORM\Column(name: 'single_sign_on_services', type: ServiceArrayType::NAME, length: 65535, nullable: true)]
+    #[ORM\Column(name: 'single_sign_on_services', type: SerializedArrayType::NAME, length: 65535)]
     public $singleSignOnServices = array();
 
     /**
@@ -77,19 +93,19 @@ class IdentityProvider extends AbstractRole
      * with green/blue deployment strategies.
      *
      */
-    #[ORM\Column(name: 'consent_settings', type: LegacyJsonType::NAME, nullable: true)]
+    #[ORM\Column(name: 'consent_settings', type: LegacyJsonType::NAME)]
     private $consentSettings;
 
     /**
      * @var ShibMdScope[]
      */
-    #[ORM\Column(name: 'shib_md_scopes', type: ShibMdScopeArrayType::NAME, length: 65535, nullable: true)]
+    #[ORM\Column(name: 'shib_md_scopes', type: SerializedArrayType::NAME, length: 65535)]
     public $shibMdScopes = array();
 
     /**
      * @var array<int, Discovery>
      */
-    #[ORM\Column(name: 'idp_discoveries', type: LegacyJsonType::NAME, nullable: true)]
+    #[ORM\Column(name: 'idp_discoveries', type: LegacyJsonType::NAME)]
     private $discoveries;
 
     /**
@@ -107,20 +123,20 @@ class IdentityProvider extends AbstractRole
         bool $additionalLogging = false,
         array $certificates = array(),
         array $contactPersons = array(),
-        ?string $descriptionEn = null,
-        ?string $descriptionNl = null,
-        ?string $descriptionPt = null,
+        string $descriptionEn = '',
+        string $descriptionNl = '',
+        string $descriptionPt = '',
         bool $disableScoping = false,
-        ?string $displayNameEn = null,
-        ?string $displayNameNl = null,
-        ?string $displayNamePt = null,
-        ?string $keywordsEn = null,
-        ?string $keywordsNl = null,
-        ?string $keywordsPt = null,
+        string $displayNameEn = '',
+        string $displayNameNl = '',
+        string $displayNamePt = '',
+        string $keywordsEn = '',
+        string $keywordsNl = '',
+        string $keywordsPt = '',
         ?Logo $logo = null,
-        ?string $nameEn = null,
-        ?string $nameNl = null,
-        ?string $namePt = null,
+        string $nameEn = '',
+        string $nameNl = '',
+        string $namePt = '',
         ?string $nameIdFormat = null,
         array $supportedNameIdFormats = array(
             Constants::NAMEID_TRANSIENT,
@@ -129,8 +145,9 @@ class IdentityProvider extends AbstractRole
         bool $requestsMustBeSigned = false,
         string $signatureMethod = XMLSecurityKey::RSA_SHA256,
         string $workflowState = self::WORKFLOW_STATE_DEFAULT,
-        ?string $manipulation = null,
+        string $manipulation = '',
         bool $enabledInWayf = true,
+        string $guestQualifier = self::GUEST_QUALIFIER_ALL,
         bool $hidden = false,
         ?string $schacHomeOrganization = null,
         array $shibMdScopes = array(),
@@ -181,6 +198,7 @@ class IdentityProvider extends AbstractRole
         $this->consentSettings = $consentSettings;
 
         $this->coins = Coins::createForIdentityProvider(
+            $guestQualifier,
             $schacHomeOrganization,
             $hidden,
             $stepupConnections,

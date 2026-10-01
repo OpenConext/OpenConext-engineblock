@@ -20,19 +20,26 @@ namespace OpenConext\EngineBlock\Metadata;
 
 class Organization
 {
-    public $name;
-    public $displayName;
-    public $url;
+    public ?string $name;
+    public ?string $displayName;
+    public ?string $url;
+
+    public function __construct(?string $name, ?string $displayName, ?string $url)
+    {
+        $this->name = $name;
+        $this->displayName = $displayName;
+        $this->url = $url;
+    }
 
     /**
-     * @param $name
-     * @param $displayName
-     * @param $url
+     * A convenience static constructor for the Organization.
      */
-    public function __construct($name, $displayName, $url)
+    public static function fromArray(array $organization): Organization
     {
-        $this->displayName = $displayName;
-        $this->name = $name;
-        $this->url = $url;
+        return new self(
+            $organization['name'] ?? null,
+            $organization['displayName'] ?? null,
+            $organization['url'] ?? null
+        );
     }
 }
