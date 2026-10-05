@@ -20,8 +20,11 @@ namespace Tests\OpenConext\EngineBlockBundle;
 
 use OpenConext\EngineBlock\Request\CorrelationIdServiceInterface;
 use OpenConext\EngineBlock\Request\CurrentCorrelationId;
+use OpenConext\EngineBlock\Service\CookieService;
 use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
 use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
+use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
+use OpenConext\EngineBlock\Service\Wayf\RememberedIdpCookie;
 use OpenConext\EngineBlockBridge\Logger\LoginLogger;
 use OpenConext\EngineBlockBundle\Bridge\DiContainerRuntime;
 use OpenConext\EngineBlockBundle\Service\WayfRenderer;
@@ -46,11 +49,37 @@ class DiContainerRuntimeTest extends TestCase
         $this->assertSame($entityIds, $runtime->getPreferredIdpEntityIds());
     }
 
+    public function testExposesRememberedIdpCookie(): void
+    {
+        $rememberedIdpCookie = $this->rememberedIdpCookieStub();
+
+        $runtime = $this->runtimeFactory(rememberedIdpCookie: $rememberedIdpCookie);
+
+        $this->assertSame($rememberedIdpCookie, $runtime->rememberedIdpCookie);
+    }
+
+    public function testIsRememberChoicePerIdpEnabledDefaultsToFalse(): void
+    {
+        $runtime = $this->runtimeFactory();
+
+        $this->assertFalse($runtime->isRememberChoicePerIdpEnabled());
+    }
+
+    public function testIsRememberChoicePerIdpEnabledReturnsConfiguredValue(): void
+    {
+        $runtime = $this->runtimeFactory(rememberChoicePerIdp: true);
+
+        $this->assertTrue($runtime->isRememberChoicePerIdpEnabled());
+    }
+
     /**
      * @param array<string> $entityIds
      */
-    private function runtimeFactory(array $entityIds): DiContainerRuntime
-    {
+    private function runtimeFactory(
+        array $entityIds = [],
+        ?RememberedIdpCookie $rememberedIdpCookie = null,
+        bool $rememberChoicePerIdp = false,
+    ): DiContainerRuntime {
         return new DiContainerRuntime(
             $this->createStub(Environment::class),
             $this->createStub(WayfRenderer::class),
@@ -59,7 +88,22 @@ class DiContainerRuntimeTest extends TestCase
             $this->createStub(FeedbackStateHelperInterface::class),
             $this->createStub(FeedbackInfoCollectorInterface::class),
             $this->createStub(LoginLogger::class),
+            $rememberedIdpCookie ?? $this->rememberedIdpCookieStub(),
+            $rememberChoicePerIdp,
             $entityIds,
+        );
+    }
+
+    private function rememberedIdpCookieStub(): RememberedIdpCookie
+    {
+        return new RememberedIdpCookie(
+            $this->createStub(TimeProvider::class),
+            $this->createStub(CookieService::class),
+            7776000,
+            16,
+            'engine.example.org',
+            '/',
+            true,
         );
     }
 }

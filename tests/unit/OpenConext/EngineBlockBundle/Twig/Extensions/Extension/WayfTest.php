@@ -235,6 +235,7 @@ class WayfTest extends TestCase
         $this->assertEquals(5, $config['cutoffPointForShowingUnfilteredIdps']);
         $this->assertEquals(Wayf::REMEMBER_CHOICE_COOKIE_NAME, $config['rememberChoiceCookieName']);
         $this->assertTrue($config['rememberChoiceFeature']);
+        $this->assertFalse($config['rememberChoicePerIdp']);
         $this->assertFalse($config['hideBookmarkableUrl']);
         $this->assertEquals('More results', $config['messages']['moreIdpResults']);
         $this->assertEquals('Request Access', $config['messages']['requestAccess']);
@@ -252,6 +253,34 @@ class WayfTest extends TestCase
 
         $config = json_decode($jsonConfig, true);
         $this->assertEmpty($config['unconnectedIdps']);
+    }
+
+    public function testGetWayfJsonConfigIncludesRememberChoicePerIdpWhenEnabled()
+    {
+        $connectedIdps = $this->createMock(ConnectedIdps::class);
+        $connectedIdps->method('getFormattedPreviousSelectionList')->willReturn([]);
+        $connectedIdps->method('getConnectedIdps')->willReturn([]);
+        $connectedIdps->method('getFormattedIdpList')->willReturn([]);
+
+        $serviceProvider = $this->createMock(ServiceProvider::class);
+        $serviceProvider->entityId = 'https://sp.example.org';
+        $serviceProvider->method('getDisplayName')->willReturn('Test SP');
+
+        $this->translator->method('trans')->willReturn('');
+
+        $jsonConfig = $this->wayf->getWayfJsonConfig(
+            $connectedIdps,
+            $serviceProvider,
+            'en',
+            false,
+            true,
+            5,
+            true
+        );
+
+        $config = json_decode($jsonConfig, true);
+        $this->assertTrue($config['rememberChoiceFeature']);
+        $this->assertTrue($config['rememberChoicePerIdp']);
     }
 
     public function testGetWayfJsonConfigIncludesHideBookmarkableUrlWhenFlagEnabled()

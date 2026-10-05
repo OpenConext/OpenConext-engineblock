@@ -46,6 +46,8 @@ use stdClass;
  */
 class PushMetadataAssembler implements MetadataAssemblerInterface
 {
+    public const COIN_WAYF_REMEMBER_CHOICE = 'wayf_remember_choice';
+
     /**
      * @var ValidatorInterface
      */
@@ -220,6 +222,10 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->setPathFromObjectBool([$connection, 'metadata:coin:transparant_issuer'], 'isTransparentIssuer');
         $properties += $this->setPathFromObjectBool([$connection, 'metadata:coin:trusted_proxy'], 'isTrustedProxy');
         $properties += $this->setPathFromObjectBool([$connection, 'metadata:coin:display_unconnected_idps_wayf'], 'displayUnconnectedIdpsWayf');
+        $properties += $this->setPathFromConnectionStrictBool(
+            [$connection, 'metadata:coin:' . self::COIN_WAYF_REMEMBER_CHOICE],
+            'wayfRememberChoice'
+        );
 
         $properties += $this->assembleIsConsentRequired($connection);
 
@@ -456,6 +462,15 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
             return array($to => null);
         }
         return array($to => (bool)$reference);
+    }
+
+    private function setPathFromConnectionStrictBool(array $from, string $to): array
+    {
+        $reference = $this->getValueFromPath($from);
+        if (is_null($reference)) {
+            return array($to => null);
+        }
+        return array($to => $reference === true || $reference === '1');
     }
 
     private function getValueFromPath(array $from)

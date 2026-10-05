@@ -23,6 +23,7 @@ use OpenConext\EngineBlock\Request\CorrelationIdService;
 use OpenConext\EngineBlock\Request\CurrentCorrelationId;
 use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
 use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
+use OpenConext\EngineBlock\Service\Wayf\RememberedIdpCookie;
 use OpenConext\EngineBlockBridge\Logger\LoginLogger;
 use OpenConext\EngineBlockBundle\Service\WayfRenderer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -33,6 +34,9 @@ class EngineBlockBootstrapper implements EventSubscriberInterface
 {
     private readonly DiContainerRuntime $diContainerRuntime;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
     public function __construct(
         Environment $twig,
         WayfRenderer $wayfRenderer,
@@ -41,6 +45,8 @@ class EngineBlockBootstrapper implements EventSubscriberInterface
         FeedbackStateHelperInterface $feedbackStateHelper,
         FeedbackInfoCollectorInterface $feedbackInfoCollector,
         LoginLogger $loginLogger,
+        RememberedIdpCookie $rememberedIdpCookie,
+        bool $rememberChoicePerIdp = false,
         array $preferredIdpEntityIds = [],
     ) {
         $this->diContainerRuntime = new DiContainerRuntime(
@@ -51,6 +57,8 @@ class EngineBlockBootstrapper implements EventSubscriberInterface
             $feedbackStateHelper,
             $feedbackInfoCollector,
             $loginLogger,
+            $rememberedIdpCookie,
+            $rememberChoicePerIdp,
             $preferredIdpEntityIds,
         );
     }

@@ -160,7 +160,9 @@ class PushMetadataAssemblerTest extends TestCase
 
         switch ($type) {
             case 'bool':
-                $values = $this->validCoinValuesBool();
+                $values = $coinName === PushMetadataAssembler::COIN_WAYF_REMEMBER_CHOICE
+                    ? $this->validCoinValuesBoolStrictTrueOnly()
+                    : $this->validCoinValuesBool();
                 break;
             case 'bool-forceAuthn':
                 $values = $this->validCoinValuesBoolForceAuthn();
@@ -192,6 +194,40 @@ class PushMetadataAssemblerTest extends TestCase
                 $roles[0]->getCoins()->{$parameter}(),
                 "Invalid coin conversion for {$roleType}:{$coinName}($type) expected '{$assertion[1]}' but encountered '{$roles[0]->getCoins()->{$parameter}()}'"
             );
+        }
+    }
+
+    public function test_it_disables_wayf_remember_choice_when_manage_coin_is_absent(): void
+    {
+        $connection = '{
+            "2d96e27a-76cf-4ca2-ac70-ece5d4c49523": {
+                "allow_all_entities": true,
+                "allowed_connections": [],
+                "metadata": {
+                    "coin": {
+                        "stepup": {}
+                    }
+                },
+                "name": "https:\/\/role/sp",
+                "state": "prodaccepted",
+                "type": "saml20-sp"
+            }
+        }';
+
+        $roles = $this->assembler->assemble(json_decode($connection));
+
+        $this->assertInstanceOf(ServiceProvider::class, $roles[0]);
+        $this->assertFalse($roles[0]->getCoins()->wayfRememberChoice());
+
+        $connection = json_decode($connection);
+
+        foreach (['false', '-1'] as $malformedTruthyString) {
+            $connection->{"2d96e27a-76cf-4ca2-ac70-ece5d4c49523"}->metadata->coin->wayf_remember_choice = $malformedTruthyString;
+
+            $roles = $this->assembler->assemble($connection);
+
+            $this->assertInstanceOf(ServiceProvider::class, $roles[0]);
+            $this->assertFalse($roles[0]->getCoins()->wayfRememberChoice());
         }
     }
 
@@ -381,6 +417,7 @@ class PushMetadataAssemblerTest extends TestCase
             ['transparant_issuer', 'saml20-sp', 'isTransparentIssuer', 'bool'],
             ['trusted_proxy', 'saml20-sp', 'isTrustedProxy', 'bool'],
             ['display_unconnected_idps_wayf', 'saml20-sp', 'displayUnconnectedIdpsWayf', 'bool'],
+            ['wayf_remember_choice', 'saml20-sp', 'wayfRememberChoice', 'bool'],
             ['eula', 'saml20-sp', 'termsOfServiceUrl', 'string'],
             ['do_not_add_attribute_aliases', 'saml20-sp', 'skipDenormalization', 'bool'],
             ['policy_enforcement_decision_required', 'saml20-sp', 'policyEnforcementDecisionRequired', 'bool'],
@@ -414,6 +451,19 @@ class PushMetadataAssemblerTest extends TestCase
             ["1", true],
             ["0", false],
             ["-1", true],
+        ];
+    }
+
+    private function validCoinValuesBoolStrictTrueOnly()
+    {
+        return [
+            [null, false],
+            [true, true],
+            [false, false],
+            ["1", true],
+            ["0", false],
+            ["false", false],
+            ["-1", false],
         ];
     }
 

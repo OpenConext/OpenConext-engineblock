@@ -30,7 +30,7 @@ export const submitForm = (e) => {
   }
   
   const entityId = element.getAttribute('data-entityid');
-  rememberChoice(entityId);
+  rememberChoice(element, entityId);
 
   selectAndSubmit(element);
 };

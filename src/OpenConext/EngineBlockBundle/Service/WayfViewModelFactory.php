@@ -49,6 +49,7 @@ class WayfViewModelFactory
         bool $showRequestAccess,
         string $requestId,
         ServiceProvider $serviceProvider,
+        bool $rememberChoicePerIdp = false,
     ): WayfViewModel {
         return new WayfViewModel(
             action: $action,
@@ -68,6 +69,7 @@ class WayfViewModelFactory
             idpList: $idpList,
             regularIdpList: $regularIdpList,
             preferredIdpList: $preferredIdpList,
+            rememberChoicePerIdp: $rememberChoicePerIdp,
         );
     }
 }
