@@ -231,7 +231,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         // Auto-select IdP when 'wayf.rememberChoice' feature is enabled and is allowed for the current request,
         // and the per-SP remembered-choice feature is not enabled.
         $legacyRememberChoiceAllowed = $container->getRememberChoice() === true
-            && $runtime->isRememberChoicePerIdpEnabled() === false
+            && $runtime->rememberChoicePerIdp === false
             && !$request->getForceAuthn()
             && !$request->isDebugRequest();
 
@@ -486,7 +486,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
 
         $notEligibleForRememberedIdp = !RememberedIdpCookie::isEnabledForServiceProvider(
             $container->getRememberChoice() === true,
-            $runtime->isRememberChoicePerIdpEnabled(),
+            $runtime->rememberChoicePerIdp,
             $sp
         ) || $request->getForceAuthn() || $request->isDebugRequest();
 
@@ -553,7 +553,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
 
         $diContainerRuntime = $application->getDiContainerRuntime();
 
-        $isRememberChoicePerIdpEnabled = $diContainerRuntime->isRememberChoicePerIdpEnabled();
+        $isRememberChoicePerIdpEnabled = $diContainerRuntime->rememberChoicePerIdp;
         $rememberChoicePerIdp = RememberedIdpCookie::isEnabledForServiceProvider(
             $container->getRememberChoice() === true,
             $isRememberChoicePerIdpEnabled,

@@ -141,7 +141,7 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
 
         if (!RememberedIdpCookie::isEnabledForServiceProvider(
             $container->getRememberChoice() === true,
-            $runtime->isRememberChoicePerIdpEnabled(),
+            $runtime->rememberChoicePerIdp,
             $sp
         )) {
             return;

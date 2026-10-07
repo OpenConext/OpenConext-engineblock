@@ -62,14 +62,14 @@ class DiContainerRuntimeTest extends TestCase
     {
         $runtime = $this->runtimeFactory();
 
-        $this->assertFalse($runtime->isRememberChoicePerIdpEnabled());
+        $this->assertFalse($runtime->rememberChoicePerIdp);
     }
 
     public function testIsRememberChoicePerIdpEnabledReturnsConfiguredValue(): void
     {
         $runtime = $this->runtimeFactory(rememberChoicePerIdp: true);
 
-        $this->assertTrue($runtime->isRememberChoicePerIdpEnabled());
+        $this->assertTrue($runtime->rememberChoicePerIdp);
     }
 
     /**
