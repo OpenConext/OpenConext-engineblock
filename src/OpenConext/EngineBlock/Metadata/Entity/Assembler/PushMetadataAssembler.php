@@ -46,8 +46,6 @@ use stdClass;
  */
 class PushMetadataAssembler implements MetadataAssemblerInterface
 {
-    public const COIN_WAYF_REMEMBER_CHOICE = 'wayf_remember_choice';
-
     /**
      * @var ValidatorInterface
      */
@@ -223,7 +221,7 @@ class PushMetadataAssembler implements MetadataAssemblerInterface
         $properties += $this->setPathFromObjectBool([$connection, 'metadata:coin:trusted_proxy'], 'isTrustedProxy');
         $properties += $this->setPathFromObjectBool([$connection, 'metadata:coin:display_unconnected_idps_wayf'], 'displayUnconnectedIdpsWayf');
         $properties += $this->setPathFromConnectionStrictBool(
-            [$connection, 'metadata:coin:' . self::COIN_WAYF_REMEMBER_CHOICE],
+            [$connection, 'metadata:coin:wayf_remember_choice'],
             'wayfRememberChoice'
         );
 
