@@ -28,6 +28,9 @@ use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 final class RememberedIdpCookie
 {
     public const NAME = 'rememberedidps';
