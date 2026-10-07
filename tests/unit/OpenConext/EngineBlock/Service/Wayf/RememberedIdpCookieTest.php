@@ -121,6 +121,14 @@ class RememberedIdpCookieTest extends TestCase
             'missing expires' => [self::rawJson('{"https://sp.example.org":{"idp":"https://idp.example.org"}}')],
             'non-integer expires' => [self::rawJson('{"https://sp.example.org":{"idp":"https://idp.example.org","expires":"1700003600"}}')],
             'extra entry key' => [self::rawJson('{"https://sp.example.org":{"idp":"https://idp.example.org","expires":1700003600,"extra":"unexpected"}}')],
+            'oversized decompressed payload exceeds the bound' => [
+                base64_encode((string) gzdeflate((string) json_encode([
+                    'https://sp.example.org' => [
+                        'idp' => 'https://idp.example.org/' . str_repeat('a', 100000),
+                        'expires' => 1700003600,
+                    ],
+                ]))),
+            ],
         ];
     }
 
