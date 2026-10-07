@@ -15,7 +15,7 @@ services:
         autowire: true
         autoconfigure: true
         arguments:
-            $rememberChoicePerIdp: '%wayf.remember_choice_per_idp%'
+            $rememberChoicePerIdp: '%feature_enable_wayf_remember_choice_per_idp%'
             $preferredIdpEntityIds: '%wayf.preferred_idp_entity_ids%'
         tags:
             - { name: kernel.event_subscriber }
