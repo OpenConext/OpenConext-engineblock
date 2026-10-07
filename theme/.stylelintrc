@@ -1,6 +1,7 @@
 {
   "extends": "stylelint-config-recommended",
   "rules": {
+    "at-rule-prelude-no-invalid": null,
     "function-no-unknown": [
       true,
       {

@@ -13,6 +13,11 @@ on the EngineBlock wiki.
 
 ## Unreleased
 
+Updated:
+
+* Updated Composer and Yarn (theme and Cypress) dependencies within their current version constraints to resolve open Dependabot alerts. Major version bumps are not included.
+* The `guzzlehttp/guzzle` (7.15) and `guzzlehttp/psr7` (2.13) security fixes can not be installed yet: `simplesamlphp/assert` 1.9.1 pins `guzzlehttp/psr7` to `~2.8.0`, and `simplesamlphp/assert` 2.x/3.x conflicts with `webmozart/assert` ^1 required by `simplesamlphp/saml2` 4.x. Composer must be run with `COMPOSER_NO_SECURITY_BLOCKING=1` until this is resolved. (#2121)
+
 Removed:
 
 * Removed the guest_qualifier / isMemberOf guest-status feature (`AddGuestStatus`). Unused and confirmed safe to remove. `FilterReservedMemberOfValues` is kept, as it also guards against IdPs spoofing reserved `urn:collab:org` group memberships. (#1294)
