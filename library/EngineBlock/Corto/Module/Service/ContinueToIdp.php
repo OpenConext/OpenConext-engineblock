@@ -133,8 +133,7 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp implements EngineBlock_Cort
 
         $rememberedIdpCookie = $runtime->rememberedIdpCookie;
 
-        $raw = $container->getSymfonyRequest()->cookies->get(RememberedIdpCookie::NAME);
-        $entries = $rememberedIdpCookie->loadValidEntries($raw, $log);
+        $entries = $rememberedIdpCookie->loadValidEntriesFromRequest($container->getSymfonyRequest(), $log);
 
         if (!$this->_isRememberChoiceChecked($rememberChoice)) {
             return;

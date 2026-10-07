@@ -28,6 +28,7 @@ use Phake;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class RememberedIdpCookieTest extends TestCase
 {
@@ -370,6 +371,30 @@ class RememberedIdpCookieTest extends TestCase
         $this->assertSame($entries, $result);
         Phake::verifyNoInteraction($cookieService);
         Phake::verifyNoInteraction($logger);
+    }
+
+    public function testLoadValidEntriesFromRequestReadsCookieFromRequest(): void
+    {
+        $entries = [
+            'https://sp.example.org' => ['idp' => 'https://idp.example.org', 'expires' => self::NOW + 1],
+        ];
+        $request = Request::create('/');
+        $request->cookies->set(RememberedIdpCookie::NAME, self::rawEntries($entries));
+        $logger = Phake::mock(LoggerInterface::class);
+
+        $result = $this->buildCookie()->loadValidEntriesFromRequest($request, $logger);
+
+        $this->assertSame($entries, $result);
+    }
+
+    public function testLoadValidEntriesFromRequestHandlesMissingCookie(): void
+    {
+        $request = Request::create('/');
+        $logger = Phake::mock(LoggerInterface::class);
+
+        $result = $this->buildCookie()->loadValidEntriesFromRequest($request, $logger);
+
+        $this->assertSame([], $result);
     }
 
     private function buildCookie(?CookieService $cookieService = null, int $maxEntries = self::MAX_ENTRIES): RememberedIdpCookie

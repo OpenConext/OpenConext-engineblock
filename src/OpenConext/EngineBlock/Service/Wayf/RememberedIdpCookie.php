@@ -26,6 +26,7 @@ use OpenConext\EngineBlock\Service\CookieService;
 use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use Symfony\Component\HttpFoundation\Request;
 
 final class RememberedIdpCookie
 {
@@ -112,6 +113,14 @@ final class RememberedIdpCookie
         }
 
         return $normalized['entries'];
+    }
+
+    /**
+     * @return array<string, array{idp: string, expires: int}>
+     */
+    public function loadValidEntriesFromRequest(Request $request, LoggerInterface $logger): array
+    {
+        return $this->loadValidEntries($request->cookies->get(self::NAME), $logger);
     }
 
     /** @param array<string, array{idp: string, expires: int}> $entries */
