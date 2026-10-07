@@ -31,6 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
 final class RememberedIdpCookie
 {
     public const NAME = 'rememberedidps';
+    private const int MAX_INFLATED_BYTES = 65536;
 
     public static function isEnabledForServiceProvider(
         bool $globalRememberChoiceEnabled,
@@ -241,7 +242,7 @@ final class RememberedIdpCookie
     {
         set_error_handler(static fn(): bool => true);
         try {
-            $inflated = gzinflate($decoded);
+            $inflated = gzinflate($decoded, self::MAX_INFLATED_BYTES);
         } finally {
             restore_error_handler();
         }
