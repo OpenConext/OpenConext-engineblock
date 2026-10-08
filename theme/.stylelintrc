@@ -1,7 +1,22 @@
 {
   "extends": "stylelint-config-recommended",
   "rules": {
-    "at-rule-prelude-no-invalid": null,
+    "at-rule-prelude-no-invalid": [
+      true,
+      {
+        "ignoreAtRules": [
+          "each",
+          "else",
+          "for",
+          "function",
+          "if",
+          "include",
+          "mixin",
+          "return",
+          "use"
+        ]
+      }
+    ],
     "function-no-unknown": [
       true,
       {
@@ -36,6 +51,12 @@
     "no-empty-source": null
   },
   "overrides": [
+    {
+      "files": ["**/breakpoints.scss"],
+      "rules": {
+        "at-rule-prelude-no-invalid": null
+      }
+    },
     {
       "files": ["*.scss", "**/*.scss"],
       "customSyntax": "postcss-scss"
