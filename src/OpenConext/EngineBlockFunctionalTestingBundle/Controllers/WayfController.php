@@ -67,7 +67,7 @@ class WayfController extends AbstractController
             shouldDisplayBanner: $showIdPBanner,
             backLink: $backLink,
             cutoffPoint: $cutoffPointForShowingUnfilteredIdps,
-            rememberChoice: $rememberChoiceFeature,
+            rememberChoice: $rememberChoiceFeature || $rememberChoicePerIdp,
             showRequestAccess: $displayUnconnectedIdpsWayf,
             requestId: 'bogus-request-id',
             serviceProvider: TestEntitySeeder::buildSp(),

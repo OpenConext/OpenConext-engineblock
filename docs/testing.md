@@ -20,7 +20,8 @@ The functional-testing route renders the WAYF page with synthetic IdP data, cont
 | `showIdPBanner` | bool | `true` | Whether to show the default IdP banner |
 | `displayUnconnectedIdpsWayf` | bool | `false` | Show unconnected IdPs with a "Request access" button |
 | `backLink` | bool | `false` | Show "Return to service provider" back link |
-| `rememberChoiceFeature` | bool | `false` | Show "Remember my choice" checkbox |
+| `rememberChoiceFeature` | bool | `false` | Show "Remember my choice" checkbox (global mode: the choice is stored in the `rememberchoice` cookie) |
+| `rememberChoicePerIdp` | bool | `false` | Show "Remember my choice" checkbox in per-SP mode (the choice is stored in the `rememberedidps` cookie). Implies `rememberChoiceFeature`, like in production where only one of the two modes can be enabled |
 | `cutoffPointForShowingUnfilteredIdps` | int | `100` | Hide the IdP list until the user searches when list length exceeds this value |
 
 #### Baseline
@@ -38,7 +39,8 @@ The functional-testing route renders the WAYF page with synthetic IdP data, cont
 
 #### UI features
 - [Back link](https://engine.dev.openconext.local/functional-testing/wayf?backLink=true)
-- [Remember my choice](https://engine.dev.openconext.local/functional-testing/wayf?rememberChoiceFeature=true)
+- [Remember my choice (global mode)](https://engine.dev.openconext.local/functional-testing/wayf?rememberChoiceFeature=true)
+- [Remember my choice (per-SP mode)](https://engine.dev.openconext.local/functional-testing/wayf?rememberChoicePerIdp=true)
 - [Default IdP banner](https://engine.dev.openconext.local/functional-testing/wayf?defaultIdpEntityId=https%3A%2F%2Fexample.com%2FentityId%2F3&showIdPBanner=true&addDiscoveries=false)
 
 #### Preferred IdPs
