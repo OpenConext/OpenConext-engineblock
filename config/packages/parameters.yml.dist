@@ -181,8 +181,13 @@ parameters:
     wayf.cutoff_point_for_showing_unfiltered_idps: 50
 
     ## Allow users to save their selected IdP and then auto-select it on returning visits.
+    ## This is the global mode: one remembered IdP for all SPs, stored in a client-side cookie.
+    ## Mutually exclusive with feature_enable_wayf_remember_choice_per_idp: enabling both fails the
+    ## container build. See docs/wayf_remember_choice.md.
     wayf.remember_choice: false
     ## Allow SPs to opt in to remembered IdP choices scoped per SP through Manage metadata.
+    ## This is the per-SP mode and replaces the global mode: it does not require wayf.remember_choice.
+    ## Mutually exclusive with wayf.remember_choice: enabling both fails the container build.
     feature_enable_wayf_remember_choice_per_idp: false
     ## Lifetime for remembered IdP choices scoped per SP, in seconds (7776000 seconds = 90 days).
     wayf.remember_choice_per_idp_lifetime: 7776000

@@ -64,7 +64,6 @@ class EngineBlock_Test_Corto_Module_Service_ContinueToIdpTest extends TestCase
 
     #[DataProvider('rememberChoiceGateProvider')]
     public function testPersistRememberedChoiceOnlyWritesTheCookieWhenTheGateIsFullyEnabled(
-        bool $globalRememberChoiceEnabled,
         bool $rememberChoicePerIdpEnabled,
         bool $spWayfRememberChoice,
         bool $expectCookieWritten
@@ -72,7 +71,6 @@ class EngineBlock_Test_Corto_Module_Service_ContinueToIdpTest extends TestCase
         $application = EngineBlock_ApplicationSingleton::getInstance();
 
         $diContainer = Phake::mock(EngineBlock_Application_DiContainer::class);
-        Phake::when($diContainer)->getRememberChoice()->thenReturn($globalRememberChoiceEnabled);
         Phake::when($diContainer)->getSymfonyRequest()->thenReturn(Request::create('/'));
         $this->setDiContainer($application, $diContainer);
 
@@ -127,11 +125,10 @@ class EngineBlock_Test_Corto_Module_Service_ContinueToIdpTest extends TestCase
     public static function rememberChoiceGateProvider(): array
     {
         return [
-            'all enabled: cookie is written' => [true, true, true, true],
-            'global remember choice disabled: not written' => [false, true, true, false],
-            'per-idp feature disabled: not written' => [true, false, true, false],
-            'sp opted out: not written' => [true, true, false, false],
-            'all disabled: not written' => [false, false, false, false],
+            'all enabled: cookie is written' => [true, true, true],
+            'per-idp feature disabled: not written' => [false, true, false],
+            'sp opted out: not written' => [true, false, false],
+            'all disabled: not written' => [false, false, false],
         ];
     }
 
@@ -140,7 +137,6 @@ class EngineBlock_Test_Corto_Module_Service_ContinueToIdpTest extends TestCase
         $application = EngineBlock_ApplicationSingleton::getInstance();
 
         $diContainer = Phake::mock(EngineBlock_Application_DiContainer::class);
-        Phake::when($diContainer)->getRememberChoice()->thenReturn(true);
         Phake::when($diContainer)->getSymfonyRequest()->thenReturn(Request::create('/'));
         $this->setDiContainer($application, $diContainer);
 

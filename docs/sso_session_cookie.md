@@ -17,7 +17,8 @@ The value of the cookie contains an array of the entity ID('s) of the successful
 This cookie will be deleted at `/logout` or will expire according to the set `sso_session_cookie_max_age`.
 If the SSO Cookie Session feature is enabled it is also possible to manually delete this cookie at
 `/authentication/idp/remove-cookies`. Do note however, that the remove cookies endpoint is only available if
-`wayf.remember_choice=true`
+`wayf.remember_choice=true`. This is the global remember my choice mode, see
+[WAYF remember my choice](wayf_remember_choice.md).
 
 ## Configuration of SSO Session Cookie in Engineblock
 

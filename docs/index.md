@@ -10,6 +10,7 @@
 1. [PHP testing][php-testing]
 1. [Javscript testing][js-testing]
 1. [Logging][logging]
+1. [WAYF remember my choice](wayf_remember_choice.md)
 
 [license]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/LICENSE
 [release]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/release_procedure.md
