@@ -54,7 +54,7 @@ shared by all SPs.
 
 The remembered IdP is ignored for `ForceAuthn` and debug requests.
 
-The cookie can be removed on `/authentication/idp/remove-cookies`, which is only available in this mode.
+The cookie can be removed on `/authentication/idp/remove-cookies`, see [Removing the cookies](#removing-the-cookies).
 
 ## Per-SP mode
 
@@ -81,6 +81,14 @@ Related parameters:
 
 The cookie content is validated strictly. Invalid or expired entries are never used to select an IdP and are removed
 from the cookie.
+
+The cookie can be removed on `/authentication/idp/remove-cookies`, see [Removing the cookies](#removing-the-cookies).
+
+## Removing the cookies
+
+The page `/authentication/idp/remove-cookies` lets a user inspect and remove the cookies EngineBlock has set,
+including `rememberchoice` and `rememberedidps`. The page is available when either mode is enabled, and returns a 404
+when both are disabled.
 
 ## Switching modes
 

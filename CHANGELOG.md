@@ -21,6 +21,8 @@ Features:
 * The per-SP mode and the existing global mode (`wayf.remember_choice`) are mutually exclusive. EngineBlock refuses to
   build its container (for example during `cache:clear` or `cache:warmup`) when both are `true`. Enable only one.
 * The per-SP mode does not require `wayf.remember_choice`. Leave `wayf.remember_choice` set to `false` when enabling it.
+* The cookie removal page `/authentication/idp/remove-cookies` is now also available in the per-SP mode and lists the
+  `rememberedidps` cookie. Before, it was only available when `wayf.remember_choice` was `true`.
 
 ## 7.2.1
 
