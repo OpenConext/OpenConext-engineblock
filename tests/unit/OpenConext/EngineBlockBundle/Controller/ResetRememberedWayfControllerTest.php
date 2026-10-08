@@ -28,6 +28,7 @@ use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
 use OpenConext\EngineBlock\Service\Wayf\RememberedIdpCookie;
 use OpenConext\EngineBlockBundle\Controller\ResetRememberedWayfController;
 use Phake;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -263,6 +264,44 @@ class ResetRememberedWayfControllerTest extends TestCase
         $response = $controller($this->buildRequest(null, 'javascript:alert(1)//profile.example.org'));
 
         $this->assertSame(self::REDIRECT_URL . '?wayfReset=none', $response->getTargetUrl());
+    }
+
+    #[Test]
+    #[DataProvider('unsafeRedirects')]
+    public function an_unsafe_redirect_parameter_falls_back_to_the_configured_redirect(string $redirect): void
+    {
+        $logger = Mockery::mock(LoggerInterface::class);
+        $logger->shouldNotReceive('info');
+
+        $controller = new ResetRememberedWayfController(
+            $this->buildRememberedIdpCookie(Phake::mock(CookieService::class)),
+            $logger,
+            self::REDIRECT_URL,
+            self::ALLOWED_REDIRECT_HOSTS,
+        );
+
+        $response = $controller($this->buildRequest(null, $redirect));
+
+        $this->assertSame(self::REDIRECT_URL . '?wayfReset=none', $response->getTargetUrl());
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function unsafeRedirects(): array
+    {
+        return [
+            'backslash before the allowed host' => ['https://evil.example.org\\@profile.example.org/'],
+            'backslash in the path' => ['https://profile.example.org\\evil.example.org/'],
+            'plain http' => ['http://profile.example.org/my-profile'],
+            'userinfo with the allowed host' => ['https://profile.example.org@evil.example.org/'],
+            'userinfo before the allowed host' => ['https://evil.example.org@profile.example.org/'],
+            'tab inside the scheme' => ["htt\tps://profile.example.org/"],
+            'newline in the url' => ["https://profile.example.org/\nevil"],
+            'leading space' => [' https://profile.example.org/'],
+            'protocol relative url' => ['//profile.example.org/my-profile'],
+            'allowed host as a subdomain of another host' => ['https://profile.example.org.evil.example.org/'],
+        ];
     }
 
     private function buildRememberedIdpCookie(CookieService $cookieService): RememberedIdpCookie

@@ -107,13 +107,15 @@ browser. It does nothing when the cookie is not present. The `rememberchoice` co
 
 The caller can choose where the user lands with the `redirect` query parameter, for example
 `/reset-remember-wayf?redirect=https://profile.dev.openconext.local/my-choices`. To prevent an open redirect, the
-`redirect` value is only used when it is an absolute `http` or `https` URL whose host is listed in:
+`redirect` value is only used when it is an absolute `https` URL whose host is listed in:
 
     # Hosts that may be used in the redirect query parameter
     wayf.reset_choice_allowed_redirect_hosts:
         - profile.dev.openconext.local
 
-A missing, malformed or unlisted `redirect` falls back to `wayf.reset_choice_per_idp_redirect`. The value in `parameters.yml.dist` is the local
+A missing, malformed or unlisted `redirect` falls back to `wayf.reset_choice_per_idp_redirect`. Plain `http` URLs, URLs
+with credentials (`user@host`), and URLs containing backslashes, whitespace or control characters are rejected as well,
+because browsers interpret those differently from the host check. The value in `parameters.yml.dist` is the local
 development host. Replace it with the hosts of your own deployment.
 
 The endpoint appends the query parameter `wayfReset` to the final URL, before any fragment. Its value is `removed` when
