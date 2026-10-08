@@ -23,6 +23,9 @@ Features:
 * The per-SP mode does not require `wayf.remember_choice`. Leave `wayf.remember_choice` set to `false` when enabling it.
 * The cookie removal page `/authentication/idp/remove-cookies` is now also available in the per-SP mode and lists the
   `rememberedidps` cookie. Before, it was only available when `wayf.remember_choice` was `true`.
+* Added the endpoint `/reset-remember-wayf`, which removes the per-SP `rememberedidps` cookie and redirects to the URL
+  configured in `wayf.reset_choice_per_idp_redirect`. This new parameter must not be empty. See
+  `docs/wayf_remember_choice.md`.
 
 ## 7.2.1
 
