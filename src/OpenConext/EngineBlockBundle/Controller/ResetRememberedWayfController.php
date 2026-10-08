@@ -34,6 +34,7 @@ final class ResetRememberedWayfController
         private readonly RememberedIdpCookie $rememberedIdpCookie,
         private readonly LoggerInterface $logger,
         private readonly string $redirectUrl,
+        private readonly array $allowedRedirectHosts = [],
     ) {
         if ($this->redirectUrl === '') {
             throw new InvalidArgumentException(
@@ -56,6 +57,54 @@ final class ResetRememberedWayfController
             ));
         }
 
-        return new RedirectResponse($this->redirectUrl, Response::HTTP_FOUND);
+        $target = $this->resolveRedirectTarget($request->query->get('redirect'));
+        $location = $this->appendQueryParameter($target, 'wayfReset', $raw !== null ? 'removed' : 'none');
+
+        return new RedirectResponse($location, Response::HTTP_FOUND);
+    }
+
+    private function resolveRedirectTarget(?string $redirect): string
+    {
+        if ($redirect === null || $redirect === '' || !$this->isAllowedRedirect($redirect)) {
+            return $this->redirectUrl;
+        }
+
+        return $redirect;
+    }
+
+    private function isAllowedRedirect(string $redirect): bool
+    {
+        // Browsers normalise backslashes and drop control characters and whitespace, parse_url() does not.
+        // Such a value could pass the host check here and still send the browser to another host.
+        if (preg_match('/[\x00-\x20\x7f\\\\]/', $redirect) === 1) {
+            return false;
+        }
+
+        $parts = parse_url($redirect);
+
+        if ($parts === false || ($parts['scheme'] ?? null) !== 'https' || !isset($parts['host'])) {
+            return false;
+        }
+
+        if (isset($parts['user']) || isset($parts['pass'])) {
+            return false;
+        }
+
+        return in_array($parts['host'], $this->allowedRedirectHosts, true);
+    }
+
+    private function appendQueryParameter(string $url, string $key, string $value): string
+    {
+        $fragment = '';
+        $hashPosition = strpos($url, '#');
+
+        if ($hashPosition !== false) {
+            $fragment = substr($url, $hashPosition);
+            $url = substr($url, 0, $hashPosition);
+        }
+
+        $separator = str_contains($url, '?') ? '&' : '?';
+
+        return $url . $separator . $key . '=' . rawurlencode($value) . $fragment;
     }
 }

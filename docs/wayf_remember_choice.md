@@ -105,6 +105,22 @@ The endpoint removes the `rememberedidps` cookie and redirects the user (HTTP 30
 The endpoint only accepts `GET` requests and needs no authentication, because it only clears a cookie in the user's own
 browser. It does nothing when the cookie is not present. The `rememberchoice` cookie of the global mode is not touched.
 
+The caller can choose where the user lands with the `redirect` query parameter, for example
+`/reset-remember-wayf?redirect=https://profile.dev.openconext.local/my-choices`. To prevent an open redirect, the
+`redirect` value is only used when it is an absolute `https` URL whose host is listed in:
+
+    # Hosts that may be used in the redirect query parameter
+    wayf.reset_choice_allowed_redirect_hosts:
+        - profile.dev.openconext.local
+
+A missing, malformed or unlisted `redirect` falls back to `wayf.reset_choice_per_idp_redirect`. Plain `http` URLs, URLs
+with credentials (`user@host`), and URLs containing backslashes, whitespace or control characters are rejected as well,
+because browsers interpret those differently from the host check. The value in `parameters.yml.dist` is the local
+development host. Replace it with the hosts of your own deployment.
+
+The endpoint appends the query parameter `wayfReset` to the final URL, before any fragment. Its value is `removed` when
+a cookie was removed and `none` when there was nothing to remove, so the target page can show a matching message.
+
 ## Switching modes
 
 Cookies written in one mode are not read in the other. After switching, users have to make their choice once more.
