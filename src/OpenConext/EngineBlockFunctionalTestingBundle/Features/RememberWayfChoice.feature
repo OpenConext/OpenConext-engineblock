@@ -88,3 +88,17 @@ Feature:
     When I give my consent
      And I pass through EngineBlock
     Then the url should match "functional-testing/Remembering-SP/acs"
+
+  Scenario: The cookie removal page lists and removes the remembered choice
+    When I log in at "Remembering-SP"
+     And I select "Dummy-IdP" on the WAYF and remember my choice
+     And I pass through EngineBlock
+     And I pass through the IdP
+    Then the "rememberedidps" cookie should be set
+    When I give my consent
+     And I pass through EngineBlock
+    Then the url should match "functional-testing/Remembering-SP/acs"
+    When I go to Engineblock URL "/authentication/idp/remove-cookies"
+    Then the response should contain 'rememberedidps'
+    When I press "remove_rememberedidps"
+    Then the "rememberedidps" cookie should not be set

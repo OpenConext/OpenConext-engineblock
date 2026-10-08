@@ -221,6 +221,12 @@ context('WAYF behaviour not tied to mouse / keyboard navigation', () => {
       cy.get(rememberChoiceTooltipToggleSelector).should('exist');
     });
 
+    it('Renders the per-SP checkbox when only rememberChoicePerIdp is passed', () => {
+      cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=5&rememberChoicePerIdp=true');
+      cy.get(`.${rememberChoicePerIdpClass}`).should('exist');
+      cy.onPage('Remember my choice');
+    });
+
     it('Hides the tooltip content until the toggle is activated', () => {
       cy.visit('https://engine.dev.openconext.local/functional-testing/wayf?connectedIdps=5&rememberChoiceFeature=true&rememberChoicePerIdp=true');
       cy.get(rememberChoiceTooltipValueSelector).should('not.be.visible');
