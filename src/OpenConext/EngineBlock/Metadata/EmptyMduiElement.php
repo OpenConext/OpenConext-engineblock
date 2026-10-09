@@ -31,6 +31,10 @@ class EmptyMduiElement implements MultilingualElement, JsonSerializable
 {
     private $name;
 
+    public $height = null;
+    public $width = null;
+    public $url = null;
+
     public function __construct(string $name)
     {
         $this->name = $name;
