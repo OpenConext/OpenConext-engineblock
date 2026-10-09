@@ -42,7 +42,8 @@ parameters can be used to manipulate the behaviour of the wayf that is rendered.
 | **Query parameter** | **Default value** | **Explanation** |
 |---|----|----|
 | displayUnconnectedIdpsWayf | (bool) false | Type: boolean. Display unconnected IdPs on the WAYF. |
-| rememberChoiceFeature | (bool) false | Type: boolean. Display the remember choice feature. |
+| rememberChoiceFeature | (bool) false | Type: boolean. Display the remember choice feature in global mode. |
+| rememberChoicePerIdp | (bool) false | Type: boolean. Display the remember choice feature in per-SP mode. Implies rememberChoiceFeature. |
 | cutoffPointForShowingUnfilteredIdps | (int) 100 | Type: integer. The number of IdPs to display on the WAYF before cutting them off. |
 | showIdpBanner | (bool) true | Type: boolean. Show the EduId (default IdP) banner on the WAYF or not |
 | defaultIdpEntityId | (string) null | Type: string. The entityId of the default IdP (EduId) |

@@ -1,6 +1,10 @@
-{% if rememberChoiceFeature %}
-    <form method="post" action="{{ action }}" class="wayf__rememberChoice">
-        <label for="rememberChoice">{{ 'remember_choice'|trans }}</label>
-        <input type="checkbox" name="rememberChoice" id="rememberChoice">
-    </form>
+{% if rememberChoicePerIdp %}
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/rememberChoicePerIdp.html.twig' with {
+        action: action,
+        rememberChoiceDuration: rememberChoiceDuration,
+    } only %}
+{% elseif rememberChoiceFeature %}
+    {% include '@theme/Authentication/View/Proxy/Partials/WAYF/rememberChoiceGlobal.html.twig' with {
+        action: action,
+    } only %}
 {% endif %}

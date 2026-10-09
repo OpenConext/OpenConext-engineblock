@@ -82,6 +82,11 @@ HTML
 
     // Remove cookies
     'remember_choice'           => 'Relembrar a minha escolha',
+    'remember_choice_per_idp'   => 'Relembrar a minha escolha para este serviço durante %duration%',
+    'remember_choice_duration_days' => '%count% dias',
+    'remember_choice_duration_minutes' => '%count% minutos',
+    'remember_choice_tooltip_screenreader' => 'Porque é que relembramos a sua escolha?',
+    'remember_choice_per_idp_tooltip' => 'Se ativar esta opção, não terá de escolher como pretende iniciar sessão nos próximos %duration%. O ecrã de início de sessão será então ignorado. Atenção: por vezes utiliza uma conta diferente para iniciar sessão? Nesse caso, desative esta opção. Pode reverter esta opção mais tarde em <a href="http://profile.surfconext.nl/">profile.surfconext.nl</a>.',
     'cookie_removal_header'     => 'Remover cookies',
     'cookie_remove_button'      => 'Remover',
     'cookie_remove_all_button'  => 'Remover todos',
