@@ -53,9 +53,16 @@ class WayfRememberChoiceRenderTest extends TestCase
         $this->assertStringContainsString('remember_choice_per_idp_tooltip:90 days', $html);
     }
 
-    public function testFeatureDisabledRendersNothing(): void
+    public function testPerIdpVariantRendersWithoutTheGlobalFeatureFlag(): void
     {
         $html = $this->render(rememberChoiceFeature: false, rememberChoicePerIdp: true, rememberChoiceDuration: '90 days');
+
+        $this->assertStringContainsString('remember_choice_per_idp:90 days', $html);
+    }
+
+    public function testBothVariantsDisabledRendersNothing(): void
+    {
+        $html = $this->render(rememberChoiceFeature: false, rememberChoicePerIdp: false, rememberChoiceDuration: '');
 
         $this->assertSame('', trim($html));
     }
