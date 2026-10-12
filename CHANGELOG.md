@@ -26,10 +26,12 @@ Features:
 * Added the endpoint `/reset-remember-wayf`, which removes the per-SP `rememberedidps` cookie and redirects to the URL
   configured in `wayf.reset_choice_per_idp_redirect`. This new parameter must not be empty. See
   `docs/wayf_remember_choice.md`.
-* The `/reset-remember-wayf` endpoint accepts a `redirect` query parameter. Only `https` URLs with a host listed in the
-  new parameter `wayf.reset_choice_allowed_redirect_hosts` are accepted, other values fall back to
-  `wayf.reset_choice_per_idp_redirect`. The endpoint also appends `wayfReset=removed` or `wayfReset=none` to the
-  redirect URL.
+* The `/reset-remember-wayf` endpoint now accepts an optional `redirect` query parameter, so callers such as Profile
+  can send the user back to the page they came from after clearing their remembered per-SP WAYF choices, instead of
+  always sending them to the operator-configured `wayf.reset_choice_per_idp_redirect`. The target must be an `https`
+  URL whose host is listed in the new parameter `wayf.reset_choice_allowed_redirect_hosts`; any other value falls
+  back to `wayf.reset_choice_per_idp_redirect`. The endpoint also appends `wayfReset=removed` or `wayfReset=none` to
+  the redirect URL, so the caller can tell whether a cookie was actually cleared.
 
 Updated:
 
