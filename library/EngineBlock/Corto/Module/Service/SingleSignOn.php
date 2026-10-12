@@ -222,16 +222,15 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
             }
         }
 
-        // Auto-select IdP when 'wayf.rememberChoice' feature is enabled and is allowed for the current request
+        // Auto-select IdP when the per-SP remember-my-choice feature is enabled for this SP
         $runtime = $application->getDiContainerRuntime();
         if ($this->_sendAuthenticationRequestForRememberedIdpPerServiceProvider($request, $sp, $candidateIDPs)) {
             return;
         }
 
-        // Auto-select IdP when 'wayf.rememberChoice' feature is enabled and is allowed for the current request,
-        // and the per-SP remembered-choice feature is not enabled.
+        // Auto-select IdP when the global 'wayf.remember_choice' feature is enabled. It is mutually exclusive
+        // with 'feature_enable_wayf_remember_choice_per_idp', which is enforced when the container is compiled.
         $legacyRememberChoiceAllowed = $container->getRememberChoice() === true
-            && $runtime->rememberChoicePerIdp === false
             && !$request->getForceAuthn()
             && !$request->isDebugRequest();
 
@@ -479,13 +478,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         ServiceProvider $sp,
         array $candidateIDPs
     ): bool {
-        $application = EngineBlock_ApplicationSingleton::getInstance();
-        $container = $application->getDiContainer();
-        $runtime = $application->getDiContainerRuntime();
+        $runtime = EngineBlock_ApplicationSingleton::getInstance()->getDiContainerRuntime();
         $log = $this->_server->getLogger();
 
         $notEligibleForRememberedIdp = !RememberedIdpCookie::isEnabledForServiceProvider(
-            $container->getRememberChoice() === true,
             $runtime->rememberChoicePerIdp,
             $sp
         ) || $request->getForceAuthn() || $request->isDebugRequest();
@@ -555,7 +551,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
 
         $isRememberChoicePerIdpEnabled = $diContainerRuntime->rememberChoicePerIdp;
         $rememberChoicePerIdp = RememberedIdpCookie::isEnabledForServiceProvider(
-            $container->getRememberChoice() === true,
             $isRememberChoicePerIdpEnabled,
             $serviceProvider
         );

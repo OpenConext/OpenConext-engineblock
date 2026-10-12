@@ -40,7 +40,6 @@ class RememberedIdpCookieTest extends TestCase
 
     #[DataProvider('isEnabledForServiceProviderProvider')]
     public function testIsEnabledForServiceProvider(
-        bool $globalRememberChoiceEnabled,
         bool $rememberChoicePerIdpEnabled,
         bool $spWayfRememberChoice,
         bool $expected
@@ -53,7 +52,6 @@ class RememberedIdpCookieTest extends TestCase
         $this->assertSame(
             $expected,
             RememberedIdpCookie::isEnabledForServiceProvider(
-                $globalRememberChoiceEnabled,
                 $rememberChoicePerIdpEnabled,
                 $serviceProvider
             )
@@ -63,11 +61,10 @@ class RememberedIdpCookieTest extends TestCase
     public static function isEnabledForServiceProviderProvider(): array
     {
         return [
-            'all enabled' => [true, true, true, true],
-            'global disabled' => [false, true, true, false],
-            'per-idp feature disabled' => [true, false, true, false],
-            'sp opted out' => [true, true, false, false],
-            'all disabled' => [false, false, false, false],
+            'all enabled' => [true, true, true],
+            'per-idp feature disabled' => [false, true, false],
+            'sp opted out' => [true, false, false],
+            'all disabled' => [false, false, false],
         ];
     }
 

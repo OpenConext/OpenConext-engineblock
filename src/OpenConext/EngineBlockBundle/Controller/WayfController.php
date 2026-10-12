@@ -22,6 +22,7 @@ use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
 use EngineBlock_Exception;
 use OpenConext\EngineBlock\Service\SsoSessionService;
+use OpenConext\EngineBlock\Service\Wayf\RememberedIdpCookie;
 use OpenConext\EngineBlockBridge\ResponseFactory;
 use OpenConext\EngineBlockBundle\Service\DiscoverySelectionService;
 use Psr\Log\LoggerInterface;
@@ -104,9 +105,22 @@ class WayfController
         return new Response($this->twig->render('@theme/Authentication/View/IdentityProvider/help-discover.html.twig'));
     }
 
+    private function isRememberChoiceEnabled(): bool
+    {
+        return $this->engineBlockApplicationSingleton->getDiContainer()->getRememberChoice() === true
+            || $this->engineBlockApplicationSingleton->getDiContainerRuntime()->rememberChoicePerIdp;
+    }
+
+    private function clearRememberedIdpCookie(string $cookie): void
+    {
+        if ($cookie === RememberedIdpCookie::NAME) {
+            $this->engineBlockApplicationSingleton->getDiContainerRuntime()->rememberedIdpCookie->clear();
+        }
+    }
+
     private function getCookies(): array
     {
-        $cookies = ['main', 'rememberchoice', 'lang', 'selectedidps'];
+        $cookies = ['main', 'rememberchoice', RememberedIdpCookie::NAME, 'lang', 'selectedidps'];
 
         if ($this->engineBlockApplicationSingleton->getDiContainer()->getFeatureConfiguration()
             ->hasFeature("eb.enable_sso_session_cookie")) {
@@ -119,8 +133,7 @@ class WayfController
     #[Route(path: '/authentication/idp/remove-cookies', name: 'authentication_wayf_remove_cookie', methods: ['GET', 'POST'])]
     public function cookieAction(Request $request)
     {
-        $application = $this->engineBlockApplicationSingleton;
-        if (($application->getDiContainer()->getRememberChoice() === true)) {
+        if ($this->isRememberChoiceEnabled()) {
             $postData = $request->request->all();
             $cookiesSet = $request->cookies->all();
             $cookies = $this->getCookies();
@@ -132,6 +145,7 @@ class WayfController
                     if (array_key_exists((string) $cookie, $cookiesSet)) {
                         unset($cookiesSet[$cookie]);
                         $response->headers->clearCookie($cookie);
+                        $this->clearRememberedIdpCookie($cookie);
                     }
                 }
                 // Clear all session-data on the server
@@ -145,6 +159,7 @@ class WayfController
                         if (array_key_exists('remove_'.$cookie, $postData)) {
                             unset($cookiesSet[$cookie]);
                             $response->headers->clearCookie($cookie);
+                            $this->clearRememberedIdpCookie($cookie);
                             if ($cookie === SsoSessionService::SSO_SESSION_COOKIE_NAME) {
                                 $this->sessionService->clearSsoSessionCookie();
                             }

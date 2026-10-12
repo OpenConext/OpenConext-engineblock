@@ -37,12 +37,10 @@ final class RememberedIdpCookie
     private const int MAX_INFLATED_BYTES = 65536;
 
     public static function isEnabledForServiceProvider(
-        bool $globalRememberChoiceEnabled,
         bool $rememberChoicePerIdpEnabled,
         ServiceProvider $serviceProvider,
     ): bool {
-        return $globalRememberChoiceEnabled
-            && $rememberChoicePerIdpEnabled
+        return $rememberChoicePerIdpEnabled
             && $serviceProvider->getCoins()->wayfRememberChoice() === true;
     }
 

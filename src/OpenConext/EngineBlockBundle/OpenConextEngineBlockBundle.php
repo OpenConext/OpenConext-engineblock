@@ -21,10 +21,17 @@ namespace OpenConext\EngineBlockBundle;
 use EngineBlock_ApplicationSingleton;
 use OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy;
 use OpenConext\EngineBlock\Request\RequestId;
+use OpenConext\EngineBlockBundle\DependencyInjection\Compiler\RememberChoiceModeCompilerPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class OpenConextEngineBlockBundle extends Bundle
 {
+    public function build(ContainerBuilder $container): void
+    {
+        $container->addCompilerPass(new RememberChoiceModeCompilerPass());
+    }
+
     public function boot()
     {
         $engineBlockApplicationSingleton = EngineBlock_ApplicationSingleton::getInstance();
