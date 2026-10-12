@@ -15,7 +15,7 @@ services:
         autowire: true
         autoconfigure: true
         arguments:
-            $rememberChoicePerIdp: '%wayf.remember_choice_per_idp%'
+            $rememberChoicePerIdp: '%feature_enable_wayf_remember_choice_per_idp%'
             $preferredIdpEntityIds: '%wayf.preferred_idp_entity_ids%'
         tags:
             - { name: kernel.event_subscriber }
@@ -179,7 +179,7 @@ services:
         arguments:
             $lifetime: '%wayf.remember_choice_per_idp_lifetime%'
             $maxEntries: '%wayf.remember_choice_per_idp_max%'
-            $cookieDomain: '%hostname%'
+            $cookieDomain: ''
             $cookiePath: '%cookie.path%'
             $secure: '%cookie.secure%'
 
