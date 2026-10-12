@@ -519,10 +519,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn implements EngineBlock_Corto
         $rememberedIdpCookie = $runtime->rememberedIdpCookie;
         $log = $this->_server->getLogger();
 
-        $raw = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()
-            ->getSymfonyRequest()->cookies->get(RememberedIdpCookie::NAME);
-
-        $entries = $rememberedIdpCookie->loadValidEntries($raw, $log);
+        $entries = $rememberedIdpCookie->loadValidEntriesFromRequest(
+            EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSymfonyRequest(),
+            $log
+        );
 
         return $rememberedIdpCookie->find($entries, $serviceProviderEntityId, $candidateIdpEntityIds);
     }

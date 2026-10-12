@@ -135,6 +135,63 @@ class EngineBlock_Test_Corto_Module_Service_ContinueToIdpTest extends TestCase
         ];
     }
 
+    public function testPersistRememberedChoiceLogsAnErrorWhenCookieWriteFails(): void
+    {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+
+        $diContainer = Phake::mock(EngineBlock_Application_DiContainer::class);
+        Phake::when($diContainer)->getRememberChoice()->thenReturn(true);
+        Phake::when($diContainer)->getSymfonyRequest()->thenReturn(Request::create('/'));
+        $this->setDiContainer($application, $diContainer);
+
+        $cookieService = Phake::mock(CookieService::class);
+        Phake::when($cookieService)->setCookieWithSameSite(Phake::anyParameters())->thenReturn(false);
+
+        $rememberedIdpCookie = new RememberedIdpCookie(
+            new TimeProvider(),
+            $cookieService,
+            7776000,
+            16,
+            'engine.example.org',
+            '/',
+            true,
+        );
+
+        $application->setDiContainerRuntime(new DiContainerRuntime(
+            $this->createStub(Environment::class),
+            $this->createStub(WayfRenderer::class),
+            $this->createStub(CorrelationIdServiceInterface::class),
+            new CurrentCorrelationId(),
+            $this->createStub(FeedbackStateHelperInterface::class),
+            $this->createStub(FeedbackInfoCollectorInterface::class),
+            $this->createStub(LoginLogger::class),
+            $rememberedIdpCookie,
+            true,
+        ));
+
+        $logger = Phake::mock(LoggerInterface::class);
+        $proxyServerMock = Phake::mock(EngineBlock_Corto_ProxyServer::class);
+        Phake::when($proxyServerMock)->getLogger()->thenReturn($logger);
+
+        $service = new EngineBlock_Corto_Module_Service_ContinueToIdp(
+            $proxyServerMock,
+            Phake::mock(EngineBlock_Corto_XmlToArray::class),
+            $this->createStub(Environment::class),
+            Phake::mock(ServiceProviderFactory::class),
+        );
+
+        $sp = new ServiceProvider('https://sp.example.org', wayfRememberChoice: true);
+        $idp = new IdentityProvider('https://idp.example.org');
+
+        $method = new ReflectionMethod($service, '_persistRememberedChoice');
+        $method->invoke($service, $sp, $idp, '1');
+
+        Phake::verify($logger)->error(
+            'WAYF-remember-my-choice cookie write failed for SP https://sp.example.org and IdP https://idp.example.org'
+        );
+        Phake::verify($logger, Phake::never())->info(Phake::anyParameters());
+    }
+
     private function setDiContainer(EngineBlock_ApplicationSingleton $application, $diContainer): void
     {
         $property = new ReflectionProperty(EngineBlock_ApplicationSingleton::class, '_diContainer');
