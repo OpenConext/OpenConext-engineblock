@@ -22,6 +22,7 @@ use OpenConext\EngineBlock\Request\CorrelationIdServiceInterface;
 use OpenConext\EngineBlock\Request\CurrentCorrelationId;
 use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
 use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
+use OpenConext\EngineBlock\Service\Wayf\RememberedIdpCookie;
 use OpenConext\EngineBlockBridge\Logger\LoginLogger;
 use OpenConext\EngineBlockBundle\Service\WayfRenderer;
 use Twig\Environment;
@@ -35,6 +36,9 @@ use Twig\Environment;
 final readonly class DiContainerRuntime
 {
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
     public function __construct(
         public Environment $twig,
         public WayfRenderer $wayfRenderer,
@@ -43,6 +47,8 @@ final readonly class DiContainerRuntime
         public FeedbackStateHelperInterface $feedbackStateHelper,
         public FeedbackInfoCollectorInterface $feedbackInfoCollector,
         public LoginLogger $loginLogger,
+        public RememberedIdpCookie $rememberedIdpCookie,
+        private bool $rememberChoicePerIdp = false,
         private array $preferredIdpEntityIds = [],
     ) {
     }
@@ -50,5 +56,10 @@ final readonly class DiContainerRuntime
     public function getPreferredIdpEntityIds(): array
     {
         return $this->preferredIdpEntityIds;
+    }
+
+    public function isRememberChoicePerIdpEnabled(): bool
+    {
+        return $this->rememberChoicePerIdp;
     }
 }
