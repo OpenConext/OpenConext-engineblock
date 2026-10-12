@@ -13,6 +13,10 @@ on the EngineBlock wiki.
 
 ## Unreleased
 
+Updated:
+
+* Updated Composer and Yarn (theme and Cypress) dependencies within their current version constraints to resolve open Dependabot alerts. (#2121)
+
 Removed:
 
 * Removed the guest_qualifier / isMemberOf guest-status feature (`AddGuestStatus`). Unused and confirmed safe to remove. `FilterReservedMemberOfValues` is kept, as it also guards against IdPs spoofing reserved `urn:collab:org` group memberships. (#1294)
