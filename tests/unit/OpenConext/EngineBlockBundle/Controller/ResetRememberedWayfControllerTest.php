@@ -27,7 +27,6 @@ use OpenConext\EngineBlock\Service\CookieService;
 use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
 use OpenConext\EngineBlock\Service\Wayf\RememberedIdpCookie;
 use OpenConext\EngineBlockBundle\Controller\ResetRememberedWayfController;
-use Phake;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -47,8 +46,18 @@ class ResetRememberedWayfControllerTest extends TestCase
     #[Test]
     public function cookie_with_valid_entries_is_cleared_and_logged_with_entry_count(): void
     {
-        $cookieService = Phake::mock(CookieService::class);
-        Phake::when($cookieService)->clearCookieWithSameSite(Phake::anyParameters())->thenReturn(true);
+        $cookieService = Mockery::mock(CookieService::class);
+        $cookieService->shouldReceive('clearCookieWithSameSite')
+            ->once()
+            ->with(
+                RememberedIdpCookie::NAME,
+                self::COOKIE_PATH,
+                self::COOKIE_DOMAIN,
+                true,
+                true,
+                'None'
+            )
+            ->andReturn(true);
 
         $rememberedIdpCookie = $this->buildRememberedIdpCookie($cookieService);
         $raw = $rememberedIdpCookie->encode([
@@ -67,21 +76,13 @@ class ResetRememberedWayfControllerTest extends TestCase
 
         $this->assertSame(Response::HTTP_FOUND, $response->getStatusCode());
         $this->assertSame(self::REDIRECT_URL, $response->getTargetUrl());
-        Phake::verify($cookieService)->clearCookieWithSameSite(
-            RememberedIdpCookie::NAME,
-            self::COOKIE_PATH,
-            self::COOKIE_DOMAIN,
-            true,
-            true,
-            'None'
-        );
     }
 
     #[Test]
     public function invalid_cookie_is_still_cleared_and_logged_with_zero_entries(): void
     {
-        $cookieService = Phake::mock(CookieService::class);
-        Phake::when($cookieService)->clearCookieWithSameSite(Phake::anyParameters())->thenReturn(true);
+        $cookieService = Mockery::mock(CookieService::class);
+        $cookieService->shouldReceive('clearCookieWithSameSite')->once()->andReturn(true);
 
         $rememberedIdpCookie = $this->buildRememberedIdpCookie($cookieService);
 
@@ -96,13 +97,12 @@ class ResetRememberedWayfControllerTest extends TestCase
 
         $this->assertSame(Response::HTTP_FOUND, $response->getStatusCode());
         $this->assertSame(self::REDIRECT_URL, $response->getTargetUrl());
-        Phake::verify($cookieService)->clearCookieWithSameSite(Phake::anyParameters());
     }
 
     #[Test]
     public function missing_cookie_is_not_cleared_or_logged_but_still_redirects(): void
     {
-        $cookieService = Phake::mock(CookieService::class);
+        $cookieService = Mockery::mock(CookieService::class);
         $rememberedIdpCookie = $this->buildRememberedIdpCookie($cookieService);
 
         $logger = Mockery::mock(LoggerInterface::class);
@@ -114,7 +114,6 @@ class ResetRememberedWayfControllerTest extends TestCase
 
         $this->assertSame(Response::HTTP_FOUND, $response->getStatusCode());
         $this->assertSame(self::REDIRECT_URL, $response->getTargetUrl());
-        Phake::verifyNoInteraction($cookieService);
     }
 
     #[Test]
@@ -123,7 +122,7 @@ class ResetRememberedWayfControllerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         new ResetRememberedWayfController(
-            $this->buildRememberedIdpCookie(Phake::mock(CookieService::class)),
+            $this->buildRememberedIdpCookie(Mockery::mock(CookieService::class)),
             Mockery::mock(LoggerInterface::class),
             ''
         );
