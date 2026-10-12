@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace OpenConext\EngineBlockBundle\DependencyInjection\Compiler;
 
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -31,8 +32,13 @@ final class RememberChoiceModeCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container): void
     {
-        if ($this->isEnabled($container, self::GLOBAL_PARAMETER)
-            && $this->isEnabled($container, self::PER_IDP_PARAMETER)
+        $featureConfiguration = new FeatureConfiguration([
+            self::GLOBAL_PARAMETER => $this->resolveBool($container, self::GLOBAL_PARAMETER),
+            self::PER_IDP_PARAMETER => $this->resolveBool($container, self::PER_IDP_PARAMETER),
+        ]);
+
+        if ($featureConfiguration->isEnabled(self::GLOBAL_PARAMETER)
+            && $featureConfiguration->isEnabled(self::PER_IDP_PARAMETER)
         ) {
             throw new InvalidConfigurationException(sprintf(
                 'The WAYF remember-my-choice modes are mutually exclusive: "%s" and "%s" cannot both be true. '
@@ -43,7 +49,7 @@ final class RememberChoiceModeCompilerPass implements CompilerPassInterface
         }
     }
 
-    private function isEnabled(ContainerBuilder $container, string $parameter): bool
+    private function resolveBool(ContainerBuilder $container, string $parameter): bool
     {
         return $container->hasParameter($parameter)
             && filter_var($container->getParameter($parameter), FILTER_VALIDATE_BOOLEAN);

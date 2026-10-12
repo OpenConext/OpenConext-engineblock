@@ -17,3 +17,4 @@ parameters:
         eb.stepup.send_user_attributes: "%feature_stepup_send_user_attributes%"
         eb.feature_enable_sram_interrupt: "%feature_enable_sram_interrupt%"
         eb.hide_bookmarkable_url: "%feature_hide_bookmarkable_url%"
+        eb.feature_enable_wayf_remember_choice_per_idp: "%feature_enable_wayf_remember_choice_per_idp%"
