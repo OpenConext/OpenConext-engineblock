@@ -48,7 +48,7 @@ final readonly class DiContainerRuntime
         public FeedbackInfoCollectorInterface $feedbackInfoCollector,
         public LoginLogger $loginLogger,
         public RememberedIdpCookie $rememberedIdpCookie,
-        private bool $rememberChoicePerIdp = false,
+        public bool $rememberChoicePerIdp = false,
         private array $preferredIdpEntityIds = [],
     ) {
     }
@@ -56,10 +56,5 @@ final readonly class DiContainerRuntime
     public function getPreferredIdpEntityIds(): array
     {
         return $this->preferredIdpEntityIds;
-    }
-
-    public function isRememberChoicePerIdpEnabled(): bool
-    {
-        return $this->rememberChoicePerIdp;
     }
 }
