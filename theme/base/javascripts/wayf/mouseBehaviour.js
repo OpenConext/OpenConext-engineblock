@@ -31,7 +31,8 @@ export const mouseBehaviour = () => {
   });
 
   // add a11y support for all checkboxes with an aria-pressed attribute.
-  const checkBoxes = document.querySelectorAll(ariaPressedCheckboxSelector);
+  // Tooltip toggles are skipped, toggleTooltipPressedStates() already flips their aria-pressed on label click.
+  const checkBoxes = document.querySelectorAll(`${ariaPressedCheckboxSelector}:not(.tooltip)`);
   handleAriaPressed(checkBoxes);
 
   // add a11y support for toggleButton
