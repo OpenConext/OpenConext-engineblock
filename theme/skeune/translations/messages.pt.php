@@ -40,6 +40,7 @@ return $overrides + [
     'wayf_deleted_account_screenreader'      => ' was deleted from your accounts',
     'wayf_remaining_idps_title_screenreader' => 'Login with an account from the list below',
     'wayf_select_account_screenreader'       => 'Select an account from the list below',
+    'wayf_title'                => 'Entrar com a',
     'wayf_search_placeholder'   => 'Search...',
     'wayf_search_screenreader'          => 'Search for an %organisationNoun%',
     'wayf_search_reset_screenreader'    => 'Clear the search field',
