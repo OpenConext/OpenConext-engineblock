@@ -28,6 +28,7 @@ class WayfViewModelFactory
 {
     public function __construct(
         private readonly Wayf $wayfExtension,
+        private readonly RememberChoiceDurationFormatter $durationFormatter,
     ) {
     }
 
@@ -70,6 +71,7 @@ class WayfViewModelFactory
             regularIdpList: $regularIdpList,
             preferredIdpList: $preferredIdpList,
             rememberChoicePerIdp: $rememberChoicePerIdp,
+            rememberChoiceDuration: $rememberChoicePerIdp ? $this->durationFormatter->format() : '',
         );
     }
 }

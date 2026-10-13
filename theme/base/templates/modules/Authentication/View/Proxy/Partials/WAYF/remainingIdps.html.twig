@@ -36,6 +36,8 @@
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/rememberChoice.html.twig' with {
         action: action,
         rememberChoiceFeature: rememberChoiceFeature,
+        rememberChoicePerIdp: rememberChoicePerIdp,
+        rememberChoiceDuration: rememberChoiceDuration,
     } only %}
     {% include '@theme/Authentication/View/Proxy/Partials/WAYF/idp/idpList.html.twig' with {
         idpList: idpListSorted,

@@ -87,18 +87,31 @@
     }
 
     > .wayf__rememberChoice {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
         margin-bottom: 3rem;
 
-        > label[for="rememberChoice"] {
-            @include mixins.font-style-large;
-            color: variables.$buttonBlue;
+        > #rememberChoice {
+            flex: 0 0 auto;
+            height: 1.2rem;
+            margin: 0 .625rem 0 0;
+            width: 1.2rem;
         }
 
-        > #rememberChoice {
-            height: 1.2rem;
-            margin: 0 0 0 10px;
-            vertical-align: sub;
-            width: 1.2rem;
+        > label[for="rememberChoice"] {
+            color: variables.$black;
+            flex: 1 1 auto;
+            font-size: variables.$f-large;
+            font-weight: variables.$normal;
+        }
+
+        > .ie11__label {
+            margin-left: .5rem;
+
+            > label.tooltip {
+                display: inline-block;
+            }
         }
     }
 }
