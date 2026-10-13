@@ -1,6 +1,7 @@
 doctrine_migrations:
     migrations_paths:
-        OpenConext\EngineBlock\Doctrine\Migrations: '%kernel.project_dir%/migrations/DoctrineMigrations'
+        OpenConext\EngineBlock\Doctrine\Migrations:
+            '%kernel.project_dir%/migrations/MariaMigrations'
     storage:
         table_storage:
             table_name: 'migration_versions'

@@ -37,37 +37,24 @@ use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
  */
 class IdentityProviderEntity implements IdentityProviderEntityInterface
 {
-    /**
-     * @var IdentityProvider
-     */
-    private $entity;
+    private IdentityProvider $entity;
 
     public function __construct(IdentityProvider $entity)
     {
         $this->entity = $entity;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->entity->id;
     }
 
-    /**
-     * @return string
-     */
     public function getEntityId(): string
     {
         return $this->entity->entityId;
     }
 
-    /**
-     * @param $locale
-     * @return string
-     */
-    public function getName($locale): string
+    public function getName(string $locale): ?string
     {
         switch (true) {
             case ($locale == 'nl'):
@@ -81,11 +68,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
         return '';
     }
 
-    /**
-     * @param $locale
-     * @return string
-     */
-    public function getDescription($locale): string
+    public function getDescription(string $locale): ?string
     {
         if ($this->entity->getMdui()->hasDescription($locale)) {
             return $this->entity->getMdui()->getDescription($locale);
@@ -94,11 +77,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
         return '';
     }
 
-    /**
-     * @param $locale
-     * @return string
-     */
-    public function getDisplayName($locale): string
+    public function getDisplayName(string $locale): string
     {
         if ($this->entity->getMdui()->hasDisplayName($locale)) {
             return $this->entity->getMdui()->getDisplayName($locale);
@@ -125,10 +104,6 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
         return false;
     }
 
-    /**
-     * @param string $locale
-     * @return Organization
-     */
     public function getOrganization(string $locale): ?Organization
     {
         switch (true) {
@@ -143,7 +118,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
         return null;
     }
 
-    public function getKeywords($locale): string
+    public function getKeywords(string $locale): ?string
     {
         if ($this->entity->getMdui()->hasKeywords($locale)) {
             return $this->entity->getMdui()->getKeywords($locale);
@@ -160,9 +135,6 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
         return $this->entity->certificates;
     }
 
-    /**
-     * @return string
-     */
     public function getWorkflowState(): string
     {
         return $this->entity->workflowState;
@@ -176,9 +148,6 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
         return $this->entity->contactPersons;
     }
 
-    /**
-     * @return string
-     */
     public function getNameIdFormat(): string
     {
         return $this->entity->nameIdFormat;
@@ -192,41 +161,26 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
         return $this->entity->supportedNameIdFormats;
     }
 
-    /**
-     * @return Service|null
-     */
     public function getSingleLogoutService(): ?Service
     {
         return $this->entity->singleLogoutService;
     }
 
-    /**
-     * @return bool
-     */
     public function isRequestsMustBeSigned(): bool
     {
         return $this->entity->requestsMustBeSigned;
     }
 
-    /**
-     * @return string
-     */
-    public function getManipulation(): string
+    public function getManipulation(): ?string
     {
         return $this->entity->manipulation;
     }
 
-    /**
-     * @return Coins
-     */
     public function getCoins(): Coins
     {
         return $this->entity->getCoins();
     }
 
-    /**
-     * @return bool
-     */
     public function isEnabledInWayf(): bool
     {
         return $this->entity->enabledInWayf;
@@ -240,9 +194,6 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
         return $this->entity->singleSignOnServices;
     }
 
-    /**
-     * @return ConsentSettings
-     */
     public function getConsentSettings(): ConsentSettings
     {
         return $this->entity->getConsentSettings();

@@ -1,7 +1,7 @@
 services:
 
     mariadb:
-        image: mariadb:10.6
+        image: mariadb:10.11
         container_name: eb-db-test
         environment:
             MYSQL_ROOT_PASSWORD: "root"
@@ -16,6 +16,19 @@ services:
             timeout: 2s
             retries: 20
             interval: 2s
+
+    postgres:
+        image: postgres:17
+        container_name: eb-psql-db-test
+        restart: unless-stopped
+        environment:
+            POSTGRES_DB: "eb_test"
+            POSTGRES_USER: "eb_testrw"
+            POSTGRES_PASSWORD: "secret"
+        ports:
+            - "5432:5432"
+        volumes:
+            - eb-psql-test-data:/var/lib/postgresql/data
 
     engine.dev.openconext.local:
         build:
@@ -62,3 +75,4 @@ services:
 
 volumes:
     eb-mysql-test-data:
+    eb-psql-test-data:

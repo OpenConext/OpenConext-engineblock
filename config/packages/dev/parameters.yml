@@ -9,3 +9,14 @@ parameters:
         rollover:
             publicFile: '%kernel.project_dir%/src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/keys/rolled-over.crt'
             privateFile: '%kernel.project_dir%/src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/keys/rolled-over.key'
+
+#   For postgres database
+#parameters:
+#    database.driver: pdo_pgsql
+#    database.server_version: '17'
+#    database.host: postgres
+#    database.port: '5432'
+#    database.user: ebrw
+#    database.password: secret
+#    database.dbname: eb
+

@@ -27,16 +27,15 @@ use OpenConext\EngineBlock\Exception\MduiRuntimeException;
  */
 class Logo implements MultilingualElement, JsonSerializable
 {
-    public $height = null;
-    public $width = null;
-    public $url = null;
+    public string $url;
+    public ?int $height;
+    public ?int $width;
 
-    /**
-     * @param string $url
-     */
-    public function __construct($url)
+    public function __construct(string $url, ?int $height = null, ?int $width = null)
     {
         $this->url = $url;
+        $this->height = $height;
+        $this->width = $width;
     }
 
     public static function fromJson(array $multiLingualElement): MultilingualElement
@@ -82,5 +81,13 @@ class Logo implements MultilingualElement, JsonSerializable
     public function getConfiguredLanguages(): array
     {
         return [self::PRIMARY_LANGUAGE];
+    }
+
+    /**
+     * A convenience static constructor for the Logo.
+     */
+    public static function fromArray(array $logo): Logo
+    {
+        return new self($logo["url"], $logo["height"], $logo["width"]);
     }
 }

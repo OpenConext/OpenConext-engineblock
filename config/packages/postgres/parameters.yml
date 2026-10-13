@@ -1,0 +1,28 @@
+parameters:
+    api.users.nameidlookup.username: nameid
+    api.users.nameidlookup.password: secret
+    feature_api_users_nameid_lookup: true
+    feature_hide_bookmarkable_url: true
+    auth.log.attributes:
+        uid: 'urn:mace:dir:attribute-def:uid'
+    encryption_keys:
+        default:
+            publicFile: /config/engine/engineblock.crt
+            privateFile: /config/engine/engineblock.pem
+        rollover:
+            publicFile: '%kernel.project_dir%/src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/keys/rolled-over.crt'
+            privateFile: '%kernel.project_dir%/src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/keys/rolled-over.key'
+    database.driver: pdo_pgsql
+    database.server_version: '17'
+    database.host: postgres
+    database.port: '5432'
+    database.user: ebrw
+    database.password: secret
+    database.dbname: eb
+    database.test.driver: pdo_pgsql
+    database.test.server_version: '17'
+    database.test.host: postgres
+    database.test.port: '5432'
+    database.test.user: eb_testrw
+    database.test.password: secret
+    database.test.dbname: eb_test
