@@ -20,12 +20,12 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
 use DOMDocument;
 use DOMElement;
-use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\KeyName;
 use SAML2\XML\ds\X509Certificate;
 use SAML2\XML\ds\X509Data;
 use SAML2\XML\md\KeyDescriptor;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class AbstractMockEntityFactory

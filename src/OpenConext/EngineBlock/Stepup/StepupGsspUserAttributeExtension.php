@@ -22,7 +22,7 @@ use DOMElement;
 use SAML2\Assertion;
 use SAML2\DOMDocumentFactory;
 use SAML2\Message;
-use SAML2\XML\Chunk;
+use SimpleSAML\XML\Chunk;
 
 class StepupGsspUserAttributeExtension
 {

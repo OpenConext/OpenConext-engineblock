@@ -16,6 +16,7 @@ on the EngineBlock wiki.
 Updated:
 
 * Updated Composer and Yarn (theme and Cypress) dependencies within their current version constraints to resolve open Dependabot alerts. (#2121)
+* Replaced `simplesamlphp/saml2` with `simplesamlphp/saml2-legacy` and bumped `simplesamlphp/assert` to `^2.0`, which unblocks `composer update -W` by removing the narrow `guzzlehttp/psr7 ~2.8.0` pin. `webmozart/assert` is now constrained to `^2.0`, requiring `openconext/monitor-bundle` to allow that version as well. `SAML2\XML\Chunk` moved to `SimpleSAML\XML\Chunk` as part of this change. (#2048)
 
 Removed:
 

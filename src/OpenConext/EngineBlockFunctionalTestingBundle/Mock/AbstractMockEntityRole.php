@@ -19,12 +19,12 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
 use RuntimeException;
-use SAML2\XML\Chunk;
 use SAML2\XML\ds\X509Certificate;
 use SAML2\XML\ds\X509Data;
 use SAML2\XML\md\EntityDescriptor;
 use SAML2\XML\md\SPSSODescriptor;
 use SAML2\XML\md\SSODescriptorType;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class AbstractMockEntityRole
