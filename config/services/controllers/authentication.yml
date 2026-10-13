@@ -74,6 +74,12 @@ services:
             - '@twig'
             - '@OpenConext\EngineBlock\Service\SsoSessionService'
 
+    OpenConext\EngineBlockBundle\Controller\ResetRememberedWayfController:
+        arguments:
+            $rememberedIdpCookie: '@OpenConext\EngineBlock\Service\Wayf\RememberedIdpCookie'
+            $logger: '@engineblock.compat.logger'
+            $redirectUrl: '%wayf.reset_choice_per_idp_redirect%'
+
     OpenConext\EngineBlock\Service\RequestAccessMailer:
         arguments:
             - '@symfony.mailer'

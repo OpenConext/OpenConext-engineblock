@@ -90,6 +90,21 @@ The page `/authentication/idp/remove-cookies` lets a user inspect and remove the
 including `rememberchoice` and `rememberedidps`. The page is available when either mode is enabled, and returns a 404
 when both are disabled.
 
+## Resetting the remembered choices
+
+In the per-SP mode, other applications (for example a profile page) can let users forget all their remembered choices
+by sending them to:
+
+    https://<engineblock-host>/reset-remember-wayf
+
+The endpoint removes the `rememberedidps` cookie and redirects the user (HTTP 302) to the URL configured in:
+
+    # Where to send the user after the reset. Required, must not be empty.
+    wayf.reset_choice_per_idp_redirect: 'https://engine.dev.openconext.local/'
+
+The endpoint only accepts `GET` requests and needs no authentication, because it only clears a cookie in the user's own
+browser. It does nothing when the cookie is not present. The `rememberchoice` cookie of the global mode is not touched.
+
 ## Switching modes
 
 Cookies written in one mode are not read in the other. After switching, users have to make their choice once more.
