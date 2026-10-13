@@ -27,6 +27,7 @@ use OpenConext\EngineBlock\Service\CookieService;
 use OpenConext\EngineBlock\Service\TimeProvider\TimeProvider;
 use OpenConext\EngineBlock\Service\Wayf\RememberedIdpCookie;
 use OpenConext\EngineBlockBundle\Controller\ResetRememberedWayfController;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -42,6 +43,7 @@ class ResetRememberedWayfControllerTest extends TestCase
     private const int MAX_ENTRIES = 16;
     private const string COOKIE_DOMAIN = 'engine.example.org';
     private const string COOKIE_PATH = '/';
+    private const array ALLOWED_REDIRECT_HOSTS = ['profile.example.org'];
 
     #[Test]
     public function cookie_with_valid_entries_is_cleared_and_logged_with_entry_count(): void
@@ -75,7 +77,7 @@ class ResetRememberedWayfControllerTest extends TestCase
         $response = $controller($this->buildRequest($raw));
 
         $this->assertSame(Response::HTTP_FOUND, $response->getStatusCode());
-        $this->assertSame(self::REDIRECT_URL, $response->getTargetUrl());
+        $this->assertSame(self::REDIRECT_URL . '?wayfReset=removed', $response->getTargetUrl());
     }
 
     #[Test]
@@ -96,7 +98,7 @@ class ResetRememberedWayfControllerTest extends TestCase
         $response = $controller($this->buildRequest('not valid base64 or deflated data!'));
 
         $this->assertSame(Response::HTTP_FOUND, $response->getStatusCode());
-        $this->assertSame(self::REDIRECT_URL, $response->getTargetUrl());
+        $this->assertSame(self::REDIRECT_URL . '?wayfReset=removed', $response->getTargetUrl());
     }
 
     #[Test]
@@ -113,7 +115,7 @@ class ResetRememberedWayfControllerTest extends TestCase
         $response = $controller($this->buildRequest(null));
 
         $this->assertSame(Response::HTTP_FOUND, $response->getStatusCode());
-        $this->assertSame(self::REDIRECT_URL, $response->getTargetUrl());
+        $this->assertSame(self::REDIRECT_URL . '?wayfReset=none', $response->getTargetUrl());
     }
 
     #[Test]
@@ -126,6 +128,211 @@ class ResetRememberedWayfControllerTest extends TestCase
             Mockery::mock(LoggerInterface::class),
             ''
         );
+    }
+
+    #[Test]
+    public function a_redirect_parameter_pointing_at_an_allowed_host_is_honoured(): void
+    {
+        $cookieService = Mockery::mock(CookieService::class);
+        $rememberedIdpCookie = $this->buildRememberedIdpCookie($cookieService);
+
+        $logger = Mockery::mock(LoggerInterface::class);
+        $logger->shouldNotReceive('info');
+
+        $controller = new ResetRememberedWayfController(
+            $rememberedIdpCookie,
+            $logger,
+            self::REDIRECT_URL,
+            self::ALLOWED_REDIRECT_HOSTS,
+        );
+
+        $response = $controller($this->buildRequest(null, 'https://profile.example.org/my-profile'));
+
+        $this->assertSame(
+            'https://profile.example.org/my-profile?wayfReset=none',
+            $response->getTargetUrl()
+        );
+    }
+
+    #[Test]
+    public function a_redirect_parameter_that_already_has_a_query_string_is_appended_to(): void
+    {
+        $cookieService = Mockery::mock(CookieService::class);
+        $rememberedIdpCookie = $this->buildRememberedIdpCookie($cookieService);
+
+        $logger = Mockery::mock(LoggerInterface::class);
+        $logger->shouldNotReceive('info');
+
+        $controller = new ResetRememberedWayfController(
+            $rememberedIdpCookie,
+            $logger,
+            self::REDIRECT_URL,
+            self::ALLOWED_REDIRECT_HOSTS,
+        );
+
+        $response = $controller($this->buildRequest(null, 'https://profile.example.org/my-profile?foo=bar'));
+
+        $this->assertSame(
+            'https://profile.example.org/my-profile?foo=bar&wayfReset=none',
+            $response->getTargetUrl()
+        );
+    }
+
+    #[Test]
+    public function a_redirect_parameter_with_a_fragment_keeps_the_fragment_after_the_query_string(): void
+    {
+        $cookieService = Mockery::mock(CookieService::class);
+        $rememberedIdpCookie = $this->buildRememberedIdpCookie($cookieService);
+
+        $logger = Mockery::mock(LoggerInterface::class);
+        $logger->shouldNotReceive('info');
+
+        $controller = new ResetRememberedWayfController(
+            $rememberedIdpCookie,
+            $logger,
+            self::REDIRECT_URL,
+            self::ALLOWED_REDIRECT_HOSTS,
+        );
+
+        $response = $controller($this->buildRequest(null, 'https://profile.example.org/my-profile#login-methods'));
+
+        $this->assertSame(
+            'https://profile.example.org/my-profile?wayfReset=none#login-methods',
+            $response->getTargetUrl()
+        );
+    }
+
+    #[Test]
+    public function a_redirect_parameter_pointing_at_a_host_that_is_not_allowed_falls_back_to_the_configured_redirect(): void
+    {
+        $cookieService = Mockery::mock(CookieService::class);
+        $rememberedIdpCookie = $this->buildRememberedIdpCookie($cookieService);
+
+        $logger = Mockery::mock(LoggerInterface::class);
+        $logger->shouldNotReceive('info');
+
+        $controller = new ResetRememberedWayfController(
+            $rememberedIdpCookie,
+            $logger,
+            self::REDIRECT_URL,
+            self::ALLOWED_REDIRECT_HOSTS,
+        );
+
+        $response = $controller($this->buildRequest(null, 'https://evil.example.org/phishing'));
+
+        $this->assertSame(self::REDIRECT_URL . '?wayfReset=none', $response->getTargetUrl());
+    }
+
+    #[Test]
+    public function a_malformed_redirect_parameter_falls_back_to_the_configured_redirect(): void
+    {
+        $cookieService = Mockery::mock(CookieService::class);
+        $rememberedIdpCookie = $this->buildRememberedIdpCookie($cookieService);
+
+        $logger = Mockery::mock(LoggerInterface::class);
+        $logger->shouldNotReceive('info');
+
+        $controller = new ResetRememberedWayfController(
+            $rememberedIdpCookie,
+            $logger,
+            self::REDIRECT_URL,
+            self::ALLOWED_REDIRECT_HOSTS,
+        );
+
+        $response = $controller($this->buildRequest(null, 'not-a-url'));
+
+        $this->assertSame(self::REDIRECT_URL . '?wayfReset=none', $response->getTargetUrl());
+    }
+
+    #[Test]
+    public function a_redirect_parameter_with_a_disallowed_scheme_falls_back_to_the_configured_redirect(): void
+    {
+        $cookieService = Mockery::mock(CookieService::class);
+        $rememberedIdpCookie = $this->buildRememberedIdpCookie($cookieService);
+
+        $logger = Mockery::mock(LoggerInterface::class);
+        $logger->shouldNotReceive('info');
+
+        $controller = new ResetRememberedWayfController(
+            $rememberedIdpCookie,
+            $logger,
+            self::REDIRECT_URL,
+            self::ALLOWED_REDIRECT_HOSTS,
+        );
+
+        $response = $controller($this->buildRequest(null, 'javascript:alert(1)//profile.example.org'));
+
+        $this->assertSame(self::REDIRECT_URL . '?wayfReset=none', $response->getTargetUrl());
+    }
+
+    #[Test]
+    #[DataProvider('unsafeRedirects')]
+    public function an_unsafe_redirect_parameter_falls_back_to_the_configured_redirect(string $redirect): void
+    {
+        $logger = Mockery::mock(LoggerInterface::class);
+        $logger->shouldNotReceive('info');
+
+        $controller = new ResetRememberedWayfController(
+            $this->buildRememberedIdpCookie(Mockery::mock(CookieService::class)),
+            $logger,
+            self::REDIRECT_URL,
+            self::ALLOWED_REDIRECT_HOSTS,
+        );
+
+        $response = $controller($this->buildRequest(null, $redirect));
+
+        $this->assertSame(self::REDIRECT_URL . '?wayfReset=none', $response->getTargetUrl());
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function unsafeRedirects(): array
+    {
+        return [
+            'backslash before the allowed host' => ['https://evil.example.org\\@profile.example.org/'],
+            'plain http' => ['http://profile.example.org/my-profile'],
+            'userinfo with the allowed host' => ['https://profile.example.org@evil.example.org/'],
+            'userinfo before the allowed host' => ['https://evil.example.org@profile.example.org/'],
+            'protocol relative url' => ['//profile.example.org/my-profile'],
+            'allowed host as a subdomain of another host' => ['https://profile.example.org.evil.example.org/'],
+            'tab inside the host' => ["https://profile.example.org\t.evil.example.org/"],
+            'fragment userinfo trick' => ['https://evil.example.org#@profile.example.org/'],
+            'query userinfo trick' => ['https://evil.example.org?@profile.example.org/'],
+            'ipv6 host with userinfo' => ['https://[::1]@profile.example.org/'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('normalisedRedirects')]
+    public function a_redirect_parameter_the_browser_would_accept_is_redirected_to_in_its_normalised_form(
+        string $redirect,
+        string $expected,
+    ): void {
+        $controller = new ResetRememberedWayfController(
+            $this->buildRememberedIdpCookie(Mockery::mock(CookieService::class)),
+            Mockery::mock(LoggerInterface::class),
+            self::REDIRECT_URL,
+            self::ALLOWED_REDIRECT_HOSTS,
+        );
+
+        $response = $controller($this->buildRequest(null, $redirect));
+
+        $this->assertSame($expected . '?wayfReset=none', $response->getTargetUrl());
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function normalisedRedirects(): array
+    {
+        return [
+            'uppercase host' => ['https://PROFILE.Example.ORG/my-profile', 'https://profile.example.org/my-profile'],
+            'leading space' => [' https://profile.example.org/', 'https://profile.example.org/'],
+            'tab inside the scheme' => ["htt\tps://profile.example.org/", 'https://profile.example.org/'],
+            'backslash in the path' => ['https://profile.example.org\\my-profile', 'https://profile.example.org/my-profile'],
+            'newline in the path' => ["https://profile.example.org/\nevil", 'https://profile.example.org/evil'],
+        ];
     }
 
     private function buildRememberedIdpCookie(CookieService $cookieService): RememberedIdpCookie
@@ -141,9 +348,10 @@ class ResetRememberedWayfControllerTest extends TestCase
         );
     }
 
-    private function buildRequest(?string $rememberedIdpsCookie): Request
+    private function buildRequest(?string $rememberedIdpsCookie, ?string $redirect = null): Request
     {
-        $request = Request::create('/reset-remember-wayf');
+        $query = $redirect !== null ? ['redirect' => $redirect] : [];
+        $request = Request::create('/reset-remember-wayf', 'GET', $query);
         if ($rememberedIdpsCookie !== null) {
             $request->cookies->set(RememberedIdpCookie::NAME, $rememberedIdpsCookie);
         }

@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Uri\WhatWg\Url;
 
 final class ResetRememberedWayfController
 {
@@ -34,6 +35,7 @@ final class ResetRememberedWayfController
         private readonly RememberedIdpCookie $rememberedIdpCookie,
         private readonly LoggerInterface $logger,
         private readonly string $redirectUrl,
+        private readonly array $allowedRedirectHosts = [],
     ) {
         if ($this->redirectUrl === '') {
             throw new InvalidArgumentException(
@@ -56,6 +58,49 @@ final class ResetRememberedWayfController
             ));
         }
 
-        return new RedirectResponse($this->redirectUrl, Response::HTTP_FOUND);
+        $target = $this->resolveRedirectTarget($request->query->get('redirect'));
+        $location = $this->appendQueryParameter($target, 'wayfReset', $raw !== null ? 'removed' : 'none');
+
+        return new RedirectResponse($location, Response::HTTP_FOUND);
+    }
+
+    private function resolveRedirectTarget(?string $redirect): string
+    {
+        if ($redirect === null || $redirect === '') {
+            return $this->redirectUrl;
+        }
+
+        return $this->validatedRedirect($redirect) ?? $this->redirectUrl;
+    }
+
+    private function validatedRedirect(string $redirect): ?string
+    {
+        $url = Url::parse($redirect);
+
+        if ($url === null
+            || $url->getScheme() !== 'https'
+            || $url->getUsername() !== null
+            || $url->getPassword() !== null
+            || !in_array($url->getAsciiHost(), $this->allowedRedirectHosts, true)
+        ) {
+            return null;
+        }
+
+        return $url->toAsciiString();
+    }
+
+    private function appendQueryParameter(string $url, string $key, string $value): string
+    {
+        $fragment = '';
+        $hashPosition = strpos($url, '#');
+
+        if ($hashPosition !== false) {
+            $fragment = substr($url, $hashPosition);
+            $url = substr($url, 0, $hashPosition);
+        }
+
+        $separator = str_contains($url, '?') ? '&' : '?';
+
+        return $url . $separator . $key . '=' . rawurlencode($value) . $fragment;
     }
 }
