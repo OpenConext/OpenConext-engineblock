@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Uri\WhatWg\Url;
 
 final class ResetRememberedWayfController
 {
@@ -65,32 +66,27 @@ final class ResetRememberedWayfController
 
     private function resolveRedirectTarget(?string $redirect): string
     {
-        if ($redirect === null || $redirect === '' || !$this->isAllowedRedirect($redirect)) {
+        if ($redirect === null || $redirect === '') {
             return $this->redirectUrl;
         }
 
-        return $redirect;
+        return $this->validatedRedirect($redirect) ?? $this->redirectUrl;
     }
 
-    private function isAllowedRedirect(string $redirect): bool
+    private function validatedRedirect(string $redirect): ?string
     {
-        // Browsers normalise backslashes and drop control characters and whitespace, parse_url() does not.
-        // Such a value could pass the host check here and still send the browser to another host.
-        if (preg_match('/[\x00-\x20\x7f\\\\]/', $redirect) === 1) {
-            return false;
+        $url = Url::parse($redirect);
+
+        if ($url === null
+            || $url->getScheme() !== 'https'
+            || $url->getUsername() !== null
+            || $url->getPassword() !== null
+            || !in_array($url->getAsciiHost(), $this->allowedRedirectHosts, true)
+        ) {
+            return null;
         }
 
-        $parts = parse_url($redirect);
-
-        if ($parts === false || ($parts['scheme'] ?? null) !== 'https' || !isset($parts['host'])) {
-            return false;
-        }
-
-        if (isset($parts['user']) || isset($parts['pass'])) {
-            return false;
-        }
-
-        return in_array($parts['host'], $this->allowedRedirectHosts, true);
+        return $url->toAsciiString();
     }
 
     private function appendQueryParameter(string $url, string $key, string $value): string

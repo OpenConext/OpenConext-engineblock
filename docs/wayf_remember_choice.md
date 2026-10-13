@@ -113,9 +113,10 @@ The caller can choose where the user lands with the `redirect` query parameter, 
     wayf.reset_choice_allowed_redirect_hosts:
         - profile.dev.openconext.local
 
-A missing, malformed or unlisted `redirect` falls back to `wayf.reset_choice_per_idp_redirect`. Plain `http` URLs, URLs
-with credentials (`user@host`), and URLs containing backslashes, whitespace or control characters are rejected as well,
-because browsers interpret those differently from the host check. The value in `parameters.yml.dist` is the local
+A missing, malformed or unlisted `redirect` falls back to `wayf.reset_choice_per_idp_redirect`. Plain `http` URLs and
+URLs with credentials (`user@host`) are rejected as well. The value is parsed with the WHATWG URL parser, the same
+specification browsers use, so the host that is checked is the host the browser navigates to. The endpoint redirects to
+the normalised form of the URL (for example with a lowercase host). The value in `parameters.yml.dist` is the local
 development host. Replace it with the hosts of your own deployment.
 
 The endpoint appends the query parameter `wayfReset` to the final URL, before any fragment. Its value is `removed` when

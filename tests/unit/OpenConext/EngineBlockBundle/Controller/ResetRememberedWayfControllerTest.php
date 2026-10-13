@@ -291,15 +291,47 @@ class ResetRememberedWayfControllerTest extends TestCase
     {
         return [
             'backslash before the allowed host' => ['https://evil.example.org\\@profile.example.org/'],
-            'backslash in the path' => ['https://profile.example.org\\evil.example.org/'],
             'plain http' => ['http://profile.example.org/my-profile'],
             'userinfo with the allowed host' => ['https://profile.example.org@evil.example.org/'],
             'userinfo before the allowed host' => ['https://evil.example.org@profile.example.org/'],
-            'tab inside the scheme' => ["htt\tps://profile.example.org/"],
-            'newline in the url' => ["https://profile.example.org/\nevil"],
-            'leading space' => [' https://profile.example.org/'],
             'protocol relative url' => ['//profile.example.org/my-profile'],
             'allowed host as a subdomain of another host' => ['https://profile.example.org.evil.example.org/'],
+            'tab inside the host' => ["https://profile.example.org\t.evil.example.org/"],
+            'fragment userinfo trick' => ['https://evil.example.org#@profile.example.org/'],
+            'query userinfo trick' => ['https://evil.example.org?@profile.example.org/'],
+            'ipv6 host with userinfo' => ['https://[::1]@profile.example.org/'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('normalisedRedirects')]
+    public function a_redirect_parameter_the_browser_would_accept_is_redirected_to_in_its_normalised_form(
+        string $redirect,
+        string $expected,
+    ): void {
+        $controller = new ResetRememberedWayfController(
+            $this->buildRememberedIdpCookie(Mockery::mock(CookieService::class)),
+            Mockery::mock(LoggerInterface::class),
+            self::REDIRECT_URL,
+            self::ALLOWED_REDIRECT_HOSTS,
+        );
+
+        $response = $controller($this->buildRequest(null, $redirect));
+
+        $this->assertSame($expected . '?wayfReset=none', $response->getTargetUrl());
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function normalisedRedirects(): array
+    {
+        return [
+            'uppercase host' => ['https://PROFILE.Example.ORG/my-profile', 'https://profile.example.org/my-profile'],
+            'leading space' => [' https://profile.example.org/', 'https://profile.example.org/'],
+            'tab inside the scheme' => ["htt\tps://profile.example.org/", 'https://profile.example.org/'],
+            'backslash in the path' => ['https://profile.example.org\\my-profile', 'https://profile.example.org/my-profile'],
+            'newline in the path' => ["https://profile.example.org/\nevil", 'https://profile.example.org/evil'],
         ];
     }
 
