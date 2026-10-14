@@ -209,7 +209,7 @@ class TestEntitySeeder
             $wayfIdps[] = new WayfIdp(
                 name: $identityProvider->$name,
                 logo: $identityProvider->logo ? $identityProvider->logo->url : '/images/placeholder.png',
-                keywords: (array) $identityProvider->keywordsEn,
+                keywords: array_map('trim', explode(',', (string) $identityProvider->keywordsEn)),
                 accessible: $identityProvider->enabledInWayf,
                 id: md5($identityProvider->entityId),
                 entityId: $identityProvider->entityId,
