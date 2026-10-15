@@ -23,6 +23,7 @@ use Behat\Mink\Exception\ExpectationException;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
+use OpenConext\EngineBlock\Service\Wayf\RememberedIdpCookie;
 use OpenConext\EngineBlockBundle\Sbs\Msg;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient;
@@ -39,6 +40,7 @@ use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RuntimeException;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use Symfony\Component\BrowserKit\Cookie;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Both set up and tasks can be a lot...
@@ -371,6 +373,19 @@ class EngineBlockContext extends AbstractSubContext
      */
     public function iSelectOnTheWAYF($idpName)
     {
+        $this->selectIdpOnTheWayf($idpName, false);
+    }
+
+    /**
+     * @Given /^I select "([^"]*)" on the WAYF and remember my choice$/
+     */
+    public function iSelectOnTheWAYFAndRememberMyChoice($idpName)
+    {
+        $this->selectIdpOnTheWayf($idpName, true);
+    }
+
+    private function selectIdpOnTheWayf(string $idpName, bool $rememberChoice): void
+    {
         /** @var MockIdentityProvider $mockIdp */
         $mockIdp = $this->mockIdpRegistry->get($idpName);
 
@@ -380,13 +395,29 @@ class EngineBlockContext extends AbstractSubContext
             );
         }
 
-        $selector = '[data-entityid="' . $mockIdp->entityId() . '"] button.idp__submit';
+        $selector = '[data-entityid="' . $mockIdp->entityId() . '"]';
+        $idpContainer = $this->getMinkContext()->getSession()->getPage()->find('css', $selector);
 
-        $mink = $this->getMinkContext()->getSession()->getPage();
-        $button = $mink->find('css', $selector);
+        if (!$idpContainer) {
+            throw new RuntimeException(sprintf('Unable to find idp container with selector "%s"', $selector));
+        }
+
+        if ($rememberChoice) {
+            $rememberChoiceField = $idpContainer->find('css', 'input[name="rememberChoice"]');
+
+            if (!$rememberChoiceField) {
+                throw new RuntimeException(
+                    sprintf('Unable to find hidden rememberChoice field within selector "%s"', $selector)
+                );
+            }
+
+            $rememberChoiceField->setValue('1');
+        }
+
+        $button = $idpContainer->find('css', 'button.idp__submit');
 
         if (!$button) {
-            throw new RuntimeException(sprintf('Unable to find button with selector "%s"', $selector));
+            throw new RuntimeException(sprintf('Unable to find button with selector "%s button.idp__submit"', $selector));
         }
 
         $button->click();
@@ -510,6 +541,15 @@ class EngineBlockContext extends AbstractSubContext
         // set unknown session id to prevent session not found exception
         $session->setCookie(session_name(), '000000');
     }
+
+    /**
+     * @Given /^I start a new browser session$/
+     */
+    public function iStartANewBrowserSession()
+    {
+        $this->getMinkContext()->getSession()->setCookie(session_name(), null);
+    }
+
     /**
      * @Given /^I lose my session and reload$/
      */
@@ -724,6 +764,91 @@ class EngineBlockContext extends AbstractSubContext
                 $this->getMinkContext()->getSession()->getDriver()
             );
         }
+    }
+
+    /**
+     * @Then /^the "rememberedidps" cookie should be set$/
+     */
+    public function theRememberedIdpsCookieShouldBeSet()
+    {
+        $cookie = $this->getMinkContext()->getSession()->getCookie(RememberedIdpCookie::NAME);
+
+        if ($cookie === null) {
+            throw new ExpectationException(
+                'The rememberedidps cookie has not been set',
+                $this->getMinkContext()->getSession()->getDriver()
+            );
+        }
+    }
+
+    /**
+     * @Then /^the "rememberedidps" cookie should not be set$/
+     */
+    public function theRememberedIdpsCookieShouldNotBeSet()
+    {
+        $cookie = $this->getMinkContext()->getSession()->getCookie(RememberedIdpCookie::NAME);
+
+        if ($cookie !== null) {
+            throw new ExpectationException(
+                'The rememberedidps cookie should not be set, but it is',
+                $this->getMinkContext()->getSession()->getDriver()
+            );
+        }
+    }
+
+    /**
+     * @Then /^the "rememberedidps" cookie should remember "([^"]*)" for SP "([^"]*)"$/
+     */
+    public function theRememberedIdpsCookieShouldRemember($idpName, $spName)
+    {
+        $cookie = $this->getMinkContext()->getSession()->getCookie(RememberedIdpCookie::NAME);
+        $entries = $cookie === null ? null : json_decode((string) gzinflate((string) base64_decode($cookie, true)), true);
+        $spEntityId = $this->mockSpRegistry->get($spName)->entityId();
+        $idpEntityId = $this->mockIdpRegistry->get($idpName)->entityId();
+
+        if (!is_array($entries) || ($entries[$spEntityId]['idp'] ?? null) !== $idpEntityId) {
+            throw new ExpectationException(
+                sprintf('The rememberedidps cookie does not remember "%s" for SP "%s"', $idpName, $spName),
+                $this->getMinkContext()->getSession()->getDriver()
+            );
+        }
+    }
+
+    /**
+     * @Given /^my browser has remembered IdP "([^"]*)" for SP "([^"]*)"$/
+     */
+    public function myBrowserHasRememberedIdpForSp($idpName, $spName)
+    {
+        $this->setRememberedIdpsCookie($idpName, $spName, time() + 3600);
+    }
+
+    /**
+     * @Given /^my browser has remembered IdP "([^"]*)" for SP "([^"]*)" but that choice has expired$/
+     */
+    public function myBrowserHasRememberedIdpForSpButItHasExpired($idpName, $spName)
+    {
+        $this->setRememberedIdpsCookie($idpName, $spName, time() - 3600);
+    }
+
+    private function setRememberedIdpsCookie(string $idpName, string $spName, int $expires): void
+    {
+        $entries = [
+            $this->mockSpRegistry->get($spName)->entityId() => [
+                'idp' => $this->mockIdpRegistry->get($idpName)->entityId(),
+                'expires' => $expires,
+            ],
+        ];
+
+        $cookie = new Cookie(
+            RememberedIdpCookie::NAME,
+            base64_encode(gzdeflate(json_encode($entries))),
+            null,
+            '/',
+            parse_url($this->engineBlockDomain, PHP_URL_HOST),
+            true
+        );
+
+        $this->getMinkContext()->getSession()->getDriver()->getClient()->getCookieJar()->set($cookie);
     }
 
     /**
