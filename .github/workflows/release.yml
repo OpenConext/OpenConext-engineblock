@@ -5,6 +5,7 @@ on:
   push:
     tags:
       - "*.*.*"
+      - "*.*-*"
 
 jobs:
   build-release-and-push-container:
