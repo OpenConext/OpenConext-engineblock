@@ -28,7 +28,12 @@
         </p>
         <form id="ProcessForm" method="post" action="{{ action }}">
             <input type="hidden" name="{{ name }}" value="{{ message }}">
-            {{ xtra|raw }}
+            {% if return is defined and return %}
+                <input type="hidden" name="return" value="{{ return }}">
+            {% endif %}
+            {% if relayState is defined and relayState %}
+                <input type="hidden" name="RelayState" value="{{ relayState }}">
+            {% endif %}
             <noscript>
                 <p>
                     <strong>{{ 'note'|trans }}:</strong>
