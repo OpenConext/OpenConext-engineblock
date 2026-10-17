@@ -1,5 +1,39 @@
 # UPGRADE NOTES
 
+## 7.3.0
+
+### Configuration changes
+
+#### WAYF "Remember My Choice" (Per-SP mode)
+
+EngineBlock 7.3.0 introduces a per-SP "remember my choice" mode for the WAYF (`feature_enable_wayf_remember_choice_per_idp`), which can be used instead of the global mode (`wayf.remember_choice`). See `docs/wayf_remember_choice.md` for comprehensive documentation.
+
+* **Mutual Exclusivity:** `wayf.remember_choice` and `feature_enable_wayf_remember_choice_per_idp` are mutually exclusive. EngineBlock refuses to build its container (during `cache:clear` or `cache:warmup`) if both are set to `true`. When enabling per-SP mode, ensure `wayf.remember_choice` is set to `false`.
+* **New Parameters:** Add or update the following parameters in `parameters.yaml` (or `parameters.yml`):
+    * `feature_enable_wayf_remember_choice_per_idp`: Set to `true` to enable per-SP remember choice mode, or `false` to keep it disabled (default: `false`).
+    * `wayf.remember_choice_per_idp_lifetime`: Lifetime of a remembered choice in seconds (default: `7776000`, 90 days).
+    * `wayf.remember_choice_per_idp_max`: Maximum number of remembered SP choices stored per cookie before oldest-expiring entries are pruned. Choices are stored in a browser cookie; do not set this value too high, because the cookie size is limited (default: `16`).
+    * `wayf.reset_choice_per_idp_redirect`: Default redirect URL after a user visits `/reset-remember-wayf` to clear their remembered choices. Shoudl point to Profile (`https://profile.openconext.org/`) unless you have a different application replacing it. **Must not be empty**.
+    * `wayf.reset_choice_allowed_redirect_hosts`: List of allowed hostnames for the optional `redirect` query parameter on `/reset-remember-wayf` (e.g. `[ profile.example.org ]`). If a requested redirect host is not in this list, EngineBlock falls back to `wayf.reset_choice_per_idp_redirect`.
+* **SP Metadata Opt-in:** Individual SPs must be opted in through Manage metadata by setting `coin:wayf_remember_choice: true`. This metadata field is present by default in Manage >=9.9, but you can also manually add it to earlier versions.
+
+Example configuration snippet in `parameters.yaml`:
+
+```yaml
+parameters:
+    wayf.remember_choice: false
+    feature_enable_wayf_remember_choice_per_idp: true
+    wayf.remember_choice_per_idp_lifetime: 7776000
+    wayf.remember_choice_per_idp_max: 16
+    wayf.reset_choice_per_idp_redirect: "https://profile.openconext.org/"
+    wayf.reset_choice_allowed_redirect_hosts:
+        - "profile.openconext.org"
+```
+
+#### Removed Parameters
+
+* Remove `addgueststatus_guestqualifier` from `parameters.yaml`: The `guest_qualifier` / `AddGuestStatus` feature has been removed as it was unused (#1294).
+
 ## 7.2.0
 
 Engineblock is now upgraded to Symfony 7.4 and requires PHP 8.5. Older PHP versions might work, but have not been tested.

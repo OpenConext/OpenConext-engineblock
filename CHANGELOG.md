@@ -11,32 +11,28 @@ More information about our release strategy can be found in
 the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes)
 on the EngineBlock wiki.
 
-## Unreleased
+## 7.3.0
 
 Features:
 
 * Added a per-SP "remember my choice" mode for the WAYF, enabled with
-  `feature_enable_wayf_remember_choice_per_idp` and the SP metadata coin `coin:wayf_remember_choice`. See
+  `feature_enable_wayf_remember_choice_per_idp` and the SP metadata coin `coin:wayf_remember_choice`. See ([#2065](https://github.com/OpenConext/OpenConext-engineblock/issues/2065)) and
   `docs/wayf_remember_choice.md`.
-* The per-SP mode and the existing global mode (`wayf.remember_choice`) are mutually exclusive. EngineBlock refuses to
-  build its container (for example during `cache:clear` or `cache:warmup`) when both are `true`. Enable only one.
-* The per-SP mode does not require `wayf.remember_choice`. Leave `wayf.remember_choice` set to `false` when enabling it.
-* The cookie removal page `/authentication/idp/remove-cookies` is now also available in the per-SP mode and lists the
-  `rememberedidps` cookie. Before, it was only available when `wayf.remember_choice` was `true`.
-* Added the endpoint `/reset-remember-wayf`, which removes the per-SP `rememberedidps` cookie and redirects to the URL
-  configured in `wayf.reset_choice_per_idp_redirect`. This new parameter must not be empty. See
-  `docs/wayf_remember_choice.md`.
-* The `/reset-remember-wayf` endpoint now accepts an optional `redirect` query parameter, so callers such as Profile
-  can send the user back to the page they came from after clearing their remembered per-SP WAYF choices, instead of
-  always sending them to the operator-configured `wayf.reset_choice_per_idp_redirect`. The target must be an `https`
-  URL whose host is listed in the new parameter `wayf.reset_choice_allowed_redirect_hosts`; any other value falls
-  back to `wayf.reset_choice_per_idp_redirect`. The endpoint also appends `wayfReset=removed` or `wayfReset=none` to
-  the redirect URL, so the caller can tell whether a cookie was actually cleared.
+    * The per-SP mode and the existing global mode (`wayf.remember_choice`) are mutually exclusive. EngineBlock refuses to build its container (for example during `cache:clear` or `cache:warmup`) when both are `true`. Enable only one.
+    * The per-SP mode does not require `wayf.remember_choice`. Leave `wayf.remember_choice` set to `false` when enabling it.
+    * The cookie removal page `/authentication/idp/remove-cookies` is now also available in the per-SP mode and lists the `rememberedidps` cookie. Before, it was only available when `wayf.remember_choice` was `true`.
+    * Added the endpoint `/reset-remember-wayf`, which removes the per-SP `rememberedidps` cookie and redirects to the URL configured in `wayf.reset_choice_per_idp_redirect`. This new parameter must not be empty. See `docs/wayf_remember_choice.md`.
+    * The `/reset-remember-wayf` endpoint now accepts an optional `redirect` query parameter, so callers such as Profile can send the user back to the page they came from after clearing their remembered per-SP WAYF choices, instead of always sending them to the operator-configured `wayf.reset_choice_per_idp_redirect`. The target must be an `https` URL whose host is listed in the new parameter `wayf.reset_choice_allowed_redirect_hosts`; any other value falls back to `wayf.reset_choice_per_idp_redirect`. The endpoint also appends `wayfReset=removed` or `wayfReset=none` to the redirect URL, so the caller can tell whether a cookie was actually cleared.
 
 Updated:
 
 * Updated Composer and Yarn (theme and Cypress) dependencies within their current version constraints to resolve open Dependabot alerts. (#2121)
 * Replaced `simplesamlphp/saml2` with `simplesamlphp/saml2-legacy` and bumped `simplesamlphp/assert` to `^2.0`, which unblocks `composer update -W` by removing the narrow `guzzlehttp/psr7 ~2.8.0` pin. `webmozart/assert` is now constrained to `^2.0`, requiring `openconext/monitor-bundle` to allow that version as well. `SAML2\XML\Chunk` moved to `SimpleSAML\XML\Chunk` as part of this change. (#2048)
+
+Fixed:
+
+* Disable `autocomplete`, `autocorrect`, `autocapitalize`, and `spellcheck` on the WAYF search input field to prevent unintended spelling alterations and IdP selection errors (#1734).
+* Improved test suite reliability and coverage across acceptance and end-to-end suites, re-enabling suppressed WAYF Cypress test cases, covering per-SP remember choice workflows, and adding regression tests for SP-bound SAML responses (#2056, #2110).
 
 Removed:
 
