@@ -8,6 +8,12 @@ monolog:
             handler: nested
             level:     debug
             channels: ["!authentication"]
+        critical:
+            type: stream
+            level: error
+            path: "%kernel.logs_dir%/error.log"
+            formatter: monolog.formatter.line
+            channels: [ "!event" ]
         nested:
             type:      stream
             level:     debug
