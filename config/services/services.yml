@@ -434,6 +434,7 @@ services:
             - "%sram.interrupt_location%"
             - "%sram.api_token%"
             - "%sram.verify_peer%"
+            - "@logger"
 
     engineblock.sbs.http_client:
         class: OpenConext\EngineBlock\Http\HttpClient
@@ -453,3 +454,4 @@ services:
         class: OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger
         arguments:
             - "%sram.allowed_attributes%"
+            - "@logger"

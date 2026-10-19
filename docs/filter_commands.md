@@ -341,6 +341,13 @@ If the sessionId is known in SBS, EB will merge the attributes supplied by SBS i
 IF the sessionId is unknown, later in the Consume Assertion process, the browser will be redirected to SBS,
 which will redirect back to EB after a successful check. Then the attributes from SBS will be merged after all.
 
+Logging of the SBS flow:
+- NOTICE: the interrupt / no interrupt decision, the redirect of the user to SBS, the return of the user from SBS and
+  which attributes were added, merged or replaced.
+- INFO: requests sent to SBS, the attributes response received and the SBS interrupt reason.
+- DEBUG: the attribute names sent in the authz request and the full JSON responses from SBS. These responses contain
+  user attributes and the interrupt nonce, so do not enable DEBUG logging in production.
+
 See https://github.com/OpenConext/OpenConext-engineblock/issues/1804 for details.
 
 

@@ -52,6 +52,8 @@ class EngineBlock_Corto_Module_Service_SramInterrupt
 
         EngineBlock_ApplicationSingleton::getInstance()->getDiContainerRuntime()->correlationIdService->resolve($id);
 
+        $this->_server->getLogger()->notice('User returned from SBS interrupt');
+
         $nextProcessStep = $this->_processingStateHelper->getStepByRequestId(
             $id,
             ProcessingStateHelperInterface::STEP_SRAM
