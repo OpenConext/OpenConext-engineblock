@@ -680,17 +680,16 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
             $xml = $messageElement->ownerDocument->saveXML($messageElement);
 
-            $extra = '';
-
             // If the processed assertion consumer service is set on the response, it is posted back to the SP using the
             // the 'return' hidden form field.
+            $return = null;
             if (method_exists($message, 'getReturn') && !empty(trim($message->getReturn() ?? ''))) {
-                $extra .= '<input type="hidden" name="return" value="' . htmlspecialchars($message->getReturn()) . '">';
+                $return = $message->getReturn();
             }
 
-            $extra .= $sspMessage->getRelayState()           ? '<input type="hidden" name="RelayState" value="' . htmlspecialchars($sspMessage->getRelayState()) . '">' : '';
+            $relayState = $sspMessage->getRelayState() ?: null;
 
-            $encodedMessage = htmlspecialchars(base64_encode($xml));
+            $encodedMessage = base64_encode($xml);
 
             $action = $sspMessage->getDestination();
 
@@ -714,7 +713,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 [
                     'action' => $action,
                     'message' => $encodedMessage,
-                    'xtra' => $extra,
+                    'relayState' => $relayState,
+                    'return' => $return,
                     'name' => $type,
                 ]
             );

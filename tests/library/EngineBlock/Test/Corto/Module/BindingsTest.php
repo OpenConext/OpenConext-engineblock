@@ -67,25 +67,7 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
         );
         Phake::when($this->proxyServer)->getConfig('WantsAuthnRequestsSigned')->thenReturn(false);
 
-        $engineBlock = \EngineBlock_ApplicationSingleton::getInstance();
-        $engineBlock->setDiContainerRuntime(new DiContainerRuntime(
-            $this->createStub(Twig\Environment::class),
-            $this->createStub(WayfRenderer::class),
-            $this->createStub(CorrelationIdServiceInterface::class),
-            new CurrentCorrelationId(),
-            $this->createStub(FeedbackStateHelperInterface::class),
-            $this->createStub(FeedbackInfoCollectorInterface::class),
-            $this->createStub(LoginLogger::class),
-            new RememberedIdpCookie(
-                $this->createStub(TimeProvider::class),
-                $this->createStub(CookieService::class),
-                7776000,
-                16,
-                'engine.example.org',
-                '/',
-                true,
-            ),
-        ));
+        $this->installRuntime($this->createStub(Twig\Environment::class));
 
         $this->bindings = new EngineBlock_Corto_Module_Bindings($this->proxyServer);
     }
@@ -249,6 +231,95 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends TestCase
         parse_str($parsed['query'], $params);
         $this->assertArrayHasKey('whr', $params, 'whr query parameter must be present');
         $this->assertSame('example.nl', $params['whr']);
+    }
+
+    public function testHttpPostPassesRelayStateAndReturnAsTemplateVariablesWithoutHtml()
+    {
+        $twig = $this->createMock(Twig\Environment::class);
+        $twig->expects($this->once())
+            ->method('render')
+            ->with(
+                '@theme/Authentication/View/Proxy/form.html.twig',
+                $this->callback(function (array $parameters) {
+                    $this->assertSame('relay"state<>&', $parameters['relayState']);
+                    $this->assertSame('https://engine.example.org/processed', $parameters['return']);
+                    $this->assertArrayNotHasKey('xtra', $parameters);
+                    $this->assertSame('SAMLResponse', $parameters['name']);
+                    $this->assertSame(base64_encode(base64_decode($parameters['message'], true)), $parameters['message']);
+                    return true;
+                })
+            )
+            ->willReturn('rendered');
+
+        $response = $this->createPostResponse();
+        $response->setReturn('https://engine.example.org/processed');
+        $response->setDeliverByBinding(Constants::BINDING_HTTP_POST);
+        $response->getSspMessage()->setRelayState('relay"state<>&');
+
+        $this->createBindingsWithTwig($twig)->send($response, new ServiceProvider('https://sp.example.edu'));
+
+        Phake::verify($this->proxyServer)->sendOutput('rendered');
+    }
+
+    public function testHttpPostPassesNoRelayStateOrReturnWhenAbsent()
+    {
+        $twig = $this->createMock(Twig\Environment::class);
+        $twig->expects($this->once())
+            ->method('render')
+            ->with(
+                '@theme/Authentication/View/Proxy/form.html.twig',
+                $this->callback(function (array $parameters) {
+                    $this->assertNull($parameters['relayState']);
+                    $this->assertNull($parameters['return']);
+                    return true;
+                })
+            )
+            ->willReturn('rendered');
+
+        $response = $this->createPostResponse();
+        $response->setReturn('  ');
+        $response->setDeliverByBinding(Constants::BINDING_HTTP_POST);
+
+        $this->createBindingsWithTwig($twig)->send($response, new ServiceProvider('https://sp.example.edu'));
+    }
+
+    private function installRuntime(Twig\Environment $twig): void
+    {
+        \EngineBlock_ApplicationSingleton::getInstance()->setDiContainerRuntime(new DiContainerRuntime(
+            $twig,
+            $this->createStub(WayfRenderer::class),
+            $this->createStub(CorrelationIdServiceInterface::class),
+            new CurrentCorrelationId(),
+            $this->createStub(FeedbackStateHelperInterface::class),
+            $this->createStub(FeedbackInfoCollectorInterface::class),
+            $this->createStub(LoginLogger::class),
+            new RememberedIdpCookie(
+                $this->createStub(TimeProvider::class),
+                $this->createStub(CookieService::class),
+                7776000,
+                16,
+                'engine.example.org',
+                '/',
+                true,
+            ),
+        ));
+    }
+
+    private function createPostResponse(): EngineBlock_Saml2_ResponseAnnotationDecorator
+    {
+        $sspResponse = new Response();
+        $sspResponse->setDestination('https://sp.example.edu/acs');
+
+        return new EngineBlock_Saml2_ResponseAnnotationDecorator($sspResponse);
+    }
+
+    private function createBindingsWithTwig(Twig\Environment $twig): EngineBlock_Corto_Module_Bindings
+    {
+        $this->installRuntime($twig);
+
+        Phake::when($this->proxyServer)->getLogger()->thenReturn($this->createStub(Psr\Log\LoggerInterface::class));
+
+        return new EngineBlock_Corto_Module_Bindings($this->proxyServer);
     }
 
     public function testOldSpIssueInstantLogsWarningOnly()
