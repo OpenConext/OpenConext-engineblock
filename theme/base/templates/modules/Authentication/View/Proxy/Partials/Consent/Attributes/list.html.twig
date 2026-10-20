@@ -12,8 +12,8 @@
         {% else %}
             {% set logoUrl = '/images/placeholder.png' %}
         {% endif %}
-    {% elseif idp.logo is not null %}
-        {% set logoUrl = idp.logo.url %}
+    {% elseif idp.mdui.hasLogo %}
+        {% set logoUrl = idp.mdui.logo.url %}
     {% else %}
         {% set logoUrl = '/images/placeholder.png' %}
     {% endif %}
