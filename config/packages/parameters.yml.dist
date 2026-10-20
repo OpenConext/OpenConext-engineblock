@@ -179,7 +179,28 @@ parameters:
     wayf.cutoff_point_for_showing_unfiltered_idps: 50
 
     ## Allow users to save their selected IdP and then auto-select it on returning visits.
+    ## This is the global mode: one remembered IdP for all SPs, stored in a client-side cookie.
+    ## Mutually exclusive with feature_enable_wayf_remember_choice_per_idp: enabling both fails the
+    ## container build. See docs/wayf_remember_choice.md.
     wayf.remember_choice: false
+    ## Lifetime for remembered IdP choices scoped per SP, in seconds (7776000 seconds = 90 days).
+    wayf.remember_choice_per_idp_lifetime: 7776000
+    ## Maximum number of remembered IdP choice entries to retain per SP. Once exceeded, the
+    ## oldest-expiring entries are evicted first; the newly added choice is always kept and no
+    ## error is raised (see RememberedIdpCookie::pruneOverLimit()).
+    wayf.remember_choice_per_idp_max: 16
+    ## URL to redirect the user to after visiting /reset-remember-wayf and having their
+    ## per-SP remembered IdP choices cookie removed. Operators should override this with a
+    ## real destination for their deployment; it must never be left empty, as the endpoint
+    ## refuses to serve requests (failing fast at construction time) when it is blank.
+    wayf.reset_choice_per_idp_redirect: 'https://engine.dev.openconext.local/'
+    ## Hostnames that the /reset-remember-wayf endpoint is allowed to redirect back to via
+    ## its `redirect` query parameter (e.g. so Profile can send the user back to the page
+    ## they came from). When the query parameter is missing, malformed, or points at a host
+    ## that is not in this list, the endpoint falls back to
+    ## `wayf.reset_choice_per_idp_redirect` instead.
+    wayf.reset_choice_allowed_redirect_hosts:
+        - profile.dev.openconext.local
 
     ## Toggle the default IdP quick link banner on the WAYF.
     wayf.display_default_idp_banner_on_wayf: true
@@ -235,6 +256,10 @@ parameters:
     feature_stepup_send_user_attributes: false
     feature_enable_sram_interrupt: false
     feature_hide_bookmarkable_url: false
+    ## Allow SPs to opt in to remembered IdP choices scoped per SP through Manage metadata.
+    ## This is the per-SP mode and replaces the global mode: it does not require wayf.remember_choice.
+    ## Mutually exclusive with wayf.remember_choice: enabling both fails the container build.
+    feature_enable_wayf_remember_choice_per_idp: false
 
     ##########################################################################################
     ## PROFILE SETTINGS

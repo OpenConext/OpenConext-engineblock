@@ -140,6 +140,7 @@ class Wayf
      * @param bool $showRequestAccess Show unconnected IdP's ?
      * @param bool $rememberChoiceFeature Remember the chosen IdP in Wayf?
      * @param int $cutoffPointForShowingUnfilteredIdps The cutoff point for showing unfiltered IdP's
+     * @param bool $rememberChoicePerIdp Remember the chosen IdP per SP instead of via the legacy global cookie?
      *
      * @return string Returns a json encoded config string. Used by the JavaScript of the Wayf to behave as intended.
      */
@@ -150,7 +151,8 @@ class Wayf
         $currentLocale,
         $showRequestAccess,
         $rememberChoiceFeature,
-        $cutoffPointForShowingUnfilteredIdps
+        $cutoffPointForShowingUnfilteredIdps,
+        $rememberChoicePerIdp = false
     ) {
 
         if ($showRequestAccess === true) {
@@ -173,6 +175,7 @@ class Wayf
                 'cutoffPointForShowingUnfilteredIdps' => $cutoffPointForShowingUnfilteredIdps,
                 'rememberChoiceCookieName' => self::REMEMBER_CHOICE_COOKIE_NAME,
                 'rememberChoiceFeature' => $rememberChoiceFeature,
+                'rememberChoicePerIdp' => $rememberChoicePerIdp,
                 'hideBookmarkableUrl' => $this->featureConfiguration->isEnabled('eb.hide_bookmarkable_url'),
                 'messages' => [
                     'moreIdpResults' => $this->translator->trans('more_idp_results'),

@@ -23,7 +23,9 @@ use OpenConext\EngineBlock\Request\CorrelationIdService;
 use OpenConext\EngineBlock\Request\CurrentCorrelationId;
 use OpenConext\EngineBlock\Service\FeedbackInfoCollectorInterface;
 use OpenConext\EngineBlock\Service\FeedbackStateHelperInterface;
+use OpenConext\EngineBlock\Service\Wayf\RememberedIdpCookie;
 use OpenConext\EngineBlockBridge\Logger\LoginLogger;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Service\WayfRenderer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -31,8 +33,13 @@ use Twig\Environment;
 
 class EngineBlockBootstrapper implements EventSubscriberInterface
 {
+    private const REMEMBER_CHOICE_PER_IDP_FEATURE = 'eb.feature_enable_wayf_remember_choice_per_idp';
+
     private readonly DiContainerRuntime $diContainerRuntime;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
     public function __construct(
         Environment $twig,
         WayfRenderer $wayfRenderer,
@@ -41,6 +48,8 @@ class EngineBlockBootstrapper implements EventSubscriberInterface
         FeedbackStateHelperInterface $feedbackStateHelper,
         FeedbackInfoCollectorInterface $feedbackInfoCollector,
         LoginLogger $loginLogger,
+        RememberedIdpCookie $rememberedIdpCookie,
+        FeatureConfigurationInterface $featureConfiguration,
         array $preferredIdpEntityIds = [],
     ) {
         $this->diContainerRuntime = new DiContainerRuntime(
@@ -51,6 +60,9 @@ class EngineBlockBootstrapper implements EventSubscriberInterface
             $feedbackStateHelper,
             $feedbackInfoCollector,
             $loginLogger,
+            $rememberedIdpCookie,
+            $featureConfiguration->hasFeature(self::REMEMBER_CHOICE_PER_IDP_FEATURE)
+                && $featureConfiguration->isEnabled(self::REMEMBER_CHOICE_PER_IDP_FEATURE),
             $preferredIdpEntityIds,
         );
     }

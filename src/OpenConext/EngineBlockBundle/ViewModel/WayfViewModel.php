@@ -52,6 +52,8 @@ final readonly class WayfViewModel
         public array $regularIdpList,
         /** @var WayfIdp[] */
         public array $preferredIdpList,
+        public bool $rememberChoicePerIdp = false,
+        public string $rememberChoiceDuration = '',
     ) {
     }
 

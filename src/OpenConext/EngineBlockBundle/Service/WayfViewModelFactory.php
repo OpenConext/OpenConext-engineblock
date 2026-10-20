@@ -28,6 +28,7 @@ class WayfViewModelFactory
 {
     public function __construct(
         private readonly Wayf $wayfExtension,
+        private readonly RememberChoiceDurationFormatter $durationFormatter,
     ) {
     }
 
@@ -49,6 +50,7 @@ class WayfViewModelFactory
         bool $showRequestAccess,
         string $requestId,
         ServiceProvider $serviceProvider,
+        bool $rememberChoicePerIdp = false,
     ): WayfViewModel {
         return new WayfViewModel(
             action: $action,
@@ -68,6 +70,8 @@ class WayfViewModelFactory
             idpList: $idpList,
             regularIdpList: $regularIdpList,
             preferredIdpList: $preferredIdpList,
+            rememberChoicePerIdp: $rememberChoicePerIdp,
+            rememberChoiceDuration: $rememberChoicePerIdp ? $this->durationFormatter->format() : '',
         );
     }
 }

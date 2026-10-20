@@ -22,6 +22,7 @@
         "ext-mbstring": "*",
         "ext-openssl": "*",
         "ext-pdo": "*",
+        "ext-zlib": "*",
         "beberlei/assert": "^3.3.3",
         "composer/package-versions-deprecated": "^1.11",
         "doctrine/dbal": "^4.3.3",
@@ -54,7 +55,6 @@
         "twig/twig": "^3.22.0"
     },
     "require-dev": {
-        "ext-zlib": "*",
         "behat/behat": "^3.26",
         "behat/mink": "^1.12",
         "behat/mink-browserkit-driver": "^2.2",

@@ -4,9 +4,15 @@ services:
 
     OpenConext\EngineBlock\Service\Wayf\IdpSplitter:
 
+    OpenConext\EngineBlockBundle\Service\RememberChoiceDurationFormatter:
+        autowire: true
+        arguments:
+            $lifetimeInSeconds: '%wayf.remember_choice_per_idp_lifetime%'
+
     OpenConext\EngineBlockBundle\Service\WayfViewModelFactory:
         arguments:
             $wayfExtension: '@OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Wayf'
+            $durationFormatter: '@OpenConext\EngineBlockBundle\Service\RememberChoiceDurationFormatter'
 
     OpenConext\EngineBlockBundle\Service\WayfRenderer:
         autowire: true
@@ -15,6 +21,7 @@ services:
         autowire: true
         autoconfigure: true
         arguments:
+            $featureConfiguration: '@OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration'
             $preferredIdpEntityIds: '%wayf.preferred_idp_entity_ids%'
         tags:
             - { name: kernel.event_subscriber }
@@ -172,6 +179,15 @@ services:
             - '@engineblock.compat.logger'
 
     OpenConext\EngineBlock\Service\CookieService:
+
+    OpenConext\EngineBlock\Service\Wayf\RememberedIdpCookie:
+        autowire: true
+        arguments:
+            $lifetime: '%wayf.remember_choice_per_idp_lifetime%'
+            $maxEntries: '%wayf.remember_choice_per_idp_max%'
+            $cookieDomain: ''
+            $cookiePath: '%cookie.path%'
+            $secure: '%cookie.secure%'
 
     OpenConext\EngineBlock\Metadata\Factory\Factory\ServiceProviderFactory:
         arguments:

@@ -41,6 +41,8 @@
                     action: action,
                     requestId: requestId,
                     rememberChoiceFeature: rememberChoiceFeature,
+                    rememberChoicePerIdp: rememberChoicePerIdp,
+                    rememberChoiceDuration: rememberChoiceDuration,
                     cutoffPointForShowingUnfilteredIdps: cutoffPointForShowingUnfilteredIdps,
                     showRequestAccess: showRequestAccess,
                 } only %}
@@ -60,6 +62,7 @@
         showRequestAccess: showRequestAccess,
         rememberChoiceFeature: rememberChoiceFeature,
         cutoffPointForShowingUnfilteredIdps: cutoffPointForShowingUnfilteredIdps,
+        rememberChoicePerIdp: rememberChoicePerIdp,
     } only %}
     {% include '@theme/Default/Partials/footer.html.twig' with { helpLink: helpLink } only %}
 {% endblock %}
