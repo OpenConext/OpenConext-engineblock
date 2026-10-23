@@ -18,7 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Sbs;
 
-use EngineBlock_ApplicationSingleton;
+use Psr\Log\LoggerInterface;
 
 class SbsAttributeMerger
 {
@@ -28,7 +28,7 @@ class SbsAttributeMerger
      */
     private array $allowedAttributeNames;
 
-    public function __construct(array $allowedAttributeNames)
+    public function __construct(array $allowedAttributeNames, private readonly LoggerInterface $logger)
     {
         $this->allowedAttributeNames = $allowedAttributeNames;
     }
@@ -36,20 +36,35 @@ class SbsAttributeMerger
     public function mergeAttributes(array $samlAttributes, array $sbsAttributes): array
     {
         $validAttributes = $this->validSbsAttributes($sbsAttributes);
+        $added = [];
+        $merged = [];
+        $replaced = [];
 
         foreach ($validAttributes as $key => $value) {
             if (!isset($samlAttributes[$key])) {
                 $samlAttributes[$key] = $value;
+                $added[] = $key;
                 continue;
             }
 
             if (is_array($value) && is_array($samlAttributes[$key])) {
                 // Merge and remove duplicates if both values are arrays
                 $samlAttributes[$key] = array_unique(array_merge($samlAttributes[$key], $value));
+                $merged[] = $key;
                 continue;
             }
 
             $samlAttributes[$key] = $value;
+            $replaced[] = $key;
+        }
+
+        if ($added !== [] || $merged !== [] || $replaced !== []) {
+            $this->logger->notice(sprintf(
+                'SBS attributes processed. Added: [%s]. Merged: [%s]. Replaced: [%s]',
+                implode(', ', $added),
+                implode(', ', $merged),
+                implode(', ', $replaced)
+            ));
         }
 
         return $samlAttributes;
@@ -72,9 +87,7 @@ class SbsAttributeMerger
         }
 
         if (!empty($invalidKeys)) {
-            $application = EngineBlock_ApplicationSingleton::getInstance();
-            $log = $application->getLogInstance();
-            $log->warning(sprintf('Attributes "%s" is not allowed to be overwritten by SBS.', implode(', ', $invalidKeys)));
+            $this->logger->warning(sprintf('Attributes "%s" is not allowed to be overwritten by SBS.', implode(', ', $invalidKeys)));
         }
 
         return $validAttributes;

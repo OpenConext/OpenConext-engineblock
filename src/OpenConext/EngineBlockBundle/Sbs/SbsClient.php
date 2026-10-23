@@ -22,6 +22,7 @@ use OpenConext\EngineBlock\Http\HttpClient;
 use OpenConext\EngineBlockBundle\Exception\InvalidSbsResponseException;
 use OpenConext\EngineBlockBundle\Sbs\Dto\AttributesRequest;
 use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
+use Psr\Log\LoggerInterface;
 
 final class SbsClient implements SbsClientInterface
 {
@@ -33,12 +34,23 @@ final class SbsClient implements SbsClientInterface
         private readonly string $attributesLocation,
         private readonly string $interruptLocation,
         private readonly string $apiToken,
-        private readonly bool $verifyPeer
+        private readonly bool $verifyPeer,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
     public function authz(AuthzRequest $request): AuthzResponse
     {
+        $this->logger->info(sprintf(
+            'Sending SBS authz request for service "%s" and issuer "%s"',
+            $request->serviceId,
+            $request->issuerId
+        ));
+        $this->logger->debug(sprintf(
+            'SBS authz request attributes sent: %s',
+            implode(', ', array_keys($request->attributes))
+        ));
+
         $jsonData = $this->httpClient->post(
             json_encode($request, JSON_THROW_ON_ERROR),
             $this->buildUrl($this->authzLocation),
@@ -51,11 +63,15 @@ final class SbsClient implements SbsClientInterface
             throw new InvalidSbsResponseException('Received non-array from SBS server: ' . get_debug_type($jsonData));
         }
 
+        $this->logger->debug('SBS authz response received', ['response' => $jsonData]);
+
         return AuthzResponse::fromData($jsonData);
     }
 
     public function requestAttributesFor(AttributesRequest $request): AttributesResponse
     {
+        $this->logger->info('Sending SBS attributes request');
+
         $jsonData = $this->httpClient->post(
             json_encode($request, JSON_THROW_ON_ERROR),
             $this->buildUrl($this->attributesLocation),
@@ -67,6 +83,9 @@ final class SbsClient implements SbsClientInterface
         if (!is_array($jsonData)) {
             throw new InvalidSbsResponseException('Received non-array from SBS server: ' . get_debug_type($jsonData));
         }
+
+        $this->logger->info('Received SBS attributes response');
+        $this->logger->debug('SBS attributes response received', ['response' => $jsonData]);
 
         return AttributesResponse::fromData($jsonData);
     }

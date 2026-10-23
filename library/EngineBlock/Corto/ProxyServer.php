@@ -580,7 +580,7 @@ class EngineBlock_Corto_ProxyServer
     public function handleSramInterruptCallout(
         EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
     ): void {
-        $this->getLogger()->info('Handle SRAM interrupt callout');
+        $this->getLogger()->notice('Handle SRAM interrupt callout');
         $nonce = $receivedResponse->getSramInterruptNonce();
 
         $sbsClient = $this->_diContainer->getSbsClient();

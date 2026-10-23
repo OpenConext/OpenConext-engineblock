@@ -19,7 +19,10 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
+use Monolog\Handler\TestHandler;
+use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class SbsAttributeMergerTest extends TestCase
 {
@@ -31,7 +34,7 @@ class SbsAttributeMergerTest extends TestCase
             'uuid',
             'sshkey'
         ];
-        $merger = new SbsAttributeMerger($allowedAttributes);
+        $merger = new SbsAttributeMerger($allowedAttributes, new NullLogger());
 
         $samlAttributes = [
             "uuid" => '1234',
@@ -68,7 +71,7 @@ class SbsAttributeMergerTest extends TestCase
             'email',
             'name'
         ];
-        $merger = new SbsAttributeMerger($allowedAttributes);
+        $merger = new SbsAttributeMerger($allowedAttributes, new NullLogger());
 
         $samlAttributes = [
             'email' => ['user@example.com'],
@@ -93,7 +96,7 @@ class SbsAttributeMergerTest extends TestCase
             'email',
             'name'
         ];
-        $merger = new SbsAttributeMerger($allowedAttributes);
+        $merger = new SbsAttributeMerger($allowedAttributes, new NullLogger());
 
         $samlAttributes = [
             'email' => ['user@example.com'],
@@ -103,5 +106,30 @@ class SbsAttributeMergerTest extends TestCase
         $sbsAttributes = [];
 
         $this->assertEquals($samlAttributes, $merger->mergeAttributes($samlAttributes, $sbsAttributes));
+    }
+
+    public function testMergeAttributesLogsAddedMergedAndReplaced(): void
+    {
+        $handler = new TestHandler();
+        $merger = new SbsAttributeMerger(['uuid', 'entitlement', 'sshkey', 'forbidden'], new Logger('test', [$handler]));
+
+        $merger->mergeAttributes(
+            ['uuid' => '1234', 'entitlement' => ['a']],
+            ['uuid' => '5678', 'entitlement' => ['b'], 'sshkey' => ['key'], 'other' => ['x']]
+        );
+
+        $this->assertTrue($handler->hasNoticeThatContains('SBS attributes processed. Added: [sshkey]. Merged: [entitlement]. Replaced: [uuid]'));
+        $this->assertTrue($handler->hasWarningThatContains('Attributes "other" is not allowed to be overwritten by SBS.'));
+    }
+
+    public function testMergeAttributesDoesNotLogNoticeWhenNothingChanged(): void
+    {
+        $handler = new TestHandler();
+        $merger = new SbsAttributeMerger(['uuid'], new Logger('test', [$handler]));
+
+        $merger->mergeAttributes(['uuid' => '1234'], ['other' => ['x']]);
+
+        $this->assertFalse($handler->hasNoticeRecords());
+        $this->assertTrue($handler->hasWarningThatContains('Attributes "other" is not allowed to be overwritten by SBS.'));
     }
 }
