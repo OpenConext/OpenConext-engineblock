@@ -41,7 +41,7 @@ class IdentityProviderNameFallbackHelper extends AbstractIdentityProvider
             if (!empty($this->entity->getName($locale))) {
                 return $this->entity->getName($locale);
             }
-            return $this->entity->getName('en');
+            return $this->entity->getName('en') ?? '';
         }
         return $this->entity->getDisplayName($locale);
     }

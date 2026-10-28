@@ -44,7 +44,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
         $this->entity = $entity;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->entity->id;
     }
@@ -68,7 +68,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
         return '';
     }
 
-    public function getDescription(string $locale): ?string
+    public function getDescription(string $locale): string
     {
         if ($this->entity->getMdui()->hasDescription($locale)) {
             return $this->entity->getMdui()->getDescription($locale);
@@ -118,7 +118,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
         return null;
     }
 
-    public function getKeywords(string $locale): ?string
+    public function getKeywords(string $locale): string
     {
         if ($this->entity->getMdui()->hasKeywords($locale)) {
             return $this->entity->getMdui()->getKeywords($locale);
@@ -148,7 +148,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
         return $this->entity->contactPersons;
     }
 
-    public function getNameIdFormat(): string
+    public function getNameIdFormat(): ?string
     {
         return $this->entity->nameIdFormat;
     }

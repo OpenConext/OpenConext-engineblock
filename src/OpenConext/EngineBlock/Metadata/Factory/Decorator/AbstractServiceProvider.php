@@ -59,12 +59,12 @@ abstract class AbstractServiceProvider implements ServiceProviderEntityInterface
         return $this->entity->getName($locale);
     }
 
-    public function getDescription(string $locale): ?string
+    public function getDescription(string $locale): string
     {
         return $this->entity->getDescription($locale);
     }
 
-    public function getDisplayName(string $locale): ?string
+    public function getDisplayName(string $locale): string
     {
         return $this->entity->getDisplayName($locale);
     }
