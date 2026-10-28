@@ -80,6 +80,7 @@ class EngineBlock_Corto_Filter_Command_SramInterruptFilter extends EngineBlock_C
             $interruptResponse = $this->sbsClient->authz($request);
 
             if ($interruptResponse->msg === Msg::Interrupt) {
+                $this->logger->notice("SBS authz result: user must be interrupted");
                 $this->logger->info("SBS interrupt reason: " . $interruptResponse->message);
                 $this->_response->setSramInterruptNonce($interruptResponse->nonce);
 
@@ -87,6 +88,7 @@ class EngineBlock_Corto_Filter_Command_SramInterruptFilter extends EngineBlock_C
             }
 
             if ($interruptResponse->msg === Msg::Authorized && !empty($interruptResponse->attributes)) {
+                $this->logger->notice("SBS authz result: user is authorized, no interrupt required");
                 $this->_responseAttributes = $this->attributeMerger->mergeAttributes($this->_responseAttributes, $interruptResponse->attributes);
 
                 return;

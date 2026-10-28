@@ -26,6 +26,8 @@ use OpenConext\EngineBlockBundle\Sbs\Dto\AuthzRequest;
 use OpenConext\EngineBlockBundle\Sbs\AuthzResponse;
 use OpenConext\EngineBlockBundle\Sbs\SbsClientInterface;
 use OpenConext\EngineBlockBundle\Sbs\SbsAttributeMerger;
+use Monolog\Handler\TestHandler;
+use Monolog\Logger;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -63,7 +65,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
         $sramFilter = new EngineBlock_Corto_Filter_Command_SramInterruptFilter(
             $sbsClient,
             new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => false]),
-            new SbsAttributeMerger([]),
+            new SbsAttributeMerger([], new NullLogger()),
             new NullLogger(),
         );
 
@@ -81,7 +83,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
         $sramFilter = new EngineBlock_Corto_Filter_Command_SramInterruptFilter(
             $sbsClient,
             new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => true]),
-            new SbsAttributeMerger([]),
+            new SbsAttributeMerger([], new NullLogger()),
             new NullLogger(),
         );
 
@@ -109,11 +111,12 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
     {
         $sbsClient = Mockery::mock(SbsClientInterface::class);
 
+        $logHandler = new TestHandler();
         $sramFilter = new EngineBlock_Corto_Filter_Command_SramInterruptFilter(
             $sbsClient,
             new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => true]),
-            new SbsAttributeMerger([]),
-            new NullLogger(),
+            new SbsAttributeMerger([], new NullLogger()),
+            new Logger('test', [$logHandler]),
         );
 
         $initialAttributes = [
@@ -179,22 +182,24 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
         $sramFilter->execute();
         $this->assertSame($initialAttributes, $sramFilter->getResponseAttributes());
         $this->assertSame('hash123', $sramFilter->getResponse()->getSramInterruptNonce());
+        $this->assertTrue($logHandler->hasNoticeThatContains('SBS authz result: user must be interrupted'));
     }
 
     public function testItAddsSramAttributesOnStatusAuthorized(): void
     {
         $sbsClient = Mockery::mock(SbsClientInterface::class);
 
+        $logHandler = new TestHandler();
         $attributeMerger = new SbsAttributeMerger([
             'urn:mace:dir:attribute-def:uid',
             'urn:mace:dir:attribute-def:eduPersonEntitlement',
-        ]);
+        ], new NullLogger());
 
         $sramFilter = new EngineBlock_Corto_Filter_Command_SramInterruptFilter(
             $sbsClient,
             new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => true]),
             $attributeMerger,
-            new NullLogger()
+            new Logger('test', [$logHandler])
         );
 
         $initialAttributes = [
@@ -271,9 +276,45 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
         $sramFilter->execute();
         $this->assertSame($expectedAttributes, $sramFilter->getResponseAttributes());
         $this->assertSame('', $sramFilter->getResponse()->getSramInterruptNonce());
+        $this->assertTrue($logHandler->hasNoticeThatContains('SBS authz result: user is authorized, no interrupt required'));
     }
 
-    public function testThrowsEngineBlockExceptionIfPolicyCannotBeChecked()
+        public function testItDoesNotLogAuthorizedWhenAuthorizedResponseHasNoAttributes(): void
+    {
+        $sbsClient = Mockery::mock(SbsClientInterface::class);
+        $sbsClient->expects('authz')->andReturn(AuthzResponse::fromData(['msg' => 'authorized', 'attributes' => []]));
+
+        $logHandler = new TestHandler();
+        $sramFilter = new EngineBlock_Corto_Filter_Command_SramInterruptFilter(
+            $sbsClient,
+            new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => true]),
+            new SbsAttributeMerger([], new NullLogger()),
+            new Logger('test', [$logHandler]),
+        );
+        $sramFilter->setResponseAttributes(['urn:mace:dir:attribute-def:uid' => ['userIdValue']]);
+
+        $server = Mockery::mock(EngineBlock_Corto_ProxyServer::class);
+        $server->expects('getUrl')->andReturn('https://example.org');
+        $server->shouldReceive('getRepository')->andReturn($this->repository);
+        $sramFilter->setProxyServer($server);
+        $sramFilter->setRequest($this->mockRequest());
+        $sramFilter->setResponse(new EngineBlock_Saml2_ResponseAnnotationDecorator(new Response()));
+
+        $sp = $this->mockServiceProvider('spEntityId');
+        $sp->expects('getCoins->collabEnabled')->andReturn(true);
+        $sramFilter->setServiceProvider($sp);
+        $sramFilter->setIdentityProvider($this->mockIdentityProvider('idpEntityId'));
+
+        try {
+            $sramFilter->execute();
+            $this->fail('Expected EngineBlock_Exception_SbsCheckFailed');
+        } catch (EngineBlock_Exception_SbsCheckFailed) {
+            $this->assertFalse($logHandler->hasNoticeThatContains('no interrupt required'));
+            $this->assertTrue($logHandler->hasErrorThatContains('SBS Authz returned error'));
+        }
+    }
+
+public function testThrowsEngineBlockExceptionIfPolicyCannotBeChecked()
     {
         $this->expectException(EngineBlock_Exception_SbsCheckFailed::class);
         $this->expectExceptionMessage('The SBS server could not be queried: Server could not be reached.');
@@ -284,7 +325,7 @@ class EngineBlock_Test_Corto_Filter_Command_SramInterruptFilterTest extends Test
         $sramFilter = new EngineBlock_Corto_Filter_Command_SramInterruptFilter(
             $sbsClient,
             new FeatureConfiguration(['eb.feature_enable_sram_interrupt' => true]),
-            new SbsAttributeMerger([]),
+            new SbsAttributeMerger([], new NullLogger()),
             new NullLogger(),
         );
 

@@ -19,6 +19,8 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use GuzzleHttp\ClientInterface;
+use Monolog\Handler\TestHandler;
+use Monolog\Logger;
 use OpenConext\EngineBlock\Http\HttpClient;
 use OpenConext\EngineBlockBundle\Sbs\AttributesResponse;
 use OpenConext\EngineBlockBundle\Sbs\AuthzResponse;
@@ -32,11 +34,13 @@ class SbsClientTest extends TestCase
     private $httpClient;
     private $sbsClient;
     private $guzzleMock;
+    private TestHandler $logHandler;
 
     protected function setUp(): void
     {
         $this->guzzleMock = $this->createMock(ClientInterface::class);
         $this->httpClient = $this->createMock(HttpClient::class);
+        $this->logHandler = new TestHandler();
 
         $this->sbsClient = new SbsClient(
             $this->httpClient,
@@ -45,13 +49,14 @@ class SbsClientTest extends TestCase
             '/authz',
             '/interrupt',
             'Bearer test_token',
-            true
+            true,
+            new Logger('test', [$this->logHandler])
         );
     }
 
     public function testAuthz(): void
     {
-        $requestMock = $this->createMock(AuthzRequest::class);
+        $requestMock = $this->authzRequest();
         $jsonResponse = ['msg' => 'interrupt', 'nonce' => 'hash'];
 
         $this->httpClient->expects($this->once())
@@ -75,7 +80,7 @@ class SbsClientTest extends TestCase
 
     public function testRequestAttributesFor(): void
     {
-        $requestMock = $this->createMock(AttributesRequest::class);
+        $requestMock = new AttributesRequest('nonce');
         $jsonResponse = [
             'msg' => 'authorized',
             'attributes' => ['name' => 'value']
@@ -98,5 +103,50 @@ class SbsClientTest extends TestCase
         $attributesResponse = $this->sbsClient->requestAttributesFor($requestMock);
 
         $this->assertInstanceOf(AttributesResponse::class, $attributesResponse);
+    }
+
+    public function testAuthzLogsRequestAndResponse(): void
+    {
+        $this->httpClient->method('post')->willReturn(['msg' => 'interrupt', 'nonce' => 'secret-nonce']);
+
+        $this->sbsClient->authz($this->authzRequest());
+
+        $this->assertTrue($this->logHandler->hasInfoThatContains('Sending SBS authz request for service "https://sp.example.com" and issuer "https://idp.example.com"'));
+        $this->assertTrue($this->logHandler->hasDebugThatContains('SBS authz request attributes sent: uid, mail'));
+        $this->assertTrue($this->logHandler->hasDebugThatPasses(
+            fn($record) => $record->message === 'SBS authz response received'
+                && $record->context === ['response' => ['msg' => 'interrupt', 'nonce' => 'secret-nonce']]
+        ));
+        foreach ($this->logHandler->getRecords() as $record) {
+            $this->assertStringNotContainsString('******', $record->message);
+        }
+    }
+
+    public function testRequestAttributesForLogsRequestAndResponse(): void
+    {
+        $this->httpClient->method('post')->willReturn(['msg' => 'authorized', 'attributes' => ['name' => 'value']]);
+
+        $this->sbsClient->requestAttributesFor(new AttributesRequest('nonce'));
+
+        $this->assertTrue($this->logHandler->hasInfoThatContains('Sending SBS attributes request'));
+        $this->assertTrue($this->logHandler->hasInfoThatContains('Received SBS attributes response'));
+        $this->assertTrue($this->logHandler->hasDebugThatPasses(
+            fn($record) => $record->message === 'SBS attributes response received'
+                && $record->context === ['response' => ['msg' => 'authorized', 'attributes' => ['name' => 'value']]]
+        ));
+    }
+
+    private function authzRequest(): AuthzRequest
+    {
+        return new AuthzRequest(
+            userId: 'user',
+            eduPersonPrincipalName: 'eppn',
+            externalSubjectId: 'sub',
+            email: ['user@example.com'],
+            continueUrl: 'https://engine.example.com/continue',
+            serviceId: 'https://sp.example.com',
+            issuerId: 'https://idp.example.com',
+            attributes: ['uid' => ['user'], 'mail' => ['user@example.com']]
+        );
     }
 }
