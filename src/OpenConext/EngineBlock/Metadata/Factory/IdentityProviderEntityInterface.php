@@ -31,9 +31,9 @@ interface IdentityProviderEntityInterface
 {
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getId(): ?int;
+    public function getId(): int;
 
     /**
      * @return string
@@ -42,7 +42,7 @@ interface IdentityProviderEntityInterface
 
     /**
      * @param $locale
-     * @return string|null
+     * @return string
      */
     public function getName(string $locale): ?string;
 
@@ -97,9 +97,9 @@ interface IdentityProviderEntityInterface
     public function getContactPersons(): array;
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getNameIdFormat(): ?string;
+    public function getNameIdFormat(): string;
 
     /**
      * @return string[]
@@ -117,7 +117,7 @@ interface IdentityProviderEntityInterface
     public function isRequestsMustBeSigned(): bool;
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getManipulation(): ?string;
 

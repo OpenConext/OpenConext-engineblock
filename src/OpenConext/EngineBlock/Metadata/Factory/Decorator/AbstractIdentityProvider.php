@@ -51,9 +51,9 @@ abstract class AbstractIdentityProvider implements IdentityProviderEntityInterfa
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->entity->getId();
     }
@@ -68,9 +68,9 @@ abstract class AbstractIdentityProvider implements IdentityProviderEntityInterfa
 
     /**
      * @param $locale
-     * @return string|null
+     * @return string
      */
-    public function getName($locale): ?string
+    public function getName($locale): string
     {
         return $this->entity->getName($locale);
     }
@@ -157,9 +157,9 @@ abstract class AbstractIdentityProvider implements IdentityProviderEntityInterfa
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getNameIdFormat(): ?string
+    public function getNameIdFormat(): string
     {
         return $this->entity->getNameIdFormat();
     }
@@ -189,9 +189,9 @@ abstract class AbstractIdentityProvider implements IdentityProviderEntityInterfa
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getManipulation(): ?string
+    public function getManipulation(): string
     {
         return $this->entity->getManipulation();
     }

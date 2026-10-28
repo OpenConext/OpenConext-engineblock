@@ -44,7 +44,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
         $this->entity = $entity;
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->entity->id;
     }
@@ -148,7 +148,7 @@ class IdentityProviderEntity implements IdentityProviderEntityInterface
         return $this->entity->contactPersons;
     }
 
-    public function getNameIdFormat(): ?string
+    public function getNameIdFormat(): string
     {
         return $this->entity->nameIdFormat;
     }
