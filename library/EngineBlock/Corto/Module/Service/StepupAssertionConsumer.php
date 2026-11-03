@@ -143,7 +143,7 @@ class EngineBlock_Corto_Module_Service_StepupAssertionConsumer implements Engine
         }
 
         if ($this->_processingStateHelper->hasStepRequestById($receivedRequest->getId(), ProcessingStateHelperInterface::STEP_SRAM) === true) {
-            $this->_server->handleSramInterruptCallout($receivedResponse);
+            $this->_server->handleSramInterruptCallout($originalReceivedResponse);
 
             return;
         }
