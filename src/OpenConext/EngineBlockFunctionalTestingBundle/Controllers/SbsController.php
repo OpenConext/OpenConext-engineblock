@@ -62,10 +62,16 @@ class SbsController extends AbstractController
     }
 
     /**
-     * The endpoint the browser is redirected to if the user is 'unknown' in SBS
+     * The endpoint the browser is redirected to if the user is 'unknown' in SBS.
+     * Like real SBS, it rejects a nonce that does not match the one from the 'interrupt' authz response.
      */
     public function interruptAction(Request $request): Response
     {
+        $expectedNonce = $this->sbsClientStateManager->getPreparedAuthzResponse()['nonce'] ?? null;
+        if ($expectedNonce === null || $request->query->get('nonce') !== $expectedNonce) {
+            return new Response('Invalid nonce', Response::HTTP_BAD_REQUEST);
+        }
+
         $storedData = $this->dataStore->load();
         $returnUrl = $storedData['continue_url'];
 
