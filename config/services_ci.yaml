@@ -73,6 +73,10 @@ services:
             $logFile: '/tmp/eb-fixtures/log-records.ndjson'
         tags: ['fob.context']
 
+    OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Recording\SamlTrafficRecorder:
+
+    OpenConext\EngineBlockFunctionalTestingBundle\Command\NormalizeSamlRecordingCommand:
+
     OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\SbsClientStateManager:
         arguments:
             - "@engineblock.functional_testing.data_store.sbs_client_state_mananger"

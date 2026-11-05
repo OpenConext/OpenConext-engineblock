@@ -46,6 +46,7 @@ default:
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\LoggingContext:
                     logFile: '/tmp/eb-fixtures/log-records.ndjson'
                 - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext:
+                - OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\SamlRecordingContext:
         functional:
             mink_session: chrome
             mink_javascript_session: chrome
