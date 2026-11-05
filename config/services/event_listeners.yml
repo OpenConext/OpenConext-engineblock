@@ -45,6 +45,10 @@ services:
         tags:
             - { name: kernel.event_listener, event: Symfony\Component\HttpKernel\Event\ExceptionEvent, method: onKernelException, priority: 25 }
 
+    OpenConext\EngineBlockBundle\EventListener\SessionHandlerInitializer:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 127 }
+
     OpenConext\EngineBlockBundle\EventListener\MethodNotAllowedHttpExceptionListener:
         arguments:
             - '@twig'
