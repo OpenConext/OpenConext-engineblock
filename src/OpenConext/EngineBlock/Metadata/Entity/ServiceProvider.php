@@ -30,7 +30,9 @@ use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\Service;
-use OpenConext\EngineBlockBundle\Doctrine\Type\SerializedArrayType;
+use OpenConext\EngineBlockBundle\Doctrine\Type\AttributeReleasePolicyType;
+use OpenConext\EngineBlockBundle\Doctrine\Type\IndexedServiceArrayType;
+use OpenConext\EngineBlockBundle\Doctrine\Type\RequestedAttributeArrayType;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 
@@ -50,31 +52,31 @@ class ServiceProvider extends AbstractRole
     /**
      * @var null|AttributeReleasePolicy
      */
-    #[ORM\Column(name: 'attribute_release_policy', type: SerializedArrayType::NAME, length: 65535)]
+    #[ORM\Column(name: 'attribute_release_policy', type: AttributeReleasePolicyType::NAME, length: 65535, nullable: true)]
     public $attributeReleasePolicy;
 
     /**
      * @var IndexedService[]
      */
-    #[ORM\Column(name: 'assertion_consumer_services', type: SerializedArrayType::NAME, length: 65535)]
+    #[ORM\Column(name: 'assertion_consumer_services', type: IndexedServiceArrayType::NAME, length: 65535, nullable: true)]
     public $assertionConsumerServices;
 
     /**
      * @var string[]
      */
-    #[ORM\Column(name: 'allowed_idp_entity_ids', type: SerializedArrayType::NAME, length: 6777215)]
+    #[ORM\Column(name: 'allowed_idp_entity_ids', type: Types::JSON, length: 6777215, nullable: true)]
     public $allowedIdpEntityIds;
 
     /**
      * @var bool
      */
-    #[ORM\Column(name: 'allow_all', type: Types::BOOLEAN)]
+    #[ORM\Column(name: 'allow_all', type: Types::BOOLEAN, nullable: true)]
     public ?bool $allowAll = null;
 
     /**
      * @var null|RequestedAttribute[]
      */
-    #[ORM\Column(name: 'requested_attributes', type: SerializedArrayType::NAME, length: 65535)]
+    #[ORM\Column(name: 'requested_attributes', type: RequestedAttributeArrayType::NAME, length: 65535, nullable: true)]
     public $requestedAttributes;
 
     /**
@@ -109,20 +111,20 @@ class ServiceProvider extends AbstractRole
         bool $additionalLogging = false,
         array $certificates = array(),
         array $contactPersons = array(),
-        ?string $descriptionEn = '',
-        ?string $descriptionNl = '',
-        ?string $descriptionPt = '',
+        ?string $descriptionEn = null,
+        ?string $descriptionNl = null,
+        ?string $descriptionPt = null,
         bool $disableScoping = false,
-        ?string $displayNameEn = '',
-        ?string $displayNameNl = '',
-        ?string $displayNamePt = '',
-        ?string $keywordsEn = '',
-        ?string $keywordsNl = '',
-        ?string $keywordsPt = '',
+        ?string $displayNameEn = null,
+        ?string $displayNameNl = null,
+        ?string $displayNamePt = null,
+        ?string $keywordsEn = null,
+        ?string $keywordsNl = null,
+        ?string $keywordsPt = null,
         ?Logo $logo = null,
-        ?string $nameEn = '',
-        ?string $nameNl = '',
-        ?string $namePt = '',
+        ?string $nameEn = null,
+        ?string $nameNl = null,
+        ?string $namePt = null,
         ?string $nameIdFormat = null,
         array $supportedNameIdFormats = array(
             Constants::NAMEID_TRANSIENT,
@@ -144,7 +146,7 @@ class ServiceProvider extends AbstractRole
         bool $policyEnforcementDecisionRequired = false,
         bool $requesteridRequired = false,
         bool $signResponse = false,
-        string $manipulation = '',
+        ?string $manipulation = null,
         ?AttributeReleasePolicy $attributeReleasePolicy = null,
         ?string $supportUrlEn = null,
         ?string $supportUrlNl = null,

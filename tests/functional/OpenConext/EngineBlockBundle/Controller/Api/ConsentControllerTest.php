@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockBundle\Tests;
 use DateTime;
 use Doctrine\DBAL\Query\QueryBuilder;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
+use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\Mdui;
 use OpenConext\EngineBlock\Metadata\Organization;
@@ -574,7 +575,7 @@ final class ConsentControllerTest extends FunctionalWebTestCase
         $queryBuilder = self::getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         assert($queryBuilder instanceof QueryBuilder);
         $queryBuilder
-            ->delete('sso_provider_roles_eb5')
+            ->delete(AbstractRole::TABLE_NAME)
             ->executeStatement();
     }
 

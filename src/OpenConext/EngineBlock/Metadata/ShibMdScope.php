@@ -24,13 +24,24 @@ namespace OpenConext\EngineBlock\Metadata;
  */
 class ShibMdScope
 {
-    /**
-     * @var string
-     */
-    public $allowed;
+    public ?string $allowed;
+    public ?string $regexp;
 
     /**
-     * @var string
+     * @param string|null $allowed
+     * @param string|null $regexp
      */
-    public $regexp;
+    public function __construct(?string $allowed = null, ?string $regexp = null)
+    {
+        $this->allowed = $allowed;
+        $this->regexp = $regexp;
+    }
+
+    /**
+     * A convenience static constructor for the ShibMdScope.
+     */
+    public static function fromArray(array $shibMdScope): ShibMdScope
+    {
+        return new self($shibMdScope["allowed"], $shibMdScope["regexp"]);
+    }
 }

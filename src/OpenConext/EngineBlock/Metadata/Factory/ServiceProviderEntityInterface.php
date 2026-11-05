@@ -31,29 +31,16 @@ use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 interface ServiceProviderEntityInterface
 {
 
-    /**
-     * @return null|int
-     */
     public function getId(): ?int;
 
-    /**
-     * @return string
-     */
     public function getEntityId(): string;
 
-    /**
-     * @param $locale
-     * @return string
-     */
-    public function getName($locale): string;
+    public function getName(string $locale): ?string;
 
-    public function getDescription(string $locale): string;
+    public function getDescription(string $locale): ?string;
 
-    public function getDisplayName(string $locale): string;
+    public function getDisplayName(string $locale): ?string;
 
-    /**
-     * @return Logo|null
-     */
     public function getLogo(): ?Logo;
 
     /**
@@ -68,30 +55,19 @@ interface ServiceProviderEntityInterface
      */
     public function getOrganization(string $locale): ?Organization;
 
-    /**
-     * @param $locale
-     * @return string
-     */
-    public function getKeywords($locale): string;
+    public function getKeywords(string $locale): string;
 
     /**
      * @return X509Certificate[]
      */
     public function getCertificates(): array;
 
-    /**
-     * @return string
-     */
     public function getWorkflowState(): string;
 
     /**
      * @return ContactPerson[]
      */
     public function getContactPersons(): array;
-
-    /**
-     * @return null|string
-     */
     public function getNameIdFormat(): ?string;
 
     /**
@@ -99,20 +75,11 @@ interface ServiceProviderEntityInterface
      */
     public function getSupportedNameIdFormats(): array;
 
-    /**
-     * @return null|Service
-     */
     public function getSingleLogoutService(): ?Service;
 
-    /**
-     * @return bool
-     */
     public function isRequestsMustBeSigned(): bool;
 
-    /**
-     * @return string
-     */
-    public function getManipulation(): string;
+    public function getManipulation(): ?string;
 
     /**
      * @return Coins
@@ -134,9 +101,6 @@ interface ServiceProviderEntityInterface
      */
     public function getAllowedIdpEntityIds(): array;
 
-    /**
-     * @return bool
-     */
     public function isAllowAll(): bool;
 
     /**
@@ -144,21 +108,10 @@ interface ServiceProviderEntityInterface
      */
     public function getRequestedAttributes(): ?array;
 
-    /**
-     * @param $locale
-     * @return string|null
-     */
-    public function getSupportUrl($locale): ?string;
+    public function getSupportUrl(string $locale): ?string;
 
-    /**
-     * @param string $idpEntityId
-     * @return bool
-     */
     public function isAllowed(string $idpEntityId): bool;
 
-    /**
-     * @return bool
-     */
     public function isAttributeAggregationRequired(): bool;
 
     public function getMdui(): Mdui;
