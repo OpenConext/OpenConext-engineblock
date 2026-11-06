@@ -33,14 +33,12 @@ Fixed:
 
 * Disable `autocomplete`, `autocorrect`, `autocapitalize`, and `spellcheck` on the WAYF search input field to prevent unintended spelling alterations and IdP selection errors (#1734).
 * Improved test suite reliability and coverage across acceptance and end-to-end suites, re-enabling suppressed WAYF Cypress test cases, covering per-SP remember choice workflows, and adding regression tests for SP-bound SAML responses (#2056, #2110).
+* The redirect to SBS after StepUp now carries the nonce from the original SBS interrupt response, so SBS can resume the interrupt flow. (#2129)
 
 Removed:
 
 * Removed the guest_qualifier / isMemberOf guest-status feature (`AddGuestStatus`). Unused and confirmed safe to remove. `FilterReservedMemberOfValues` is kept, as it also guards against IdPs spoofing reserved `urn:collab:org` group memberships. (#1294)
 
-Fixes:
-
-* The redirect to SBS after StepUp now carries the nonce from the original SBS interrupt response, so SBS can resume the interrupt flow. (#2129)
 
 ## 7.2.1
 
