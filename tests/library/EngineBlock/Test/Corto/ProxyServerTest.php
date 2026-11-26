@@ -21,7 +21,12 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
 use PHPUnit\Framework\TestCase;
 use SAML2\AuthnRequest;
+use SAML2\XML\saml\Issuer;
 use Surfnet\SamlBundle\Signing\KeyPair;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Twig\Environment;
 
 /**
@@ -30,6 +35,80 @@ use Twig\Environment;
 class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
+
+    private ?RequestStack $requestStack = null;
+
+    protected function tearDown(): void
+    {
+        $this->requestStack?->pop();
+        $this->requestStack = null;
+        parent::tearDown();
+    }
+
+    public function testFindRequestFromRequestIdReturnsLinkedRequestEvenIfStoredRequestIsOverwritten()
+    {
+        $repository = $this->authnRequestRepositoryWithSession();
+        $spRequestA = $this->factorySpRequest('_reused', 'https://sp-a.example.edu');
+        $ebRequest = $this->factorySpRequest('_eb-request', 'https://engine.example.edu');
+        $repository->store($spRequestA);
+        $repository->store($ebRequest);
+        $repository->link($ebRequest, $spRequestA);
+
+        // Simulate a second SP request with the same ID overwriting the stored request in the session.
+        $this->requestStack->getSession()->set(
+            'SAMLRequest',
+            ['_reused' => $this->factorySpRequest('_reused', 'https://sp-b.example.edu')]
+        );
+
+        $this->assertSame($spRequestA, $this->factoryProxyServer()->findRequestFromRequestId('_eb-request'));
+    }
+
+    public function testFindRequestFromRequestIdThrowsSessionLostForUnknownRequest()
+    {
+        $this->authnRequestRepositoryWithSession();
+
+        $this->expectException(EngineBlock_Corto_Module_Services_SessionLostException::class);
+        $this->expectExceptionMessage('is not known in this session');
+
+        $this->factoryProxyServer()->findRequestFromRequestId('_unknown');
+    }
+
+    public function testFindRequestFromRequestIdThrowsSessionLostForLinkWithoutLinkedRequest()
+    {
+        $this->authnRequestRepositoryWithSession();
+        $session = $this->requestStack->getSession();
+        $session->set('SAMLRequest', ['_sp' => $this->factorySpRequest('_sp', 'https://sp-a.example.edu')]);
+        $session->set('SAMLRequestLinks', ['_eb-request' => '_sp']);
+
+        $this->expectException(EngineBlock_Corto_Module_Services_SessionLostException::class);
+        $this->expectExceptionMessage('Linked request snapshot missing');
+
+        $this->factoryProxyServer()->findRequestFromRequestId('_eb-request');
+    }
+
+    private function authnRequestRepositoryWithSession(): EngineBlock_Saml2_AuthnRequestSessionRepository
+    {
+        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $symfonyContainer = (fn () => $this->getSymfonyContainer())->call($diContainer);
+
+        $request = new Request();
+        $request->setSession(new Session(new MockArraySessionStorage()));
+        $this->requestStack = $symfonyContainer->get('request_stack');
+        $this->requestStack->push($request);
+
+        return $diContainer->getAuthnRequestSessionRepository();
+    }
+
+    private function factorySpRequest(string $id, string $issuer): EngineBlock_Saml2_AuthnRequestAnnotationDecorator
+    {
+        $request = new AuthnRequest();
+        $request->setId($id);
+        $issuerElement = new Issuer();
+        $issuerElement->setValue($issuer);
+        $request->setIssuer($issuerElement);
+
+        return new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($request);
+    }
 
     public function testDefaultNameIDPolicy()
     {
