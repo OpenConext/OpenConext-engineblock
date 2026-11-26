@@ -138,6 +138,11 @@ class MockServiceProvider extends AbstractMockEntityRole
         $this->descriptor->getExtensions()['SAMLRequest']->setIsPassive(true);
     }
 
+    public function setAuthnRequestId(string $id): void
+    {
+        $this->descriptor->getExtensions()['SAMLRequest']->setId($id);
+    }
+
     /**
      * @param string $idpEntityId
      */

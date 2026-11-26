@@ -1115,10 +1115,16 @@ class EngineBlock_Corto_ProxyServer
             );
         }
 
-        $spRequest = $authnRequestRepository->findRequestById($spRequestId);
-        if (!$spRequest) {
-            throw new EngineBlock_Corto_ProxyServer_Exception(
-                'Response has no known Request',
+        // Resolve the SP request that was linked when we sent our request to the IdP. Looking it up by the
+        // SP-chosen ID would return whatever request last used that ID in this session.
+        $spRequest = $authnRequestRepository->findLinkedRequest($requestId);
+        if ($spRequest === null) {
+            throw new EngineBlock_Corto_Module_Services_SessionLostException(
+                sprintf(
+                    'Linked request snapshot missing for AuthnRequest (we made and sent) with id "%s". '.
+                    'Likely the session was started before an upgrade, the user has to log in again.',
+                    $requestId
+                ),
                 EngineBlock_Corto_ProxyServer_Exception::CODE_NOTICE
             );
         }

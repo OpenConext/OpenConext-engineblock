@@ -20,7 +20,9 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use SAML2\AuthnRequest;
+use SAML2\XML\saml\Issuer;
 use Surfnet\SamlBundle\Signing\KeyPair;
 use Twig\Environment;
 
@@ -30,6 +32,62 @@ use Twig\Environment;
 class EngineBlock_Test_Corto_ProxyServerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
+
+    protected function setUp(): void
+    {
+        $_SESSION = [];
+    }
+
+    protected function tearDown(): void
+    {
+        $_SESSION = [];
+        parent::tearDown();
+    }
+
+    public function testFindRequestFromRequestIdReturnsLinkedRequestEvenIfStoredRequestIsOverwritten()
+    {
+        $repository = new EngineBlock_Saml2_AuthnRequestSessionRepository(new NullLogger());
+        $spRequestA = $this->factorySpRequest('_reused', 'https://sp-a.example.edu');
+        $ebRequest = $this->factorySpRequest('_eb-request', 'https://engine.example.edu');
+        $repository->store($spRequestA);
+        $repository->store($ebRequest);
+        $repository->link($ebRequest, $spRequestA);
+
+        // Simulate a second SP request with the same ID overwriting the stored request in the session.
+        $_SESSION['SAMLRequest'] = ['_reused' => $this->factorySpRequest('_reused', 'https://sp-b.example.edu')];
+
+        $this->assertSame($spRequestA, $this->factoryProxyServer()->findRequestFromRequestId('_eb-request'));
+    }
+
+    public function testFindRequestFromRequestIdThrowsSessionLostForUnknownRequest()
+    {
+        $this->expectException(EngineBlock_Corto_Module_Services_SessionLostException::class);
+        $this->expectExceptionMessage('is not known in this session');
+
+        $this->factoryProxyServer()->findRequestFromRequestId('_unknown');
+    }
+
+    public function testFindRequestFromRequestIdThrowsSessionLostForLinkWithoutLinkedRequest()
+    {
+        $_SESSION['SAMLRequest'] = ['_sp' => $this->factorySpRequest('_sp', 'https://sp-a.example.edu')];
+        $_SESSION['SAMLRequestLinks'] = ['_eb-request' => '_sp'];
+
+        $this->expectException(EngineBlock_Corto_Module_Services_SessionLostException::class);
+        $this->expectExceptionMessage('Linked request snapshot missing');
+
+        $this->factoryProxyServer()->findRequestFromRequestId('_eb-request');
+    }
+
+    private function factorySpRequest(string $id, string $issuer): EngineBlock_Saml2_AuthnRequestAnnotationDecorator
+    {
+        $request = new AuthnRequest();
+        $request->setId($id);
+        $issuerElement = new Issuer();
+        $issuerElement->setValue($issuer);
+        $request->setIssuer($issuerElement);
+
+        return new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($request);
+    }
 
     public function testDefaultNameIDPolicy()
     {

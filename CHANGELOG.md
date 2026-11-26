@@ -11,6 +11,16 @@ More information about our release strategy can be found in
 the [Development Guidelines](https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#release-notes) on
 the EngineBlock wiki.
 
+## Unreleased
+
+Security:
+
+* A login in progress now stays bound to the Service Provider that started it. EngineBlock rejects an AuthnRequest
+  whose ID is already in use in the same session by another Service Provider, including another Service Provider behind
+  the same trusted proxy. After the IdP responds, EngineBlock continues with the exact request it sent to the IdP.
+* Logins that are in progress during the upgrade end with a "session lost" error after the IdP responds. The user has
+  to log in again.
+
 ## 7.1.0
 SBS integration:
 * Add support for [SBS](https://github.com/SURFscz/SBS)/[SRAM](https://sram.surf.nl/):

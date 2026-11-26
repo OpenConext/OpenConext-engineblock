@@ -18,6 +18,15 @@
 
 /**
  * Session storage for Authentication Requests. Store AuthnRequests and link requests together.
+ *
+ * Uses three session keys:
+ *   'SAMLRequest'               — map of requestId => AuthnRequestAnnotationDecorator
+ *   'SAMLRequestLinks'          — map of idpRequestId => spRequestId
+ *   'SAMLRequestLinkedRequests' — map of idpRequestId => AuthnRequestAnnotationDecorator
+ *
+ * 'SAMLRequest' is keyed on the ID chosen by the SP and can therefore be overwritten by a later request.
+ * Lookups after the IdP has responded must use findLinkedRequest(), which is keyed on the ID generated
+ * by EngineBlock and returns the exact request that was sent to the IdP.
  */
 class EngineBlock_Saml2_AuthnRequestSessionRepository
 {
@@ -37,6 +46,11 @@ class EngineBlock_Saml2_AuthnRequestSessionRepository
     private $linkStorage;
 
     /**
+     * @var array
+     */
+    private $linkedRequestStorage;
+
+    /**
      * @param Psr\Log\LoggerInterface $sessionLog
      */
     public function __construct(Psr\Log\LoggerInterface $sessionLog)
@@ -50,6 +64,11 @@ class EngineBlock_Saml2_AuthnRequestSessionRepository
             $_SESSION['SAMLRequestLinks'] = array();
         }
         $this->linkStorage    = &$_SESSION['SAMLRequestLinks'];
+
+        if (!isset($_SESSION['SAMLRequestLinkedRequests'])) {
+            $_SESSION['SAMLRequestLinkedRequests'] = array();
+        }
+        $this->linkedRequestStorage = &$_SESSION['SAMLRequestLinkedRequests'];
 
         $this->sessionLog = $sessionLog;
     }
@@ -82,6 +101,15 @@ class EngineBlock_Saml2_AuthnRequestSessionRepository
         return $this->linkStorage[$requestId];
     }
 
+    public function findLinkedRequest(?string $requestId): ?EngineBlock_Saml2_AuthnRequestAnnotationDecorator
+    {
+        if (!$requestId) {
+            return null;
+        }
+
+        return $this->linkedRequestStorage[$requestId] ?? null;
+    }
+
     /**
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $spRequest
      * @return $this
@@ -89,9 +117,47 @@ class EngineBlock_Saml2_AuthnRequestSessionRepository
     public function store(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $spRequest
     ) {
+        $this->assertNoIssuerConflict($this->findRequestById($spRequest->getId()), $spRequest);
+
         // Store the original Request
         $this->requestStorage[$spRequest->getId()] = $spRequest;
         return $this;
+    }
+
+    /**
+     * A request ID in this session may never be reused by a different Service Provider, as the consent and
+     * processing state are keyed on the request ID alone. A trusted proxy uses its last RequesterID to identify
+     * the Service Provider behind it, so that RequesterID must match as well.
+     *
+     * @throws EngineBlock_Corto_Module_Bindings_Exception
+     */
+    public function assertRequestIdNotUsedByOtherIssuer(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request): void
+    {
+        $this->assertNoIssuerConflict($this->findRequestById($request->getId()), $request);
+    }
+
+    private function assertNoIssuerConflict(
+        ?EngineBlock_Saml2_AuthnRequestAnnotationDecorator $existing,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $new
+    ): void {
+        if ($existing === null) {
+            return;
+        }
+
+        if ($existing->getIssuer()?->getValue() !== $new->getIssuer()?->getValue()
+            || $this->getLastRequesterId($existing) !== $this->getLastRequesterId($new)
+        ) {
+            throw new EngineBlock_Corto_Module_Bindings_Exception(
+                'AuthnRequest ID is already in use in this session by another Service Provider'
+            );
+        }
+    }
+
+    private function getLastRequesterId(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request): ?string
+    {
+        $requesterIds = $request->getRequesterIds();
+
+        return empty($requesterIds) ? null : end($requesterIds);
     }
 
     /**
@@ -105,6 +171,7 @@ class EngineBlock_Saml2_AuthnRequestSessionRepository
     ) {
         // Store the mapping from the new request ID to the original request ID
         $this->linkStorage[$fromRequest->getId()] = $toRequest->getId();
+        $this->linkedRequestStorage[$fromRequest->getId()] = $toRequest;
         return $this;
     }
 }

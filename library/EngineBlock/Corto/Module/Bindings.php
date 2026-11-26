@@ -180,6 +180,22 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 'Missing <saml:Issuer> in message delivered to AssertionConsumerService.'
             );
         }
+
+        try {
+            (new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_logger))
+                ->assertRequestIdNotUsedByOtherIssuer($ebRequest);
+        } catch (EngineBlock_Corto_Module_Bindings_Exception $e) {
+            $this->_logger->warning(
+                'Rejected AuthnRequest: its ID is already in use in this session by another Service Provider',
+                [
+                    'request_id' => $ebRequest->getId(),
+                    'issuer' => $ebRequest->getIssuer()->getValue(),
+                    'requester_ids' => $ebRequest->getRequesterIds(),
+                ]
+            );
+            throw $e;
+        }
+
         // Remember sp for debugging
         $_SESSION['currentServiceProvider'] = $ebRequest->getIssuer()->getValue();
 

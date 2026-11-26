@@ -47,6 +47,7 @@ use SAML2\DOMDocumentFactory;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to all integration specific features
  * @SuppressWarnings(PHPMD.ExcessivePublicCount) Both set up and tasks can be a lot...
  * @SuppressWarnings(PHPMD.TooManyFields) Both set up and tasks can be a lot...
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength) Both set up and tasks can be a lot...
  */
 class EngineBlockContext extends AbstractSubContext
 {
@@ -737,6 +738,17 @@ class EngineBlockContext extends AbstractSubContext
         $url = $this->engineBlockDomain . $path;
 
         $this->getMinkContext()->getSession()->getDriver()->getClient()->request('POST', $url, $postdata);
+    }
+
+    /**
+     * @When /^I post consent for request ID "([^"]*)"$/
+     */
+    public function iPostConsentForRequestId(string $requestId): void
+    {
+        $this->iPostDataToEngineBlockUrl(
+            json_encode(['ID' => $requestId, 'consent' => 'yes']),
+            '/authentication/idp/process-consent'
+        );
     }
 
     /**

@@ -82,6 +82,7 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends TestCase
 
     public function setUp(): void
     {
+        $_SESSION = [];
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
 
         $this->proxyServerMock    = $this->mockProxyServer();
