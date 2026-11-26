@@ -754,6 +754,17 @@ class EngineBlockContext extends AbstractSubContext
     }
 
     /**
+     * @When /^I post consent for request ID "([^"]*)"$/
+     */
+    public function iPostConsentForRequestId(string $requestId): void
+    {
+        $this->iPostDataToEngineBlockUrl(
+            json_encode(['ID' => $requestId, 'consent' => 'yes']),
+            '/authentication/idp/process-consent'
+        );
+    }
+
+    /**
      * @Given /^the attribute aggregator returns no attributes$/
      */
     public function aaReturnsNoAttributes()

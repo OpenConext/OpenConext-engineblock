@@ -184,6 +184,22 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
 
+        try {
+            EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()
+                ->getAuthnRequestSessionRepository()
+                ->assertRequestIdNotUsedByOtherIssuer($ebRequest);
+        } catch (EngineBlock_Corto_Module_Bindings_Exception $e) {
+            $this->_logger->warning(
+                'Rejected AuthnRequest: its ID is already in use in this session by another Service Provider',
+                [
+                    'request_id' => $ebRequest->getId(),
+                    'issuer' => $ebRequest->getIssuer()->getValue(),
+                    'requester_ids' => $ebRequest->getRequesterIds(),
+                ]
+            );
+            throw $e;
+        }
+
         EngineBlock_ApplicationSingleton::getInstance()->getDiContainerRuntime()->feedbackStateHelper->startNewFlow(
             $ebRequest->getId(),
             $ebRequest->getIssuer()->getValue()

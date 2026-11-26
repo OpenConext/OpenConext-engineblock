@@ -25,6 +25,9 @@ use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
 use RuntimeException;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class StepupContext extends AbstractSubContext
 {
     /**
@@ -43,6 +46,8 @@ class StepupContext extends AbstractSubContext
      * @var ServiceRegistryFixture
      */
     private $serviceRegistryFixture;
+
+    private ?array $keptStepupResponse = null;
 
     /**
      * @param EntityRegistry $mockSpRegistry
@@ -100,6 +105,42 @@ class StepupContext extends AbstractSubContext
         $mink = $this->getMinkContext();
 
         $mink->pressButton('Submit-loa2');
+    }
+
+    /**
+     * @When /^I keep the Stepup "([^"]*)" response for later$/
+     */
+    public function iKeepTheStepupResponseForLater(string $responseId): void
+    {
+        $page = $this->getMinkContext()->getSession()->getPage();
+        $form = $page->find('xpath', sprintf('//form[.//input[@value="Submit-%s"]]', $responseId));
+        if ($form === null) {
+            throw new RuntimeException(sprintf('No Stepup "%s" response form found', $responseId));
+        }
+
+        $fields = ['SAMLResponse' => $form->find('css', 'input[name="SAMLResponse"]')->getValue()];
+        $relayState = $form->find('css', 'input[name="RelayState"]');
+        if ($relayState !== null) {
+            $fields['RelayState'] = $relayState->getValue();
+        }
+
+        $this->keptStepupResponse = ['action' => $form->getAttribute('action'), 'fields' => $fields];
+    }
+
+    /**
+     * @When /^I submit the kept Stepup response$/
+     */
+    public function iSubmitTheKeptStepupResponse(): void
+    {
+        if ($this->keptStepupResponse === null) {
+            throw new RuntimeException('No Stepup response was kept');
+        }
+
+        $this->getMinkContext()->getSession()->getDriver()->getClient()->request(
+            'POST',
+            $this->keptStepupResponse['action'],
+            $this->keptStepupResponse['fields']
+        );
     }
 
     /**

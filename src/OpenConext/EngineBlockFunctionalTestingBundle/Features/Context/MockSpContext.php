@@ -619,6 +619,17 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^SP "([^"]*)" uses AuthnRequest ID "([^"]*)"$/
+     */
+    public function spUsesAuthnRequestId(string $spName, string $requestId): void
+    {
+        $sp = $this->mockSpRegistry->get($spName);
+        $sp->setAuthnRequestId($requestId);
+
+        $this->mockSpRegistry->save();
+    }
+
+    /**
      * @Given /^SP "([^"]*)" requires a policy enforcement decision$/
      * @param string $spName
      */
